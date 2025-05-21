@@ -63,6 +63,7 @@ sounds {
     camera = gui/camera
     menu_activate = gui/menu_activate
     menu_back = gui/menu_back
+    menu_fail = gui/menu_fail
     menu_select = gui/menu_select
     switch_pikmin = gui/switch_pikmin
 }

@@ -211,6 +211,9 @@ public:
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> onGetTooltip = nullptr;
     
+    //Play a "failure" sound on activation instead, for the next activation.
+    bool playFailSound = false;
+    
     
     //--- Function declarations ---
     

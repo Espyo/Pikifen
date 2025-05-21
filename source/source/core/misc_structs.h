@@ -621,6 +621,9 @@ struct SystemContentList {
     //Menu item back.
     ALLEGRO_SAMPLE* sndMenuBack = nullptr;
     
+    //Menu item activation fail.
+    ALLEGRO_SAMPLE* sndMenuFail = nullptr;
+    
     //Menu item selection.
     ALLEGRO_SAMPLE* sndMenuSelect = nullptr;
     
@@ -824,6 +827,9 @@ struct SystemContentNames {
     
     //Menu item back.
     string sndMenuBack = "gui/menu_back";
+    
+    //Menu item fail.
+    string sndMenuFail = "gui/menu_fail";
     
     //Menu item selection.
     string sndMenuSelect = "gui/menu_select";

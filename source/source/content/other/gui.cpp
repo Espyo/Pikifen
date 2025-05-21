@@ -294,10 +294,13 @@ bool GuiItem::activate(const Point& cursorPos) {
     ALLEGRO_SAMPLE* sample =
         this == manager->backItem ?
         game.sysContent.sndMenuBack :
+        playFailSound ?
+        game.sysContent.sndMenuFail :
         game.sysContent.sndMenuActivate;
     SoundSourceConfig activateSoundConfig;
     activateSoundConfig.gain = 0.75f;
     game.audio.createUiSoundsource(sample, activateSoundConfig);
+    playFailSound = false;
     
     return true;
 }

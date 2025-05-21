@@ -9,9 +9,11 @@ Next tasks (roughly sorted most important first)
     If you're panning the camera in an editor's canvas and your cursor goes to the panel, you can left-click to interact with it and with the canvas at the same time
     Sleeping right after the stage loads (maybe only in the area editor quick play?) puts you in a limbo state
     Quitting the radar using the Tab key won't play the "back" sound
+    The camera offset because the leader is far from the Pikmin should have a maximum
     Fix #8
 
     --- 0.26 ---
+    Area loading screen should mention the name of the creator, so people recording videos can't accidentally miss crediting
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
@@ -36,7 +38,7 @@ Next tasks (roughly sorted most important first)
                 ? Menu item selected
                 ? Menu item activated
                 ? Menu backed out of
-                Boing for when you're trying to do something wrong (like going past the limit in the Onion menu)
+                x Boing for when you're trying to do something wrong (like going past the limit in the Onion menu)
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
                     Could change pitch when you're changing those multi-value options in the options menu
             HUD
@@ -896,6 +898,7 @@ Misc things (so I don't forget)
             Show mobs as sprites of the mob proper. In mob editing mode, also show a circle around them to help make it clear what their radius and angle are
             Add regression-testing in-game
             Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
+            When you want to pick a song, a dialog should appear listing all of them, separating the area songs from the other ones, and also showing the tags and credits
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
@@ -1138,6 +1141,7 @@ Tasks for later on (I might never implement these)
         Good luck with floating point determinism lol
             https://github.com/MikeLankamp/fpm
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
+        Either prepare for or disallow changing options mid-game
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...

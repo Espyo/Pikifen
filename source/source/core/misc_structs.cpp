@@ -1848,6 +1848,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("camera", sndCamera);
     sndRS.set("menu_activate", sndMenuActivate);
     sndRS.set("menu_back", sndMenuBack);
+    sndRS.set("menu_fail", sndMenuFail);
     sndRS.set("menu_select", sndMenuSelect);
     sndRS.set("switch_pikmin", sndSwitchPikmin);
     

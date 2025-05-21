@@ -223,8 +223,10 @@ OnionMenu::OnionMenu(
             );
         };
         onionButton->onActivate =
-        [this, t] (const Point&) {
-            addToOnion(onWindowTypes[t]->typeIdx);
+        [this, t, onionButton] (const Point&) {
+            if(!addToOnion(onWindowTypes[t]->typeIdx)) {
+                onionButton->playFailSound = true;
+            }
         };
         onionButton->canAutoRepeat = true;
         onionButton->onGetTooltip =
@@ -251,7 +253,9 @@ OnionMenu::OnionMenu(
     };
     onionAllButton->onActivate =
     [this] (const Point&) {
-        addAllToOnion();
+        if(!addAllToOnion()) {
+            onionAllButton->playFailSound = true;
+        }
     };
     onionAllButton->canAutoRepeat = true;
     onionAllButton->onGetTooltip =
@@ -330,8 +334,10 @@ OnionMenu::OnionMenu(
             );
         };
         groupButton->onActivate =
-        [this, t] (const Point&) {
-            addToGroup(onWindowTypes[t]->typeIdx);
+        [this, t, groupButton] (const Point&) {
+            if(!addToGroup(onWindowTypes[t]->typeIdx)) {
+                groupButton->playFailSound = true;
+            }
         };
         groupButton->canAutoRepeat = true;
         groupButton->onGetTooltip =
@@ -358,7 +364,9 @@ OnionMenu::OnionMenu(
     };
     groupAllButton->onActivate =
     [this] (const Point&) {
-        addAllToGroup();
+        if(!addAllToGroup()) {
+            groupAllButton->playFailSound = true;
+        }
     };
     groupAllButton->canAutoRepeat = true;
     groupAllButton->onGetTooltip =
@@ -533,21 +541,29 @@ OnionMenu::~OnionMenu() {
 
 /**
  * @brief Adds one Pikmin of each type from Onion to the group, if possible.
+ *
+ * @return Whether any succeeded.
  */
-void OnionMenu::addAllToGroup() {
+bool OnionMenu::addAllToGroup() {
+    bool success = false;
     for(size_t t = 0; t < types.size(); t++) {
-        addToGroup(t);
+        success |= addToGroup(t);
     }
+    return success;
 }
 
 
 /**
  * @brief Adds one Pikmin of each type from the group to the Onion, if possible.
+ *
+ * @return Whether any succeeded.
  */
-void OnionMenu::addAllToOnion() {
+bool OnionMenu::addAllToOnion() {
+    bool success = false;
     for(size_t t = 0; t < types.size(); t++) {
-        addToOnion(t);
+        success |= addToOnion(t);
     }
+    return success;
 }
 
 
@@ -555,8 +571,9 @@ void OnionMenu::addAllToOnion() {
  * @brief Adds one Pikmin from the Onion to the group, if possible.
  *
  * @param typeIdx Index of the Onion's Pikmin type.
+ * @return Whether it succeeded.
  */
-void OnionMenu::addToGroup(size_t typeIdx) {
+bool OnionMenu::addToGroup(size_t typeIdx) {
     size_t realOnionAmount =
         nestPtr->getAmountByType(nestPtr->nestType->pikTypes[typeIdx]);
         
@@ -566,7 +583,7 @@ void OnionMenu::addToGroup(size_t typeIdx) {
         if(windowIdx != INVALID) {
             makeGuiItemRed(onionAmountItems[windowIdx]);
         }
-        return;
+        return false;
     }
     
     //Next, check if the addition won't make the field amount hit the limit.
@@ -579,7 +596,7 @@ void OnionMenu::addToGroup(size_t typeIdx) {
         game.config.rules.maxPikminInField
     ) {
         makeGuiItemRed(fieldAmountText);
-        return;
+        return false;
     }
     
     types[typeIdx].delta++;
@@ -597,6 +614,7 @@ void OnionMenu::addToGroup(size_t typeIdx) {
         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
     );
     
+    return true;
 }
 
 
@@ -604,8 +622,9 @@ void OnionMenu::addToGroup(size_t typeIdx) {
  * @brief Adds one Pikmin from the group to the Onion, if possible.
  *
  * @param typeIdx Index of the Onion's Pikmin type.
+ * @return Whether it succeeded.
  */
-void OnionMenu::addToOnion(size_t typeIdx) {
+bool OnionMenu::addToOnion(size_t typeIdx) {
     size_t realGroupAmount =
         leaderPtr->group->getAmountByType(nestPtr->nestType->pikTypes[typeIdx]);
         
@@ -614,7 +633,7 @@ void OnionMenu::addToOnion(size_t typeIdx) {
         if(windowIdx != INVALID) {
             makeGuiItemRed(groupAmountItems[windowIdx]);
         }
-        return;
+        return false;
     }
     
     types[typeIdx].delta--;
@@ -631,6 +650,8 @@ void OnionMenu::addToOnion(size_t typeIdx) {
     fieldAmountText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
     );
+    
+    return true;
 }
 
 

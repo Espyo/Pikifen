@@ -152,10 +152,10 @@ struct OnionMenu {
     
     OnionMenu(PikminNest* nPtr, Leader* lPtr);
     ~OnionMenu();
-    void addAllToGroup();
-    void addAllToOnion();
-    void addToGroup(size_t typeIdx);
-    void addToOnion(size_t typeIdx);
+    bool addAllToGroup();
+    bool addAllToOnion();
+    bool addToGroup(size_t typeIdx);
+    bool addToOnion(size_t typeIdx);
     void confirm();
     void goToPage(size_t page);
     void growButtons();
