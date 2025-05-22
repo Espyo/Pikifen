@@ -61,10 +61,12 @@ fonts {
 sounds {
     attack = effects/attack
     camera = gui/camera
+    go = gui/go
     menu_activate = gui/menu_activate
     menu_back = gui/menu_back
     menu_fail = gui/menu_fail
     menu_select = gui/menu_select
+    ready = gui/ready
     switch_pikmin = gui/switch_pikmin
 }
 

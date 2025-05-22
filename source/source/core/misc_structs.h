@@ -615,6 +615,9 @@ struct SystemContentList {
     //Camera zoom level.
     ALLEGRO_SAMPLE* sndCamera = nullptr;
     
+    //"Go!" big message.
+    ALLEGRO_SAMPLE* sndGo = nullptr;
+    
     //Menu item activation.
     ALLEGRO_SAMPLE* sndMenuActivate = nullptr;
     
@@ -626,6 +629,9 @@ struct SystemContentList {
     
     //Menu item selection.
     ALLEGRO_SAMPLE* sndMenuSelect = nullptr;
+    
+    //"Ready..." big message.
+    ALLEGRO_SAMPLE* sndReady = nullptr;
     
     //Switching standby Pikmin type.
     ALLEGRO_SAMPLE* sndSwitchPikmin = nullptr;
@@ -822,6 +828,9 @@ struct SystemContentNames {
     //Camera zoom level.
     string sndCamera = "gui/camera";
     
+    //"Go!" big message.
+    string sndGo = "gui/go";
+    
     //Menu item activation.
     string sndMenuActivate = "gui/menu_activate";
     
@@ -833,6 +842,9 @@ struct SystemContentNames {
     
     //Menu item selection.
     string sndMenuSelect = "gui/menu_select";
+    
+    //"Ready..." big message.
+    string sndReady = "gui/ready";
     
     //Switching standby Pikmin type.
     string sndSwitchPikmin = "gui/switch_pikmin";

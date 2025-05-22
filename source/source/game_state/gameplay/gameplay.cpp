@@ -497,11 +497,11 @@ void GameplayState::enter() {
     bigMsgTime = 0.0f;
     deltaTMult = 0.5f;
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
+    bool skipReadyInterlude = false;
     
     if(!game.states.areaEd->quickPlayAreaPath.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.
-        interludeTime = GAMEPLAY::BIG_MSG_READY_DUR;
-        bigMsgTime = GAMEPLAY::BIG_MSG_READY_DUR;
+        skipReadyInterlude = true;
     }
     
     if(wentToResults) {
@@ -546,6 +546,13 @@ void GameplayState::enter() {
                     player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS
                 );
         };
+    }
+    
+    if(skipReadyInterlude) {
+        interludeTime = GAMEPLAY::BIG_MSG_READY_DUR;
+        bigMsgTime = GAMEPLAY::BIG_MSG_READY_DUR;
+    } else {
+        game.audio.createUiSoundsource(game.sysContent.sndReady);
     }
 }
 

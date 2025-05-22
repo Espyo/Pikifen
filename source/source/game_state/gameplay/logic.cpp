@@ -1455,6 +1455,7 @@ void GameplayState::doMenuLogic() {
         if(bigMsgTime >= GAMEPLAY::BIG_MSG_READY_DUR) {
             curBigMsg = BIG_MESSAGE_GO;
             bigMsgTime = 0.0f;
+            game.audio.createUiSoundsource(game.sysContent.sndGo);
         }
         break;
     } case BIG_MESSAGE_GO: {

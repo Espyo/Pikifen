@@ -1846,10 +1846,12 @@ void SystemContentNames::load(DataNode* file) {
     
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
+    sndRS.set("go", sndGo);
     sndRS.set("menu_activate", sndMenuActivate);
     sndRS.set("menu_back", sndMenuBack);
     sndRS.set("menu_fail", sndMenuFail);
     sndRS.set("menu_select", sndMenuSelect);
+    sndRS.set("ready", sndReady);
     sndRS.set("switch_pikmin", sndSwitchPikmin);
     
     ReaderSetter sngRS(file->getChildByName("songs"));
