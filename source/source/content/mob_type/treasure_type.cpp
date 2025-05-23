@@ -12,10 +12,10 @@
 
 #include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
-#include "../mob_script/gen_mob_fsm.h"
-#include "../mob_script/treasure_fsm.h"
 #include "../mob/mob.h"
 #include "../mob/treasure.h"
+#include "../mob_script/gen_mob_fsm.h"
+#include "../mob_script/treasure_fsm.h"
 
 
 /**

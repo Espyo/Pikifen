@@ -10,8 +10,8 @@
 
 #include "decoration_type.h"
 
-#include "../mob_script/decoration_fsm.h"
 #include "../mob/decoration.h"
+#include "../mob_script/decoration_fsm.h"
 #include "../other/mob_script.h"
 
 

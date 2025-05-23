@@ -439,41 +439,6 @@ string getKeyName(int keycode, bool condensed) {
 
 
 /**
- * @brief Returns whether any Shift key, any Ctrl key, and any Alt key
- * is pressed.
- *
- * @param outShiftState If not nullptr,
- * whether Shift is pressed is returned here.
- * @param outCtrlState If not nullptr,
- * whether Ctrl is pressed is returned here.
- * @param outAltState If not nullptr,
- * whether Alt is pressed is returned here.
- */
-void getShiftCtrlAltState(
-    bool* outShiftState, bool* outCtrlState, bool* outAltState
-) {
-    ALLEGRO_KEYBOARD_STATE keyboardState;
-    al_get_keyboard_state(&keyboardState);
-    if(outShiftState) {
-        *outShiftState =
-            al_key_down(&keyboardState, ALLEGRO_KEY_LSHIFT) ||
-            al_key_down(&keyboardState, ALLEGRO_KEY_RSHIFT);
-    }
-    if(outCtrlState) {
-        *outCtrlState =
-            al_key_down(&keyboardState, ALLEGRO_KEY_LCTRL) ||
-            al_key_down(&keyboardState, ALLEGRO_KEY_RCTRL) ||
-            al_key_down(&keyboardState, ALLEGRO_KEY_COMMAND);
-    }
-    if(outAltState) {
-        *outAltState =
-            al_key_down(&keyboardState, ALLEGRO_KEY_ALT) ||
-            al_key_down(&keyboardState, ALLEGRO_KEY_ALTGR);
-    }
-}
-
-
-/**
  * @brief Like an std::getline(), but for ALLEGRO_FILE*.
  *
  * @param file Allegro file handle.
@@ -522,6 +487,41 @@ void getline(ALLEGRO_FILE* file, string& line) {
     }
     
     delete cPtr;
+}
+
+
+/**
+ * @brief Returns whether any Shift key, any Ctrl key, and any Alt key
+ * is pressed.
+ *
+ * @param outShiftState If not nullptr,
+ * whether Shift is pressed is returned here.
+ * @param outCtrlState If not nullptr,
+ * whether Ctrl is pressed is returned here.
+ * @param outAltState If not nullptr,
+ * whether Alt is pressed is returned here.
+ */
+void getShiftCtrlAltState(
+    bool* outShiftState, bool* outCtrlState, bool* outAltState
+) {
+    ALLEGRO_KEYBOARD_STATE keyboardState;
+    al_get_keyboard_state(&keyboardState);
+    if(outShiftState) {
+        *outShiftState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_LSHIFT) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_RSHIFT);
+    }
+    if(outCtrlState) {
+        *outCtrlState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_LCTRL) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_RCTRL) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_COMMAND);
+    }
+    if(outAltState) {
+        *outAltState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_ALT) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_ALTGR);
+    }
 }
 
 

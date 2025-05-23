@@ -266,45 +266,6 @@ DataNode* DataNode::getChildByName(
 
 
 /**
- * @brief Returns the number of children nodes (direct children only).
- *
- * @return The number.
- */
-size_t DataNode::getNrOfChildren() const {
-    return children.size();
-}
-
-
-/**
- * @brief Returns the number of occurences of a child name
- * (direct children only).
- *
- * @param name Name the children must have.
- * @return The number.
- */
-size_t DataNode::getNrOfChildrenByName(const string& name) const {
-    size_t number = 0;
-    
-    for(size_t c = 0; c < children.size(); c++) {
-        if(name == children[c]->name) number++;
-    }
-    
-    return number;
-}
-
-
-/**
- * @brief Returns the value of a node, or def if it has no value.
- *
- * @param def Default value.
- * @return The value.
- */
-string DataNode::getValueOrDefault(const string& def) const {
-    return (value.empty() ? def : value);
-}
-
-
-/**
  * @brief Like an std::getline(), but for ALLEGRO_FILE*.
  *
  * @param file Allegro file handle.
@@ -363,6 +324,45 @@ void DataNode::getline(
     }
     
     delete cPtr;
+}
+
+
+/**
+ * @brief Returns the number of children nodes (direct children only).
+ *
+ * @return The number.
+ */
+size_t DataNode::getNrOfChildren() const {
+    return children.size();
+}
+
+
+/**
+ * @brief Returns the number of occurences of a child name
+ * (direct children only).
+ *
+ * @param name Name the children must have.
+ * @return The number.
+ */
+size_t DataNode::getNrOfChildrenByName(const string& name) const {
+    size_t number = 0;
+    
+    for(size_t c = 0; c < children.size(); c++) {
+        if(name == children[c]->name) number++;
+    }
+    
+    return number;
+}
+
+
+/**
+ * @brief Returns the value of a node, or def if it has no value.
+ *
+ * @param def Default value.
+ * @return The value.
+ */
+string DataNode::getValueOrDefault(const string& def) const {
+    return (value.empty() ? def : value);
 }
 
 

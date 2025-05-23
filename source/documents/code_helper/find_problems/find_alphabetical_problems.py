@@ -12,7 +12,7 @@ def are_constants_ordered(c1, c2):
         return len(c2) == 0
     if len(c2) == 0:
         return True
-    return c1 < c2
+    return c1.lower() < c2.lower()
 
 
 ## Returns whether two functions are in the right order.
@@ -24,7 +24,7 @@ def are_functions_ordered(f1, f2):
         return f1.is_const_or_dest()
     if f1.is_const_or_dest():
         return True
-    return f1.name < f2.name
+    return f1.name.lower() < f2.name.lower()
 
 
 ## Returns whether two includes are in the right order.
@@ -39,7 +39,7 @@ def are_includes_ordered(i1, i2):
     if abs(i1.line - i2.line) > 1:
         # Different blocks. No comparison.
         return True
-    return i1.name < i2.name
+    return i1.name.lower() < i2.name.lower()
 
 
 ## Returns whether two namespaces are in the right order.
@@ -51,7 +51,7 @@ def are_namespaces_ordered(n1, n2):
         return len(n2) == 0
     if len(n2) == 0:
         return True
-    return n1 < n2
+    return n1.lower() < n2.lower()
 
 
 ## Returns all unordered things in all source files as problems.

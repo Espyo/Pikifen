@@ -117,9 +117,11 @@ def get_functions_in_file(file_path):
             continue
         # Simplify calls to std::.
         line = line.replace('std::', '')
+        # Simplify operators.
+        line = line.replace("operator ", "operator")
         
         # Style #1: function belonging to a namespace.
-        r = re.match(r'(.+)::([^\(]+)\(', line)
+        r = re.match(r'(.+)::([^\( ]+)\(', line)
         
         if r is not None:
             f = Function()

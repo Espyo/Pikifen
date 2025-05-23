@@ -17,10 +17,10 @@
 #include "../../game_state/gameplay/gameplay.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
-#include "../mob_type/leader_type.h"
 #include "../mob/drop.h"
 #include "../mob/leader.h"
 #include "../mob/track.h"
+#include "../mob_type/leader_type.h"
 #include "gen_mob_fsm.h"
 
 
@@ -1530,71 +1530,6 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief When a leader's leader dismisses them.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void LeaderFsm::beDismissed(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->setAnimation(LEADER_ANIM_IDLING);
-}
-
-
-/**
- * @brief When a leader is grabbed by another leader.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void LeaderFsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
-    m->setAnimation(LEADER_ANIM_IDLING);
-}
-
-
-/**
- * @brief When a leader grabbed by another is released.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
-
-}
-
-
-/**
- * @brief When a leader grabbed by another is thrown.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->startThrowTrail();
-}
-
-
-/**
- * @brief When a leader is thrown by a bouncer mob.
- *
- * @param m The mob.
- * @param info1 Points to the bouncer mob.
- * @param info2 Unused.
- */
-void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    leaPtr->startThrowTrail();
-    if(!leaPtr->player) {
-        leaPtr->leaveGroup();
-    }
-}
-
-
-/**
  * @brief When a leader is meant to become the active one.
  *
  * @param m The mob.
@@ -1669,6 +1604,71 @@ void LeaderFsm::becomeInactive(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     leaPtr->player = nullptr;
     leaPtr->stopAutoThrowing();
+}
+
+
+/**
+ * @brief When a leader's leader dismisses them.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::beDismissed(Mob* m, void* info1, void* info2) {
+    m->stopChasing();
+    m->setAnimation(LEADER_ANIM_IDLING);
+}
+
+
+/**
+ * @brief When a leader is grabbed by another leader.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
+    m->setAnimation(LEADER_ANIM_IDLING);
+}
+
+
+/**
+ * @brief When a leader grabbed by another is released.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
+
+}
+
+
+/**
+ * @brief When a leader grabbed by another is thrown.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->startThrowTrail();
+}
+
+
+/**
+ * @brief When a leader is thrown by a bouncer mob.
+ *
+ * @param m The mob.
+ * @param info1 Points to the bouncer mob.
+ * @param info2 Unused.
+ */
+void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
+    leaPtr->startThrowTrail();
+    if(!leaPtr->player) {
+        leaPtr->leaveGroup();
+    }
 }
 
 

@@ -61,8 +61,9 @@ def write_code_problems():
         problems_by_file[file].append((problem, info))
     
     for file, dummy in sorted(problems_by_file.items()):
-        if file.find('imgui/') != -1:
-            continue
+        if file.find('imgui/') != -1: continue
+        if file.find('shaders_source.cpp') != -1: continue
+        if file.find('code_debug.cpp') != -1: continue
             
         has_problems = True
         print(file)

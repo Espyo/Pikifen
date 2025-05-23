@@ -2028,6 +2028,72 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a Pikmin becomes "helpless".
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::becomeHelpless(Mob* m, void* info1, void* info2) {
+    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    m->leaveGroup();
+    
+    m->setAnimation(PIKMIN_ANIM_IDLING);
+}
+
+
+/**
+ * @brief When a Pikmin becomes idling.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::becomeIdle(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) m;
+    
+    PikminFsm::standStill(m, info1, info2);
+    
+    if(pikPtr->pikType->canFly) {
+        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        pikPtr->chase(
+            pikPtr->pos,
+            pikPtr->groundSector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
+        );
+    }
+    
+    m->unfocusFromMob();
+    
+    m->setAnimation(
+        PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+    );
+    m->setTimer(
+        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+    );
+}
+
+
+/**
+ * @brief When a Pikmin becomes a seed or a sprout.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::becomeSprout(Mob* m, void* info1, void* info2) {
+    m->leaveGroup();
+    enableFlag(m->flags, MOB_FLAG_INTANGIBLE);
+    enableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
+    enableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
+    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    ((Pikmin*) m)->isSeedOrSprout = true;
+    m->setAnimation(
+        PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+    );
+}
+
+
+/**
  * @brief When a Pikmin is crushed.
  *
  * @param m The mob.
@@ -2060,6 +2126,30 @@ void PikminFsm::beDismissed(Mob* m, void* info1, void* info2) {
     
     m->setAnimation(PIKMIN_ANIM_IDLING);
     m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_IDLE]);
+}
+
+
+/**
+ * @brief Makes a Pikmin begin its plucking process.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that is plucking.
+ * @param info2 Unused.
+ */
+void PikminFsm::beginPluck(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
+    
+    Pikmin* pikPtr = (Pikmin*) m;
+    Mob* leaPtr = (Mob*) info1;
+    
+    pikPtr->focusOnMob(leaPtr);
+    disableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
+    disableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
+    disableFlag(m->flags, MOB_FLAG_INTANGIBLE);
+    pikPtr->isSeedOrSprout = false;
+    PikminFsm::clearTimer(m, info1, info2); //Clear sprout evolution timer.
+    
+    pikPtr->setAnimation(PIKMIN_ANIM_PLUCKING);
 }
 
 
@@ -2199,96 +2289,6 @@ void PikminFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
     m->setAnimation(PIKMIN_ANIM_THROWN);
     
     ((Pikmin*) m)->startThrowTrail();
-}
-
-
-/**
- * @brief When a Pikmin becomes "helpless".
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void PikminFsm::becomeHelpless(Mob* m, void* info1, void* info2) {
-    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    m->leaveGroup();
-    
-    m->setAnimation(PIKMIN_ANIM_IDLING);
-}
-
-
-/**
- * @brief When a Pikmin becomes idling.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void PikminFsm::becomeIdle(Mob* m, void* info1, void* info2) {
-    Pikmin* pikPtr = (Pikmin*) m;
-    
-    PikminFsm::standStill(m, info1, info2);
-    
-    if(pikPtr->pikType->canFly) {
-        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-        pikPtr->chase(
-            pikPtr->pos,
-            pikPtr->groundSector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
-        );
-    }
-    
-    m->unfocusFromMob();
-    
-    m->setAnimation(
-        PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
-    );
-    m->setTimer(
-        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
-    );
-}
-
-
-/**
- * @brief When a Pikmin becomes a seed or a sprout.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void PikminFsm::becomeSprout(Mob* m, void* info1, void* info2) {
-    m->leaveGroup();
-    enableFlag(m->flags, MOB_FLAG_INTANGIBLE);
-    enableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
-    enableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
-    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    ((Pikmin*) m)->isSeedOrSprout = true;
-    m->setAnimation(
-        PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
-    );
-}
-
-
-/**
- * @brief Makes a Pikmin begin its plucking process.
- *
- * @param m The mob.
- * @param info1 Pointer to the leader that is plucking.
- * @param info2 Unused.
- */
-void PikminFsm::beginPluck(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Pikmin* pikPtr = (Pikmin*) m;
-    Mob* leaPtr = (Mob*) info1;
-    
-    pikPtr->focusOnMob(leaPtr);
-    disableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
-    disableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
-    disableFlag(m->flags, MOB_FLAG_INTANGIBLE);
-    pikPtr->isSeedOrSprout = false;
-    PikminFsm::clearTimer(m, info1, info2); //Clear sprout evolution timer.
-    
-    pikPtr->setAnimation(PIKMIN_ANIM_PLUCKING);
 }
 
 
@@ -3037,6 +3037,29 @@ void PikminFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a Pikmin needs to get going to its dismiss spot.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) m;
+    
+    if(pikPtr->pikType->canFly) {
+        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    }
+    
+    m->setTimer(PIKMIN::DISMISS_TIMEOUT);
+    
+    m->setAnimation(
+        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
+        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+    );
+}
+
+
+/**
  * @brief When a Pikmin needs to go towards its spot on a carriable object.
  *
  * @param m The mob.
@@ -3321,29 +3344,6 @@ void PikminFsm::goToTool(Mob* m, void* info1, void* info2) {
     
     pikPtr->fsm.setState(PIKMIN_STATE_GOING_TO_TOOL);
     
-}
-
-
-/**
- * @brief When a Pikmin needs to get going to its dismiss spot.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void PikminFsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
-    Pikmin* pikPtr = (Pikmin*) m;
-    
-    if(pikPtr->pikType->canFly) {
-        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    }
-    
-    m->setTimer(PIKMIN::DISMISS_TIMEOUT);
-    
-    m->setAnimation(
-        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
-        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
-    );
 }
 
 

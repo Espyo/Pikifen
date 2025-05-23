@@ -20,7 +20,6 @@
 #include "../game_state/gameplay/gameplay.h"
 #include "../util/allegro_utils.h"
 #include "../util/drawing_utils.h"
-#include "../util/drawing_utils.h"
 #include "../util/general_utils.h"
 #include "../util/geometry_utils.h"
 #include "../util/string_utils.h"

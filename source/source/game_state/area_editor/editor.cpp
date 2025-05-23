@@ -3013,6 +3013,45 @@ void AreaEditor::selectEdge(Edge* e) {
 
 
 /**
+ * @brief Code to run for the selection filter command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::selectionFilterCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    clearSelection();
+    if(!isShiftPressed) {
+        selectionFilter =
+            (SELECTION_FILTER)
+            sumAndWrap(selectionFilter, 1, N_SELECTION_FILTERS);
+    } else {
+        selectionFilter =
+            (SELECTION_FILTER)
+            sumAndWrap(selectionFilter, -1, N_SELECTION_FILTERS);
+    }
+    
+    string finalStatusText = "Set selection filter to ";
+    switch(selectionFilter) {
+    case SELECTION_FILTER_SECTORS: {
+        finalStatusText += "sectors + edges + vertexes";
+        break;
+    } case SELECTION_FILTER_EDGES: {
+        finalStatusText += "edges + vertexes";
+        break;
+    } case SELECTION_FILTER_VERTEXES: {
+        finalStatusText += "vertexes";
+        break;
+    } case N_SELECTION_FILTERS: {
+        break;
+    }
+    }
+    finalStatusText += ".";
+    setStatus(finalStatusText);
+}
+
+
+/**
  * @brief Selects all path stops with the given label.
  *
  * @param label Label to search for.
@@ -3064,45 +3103,6 @@ void AreaEditor::selectVertex(Vertex* v) {
     selectedVertexes.insert(v);
     setSelectionStatusText();
     updateVertexSelection();
-}
-
-
-/**
- * @brief Code to run for the selection filter command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::selectionFilterCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    clearSelection();
-    if(!isShiftPressed) {
-        selectionFilter =
-            (SELECTION_FILTER)
-            sumAndWrap(selectionFilter, 1, N_SELECTION_FILTERS);
-    } else {
-        selectionFilter =
-            (SELECTION_FILTER)
-            sumAndWrap(selectionFilter, -1, N_SELECTION_FILTERS);
-    }
-    
-    string finalStatusText = "Set selection filter to ";
-    switch(selectionFilter) {
-    case SELECTION_FILTER_SECTORS: {
-        finalStatusText += "sectors + edges + vertexes";
-        break;
-    } case SELECTION_FILTER_EDGES: {
-        finalStatusText += "edges + vertexes";
-        break;
-    } case SELECTION_FILTER_VERTEXES: {
-        finalStatusText += "vertexes";
-        break;
-    } case N_SELECTION_FILTERS: {
-        break;
-    }
-    }
-    finalStatusText += ".";
-    setStatus(finalStatusText);
 }
 
 

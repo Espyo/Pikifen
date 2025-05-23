@@ -523,7 +523,7 @@ bool Point::operator !=(const Point& p) const {
  * @param p Coordinates to add to.
  * @return The new point.
  */
-const Point operator+(float n, const Point& p) {
+const Point operator +(float n, const Point& p) {
     return Point(n + p.x, n + p.y);
 }
 
@@ -536,7 +536,7 @@ const Point operator+(float n, const Point& p) {
  * @param p Coordinates to subtract with.
  * @return The new point.
  */
-const Point operator-(float n, const Point& p) {
+const Point operator -(float n, const Point& p) {
     return Point(n - p.x, n - p.y);
 }
 
@@ -549,7 +549,7 @@ const Point operator-(float n, const Point& p) {
  * @param p Coordinates to multiply with.
  * @return The new point.
  */
-const Point operator*(float n, const Point& p) {
+const Point operator *(float n, const Point& p) {
     return Point(n * p.x, n * p.y);
 }
 
@@ -562,7 +562,7 @@ const Point operator*(float n, const Point& p) {
  * @param p Coordinates to divide with.
  * @return The new point.
  */
-const Point operator/(float n, const Point& p) {
+const Point operator /(float n, const Point& p) {
     return Point(n / p.x, n / p.y);
 }
 
@@ -1517,6 +1517,18 @@ bool isPointInTriangle(
 
 
 /**
+ * @brief Converts linear distance to angular distance.
+ *
+ * @param linearDist Linear distance.
+ * @param radius Radius of the circle.
+ * @return The angular distance.
+ */
+float linearDistToAngular(float linearDist, float radius) {
+    return (float) (2 * atan(linearDist / (2 * radius)));
+}
+
+
+/**
  * @brief Returns whether a line segment intersects with a rectangle.
  * Also returns true if the line is fully inside the rectangle.
  *
@@ -1736,18 +1748,6 @@ bool lineSegsIntersect(
         outIntersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     return true;
-}
-
-
-/**
- * @brief Converts linear distance to angular distance.
- *
- * @param linearDist Linear distance.
- * @param radius Radius of the circle.
- * @return The angular distance.
- */
-float linearDistToAngular(float linearDist, float radius) {
-    return (float) (2 * atan(linearDist / (2 * radius)));
 }
 
 

@@ -746,6 +746,31 @@ void AnimationEditor::panCam(const ALLEGRO_EVENT& ev) {
 
 
 /**
+ * @brief Callback for when the user picks an animation from the picker.
+ *
+ * @param name Name of the animation.
+ * @param topCat Unused.
+ * @param secCat Unused.
+ * @param info Unused.
+ * @param isNew Is this a new animation or an existing one?
+ */
+void AnimationEditor::pickAnimation(
+    const string& name, const string& topCat, const string& secCat,
+    void* info, bool isNew
+) {
+    if(isNew) {
+        db.animations.push_back(new Animation(name));
+        db.sortAlphabetically();
+        changesMgr.markAsChanged();
+        setStatus("Created animation \"" + name + "\".");
+    }
+    curAnimInst.clear();
+    curAnimInst.animDb = &db;
+    curAnimInst.curAnim = db.animations[db.findAnimation(name)];
+}
+
+
+/**
  * @brief Callback for when the user picks a file from the picker.
  *
  * @param name Name of the file.
@@ -773,31 +798,6 @@ void AnimationEditor::pickAnimDbFile(
     } else {
         reallyLoad();
     }
-}
-
-
-/**
- * @brief Callback for when the user picks an animation from the picker.
- *
- * @param name Name of the animation.
- * @param topCat Unused.
- * @param secCat Unused.
- * @param info Unused.
- * @param isNew Is this a new animation or an existing one?
- */
-void AnimationEditor::pickAnimation(
-    const string& name, const string& topCat, const string& secCat,
-    void* info, bool isNew
-) {
-    if(isNew) {
-        db.animations.push_back(new Animation(name));
-        db.sortAlphabetically();
-        changesMgr.markAsChanged();
-        setStatus("Created animation \"" + name + "\".");
-    }
-    curAnimInst.clear();
-    curAnimInst.animDb = &db;
-    curAnimInst.curAnim = db.animations[db.findAnimation(name)];
 }
 
 

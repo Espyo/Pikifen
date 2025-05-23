@@ -20,8 +20,8 @@
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
 #include "../mob_script/pikmin_fsm.h"
-#include "mob_enums.h"
 #include "mob.h"
+#include "mob_enums.h"
 
 
 namespace PIKMIN {

@@ -4332,84 +4332,6 @@ void AreaEditor::processGuiPanelPathLink() {
 
 
 /**
- * @brief Processes the Dear ImGui path stop control panel for this frame.
- */
-void AreaEditor::processGuiPanelPathStop() {
-    PathStop* sPtr = *selectedPathStops.begin();
-    
-    //Radius value.
-    float radius = sPtr->radius;
-    if(ImGui::DragFloat("Radius", &radius, 0.5f, PATHS::MIN_STOP_RADIUS)) {
-        radius = std::max(PATHS::MIN_STOP_RADIUS, radius);
-        registerChange("path stop radius change");
-        sPtr->radius = radius;
-        pathPreviewTimer.start(false);
-    }
-    setTooltip(
-        "Radius of the stop. Used when mobs want to find the closest\n"
-        "start/end stop.",
-        "", WIDGET_EXPLANATION_DRAG
-    );
-    
-    //Script use only checkbox.
-    int flagsI = sPtr->flags;
-    if(
-        ImGui::CheckboxFlags(
-            "Script use only",
-            &flagsI,
-            PATH_STOP_FLAG_SCRIPT_ONLY
-        )
-    ) {
-        registerChange("path stop property change");
-        sPtr->flags = flagsI;
-    }
-    setTooltip(
-        "Can only be used by objects if their script tells them to."
-    );
-    
-    //Light load only checkbox.
-    if(
-        ImGui::CheckboxFlags(
-            "Light load only",
-            &flagsI,
-            PATH_STOP_FLAG_LIGHT_LOAD_ONLY
-        )
-    ) {
-        registerChange("path stop property change");
-        sPtr->flags = flagsI;
-    }
-    setTooltip(
-        "Can only be used by objects that are not carrying anything, "
-        "or by objects that only have a weight of 1."
-    );
-    
-    //Airborne only checkbox.
-    if(
-        ImGui::CheckboxFlags(
-            "Airborne only",
-            &flagsI,
-            PATH_STOP_FLAG_AIRBORNE_ONLY
-        )
-    ) {
-        registerChange("path stop property change");
-        sPtr->flags = flagsI;
-    }
-    setTooltip(
-        "Can only be used by objects that can fly."
-    );
-    
-    //Label text.
-    monoInputText("Label", &sPtr->label);
-    setTooltip(
-        "If this stop is part of a path that you want\n"
-        "to address in a script, write the name here."
-    );
-    
-    homogenizeSelectedPathStops();
-}
-
-
-/**
  * @brief Processes the Dear ImGui paths control panel for this frame.
  */
 void AreaEditor::processGuiPanelPaths() {
@@ -4852,6 +4774,84 @@ void AreaEditor::processGuiPanelPaths() {
     }
     
     ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui path stop control panel for this frame.
+ */
+void AreaEditor::processGuiPanelPathStop() {
+    PathStop* sPtr = *selectedPathStops.begin();
+    
+    //Radius value.
+    float radius = sPtr->radius;
+    if(ImGui::DragFloat("Radius", &radius, 0.5f, PATHS::MIN_STOP_RADIUS)) {
+        radius = std::max(PATHS::MIN_STOP_RADIUS, radius);
+        registerChange("path stop radius change");
+        sPtr->radius = radius;
+        pathPreviewTimer.start(false);
+    }
+    setTooltip(
+        "Radius of the stop. Used when mobs want to find the closest\n"
+        "start/end stop.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Script use only checkbox.
+    int flagsI = sPtr->flags;
+    if(
+        ImGui::CheckboxFlags(
+            "Script use only",
+            &flagsI,
+            PATH_STOP_FLAG_SCRIPT_ONLY
+        )
+    ) {
+        registerChange("path stop property change");
+        sPtr->flags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects if their script tells them to."
+    );
+    
+    //Light load only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Light load only",
+            &flagsI,
+            PATH_STOP_FLAG_LIGHT_LOAD_ONLY
+        )
+    ) {
+        registerChange("path stop property change");
+        sPtr->flags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects that are not carrying anything, "
+        "or by objects that only have a weight of 1."
+    );
+    
+    //Airborne only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Airborne only",
+            &flagsI,
+            PATH_STOP_FLAG_AIRBORNE_ONLY
+        )
+    ) {
+        registerChange("path stop property change");
+        sPtr->flags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects that can fly."
+    );
+    
+    //Label text.
+    monoInputText("Label", &sPtr->label);
+    setTooltip(
+        "If this stop is part of a path that you want\n"
+        "to address in a script, write the name here."
+    );
+    
+    homogenizeSelectedPathStops();
 }
 
 

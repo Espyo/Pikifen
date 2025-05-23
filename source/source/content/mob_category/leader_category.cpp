@@ -13,8 +13,8 @@
 #include "leader_category.h"
 
 #include "../../core/game.h"
-#include "../mob_script/leader_fsm.h"
 #include "../mob/leader.h"
+#include "../mob_script/leader_fsm.h"
 
 
 /**

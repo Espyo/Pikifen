@@ -1112,39 +1112,6 @@ void AreaEditor::findProblemsNoGoalMob() {
 
 
 /**
- * @brief Checks for any missing mission score criterion in the area, and
- * fills the problem info if so.
- */
-void AreaEditor::findProblemsNoScoreCriteria() {
-    if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
-        bool hasAnyCriterion = false;
-        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            if(
-                game.missionScoreCriteria[c]->getMultiplier(
-                    &game.curAreaData->mission
-                ) != 0
-            ) {
-                hasAnyCriterion = true;
-                break;
-            }
-        }
-        if(!hasAnyCriterion) {
-            problemType = EPT_NO_SCORE_CRITERIA;
-            problemTitle = "No active score criteria!";
-            problemDescription =
-                "In this mission, the player is graded according to their "
-                "score. However, none of the score criteria are active, "
-                "so the player's score will always be 0.";
-            return;
-        }
-    }
-}
-
-
-/**
  * @brief Checks for any non-simple sectors in the area, and fills the problem
  * info if so.
  */
@@ -1175,6 +1142,39 @@ void AreaEditor::findProblemsNonSimpleSector() {
             problemDescription.clear();
             break;
         }
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any missing mission score criterion in the area, and
+ * fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoScoreCriteria() {
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+    ) {
+        bool hasAnyCriterion = false;
+        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
+            if(
+                game.missionScoreCriteria[c]->getMultiplier(
+                    &game.curAreaData->mission
+                ) != 0
+            ) {
+                hasAnyCriterion = true;
+                break;
+            }
+        }
+        if(!hasAnyCriterion) {
+            problemType = EPT_NO_SCORE_CRITERIA;
+            problemTitle = "No active score criteria!";
+            problemDescription =
+                "In this mission, the player is graded according to their "
+                "score. However, none of the score criteria are active, "
+                "so the player's score will always be 0.";
+            return;
         }
     }
 }

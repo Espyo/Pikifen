@@ -14,8 +14,8 @@
 
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
-#include "../mob_type/mob_type.h"
 #include "../mob/mob.h"
+#include "../mob_type/mob_type.h"
 
 
 using std::size_t;

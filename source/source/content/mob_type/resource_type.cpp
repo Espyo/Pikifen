@@ -13,8 +13,8 @@
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
-#include "../mob_script/resource_fsm.h"
 #include "../mob/resource.h"
+#include "../mob_script/resource_fsm.h"
 
 
 /**
