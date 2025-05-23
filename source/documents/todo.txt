@@ -42,8 +42,8 @@ Next tasks (roughly sorted most important first)
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
                     Could change pitch when you're changing those multi-value options in the options menu
             HUD
-                Ready...
-                GO!
+                x Ready...
+                x GO!
                 Mission complete
                 Mission failed
                 Mission completion item going up
@@ -190,10 +190,10 @@ Next tasks (roughly sorted most important first)
         Mobs for decorative pebbles, stones, sticks, cobwebs
     More particles
         More across the board -- check all mobs too
+    Knockback could scale with vulnerability (thanks Rosey)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
-        Add a favicon
     Cook up a better logo?
     Set the version of all pieces of content to 1.0
     Test it on the Steam Deck
@@ -221,7 +221,6 @@ Next tasks (roughly sorted most important first)
                 "--squeeze-lines=3",
                 "--style=java",
             ],
-        Make it so the ampersand for references is near the type name, not the variable name
         Document the usage of Astyle in the contributing file
     Make sure the readme's <50MB size claim is correct
     
@@ -338,6 +337,7 @@ Next tasks (roughly sorted most important first)
         Maximum Pikmin in field
         If Onions work automatically, by ejecting Pikmin whenever the amount on field is not at max (a la Bingo Battle)
         If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
+        If Onions should pop new seeds when an extinction happen or if they should let the extinction happen
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
