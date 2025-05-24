@@ -1,0 +1,13 @@
+name = Rising Tide
+
+tags = Area; Calm; Reflective
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_start = 9.6
+
+main_track = areas/rising_tide
+mix_tracks {
+    enemy = areas/rising_tide_enemy
+}

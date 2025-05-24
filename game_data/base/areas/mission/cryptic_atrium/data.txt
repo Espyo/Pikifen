@@ -10,7 +10,7 @@ bg_bmp
 bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=1.0000
-song
+song=areas/rising_tide
 weather=cave_normal
 day_time_start=420
 day_time_speed=120.0000

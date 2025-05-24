@@ -10,7 +10,7 @@ bg_bmp=textures/grass_light
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000
-song
+song=areas/trials_and_tribulations
 weather=dripping
 day_time_start=990
 day_time_speed=0.0000

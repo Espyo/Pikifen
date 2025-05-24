@@ -1,0 +1,14 @@
+name = Trials and Tribulations
+description = A bold and orchestral piece for a test of skill.
+
+tags = Area; Triumphant; Upbeat;
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_start = 24
+
+main_track = areas/trials_and_tribulations
+mix_tracks {
+    enemy = areas/trials_and_tribulations_enemy
+}
