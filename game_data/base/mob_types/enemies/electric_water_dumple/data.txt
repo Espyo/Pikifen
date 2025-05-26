@@ -1,5 +1,6 @@
 name = Electric Water Dumple
 description = This large Water Dumple can produce electricity from its whiskers in order to stun Pikmin before eating them.
+notes = Original enemy, concept by CraftedPBody on Pikmin Fanon.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

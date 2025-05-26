@@ -149,9 +149,7 @@ Next tasks (roughly sorted most important first)
             Plucking -- sounds like crap
         All sound files should be at peak amplitude
     Compose and add songs
-        Editors
         A couple of gameplay songs
-        Results screen
         Helodity's tropical song
         Other people's songs
     Other base content changes

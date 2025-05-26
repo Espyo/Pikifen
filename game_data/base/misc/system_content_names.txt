@@ -73,8 +73,9 @@ sounds {
 songs {
     boss = others/a_boss_like_enemy
     boss_victory = others/a_boss_like_enemy_victory
-    editors = others/editors
+    editors = others/makes_you_think
     menus = others/pikifen
+    results = others/makes_you_think
 }
 
 animations {

@@ -1,5 +1,6 @@
 name = Cyclopod
 description = A gormless underwater creature. Its only means of defense, spinning, is also what leaves it vulnerable.
+notes = Original enemy.
 
 acceleration = 60
 can_hunt = player; enemy

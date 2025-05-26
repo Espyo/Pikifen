@@ -1,0 +1,12 @@
+name = Makes You Think
+description = Let the simple guitar of this song lull you as you concentrate on what you're making.
+
+tags = Calm; Thinking; Menu
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_end = 200
+loop_start = 8
+
+main_track = others/makes_you_think

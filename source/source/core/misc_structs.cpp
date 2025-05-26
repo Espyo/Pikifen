@@ -1860,6 +1860,7 @@ void SystemContentNames::load(DataNode* file) {
     sngRS.set("boss_victory", sngBossVictory);
     sngRS.set("editors", sngEditors);
     sngRS.set("menus", sngMenus);
+    sngRS.set("results", sngResults);
     
     ReaderSetter aniRS(file->getChildByName("animations"));
     

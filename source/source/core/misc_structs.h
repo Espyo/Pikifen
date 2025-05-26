@@ -863,6 +863,9 @@ struct SystemContentNames {
     //Menus.
     string sngMenus = "others/menus";
     
+    //Results menu.
+    string sngResults = "others/results";
+    
     //Global animations.
     
     //Leader damage spark.

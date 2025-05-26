@@ -130,6 +130,7 @@ void Results::continuePlaying() {
         game.states.gameplay->afterHours = true;
         game.states.gameplay->missionFailReason =
             (MISSION_FAIL_COND) INVALID;
+        game.audio.setCurrentSong("");
         game.changeState(game.states.gameplay, true, false);
         game.states.gameplay->enter();
     });
@@ -803,7 +804,7 @@ void Results::load() {
     gui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    game.audio.setCurrentSong(game.sysContentNames.sngEditors);
+    game.audio.setCurrentSong(game.sysContentNames.sngResults);
     game.fadeMgr.startFade(true, nullptr);
     gui.setSelectedItem(gui.backItem, true);
     guiTimeSpent = 0.0f;
