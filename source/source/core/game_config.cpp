@@ -109,9 +109,6 @@ const float CHASE_RANGE = 200.0f;
 //Default value for the idle Pikmin bump delay.
 const float IDLE_BUMP_DELAY = 5.0f;
 
-//Default value for the idle Pikmin bump range.
-const float IDLE_BUMP_RANGE = 50.0f;
-
 //Default value for the idle Pikmin task range.
 const float IDLE_TASK_RANGE = 50.0f;
 
@@ -253,7 +250,6 @@ void GameConfig::load(DataNode* file) {
         
         pRS.set("chase_range", pikmin.chaseRange);
         pRS.set("idle_bump_delay", pikmin.idleBumpDelay);
-        pRS.set("idle_bump_range", pikmin.idleBumpRange);
         pRS.set("idle_task_range", pikmin.idleTaskRange);
         pRS.set("maturity_power_mult", pikmin.maturityPowerMult);
         pRS.set("maturity_speed_mult", pikmin.maturitySpeedMult);

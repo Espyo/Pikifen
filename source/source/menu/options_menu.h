@@ -267,6 +267,10 @@ private:
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*
     leavingConfirmationPicker = nullptr;
     
+    //Pikmin bump picker widget.
+    OptionsMenuPickerGuiItem<float>*
+    pikminBumpPicker = nullptr;
+    
     //Master volume picker widget.
     OptionsMenuPickerGuiItem<float>* masterVolPicker = nullptr;
     

@@ -1845,7 +1845,7 @@ void GameplayState::processMobMiscInteractions(
                 //Pikmin don't get bumped by leaders that are,
                 //for instance, lying down.
                 m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
-                d <= game.config.pikmin.idleBumpRange
+                dBetween <= game.options.misc.pikminBumpDist
             ) {
                 pendingIntermobEvents.push_back(
                     PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)

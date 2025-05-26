@@ -2431,7 +2431,7 @@ void PikminFsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
  */
 void PikminFsm::checkLeaderBump(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
-    if(pikPtr->bumpLock > 0.0f) {
+    if(game.options.misc.pikminBumpDist >= 0.0f && pikPtr->bumpLock > 0.0f) {
         pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
         return;
     }

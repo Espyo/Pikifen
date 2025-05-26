@@ -70,7 +70,6 @@ extern const float DAY_MINUTES_START;
 namespace PIKMIN_D {
 extern const float CHASE_RANGE;
 extern const float IDLE_BUMP_DELAY;
-extern const float IDLE_BUMP_RANGE;
 extern const float IDLE_TASK_RANGE;
 extern const float MATURITY_POWER_MULT;
 extern const float MATURITY_SPEED_MULT;
@@ -227,9 +226,6 @@ struct GameConfig {
         
         //Idle Pikmin are only bumped if away from a leader for these many secs.
         float idleBumpDelay = PIKMIN_D::IDLE_BUMP_DELAY;
-        
-        //Idle Pikmin will be bumped by a leader within this distance.
-        float idleBumpRange = PIKMIN_D::IDLE_BUMP_RANGE;
         
         //Idle Pikmin will go for a task if they are within this distance of it.
         float idleTaskRange = PIKMIN_D::IDLE_TASK_RANGE;

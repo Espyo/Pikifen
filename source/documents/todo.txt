@@ -761,7 +761,6 @@ Misc things (so I don't forget)
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
         The standby counter near the cursor should be made into an option and disabled by default
         Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
-        An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Mechanics
         Lock-on
             Auto [PIKMIN 4]

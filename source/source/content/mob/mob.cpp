@@ -1832,6 +1832,9 @@ Distance Mob::getDistanceBetween(
         distPadding = radius + m2Ptr->radius;
     }
     mobToHotspotDist -= distPadding;
+    if(mobToHotspotDist.toFloat() < 0.0f) {
+        mobToHotspotDist = 0.0f;
+    }
     return mobToHotspotDist;
 }
 

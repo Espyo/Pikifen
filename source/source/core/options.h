@@ -143,6 +143,7 @@ extern const bool SNAP;
 namespace MISC_D {
 extern const float CURSOR_CAM_WEIGHT;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
+extern const float PIKMIN_BUMP_DIST;
 extern const bool SHOW_HUD_INPUT_ICONS;
 }
 
@@ -372,6 +373,9 @@ struct Options {
         
         //Pause menu leaving confirmation question mode.
         LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;
+
+        //Idle Pikmin leader bumping distance.
+        float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
         //Show control bind icons on top of HUD elements?
         bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;

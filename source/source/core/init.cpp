@@ -548,14 +548,14 @@ void initControls() {
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 1",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_1", ""
+        "mt_mod_1", "k_216"
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_MOD_2,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 2",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_2", ""
+        "mt_mod_2", "k_218"
     );
     
     //Gameplay maker tools.
