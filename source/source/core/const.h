@@ -108,7 +108,7 @@ const string MISSION_AREAS = "mission";
 const string TUTORIAL_AREA = "tutorial_meadow";
 
 //Global animations folder.
-const string GLOBAL_ANIMATIONS = "animations";
+const string GLOBAL_ANIMATIONS = "global_animations";
 
 //Graphics folder.
 const string GRAPHICS = "graphics";
