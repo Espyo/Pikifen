@@ -46,5 +46,5 @@ sounds {
 }
 
 status_vulnerabilities {
-    mud = 0
+    muddy = 0
 }

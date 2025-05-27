@@ -10,6 +10,7 @@ Next tasks (roughly sorted most important first)
     Sleeping right after the stage loads (maybe only in the area editor quick play?) puts you in a limbo state
     Quitting the radar using the Tab key won't play the "back" sound
     The camera offset because the leader is far from the Pikmin should have a maximum
+    If a leader hits a geyser while in the throwing animation, that animation will loop
     Fix #8
 
     --- 0.26 ---
@@ -361,6 +362,7 @@ Next tasks (roughly sorted most important first)
     [NEEDS BRAINSTORMING] Re-think how missions work
         Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
         I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
+        Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen

@@ -954,6 +954,8 @@ void initMisc() {
         
     game.liquidLimitEffectBuffer = al_create_bitmap(game.winW, game.winH);
     game.wallOffsetEffectBuffer = al_create_bitmap(game.winW, game.winH);
+    
+    game.editorsView.boxMargin = GAMEPLAY::CAMERA_BOX_MARGIN;
 }
 
 

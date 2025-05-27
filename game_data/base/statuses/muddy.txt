@@ -1,4 +1,4 @@
-name = Mud
+name = Muddy
 description = Mobs in mud get heavily slowed down.
 
 affects = enemies; leaders; pikmin; others

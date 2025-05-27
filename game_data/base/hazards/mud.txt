@@ -3,5 +3,5 @@ description = Any body of mud on the floor. Pikmin and leaders will be heavily s
 
 blocks_paths = false
 color = 0 0 255
-effects = mud
+effects = muddy
 liquid = mud
