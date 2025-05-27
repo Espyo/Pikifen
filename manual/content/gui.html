@@ -277,12 +277,12 @@
       </ul>
     </ul>
 
-    <h3 id="help">Help menu</h3>
+    <h3 id="help-menu">Help menu</h3>
 
     <p>The help menu, accessible from the main menu or the pause menu.</p>
 
     <ul>
-      <li><b>Internal name:</b> <code>help</code></li>
+      <li><b>Internal name:</b> <code>help_menu</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>back</code>: Button to return to the pause menu.</li>
@@ -297,47 +297,6 @@
         <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
       </ul>
       <li><b>Tidbits:</b> Tidbits of information in the help menu are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the file in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
-    </ul>
-    
-    <h3 id="main-menu">Main menu</h3>
-
-    <p>The main menu, entered when you start the game.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>main_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>play</code>: Play button.</li>
-        <li><code>make</code>: Make button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>stats</code>: Statistics button.</li>
-        <li><code>discord</code>: Discord server invite button.</li>
-        <li><code>github</code>: GitHub page button.</li>
-        <li><code>exit</code>: Exit button.</li>
-        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
-      </ul>
-      <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
-      <ul>
-        <li><code>min_window_limit</code>: Top-left coordinates of the logo's placement on the game window, in window width or height percentage.</li>
-        <li><code>max_window_limit</code>: Same as above, but for the bottom-right.</li>
-        <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in ratio per second. The ratio is of the window width or height, whichever is largest.</li>
-        <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
-        <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
-        <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
-        <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
-        <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
-        <li><code>pikmin_size</code>: Pikmin size, in window dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the window width nor 2% of the window height.</li>
-        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
-        <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
-      </ul>
-      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
-      <ul>
-        <li><code>play</code>: Play button.</li>
-        <li><code>make</code>: Make button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>statistics</code>: Statistics button.</li>
-        <li><code>quit</code>: Quit button.</li>
-      </ul>
     </ul>
     
     <h3 id="main-menu-make">Main menu &ndash; make page</h3>
@@ -379,6 +338,63 @@
       <ul>
         <li><code>simple_areas</code>: Simple areas button.</li>
         <li><code>missions</code>: Missions button.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="main-menu-top">Main menu &ndash; top page</h3>
+
+    <p>The main menu's top-level page, entered when you start the game.</p>
+    
+    <ul>
+      <li><b>Internal name:</b> <code>main_menu_top</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>play</code>: Play button.</li>
+        <li><code>make</code>: Make button.</li>
+        <li><code>options</code>: Options button.</li>
+        <li><code>stats</code>: Statistics button.</li>
+        <li><code>discord</code>: Discord server invite button.</li>
+        <li><code>github</code>: GitHub page button.</li>
+        <li><code>exit</code>: Exit button.</li>
+        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
+      </ul>
+      <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
+      <ul>
+        <li><code>min_window_limit</code>: Top-left coordinates of the logo's placement on the game window, in window width or height percentage.</li>
+        <li><code>max_window_limit</code>: Same as above, but for the bottom-right.</li>
+        <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in ratio per second. The ratio is of the window width or height, whichever is largest.</li>
+        <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
+        <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
+        <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
+        <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
+        <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
+        <li><code>pikmin_size</code>: Pikmin size, in window dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the window width nor 2% of the window height.</li>
+        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
+        <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
+      </ul>
+      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
+      <ul>
+        <li><code>play</code>: Play button.</li>
+        <li><code>make</code>: Make button.</li>
+        <li><code>options</code>: Options button.</li>
+        <li><code>statistics</code>: Statistics button.</li>
+        <li><code>quit</code>: Quit button.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="main-menu">Main menu &ndash; tutorial page</h3>
+
+    <p>The main menu page that asks first-time players to try the tutorial area.</p>
+    
+    <ul>
+      <li><b>Internal name:</b> <code>main_menu_tutorial</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>question</code>: The question's text.</li>
+        <li><code>no</code>: No button.</li>
+        <li><code>no_input</code>: Icon of the player input that answers no.</li>
+        <li><code>yes</code>: Yes button.</li>
+        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
     </ul>
     
@@ -503,39 +519,12 @@
       </ul>
     </ul>
     
-    <h3 id="pause-menu">Pause menu</h3>
-
-    <p>The menu that shows when the player pauses the game. This is only the system page, not the mission page, confirmation page, etc.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>pause_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>header</code>: Header text saying "PAUSED".</li>
-        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
-        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
-        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
-        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
-        <li><code>line</code>: Horizontal line separating the header and the menu.</li>
-        <li><code>area_name</code>: Area name.</li>
-        <li><code>area_subtitle</code>: Area subtitle or mission goal, if any.</li>
-        <li><code>continue</code>: Continue button.</li>
-        <li><code>retry</code>: Restart exploration/retry mission button.</li>
-        <li><code>end</code>: End exploration/mission button.</li>
-        <li><code>help</code>: Help button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>stats</code>: Statistics button.</li>
-        <li><code>quit</code>: Quit button.</li>
-        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
-      </ul>
-    </ul>
-    
     <h3 id="pause-menu-confirmation">Pause menu &ndash; confirmation page</h3>
 
     <p>The leaving confirmation page of the pause menu.</p>
 
     <ul>
-      <li><b>Internal name:</b> <code>pause_confirmation</code></li>
+      <li><b>Internal name:</b> <code>pause_menu_confirmation</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>cancel</code>: Cancel button.</li>
@@ -552,7 +541,7 @@
     <p>The mission page of the pause menu.</p>
 
     <ul>
-      <li><b>Internal name:</b> <code>pause_mission</code></li>
+      <li><b>Internal name:</b> <code>pause_menu_mission</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "MISSION".</li>
@@ -580,7 +569,7 @@
     <p>The radar page of the pause menu.</p>
 
     <ul>
-      <li><b>Internal name:</b> <code>pause_radar</code></li>
+      <li><b>Internal name:</b> <code>pause_menu_radar</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "RADAR".</li>
@@ -621,7 +610,7 @@
     <p>The Pikmin status page of the pause menu.</p>
 
     <ul>
-      <li><b>Internal name:</b> <code>pause_status</code></li>
+      <li><b>Internal name:</b> <code>pause_menu_status</code></li>
       <li><b>Items:</b></li>
       <ul>
         <li><code>header</code>: Header text saying "STATUS".</li>
@@ -636,6 +625,33 @@
         <li><code>list_scroll</code>: Scrollbar for the list.</li>
         <li><code>totals</code>: Row containing the grand totals.</li>
         <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
+        <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="pause-menu-system">Pause menu -- system page</h3>
+
+    <p>The menu that shows when the player pauses the game. This is only the system page, not the mission page, confirmation page, etc.</p>
+    
+    <ul>
+      <li><b>Internal name:</b> <code>pause_menu_system</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>header</code>: Header text saying "PAUSED".</li>
+        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
+        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
+        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
+        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
+        <li><code>line</code>: Horizontal line separating the header and the menu.</li>
+        <li><code>area_name</code>: Area name.</li>
+        <li><code>area_subtitle</code>: Area subtitle or mission goal, if any.</li>
+        <li><code>continue</code>: Continue button.</li>
+        <li><code>retry</code>: Restart exploration/retry mission button.</li>
+        <li><code>end</code>: End exploration/mission button.</li>
+        <li><code>help</code>: Help button.</li>
+        <li><code>options</code>: Options button.</li>
+        <li><code>stats</code>: Statistics button.</li>
+        <li><code>quit</code>: Quit button.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
     </ul>

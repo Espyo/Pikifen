@@ -1,5 +1,5 @@
-name=Main menu
-description=GUI for the main menu's top menu.
+name=Main menu -- top
+description=GUI for the main menu's top-level menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0

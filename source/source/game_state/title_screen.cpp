@@ -27,7 +27,7 @@ using DrawInfo = GuiItem::DrawInfo;
 namespace TITLE_SCREEN {
 
 //Name of the GUI information file.
-const string GUI_FILE_NAME = "main_menu";
+const string GUI_FILE_NAME = "main_menu_top";
 
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;

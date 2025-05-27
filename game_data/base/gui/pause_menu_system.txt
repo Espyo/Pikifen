@@ -1,5 +1,5 @@
-name=Pause menu
-description=GUI for the pause menu's top page.
+name=Pause menu -- system
+description=GUI for the pause menu's system page.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
