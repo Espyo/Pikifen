@@ -1,9 +1,0 @@
-name = Stunning electricity
-description = Small currents of electricity that aren't harmful, but paralize Pikmin. Used, for instance, by an Electric Water Dumple's zapping attack.
-
-color = 255 255 128
-effects = shocked
-
-maker = Espyo
-version = 1.0.0
-engine_version = 1.0.0

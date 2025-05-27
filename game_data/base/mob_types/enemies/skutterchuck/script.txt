@@ -11,7 +11,7 @@ script {
     looking_for_nodule {
         on_enter {
             set_var has_nodule false
-            receive_status triple_speed
+            receive_status speed_tripled
             set_animation idling random_time_on_spawn
             stop
             set_near_reach nodule_search
@@ -95,7 +95,7 @@ script {
     
     picking_up {
         on_enter {
-            remove_status triple_speed
+            remove_status speed_tripled
             set_animation picking_up
             stop
         }

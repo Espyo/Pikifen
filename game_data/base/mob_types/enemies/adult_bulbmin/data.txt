@@ -98,8 +98,8 @@ spawns {
 
 vulnerabilities {
     fire = 0
-    stunning_electricity = 0
-    fatal_electricity = 0
+    electricity_stunning = 0
+    electricity_fatal = 0
     water = 0
     water_bubble = 0
     poison = 0

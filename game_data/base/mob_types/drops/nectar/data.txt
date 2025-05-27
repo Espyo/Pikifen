@@ -11,7 +11,7 @@ total_doses = 10
 
 sounds {
     bumped {
-        file = misc/low_boing_2
+        file = misc/boing_low_2
         volume = 40
         speed_deviation = 8
     }

@@ -3161,7 +3161,7 @@ mobs{
 		vars=max_health=500.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-432.0000 -112.0000
 		vars=max_health=500.0000
 	}
@@ -3294,7 +3294,7 @@ mobs{
 		angle=1.6712
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-320.0000 160.0000
 		angle=1.5708
 		vars=max_health=500.0000
@@ -3464,7 +3464,7 @@ mobs{
 		angle=2.2686
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=768.0000 -192.0000
 		angle=1.5708
 		vars=max_health=500.0000
@@ -3480,7 +3480,7 @@ mobs{
 		angle=-0.9490
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=768.0000 96.0000
 		angle=-1.5708
 		vars=max_health=500.0000
@@ -3536,7 +3536,7 @@ mobs{
 		angle=0.9243
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=256.0000 320.0000
 		angle=1.5708
 		vars=max_health=500.0000

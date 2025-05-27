@@ -1,0 +1,29 @@
+name = Burgeoning Spiderwort (spicy)
+description = This Burgeoning Spiderwort grows ultra-spicy berries, which can be harvested.
+
+can_drop_multiple = true
+contents = berry_spicy
+custom_category_name = Useful
+delete_when_finished = false
+health_per_resource = 200
+height = 160
+hide_when_empty = false
+max_amount = 5
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 10
+recharge_amount = 1
+recharge_interval = 60
+show_amount = false
+show_health = false
+size_animation_suffixes = _0;_1;_2;_3;_4;_5
+target_type = explodable_pikmin_obstacle
+
+vulnerabilities {
+    explosion = 400
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

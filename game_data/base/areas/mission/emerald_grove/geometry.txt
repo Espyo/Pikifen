@@ -5492,7 +5492,7 @@ mobs{
 		angle=-0.5691
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=-244.5975 245.6557
 		angle=-0.7752
 		vars=max_health=3000.0000

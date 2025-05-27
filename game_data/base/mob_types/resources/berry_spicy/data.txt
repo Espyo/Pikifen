@@ -1,0 +1,21 @@
+name = Berry (spicy)
+description = Ultra-spicy berries can be gathered, and 10 of them are used to concoct a new dosage of ultra-spicy spray.
+
+can_walk_on_others = true
+carrying_destination = ship
+custom_category_name = Useful
+delivery_result = increase_ingredients
+height = 28
+max_carriers = 1
+pushable = true
+pushes = false
+radius = 14
+return_to_pile_on_vanish = false
+spray_to_concoct = ultra-spicy_spray
+vanish_delay = 10
+vanish_on_drop = true
+weight = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

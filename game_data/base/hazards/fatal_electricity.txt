@@ -1,9 +1,0 @@
-name = Fatal electricity
-description = Powerful eletrical current that eletrocutes the victim, killing them. Used, for instance, by an electrical wire's electricity arc.
-
-color = 255 255 128
-effects = electrocuted
-
-maker = Espyo
-version = 1.0.0
-engine_version = 1.0.0

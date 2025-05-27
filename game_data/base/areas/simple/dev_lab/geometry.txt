@@ -10746,7 +10746,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=fatal_electricity
+		hazard=electricity_fatal
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10754,7 +10754,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=fatal_electricity
+		hazard=electricity_fatal
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10794,7 +10794,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=stunning_electricity
+		hazard=electricity_stunning
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10826,7 +10826,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=stunning_electricity
+		hazard=electricity_stunning
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -13025,202 +13025,202 @@ mobs{
 		p=-320.0000 -2880.0000
 	}
 	pellet{
-		type=red_1_pellet
+		type=pellet_1_red
 		p=-480.0000 -2656.0000
 	}
 	pellet{
-		type=red_5_pellet
+		type=pellet_5_red
 		p=-480.0000 -2752.0000
 	}
 	pellet{
-		type=red_10_pellet
+		type=pellet_10_red
 		p=-480.0000 -2880.0000
 	}
 	pellet{
-		type=red_20_pellet
+		type=pellet_20_red
 		p=-480.0000 -3040.0000
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-768.0000 -2656.0000
 		vars=bloom_time=0.0000;red=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-768.0000 -2752.0000
 		vars=bloom_time=0.0000;red=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-768.0000 -2880.0000
 		vars=bloom_time=0.0000;red=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-768.0000 -3040.0000
 		vars=bloom_time=0.0000;red=true
 	}
 	pellet{
-		type=yellow_1_pellet
+		type=pellet_1_yellow
 		p=-896.0000 -2656.0000
 	}
 	pellet{
-		type=yellow_5_pellet
+		type=pellet_5_yellow
 		p=-896.0000 -2752.0000
 	}
 	pellet{
-		type=yellow_10_pellet
+		type=pellet_10_yellow
 		p=-896.0000 -2880.0000
 	}
 	pellet{
-		type=yellow_20_pellet
+		type=pellet_20_yellow
 		p=-896.0000 -3040.0000
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-1184.0000 -2656.0000
 		vars=bloom_time=0.0000;yellow=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-1184.0000 -2752.0000
 		vars=bloom_time=0.0000;yellow=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-1184.0000 -2880.0000
 		vars=bloom_time=0.0000;yellow=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-1184.0000 -3040.0000
 		vars=bloom_time=0.0000;yellow=true
 	}
 	pellet{
-		type=blue_1_pellet
+		type=pellet_1_blue
 		p=-1312.0000 -2656.0000
 	}
 	pellet{
-		type=blue_5_pellet
+		type=pellet_5_blue
 		p=-1312.0000 -2752.0000
 	}
 	pellet{
-		type=blue_10_pellet
+		type=pellet_10_blue
 		p=-1312.0000 -2880.0000
 	}
 	pellet{
-		type=blue_20_pellet
+		type=pellet_20_blue
 		p=-1312.0000 -3040.0000
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-1600.0000 -2656.0000
 		vars=bloom_time=0.0000;blue=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-1600.0000 -2752.0000
 		vars=bloom_time=0.0000;blue=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-1600.0000 -2880.0000
 		vars=bloom_time=0.0000;blue=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-1600.0000 -3040.0000
 		vars=bloom_time=0.0000;blue=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-2016.0000 -2752.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-2016.0000 -2880.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-2016.0000 -3040.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	pellet{
-		type=rock_1_pellet
+		type=pellet_1_rock
 		p=-1728.0000 -2656.0000
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=-1728.0000 -2752.0000
 	}
 	pellet{
-		type=rock_10_pellet
+		type=pellet_10_rock
 		p=-1728.0000 -2880.0000
 	}
 	pellet{
-		type=rock_20_pellet
+		type=pellet_20_rock
 		p=-1728.0000 -3040.0000
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-2016.0000 -2656.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-2432.0000 -2752.0000
 		vars=bloom_time=0.0000;winged=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-2432.0000 -2880.0000
 		vars=bloom_time=0.0000;winged=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-2432.0000 -3040.0000
 		vars=bloom_time=0.0000;winged=true
 	}
 	pellet{
-		type=winged_1_pellet
+		type=pellet_1_winged
 		p=-2144.0000 -2656.0000
 	}
 	pellet{
-		type=winged_5_pellet
+		type=pellet_5_winged
 		p=-2144.0000 -2752.0000
 	}
 	pellet{
-		type=winged_10_pellet
+		type=pellet_10_winged
 		p=-2144.0000 -2880.0000
 	}
 	pellet{
-		type=winged_20_pellet
+		type=pellet_20_winged
 		p=-2144.0000 -3040.0000
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-2432.0000 -2656.0000
 		vars=bloom_time=0.0000;winged=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-2688.0000 -2752.0000
 		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
-		type=10_pellet_posy
+		type=pellet_posy_10
 		p=-2688.0000 -2880.0000
 		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
-		type=20_pellet_posy
+		type=pellet_posy_20
 		p=-2688.0000 -3040.0000
 		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-2688.0000 -2656.0000
 		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
 	}
@@ -13289,7 +13289,7 @@ mobs{
 		links=151
 	}
 	bridge{
-		type=ceramic_bridge_red
+		type=bridge_ceramic_red
 		p=768.0000 -640.0000
 		vars=chunks=5;max_health=20.0000
 		links=152
@@ -13300,7 +13300,7 @@ mobs{
 		vars=chunks=5
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=1696.0000 -640.0000
 		links=154
 	}
@@ -13310,7 +13310,7 @@ mobs{
 		vars=max_health=20.0000;chunks=5
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=384.0000 -1088.0000
 	}
 	bouncer{
@@ -13389,7 +13389,7 @@ mobs{
 		p=1920.0000 -1440.0000
 	}
 	pellet{
-		type=red_1_pellet
+		type=pellet_1_red
 		p=1856.0000 -1504.0000
 	}
 	custom{
@@ -13496,21 +13496,21 @@ mobs{
 		vars=text=This sign tests markup text! New line:\nButton for throwing: \k throw \k.\nActual slash: \\.
 	}
 	pile{
-		type=bitter_burgeoning_spiderwort
+		type=burgeoning_spiderwort_bitter
 		p=640.0000 -3264.0000
 		angle=1.5708
 	}
 	resource{
-		type=bitter_berry
+		type=berry_bitter
 		p=576.0000 -3168.0000
 	}
 	pile{
-		type=spicy_burgeoning_spiderwort
+		type=burgeoning_spiderwort_spicy
 		p=768.0000 -3264.0000
 		angle=1.5708
 	}
 	resource{
-		type=spicy_berry
+		type=berry_spicy
 		p=832.0000 -3200.0000
 	}
 	tool{
@@ -13552,7 +13552,7 @@ mobs{
 		p=1472.0000 -3008.0000
 	}
 	pellet{
-		type=red_1_pellet
+		type=pellet_1_red
 		p=1450.3019 -3013.1511
 	}
 	interactable{
@@ -13657,12 +13657,12 @@ mobs{
 		p=160.0000 1888.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=320.0000 2048.0000
 		vars=max_health=1.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=480.0000 2048.0000
 		vars=health=1000.0000
 	}
@@ -13710,12 +13710,12 @@ mobs{
 		stored_inside=243
 	}
 	pellet{
-		type=blue_1_pellet
+		type=pellet_1_blue
 		p=544.0000 2336.0000
 		stored_inside=244
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=640.0000 2272.0000
 		links=247
 	}
@@ -13724,7 +13724,7 @@ mobs{
 		p=928.0000 2272.0000
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=1056.0000 2272.0000
 		links=249
 	}
@@ -13733,7 +13733,7 @@ mobs{
 		p=1376.0000 2272.0000
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=1056.0000 2016.0000
 		links=251
 	}
@@ -13742,7 +13742,7 @@ mobs{
 		p=1376.0000 2016.0000
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=1536.0000 2016.0000
 		links=253
 	}
@@ -13986,47 +13986,47 @@ mobs{
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-352.0000 1920.0000
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-512.0000 2144.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-800.0000 1888.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-832.0000 2144.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-896.0000 2144.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-960.0000 2144.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-1888.0000 1856.0000
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-2080.0000 1856.0000
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-1632.0000 2048.0000
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-1824.0000 2048.0000
 		angle=1.5708
 	}
@@ -14069,16 +14069,16 @@ mobs{
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-2464.0000 1760.0000
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-2592.0000 2048.0000
 		angle=1.5708
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=-2784.0000 2048.0000
 		angle=1.5708
 	}
@@ -14097,7 +14097,7 @@ mobs{
 		links=327
 	}
 	bridge{
-		type=ceramic_bridge_red
+		type=bridge_ceramic_red
 		p=-864.0000 2592.0000
 		angle=3.1416
 		links=328
@@ -14381,7 +14381,7 @@ mobs{
 		links=389
 	}
 	custom{
-		type=or_gate
+		type=logic_or_gate
 		p=2432.0000 -1088.0000
 		links=386
 	}
@@ -14402,7 +14402,7 @@ mobs{
 		links=393
 	}
 	custom{
-		type=and_gate
+		type=logic_and_gate
 		p=2752.0000 -1088.0000
 		links=390
 	}
@@ -14418,7 +14418,7 @@ mobs{
 		links=396
 	}
 	custom{
-		type=not_gate
+		type=logic_not_gate
 		p=3328.0000 -1088.0000
 		links=394
 	}
@@ -14434,7 +14434,7 @@ mobs{
 		links=399
 	}
 	custom{
-		type=xor_gate
+		type=logic_xor_gate
 		p=3040.0000 -1088.0000
 		links=397
 	}

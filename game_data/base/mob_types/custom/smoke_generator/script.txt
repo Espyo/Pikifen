@@ -3,7 +3,7 @@ first_state = idling
 script {
     idling {
         on_enter {
-            start_particles large_smoke 0 0 512 
+            start_particles smoke_large 0 0 512 
         }
     }
 }

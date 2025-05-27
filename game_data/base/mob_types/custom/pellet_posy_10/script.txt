@@ -1,0 +1,184 @@
+first_state = check_ok
+death_state = destroyed
+
+init {
+    set_var red false
+    set_var yellow false
+    set_var blue false
+    set_var rock false
+    set_var winged false
+    set_var cur_color none
+    set_var bloom_time 240
+}
+
+script {
+    check_ok {
+        on_enter {
+            if $red = true
+                set_state sprout
+            end_if
+            if $yellow = true
+                set_state sprout
+            end_if
+            if $blue = true
+                set_state sprout
+            end_if
+            if $rock = true
+                set_state sprout
+            end_if
+            if $winged = true
+                set_state sprout
+            end_if
+            
+            //If it got here, that means it has no chosen content. Pick red.
+            set_var red true
+            set_state sprout
+        }
+    }
+    sprout {
+        on_enter {
+            set_animation sprout
+            set_timer 1
+            set_huntable false
+        }
+        on_timer {
+            set_timer 1
+            calculate bloom_time $bloom_time - 1
+            if $bloom_time <= 120
+                set_state sapling
+            end_if
+        }
+    }
+    sapling {
+        on_enter {
+            set_animation sapling
+            start_particles sparks_small 15 0 150
+            set_timer 1
+        }
+        on_timer {
+            set_timer 1
+            calculate bloom_time $bloom_time - 1
+            if $bloom_time <= 0
+                set_state blooming
+            end_if
+        }
+    }
+    blooming {
+        on_enter {
+            set_animation blooming
+            start_particles sparks_small 15 0 150
+        }
+        on_animation_end {
+            set_huntable true
+            set_var cur_color winged
+            set_state picking_next_color
+        }
+    }
+    picking_next_color {
+        on_enter {
+            set_timer 3
+            
+            label try_next
+            
+            if $cur_color = red
+                set_var cur_color yellow
+            else
+                if $cur_color = yellow
+                    set_var cur_color blue
+                else
+                    if $cur_color = blue
+                        set_var cur_color rock
+                    else
+                        if $cur_color = rock
+                            set_var cur_color winged
+                        else
+                            if $cur_color = winged
+                                set_var cur_color red
+                            end_if
+                        end_if
+                    end_if
+                end_if
+            end_if
+            
+            if $cur_color = red
+                if $red != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = yellow
+                if $yellow != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = blue
+                if $blue != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = rock
+                if $rock != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = winged
+                if $winged != true
+                    goto try_next
+                end_if
+            end_if
+            
+            set_state idling
+        }
+    }
+    idling {
+        on_enter {
+            if $cur_color = red
+                set_animation idling_red no_restart
+            end_if
+            
+            if $cur_color = yellow
+                set_animation idling_yellow no_restart
+            end_if
+            
+            if $cur_color = blue
+                set_animation idling_blue no_restart
+            end_if
+            
+            if $cur_color = rock
+                set_animation idling_rock no_restart
+            end_if
+            
+            if $cur_color = winged
+                set_animation idling_winged no_restart
+            end_if
+        }
+        on_timer {
+            set_state picking_next_color
+        }
+    }
+    destroyed {
+        on_enter {
+            set_animation dying
+            start_particles enemy_defeat 0 0 150
+            start_particles pellet_posy_10_petals 100 0 150
+            start_dying
+            if $cur_color = red
+                spawn red
+            end_if
+            if $cur_color = yellow
+                spawn yellow
+            end_if
+            if $cur_color = blue
+                spawn blue
+            end_if
+            if $cur_color = rock
+                spawn rock
+            end_if
+            if $cur_color = winged
+                spawn winged
+            end_if
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}

@@ -71,7 +71,7 @@ script {
 
     destroying {
         on_enter {
-            start_particles small_crystal_explosion 0 0 100
+            start_particles crystal_explosion_small 0 0 100
             set_animation destroyed
             set_tangible false
         }

@@ -62,8 +62,8 @@ sounds {
 }
 
 vulnerabilities {
-    fatal_electricity = 0
-    stunning_electricity = 0
+    electricity_fatal = 0
+    electricity_stunning = 0
 }
 
 maker = Espyo

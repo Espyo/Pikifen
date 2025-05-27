@@ -5972,7 +5972,7 @@ mobs{
 		angle=1.3300
 	}
 	bridge{
-		type=ceramic_bridge_red
+		type=bridge_ceramic_red
 		p=446.5916 -22.6164
 		angle=-0.1735
 		links=68
@@ -5987,7 +5987,7 @@ mobs{
 		p=177.4414 170.7757
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=213.2596 -556.7504
 	}
 	enemy{
@@ -5996,19 +5996,19 @@ mobs{
 		angle=2.0204
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=205.3559 -4.8193
 		angle=1.6735
 		vars=bloom_time=0;rock=true;yellow=true
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=353.6870 429.6745
 		angle=-2.6678
 		vars=bloom_time=0;rock=true;yellow=true
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=-223.9106 184.8167
 		angle=0.7311
 		vars=bloom_time=0;rock=true;yellow=true
@@ -6053,12 +6053,12 @@ mobs{
 		p=555.5326 -588.6821
 	}
 	pile{
-		type=spicy_burgeoning_spiderwort
+		type=burgeoning_spiderwort_spicy
 		p=1085.2948 -982.8155
 		angle=1.4023
 	}
 	pile{
-		type=spicy_burgeoning_spiderwort
+		type=burgeoning_spiderwort_spicy
 		p=1304.0958 -1070.2521
 		angle=0.7525
 	}
@@ -6258,7 +6258,7 @@ mobs{
 		angle=2.9557
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=1779.5333 -485.8458
 		angle=2.7790
 		links=70
@@ -6317,7 +6317,7 @@ mobs{
 		p=1751.9985 -115.6080
 	}
 	pellet{
-		type=yellow_5_pellet
+		type=pellet_5_yellow
 		p=-1118.0107 303.0197
 	}
 	custom{
@@ -6325,12 +6325,12 @@ mobs{
 		p=1149.8031 -73.9318
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=-948.4150 -202.7220
 		stored_inside=99
 	}
 	pellet{
-		type=rock_1_pellet
+		type=pellet_1_rock
 		p=-1224.0000 -416.0000
 		stored_inside=107
 	}
@@ -6372,17 +6372,17 @@ mobs{
 		p=-466.4378 1073.5718
 	}
 	pellet{
-		type=yellow_1_pellet
+		type=pellet_1_yellow
 		p=24.0000 656.0000
 		stored_inside=57
 	}
 	pellet{
-		type=rock_1_pellet
+		type=pellet_1_rock
 		p=-96.0000 536.0000
 		stored_inside=56
 	}
 	pellet{
-		type=rock_10_pellet
+		type=pellet_10_rock
 		p=-1704.0000 -552.0000
 	}
 	decoration{
@@ -6390,7 +6390,7 @@ mobs{
 		p=921.6000 -144.0000
 	}
 	pellet{
-		type=rock_20_pellet
+		type=pellet_20_rock
 		p=1504.0000 -824.0000
 	}
 	enemy{
@@ -6410,19 +6410,19 @@ mobs{
 		p=-1282.3231 497.9460
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=1843.1998 -345.6000
 		angle=2.5730
 		vars=bloom_time=240.0000;rock=true;yellow=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=124.7549 -1359.7683
 		angle=2.1258
 		vars=bloom_time=240.0000;rock=true;yellow=true
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=664.0000 -256.0000
 		angle=0.7316
 		vars=bloom_time=0;rock=true;yellow=true
@@ -6481,7 +6481,7 @@ mobs{
 		p=-347.8887 -407.1091
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=-768.0000 -240.0000
 		stored_inside=53
 	}
@@ -6647,7 +6647,7 @@ mobs{
 		p=828.1887 442.4410
 	}
 	pellet{
-		type=rock_1_pellet
+		type=pellet_1_rock
 		p=1176.0000 -376.0000
 	}
 	decoration{
@@ -6734,7 +6734,7 @@ mobs{
 		angle=-1.8022
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=-240.0000 272.0000
 		angle=2.9858
 		links=179
@@ -6744,12 +6744,12 @@ mobs{
 		p=-402.2472 296.5888
 	}
 	pellet{
-		type=rock_20_pellet
+		type=pellet_20_rock
 		p=-176.0000 -1272.0000
 		stored_inside=3
 	}
 	pellet{
-		type=yellow_20_pellet
+		type=pellet_20_yellow
 		p=-912.0000 1072.0000
 		stored_inside=60
 	}

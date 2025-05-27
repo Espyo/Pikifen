@@ -37,7 +37,7 @@ script {
             set_can_block_paths true
             set_tangible true
             move_to_absolute $x $y $z_open
-            start_particles falling_dirt 0 0 0
+            start_particles dust_falling 0 0 0
         }
         on_receive_message {
             if $msg = goal_lost
@@ -69,7 +69,7 @@ script {
             set_can_block_paths true
             set_tangible true
             move_to_absolute $x $y $z_closed
-            start_particles falling_dirt 0 0 0
+            start_particles dust_falling 0 0 0
         }
         on_receive_message {
             if $msg = goal_reached

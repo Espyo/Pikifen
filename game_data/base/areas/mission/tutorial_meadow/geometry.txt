@@ -4492,7 +4492,7 @@ mobs{
 		vars=text=Over that ledge is an Onion.\nThat's where Pikmin are stored, and where new ones can be created.
 	}
 	pellet{
-		type=red_1_pellet
+		type=pellet_1_red
 		p=1408.0000 -192.0000
 	}
 	interactable{
@@ -4515,12 +4515,12 @@ mobs{
 		vars=goal_number=10
 	}
 	custom{
-		type=1_pellet_posy
+		type=pellet_posy_1
 		p=1440.0000 448.0000
 		vars=bloom_time=0.0000;red=true
 	}
 	pellet{
-		type=red_5_pellet
+		type=pellet_5_red
 		p=1350.4882 709.7982
 	}
 	custom{
@@ -4540,20 +4540,20 @@ mobs{
 		vars=text=Not having luck with that electric gate?\nRed Pikmin are not resistent to electricity, but maybe others are...\nChange the current Pikmin type with \k next_type \k / \k prev_type \k.
 	}
 	pellet{
-		type=yellow_5_pellet
+		type=pellet_5_yellow
 		p=2095.0857 1216.0000
 		vars=maturity=0;sprout=true
 	}
 	pellet{
-		type=yellow_1_pellet
+		type=pellet_1_yellow
 		p=1984.6696 1333.2872
 	}
 	pellet{
-		type=yellow_1_pellet
+		type=pellet_1_yellow
 		p=2007.4050 1404.7391
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=804.4946 1677.2607
 		angle=1.0103
 		vars=max_health=300.0000

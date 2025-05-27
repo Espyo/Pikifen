@@ -1,0 +1,103 @@
+name = Pellet Posy (1 pellet)
+description = This plant, when mature, houses a 1 pellet between its petals.
+
+custom_category_name = Pellet Posy
+height = 128
+inactive_logic = ticks
+max_health = 50
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 10
+target_type = weak_plain_obstacle
+team = obstacle
+
+area_editor_properties {
+    Bloom time {
+        var = bloom_time
+        type = float
+        def_value = 240
+        min_value = 0
+        tooltip = Time left until the posy blooms.
+    }
+    Red {
+        var = red
+        type = bool
+        def_value = false
+        tooltip = Does it have a red pellet?
+    }
+    Yellow {
+        var = yellow
+        type = bool
+        def_value = false
+        tooltip = Does it have a yellow pellet?
+    }
+    Blue {
+        var = blue
+        type = bool
+        def_value = false
+        tooltip = Does it have a blue pellet?
+    }
+    Rock {
+        var = rock
+        type = bool
+        def_value = false
+        tooltip = Does it have a rock pellet?
+    }
+    Winged {
+        var = winged
+        type = bool
+        def_value = false
+        tooltip = Does it have a winged pellet?
+    }
+}
+
+spawns {
+    red {
+        object = pellet_1_red
+        relative = true
+        coordinates = 40 0 96
+        angle = 270
+        momentum = 10
+    }
+    yellow {
+        object = pellet_1_yellow
+        relative = true
+        coordinates = 40 0 96
+        angle = 270
+        momentum = 10
+    }
+    blue {
+        object = pellet_1_blue
+        relative = true
+        coordinates = 40 0 96
+        angle = 270
+        momentum = 10
+    }
+    rock {
+        object = pellet_1_rock
+        relative = true
+        coordinates = 40 0 96
+        angle = 270
+        momentum = 10
+    }
+    winged {
+        object = pellet_1_winged
+        relative = true
+        coordinates = 40 0 96
+        angle = 270
+        momentum = 10
+    }
+}
+
+sounds{
+    dying {
+        file = misc/plant_dying
+        volume = 10
+        speed = 150
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

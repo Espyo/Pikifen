@@ -7616,7 +7616,7 @@ mobs{
 		vars=contents=nectar_2
 	}
 	pellet{
-		type=rock_1_pellet
+		type=pellet_1_rock
 		p=256.0000 672.0000
 		vars=bloom_time=0.0000;rock=true
 	}
@@ -7741,7 +7741,7 @@ mobs{
 		p=-544.0000 680.0000
 	}
 	bridge{
-		type=wood_bridge
+		type=bridge_wood
 		p=-152.0000 936.0000
 		angle=0.7854
 		vars=chunks=5
@@ -7795,33 +7795,33 @@ mobs{
 		angle=-2.7275
 	}
 	pellet{
-		type=blue_1_pellet
+		type=pellet_1_blue
 		p=496.0000 400.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=-8.0000 -136.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=-384.0000 -864.0000
 		angle=0.8067
 		vars=bloom_time=0.0000;blue=true;rock=true
 	}
 	pellet{
-		type=rock_5_pellet
+		type=pellet_5_rock
 		p=-320.0000 784.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	pellet{
-		type=blue_5_pellet
+		type=pellet_5_blue
 		p=-688.0000 1368.0000
 		vars=bloom_time=0.0000;rock=true
 	}
 	custom{
-		type=5_pellet_posy
+		type=pellet_posy_5
 		p=1072.0000 -1008.0000
 		angle=-2.7078
 		vars=bloom_time=0.0000;blue=true;rock=true
@@ -7845,7 +7845,7 @@ mobs{
 		vars=contents=nectar
 	}
 	pile{
-		type=spicy_burgeoning_spiderwort
+		type=burgeoning_spiderwort_spicy
 		p=624.0000 448.0000
 		angle=2.0030
 	}

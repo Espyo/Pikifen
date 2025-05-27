@@ -1,4 +1,4 @@
-name = Ceramic pile red
+name = Ceramic pile (red)
 description = A pile of red ceramic fragments, used to build a bridge with.
 
 area_editor_recommend_links_from = true

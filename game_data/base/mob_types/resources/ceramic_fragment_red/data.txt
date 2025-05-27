@@ -1,4 +1,4 @@
-name = Ceramic fragment red
+name = Ceramic fragment (red)
 description = A red fragment of ceramic. Regardless of what it belonged to, it can be used to build a bridge.
 
 area_editor_recommend_links_from = true

@@ -1,0 +1,9 @@
+name = Electricity (stunning)
+description = Small current of electricity that isn't harmful, but paralizes Pikmin. Used, for instance, by an Electric Water Dumple's zapping attack.
+
+color = 255 255 128
+effects = shocked
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

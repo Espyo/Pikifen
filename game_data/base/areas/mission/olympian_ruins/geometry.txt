@@ -3121,7 +3121,7 @@ mobs{
 		angle=1.8713
 	}
 	custom{
-		type=white_bramble_gate
+		type=bramble_gate_white
 		p=416.0000 -256.0000
 		angle=0.6747
 		vars=health=80.0000

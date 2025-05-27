@@ -1,0 +1,87 @@
+name=Wood bridge animations
+description=Animations for the wood bridge.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.0000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=other_mobs/bridge_wood
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			left{
+				coords=0.0000 -60.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			right{
+				coords=0.0000 60.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=other_mobs/bridge_wood
+		file_pos=0.0000 0.0000
+		file_size=42.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			left{
+				coords=0.0000 -60.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			right{
+				coords=0.0000 60.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+}
+body_parts{
+	center
+	left
+	right
+}

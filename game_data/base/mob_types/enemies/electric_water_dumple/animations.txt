@@ -1049,7 +1049,7 @@ sprites{
 				radius=62.0000
 				type=1
 				value=30.0000
-				hazard=stunning_electricity
+				hazard=electricity_stunning
 				knockback=1.0000
 			}
 		}
@@ -1081,7 +1081,7 @@ sprites{
 				radius=62.0000
 				type=1
 				value=30.0000
-				hazard=stunning_electricity
+				hazard=electricity_stunning
 				knockback=1.0000
 			}
 		}
@@ -1113,7 +1113,7 @@ sprites{
 				radius=62.0000
 				type=1
 				value=30.0000
-				hazard=stunning_electricity
+				hazard=electricity_stunning
 				knockback=1.0000
 			}
 		}

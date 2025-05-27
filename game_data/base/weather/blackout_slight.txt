@@ -1,0 +1,13 @@
+name = Blackout (slight)
+description = A slight blackout effect, and slightly darker lighting.
+
+lighting {
+    0    = 0   0   0   64
+}
+blackout_strength {
+    0    = 64
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0
