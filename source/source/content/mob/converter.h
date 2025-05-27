@@ -15,10 +15,10 @@
 
 namespace CONVERTER {
 extern const float NEW_SEED_Z_OFFSET;
-extern const float SPEW_ANGLE_SHIFT;
-extern const float SPEW_H_SPEED;
-extern const float SPEW_H_SPEED_DEVIATION;
-extern const float SPEW_V_SPEED;
+extern const float SPIT_ANGLE_SHIFT;
+extern const float SPIT_H_SPEED;
+extern const float SPIT_H_SPEED_DEVIATION;
+extern const float SPIT_V_SPEED;
 }
 
 
@@ -56,7 +56,7 @@ public:
     Timer autoConversionTimer;
     
     //Angle it will spit the next seed towards.
-    float nextSpewAngle = 0.0f;
+    float nextSpitAngle = 0.0f;
     
     
     //--- Function declarations ---
@@ -64,7 +64,7 @@ public:
     Converter(const Point& pos, ConverterType* type, float angle);
     void changeType();
     void close();
-    void spew();
+    void spit();
     
 protected:
 

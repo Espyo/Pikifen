@@ -200,7 +200,7 @@ void setStringTokenWidths(
     float maxControlBitmapHeight = 0, bool controlCondensed = false
 );
 void signalHandler(int signum);
-void spewPikminSeed(
+void spitPikminSeed(
     const Point pos, float z, PikminType* pikType,
     float angle, float horizontalSpeed, float verticalSpeed
 );

@@ -21,16 +21,16 @@ namespace CONVERTER {
 const float NEW_SEED_Z_OFFSET = 32.0f;
 
 //After spitting a seed, the next seed's angle shifts by this much.
-const float SPEW_ANGLE_SHIFT = TAU * 0.12345;
+const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
 
 //A converter-spat seed is this quick, horizontally.
-const float SPEW_H_SPEED = 90.0f;
+const float SPIT_H_SPEED = 90.0f;
 
 //Deviate the seed's horizontal speed by this much, more or less.
-const float SPEW_H_SPEED_DEVIATION = 10.0f;
+const float SPIT_H_SPEED_DEVIATION = 10.0f;
 
 //A converter-spat seed is this quick, vertically.
-const float SPEW_V_SPEED = 1200.0f;
+const float SPIT_V_SPEED = 1200.0f;
 
 }
 
@@ -98,9 +98,9 @@ void Converter::close() {
 
 
 /**
- * @brief Spews out the converted seeds.
+ * @brief Spits out the converted seeds.
  */
-void Converter::spew() {
+void Converter::spit() {
     size_t totalToSpit = amountInBuffer * conType->pikminPerConversion;
     
     for(size_t s = 0; s < totalToSpit; s++) {
@@ -112,18 +112,18 @@ void Converter::spew() {
         }
         
         float horizontalStrength =
-            CONVERTER::SPEW_H_SPEED +
+            CONVERTER::SPIT_H_SPEED +
             game.rng.f(
-                -CONVERTER::SPEW_H_SPEED_DEVIATION,
-                CONVERTER::SPEW_H_SPEED_DEVIATION
+                -CONVERTER::SPIT_H_SPEED_DEVIATION,
+                CONVERTER::SPIT_H_SPEED_DEVIATION
             );
-        spewPikminSeed(
+        spitPikminSeed(
             pos, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
-            nextSpewAngle, horizontalStrength, CONVERTER::SPEW_V_SPEED
+            nextSpitAngle, horizontalStrength, CONVERTER::SPIT_V_SPEED
         );
         
-        nextSpewAngle += CONVERTER::SPEW_ANGLE_SHIFT;
-        nextSpewAngle = normalizeAngle(nextSpewAngle);
+        nextSpitAngle += CONVERTER::SPIT_ANGLE_SHIFT;
+        nextSpitAngle = normalizeAngle(nextSpitAngle);
     }
     
     amountInBuffer = 0;

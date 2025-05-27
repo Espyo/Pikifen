@@ -1367,16 +1367,16 @@ void signalHandler(int signum) {
 
 
 /**
- * @brief Spews out a Pikmin from a given point. Used by Onions and converters.
+ * @brief Spits out a Pikmin from a given point. Used by Onions and converters.
  *
  * @param pos Point of origin.
  * @param z Z of the point of origin.
- * @param pikType Type of the Pikmin to spew out.
- * @param angle Direction in which to spew.
- * @param horizontalSpeed Horizontal speed in which to spew.
- * @param verticalSpeed Vertical speed in which to spew.
+ * @param pikType Type of the Pikmin to spit out.
+ * @param angle Direction in which to spit.
+ * @param horizontalSpeed Horizontal speed in which to spit.
+ * @param verticalSpeed Vertical speed in which to spit.
  */
-void spewPikminSeed(
+void spitPikminSeed(
     const Point pos, float z, PikminType* pikType,
     float angle, float horizontalSpeed, float verticalSpeed
 ) {

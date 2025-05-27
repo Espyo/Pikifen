@@ -28,6 +28,6 @@ void handlePikmin(Mob* m, void* info1, void* info2);
 void open(Mob* m, void* info1, void* info2);
 void openOrDie(Mob* m, void* info1, void* info2);
 void openOrSpit(Mob* m, void* info1, void* info2);
-void spew(Mob* m, void* info1, void* info2);
+void spit(Mob* m, void* info1, void* info2);
 void startDying(Mob* m, void* info1, void* info2);
 }

@@ -41,16 +41,16 @@ const float NEXT_GENERATION_INTERVAL = 0.10f;
 const unsigned char SEETHROUGH_ALPHA = 128;
 
 //After spitting a seed, the next seed's angle shifts by this much.
-const float SPEW_ANGLE_SHIFT = TAU * 0.12345;
+const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
 
 //An Onion-spat seed is this quick, horizontally.
-const float SPEW_H_SPEED = 80.0f;
+const float SPIT_H_SPEED = 80.0f;
 
 //Deviate the seed's horizontal speed by this much, more or less.
-const float SPEW_H_SPEED_DEVIATION = 10.0f;
+const float SPIT_H_SPEED_DEVIATION = 10.0f;
 
 //An Onion-spat seed is this quick, vertically.
-const float SPEW_V_SPEED = 600.0f;
+const float SPIT_V_SPEED = 600.0f;
 }
 
 
@@ -130,7 +130,7 @@ void Onion::drawMob() {
 
 
 /**
- * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
+ * @brief Spit a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void Onion::generate() {
     for(size_t t = 0; t < generationQueue.size(); t++) {
@@ -162,18 +162,18 @@ void Onion::generate() {
         }
         
         float horizontalStrength =
-            ONION::SPEW_H_SPEED +
+            ONION::SPIT_H_SPEED +
             game.rng.f(
-                -ONION::SPEW_H_SPEED_DEVIATION,
-                ONION::SPEW_H_SPEED_DEVIATION
+                -ONION::SPIT_H_SPEED_DEVIATION,
+                ONION::SPIT_H_SPEED_DEVIATION
             );
-        spewPikminSeed(
+        spitPikminSeed(
             pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[t],
-            nextSpewAngle, horizontalStrength, ONION::SPEW_V_SPEED
+            nextSpitAngle, horizontalStrength, ONION::SPIT_V_SPEED
         );
         
-        nextSpewAngle += ONION::SPEW_ANGLE_SHIFT;
-        nextSpewAngle = normalizeAngle(nextSpewAngle);
+        nextSpitAngle += ONION::SPIT_ANGLE_SHIFT;
+        nextSpitAngle = normalizeAngle(nextSpitAngle);
         
         playSound(oniType->soundPopIdx);
         

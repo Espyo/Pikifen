@@ -26,10 +26,10 @@ extern const float GENERATION_DELAY;
 extern const float NEW_SEED_Z_OFFSET;
 extern const float NEXT_GENERATION_INTERVAL;
 extern const unsigned char SEETHROUGH_ALPHA;
-extern const float SPEW_ANGLE_SHIFT;
-extern const float SPEW_H_SPEED;
-extern const float SPEW_H_SPEED_DEVIATION;
-extern const float SPEW_V_SPEED;
+extern const float SPIT_ANGLE_SHIFT;
+extern const float SPIT_H_SPEED;
+extern const float SPIT_H_SPEED_DEVIATION;
+extern const float SPIT_V_SPEED;
 }
 
 
@@ -61,7 +61,7 @@ public:
     Timer nextGenerationTimer = Timer(ONION::NEXT_GENERATION_INTERVAL);
     
     //Angle at which the next seed will be spit.
-    float nextSpewAngle = 0.0f;
+    float nextSpitAngle = 0.0f;
     
     //The Onion's alpha.
     unsigned char seethrough = 255;

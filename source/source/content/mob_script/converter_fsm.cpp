@@ -53,7 +53,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     
     efc.newState("spitting", CONVERTER_STATE_SPITTING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(ConverterFsm::spew);
+            efc.run(ConverterFsm::spit);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
             efc.run(ConverterFsm::openOrDie);
@@ -272,13 +272,13 @@ void ConverterFsm::openOrSpit(Mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief Spews out the converted seeds.
+ * @brief Spits out the converted seeds.
  *
  * @param m The mob.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::spew(Mob* m, void* info1, void* info2) {
+void ConverterFsm::spit(Mob* m, void* info1, void* info2) {
     Converter* conPtr = (Converter*) m;
     
     conPtr->setAnimation(
@@ -287,7 +287,7 @@ void ConverterFsm::spew(Mob* m, void* info1, void* info2) {
         )
     );
     conPtr->curBaseAnimIdx = CONVERTER_ANIM_SPITTING;
-    conPtr->spew();
+    conPtr->spit();
 }
 
 

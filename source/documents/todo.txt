@@ -148,10 +148,7 @@ Next tasks (roughly sorted most important first)
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         All sound files should be at peak amplitude
-    Compose and add songs
-        A couple of gameplay songs
-        Helodity's tropical song
-        Other people's songs
+    Compose and add a song for Playful Yard
     Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
@@ -979,7 +976,7 @@ Misc things (so I don't forget)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
     Fix bridges and dummies emitting light during blackout (Darthvato)
-    I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spew another, they hash that number to get the random angle and distance of the next spew. That way it's still consistent, but it looks random and interesting
+    I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spit. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
