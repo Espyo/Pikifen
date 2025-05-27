@@ -1,3 +1,8 @@
+name=Margaret animations
+description=Animations for the Margaret.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	bumped{
 		frames{
@@ -83,4 +88,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

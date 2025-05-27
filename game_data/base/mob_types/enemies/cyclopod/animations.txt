@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Cyclopod animations
+description=Animations for the Cyclopod.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	attacking{
 		loop_frame=3

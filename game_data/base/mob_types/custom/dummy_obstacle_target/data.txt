@@ -7,3 +7,7 @@ can_block_paths = true
 casts_shadow = false
 custom_category_name = Misc
 radius = 48
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -17,3 +17,7 @@ show_amount = true
 show_health = false
 size_animation_suffixes = _0;_1;_2;_3;_4;_5;_6;_7;_8;_9
 target_type = explodable_pikmin_obstacle
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

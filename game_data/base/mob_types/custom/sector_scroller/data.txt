@@ -11,3 +11,7 @@ area_editor_properties {
         tooltip = What speed the sector's floor scrolls at.
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

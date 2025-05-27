@@ -1,6 +1,8 @@
 name=Onion insertion
 description=Used when an object is inserted into the Onion via it being beamed up.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=15
 	number_deviation=5

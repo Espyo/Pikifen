@@ -1,5 +1,8 @@
 name=White Pikmin animations
-engine_version=0.25.0
+description=Animations for the White Pikmin.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	arms_out{
 		frames{

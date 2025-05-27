@@ -1,3 +1,8 @@
+name=Climbing stick animations
+description=Animations for the climbing stick.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

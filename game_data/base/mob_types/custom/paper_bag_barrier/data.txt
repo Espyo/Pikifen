@@ -12,3 +12,7 @@ radius = 8
 rectangular_dimensions = 16 196
 target_type = none
 team = none
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

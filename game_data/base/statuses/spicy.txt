@@ -9,3 +9,7 @@ particle_offset = 0 0 64
 reapply_rule = reset_time
 speed_multiplier = 1.5
 tint = 255 192 160
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

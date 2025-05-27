@@ -1,5 +1,8 @@
 name=Fire
 description=Fire on top of a Pikmin that's burning up.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	main{
 		frames{
@@ -54,4 +57,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

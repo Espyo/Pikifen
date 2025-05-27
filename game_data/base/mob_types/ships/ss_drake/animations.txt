@@ -1,4 +1,8 @@
 name=S.S. Drake animations
+description=Animations for the S.S. Drake.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

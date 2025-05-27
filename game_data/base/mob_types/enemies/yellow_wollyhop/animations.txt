@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Yellow Wollyhop animations
+description=Animations for the Yellow Wollyhop.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	croaking{
 		frames{

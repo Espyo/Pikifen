@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Geyser animations
+description=Animations for the geyser.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	bouncing{
 		frames{

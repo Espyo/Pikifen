@@ -10,3 +10,7 @@ pushes = true
 pushes_softly = true
 radius = 26
 weight = 2
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

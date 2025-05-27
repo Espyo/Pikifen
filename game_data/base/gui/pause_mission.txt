@@ -1,5 +1,8 @@
 name=Pause menu -- mission
 description=GUI for the mission info sub-menu of the pause menu.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	header=50.0000 5.0000 52.0000 6.0000
 	left_page=12.0000 5.0000 20.0000 6.0000

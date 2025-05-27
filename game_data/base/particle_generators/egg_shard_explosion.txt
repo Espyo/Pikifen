@@ -1,6 +1,8 @@
 name=Egg shard explosion
 description=An explosion of shards from a recently-broken egg's shell.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=1

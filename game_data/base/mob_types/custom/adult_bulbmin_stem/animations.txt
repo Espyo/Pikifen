@@ -1,3 +1,8 @@
+name=Adult Bulbmin stem animations
+description=Animations for the Adult Bulbmin stem.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

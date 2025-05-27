@@ -1,3 +1,8 @@
+name=Paper bag animations
+description=Animations for the paper bag.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	crushing{
 		loop_frame=20
@@ -152,4 +157,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

@@ -48,3 +48,7 @@ sounds {
 status_vulnerabilities {
     muddy = 0
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

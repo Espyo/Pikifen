@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Seesaw block animations
+description=Animations for the seesaw block.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	down{
 		frames{

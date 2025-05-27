@@ -22,3 +22,7 @@ area_editor_properties {
         tooltip = If you have an object that can only be delivered to targets with a Pikmin type matching the type decided by the carriers, choose a type here.
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

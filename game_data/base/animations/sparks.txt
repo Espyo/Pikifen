@@ -1,5 +1,8 @@
 name=Sparks
 description=Electric sparks on top of a leader that just got hurt.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	main{
 		frames{
@@ -41,4 +44,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

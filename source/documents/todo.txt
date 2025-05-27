@@ -191,7 +191,6 @@ Next tasks (roughly sorted most important first)
     Manual updates
         Update screenshots that still show off the Play area
     Cook up a better logo?
-    Set the version of all pieces of content to 1.0
     Test it on the Steam Deck
     Test everything in the regression tests
     Test everything in DEV Lab

@@ -3,3 +3,7 @@ description = Fire, and really, anything that burns. Typically makes a Pikmin's 
 
 color = 255 0 0
 effects = burned
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

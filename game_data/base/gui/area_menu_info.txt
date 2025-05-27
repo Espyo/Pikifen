@@ -1,5 +1,8 @@
 name=Area menu -- info
 description=GUI for the area selection menu's area information table.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	info_name=36.0000 6.0000 68.0000 8.0000
 	subtitle=36.0000 16.0000 68.0000 8.0000

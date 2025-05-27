@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Skutterchuck animations
+description=Animations for the Skutterchuck.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	dying{
 		loop_frame=17

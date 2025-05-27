@@ -3,7 +3,7 @@ description=Three pressure plates, three markers on the floor... How should you 
 tags=Puzzle; Short and sweet; Tiles
 maker=Espyo
 version=1.2.0
-engine_version=0.25.0
+engine_version=1.0.0
 subtitle
 difficulty=3
 bg_bmp

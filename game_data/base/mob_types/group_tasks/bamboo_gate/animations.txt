@@ -1,3 +1,8 @@
+name=Bamboo gate animations
+description=Animations for the bamboo gate.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	closed{
 		frames{
@@ -112,4 +117,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

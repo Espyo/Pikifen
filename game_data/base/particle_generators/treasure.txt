@@ -1,6 +1,8 @@
 name=Treasure
 description=Sparkles on top of treasures.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

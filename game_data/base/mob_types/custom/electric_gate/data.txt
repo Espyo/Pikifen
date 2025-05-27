@@ -49,3 +49,7 @@ spawns {
         link_object_to_spawn = true
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -1,6 +1,8 @@
 name=Bubble explosion (small, continuous)
 description=A generic small continuous explosion of bubbles. Used, for instance, when the Cyclopod is spinning.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=4
 	number_deviation=0

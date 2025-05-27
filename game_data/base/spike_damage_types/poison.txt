@@ -3,3 +3,7 @@ description = Damage applied to an enemy that eats a White Pikmin. It gives them
 
 ingestion_only = true
 status_to_apply = white_pikmin_poison
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

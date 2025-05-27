@@ -1,6 +1,8 @@
 name=Leader land
 description=Puff of dirt for when a leader lands from a height.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=3

@@ -8,3 +8,7 @@ random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.3
 tint_random_maximum = 224 224 255
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

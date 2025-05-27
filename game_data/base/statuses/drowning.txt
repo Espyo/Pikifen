@@ -8,3 +8,7 @@ maturity_change_amount = -1
 remove_on_hazard_leave = true
 speed_multiplier = 0.2
 state_change_type = flailing
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

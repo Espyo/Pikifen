@@ -1,3 +1,8 @@
+name=Fidget Spinner animations
+description=Animations for the Fidget Spinner.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{
@@ -15,4 +20,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2

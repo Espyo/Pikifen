@@ -8,3 +8,7 @@ health_change = -200
 particle_generator = white_pikmin_poison
 particle_offset = 0 0 300
 reapply_rule = add_time
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

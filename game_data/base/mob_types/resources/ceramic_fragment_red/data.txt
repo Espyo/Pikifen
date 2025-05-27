@@ -16,3 +16,7 @@ return_to_pile_on_vanish = true
 vanish_delay = 0
 vanish_on_drop = true
 weight = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

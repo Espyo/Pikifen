@@ -11,3 +11,7 @@ radius = 30
 ride_speed = 0.2
 riders = pikmin
 riding_pose = climbing
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

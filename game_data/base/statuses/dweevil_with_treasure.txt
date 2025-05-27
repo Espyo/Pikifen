@@ -4,3 +4,7 @@ description = Dweevils carrying treasure gain some resistance, since the treasur
 affects = enemies
 color = 255 204 85
 defense_multiplier = 20.0
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

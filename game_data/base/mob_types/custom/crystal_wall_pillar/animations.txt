@@ -1,3 +1,8 @@
+name=Crystal wall pillar animations
+description=Animations for the crystal wall pillar.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

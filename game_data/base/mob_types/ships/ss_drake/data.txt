@@ -10,3 +10,7 @@ pushes = true
 pushes_softly = true
 radius = 90
 receptacle_offset = 131 5
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

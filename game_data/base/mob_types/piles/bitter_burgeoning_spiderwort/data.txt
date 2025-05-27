@@ -23,3 +23,7 @@ target_type = explodable_pikmin_obstacle
 vulnerabilities {
     explosion = 400
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

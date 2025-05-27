@@ -3,7 +3,7 @@ description=Legend has it this was a site for Olympian prowesses! Why don't you 
 tags=Short and sweet; Garden
 maker=Espyo
 version=1.1.0
-engine_version=0.25.0
+engine_version=1.0.0
 subtitle
 difficulty=4
 bg_bmp=textures/grass_light

@@ -1,5 +1,8 @@
 name=Main menu -- make
 description=GUI for the main menu's "make" sub-menu.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	animation_editor=27.5000 63.0000 43.0000 12.0000
 	area_editor=72.5000 63.0000 43.0000 12.0000

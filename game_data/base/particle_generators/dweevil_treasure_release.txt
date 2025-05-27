@@ -1,5 +1,8 @@
 name = Dweevil treasure release
 description=Some sparkles for when a Dweevil releases a treasure.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=30
 	number_deviation=5

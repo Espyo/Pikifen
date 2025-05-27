@@ -19,3 +19,7 @@ sounds {
         stack_min_pos = 0.005
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -3,3 +3,7 @@ description = Powerful eletrical current that eletrocutes the victim, killing th
 
 color = 255 255 128
 effects = electrocuted
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

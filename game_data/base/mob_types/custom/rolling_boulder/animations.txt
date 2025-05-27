@@ -1,3 +1,8 @@
+name=Rolling boulder animations
+description=Animations for the rolling boulder.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{
@@ -212,4 +217,3 @@ sprites{
 body_parts{
 	rock
 }
-engine_version=0.25.0

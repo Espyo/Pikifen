@@ -12,3 +12,7 @@ reapply_rule = keep_time
 replacement_on_timeout = petrified_cracking
 speed_multiplier = 0
 tint = 64 64 64
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

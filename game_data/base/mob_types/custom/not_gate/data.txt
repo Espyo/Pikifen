@@ -4,3 +4,7 @@ description = Connect one power source here. When it's giving power, this mob wi
 area_editor_recommend_links_from = true
 area_editor_recommend_links_to = true
 custom_category_name = Puzzle
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

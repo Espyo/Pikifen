@@ -15,3 +15,7 @@ spray_to_concoct = ultra-bitter_spray
 vanish_delay = 10
 vanish_on_drop = true
 weight = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

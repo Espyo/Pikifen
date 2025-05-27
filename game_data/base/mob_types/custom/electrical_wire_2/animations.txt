@@ -1,3 +1,8 @@
+name=Electric wire (2) animations
+description=Animations for the second part of the electrical wire.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{
@@ -47,4 +52,3 @@ sprites{
 body_parts{
 	hit
 }
-engine_version=0.23.2

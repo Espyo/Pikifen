@@ -10,3 +10,7 @@ pushes = true
 radius = 24
 target_type = none
 team = none
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

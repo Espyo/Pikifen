@@ -1,3 +1,8 @@
+name=Spicy Burgeoning Spiderwort animations
+description=Animations for the spicy Burgeoning Spiderwort.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling_0{
 		frames{
@@ -407,4 +412,3 @@ sprites{
 body_parts{
 	hit
 }
-engine_version=0.25.0

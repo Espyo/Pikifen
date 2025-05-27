@@ -1,5 +1,8 @@
 name = Dust
 description=Generic puffs of dust being lifted to the air in place. Used, for instance, by the trail left behind a rolling boulder.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

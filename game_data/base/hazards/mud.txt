@@ -5,3 +5,7 @@ blocks_paths = false
 color = 0 0 255
 effects = muddy
 liquid = mud
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

@@ -3,3 +3,7 @@ description = Globs of ink that obscure a Pikmin's top and send it into a tempor
 
 color = 64 64 64
 effects = inked
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

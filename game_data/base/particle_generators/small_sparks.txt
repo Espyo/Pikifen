@@ -1,5 +1,8 @@
 name = Small sparks
 description=A small explosion of gentle sparkles, signifying a Pellet Posy's growth.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=15
 	number_deviation=2

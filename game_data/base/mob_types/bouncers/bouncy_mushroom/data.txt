@@ -9,3 +9,7 @@ pushes = true
 pushes_softly = true
 radius = 64
 riders = pikmin leaders
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

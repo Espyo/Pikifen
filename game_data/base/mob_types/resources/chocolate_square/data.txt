@@ -14,3 +14,7 @@ radius = 20
 return_to_pile_on_vanish = false
 vanish_on_drop = false
 weight = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

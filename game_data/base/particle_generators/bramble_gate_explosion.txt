@@ -1,6 +1,8 @@
 name=Bramble gate explosion
 description=A bramble gate blowing in a dust of debris after being completely destroyed.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=30
 	number_deviation=0

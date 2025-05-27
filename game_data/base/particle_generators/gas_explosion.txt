@@ -1,6 +1,8 @@
 name=Gas explosion
 description=A generic explosion of poison gas. Used, for instance, by the Munge Dweevil when attacking.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=0

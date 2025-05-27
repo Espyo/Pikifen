@@ -1,6 +1,8 @@
 name=Dust explosion (large)
 description=A generic large explosion of dust. Used, for instance, when the Puffy Blowhog falls to the ground.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=16
 	number_deviation=0

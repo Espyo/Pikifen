@@ -1,5 +1,8 @@
 name = Bubble placement (small)
 description=A generic patch of small bubbles placed in place. Used, for instance, when the Cyclopod is swimming.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=2
 	number_deviation=1

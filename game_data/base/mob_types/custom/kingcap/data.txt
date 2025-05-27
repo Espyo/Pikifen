@@ -11,3 +11,7 @@ radius = 51
 rotation_speed = 3000
 target_type = explodable_pikmin_obstacle
 team = obstacle
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

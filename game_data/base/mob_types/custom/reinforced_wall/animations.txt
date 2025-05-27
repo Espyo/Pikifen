@@ -1,3 +1,8 @@
+name=Reinforced wall animations
+description=Animations for the reinforced wall.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{
@@ -499,4 +504,3 @@ body_parts{
 	near_left
 	near_right
 }
-engine_version=0.25.0

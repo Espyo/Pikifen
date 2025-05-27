@@ -1,3 +1,8 @@
+name=Ceramic fragment (red) animations
+description=Animations for the red ceramic fragment.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

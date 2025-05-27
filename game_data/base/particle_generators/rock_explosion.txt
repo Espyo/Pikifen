@@ -1,6 +1,8 @@
 name=Rock explosion
 description=A generic explosion of rock particles. Used, for instance, when a rolling boulder breaks.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=8
 	number_deviation=1

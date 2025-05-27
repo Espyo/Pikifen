@@ -59,3 +59,7 @@ vulnerabilities {
     poison = 0
     water = 0
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

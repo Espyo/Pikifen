@@ -12,3 +12,7 @@ removable_with_whistle = true
 speed_multiplier = 2.0
 state_change_type = panic
 tint = 128 128 128
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

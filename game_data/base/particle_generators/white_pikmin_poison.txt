@@ -1,5 +1,8 @@
 name = White Pikmin poison
 description=A continuous stream of poison particles, signifying an enemy's poison from having ingested a White Pikmin.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

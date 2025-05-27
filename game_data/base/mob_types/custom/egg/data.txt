@@ -42,3 +42,7 @@ spawns {
         momentum = 100
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

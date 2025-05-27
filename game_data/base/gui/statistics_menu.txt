@@ -1,5 +1,8 @@
 name=Statistics menu
 description=GUI for the statistics menu.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	back_input=3.0000 7.0000 4.0000 4.0000

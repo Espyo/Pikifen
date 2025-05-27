@@ -1,6 +1,8 @@
 name=Purple Pikmin pound
 description=A brief explosion of dust from a Purple Pikmin landing on top of an enemy.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=0

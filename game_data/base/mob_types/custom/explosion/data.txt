@@ -11,3 +11,7 @@ pikmin_returns_after_using = true
 pushable = false
 pushes = false
 radius = 68
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

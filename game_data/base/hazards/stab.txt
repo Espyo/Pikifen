@@ -2,3 +2,7 @@ name = Stab
 description = The force necessary to pierce through something that's too fleshy to resist. Used, for example, by a Cloaking Burrow-nit's stab attack.
 
 color = 0 0 0
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

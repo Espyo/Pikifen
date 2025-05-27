@@ -37,3 +37,7 @@ sounds {
         speed = 110
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -1,6 +1,8 @@
 name=Electric gate explosion
 description=An explosion of triangular shards representing the glass lamps of a destroyed electric gate.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=80
 	number_deviation=3

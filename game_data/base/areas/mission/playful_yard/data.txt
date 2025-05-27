@@ -3,7 +3,7 @@ description=In the forest, a few creatures found some large wooden object... Whi
 tags=Standard; Forest
 maker=Espyo
 version=1.1.0
-engine_version=0.25.0
+engine_version=1.0.0
 subtitle
 difficulty=2
 bg_bmp=textures/grass_dark

@@ -19,3 +19,7 @@ sun_strength {
     1020 = 128
     1140 = 96
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

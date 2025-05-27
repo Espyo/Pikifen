@@ -17,3 +17,7 @@ sounds {
         random_delay = 0.1
     }
 }
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

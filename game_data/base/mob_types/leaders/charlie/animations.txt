@@ -1,5 +1,8 @@
 name=Charlie animations
-engine_version=0.25.0
+description=Animations for Charlie.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	called{
 		frames{

@@ -1,6 +1,8 @@
 name=Bubble hazard
 description=Small bubbles that come out of Pikmin tops periodically, indicating they are suffocating from a bubble of water.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

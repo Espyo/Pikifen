@@ -3,3 +3,7 @@ description = Small currents of electricity that aren't harmful, but paralize Pi
 
 color = 255 255 128
 effects = shocked
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -11,3 +11,7 @@ state_change_type = helpless
 tint = 0 0 0 0
 turns_inedible = true
 turns_invisible = true
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

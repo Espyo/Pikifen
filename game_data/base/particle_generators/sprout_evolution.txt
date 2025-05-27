@@ -1,6 +1,8 @@
 name=Sprout evolution
 description=Used when a Pikmin sprout evolves into the next stage of maturity.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=8
 	number_deviation=1

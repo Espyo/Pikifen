@@ -4,3 +4,7 @@ description = Bomb rocks under this status effect will start losing their health
 affects = others
 color = 0 0 0
 health_change_ratio = -0.25
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

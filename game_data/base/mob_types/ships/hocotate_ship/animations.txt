@@ -1,4 +1,8 @@
 name=Hocotate ship animations
+description=Animations for the Hocotate ship.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

@@ -8,3 +8,7 @@ shine_color = 255 255 255 255
 radar_color = 32 64 180
 distortion_amount = 14 4
 animation_speed = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

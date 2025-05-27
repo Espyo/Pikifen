@@ -1,6 +1,8 @@
 name=Blowhog wind
 description=Wind blown in a circle outwards, caused when a Puffy Blowhog's wind blowing attack hits the floor.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=5
 	number_deviation=1

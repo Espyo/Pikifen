@@ -1,6 +1,8 @@
 name=Dust explosion
 description=A generic mid-sized explosion of dust. Used, for instance, when a Beady Long Legs stomps its foot.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=8
 	number_deviation=0

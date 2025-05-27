@@ -9,3 +9,7 @@ pushable = false
 pushes = false
 radius = 38
 target_type = none
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

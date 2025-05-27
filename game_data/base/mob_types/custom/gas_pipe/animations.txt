@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Gas pipe animations
+description=Animations for the gas pipe.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{

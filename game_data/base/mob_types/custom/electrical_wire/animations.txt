@@ -1,3 +1,8 @@
+name=Electrical wire animations
+description=Animations for the electrical wire's main part.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{
@@ -332,4 +337,3 @@ body_parts{
 	zap4
 	zap5
 }
-engine_version=0.25.0

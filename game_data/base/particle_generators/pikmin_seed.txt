@@ -1,6 +1,8 @@
 name=Pikmin seed
 description=Sparkles left behind by a Pikmin seed as it shoots through the air.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

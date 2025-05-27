@@ -12,3 +12,7 @@ pushes = false
 radius = 40
 rectangular_dimensions = 80 80
 walkable = true
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

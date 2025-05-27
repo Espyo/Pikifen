@@ -13,3 +13,7 @@ fog_color {
 }
 fog_near = 96
 fog_far = 256
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

@@ -1,5 +1,8 @@
 name = Dark smoke explosion
 description=A generic explosion of dark smoke. Used, for instance, when a bomb rock is ingested and blows up inside an enemy.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=20
 	number_deviation=0

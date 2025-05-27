@@ -1,6 +1,8 @@
 name=Dust (pressure plate click)
 description=A quick explosion of dust. Used, for instance, when a pressure plate is pressed down.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=15
 	number_deviation=0

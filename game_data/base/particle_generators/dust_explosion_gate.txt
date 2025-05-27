@@ -1,5 +1,8 @@
 name = Dust explosion (gate)
 description=A generic gate-sized explosion of dust. Used, for instance, when a lifted gate lands.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=18
 	number_deviation=0

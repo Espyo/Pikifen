@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=Dwarf Red Bulborb animations
+description=Animations for the Dwarf Red Bulborb.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	attacking{
 		hit_rate=75

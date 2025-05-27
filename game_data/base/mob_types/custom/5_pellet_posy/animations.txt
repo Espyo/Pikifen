@@ -1,3 +1,8 @@
+name=5 Pellet Posy animations
+description=Animations for the 5 Pellet Posy.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	blooming{
 		frames{
@@ -850,4 +855,3 @@ body_parts{
 	pellet
 	body
 }
-engine_version=0.25.0

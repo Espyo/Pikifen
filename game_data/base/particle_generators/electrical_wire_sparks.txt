@@ -1,6 +1,8 @@
 name=Electrical wire sparks
 description=A series of small sparks emitted by an electrical wire that's about to start an arc of electricity.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

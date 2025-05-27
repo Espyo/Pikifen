@@ -1,3 +1,8 @@
+name=Spotcap animations
+description=Animations for the Spotcap.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	destroyed{
 		frames{
@@ -90,4 +95,3 @@ sprites{
 body_parts{
 	hit
 }
-engine_version=0.25.0

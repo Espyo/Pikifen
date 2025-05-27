@@ -10,3 +10,7 @@ particle_offset = 0 0 32
 removable_with_whistle = true
 speed_multiplier = 2.0
 state_change_type = panic
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

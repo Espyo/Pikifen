@@ -1,6 +1,8 @@
 name=Pikmin seed landed
 description=Dirt that comes out when a Pikmin seed hits the floor.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=8
 	number_deviation=1

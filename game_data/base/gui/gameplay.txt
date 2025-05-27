@@ -1,5 +1,8 @@
 name=Gameplay
 description=GUI for regular gameplay. i.e. the game HUD.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	time=0.0000 0.0000 0.0000 0.0000
 	day_bubble=0.0000 0.0000 0.0000 0.0000

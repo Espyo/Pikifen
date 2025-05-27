@@ -4,3 +4,7 @@ description = Any body of water on the floor. Pikmin that cannot swim will start
 color = 0 0 255
 effects = drowning
 liquid = water
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

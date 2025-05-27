@@ -9,3 +9,7 @@ effects = petrified
 group = false
 icon = other_mobs/ultra-bitter_spray
 ingredients = 10
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

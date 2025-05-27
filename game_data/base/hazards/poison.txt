@@ -3,3 +3,7 @@ description = Poison gas that chokes a Pikmin's top, causing it to suffocate. Us
 
 color = 128 16 112
 effects = poisoned
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

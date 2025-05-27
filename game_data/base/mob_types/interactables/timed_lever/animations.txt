@@ -1,3 +1,8 @@
+name=Timed lever animations
+description=Animations for the timed lever.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	flipping_off{
 		frames{
@@ -126,4 +131,3 @@ sprites{
 body_parts{
 	main
 }
-engine_version=0.25.0

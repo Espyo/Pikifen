@@ -1,5 +1,8 @@
 name=Onion menu
 description=GUI for the Onion menu.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	instructions=50.0000 7.0000 90.0000 20.0000
 	cancel=16.0000 85.0000 18.0000 11.0000

@@ -1,3 +1,8 @@
+name=Billiards Ball animations
+description=Animations for the Billiards Ball.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

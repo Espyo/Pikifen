@@ -1,4 +1,8 @@
-engine_version=0.25.0
+name=Adult Bulbmin animations
+description=Animations for the adult Bulbmin.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	attacking{
 		hit_rate=50

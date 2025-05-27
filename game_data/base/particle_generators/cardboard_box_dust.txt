@@ -1,6 +1,8 @@
 name=Cardboard box dust
 description=The dust spread to the air by a cardboard box that's being dragged.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0

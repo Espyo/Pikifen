@@ -1,5 +1,8 @@
 name = Bubble explosion (small)
 description=A generic small explosion of bubbles. Used, for instance, when the Cyclopod dies.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=0

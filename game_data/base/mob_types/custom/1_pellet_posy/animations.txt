@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=1 Pellet Posy animations
+description=Animations for the 1 Pellet Posy.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	blooming{
 		frames{

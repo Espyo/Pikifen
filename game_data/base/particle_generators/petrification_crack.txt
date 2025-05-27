@@ -1,6 +1,8 @@
 name=Petrification crack
 description=A small explosion of rocks from when a petrified enemy manages to break free.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=16
 	number_deviation=0

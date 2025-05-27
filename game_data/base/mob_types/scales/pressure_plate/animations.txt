@@ -1,3 +1,8 @@
+name=Pressure plate animations
+description=Animations for the pressure plate.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	down{
 		frames{
@@ -27,4 +32,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2

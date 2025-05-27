@@ -1,3 +1,8 @@
+name=Ceramic bridge base (red) animations
+description=Animations for the red ceramic bridge base.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

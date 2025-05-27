@@ -1,3 +1,8 @@
+name=Cardboard box animations
+description=Animations for the cardboard box.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{
@@ -15,4 +20,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.23.2

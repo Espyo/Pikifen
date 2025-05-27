@@ -1,5 +1,8 @@
 name=Pause menu -- exit confirmation
 description=GUI for the exit confirmation sub-menu of the pause menu.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 positions{
 	cancel=19.0000 83.0000 30.0000 10.0000
 	cancel_input=5.0000 87.0000 4.0000 4.0000

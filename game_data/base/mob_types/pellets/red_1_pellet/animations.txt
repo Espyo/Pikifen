@@ -1,3 +1,8 @@
+name=Red 1 pellet animations
+description=Animations for the red 1 pellet.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

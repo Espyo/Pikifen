@@ -12,3 +12,7 @@ rotation_speed = 3000
 show_health = false
 target_type = explodable_pikmin_obstacle
 team = obstacle
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

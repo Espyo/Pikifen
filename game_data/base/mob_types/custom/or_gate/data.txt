@@ -4,3 +4,7 @@ description = Connect two power sources here. When A OR B are giving power, this
 area_editor_recommend_links_from = true
 area_editor_recommend_links_to = true
 custom_category_name = Puzzle
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

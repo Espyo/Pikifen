@@ -1,3 +1,8 @@
+name=Lever animations
+description=Animations for the lever.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	flipping_off{
 		frames{
@@ -89,4 +94,3 @@ sprites{
 body_parts{
 	main
 }
-engine_version=0.24.0

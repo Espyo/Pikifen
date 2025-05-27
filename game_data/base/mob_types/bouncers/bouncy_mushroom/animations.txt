@@ -1,3 +1,8 @@
+name=Bouncy Mushroom animations
+description=Animations for the Bouncy Mushroom.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	bouncing{
 		frames{
@@ -47,4 +52,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

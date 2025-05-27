@@ -1,6 +1,8 @@
 name=Falling dirt
 description=Generic particles of dirt falling down. Used, for instance, by a lifting gate.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=16
 	number_deviation=1

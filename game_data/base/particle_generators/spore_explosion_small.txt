@@ -1,5 +1,8 @@
 name = Spore explosion (small)
 description=A small explosion of spores, emitted by a destroyed Spotcap.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=12
 	number_deviation=4

@@ -1,6 +1,8 @@
 name=Ink
 description=Ink on top of a Pikmin that's been inked.
-engine_version=0.25.0
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	main{
 		frames{

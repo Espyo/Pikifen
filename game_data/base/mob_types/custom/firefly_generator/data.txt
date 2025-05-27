@@ -4,3 +4,7 @@ description = A decorative object whose only purpose is to emit firefly particle
 casts_shadow = false
 custom_category_name = Decoration
 territory_radius = 300
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

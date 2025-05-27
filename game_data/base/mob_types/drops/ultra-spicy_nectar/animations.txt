@@ -1,3 +1,8 @@
+name=Ultra-spicy nectar animations
+description=Animations for the ultra-spicy nectar.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	bumped{
 		frames{
@@ -102,4 +107,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

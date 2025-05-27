@@ -1,3 +1,8 @@
+name=Blue 1 pellet animations
+description=Animations for the blue 1 pellet.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	idling{
 		frames{

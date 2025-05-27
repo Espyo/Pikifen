@@ -1,5 +1,8 @@
-name
-engine_version=0.25.0
+name=White Spectralids animations
+description=Animations for the White Spectralids.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
 animations{
 	dying{
 		loop_frame=3

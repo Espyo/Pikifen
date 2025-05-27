@@ -1,6 +1,8 @@
 name=Fireflies
 description=Small fireflies flying in place that fade in and out.
-engine_version=0.25.0
+maker=Helodity
+version=1.0.0
+engine_version=1.0.0
 emission{
 	number=1
 	number_deviation=0
