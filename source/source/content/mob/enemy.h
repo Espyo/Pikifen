@@ -33,13 +33,16 @@ public:
     //What type of enemy it is.
     EnemyType* eneType = nullptr;
     
+    //Time left until it respawns.
+    Timer reviveTimer;
     
     //--- Function declarations ---
     
     Enemy(const Point& pos, EnemyType* type, float angle);
     bool canReceiveStatus(StatusType* s) const override;
     void drawMob() override;
+    void revive();
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;
-    
+    void tickClassSpecifics(float deltaT) override;
 };

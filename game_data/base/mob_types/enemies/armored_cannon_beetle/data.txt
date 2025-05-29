@@ -6,7 +6,6 @@ can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 can_walk_on_others = true
 custom_category_name = Enemy, large and aggressive
-drops_corpse = true
 health_regen = 0
 height = 100
 itch_damage = 20

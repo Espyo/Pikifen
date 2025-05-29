@@ -413,6 +413,9 @@ public:
     
     //Index of the state to go to when it's dying.
     size_t dyingStateIdx = INVALID;
+
+    //Index of the state to go to when it's dying.
+    size_t reviveStateIdx = INVALID;
     
     //States that ignore the death event.
     vector<string> statesIgnoringDeath;

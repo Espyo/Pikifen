@@ -44,7 +44,7 @@ void EnemyType::loadCatProperties(DataNode* file) {
     ReaderSetter eRS(file);
     
     eRS.set("allow_ground_attacks", allowGroundAttacks);
-    eRS.set("drops_corpse", dropsCorpse);
+    eRS.set("revive_time", reviveTime);
     eRS.set("pikmin_seeds", pikminSeeds);
     eRS.set("points", points);
     eRS.set("is_boss", isBoss);

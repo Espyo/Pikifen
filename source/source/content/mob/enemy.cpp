@@ -45,7 +45,10 @@ const float SPIRIT_SIZE_MULT = 0.7;
  */
 Enemy::Enemy(const Point& pos, EnemyType* type, float angle) :
     Mob(pos, type, angle),
-    eneType(type) {
+    eneType(type),
+    reviveTimer(type->reviveTime) {
+    reviveTimer.onEnd =
+    [this] () { this->revive(); };
     
 }
 
@@ -89,36 +92,52 @@ void Enemy::drawMob() {
 
 
 /**
+ * @brief Takes an enemy out of its death states.
+ */
+void Enemy::revive() {
+    health = maxHealth;
+    disableFlag(flags, MOB_FLAG_NON_HUNTABLE);
+    becomeUncarriable();
+    fsm.setState(type->reviveStateIdx);
+}
+
+/**
  * @brief Logic specific to enemies for when they finish dying.
  */
 void Enemy::finishDyingClassSpecifics() {
     //Corpse.
-    if(eneType->dropsCorpse) {
-        becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
-        fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+    enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
+    becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
+    fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+    
+    //Revive timer
+    if(reviveTimer.duration >= 0) {
+        reviveTimer.start();
+    } else {
+        //Revivable enemies do not release a soul.
+        
+        //Soul particle.
+        Particle par(
+            pos, LARGE_FLOAT,
+            std::clamp(
+                radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
+                ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
+            ),
+            2, PARTICLE_PRIORITY_MEDIUM
+        );
+        par.bitmap = game.sysContent.bmpEnemySpirit;
+        par.friction = 0.5f;
+        par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
+        par.linearSpeed.add(0.5f, Point(50, -50));
+        par.linearSpeed.add(1, Point(-50, -50));
+        
+        par.color =
+            KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
+        par.color.add(0.1f, al_map_rgb(255, 192, 255));
+        par.color.add(0.6f, al_map_rgb(255, 192, 255));
+        par.color.add(1, al_map_rgba(255, 192, 255, 0));
+        game.states.gameplay->particles.add(par);
     }
-    
-    //Soul.
-    Particle par(
-        pos, LARGE_FLOAT,
-        std::clamp(
-            radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
-            ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
-        ),
-        2, PARTICLE_PRIORITY_MEDIUM
-    );
-    par.bitmap = game.sysContent.bmpEnemySpirit;
-    par.friction = 0.5f;
-    par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
-    par.linearSpeed.add(0.5f, Point(50, -50));
-    par.linearSpeed.add(1, Point(-50, -50));
-    
-    par.color =
-        KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
-    par.color.add(0.1f, al_map_rgb(255, 192, 255));
-    par.color.add(0.6f, al_map_rgb(255, 192, 255));
-    par.color.add(1, al_map_rgba(255, 192, 255, 0));
-    game.states.gameplay->particles.add(par);
 }
 
 
@@ -164,4 +183,17 @@ void Enemy::startDyingClassSpecifics() {
             game.sysContentNames.parEnemyDefeat, this
         );
     particleGenerators.push_back(pg);
+}
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void Enemy::tickClassSpecifics(float deltaT) {
+    reviveTimer.tick(deltaT);
+    if(reviveTimer.timeLeft > 0) {
+        //Override the health wheel with the revive timer.
+        health = maxHealth * (1 - reviveTimer.getRatioLeft());
+    }
 }

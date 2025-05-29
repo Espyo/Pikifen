@@ -301,8 +301,6 @@ Next tasks (roughly sorted most important first)
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Luminkolls
     Mob rotation should have acceleration too
-    Enemy revival
-        drops_corpse could probably be revamped or removed entirely
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on

@@ -6,7 +6,6 @@ acceleration = 60
 can_hunt = player; enemy
 can_walk_on_others = true
 custom_category_name = Enemy, small and peaceful
-drops_corpse = true
 height = 128
 itch_damage = 50
 itch_time = 12

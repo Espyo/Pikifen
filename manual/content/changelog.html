@@ -105,6 +105,7 @@
       <li><span class="cl-a">Added</span> the ability to customize the control binds for <a href="maker_toolkit.html">maker tools</a>.</li>
       <li><span class="cl-a">Added</span> some modifiers to the <a href="maker_toolkit.html">maker tools</a> to allow for more behaviors.</li>
       <li><span class="cl-a">Added</span> knockback multiplication logic to <a href="mob_type#vulnerabilities.html">object type vulnerabilities</a>. (Thanks Rosey)</li>
+      <li><span class="cl-a">Added</span> <a href="https://www.pikminwiki.com/Health#Revival">enemy revival</a>.</li>
     </ul>
 
     <p><b>Breaking changes</b></p>
@@ -155,6 +156,7 @@
         <li><span class="cl-c">Changed</span> the property <code>enemy_deaths</code> in the statistics to <code>enemy_defeats</code>. Without external manipulation it will be impossible to port this value of the statistics file over to this version.</li>
         <li><span class="cl-c">Changed</span> the internal name of some multi-word pieces of content to fit a "subject_adjective" naming scheme: electricity hazards, bridge-related objects, bramble gate-related objects, logic gate objects, Pellet Posy objects, pellet objects, Burgeoning Spiderwort objects, berry objects, crystal explosion particle generators, dust-related particle generators, gas-related particle generators, rock explosion particle generators, smoke-related particle generators, spark-related particle generators, speed-changing status effects, blackout weather conditions, and foggy weather conditions.</li>
         <li><span class="cl-c">Changed</span> the internal name of some menu-related GUI definitions for consistency: help menu, main menu's top page, and all pause menu GUI definitions.</li>
+        <li><span class="cl-r">Removed</span> the <code>drops_corpse</code> enemy parameter. Instead, use the <code>delete</code> script action or avoid running <code>finish_dying</code>.</li>
       </li>
     </ul>
     

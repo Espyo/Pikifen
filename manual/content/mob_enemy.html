@@ -43,10 +43,10 @@
         <td>true</td>
       </tr>
       <tr>
-        <td>drops_corpse</td>
-        <td>Whether this enemy drops a carriable corpse upon death.</td>
-        <td>Boolean</td>
-        <td>true</td>
+        <td>revive_time</td>
+        <td>How long after death until an enemy revives. Set to 0 for no revival.</td>
+        <td>Number</td>
+        <td>0</td>
       </tr>
       <tr>
         <td>is_boss</td>
@@ -74,7 +74,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. There are no recommended states, events, or actions.</p>
+    <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. Enemies can define a <code>revive_state</code>, dictating what state they will return to at the end of their revive timer.</p>
 
   </div>
 </body>

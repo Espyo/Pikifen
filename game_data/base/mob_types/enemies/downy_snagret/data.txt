@@ -4,7 +4,6 @@ description = This young snagret hops around in search of prey.
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 custom_category_name = Enemy, small and aggressive
-drops_corpse = true
 height = 64
 itch_damage = 25
 itch_time = 2
