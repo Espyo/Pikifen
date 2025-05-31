@@ -375,6 +375,25 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         handleMouseUpdate(ev);
     }
     
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+        //Mouse button down in general.
+        
+        //If we started holding one button in the GUI but are now
+        //pressing outside, force a mouse-up for that button. And vice-versa.
+        if(isM1Pressed && (isM1DragStartInGui != isMouseInGui)) {
+            isM1Pressed = false;
+            handleLmbUp(ev);
+        }
+        if(isM2Pressed && (isM2DragStartInGui != isMouseInGui)) {
+            isM2Pressed = false;
+            handleRmbUp(ev);
+        }
+        if(isM3Pressed && (isM3DragStartInGui != isMouseInGui)) {
+            isM3Pressed = false;
+            handleMmbUp(ev);
+        }
+    }
+    
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         isMouseInCanvas
@@ -472,16 +491,22 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         
         switch(ev.mouse.button) {
         case 1: {
-            isM1Pressed = false;
-            handleLmbUp(ev);
+            if(isM1Pressed) {
+                isM1Pressed = false;
+                handleLmbUp(ev);
+            }
             break;
         } case 2: {
-            isM2Pressed = false;
-            handleRmbUp(ev);
+            if(isM2Pressed) {
+                isM2Pressed = false;
+                handleRmbUp(ev);
+            }
             break;
         } case 3: {
-            isM3Pressed = false;
-            handleMmbUp(ev);
+            if(isM3Pressed) {
+                isM3Pressed = false;
+                handleMmbUp(ev);
+            }
             break;
         }
         }

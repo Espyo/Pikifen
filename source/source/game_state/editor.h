@@ -618,6 +618,15 @@ protected:
     //Is the mouse currently hovering the gui? False if it's the canvas.
     bool isMouseInGui = false;
     
+    //Whether the left mouse button's drag start was on the GUI or canvas.
+    bool isM1DragStartInGui = false;
+    
+    //Whether the right mouse button's drag start was on the GUI or canvas.
+    bool isM2DragStartInGui = false;
+    
+    //Whether the middle mouse button's drag start was on the GUI or canvas.
+    bool isM3DragStartInGui = false;
+    
     //Number of the mouse button pressed.
     size_t lastMouseClick = INVALID;
     
