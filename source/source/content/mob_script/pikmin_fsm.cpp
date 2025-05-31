@@ -1982,10 +1982,27 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     if(info) {
         //Damage.
-        float damage = 0;
         float healthBefore = pikPtr->health;
-        info->mob2->calculateDamage(m, info->h2, info->h1, &damage);
-        m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
+        float offenseMultiplier = 0;
+        float defenseMultiplier = 0;
+        float damage = 0;
+        bool validAttack = false;
+        
+        validAttack =
+            info->mob2->calculateAttackBasics(
+                m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
+            );
+        if(validAttack) {
+            validAttack =
+                info->mob2->calculateAttackDamage(
+                    m, info->h2, info->h1,
+                    offenseMultiplier, defenseMultiplier, &damage
+                );
+        }
+        if(validAttack) {
+            m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
+        }
+        
         if(pikPtr->health <= 0.0f && healthBefore > 0.0f) {
             if(info->h2->hazard) {
                 game.statistics.pikminHazardDeaths++;
@@ -1995,8 +2012,10 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
         //Knockback.
         float knockback = 0;
         float knockbackAngle = 0;
-        info->mob2->calculateKnockback(
-            m, info->h2, info->h1, &knockback, &knockbackAngle
+        info->mob2->calculateAttackKnockback(
+            m, info->h2, info->h1,
+            offenseMultiplier, defenseMultiplier,
+            &knockback, &knockbackAngle
         );
         m->applyKnockback(knockback, knockbackAngle);
         
@@ -2410,8 +2429,23 @@ void PikminFsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
         return;
     }
     
+    float offenseMultiplier = 0;
+    float defenseMultiplier = 0;
     float damage = 0;
-    if(!info->mob2->calculateDamage(m, info->h2, info->h1, &damage)) {
+    if(
+        !info->mob2->calculateAttackBasics(
+            m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
+        )
+    ) {
+        //This attack doesn't work.
+        return;
+    }
+    
+    if(
+        !info->mob2->calculateAttackDamage(
+            m, info->h2, info->h1, offenseMultiplier, defenseMultiplier, &damage
+        )
+    ) {
         //This attack doesn't cause damage.
         return;
     }
@@ -2461,10 +2495,23 @@ void PikminFsm::checkOutgoingAttack(Mob* m, void* info1, void* info2) {
     HitboxInteraction* info = (HitboxInteraction*) info1;
     Pikmin* pikPtr = (Pikmin*) m;
     
+    float offenseMultiplier = 0;
+    float defenseMultiplier = 0;
     float damage = 0;
     bool attackSuccess =
-        pikPtr->calculateDamage(info->mob2, info->h1, info->h2, &damage);
+        pikPtr->calculateAttackBasics(
+            info->mob2, info->h1, info->h2,
+            &offenseMultiplier, &defenseMultiplier
+        );
         
+    if(attackSuccess) {
+        attackSuccess =
+            pikPtr->calculateAttackDamage(
+                info->mob2, info->h1, info->h2,
+                offenseMultiplier, defenseMultiplier, &damage
+            );
+    }
+    
     if(damage == 0 || !attackSuccess) {
         pikPtr->wasLastHitDud = true;
     }

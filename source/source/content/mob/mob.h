@@ -380,6 +380,10 @@ public:
     );
     void addToGroup(Mob* newMember);
     void applyKnockback(float knockback, float knockbackAngle);
+    bool calculateAttackBasics(
+        Mob* victim, Hitbox* attackH, const Hitbox* victimH,
+        float* outOffenseMultiplier, float* outDefenseMultiplier
+    );
     bool calculateCarryingDestination(
         Mob* added, Mob* removed,
         PikminType** targetType, Mob** targetMob, Point* targetPoint
@@ -388,12 +392,15 @@ public:
         Mob* added, Mob* removed, PikminType** targetType
     ) const;
     Ship* calculateCarryingShip() const;
-    bool calculateDamage(
-        Mob* victim, Hitbox* attackH, const Hitbox* victimH, float* damage
+    bool calculateAttackDamage(
+        Mob* victim, Hitbox* attackH, const Hitbox* victimH,
+        float offenseMultiplier, float defenseMultiplier,
+        float* outDamage
     ) const;
-    void calculateKnockback(
-        const Mob* victim, const Hitbox* attackH,
-        Hitbox* victimH, float* knockback, float* angle
+    void calculateAttackKnockback(
+        const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
+        float offenseMultiplier, float defenseMultiplier,
+        float* outKbStrength, float* outKbAngle
     ) const;
     void causeSpikeDamage(Mob* victim, bool isIngestion);
     void chomp(Mob* m, const Hitbox* hitboxInfo);

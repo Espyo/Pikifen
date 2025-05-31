@@ -35,9 +35,22 @@ void GenMobFsm::beAttacked(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    
+    float offenseMultiplier = 1.0f;
+    float defenseMultiplier = 1.0f;
     float damage = 0;
-    if(!info->mob2->calculateDamage(m, info->h2, info->h1, &damage)) {
+    
+    if(
+        !info->mob2->calculateAttackBasics(
+            m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
+        )
+    ) {
+        return;
+    }
+    if(
+        !info->mob2->calculateAttackDamage(
+            m, info->h2, info->h1, offenseMultiplier, defenseMultiplier, &damage
+        )
+    ) {
         return;
     }
     

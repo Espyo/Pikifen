@@ -1490,10 +1490,23 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     if(m->invulnPeriod.timeLeft > 0.0f) return;
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    
-    float damage = 0;
     float healthBefore = m->health;
-    if(!info->mob2->calculateDamage(m, info->h2, info->h1, &damage)) {
+    float offenseMultiplier = 1.0f;
+    float defenseMultiplier = 1.0f;
+    float damage = 0;
+    
+    if(
+        !info->mob2->calculateAttackBasics(
+            m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
+        )
+    ) {
+        return;
+    }
+    if(
+        !info->mob2->calculateAttackDamage(
+            m, info->h2, info->h1, offenseMultiplier, defenseMultiplier, &damage
+        )
+    ) {
         return;
     }
     
@@ -1503,8 +1516,9 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     float knockback = 0;
     float knockbackAngle = 0;
-    info->mob2->calculateKnockback(
-        m, info->h2, info->h1, &knockback, &knockbackAngle
+    info->mob2->calculateAttackKnockback(
+        m, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
+        &knockback, &knockbackAngle
     );
     m->applyKnockback(knockback, knockbackAngle);
     
@@ -1743,11 +1757,20 @@ void LeaderFsm::checkPunchDamage(Mob* m, void* info1, void* info2) {
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
+    float offenseMultiplier = 0;
+    float defenseMultiplier = 0;
     float damage = 0;
     if(
         info->mob2->health > 0.0f &&
         m->canHurt(info->mob2) &&
-        m->calculateDamage(info->mob2, info->h1, info->h2, &damage)
+        m->calculateAttackBasics(
+            info->mob2, info->h1, info->h2,
+            &offenseMultiplier, &defenseMultiplier
+        ) &&
+        m->calculateAttackDamage(
+            info->mob2, info->h1, info->h2,
+            offenseMultiplier, defenseMultiplier, &damage
+        )
     ) {
         game.statistics.punchDamageCaused += damage;
     }

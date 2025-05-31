@@ -589,6 +589,72 @@ void Mob::becomeUncarriable() {
 
 
 /**
+ * @brief Calculates some basic data for how an attack should go.
+ *
+ * @param victim The mob that'll take the damage.
+ * @param attackH Hitbox used for the attack.
+ * @param victimH Victim's hitbox that got hit.
+ * @param outOffenseMultiplier The mob's offense multiplier is returned here.
+ * @param outDefenseMultiplier The victim's defense multiplier is returned
+ * here. If the value is LARGE_FLOAT, that means the victim is immune to
+ * the attack's hazards.
+ * @return Whether the attack is valid.
+ */
+bool Mob::calculateAttackBasics(
+    Mob* victim, Hitbox* attackH, const Hitbox* victimH,
+    float* outOffenseMultiplier, float* outDefenseMultiplier
+) {
+    *outDefenseMultiplier = 1.0f;
+    *outOffenseMultiplier = 1.0f;
+    
+    //First, check if this hitbox cannot be damaged.
+    if(victimH->type != HITBOX_TYPE_NORMAL) {
+        //This hitbox can't be damaged! Abort!
+        return false;
+    }
+    
+    //Calculate the hitbox multipliers.
+    *outDefenseMultiplier *= victimH->value;
+    
+    //Calculate the hazard multipliers.
+    if(attackH) {
+        float vulnMult = 1.0f;
+        if(attackH->hazard) {
+            MobType::Vulnerability vuln =
+                victim->getHazardVulnerability(attackH->hazard);
+            vulnMult = vuln.effectMult;
+        } else {
+            vulnMult = victim->type->defaultVulnerability;
+        }
+        
+        if(vulnMult == 0.0f) {
+            //The victim is immune to this hazard!
+            *outDefenseMultiplier = LARGE_FLOAT;
+        } else {
+            *outDefenseMultiplier = 1.0f / vulnMult;
+        }
+    }
+    
+    //Calculate the status multipliers.
+    for(size_t s = 0; s < statuses.size(); s++) {
+        *outOffenseMultiplier *= statuses[s].type->attackMultiplier;
+    }
+    for(size_t s = 0; s < victim->statuses.size(); s++) {
+        float statusDefMult =
+            victim->statuses[s].type->defenseMultiplier - 1.0f;
+        auto statusVulnIt =
+            victim->type->statusVulnerabilities.find(victim->statuses[s].type);
+        if(statusVulnIt != victim->type->statusVulnerabilities.end()) {
+            statusDefMult *= statusVulnIt->second.effectMult;
+        }
+        *outDefenseMultiplier *= (statusDefMult + 1.0f);
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Calculates the final carrying target, and the final carrying position,
  * given the sort of carry destination, what Pikmin are holding on, and what
  * Pikmin got added or removed.
@@ -845,82 +911,34 @@ Ship* Mob::calculateCarryingShip() const {
  * @param victim The mob that'll take the damage.
  * @param attackH Hitbox used for the attack.
  * @param victimH Victim's hitbox that got hit.
- * @param damage Return the calculated damage here.
+ * @param offenseMultiplier Pre-calculated attack offense multiplier.
+ * @param defenseMultiplier Pre-calculated victim defense multiplier.
+ * @param outDamage Return the calculated damage here.
  * @return Whether the attack will hit.
  * Returns true even if it will end up causing zero damage.
  * Returns false if it cannot hit (e.g. the victim hitbox is not valid).
  */
-bool Mob::calculateDamage(
-    Mob* victim, Hitbox* attackH, const Hitbox* victimH, float* damage
+bool Mob::calculateAttackDamage(
+    Mob* victim, Hitbox* attackH, const Hitbox* victimH,
+    float offenseMultiplier, float defenseMultiplier, float* outDamage
 ) const {
-    float attackerOffense = 0;
-    float defenseMultiplier = 1;
-    
-    //First, check if this hitbox cannot be damaged.
-    if(victimH->type != HITBOX_TYPE_NORMAL) {
-        //This hitbox can't be damaged! Abort!
-        return false;
-    }
-    
-    //Calculate the damage.
-    if(attackH) {
-        attackerOffense = attackH->value;
-        
-        if(attackH->hazard) {
-            MobType::Vulnerability vuln =
-                victim->getHazardVulnerability(attackH->hazard);
-                
-            if(vuln.effectMult == 0.0f) {
-                //The victim is immune to this hazard!
-                *damage = 0;
-                return true;
-            } else {
-                defenseMultiplier = 1.0f / vuln.effectMult;
-            }
-            
-        } else {
-        
-            if(victim->type->defaultVulnerability == 0.0f) {
-                //The victim is invulnerable to everything about this attack!
-                *damage = 0;
-                return true;
-            } else {
-                defenseMultiplier = 1.0f / victim->type->defaultVulnerability;
-            }
-        }
-        
-    } else {
-        attackerOffense = 1;
-    }
-    
     if(victimH->value == 0.0f) {
-        //Hah, this hitbox is invulnerable!
-        *damage = 0;
+        //This hitbox is invulnerable!
+        *outDamage = 0;
         return true;
     }
     
-    defenseMultiplier *= victimH->value;
-    
-    for(size_t s = 0; s < statuses.size(); s++) {
-        attackerOffense *= statuses[s].type->attackMultiplier;
-    }
-    for(size_t s = 0; s < victim->statuses.size(); s++) {
-        float vulnMult = victim->statuses[s].type->defenseMultiplier - 1.0f;
-        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
-        if(vulnIt != type->statusVulnerabilities.end()) {
-            vulnMult *= vulnIt->second.effectMult;
-        }
-        defenseMultiplier *= (vulnMult + 1.0f);
-    }
+    float attackStrength = attackH ? attackH->value : 1.0f;
     
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
         //It's easier to calculate the maturity attack boost here.
         Pikmin* pikPtr = (Pikmin*) this;
-        attackerOffense *=
+        attackStrength *=
             1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
     }
     
-    *damage = attackerOffense * (1.0f / defenseMultiplier);
+    *outDamage =
+        attackStrength * offenseMultiplier * (1.0f / defenseMultiplier);
     return true;
 }
 
@@ -931,25 +949,29 @@ bool Mob::calculateDamage(
  * @param victim The mob that'll take the damage.
  * @param attackH The hitbox of the attacker mob, if any.
  * @param victimH The hitbox of the victim mob, if any.
- * @param kbStrength The variable to return the knockback amount to.
- * @param kbAngle The variable to return the angle of the knockback to.
+ * @param offenseMultiplier Pre-calculated attack offense multiplier.
+ * @param defenseMultiplier Pre-calculated victim defense multiplier.
+ * @param outKbStrength The variable to return the knockback amount to.
+ * @param outKbAngle The variable to return the angle of the knockback to.
  */
-void Mob::calculateKnockback(
-    const Mob* victim, const Hitbox* attackH,
-    Hitbox* victimH, float* kbStrength, float* kbAngle
+void Mob::calculateAttackKnockback(
+    const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
+    float offenseMultiplier, float defenseMultiplier,
+    float* outKbStrength, float* outKbAngle
 ) const {
     if(attackH) {
-        *kbStrength = attackH->knockback;
+        *outKbStrength = attackH->knockback;
+        *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
         if(attackH->knockbackOutward) {
-            *kbAngle =
+            *outKbAngle =
                 getAngle(attackH->getCurPos(pos, angle), victim->pos);
         } else {
-            *kbAngle =
+            *outKbAngle =
                 angle + attackH->knockbackAngle;
         }
     } else {
-        *kbStrength = 0;
-        *kbAngle = 0;
+        *outKbStrength = 0;
+        *outKbAngle = 0;
     }
 }
 
