@@ -757,10 +757,18 @@ Hud::Hud() :
         }
         if(topSprayIdx == INVALID) return;
         
+        size_t curAmount = player->team->sprayStats[topSprayIdx].nrSprays;
+        
+        if(curAmount != spray1CountNr) {
+            spray1Amount->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            spray1CountNr = curAmount;
+        }
+        
         drawText(
             "x" +
-            i2s(player->team->sprayStats[topSprayIdx].nrSprays),
-            game.sysContent.fntCounter,
+            i2s(curAmount), game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
             mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
@@ -850,10 +858,18 @@ Hud::Hud() :
         }
         if(bottomSprayIdx == INVALID) return;
         
+        size_t curAmount = player->team->sprayStats[bottomSprayIdx].nrSprays;
+        
+        if(curAmount != spray2CountNr) {
+            spray2Amount->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            spray2CountNr = curAmount;
+        }
+        
         drawText(
             "x" +
-            i2s(player->team->sprayStats[bottomSprayIdx].nrSprays),
-            game.sysContent.fntCounter,
+            i2s(curAmount), game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
             mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
@@ -1415,10 +1431,10 @@ Hud::Hud() :
     
 #define loader(var, name) \
     var = \
-        game.content.bitmaps.list.get( \
-            bitmapsNode->getChildByName(name)->value, \
-            bitmapsNode->getChildByName(name) \
-        );
+          game.content.bitmaps.list.get( \
+                                         bitmapsNode->getChildByName(name)->value, \
+                                         bitmapsNode->getChildByName(name) \
+                                       );
     
     loader(bmpBubble,               "bubble");
     loader(bmpCounterBubbleField,   "counter_bubble_field");

@@ -158,6 +158,12 @@ struct Hud {
     //Maturity icon in the previous frame.
     ALLEGRO_BITMAP* prevMaturityIcon = nullptr;
     
+    //Current spray 1 count.
+    size_t spray1CountNr = 0;
+    
+    //Current spray 2 count.
+    size_t spray2CountNr = 0;
+    
     //Spray 1 amount text. Cache for convenience.
     GuiItem* spray1Amount = nullptr;
     

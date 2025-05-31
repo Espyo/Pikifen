@@ -591,7 +591,7 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
         case PLAYER_ACTION_TYPE_USE_SPRAY_2: {
             doPlayerActionUseSpray(
                 player, isDown,
-                action.actionTypeId == PLAYER_ACTION_TYPE_USE_SPRAY_1
+                action.actionTypeId == PLAYER_ACTION_TYPE_USE_SPRAY_2
             );
             break;
             
