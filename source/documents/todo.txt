@@ -6,14 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you're panning the camera in an editor's canvas and your cursor goes to the panel, you can left-click to interact with it and with the canvas at the same time
-    Sleeping right after the stage loads (maybe only in the area editor quick play?) puts you in a limbo state
     Quitting the radar using the Tab key won't play the "back" sound
     The camera offset because the leader is far from the Pikmin should have a maximum
     If a leader hits a geyser while in the throwing animation, that animation will loop
     Fix #8
 
     --- 0.26 ---
+    https://github.com/Helodity/Pikifen/tree/enemy-revival
     Area loading screen should mention the name of the creator, so people recording videos can't accidentally miss crediting
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
@@ -196,27 +195,6 @@ Next tasks (roughly sorted most important first)
     Test everything in DEV Lab
     Test all Pikmin and leader states
     Check one final time for leaks, run a static analysis, etc.
-    Format the whole code with Astyle, once #563 is fixed
-        This setup seemed to work ok, or at least as a start:
-            "astyle.cmd_options": [
-                "--align-pointer=type",
-                "--align-reference=name",
-                "--convert-tabs",
-                "--fill-empty-lines",
-                "--indent-after-parens",
-                "--indent-continuation=1",
-                "--indent-col1-comments",
-                "--indent-preproc-define",
-                "--indent=spaces=4",
-                "--keep-one-line-blocks",
-                "--keep-one-line-statements",
-                "--min-conditional-indent=0",
-                "--mode=c",
-                "--pad-oper",
-                "--squeeze-lines=3",
-                "--style=java",
-            ],
-        Document the usage of Astyle in the contributing file
     Make sure the readme's <50MB size claim is correct
     
     --- Future ---
@@ -489,6 +467,7 @@ Next tasks (roughly sorted most important first)
                 If Pikmin can attack each other
                 If Pikmin can attack leaders
                 If a given item can suddenly be worth double or triple the normal amount (like in Dandori Battles)
+                If a Pikmin sees enemy Pikmin carrying something, whether they try to attack them (P2/P3), or overpower them (P4)
             A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
             A handful of rulesets for basic battles, Pikmin 2 battles, Pikmin 3 Bingo Battles, Pikmin 4 Dandori Battles, etc.

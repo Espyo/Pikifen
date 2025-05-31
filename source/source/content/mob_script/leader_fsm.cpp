@@ -2418,6 +2418,20 @@ void LeaderFsm::searchSeed(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::setCorrectActiveAnim(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
+    size_t walkAnimIdx =
+        leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
+    size_t idleAnimIdx =
+        leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_IDLING];
+    if(
+        leaPtr->anim.curAnim !=
+        leaPtr->anim.animDb->animations[walkAnimIdx] &&
+        leaPtr->anim.curAnim !=
+        leaPtr->anim.animDb->animations[idleAnimIdx]
+    ) {
+        //The leader's doing some other animation, so let that happen.
+        return;
+    }
+    
     bool mustUseWalkingAnim =
         leaPtr->isActiveWalking || leaPtr->isActiveTurning;
         
