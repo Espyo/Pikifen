@@ -35,7 +35,7 @@ sounds {
         volume = 40
     }
     bumped {
-        file = misc/low_boing_1
+        file = misc/boing_low_1
         volume = 40
         speed_deviation = 8
     }
