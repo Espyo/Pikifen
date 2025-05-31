@@ -6,10 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Quitting the radar using the Tab key won't play the "back" sound
-    The camera offset because the leader is far from the Pikmin should have a maximum
-    If a leader hits a geyser while in the throwing animation, that animation will loop
     Fix #8
+        If a random Onion needs to be chosen to deliver the object to, pick it cyclically, instead of random every time.
+        For example: if I generate a new tie between Red, Yellow and Blue, pick Red. If I generate the same time again, pick Yellow. Then Blue, then Red, and so forth.
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/enemy-revival
@@ -46,6 +45,7 @@ Next tasks (roughly sorted most important first)
                 x GO!
                 Mission complete
                 Mission failed
+                Pausing
                 Mission completion item going up
                 Mission completion item going down
                 Mission failure item going up

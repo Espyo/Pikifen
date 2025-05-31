@@ -225,6 +225,13 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             groupCenter.x = (tl.x + br.x) / 2.0f;
             groupCenter.y = (tl.y + br.y) / 2.0f;
             groupWeight = 0.1f;
+            
+            Distance groupDist(player->leaderPtr->pos, groupCenter);
+            if(groupDist > 500) {
+                //If the group is too far away, limit how far the camera can go.
+                float extra = groupDist.toFloat() / 500;
+                groupWeight *= (1.0f / extra);
+            }
         }
         
         float weightSums = leaderWeight + cursorWeight + groupWeight;

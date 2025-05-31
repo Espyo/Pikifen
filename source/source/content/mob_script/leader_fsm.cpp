@@ -1667,6 +1667,7 @@ void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
     ((Leader*) m)->startThrowTrail();
+    m->setAnimation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1680,6 +1681,7 @@ void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
 void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     leaPtr->startThrowTrail();
+    leaPtr->setAnimation(LEADER_ANIM_IDLING);
     if(!leaPtr->player) {
         leaPtr->leaveGroup();
     }
