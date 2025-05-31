@@ -967,7 +967,7 @@ void GameplayState::load() {
     game.errors.prepareAreaLoad();
     wentToResults = false;
     
-    drawLoadingScreen("", "", 1.0f);
+    drawLoadingScreen("", "", "", 1.0f);
     al_flip_display();
     
     game.statistics.areaEntries++;

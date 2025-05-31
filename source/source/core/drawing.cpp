@@ -573,11 +573,13 @@ void drawLiquid(
  *
  * @param text The main text to show, optional.
  * @param subtext Subtext to show under the main text, optional.
+ * @param subtext Name of the maker, optional.
  * @param opacity 0 to 1. The background blackness lowers in opacity
  * much faster.
  */
 void drawLoadingScreen(
-    const string& text, const string& subtext, float opacity
+    const string& text, const string& subtext, const string& maker,
+    float opacity
 ) {
     const float textW = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
     const float textH = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
@@ -745,6 +747,18 @@ void drawLoadingScreen(
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
+    }
+    
+    //Draw the area's maker, if applicable.
+    if(!maker.empty()) {
+        const Point textBox(game.winW * 0.20f, game.winH * 0.03f);
+        drawText(
+            "Made by: " + maker, game.sysContent.fntStandard,
+            Point(8, game.winH - 8), textBox,
+            al_map_rgba(192, 192, 192, opacity * 255.0),
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM, 0,
+            Point(0.8f, 0.8f)
+        );
     }
     
     //Draw the game's logo to the left of the "Loading..." text,

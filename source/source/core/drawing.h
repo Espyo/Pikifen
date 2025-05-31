@@ -199,7 +199,8 @@ void drawLiquid(
     float time
 );
 void drawLoadingScreen(
-    const string& areaName, const string& subtitle, float opacity
+    const string& areaName, const string& subtitle, const string& maker,
+    float opacity
 );
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,

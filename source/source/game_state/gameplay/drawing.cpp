@@ -194,6 +194,7 @@ void GameplayState::doGameDrawing(
                     game.curAreaData->type,
                     game.curAreaData->mission.goal
                 ),
+                game.curAreaData->maker,
                 areaTitleFadeTimer.getRatioLeft()
             );
         }

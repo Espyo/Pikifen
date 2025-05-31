@@ -429,7 +429,7 @@ int Game::start() {
     loadMiscSounds();
     
     //Draw the basic loading screen.
-    drawLoadingScreen("", "", 1.0);
+    drawLoadingScreen("", "", "", 1.0);
     al_flip_display();
     
     //Init Dear ImGui.

@@ -170,6 +170,7 @@ bool AreaContentManager::loadArea(
                 areaPtr->type,
                 areaPtr->mission.goal
             ),
+            areaPtr->maker,
             1.0f
         );
         al_flip_display();

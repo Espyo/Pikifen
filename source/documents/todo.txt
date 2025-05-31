@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
 
     --- 0.26 ---
     https://github.com/Helodity/Pikifen/tree/enemy-revival
-    Area loading screen should mention the name of the creator, so people recording videos can't accidentally miss crediting
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
@@ -925,6 +924,7 @@ Misc things (so I don't forget)
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
+    The loading screen's elements could be controlled with a GUI definition
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
