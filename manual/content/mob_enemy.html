@@ -43,12 +43,6 @@
         <td>true</td>
       </tr>
       <tr>
-        <td>revive_time</td>
-        <td>How long after death until an enemy revives. Set to 0 for no revival.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
         <td>is_boss</td>
         <td>Whether this enemy is considered a boss enemy.</td>
         <td>Boolean</td>
@@ -66,6 +60,12 @@
         <td>Number</td>
         <td>0</td>
       </tr>
+      <tr>
+        <td>revive_time</td>
+        <td>How long after death until an enemy revives. Set to 0 for no revival.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
     </table>
 
     <h2 id="animations">Animations</h2>
@@ -74,7 +74,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. Enemies can define a <code>revive_state</code>, dictating what state they will return to at the end of their revive timer.</p>
+    <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. You can define a <code>revive_state</code> property in the script file, dictating what state the enemy will return to at the end of its revival timer.</p>
 
   </div>
 </body>

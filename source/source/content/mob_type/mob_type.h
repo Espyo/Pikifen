@@ -413,8 +413,8 @@ public:
     
     //Index of the state to go to when it's dying.
     size_t dyingStateIdx = INVALID;
-
-    //Index of the state to go to when it's dying.
+    
+    //Index of the state to go to when it's done reviving.
     size_t reviveStateIdx = INVALID;
     
     //States that ignore the death event.

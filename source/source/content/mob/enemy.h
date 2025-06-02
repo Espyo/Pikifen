@@ -33,7 +33,7 @@ public:
     //What type of enemy it is.
     EnemyType* eneType = nullptr;
     
-    //Time left until it respawns.
+    //Time left until it comes back to life.
     Timer reviveTimer;
     
     //--- Function declarations ---

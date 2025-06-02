@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
         For example: if I generate a new tie between Red, Yellow and Blue, pick Red. If I generate the same time again, pick Yellow. Then Blue, then Red, and so forth.
 
     --- 0.26 ---
-    https://github.com/Helodity/Pikifen/tree/enemy-revival
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
@@ -42,8 +41,8 @@ Next tasks (roughly sorted most important first)
             HUD
                 x Ready...
                 x GO!
-                Mission complete
-                Mission failed
+                x Mission complete
+                x Mission failed
                 Pausing
                 Mission completion item going up
                 Mission completion item going down

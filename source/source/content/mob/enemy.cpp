@@ -47,6 +47,7 @@ Enemy::Enemy(const Point& pos, EnemyType* type, float angle) :
     Mob(pos, type, angle),
     eneType(type),
     reviveTimer(type->reviveTime) {
+    
     reviveTimer.onEnd =
     [this] () { this->revive(); };
     
@@ -92,16 +93,6 @@ void Enemy::drawMob() {
 
 
 /**
- * @brief Takes an enemy out of its death states.
- */
-void Enemy::revive() {
-    health = maxHealth;
-    disableFlag(flags, MOB_FLAG_NON_HUNTABLE);
-    becomeUncarriable();
-    fsm.setState(type->reviveStateIdx);
-}
-
-/**
  * @brief Logic specific to enemies for when they finish dying.
  */
 void Enemy::finishDyingClassSpecifics() {
@@ -110,13 +101,12 @@ void Enemy::finishDyingClassSpecifics() {
     becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
     fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     
-    //Revive timer
     if(reviveTimer.duration >= 0) {
+        //Revival.
         reviveTimer.start();
-    } else {
-        //Revivable enemies do not release a soul.
         
-        //Soul particle.
+    } else {
+        //Soul particle, only if the enemy does not revive.
         Particle par(
             pos, LARGE_FLOAT,
             std::clamp(
@@ -137,6 +127,22 @@ void Enemy::finishDyingClassSpecifics() {
         par.color.add(0.6f, al_map_rgb(255, 192, 255));
         par.color.add(1, al_map_rgba(255, 192, 255, 0));
         game.states.gameplay->particles.add(par);
+    }
+}
+
+
+/**
+ * @brief Brings the enemy back to life by taking it out of its death states.
+ */
+void Enemy::revive() {
+    health = maxHealth;
+    disableFlag(flags, MOB_FLAG_NON_HUNTABLE);
+    becomeUncarriable();
+    
+    if(type->reviveStateIdx != INVALID) {
+        fsm.setState(type->reviveStateIdx);
+    } else {
+        fsm.setState(type->firstStateIdx);
     }
 }
 
@@ -185,6 +191,7 @@ void Enemy::startDyingClassSpecifics() {
     particleGenerators.push_back(pg);
 }
 
+
 /**
  * @brief Ticks time by one frame of logic.
  *
@@ -194,6 +201,6 @@ void Enemy::tickClassSpecifics(float deltaT) {
     reviveTimer.tick(deltaT);
     if(reviveTimer.timeLeft > 0) {
         //Override the health wheel with the revive timer.
-        health = maxHealth * (1 - reviveTimer.getRatioLeft());
+        health = maxHealth * (1.0f - reviveTimer.getRatioLeft());
     }
 }

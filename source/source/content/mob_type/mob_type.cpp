@@ -918,11 +918,12 @@ void MobType::loadFromDataNode(
                     );
                 }
             }
+
             if(category->id == MOB_CATEGORY_ENEMIES) {
                 DataNode* reviveStateNameNode =
-                scriptFile.getChildByName("revive_state");
+                    scriptFile.getChildByName("revive_state");
                 string reviveStateName = reviveStateNameNode->value;
-
+                
                 if(!reviveStateName.empty()) {
                     for(size_t s = 0; s < states.size(); s++) {
                         if(states[s]->name == reviveStateName) {
