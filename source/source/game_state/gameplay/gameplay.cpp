@@ -426,10 +426,13 @@ void GameplayState::endMission(bool cleared) {
     
     if(cleared) {
         curBigMsg = BIG_MESSAGE_MISSION_CLEAR;
+        game.audio.createUiSoundsource(game.sysContent.sndMissionClear);
     } else {
         curBigMsg = BIG_MESSAGE_MISSION_FAILED;
+        game.audio.createUiSoundsource(game.sysContent.sndMissionFailed);
     }
     bigMsgTime = 0.0f;
+    game.audio.setCurrentSong("");
     
     for(Player& player : players) {
         player.hud->gui.startAnimation(

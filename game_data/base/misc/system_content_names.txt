@@ -66,6 +66,8 @@ sounds {
     menu_back = gui/menu_back
     menu_fail = gui/menu_fail
     menu_select = gui/menu_select
+    mission_clear = gui/mission_clear
+    mission_failed = gui/mission_failed
     ready = gui/ready
     switch_pikmin = gui/switch_pikmin
 }

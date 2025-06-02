@@ -1851,6 +1851,8 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("menu_back", sndMenuBack);
     sndRS.set("menu_fail", sndMenuFail);
     sndRS.set("menu_select", sndMenuSelect);
+    sndRS.set("mission_clear", sndMissionClear);
+    sndRS.set("mission_failed", sndMissionFailed);
     sndRS.set("ready", sndReady);
     sndRS.set("switch_pikmin", sndSwitchPikmin);
     
