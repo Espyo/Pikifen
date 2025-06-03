@@ -431,6 +431,9 @@ public:
     
     //What item this scrollbar is in charge of controlling.
     ListGuiItem* listItem = nullptr;
+
+    //Does mouse movement affect this item's scroll?
+    bool isSelected = false;
     
     
     //--- Function declarations ---
