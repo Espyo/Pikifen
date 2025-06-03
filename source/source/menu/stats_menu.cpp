@@ -136,6 +136,7 @@ void StatsMenu::initGuiMain() {
     
     //Statistics list.
     statsList = new ListGuiItem();
+    populateStatsList();
     gui.addItem(statsList, "list");
     
     //Statistics list scrollbar.
@@ -147,9 +148,7 @@ void StatsMenu::initGuiMain() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
     gui.addItem(tooltipText, "tooltip");
-    
-    populateStatsList();
-    
+
     //Finishing touches.
     gui.setSelectedItem(gui.backItem, true);
 }

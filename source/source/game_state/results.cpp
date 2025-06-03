@@ -237,6 +237,137 @@ void Results::leave() {
     });
 }
 
+void Results::populateStatsList(MissionRecord oldRecord) {
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.startingPoints != 0
+    ) {
+        //Starting score bullet.
+        addStat(
+            "Starting score: ",
+            i2s(game.curAreaData->mission.startingPoints),
+            COLOR_GOLD
+        );
+    }
+    
+    //Time taken bullet.
+    unsigned int ds =
+        fmod(game.states.gameplay->gameplayTimePassed * 10, 10);
+    unsigned char seconds =
+        fmod(game.states.gameplay->gameplayTimePassed, 60);
+    size_t minutes =
+        game.states.gameplay->gameplayTimePassed / 60.0f;
+    addStat(
+        "Time taken:",
+        i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
+    );
+    
+    //Pikmin born bullet.
+    addStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
+    
+    //Pikmin born points bullet.
+    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
+    
+    //Pikmin deaths bullet.
+    addStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
+    
+    //Pikmin death points bullet.
+    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
+    
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.pointsPerSecLeft != 0
+    ) {
+        //Seconds left bullet.
+        addStat(
+            "Seconds left:",
+            i2s(
+                game.curAreaData->mission.failTimeLimit -
+                floor(game.states.gameplay->gameplayTimePassed)
+            )
+        );
+        
+        //Seconds left points bullet.
+        addScoreStat(MISSION_SCORE_CRITERIA_SEC_LEFT);
+    }
+    
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.pointsPerSecPassed != 0
+    ) {
+        //Seconds passed bullet.
+        addStat(
+            "Seconds passed:",
+            i2s(game.states.gameplay->gameplayTimePassed)
+        );
+        
+        //Seconds passed points bullet.
+        addScoreStat(MISSION_SCORE_CRITERIA_SEC_PASSED);
+    }
+    
+    //Treasures bullet.
+    addStat(
+        "Treasures:",
+        i2s(game.states.gameplay->treasuresCollected) + "/" +
+        i2s(game.states.gameplay->treasuresTotal)
+    );
+    
+    //Treasure points bullet.
+    addStat(
+        "Treasure points:",
+        i2s(game.states.gameplay->treasurePointsCollected) + "/" +
+        i2s(game.states.gameplay->treasurePointsTotal)
+    );
+    
+    //Treasure points points bullet.
+    addScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
+    
+    //Enemy defeats bullet.
+    addStat(
+        "Enemy defeats:",
+        i2s(game.states.gameplay->enemyDefeats) + "/" +
+        i2s(game.states.gameplay->enemyTotal)
+    );
+    
+    //Enemy points bullet.
+    addStat(
+        "Enemy defeat points:",
+        i2s(game.states.gameplay->enemyPointsCollected) + "/" +
+        i2s(game.states.gameplay->enemyPointsTotal)
+    );
+    
+    //Enemy points points bullet.
+    addScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
+    
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+    ) {
+        //Final score bullet.
+        addStat(
+            "Final score:",
+            i2s(finalMissionScore),
+            COLOR_GOLD
+        );
+        
+        //Old record bullet:
+        addStat(
+            "Previous record:",
+            oldRecord.date.empty() ? "-" : i2s(oldRecord.score),
+            COLOR_WHITE
+        );
+        
+        //Maker's record bullet.
+        if(!game.curAreaData->mission.makerRecordDate.empty()) {
+            addStat(
+                "Maker's record:",
+                i2s(game.curAreaData->mission.makerRecord),
+                COLOR_WHITE
+            );
+        }
+    }
+}
+
 
 /**
  * @brief Loads the results state into memory.
@@ -599,149 +730,20 @@ void Results::load() {
     statsList->onDraw =
     [this] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
-            draw.center, draw.size, 8.0f, al_map_rgba(0, 0, 0, 40)
+            draw.center, draw.size, 16.0f, al_map_rgba(0, 0, 0, 40)
         );
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
             COLOR_TRANSPARENT_WHITE
         );
     };
+    populateStatsList(oldRecord);
     gui.addItem(statsList, "stats");
     
     //Stats list scrollbar.
     ScrollGuiItem* statsScroll = new ScrollGuiItem();
     statsScroll->listItem = statsList;
     gui.addItem(statsScroll, "stats_scroll");
-    
-    if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.startingPoints != 0
-    ) {
-        //Starting score bullet.
-        addStat(
-            "Starting score: ",
-            i2s(game.curAreaData->mission.startingPoints),
-            COLOR_GOLD
-        );
-    }
-    
-    //Time taken bullet.
-    unsigned int ds =
-        fmod(game.states.gameplay->gameplayTimePassed * 10, 10);
-    unsigned char seconds =
-        fmod(game.states.gameplay->gameplayTimePassed, 60);
-    size_t minutes =
-        game.states.gameplay->gameplayTimePassed / 60.0f;
-    addStat(
-        "Time taken:",
-        i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
-    );
-    
-    //Pikmin born bullet.
-    addStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
-    
-    //Pikmin born points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
-    
-    //Pikmin deaths bullet.
-    addStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
-    
-    //Pikmin death points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
-    
-    if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.pointsPerSecLeft != 0
-    ) {
-        //Seconds left bullet.
-        addStat(
-            "Seconds left:",
-            i2s(
-                game.curAreaData->mission.failTimeLimit -
-                floor(game.states.gameplay->gameplayTimePassed)
-            )
-        );
-        
-        //Seconds left points bullet.
-        addScoreStat(MISSION_SCORE_CRITERIA_SEC_LEFT);
-    }
-    
-    if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.pointsPerSecPassed != 0
-    ) {
-        //Seconds passed bullet.
-        addStat(
-            "Seconds passed:",
-            i2s(game.states.gameplay->gameplayTimePassed)
-        );
-        
-        //Seconds passed points bullet.
-        addScoreStat(MISSION_SCORE_CRITERIA_SEC_PASSED);
-    }
-    
-    //Treasures bullet.
-    addStat(
-        "Treasures:",
-        i2s(game.states.gameplay->treasuresCollected) + "/" +
-        i2s(game.states.gameplay->treasuresTotal)
-    );
-    
-    //Treasure points bullet.
-    addStat(
-        "Treasure points:",
-        i2s(game.states.gameplay->treasurePointsCollected) + "/" +
-        i2s(game.states.gameplay->treasurePointsTotal)
-    );
-    
-    //Treasure points points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
-    
-    //Enemy defeats bullet.
-    addStat(
-        "Enemy defeats:",
-        i2s(game.states.gameplay->enemyDefeats) + "/" +
-        i2s(game.states.gameplay->enemyTotal)
-    );
-    
-    //Enemy points bullet.
-    addStat(
-        "Enemy defeat points:",
-        i2s(game.states.gameplay->enemyPointsCollected) + "/" +
-        i2s(game.states.gameplay->enemyPointsTotal)
-    );
-    
-    //Enemy points points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
-    
-    if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
-        //Final score bullet.
-        addStat(
-            "Final score:",
-            i2s(finalMissionScore),
-            COLOR_GOLD
-        );
-        
-        //Old record bullet:
-        addStat(
-            "Previous record:",
-            oldRecord.date.empty() ? "-" : i2s(oldRecord.score),
-            COLOR_WHITE
-        );
-        
-        //Maker's record bullet.
-        if(!game.curAreaData->mission.makerRecordDate.empty()) {
-            addStat(
-                "Maker's record:",
-                i2s(game.curAreaData->mission.makerRecord),
-                COLOR_WHITE
-            );
-        }
-    }
-    
     
     //Retry button.
     ButtonGuiItem* retryButton =

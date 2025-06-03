@@ -66,6 +66,7 @@ private:
     );
     void continuePlaying();
     void leave();
+    void populateStatsList(MissionRecord oldRecord);
     void retryArea();
     
 };
