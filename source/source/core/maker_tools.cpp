@@ -74,21 +74,42 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
         
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
 
-        unsigned char settingIdx =
-            getMakerToolSettingIdx();
-        bool finalState = false;
-        if(!changeSpeed) {
-            finalState = true;
+        if(frameAdvanceMode) {
+            frameAdvanceMode = false;
+            mustAdvanceOneFrame = false;
         } else {
-            if(changeSpeedSettingIdx != settingIdx) {
+            unsigned char settingIdx =
+                getMakerToolSettingIdx();
+            bool finalState = false;
+            if(!changeSpeed) {
                 finalState = true;
+            } else {
+                if(changeSpeedSettingIdx != settingIdx) {
+                    finalState = true;
+                }
             }
+            
+            if(finalState) {
+                changeSpeedSettingIdx = settingIdx;
+            }
+            changeSpeed = finalState;
         }
         
-        if(finalState) {
-            changeSpeedSettingIdx = settingIdx;
+        usedHelpingTools = true;
+        break;
+        
+    } case PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE: {
+
+        if(mod1) {
+            frameAdvanceMode = false;
+            mustAdvanceOneFrame = false;
+        } else {
+            if(!frameAdvanceMode) {
+                frameAdvanceMode = true;
+            } else {
+                mustAdvanceOneFrame = true;
+            }
         }
-        changeSpeed = finalState;
         
         usedHelpingTools = true;
         break;
@@ -402,6 +423,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
  */
 void MakerTools::resetForGameplay() {
     changeSpeed = false;
+    frameAdvanceMode = false;
     collision = false;
     geometryInfo = false;
     hitboxes = false;

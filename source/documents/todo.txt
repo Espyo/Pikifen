@@ -970,7 +970,6 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
-        A maker tool that lets you go frame-by-frame
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file

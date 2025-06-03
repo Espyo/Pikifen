@@ -362,6 +362,14 @@ void GameplayState::doLogic() {
             game.makerTools.changeSpeedSettings[
                 game.makerTools.changeSpeedSettingIdx
             ];
+    } else if(game.makerTools.frameAdvanceMode) {
+        if(game.makerTools.mustAdvanceOneFrame) {
+            game.makerTools.mustAdvanceOneFrame = false;
+            game.deltaT = 1.0f / game.options.advanced.targetFps;
+        } else {
+            //Let's not make it exactly 0 otherwise we'll get divisions-by-zero.
+            game.deltaT = FLT_MIN;
+        }
     }
     
     for(Player& player : players) {

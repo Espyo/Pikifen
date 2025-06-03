@@ -39,6 +39,9 @@ enum MAKER_TOOL_TYPE {
     //Show collision box.
     MAKER_TOOL_TYPE_COLLISION,
     
+    //Frame advance.
+    MAKER_TOOL_TYPE_FRAME_ADVANCE,
+    
     //Geometry info beneath mouse cursor.
     MAKER_TOOL_TYPE_GEOMETRY_INFO,
     
@@ -117,6 +120,12 @@ struct MakerTools {
     
     //Are we currently changing the game speed?
     bool changeSpeed = false;
+    
+    //Are we currently paused for frame advance?
+    bool frameAdvanceMode = false;
+    
+    //Do we have to advance one game frame on the next processing frame?
+    bool mustAdvanceOneFrame = false;
     
     //Which game speed change setting to use.
     unsigned char changeSpeedSettingIdx = 0;

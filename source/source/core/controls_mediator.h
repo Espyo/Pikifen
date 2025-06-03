@@ -213,6 +213,9 @@ enum PLAYER_ACTION_TYPE {
     //Change speed.
     PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
     
+    //Frame advance.
+    PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
+    
     //Geometry info.
     PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
     

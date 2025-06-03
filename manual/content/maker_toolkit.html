@@ -114,6 +114,15 @@
       </tr>
     </table>
 
+    <h3 id="frame-advance">Frame advance</h3>
+    
+    <p>When initially activated, it enters frame advance mode, which pauses gameplay. Then, any subsequent activation will advance gameplay by one frame. How much one frame is worth here depends on the framerate specified in the <a href="options.html">options</a>. If you were holding "modifier 1", it will leave frame advance mode and return to normal. It will also return to normal if you <a href="#speed">change the game speed</a>.</p>
+    <p>Some things, like cursor control, happen independently of the framerate, so expect to still see some stuff moving. Also, internally, it's not actually freezing one frame forever, but setting the game speed to an ultra-slow speed. This simplifies a lot of internal logic (by avoiding divisions by 0!), but it works more than well for practical use.</p>
+
+    <p><b>Tool internal name</b>: <code>frame_advance</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
     <h3 id="geometry-info">Geometry info</h3>
     
     <p>Prints out geometry info about what's under the mouse cursor (or stops if pressed again), on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. This prints out the cursor's coordinates, as well as some basic info about the sector that the cursor is on: its height and texture.</p>

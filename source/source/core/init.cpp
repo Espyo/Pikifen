@@ -574,6 +574,14 @@ void initControls() {
         "mt_change_speed", "k_28"
     );
     game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Frame advance",
+        "Pause gameplay and advance by one frame each time. "
+        "Use \"modifier 1\" to unpause.",
+        "mt_frame_advance", "", 0.5f
+    );
+    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
