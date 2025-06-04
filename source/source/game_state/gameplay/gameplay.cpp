@@ -499,7 +499,7 @@ void GameplayState::enter() {
     goalIndicatorRatio = 0.0f;
     fail1IndicatorRatio = 0.0f;
     fail2IndicatorRatio = 0.0f;
-    scoreIndicator = 0.0f;
+    scoreFlapper = 0.0f;
     
     paused = false;
     curInterlude = INTERLUDE_READY;

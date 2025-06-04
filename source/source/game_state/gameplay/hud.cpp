@@ -32,11 +32,14 @@ const string GUI_FILE_NAME = "gameplay";
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
 
-//Standard mission score medal icon scale.
-const float MEDAL_ICON_SCALE = 1.5f;
+//Standard mission score medal icon scale, for the obtained medal.
+const float MEDAL_ICON_SCALE_CUR = 2.0f;
 
 //Multiply time by this much to get the right scale animation amount.
 const float MEDAL_ICON_SCALE_MULT = 0.3f;
+
+//Standard mission score medal icon scale, for the next medal.
+const float MEDAL_ICON_SCALE_NEXT = 1.5f;
 
 //Multiply time by this much to get the right scale animation speed.
 const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
@@ -44,8 +47,8 @@ const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
 //Dampen the mission score indicator's movement by this much.
 const float SCORE_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
-//How many points to show before and after the mission score ruler flapper.
-const int SCORE_RULER_RANGE = 125;
+//Ratio of the score gamut to show around the mission score ruler flapper.
+const float SCORE_RULER_RATIO_RANGE = 0.20f;
 
 //How long the spray swap juice animation lasts for.
 const float SPRAY_SWAP_JUICE_DURATION = 0.7f;
@@ -1221,44 +1224,60 @@ Hud::Hud() :
         missionScoreRuler->onDraw =
         [this] (const DrawInfo & draw) {
             //Setup.
-            const float rulerStartValue =
-                game.states.gameplay->scoreIndicator -
-                HUD::SCORE_RULER_RANGE / 2.0f;
-            const float rulerEndValue =
-                game.states.gameplay->scoreIndicator +
-                HUD::SCORE_RULER_RANGE / 2.0f;
-            const float rulerScale =
-                draw.size.x / (float) HUD::SCORE_RULER_RANGE;
-            const float rulerStartX = draw.center.x - draw.size.x / 2.0f;
-            const float rulerEndX = draw.center.x + draw.size.x / 2.0f;
+            const float lowestNormalValue =
+                std::min(0, game.curAreaData->mission.bronzeReq);
+            const float highestNormalValue =
+                std::max(
+                    game.curAreaData->mission.startingPoints,
+                    game.curAreaData->mission.platinumReq
+                );
+            const float valueRange =
+                (highestNormalValue - lowestNormalValue) *
+                HUD::SCORE_RULER_RATIO_RANGE;
+            const float startValue =
+                game.states.gameplay->scoreFlapper -
+                valueRange / 2.0f;
+            const float endValue =
+                game.states.gameplay->scoreFlapper +
+                valueRange / 2.0f;
+            const float valueScale = draw.size.x / valueRange;
+            const float startX = draw.center.x - draw.size.x / 2.0f;
+            const float endX = draw.center.x + draw.size.x / 2.0f;
+            
+            auto valueToWindowX = [&draw, &valueScale] (float value) {
+                return
+                    draw.center.x -
+                    (game.states.gameplay->scoreFlapper - value) *
+                    valueScale;
+            };
             
             const float segLimits[] = {
-                std::min(rulerStartValue, 0.0f),
+                std::min(startValue, 0.0f),
                 0,
                 (float) game.curAreaData->mission.bronzeReq,
                 (float) game.curAreaData->mission.silverReq,
                 (float) game.curAreaData->mission.goldReq,
                 (float) game.curAreaData->mission.platinumReq,
                 std::max(
-                    rulerEndValue,
+                    endValue,
                     (float) game.curAreaData->mission.platinumReq
                 )
             };
             const ALLEGRO_COLOR segColorsTop[] = {
-                al_map_rgba(152, 160, 152, 128), //Negatives.
-                al_map_rgb(158, 166, 158),       //No medal.
-                al_map_rgb(203, 117, 37),        //Bronze.
-                al_map_rgb(223, 227, 209),       //Silver.
-                al_map_rgb(235, 209, 59),        //Gold.
-                al_map_rgb(158, 222, 211)        //Platinum.
+                al_map_rgba(152, 160, 152, 96),  //Negatives.
+                al_map_rgba(204, 229, 172, 160), //No medal.
+                al_map_rgb(229, 175, 126),       //Bronze.
+                al_map_rgb(190, 224, 229),       //Silver.
+                al_map_rgb(229, 212, 110),       //Gold.
+                al_map_rgb(110, 229, 193)        //Platinum.
             };
             const ALLEGRO_COLOR segColorsBottom[] = {
-                al_map_rgba(152, 160, 152, 128), //Negatives.
-                al_map_rgb(119, 128, 118),       //No medal.
-                al_map_rgb(131, 52, 18),         //Bronze.
-                al_map_rgb(160, 154, 127),       //Silver.
-                al_map_rgb(173, 127, 24),        //Gold.
-                al_map_rgb(79, 172, 153)         //Platinum.
+                al_map_rgba(152, 160, 152, 96),  //Negatives.
+                al_map_rgba(190, 214, 160, 160), //No medal.
+                al_map_rgb(214, 111, 13),        //Bronze.
+                al_map_rgb(156, 207, 214),       //Silver.
+                al_map_rgb(214, 184, 4),         //Gold.
+                al_map_rgb(3, 214, 144)          //Platinum.
             };
             ALLEGRO_BITMAP* segIcons[] = {
                 nullptr,
@@ -1269,39 +1288,65 @@ Hud::Hud() :
                 game.sysContent.bmpMedalPlatinum
             };
             
-            //Draw each segment (no medal, bronze, etc.).
+            //Draw each segment (negatives, no medal, bronze, etc.).
             for(int s = 0; s < 6; s++) {
-                float segStartValue = segLimits[s];
-                float segEndValue = segLimits[s + 1];
-                if(segEndValue < rulerStartValue) continue;
-                if(segStartValue > rulerEndValue) continue;
+                float segStartValue =
+                    s == 0 ? -FLT_MAX : segLimits[s];
+                float segEndValue =
+                    s == 5 ? FLT_MAX : segLimits[s + 1];
                 float segStartX =
-                    draw.center.x -
-                    (game.states.gameplay->scoreIndicator - segStartValue) *
-                    rulerScale;
+                    s == 0 ? -FLT_MAX : valueToWindowX(segStartValue);
                 float segEndX =
-                    draw.center.x +
-                    (segEndValue - game.states.gameplay->scoreIndicator) *
-                    rulerScale;
-                segStartX = std::max(segStartX, rulerStartX);
-                segEndX = std::min(rulerEndX, segEndX);
-                
+                    s == 5 ? FLT_MAX : valueToWindowX(segEndValue);
+                if(endX < segStartX) continue;
+                if(startX > segEndX) continue;
+                float segVisStartX = std::max(segStartX, startX);
+                float segVisEndX = std::min(segEndX, endX);
+                const ALLEGRO_COLOR& colorTop1 =
+                    segColorsTop[s];
+                const ALLEGRO_COLOR& colorTop2 =
+                    s == 5 ? segColorsTop[5] : segColorsTop[s + 1];
+                const ALLEGRO_COLOR& colorBottom1 =
+                    segColorsBottom[s];
+                const ALLEGRO_COLOR& colorBottom2 =
+                    s == 5 ? segColorsBottom[5] : segColorsBottom[s + 1];
+                ALLEGRO_COLOR segVisStartColorTop =
+                    interpolateColor(
+                        segVisStartX, segStartX, segEndX,
+                        colorTop1, colorTop2
+                    );
+                ALLEGRO_COLOR segVisStartColorBottom =
+                    interpolateColor(
+                        segVisStartX, segStartX, segEndX,
+                        colorBottom1, colorBottom2
+                    );
+                ALLEGRO_COLOR segVisEndColorTop =
+                    interpolateColor(
+                        segVisEndX, segStartX, segEndX,
+                        colorTop1, colorTop2
+                    );
+                ALLEGRO_COLOR segVisEndColorBottom =
+                    interpolateColor(
+                        segVisEndX, segStartX, segEndX,
+                        colorBottom1, colorBottom2
+                    );
+                    
                 ALLEGRO_VERTEX vertexes[4];
                 for(unsigned char v = 0; v < 4; v++) {
                     vertexes[v].z = 0.0f;
                 }
-                vertexes[0].x = segStartX;
+                vertexes[0].x = segVisStartX;
                 vertexes[0].y = draw.center.y - draw.size.y / 2.0f;
-                vertexes[0].color = segColorsTop[s];
-                vertexes[1].x = segStartX;
+                vertexes[0].color = segVisStartColorTop;
+                vertexes[1].x = segVisStartX;
                 vertexes[1].y = draw.center.y + draw.size.y / 2.0f;
-                vertexes[1].color = segColorsBottom[s];
-                vertexes[2].x = segEndX;
+                vertexes[1].color = segVisStartColorBottom;
+                vertexes[2].x = segVisEndX;
                 vertexes[2].y = draw.center.y + draw.size.y / 2.0f;
-                vertexes[2].color = segColorsBottom[s];
-                vertexes[3].x = segEndX;
+                vertexes[2].color = segVisEndColorBottom;
+                vertexes[3].x = segVisEndX;
                 vertexes[3].y = draw.center.y - draw.size.y / 2.0f;
-                vertexes[3].color = segColorsTop[s];
+                vertexes[3].color = segVisEndColorTop;
                 al_draw_prim(
                     vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
@@ -1309,15 +1354,12 @@ Hud::Hud() :
             
             //Draw the markings.
             for(
-                float m = floor(rulerStartValue / 25.0f) * 25.0f;
-                m <= rulerEndValue;
+                float m = floor(startValue / 25.0f) * 25.0f;
+                m <= endValue;
                 m += 25.0f
             ) {
-                if(m < 0.0f || m < rulerStartValue) continue;
-                float markingX =
-                    draw.center.x -
-                    (game.states.gameplay->scoreIndicator - m) *
-                    rulerScale;
+                if(m < 0.0f || m < startValue) continue;
+                float markingX = valueToWindowX(m);
                 float markingLength =
                     fmod(m, 100) == 0 ?
                     draw.size.y * 0.7f :
@@ -1339,7 +1381,7 @@ Hud::Hud() :
             int curSeg = 0;
             int lastPassedSeg = 0;
             float curMedalScale =
-                HUD::MEDAL_ICON_SCALE +
+                HUD::MEDAL_ICON_SCALE_CUR +
                 sin(
                     game.states.gameplay->areaTimePassed *
                     HUD::MEDAL_ICON_SCALE_TIME_MULT
@@ -1347,39 +1389,30 @@ Hud::Hud() :
                 HUD::MEDAL_ICON_SCALE_MULT;
             for(int s = 0; s < 6; s++) {
                 float segStartValue = segLimits[s];
-                if(segStartValue <= game.states.gameplay->scoreIndicator) {
+                if(segStartValue <= game.states.gameplay->missionScore) {
                     curSeg = s;
                 }
-                if(segStartValue <= rulerStartValue) {
+                if(segStartValue <= startValue) {
                     lastPassedSeg = s;
                 }
             }
             for(int s = 0; s < 6; s++) {
                 if(!segIcons[s]) continue;
                 float segStartValue = segLimits[s];
-                if(segStartValue < rulerStartValue) continue;
-                float segStartX =
-                    draw.center.x -
-                    (game.states.gameplay->scoreIndicator - segStartValue) *
-                    rulerScale;
-                float iconX = segStartX;
-                unsigned char iconAlpha = 255;
-                float iconScale = HUD::MEDAL_ICON_SCALE;
+                if(segStartValue < startValue) continue;
+                if(segStartValue > endValue) continue;
+                float segVisStartX = valueToWindowX(segStartValue);
+                float iconX = segVisStartX;
+                float iconScale = HUD::MEDAL_ICON_SCALE_NEXT;
                 if(curSeg == s) {
                     iconScale = curMedalScale;
-                }
-                if(segStartValue > rulerEndValue) {
-                    iconX = rulerEndX;
-                    iconAlpha = 128;
                 }
                 drawBitmap(
                     segIcons[s],
                     Point(iconX, draw.center.y),
-                    Point(-1, draw.size.y * iconScale),
-                    0,
-                    al_map_rgba(255, 255, 255, iconAlpha)
+                    Point(-1, draw.size.y * iconScale)
                 );
-                if(segStartValue > rulerEndValue) {
+                if(segStartValue > endValue) {
                     //If we found the first icon that goes past the ruler's end,
                     //then we shouldn't draw the other ones that come after.
                     break;
@@ -1388,7 +1421,7 @@ Hud::Hud() :
             if(segIcons[lastPassedSeg] && lastPassedSeg == curSeg) {
                 drawBitmap(
                     segIcons[lastPassedSeg],
-                    Point(rulerStartX, draw.center.y),
+                    Point(startX, draw.center.y),
                     Point(-1, draw.size.y * curMedalScale)
                 );
             }
@@ -1399,14 +1432,14 @@ Hud::Hud() :
                 draw.center.x, draw.center.y,
                 draw.center.x + (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                al_map_rgb(105, 161, 105)
+                al_map_rgb(64, 186, 64)
             );
             al_draw_filled_triangle(
                 draw.center.x, draw.center.y + draw.size.y / 2.0f,
                 draw.center.x, draw.center.y,
                 draw.center.x - (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                al_map_rgb(124, 191, 124)
+                al_map_rgb(75, 218, 75)
             );
         };
         gui.addItem(missionScoreRuler, "mission_score_ruler");

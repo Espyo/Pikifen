@@ -312,7 +312,7 @@ public:
     float fail2IndicatorRatio = 0.0f;
     
     //Position of the mission score HUD item's indicator.
-    float scoreIndicator = 0.0f;
+    float scoreFlapper = 0.0f;
     
     //Current interlude, if any.
     INTERLUDE curInterlude = INTERLUDE_NONE;

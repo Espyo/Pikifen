@@ -20,11 +20,12 @@ namespace HUD {
 extern const float GOAL_INDICATOR_SMOOTHNESS_MULT;
 extern const string GUI_FILE_NAME;
 extern const float LEADER_SWAP_JUICE_DURATION;
-extern const float MEDAL_ICON_SCALE;
+extern const float MEDAL_ICON_SCALE_CUR;
 extern const float MEDAL_ICON_SCALE_MULT;
+extern const float MEDAL_ICON_SCALE_NEXT;
 extern const float MEDAL_ICON_SCALE_TIME_MULT;
 extern const float SCORE_INDICATOR_SMOOTHNESS_MULT;
-extern const int SCORE_RULER_RANGE;
+extern const float SCORE_RULER_RATIO_RANGE;
 extern const float SPRAY_SWAP_JUICE_DURATION;
 extern const float STANDBY_SWAP_JUICE_DURATION;
 extern const float SUN_METER_SUN_SPIN_SPEED;

@@ -1028,8 +1028,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 oldMissionScore = missionScore;
             }
             
-            scoreIndicator +=
-                (missionScore - scoreIndicator) *
+            scoreFlapper +=
+                (missionScore - scoreFlapper) *
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * deltaT);
                 
             int goalCur =
