@@ -1087,6 +1087,39 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 }
             }
             
+            float timeLimit = 0;
+            if(
+                hasFlag(
+                    game.curAreaData->mission.failConditions,
+                    getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                )
+            ) {
+                timeLimit = game.curAreaData->mission.failTimeLimit;
+            } else if(
+                game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+            ) {
+                timeLimit = game.curAreaData->mission.goalAmount;
+            }
+            
+            if(
+                timeLimit >= 120.0f &&
+                game.states.gameplay->curBigMsg == BIG_MESSAGE_NONE
+            ) {
+                //It makes sense to only show the warning if the mission
+                //is long enough to the point where the player could lose
+                //track of where the final minute is.
+                float timeLeftCurFrame =
+                    timeLimit - game.states.gameplay->gameplayTimePassed;
+                float timeLeftPrevFrame =
+                    timeLeftCurFrame + game.deltaT;
+                if(
+                    timeLeftPrevFrame > 60.0f && timeLeftCurFrame <= 60.0f
+                ) {
+                    game.states.gameplay->curBigMsg = BIG_MESSAGE_1_MIN;
+                    game.states.gameplay->bigMsgTime = 0.0f;
+                }
+            }
+            
         }
         
     } else {
@@ -1477,6 +1510,11 @@ void GameplayState::doMenuLogic() {
         break;
     } case BIG_MESSAGE_GO: {
         if(bigMsgTime >= GAMEPLAY::BIG_MSG_GO_DUR) {
+            curBigMsg = BIG_MESSAGE_NONE;
+        }
+        break;
+    } case BIG_MESSAGE_1_MIN: {
+        if(bigMsgTime >= GAMEPLAY::BIG_MSG_1_MIN_DUR) {
             curBigMsg = BIG_MESSAGE_NONE;
         }
         break;

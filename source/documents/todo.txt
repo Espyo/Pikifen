@@ -43,6 +43,7 @@ Next tasks (roughly sorted most important first)
                 x GO!
                 x Mission complete
                 x Mission failed
+                1 minute left!
                 Mission timer 10 seconds remaining (one sound per second)
                 Pausing
                 Mission completion item going up

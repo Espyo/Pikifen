@@ -2870,7 +2870,6 @@ void AreaEditor::processGuiPanelMain() {
  * @brief Processes the Dear ImGui mission control panel for this frame.
  */
 void AreaEditor::processGuiPanelMission() {
-
     float oldMissionSurvivalMin =
         game.curAreaData->mission.goalAmount / 60.0f;
     float oldMissionTimeLimitMin =
@@ -3013,6 +3012,11 @@ void AreaEditor::processGuiPanelMission() {
         if(game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             oldMissionMin = oldMissionSurvivalMin;
             missionSeconds = game.curAreaData->mission.goalAmount;
+            game.curAreaData->mission.failTimeLimit = 0.0f;
+            disableFlag(
+                game.curAreaData->mission.failConditions,
+                getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            );
         } else {
             oldMissionMin = oldMissionTimeLimitMin;
             missionSeconds = game.curAreaData->mission.failTimeLimit;
