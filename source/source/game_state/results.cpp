@@ -433,38 +433,29 @@ void Results::load() {
         switch(game.curAreaData->mission.gradingMode) {
         case MISSION_GRADING_MODE_POINTS: {
             medalReason = "Got " + i2s(finalMissionScore) + " points";
-            if(
-                finalMissionScore >=
-                game.curAreaData->mission.platinumReq
-            ) {
-                medal = MISSION_MEDAL_PLATINUM;
-                medalReason += "!";
-                medalReasonColor = al_map_rgba(145, 226, 210, 192);
-            } else if(
-                finalMissionScore >=
-                game.curAreaData->mission.goldReq
-            ) {
-                medal = MISSION_MEDAL_GOLD;
-                medalReason += "!";
-                medalReasonColor = al_map_rgba(233, 200, 80, 192);
-            } else if(
-                finalMissionScore >=
-                game.curAreaData->mission.silverReq
-            ) {
-                medal = MISSION_MEDAL_SILVER;
-                medalReason += "!";
-                medalReasonColor = al_map_rgba(216, 216, 200, 192);
-            } else if(
-                finalMissionScore >=
-                game.curAreaData->mission.bronzeReq
-            ) {
-                medal = MISSION_MEDAL_BRONZE;
-                medalReason += "!";
-                medalReasonColor = al_map_rgba(200, 132, 74, 192);
-            } else {
-                medal = MISSION_MEDAL_NONE;
+            medal = game.curAreaData->mission.getScoreMedal(finalMissionScore);
+            switch(medal) {
+            case MISSION_MEDAL_NONE: {
                 medalReason += "...";
                 medalReasonColor = al_map_rgba(200, 200, 200, 192);
+                break;
+            } case MISSION_MEDAL_BRONZE: {
+                medalReason += "!";
+                medalReasonColor = al_map_rgba(200, 132, 74, 192);
+                break;
+            } case MISSION_MEDAL_SILVER: {
+                medalReason += "!";
+                medalReasonColor = al_map_rgba(216, 216, 200, 192);
+                break;
+            } case MISSION_MEDAL_GOLD: {
+                medalReason += "!";
+                medalReasonColor = al_map_rgba(233, 200, 80, 192);
+                break;
+            } case MISSION_MEDAL_PLATINUM: {
+                medalReason += "!";
+                medalReasonColor = al_map_rgba(145, 226, 210, 192);
+                break;
+            }
             }
             break;
         } case MISSION_GRADING_MODE_GOAL: {

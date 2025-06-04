@@ -314,6 +314,9 @@ public:
     //Position of the mission score HUD item's indicator.
     float scoreFlapper = 0.0f;
     
+    //Animation timer for the "Got it!" medal text on the mission score ruler.
+    float medalGotItJuiceTimer = 0.0f;
+    
     //Current interlude, if any.
     INTERLUDE curInterlude = INTERLUDE_NONE;
     

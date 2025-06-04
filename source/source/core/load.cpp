@@ -328,6 +328,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalBronze);
     game.sysContent.bmpMedalGold =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalGold);
+    game.sysContent.bmpMedalGotIt =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpMedalGotIt);
     game.sysContent.bmpMedalNone =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalNone);
     game.sysContent.bmpMedalPlatinum =
@@ -533,6 +535,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpLeaderSilhouetteTop);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalBronze);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalGold);
+    game.content.bitmaps.list.free(game.sysContent.bmpMedalGotIt);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalNone);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalPlatinum);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalSilver);

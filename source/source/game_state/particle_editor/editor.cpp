@@ -43,9 +43,9 @@ ParticleEditor::ParticleEditor() :
     
 #define registerCmd(ptr, name) \
     commands.push_back( \
-                        Command(std::bind((ptr), this, std::placeholders::_1), \
-                                (name)) \
-                      );
+        Command(std::bind((ptr), this, std::placeholders::_1), \
+            (name)) \
+        );
     
     registerCmd(
         &ParticleEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"

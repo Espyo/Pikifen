@@ -82,9 +82,9 @@ AnimationEditor::AnimationEditor() :
     
 #define registerCmd(ptr, name) \
     commands.push_back( \
-                        Command(std::bind((ptr), this, std::placeholders::_1), \
-                                (name)) \
-                      );
+        Command(std::bind((ptr), this, std::placeholders::_1), \
+            (name)) \
+        );
     
     registerCmd(&AnimationEditor::gridToggleCmd, "grid_toggle");
     registerCmd(&AnimationEditor::hitboxesToggleCmd, "hitboxes_toggle");

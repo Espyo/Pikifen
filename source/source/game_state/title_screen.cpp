@@ -205,7 +205,7 @@ void TitleScreen::initGuiMainPage() {
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
 #define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-                                getValueOrDefault(def))
+    getValueOrDefault(def))
     
     bool playIconLeft = iconLeft("play", "true");
     bool makeIconLeft = iconLeft("make", "false");
@@ -499,7 +499,7 @@ void TitleScreen::initGuiMakePage() {
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
 #define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-                                getValueOrDefault(def))
+    getValueOrDefault(def))
     
     bool animEditorIconLeft = iconLeft("animation_editor", "true");
     bool areaEditorIconLeft = iconLeft("area_editor", "false");
@@ -683,7 +683,7 @@ void TitleScreen::initGuiPlayPage() {
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
 #define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-                                getValueOrDefault(def))
+    getValueOrDefault(def))
     
     bool simpleAreasIconLeft = iconLeft("simple_areas", "true");
     bool missionsIconLeft = iconLeft("missions", "true");

@@ -1025,6 +1025,14 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 missionScoreCurText->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
+                MISSION_MEDAL oldMedal =
+                    game.curAreaData->mission.getScoreMedal(oldMissionScore);
+                MISSION_MEDAL newMedal =
+                    game.curAreaData->mission.getScoreMedal(missionScore);
+                if(oldMedal != newMedal) {
+                    medalGotItJuiceTimer = 0.0f;
+                }
+                
                 oldMissionScore = missionScore;
             }
             
@@ -1032,6 +1040,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 (missionScore - scoreFlapper) *
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * deltaT);
                 
+            medalGotItJuiceTimer += deltaT;
+            
             int goalCur =
                 game.missionGoals[game.curAreaData->mission.goal]->
                 getCurAmount(game.states.gameplay);

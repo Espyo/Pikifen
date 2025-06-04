@@ -32,6 +32,9 @@ const string GUI_FILE_NAME = "gameplay";
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
 
+//How long the medal "Got it!" text juice animation lasts for.
+const float MEDAL_GOT_IT_JUICE_DURATION = 1.3f;
+
 //Standard mission score medal icon scale, for the obtained medal.
 const float MEDAL_ICON_SCALE_CUR = 2.0f;
 
@@ -1213,7 +1216,8 @@ Hud::Hud() :
                 "pts", game.sysContent.fntStandard,
                 Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
                 draw.size,
-                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
+                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT,
+                V_ALIGN_MODE_CENTER, 0, 0.66f
             );
         };
         gui.addItem(missionScorePointsLabel, "mission_score_points_label");
@@ -1396,6 +1400,7 @@ Hud::Hud() :
                     lastPassedSeg = s;
                 }
             }
+            float gotItX = LARGE_FLOAT;
             for(int s = 0; s < 6; s++) {
                 if(!segIcons[s]) continue;
                 float segStartValue = segLimits[s];
@@ -1412,6 +1417,9 @@ Hud::Hud() :
                     Point(iconX, draw.center.y),
                     Point(-1, draw.size.y * iconScale)
                 );
+                if(curSeg == s) {
+                    gotItX = iconX;
+                }
                 if(segStartValue > endValue) {
                     //If we found the first icon that goes past the ruler's end,
                     //then we shouldn't draw the other ones that come after.
@@ -1423,6 +1431,23 @@ Hud::Hud() :
                     segIcons[lastPassedSeg],
                     Point(startX, draw.center.y),
                     Point(-1, draw.size.y * curMedalScale)
+                );
+                gotItX = startX;
+            }
+            
+            if(gotItX != LARGE_FLOAT) {
+                float juiceTime =
+                    game.states.gameplay->medalGotItJuiceTimer /
+                    HUD::MEDAL_GOT_IT_JUICE_DURATION;
+                juiceTime = std::min(juiceTime, 1.0f);
+                drawBitmap(
+                    game.sysContent.bmpMedalGotIt,
+                    Point(gotItX, draw.center.y + draw.size.y / 2.0f),
+                    Point(
+                        -1,
+                        draw.size.y * ease(EASE_METHOD_OUT_ELASTIC, juiceTime)
+                    ),
+                    TAU * 0.05f
                 );
             }
             
@@ -1464,10 +1489,10 @@ Hud::Hud() :
     
 #define loader(var, name) \
     var = \
-          game.content.bitmaps.list.get( \
-                                         bitmapsNode->getChildByName(name)->value, \
-                                         bitmapsNode->getChildByName(name) \
-                                       );
+        game.content.bitmaps.list.get( \
+            bitmapsNode->getChildByName(name)->value, \
+            bitmapsNode->getChildByName(name) \
+        );
     
     loader(bmpBubble,               "bubble");
     loader(bmpCounterBubbleField,   "counter_bubble_field");

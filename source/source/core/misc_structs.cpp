@@ -1804,6 +1804,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
     graRS.set("medal_bronze", bmpMedalBronze);
     graRS.set("medal_gold", bmpMedalGold);
+    graRS.set("medal_got_it", bmpMedalGotIt);
     graRS.set("medal_none", bmpMedalNone);
     graRS.set("medal_platinum", bmpMedalPlatinum);
     graRS.set("medal_silver", bmpMedalSilver);

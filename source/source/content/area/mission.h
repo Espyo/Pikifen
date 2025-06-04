@@ -256,6 +256,11 @@ struct MissionData {
     //The date of the maker's record, or empty for no record.
     string makerRecordDate = "";
     
+    
+    //--- Function declarations ---
+    
+    MISSION_MEDAL getScoreMedal(int score);
+    
 };
 
 

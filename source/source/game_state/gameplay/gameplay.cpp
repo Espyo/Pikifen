@@ -1021,6 +1021,7 @@ void GameplayState::load() {
     oldMissionFail2Cur = 0;
     nrLivingLeaders = 0;
     leadersKod = 0;
+    medalGotItJuiceTimer = 0.0f;
     
     game.framerateLastAvgPoint = 0;
     game.framerateHistory.clear();

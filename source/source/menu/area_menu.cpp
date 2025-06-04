@@ -212,16 +212,24 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         } else {
             switch(areaPtr->mission.gradingMode) {
             case MISSION_GRADING_MODE_POINTS: {
-                if(score >= areaPtr->mission.platinumReq) {
-                    curMedal = game.sysContent.bmpMedalPlatinum;
-                } else if(score >= areaPtr->mission.goldReq) {
-                    curMedal = game.sysContent.bmpMedalGold;
-                } else if(score >= areaPtr->mission.silverReq) {
-                    curMedal = game.sysContent.bmpMedalSilver;
-                } else if(score >= areaPtr->mission.bronzeReq) {
-                    curMedal = game.sysContent.bmpMedalBronze;
-                } else {
+                MISSION_MEDAL medal = areaPtr->mission.getScoreMedal(score);
+                switch(medal) {
+                case MISSION_MEDAL_NONE: {
                     curMedal = game.sysContent.bmpMedalNone;
+                    break;
+                } case MISSION_MEDAL_BRONZE: {
+                    curMedal = game.sysContent.bmpMedalBronze;
+                    break;
+                } case MISSION_MEDAL_SILVER: {
+                    curMedal = game.sysContent.bmpMedalSilver;
+                    break;
+                } case MISSION_MEDAL_GOLD: {
+                    curMedal = game.sysContent.bmpMedalGold;
+                    break;
+                } case MISSION_MEDAL_PLATINUM: {
+                    curMedal = game.sysContent.bmpMedalPlatinum;
+                    break;
+                }
                 }
                 break;
             } case MISSION_GRADING_MODE_GOAL: {
@@ -641,14 +649,24 @@ void AreaMenu::initGuiMain() {
                     switch(areaPtr->mission.gradingMode) {
                     case MISSION_GRADING_MODE_POINTS: {
                         int score = areaRecords[a].score;
-                        if(score >= areaPtr->mission.platinumReq) {
-                            medalBmp = game.sysContent.bmpMedalPlatinum;
-                        } else if(score >= areaPtr->mission.goldReq) {
-                            medalBmp = game.sysContent.bmpMedalGold;
-                        } else if(score >= areaPtr->mission.silverReq) {
-                            medalBmp = game.sysContent.bmpMedalSilver;
-                        } else if(score >= areaPtr->mission.bronzeReq) {
+                        MISSION_MEDAL medal =
+                            areaPtr->mission.getScoreMedal(score);
+                        switch(medal) {
+                        case MISSION_MEDAL_NONE: {
+                            break;
+                        } case MISSION_MEDAL_BRONZE: {
                             medalBmp = game.sysContent.bmpMedalBronze;
+                            break;
+                        } case MISSION_MEDAL_SILVER: {
+                            medalBmp = game.sysContent.bmpMedalSilver;
+                            break;
+                        } case MISSION_MEDAL_GOLD: {
+                            medalBmp = game.sysContent.bmpMedalGold;
+                            break;
+                        } case MISSION_MEDAL_PLATINUM: {
+                            medalBmp = game.sysContent.bmpMedalPlatinum;
+                            break;
+                        }
                         }
                         break;
                     } case MISSION_GRADING_MODE_GOAL: {

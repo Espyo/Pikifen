@@ -501,6 +501,9 @@ struct SystemContentList {
     //Gold mission medal.
     ALLEGRO_BITMAP* bmpMedalGold = nullptr;
     
+    //"Got it!" blurb for mission medals.
+    ALLEGRO_BITMAP* bmpMedalGotIt = nullptr;
+    
     //No mission medal.
     ALLEGRO_BITMAP* bmpMedalNone = nullptr;
     
@@ -721,6 +724,9 @@ struct SystemContentNames {
     
     //Gold medal.
     string bmpMedalGold = "gui/medal_gold";
+    
+    //"Got it!" blurb for mission medals.
+    string bmpMedalGotIt = "gui/medal_got_it";
     
     //No medal.
     string bmpMedalNone = "gui/medal_none";

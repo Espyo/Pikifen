@@ -20,6 +20,7 @@ namespace HUD {
 extern const float GOAL_INDICATOR_SMOOTHNESS_MULT;
 extern const string GUI_FILE_NAME;
 extern const float LEADER_SWAP_JUICE_DURATION;
+extern const float MEDAL_GOT_IT_JUICE_DURATION;
 extern const float MEDAL_ICON_SCALE_CUR;
 extern const float MEDAL_ICON_SCALE_MULT;
 extern const float MEDAL_ICON_SCALE_NEXT;

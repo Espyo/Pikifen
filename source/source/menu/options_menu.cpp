@@ -835,7 +835,7 @@ void OptionsMenu::initGuiTopPage() {
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
 #define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-                                getValueOrDefault(def))
+    getValueOrDefault(def))
     
     bool controlsIconLeft = iconLeft("controls", "true");
     bool graphicsIconLeft = iconLeft("graphics", "true");

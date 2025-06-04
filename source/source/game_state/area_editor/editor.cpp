@@ -152,9 +152,9 @@ AreaEditor::AreaEditor() :
     
 #define registerCmd(ptr, name) \
     commands.push_back( \
-                        Command(std::bind((ptr), this, std::placeholders::_1), \
-                                (name)) \
-                      );
+        Command(std::bind((ptr), this, std::placeholders::_1), \
+            (name)) \
+        );
     
     registerCmd(&AreaEditor::circleSectorCmd, "circle_sector");
     registerCmd(&AreaEditor::copyPropertiesCmd, "copy_properties");

@@ -19,6 +19,7 @@ graphics {
     leader_silhouette_top = gui/leader_silhouette_top
     medal_bronze = gui/medal_bronze
     medal_gold = gui/medal_gold
+    medal_got_it = gui/medal_got_it
     medal_none = gui/medal_none
     medal_platinum = gui/medal_platinum
     medal_silver = gui/medal_silver

@@ -1,5 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-
+    
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -43,6 +43,7 @@ Next tasks (roughly sorted most important first)
                 x GO!
                 x Mission complete
                 x Mission failed
+                Mission timer 10 seconds remaining (one sound per second)
                 Pausing
                 Mission completion item going up
                 Mission completion item going down
@@ -399,6 +400,7 @@ Next tasks (roughly sorted most important first)
                 Compatibility data: None; all areas are compatible
             Collection
                 First team to collect a certain amount of certain treasure wins
+                In the canon games, this is P2's yellow marbles
                 Compatibility data:
                     What the treasure is. If not specified, a random treasure from the area is chosen
                 Default recommended values:
@@ -412,6 +414,16 @@ Next tasks (roughly sorted most important first)
                 Compatibility data:
                     What the flag object is. If not specified, a random treasure from the game is chosen
                     Where the flag objects spawn. If not specified, they spawn near the Onion, some small distance away, facing like 45 degrees left of the direction from this Onion to the other area center (the average of all Onions)
+                Default recommended values:
+                    Captures amount is 1
+                When (if) time is up:
+                    Player with the most captures gets 1 point in their overall standing. No points are awarded in the case of a first-place tie
+            Recovery
+                When a team collects a specific object that's at the center of the arena, they gain a point. First team to reach a certain amount of points wins
+                It could be an item to bring to one's own base, or to an opponent's base
+                Compatibility data:
+                    What the target object is. If not specified, a random treasure from the game is chosen
+                    Where the target object spawns. If not specified, it spawns in the same place as a randomly-picked mob
                 Default recommended values:
                     Captures amount is 1
                 When (if) time is up:
@@ -439,6 +451,9 @@ Next tasks (roughly sorted most important first)
                 [NEEDS BRAINSTORMING] Maybe more objectives than just "Kill an X"?
             Point capture?
                 When a Pikmin is on top of a point, it slowly captures for that team, a la TF2. The more Pikmin, the quicker it captures
+                First team to have the captured point for X time wins
+                There could be one point or multiple
+                There could be an option for the team's time to only tick up when Pikmin/leaders are on the point, or while the point is currently captured
                 Compatibility data:
                     Where the point is. If not specified, it spawns in the same place as a randomly-picked mob
             Build a Wonder?
@@ -712,7 +727,6 @@ Misc things (so I don't forget)
             Make it use the same logic as drawTexture, where a fade sector must draw the liquid twice, with the second time fading
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
-        A small "Got it!" for the score bar, to mark the medal you have
         Animate the mission results screen. Basically, reveal one thing at a time
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens

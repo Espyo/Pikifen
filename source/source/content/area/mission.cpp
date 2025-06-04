@@ -41,6 +41,21 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
+ * @brief Returns which medal the given score would give.
+ *
+ * @param score Score to check.
+ * @return The medal, if any.
+ */
+MISSION_MEDAL MissionData::getScoreMedal(int score) {
+    if(score >= platinumReq) return MISSION_MEDAL_PLATINUM;
+    if(score >= goldReq) return MISSION_MEDAL_GOLD;
+    if(score >= silverReq) return MISSION_MEDAL_SILVER;
+    if(score >= bronzeReq) return MISSION_MEDAL_BRONZE;
+    return MISSION_MEDAL_NONE;
+}
+
+
+/**
  * @brief Returns the player's current amount for whatever the condition needs.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
