@@ -26,6 +26,7 @@
 #include "../content/other/particle.h"
 #include "../lib/data_file/data_file.h"
 #include "../lib/imgui/imgui.h"
+#include "../util/container_utils.h"
 #include "../util/drawing_utils.h"
 #include "../util/general_utils.h"
 #include "../util/geometry_utils.h"

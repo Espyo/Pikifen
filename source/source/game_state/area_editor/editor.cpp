@@ -17,6 +17,7 @@
 #include "../../core/misc_functions.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 
@@ -3147,7 +3148,7 @@ void AreaEditor::setNewCircleSectorPoints() {
     
     newCircleSectorValidEdges.clear();
     for(size_t p = 0; p < nPoints; p++) {
-        Point next = getNextInVector(newCircleSectorPoints, p);
+        Point next = getNextInVectorByIdx(newCircleSectorPoints, p);
         bool valid = true;
         
         for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {

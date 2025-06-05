@@ -18,6 +18,7 @@
 #include "misc_structs.h"
 
 #include "../util/allegro_utils.h"
+#include "../util/container_utils.h"
 #include "../util/general_utils.h"
 #include "../util/string_utils.h"
 #include "const.h"
@@ -1702,7 +1703,7 @@ SubgroupType* SubgroupTypeManager::getNextType(
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
-            return getNextInVector(types, t);
+            return getNextInVectorByIdx(types, t);
         }
     }
     return nullptr;
@@ -1720,7 +1721,7 @@ SubgroupType* SubgroupTypeManager::getPrevType(
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
-            return getPrevInVector(types, t);
+            return getPrevInVectorByIdx(types, t);
         }
     }
     return nullptr;

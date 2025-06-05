@@ -19,6 +19,7 @@
 #include "geometry.h"
 
 #include "../../core/misc_functions.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 #include "vertex.h"
@@ -98,9 +99,9 @@ Polygon::Polygon(const vector<Vertex*>& vertexes) :
 void Polygon::clean(bool recursive) {
     for(size_t v = 0; v < vertexes.size();) {
         bool shouldDelete = false;
-        Vertex* prevV = getPrevInVector(vertexes, v);
+        Vertex* prevV = getPrevInVectorByIdx(vertexes, v);
         Vertex* curV = vertexes[v];
-        Vertex* nextV = getNextInVector(vertexes, v);
+        Vertex* nextV = getNextInVectorByIdx(vertexes, v);
         
         //If the distance between both vertexes is so small
         //that it's basically 0, delete this vertex from the list.
@@ -180,7 +181,7 @@ void Polygon::cut() {
         Vertex* v1 = nullptr, *v2 = nullptr;
         for(size_t v = 0; v < vertexes.size(); v++) {
             v1 = vertexes[v];
-            v2 = getNextInVector(vertexes, v);
+            v2 = getNextInVectorByIdx(vertexes, v);
             if(
                 (v1->x >= start->x || v2->x >= start->x) &&
                 (v1->x <= rightmost->x || v2->x <= rightmost->x)
@@ -294,7 +295,7 @@ void Polygon::cut() {
                 
             for(size_t v = 0; v < bridges.size(); v++) {
                 Vertex* vPtr = vertexes[bridges[v]];
-                Vertex* nvPtr = getNextInVector(vertexes, bridges[v]);
+                Vertex* nvPtr = getNextInVectorByIdx(vertexes, bridges[v]);
                 float a =
                     getAngleCwDiff(
                         getAngle(v2p(vPtr), v2p(nvPtr)),
@@ -839,7 +840,7 @@ bool isPolygonClockwise(vector<Vertex*>& vertexes) {
     float sum = 0;
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* vPtr = vertexes[v];
-        Vertex* v2Ptr = getNextInVector(vertexes, v);
+        Vertex* v2Ptr = getNextInVectorByIdx(vertexes, v);
         sum += (v2Ptr->x - vPtr->x) * (v2Ptr->y + vPtr->y);
     }
     return sum < 0;
@@ -855,8 +856,8 @@ bool isPolygonClockwise(vector<Vertex*>& vertexes) {
  */
 bool isVertexConvex(const vector<Vertex*>& vec, size_t idx) {
     const Vertex* curV = vec[idx];
-    const Vertex* prevV = getPrevInVector(vec, idx);
-    const Vertex* nextV = getNextInVector(vec, idx);
+    const Vertex* prevV = getPrevInVectorByIdx(vec, idx);
+    const Vertex* nextV = getNextInVectorByIdx(vec, idx);
     float anglePrev = getAngle(v2p(curV), v2p(prevV));
     float angleNext = getAngle(v2p(curV), v2p(nextV));
     return getAngleCwDiff(anglePrev, angleNext) < TAU / 2;
@@ -878,8 +879,8 @@ bool isVertexEar(
     //does not contain any other vertex inside. Also, if it has vertexes inside,
     //they mandatorily are concave, so only check those.
     const Vertex* v = vec[idx];
-    const Vertex* pv = getPrevInVector(vec, idx);
-    const Vertex* nv = getNextInVector(vec, idx);
+    const Vertex* pv = getPrevInVectorByIdx(vec, idx);
+    const Vertex* nv = getNextInVectorByIdx(vec, idx);
     
     for(size_t c = 0; c < concaves.size(); c++) {
         const Vertex* vToCheck = vec[concaves[c]];
@@ -1099,8 +1100,8 @@ TRIANGULATION_ERROR triangulatePolygon(
             triangles->push_back(
                 Triangle(
                     vertexesLeft[ears[0]],
-                    getPrevInVector(vertexesLeft, ears[0]),
-                    getNextInVector(vertexesLeft, ears[0])
+                    getPrevInVectorByIdx(vertexesLeft, ears[0]),
+                    getNextInVectorByIdx(vertexesLeft, ears[0])
                 )
             );
             

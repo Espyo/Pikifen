@@ -24,6 +24,7 @@
 #include "../lib/imgui/imgui_stdlib.h"
 #include "../util/allegro_utils.h"
 #include "../util/backtrace.h"
+#include "../util/container_utils.h"
 #include "../util/general_utils.h"
 #include "../util/imgui_utils.h"
 #include "../util/os_utils.h"
@@ -562,7 +563,7 @@ Mob* getNextMobNearCursor(
     if(pivotIdx == INVALID) {
         return mobsNearCursor[0];
     } else {
-        return getNextInVector(mobsNearCursor, pivotIdx);
+        return getNextInVectorByIdx(mobsNearCursor, pivotIdx);
     }
 }
 

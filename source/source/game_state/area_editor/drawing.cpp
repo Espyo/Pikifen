@@ -17,6 +17,7 @@
 #include "../../core/misc_functions.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 
@@ -402,7 +403,7 @@ void AreaEditor::drawCanvas() {
             for(size_t p = 0; p < newCircleSectorPoints.size(); p++) {
                 Point curPoint = newCircleSectorPoints[p];
                 Point nextPoint =
-                    getNextInVector(newCircleSectorPoints, p);
+                    getNextInVectorByIdx(newCircleSectorPoints, p);
                 ALLEGRO_COLOR color =
                     newCircleSectorValidEdges[p] ?
                     al_map_rgb(64, 255, 64) :

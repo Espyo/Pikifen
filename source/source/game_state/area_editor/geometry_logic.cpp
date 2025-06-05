@@ -16,6 +16,7 @@
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 
@@ -1642,8 +1643,10 @@ bool AreaEditor::getDrawingOuterSector(Sector** result) const {
     //Grab the first line that is not on top of an existing one,
     //and find the sector that line is on by checking its center.
     for(size_t n = 0; n < drawingNodes.size(); n++) {
-        const LayoutDrawingNode* n1 = &drawingNodes[n];
-        const LayoutDrawingNode* n2 = &(getNextInVector(drawingNodes, n));
+        const LayoutDrawingNode* n1 =
+            &drawingNodes[n];
+        const LayoutDrawingNode* n2 =
+            &(drawingNodes[(n + 1) % drawingNodes.size()]);
         if(!areNodesTraversable(*n1, *n2)) {
             *result =
                 getSector(

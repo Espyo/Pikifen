@@ -14,6 +14,7 @@
 
 #include "../../core/const.h"
 #include "../../core/misc_functions.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../mob/bridge.h"
 #include "../mob/enemy.h"
@@ -307,7 +308,7 @@ void GenMobFsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
             m->carryInfo->getCarrierInvulnerabilities();
             
         if(
-            !vectorsContainSame(
+            !isPermutation(
                 newInvulnerabilities,
                 m->pathInfo->settings.invulnerabilities
             )
@@ -384,7 +385,7 @@ void GenMobFsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
             m->carryInfo->getCarrierInvulnerabilities();
             
         if(
-            !vectorsContainSame(
+            !isPermutation(
                 newInvulnerabilities,
                 m->pathInfo->settings.invulnerabilities
             )
