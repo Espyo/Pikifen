@@ -1092,6 +1092,7 @@ void GameplayState::drawLeaderCursor(
 ) {
     if(!player->leaderPtr) return;
     
+    //Swarm arrows.
     size_t nArrows = player->leaderPtr->swarmArrows.size();
     for(size_t a = 0; a < nArrows; a++) {
         Point pos(
@@ -1120,6 +1121,7 @@ void GameplayState::drawLeaderCursor(
         );
     }
     
+    //Whistle rings.
     size_t nRings = player->whistle.rings.size();
     float cursorAngle =
         getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
@@ -1160,6 +1162,7 @@ void GameplayState::drawLeaderCursor(
         );
     }
     
+    //Whistle dots.
     if(
         player->whistle.radius > 0 ||
         player->whistle.fadeTimer.timeLeft > 0.0f
@@ -1225,7 +1228,10 @@ void GameplayState::drawLeaderCursor(
     
     //Standby type count.
     size_t nStandbyPikmin = 0;
-    if(player->leaderPtr->group->curStandbyType) {
+    if(
+        game.options.misc.showCounterOnCursor &&
+        player->leaderPtr->group->curStandbyType
+    ) {
         for(
             size_t m = 0; m < player->leaderPtr->group->members.size(); m++
         ) {

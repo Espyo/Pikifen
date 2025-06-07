@@ -694,14 +694,15 @@ void OptionsMenu::initGuiGraphicsPage() {
  */
 void OptionsMenu::initGuiMiscPage() {
     //Menu items.
-    miscGui.registerCoords("back",                 12,    5, 20,  6);
-    miscGui.registerCoords("back_input",            3,    7,  4,  4);
-    miscGui.registerCoords("header",               50,   10, 50,  6);
-    miscGui.registerCoords("pikmin_bump",          50,   25, 70, 10);
-    miscGui.registerCoords("cursor_cam_weight",    50, 42.5, 70, 10);
-    miscGui.registerCoords("show_hud_input_icons", 50,   60, 70, 10);
-    miscGui.registerCoords("leaving_confirmation", 50, 77.5, 70, 10);
-    miscGui.registerCoords("tooltip",              50,   96, 96,  4);
+    miscGui.registerCoords("back",                   12,    5, 20,  6);
+    miscGui.registerCoords("back_input",              3,    7,  4,  4);
+    miscGui.registerCoords("header",                 50,   10, 50,  6);
+    miscGui.registerCoords("pikmin_bump",            50,   25, 70, 10);
+    miscGui.registerCoords("cursor_cam_weight",      50, 37.5, 70, 10);
+    miscGui.registerCoords("show_counter_on_cursor", 50,   50, 70, 10);
+    miscGui.registerCoords("show_hud_input_icons",   50, 62.5, 70, 10);
+    miscGui.registerCoords("leaving_confirmation",   50,   75, 70, 10);
+    miscGui.registerCoords("tooltip",                50,   96, 96,  4);
     miscGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
         getChildByName("positions")
@@ -754,6 +755,20 @@ void OptionsMenu::initGuiMiscPage() {
     };
     cursorCamWeightPicker->init();
     miscGui.addItem(cursorCamWeightPicker, "cursor_cam_weight");
+    
+    //Show counter on cursor checkbox.
+    CheckGuiItem* showCounterOnCursorCheck =
+        new CheckGuiItem(
+        &game.options.misc.showCounterOnCursor,
+        "Show counter on cursor", game.sysContent.fntStandard
+    );
+    showCounterOnCursorCheck->onGetTooltip =
+    [] () {
+        return
+            "Show a standby type counter on the leader's cursor? "
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_COUNTER_ON_CURSOR) + ".";
+    };
+    miscGui.addItem(showCounterOnCursorCheck, "show_counter_on_cursor");
     
     //Show HUD player input icons checkbox.
     CheckGuiItem* showHudinputIconsCheck =
