@@ -161,19 +161,12 @@ void Onion::generate() {
             return;
         }
         
-        float horizontalStrength =
-            ONION::SPIT_H_SPEED +
-            game.rng.f(
-                -ONION::SPIT_H_SPEED_DEVIATION,
-                ONION::SPIT_H_SPEED_DEVIATION
-            );
         spitPikminSeed(
             pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[t],
-            nextSpitAngle, horizontalStrength, ONION::SPIT_V_SPEED
+            nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
+            ONION::SPIT_V_SPEED
         );
-        
-        nextSpitAngle += ONION::SPIT_ANGLE_SHIFT;
-        nextSpitAngle = normalizeAngle(nextSpitAngle);
+        nSpits++;
         
         playSound(oniType->soundPopIdx);
         

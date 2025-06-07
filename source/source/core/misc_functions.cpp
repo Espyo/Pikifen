@@ -1373,14 +1373,28 @@ void signalHandler(int signum) {
  * @param pos Point of origin.
  * @param z Z of the point of origin.
  * @param pikType Type of the Pikmin to spit out.
- * @param angle Direction in which to spit.
- * @param horizontalSpeed Horizontal speed in which to spit.
- * @param verticalSpeed Vertical speed in which to spit.
+ * @param spitNr Number of this spit. This gets hashed and used to determine the
+ * angle and horizontal speed of the spit.
+ * @param baseHorizontalSpeed Horizontal speed sans deviation.
+ * @param maxHorizontalSpeedDeviation Maximum horizontal speed deviation
+ * to add or remove from the base horizontal speed.
+ * @param verticalSpeed Vertical speed.
  */
 void spitPikminSeed(
     const Point pos, float z, PikminType* pikType,
-    float angle, float horizontalSpeed, float verticalSpeed
+    uint32_t spitNr, float baseHorizontalSpeed,
+    float maxHorizontalSpeedDeviation, float verticalSpeed
 ) {
+    uint32_t angleI = hashNr(spitNr);
+    uint32_t horizontalDevMultI = hashNr(spitNr + 1);
+    float angle = angleI / (float) UINT32_MAX;
+    angle *= TAU;
+    float horizontalDevMult = horizontalDevMultI / (float) UINT32_MAX;
+    horizontalDevMult = horizontalDevMult * 2.0f - 1.0f;
+    float horizontalSpeed =
+        baseHorizontalSpeed +
+        horizontalDevMult * maxHorizontalSpeedDeviation;
+        
     Pikmin* newPikmin =
         (
             (Pikmin*)

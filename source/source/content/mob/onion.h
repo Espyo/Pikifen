@@ -60,14 +60,11 @@ public:
     //Time left until it generates the next Pikmin in the queue.
     Timer nextGenerationTimer = Timer(ONION::NEXT_GENERATION_INTERVAL);
     
-    //Angle at which the next seed will be spit.
-    float nextSpitAngle = 0.0f;
+    //Number of seeds it has spit so far.
+    unsigned int nSpits = 0;
     
     //The Onion's alpha.
     unsigned char seethrough = 255;
-    
-    //Spit a new seed.
-    void generate();
     
     
     //--- Function declarations ---
@@ -75,6 +72,7 @@ public:
     Onion(const Point& pos, OnionType* type, float angle);
     ~Onion();
     void drawMob() override;
+    void generate();
     void readScriptVars(const ScriptVarReader& svr) override;
     void startGenerating();
     void stopGenerating();

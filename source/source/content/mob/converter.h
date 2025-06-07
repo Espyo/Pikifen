@@ -55,8 +55,8 @@ public:
     //Time left before it auto-closes and converts the Pikmin in the buffer.
     Timer autoConversionTimer;
     
-    //Angle it will spit the next seed towards.
-    float nextSpitAngle = 0.0f;
+    //Number of seeds it has spit so far.
+    unsigned int nSpits = 0;
     
     
     //--- Function declarations ---

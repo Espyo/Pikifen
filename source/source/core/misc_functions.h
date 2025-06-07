@@ -202,7 +202,8 @@ void setStringTokenWidths(
 void signalHandler(int signum);
 void spitPikminSeed(
     const Point pos, float z, PikminType* pikType,
-    float angle, float horizontalSpeed, float verticalSpeed
+    uint32_t spitNr, float baseHorizontalSpeed,
+    float maxHorizontalSpeedDeviation, float verticalSpeed
 );
 vector<vector<StringToken> > splitLongStringWithTokens(
     const vector<StringToken>& tokens, int maxWidth

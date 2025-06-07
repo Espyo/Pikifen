@@ -111,19 +111,12 @@ void Converter::spit() {
             break;
         }
         
-        float horizontalStrength =
-            CONVERTER::SPIT_H_SPEED +
-            game.rng.f(
-                -CONVERTER::SPIT_H_SPEED_DEVIATION,
-                CONVERTER::SPIT_H_SPEED_DEVIATION
-            );
         spitPikminSeed(
             pos, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
-            nextSpitAngle, horizontalStrength, CONVERTER::SPIT_V_SPEED
+            nSpits, CONVERTER::SPIT_H_SPEED, CONVERTER::SPIT_H_SPEED_DEVIATION,
+            CONVERTER::SPIT_V_SPEED
         );
-        
-        nextSpitAngle += CONVERTER::SPIT_ANGLE_SHIFT;
-        nextSpitAngle = normalizeAngle(nextSpitAngle);
+        nSpits++;
     }
     
     amountInBuffer = 0;
