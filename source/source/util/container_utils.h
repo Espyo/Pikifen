@@ -60,7 +60,7 @@ vector<ContentT> filterVectorWithBanList(
  * @brief Returns the cyclically next element in a vector, given the
  * current element. If the element is not in the vector, it returns the
  * first element.
- * 
+ *
  * @tparam ContentT Type of contents of the vector.
  * @param v The vector.
  * @param e The current element.
@@ -82,7 +82,7 @@ ContentT getNextInVector(const vector<ContentT>& v, const ContentT& e) {
 /**
  * @brief Returns the cyclically next element in a vector, given the
  * current element's index.
- * 
+ *
  * @tparam ContentT Type of contents of the vector.
  * @param v The vector.
  * @param idx The current element's index.
@@ -100,7 +100,7 @@ ContentT getNextInVectorByIdx(const vector<ContentT>& v, size_t idx) {
  * @brief Returns the cyclically previous element in a vector, given the
  * current element. If the element is not in the vector, it returns the
  * last element.
- * 
+ *
  * @tparam ContentT Type of contents of the vector.
  * @param v The vector.
  * @param e The current element.
@@ -122,7 +122,7 @@ ContentT getPrevInVector(const vector<ContentT>& v, const ContentT& e) {
 /**
  * @brief Returns the cyclically previous element in a vector, given the
  * current element's index.
- * 
+ *
  * @tparam ContentT Type of contents of the vector.
  * @param v The vector.
  * @param idx The current element's index.
@@ -155,7 +155,7 @@ bool isInMap(const MapT& cont, const KeyT& key) {
  * @brief Returns whether one container is a permutation of another. In other
  * words, if both containers contain the exact same things, even if they
  * are in a different order.
- * 
+ *
  * @tparam Container1T Type of the first container.
  * @tparam Container2T Type of the second container.
  * @param cont1 First container.
@@ -164,6 +164,7 @@ bool isInMap(const MapT& cont, const KeyT& key) {
  */
 template<class Container1T, class Container2T>
 bool isPermutation(const Container1T& cont1, const Container2T& cont2) {
+    if(cont1.size() != cont2.size()) return false;
     return std::is_permutation(cont1.begin(), cont1.end(), cont2.begin());
 }
 

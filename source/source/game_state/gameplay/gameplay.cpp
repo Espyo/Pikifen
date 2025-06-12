@@ -1028,6 +1028,7 @@ void GameplayState::load() {
     nrLivingLeaders = 0;
     leadersKod = 0;
     medalGotItJuiceTimer = 0.0f;
+    lastCarryingTieBreaker = nullptr;
     
     game.framerateLastAvgPoint = 0;
     game.framerateHistory.clear();

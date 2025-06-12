@@ -6,9 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Fix #8
-        If a random Onion needs to be chosen to deliver the object to, pick it cyclically, instead of random every time.
-        For example: if I generate a new tie between Red, Yellow and Blue, pick Red. If I generate the same time again, pick Yellow. Then Blue, then Red, and so forth.
+    
 
     --- 0.26 ---
     Update Dear ImGui to version 1.91.9b
@@ -32,9 +30,9 @@ Next tasks (roughly sorted most important first)
                 Walking? Maybe some custom logic to only make it play 1/(number of Pikmin on screen) times
             Menus
                 https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
-                ? Menu item selected
-                ? Menu item activated
-                ? Menu backed out of
+                x Menu item selected
+                x Menu item activated
+                x Menu backed out of
                 x Boing for when you're trying to do something wrong (like going past the limit in the Onion menu)
                 Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
                     Could change pitch when you're changing those multi-value options in the options menu
@@ -185,7 +183,6 @@ Next tasks (roughly sorted most important first)
         Mobs for decorative pebbles, stones, sticks, cobwebs
     More particles
         More across the board -- check all mobs too
-    Knockback could scale with vulnerability (thanks Rosey)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
@@ -210,7 +207,6 @@ Next tasks (roughly sorted most important first)
         A mission's data should control how each HUD element displays its information
             Number of things the player's achieved vs. number of things remaining
             Display a slash and an out-of-total count vs. not displaying it
-        The visible portion of the score ruler in a mission's HUD should be like 1/3 of the amount of points between the initial amount and platinum. This way the bar still has to move left as the player gets points, but the next medals are comfortably within view instead of being at unfathomably long distances off to the right
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
         Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies
         Show how close you are to concocting a new spray
@@ -677,6 +673,8 @@ Next tasks (roughly sorted most important first)
             A way to view all states, with arrows pointing to which events lead to which states
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
+        Loose content editor
+            Basically just a frontend for editing hazards, liquids, misc. configs, mob types, spike damage types, sprays, and statuses
     
     
 Small tasks (for when I'm feeling lazy)
@@ -747,7 +745,6 @@ Misc things (so I don't forget)
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
-        The standby counter near the cursor should be made into an option and disabled by default
         Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
     Mechanics
         Lock-on
@@ -805,9 +802,10 @@ Misc things (so I don't forget)
         Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
-        The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
-        The ability for a mob to spawn another mob at a random angle
-        A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
+        Spawning
+            The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
+            The ability for a mob to spawn another mob at a random angle
+            A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
         hold_focused_mob should be able to specify the hold rotation method
         Some way to read a different mob's "focus mob memory"?
         A way to run actions on other mobs
@@ -941,10 +939,8 @@ Misc things (so I don't forget)
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
     Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar should automatically pick leaf Pikmin [PIKMIN 4]
-    Save centiseconds in the mission's record (and display them in a smaller font) (thanks Helodity)
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
-    The spray HUD icons should show a tiny bar with concoction progress
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions
@@ -968,7 +964,6 @@ Misc things (so I don't forget)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
     Fix bridges and dummies emitting light during blackout (Darthvato)
-    I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spit. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
@@ -983,6 +978,7 @@ Misc things (so I don't forget)
             As a parameter in every single mob generator?
         Custom goal clear conditions and custom fail conditions, via scripting somehow
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
+        The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
     Code cleanup

@@ -17,6 +17,7 @@
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
@@ -656,24 +657,20 @@ bool Mob::calculateAttackBasics(
 
 /**
  * @brief Calculates the final carrying target, and the final carrying position,
- * given the sort of carry destination, what Pikmin are holding on, and what
- * Pikmin got added or removed.
+ * given the sort of carry destination, what Pikmin are holding on, etc.
  *
- * @param added The Pikmin that got added, if any.
- * @param removed The Pikmin that got removed, if any.
- * @param targetType Return the target Pikmin type (if any) here.
- * @param targetMob Return the target mob (if any) here.
- * @param targetPoint Return the target point here.
+ * @param outTargetType Return the target Pikmin type (if any) here.
+ * @param outTargetMob Return the target mob (if any) here.
+ * @param outTargetPoint Return the target point here.
  * @return Whether it succeeded.
  * Returns false if there are no available targets or if
  * something went wrong.
  */
 bool Mob::calculateCarryingDestination(
-    Mob* added, Mob* removed,
-    PikminType** targetType, Mob** targetMob, Point* targetPoint
+    PikminType** outTargetType, Mob** outTargetMob, Point* outTargetPoint
 ) const {
-    *targetMob = nullptr;
-    *targetPoint = pos;
+    *outTargetMob = nullptr;
+    *outTargetPoint = pos;
     if(!carryInfo) return false;
     
     switch(carryInfo->destination) {
@@ -681,49 +678,48 @@ bool Mob::calculateCarryingDestination(
 
         //Go to the nearest ship.
         Ship* target = calculateCarryingShip();
-        
         if(target) {
-            *targetMob = target;
-            *targetPoint = target->controlPointFinalPos;
+            *outTargetMob = target;
+            *outTargetPoint = target->controlPointFinalPos;
             return true;
-            
-        } else {
-            return false;
         }
         
+        return false;
         break;
         
     } case CARRY_DESTINATION_ONION: {
 
-        Onion* target = calculateCarryingOnion(added, removed, targetType);
-        
-        if(!target) {
-            return false;
+        //Go to the nearest Onion.
+        Onion* target = calculateCarryingOnion(outTargetType);
+        if(target) {
+            *outTargetMob = target;
+            *outTargetPoint = (*outTargetMob)->pos;
+            return true;
         }
-        *targetMob = target;
-        *targetPoint = (*targetMob)->pos;
-        return true;
         
+        return false;
         break;
         
     } case CARRY_DESTINATION_SHIP_NO_ONION: {
 
-        Onion* oniTarget = calculateCarryingOnion(added, removed, targetType);
-        
+        //Go to the nearest Onion if possible.
+        Onion* oniTarget = calculateCarryingOnion(outTargetType);
         if(oniTarget) {
-            *targetMob = oniTarget;
-            *targetPoint = (*targetMob)->pos;
+            *outTargetMob = oniTarget;
+            *outTargetPoint = (*outTargetMob)->pos;
             return true;
         }
         
-        //No onion, find a ship instead.
+        //No Onion, find the nearest ship instead.
         Ship* shiTarget = calculateCarryingShip();
         if(shiTarget) {
-            *targetMob = shiTarget;
-            *targetPoint = shiTarget->controlPointFinalPos;
+            *outTargetMob = shiTarget;
+            *outTargetPoint = shiTarget->controlPointFinalPos;
             return true;
         }
+        
         return false;
+        break;
         
     } case CARRY_DESTINATION_LINKED_MOB: {
 
@@ -741,13 +737,12 @@ bool Mob::calculateCarryingDestination(
         }
         
         if(closestLink) {
-            *targetMob = closestLink;
-            *targetPoint = closestLink->pos;
+            *outTargetMob = closestLink;
+            *outTargetPoint = closestLink->pos;
             return true;
-        } else {
-            return false;
         }
         
+        return false;
         break;
         
     } case CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE: {
@@ -782,9 +777,8 @@ bool Mob::calculateCarryingDestination(
             return false;
         }
         
-        PikminType* decidedType =
-            decideCarryPikminType(availableTypes, added, removed);
-            
+        PikminType* decidedType = decideCarryPikminType(availableTypes);
+        
         //Figure out which linked mob matches the decided type.
         size_t closestTargetIdx = INVALID;
         Distance closestTargetDist;
@@ -799,9 +793,9 @@ bool Mob::calculateCarryingDestination(
         }
         
         //Finally, set the destination data.
-        *targetType = decidedType;
-        *targetMob = links[closestTargetIdx];
-        *targetPoint = (*targetMob)->pos;
+        *outTargetType = decidedType;
+        *outTargetMob = links[closestTargetIdx];
+        *outTargetPoint = (*outTargetMob)->pos;
         
         return true;
         
@@ -815,54 +809,41 @@ bool Mob::calculateCarryingDestination(
 
 
 /**
- * @brief Calculates to which Onion Pikmin should carry something.
+ * @brief Calculates to which Onion Pikmin should carry something, along with
+ * the Pikmin type that will receive it, if applicable.
  *
- * @param added Newly added Pikmin, if any.
- * @param removed Newly removed Pikmin, if any.
- * @param targetType If not nullptr, the target Pikmin type is returned here.
- * @return The Onion.
+ * @param outTargetType If not nullptr, the target Pikmin type is returned here.
+ * @return The Onion, or nullptr if no valid one was found.
  */
-Onion* Mob::calculateCarryingOnion(
-    Mob* added, Mob* removed, PikminType** targetType
-) const {
-    //If it's meant for an Onion, we need to decide which Onion, based on
-    //the Pikmin. First, check which Onion Pikmin types are even available.
+Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
+    //First, check which Onion Pikmin types are even available.
     unordered_set<PikminType*> availableTypes;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
-        if(oPtr->activated) {
-            for(
-                size_t t = 0;
-                t < oPtr->oniType->nest->pikTypes.size();
-                t++
-            ) {
-                availableTypes.insert(
-                    oPtr->oniType->nest->pikTypes[t]
-                );
-            }
-        }
+        if(!oPtr->activated) continue;
+        availableTypes.insert(
+            oPtr->oniType->nest->pikTypes.begin(),
+            oPtr->oniType->nest->pikTypes.end()
+        );
     }
     
+    //Check if there are even any available types.
     if(availableTypes.empty()) {
-        //No available types?! Well...make the Pikmin stuck.
+        *outTargetType = nullptr;
         return nullptr;
     }
     
-    PikminType* decidedType =
-        decideCarryPikminType(availableTypes, added, removed);
-        
-    //Figure out where that type's Onion is.
+    //Decide what type to go to.
+    PikminType* decidedType = decideCarryPikminType(availableTypes);
+    
+    //Figure out where that type's closest Onion is.
     size_t closestOnionIdx = INVALID;
     Distance closestOnionDist;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
         if(!oPtr->activated) continue;
         bool hasType = false;
-        for(
-            size_t t = 0;
-            t < oPtr->oniType->nest->pikTypes.size();
-            t++
-        ) {
+        for(size_t t = 0; t < oPtr->oniType->nest->pikTypes.size(); t++) {
             if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
                 hasType = true;
                 break;
@@ -877,7 +858,8 @@ Onion* Mob::calculateCarryingOnion(
         }
     }
     
-    *targetType = decidedType;
+    //Finish!
+    *outTargetType = decidedType;
     return game.states.gameplay->mobs.onions[closestOnionIdx];
 }
 
@@ -1237,84 +1219,127 @@ void Mob::circleAround(
 
 
 /**
- * @brief Returns what Pikmin type is decided when carrying something.
+ * @brief Decides what Pikmin type should receive something that is
+ * being carried to Onions.
  *
- * @param availableTypes List of Pikmin types that are currently
- * available in the area.
- * @param added If a Pikmin got added to the carriers, specify it here.
- * @param removed If a Pikmin got removed from the carriers, specify it here.
- * @return The Pikmin type.
+ * @param availableTypes List of Pikmin types that are available to be picked.
+ * @return The Pikmin type, or nullptr on error.
  */
 PikminType* Mob::decideCarryPikminType(
-    const unordered_set<PikminType*>& availableTypes,
-    Mob* added, Mob* removed
+    const unordered_set<PikminType*>& availableTypes
 ) const {
-    //How many of each Pikmin type are carrying.
-    map<PikminType*, unsigned> typeQuantity;
-    //The Pikmin type with the most carriers.
-    vector<PikminType*> majorityTypes;
+    if(availableTypes.empty()) return nullptr;
     
-    //Count how many of each type there are carrying.
+    //Before we begin, count how many of each type there are carrying.
+    map<PikminType*, unsigned int> carrierTypeQuantities;
     for(size_t p = 0; p < type->maxCarriers; p++) {
         Pikmin* pikPtr = nullptr;
-        
         if(carryInfo->spotInfo[p].state != CARRY_SPOT_STATE_USED) continue;
-        
         pikPtr = (Pikmin*) carryInfo->spotInfo[p].pikPtr;
         
-        //If it doesn't have an Onion to carry to, it won't even count.
+        //If this Pikmin's type isn't one of the available ones,
+        //then the Pikmin shouldn't even count for deciding quantities.
         if(!isInContainer(availableTypes, pikPtr->pikType)) {
             continue;
         }
         
-        typeQuantity[pikPtr->pikType]++;
+        carrierTypeQuantities[pikPtr->pikType]++;
     }
     
-    //Then figure out what are the majority types.
-    unsigned most = 0;
-    for(auto& t : typeQuantity) {
-        if(t.second > most) {
-            most = t.second;
-            majorityTypes.clear();
+    //Majority carrier types get priority for being the candidates.
+    //So calculate which carrier Pikmin types have majorities and start
+    //the list of candidates with those.
+    unsigned highestCarrierTypeQuantity = 0;
+    vector<PikminType*> candidateTypes;
+    for(auto& t : carrierTypeQuantities) {
+        if(t.second > highestCarrierTypeQuantity) {
+            highestCarrierTypeQuantity = t.second;
+            candidateTypes.clear();
         }
-        if(t.second == most) majorityTypes.push_back(t.first);
-    }
-    
-    //If we ended up with no candidates, pick a type at random,
-    //out of all possible types.
-    bool forceRandom = false;
-    if(majorityTypes.empty()) {
-        forceRandom = true;
-        for(auto t = availableTypes.begin(); t != availableTypes.end(); ++t) {
-            majorityTypes.push_back(*t);
+        if(t.second == highestCarrierTypeQuantity) {
+            candidateTypes.push_back(t.first);
         }
     }
     
-    PikminType* decidedType = nullptr;
+    //If there are no candidates (i.e. no majority carriers),
+    //then let's operate on the available types, which are all equally valid.
+    if(candidateTypes.empty()) {
+        for(auto& t : availableTypes) {
+            candidateTypes.push_back(t);
+        }
+    }
     
-    //Now let's pick an Pikmin type from the candidates.
-    if(majorityTypes.size() == 1) {
-        //If there's only one possible type to pick, pick it.
-        decidedType = *majorityTypes.begin();
-        
-    } else {
-        //If the current type is a majority, it takes priority.
-        //Otherwise, pick a majority at random.
+    //If we have multiple candidates, keep the ones with the lowest
+    //population, since those need a population increase the most.
+    if(candidateTypes.size() > 1) {
+        unsigned long lowestPopulation = ULONG_MAX;
+        vector<PikminType*> underpopulatedTypes;
+        for(auto& t : candidateTypes) {
+            unsigned long population =
+                game.states.gameplay->getAmountOfTotalPikmin(t);
+            if(population < lowestPopulation) {
+                lowestPopulation = population;
+                underpopulatedTypes.clear();
+            }
+            if(population == lowestPopulation) underpopulatedTypes.push_back(t);
+        }
+        candidateTypes = underpopulatedTypes;
+    }
+    
+    //If there are still multiple candidates, see if we can keep the
+    //previous one.
+    if(candidateTypes.size() > 1) {
         if(
-            carryInfo->intendedPikType &&
-            !forceRandom &&
-            isInContainer(majorityTypes, carryInfo->intendedPikType)
+            carryInfo->isMoving && carryInfo->intendedPikType &&
+            isInContainer(availableTypes, carryInfo->intendedPikType)
         ) {
-            decidedType = carryInfo->intendedPikType;
-        } else {
-            decidedType =
-                majorityTypes[
-                    game.rng.i(0, (int) majorityTypes.size() - 1)
-                ];
+            candidateTypes = { carryInfo->intendedPikType };
         }
     }
     
-    return decidedType;
+    //If there are still multiple candidates, pick one at "random". This
+    //actually picks cyclically.
+    if(candidateTypes.size() > 1) {
+        PikminType* firstAttempt = nullptr;
+        PikminType* attempt = game.states.gameplay->lastCarryingTieBreaker;
+        PikminType* decidedType = nullptr;
+        while(true) {
+            attempt = getNextInVector(game.config.pikmin.order, attempt);
+            if(!attempt) {
+                //Panic check, no order Pikmin.
+                break;
+            }
+            if(!firstAttempt) {
+                firstAttempt = attempt;
+            } else if(attempt == firstAttempt) {
+                //Panic check, we've looped around.
+                break;
+            }
+            if(!isInContainer(candidateTypes, attempt)) {
+                //Can't use this one since it's not in the candidate types.
+                continue;
+            }
+            decidedType = attempt;
+            break;
+        }
+        
+        if(decidedType) {
+            game.states.gameplay->lastCarryingTieBreaker = decidedType;
+            candidateTypes = { decidedType };
+        } else {
+            //Panic check. Just use the first available type instead.
+            candidateTypes = { *availableTypes.begin() };
+        }
+        game.states.gameplay->lastCarryingTieBreaker = candidateTypes[0];
+    }
+    
+    //Finally, we should only have one candidate now. Choose it!
+    if(candidateTypes.size() == 1) {
+        return candidateTypes[0];
+    } else {
+        //Panic check.
+        return nullptr;
+    }
 }
 
 

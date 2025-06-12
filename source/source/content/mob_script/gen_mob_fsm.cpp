@@ -272,9 +272,14 @@ void GenMobFsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
     m->chaseInfo.maxSpeed = m->carryInfo->getSpeed();
     m->chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
+    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
+    
+    if(!canMove) {
+        return;
+    }
+    
     m->carryInfo->destinationExists =
         m->calculateCarryingDestination(
-            pikPtr, nullptr,
             &m->carryInfo->intendedPikType,
             &m->carryInfo->intendedMob, &m->carryInfo->intendedPoint
         );
@@ -284,7 +289,6 @@ void GenMobFsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
     
     //Start by checking if the mob can now start moving,
     //or if it already could and the target changed.
-    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
     if(canMove) {
         if(
             !couldMove ||
@@ -348,20 +352,21 @@ void GenMobFsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
     m->chaseInfo.maxSpeed = m->carryInfo->getSpeed();
     m->chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
+    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
+    
+    if(!canMove) {
+        if(couldMove) {
+            //If the mob can no longer move, send a move stop event,
+            //so the mob, well, stops.
+            m->fsm.runEvent(MOB_EV_CARRY_STOP_MOVE);
+        }
+        return;
+    }
+    
     m->calculateCarryingDestination(
-        nullptr, pikPtr,
         &m->carryInfo->intendedPikType,
         &m->carryInfo->intendedMob, &m->carryInfo->intendedPoint
     );
-    
-    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
-    
-    //If the mob can no longer move, send a move stop event,
-    //so the mob, well, stops.
-    if(couldMove && !canMove) {
-        m->fsm.runEvent(MOB_EV_CARRY_STOP_MOVE);
-        return;
-    }
     
     //Check if we need to update the path.
     bool mustUpdate = false;

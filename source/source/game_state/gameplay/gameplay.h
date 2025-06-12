@@ -343,6 +343,9 @@ public:
     //Number of Pikmin lost so far, per type.
     map<PikminType*, long> pikminDeathsPerType;
     
+    //Last Pikmin type chosen to resolve a carrying tie, if any.
+    PikminType* lastCarryingTieBreaker = nullptr;
+    
     //Closest, middle, and farthest zoom levels. Cache for convenience.
     float zoomLevels[3] = { 0.0f, 0.0f, 0.0f };
     

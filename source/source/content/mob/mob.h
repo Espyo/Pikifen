@@ -385,12 +385,9 @@ public:
         float* outOffenseMultiplier, float* outDefenseMultiplier
     );
     bool calculateCarryingDestination(
-        Mob* added, Mob* removed,
         PikminType** targetType, Mob** targetMob, Point* targetPoint
     ) const;
-    Onion* calculateCarryingOnion(
-        Mob* added, Mob* removed, PikminType** targetType
-    ) const;
+    Onion* calculateCarryingOnion(PikminType** targetType) const;
     Ship* calculateCarryingShip() const;
     bool calculateAttackDamage(
         Mob* victim, Hitbox* attackH, const Hitbox* victimH,
@@ -536,8 +533,7 @@ protected:
     //--- Function declarations ---
     
     PikminType* decideCarryPikminType(
-        const unordered_set<PikminType*>& availableTypes,
-        Mob* added, Mob* removed
+        const unordered_set<PikminType*>& availableTypes
     ) const;
     Mob* getMobToWalkOn() const;
     H_MOVE_RESULT getMovementEdgeIntersections(
