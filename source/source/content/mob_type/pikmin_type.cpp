@@ -183,11 +183,13 @@ void PikminType::loadCatProperties(DataNode* file) {
     DataNode* topFlowerNode = nullptr;
     
     pRS.set("attack_method", attackMethodStr, &attackMethodNode);
-    pRS.set("knocked_down_duration", knockedDownDuration);
-    pRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
     pRS.set("can_carry_tools", canCarryTools);
     pRS.set("can_fly", canFly);
     pRS.set("carry_strength", carryStrength);
+    pRS.set("enemy_hit_rate_modifier_latched", enemyHitRateModifierLatched);
+    pRS.set("enemy_hit_rate_modifier_standing", enemyHitRateModifierStanding);
+    pRS.set("knocked_down_duration", knockedDownDuration);
+    pRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
     pRS.set("max_throw_height", maxThrowHeight);
     pRS.set("push_strength", pushStrength);
     pRS.set("sprout_evolution_time_1", sproutEvolutionTime[0]);
@@ -234,6 +236,11 @@ void PikminType::loadCatProperties(DataNode* file) {
     bmpTop[0] = game.content.bitmaps.list.get(topLeafStr, topLeafNode);
     bmpTop[1] = game.content.bitmaps.list.get(topBudStr, topBudNode);
     bmpTop[2] = game.content.bitmaps.list.get(topFlowerStr, topFlowerNode);
+    
+    enemyHitRateModifierLatched =
+        std::clamp(enemyHitRateModifierLatched / 100.0f, -1.0f, 1.0f);
+    enemyHitRateModifierStanding =
+        std::clamp(enemyHitRateModifierStanding / 100.0f, -1.0f, 1.0f);
 }
 
 

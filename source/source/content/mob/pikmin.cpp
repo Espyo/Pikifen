@@ -484,11 +484,27 @@ bool Pikmin::processAttackMiss(HitboxInteraction* info) {
         return false;
     }
     
-    unsigned char hitRate = info->mob2->anim.curAnim->hitRate;
-    if(hitRate == 0) return false;
+    if(info->mob2->anim.curAnim->hitRate == 0) return false;
+    if(info->mob2->anim.curAnim->hitRate == 100) return true;
     
-    unsigned char hitRoll = game.rng.i(0, 100);
-    if(hitRoll > hitRate) {
+    float enemyHitRateModifier =
+        holder.m == info->mob2 && latched ?
+        pikType->enemyHitRateModifierLatched :
+        pikType->enemyHitRateModifierStanding;
+        
+    float hitRateF = info->mob2->anim.curAnim->hitRate / 100.0f;
+    if(enemyHitRateModifier > 0.0f) {
+        float missRate = 1.0f - hitRateF;
+        missRate *= 1.0 - enemyHitRateModifier;
+        hitRateF = 1.0f - missRate;
+    } else if(enemyHitRateModifier < 0.0f) {
+        hitRateF *= 1.0f - fabs(enemyHitRateModifier);
+    }
+    
+    unsigned char hitRollC = game.rng.i(1, 100);
+    unsigned char hitRateC = hitRateF * 100.0f;
+    
+    if(hitRollC > hitRateC) {
         //This attack was randomly decided to be a miss.
         //Record this animation so it won't be considered a hit next frame.
         missedAttackPtr = info->mob2->anim.curAnim;

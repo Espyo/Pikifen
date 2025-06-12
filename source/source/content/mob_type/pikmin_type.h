@@ -363,6 +363,16 @@ public:
     
     //Whether it can carry tool-type objects or not.
     bool canCarryTools = true;
+
+    //Modifier for enemy hit rates when attacking this Pikmin, latched.
+    //0 = normal. -1 = always misses. 1 = always hits.
+    //-0.5 = misses twice as often. etc.
+    float enemyHitRateModifierLatched = 0.0f;
+    
+    //Modifier for enemy hit rates when attacking this Pikmin, not latched.
+    //0 = normal. -1 = always misses. 1 = always hits.
+    //-0.5 = misses twice as often. etc.
+    float enemyHitRateModifierStanding = 0.0f;
     
     //How long it takes to evolve in maturity, as a sprout.
     float sproutEvolutionTime[N_MATURITIES] = { 0.0f, 0.0f, 0.0f };
