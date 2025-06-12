@@ -243,9 +243,11 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
                 game.states.gameplay->players[0].view.cursorWorldPos,
                 mouseSector->z, CHASE_FLAG_TELEPORT
             );
-            game.states.gameplay->players[0].view.cam.setPos(
-                game.states.gameplay->players[0].view.cursorWorldPos
-            );
+            if(mobToTeleport == game.states.gameplay->players[0].leaderPtr) {
+                game.states.gameplay->players[0].view.cam.setPos(
+                    game.states.gameplay->players[0].view.cursorWorldPos
+                );
+            }
         }
         usedHelpingTools = true;
         break;

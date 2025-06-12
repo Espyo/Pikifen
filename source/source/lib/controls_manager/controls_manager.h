@@ -105,7 +105,7 @@ struct PlayerInputSource {
 
 /**
  * @brief Defines an instance of a specific input: a specific gesture made
- * by the human on a specific source of a specific piece of hardware.
+ * by a human on a specific source of a specific piece of hardware.
  */
 struct PlayerInput {
 
@@ -131,7 +131,7 @@ struct ControlBind {
     //Action type ID.
     int actionTypeId = 0;
     
-    //Player number, starting at 0.
+    //Player number, starting at 1. Use 0 if N/A.
     int playerNr = 0;
     
     //Player input source bound.
@@ -152,7 +152,7 @@ struct PlayerActionType {
     
     //Auto-repeat. 0 if disabled, otherwise this indicates the threshold (0 - 1)
     //after which the input will start auto-repeating. The manager's
-    //auto-repeating settings have to be configured.
+    //auto-repeating settings have to be configured for this to work.
     float autoRepeat = 0.0f;
     
 };
@@ -169,6 +169,9 @@ struct PlayerAction {
     
     //Action type ID.
     int actionTypeId = 0;
+    
+    //Player number, starting at 1. Use 0 if N/A.
+    int playerNr = 0;
     
     //Value associated. 0 to 1.
     float value = 0.0f;
@@ -250,10 +253,10 @@ public:
 
     //--- Members ---
     
-    //Map of all registered player action types.
+    //Map of all registered player action types, using their IDs as the key.
     map<int, PlayerActionType> actionTypes;
     
-    //Control binds.
+    //All registered control binds.
     vector<ControlBind> binds;
     
     //Are we ignoring player actions right now?

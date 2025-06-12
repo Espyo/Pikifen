@@ -123,7 +123,7 @@ void AreaEditor::drawCanvas() {
         .mobAlpha = 0.15f
     };
     float selectionMinAlpha = 0.25f;
-    float selectionMaxAlpha = 0.25f;
+    float selectionMaxAlpha = 0.75f;
     
     if(game.options.editors.useCustomStyle) {
         style.highlightColor = game.options.editors.highlightColor;

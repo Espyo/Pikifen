@@ -284,35 +284,6 @@ void GameplayState::drawBigMsg() {
     case BIG_MESSAGE_NONE: {
         return;
         
-    } case BIG_MESSAGE_1_MIN: {
-        const float TEXT_W = game.winW * 0.70f;
-        const float TEXT_VARIATION_DUR = 0.04f;
-        const float TEXT_MOVE_STOP_T = 0.25f;
-        const float TEXT_MOVE_AGAIN_T = 0.66f;
-        const float TEXT_DRIFT_START_X = game.winW * 0.005f;
-        const float TEXT_DRIFT_END_X = game.winW * -0.005f;
-        const float t = bigMsgTime / GAMEPLAY::BIG_MSG_1_MIN_DUR;
-        
-        KeyframeInterpolator<float> kiX(game.winW);
-        kiX.add(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
-        kiX.add(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
-        kiX.add(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
-        
-        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_1_MIN_TEXT.size(); c++) {
-            float charRatio =
-                c / ((float) GAMEPLAY::BIG_MSG_1_MIN_TEXT.size() - 1);
-            charRatio = 1.0f - charRatio;
-            float xOffset = (TEXT_W / 2.0f) - (TEXT_W * charRatio);
-            float x = kiX.get(t + charRatio * TEXT_VARIATION_DUR);
-            drawText(
-                string(1, GAMEPLAY::BIG_MSG_1_MIN_TEXT[c]),
-                game.sysContent.fntAreaName,
-                Point((game.winW / 2.0f) + xOffset + x, game.winH / 2.0f),
-                Point(LARGE_FLOAT, game.winH * 0.08f), COLOR_GOLD
-            );
-        }
-        break;
-        
     } case BIG_MESSAGE_READY: {
         const float TEXT_W = game.winW * 0.60f;
         const float TEXT_INITIAL_HEIGHT = 0.10;
@@ -366,6 +337,35 @@ void GameplayState::drawBigMsg() {
             Point(LARGE_FLOAT, game.winH * kiH.get(t)),
             changeAlpha(COLOR_GOLD, 255 * kiA.get(t))
         );
+        break;
+        
+    } case BIG_MESSAGE_ONE_MIN_LEFT: {
+        const float TEXT_W = game.winW * 0.70f;
+        const float TEXT_VARIATION_DUR = 0.04f;
+        const float TEXT_MOVE_STOP_T = 0.25f;
+        const float TEXT_MOVE_AGAIN_T = 0.66f;
+        const float TEXT_DRIFT_START_X = game.winW * 0.005f;
+        const float TEXT_DRIFT_END_X = game.winW * -0.005f;
+        const float t = bigMsgTime / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
+        
+        KeyframeInterpolator<float> kiX(game.winW);
+        kiX.add(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
+        kiX.add(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
+        kiX.add(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
+        
+        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT.size(); c++) {
+            float charRatio =
+                c / ((float) GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT.size() - 1);
+            charRatio = 1.0f - charRatio;
+            float xOffset = (TEXT_W / 2.0f) - (TEXT_W * charRatio);
+            float x = kiX.get(t + charRatio * TEXT_VARIATION_DUR);
+            drawText(
+                string(1, GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT[c]),
+                game.sysContent.fntAreaName,
+                Point((game.winW / 2.0f) + xOffset + x, game.winH / 2.0f),
+                Point(LARGE_FLOAT, game.winH * 0.08f), COLOR_GOLD
+            );
+        }
         break;
         
     } case BIG_MESSAGE_MISSION_CLEAR:

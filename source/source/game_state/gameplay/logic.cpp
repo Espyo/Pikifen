@@ -1115,7 +1115,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 if(
                     timeLeftPrevFrame > 60.0f && timeLeftCurFrame <= 60.0f
                 ) {
-                    game.states.gameplay->curBigMsg = BIG_MESSAGE_1_MIN;
+                    game.states.gameplay->curBigMsg = BIG_MESSAGE_ONE_MIN_LEFT;
                     game.states.gameplay->bigMsgTime = 0.0f;
                 }
             }
@@ -1317,7 +1317,11 @@ void GameplayState::doMenuLogic() {
     //Print info on a mob.
     if(game.makerTools.infoLock) {
         string nameStr =
-            boxString(game.makerTools.infoLock->type->name, 26);
+            boxString(
+                "#" + i2s(game.makerTools.infoLock->id) + " " +
+                game.makerTools.infoLock->type->name,
+                26
+            );
         string coordsStr =
             boxString(
                 boxString(f2s(game.makerTools.infoLock->pos.x), 8, " ") +
@@ -1513,8 +1517,8 @@ void GameplayState::doMenuLogic() {
             curBigMsg = BIG_MESSAGE_NONE;
         }
         break;
-    } case BIG_MESSAGE_1_MIN: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_1_MIN_DUR) {
+    } case BIG_MESSAGE_ONE_MIN_LEFT: {
+        if(bigMsgTime >= GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR) {
             curBigMsg = BIG_MESSAGE_NONE;
         }
         break;

@@ -550,21 +550,8 @@ Mob* getNextMobNearCursor(
     }
     );
     
-    //Find the pivot's index so we can go to the next one.
-    size_t pivotIdx = INVALID;
-    for(size_t m = 0; m < mobsNearCursor.size(); m++) {
-        if(mobsNearCursor[m] == pivot) {
-            pivotIdx = m;
-            break;
-        }
-    }
-    
-    //Return the next one, looping, or just returns the first if not available.
-    if(pivotIdx == INVALID) {
-        return mobsNearCursor[0];
-    } else {
-        return getNextInVectorByIdx(mobsNearCursor, pivotIdx);
-    }
+    //Now get the next one.
+    return getNextInVector(mobsNearCursor, pivot);
 }
 
 

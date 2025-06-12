@@ -32,14 +32,14 @@
 namespace GAMEPLAY {
 extern const float AREA_INTRO_HUD_MOVE_TIME;
 extern const float AREA_TITLE_FADE_DURATION;
-extern const float BIG_MSG_1_MIN_DUR;
-extern const string BIG_MSG_1_MIN_TEXT;
 extern const float BIG_MSG_GO_DUR;
 extern const string BIG_MSG_GO_TEXT;
 extern const float BIG_MSG_MISSION_CLEAR_DUR;
 extern const string BIG_MSG_MISSION_CLEAR_TEXT;
 extern const float BIG_MSG_MISSION_FAILED_DUR;
 extern const string BIG_MSG_MISSION_FAILED_TEXT;
+extern const float BIG_MSG_ONE_MIN_LEFT_DUR;
+extern const string BIG_MSG_ONE_MIN_LEFT_TEXT;
 extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
@@ -92,7 +92,7 @@ enum BIG_MESSAGE {
     BIG_MESSAGE_GO,
     
     //1 minute left!
-    BIG_MESSAGE_1_MIN,
+    BIG_MESSAGE_ONE_MIN_LEFT,
     
     //Mission clear!
     BIG_MESSAGE_MISSION_CLEAR,

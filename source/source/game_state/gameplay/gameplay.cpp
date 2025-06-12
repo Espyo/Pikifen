@@ -36,12 +36,6 @@ const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 1.0f;
 
-//How long the "1 minute left!" big message lasts for.
-const float BIG_MSG_1_MIN_DUR = 4.0f;
-
-//What text to show in the "1 minute left!" big message.
-const string BIG_MSG_1_MIN_TEXT = "1 minute left!";
-
 //How long the "Go!" big message lasts for.
 const float BIG_MSG_GO_DUR = 1.5f;
 
@@ -59,6 +53,12 @@ const float BIG_MSG_MISSION_FAILED_DUR = 4.5f;
 
 //What text to show in the "Mission failed..." big message.
 const string BIG_MSG_MISSION_FAILED_TEXT = "MISSION FAILED...";
+
+//How long the "1 minute left!" big message lasts for.
+const float BIG_MSG_ONE_MIN_LEFT_DUR = 4.0f;
+
+//What text to show in the "1 minute left!" big message.
+const string BIG_MSG_ONE_MIN_LEFT_TEXT = "1 minute left!";
 
 //How long the "Ready?" big message lasts for.
 const float BIG_MSG_READY_DUR = 2.5f;
