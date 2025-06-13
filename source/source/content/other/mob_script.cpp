@@ -386,12 +386,6 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
         runEvent(MOB_EV_ON_LEAVE, info1, info2);
     }
     
-    //Uncomment this to be notified about state changes on stdout.
-    /*if(curState) {
-        cout << "State " << curState->name << " -> "
-        << m->type->states[newState]->name << "\n";
-    }*/
-    
     if(newState < m->type->states.size() && newState != INVALID) {
         //Switch states.
         curState = m->type->states[newState];

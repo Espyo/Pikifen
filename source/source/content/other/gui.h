@@ -153,7 +153,7 @@ public:
     //Is it currently visible?
     bool visible = true;
     
-    //Is it currentl responsive?
+    //Is it currently responsive?
     bool responsive = true;
     
     //Can it be selected?

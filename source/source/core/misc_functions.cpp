@@ -1596,6 +1596,44 @@ vector<StringToken> tokenizeString(const string& s) {
 
 
 /**
+ * @brief Transitions between one GUI and another.
+ *
+ * @param from GUI manager to transition from.
+ * @param to GUI manager to transition to.
+ * @param anim1 Type of animation for the first GUI manager. The second will
+ * receive the equivalent animation.
+ * @param duration Total duration of the transition.
+ */
+void transitionGuis(
+    GuiManager& from, GuiManager& to, GUI_MANAGER_ANIM anim1, float duration
+) {
+    GUI_MANAGER_ANIM anim2 = GUI_MANAGER_ANIM_NONE;
+    switch(anim1) {
+    case GUI_MANAGER_ANIM_CENTER_TO_UP: {
+        anim2 = GUI_MANAGER_ANIM_DOWN_TO_CENTER;
+        break;
+    } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
+        anim2 = GUI_MANAGER_ANIM_UP_TO_CENTER;
+        break;
+    } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
+        anim2 = GUI_MANAGER_ANIM_RIGHT_TO_CENTER;
+        break;
+    } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
+        anim2 = GUI_MANAGER_ANIM_LEFT_TO_CENTER;
+        break;
+    } default: {
+        break;
+    }
+    }
+    
+    from.responsive = false;
+    from.startAnimation(anim1, duration);
+    to.responsive = true;
+    to.startAnimation(anim2, duration);
+}
+
+
+/**
  * @brief Unescapes a user string. This converts two backslashes into one, and
  * converts backslash n into a newline character.
  *

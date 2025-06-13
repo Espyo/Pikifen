@@ -626,14 +626,8 @@ void PauseMenu::confirmOrLeave() {
         }
         }
         
-        gui.responsive = false;
-        gui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        confirmationGui.responsive = true;
-        confirmationGui.startAnimation(
-            GUI_MANAGER_ANIM_UP_TO_CENTER,
+        transitionGuis(
+            gui, confirmationGui, GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
         
@@ -1717,14 +1711,8 @@ void PauseMenu::initConfirmationPage() {
     );
     confirmationGui.backItem->onActivate =
     [this] (const Point&) {
-        confirmationGui.responsive = false;
-        confirmationGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-        gui.responsive = true;
-        gui.startAnimation(
-            GUI_MANAGER_ANIM_UP_TO_CENTER,
+        transitionGuis(
+            confirmationGui, gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
     };
@@ -1920,33 +1908,21 @@ void PauseMenu::initMainPauseMenu() {
         new ButtonGuiItem("Help", game.sysContent.fntStandard);
     helpButton->onActivate =
     [this] (const Point&) {
-        gui.responsive = false;
-        gui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         HelpMenu* helpMenu = new HelpMenu();
-        helpMenu->gui.responsive = true;
-        helpMenu->gui.startAnimation(
-            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         helpMenu->leaveCallback = [this, helpMenu] () {
             helpMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-            helpMenu->gui.responsive = false;
-            helpMenu->gui.startAnimation(
-                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-            );
-            gui.responsive = true;
-            gui.startAnimation(
-                GUI_MANAGER_ANIM_UP_TO_CENTER,
+            transitionGuis(
+                helpMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
         helpMenu->load();
         helpMenu->enter();
         secondaryMenu = helpMenu;
+        transitionGuis(
+            gui, helpMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
     };
     helpButton->onGetTooltip =
     [] () {
@@ -1961,33 +1937,21 @@ void PauseMenu::initMainPauseMenu() {
         new ButtonGuiItem("Options", game.sysContent.fntStandard);
     optionsButton->onActivate =
     [this] (const Point&) {
-        gui.responsive = false;
-        gui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         OptionsMenu* optionsMenu = new OptionsMenu();
-        optionsMenu->topGui.responsive = true;
-        optionsMenu->topGui.startAnimation(
-            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         optionsMenu->leaveCallback = [this, optionsMenu] () {
             optionsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-            optionsMenu->topGui.responsive = false;
-            optionsMenu->topGui.startAnimation(
-                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-            );
-            gui.responsive = true;
-            gui.startAnimation(
-                GUI_MANAGER_ANIM_UP_TO_CENTER,
+            transitionGuis(
+                optionsMenu->topGui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
         optionsMenu->load();
         optionsMenu->enter();
         secondaryMenu = optionsMenu;
+        transitionGuis(
+            gui, optionsMenu->topGui, GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
     };
     optionsButton->onGetTooltip =
     [] () {
@@ -2002,33 +1966,21 @@ void PauseMenu::initMainPauseMenu() {
         new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
     statsButton->onActivate =
     [this] (const Point&) {
-        gui.responsive = false;
-        gui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         StatsMenu* statsMenu = new StatsMenu();
-        statsMenu->gui.responsive = true;
-        statsMenu->gui.startAnimation(
-            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
         statsMenu->leaveCallback = [this, statsMenu] () {
             statsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-            statsMenu->gui.responsive = false;
-            statsMenu->gui.startAnimation(
-                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
-                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-            );
-            gui.responsive = true;
-            gui.startAnimation(
-                GUI_MANAGER_ANIM_UP_TO_CENTER,
+            transitionGuis(
+                statsMenu->gui, gui, GUI_MANAGER_ANIM_CENTER_TO_DOWN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
         statsMenu->load();
         statsMenu->enter();
         secondaryMenu = statsMenu;
+        transitionGuis(
+            gui, statsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
     };
     statsButton->onGetTooltip =
     [] () {
@@ -2788,18 +2740,11 @@ void PauseMenu::switchPage(
     }
     }
     
-    curGui->responsive = false;
-    curGui->startAnimation(
+    transitionGuis(
+        *curGui, *newGui,
         left ?
         GUI_MANAGER_ANIM_CENTER_TO_RIGHT :
         GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-    );
-    newGui->responsive = true;
-    newGui->startAnimation(
-        left ?
-        GUI_MANAGER_ANIM_LEFT_TO_CENTER :
-        GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
 }

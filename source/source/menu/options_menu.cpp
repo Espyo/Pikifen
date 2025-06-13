@@ -225,14 +225,8 @@ void OptionsMenu::initGuiAudioPage() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     audioGui.backItem->onActivate =
     [this] (const Point&) {
-        audioGui.responsive = false;
-        audioGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        topGui.responsive = true;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+        transitionGuis(
+            audioGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -375,18 +369,12 @@ void OptionsMenu::initGuiControlBindsPage() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     bindsGui.backItem->onActivate =
     [this] (const Point&) {
-        bindsGui.responsive = false;
-        bindsGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        controlsGui.responsive = true;
-        controlsGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
         saveOptions();
         saveMakerTools();
+        transitionGuis(
+            bindsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
     bindsGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
@@ -449,14 +437,8 @@ void OptionsMenu::initGuiControlsPage() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     controlsGui.backItem->onActivate =
     [this] (const Point&) {
-        controlsGui.responsive = false;
-        controlsGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        topGui.responsive = true;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+        transitionGuis(
+            controlsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -484,17 +466,11 @@ void OptionsMenu::initGuiControlsPage() {
     normalBindsButton->onActivate =
     [this] (const Point&) {
         bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
-        controlsGui.responsive = false;
-        controlsGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        bindsGui.responsive = true;
-        bindsGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
         mustPopulateBinds = true;
+        transitionGuis(
+            controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
     normalBindsButton->onGetTooltip =
     [] () { return "Choose what buttons do what regular actions."; };
@@ -508,17 +484,11 @@ void OptionsMenu::initGuiControlsPage() {
     specialBindsButton->onActivate =
     [this] (const Point&) {
         bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
-        controlsGui.responsive = false;
-        controlsGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        bindsGui.responsive = true;
-        bindsGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
         mustPopulateBinds = true;
+        transitionGuis(
+            controlsGui, bindsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
     specialBindsButton->onGetTooltip =
     [] () { return "Choose what buttons do what special features."; };
@@ -591,14 +561,8 @@ void OptionsMenu::initGuiGraphicsPage() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     graphicsGui.backItem->onActivate =
     [this] (const Point&) {
-        graphicsGui.responsive = false;
-        graphicsGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        topGui.responsive = true;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+        transitionGuis(
+            graphicsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -713,14 +677,8 @@ void OptionsMenu::initGuiMiscPage() {
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     miscGui.backItem->onActivate =
     [this] (const Point&) {
-        miscGui.responsive = false;
-        miscGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        topGui.responsive = true;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+        transitionGuis(
+            miscGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -914,14 +872,8 @@ void OptionsMenu::initGuiTopPage() {
     };
     controlsButton->onActivate =
     [this] (const Point&) {
-        topGui.responsive = false;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        controlsGui.responsive = true;
-        controlsGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            topGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -946,14 +898,8 @@ void OptionsMenu::initGuiTopPage() {
     };
     graphicsButton->onActivate =
     [this] (const Point&) {
-        topGui.responsive = false;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        graphicsGui.responsive = true;
-        graphicsGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            topGui, graphicsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -978,14 +924,8 @@ void OptionsMenu::initGuiTopPage() {
     };
     audioButton->onActivate =
     [this] (const Point&) {
-        topGui.responsive = false;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        audioGui.responsive = true;
-        audioGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            topGui, audioGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
@@ -1010,32 +950,20 @@ void OptionsMenu::initGuiTopPage() {
     };
     packsButton->onActivate =
     [this] (const Point&) {
-        topGui.responsive = false;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
         packsMenu = new PacksMenu();
-        packsMenu->gui.responsive = true;
-        packsMenu->gui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
         packsMenu->leaveCallback = [ = ] () {
             packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
-            packsMenu->gui.responsive = false;
-            packsMenu->gui.startAnimation(
-                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                OPTIONS_MENU::HUD_MOVE_TIME
-            );
-            topGui.responsive = true;
-            topGui.startAnimation(
-                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            transitionGuis(
+                packsMenu->gui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
                 OPTIONS_MENU::HUD_MOVE_TIME
             );
         };
         packsMenu->load();
         packsMenu->enter();
+        transitionGuis(
+            topGui, packsMenu->gui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
     packsButton->onGetTooltip =
     [] () { return "Manage any content packs you have installed."; };
@@ -1058,14 +986,8 @@ void OptionsMenu::initGuiTopPage() {
     };
     miscButton->onActivate =
     [this] (const Point&) {
-        topGui.responsive = false;
-        topGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            OPTIONS_MENU::HUD_MOVE_TIME
-        );
-        miscGui.responsive = true;
-        miscGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            topGui, miscGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };

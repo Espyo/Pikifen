@@ -213,6 +213,9 @@ ParticleGenerator standardParticleGenSetup(
 );
 void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp);
 vector<StringToken> tokenizeString(const string& s);
+void transitionGuis(
+    GuiManager& from, GuiManager& to, GUI_MANAGER_ANIM anim1, float duration
+);
 string unescapeString(const string& s);
 void updateOffsetEffectBuffer(
     const Point& camTL, const Point& camBR,

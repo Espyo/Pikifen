@@ -125,7 +125,7 @@ void TitleScreen::doLogic() {
             float a = getAngle(pik->pos, pik->destination);
             float speed =
                 std::min(
-                    (float) (pik->speed * largestWindowDim * game.deltaT),
+                    pik->speed * largestWindowDim * (float) game.deltaT,
                     Distance(pik->pos, pik->destination).toFloat() *
                     logoPikminSpeedSmoothness
                 );
@@ -246,24 +246,12 @@ void TitleScreen::initGuiMainPage() {
     };
     playButton->onActivate =
     [this] (const Point&) {
-        mainGui.responsive = false;
-        mainGui.startAnimation(
+        transitionGuis(
+            mainGui,
+            game.statistics.areaEntries == 0 ? tutorialGui : playGui,
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             TITLE_SCREEN::HUD_MOVE_TIME
         );
-        if(game.statistics.areaEntries == 0) {
-            tutorialGui.responsive = true;
-            tutorialGui.startAnimation(
-                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-                TITLE_SCREEN::HUD_MOVE_TIME
-            );
-        } else {
-            playGui.responsive = true;
-            playGui.startAnimation(
-                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-                TITLE_SCREEN::HUD_MOVE_TIME
-            );
-        }
     };
     playButton->onGetTooltip =
     [] () { return "Choose an area to play in."; };
@@ -286,14 +274,8 @@ void TitleScreen::initGuiMainPage() {
     };
     makeButton->onActivate =
     [this] (const Point&) {
-        mainGui.responsive = false;
-        mainGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
-        );
-        makeGui.responsive = true;
-        makeGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
@@ -625,14 +607,8 @@ void TitleScreen::initGuiMakePage() {
         new ButtonGuiItem("Back", game.sysContent.fntAreaName);
     makeGui.backItem->onActivate =
     [this] (const Point&) {
-        makeGui.responsive = false;
-        makeGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            TITLE_SCREEN::HUD_MOVE_TIME
-        );
-        mainGui.responsive = true;
-        mainGui.startAnimation(
-            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+        transitionGuis(
+            makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
@@ -765,14 +741,8 @@ void TitleScreen::initGuiPlayPage() {
         new ButtonGuiItem("Back", game.sysContent.fntAreaName);
     playGui.backItem->onActivate =
     [this] (const Point&) {
-        playGui.responsive = false;
-        playGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
-        );
-        mainGui.responsive = true;
-        mainGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
@@ -828,14 +798,8 @@ void TitleScreen::initGuiTutorialPage() {
         new ButtonGuiItem("No", game.sysContent.fntStandard);
     tutorialGui.backItem->onActivate =
     [this] (const Point&) {
-        tutorialGui.responsive = false;
-        tutorialGui.startAnimation(
-            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
-        );
-        playGui.responsive = true;
-        playGui.startAnimation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+        transitionGuis(
+            tutorialGui, playGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
