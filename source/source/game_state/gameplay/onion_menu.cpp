@@ -55,41 +55,42 @@ OnionMenu::OnionMenu(
     
     nrPages = ceil(types.size() / (float) ONION_MENU::TYPES_PER_PAGE);
     
-    gui.registerCoords("instructions",     50,  7, 90, 20);
-    gui.registerCoords("cancel",           16, 85, 18, 11);
-    gui.registerCoords("cancel_input",      8, 89,  4,  4);
-    gui.registerCoords("ok",               84, 85, 18, 11);
-    gui.registerCoords("field",            50, 75, 18,  4);
-    gui.registerCoords("select_all",       50, 87, 24,  6);
-    gui.registerCoords("onion_1_button",   50, 20,  9, 12);
-    gui.registerCoords("onion_2_button",   50, 20,  9, 12);
-    gui.registerCoords("onion_3_button",   50, 20,  9, 12);
-    gui.registerCoords("onion_4_button",   50, 20,  9, 12);
-    gui.registerCoords("onion_5_button",   50, 20,  9, 12);
-    gui.registerCoords("onion_1_amount",   50, 29, 12,  4);
-    gui.registerCoords("onion_2_amount",   50, 29, 12,  4);
-    gui.registerCoords("onion_3_amount",   50, 29, 12,  4);
-    gui.registerCoords("onion_4_amount",   50, 29, 12,  4);
-    gui.registerCoords("onion_5_amount",   50, 29, 12,  4);
-    gui.registerCoords("group_1_button",   50, 60,  9, 12);
-    gui.registerCoords("group_2_button",   50, 60,  9, 12);
-    gui.registerCoords("group_3_button",   50, 60,  9, 12);
-    gui.registerCoords("group_4_button",   50, 60,  9, 12);
-    gui.registerCoords("group_5_button",   50, 60,  9, 12);
-    gui.registerCoords("group_1_amount",   50, 51, 12,  4);
-    gui.registerCoords("group_2_amount",   50, 51, 12,  4);
-    gui.registerCoords("group_3_amount",   50, 51, 12,  4);
-    gui.registerCoords("group_4_amount",   50, 51, 12,  4);
-    gui.registerCoords("group_5_amount",   50, 51, 12,  4);
-    gui.registerCoords("onion_all",        50, 20,  9, 12);
-    gui.registerCoords("group_all",        50, 60,  9, 12);
-    gui.registerCoords("prev_page",         5, 40,  8, 10);
-    gui.registerCoords("next_page",        95, 40,  8, 11);
-    gui.registerCoords("onion_left_more",   5, 20,  3,  4);
-    gui.registerCoords("onion_right_more", 95, 20,  3,  4);
-    gui.registerCoords("group_left_more",   5, 60,  3,  4);
-    gui.registerCoords("group_right_more", 95, 60,  3,  4);
-    gui.registerCoords("tooltip",          50, 95, 95,  8);
+    gui.registerCoords("instructions",     50,    7, 90, 20);
+    gui.registerCoords("cancel",           16,   85, 18, 11);
+    gui.registerCoords("cancel_input",      8,   89,  4,  4);
+    gui.registerCoords("ok",               84,   85, 18, 11);
+    gui.registerCoords("field",            50,   75, 18,  4);
+    gui.registerCoords("select_all",       50, 82.5, 25,  5);
+    gui.registerCoords("change_ten",       50, 87.5, 25,  5);
+    gui.registerCoords("onion_1_button",   50,   20,  9, 12);
+    gui.registerCoords("onion_2_button",   50,   20,  9, 12);
+    gui.registerCoords("onion_3_button",   50,   20,  9, 12);
+    gui.registerCoords("onion_4_button",   50,   20,  9, 12);
+    gui.registerCoords("onion_5_button",   50,   20,  9, 12);
+    gui.registerCoords("onion_1_amount",   50,   29, 12,  4);
+    gui.registerCoords("onion_2_amount",   50,   29, 12,  4);
+    gui.registerCoords("onion_3_amount",   50,   29, 12,  4);
+    gui.registerCoords("onion_4_amount",   50,   29, 12,  4);
+    gui.registerCoords("onion_5_amount",   50,   29, 12,  4);
+    gui.registerCoords("group_1_button",   50,   60,  9, 12);
+    gui.registerCoords("group_2_button",   50,   60,  9, 12);
+    gui.registerCoords("group_3_button",   50,   60,  9, 12);
+    gui.registerCoords("group_4_button",   50,   60,  9, 12);
+    gui.registerCoords("group_5_button",   50,   60,  9, 12);
+    gui.registerCoords("group_1_amount",   50,   51, 12,  4);
+    gui.registerCoords("group_2_amount",   50,   51, 12,  4);
+    gui.registerCoords("group_3_amount",   50,   51, 12,  4);
+    gui.registerCoords("group_4_amount",   50,   51, 12,  4);
+    gui.registerCoords("group_5_amount",   50,   51, 12,  4);
+    gui.registerCoords("onion_all",        50,   20,  9, 12);
+    gui.registerCoords("group_all",        50,   60,  9, 12);
+    gui.registerCoords("prev_page",         5,   40,  8, 10);
+    gui.registerCoords("next_page",        95,   40,  8, 11);
+    gui.registerCoords("onion_left_more",   5,   20,  3,  4);
+    gui.registerCoords("onion_right_more", 95,   20,  3,  4);
+    gui.registerCoords("group_left_more",   5,   60,  3,  4);
+    gui.registerCoords("group_right_more", 95,   60,  3,  4);
+    gui.registerCoords("tooltip",          50,   95, 95,  8);
     gui.readCoords(
         game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME].
         getChildByName("positions")
@@ -184,12 +185,31 @@ OnionMenu::OnionMenu(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         toggleSelectAll();
+        selectAllCheck->value = selectAll;
     };
     selectAllCheck->visible = types.size() > 1;
     selectAllCheck->selectable = types.size() > 1;
     selectAllCheck->onGetTooltip =
-    [] () { return "Control all Pikmin numbers at once?"; };
+    [] () { return "Control all Pikmin types at once?"; };
     gui.addItem(selectAllCheck, "select_all");
+    
+    //Change ten at a time checkbox.
+    CheckGuiItem* changeTenCheck =
+        new CheckGuiItem(
+        &changeTen,
+        "Change ten", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
+    );
+    changeTenCheck->onActivate =
+    [this, changeTenCheck] (const Point&) {
+        changeTenCheck->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
+        changeTen = !changeTen;
+        changeTenCheck->value = changeTen;
+    };
+    changeTenCheck->onGetTooltip =
+    [] () { return "Change the numbers by ten at a time?"; };
+    gui.addItem(changeTenCheck, "change_ten");
     
     //Onion icons and buttons.
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
@@ -224,7 +244,10 @@ OnionMenu::OnionMenu(
         };
         onionButton->onActivate =
         [this, t, onionButton] (const Point&) {
-            if(!addToOnion(onWindowTypes[t]->typeIdx)) {
+            if(
+                transfer(false, onWindowTypes[t]->typeIdx) !=
+                ONION_TRANSFER_RESULT_OK
+            ) {
                 onionButton->playFailSound = true;
             }
         };
@@ -232,7 +255,9 @@ OnionMenu::OnionMenu(
         onionButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = this->onWindowTypes[t];
-            return "Store one " + tPtr->pikType->name + " inside.";
+            return
+                "Store " + getTransferAmountStr() + " " +
+                tPtr->pikType->name + " inside.";
         };
         gui.addItem(onionButton, id);
         onionButtonItems.push_back(onionButton);
@@ -253,13 +278,17 @@ OnionMenu::OnionMenu(
     };
     onionAllButton->onActivate =
     [this] (const Point&) {
-        if(!addAllToOnion()) {
+        if(transfer(false, 0) != ONION_TRANSFER_RESULT_OK) {
             onionAllButton->playFailSound = true;
         }
     };
     onionAllButton->canAutoRepeat = true;
     onionAllButton->onGetTooltip =
-    [] () { return "Store one Pikmin of each type inside."; };
+    [this] () {
+        return
+            "Store " + getTransferAmountStr() +
+            " Pikmin of each type inside.";
+    };
     gui.addItem(onionAllButton, "onion_all");
     
     //Onion amounts.
@@ -335,7 +364,10 @@ OnionMenu::OnionMenu(
         };
         groupButton->onActivate =
         [this, t, groupButton] (const Point&) {
-            if(!addToGroup(onWindowTypes[t]->typeIdx)) {
+            if(
+                transfer(true, onWindowTypes[t]->typeIdx) !=
+                ONION_TRANSFER_RESULT_OK
+            ) {
                 groupButton->playFailSound = true;
             }
         };
@@ -343,7 +375,9 @@ OnionMenu::OnionMenu(
         groupButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = this->onWindowTypes[t];
-            return "Call one " + tPtr->pikType->name + " to the group.";
+            return
+                "Call " + getTransferAmountStr() + " " +
+                tPtr->pikType->name + " to the group.";
         };
         gui.addItem(groupButton, id);
         groupButtonItems.push_back(groupButton);
@@ -364,13 +398,17 @@ OnionMenu::OnionMenu(
     };
     groupAllButton->onActivate =
     [this] (const Point&) {
-        if(!addAllToGroup()) {
+        if(transfer(true, 0) != ONION_TRANSFER_RESULT_OK) {
             groupAllButton->playFailSound = true;
         }
     };
     groupAllButton->canAutoRepeat = true;
     groupAllButton->onGetTooltip =
-    [] () { return "Call one Pikmin of each type to the group."; };
+    [this] () {
+        return
+            "Call " + getTransferAmountStr() +
+            " Pikmin of each type to the group.";
+    };
     gui.addItem(groupAllButton, "group_all");
     
     //Group amounts.
@@ -540,50 +578,103 @@ OnionMenu::~OnionMenu() {
 
 
 /**
- * @brief Adds one Pikmin of each type from Onion to the group, if possible.
+ * @brief Transfers some Pikmin, if possible. This moves either one or ten
+ * depending on changeTen, moves from either one type or from each type
+ * depending on selectAll, and moves to either direction.
  *
- * @return Whether any succeeded.
+ * @param toGroup Whether the transfer is to the group or to the Onion.
+ * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ * @return Success if any transfer succeeded, otherwise the failure reason.
  */
-bool OnionMenu::addAllToGroup() {
+ONION_TRANSFER_RESULT OnionMenu::transfer(bool toGroup, size_t typeIdx) {
     bool success = false;
-    for(size_t t = 0; t < types.size(); t++) {
-        success |= addToGroup(t);
+    ONION_TRANSFER_RESULT latestError = ONION_TRANSFER_RESULT_OK;
+    const size_t amountToTransfer = changeTen ? 10 : 1;
+    const size_t firstTypeIdx = selectAll ? 0 : typeIdx;
+    const size_t lastTypeIdx = selectAll ? types.size() - 1 : typeIdx;
+    
+    for(size_t p = 0; p < amountToTransfer; p++) {
+        for(size_t t = firstTypeIdx; t <= lastTypeIdx; t++) {
+        
+            size_t onWindowIdx = types[t].onWindowIdx;
+            ONION_TRANSFER_RESULT oneResult =
+                toGroup ? canAddToGroup(t) : canAddToOnion(t);
+                
+            switch(oneResult) {
+            case ONION_TRANSFER_RESULT_OK: {
+                if(toGroup) {
+                    types[t].delta++;
+                    if(onWindowIdx != INVALID) {
+                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                    }
+                    fieldAmountText->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                } else {
+                    types[t].delta--;
+                    size_t onWindowIdx = types[t].onWindowIdx;
+                    if(onWindowIdx != INVALID) {
+                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                    }
+                    fieldAmountText->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                }
+                success = true;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_NONE_IN_ONION: {
+                if(onWindowIdx != INVALID) {
+                    makeGuiItemRed(onionAmountItems[onWindowIdx]);
+                }
+                latestError = oneResult;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_NONE_IN_GROUP: {
+                if(onWindowIdx != INVALID) {
+                    makeGuiItemRed(groupAmountItems[onWindowIdx]);
+                }
+                latestError = oneResult;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_FIELD_FULL: {
+                makeGuiItemRed(fieldAmountText);
+                latestError = oneResult;
+                break;
+                
+            }
+            }
+        }
     }
-    return success;
+    
+    return success ? ONION_TRANSFER_RESULT_OK : latestError;
 }
 
 
 /**
- * @brief Adds one Pikmin of each type from the group to the Onion, if possible.
- *
- * @return Whether any succeeded.
- */
-bool OnionMenu::addAllToOnion() {
-    bool success = false;
-    for(size_t t = 0; t < types.size(); t++) {
-        success |= addToOnion(t);
-    }
-    return success;
-}
-
-
-/**
- * @brief Adds one Pikmin from the Onion to the group, if possible.
+ * @brief Returns whether it's possible to add one Pikmin from the
+ * Onion to the group.
  *
  * @param typeIdx Index of the Onion's Pikmin type.
- * @return Whether it succeeded.
+ * @return The transfer's result.
  */
-bool OnionMenu::addToGroup(size_t typeIdx) {
+ONION_TRANSFER_RESULT OnionMenu::canAddToGroup(size_t typeIdx) {
     size_t realOnionAmount =
         nestPtr->getAmountByType(nestPtr->nestType->pikTypes[typeIdx]);
         
     //First, check if there are enough in the Onion to take out.
     if((signed int) (realOnionAmount - types[typeIdx].delta) <= 0) {
-        size_t windowIdx = types[typeIdx].onWindowIdx;
-        if(windowIdx != INVALID) {
-            makeGuiItemRed(onionAmountItems[windowIdx]);
-        }
-        return false;
+        return ONION_TRANSFER_RESULT_NONE_IN_ONION;
     }
     
     //Next, check if the addition won't make the field amount hit the limit.
@@ -595,63 +686,33 @@ bool OnionMenu::addToGroup(size_t typeIdx) {
         game.states.gameplay->mobs.pikmin.size() + totalDelta >=
         game.config.rules.maxPikminInField
     ) {
-        makeGuiItemRed(fieldAmountText);
-        return false;
+        return ONION_TRANSFER_RESULT_FIELD_FULL;
     }
     
-    types[typeIdx].delta++;
-    
-    size_t onWindowIdx = types[typeIdx].onWindowIdx;
-    if(onWindowIdx != INVALID) {
-        onionAmountItems[onWindowIdx]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-        );
-        groupAmountItems[onWindowIdx]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-        );
-    }
-    fieldAmountText->startJuiceAnimation(
-        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-    );
-    
-    return true;
+    //All good!
+    return ONION_TRANSFER_RESULT_OK;
 }
 
 
 /**
- * @brief Adds one Pikmin from the group to the Onion, if possible.
+ * @brief Returns whether it's possible to add one Pikmin from the
+ * group to the Onion.
  *
  * @param typeIdx Index of the Onion's Pikmin type.
- * @return Whether it succeeded.
+ * @return The transfer's result.
  */
-bool OnionMenu::addToOnion(size_t typeIdx) {
+ONION_TRANSFER_RESULT OnionMenu::canAddToOnion(size_t typeIdx) {
     size_t realGroupAmount =
         leaderPtr->group->getAmountByType(nestPtr->nestType->pikTypes[typeIdx]);
         
+    //First, check if there are enough in the group to put in.
     if((signed int) (realGroupAmount + types[typeIdx].delta) <= 0) {
-        size_t windowIdx = types[typeIdx].onWindowIdx;
-        if(windowIdx != INVALID) {
-            makeGuiItemRed(groupAmountItems[windowIdx]);
-        }
-        return false;
+    
+        return ONION_TRANSFER_RESULT_NONE_IN_GROUP;
     }
     
-    types[typeIdx].delta--;
-    
-    size_t onWindowIdx = types[typeIdx].onWindowIdx;
-    if(onWindowIdx != INVALID) {
-        onionAmountItems[onWindowIdx]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-        );
-        groupAmountItems[onWindowIdx]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-        );
-    }
-    fieldAmountText->startJuiceAnimation(
-        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-    );
-    
-    return true;
+    //All good!
+    return ONION_TRANSFER_RESULT_OK;
 }
 
 
@@ -669,6 +730,17 @@ void OnionMenu::confirm() {
             );
         }
     }
+}
+
+
+/**
+ * @brief Returns "ten" or "one", depending on the amount of Pikmin slated to
+ * be transfered each transfer. Used in tooltips.
+ *
+ * @return "ten" or "one".
+ */
+string OnionMenu::getTransferAmountStr() {
+    return changeTen ? "ten" : "one";
 }
 
 

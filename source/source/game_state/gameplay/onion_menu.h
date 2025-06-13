@@ -29,6 +29,24 @@ extern const size_t TYPES_PER_PAGE;
 }
 
 
+//Results for trying to transfer Pikmin up or down on the menu.
+enum ONION_TRANSFER_RESULT {
+
+    //OK.
+    ONION_TRANSFER_RESULT_OK,
+
+    //No more Pikmin inside the Onion to take out.
+    ONION_TRANSFER_RESULT_NONE_IN_ONION,
+
+    //No more Pikmin in the group to store.
+    ONION_TRANSFER_RESULT_NONE_IN_GROUP,
+
+    //No more space in the field.
+    ONION_TRANSFER_RESULT_FIELD_FULL,
+
+};
+
+
 /**
  * @brief Info about a given Pikmin type in an Onion menu.
  */
@@ -80,6 +98,9 @@ struct OnionMenu {
     
     //Is "select all" currently on?
     bool selectAll = false;
+    
+    //Is "change ten" currently on?
+    bool changeTen = false;
     
     //If it manages more than 5, this is the Pikmin type page index.
     size_t page = 0;
@@ -152,10 +173,9 @@ struct OnionMenu {
     
     OnionMenu(PikminNest* nPtr, Leader* lPtr);
     ~OnionMenu();
-    bool addAllToGroup();
-    bool addAllToOnion();
-    bool addToGroup(size_t typeIdx);
-    bool addToOnion(size_t typeIdx);
+    ONION_TRANSFER_RESULT transfer(bool toGroup, size_t typeIdx);
+    ONION_TRANSFER_RESULT canAddToGroup(size_t typeIdx);
+    ONION_TRANSFER_RESULT canAddToOnion(size_t typeIdx);
     void confirm();
     void goToPage(size_t page);
     void growButtons();
@@ -175,6 +195,7 @@ struct OnionMenu {
     
     //--- Function declarations ---
     
+    string getTransferAmountStr();
     void makeGuiItemRed(GuiItem* item);
     void update();
     
