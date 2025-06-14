@@ -619,8 +619,17 @@ struct SystemContentList {
     //Camera zoom level.
     ALLEGRO_SAMPLE* sndCamera = nullptr;
     
+    //10 second countdown second tick.
+    ALLEGRO_SAMPLE* sndCountdownTick = nullptr;
+    
+    //Gameplay message character being typed out.
+    ALLEGRO_SAMPLE* sndGameplayMsgChar = nullptr;
+    
     //"Go!" big message.
     ALLEGRO_SAMPLE* sndGo = nullptr;
+    
+    //"Got it!" medal blurb.
+    ALLEGRO_SAMPLE* sndMedalGotIt = nullptr;
     
     //Menu item activation.
     ALLEGRO_SAMPLE* sndMenuActivate = nullptr;
@@ -639,6 +648,9 @@ struct SystemContentList {
     
     //"Mission failed..." big message.
     ALLEGRO_SAMPLE* sndMissionFailed = nullptr;
+    
+    //"1 minute left!" big message.
+    ALLEGRO_SAMPLE* sndOneMinuteLeft = nullptr;
     
     //"Ready..." big message.
     ALLEGRO_SAMPLE* sndReady = nullptr;
@@ -841,8 +853,17 @@ struct SystemContentNames {
     //Camera zoom level.
     string sndCamera = "gui/camera";
     
+    //10 second countdown second tick.
+    string sndCountdownTick = "gui/countdown_tick";
+    
+    //Gameplay message character being typed out.
+    string sndGameplayMsgChar = "gui/gameplay_message_char";
+    
     //"Go!" big message.
     string sndGo = "gui/go";
+    
+    //"Got it!" medal blurb.
+    string sndMedalGotIt = "gui/medal_got_it";
     
     //Menu item activation.
     string sndMenuActivate = "gui/menu_activate";
@@ -861,6 +882,9 @@ struct SystemContentNames {
     
     //"Mission failed..." big message.
     string sndMissionFailed = "gui/mission_failed";
+    
+    //"1 minute left!" big message.
+    string sndOneMinuteLeft = "gui/one_minute_left";
     
     //"Ready..." big message.
     string sndReady = "gui/ready";

@@ -242,16 +242,23 @@ void GameplayMessageBox::tick(float deltaT) {
                     game.config.aestheticGen.gameplayMsgChInterval;
                 curToken =
                     std::min(curToken, tokensInSection + 1);
-                if(
-                    curToken == tokensInSection + 1 &&
-                    prevToken != curToken
-                ) {
-                    //We've reached the last token organically.
-                    //Start a misinput protection timer, so the player
-                    //doesn't accidentally go to the next section when they
-                    //were just trying to skip the text.
-                    misinputProtectionTimer =
-                        GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                if(prevToken != curToken) {
+                    game.audio.createUiSoundsource(
+                    game.sysContent.sndGameplayMsgChar, {
+                        .stackMinPos = 0.05f,
+                        .gain = 0.5f,
+                        .gainDeviation = 0.1f,
+                        .speedDeviation = 0.1f,
+                    }
+                    );
+                    if(curToken == tokensInSection + 1) {
+                        //We've reached the last token organically.
+                        //Start a misinput protection timer, so the player
+                        //doesn't accidentally go to the next section when they
+                        //were just trying to skip the text.
+                        misinputProtectionTimer =
+                            GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                    }
                 }
             } else {
                 totalSkipAnimTime += deltaT;

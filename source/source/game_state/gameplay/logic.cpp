@@ -1029,8 +1029,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     game.curAreaData->mission.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
                     game.curAreaData->mission.getScoreMedal(missionScore);
-                if(oldMedal != newMedal) {
+                if(oldMedal < newMedal) {
                     medalGotItJuiceTimer = 0.0f;
+                    game.audio.createUiSoundsource(
+                        game.sysContent.sndMedalGotIt,
+                    { .gain = 0.50f }
+                    );
                 }
                 
                 oldMissionScore = missionScore;
@@ -1117,8 +1121,35 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 ) {
                     game.states.gameplay->curBigMsg = BIG_MESSAGE_ONE_MIN_LEFT;
                     game.states.gameplay->bigMsgTime = 0.0f;
+                    game.audio.createUiSoundsource(
+                        game.sysContent.sndOneMinuteLeft,
+                    { .gain = 0.5f }
+                    );
                 }
             }
+            
+            if(
+                timeLimit >= 30.0f &&
+                game.states.gameplay->curBigMsg == BIG_MESSAGE_NONE
+            ) {
+                //It makes sense to only tick the countdown if the
+                //final ten seconds would be exciting, which isn't the case
+                //on short missions.
+                float timeLeftCurFrame =
+                    timeLimit - game.states.gameplay->gameplayTimePassed;
+                float timeLeftPrevFrame =
+                    timeLeftCurFrame + game.deltaT;
+                if(
+                    timeLeftCurFrame <= 10.0f &&
+                    timeLeftCurFrame > 0.0f &&
+                    floor(timeLeftPrevFrame) > floor(timeLeftCurFrame)
+                ) {
+                    game.audio.createUiSoundsource(
+                        game.sysContent.sndCountdownTick
+                    );
+                }
+            }
+            
             
         }
         

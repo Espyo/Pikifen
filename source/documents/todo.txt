@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Using the shortcut keys to change pages in the pause menu does not play a sound
 
     --- 0.26 ---
     Update Dear ImGui to version 1.91.9b
@@ -41,16 +41,16 @@ Next tasks (roughly sorted most important first)
                 x GO!
                 x Mission complete
                 x Mission failed
-                1 minute left!
-                Mission timer 10 seconds remaining (one sound per second)
+                x 1 minute left!
+                x Mission timer 10 seconds remaining (one sound per second)
                 Pausing
                 Mission completion item going up
                 Mission completion item going down
                 Mission failure item going up
                 Mission failure item going down
                 Score ruler ticking after the player got (or lost?) some points
-                Reaching a new medal in the score ruler
-                Gameplay message character being typed out
+                x Reaching a new medal in the score ruler
+                x Gameplay message character being typed out
             Results screen
                 Item run-up ticking
                 Item run-up finished
@@ -190,6 +190,7 @@ Next tasks (roughly sorted most important first)
         Update screenshots that still show off the Play area
     Cook up a better logo?
     Test it on the Steam Deck
+    Test from a fresh save file
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states

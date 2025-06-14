@@ -400,8 +400,14 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndAttack);
     game.sysContent.sndCamera =
         game.content.sounds.list.get(game.sysContentNames.sndCamera);
+    game.sysContent.sndCountdownTick =
+        game.content.sounds.list.get(game.sysContentNames.sndCountdownTick);
+    game.sysContent.sndGameplayMsgChar =
+        game.content.sounds.list.get(game.sysContentNames.sndGameplayMsgChar);
     game.sysContent.sndGo =
         game.content.sounds.list.get(game.sysContentNames.sndGo);
+    game.sysContent.sndMedalGotIt =
+        game.content.sounds.list.get(game.sysContentNames.sndMedalGotIt);
     game.sysContent.sndMenuActivate =
         game.content.sounds.list.get(game.sysContentNames.sndMenuActivate);
     game.sysContent.sndMenuBack =
@@ -412,6 +418,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndMissionClear);
     game.sysContent.sndMissionFailed =
         game.content.sounds.list.get(game.sysContentNames.sndMissionFailed);
+    game.sysContent.sndOneMinuteLeft =
+        game.content.sounds.list.get(game.sysContentNames.sndOneMinuteLeft);
     game.sysContent.sndReady =
         game.content.sounds.list.get(game.sysContentNames.sndReady);
     game.sysContent.sndMenuSelect =
@@ -572,13 +580,17 @@ void unloadMiscResources() {
     //Sounds effects.
     game.content.sounds.list.free(game.sysContent.sndAttack);
     game.content.sounds.list.free(game.sysContent.sndCamera);
+    game.content.sounds.list.free(game.sysContent.sndCountdownTick);
+    game.content.sounds.list.free(game.sysContent.sndGameplayMsgChar);
     game.content.sounds.list.free(game.sysContent.sndGo);
+    game.content.sounds.list.free(game.sysContent.sndMedalGotIt);
     game.content.sounds.list.free(game.sysContent.sndMenuActivate);
     game.content.sounds.list.free(game.sysContent.sndMenuBack);
     game.content.sounds.list.free(game.sysContent.sndMenuFail);
     game.content.sounds.list.free(game.sysContent.sndMenuSelect);
     game.content.sounds.list.free(game.sysContent.sndMissionClear);
     game.content.sounds.list.free(game.sysContent.sndMissionFailed);
+    game.content.sounds.list.free(game.sysContent.sndOneMinuteLeft);
     game.content.sounds.list.free(game.sysContent.sndReady);
     game.content.sounds.list.free(game.sysContent.sndSwitchPikmin);
 }
