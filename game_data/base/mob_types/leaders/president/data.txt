@@ -38,6 +38,10 @@ sounds {
         volume_deviation = 3
         speed_deviation = 30
     }
+    pain {
+        file = leaders/pain
+        volume = 30
+    }
     spray {
         file = misc/spray
         speed_deviation = 5
@@ -52,6 +56,10 @@ sounds {
         volume = 30
         speed_deviation = 5
         stack_mode = override
+    }
+    woosh {
+        file = misc/woosh
+        volume = 30
     }
 }
 

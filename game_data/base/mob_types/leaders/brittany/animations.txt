@@ -124,13 +124,17 @@ animations{
 		}
 	}
 	knocked_back{
-		loop_frame=1
+		loop_frame=2
 		frames{
 			idling{
-				duration=0.1000
+				duration=0.0500
+			}
+			idling{
+				duration=0.0500
+				sound=pain
 			}
 			half_lying{
-				duration=0.1000
+				duration=0.0500
 			}
 		}
 	}
@@ -236,6 +240,7 @@ animations{
 			pain{
 				duration=0.1000
 				interpolate=true
+				sound=pain
 			}
 			half_limbo{
 				duration=0.0100
@@ -287,6 +292,7 @@ animations{
 			punch_stretched{
 				duration=0.1000
 				interpolate=true
+				sound=woosh
 			}
 			punch{
 				duration=0.1000

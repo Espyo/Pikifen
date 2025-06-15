@@ -7,6 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Using the shortcut keys to change pages in the pause menu does not play a sound
+    Dead enemies aren't leaving souls
 
     --- 0.26 ---
     Update Dear ImGui to version 1.91.9b
@@ -61,8 +62,8 @@ Next tasks (roughly sorted most important first)
                 Alph, Brittany, and Charlie
                 x Spray
                 Swarming
-                Punching
-                Getting hurt
+                x Punching
+                x Getting hurt
                 Better throw sound, closer to P1/P2?
             Enemies
                 x Generic sucking in air
