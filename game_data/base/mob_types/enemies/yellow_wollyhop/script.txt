@@ -141,8 +141,10 @@ script {
         on_enter {
             set_gravity 1.5
             set_animation falling
+            play_sound falling sound_id
         }
         on_land {
+            stop_sound $sound_id
             set_state landing
         }
     }

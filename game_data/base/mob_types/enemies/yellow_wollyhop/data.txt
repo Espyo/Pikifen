@@ -1,6 +1,7 @@
 name = Yellow Wollyhop
 description = Once it senses prey, a Yellow Wollyhop will jump in the air if it can. It will then float for a bit, and land down with force, crushing anything below.
 
+acceleration = 1000
 allow_ground_attacks = true
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
@@ -32,15 +33,47 @@ reaches {
 }
 
 sounds {
+    croak {
+        file = misc/frog_croak
+        volume = 70
+        speed = 80
+        speed_deviation = 10
+    }
+    croak_small {
+        file = misc/frog_croak
+        volume = 30
+        speed = 130
+    }
+    croak_slow {
+        file = misc/frog_croak
+        volume = 60
+        speed = 60
+        speed_deviation = 5
+    }
+    falling {
+        file = misc/falling
+        volume = 50
+        speed_deviation = 5
+    }
+    jump {
+        file = misc/jump
+        volume = 50
+        speed_deviation = 5
+    }
     step {
         file = misc/stomp_quick
-        volume = 15
+        volume = 30
         speed = 160
         speed_deviation = 5
     }
     thump {
         file = misc/thump
         speed_deviation = 10
+    }
+    thump_quiet {
+        file = misc/thump
+        speed_deviation = 10
+        volume = 50
     }
 }
 

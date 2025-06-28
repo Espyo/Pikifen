@@ -85,6 +85,7 @@ animations{
 			}
 			lying_squashed_02{
 				duration=0.0100
+				sound=jump
 			}
 			half_lying{
 				duration=0.0700

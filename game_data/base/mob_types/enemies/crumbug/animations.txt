@@ -69,6 +69,7 @@ animations{
 			}
 			moving_02{
 				duration=0.1000
+				sound=waddle
 			}
 			moving_01{
 				duration=0.1000

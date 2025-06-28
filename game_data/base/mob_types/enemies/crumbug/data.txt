@@ -48,6 +48,13 @@ sounds {
         speed = 200
         volume = 20
     }
+    waddle {
+        file = misc/fat_slosh
+        speed = 120
+        speed_deviation = 20
+        volume = 10
+        volume_deviation = 5
+    }
 }
 
 maker = Espyo

@@ -72,7 +72,18 @@ animations{
 				duration=0.1000
 			}
 			bucking_03{
-				duration=0.4000
+				duration=0.1000
+				sound=oink_quick
+			}
+			bucking_03{
+				duration=0.1000
+			}
+			bucking_03{
+				duration=0.1000
+				sound=oink_quick
+			}
+			bucking_03{
+				duration=0.1000
 			}
 			bucking_02{
 				duration=0.1000
@@ -80,6 +91,7 @@ animations{
 			bucking_04{
 				duration=0.1000
 				interpolate=true
+				sound=woosh
 			}
 			bucking_05{
 				duration=0.3000
@@ -97,7 +109,7 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=8
+		loop_frame=9
 		frames{
 			dying_01{
 				duration=0.1000
@@ -107,6 +119,7 @@ animations{
 			}
 			dying_03{
 				duration=0.5000
+				sound=oink_slow
 			}
 			dying_02{
 				duration=0.2000
@@ -116,12 +129,17 @@ animations{
 			}
 			dying_04{
 				duration=0.1000
+				sound=oink_simple
 			}
 			dying_05{
 				duration=0.1200
 			}
 			dying_06{
 				duration=0.1500
+			}
+			dying_07{
+				duration=0.1000
+				sound=thud
 			}
 			dying_07{
 				duration=1.0000
@@ -135,6 +153,7 @@ animations{
 			}
 			looking_r_01{
 				duration=0.1000
+				sound=oink_simple
 			}
 			looking_r_02{
 				duration=0.1000
@@ -169,12 +188,14 @@ animations{
 			}
 			moving_01{
 				duration=0.1000
+				sound=thud
 			}
 			idling{
 				duration=0.1000
 			}
 			moving_02{
 				duration=0.1000
+				sound=thud
 			}
 		}
 	}

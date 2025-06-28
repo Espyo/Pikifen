@@ -8,9 +8,11 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Using the shortcut keys to change pages in the pause menu does not play a sound
     Dead enemies aren't leaving souls
+        if(reviveTimer.duration >= 0)
 
     --- 0.26 ---
-    Update Dear ImGui to version 1.91.9b
+    Update Dear ImGui to version 1.92.0
+        https://github.com/ocornut/imgui/releases/tag/v1.92.0
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
         Candidate list of all needed sounds, for now
@@ -64,7 +66,6 @@ Next tasks (roughly sorted most important first)
                 Swarming
                 x Punching
                 x Getting hurt
-                Better throw sound, closer to P1/P2?
             Enemies
                 x Generic sucking in air
                 ? Generic spitting
@@ -81,18 +82,18 @@ Next tasks (roughly sorted most important first)
                 x Water fountain
                 x Boulder rolling
                 x Burrowing sound
-                Bulborb screaming when dying
                 Burrow-nit screeching when dying
                 Burrow-nit squeaking while moving
-                Crumbug waddling
+                x Crumbug waddling
                 Dwarf Bulborb screaming
                 Munge Dweevil gas being spit (and gas pipes)
                 Munge Dweevil squeaking
                 Munge Dweevil picking up something (and Skutterchuck)
                 Munge Dweevil treasure snapping off
-                Fiery Blowhog oinking
-                Fiery Blowhog moving
-                Fiery Blowhog flinging (and Skutterchuck)
+                x Fiery Blowhog oinking
+                x Fiery Blowhog moving
+                x Fiery Blowhog flinging (and Skutterchuck)
+                Red Bulborb screaming when dying
                 Red Bulborb snoring
                 Red Bulborb growling
                 Skutterchuck squeaking
@@ -100,9 +101,9 @@ Next tasks (roughly sorted most important first)
                 Water Dumple growling
                 Water Dumple waddling
                 Whiptongue bulborb slurping
-                Wollyhop croaking
-                Wollyhop falling
-                Wollyhop jumping (and leader getting up)
+                x Wollyhop croaking
+                x Wollyhop falling
+                x Wollyhop jumping (and leader getting up)
                 Enemy spirit floating
             Other mobs
                 Onion/ship beam
@@ -175,6 +176,7 @@ Next tasks (roughly sorted most important first)
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         Bulborbs need a few more frames for fluidity
+            Definitely add one or two Bolbert frames
         Yellow Wollyhop should close its eyes when shaking
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
@@ -300,6 +302,7 @@ Next tasks (roughly sorted most important first)
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Luminkolls
+        Glowmob?
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
@@ -951,19 +954,20 @@ Misc things (so I don't forget)
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
-    Base game content to add
+    Base content to add
         Enemies
             Add Helodity's Plasm Wraith
             Burrowing Snagret
             Bulbears
             Scuttlebug?
+            An enemy that follows you anywhere, but only at short-range. You can use this to goad it towards the Onion for less corpse carrying time, or to an opponent's Onion in multiplayer arenas
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
         A tall grass mob
         A turnstyle mob
-    Base game content to tweak
+    Base content to tweak
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
     Fix bridges and dummies emitting light during blackout (Darthvato)

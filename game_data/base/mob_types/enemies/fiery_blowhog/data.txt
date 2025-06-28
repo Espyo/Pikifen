@@ -44,6 +44,36 @@ sounds {
         file = misc/flamethrower
         loop = true
     }
+    oink_simple {
+        file = misc/oink
+        volume = 20
+        speed_deviation = 10
+        random_delay = 0.3
+    }
+    oink_quick {
+        file = misc/oink
+        speed = 110
+        speed_deviation = 5
+        volume = 50
+        stack_min_pos = 0.05
+    }
+    oink_slow {
+        file = misc/oink
+        speed = 80
+        speed_deviation = 5
+        volume = 50
+    }
+    thud {
+        file = misc/thump
+        speed = 130
+        speed_deviation = 20
+        volume = 20
+        stack_min_pos = 0.05
+    }
+    woosh {
+        file = misc/woosh
+        volume = 50
+    }
 }
 
 maker = Espyo

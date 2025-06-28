@@ -2,7 +2,7 @@ name=Yellow Wollyhop animations
 description=Animations for the Yellow Wollyhop.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=0.25.0
 animations{
 	croaking{
 		frames{
@@ -11,6 +11,7 @@ animations{
 			}
 			croak_01{
 				duration=0.1000
+				sound=croak
 			}
 			croak_02{
 				duration=0.1000
@@ -35,6 +36,7 @@ animations{
 			dying_02{
 				duration=0.1000
 				interpolate=true
+				sound=croak
 			}
 			dying_03{
 				duration=0.1000
@@ -51,6 +53,7 @@ animations{
 			dying_02{
 				duration=0.1000
 				interpolate=true
+				sound=croak_slow
 			}
 			dying_03{
 				duration=0.1000
@@ -140,11 +143,15 @@ animations{
 		}
 	}
 	jumping_up{
-		loop_frame=1
+		loop_frame=2
 		hit_rate=10
 		frames{
 			jump_up_damage{
 				duration=0.0400
+			}
+			jump_up{
+				duration=0.1000
+				sound=jump
 			}
 			jump_up{
 				duration=0.1000
@@ -176,6 +183,7 @@ animations{
 			}
 			idling_01{
 				duration=0.1000
+				sound=thump_quiet
 			}
 		}
 	}
@@ -195,6 +203,7 @@ animations{
 			struggling_01{
 				duration=0.1000
 				interpolate=true
+				sound=croak_small
 			}
 			idling_01{
 				duration=0.1000
