@@ -1793,7 +1793,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("cursor", bmpCursor);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);
-    graRS.set("enemy_spirit", bmpEnemySpirit);
+    graRS.set("enemy_soul", bmpEnemySoul);
     graRS.set("focus_box", bmpFocusBox);
     graRS.set("frame_box", bmpFrameBox);
     graRS.set("github_icon", bmpGithubIcon);
@@ -1815,7 +1815,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
     graRS.set("notification", bmpNotification);
-    graRS.set("pikmin_spirit", bmpPikminSpirit);
+    graRS.set("pikmin_soul", bmpPikminSoul);
     graRS.set("player_input_icons", bmpPlayerInputIcons);
     graRS.set("random", bmpRandom);
     graRS.set("rock", bmpRock);
@@ -1849,6 +1849,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
     sndRS.set("countdown_tick", sndCountdownTick);
+    sndRS.set("enemy_soul", sndEnemySoul);
     sndRS.set("gameplay_message_char", sndGameplayMsgChar);
     sndRS.set("go", sndGo);
     sndRS.set("medal_got_it", sndMedalGotIt);

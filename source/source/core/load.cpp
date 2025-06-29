@@ -302,8 +302,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpCursor);
     game.sysContent.bmpDiscordIcon =
         game.content.bitmaps.list.get(game.sysContentNames.bmpDiscordIcon);
-    game.sysContent.bmpEnemySpirit =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpEnemySpirit);
+    game.sysContent.bmpEnemySoul =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpEnemySoul);
     game.sysContent.bmpFocusBox =
         game.content.bitmaps.list.get(game.sysContentNames.bmpFocusBox);
     game.sysContent.bmpFrameBox =
@@ -348,8 +348,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMouseCursor);
     game.sysContent.bmpNotification =
         game.content.bitmaps.list.get(game.sysContentNames.bmpNotification);
-    game.sysContent.bmpPikminSpirit =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpPikminSpirit);
+    game.sysContent.bmpPikminSoul =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpPikminSoul);
     game.sysContent.bmpPlayerInputIcons =
         game.content.bitmaps.list.get(game.sysContentNames.bmpPlayerInputIcons);
     game.sysContent.bmpRandom =
@@ -402,6 +402,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndCamera);
     game.sysContent.sndCountdownTick =
         game.content.sounds.list.get(game.sysContentNames.sndCountdownTick);
+    game.sysContent.sndEnemySoul =
+        game.content.sounds.list.get(game.sysContentNames.sndEnemySoul);
     game.sysContent.sndGameplayMsgChar =
         game.content.sounds.list.get(game.sysContentNames.sndGameplayMsgChar);
     game.sysContent.sndGo =
@@ -531,7 +533,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxNoCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpDiscordIcon);
-    game.content.bitmaps.list.free(game.sysContent.bmpEnemySpirit);
+    game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
     game.content.bitmaps.list.free(game.sysContent.bmpFocusBox);
     game.content.bitmaps.list.free(game.sysContent.bmpFrameBox);
     game.content.bitmaps.list.free(game.sysContent.bmpGithubIcon);
@@ -553,7 +555,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpNotification);
-    game.content.bitmaps.list.free(game.sysContent.bmpPikminSpirit);
+    game.content.bitmaps.list.free(game.sysContent.bmpPikminSoul);
     game.content.bitmaps.list.free(game.sysContent.bmpPlayerInputIcons);
     game.content.bitmaps.list.free(game.sysContent.bmpRandom);
     game.content.bitmaps.list.free(game.sysContent.bmpRock);
@@ -581,6 +583,7 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndAttack);
     game.content.sounds.list.free(game.sysContent.sndCamera);
     game.content.sounds.list.free(game.sysContent.sndCountdownTick);
+    game.content.sounds.list.free(game.sysContent.sndEnemySoul);
     game.content.sounds.list.free(game.sysContent.sndGameplayMsgChar);
     game.content.sounds.list.free(game.sysContent.sndGo);
     game.content.sounds.list.free(game.sysContent.sndMedalGotIt);

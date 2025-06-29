@@ -24,14 +24,20 @@
 
 namespace ENEMY {
 
-//Maximum diameter an enemy's spirit can be.
-const float SPIRIT_MAX_SIZE = 128;
+//Maximum diameter an enemy's soul can be.
+const float SOUL_MAX_SIZE = 128;
 
-//Minimum diameter an enemy's spirit can be.
-const float SPIRIT_MIN_SIZE = 16;
+//Minimum diameter an enemy's soul can be.
+const float SOUL_MIN_SIZE = 16;
 
-//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
-const float SPIRIT_SIZE_MULT = 0.7;
+//Maximum pitch an enemy's soul sound can have.
+const float SOUL_MAX_PITCH = 1.1f;
+
+//Minimum pitch an enemy's soul sound can have.
+const float SOUL_MIN_PITCH = 0.85f;
+
+//Normally, the soul's diameter is the enemy's. Multiply the soul by this.
+const float SOUL_SIZE_MULT = 0.7;
 
 }
 
@@ -101,21 +107,25 @@ void Enemy::finishDyingClassSpecifics() {
     becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
     fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     
-    if(reviveTimer.duration >= 0) {
+    if(reviveTimer.duration > 0.0f) {
         //Revival.
         reviveTimer.start();
         
     } else {
         //Soul particle, only if the enemy does not revive.
-        Particle par(
-            pos, LARGE_FLOAT,
+        float soulSize =
             std::clamp(
-                radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
-                ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
-            ),
-            2, PARTICLE_PRIORITY_MEDIUM
-        );
-        par.bitmap = game.sysContent.bmpEnemySpirit;
+                radius * 2 * ENEMY::SOUL_SIZE_MULT,
+                ENEMY::SOUL_MIN_SIZE, ENEMY::SOUL_MAX_SIZE
+            );
+        float soulPitch =
+            interpolateNumber(
+                soulSize, ENEMY::SOUL_MIN_SIZE, ENEMY::SOUL_MAX_SIZE,
+                ENEMY::SOUL_MAX_PITCH, ENEMY::SOUL_MIN_PITCH
+            );
+            
+        Particle par(pos, LARGE_FLOAT, soulSize, 2, PARTICLE_PRIORITY_MEDIUM);
+        par.bitmap = game.sysContent.bmpEnemySoul;
         par.friction = 0.5f;
         par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
         par.linearSpeed.add(0.5f, Point(50, -50));
@@ -127,6 +137,11 @@ void Enemy::finishDyingClassSpecifics() {
         par.color.add(0.6f, al_map_rgb(255, 192, 255));
         par.color.add(1, al_map_rgba(255, 192, 255, 0));
         game.states.gameplay->particles.add(par);
+        
+        game.audio.createPosSoundSource(
+            game.sysContent.sndEnemySoul, pos, false,
+        { .gain = 0.2f, .speed = soulPitch, .speedDeviation = 0.02f }
+        );
     }
 }
 

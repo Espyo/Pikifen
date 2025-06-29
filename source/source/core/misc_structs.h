@@ -466,8 +466,8 @@ struct SystemContentList {
     //Discord icon.
     ALLEGRO_BITMAP* bmpDiscordIcon = nullptr;
     
-    //Enemy spirit.
-    ALLEGRO_BITMAP* bmpEnemySpirit = nullptr;
+    //Enemy soul.
+    ALLEGRO_BITMAP* bmpEnemySoul = nullptr;
     
     //9-slice texture for the focused GUI item.
     ALLEGRO_BITMAP* bmpFocusBox = nullptr;
@@ -532,8 +532,8 @@ struct SystemContentList {
     //Notification.
     ALLEGRO_BITMAP* bmpNotification = nullptr;
     
-    //Pikmin spirit.
-    ALLEGRO_BITMAP* bmpPikminSpirit = nullptr;
+    //Pikmin soul.
+    ALLEGRO_BITMAP* bmpPikminSoul = nullptr;
     
     //Misc. specific player input icons.
     ALLEGRO_BITMAP* bmpPlayerInputIcons = nullptr;
@@ -622,6 +622,9 @@ struct SystemContentList {
     //10 second countdown second tick.
     ALLEGRO_SAMPLE* sndCountdownTick = nullptr;
     
+    //Enemy soul.
+    ALLEGRO_SAMPLE* sndEnemySoul = nullptr;
+    
     //Gameplay message character being typed out.
     ALLEGRO_SAMPLE* sndGameplayMsgChar = nullptr;
     
@@ -702,8 +705,8 @@ struct SystemContentNames {
     //Editor icons.
     string bmpEditorIcons = "gui/editor_icons";
     
-    //Enemy spirit.
-    string bmpEnemySpirit = "effects/enemy_spirit";
+    //Enemy soul.
+    string bmpEnemySoul = "effects/enemy_soul";
     
     //GUI focus box.
     string bmpFocusBox = "gui/focus_box";
@@ -768,8 +771,8 @@ struct SystemContentNames {
     //Notification.
     string bmpNotification = "gui/notification";
     
-    //Pikmin spirit.
-    string bmpPikminSpirit = "effects/pikmin_spirit";
+    //Pikmin soul.
+    string bmpPikminSoul = "effects/pikmin_soul";
     
     //Misc. specific player input icons.
     string bmpPlayerInputIcons = "gui/player_input_icons";
@@ -855,6 +858,9 @@ struct SystemContentNames {
     
     //10 second countdown second tick.
     string sndCountdownTick = "gui/countdown_tick";
+    
+    //Enemy soul.
+    string sndEnemySoul = "effects/enemy_soul";
     
     //Gameplay message character being typed out.
     string sndGameplayMsgChar = "gui/gameplay_message_char";

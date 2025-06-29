@@ -215,7 +215,7 @@ void Pikmin::finishDyingClassSpecifics() {
         pos, LARGE_FLOAT,
         radius * 2, 2.0f
     );
-    par.bitmap = game.sysContent.bmpPikminSpirit;
+    par.bitmap = game.sysContent.bmpPikminSoul;
     par.friction = 0.8;
     Point baseSpeed = Point(game.rng.f(-20, 20), game.rng.f(-70, -30));
     par.linearSpeed = KeyframeInterpolator<Point>(baseSpeed);

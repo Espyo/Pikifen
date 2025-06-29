@@ -15,9 +15,9 @@
 
 
 namespace ENEMY {
-extern const float SPIRIT_SIZE_MULT;
-extern const float SPIRIT_MAX_SIZE;
-extern const float SPIRIT_MIN_SIZE;
+extern const float SOUL_SIZE_MULT;
+extern const float SOUL_MAX_SIZE;
+extern const float SOUL_MIN_SIZE;
 }
 
 

@@ -107,7 +107,7 @@ Next tasks (roughly sorted most important first)
                 x Wollyhop croaking
                 x Wollyhop falling
                 x Wollyhop jumping (and leader getting up)
-                Enemy spirit floating
+                x Enemy soul floating
             Other mobs
                 Onion/ship beam
                     Two sine-wave tracks, different frequencies, with tremolo
@@ -873,7 +873,7 @@ Misc things (so I don't forget)
         Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
         Blur the background of the Onion menu, pause menu, etc.
-        Enemy spirits?
+        Enemy souls?
     Pathing
         Pikmin, leaders, and so on should be able to take climbing sticks, bouncy mushrooms, geysers, etc. in order to traverse paths
     Editor improvements
