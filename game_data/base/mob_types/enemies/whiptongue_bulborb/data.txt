@@ -48,6 +48,12 @@ sounds {
         file = misc/shaking
         volume = 60
     }
+    slurp {
+        file = misc/slurp
+        volume = 30
+        speed = 90
+        speed_deviation = 20
+    }
     swallow {
         file = misc/swallow
         volume = 40

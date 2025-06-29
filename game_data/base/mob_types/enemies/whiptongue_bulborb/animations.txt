@@ -27,6 +27,7 @@ animations{
 			}
 			attacking_04{
 				duration=0.1000
+				sound=slurp
 			}
 			attacking_05{
 				duration=0.1000

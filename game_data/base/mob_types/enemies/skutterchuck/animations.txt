@@ -86,6 +86,7 @@ animations{
 			flinging_02{
 				duration=0.0500
 				signal=0
+				sound=woosh
 			}
 			flinging_03{
 				duration=0.5000
@@ -128,6 +129,7 @@ animations{
 			}
 			picking_up_02{
 				duration=0.1000
+				sound=pick_up
 			}
 			idling_03{
 				duration=0.1000
@@ -241,6 +243,7 @@ animations{
 			}
 			shaking_04{
 				duration=0.0500
+				sound=woosh
 			}
 			flinging_03{
 				duration=0.5000

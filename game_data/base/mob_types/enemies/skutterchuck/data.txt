@@ -30,10 +30,19 @@ reaches {
 }
 
 sounds{
+    pick_up {
+        file = misc/pick_up
+        volume = 30
+    }
     thud {
         file = misc/thump
         speed = 160
         volume = 15
+    }
+    woosh {
+        file = misc/woosh
+        speed = 120
+        volume = 40
     }
 }
 

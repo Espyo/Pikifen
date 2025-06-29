@@ -29,6 +29,19 @@ reaches {
 }
 
 sounds {
+    gas {
+        file = misc/spray
+        volume = 40
+        speed_deviation = 5
+    }
+    snap {
+        file = misc/snap
+        volume = 80
+    }
+    pick_up {
+        file = misc/pick_up
+        volume = 30
+    }
     shaking {
         file = misc/shaking
         volume = 40

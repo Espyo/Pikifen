@@ -6,11 +6,14 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
     Dead enemies aren't leaving souls
         if(reviveTimer.duration >= 0)
+    You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
 
     --- 0.26 ---
+    If the sprites or animations got sorted when saving, say so in the status bar
     Update Dear ImGui to version 1.92.0
         https://github.com/ocornut/imgui/releases/tag/v1.92.0
         "Image: removed tint_col and border_col parameter from Image() function"
@@ -86,21 +89,21 @@ Next tasks (roughly sorted most important first)
                 Burrow-nit squeaking while moving
                 x Crumbug waddling
                 Dwarf Bulborb screaming
-                Munge Dweevil gas being spit (and gas pipes)
+                x Munge Dweevil gas being spit (and gas pipes)
                 Munge Dweevil squeaking
-                Munge Dweevil picking up something (and Skutterchuck)
-                Munge Dweevil treasure snapping off
+                x Munge Dweevil picking up something (and Skutterchuck)
+                x Munge Dweevil treasure snapping off
                 x Fiery Blowhog oinking
                 x Fiery Blowhog moving
                 x Fiery Blowhog flinging (and Skutterchuck)
                 Red Bulborb screaming when dying
-                Red Bulborb snoring
+                x Red Bulborb snoring
                 Red Bulborb growling
                 Skutterchuck squeaking
                 Skutterchuck walking
                 Water Dumple growling
                 Water Dumple waddling
-                Whiptongue bulborb slurping
+                x Whiptongue bulborb slurping
                 x Wollyhop croaking
                 x Wollyhop falling
                 x Wollyhop jumping (and leader getting up)
@@ -164,6 +167,8 @@ Next tasks (roughly sorted most important first)
         Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
         Make Rock Pikmin colors darker (thanks Nataly171)
         Style Tutorial Meadow to be more DEV Lab-like
+            Have some DEV Lab terminals dotted around, and a couple of things be metal instead of purely natural; maybe the ship's landing spot?
+            Reword the tutorial signs so it sounds like they're explaining new spacefarers or tourists about how PNF-404 works
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
     Leader animations

@@ -13,6 +13,7 @@ animations{
 			attacking_gas_02{
 				duration=0.1000
 				interpolate=true
+				sound=gas
 			}
 			attacking_gas_01{
 				duration=0.1000
@@ -30,60 +31,48 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
+			attacking_safe_01{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_02{
+			attacking_safe_02{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
+			attacking_safe_01{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_02{
+			attacking_safe_02{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
+			attacking_safe_01{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_02{
+			attacking_safe_02{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
+			attacking_safe_01{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_02{
+			attacking_safe_02{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
-				duration=0.1000
+			attacking_safe_01{
+				duration=0.1500
 				interpolate=true
 			}
-			attacking_gas_02{
-				duration=0.1000
+			attacking_safe_02{
+				duration=0.2000
 				interpolate=true
 			}
-			attacking_gas_01{
-				duration=0.1000
-				interpolate=true
-			}
-			attacking_gas_02{
-				duration=0.1000
-				interpolate=true
-			}
-			attacking_gas_01{
-				duration=0.1000
-				interpolate=true
-			}
-			attacking_gas_02{
-				duration=0.1000
+			attacking_safe_01{
+				duration=0.2500
 				interpolate=true
 			}
 		}
@@ -196,6 +185,7 @@ animations{
 			}
 			picking_up_01{
 				duration=0.1000
+				sound=pick_up
 			}
 			picking_up_03{
 				duration=0.1000
@@ -208,8 +198,9 @@ animations{
 			moving_03{
 				duration=0.1000
 			}
-			attacking_02{
+			shaking_02{
 				duration=0.1000
+				sound=snap
 			}
 			idling_01{
 				duration=0.5000
@@ -219,38 +210,38 @@ animations{
 	shaking{
 		hit_rate=75
 		frames{
-			attacking_01{
+			shaking_01{
 				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
 			}
-			attacking_02{
+			shaking_02{
 				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
 			}
-			attacking_01{
+			shaking_01{
 				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
 			}
-			attacking_02{
+			shaking_02{
 				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
 				sound=shaking
 			}
-			attacking_01{
+			shaking_01{
 				duration=0.1000
 			}
 			idling_01{
 				duration=0.1000
 			}
-			attacking_02{
+			shaking_02{
 				duration=0.1000
 			}
 			shaking_kb{
@@ -260,66 +251,6 @@ animations{
 	}
 }
 sprites{
-	attacking_01{
-		file=enemies/munge_dweevil
-		file_pos=490.0000 144.0000
-		file_size=113.0000 116.0000
-		offset=-1.0000 -1.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			gas{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			treasure{
-				coords=0.0000 0.0000 48.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	attacking_02{
-		file=enemies/munge_dweevil
-		file_pos=604.0000 148.0000
-		file_size=113.0000 115.0000
-		offset=-1.0000 0.0000
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			gas{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=32.0000
-				type=2
-				value=1.0000
-			}
-			treasure{
-				coords=0.0000 0.0000 48.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
 	attacking_gas_01{
 		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
@@ -369,6 +300,65 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=poison
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_safe_01{
+		file=enemies/munge_dweevil
+		file_pos=0.0000 121.0000
+		file_size=94.0000 88.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_safe_02{
+		file=enemies/munge_dweevil
+		file_pos=0.0000 121.0000
+		file_size=94.0000 88.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
 			}
 			treasure{
 				coords=0.0000 0.0000 48.0000
@@ -931,6 +921,66 @@ sprites{
 			}
 			treasure{
 				coords=36.0000 0.0000 24.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_01{
+		file=enemies/munge_dweevil
+		file_pos=490.0000 144.0000
+		file_size=113.0000 116.0000
+		offset=-1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
+				height=8.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_02{
+		file=enemies/munge_dweevil
+		file_pos=604.0000 148.0000
+		file_size=113.0000 115.0000
+		offset=-1.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			gas{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+			treasure{
+				coords=0.0000 0.0000 48.0000
 				height=8.0000
 				radius=8.0000
 				type=2

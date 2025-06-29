@@ -421,7 +421,7 @@ private:
     //Mob-specific sound effect sources.
     map<size_t, Mob*> mobSources;
     
-    //All sound effect sources.
+    //All sound effect sources, including the mob-specific ones.
     map<size_t, SoundSource> sources;
     
     //All sound effects being played right now.

@@ -52,6 +52,12 @@ sounds {
         file = misc/shaking
         volume = 60
     }
+    snoring {
+        file = misc/snoring
+        volume = 10
+        volume_deviation = 3
+        speed_deviation = 5
+    }
     swallow {
         file = misc/swallow
         volume = 40
