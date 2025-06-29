@@ -28,17 +28,17 @@ reaches {
 
 sounds {
     bite {
-        file = misc/bite
+        file = creature_misc/bite
         volume = 40
         speed = 150
     }
     chew {
-        file = misc/bite
+        file = creature_misc/bite
         volume = 20
         speed = 140
     }
     swallow {
-        file = misc/swallow
+        file = creature_misc/swallow
         volume = 20
         speed = 140
         speed_deviation = 20
@@ -49,7 +49,7 @@ sounds {
         volume = 20
     }
     waddle {
-        file = misc/fat_slosh
+        file = creature_misc/fat_slosh
         speed = 120
         speed_deviation = 20
         volume = 10

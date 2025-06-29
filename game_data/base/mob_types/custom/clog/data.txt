@@ -31,7 +31,7 @@ sounds {
         type = gameplay_global
     }
     drain {
-        file = misc/drain
+        file = nature/drain
         volume = 50
     }
 }

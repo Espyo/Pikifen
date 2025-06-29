@@ -19,12 +19,12 @@ sounds {
         speed_deviation = 5
     }
     rustling_short {
-        file = misc/foliage_short
+        file = nature/foliage_short
         volume = 20
         speed = 75
     }
     rustling {
-        file = misc/foliage_long
+        file = nature/foliage_long
         volume = 20
         speed = 75
     }
@@ -33,7 +33,7 @@ sounds {
         volume = 40
     }
     bumped {
-        file = misc/boing_low_1
+        file = effects/boing_low_1
         volume = 40
         speed_deviation = 8
     }

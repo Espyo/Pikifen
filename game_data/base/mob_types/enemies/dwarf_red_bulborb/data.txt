@@ -38,21 +38,21 @@ sounds {
         speed_deviation = 5
     }
     bite {
-        file = misc/bite
+        file = creature_misc/bite
         volume = 40
         speed = 120
     }
     chew {
-        file = misc/bite
+        file = creature_misc/bite
         volume = 20
         speed = 110
     }
     shaking {
-        file = misc/shaking
+        file = creature_misc/shaking
         volume = 40
     }
     swallow {
-        file = misc/swallow
+        file = creature_misc/swallow
         volume = 20
         speed = 110
         speed_deviation = 20

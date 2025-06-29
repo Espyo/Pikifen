@@ -13,7 +13,7 @@ team = obstacle
 
 sounds {
     sticks {
-        file = misc/sticks
+        file = nature/sticks
         speed_deviation = 10
         volume = 30
         stack_min_pos = 0.25

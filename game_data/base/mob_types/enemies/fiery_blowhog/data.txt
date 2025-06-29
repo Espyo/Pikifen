@@ -31,12 +31,12 @@ reaches {
 
 sounds {
     inhaling {
-        file = misc/inhaling
+        file = creature_vocals/inhaling
         loop = true
         volume = 25
     }
     exhaling {
-        file = misc/exhaling
+        file = creature_vocals/exhaling
         loop = true
         volume = 20
     }
@@ -45,20 +45,20 @@ sounds {
         loop = true
     }
     oink_simple {
-        file = misc/oink
+        file = creature_vocals/oink
         volume = 20
         speed_deviation = 10
         random_delay = 0.3
     }
     oink_quick {
-        file = misc/oink
+        file = creature_vocals/oink
         speed = 110
         speed_deviation = 5
         volume = 50
         stack_min_pos = 0.05
     }
     oink_slow {
-        file = misc/oink
+        file = creature_vocals/oink
         speed = 80
         speed_deviation = 5
         volume = 50
@@ -71,7 +71,7 @@ sounds {
         stack_min_pos = 0.05
     }
     woosh {
-        file = misc/woosh
+        file = effects/woosh
         volume = 50
     }
 }

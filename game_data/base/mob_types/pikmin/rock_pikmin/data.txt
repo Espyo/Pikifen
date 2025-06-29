@@ -52,7 +52,7 @@ sounds {
         file = pikmin/pikmin_idle
     }
     pluck_ground {
-        file = misc/pluck
+        file = effects/pluck
     }
     plucked {
         file = pikmin/pikmin_plucked

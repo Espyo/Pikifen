@@ -39,7 +39,7 @@ sounds {
         speed_deviation = 30
     }
     jump {
-        file = misc/jump
+        file = effects/jump
         volume = 5
         speed = 120
     }
@@ -63,7 +63,7 @@ sounds {
         stack_mode = override
     }
     woosh {
-        file = misc/woosh
+        file = effects/woosh
         volume = 30
     }
 }

@@ -34,29 +34,29 @@ reaches {
 
 sounds {
     croak {
-        file = misc/frog_croak
+        file = creature_vocals/frog_croak
         volume = 70
         speed = 80
         speed_deviation = 10
     }
     croak_small {
-        file = misc/frog_croak
+        file = creature_vocals/frog_croak
         volume = 30
         speed = 130
     }
     croak_slow {
-        file = misc/frog_croak
+        file = creature_vocals/frog_croak
         volume = 60
         speed = 60
         speed_deviation = 5
     }
     falling {
-        file = misc/falling
+        file = effects/falling
         volume = 50
         speed_deviation = 5
     }
     jump {
-        file = misc/jump
+        file = effects/jump
         volume = 50
         speed_deviation = 5
     }

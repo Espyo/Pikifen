@@ -26,7 +26,7 @@ reaches {
 
 sounds {
     burying {
-        file = misc/burying
+        file = creature_misc/burying
         speed = 140
         speed_deviation = 15
         volume = 30

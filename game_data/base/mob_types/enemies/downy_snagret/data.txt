@@ -28,7 +28,7 @@ reaches {
 
 sounds {
     swish {
-        file = misc/swish
+        file = effects/swish
         volume = 50
     }
     thud {
@@ -37,7 +37,7 @@ sounds {
         speed = 200
     }
     shaking {
-        file = misc/shaking
+        file = creature_misc/shaking
         volume = 50
         speed = 160
     }

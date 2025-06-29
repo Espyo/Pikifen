@@ -83,7 +83,7 @@ reaches {
 
 sounds {
     shaking {
-        file = misc/shaking
+        file = creature_misc/shaking
         volume = 30
         speed = 50
     }

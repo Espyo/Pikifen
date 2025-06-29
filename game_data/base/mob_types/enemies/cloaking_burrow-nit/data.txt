@@ -32,15 +32,15 @@ reaches {
 
 sounds {
     swish {
-        file = misc/swish
+        file = effects/swish
         volume = 50
     }
     shaking {
-        file = misc/shaking
+        file = creature_misc/shaking
         volume = 60
     }
     burying {
-        file = misc/burying
+        file = creature_misc/burying
         speed_deviation = 20
         volume = 30
     }

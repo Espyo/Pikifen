@@ -10,7 +10,7 @@ tint_random_maximum = 159 255 159
 
 sounds {
     bumped {
-        file = misc/foliage_long
+        file = nature/foliage_long
         volume = 40
         speed_deviation = 40
         volume_deviation = 10

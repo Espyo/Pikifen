@@ -17,12 +17,12 @@ show_health = false
 
 sounds {
     wood_hit {
-        file = misc/wood_hit
+        file = nature/wood_hit
         volume = 20
         speed_deviation = 30
     }
     sticks {
-        file = misc/sticks
+        file = nature/sticks
         speed_deviation = 10
         volume = 35
     }

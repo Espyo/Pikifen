@@ -35,15 +35,15 @@ sounds {
         speed_deviation = 5
     }
     snap {
-        file = misc/snap
+        file = effects/snap
         volume = 80
     }
     pick_up {
-        file = misc/pick_up
+        file = effects/pick_up
         volume = 30
     }
     shaking {
-        file = misc/shaking
+        file = creature_misc/shaking
         volume = 40
         speed = 140
     }

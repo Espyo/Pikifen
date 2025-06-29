@@ -17,7 +17,7 @@ sounds {
         volume = 35
     }
     fountain {
-        file = misc/fountain
+        file = nature/fountain
         type = ambiance_pos
         loop = true
         volume = 5
