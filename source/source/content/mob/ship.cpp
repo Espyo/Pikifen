@@ -23,17 +23,17 @@
 
 namespace SHIP {
 
+//How often the beam generates a ring.
+const float BEAM_EMIT_RATE = 0.15f;
+
+//Animate each beam ring for this long.
+const float BEAM_RING_ANIM_DUR = 0.8f;
+
 //Animate the control point's ring for this long.
 const float CONTROL_POINT_ANIM_DUR = 10.0f;
 
 //The amount of rings the ship's control point has.
 const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
-
-//How often the tractor beam generates a ring.
-const float TRACTOR_BEAM_EMIT_RATE = 0.15f;
-
-//Animate each tractor beam ring for this long.
-const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
 
 }
 
@@ -58,17 +58,17 @@ Ship::Ship(const Point& pos, ShipType* type, float angle) :
         Distance(controlPointFinalPos, receptacleFinalPos).toFloat()
     ) {
     
-    nextTractorBeamRingTimer.onEnd = [this] () {
-        nextTractorBeamRingTimer.start();
-        tractorBeamRings.push_back(0);
+    nextBeamRingTimer.onEnd = [this] () {
+        nextBeamRingTimer.start();
+        beamRings.push_back(0);
         float hue =
             fmod(
                 game.states.gameplay->areaTimePassed * 360, 360
             );
             
-        tractorBeamRingColors.push_back(hue);
+        beamRingColors.push_back(hue);
     };
-    nextTractorBeamRingTimer.start();
+    nextBeamRingTimer.start();
     
     nest = new PikminNest(this, shiType->nest);
     
@@ -142,12 +142,12 @@ void Ship::drawMob() {
         );
     }
     
-    //Drawing the tractor beam rings.
+    //Drawing the beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
-    for(char r = (char) tractorBeamRings.size() - 1; r > 0; r--) {
+    for(char r = (char) beamRings.size() - 1; r > 0; r--) {
     
         float ringAnimRatio =
-            tractorBeamRings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;
+            beamRings[r] / SHIP::BEAM_RING_ANIM_DUR;
             
         unsigned char ringAlpha = 80;
         if(ringAnimRatio <= 0.3f) {
@@ -176,7 +176,7 @@ void Ship::drawMob() {
             );
             
         ALLEGRO_COLOR ringColor =
-            al_color_hsl(tractorBeamRingColors[r], 1.0f, ringBrightness);
+            al_color_hsl(beamRingColors[r], 1.0f, ringBrightness);
         ringColor = changeAlpha(ringColor, ringAlpha);
         
         float ringScale =
@@ -257,18 +257,18 @@ void Ship::tickClassSpecifics(float deltaT) {
     nest->tick(deltaT);
     
     if(mobsBeingBeamed > 0) {
-        nextTractorBeamRingTimer.tick(deltaT);
+        nextBeamRingTimer.tick(deltaT);
     }
     
-    for(size_t r = 0; r < tractorBeamRings.size(); ) {
+    for(size_t r = 0; r < beamRings.size(); ) {
         //Erase rings that have reached the end of their animation.
-        tractorBeamRings[r] += deltaT;
-        if(tractorBeamRings[r] > SHIP::TRACTOR_BEAM_RING_ANIM_DUR) {
-            tractorBeamRings.erase(
-                tractorBeamRings.begin() + r
+        beamRings[r] += deltaT;
+        if(beamRings[r] > SHIP::BEAM_RING_ANIM_DUR) {
+            beamRings.erase(
+                beamRings.begin() + r
             );
-            tractorBeamRingColors.erase(
-                tractorBeamRingColors.begin() + r
+            beamRingColors.erase(
+                beamRingColors.begin() + r
             );
         } else {
             r++;

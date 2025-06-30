@@ -18,10 +18,10 @@
 
 
 namespace SHIP {
+extern const float BEAM_EMIT_RATE;
+extern const float BEAM_RING_ANIM_DUR;
 extern const float CONTROL_POINT_ANIM_DUR;
 extern const unsigned char CONTROL_POINT_RING_AMOUNT;
-extern const float TRACTOR_BEAM_EMIT_RATE;
-extern const float TRACTOR_BEAM_RING_ANIM_DUR;
 }
 
 
@@ -40,17 +40,20 @@ public:
     //Nest data.
     PikminNest* nest = nullptr;
     
-    //Time left until the next tractor beam ring is spat out.
-    Timer nextTractorBeamRingTimer = Timer(SHIP::TRACTOR_BEAM_EMIT_RATE);
+    //Time left until the next beam ring is spat out.
+    Timer nextBeamRingTimer = Timer(SHIP::BEAM_EMIT_RATE);
     
-    //Hue of each tractor beam ring.
-    vector<float> tractorBeamRingColors;
+    //Hue of each beam ring.
+    vector<float> beamRingColors;
     
-    //How long each tractor beam ring has existed for.
-    vector<float> tractorBeamRings;
+    //How long each beam ring has existed for.
+    vector<float> beamRings;
     
     //How many objects are currently being beamed?
     size_t mobsBeingBeamed = 0;
+    
+    //ID of the beam sound, if any.
+    size_t soundBeamId = 0;
     
     //The control point's absolute coordinates.
     Point controlPointFinalPos;

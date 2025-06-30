@@ -11,7 +11,7 @@ If you found a problem while using _Pikifen_, please refer to the included manua
 
 ## Suggesting features or improvements
 
-If you have any feedback, suggestions, or ideas, feel free to open a [GitHub issue](https://github.com/Espyo/Pikifen/issues) with them. Though the easiest and most direct way is to just tell me about it on the [Discord server](https://discord.gg/qbhz4u3). No need to be formal with these suggestions, but check `source/documents/todo.txt` to make sure it's not already there, and also please let me know why you think _Pikifen_ would be better with them.
+If you have any feedback, suggestions, or ideas, feel free to open a [GitHub issue](https://github.com/Espyo/Pikifen/issues) with them. Though the easiest and most direct way is to just tell me about it on the [Discord server](https://discord.gg/qbhz4u3). No need to be formal with these suggestions, but check `source/documents/todo.txt` to make sure it's not already there, and also please let me know why you think _Pikifen_ would be better with them &ndash; some features aren't such a good idea when you think about it twice!
 
 ## Contributing with code
 
@@ -47,7 +47,7 @@ If you've made some content to be added to the base content in _Pikifen_, you ca
 
 The content you made, once done, will be officially added to the engine. For the sake of fairness, and to help showcase diverse creations around the fanbase, you will still be recorded as the author of the content, your name will show up in the area selection menu in the case of areas, and you will still be the person to talk to for thanks, updates, feedback, etc. I think it's only fair to treat other people's content with respect, especially when I intend to use them officially for the engine, after all! That said, there are some things I'd like to point out:
 
-1. I may tweak the content further before officially adding it to the engine. Remember that the base content is meant to be fun to play with, and also serve as a reference point for new content, so I want the content to be as squeaky clean as they can.
+1. I may tweak the content further before officially adding it to the engine. Remember that the base content is meant to be fun to play with, and also serve as a reference point for new content, so I want the content to be as polished as it can.
 2. Once officially in the engine, the content will receive the same treatment any other official content would, in that I'll be its maintainer (not author!).
 3. Over time, I may need to remove problematic parts, make changes to make it compatible from version to version, tweak certain things for quality/balance/diversity reasons as the engine evolves, give it extra content that is currently missing from the engine, remove the content entirely, and so on.
 4. I will always try to keep your original vision intact, and I will make a fair effort to balance out your wishes with the engine's needs.
@@ -58,7 +58,7 @@ The content you made, once done, will be officially added to the engine. For the
 
 ### Variety
 
-Before starting your work on content to be added officially, you should probably discuss with everyone else what your plan is. This way, we can make sure the content included are diverse in nature, and that we don't end up with something like 4 forest-themed songs, or 0 areas total that use Rock Pikmin, or something.
+Before starting your work on content to be added officially, you should probably discuss with everyone else what your plan is. This way, we can make sure the contents included are diverse in nature, and that we don't end up with something like 4 forest-themed songs, or 0 areas total that use Rock Pikmin, or something.
 
 ### Quality
 

@@ -66,6 +66,12 @@ public:
     //The Onion's alpha.
     unsigned char seethrough = 255;
     
+    //How many objects are currently being beamed?
+    size_t mobsBeingBeamed = 0;
+    
+    //ID of the beam sound, if any.
+    size_t soundBeamId = 0;
+    
     
     //--- Function declarations ---
     

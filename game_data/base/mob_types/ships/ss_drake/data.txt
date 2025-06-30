@@ -11,6 +11,22 @@ pushes_softly = true
 radius = 90
 receptacle_offset = 131 5
 
+sounds {
+    beam {
+        file = effects/beam
+        volume = 30
+        speed = 95
+        speed_deviation = 5
+        loop = true
+    }
+    reception {
+        file = effects/poof
+        volume = 40
+        speed = 95
+        speed_deviation = 15
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

@@ -63,8 +63,14 @@ public:
     //Nest data.
     PikminNestType* nest = nullptr;
     
+    //Sound data index for the beam sound. Cache for performance.
+    size_t soundBeamIdx = INVALID;
+    
     //Sound data index for the pop sound. Cache for performance.
     size_t soundPopIdx = INVALID;
+    
+    //Sound data index for the object reception sound. Cache for performance.
+    size_t soundReceptionIdx = INVALID;
     
     
     //--- Function declarations ---

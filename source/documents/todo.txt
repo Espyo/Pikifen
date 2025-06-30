@@ -109,9 +109,8 @@ Next tasks (roughly sorted most important first)
                 x Wollyhop jumping (and leader getting up)
                 x Enemy soul floating
             Other mobs
-                Onion/ship beam
-                    Two sine-wave tracks, different frequencies, with tremolo
-                Onion/ship object entered
+                x Onion/ship beam
+                x Onion/ship object entered
                 Onion spinning up to generate
                 x Onion/Candypop spitting
                 Pikmin entering Onion

@@ -22,6 +22,7 @@ void createFsm(MobType* typ);
 void checkStartGenerating(Mob* m, void* info1, void* info2);
 void checkStopGenerating(Mob* m, void* info1, void* info2);
 void receiveMob(Mob* m, void* info1, void* info2);
+void startDelivery(Mob* m, void* info1, void* info2);
 void startGenerating(Mob* m, void* info1, void* info2);
 void startIdling(Mob* m, void* info1, void* info2);
 void stopGenerating(Mob* m, void* info1, void* info2);

@@ -148,6 +148,12 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
     }
     
     shiPtr->mobsBeingBeamed--;
+    
+    if(shiPtr->mobsBeingBeamed == 0 && shiPtr->soundBeamId != 0) {
+        game.audio.destroySoundSource(shiPtr->soundBeamId);
+        shiPtr->soundBeamId = 0;
+    }
+    
     ParticleGenerator pg =
         standardParticleGenSetup(
             game.sysContentNames.parOnionInsertion, shiPtr
@@ -156,6 +162,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
     pg.followZOffset -= 2.0f; //Must appear below the ship's receptacle.
     shiPtr->particleGenerators.push_back(pg);
     
+    shiPtr->playSound(shiPtr->shiType->soundReceptionIdx);
 }
 
 
@@ -183,4 +190,7 @@ void ShipFsm::setAnim(Mob* m, void* info1, void* info2) {
 void ShipFsm::startDelivery(Mob* m, void* info1, void* info2) {
     Ship* shiPtr = (Ship*) m;
     shiPtr->mobsBeingBeamed++;
+    if(shiPtr->mobsBeingBeamed == 1 && shiPtr->soundBeamId == 0) {
+        shiPtr->soundBeamId = shiPtr->playSound(shiPtr->shiType->soundBeamIdx);
+    }
 }

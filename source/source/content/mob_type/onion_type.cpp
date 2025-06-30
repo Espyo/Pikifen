@@ -77,6 +77,10 @@ void OnionType::loadCatProperties(DataNode* file) {
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
             soundPopIdx = s;
+        } else if(sounds[s].name == "beam") {
+            soundBeamIdx = s;
+        } else if(sounds[s].name == "reception") {
+            soundReceptionIdx = s;
         }
     }
 }

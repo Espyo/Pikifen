@@ -64,6 +64,12 @@ public:
     //Ship control point radius.
     float controlPointRadius = 45.0f;
     
+    //Sound data index for the beam sound. Cache for performance.
+    size_t soundBeamIdx = INVALID;
+    
+    //Sound data index for the object reception sound. Cache for performance.
+    size_t soundReceptionIdx = INVALID;
+    
     
     //--- Function declarations ---
     

@@ -30,6 +30,9 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(OnionFsm::startIdling);
         }
+        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+            efc.run(OnionFsm::startDelivery);
+        }
         efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
@@ -42,6 +45,9 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(OnionFsm::startGenerating);
         }
+        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+            efc.run(OnionFsm::startDelivery);
+        }
         efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
@@ -53,6 +59,9 @@ void OnionFsm::createFsm(MobType* typ) {
     efc.newState("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(OnionFsm::stopGenerating);
+        }
+        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+            efc.run(OnionFsm::startDelivery);
         }
         efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
@@ -159,6 +168,13 @@ void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
         }
     }
     
+    oniPtr->mobsBeingBeamed--;
+    
+    if(oniPtr->mobsBeingBeamed == 0 && oniPtr->soundBeamId != 0) {
+        game.audio.destroySoundSource(oniPtr->soundBeamId);
+        oniPtr->soundBeamId = 0;
+    }
+    
     oniPtr->stopGenerating();
     oniPtr->generationDelayTimer.start();
     oniPtr->generationQueue[typeIdx] += seeds;
@@ -170,7 +186,25 @@ void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
     pg.followZOffset -= 2.0f; //Must appear below the Onion's bulb.
     oniPtr->particleGenerators.push_back(pg);
     
+    oniPtr->playSound(oniPtr->oniType->soundReceptionIdx);
 }
+
+
+/**
+ * @brief When an Onion starts receiving a mob carried by Pikmin.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void OnionFsm::startDelivery(Mob* m, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) m;
+    oniPtr->mobsBeingBeamed++;
+    if(oniPtr->mobsBeingBeamed == 1 && oniPtr->soundBeamId == 0) {
+        oniPtr->soundBeamId = oniPtr->playSound(oniPtr->oniType->soundBeamIdx);
+    }
+}
+
 
 
 /**

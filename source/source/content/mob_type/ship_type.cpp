@@ -77,6 +77,14 @@ void ShipType::loadCatProperties(DataNode* file) {
     sRS.set("receptacle_offset", receptacleOffset);
     
     nest->loadProperties(file);
+    
+    for(size_t s = 0; s < sounds.size(); s++) {
+        if(sounds[s].name == "beam") {
+            soundBeamIdx = s;
+        } else if(sounds[s].name == "reception") {
+            soundReceptionIdx = s;
+        }
+    }
 }
 
 
