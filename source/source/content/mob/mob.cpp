@@ -115,7 +115,7 @@ const float MOB_SPEED_ANIM_MIN_MULT = 0.3f;
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 
 //Wait these many seconds before allowing another Pikmin to be called out.
-const float PIKMIN_NEST_CALL_INTERVAL = 0.01f;
+const float PIKMIN_NEST_CALL_INTERVAL = 0.02f;
 
 //A little extra push amount when mobs intersect. Can't be throttled.
 const float PUSH_EXTRA_AMOUNT = 50.0f;

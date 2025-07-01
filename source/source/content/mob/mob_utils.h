@@ -655,10 +655,16 @@ struct PikminNestType {
     //Speed at which Pikmin exit the nest.
     float pikminExitSpeed = 2.0f;
     
+    //Sound data index for the Pikmin entry sound. Cache for performance.
+    size_t soundPikminEntryIdx = INVALID;
+    
+    //Sound data index for the Pikmin exit sound. Cache for performance.
+    size_t soundPikminExitIdx = INVALID;
+    
     
     //--- Function declarations ---
     
-    void loadProperties(DataNode* file);
+    void loadProperties(DataNode* file, MobType* mobType);
     
 };
 

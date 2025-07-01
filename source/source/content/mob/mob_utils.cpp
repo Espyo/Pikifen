@@ -875,6 +875,9 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
         );
         newPikmin->leaderToReturnTo = callingLeader;
         
+        //Sound.
+        mPtr->playSound(nestType->soundPikminExitIdx);
+        
         return true;
     }
     
@@ -959,6 +962,8 @@ void PikminNest::storePikmin(Pikmin* pPtr) {
     }
     
     pPtr->toDelete = true;
+    
+    mPtr->playSound(nestType->soundPikminEntryIdx);
 }
 
 
@@ -1009,8 +1014,9 @@ void PikminNest::tick(float deltaT) {
  * @brief Loads nest-related properties from a data file.
  *
  * @param file File to read from.
+ * @param mobType The mob type it belongs to.
  */
-void PikminNestType::loadProperties(DataNode* file) {
+void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     ReaderSetter nRS(file);
     
     string pikTypesStr;
@@ -1046,6 +1052,14 @@ void PikminNestType::loadProperties(DataNode* file) {
             );
         } else {
             pikTypes.push_back(game.content.mobTypes.list.pikmin[str]);
+        }
+    }
+    
+    for(size_t s = 0; s < mobType->sounds.size(); s++) {
+        if(mobType->sounds[s].name == "pikmin_entry") {
+            soundPikminEntryIdx = s;
+        } else if(mobType->sounds[s].name == "pikmin_exit") {
+            soundPikminExitIdx = s;
         }
     }
 }

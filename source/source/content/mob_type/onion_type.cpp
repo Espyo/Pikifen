@@ -72,7 +72,7 @@ AnimConversionVector OnionType::getAnimConversions() const {
  * @param file File to read from.
  */
 void OnionType::loadCatProperties(DataNode* file) {
-    nest->loadProperties(file);
+    nest->loadProperties(file, this);
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {

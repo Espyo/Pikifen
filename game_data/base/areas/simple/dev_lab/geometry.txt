@@ -12691,7 +12691,7 @@ mobs{
 	onion{
 		type=master_onion
 		p=-352.0000 -544.0000
-		vars=pikmin_inside=1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+		vars=pikmin_inside=3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 	}
 	bouncer{
 		type=geyser
@@ -12705,27 +12705,27 @@ mobs{
 	onion{
 		type=red_onion
 		p=-512.0000 -544.0000
-		vars=pikmin_inside=1 1 1
+		vars=pikmin_inside=3 3 3
 	}
 	onion{
 		type=yellow_onion
 		p=-672.0000 -544.0000
-		vars=pikmin_inside=1 1 1
+		vars=pikmin_inside=3 3 3
 	}
 	onion{
 		type=blue_onion
 		p=-832.0000 -544.0000
-		vars=pikmin_inside=1 1 1
+		vars=pikmin_inside=3 3 3
 	}
 	onion{
 		type=rock_onion
 		p=-992.0000 -544.0000
-		vars=pikmin_inside=1 1 1
+		vars=pikmin_inside=3 3 3
 	}
 	onion{
 		type=winged_onion
 		p=-1152.0000 -544.0000
-		vars=pikmin_inside=1 1 1
+		vars=pikmin_inside=3 3 3
 	}
 	interactable{
 		type=orb_sign
@@ -13438,6 +13438,7 @@ mobs{
 	ship{
 		type=hocotate_ship
 		p=320.0000 -2304.0000
+		vars=pikmin_inside=3 3 3 3 3 3
 	}
 	bouncer{
 		type=geyser

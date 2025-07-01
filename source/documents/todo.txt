@@ -11,6 +11,7 @@ Next tasks (roughly sorted most important first)
     Dead enemies aren't leaving souls
         if(reviveTimer.duration >= 0)
     You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
+    Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
     If the sprites or animations got sorted when saving, say so in the status bar
@@ -113,8 +114,8 @@ Next tasks (roughly sorted most important first)
                 x Onion/ship object entered
                 Onion spinning up to generate
                 x Onion/Candypop spitting
-                Pikmin entering Onion
-                Pikmin exiting Onion
+                x Pikmin entering Onion
+                x Pikmin exiting Onion
                 Bamboo gate moving
                 Automatic gate moving
                 Bramble gate being hit
@@ -151,6 +152,8 @@ Next tasks (roughly sorted most important first)
                     Birds, frogs, etc.
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
+        All enemy stepping sounds should be audible
+        All enemies should make a thud sound when plopping down when dying
         All sound files should be at peak amplitude
     Compose and add a song for Playful Yard
     Other base content changes

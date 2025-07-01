@@ -24,6 +24,20 @@ sounds {
         speed_deviation = 5
         stack_min_pos = 0.005
     }
+    pikmin_entry {
+        file = effects/pop
+        volume = 20
+        speed = 50
+        speed_deviation = 8
+        stack_min_pos = 0.02
+    }
+    pikmin_exit {
+        file = effects/pop
+        volume = 20
+        speed = 70
+        speed_deviation = 8
+        stack_min_pos = 0.02
+    }
     reception {
         file = effects/poof
         volume = 40
