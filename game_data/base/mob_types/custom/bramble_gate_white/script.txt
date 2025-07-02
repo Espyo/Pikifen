@@ -19,6 +19,7 @@ script {
             set_animation stage_1_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
@@ -37,6 +38,7 @@ script {
             set_state stage_1_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
@@ -51,6 +53,7 @@ script {
             set_animation stage_2_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
@@ -66,6 +69,7 @@ script {
             set_state stage_2_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
@@ -77,6 +81,7 @@ script {
             set_animation stage_3_idling
         }
         on_damage {
+            play_sound hit
             set_state stage_3_shaking
         }
     }
@@ -95,6 +100,7 @@ script {
             finish_dying
             start_particles enemy_defeat 0 0 129
             start_particles bramble_gate_explosion 0 0 129
+            play_sound destroyed
             play_sound obstacle_cleared
             set_tangible false
             set_shadow_visibility false

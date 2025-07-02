@@ -39,6 +39,11 @@ children {
 }
 
 sounds {
+    drag {
+        file = misc/cardboard_drag
+        volume = 40
+        loop = true
+    }
     obstacle_cleared {
         file = gui/obstacle_cleared
         type = gameplay_global

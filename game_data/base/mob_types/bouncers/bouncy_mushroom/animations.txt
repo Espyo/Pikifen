@@ -13,6 +13,7 @@ animations{
 			idling{
 				duration=0.0600
 				interpolate=true
+				sound=boing
 			}
 			bouncing_02{
 				duration=0.0600

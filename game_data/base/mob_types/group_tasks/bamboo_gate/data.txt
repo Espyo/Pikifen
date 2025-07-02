@@ -52,6 +52,11 @@ spawns {
 }
 
 sounds {
+    bamboo {
+        file = nature/bamboo
+        volume = 30
+        speed_deviation = 5
+    }
     thud {
         file = misc/stomp_quick
         volume = 70

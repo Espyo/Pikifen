@@ -14,6 +14,8 @@ Next tasks (roughly sorted most important first)
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
+    Try some more styles for the logo Pikmin, so that all flower colors are included; or only the P is white while the others are different
+        Create a wordmark, using the logo Pikmin, to show in the README, manual, and so on
     If the sprites or animations got sorted when saving, say so in the status bar
     Update Dear ImGui to version 1.92.0
         https://github.com/ocornut/imgui/releases/tag/v1.92.0
@@ -116,12 +118,12 @@ Next tasks (roughly sorted most important first)
                 x Onion/Candypop spitting
                 x Pikmin entering Onion
                 x Pikmin exiting Onion
-                Bamboo gate moving
-                Automatic gate moving
-                Bramble gate being hit
-                Bramble gate breaking
-                Bouncy Mushroom throwing
-                Cardboard box being dragged
+                x Bamboo gate moving
+                x Automatic gate moving
+                x Bramble gate being hit
+                x Bramble gate breaking
+                x Bouncy Mushroom throwing
+                x Cardboard box being dragged
                 Kingcap and Spotcap being damaged
                 Kingcap and Spotcap exploding
                 Paper bag deflating crinkling
@@ -205,6 +207,7 @@ Next tasks (roughly sorted most important first)
     Test everything in DEV Lab
     Test all Pikmin and leader states
     Check one final time for leaks, run a static analysis, etc.
+    Check one final time that all content has the engine version as 1.0.0
     Make sure the readme's <50MB size claim is correct
     
     --- Future ---
@@ -685,6 +688,7 @@ Next tasks (roughly sorted most important first)
             A way to un/fold the contents of states and events
             A way to view all states, with arrows pointing to which events lead to which states
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
+                Probably too much info shown at once
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
         Loose content editor
             Basically just a frontend for editing hazards, liquids, misc. configs, mob types, spike damage types, sprays, and statuses

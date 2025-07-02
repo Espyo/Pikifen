@@ -10,6 +10,14 @@ pushes_softly = true
 radius = 64
 riders = pikmin leaders
 
+sounds {
+    boing {
+        file = effects/boing_mid
+        volume = 60
+        speed_deviation = 5
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

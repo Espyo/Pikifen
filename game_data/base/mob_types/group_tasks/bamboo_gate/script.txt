@@ -38,6 +38,7 @@ script {
             set_tangible true
             move_to_absolute $x $y $z_open
             start_particles dust_falling 0 0 0
+            play_sound bamboo
         }
         on_receive_message {
             if $msg = goal_lost
@@ -70,6 +71,7 @@ script {
             set_tangible true
             move_to_absolute $x $y $z_closed
             start_particles dust_falling 0 0 0
+            play_sound bamboo
         }
         on_receive_message {
             if $msg = goal_reached

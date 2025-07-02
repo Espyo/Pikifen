@@ -12,6 +12,16 @@ radius = 32
 rectangular_dimensions = 40 192
 
 sounds {
+    vine {
+        file = effects/stretch
+        volume = 40
+        speed_deviation = 10
+    }
+    rock {
+        file = misc/rock_grind
+        volume = 30
+        speed_deviation = 5
+    }
     thud {
         file = misc/stomp_long
         volume = 70

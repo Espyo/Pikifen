@@ -17,7 +17,7 @@ show_health = false
 
 sounds {
     wood_hit {
-        file = nature/wood_hit
+        file = nature/wood_hit_1
         volume = 20
         speed_deviation = 30
     }
