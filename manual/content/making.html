@@ -32,9 +32,9 @@
       <dt><b>Internal names are the file names without extension or the folder names.</b></dt>
       <dd>Whether a piece of content's internal name comes from its file name or from its folder name depends on the type of content. In the case of file names, the file proper must have an <a href="glossary.html#file-name">extension</a> but the internal name will not include it.</dd>
       <dt><b>Internal names should ideally be in lowercase and use underscores.</b></dt>
-      <dd>To avoid mishaps with case sensitivity and spaces for separating arguments in different parts of the engine, internal names (and thus content file and folder names) should use lowercase letters only, use underscores instead of spaces, and avoid more "exotic" characters like symbols.</dd>
+      <dd>To avoid mishaps with case sensitivity and spaces for separating arguments in different parts of the engine, internal names (and thus content file and folder names) should be in <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a>: use lowercase letters only, use underscores instead of spaces, and avoid more "exotic" characters like symbols.</dd>
       <dt><b>Most content has a data file with some metadata.</b></dt>
-      <dd>Besides things like images and sounds, all pieces of game content have a data file that contains metadata, i.e. information about what this content is, what version it is, who made it, and so on. See <a href="#content-props">here</a> for details.</dd>
+      <dd>Besides assets like images and sounds, all pieces of game content have a data file that contains metadata, i.e. information about what this content is, what version it is, who made it, and so on. See <a href="#content-props">here</a> for details.</dd>
       <dt><b>Content can exist in multiple packs.</b></dt>
       <dd>For more information, see <a href="#packs">here</a>.</dd>
     </dl>
@@ -159,7 +159,7 @@ block {
       <dt><b>Content with the same internal name will be overwritten.</b></dt>
       <dd>There can only be one piece of content by a given internal name. So you can't have two <code>water</code> hazards loaded, for instance. If a pack has a <code>water</code> hazard, but another pack that gets loaded later also has a <code>water</code> hazard, only the latter's will be loaded. This allows you, for instance, to replace content from the base pack with your own versions!</dd>
       <dt><b>Sharing your pack is ideally done with a zip file.</b></dt>
-      <dd>When you want to share your content with others, it's recommended that you right-click your pack's folder, and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file. It's better to compress the pack folder as a whole, and not the contents <i>inside</i> the folder. Once you share it (try the <a href="https://discord.gg/qbhz4u3">Discord server</a>!), any player that wants to try your content simply needs to download your zip file, extract it, and place the extracted folder in their own <code>game_data</code> folder!</dd>
+      <dd>When you want to share your content with others, it's recommended that you right-click your pack's folder, and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file. It's better to compress the pack <i>folder</i> as a whole, and not the contents <i>inside</i> the folder. Once you share it (try the <a href="https://discord.gg/qbhz4u3">Discord server</a>!), any player that wants to try your content simply needs to download your zip file, extract it, and place the extracted folder in their own <code>game_data</code> folder!</dd>
     </dl>
 
     <h3 id="pack-props">Pack properties</h3>

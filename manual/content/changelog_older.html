@@ -17,6 +17,379 @@
     
     <p>Older entries of the <a href="changelog.html">changelog</a>.</p>
 
+    <h2 id="0.25.0">0.25.0</h2>
+    
+    <p><i>February 17th, 2024 &ndash; the "music & radar" update</i></p>
+
+    <p><b>Gameplay changes</b></p>
+
+    <ul>
+      <li>
+        New pause menu features:
+        <ul>
+          <li><span class="cl-a">Added</span> a radar to the pause menu, along with Go Here, and a dedicated button shortcut.</li>
+          <li><span class="cl-a">Added</span> a Pikmin status page to the pause menu.</li>
+        </ul>
+      </li>
+      <li>
+        New objects:
+        <ul>
+          <li><span class="cl-a">Added</span> <a href="mob_interactable.html">levers and timed levers</a>. Interact with a leader or throw a Pikmin to power or stop powering devices.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_interactable.html">buttons</a>. Interact with a leader or throw a Pikmin to power devices for a split-second.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_custom.html">logic gates</a>. These allow for complex mechanisms, like a gate that only opens if two different power sources are on.</li>
+        </ul>
+      </li>
+      <li>
+        Audio improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> audio volume options.</li>
+          <li><span class="cl-c">Changed</span> the audio system for much better sound effect playback.</li>
+        </ul>
+      </li>
+      <li>
+        UI improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> headers to each menu.</li>
+          <li><span class="cl-a">Added</span> the ability to close messages with the "pause" button.</li>
+          <li><span class="cl-a">Added</span> control binds for navigating between pages of the pause menu, as well as radar-related binds.</li>
+          <li><span class="cl-c">Changed</span> the options menu to be split into pages.</li>
+        </ul>
+      </li>
+      <li>
+        Other changes:
+        <ul>
+          <li><span class="cl-c">Changed</span> how some objects push against each other. Now, leaders and Pikmin can squeeze through them to get unstuck. This does not apply to more "solid" objects like gates.</li>
+          <li><span class="cl-c">Changed</span> the range for an idle Pikmin to be considered "bumped" by the active leader, so they can be called from farther away.</li>
+          <li><span class="cl-c">Changed</span> the way the Yellow Wollywog works to make the fight easier and a bit more dynamic.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Content making changes</b></p>
+
+    <ul>
+      <li>
+        Audio:
+        <ul>
+          <li><span class="cl-a">Added</span> <a href="music.html">music</a> support.</li>
+          <li><span class="cl-a">Added</span> the system sound effects to the <a href="misc_config.html#system-asset">system asset file names list</a>.</li>
+          <li><span class="cl-a">Added</span> the ability for objects to play sounds via <a href="animation.html">animations</a> or <a href="script.html">scripting</a> (<code>play_sound</code> action).</li>
+          <li><span class="cl-a">Added</span> the ability for different Pikmin types to play different sounds.</li>
+        </ul>
+      </li>
+      <li>
+        Area editor improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> a redo feature to the area editor.</li>
+          <li><span class="cl-a">Added</span> the ability for a sector to reuse the same vertex. Before, it just considered the sector broken.</li>
+          <li><span class="cl-a">Added</span> the ability to create sub-sectors. This happens if one sector's polygon ends up getting split into two. While not recommended, it stops the maker from receiving warnings and from the sector to be considered broken.</li>
+          <li><span class="cl-a">Added</span> the ability to keep drawing a new sector, for when you try to split a sector but the engine considers that split useless.</li>
+          <li><span class="cl-a">Added</span> an outline of child objects when viewing an object in the area editor. (Thanks Helodity)</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="mob_type.html">object type</a> properties:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>pushes_softly</code> property.</li>
+          <li><span class="cl-a">Added</span> the <code>blackout_radius</code> property. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> the <code>area_editor_recommend_links_from</code> and <code>area_editor_recommend_links_to</code> properties.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="events_and_actions.html">Object script event and action</a> changes:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>on_input_received</code> event.</li>
+          <li><span class="cl-a">Added</span> the <code>on_ready</code> event.</li>
+          <li><span class="cl-a">Added</span> the <code>get_area_info</code>, <code>get_event_info</code>, and <code>get_mob_info</code> actions. All data obtained from <code>get_info</code> are now obtained by the corresponding actions. (Thanks Helodity)</li>
+          <li><span class="cl-r">Removed</span> the <code>get_info</code> action, since it was replaced by the previous three actions. (Thanks Helodity)</li>
+          <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> action, since it was replaced by <code>get_mob_info</code> with the <code>focus</code> target. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_event_info</code> action.</li>
+          <li><span class="cl-a">Added</span> the <code>id</code> and <code>state</code> data types to the <code>get_mob_info</code> action. (Thanks Helodity)</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="misc_config.html">game configuration</a> properties:
+        <ul>
+          <li><span class="cl-a">Added</span> support for the thus far-unused <code>maturity_power_mult</code> property.</li>
+          <li><span class="cl-a">Added</span> the <code>idle_bump_range</code> property.</li>
+        </ul>
+      </li>
+      <li>
+        Pathing changes:
+        <ul>
+          <li><span class="cl-a">Added</span> the "ledge" link type. Normal mobs can go from a higher path stop to a lower one but not the other way around, unless they are airborne.</li>
+          <li><span class="cl-a">Added</span> the "script use only", "light load only", and "airborne only" settings to stops. These replace the equivalent link types. Also, added labels to stops, which replace labels in links.</li>
+          <li><span class="cl-r">Removed</span> all link types except for the newly-added "ledge" type, since they were replaced by the equivalent stop settings. Also, removed link labels, since they too were replaced with a stop property.</li>
+          <li><span class="cl-a">Added</span> a radius property to path stops.</li>
+        </ul>
+      </li>
+      <li>
+        Other changes:
+        <ul>
+          <li><span class="cl-a">Added</span> three new player actions to the controls: <code>custom_a</code>, <code>custom_b</code>, and <code>custom_c</code>. These do nothing on their own, but can be detected through <a href="script.html">leader scripts</a>. (Thanks WanderingLetterS)</li>
+          <li><span class="cl-a">Added</span> the <code>is_boss</code> property to <a href="mob_enemy.html">enemy types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>radar_color</code> property to <a href="hazard.html">liquids</a>.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-r">Removed</span> the <code>get_info</code> <a href="script.html">mob action</a>, per above.</li>
+      <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> <a href="script.html">mob action</a>, per above.</li>
+      <li><span class="cl-c">Changed</span> the GUI data and file names for the options menu since it's now split into pages, as well as the name of the control binds menu (<code>Control_binds_menu.txt</code> instead of <code>Controls_menu.txt</code>).</li>
+      <li><span class="cl-c">Changed</span> the list of existing <a href="misc_config.html#system-asset">system asset file names</a> to be inside of a <code>graphics</code> block.</li>
+      <li><span class="cl-c">Changed</span> the location of sound effects from <code>Game_data/Audio</code> to <code>Game_data/Audio/Sounds</code>.</li>
+      <li><span class="cl-c">Changed</span> the way leader type and Pikmin type sounds are configured. Instead of properties starting with <code>sfx_</code>, or just hardcoded files starting with <code>Pikmin_</code>, they are now standard object type sounds.</li>
+    </ul>
+
+    <h2 id="0.24.0">0.24.0</h2>
+    
+    <p><i>July 14th, 2023 &ndash; the "new areas" update</i></p>
+
+    <p><b>Gameplay changes</b></p>
+
+    <ul>
+      <li>
+        New areas:
+        <ul>
+          <li><span class="cl-a">Added</span> Tutorial Meadow. If you never played an area before, you will be prompted to start here.</li>
+          <li><span class="cl-a">Added</span> Cryptic Atrium. A medium-short puzzle stage with pressure plates and automatic gates.</li>
+          <li><span class="cl-a">Added</span> Playful Yard. A reincarnation of the old "Play" area, with a more playful motif, better design, and as a proper mission.</li>
+          <li><span class="cl-a">Added</span> Crash Landing. A difficult quick mission to get all treasures before time runs out. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> DEV Lab. It showcases pretty much everything <i>Pikifen</i> has to offer.</li>
+          <li><span class="cl-r">Removed</span> Play in favor of Playful Yard.</li>
+        </ul>
+      </li>
+      <li>
+        New objects:
+        <ul>
+          <li><span class="cl-a">Added</span> <a href="mob_interactable.html">orb signs</a>, which work like signs but are generic orbs instead of wooden planks.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_bouncer.html">geysers</a>, a type of bouncer that only leaders can use.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_resource.html">carriable rocks</a>, which can be carried around and dropped to weigh on something.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_scale.html">pressure plates</a>, which trigger some other object to do something whenever they have enough weight on them.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_custom.html">automatic gates</a>, which lift in the air whenever they are powered by things like a pressure plate.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_custom.html">carry targets</a>, which allows other things to be carried to it for no effect.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_treasure.html">treasures</a>: a fidget spinner, a yo-yo, and a jigsaw puzzle piece.</li>
+        </ul>
+      </li>
+      <li>
+        Misc:
+        <ul>
+          <li><span class="cl-a">Added</span> images to the help page of the pause menu. (Thanks erdinvark)</li>
+          <li><span class="cl-a">Added</span> a random area button to the area selection menu.</li>
+          <li><span class="cl-a">Added</span> mission statistics for the total of clears, total of platinum medals, and total combined sum of score points.</li>
+          <li><span class="cl-c">Changed</span> the way paper bags work to make it so leaders can't be thrown on top, and so that Pikmin can't accidentally be thrown over them to the other side.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Content making changes</b></p>
+
+    <ul>
+      <li>Editor improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> a bunch of menu bar items across all editors.</li>
+          <li><span class="cl-a">Added</span> a toolbar button to the area editor to toggle preview mode. Advanced interface mode only.</li>
+          <li><span class="cl-a">Added</span> the ability to lock to an axis while dragging, if Ctrl is held.</li>
+          <li><span class="cl-a">Added</span> the ability to add to the selection when dragging a selection box, if Ctrl is held.</li>
+          <li><span class="cl-a">Added</span> the ability to copy a sector, edge, object, or path link's properties, so they can then be pasted elsewhere.</li>
+          <li><span class="cl-a">Added</span> some shortcut operations to the sector height widget as a right-click context menu.</li>
+          <li><span class="cl-a">Added</span> settings for the area editor's path preview tool. Plus some more detailed information about the path calculation.</li>
+          <li><span class="cl-c">Changed</span> the unsaved changes warning to be a dialog like in most programs. The idea of the old pop-up was to require fewer clicks and mouse movement when you were sure you wanted to not save, but some actions are hidden behind menus which forces you to go there twice. The dialog approach comes with many quality-of-life tweaks that make it an overall better feature.</li>
+          <li><span class="cl-c">Changed</span> the way copying textures from a different sector works. Instead of selecting the source, then hovering the mouse over the destination and pressing T, you now copy the source sector's properties, then paste just the texture on the selected sectors.</li>
+          <li><span class="cl-c">Changed</span> what happens when the user is drawing a new sector and clicks on an edge or vertex. Instead of throwing an error, the editor now changes the drawing to a sector split drawing, and lets the user continue drawing from the opposite end.</li>
+          <li><span class="cl-c">Changed</span> the area editor's saving procedure to no longer need to boot the user back to the main panel.</li>
+        </ul>
+      </li>
+      <li>Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>hud</code> <a href="maker_toolkit.html">maker tool</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>path_info</code> <a href="maker_toolkit.html">maker tool</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>custom_carry_spots</code> property to <a href="mob_type.html">mob types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>power_goal</code> script variable to <a href="mob_group_task.html">group tasks</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>goal_number</code> script variable to <a href="mob_scale.html">scales</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>stay</code> value to a <a href="mob_resource.html">resource type's</a> delivery results.</li>
+          <li><span class="cl-a">Added</span> the <code>linked_mob_matching_type</code> value to a <a href="mob_resource.html">resource type's</a> carrying destinations.</li>
+          <li><span class="cl-a">Added</span> the <code>area_image_padding</code> property to the <a href="maker_toolkit.html">maker tools</a>.</li>
+          <li><span class="cl-a">Added</span> the ability for dead enemies to drop objects via a "stored inside" feature in the area editor. This allows the engine to detect things like treasures inside enemies for the purposes of missions.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-r">Removed</span> the ability for dead enemies to drop objects via the <code>spoils</code> and <code>random_pellet_spoils</code> script variables, in favor of the "stored inside" area editor feature. Areas with such objects need to be adjusted.</li>
+      <li><span class="cl-c">Changed</span> the following obstacles to have a consistent 192px size: electrical wire (also now doesn't push), paper bag (also now blocks paths), cardboard box, wood bridge.</li>
+      <li><span class="cl-c">Changed</span> the spritesheet for player input icons (formerly control icons). All properties and files changed from <code>control_icon</code> to <code>player_input_icon</code>.</li>
+      <li><span class="cl-c">Changed</span> the <code>show_hud_controls</code> option to <code>show_hud_input_icons</code>.</li>
+      <li><span class="cl-c">Changed</span> the gameplay GUI item names that had <code>button</code> in them to instead have <code>input</code>.</li>
+      <li><span class="cl-c">Changed</span> the default value of an <a href="mob_type.html">object type</a>'s <code>can_walk_on_others</code> properties to false.</li>
+      <li><span class="cl-c">Changed</span> the name of some texture files: <code>Bark</code> &rarr; <code>Wood_bark</code>. <code>Bridge</code> &rarr; <code>Wood_bridge</code>. <code>Bridge_rail</code> &rarr; <code>Wood_bridge_rail</code>. <code>Metal</code> &rarr; <code>Metal_rusted</code>. <code>Stump</code> &rarr; <code>Wood_stump</code>.</li>
+    </ul>
+
+    <h2 id="0.23.2">0.23.2</h2>
+    
+    <p><i>January 23rd, 2023</i></p>
+
+    <p><b>Bug fixes and improvements</b></p>
+
+    <ul>
+      <li><span class="cl-f">Fixed</span> bouncers not working. (Thanks Darthvato)</li>
+      <li><span class="cl-f">Fixed</span> Pikmin taking paths that they are vulnerable to. (Thanks Quarter C++)</li>
+      <li><span class="cl-f">Fixed</span> the camera sometimes focusing on the wrong spot when a "get to the exit" mission is completed. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> dropped bomb rocks not activating if the Pikmin hits an opponent mid-throw. (Thanks erdinvark)</li>
+      <li><span class="cl-f">Fixed</span> leaders being unable to throw Pikmin if either one is under a lifted bamboo gate.</li>
+      <li><span class="cl-f">Fixed</span> the gameplay start day time area property not being respected. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the weather tables needing an entry for 0. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the calculation for seconds remaining, in the results screen.</li>
+    </ul>
+
+    <h2 id="0.23.1">0.23.1</h2>
+    
+    <p><i>January 1st, 2023</i></p>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-c">Changed</span> how the mission records and statistics files are saved and loaded. This fixes a problem where the files wouldn't be read if they had certain characters. When you start 0.23.1, these files from 0.23.0, if any, will be deleted. If you <i>really</i> want to keep their content, get in contact with me by reading <code>readme.txt</code>.</li>
+    </ul>
+
+    <p><b>Bug fixes and improvements</b></p>
+
+    <ul>
+      <li><span class="cl-f">Fixed</span> the edge length indicators not appearing in the area editor. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> negative point amounts for mission criteria not saving. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the HUD using enemy kills when the mission specifies using enemy points instead. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> wall shadows not rendering when there are liquids in the area editor's preview. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> sectors not showing their liquid in the area editor's preview unless you reload the area. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the area selection menu always showing a platinum medal next to the area name, if you have a medal. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> a crash when one selects a GUI item with no behavior and presses Enter.</li>
+      <li><span class="cl-f">Fixed</span> the results menu showing the centiseconds digit instead of the deciseconds digit.</li>
+      <li><span class="cl-c">Changed</span> the way gameplay time is calculated, so time spent during interludes (the starting countdown, mission end text, etc.) doesn't count. (Thanks Helodity)</li>
+    </ul>
+
+    <h2 id="0.23.0">0.23.0</h2>
+    
+    <p><i>December 25th, 2022 &ndash; the "Mission Mode" update</i></p>
+
+    <p><b>Gameplay changes</b></p>
+
+    <ul>
+      <li>
+        Missions:
+        <ul>
+          <li><span class="cl-a">Added</span> mission-type areas. Gameplay during missions usually involves reaching a goal, avoiding some fail conditions, and getting medals based on several scoring criteria.</li>
+          <li><span class="cl-a">Added</span> info about the area that is currently selected in the list, in the area selection screen.</li>
+          <li><span class="cl-a">Added</span> a mission information tab to the pause menu, if you're playing on a mission.</li>
+          <li><span class="cl-a">Added</span> a "play" button and a "make" button for the main menu, which show the list of area types that can be played, and the list of editors, respectively.</li>
+          <li><span class="cl-c">Changed</span> the results screen to better suit a mission's completion screen.</li>
+        </ul>
+      </li>
+      <li>
+        Lifetime statistics:
+        <ul>
+          <li><span class="cl-a">Added</span> lifetime statistics, accessible from a menu in the main menu. These are saved onto the disk.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability to play when there are no available leaders, or even if there were none to begin with. There isn't much to do in this state other than move the camera, however.</li>
+          <li><span class="cl-a">Added</span> the ability for the camera to be influenced by the group and the cursor. Added an option to control how much the cursor influences it.</li>
+          <li><span class="cl-a">Added</span> a confirmation message for the pause menu, shown when you want to leave. This can be changed in the options. (Thanks Neo)</li>
+          <li><span class="cl-c">Changed</span> the pause menu with various improvements.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Content making changes</b></p>
+
+    <ul>
+      <li>
+        <a href="area.html">Area editor</a> improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> a history of opened folders.</li>
+          <li><span class="cl-a">Added</span> a "gameplay" panel, with the starting spray amounts (with a better interface), as well as the new mission stuff.</li></li>
+          <li><span class="cl-a">Added</span> description, tags, thumbnail, and difficulty properties for areas.</li>
+          <li><span class="cl-a">Added</span> a show path link length option. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> a show circular sector info option. (Thanks Neo)</li>
+          <li><span class="cl-a">Added</span> a basic/advanced interface mode option.</li>
+          <li><span class="cl-a">Added</span> the ability to choose what type and label new path links will have as you're drawing them. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> highlights to a sector, mob, etc. when you hover your mouse over it. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> toolbar buttons to swap to the layout, objects, paths, or details mode. Advanced interface mode only. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> the H shortcut key to change a sector's height.</li>
+          <li><span class="cl-a">Added</span> the T shortcut key to copy a sector's texture.</li>
+          <li><span class="cl-a">Added</span> the L, O, P, D shortcut keys to swap to the layout, objects, paths, and details mode. Advanced interface mode only. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> liquids to the area preview feature.</li>
+          <li><span class="cl-a">Added</span> the ability for areas to specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="maker_toolkit.html">Maker tools</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> the Ctrl+F12 shortcut to change the auto-start maker tool's data to match the current mode and currently open content.</li>
+          <li><span class="cl-a">Added</span> a "show collision" maker tool. (Thanks Helodity)</li>
+        </ul>
+      </li>
+      <li>
+        New properties:
+        <ul>
+          <li><span class="cl-a">Added</span> a <code>points</code> property for <a href="mob_enemy.html">enemy types</a>.</li>
+          <li><span class="cl-a">Added</span> a <code>states_ignoring_hazard</code> property for <a href="script.html">scripts</a>.</li>
+          <li><span class="cl-a">Added</span> a <code>hold_offset_vertical_distance</code> property for a <a href="mob_type.html">mob type</a>'s children data.</li>
+          <li><span class="cl-a">Added</span> a <code>custom_category_name</code> property for <a href="mob_type.html">mob types</a>. With this, the pre-packaged mob types are now better organized in the editors.</li>
+          <li><span class="cl-a">Added</span> a <code>can_walk_on_others</code> property for <a href="mob_type.html">mob types</a>.</li>
+          <li><span class="cl-a">Added</span> a <code>knocked_down_duration</code> and a <code>knocked_down_whistle_bonus</code> property for <a href="mob_pikmin.html">Pikmin types</a>.</li>
+          <li><span class="cl-a">Added</span> an <code>auto_shrink_smallest_radius</code> property for <a href="mob_pile.html">pile types</a>.</li>
+          <li><span class="cl-a">Added</span> an <code>interval_deviation</code> property for <a href="particle.html">particle generators</a>.</li>
+        </ul>
+      </li>
+      <li>
+        GUI editor:
+        <ul>
+          <li><span class="cl-a">Added</span> a GUI editor. This should make it easier to position and resize GUI elements in menus and HUDs.</li>
+        </ul>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability to lock the center (as opposed to the opposite side/corner) by holding Alt, when you are dragging a side/corner handle of a transformation widget in an editor's canvas.</li>
+          <li><span class="cl-a">Added</span> script variables to <a href="mob_decoration.html">decoration</a> objects to allow them to disable the random property changes.</li>
+          <li><span class="cl-a">Added</span> the <code>gentle_release</code> script variable to <a href="mob_tool.html">tool</a> objects so they can know if the Pikmin released it gently (i.e. the Pikmin is entering an Onion) or not.</li>
+          <li><span class="cl-a">Added</span> logic for rectangular objects to be able to push other rectangular objects. (Thanks Helodity)</li>
+          <li><span class="cl-c">Changed</span> the duplicate mobs area editor keyboard shortcut from D to Ctrl+D, since D is now used to go to the details mode.</li>
+          <li><span class="cl-c">Changed</span> keyboard shortcuts made for the editor canvases to make them now work anywhere so long as you aren't writing in a text box. (Thanks Neo)</li>
+          <li><span class="cl-c">Changed</span> drag buttons in editors to only need a single click in order to enter text input mode.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Custom content compatibility warnings</b></p>
+
+    <ul>
+      <li>
+        Revamped the following <a href="gui.html">GUI</a>s:
+        <ul>
+          <li><span class="cl-c">Changed</span> the main menu's GUI.</li>
+          <li><span class="cl-c">Changed</span> the area menu's GUI.</li>
+          <li><span class="cl-c">Changed</span> the results screen's GUI.</li>
+          <li><span class="cl-c">Changed</span> the pause menu's GUI.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-c">Changed</span> the location of area folders, where simple areas used to be in <code>Game_data/Areas/&lt;folder&gt;</code>, but must now be moved to <code>Game_data/Areas/Simple/&lt;folder&gt;</code>. If you care about auto-backups and reference image data, do the same to the area-related stuff in the <code>User_data</code> folder.</li>
+          <li><span class="cl-r">Removed</span> the <code>day_minutes_per_irl_sec</code> field from the <a href="misc_config.html">config file</a> since now each area controls its speed.</li>
+          <li><span class="cl-r">Removed</span> the <a href="misc_config.html#system-asset">system asset</a> for the Pikmin silhouette, in favor of two leader silhouettes.</li>
+          <li><span class="cl-a">Added</span> two leader silhouette graphics to replace the Pikmin silhouette image.</li>
+          <li><span class="cl-a">Added</span> a <code>standard_leader_height</code> and a <code>standard_leader_radius</code> game config property.</li>
+        </ul>
+      </li>
+    </ul>
+    
     <h2 id="0.22.0">0.22.0</h2>
     
     <p><i>July 5th, 2022 &ndash; the "polish" update</i></p>

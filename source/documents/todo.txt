@@ -8,18 +8,17 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
-    Dead enemies aren't leaving souls
-        if(reviveTimer.duration >= 0)
     You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
     Try some more styles for the logo Pikmin, so that all flower colors are included; or only the P is white while the others are different
         Create a wordmark, using the logo Pikmin, to show in the README, manual, and so on
-    If the sprites or animations got sorted when saving, say so in the status bar
     Update Dear ImGui to version 1.92.0
-        https://github.com/ocornut/imgui/releases/tag/v1.92.0
+        Wait until the Allegro backend is fixed!
         "Image: removed tint_col and border_col parameter from Image() function"
+        "All API functions taking a ImTextureID parameter are now taking a 'ImTextureRef`"
+        ImGui::PushFont(font) -> ImGui::PushFont(font, font->legacySize)
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -186,20 +185,19 @@ Next tasks (roughly sorted most important first)
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         Bulborbs need a few more frames for fluidity
             Definitely add one or two Bolbert frames
-        Yellow Wollyhop should close its eyes when shaking
+        Yellow Wollyhop should close its eyes when struggling
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Add a glow to the smack effect particle?
-        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
+        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies, right?
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    New mobs
-        Nuggets
-        Mobs for decorative pebbles, stones, sticks, cobwebs
+    Add nuggets
     More particles
         More across the board -- check all mobs too
-    Add a screenshot, or better yet, a gif to the readme
+    Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area
     Manual updates
         Update screenshots that still show off the Play area
+        Update the history page to mention 1.0's launch
     Cook up a better logo?
     Test it on the Steam Deck
     Test from a fresh save file
@@ -474,7 +472,7 @@ Next tasks (roughly sorted most important first)
             Tag?
                 One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
             Time?
-                When time is up, the player with the most Pikmin wins. Or with the most enemy defeats. Or treasure points collected. And so on.
+                When time is up, the player with the most Pikmin raised wins. Or with the most enemy defeats. Or treasure points collected. Or mission points for custom competitive missions. And so on.
             Delivery?
                 There are loose, 1-weight objects stranded around the area, and players can send their Pikmin to deliver them to a pick-up point somewhere in the center of the area. The player to reach the highest amount of deliveries wins
         Rulesets
@@ -492,6 +490,7 @@ Next tasks (roughly sorted most important first)
                 If Pikmin can attack leaders
                 If a given item can suddenly be worth double or triple the normal amount (like in Dandori Battles)
                 If a Pikmin sees enemy Pikmin carrying something, whether they try to attack them (P2/P3), or overpower them (P4)
+                If collected objects and defeated enemies eventually respawn [PIKMIN 4]
             A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
             A handful of rulesets for basic battles, Pikmin 2 battles, Pikmin 3 Bingo Battles, Pikmin 4 Dandori Battles, etc.
@@ -949,7 +948,8 @@ Misc things (so I don't forget)
     Small gameplay messages
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
-    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
+    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, cobwebs, etc. to the area's terrain without using sectors or objects
+        Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The loading screen's elements could be controlled with a GUI definition
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing

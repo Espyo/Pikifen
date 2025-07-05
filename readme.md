@@ -1,9 +1,12 @@
+<div align="center">
+
 Pikifen
 ====
 
-A fan-made _Pikmin_-based engine made by Espyo that allows users to make and play their own _Pikmin_ content.
-
 ![Pikifen's logo](game_data/base/graphics/gui/icon.png)
+
+A fan-made _Pikmin_-based engine for players to make and play their own _Pikmin_ fan content in.  
+Made with ♡ by Espyo.
 
 [![GitHub Downloads (all assets, latest release)](
     https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads
@@ -35,6 +38,8 @@ A fan-made _Pikmin_-based engine made by Espyo that allows users to make and pla
     https://img.shields.io/badge/Platforms-Windows%2C%20Linux%2C%20MacOS-lightgray?style=plastic
 )
 
+</div>
+
 > * [Overview](#overview)
 > * [Notable features](#notable-features)
 > * [Get the latest version](#get-the-latest-version)
@@ -65,14 +70,14 @@ Depending on the area the player selects, they can either explore around freely 
 * Unique features like weather conditions, complex missions, and more.
 * Content that can be edited via text files, or by just replacing the image and sound files.
 * Intuitive and deep editors, such as an area editor, animation editor, and more. (Made with [Dear ImGui](https://github.com/ocornut/imgui)!)
-* Scripting for custom objects using a finite state machine.
+* Scripting for custom objects using finite state machines.
 * Tools to help with debugging custom content.
 * A comprehensive but easy-to-follow manual to help with making content.
 * Customizable control schemes.
-* Fairly low system requirements, no special permissions to run, no need to install, and less than 50 MB when extracted.
 * Filled with quality-of-life features and details, both for gameplay and for content-making.
+* Fairly low system requirements, no special permissions to run, no need to install, and less than 50 MB when extracted.
+* Made almost entirely from scratch, as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
 * Organized codebase with very few external dependencies.
-* Made almost entirely from scratch, as free and open-source software, for Windows, Linux, and Mac.
 
 ## Get the latest version
 
@@ -112,8 +117,8 @@ Please see the [contributing file](https://github.com/Espyo/Pikifen/blob/master/
 
 ## Disclaimer
 
-Licensing info can be found in `license.txt`.
+Project licensing info can be found in `license.txt`.
     
-_Pikmin_ ® is a trademark of Nintendo®.  
-_Pikifen_ and any fan content run within it are not affiliated with Nintendo®, do not replace any official Nintendo content, do not contain any copyrighted assets, and can not be sold.  
-They are non-commercial projects created by fans of the _Pikmin_ ® franchise for entertainment and educational purposes only.
+Trademark and copyright of _Pikmin_ belongs to Nintendo.  
+_Pikifen_ and any fan content run within it are not affiliated with Nintendo, do not replace any official Nintendo content, do not contain any copyrighted assets, and can not be sold.  
+They are non-commercial projects created by fans of the _Pikmin_ franchise for entertainment and educational purposes only.
