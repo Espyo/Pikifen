@@ -17,6 +17,9 @@ script {
             get_random_float t 0 360
             turn_to_relative $t
         }
+        on_damage {
+            play_sound hit
+        }
 		on_pikmin_land {
             get_mob_info t trigger mob_type
 			if $t != white_pikmin
@@ -28,6 +31,7 @@ script {
         on_enter {
 			start_particles spore_explosion_small 0 0 0
             set_animation destroyed
+            play_sound destroy
         }
         on_animation_end {
 			finish_dying

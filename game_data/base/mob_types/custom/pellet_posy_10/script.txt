@@ -151,6 +151,9 @@ script {
                 set_animation idling_winged no_restart
             end_if
         }
+        on_damage {
+            play_sound squeak
+        }
         on_timer {
             set_state picking_next_color
         }

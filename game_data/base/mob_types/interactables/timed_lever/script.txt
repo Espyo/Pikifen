@@ -38,6 +38,8 @@ script{
             set_animation flipping_on
             set_var time $duration
             set_health 100
+            play_sound click_down
+            play_sound tension sound_id
         }
         on_animation_end {
             set_state on
@@ -81,6 +83,8 @@ script{
             set_animation flipping_off
             set_var time $duration
             set_health 100
+            play_sound click_up
+            stop_sound $sound_id
         }
         on_animation_end {
             set_state off

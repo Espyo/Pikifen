@@ -13,6 +13,21 @@ show_health = false
 target_type = explodable_pikmin_obstacle
 team = obstacle
 
+sounds {
+    hit {
+        file = nature/organic_hit
+        speed = 120
+        speed_deviation = 10
+        volume = 50
+    }
+    destroy {
+        file = nature/organic_smash
+        speed = 120
+        speed_deviation = 5
+        volume = 50
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

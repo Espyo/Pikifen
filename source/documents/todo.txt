@@ -117,17 +117,17 @@ Next tasks (roughly sorted most important first)
                 x Bramble gate breaking
                 x Bouncy Mushroom throwing
                 x Cardboard box being dragged
-                Kingcap and Spotcap being damaged
-                Kingcap and Spotcap exploding
-                Paper bag deflating crinkling
-                Paper bag deflating air
-                Pellet Posy being hit
-                Stone button
-                Stone lever
-                Stone pressure plate click
-                Spiderwort popping a berry out
-                Bomb rock hissing
-                Egg shattering
+                x Kingcap and Spotcap being damaged
+                x Kingcap and Spotcap exploding
+                x Paper bag deflating crinkling
+                x Paper bag deflating air
+                x Pellet Posy being hit
+                x Stone button
+                x Stone lever
+                x Stone pressure plate click
+                x Spiderwort popping a berry out
+                x Bomb rock hissing
+                x Egg shattering
             Others
                 Generic sparkles (Spiderworts regrowing, Pikmin flowering)
                 x Thud (carriable rock landing, airborne enemy enemy lands)
@@ -140,7 +140,7 @@ Next tasks (roughly sorted most important first)
                 Drinking nectar (leaders and Pikmin)
                 Harmless ding (when Pikmin smack a reinforced wall)
                 Chocolate snapping off
-                Explosion
+                x Explosion
                 Ambiance sounds
                     Wind
                     Leaves rustling

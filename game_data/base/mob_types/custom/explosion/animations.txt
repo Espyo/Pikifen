@@ -12,6 +12,7 @@ animations{
 			exploding_01{
 				duration=0.0800
 				interpolate=true
+				sound=explosion
 			}
 			exploding_02{
 				duration=0.0010

@@ -9,6 +9,7 @@ script {
     up {
         on_enter {
             set_animation up
+            play_sound click_up
             if $weight >= $goal_number
                 set_state down
             end_if
@@ -28,6 +29,7 @@ script {
     down {
         on_enter {
             set_animation down
+            play_sound click_down
             if $weight < $goal_number
                 start_particles dust_pressure_plate_click 0 0 16
                 set_state up

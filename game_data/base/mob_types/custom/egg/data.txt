@@ -43,6 +43,13 @@ spawns {
     }
 }
 
+sounds {
+    crack {
+        file = misc/egg_crack
+        speed_deviation = 10
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

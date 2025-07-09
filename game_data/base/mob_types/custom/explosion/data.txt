@@ -12,6 +12,13 @@ pushable = false
 pushes = false
 radius = 68
 
+sounds {
+    explosion {
+        file = effects/explosion
+        speed_deviation = 10
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

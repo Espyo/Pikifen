@@ -14,6 +14,7 @@ script {
             if $t >= $goal_number
                 set_state crushed_1
             end_if
+            play_sound crumple
         }
     }
     
@@ -23,6 +24,7 @@ script {
             set_height 2
             set_health 0
             start_particles paper_bag_dust 0 0 200
+            play_sound deflate
             play_sound obstacle_cleared
             send_message_to_links paper_bag_crushed
         }
@@ -35,6 +37,7 @@ script {
     crushed_2 {
         on_enter {
             start_particles paper_bag_final_dust 0 0 20
+            play_sound poof
         }
     }
 }

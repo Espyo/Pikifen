@@ -1,8 +1,5 @@
 script {
     idling {
-        on_damage {
-            play_sound ceramic_hit
-        }
         on_receive_message {
             get_event_info m message
             if $m = dropped_resource

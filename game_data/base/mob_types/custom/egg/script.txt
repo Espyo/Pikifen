@@ -62,6 +62,7 @@ script {
             set_animation destroyed
             start_dying
             start_particles egg_shard_explosion
+            play_sound crack
             
             if $contents = random
                 get_random_float c 1 100

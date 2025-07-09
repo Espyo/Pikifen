@@ -11,6 +11,19 @@ pushes = false
 radius = 16
 trigger_range = 64
 
+sounds {
+    click_down {
+        file = misc/stone_click
+        volume = 75
+        speed = 100
+    }
+    click_up {
+        file = misc/stone_click
+        volume = 60
+        speed = 80
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

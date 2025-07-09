@@ -26,6 +26,14 @@ spawns {
     }
 }
 
+sounds {
+    wick {
+        file = misc/wick
+        volume = 30
+        loop = true
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

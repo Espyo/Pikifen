@@ -47,11 +47,13 @@ script {
         on_enter {
             set_animation held
             remove_status bomb_rock_health_drain
+            stop_sound $sound_id
         }
         on_released {
             set_state primed
         }
         on_swallowed {
+            stop_sound $sound_id
             delete
         }
     }
@@ -61,6 +63,7 @@ script {
             set_animation primed
             set_holdable enemies
             receive_status bomb_rock_health_drain
+            play_sound wick sound_id
             stop
         }
         on_hitbox_touch_eat {
@@ -75,6 +78,7 @@ script {
     exploding {
         on_enter {
             spawn explosion
+            stop_sound $sound_id
             delete
         }
     }

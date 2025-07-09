@@ -24,6 +24,13 @@ vulnerabilities {
     explosion = 400
 }
 
+sounds {
+    snap {
+        file = effects/snap
+        volume = 80
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

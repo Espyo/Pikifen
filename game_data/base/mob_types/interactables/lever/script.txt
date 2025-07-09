@@ -30,6 +30,7 @@ script{
     flipping_on {
         on_enter {
             set_animation flipping_on
+            play_sound click_down
         }
         on_animation_end {
             set_state on
@@ -58,6 +59,7 @@ script{
     flipping_off {
         on_enter {
             set_animation flipping_off
+            play_sound click_up
         }
         on_animation_end {
             set_state off
