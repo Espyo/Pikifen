@@ -12,6 +12,7 @@ Next tasks (roughly sorted most important first)
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
+    Properties, error messages, etc. that refer to "file" should refer to "asset" or something instead, unless it's REALLY a file
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

@@ -133,6 +133,9 @@ void PileFsm::beAttacked(Mob* m, void* info1, void* info2) {
         if(r == 0) {
             resourceToPickUp = newResource;
         }
+        
+        string droppedResourceMsg = "dropped_resource";
+        m->sendScriptMessage(m, droppedResourceMsg);
     }
     
     if(pikminToStartCarrying) {
