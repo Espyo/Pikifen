@@ -1,0 +1,16 @@
+name = Crumbug Castle
+description = A happy-go-lucky theme, with just a hint of whimsy.
+
+tags = Area; Happy
+maker = Rosey
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+
+loop_start = 13.714
+loop_end = 82.285
+
+main_track = areas/crumbug_castle
+mix_tracks {
+    enemy = areas/crumbug_castle_enemy
+}

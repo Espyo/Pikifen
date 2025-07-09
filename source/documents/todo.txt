@@ -151,7 +151,6 @@ Next tasks (roughly sorted most important first)
         All enemy stepping sounds should be audible
         All enemies should make a thud sound when plopping down when dying
         All sound files should be at peak amplitude
-    Compose and add a song for Playful Yard
     Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
