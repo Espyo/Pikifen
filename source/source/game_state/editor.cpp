@@ -1420,7 +1420,12 @@ bool Editor::listPopup(
         if(escapeWasPressed) {
             ImGui::CloseCurrentPopup();
         }
-        if(useMonospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+        if(useMonospace) {
+            ImGui::PushFont(
+                game.sysContent.fntDearImGuiMonospace,
+                game.sysContent.fntDearImGuiMonospace->LegacySize
+            );
+        }
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
             bool hitButton =
@@ -1458,7 +1463,12 @@ bool Editor::listPopup(
         if(escapeWasPressed) {
             ImGui::CloseCurrentPopup();
         }
-        if(useMonospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+        if(useMonospace) {
+            ImGui::PushFont(
+                game.sysContent.fntDearImGuiMonospace,
+                game.sysContent.fntDearImGuiMonospace->LegacySize
+            );
+        }
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
             bool hitButton =
@@ -2824,7 +2834,10 @@ void Editor::processGuiUnsavedChangesDialog() {
 bool Editor::saveableTreeNode(const string& category, const string& label) {
     string nodeName = getName() + "/" + category + "/" + label;
     ImGui::SetNextItemOpen(game.options.editors.openNodes[nodeName]);
-    ImGui::PushFont(game.sysContent.fntDearImGuiHeader);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiHeader,
+        game.sysContent.fntDearImGuiHeader->LegacySize
+    );
     bool isOpen = ImGui::TreeNode(label.c_str());
     ImGui::PopFont();
     game.options.editors.openNodes[nodeName] = isOpen;
@@ -3721,7 +3734,10 @@ void Editor::Picker::process() {
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
                 if(useMonospace) {
-                    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+                    ImGui::PushFont(
+                        game.sysContent.fntDearImGuiMonospace,
+                        game.sysContent.fntDearImGuiMonospace->LegacySize
+                    );
                 }
                 
                 Point buttonSize;

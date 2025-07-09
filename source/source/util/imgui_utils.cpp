@@ -223,29 +223,28 @@ void ImGui::FocusOnInputText(bool& condition) {
 
 
 /**
- * @brief Wrapper for creating a Dear ImGui combo image widget, but
- * using Allegro bitmaps.
+ * @brief Wrapper for creating a Dear ImGui combo image widget
+ * (with background), but using Allegro bitmaps.
  *
  * @param bitmap Bitmap to show on the button.
  * @param bitmapSize Width and height of the bitmap.
  * @param uv0 UV coordinates of the top-left coordinate.
  * @param uv1 UV coordinates of the bottom-right coordinate.
  * @param tintCol Tint color.
- * @param borderCol Border color.
  * @return Whether the button was pressed.
  */
 void ImGui::Image(
     ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
     const Point& uv0, const Point& uv1,
-    const ALLEGRO_COLOR& tintCol, const ALLEGRO_COLOR& borderCol
+    const ALLEGRO_COLOR& tintCol
 ) {
-    ImGui::Image(
+    ImGui::ImageWithBg(
         (ImTextureID) (intptr_t) bitmap,
         ImVec2(bitmapSize.x, bitmapSize.y),
         ImVec2(uv0.x, uv0.y),
         ImVec2(uv1.x, uv1.y),
-        ImVec4(tintCol.r, tintCol.g, tintCol.b, tintCol.a),
-        ImVec4(borderCol.r, borderCol.g, borderCol.b, borderCol.a)
+        ImVec4(0, 0, 0, 0),
+        ImVec4(tintCol.r, tintCol.g, tintCol.b, tintCol.a)
     );
 }
 

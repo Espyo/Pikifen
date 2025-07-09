@@ -842,7 +842,10 @@ void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
  * @return Whether the button was activated.
  */
 bool monoButton(const char* label, const ImVec2& size) {
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result = ImGui::Button(label, size);
     ImGui::PopFont();
     
@@ -867,7 +870,10 @@ bool monoCombo(
 ) {
     bool hasText = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result =
         ImGui::Combo(
             hasText ? "##cb" + label : label,
@@ -903,7 +909,10 @@ bool monoCombo(
 ) {
     bool hasText = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result =
         ImGui::Combo(
             hasText ? "##cb" + label : label,
@@ -943,7 +952,10 @@ bool monoCombo(
 ) {
     bool hasText = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result =
         ImGui::Combo(
             hasText ? "##cb" + label : label,
@@ -979,7 +991,10 @@ bool monoInputText(
 ) {
     bool hasText = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result =
         ImGui::InputText(
             hasText ? ("##ti" + string(label)).c_str() : label,
@@ -1017,7 +1032,12 @@ bool monoInputTextWithHint(
     bool hasText = label[0] != '#';
     bool strEmpty = str->empty();
     ImGui::BeginGroup();
-    if(!strEmpty) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    if(!strEmpty) {
+        ImGui::PushFont(
+            game.sysContent.fntDearImGuiMonospace,
+            game.sysContent.fntDearImGuiMonospace->LegacySize
+        );
+    }
     bool result =
         ImGui::InputTextWithHint(
             hasText ? ("##ti" + string(label)).c_str() : label,
@@ -1051,7 +1071,10 @@ bool monoListBox(
 ) {
     bool hasText = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result =
         ImGui::ListBox(
             hasText ? ("##lb" + string(label)).c_str() : label,
@@ -1083,7 +1106,10 @@ bool monoSelectable(
     const char* label, bool selected, ImGuiSelectableFlags flags,
     const ImVec2& size
 ) {
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result = ImGui::Selectable(label, selected, flags, size);
     ImGui::PopFont();
     return result;
@@ -1104,7 +1130,10 @@ bool monoSelectable(
     const char* label, bool* pSelected, ImGuiSelectableFlags flags,
     const ImVec2& size
 ) {
-    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    ImGui::PushFont(
+        game.sysContent.fntDearImGuiMonospace,
+        game.sysContent.fntDearImGuiMonospace->LegacySize
+    );
     bool result = ImGui::Selectable(label, pSelected, flags, size);
     ImGui::PopFont();
     return result;

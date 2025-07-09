@@ -14,11 +14,6 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Try some more styles for the logo Pikmin, so that all flower colors are included; or only the P is white while the others are different
         Create a wordmark, using the logo Pikmin, to show in the README, manual, and so on
-    Update Dear ImGui to version 1.92.0
-        Wait until the Allegro backend is fixed!
-        "Image: removed tint_col and border_col parameter from Image() function"
-        "All API functions taking a ImTextureID parameter are now taking a 'ImTextureRef`"
-        ImGui::PushFont(font) -> ImGui::PushFont(font, font->legacySize)
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

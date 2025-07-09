@@ -50,8 +50,7 @@ void FocusOnInputText(bool& condition);
 void Image(
     ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
     const Point& uv0 = Point(), const Point& uv1 = Point(1.0f),
-    const ALLEGRO_COLOR& tintCol = al_map_rgb(255, 255, 255),
-    const ALLEGRO_COLOR& borderCol = al_map_rgba(0, 0, 0, 0)
+    const ALLEGRO_COLOR& tintCol = al_map_rgb(255, 255, 255)
 );
 bool ImageButton(
     const string& strId, ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
