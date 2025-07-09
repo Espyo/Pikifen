@@ -12,8 +12,6 @@ Next tasks (roughly sorted most important first)
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
-    Try some more styles for the logo Pikmin, so that all flower colors are included; or only the P is white while the others are different
-        Create a wordmark, using the logo Pikmin, to show in the README, manual, and so on
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

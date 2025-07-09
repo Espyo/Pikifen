@@ -1,11 +1,9 @@
 <div align="center">
 
-Pikifen
-====
+![Pikifen's logo](game_data/base/graphics/gui/icon.png)  
+![Pikifen's wordmark](game_data/base/graphics/gui/wordmark.png)
 
-![Pikifen's logo](game_data/base/graphics/gui/icon.png)
-
-A fan-made _Pikmin_-based engine for players to make and play their own _Pikmin_ fan content in.  
+Pikifen, a fan-made _Pikmin_-based engine for players to make and play their own _Pikmin_ fan content in.  
 Made with ♡ by Espyo.
 
 [![GitHub Downloads (all assets, latest release)](
