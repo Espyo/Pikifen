@@ -34,44 +34,44 @@ reaches {
 
 sounds {
     croak {
-        file = creature_vocals/frog_croak
+        sound = creature_vocals/frog_croak
         volume = 70
         speed = 80
         speed_deviation = 10
     }
     croak_small {
-        file = creature_vocals/frog_croak
+        sound = creature_vocals/frog_croak
         volume = 30
         speed = 130
     }
     croak_slow {
-        file = creature_vocals/frog_croak
+        sound = creature_vocals/frog_croak
         volume = 60
         speed = 60
         speed_deviation = 5
     }
     falling {
-        file = effects/falling
+        sound = effects/falling
         volume = 50
         speed_deviation = 5
     }
     jump {
-        file = effects/jump
+        sound = effects/jump
         volume = 50
         speed_deviation = 5
     }
     step {
-        file = misc/stomp_quick
+        sound = misc/stomp_quick
         volume = 30
         speed = 160
         speed_deviation = 5
     }
     thump {
-        file = misc/thump
+        sound = misc/thump
         speed_deviation = 10
     }
     thump_quiet {
-        file = misc/thump
+        sound = misc/thump
         speed_deviation = 10
         volume = 50
     }

@@ -234,12 +234,12 @@ void AnimationEditor::processGuiDeleteAnimDbDialog() {
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
         explanationStr =
-            "You have never saved this animation database to disk, so if you\n"
-            "delete, you will only lose your unsaved progress.";
+            "You have never saved this animation database to your disk, so\n"
+            "if you delete, you will only lose your unsaved progress.";
     } else {
         explanationStr =
             "If you delete, you will lose all unsaved progress, and the\n"
-            "animation database's files on the disk will be gone FOREVER!";
+            "animation database's files in your disk will be gone FOREVER!";
     }
     ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
     ImGui::Text("%s", explanationStr.c_str());
@@ -354,7 +354,7 @@ void AnimationEditor::processGuiMenuBar() {
                 loadCmd(1.0f);
             }
             setTooltip(
-                "Pick a file to load.",
+                "Pick a database to load.",
                 "Ctrl + L"
             );
             
@@ -364,7 +364,8 @@ void AnimationEditor::processGuiMenuBar() {
                 reloadCmd(1.0f);
             }
             setTooltip(
-                "Lose all changes and reload the current file from the disk."
+                "Lose all changes and reload the current "
+                "database from your disk."
             );
             
             //Save current file item.
@@ -372,7 +373,7 @@ void AnimationEditor::processGuiMenuBar() {
                 saveCmd(1.0f);
             }
             setTooltip(
-                "Save the animation database into the file on disk.",
+                "Save the animation database to your disk.",
                 "Ctrl + S"
             );
             
@@ -381,7 +382,7 @@ void AnimationEditor::processGuiMenuBar() {
                 deleteAnimDbCmd(1.0f);
             }
             setTooltip(
-                "Delete the current animation database from the disk."
+                "Delete the current animation database from your disk."
             );
             
             //Separator item.
@@ -597,7 +598,7 @@ void AnimationEditor::processGuiNewDialog() {
             if(newDialog.animPathExists) {
                 problem =
                     "There is already an animation database\n"
-                    "file for that object type in that pack!";
+                    "for that object type in that pack!";
             }
         }
     }
@@ -717,7 +718,7 @@ void AnimationEditor::processGuiOptionsDialog() {
             }
             setTooltip(
                 "Remove the background image.\n"
-                "This does not delete the file on your disk."
+                "This does not delete the file in your disk."
             );
             
             //Background texture browse button.
@@ -745,7 +746,7 @@ void AnimationEditor::processGuiOptionsDialog() {
                 }
             }
             setTooltip(
-                "Browse for which texture file on your disk to use."
+                "Browse for which texture file in your disk to use."
             );
             
             //Background texture name text.
@@ -1660,7 +1661,7 @@ void AnimationEditor::processGuiPanelInfo() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Version of the file, preferably in the \"X.Y.Z\" format. "
+        "Version of the database, preferably in the \"X.Y.Z\" format. "
         "Optional."
     );
     
@@ -1669,7 +1670,7 @@ void AnimationEditor::processGuiPanelInfo() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Name (or nickname) of who made this file. "
+        "Name (or nickname) of who made this database. "
         "Optional."
     );
     
@@ -1678,7 +1679,7 @@ void AnimationEditor::processGuiPanelInfo() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Extra notes or comments about the file for other makers to see. "
+        "Extra notes or comments about the database for other makers to see. "
         "Optional."
     );
     
@@ -1703,10 +1704,10 @@ void AnimationEditor::processGuiPanelMain() {
     
     ImGui::BeginChild("main");
     
-    //Current file header text.
-    ImGui::Text("File: ");
+    //Current database header text.
+    ImGui::Text("Database: ");
     
-    //Current file text.
+    //Current database text.
     ImGui::SameLine();
     monoText(
         "%s",
@@ -1718,7 +1719,7 @@ void AnimationEditor::processGuiPanelMain() {
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changesMgr.existsOnDisk()) {
-        fileTooltip += "Not saved to disk yet!";
+        fileTooltip += "Doesn't exit in your disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
         fileTooltip += "You have unsaved changes.";
     } else {
@@ -2168,7 +2169,7 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
             importSpriteBmpData(pickedSprite);
             centerCameraOnSpriteBitmap(false);
             setStatus(
-                "Imported file data from \"" + pickedSprite + "\"."
+                "Imported bitmap data from \"" + pickedSprite + "\"."
             );
         }
         
@@ -3069,7 +3070,7 @@ void AnimationEditor::processGuiToolbar() {
         loadCmd(1.0f);
     }
     setTooltip(
-        "Pick a file to load.",
+        "Pick a database to load.",
         "Ctrl + L"
     );
     
@@ -3087,7 +3088,7 @@ void AnimationEditor::processGuiToolbar() {
         saveCmd(1.0f);
     }
     setTooltip(
-        "Save the animation database into the file on disk.",
+        "Save the animation database to your disk.",
         "Ctrl + S"
     );
     

@@ -31,7 +31,7 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
     bool reportErrors = true
 );
 ALLEGRO_BITMAP* loadBmp(
-    const string& path, DataNode* node = nullptr,
+    const string& filePath, DataNode* node = nullptr,
     bool reportError = true, bool errorBmpOnError = true,
     bool errorBmpOnEmpty = true
 );

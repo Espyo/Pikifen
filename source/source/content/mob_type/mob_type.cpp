@@ -646,8 +646,8 @@ void MobType::loadFromDataNode(
         ReaderSetter sRS(soundNode);
         MobType::Sound newSound;
         
-        string fileStr;
-        DataNode* fileNode = nullptr;
+        string soundINameStr;
+        DataNode* soundINameNode = nullptr;
         string typeStr;
         DataNode* typeNode = nullptr;
         string stackModeStr;
@@ -658,7 +658,7 @@ void MobType::loadFromDataNode(
         
         newSound.name = soundNode->name;
         
-        sRS.set("file", fileStr, &fileNode);
+        sRS.set("sound", soundINameStr, &soundINameNode);
         sRS.set("type", typeStr, &typeNode);
         sRS.set("stack_mode", stackModeStr, &stackModeNode);
         sRS.set("stack_min_pos", newSound.config.stackMinPos);
@@ -669,7 +669,7 @@ void MobType::loadFromDataNode(
         sRS.set("speed_deviation", newSound.config.speedDeviation);
         sRS.set("random_delay", newSound.config.randomDelay);
         
-        newSound.sample = game.content.sounds.list.get(fileStr, fileNode);
+        newSound.sample = game.content.sounds.list.get(soundINameStr, soundINameNode);
         
         if(typeNode) {
             if(typeStr == "gameplay_global") {

@@ -38,22 +38,22 @@ children {
 
 sounds {
     crumple {
-        file = misc/paper_crumple
+        sound = misc/paper_crumple
         volume = 40
         speed_deviation = 10
     }
     deflate {
-        file = misc/paper_deflate
+        sound = misc/paper_deflate
         volume = 40
         speed_deviation = 10
     }
     poof {
-        file = effects/poof
+        sound = effects/poof
         volume = 60
         speed = 120
     }
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
 }

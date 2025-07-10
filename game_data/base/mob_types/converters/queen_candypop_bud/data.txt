@@ -16,26 +16,26 @@ type_animation_suffixes = _red;_yellow;_blue;_rock;_winged
 
 sounds {
     pop {
-        file = pikmin/seed_pop
+        sound = pikmin/seed_pop
         volume = 40
         speed_deviation = 5
     }
     rustling_short {
-        file = nature/foliage_short
+        sound = nature/foliage_short
         volume = 20
         speed = 75
     }
     rustling {
-        file = nature/foliage_long
+        sound = nature/foliage_long
         volume = 20
         speed = 75
     }
     dying {
-        file = misc/plant_dying
+        sound = misc/plant_dying
         volume = 40
     }
     bumped {
-        file = effects/boing_low_1
+        sound = effects/boing_low_1
         volume = 40
         speed_deviation = 8
     }

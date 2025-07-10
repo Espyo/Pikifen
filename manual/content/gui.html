@@ -25,7 +25,7 @@
 
     <p>The GUI editor is a simple tool that allows you to change the position and size of each item in a menu/HUD. To learn more about how editors work in general, see <a href="editor.html">here</a>.</p>
 
-    <h3 id="opening">Opening a GUI definition file</h3>
+    <h3 id="opening">Opening a GUI definition</h3>
 
     <dl>
       <dt><b>When you open the menu, you'll be asked what GUI to edit.</b></dt>
@@ -39,7 +39,7 @@
 
     <dl>
       <dt><b>The left side of the editor represents the player's game window.</b></dt>
-      <dd>Once you open a file, you'll see a green square in a black void in the canvas, on the left half of the editor. This square represents the player's game window, and is where all the items are positioned.</dd>
+      <dd>Once you open a GUI definition, you'll see a green square in a black void in the canvas, on the left half of the editor. This square represents the player's game window, and is where all the items are positioned.</dd>
 
       <dt><b>GUI item positions and sizes aren't specified in pixels.</b></dt>
       <dd>You may find it weird how the green shape in the canvas is a square, since almost nobody uses a square game window. The trick with this editor, and with the way GUI item positions and sizes work, is that you don't specify exact coordinates for where they should go, or how big they should be. If you want to horizontally center a certain item in the game's window, you can't just say its center's X coordinate is 512 pixels or something. While 512 pixels may look centered in your game's window, it may look completely off in the window of somebody with a different size &ndash; remember each player can set the game's window size in the options menu!</dd>
@@ -93,7 +93,7 @@
 
     <dl>
       <dt><b>When you're done, save with the button in the toolbar.</b></dt>
-      <dd>When you press the save button, the GUI definition gets saved to a file on the disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
+      <dd>When you press the save button, the GUI definition gets saved to a file to your disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
 
       <dt><b>The editor can only uses an item's internal name and draw a vague shape representing it.</b></dt>
       <dd>Because each GUI item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#definitions">GUI definitions section</a> of this document.</dd>
@@ -133,7 +133,7 @@
     
     <h3 id="area-menu-main">Area menu &ndash; main</h3>
 
-    <p>The menu in which players can choose what area to play. This only includes the main stuff, that's common to all area types and menu pages, like the list of areas and the menu buttons. The items that make up the list of areas are created on-the-fly, so they aren't included in the data file.</p>
+    <p>The menu in which players can choose what area to play. This only includes the main stuff, that's common to all area types and menu pages, like the list of areas and the menu buttons. The items that make up the list of areas are created on-the-fly, so they aren't included in the GUI definition.</p>
     
     <ul>
       <li><b>Internal name:</b> <code>area_menu</code></li>
@@ -260,7 +260,7 @@
         <li><code>mission_fail_2_slash</code>: Same as <code>mission_fail_1_slash</code>, but for the secondary fail condition.</li>
         <li><code>mission_fail_2_name</code>: Same as <code>mission_fail_1_name</code>, but for the secondary fail condition.</li>
       </ul>
-      <li><b>Files:</b> You can specify what bitmap files some of the HUD items should use in the <code>files</code> block.</li>
+      <li><b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the HUD items should use in the <code>bitmaps</code> block.</li>
       <ul>
         <li><code>bubble</code>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
         <li><code>checkbox_check</code>: A checkbox with a checkmark in it. Used in menus.</li>
@@ -296,7 +296,7 @@
         <li><code>list_scroll</code>: Scrollbar for the list.</li>
         <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
       </ul>
-      <li><b>Tidbits:</b> Tidbits of information in the help menu are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the file in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
+      <li><b>Tidbits:</b> Tidbits of information in the help menu are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the bitmap in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
     </ul>
     
     <h3 id="main-menu-make">Main menu &ndash; make page</h3>
@@ -590,7 +590,7 @@
         <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
-      <li><b>Files:</b> You can specify the internal name of the bitmap files some of the radar icons should use in the <code>files</code> block.</li>
+      <li><b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the radar icons should use in the <code>bitmaps</code> block.</li>
       <ul>
         <li><code>pikmin</code>: Icon representing a Pikmin.</li>
         <li><code>treasure</code>: Icon representing a treasure.</li>

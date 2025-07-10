@@ -41,17 +41,17 @@ spawns {
 
 sounds{
     destroyed {
-        file = nature/wood_smash
+        sound = nature/wood_smash
         volume = 80
         speed_deviation = 5
     }
     hit {
-        file = nature/wood_hit_2
+        sound = nature/wood_hit_2
         volume = 60
         speed_deviation = 10
     }
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
 }

@@ -565,7 +565,7 @@ void Results::load() {
                 "it won't be saved.";
         } else if(!savedSuccessfully) {
             conclusion =
-                "FAILED TO SAVE THIS RESULT AS A NEW RECORD!";
+                "COULD NOT SAVE THIS RESULT AS A NEW RECORD!";
         } else {
             conclusion =
                 "Saved this result as a new record!";

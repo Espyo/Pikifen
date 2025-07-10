@@ -42,7 +42,7 @@ spawns {
 
 sounds {
     stretch {
-        file = effects/stretch
+        sound = effects/stretch
         speed = 60
         speed_deviation = 5
         volume = 50

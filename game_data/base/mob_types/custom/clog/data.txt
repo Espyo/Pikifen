@@ -15,23 +15,23 @@ team = obstacle
 
 sounds {
     rock_hit {
-        file = misc/rock_hit
+        sound = misc/rock_hit
         volume = 80
         speed = 75
         speed_deviation = 10
         random_delay = 0.05
     }
     rock_breaking {
-        file = misc/rock_breaking
+        sound = misc/rock_breaking
         speed = 110
         volume = 50
     }
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
     drain {
-        file = nature/drain
+        sound = nature/drain
         volume = 50
     }
 }

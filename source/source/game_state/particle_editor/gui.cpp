@@ -53,7 +53,7 @@ void ParticleEditor::openLoadDialog() {
         
     //Open the dialog that will contain the picker and history.
     openDialog(
-        "Load a particle generator file",
+        "Load a particle generator",
         std::bind(&ParticleEditor::processGuiLoadDialog, this)
     );
     dialogs.back()->closeCallback =
@@ -158,17 +158,17 @@ void ParticleEditor::processGuiControlPanel() {
     
     ImGui::BeginChild("panel");
     
-    //Current file header text.
-    ImGui::Text("File: ");
+    //Current generator header text.
+    ImGui::Text("Generator: ");
     
-    //Current file text.
+    //Current generator text.
     ImGui::SameLine();
     monoText("%s", manifest.internalName.c_str());
     string fileTooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changesMgr.existsOnDisk()) {
-        fileTooltip += "Not saved to disk yet!";
+        fileTooltip += "Doesn't exist in your disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
         fileTooltip += "You have unsaved changes.";
     } else {
@@ -194,12 +194,12 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
         explanationStr =
-            "You have never saved this particle generator to disk, so if you\n"
-            "delete, you will only lose your unsaved progress.";
+            "You have never saved this particle generator to your disk, so\n"
+            "if you delete, you will only lose your unsaved progress.";
     } else {
         explanationStr =
             "If you delete, you will lose all unsaved progress, and the\n"
-            "particle generator's files on the disk will be gone FOREVER!";
+            "particle generator's files in your disk will be gone FOREVER!";
     }
     ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
     ImGui::Text("%s", explanationStr.c_str());
@@ -296,7 +296,7 @@ void ParticleEditor::processGuiMenuBar() {
                 loadCmd(1.0f);
             }
             setTooltip(
-                "Pick a particle generator file to load.",
+                "Pick a particle generator to load.",
                 "Ctrl + L"
             );
             
@@ -306,7 +306,8 @@ void ParticleEditor::processGuiMenuBar() {
                 reloadCmd(1.0f);
             }
             setTooltip(
-                "Lose all changes and reload the current file from the disk."
+                "Lose all changes and reload the current generator "
+                "from your disk."
             );
             
             //Save file item.
@@ -314,7 +315,7 @@ void ParticleEditor::processGuiMenuBar() {
                 saveCmd(1.0f);
             }
             setTooltip(
-                "Save the particle generator into the file on disk.",
+                "Save the particle generator to your disk.",
                 "Ctrl + S"
             );
             
@@ -323,7 +324,7 @@ void ParticleEditor::processGuiMenuBar() {
                 deletePartGenCmd(1.0f);
             }
             setTooltip(
-                "Delete the current particle generator from the disk."
+                "Delete the current particle generator from your disk."
             );
             
             //Separator item.
@@ -624,7 +625,7 @@ void ParticleEditor::processGuiOptionsDialog() {
             }
             setTooltip(
                 "Remove the background image.\n"
-                "This does not delete the file on your disk."
+                "This does not delete the file in your disk."
             );
             
             //Background texture browse button.
@@ -652,7 +653,7 @@ void ParticleEditor::processGuiOptionsDialog() {
                 }
             }
             setTooltip(
-                "Browse for which texture file on your disk to use."
+                "Browse for which texture file in your disk to use."
             );
             
             //Background texture name text.
@@ -1654,7 +1655,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             changesMgr.markAsChanged();
         }
         setTooltip(
-            "Version of the file, preferably in the \"X.Y.Z\" format. "
+            "Version of the generator, preferably in the \"X.Y.Z\" format. "
             "Optional."
         );
         
@@ -1665,7 +1666,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             changesMgr.markAsChanged();
         }
         setTooltip(
-            "Name (or nickname) of who made this file. "
+            "Name (or nickname) of who made this generator. "
             "Optional."
         );
         
@@ -1676,8 +1677,8 @@ void ParticleEditor::processGuiPanelGenerator() {
             changesMgr.markAsChanged();
         }
         setTooltip(
-            "Extra notes or comments about the file for other makers to see. "
-            "Optional."
+            "Extra notes or comments about the generator for "
+            "other makers to see. Optional."
         );
         
         //Notes input.
@@ -1753,7 +1754,7 @@ void ParticleEditor::processGuiToolbar() {
         loadCmd(1.0f);
     }
     setTooltip(
-        "Pick a particle generator file to load.",
+        "Pick a particle generator to load.",
         "Ctrl + L"
     );
     
@@ -1771,7 +1772,7 @@ void ParticleEditor::processGuiToolbar() {
         saveCmd(1.0f);
     }
     setTooltip(
-        "Save the particle generator into the file on disk.",
+        "Save the particle generator to your disk.",
         "Ctrl + S"
     );
     

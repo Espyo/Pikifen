@@ -69,7 +69,7 @@ positions{
 	mission_fail_2_slash=82.0000 18.5000 4.0000 5.0000
 	mission_fail_2_name=82.0000 20.0000 30.0000 8.0000
 }
-files{
+bitmaps{
 	bubble=effects/bubble
 	checkbox_check=gui/checkbox_check
 	checkbox_no_check=gui/checkbox_no_check

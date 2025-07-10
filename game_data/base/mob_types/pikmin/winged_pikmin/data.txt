@@ -28,37 +28,37 @@ top_leaf = pikmin/leaf_top
 
 sounds {
     attack {
-        file = pikmin/pikmin_attack
+        sound = pikmin/pikmin_attack
     }
     called {
-        file = pikmin/pikmin_called
+        sound = pikmin/pikmin_called
     }
     carrying {
-        file = pikmin/pikmin_carrying
+        sound = pikmin/pikmin_carrying
     }
     carrying_grab {
-        file = pikmin/pikmin_carrying_grab
+        sound = pikmin/pikmin_carrying_grab
     }
     caught {
-        file = pikmin/pikmin_caught
+        sound = pikmin/pikmin_caught
     }
     dying {
-        file = pikmin/pikmin_dying
+        sound = pikmin/pikmin_dying
     }
     held {
-        file = pikmin/pikmin_held
+        sound = pikmin/pikmin_held
     }
     idle {
-        file = pikmin/pikmin_idle
+        sound = pikmin/pikmin_idle
     }
     pluck_ground {
-        file = effects/pluck
+        sound = effects/pluck
     }
     plucked {
-        file = pikmin/pikmin_plucked
+        sound = pikmin/pikmin_plucked
     }
     thrown {
-        file = pikmin/pikmin_thrown
+        sound = pikmin/pikmin_thrown
     }
 }
 

@@ -32,38 +32,38 @@ reaches {
 
 sounds {
     inhaling {
-        file = creature_vocals/inhaling
+        sound = creature_vocals/inhaling
         loop = true
         volume = 50
     }
     spit {
-        file = creature_vocals/spit
+        sound = creature_vocals/spit
         volume = 60
     }
     stomp {
-        file = misc/stomp_quick
+        sound = misc/stomp_quick
         volume = 70
         speed = 30
         speed_deviation = 5
         stack_min_pos = 0.01
     }
     wings {
-        file = creature_misc/page_flip
+        sound = creature_misc/page_flip
         volume = 30
         speed = 25
     }
     steam {
-        file = misc/steam
+        sound = misc/steam
         loop = true
         volume = 40
     }
     dying {
-        file = misc/stomp_long
+        sound = misc/stomp_long
         volume = 80
         speed = 120
     }
     shaking {
-        file = creature_misc/shaking
+        sound = creature_misc/shaking
         volume = 30
         speed = 50
     }

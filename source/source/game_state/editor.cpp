@@ -2822,7 +2822,7 @@ void Editor::processGuiUnsavedChangesDialog() {
  * closes it based on the user's preferences.
  *
  * It also saves the user's preferences as they open and close the node.
- * In order for these preferences to be saved onto disk, saveOptions must
+ * In order for these preferences to be saved to the disk, saveOptions must
  * be called.
  *
  * @param category Category this node belongs to.
@@ -3311,12 +3311,12 @@ bool Editor::ChangesManager::askIfUnsaved(
 
 
 /**
- * @brief Returns whether the content exists on the disk.
+ * @brief Returns whether the content exists in the disk.
  *
  * @return Whether it exists.
  */
 bool Editor::ChangesManager::existsOnDisk() const {
-    return onDisk;
+    return inDisk;
 }
 
 
@@ -3412,11 +3412,11 @@ void Editor::ChangesManager::markAsChanged() {
 
 
 /**
- * @brief Marks the state of the editor's file as not existing on disk yet.
+ * @brief Marks the state of the editor's file as not existing in the disk yet.
  * This also marks it as having unsaved changes.
  */
 void Editor::ChangesManager::markAsNonExistent() {
-    onDisk = false;
+    inDisk = false;
     markAsChanged();
 }
 
@@ -3429,7 +3429,7 @@ void Editor::ChangesManager::markAsNonExistent() {
 void Editor::ChangesManager::markAsSaved() {
     unsavedChanges = 0;
     unsavedTime = 0.0f;
-    onDisk = true;
+    inDisk = true;
 }
 
 
@@ -3439,7 +3439,7 @@ void Editor::ChangesManager::markAsSaved() {
 void Editor::ChangesManager::reset() {
     unsavedChanges = 0;
     unsavedTime = 0.0f;
-    onDisk = true;
+    inDisk = true;
 }
 
 

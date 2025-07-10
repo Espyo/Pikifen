@@ -471,8 +471,8 @@ protected:
         //Editor it belongs to.
         Editor* ed = nullptr;
         
-        //Whether the content exists on the disk.
-        bool onDisk = true;
+        //Whether the content exists in the disk.
+        bool inDisk = true;
         
         //Cummulative number of unsaved changes since the last save.
         size_t unsavedChanges = 0;

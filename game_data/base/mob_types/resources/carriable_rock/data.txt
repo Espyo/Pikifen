@@ -17,7 +17,7 @@ weight = 10
 
 sounds {
     thump {
-        file = misc/thump
+        sound = misc/thump
         speed = 70
         speed_deviation = 10
     }

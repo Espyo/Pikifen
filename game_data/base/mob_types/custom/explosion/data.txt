@@ -14,7 +14,7 @@ radius = 68
 
 sounds {
     explosion {
-        file = effects/explosion
+        sound = effects/explosion
         speed_deviation = 10
     }
 }

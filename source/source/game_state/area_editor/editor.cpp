@@ -691,7 +691,7 @@ void AreaEditor::deleteCurrentArea() {
     );
     
     if(!changesMgr.existsOnDisk()) {
-        //If the area doesn't exist on disk, since it was never
+        //If the area doesn't exist in the disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
         goToLoadDialog = true;
@@ -715,14 +715,14 @@ void AreaEditor::deleteCurrentArea() {
         } case FS_DELETE_RESULT_NOT_FOUND: {
             success = false;
             messageBoxText =
-                "Area \"" + origInternalName +
-                "\" deletion failed! The folder was not found!";
+                "Could not delete area folder \"" + manifest.path +
+                "\"! The folder was not found!";
             goToLoadDialog = false;
             break;
         } case FS_DELETE_RESULT_HAS_IMPORTANT: {
             success = true;
             messageBoxText =
-                "The area \"" + origInternalName + "\" was deleted "
+                "The area \"" + manifest.path + "\" was deleted "
                 "successfully, but the folder still has user files, which "
                 "have not been deleted.";
             goToLoadDialog = true;
@@ -730,10 +730,9 @@ void AreaEditor::deleteCurrentArea() {
         } case FS_DELETE_RESULT_DELETE_ERROR: {
             success = false;
             messageBoxText =
-                "Area \"" + origInternalName +
-                "\" deletion failed! Something went wrong. Please make sure "
-                "there are enough permissions to delete the folder and "
-                "try again.";
+                "Could not delete area folder \"" + manifest.path +
+                "\"! Something went wrong. Please make sure there are enough "
+                "permissions to delete the folder and try again.";
             goToLoadDialog = false;
             break;
         }
@@ -2216,7 +2215,7 @@ void AreaEditor::loadAreaFolder(
     ) {
         openMessageDialog(
             "Load failed!",
-            "Failed to load the area folder \"" + manifest.path + "\"!",
+            "Could not load the area folder \"" + manifest.path + "\"!",
         [this] () { openLoadDialog(); }
         );
         manifest.clear();
@@ -2798,7 +2797,7 @@ void AreaEditor::rollbackToPreparedState(Area* preparedState) {
 
 
 /**
- * @brief Saves the area onto the disk.
+ * @brief Saves the area to the disk.
  *
  * @param toBackup If false, save normally.
  * If true, save to an auto-backup file.
@@ -2834,7 +2833,7 @@ bool AreaEditor::saveArea(bool toBackup) {
             false;
     }
     
-    //Finally, actually save to disk.
+    //Finally, actually save to the disk.
     string baseFolderPath =
         toBackup ? game.curAreaData->userDataPath : manifest.path;
     string mainDataFilePath =
@@ -2913,7 +2912,8 @@ void AreaEditor::saveCmd(float inputValue) {
 
 
 /**
- * @brief Saves the reference data to disk, in the area's reference config file.
+ * @brief Saves the reference data to the disk, in the area's
+ * reference config file.
  */
 void AreaEditor::saveReference() {
     string filePath =

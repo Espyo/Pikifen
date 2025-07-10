@@ -12,7 +12,7 @@ riders = pikmin leaders
 
 sounds {
     boing {
-        file = effects/boing_mid
+        sound = effects/boing_mid
         volume = 60
         speed_deviation = 5
     }

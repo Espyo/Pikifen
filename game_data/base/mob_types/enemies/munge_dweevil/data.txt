@@ -30,20 +30,20 @@ reaches {
 
 sounds {
     gas {
-        file = misc/spray
+        sound = misc/spray
         volume = 40
         speed_deviation = 5
     }
     snap {
-        file = effects/snap
+        sound = effects/snap
         volume = 80
     }
     pick_up {
-        file = effects/pick_up
+        sound = effects/pick_up
         volume = 30
     }
     shaking {
-        file = creature_misc/shaking
+        sound = creature_misc/shaking
         volume = 40
         speed = 140
     }

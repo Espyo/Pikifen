@@ -13,12 +13,12 @@ trigger_range = 64
 
 sounds {
     click_down {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 75
         speed = 110
     }
     click_up {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 60
         speed = 90
     }

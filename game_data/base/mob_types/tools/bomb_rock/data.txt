@@ -28,7 +28,7 @@ spawns {
 
 sounds {
     wick {
-        file = misc/wick
+        sound = misc/wick
         volume = 30
         loop = true
     }

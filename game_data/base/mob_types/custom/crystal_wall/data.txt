@@ -43,7 +43,7 @@ spawns {
 
 sounds {
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
 }

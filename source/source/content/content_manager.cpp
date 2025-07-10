@@ -139,7 +139,7 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
 
 /**
  * @brief Loads all pieces of game content of some type.
- * This begins by generating a manifest of all content on disk, with packs
+ * This begins by generating a manifest of all content in the disk, with packs
  * in mind, and then reads all the files in the manifest.
  *
  * @param types Types of game content to load.

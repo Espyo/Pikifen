@@ -13,33 +13,33 @@ radius = 16
 
 sounds {
     beam {
-        file = effects/beam
+        sound = effects/beam
         volume = 30
         speed_deviation = 5
         loop = true
     }
     pop {
-        file = pikmin/seed_pop
+        sound = pikmin/seed_pop
         volume = 40
         speed_deviation = 5
         stack_min_pos = 0.005
     }
     pikmin_entry {
-        file = effects/pop
+        sound = effects/pop
         volume = 20
         speed = 50
         speed_deviation = 8
         stack_min_pos = 0.02
     }
     pikmin_exit {
-        file = effects/pop
+        sound = effects/pop
         volume = 20
         speed = 70
         speed_deviation = 8
         stack_min_pos = 0.02
     }
     reception {
-        file = effects/poof
+        sound = effects/poof
         volume = 40
         speed_deviation = 15
     }

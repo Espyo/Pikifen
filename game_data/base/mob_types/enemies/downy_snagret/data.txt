@@ -28,16 +28,16 @@ reaches {
 
 sounds {
     swish {
-        file = effects/swish
+        sound = effects/swish
         volume = 50
     }
     thud {
-        file = misc/thump
+        sound = misc/thump
         volume = 50
         speed = 200
     }
     shaking {
-        file = creature_misc/shaking
+        sound = creature_misc/shaking
         volume = 50
         speed = 160
     }

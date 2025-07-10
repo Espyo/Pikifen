@@ -31,16 +31,16 @@ reaches {
 
 sounds{
     pick_up {
-        file = effects/pick_up
+        sound = effects/pick_up
         volume = 30
     }
     thud {
-        file = misc/thump
+        sound = misc/thump
         speed = 160
         volume = 15
     }
     woosh {
-        file = effects/woosh
+        sound = effects/woosh
         speed = 120
         volume = 40
     }

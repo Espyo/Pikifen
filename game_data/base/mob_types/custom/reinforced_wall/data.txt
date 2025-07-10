@@ -42,12 +42,12 @@ spawns {
 
 sounds {
     rock_breaking {
-        file = misc/rock_breaking
+        sound = misc/rock_breaking
         volume = 75
         speed = 90
     }
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
 }

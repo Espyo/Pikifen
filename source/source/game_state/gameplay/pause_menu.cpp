@@ -2166,7 +2166,7 @@ void PauseMenu::initRadarPage() {
         &game.content.guiDefs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
         
     //Assets.
-    DataNode* bitmapsNode = guiFile->getChildByName("files");
+    DataNode* bitmapsNode = guiFile->getChildByName("bitmaps");
     
 #define loader(var, name) \
     var = \

@@ -219,7 +219,7 @@ void AnimationEditor::deleteCurrentAnimDb() {
     string messageBoxText;
     
     if(!changesMgr.existsOnDisk()) {
-        //If the database doesn't exist on disk, since it was never
+        //If the database doesn't exist in the disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
         goToLoadDialog = true;
@@ -237,15 +237,15 @@ void AnimationEditor::deleteCurrentAnimDb() {
         } case FS_DELETE_RESULT_NOT_FOUND: {
             success = false;
             messageBoxText =
-                "Animation database \"" + origInternalName +
-                "\" deletion failed! The file was not found!";
+                "Could not delete animation database file \"" + manifest.path +
+                "\"! The file was not found!";
             goToLoadDialog = false;
             break;
         } case FS_DELETE_RESULT_DELETE_ERROR: {
             success = false;
             messageBoxText =
-                "Animation database \"" + origInternalName +
-                "\" deletion failed! Something went wrong. Please make sure "
+                "Could not delete animation database file \"" + manifest.path +
+                "\"! Something went wrong. Please make sure "
                 "there are enough permissions to delete the file and "
                 "try again.";
             goToLoadDialog = false;
@@ -649,7 +649,7 @@ void AnimationEditor::loadAnimDbFile(
     if(!file.fileWasOpened) {
         openMessageDialog(
             "Load failed!",
-            "Failed to load the animation database file \"" +
+            "Could not load the animation database file \"" +
             manifest.path + "\"!",
         [this] () { openLoadDialog(); }
         );
@@ -693,7 +693,9 @@ void AnimationEditor::loadAnimDbFile(
         );
     }
     
-    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
+    setStatus(
+        "Loaded database \"" + manifest.internalName + "\" successfully."
+    );
 }
 
 
@@ -707,7 +709,7 @@ void AnimationEditor::loadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         loadWidgetPos,
-        "loading a file", "load",
+        "loading a database", "load",
         std::bind(&AnimationEditor::openLoadDialog, this),
         std::bind(&AnimationEditor::saveAnimDb, this)
     );
@@ -921,7 +923,7 @@ void AnimationEditor::reloadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
-        "reloading the current file", "reload",
+        "reloading the current database", "reload",
     [this] () { loadAnimDbFile(string(manifest.path), false); },
     std::bind(&AnimationEditor::saveAnimDb, this)
     );
@@ -1214,11 +1216,11 @@ bool AnimationEditor::saveAnimDb() {
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        setStatus("Could not save the animation file!", true);
+        setStatus("Could not save the animation database!", true);
         return false;
         
     } else {
-        setStatus("Saved file successfully.");
+        setStatus("Saved database successfully.");
         changesMgr.markAsSaved();
         updateHistory(
             game.options.animEd.history, manifest, getNameForHistory()

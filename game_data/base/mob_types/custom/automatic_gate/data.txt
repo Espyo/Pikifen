@@ -13,17 +13,17 @@ rectangular_dimensions = 40 192
 
 sounds {
     vine {
-        file = effects/stretch
+        sound = effects/stretch
         volume = 40
         speed_deviation = 10
     }
     rock {
-        file = misc/rock_grind
+        sound = misc/rock_grind
         volume = 30
         speed_deviation = 5
     }
     thud {
-        file = misc/stomp_long
+        sound = misc/stomp_long
         volume = 70
         speed = 80
         speed_deviation = 5

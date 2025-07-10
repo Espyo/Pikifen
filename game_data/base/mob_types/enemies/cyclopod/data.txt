@@ -30,34 +30,34 @@ reaches {
 
 sounds {
     swish {
-        file = effects/swish
+        sound = effects/swish
         speed = 110
         speed_deviation = 5
         stack_min_pos = 0.001
     }
     swish_low {
-        file = effects/swish
+        sound = effects/swish
         speed = 80
         volume = 30
     }
     stretch {
-        file = effects/stretch
+        sound = effects/stretch
         speed = 120
         volume = 50
     }
     cuckoo {
-        file = effects/cuckoo
+        sound = effects/cuckoo
         speed = 75
         volume = 15
     }
     slosh {
-        file = nature/slosh
+        sound = nature/slosh
         speed_deviation = 10
         stack_min_pos = 1
         volume = 50
     }
     slosh_quiet {
-        file = nature/slosh
+        sound = nature/slosh
         volume = 15
     }
 }

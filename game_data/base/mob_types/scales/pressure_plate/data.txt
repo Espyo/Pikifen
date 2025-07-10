@@ -15,12 +15,12 @@ walkable = true
 
 sounds {
     click_down {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 75
         speed = 60
     }
     click_up {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 60
         speed = 50
     }

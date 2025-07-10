@@ -31,21 +31,21 @@ reaches {
 
 sounds {
     bite {
-        file = creature_misc/bite
+        sound = creature_misc/bite
         volume = 70
         speed = 90
     }
     chew {
-        file = creature_misc/bite
+        sound = creature_misc/bite
         volume = 40
         speed = 80
     }
     shaking {
-        file = creature_misc/shaking
+        sound = creature_misc/shaking
         volume = 60
     }
     swallow {
-        file = creature_misc/swallow
+        sound = creature_misc/swallow
         volume = 40
         speed = 80
         speed_deviation = 20

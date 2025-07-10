@@ -9,10 +9,10 @@ Next tasks (roughly sorted most important first)
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
     You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
+        Make sounds work like normal, and simply mute the sounds mixer during an interlude
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
-    Properties, error messages, etc. that refer to "file" should refer to "asset" or something instead, unless it's REALLY a file
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

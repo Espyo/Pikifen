@@ -1485,7 +1485,7 @@ Hud::Hud() :
     }
     
     
-    DataNode* bitmapsNode = hudFileNode->getChildByName("files");
+    DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");
     
 #define loader(var, name) \
     var = \

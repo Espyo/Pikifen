@@ -87,7 +87,7 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
 /**
  * @brief Loads a bitmap from the game's content.
  *
- * @param path Path to the bitmap file.
+ * @param filePath Path to the bitmap file.
  * @param node If present, it will be used to report errors, if any.
  * @param reportError If false, omits error reporting.
  * @param errorBmpOnError If true, returns the error bitmap in the case of an
@@ -97,11 +97,11 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* loadBmp(
-    const string& path, DataNode* node,
+    const string& filePath, DataNode* node,
     bool reportError, bool errorBmpOnError,
     bool errorBmpOnEmpty
 ) {
-    if(path.empty()) {
+    if(filePath.empty()) {
         if(errorBmpOnEmpty) {
             return game.bmpError;
         } else {
@@ -109,12 +109,12 @@ ALLEGRO_BITMAP* loadBmp(
         }
     }
     
-    ALLEGRO_BITMAP* b = al_load_bitmap((path).c_str());
+    ALLEGRO_BITMAP* b = al_load_bitmap((filePath).c_str());
     
     if(!b) {
         if(reportError) {
             game.errors.report(
-                "Could not open image \"" + path + "\"!",
+                "Could not open image file \"" + filePath + "\"!",
                 node
             );
         }
@@ -465,20 +465,20 @@ void loadOptions() {
 /**
  * @brief Loads an audio sample from the game's content.
  *
- * @param path Path to the file to load.
+ * @param filePath Path to the file to load.
  * @param node If not nullptr, blame this data node if the file
  * doesn't exist.
  * @param reportErrors Only issues errors if this is true.
  * @return The sample.
  */
 ALLEGRO_SAMPLE* loadSample(
-    const string& path, DataNode* node, bool reportErrors
+    const string& filePath, DataNode* node, bool reportErrors
 ) {
-    ALLEGRO_SAMPLE* sample = al_load_sample((path).c_str());
+    ALLEGRO_SAMPLE* sample = al_load_sample((filePath).c_str());
     
     if(!sample && reportErrors) {
         game.errors.report(
-            "Could not open audio file \"" + path + "\"!",
+            "Could not open audio sample file \"" + filePath + "\"!",
             node
         );
     }

@@ -24,12 +24,12 @@ children {
 
 sounds {
     click {
-        file = misc/ceramic
+        sound = misc/ceramic
         speed_deviation = 10
         volume = 50
     }
     obstacle_cleared {
-        file = gui/obstacle_cleared
+        sound = gui/obstacle_cleared
         type = gameplay_global
     }
 }

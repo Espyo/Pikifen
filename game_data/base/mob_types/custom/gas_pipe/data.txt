@@ -14,7 +14,7 @@ team = obstacle
 
 sounds {
     gas {
-        file = misc/gas
+        sound = misc/gas
         volume = 40
         speed = 75
         loop = true

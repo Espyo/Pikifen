@@ -24,17 +24,17 @@ area_editor_properties {
 
 sounds {
     click_down {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 75
         speed = 100
     }
     click_up {
-        file = misc/stone_click
+        sound = misc/stone_click
         volume = 60
         speed = 80
     }
     tension {
-        file = effects/stretch
+        sound = effects/stretch
         volume = 40
         loop = true
     }

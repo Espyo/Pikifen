@@ -17,28 +17,28 @@ receptacle_offset = 40 0
 
 sounds {
     beam {
-        file = effects/beam
+        sound = effects/beam
         volume = 30
         speed = 95
         speed_deviation = 5
         loop = true
     }
     pikmin_entry {
-        file = effects/pop
+        sound = effects/pop
         volume = 20
         speed = 50
         speed_deviation = 8
         stack_min_pos = 0.02
     }
     pikmin_exit {
-        file = effects/pop
+        sound = effects/pop
         volume = 20
         speed = 70
         speed_deviation = 8
         stack_min_pos = 0.02
     }
     reception {
-        file = effects/poof
+        sound = effects/poof
         volume = 40
         speed = 95
         speed_deviation = 15

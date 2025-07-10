@@ -24,7 +24,7 @@ worker_pikmin_pose = carrying
 
 sounds {
     pulled {
-        file = effects/stretch
+        sound = effects/stretch
         volume = 25
         speed = 110
         speed_deviation = 30
@@ -32,7 +32,7 @@ sounds {
         random_delay = 0.2
     }
     dying {
-        file = effects/pluck
+        sound = effects/pluck
         volume = 40
         speed = 110
     }

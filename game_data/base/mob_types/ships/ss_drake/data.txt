@@ -13,14 +13,14 @@ receptacle_offset = 131 5
 
 sounds {
     beam {
-        file = effects/beam
+        sound = effects/beam
         volume = 30
         speed = 95
         speed_deviation = 5
         loop = true
     }
     reception {
-        file = effects/poof
+        sound = effects/poof
         volume = 40
         speed = 95
         speed_deviation = 15

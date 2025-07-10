@@ -223,12 +223,12 @@ void AreaEditor::processGuiDeleteAreaDialog() {
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
         explanationStr =
-            "You have never saved this area to disk, so if you\n"
+            "You have never saved this area to your disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
     } else {
         explanationStr =
             "If you delete, you will lose all unsaved progress,\n"
-            "and the area's files on the disk will be gone FOREVER!";
+            "and the area's files in your disk will be gone FOREVER!";
     }
     ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
     ImGui::Text("%s", explanationStr.c_str());
@@ -454,7 +454,7 @@ void AreaEditor::processGuiMenuBar() {
                 reloadCmd(1.0f);
             }
             setTooltip(
-                "Lose all changes and reload the current area from the disk."
+                "Lose all changes and reload the current area from your disk."
             );
             
             //Save current area item.
@@ -462,7 +462,7 @@ void AreaEditor::processGuiMenuBar() {
                 saveCmd(1.0f);
             }
             setTooltip(
-                "Save the area into the files on disk.",
+                "Save the GUI definition to your disk.",
                 "Ctrl + S"
             );
             
@@ -471,7 +471,7 @@ void AreaEditor::processGuiMenuBar() {
                 deleteAreaCmd(1.0f);
             }
             setTooltip(
-                "Delete the current area from the disk."
+                "Delete the current area from your disk."
             );
             
             //Quick play item.
@@ -2291,8 +2291,8 @@ void AreaEditor::processGuiPanelInfo() {
         }
         setTooltip(
             "Press the Browse... button to set the area's thumbnail from\n"
-            "a file on your disk. When you save the area, the thumbnail\n"
-            "gets saved into thumbnail.png in the area's folder, \n"
+            "a file in your disk. When you save the area, the thumbnail\n"
+            "gets saved into \"thumbnail.png\" in the area's folder, \n"
             "but the original file you selected with the\n"
             "'Browse...' button will be left untouched."
         );
@@ -2737,7 +2737,7 @@ void AreaEditor::processGuiPanelMain() {
         "\n\n"
         "Folder state: ";
     if(!changesMgr.existsOnDisk()) {
-        folderTooltip += "Not saved to disk yet!";
+        folderTooltip += "Doesn't exist in your disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
         folderTooltip += "You have unsaved changes.";
     } else {
@@ -5448,7 +5448,7 @@ void AreaEditor::processGuiPanelTools() {
         }
         setTooltip(
             "Remove the reference image.\n"
-            "This does not delete the file on your disk."
+            "This does not delete the file in your disk."
         );
         
         //Browse for a reference image button.
@@ -5470,7 +5470,7 @@ void AreaEditor::processGuiPanelTools() {
             updateReference();
         }
         setTooltip(
-            "Browse for a file on your disk to use."
+            "Browse for a file in your disk to use."
         );
         
         //Reference image name text.
@@ -5678,7 +5678,7 @@ void AreaEditor::processGuiToolbar() {
         saveCmd(1.0f);
     }
     setTooltip(
-        "Save the area into the files on disk.",
+        "Save the area to your disk.",
         "Ctrl + S"
     );
     

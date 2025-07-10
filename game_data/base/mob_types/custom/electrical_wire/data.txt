@@ -24,12 +24,12 @@ children {
 
 sounds {
     electricity {
-        file = misc/electricity
+        sound = misc/electricity
         loop = true
         volume = 80
     }
     sparks {
-        file = misc/electric_sparks
+        sound = misc/electric_sparks
         loop = true
         volume = 80
     }

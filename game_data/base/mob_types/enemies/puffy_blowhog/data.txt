@@ -32,26 +32,26 @@ reaches {
 
 sounds {
     wing {
-        file = creature_misc/wing_deep_whoosh
+        sound = creature_misc/wing_deep_whoosh
         speed = 120
         volume = 20
     }
     inhaling {
-        file = creature_vocals/inhaling
+        sound = creature_vocals/inhaling
         loop = true
         volume = 35
     }
     shaking {
-        file = creature_misc/shaking
+        sound = creature_misc/shaking
         volume = 60
     }
     exhaling {
-        file = creature_vocals/exhaling
+        sound = creature_vocals/exhaling
         loop = true
         volume = 50
     }
     thump {
-        file = misc/thump
+        sound = misc/thump
     }
 }
 

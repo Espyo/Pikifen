@@ -50,7 +50,7 @@ void GuiEditor::openLoadDialog() {
         
     //Open the dialog that will contain the picker and history.
     openDialog(
-        "Load a GUI definition file",
+        "Load a GUI definition",
         std::bind(&GuiEditor::processGuiLoadDialog, this)
     );
     dialogs.back()->closeCallback =
@@ -161,17 +161,17 @@ void GuiEditor::processGuiControlPanel() {
     
     ImGui::BeginChild("panel");
     
-    //Current file header text.
-    ImGui::Text("File: ");
+    //Current definition header text.
+    ImGui::Text("Definition: ");
     
-    //Current file text.
+    //Current definition text.
     ImGui::SameLine();
     monoText("%s", manifest.internalName.c_str());
     string fileTooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changesMgr.existsOnDisk()) {
-        fileTooltip += "Not saved to disk yet!";
+        fileTooltip += "Doesn't exist in your disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
         fileTooltip += "You have unsaved changes.";
     } else {
@@ -202,12 +202,12 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
         explanationStr =
-            "You have never saved this GUI definition to disk, so if you\n"
+            "You have never saved this GUI definition to your disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
     } else {
         explanationStr =
             "If you delete, you will lose all unsaved progress, and the\n"
-            "GUI definition's files on the disk will be gone FOREVER!";
+            "GUI definition's files in your disk will be gone FOREVER!";
     }
     ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
     ImGui::Text("%s", explanationStr.c_str());
@@ -305,7 +305,7 @@ void GuiEditor::processGuiMenuBar() {
                 loadCmd(1.0f);
             }
             setTooltip(
-                "Pick a GUI definition file to load.",
+                "Pick a GUI definition to load.",
                 "Ctrl + L"
             );
             
@@ -315,7 +315,8 @@ void GuiEditor::processGuiMenuBar() {
                 reloadCmd(1.0f);
             }
             setTooltip(
-                "Lose all changes and reload the current file from the disk."
+                "Lose all changes and reload the current definition "
+                "from your disk."
             );
             
             //Save file item.
@@ -323,7 +324,7 @@ void GuiEditor::processGuiMenuBar() {
                 saveCmd(1.0f);
             }
             setTooltip(
-                "Save the GUI definition into the file on disk.",
+                "Save the GUI definition to your disk.",
                 "Ctrl + S"
             );
             
@@ -332,7 +333,7 @@ void GuiEditor::processGuiMenuBar() {
                 deleteGuiDefCmd(1.0f);
             }
             setTooltip(
-                "Delete the current GUI definition from the disk."
+                "Delete the current GUI definition from your disk."
             );
             
             //Separator item.
@@ -462,21 +463,21 @@ void GuiEditor::processGuiNewDialog() {
     }
     ImGui::Spacer();
     newDialog.mustUpdate |=
-        monoCombo("File", &newDialog.internalName, guiFiles);
+        monoCombo("Definition", &newDialog.internalName, guiFiles);
         
     //Check if everything's ok.
     if(newDialog.mustUpdate) {
         newDialog.problem.clear();
         if(newDialog.internalName.empty()) {
             newDialog.problem =
-                "You have to select a file!";
+                "You have to select a definition!";
         } else if(!isInternalNameGood(newDialog.internalName)) {
             newDialog.problem =
                 "The internal name should only have lowercase letters,\n"
                 "numbers, and underscores!";
         } else if(newDialog.pack == FOLDER_NAMES::BASE_PACK) {
             newDialog.problem =
-                "All the GUI definition files already live in the\n"
+                "All the GUI definitions already live in the\n"
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
@@ -488,7 +489,7 @@ void GuiEditor::processGuiNewDialog() {
             if(fileExists(newDialog.defPath)) {
                 newDialog.problem =
                     "There is already a GUI definition\n"
-                    "file for that GUI in that pack!";
+                    "for that GUI in that pack!";
             }
         }
         newDialog.mustUpdate = false;
@@ -792,7 +793,7 @@ void GuiEditor::processGuiToolbar() {
         loadCmd(1.0f);
     }
     setTooltip(
-        "Pick a GUI definition file to load.",
+        "Pick a GUI definition to load.",
         "Ctrl + L"
     );
     
@@ -810,7 +811,7 @@ void GuiEditor::processGuiToolbar() {
         saveCmd(1.0f);
     }
     setTooltip(
-        "Save the GUI definition into the file on disk.",
+        "Save the GUI definition to your disk.",
         "Ctrl + S"
     );
     

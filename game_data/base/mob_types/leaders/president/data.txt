@@ -18,52 +18,52 @@ weight = 1
 
 sounds {
     dismissing {
-        file = leaders/president_dismiss
+        sound = leaders/president_dismiss
     }
     name_call {
-        file = leaders/president_name_call
+        sound = leaders/president_name_call
     }
     whistling {
-        file = leaders/president_whistle
+        sound = leaders/president_whistle
     }
     footstep_1 {
-        file = leaders/footstep_1
+        sound = leaders/footstep_1
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     footstep_2 {
-        file = leaders/footstep_2
+        sound = leaders/footstep_2
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     jump {
-        file = effects/jump
+        sound = effects/jump
         volume = 5
         speed = 120
     }
     pain {
-        file = leaders/pain
+        sound = leaders/pain
         volume = 30
     }
     spray {
-        file = misc/spray
+        sound = misc/spray
         speed_deviation = 5
         speed = 130
     }
     thump {
-        file = misc/thump
+        sound = misc/thump
         volume = 45
     }
     throw {
-        file = effects/throw
+        sound = effects/throw
         volume = 30
         speed_deviation = 5
         stack_mode = override
     }
     woosh {
-        file = effects/woosh
+        sound = effects/woosh
         volume = 30
     }
 }

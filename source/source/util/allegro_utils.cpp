@@ -109,7 +109,7 @@ ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l) {
 
 
 /**
- * @brief Deletes a file on the disk.
+ * @brief Deletes a file in the disk.
  *
  * @param filePath Path to the file.
  * @return A status code.

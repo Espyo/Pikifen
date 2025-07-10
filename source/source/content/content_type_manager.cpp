@@ -1230,7 +1230,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + s + "\" found "
-                "in the Pikmin order list in the config file!"
+                "in the Pikmin order list in the game configuration!"
             );
         }
     }
@@ -1261,7 +1261,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         } else {
             game.errors.report(
                 "Unknown leader type \"" + s + "\" found "
-                "in the leader order list in the config file!"
+                "in the leader order list in the game configuration!"
             );
         }
     }
@@ -2012,7 +2012,7 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         } else {
             game.errors.report(
                 "Unknown spray type \"" + s + "\" found "
-                "in the spray order list in the config file!"
+                "in the spray order list in the game configuration!"
             );
         }
     }

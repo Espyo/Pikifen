@@ -20,7 +20,7 @@ target_type = explodable_pikmin_obstacle
 
 sounds {
     snap {
-        file = effects/snap
+        sound = effects/snap
         volume = 80
     }
 }

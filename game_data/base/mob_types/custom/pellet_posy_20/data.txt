@@ -92,12 +92,12 @@ spawns {
 
 sounds{
     squeak {
-        file = misc/pellet_posy_squeak
+        sound = misc/pellet_posy_squeak
         volume = 40
         speed_deviation = 10
     }
     dying {
-        file = misc/plant_dying
+        sound = misc/plant_dying
         volume = 10
         speed = 135
     }

@@ -97,7 +97,7 @@ enum CONTENT_LOAD_LEVEL {
 
 
 /**
- * @brief A manifest record of a piece of content on the disk.
+ * @brief A manifest record of a piece of content in the disk.
  */
 struct ContentManifest {
 

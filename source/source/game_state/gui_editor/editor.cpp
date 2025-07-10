@@ -131,7 +131,7 @@ void GuiEditor::deleteCurrentGuiDef() {
     string messageBoxText;
     
     if(!changesMgr.existsOnDisk()) {
-        //If the definition doesn't exist on disk, since it was never
+        //If the definition doesn't exist in the disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
         goToLoadDialog = true;
@@ -149,17 +149,16 @@ void GuiEditor::deleteCurrentGuiDef() {
         } case FS_DELETE_RESULT_NOT_FOUND: {
             success = false;
             messageBoxText =
-                "GUI definition \"" + origInternalName +
-                "\" deletion failed! The file was not found!";
+                "Could not delete GUI definition file \"" + manifest.path +
+                "\"! The file was not found!";
             goToLoadDialog = false;
             break;
         } case FS_DELETE_RESULT_DELETE_ERROR: {
             success = false;
             messageBoxText =
-                "GUI definition \"" + origInternalName +
-                "\" deletion failed! Something went wrong. Please make sure "
-                "there are enough permissions to delete the file and "
-                "try again.";
+                "Could not delete GUI definition file \"" + manifest.path +
+                "\"! Something went wrong. Please make sure there are enough "
+                "permissions to delete the file and try again.";
             goToLoadDialog = false;
             break;
         }
@@ -383,7 +382,7 @@ void GuiEditor::loadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         loadWidgetPos,
-        "loading a file", "load",
+        "loading a definition", "load",
         std::bind(&GuiEditor::openLoadDialog, this),
         std::bind(&GuiEditor::saveGuiDef, this)
     );
@@ -411,7 +410,7 @@ void GuiEditor::loadGuiDefFile(
     if(!fileNode.fileWasOpened) {
         openMessageDialog(
             "Load failed!",
-            "Failed to load the GUI definition file \"" + manifest.path + "\"!",
+            "Could not load the GUI definition file \"" + manifest.path + "\"!",
         [this] () { openLoadDialog(); }
         );
         manifest.clear();
@@ -439,7 +438,9 @@ void GuiEditor::loadGuiDefFile(
     if(shouldUpdateHistory) {
         updateHistory(game.options.guiEd.history, manifest, "");
     }
-    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
+    setStatus(
+        "Loaded definition \"" + manifest.internalName + "\" successfully."
+    );
 }
 
 
@@ -520,7 +521,7 @@ void GuiEditor::reloadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
-        "reloading the current file", "reload",
+        "reloading the current definition", "reload",
     [this] () { loadGuiDefFile(string(manifest.path), false); },
     std::bind(&GuiEditor::saveGuiDef, this)
     );
@@ -571,7 +572,7 @@ void GuiEditor::saveCmd(float inputValue) {
 
 
 /**
- * @brief Saves the GUI file onto the disk.
+ * @brief Saves the GUI file to the the disk.
  *
  * @return Whether it succeded.
  */
@@ -585,19 +586,19 @@ bool GuiEditor::saveGuiDef() {
     if(!fileNode.saveFile(manifest.path)) {
         showSystemMessageBox(
             nullptr, "Save failed!",
-            "Could not save the GUI file!",
+            "Could not save the GUI definition!",
             (
-                "An error occured while saving the GUI data to the file \"" +
-                manifest.path + "\". Make sure that the folder it is saving "
-                "to exists and it is not read-only, and try again."
+                "An error occured while saving the GUI definition to the "
+                "file \"" + manifest.path + "\". Make sure that the folder it "
+                "is saving to exists and it is not read-only, and try again."
             ).c_str(),
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        setStatus("Could not save the GUI file!", true);
+        setStatus("Could not save the GUI definition!", true);
         return false;
     } else {
-        setStatus("Saved GUI file successfully.");
+        setStatus("Saved GUI definition successfully.");
         changesMgr.markAsSaved();
         return true;
     }

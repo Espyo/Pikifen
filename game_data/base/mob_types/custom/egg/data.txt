@@ -45,7 +45,7 @@ spawns {
 
 sounds {
     crack {
-        file = misc/egg_crack
+        sound = misc/egg_crack
         speed_deviation = 10
     }
 }

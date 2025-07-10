@@ -166,7 +166,7 @@ void ParticleEditor::deleteCurrentPartGen() {
     string messageBoxText;
     
     if(!changesMgr.existsOnDisk()) {
-        //If the generator doesn't exist on disk, since it was never
+        //If the generator doesn't exist in the disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
         goToLoadDialog = true;
@@ -184,17 +184,16 @@ void ParticleEditor::deleteCurrentPartGen() {
         } case FS_DELETE_RESULT_NOT_FOUND: {
             success = false;
             messageBoxText =
-                "Particle generator \"" + origInternalName +
-                "\" deletion failed! The file was not found!";
+                "Could not delete particle generator file \"" + manifest.path +
+                "\"! The file was not found!";
             goToLoadDialog = false;
             break;
         } case FS_DELETE_RESULT_DELETE_ERROR: {
             success = false;
             messageBoxText =
-                "Particle generator \"" + origInternalName +
-                "\" deletion failed! Something went wrong. Please make sure "
-                "there are enough permissions to delete the file and "
-                "try again.";
+                "Could not delete particle generator file \"" + manifest.path +
+                "\"! Something went wrong. Please make sure there are enough "
+                "permissions to delete the file and try again.";
             goToLoadDialog = false;
             break;
         }
@@ -480,7 +479,7 @@ void ParticleEditor::loadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         loadWidgetPos,
-        "loading a file", "load",
+        "loading a generator", "load",
         std::bind(&ParticleEditor::openLoadDialog, this),
         std::bind(&ParticleEditor::savePartGen, this)
     );
@@ -508,7 +507,7 @@ void ParticleEditor::loadPartGenFile(
     if(!file.fileWasOpened) {
         openMessageDialog(
             "Load failed!",
-            "Failed to load the particle generator file \"" +
+            "Could not load the particle generator file \"" +
             manifest.path + "\"!",
         [this] () { openLoadDialog(); }
         );
@@ -527,7 +526,9 @@ void ParticleEditor::loadPartGenFile(
         updateHistory(game.options.partEd.history, manifest, loadedGen.name);
     }
     
-    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
+    setStatus(
+        "Loaded generator \"" + manifest.internalName + "\" successfully."
+    );
 }
 
 
@@ -634,7 +635,7 @@ void ParticleEditor::reloadCmd(float inputValue) {
     
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
-        "reloading the current file", "reload",
+        "reloading the current generator", "reload",
     [this] () { loadPartGenFile(string(manifest.path), false); },
     std::bind(&ParticleEditor::savePartGen, this)
     );
@@ -688,7 +689,7 @@ void ParticleEditor::saveCmd(float inputValue) {
 
 
 /**
- * @brief Saves the particle generator onto the disk.
+ * @brief Saves the particle generator to the disk.
  *
  * @return Whether it succeded.
  */
@@ -701,7 +702,7 @@ bool ParticleEditor::savePartGen() {
     if(!fileNode.saveFile(manifest.path)) {
         showSystemMessageBox(
             nullptr, "Save failed!",
-            "Could not save the particle file!",
+            "Could not save the particle generator!",
             (
                 "An error occured while saving the particle generator "
                 "to the file \"" +
@@ -711,10 +712,10 @@ bool ParticleEditor::savePartGen() {
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        setStatus("Could not save the particle generator file!", true);
+        setStatus("Could not save the particle generator!", true);
         return false;
     } else {
-        setStatus("Saved file successfully.");
+        setStatus("Saved generator successfully.");
         changesMgr.markAsSaved();
         updateHistory(game.options.partEd.history, manifest, loadedGen.name);
         return true;
