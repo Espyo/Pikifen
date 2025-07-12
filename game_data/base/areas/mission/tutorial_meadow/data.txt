@@ -1,5 +1,5 @@
 name=Tutorial Meadow
-description=A tutorial area to help you learn how to play Pikifen!
+description=A tutorial area designed to teach you how to navigate through PNF-404!
 tags=Tutorial
 maker=Espyo
 version=1.1.0

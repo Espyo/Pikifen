@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
     You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
@@ -30,123 +31,37 @@ Next tasks (roughly sorted most important first)
                 Sighing
                 Seed landing
                 Walking? Maybe some custom logic to only make it play 1/(number of Pikmin on screen) times
-            Menus
-                https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
-                x Menu item selected
-                x Menu item activated
-                x Menu backed out of
-                x Boing for when you're trying to do something wrong (like going past the limit in the Onion menu)
-                Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
-                    Could change pitch when you're changing those multi-value options in the options menu
             HUD
-                x Ready...
-                x GO!
-                x Mission complete
-                x Mission failed
-                x 1 minute left!
-                x Mission timer 10 seconds remaining (one sound per second)
                 Pausing
-                Mission completion item going up
-                Mission completion item going down
-                Mission failure item going up
-                Mission failure item going down
-                Score ruler ticking after the player got (or lost?) some points
-                x Reaching a new medal in the score ruler
-                x Gameplay message character being typed out
-            Results screen
-                Item run-up ticking
-                Item run-up finished
-                Katching for getting a medal
-                Puff for the complete/failed stamp
             Leader
-                x Footsteps
                 Alph, Brittany, and Charlie
-                x Spray
                 Swarming
-                x Punching
-                x Getting hurt
             Enemies
-                x Generic sucking in air
-                ? Generic spitting
-                x Generic big stomp
-                ? Generic exhaling (Puffy Blowhog)
-                    Make it stronger
-                ? Generic shaking
-                x Generic whisk (Burrow-nit stabbing)
-                x Generic biting
-                x Generic gulping
-                x Generic eletric attack
-                x Generic electric sparks
-                x Generic fire attack
-                x Water fountain
-                x Boulder rolling
-                x Burrowing sound
                 Burrow-nit screeching when dying
                 Burrow-nit squeaking while moving
-                x Crumbug waddling
                 Dwarf Bulborb screaming
-                x Munge Dweevil gas being spit (and gas pipes)
                 Munge Dweevil squeaking
-                x Munge Dweevil picking up something (and Skutterchuck)
-                x Munge Dweevil treasure snapping off
-                x Fiery Blowhog oinking
-                x Fiery Blowhog moving
-                x Fiery Blowhog flinging (and Skutterchuck)
                 Red Bulborb screaming when dying
-                x Red Bulborb snoring
                 Red Bulborb growling
                 Skutterchuck squeaking
                 Skutterchuck walking
                 Water Dumple growling
                 Water Dumple waddling
-                x Whiptongue bulborb slurping
-                x Wollyhop croaking
-                x Wollyhop falling
-                x Wollyhop jumping (and leader getting up)
-                x Enemy soul floating
-            Other mobs
-                x Onion/ship beam
-                x Onion/ship object entered
-                Onion spinning up to generate
-                x Onion/Candypop spitting
-                x Pikmin entering Onion
-                x Pikmin exiting Onion
-                x Bamboo gate moving
-                x Automatic gate moving
-                x Bramble gate being hit
-                x Bramble gate breaking
-                x Bouncy Mushroom throwing
-                x Cardboard box being dragged
-                x Kingcap and Spotcap being damaged
-                x Kingcap and Spotcap exploding
-                x Paper bag deflating crinkling
-                x Paper bag deflating air
-                x Pellet Posy being hit
-                x Stone button
-                x Stone lever
-                x Stone pressure plate click
-                x Spiderwort popping a berry out
-                x Bomb rock hissing
-                x Egg shattering
             Others
+                Onion spinning up to generate
                 Generic sparkles (Spiderworts regrowing, Pikmin flowering)
-                x Thud (carriable rock landing, airborne enemy enemy lands)
-                x Ceramic clunk (ceramic bridge piece fitting)
-                x Sticks clacking (climbing stick growing)
-                x Rocks crumbling (clog being destroyed)
                 Crystal being hit
                 Crystal shattering
-                x Leaves rustling (vegetation)
                 Drinking nectar (leaders and Pikmin)
                 Harmless ding (when Pikmin smack a reinforced wall)
-                Chocolate snapping off
-                x Explosion
                 Ambiance sounds
                     Wind
                     Leaves rustling
                     Birds, frogs, etc.
-        Recreate the following sounds, as per user feedback
-            Plucking -- sounds like crap
+        Try to improve these sounds:
+            Spitting
+            Exhaling; make it stronger
+            Shaking
         All enemy stepping sounds should be audible
         All enemies should make a thud sound when plopping down when dying
         All sound files should be at peak amplitude
@@ -162,9 +77,6 @@ Next tasks (roughly sorted most important first)
         Leaf Pikmin should be able to follow leaders in walking
         Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
         Make Rock Pikmin colors darker (thanks Nataly171)
-        Style Tutorial Meadow to be more DEV Lab-like
-            Have some DEV Lab terminals dotted around, and a couple of things be metal instead of purely natural; maybe the ship's landing spot?
-            Reword the tutorial signs so it sounds like they're explaining new spacefarers or tourists about how PNF-404 works
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
     Leader animations
@@ -736,6 +648,7 @@ Misc things (so I don't forget)
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animate the mission results screen. Basically, reveal one thing at a time
+            Add sounds for an item's run-up ticking, an item's run-up finishing, a ka-ching for getting a medal, and a puff for the complete/failed stamp
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
@@ -971,6 +884,22 @@ Misc things (so I don't forget)
         Pellet Posies could have properties that make them regrow
         A tall grass mob
         A turnstyle mob
+        Sounds
+            Menus
+                https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
+                Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
+                    Could change pitch when you're changing those multi-value options in the options menu
+            HUD
+                Mission completion item going up
+                Mission completion item going down
+                Mission failure item going up
+                Mission failure item going down
+                Score ruler ticking after the player got (or lost?) some points
+            Results screen
+                Item run-up ticking
+                Item run-up finished
+                Katching for getting a medal
+                Puff for the complete/failed stamp
     Base content to tweak
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?

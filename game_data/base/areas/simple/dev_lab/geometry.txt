@@ -12618,7 +12618,7 @@ mobs{
 	interactable{
 		type=orb_sign
 		p=120.0000 -120.0000
-		vars=text=[Quadrant 2]\nThe northwest quadrant of the laboratory features\nsimulations of the bizarre plants, creatures, and objects\nthat can be spotted on PNF-404 that, while not\nspecifically a part of a Pikmin's everyday life, should still\nbe known by explorers wishing to make the most\nout of their journey.
+		vars=text=[Quadrant 2]\nThe northeast quadrant of the laboratory features\nsimulations of the bizarre plants, creatures, and objects\nthat can be spotted on PNF-404 that, while not\nspecifically a part of a Pikmin's everyday life, should still\nbe known by explorers wishing to make the most\nout of their journey.
 	}
 	interactable{
 		type=orb_sign

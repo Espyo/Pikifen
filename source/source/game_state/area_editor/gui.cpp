@@ -4923,7 +4923,8 @@ void AreaEditor::processGuiPanelReview() {
         ImGui::Checkbox("Preview area", &previewMode);
         setTooltip(
             "Preview how the area will look like, without any of the "
-            "area editor's components in the way."
+            "area editor's components in the way.",
+            "Shift + P"
         );
         
         //Tree shadows checkbox.
