@@ -53,17 +53,39 @@ sounds {
     dying {
         sound = pikmin/pikmin_dying
     }
+    footstep {
+        sound = pikmin/footstep
+        volume = 20
+        speed = 95
+        speed_deviation = 40
+        random_delay = 0.05
+    }
     held {
         sound = pikmin/pikmin_held
     }
     idle {
         sound = pikmin/pikmin_idle
     }
+    latch {
+        sound = pikmin/latch
+        volume = 50
+    }
     pluck_ground {
         sound = effects/pluck
     }
     plucked {
         sound = pikmin/pikmin_plucked
+    }
+    seed_landing {
+        sound = pikmin/seed_landing
+        volume = 20
+        speed_deviation = 15
+        stack_min_pos = 0.005
+    }
+    shaking {
+        sound = creature_misc/shaking
+        volume = 50
+        speed = 140
     }
     thrown {
         sound = pikmin/pikmin_thrown

@@ -636,6 +636,7 @@ animations{
 			shaking_02{
 				duration=0.1000
 				interpolate=true
+				sound=shaking
 			}
 			shaking_01{
 				duration=0.1000

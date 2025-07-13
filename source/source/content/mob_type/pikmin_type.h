@@ -308,6 +308,12 @@ enum PIKMIN_SOUND {
     //Becoming idle.
     PIKMIN_SOUND_IDLE,
     
+    //Latching on.
+    PIKMIN_SOUND_LATCH,
+    
+    //Seed landing.
+    PIKMIN_SOUND_SEED_LANDING,
+    
     //Thrown by a leader.
     PIKMIN_SOUND_THROWN,
     
@@ -363,7 +369,7 @@ public:
     
     //Whether it can carry tool-type objects or not.
     bool canCarryTools = true;
-
+    
     //Modifier for enemy hit rates when attacking this Pikmin, latched.
     //0 = normal. -1 = always misses. 1 = always hits.
     //-0.5 = misses twice as often. etc.

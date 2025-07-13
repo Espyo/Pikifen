@@ -464,6 +464,8 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
     );
     
     latched = true;
+    
+    playSound(pikType->soundDataIdxs[PIKMIN_SOUND_LATCH]);
 }
 
 

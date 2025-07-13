@@ -607,6 +607,7 @@ animations{
 			shaking_02{
 				duration=0.1000
 				interpolate=true
+				sound=shaking
 			}
 			shaking_01{
 				duration=0.1000
@@ -838,12 +839,14 @@ animations{
 			}
 			walking_02{
 				duration=0.1000
+				sound=footstep
 			}
 			idling_01{
 				duration=0.1000
 			}
 			walking_01{
 				duration=0.1000
+				sound=footstep
 			}
 		}
 	}

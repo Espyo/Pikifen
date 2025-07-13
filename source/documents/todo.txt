@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
@@ -14,6 +15,7 @@ Next tasks (roughly sorted most important first)
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
 
     --- 0.26 ---
+    Try to implement the motif into Coastal Pavement
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -26,11 +28,7 @@ Next tasks (roughly sorted most important first)
                 Crushed
                 Celebrating
                 Gentle bored sound
-                Latching
-                Shaking
                 Sighing
-                Seed landing
-                Walking? Maybe some custom logic to only make it play 1/(number of Pikmin on screen) times
             HUD
                 Pausing
             Leader

@@ -2563,7 +2563,7 @@ void PikminFsm::circleOpponent(Mob* m, void* info1, void* info2) {
     );
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
 
@@ -3101,7 +3101,7 @@ void PikminFsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
     
     m->setAnimation(
         m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
-        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
 
@@ -3174,7 +3174,7 @@ void PikminFsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
     
 }
@@ -3225,7 +3225,7 @@ void PikminFsm::goToGroupTask(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
     
     pikPtr->fsm.setState(PIKMIN_STATE_GOING_TO_GROUP_TASK);
@@ -3273,7 +3273,7 @@ void PikminFsm::goToOnion(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
 
@@ -3334,7 +3334,7 @@ void PikminFsm::goToOpponent(Mob* m, void* info1, void* info2) {
     pikPtr->consecutiveDudHits = 0;
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
     
     m->fsm.setState(PIKMIN_STATE_GOING_TO_OPPONENT);
@@ -3386,7 +3386,7 @@ void PikminFsm::goToTool(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
     
     pikPtr->fsm.setState(PIKMIN_STATE_GOING_TO_TOOL);
@@ -3895,6 +3895,8 @@ void PikminFsm::releaseTool(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::seedLanded(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) m;
+    
     //Clear the seed sparkles.
     m->particleGenerators.clear();
     
@@ -3904,6 +3906,9 @@ void PikminFsm::seedLanded(Mob* m, void* info1, void* info2) {
             game.sysContentNames.parPikminSeedLanded, m
         );
     m->particleGenerators.push_back(pg);
+    
+    //Play the sound.
+    m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SEED_LANDING]);
 }
 
 
@@ -4070,7 +4075,7 @@ void PikminFsm::startChasingLeader(Mob* m, void* info1, void* info2) {
     PikminFsm::updateInGroupChasing(m, nullptr, nullptr);
     m->setAnimation(
         m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
-        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
 
@@ -4213,7 +4218,7 @@ void PikminFsm::startPanicking(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     PikminFsm::panicNewChase(m, info1, info2);
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
 
@@ -4277,7 +4282,7 @@ void PikminFsm::startReturning(Mob* m, void* info1, void* info2) {
         )
     ) {
         m->setAnimation(
-            PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true,
+            PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true,
             m->type->moveSpeed
         );
     } else {
@@ -4313,7 +4318,7 @@ void PikminFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
     
     switch(traPtr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
-        m->setAnimation(PIKMIN_ANIM_WALKING);
+        m->setAnimation(PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
         m->setAnimation(PIKMIN_ANIM_CLIMBING);

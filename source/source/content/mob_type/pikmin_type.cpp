@@ -227,6 +227,10 @@ void PikminType::loadCatProperties(DataNode* file) {
             soundDataIdxs[PIKMIN_SOUND_HELD] = s;
         } else if(sounds[s].name == "idle") {
             soundDataIdxs[PIKMIN_SOUND_IDLE] = s;
+        } else if(sounds[s].name == "latch") {
+            soundDataIdxs[PIKMIN_SOUND_LATCH] = s;
+        } else if(sounds[s].name == "seed_landing") {
+            soundDataIdxs[PIKMIN_SOUND_SEED_LANDING] = s;
         } else if(sounds[s].name == "thrown") {
             soundDataIdxs[PIKMIN_SOUND_THROWN] = s;
         }
