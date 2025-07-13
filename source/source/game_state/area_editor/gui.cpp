@@ -4007,6 +4007,14 @@ void AreaEditor::processGuiPanelMob() {
     ImGui::Spacer();
     if(saveableTreeNode("mobs", "Advanced")) {
     
+        if(mPtr->type && mPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
+            ImGui::Checkbox("Boss", &mPtr->isBoss);
+            setTooltip(
+                "If this mob should be considered a boss.\n"
+                "Boss mobs will trigger music when nearby."
+            );
+        }
+            
         if(mPtr->storedInside == INVALID) {
             //Store inside another mob button.
             if(ImGui::Button("Store inside...")) {

@@ -36,6 +36,9 @@ public:
     //Time left until it comes back to life.
     Timer reviveTimer;
     
+    //True if it's a boss.
+    bool isBoss = false;
+
     //--- Function declarations ---
     
     Enemy(const Point& pos, EnemyType* type, float angle);

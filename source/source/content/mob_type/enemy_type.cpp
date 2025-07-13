@@ -47,5 +47,4 @@ void EnemyType::loadCatProperties(DataNode* file) {
     eRS.set("revive_time", reviveTime);
     eRS.set("pikmin_seeds", pikminSeeds);
     eRS.set("points", points);
-    eRS.set("is_boss", isBoss);
 }

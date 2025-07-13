@@ -1248,6 +1248,30 @@ Mob* createMob(
 
 
 /**
+ * @brief Creates a mob, adding it to the corresponding vectors.
+ *
+ * @param gen The mob generator to use.
+ * @return The new mob.
+ */
+Mob* createMob(MobGen* gen) {
+    Mob* mPtr = 
+    createMob(
+        gen->type->category, gen->pos, gen->type,
+        gen->angle, gen->vars
+    );
+
+    if(mPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
+        Enemy* ePtr = (Enemy*)mPtr;
+        ePtr->isBoss = gen->isBoss;
+    }
+
+
+    return mPtr;
+}
+
+
+
+/**
  * @brief Deletes a mob from the relevant vectors.
  *
  * It's always removed from the vector of mobs, but it's

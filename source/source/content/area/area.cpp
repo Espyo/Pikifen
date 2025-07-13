@@ -1024,6 +1024,7 @@ void Area::loadGeometryFromDataNode(
         
         mRS.set("p", newMob->pos);
         mRS.set("angle", newMob->angle);
+        mRS.set("boss", newMob->isBoss);
         mRS.set("vars", newMob->vars);
         mRS.set("type", typeStr);
         mRS.set("links", linksStr);
@@ -1721,6 +1722,9 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(!mPtr->vars.empty()) {
             mGW.write("vars", mPtr->vars);
         }
+        if(mPtr->isBoss) {
+            mGW.write("boss", mPtr->isBoss);
+        }
         
         string linksStr;
         for(size_t l = 0; l < mPtr->linkIdxs.size(); l++) {
@@ -2104,12 +2108,14 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
  * @param vars String representation of the script vars.
  */
 MobGen::MobGen(
-    const Point& pos, MobType* type, float angle, const string& vars
+    const Point& pos, MobType* type, float angle, const string& vars,
+    bool boss
 ) :
     type(type),
     pos(pos),
     angle(angle),
-    vars(vars) {
+    vars(vars),
+    isBoss(boss) {
     
 }
 
@@ -2125,6 +2131,7 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
     destination->angle = angle;
     if(includePosition) destination->pos = pos;
     destination->type = type;
+    destination->isBoss = isBoss;
     destination->vars = vars;
     destination->linkIdxs = linkIdxs;
     destination->storedInside = storedInside;

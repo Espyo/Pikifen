@@ -1115,11 +1115,7 @@ void GameplayState::load() {
         }
         
         if(valid) {
-            Mob* newMob =
-                createMob(
-                    mPtr->type->category, mPtr->pos, mPtr->type,
-                    mPtr->angle, mPtr->vars
-                );
+            Mob* newMob = createMob(mPtr);
             mobsPerGen.push_back(newMob);
         } else {
             mobsPerGen.push_back(nullptr);
