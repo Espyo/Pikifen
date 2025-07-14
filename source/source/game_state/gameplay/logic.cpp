@@ -1659,7 +1659,7 @@ void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
             
             Distance d = player.leaderPtr->getDistanceBetween(ePtr);
             
-            if(!ePtr->eneType->isBoss) {
+            if(!ePtr->isBoss) {
                 if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
                     foundEnemy = true;
                 }

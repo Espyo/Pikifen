@@ -52,7 +52,8 @@ const float SOUL_SIZE_MULT = 0.7;
 Enemy::Enemy(const Point& pos, EnemyType* type, float angle) :
     Mob(pos, type, angle),
     eneType(type),
-    reviveTimer(type->reviveTime) {
+    reviveTimer(type->reviveTime),
+    isBoss(false) {
     
     reviveTimer.onEnd =
     [this] () { this->revive(); };

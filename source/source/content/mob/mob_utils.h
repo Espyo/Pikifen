@@ -46,6 +46,7 @@ using std::vector;
 
 
 class Mob;
+struct MobGen;
 
 /**
  * @brief Info on a carrying spot around a mob's perimeter.
@@ -757,6 +758,10 @@ Mob* createMob(
     std::function<void(Mob*)> codeAfterCreation = nullptr,
     size_t firstStateOverride = INVALID
 );
+Mob* createMob(
+    MobGen* gen
+);
+
 void deleteMob(Mob* m, bool completeDestruction = false);
 string getErrorMessageMobInfo(Mob* m);
 vector<Hazard*> getMobTypeListInvulnerabilities(
