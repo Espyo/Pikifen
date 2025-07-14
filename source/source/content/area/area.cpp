@@ -2114,8 +2114,8 @@ MobGen::MobGen(
     type(type),
     pos(pos),
     angle(angle),
-    vars(vars),
-    isBoss(boss) {
+    isBoss(boss),
+    vars(vars) {
     
 }
 

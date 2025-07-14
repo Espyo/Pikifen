@@ -107,9 +107,9 @@ struct MobGen {
     //Angle.
     float angle = 0.0f;
     
-    //Is a boss?
+    //Is it a boss encounter?
     bool isBoss = false;
-
+    
     //Script vars.
     string vars;
     

@@ -6084,6 +6084,7 @@ mobs{
 		type=beady_long_legs
 		p=192.0000 -528.0000
 		angle=1.8232
+		boss=true
 	}
 	resource{
 		type=chocolate_square

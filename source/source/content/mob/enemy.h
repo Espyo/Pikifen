@@ -36,7 +36,7 @@ public:
     //Time left until it comes back to life.
     Timer reviveTimer;
     
-    //True if it's a boss.
+    //Is it a boss encounter?
     bool isBoss = false;
 
     //--- Function declarations ---

@@ -142,7 +142,6 @@ Next tasks (roughly sorted most important first)
         Game state refactor
             Add a gui.startTransition function so that we don't have to do the responsive = true/false thing when we call gui.startAnimation
             Some sort of sub-menus manager so we don't have to have half a dozen if(subGui) subGui.handlePlayerAction() and stuff like that
-        Allow the player to drag their mouse on the scrollbar GUI item
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
         The selector cursor should be a part of the GUI manager itself

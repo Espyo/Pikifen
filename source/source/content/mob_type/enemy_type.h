@@ -42,9 +42,6 @@ public:
     //Points worth for missions.
     size_t points = 10;
     
-    //True if it's a boss.
-    bool isBoss = false;
-    
     
     //--- Function declarations ---
     

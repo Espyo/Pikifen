@@ -12960,6 +12960,7 @@ mobs{
 	enemy{
 		type=beady_long_legs
 		p=-2240.0000 -1792.0000
+		boss=true
 	}
 	bouncer{
 		type=geyser

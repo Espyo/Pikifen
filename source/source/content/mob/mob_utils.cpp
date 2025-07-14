@@ -1265,10 +1265,8 @@ Mob* createMob(MobGen* gen) {
         ePtr->isBoss = gen->isBoss;
     }
 
-
     return mPtr;
 }
-
 
 
 /**

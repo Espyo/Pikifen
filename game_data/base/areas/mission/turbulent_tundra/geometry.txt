@@ -6221,6 +6221,7 @@ mobs{
 		type=beady_long_legs
 		p=-947.7924 1087.9843
 		angle=-1.0688
+		boss=true
 	}
 	enemy{
 		type=crumbug

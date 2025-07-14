@@ -4008,13 +4008,17 @@ void AreaEditor::processGuiPanelMob() {
     if(saveableTreeNode("mobs", "Advanced")) {
     
         if(mPtr->type && mPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
-            ImGui::Checkbox("Boss", &mPtr->isBoss);
+            bool isBoss = mPtr->isBoss;
+            if(ImGui::Checkbox("Boss", &isBoss)) {
+                registerChange("Enemy boss setting");
+                mPtr->isBoss = isBoss;
+            }
             setTooltip(
-                "If this mob should be considered a boss.\n"
-                "Boss mobs will trigger music when nearby."
+                "If this enemy should be considered a boss.\n"
+                "Boss enemies will trigger boss music when nearby."
             );
         }
-            
+        
         if(mPtr->storedInside == INVALID) {
             //Store inside another mob button.
             if(ImGui::Button("Store inside...")) {
@@ -4030,6 +4034,7 @@ void AreaEditor::processGuiPanelMob() {
         
             //Unstore button.
             if(ImGui::Button("Unstore")) {
+                registerChange("Object in object storing");
                 mPtr->storedInside = INVALID;
             }
             setTooltip(

@@ -180,7 +180,7 @@ void Enemy::startDyingClassSpecifics() {
     }
     
     //Music.
-    if(eneType->isBoss) {
+    if(isBoss) {
         switch(game.states.gameplay->bossMusicState) {
         case BOSS_MUSIC_STATE_PLAYING: {
             bool nearBoss;

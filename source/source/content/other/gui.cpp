@@ -1672,12 +1672,12 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         isMouseOn(Point(ev.mouse.x, ev.mouse.y))
     ) {
         float listBottom = listItem->getChildBottom();
-        isSelected = true;
-
+        isMouseDragging = true;
+        
         if(listBottom <= 1.0f) {
             return;
         }
-
+        
         Point c = getReferenceCenter();
         Point s = getReferenceSize();
         float barH = (1.0f / listBottom) * s.y;
@@ -1687,20 +1687,22 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         click = std::clamp(click, 0.0f, 1.0f);
         
         listItem->targetOffset = click * (listBottom - 1.0f);
+        
     } else if(
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && 
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
         ev.mouse.button == 1
     ) {
-        isSelected = false;
+        isMouseDragging = false;
+
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-        isSelected
+        isMouseDragging
     ) {
         float listBottom = listItem->getChildBottom();
         if(listBottom <= 1.0f) {
             return;
         }
-
+        
         Point c = getReferenceCenter();
         Point s = getReferenceSize();
         float barH = (1.0f / listBottom) * s.y;
