@@ -91,6 +91,12 @@ spawns {
 }
 
 sounds{
+    grow {
+        sound = effects/sparkles
+        volume = 30
+        speed = 60
+        speed_deviation = 10
+    }
     squeak {
         sound = misc/pellet_posy_squeak
         volume = 40

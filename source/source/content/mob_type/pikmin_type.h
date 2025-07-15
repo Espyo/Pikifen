@@ -311,6 +311,9 @@ enum PIKMIN_SOUND {
     //Latching on.
     PIKMIN_SOUND_LATCH,
     
+    //Maturing from one maturity to the next.
+    PIKMIN_SOUND_MATURING,
+    
     //Seed landing.
     PIKMIN_SOUND_SEED_LANDING,
     

@@ -6,6 +6,9 @@ script {
         on_enter {
             set_animation idling
         }
+        on_damage {
+            play_sound hit
+        }
         on_receive_message {
             get_event_info msg message
             if $msg = be_carried
@@ -47,6 +50,7 @@ script {
         on_enter {
             start_particles crystal_explosion_small 0 0 40
             set_animation destroyed
+            play_sound destroyed
         }
         on_animation_end {
             delete

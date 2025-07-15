@@ -29,6 +29,12 @@ sounds {
         sound = effects/snap
         volume = 80
     }
+    grow {
+        sound = effects/sparkles
+        volume = 10
+        speed = 60
+        speed_deviation = 10
+    }
 }
 
 maker = Espyo

@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Pikmin multiple dud hit recognition isn't working
     Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot

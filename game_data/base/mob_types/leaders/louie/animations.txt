@@ -41,6 +41,7 @@ animations{
 			ducking_stretched_01{
 				duration=0.1250
 				interpolate=true
+				sound=drinking
 			}
 			ducking{
 				duration=0.1250

@@ -3974,25 +3974,10 @@ void PikminFsm::sproutEvolve(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
     if(pikPtr->maturity == 0 || pikPtr->maturity == 1) {
         //Leaf to bud, or bud to flower.
-        
-        pikPtr->maturity++;
-        
-        ParticleGenerator pg =
-            standardParticleGenSetup(
-                game.sysContentNames.parSproutEvolution, pikPtr
-            );
-        pikPtr->particleGenerators.push_back(pg);
-        
+        pikPtr->increaseMaturity(1);
     } else {
         //Flower to leaf.
-        
-        pikPtr->maturity = 0;
-        
-        ParticleGenerator pg =
-            standardParticleGenSetup(
-                game.sysContentNames.parSproutRegression, pikPtr
-            );
-        pikPtr->particleGenerators.push_back(pg);
+        pikPtr->increaseMaturity(-2);
     }
 }
 

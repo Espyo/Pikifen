@@ -1849,6 +1849,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
     sndRS.set("countdown_tick", sndCountdownTick);
+    sndRS.set("ding", sndDing);
     sndRS.set("enemy_soul", sndEnemySoul);
     sndRS.set("gameplay_message_char", sndGameplayMsgChar);
     sndRS.set("go", sndGo);

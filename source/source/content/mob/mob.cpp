@@ -1471,18 +1471,21 @@ void Mob::doAttackEffects(
     
     if(!useless) {
         //Play the sound.
-        
-        SoundSourceConfig attackSoundConfig;
-        attackSoundConfig.gain = 0.6f;
         game.audio.createPosSoundSource(
             game.sysContent.sndAttack,
-            pos, false, attackSoundConfig
+            pos, false, { .gain = 0.6f }
         );
         
         //Damage squash and stretch animation.
         if(damageSquashTime == 0.0f) {
             damageSquashTime = MOB::DAMAGE_SQUASH_DURATION;
         }
+    } else {
+        //Play the sound.
+        game.audio.createPosSoundSource(
+            game.sysContent.sndDing,
+            pos, false, { .gain = 0.3f }
+        );
     }
 }
 

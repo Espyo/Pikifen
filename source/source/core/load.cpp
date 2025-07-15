@@ -402,6 +402,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndCamera);
     game.sysContent.sndCountdownTick =
         game.content.sounds.list.get(game.sysContentNames.sndCountdownTick);
+    game.sysContent.sndDing =
+        game.content.sounds.list.get(game.sysContentNames.sndDing);
     game.sysContent.sndEnemySoul =
         game.content.sounds.list.get(game.sysContentNames.sndEnemySoul);
     game.sysContent.sndGameplayMsgChar =
@@ -583,6 +585,7 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndAttack);
     game.content.sounds.list.free(game.sysContent.sndCamera);
     game.content.sounds.list.free(game.sysContent.sndCountdownTick);
+    game.content.sounds.list.free(game.sysContent.sndDing);
     game.content.sounds.list.free(game.sysContent.sndEnemySoul);
     game.content.sounds.list.free(game.sysContent.sndGameplayMsgChar);
     game.content.sounds.list.free(game.sysContent.sndGo);

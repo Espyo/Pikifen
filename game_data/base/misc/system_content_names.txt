@@ -62,6 +62,7 @@ fonts {
 sounds {
     attack = effects/attack
     camera = gui/camera
+    ding = effects/ding
     enemy_soul = effects/enemy_soul
     go = gui/go
     menu_activate = gui/menu_activate

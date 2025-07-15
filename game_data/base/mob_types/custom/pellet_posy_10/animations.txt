@@ -11,6 +11,7 @@ animations{
 			}
 			blooming_02{
 				duration=0.1000
+				sound=grow
 			}
 		}
 	}

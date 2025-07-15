@@ -20,6 +20,11 @@ sounds {
     dismissing {
         sound = leaders/olimar_dismiss
     }
+    drinking {
+        sound = misc/slurp_straw
+        volume = 50
+        speed_deviation = 10
+    }
     name_call {
         sound = leaders/olimar_name_call
     }

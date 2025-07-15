@@ -622,6 +622,9 @@ struct SystemContentList {
     //10 second countdown second tick.
     ALLEGRO_SAMPLE* sndCountdownTick = nullptr;
     
+    //Useless attack ding.
+    ALLEGRO_SAMPLE* sndDing = nullptr;
+    
     //Enemy soul.
     ALLEGRO_SAMPLE* sndEnemySoul = nullptr;
     
@@ -858,6 +861,9 @@ struct SystemContentNames {
     
     //10 second countdown second tick.
     string sndCountdownTick = "gui/countdown_tick";
+    
+    //Useless attack ding.
+    string sndDing = "effects/ding";
     
     //Enemy soul.
     string sndEnemySoul = "effects/enemy_soul";

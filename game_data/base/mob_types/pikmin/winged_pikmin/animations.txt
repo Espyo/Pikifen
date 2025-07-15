@@ -237,6 +237,7 @@ animations{
 			drinking_01{
 				duration=0.1250
 				interpolate=true
+				sound=drinking
 			}
 			crouching{
 				duration=0.1250

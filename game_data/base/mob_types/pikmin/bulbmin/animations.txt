@@ -210,6 +210,7 @@ animations{
 			drinking_01{
 				duration=0.1250
 				interpolate=true
+				sound=drinking
 			}
 			grabbing_near{
 				duration=0.1250

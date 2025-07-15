@@ -26,6 +26,18 @@ children {
 }
 
 sounds {
+    hit {
+        sound = nature/crystal_hit
+        speed = 110
+        volume = 20
+        speed_deviation = 8
+    }
+    destroyed {
+        sound = nature/crystal_smash
+        speed = 100
+        volume = 30
+        speed_deviation = 8
+    }
     obstacle_cleared {
         sound = gui/obstacle_cleared
         type = gameplay_global

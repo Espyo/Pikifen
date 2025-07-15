@@ -28,6 +28,7 @@ script {
             set_animation stage_1_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.85
                 set_state stage_2_shaking
@@ -44,6 +45,7 @@ script {
             set_state stage_1_idling
         }
         on_damage {
+            play_sound hit
             get_mob_info t self health_ratio
             if $t < 0.85
                 set_state stage_2_shaking
@@ -56,6 +58,7 @@ script {
             set_animation stage_2_idling
         }
         on_damage {
+            play_sound hit
             set_state stage_2_shaking
         }
     }
@@ -67,13 +70,17 @@ script {
         on_animation_end {
             set_state stage_2_idling
         }
+        on_damage {
+            play_sound hit
+        }
     }
 
     destroying {
         on_enter {
+            set_tangible false
             start_particles crystal_explosion_small 0 0 100
             set_animation destroyed
-            set_tangible false
+            play_sound destroyed
         }
         on_animation_end {
             throw_focused_mob 0 0 0 0

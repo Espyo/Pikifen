@@ -5,6 +5,9 @@ script {
             if $m = dropped_resource
                 play_sound snap
             end_if
+            if $m = grown_resource
+                play_sound grow
+            end_if
         }
     }
 }

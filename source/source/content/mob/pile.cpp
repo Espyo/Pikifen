@@ -50,6 +50,11 @@ void Pile::changeAmount(int change) {
     setHealth(true, false, change * pilType->healthPerResource);
     
     update();
+    
+    if(change > 0) {
+        string grownResourceMsg = "grown_resource";
+        sendScriptMessage(this, grownResourceMsg);
+    }
 }
 
 

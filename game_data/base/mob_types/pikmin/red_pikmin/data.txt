@@ -41,6 +41,12 @@ sounds {
     caught {
         sound = pikmin/pikmin_caught
     }
+    drinking {
+        sound = misc/slurp_straw
+        volume = 30
+        speed = 120
+        speed_deviation = 10
+    }
     dying {
         sound = pikmin/pikmin_dying
     }
@@ -59,6 +65,12 @@ sounds {
     latch {
         sound = pikmin/latch
         volume = 50
+    }
+    maturing {
+        sound = effects/sparkles
+        volume = 10
+        speed = 60
+        speed_deviation = 10
     }
     pluck_ground {
         sound = effects/pluck

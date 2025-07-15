@@ -432,7 +432,21 @@ bool Pikmin::increaseMaturity(int amount) {
     
     if(maturity > oldMaturity) {
         game.statistics.pikminBlooms++;
+        ParticleGenerator pg =
+            standardParticleGenSetup(
+                game.sysContentNames.parSproutEvolution, this
+            );
+        particleGenerators.push_back(pg);
+        playSound(pikType->soundDataIdxs[PIKMIN_SOUND_MATURING]);
+        
+    } else {
+        ParticleGenerator pg =
+            standardParticleGenSetup(
+                game.sysContentNames.parSproutRegression, this
+            );
+        particleGenerators.push_back(pg);
     }
+    
     return maturity != oldMaturity;
 }
 
