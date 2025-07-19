@@ -58,10 +58,10 @@ public:
     Timer missedAttackTimer;
     
     //Did the Pikmin's last attack cause zero damage?
-    bool wasLastHitDud = false;
+    bool wasLastHitDing = false;
     
     //How many hits in a row have done no damage.
-    unsigned char consecutiveDudHits = 0;
+    unsigned char consecutiveDings = 0;
     
     //Maturity. 0: leaf. 1: bud. 2: flower.
     unsigned char maturity = 2;

@@ -648,7 +648,9 @@ bool Mob::calculateAttackBasics(
         if(statusVulnIt != victim->type->statusVulnerabilities.end()) {
             statusDefMult *= statusVulnIt->second.effectMult;
         }
-        *outDefenseMultiplier *= (statusDefMult + 1.0f);
+        if(*outDefenseMultiplier != LARGE_FLOAT) {
+            *outDefenseMultiplier *= (statusDefMult + 1.0f);
+        }
     }
     
     return true;
@@ -904,8 +906,8 @@ bool Mob::calculateAttackDamage(
     Mob* victim, Hitbox* attackH, const Hitbox* victimH,
     float offenseMultiplier, float defenseMultiplier, float* outDamage
 ) const {
-    if(victimH->value == 0.0f) {
-        //This hitbox is invulnerable!
+    if(victimH->value == 0.0f || defenseMultiplier == LARGE_FLOAT) {
+        //Invulnerable!
         *outDamage = 0;
         return true;
     }

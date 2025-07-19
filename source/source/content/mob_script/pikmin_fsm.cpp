@@ -2082,6 +2082,8 @@ void PikminFsm::becomeIdle(Mob* m, void* info1, void* info2) {
     }
     
     m->unfocusFromMob();
+    pikPtr->wasLastHitDing = false;
+    pikPtr->consecutiveDings = 0;
     
     m->setAnimation(
         PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -2325,8 +2327,8 @@ void PikminFsm::called(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
     Mob* caller = (Mob*) info1;
     
-    pikPtr->wasLastHitDud = false;
-    pikPtr->consecutiveDudHits = 0;
+    pikPtr->wasLastHitDing = false;
+    pikPtr->consecutiveDings = 0;
     PikminFsm::standStill(m, info1, info2);
     
     pikPtr->focusOnMob(caller);
@@ -2513,7 +2515,10 @@ void PikminFsm::checkOutgoingAttack(Mob* m, void* info1, void* info2) {
     }
     
     if(damage == 0 || !attackSuccess) {
-        pikPtr->wasLastHitDud = true;
+        pikPtr->wasLastHitDing = true;
+    } else {
+        pikPtr->wasLastHitDing = false;
+        pikPtr->consecutiveDings = 0;
     }
 }
 
@@ -3289,8 +3294,8 @@ void PikminFsm::goToOpponent(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Pikmin* pikPtr = (Pikmin*) m;
-    
     Mob* otherPtr = (Mob*) info1;
+    
     if(!pikPtr->pikType->canFly) {
         //Grounded Pikmin.
         if(otherPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
@@ -3329,9 +3334,6 @@ void PikminFsm::goToOpponent(Mob* m, void* info1, void* info2) {
         targetDist
     );
     m->leaveGroup();
-    
-    pikPtr->wasLastHitDud = false;
-    pikPtr->consecutiveDudHits = 0;
     
     m->setAnimation(
         PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
@@ -3728,7 +3730,6 @@ void PikminFsm::prepareToAttack(Mob* m, void* info1, void* info2) {
     engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     Pikmin* pikPtr = (Pikmin*) m;
-    pikPtr->wasLastHitDud = false;
     
     if(pikPtr->focusedMob->rectangularDim.x != 0.0f) {
         bool isInside = false;
@@ -3810,15 +3811,15 @@ void PikminFsm::reachDismissSpot(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::rechaseOpponent(Mob* m, void* info1, void* info2) {
-
     Pikmin* pikPtr = (Pikmin*) m;
     
-    if(pikPtr->wasLastHitDud) {
-        //Check if the Pikmin's last hits were duds.
+    if(pikPtr->wasLastHitDing) {
+        //Check if the Pikmin's last hits were dings.
         //If so, maybe give up and sigh.
-        pikPtr->consecutiveDudHits++;
-        if(pikPtr->consecutiveDudHits >= 4) {
-            pikPtr->consecutiveDudHits = 0;
+        pikPtr->consecutiveDings++;
+        if(pikPtr->consecutiveDings >= 4) {
+            pikPtr->wasLastHitDing = false;
+            pikPtr->consecutiveDings = 0;
             pikPtr->fsm.setState(PIKMIN_STATE_SIGHING);
             return;
         }
