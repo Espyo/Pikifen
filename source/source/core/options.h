@@ -142,6 +142,7 @@ extern const bool SNAP;
 
 namespace MISC_D {
 extern const float CURSOR_CAM_WEIGHT;
+extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const float PIKMIN_BUMP_DIST;
 extern const bool SHOW_COUNTER_ON_CURSOR;
@@ -371,6 +372,9 @@ struct Options {
     
         //Cursor camera movement weight.
         float cursorCamWeight = OPTIONS::MISC_D::CURSOR_CAM_WEIGHT;
+
+        //Dismissing dismisses all.
+        bool dismissAll = OPTIONS::MISC_D::DISMISS_ALL;
         
         //Pause menu leaving confirmation question mode.
         LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;

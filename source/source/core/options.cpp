@@ -203,6 +203,9 @@ namespace MISC_D {
 //Default value for the cursor camera weight.
 const float CURSOR_CAM_WEIGHT = 0.0f;
 
+//Default value for the dismiss dismissing all.
+const bool DISMISS_ALL = true;
+
 //Default value for the pause menu leaving confirmation mode.
 const LEAVING_CONF_MODE LEAVING_CONF = LEAVING_CONF_MODE_ALWAYS;
 
@@ -454,6 +457,7 @@ void Options::loadFromDataNode(DataNode* file) {
         unsigned char leavingConfModeChar = misc.leavingConfMode;
         
         mRS.set("cursor_cam_weight", misc.cursorCamWeight);
+        mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leaving_confirmation_mode", leavingConfModeChar);
         mRS.set("pikmin_bump_dist", misc.pikminBumpDist);
         mRS.set("show_counter_on_cursor", misc.showCounterOnCursor);
@@ -646,6 +650,7 @@ void Options::saveToDataNode(DataNode* file) const {
         GetterWriter mGW(file->addNew("misc"));
         
         mGW.write("cursor_cam_weight", misc.cursorCamWeight);
+        mGW.write("dismiss_all", misc.dismissAll);
         mGW.write("leaving_confirmation_mode", misc.leavingConfMode);
         mGW.write("pikmin_bump_dist", misc.pikminBumpDist);
         mGW.write("show_counter_on_cursor", misc.showCounterOnCursor);

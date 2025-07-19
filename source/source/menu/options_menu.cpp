@@ -658,15 +658,16 @@ void OptionsMenu::initGuiGraphicsPage() {
  */
 void OptionsMenu::initGuiMiscPage() {
     //Menu items.
-    miscGui.registerCoords("back",                   12,    5, 20,  6);
-    miscGui.registerCoords("back_input",              3,    7,  4,  4);
-    miscGui.registerCoords("header",                 50,   10, 50,  6);
-    miscGui.registerCoords("pikmin_bump",            50,   25, 70, 10);
-    miscGui.registerCoords("cursor_cam_weight",      50, 37.5, 70, 10);
-    miscGui.registerCoords("show_counter_on_cursor", 50,   50, 70, 10);
-    miscGui.registerCoords("show_hud_input_icons",   50, 62.5, 70, 10);
-    miscGui.registerCoords("leaving_confirmation",   50,   75, 70, 10);
-    miscGui.registerCoords("tooltip",                50,   96, 96,  4);
+    miscGui.registerCoords("back",                   12,     5, 20,   6);
+    miscGui.registerCoords("back_input",              3,     7,  4,   4);
+    miscGui.registerCoords("header",                 50,    10, 50,   6);
+    miscGui.registerCoords("pikmin_bump",            50, 28.75, 70, 7.5);
+    miscGui.registerCoords("dismiss_all",            50, 38.75, 70, 7.5);
+    miscGui.registerCoords("cursor_cam_weight",      50, 48.75, 70, 7.5);
+    miscGui.registerCoords("show_counter_on_cursor", 50, 58.75, 70, 7.5);
+    miscGui.registerCoords("show_hud_input_icons",   50, 68.75, 70, 7.5);
+    miscGui.registerCoords("leaving_confirmation",   50, 78.75, 70, 7.5);
+    miscGui.registerCoords("tooltip",                50,    96, 96,   4);
     miscGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
         getChildByName("positions")
@@ -698,7 +699,43 @@ void OptionsMenu::initGuiMiscPage() {
     );
     miscGui.addItem(headerText, "header");
     
-    //Cursor camera weight.
+    //Pikmin bump mode picker.
+    vector<float> presetPikminBumpValues = {
+        0.0f, 25.0f, 50.0f
+    };
+    vector<string> presetPikminBumpNames = {
+        "Touch", "Very close", "Nearby"
+    };
+    pikminBumpPicker =
+        new OptionsMenuPickerGuiItem<float>(
+        "Pikmin bumping: ",
+        &game.options.misc.pikminBumpDist,
+        OPTIONS::MISC_D::PIKMIN_BUMP_DIST,
+        presetPikminBumpValues, presetPikminBumpNames
+    );
+    pikminBumpPicker->presetDescriptions = {
+        "Idle Pikmin only join the leader when they are touching.",
+        "Idle Pikmin join the leader when they are very close.",
+        "Idle Pikmin join the leader when they are somewhat nearby."
+    };
+    pikminBumpPicker->init();
+    miscGui.addItem(pikminBumpPicker, "pikmin_bump");
+    
+    //Dismiss all checkbox.
+    CheckGuiItem* dismissAllCheckbox =
+        new CheckGuiItem(
+        &game.options.misc.dismissAll,
+        "Dismissing dismisses all", game.sysContent.fntStandard
+    );
+    dismissAllCheckbox->onGetTooltip =
+    [] () {
+        return
+            "Do dismisses dismiss all Pikmin, or keep the standby type? "
+            "Default: " + b2s(OPTIONS::MISC_D::DISMISS_ALL) + ".";
+    };
+    miscGui.addItem(dismissAllCheckbox, "dismiss_all");
+    
+    //Cursor camera weight picker.
     cursorCamWeightPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor cam weight: ",
@@ -762,28 +799,6 @@ void OptionsMenu::initGuiMiscPage() {
     };
     leavingConfirmationPicker->init();
     miscGui.addItem(leavingConfirmationPicker, "leaving_confirmation");
-    
-    //Pikmin bump mode.
-    vector<float> presetPikminBumpValues = {
-        0.0f, 25.0f, 50.0f
-    };
-    vector<string> presetPikminBumpNames = {
-        "Touch", "Very close", "Nearby"
-    };
-    pikminBumpPicker =
-        new OptionsMenuPickerGuiItem<float>(
-        "Pikmin bumping: ",
-        &game.options.misc.pikminBumpDist,
-        OPTIONS::MISC_D::PIKMIN_BUMP_DIST,
-        presetPikminBumpValues, presetPikminBumpNames
-    );
-    pikminBumpPicker->presetDescriptions = {
-        "Idle Pikmin only join the leader when they are touching.",
-        "Idle Pikmin join the leader when they are very close.",
-        "Idle Pikmin join the leader when they are somewhat nearby."
-    };
-    pikminBumpPicker->init();
-    miscGui.addItem(pikminBumpPicker, "pikmin_bump");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

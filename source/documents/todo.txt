@@ -665,7 +665,6 @@ Misc things (so I don't forget)
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
-        Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
     Mechanics
         Lock-on
             Auto [PIKMIN 4]

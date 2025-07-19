@@ -61,6 +61,7 @@ extern const float THROW_PREVIEW_FADE_IN_RATIO;
 extern const float THROW_PREVIEW_FADE_OUT_RATIO;
 extern const float THROW_PREVIEW_MIN_THICKNESS;
 extern const float THROW_PREVIEW_DEF_MAX_THICKNESS;
+extern const float TIDY_SINGLE_DISMISS_DURATION;
 }
 
 
@@ -143,6 +144,17 @@ public:
     //Is it currently doing some boredom-related animation?
     bool inBoredAnimation = false;
     
+    //Time left in the tidy single dismiss mode.
+    float tidySingleDismissTime = 0.0f;
+    
+    //Dismiss the Pikmin to this relative spot,
+    //if in the tidy single dismiss timer.
+    Point tidySingleDismissRelCenter;
+    
+    //Dismiss the Pikmin using this in reference to the leader's position,
+    //if in the tidy single dismiss timer.
+    Point tidySingleDismissLeaderPos;
+    
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t tempI = 0;
     
@@ -187,14 +199,16 @@ private:
     //Sound effect source ID of the whistle, or 0 for none.
     size_t whistleSoundSourceId = 0;
     
-    //Returns how many rows are needed for all members' dismissal.
-    size_t getDismissRows(size_t nMembers) const;
-    
     
     //--- Function declarations ---
     
     void dismissDetails();
     void dismissLogic();
+    size_t getDismissRows(size_t nMembers) const;
+    void specificDismiss(
+        const vector<Mob*> members,
+        const Point& relCenter, const Point& leaderPos
+    );
     
 };
 

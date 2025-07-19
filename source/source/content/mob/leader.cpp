@@ -132,6 +132,9 @@ const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f - THROW_PREVIEW_FADE_IN_RATIO;
 //Throw preview minimum thickness.
 const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
 
+//Duration of the tidy single dismiss mode.
+const float TIDY_SINGLE_DISMISS_DURATION = 3.0f;
+
 }
 
 
@@ -403,13 +406,16 @@ void Leader::dismissLogic() {
     
         //--- Members ---
         
+        //Subgroup type.
+        SubgroupType* type = nullptr;
+        
         //Radius of the group.
-        float radius;
+        float radius = 0.0f;
         
         //Group members of this subgroup type.
         vector<Mob*> members;
         
-        //Center point of the subgroup.
+        //Center point of the subgroup, relative to the leader.
         Point center;
         
     };
@@ -437,6 +443,7 @@ void Leader::dismissLogic() {
                 
                 if(!subgroupExists) {
                     subgroupsInfo.push_back(DismissSubgroup());
+                    subgroupsInfo.back().type = curType;
                     subgroupExists = true;
                 }
                 
@@ -449,6 +456,25 @@ void Leader::dismissLogic() {
             game.states.gameplay->subgroupTypes.getNextType(curType);
             
     } while(curType != firstType);
+    
+    bool keepCurType =
+        !game.options.misc.dismissAll &&
+        subgroupsInfo.size() > 1;
+        
+    //Let's move the current standby type to the first element.
+    //This way, when dismissing all Pikmin while keeping the standby type,
+    //there will be a gap where that group would go, and dimissing again
+    //will place those Pikmin in that missing group's place.
+    auto firstSubgroup =
+        std::find_if(
+            subgroupsInfo.begin(), subgroupsInfo.end(),
+    [this] (const auto & s) -> bool {
+        return s.type == this->group->curStandbyType;
+    }
+        );
+    if(firstSubgroup != subgroupsInfo.end()) {
+        std::rotate(subgroupsInfo.begin(), firstSubgroup, firstSubgroup + 1);
+    }
     
     //Let's figure out each subgroup's size.
     //Subgroups will be made by placing the members in
@@ -510,7 +536,6 @@ void Leader::dismissLogic() {
     vector<Row> rows;
     Row curRow;
     curRow.distBetweenCenter = LEADER::DISMISS_SUBGROUP_DISTANCE;
-    size_t curRowidx = 0;
     size_t curSubgroupIdx = 0;
     
     while(!done && !subgroupsInfo.empty()) {
@@ -569,7 +594,6 @@ void Leader::dismissLogic() {
             //Or this is the last subgroup, and the row needs to be committed.
             
             rows.push_back(curRow);
-            curRowidx++;
             curRow.distBetweenCenter +=
                 curRow.thickness + LEADER::DISMISS_SUBGROUP_DISTANCE;
             curRow.subgroups.clear();
@@ -620,60 +644,43 @@ void Leader::dismissLogic() {
     }
     
     //Now, dismiss!
-    for(size_t s = 0; s < subgroupsInfo.size(); s++) {
-        curRowidx = 0;
-        size_t curRowSpotIdx = 0;
-        size_t curRowSpots = 1;
+    if(tidySingleDismissTime > 0.0f && subgroupsInfo.size() == 1) {
+        //We recently dismissed all other subgroups except this one.
+        //Let's dismiss this single one towards where it would go if it got
+        //dismissed alongside. That way all the Pikmin are organized tidily.
+        specificDismiss(
+            subgroupsInfo[0].members,
+            tidySingleDismissRelCenter, tidySingleDismissLeaderPos
+        );
+        tidySingleDismissTime = 0.0f;
         
-        for(size_t m = 0; m < subgroupsInfo[s].members.size(); m++) {
-        
-            Point destination;
-            
-            if(curRowidx == 0) {
-                destination = subgroupsInfo[s].center;
-            } else {
-                float memberAngle =
-                    ((float) curRowSpotIdx / curRowSpots) * TAU;
-                destination =
-                    subgroupsInfo[s].center +
-                    angleToCoordinates(
-                        memberAngle,
-                        curRowidx * game.config.pikmin.standardRadius * 2 *
-                        LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
-                    );
+    } else {
+        //Let's dismiss normally, possibly keeping the current standby type.
+        for(size_t s = 0; s < subgroupsInfo.size(); s++) {
+            if(
+                subgroupsInfo[s].type == group->curStandbyType &&
+                keepCurType
+            ) {
+                tidySingleDismissRelCenter = subgroupsInfo[s].center;
+                tidySingleDismissLeaderPos = pos;
+                tidySingleDismissTime = LEADER::TIDY_SINGLE_DISMISS_DURATION;
+                continue;
             }
             
-            destination +=
-                Point(
-                    game.rng.f(-5.0, 5.0),
-                    game.rng.f(-5.0, 5.0)
-                );
-                
-            curRowSpotIdx++;
-            if(curRowSpotIdx == curRowSpots) {
-                curRowidx++;
-                curRowSpotIdx = 0;
-                if(curRowidx == 1) {
-                    curRowSpots = 6;
-                } else {
-                    curRowSpots += 6;
-                }
-            }
-            
-            destination += this->pos;
-            
-            subgroupsInfo[s].members[m]->leaveGroup();
-            subgroupsInfo[s].members[m]->fsm.runEvent(
-                MOB_EV_DISMISSED, (void*) &destination
+            specificDismiss(
+                subgroupsInfo[s].members,
+                subgroupsInfo[s].center, pos
             );
-            
         }
+        
     }
     
     //Dismiss leaders now.
-    while(!group->members.empty()) {
-        group->members[0]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
-        group->members[0]->leaveGroup();
+    for(size_t m = 0; m < group->members.size(); m++) {
+        if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
+            group->members[0]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
+            group->members[0]->leaveGroup();
+        }
     }
 }
 
@@ -908,6 +915,65 @@ void Leader::signalSwarmStart() const {
 
 
 /**
+ * @brief Dismisses some group members in a specific way.
+ *
+ * @param members Members to dismiss.
+ * @param relCenter Center coordinates of where they will be dismissed to,
+ * relative to the leader's position.
+ * @param leaderPos Position of the leader to use.
+ */
+void Leader::specificDismiss(
+    const vector<Mob*> members,
+    const Point& relCenter, const Point& leaderPos
+) {
+    size_t curRowidx = 0;
+    size_t curRowSpotIdx = 0;
+    size_t curRowSpots = 1;
+    
+    for(size_t m = 0; m < members.size(); m++) {
+        Point destination;
+        
+        if(curRowidx == 0) {
+            //The first Pikmin always goes to the dead center.
+            destination = relCenter;
+        } else {
+            float memberAngle = ((float) curRowSpotIdx / curRowSpots) * TAU;
+            destination =
+                relCenter +
+                angleToCoordinates(
+                    memberAngle,
+                    curRowidx * game.config.pikmin.standardRadius * 2 *
+                    LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
+                );
+        }
+        
+        //Prepare the next row.
+        curRowSpotIdx++;
+        if(curRowSpotIdx == curRowSpots) {
+            curRowidx++;
+            curRowSpotIdx = 0;
+            if(curRowidx == 1) {
+                curRowSpots = 6;
+            } else {
+                curRowSpots += 6;
+            }
+        }
+        
+        //Fudge the location a bit so it looks more natural.
+        destination += Point(game.rng.f(-5.0, 5.0), game.rng.f(-5.0, 5.0));
+        destination += leaderPos;
+        
+        //Remove it from the group and order it to go to that spot.
+        members[m]->leaveGroup();
+        members[m]->fsm.runEvent(
+            MOB_EV_DISMISSED, (void*) &destination
+        );
+        
+    }
+}
+
+
+/**
  * @brief Starts the auto-throw mode.
  */
 void Leader::startAutoThrowing() {
@@ -1061,10 +1127,15 @@ void Leader::tickClassSpecifics(float deltaT) {
         stopAutoThrowing();
     }
     
+    //Others.
     if(player && player->whistle.whistling) {
         game.audio.setSoundSourcePos(
             whistleSoundSourceId, player->leaderCursorWorld
         );
+    }
+    
+    if(tidySingleDismissTime > 0.0f) {
+        tidySingleDismissTime -= deltaT;
     }
     
     //Health wheel logic.

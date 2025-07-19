@@ -407,6 +407,9 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::startGoHere);
         }
+        efc.newEvent(LEADER_EV_DISMISS); {
+            efc.changeState("dismissing");
+        }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(LeaderFsm::beAttacked);
         }
