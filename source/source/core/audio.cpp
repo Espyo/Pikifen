@@ -26,6 +26,9 @@ namespace AUDIO {
 //thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
 
+//Change speed for interlude volume changes, measured in amount per second.
+const float INTERLUDE_GAIN_SPEED = 2.0f;
+
 //Change speed for a mix track's gain, measured in amount per second.
 const float MIX_TRACK_GAIN_SPEED = 1.0f;
 
@@ -427,6 +430,36 @@ SoundSource* AudioManager::getSource(size_t sourceId) {
 
 
 /**
+ * @brief Handles an interlude ending, so the sound effect mixers can
+ * stop lowering their volume.
+ *
+ * @param instant Whether the change in volume happens instantly.
+ */
+void AudioManager::handleInterludeEnd(bool instant) {
+    inInterlude = false;
+    if(instant) {
+        interludeGain = 1.0f;
+        updateMixerVolumes();
+    }
+}
+
+
+/**
+ * @brief Handles an interlude starting, so the sound effect mixers can
+ * lower their volume.
+ *
+ * @param instant Whether the change in volume happens instantly.
+ */
+void AudioManager::handleInterludeStart(bool instant) {
+    inInterlude = true;
+    if(instant) {
+        interludeGain = 0.0f;
+        updateMixerVolumes();
+    }
+}
+
+
+/**
  * @brief Handles a mob being deleted.
  *
  * @param mPtr Mob that got deleted.
@@ -540,17 +573,8 @@ void AudioManager::handleWorldUnpause() {
 
 /**
  * @brief Initializes the audio manager.
- *
- * @param masterVolume Volume of the master mixer.
- * @param gameplaySoundVolume Volume of the gameplay sound effects mixer.
- * @param musicVolume Volume of the music mixer.
- * @param ambianceSoundVolume Volume of the ambiance sounds mixer.
- * @param uiSoundVolume Volume of the UI sound effects mixer.
  */
-void AudioManager::init(
-    float masterVolume, float gameplaySoundVolume, float musicVolume,
-    float ambianceSoundVolume, float uiSoundVolume
-) {
+void AudioManager::init() {
     //Main voice.
     voice =
         al_create_voice(
@@ -593,13 +617,7 @@ void AudioManager::init(
     al_attach_mixer_to_mixer(uiSoundMixer, masterMixer);
     
     //Set all of the mixer volumes.
-    updateVolumes(
-        masterVolume,
-        gameplaySoundVolume,
-        musicVolume,
-        ambianceSoundVolume,
-        uiSoundVolume
-    );
+    updateMixerVolumes();
     
     //Initialization of every mix track type.
     for(size_t m = 0; m < N_MIX_TRACK_TYPES; m++) {
@@ -1098,6 +1116,22 @@ void AudioManager::tick(float deltaT) {
     for(size_t s = 0; s < N_MIX_TRACK_TYPES; s++) {
         mixStatuses[s] = false;
     }
+    
+    //Update the volume of the sound effect mixers, depending on the interlude
+    //status.
+    if(inInterlude && interludeGain > 0.0f) {
+        interludeGain =
+            inchTowards(
+                interludeGain, 0.0f, -AUDIO::INTERLUDE_GAIN_SPEED * deltaT
+            );
+        updateMixerVolumes();
+    } else if(!inInterlude && interludeGain < 1.0f) {
+        interludeGain =
+            inchTowards(
+                interludeGain, 1.0f, AUDIO::INTERLUDE_GAIN_SPEED * deltaT
+            );
+        updateMixerVolumes();
+    }
 }
 
 
@@ -1185,32 +1219,37 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playbackIdx) {
 
 
 /**
- * @brief Updates the volumes of all mixers.
- *
- * @param masterVolume Volume of the master mixer.
- * @param gameplaySoundVolume Volume of the gameplay sound effects mixer.
- * @param musicVolume Volume of the music mixer.
- * @param ambianceSoundVolume Volume of the ambiance sounds mixer.
- * @param uiSoundVolume Volume of the UI sound effects mixer.
+ * @brief Updates the volumes of all mixers, based on the values of the
+ * various variables in charge.
  */
-void AudioManager::updateVolumes(
-    float masterVolume, float gameplaySoundVolume, float musicVolume,
-    float ambianceSoundVolume, float uiSoundVolume
-) {
-    masterVolume = std::clamp(masterVolume, 0.0f, 1.0f);
-    al_set_mixer_gain(masterMixer, masterVolume);
+void AudioManager::updateMixerVolumes() {
+    baseMasterMixerVolume =
+        std::clamp(baseMasterMixerVolume, 0.0f, 1.0f);
+    baseGameplaySoundMixerVolume =
+        std::clamp(baseGameplaySoundMixerVolume, 0.0f, 1.0f);
+    baseMusicMixerVolume =
+        std::clamp(baseMusicMixerVolume, 0.0f, 1.0f);
+    baseAmbianceSoundMixerVolume =
+        std::clamp(baseAmbianceSoundMixerVolume, 0.0f, 1.0f);
+    baseUiSoundMixerVolume =
+        std::clamp(baseUiSoundMixerVolume, 0.0f, 1.0f);
+    interludeGain = std::clamp(interludeGain, 0.0f, 1.0f);
     
-    gameplaySoundVolume = std::clamp(gameplaySoundVolume, 0.0f, 1.0f);
-    al_set_mixer_gain(gameplaySoundMixer, gameplaySoundVolume);
-    
-    musicVolume = std::clamp(musicVolume, 0.0f, 1.0f);
-    al_set_mixer_gain(musicMixer, musicVolume);
-    
-    ambianceSoundVolume = std::clamp(ambianceSoundVolume, 0.0f, 1.0f);
-    al_set_mixer_gain(ambianceSoundMixer, ambianceSoundVolume);
-    
-    uiSoundVolume = std::clamp(uiSoundVolume, 0.0f, 1.0f);
-    al_set_mixer_gain(uiSoundMixer, uiSoundVolume);
+    al_set_mixer_gain(
+        masterMixer, baseMasterMixerVolume
+    );
+    al_set_mixer_gain(
+        gameplaySoundMixer, baseGameplaySoundMixerVolume * interludeGain
+    );
+    al_set_mixer_gain(
+        musicMixer, baseMusicMixerVolume
+    );
+    al_set_mixer_gain(
+        ambianceSoundMixer, baseAmbianceSoundMixerVolume * interludeGain
+    );
+    al_set_mixer_gain(
+        uiSoundMixer, baseUiSoundMixerVolume
+    );
 }
 
 

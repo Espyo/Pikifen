@@ -280,7 +280,7 @@ void GameplayState::drawBackground(
  * @brief Draws the current big message, if any.
  */
 void GameplayState::drawBigMsg() {
-    switch(curBigMsg) {
+    switch(bigMsg.get()) {
     case BIG_MESSAGE_NONE: {
         return;
         
@@ -292,7 +292,7 @@ void GameplayState::drawBigMsg() {
         const float TEXT_MOVE_MID_T = 0.30f;
         const float TEXT_PAUSE_T = 0.60f;
         const float TEXT_SHRINK_T = 0.95f;
-        const float t = bigMsgTime / GAMEPLAY::BIG_MSG_READY_DUR;
+        const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_READY_DUR;
         
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
         kiY.add(TEXT_START_T, game.winH * (-0.2f));
@@ -321,7 +321,7 @@ void GameplayState::drawBigMsg() {
     } case BIG_MESSAGE_GO: {
 
         const float TEXT_GROW_STOP_T = 0.10f;
-        const float t = bigMsgTime / GAMEPLAY::BIG_MSG_GO_DUR;
+        const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_GO_DUR;
         
         KeyframeInterpolator<float> kiH(0.0f);
         kiH.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
@@ -346,7 +346,7 @@ void GameplayState::drawBigMsg() {
         const float TEXT_MOVE_AGAIN_T = 0.66f;
         const float TEXT_DRIFT_START_X = game.winW * 0.005f;
         const float TEXT_DRIFT_END_X = game.winW * -0.005f;
-        const float t = bigMsgTime / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
+        const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
         
         KeyframeInterpolator<float> kiX(game.winW);
         kiX.add(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
@@ -371,7 +371,7 @@ void GameplayState::drawBigMsg() {
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED: {
         const string& TEXT =
-            curBigMsg == BIG_MESSAGE_MISSION_CLEAR ?
+            bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
         const float TEXT_W = game.winW * 0.80f;
@@ -381,9 +381,9 @@ void GameplayState::drawBigMsg() {
         const float TEXT_PAUSE_T = 0.50f;
         const float TEXT_FADE_T = 0.90f;
         const float t =
-            curBigMsg == BIG_MESSAGE_MISSION_CLEAR ?
-            (bigMsgTime / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
-            (bigMsgTime / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
+            bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
             
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
         kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);

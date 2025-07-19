@@ -781,7 +781,7 @@ bool GameplayState::shouldIgnorePlayerAction(const PlayerAction& action) {
     };
     
     if(!readyForInput || !isInputAllowed) return true;
-    if(curInterlude != INTERLUDE_NONE) {
+    if(interlude.get() != INTERLUDE_NONE) {
         if(
             !isInContainer(
                 actionsAllowedDuringInterludes, action.actionTypeId

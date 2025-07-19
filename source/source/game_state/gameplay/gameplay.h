@@ -124,6 +124,60 @@ struct GameplayMessageBox;
 
 
 /**
+ * @brief Basic information about the current interlude.
+ */
+struct InterludeInfo {
+
+    //--- Function declarations ---
+    
+    void set(INTERLUDE id, bool instantVolumeChange);
+    INTERLUDE get();
+    float getTime();
+    void overrideTime(float time);
+    void tick(float delta_t);
+    
+    
+    private:
+    
+    //--- Members ---
+    
+    //ID of the current interlude, if any.
+    INTERLUDE curId = INTERLUDE_NONE;
+    
+    //Time passed in the current interlude.
+    float curTime = 0.0f;
+    
+};
+
+
+/**
+ * @brief Basic information about the current big message.
+ */
+struct BigMessageInfo {
+
+    //--- Function declarations ---
+    
+    void set(BIG_MESSAGE id);
+    BIG_MESSAGE get();
+    float getTime();
+    void overrideTime(float time);
+    void tick(float delta_t);
+    
+    
+    private:
+    
+    //--- Members ---
+    
+    //ID of the current big message, if any.
+    BIG_MESSAGE curId = BIG_MESSAGE_NONE;
+    
+    //Time passed in the current big message.
+    float curTime = 0.0f;
+    
+};
+
+
+/**
  * @brief Standard gameplay state. This is where the action happens.
  */
 class GameplayState : public GameState {
@@ -322,17 +376,11 @@ public:
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
     
-    //Current interlude, if any.
-    INTERLUDE curInterlude = INTERLUDE_NONE;
+    //Current interlude info.
+    InterludeInfo interlude;
     
-    //Time passed in the current interlude.
-    float interludeTime = 0.0f;
-    
-    //Current big message, if any.
-    BIG_MESSAGE curBigMsg = BIG_MESSAGE_NONE;
-    
-    //Time passed in the current big message.
-    float bigMsgTime = 0.0f;
+    //Current big message info.
+    BigMessageInfo bigMsg;
     
     //Current state of the boss music.
     BOSS_MUSIC_STATE bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;

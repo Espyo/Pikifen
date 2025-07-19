@@ -257,13 +257,17 @@ void OptionsMenu::initGuiAudioPage() {
         "100%"
     };
     auto updateVolumes = [this] () {
-        game.audio.updateVolumes(
-            game.options.audio.masterVol,
-            game.options.audio.gameplaySoundVol,
-            game.options.audio.musicVol,
-            game.options.audio.ambianceSoundVol,
-            game.options.audio.uiSoundVol
-        );
+        game.audio.baseMasterMixerVolume =
+            game.options.audio.masterVol;
+        game.audio.baseGameplaySoundMixerVolume =
+            game.options.audio.gameplaySoundVol;
+        game.audio.baseMusicMixerVolume =
+            game.options.audio.musicVol;
+        game.audio.baseAmbianceSoundMixerVolume =
+            game.options.audio.ambianceSoundVol;
+        game.audio.baseUiSoundMixerVolume =
+            game.options.audio.uiSoundVol;
+        game.audio.updateMixerVolumes();
     };
     
     //Master volume picker.

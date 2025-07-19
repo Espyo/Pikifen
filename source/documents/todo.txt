@@ -11,9 +11,8 @@ Next tasks (roughly sorted most important first)
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Using the shortcut keys to change pages in the pause menu does not play a sound
-    You can't have, for instance, a gas pipe start making sounds on spawn because the "we're in an interlude" logic kicks in and silences it, even if the sound loops
-        Make sounds work like normal, and simply mute the sounds mixer during an interlude
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
+        Shouldn't clicking out of a textbox have full control, and not allow the canvas to receive the event?
 
     --- 0.26 ---
     Try to implement the motif into Coastal Pavement
@@ -48,11 +47,6 @@ Next tasks (roughly sorted most important first)
                 Water Dumple waddling
             Others
                 Onion spinning up to generate
-                Generic sparkles (Spiderworts regrowing, Pikmin flowering)
-                Crystal being hit
-                Crystal shattering
-                Drinking nectar (leaders and Pikmin)
-                Harmless ding (when Pikmin smack a reinforced wall)
                 Ambiance sounds
                     Wind
                     Leaves rustling
@@ -528,7 +522,7 @@ Next tasks (roughly sorted most important first)
             Sunset
                 On-screen warning
                 Draw the safe radius around all Onions
-                Wild Pikmin and sprouts should be immune to the sunset
+                Wild Pikmin and sprouts should be immune to the sunset, as well as to changing the day or the game's lifetime statistics (number of blooms, number of births, etc.)
                 Blink Pikmin in danger on the radar
             Upgrades (like the Exploration Kit)
                 The ability to turn them off in the pause menu
@@ -918,6 +912,8 @@ Misc things (so I don't forget)
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
+        A mob's reach visualizer
+        A modifier for the cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file

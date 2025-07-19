@@ -52,6 +52,7 @@ class Mob;
 
 namespace AUDIO {
 extern const float DEF_STACK_MIN_POS;
+extern const float INTERLUDE_GAIN_SPEED;
 extern const float MIX_TRACK_GAIN_SPEED;
 extern const float PLAYBACK_GAIN_SPEED;
 extern const float PLAYBACK_PAN_SPEED;
@@ -343,6 +344,21 @@ public:
 
     //--- Members ---
     
+    //Base master mixer volume.
+    float baseMasterMixerVolume = 1.0f;
+    
+    //Base gameplay sound mixer volume.
+    float baseGameplaySoundMixerVolume = 1.0f;
+    
+    //Base music mixer volume.
+    float baseMusicMixerVolume = 1.0f;
+    
+    //Base ambiance sound mixer volume.
+    float baseAmbianceSoundMixerVolume = 1.0f;
+    
+    //Base UI sound mixer volume.
+    float baseUiSoundMixerVolume = 1.0f;
+    
     //Callback for when a song ends, if any.
     std::function<void(const string& name)> onSongFinished = nullptr;
     
@@ -368,14 +384,13 @@ public:
     bool destroySoundSource(size_t sourceId);
     void destroy();
     bool emit(size_t sourceId);
+    void handleInterludeEnd(bool instant);
+    void handleInterludeStart(bool instant);
     void handleMobDeletion(const Mob* mPtr);
     void handleStreamFinished(ALLEGRO_AUDIO_STREAM* stream);
     void handleWorldPause();
     void handleWorldUnpause();
-    void init(
-        float masterVolume, float gameplaySoundVolume, float musicVolume,
-        float ambianceSoundVolume, float uiSoundVolume
-    );
+    void init();
     void markMixTrackStatus(MIX_TRACK_TYPE trackType);
     bool rewindSong(const string& name);
     bool scheduleEmission(size_t sourceId, bool first);
@@ -388,10 +403,7 @@ public:
     bool setSoundSourcePos(size_t sourceId, const Point& pos);
     void stopAllPlaybacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float deltaT);
-    void updateVolumes(
-        float masterVolume, float gameplaySoundVolume, float musicVolume,
-        float ambianceSoundVolume, float uiSoundVolume
-    );
+    void updateMixerVolumes();
     
 private:
 
@@ -432,6 +444,13 @@ private:
     
     //Current volume of each mix track type.
     vector<float> mixVolumes;
+    
+    //Are we currently in an interlude?
+    bool inInterlude = false;
+    
+    //Current sound effect mixer gain multiplier,
+    //based on whether we're in an interlude, 0 to 1.
+    float interludeGain = 0.0f;
     
     //Top-left camera coordinates.
     Point camTL;

@@ -387,13 +387,17 @@ void loadMiscGraphics() {
  * @brief Loads miscellaneous fixed sound effects.
  */
 void loadMiscSounds() {
-    game.audio.init(
-        game.options.audio.masterVol,
-        game.options.audio.gameplaySoundVol,
-        game.options.audio.musicVol,
-        game.options.audio.ambianceSoundVol,
-        game.options.audio.uiSoundVol
-    );
+    game.audio.baseMasterMixerVolume =
+        game.options.audio.masterVol;
+    game.audio.baseGameplaySoundMixerVolume =
+        game.options.audio.gameplaySoundVol;
+    game.audio.baseMusicMixerVolume =
+        game.options.audio.musicVol;
+    game.audio.baseAmbianceSoundMixerVolume =
+        game.options.audio.ambianceSoundVol;
+    game.audio.baseUiSoundMixerVolume =
+        game.options.audio.uiSoundVol;
+    game.audio.init();
     
     //Sound effects.
     game.sysContent.sndAttack =

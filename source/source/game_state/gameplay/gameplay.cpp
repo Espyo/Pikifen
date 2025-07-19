@@ -121,6 +121,60 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 
 
 /**
+ * @brief Gets the current big message's ID.
+ *
+ * @return The ID.
+ */
+BIG_MESSAGE BigMessageInfo::get() {
+    return curId;
+}
+
+
+/**
+ * @brief Gets the current big message's time spent.
+ *
+ * @return The time.
+ */
+float BigMessageInfo::getTime() {
+    return curTime;
+}
+
+
+/**
+ * @brief Overrides the time spent in the current big message to be
+ * the specified amount.
+ *
+ * @param time The new time.
+ */
+void BigMessageInfo::overrideTime(float time) {
+    curTime = time;
+}
+
+
+/**
+ * @brief Sets the current big message to be this one.
+ *
+ * @param id ID of the new big message.
+ */
+void BigMessageInfo::set(BIG_MESSAGE id) {
+    curId = id;
+    curTime = 0.0f;
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void BigMessageInfo::tick(float delta_t) {
+    if(curId != BIG_MESSAGE_NONE) {
+        curTime += delta_t;
+    }
+}
+
+
+/**
  * @brief Constructs a new message box info object.
  *
  * @param text Text to display.
@@ -413,11 +467,9 @@ void GameplayState::doLogic() {
  * @param cleared Did the player reach the goal?
  */
 void GameplayState::endMission(bool cleared) {
-    if(curInterlude != INTERLUDE_NONE) {
-        return;
-    }
-    curInterlude = INTERLUDE_MISSION_END;
-    interludeTime = 0.0f;
+    if(interlude.get() != INTERLUDE_NONE) return;
+    
+    interlude.set(INTERLUDE_MISSION_END, false);
     deltaTMult = 0.5f;
     for(Player& player : players) {
         player.leaderMovement.reset(); //TODO replace with a better solution.
@@ -446,13 +498,12 @@ void GameplayState::endMission(bool cleared) {
     }
     
     if(cleared) {
-        curBigMsg = BIG_MESSAGE_MISSION_CLEAR;
+        bigMsg.set(BIG_MESSAGE_MISSION_CLEAR);
         game.audio.createUiSoundsource(game.sysContent.sndMissionClear);
     } else {
-        curBigMsg = BIG_MESSAGE_MISSION_FAILED;
+        bigMsg.set(BIG_MESSAGE_MISSION_FAILED);
         game.audio.createUiSoundsource(game.sysContent.sndMissionFailed);
     }
-    bigMsgTime = 0.0f;
     game.audio.setCurrentSong("");
     
     for(Player& player : players) {
@@ -515,10 +566,8 @@ void GameplayState::enter() {
     scoreFlapper = 0.0f;
     
     paused = false;
-    curInterlude = INTERLUDE_READY;
-    interludeTime = 0.0f;
-    curBigMsg = BIG_MESSAGE_READY;
-    bigMsgTime = 0.0f;
+    interlude.set(INTERLUDE_READY, true);
+    bigMsg.set(BIG_MESSAGE_READY);
     deltaTMult = 0.5f;
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     bool skipReadyInterlude = false;
@@ -573,8 +622,8 @@ void GameplayState::enter() {
     }
     
     if(skipReadyInterlude) {
-        interludeTime = GAMEPLAY::BIG_MSG_READY_DUR;
-        bigMsgTime = GAMEPLAY::BIG_MSG_READY_DUR;
+        interlude.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
+        bigMsg.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
     } else {
         game.audio.createUiSoundsource(game.sysContent.sndReady);
     }
@@ -1673,5 +1722,71 @@ void GameplayState::updateClosestGroupMembers(Player* player) {
     
     if(player->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         player->leaderPtr->updateThrowVariables();
+    }
+}
+
+
+/**
+ * @brief Gets the current interlude's ID.
+ *
+ * @return The ID.
+ */
+INTERLUDE InterludeInfo::get() {
+    return curId;
+}
+
+
+/**
+ * @brief Gets the current interlude's time spent.
+ *
+ * @return The time.
+ */
+float InterludeInfo::getTime() {
+    return curTime;
+}
+
+
+/**
+ * @brief Overrides the time spent in the current interlude to be
+ * the specified amount.
+ *
+ * @param time The new time.
+ */
+void InterludeInfo::overrideTime(float time) {
+    curTime = time;
+}
+
+
+/**
+ * @brief Sets the current interlude to be this one.
+ *
+ * @param id ID of the new interlude.
+ * @param instantVolumeChange Whether the volume of sound effects should
+ * change instantly or gradually.
+ */
+void InterludeInfo::set(INTERLUDE id, bool instantVolumeChange) {
+    bool wasInInterlude = curId != INTERLUDE_NONE;
+    
+    curId = id;
+    curTime = 0.0f;
+    
+    bool isInInterlude = curId != INTERLUDE_NONE;
+    
+    if(!wasInInterlude && isInInterlude) {
+        game.audio.handleInterludeStart(instantVolumeChange);
+    } else if(wasInInterlude && !isInInterlude) {
+        game.audio.handleInterludeEnd(instantVolumeChange);
+    }
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void InterludeInfo::tick(float delta_t) {
+    if(curId != INTERLUDE_NONE) {
+        curTime += delta_t;
     }
 }

@@ -206,7 +206,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         );
     }
     
-    if(curInterlude == INTERLUDE_NONE) {
+    if(interlude.get() == INTERLUDE_NONE) {
         //Adjust the camera position.
         float leaderWeight = 1.0f;
         float cursorWeight = game.options.misc.cursorCamWeight;
@@ -583,7 +583,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Closest enemy check for the music mix track.
     if(
         game.states.gameplay->mobs.enemies.size() > 0 &&
-        curInterlude == INTERLUDE_NONE
+        interlude.get() == INTERLUDE_NONE
     ) {
         bool nearEnemy = false;
         bool nearBoss = false;
@@ -688,7 +688,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         );
         
         areaTimePassed += deltaT;
-        if(curInterlude == INTERLUDE_NONE) {
+        if(interlude.get() == INTERLUDE_NONE) {
             gameplayTimePassed += deltaT;
             dayMinutes +=
                 (game.curAreaData->dayTimeSpeed * deltaT / 60.0f);
@@ -989,7 +989,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
-            if(curInterlude == INTERLUDE_NONE) {
+            if(interlude.get() == INTERLUDE_NONE) {
                 if(isMissionClearMet()) {
                     endMission(true);
                 } else if(isMissionFailMet(&missionFailReason)) {
@@ -1107,7 +1107,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             if(
                 timeLimit >= 120.0f &&
-                game.states.gameplay->curBigMsg == BIG_MESSAGE_NONE
+                game.states.gameplay->bigMsg.get() == BIG_MESSAGE_NONE
             ) {
                 //It makes sense to only show the warning if the mission
                 //is long enough to the point where the player could lose
@@ -1119,8 +1119,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 if(
                     timeLeftPrevFrame > 60.0f && timeLeftCurFrame <= 60.0f
                 ) {
-                    game.states.gameplay->curBigMsg = BIG_MESSAGE_ONE_MIN_LEFT;
-                    game.states.gameplay->bigMsgTime = 0.0f;
+                    game.states.gameplay->bigMsg.set(BIG_MESSAGE_ONE_MIN_LEFT);
                     game.audio.createUiSoundsource(
                         game.sysContent.sndOneMinuteLeft,
                     { .gain = 0.5f }
@@ -1130,7 +1129,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             if(
                 timeLimit >= 30.0f &&
-                game.states.gameplay->curBigMsg == BIG_MESSAGE_NONE
+                game.states.gameplay->bigMsg.get() == BIG_MESSAGE_NONE
             ) {
                 //It makes sense to only tick the countdown if the
                 //final ten seconds would be exciting, which isn't the case
@@ -1529,54 +1528,49 @@ void GameplayState::doMenuLogic() {
     game.makerTools.infoPrintTimer.tick(game.deltaT);
     
     //Big message.
-    if(curBigMsg != BIG_MESSAGE_NONE) {
-        bigMsgTime += game.deltaT;
-    }
+    bigMsg.tick(game.deltaT);
     
-    switch(curBigMsg) {
+    switch(bigMsg.get()) {
     case BIG_MESSAGE_NONE: {
         break;
     } case BIG_MESSAGE_READY: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_READY_DUR) {
-            curBigMsg = BIG_MESSAGE_GO;
-            bigMsgTime = 0.0f;
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_READY_DUR) {
+            bigMsg.set(BIG_MESSAGE_GO);
             game.audio.createUiSoundsource(game.sysContent.sndGo);
         }
         break;
     } case BIG_MESSAGE_GO: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_GO_DUR) {
-            curBigMsg = BIG_MESSAGE_NONE;
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_GO_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;
     } case BIG_MESSAGE_ONE_MIN_LEFT: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR) {
-            curBigMsg = BIG_MESSAGE_NONE;
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;
     } case BIG_MESSAGE_MISSION_CLEAR: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
-            curBigMsg = BIG_MESSAGE_NONE;
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;
     } case BIG_MESSAGE_MISSION_FAILED: {
-        if(bigMsgTime >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
-            curBigMsg = BIG_MESSAGE_NONE;
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;
     }
     }
     
     //Interlude.
-    if(curInterlude != INTERLUDE_NONE) {
-        interludeTime += game.deltaT;
-    }
+    interlude.tick(game.deltaT);
     
-    switch(curInterlude) {
+    switch(interlude.get()) {
     case INTERLUDE_NONE: {
         break;
     } case INTERLUDE_READY: {
-        if(interludeTime >= GAMEPLAY::BIG_MSG_READY_DUR) {
-            curInterlude = INTERLUDE_NONE;
+        if(interlude.getTime() >= GAMEPLAY::BIG_MSG_READY_DUR) {
+            interlude.set(INTERLUDE_NONE, false);
             deltaTMult = 1.0f;
             for(Player& player : players) {
                 player.hud->gui.startAnimation(
@@ -1588,8 +1582,8 @@ void GameplayState::doMenuLogic() {
         }
         break;
     } case INTERLUDE_MISSION_END: {
-        if(interludeTime >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
-            curInterlude = INTERLUDE_NONE;
+        if(interlude.getTime() >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
+            interlude.set(INTERLUDE_NONE, false);
             deltaTMult = 1.0f;
             leave(GAMEPLAY_LEAVE_TARGET_END);
         }

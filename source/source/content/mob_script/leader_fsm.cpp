@@ -1592,7 +1592,7 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
     //We should probably not play the name call then.
     if(
         !game.states.gameplay->loading &&
-        game.states.gameplay->curInterlude == INTERLUDE_NONE
+        game.states.gameplay->interlude.get() == INTERLUDE_NONE
     ) {
         //Play the name call as a global sound, so that even leaders far away
         //can have their name call play clearly.
