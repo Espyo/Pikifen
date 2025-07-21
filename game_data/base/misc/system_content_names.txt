@@ -15,6 +15,7 @@ graphics {
     hard_bubble = gui/hard_bubble
     icon = gui/icon
     idle_glow = effects/idle_glow
+    key_box = gui/key_box
     leader_silhouette_side = gui/leader_silhouette_side
     leader_silhouette_top = gui/leader_silhouette_top
     medal_bronze = gui/medal_bronze
@@ -62,9 +63,12 @@ fonts {
 sounds {
     attack = effects/attack
     camera = gui/camera
+    countdown_tick = gui/countdown_tick
     ding = effects/ding
     enemy_soul = effects/enemy_soul
+    gameplay_message_char = gui/gameplay_message_char
     go = gui/go
+    medal_got_it = gui/medal_got_it
     menu_activate = gui/menu_activate
     menu_back = gui/menu_back
     menu_fail = gui/menu_fail

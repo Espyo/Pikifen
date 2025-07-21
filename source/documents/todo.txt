@@ -10,15 +10,12 @@ Next tasks (roughly sorted most important first)
     Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
-    Using the shortcut keys to change pages in the pause menu does not play a sound
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
         Shouldn't clicking out of a textbox have full control, and not allow the canvas to receive the event?
 
     --- 0.26 ---
     Revamp sounds
         Candidate list of all needed sounds, for now
-            HUD
-                Pausing
             Leader
                 Alph, Brittany, and Charlie
             Enemies
@@ -32,15 +29,11 @@ Next tasks (roughly sorted most important first)
                 Skutterchuck walking
                 Water Dumple growling
                 Water Dumple waddling
-            Others
-                Ambiance sounds
-                    Wind
-                    Leaves rustling
-                    Birds, frogs, etc.
         Try to improve these sounds:
             Spitting
             Exhaling; make it stronger
             Shaking
+            Pikmin footsteps
         All enemy stepping sounds should be audible
         All enemies should make a thud sound when plopping down when dying
         All sound files should be at peak amplitude
@@ -137,6 +130,7 @@ Next tasks (roughly sorted most important first)
             Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
         Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
             Same for holding down Enter to continuously activate a button and such
+        The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
@@ -444,6 +438,7 @@ Next tasks (roughly sorted most important first)
         A way to control what parts of the area use what weather -- that way, a cave can use a blackout, or stay out of rain
         You should be able to tint water -- for instance, at sunset, making the water look a bit more pink
         A way to specify an ambiance sound effect that loops
+            Add sounds to the base content for wind, leaves rustling, birds, frogs, etc.
         As a day progresses, mob shadows should become invisible long before sunlight ends. IRL, during twilight there are no shadows, but there's still overall visibility. That said, for gameplay purposes there should probably always be a shadow, even if faint
     Replay
         A vector of "abstract" objects
@@ -687,6 +682,7 @@ Misc things (so I don't forget)
         The audio options menu should have a button to playback one or two sound effects
         More sounds
             Onion spinning up to generate
+            Un/Pausing
     Radar
         Details
             Sparkles on treasures

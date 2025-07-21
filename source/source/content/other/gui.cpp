@@ -297,9 +297,7 @@ bool GuiItem::activate(const Point& cursorPos) {
         playFailSound ?
         game.sysContent.sndMenuFail :
         game.sysContent.sndMenuActivate;
-    SoundSourceConfig activateSoundConfig;
-    activateSoundConfig.gain = 0.75f;
-    game.audio.createUiSoundsource(sample, activateSoundConfig);
+    game.audio.createUiSoundsource(sample, { .gain = 0.75f });
     playFailSound = false;
     
     return true;
@@ -1153,13 +1151,9 @@ void GuiManager::setSelectedItem(GuiItem* item, bool silent) {
     }
     
     if(selectedItem && !silent) {
-        SoundSourceConfig selectSoundConfig;
-        selectSoundConfig.gain = 0.5f;
-        selectSoundConfig.speedDeviation = 0.1f;
-        selectSoundConfig.stackMinPos = 0.01f;
         game.audio.createUiSoundsource(
             game.sysContent.sndMenuSelect,
-            selectSoundConfig
+        { .stackMinPos = 0.01f, .gain = 0.5f, .speedDeviation = 0.1f }
         );
     }
 }
@@ -1693,7 +1687,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         ev.mouse.button == 1
     ) {
         isMouseDragging = false;
-
+        
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         isMouseDragging

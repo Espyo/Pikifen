@@ -2262,11 +2262,9 @@ void PikminFsm::beThrown(Mob* m, void* info1, void* info2) {
     if(throwSoundIdx != INVALID) {
         MobType::Sound* throwSound =
             &pikPtr->type->sounds[throwSoundIdx];
-        SoundSourceConfig throwSoundConfig;
-        throwSoundConfig.stackMode = SOUND_STACK_MODE_OVERRIDE;
         game.audio.createMobSoundSource(
             throwSound->sample,
-            m, false, throwSoundConfig
+            m, false, { .stackMode = SOUND_STACK_MODE_OVERRIDE }
         );
     }
     

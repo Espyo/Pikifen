@@ -527,11 +527,9 @@ void GameplayState::doPlayerActionZoom(
         player->view.cam.targetZoom = zoomLevels[2];
     }
     
-    SoundSourceConfig camSoundConfig;
-    camSoundConfig.stackMode = SOUND_STACK_MODE_NEVER;
     game.audio.createUiSoundsource(
         game.sysContent.sndCamera,
-        camSoundConfig
+    { .stackMode = SOUND_STACK_MODE_NEVER }
     );
 }
 
