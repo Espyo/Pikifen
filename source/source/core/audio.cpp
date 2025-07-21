@@ -330,6 +330,15 @@ bool AudioManager::emit(size_t sourceId) {
         }
     }
     
+    //Check if there's a random chance for this to not play.
+    if(sourcePtr->config.randomChance < 100) {
+        unsigned char roll = game.rng.i(1, 100);
+        if(roll > sourcePtr->config.randomChance) {
+            //Can't emit. Random chance failed.
+            return false;
+        }
+    }
+    
     //Check if other playbacks exist and if we need to stop them.
     if(sourcePtr->config.stackMode == SOUND_STACK_MODE_OVERRIDE) {
         for(size_t p = 0; p < playbacks.size(); p++) {

@@ -211,6 +211,9 @@ struct SoundSourceConfig {
     //Randomness to the speed every time it emits the sound. 0 for none.
     float speedDeviation = 0.0f;
     
+    //X% chance for the sound to actually play. 0 to 100. 100 for normal chance.
+    unsigned char randomChance = 100;
+    
     //Randomly delay the emission between 0 and this amount. 0 for none.
     float randomDelay = 0.0f;
     

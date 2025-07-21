@@ -667,6 +667,7 @@ void MobType::loadFromDataNode(
         sRS.set("speed", speedFloat);
         sRS.set("volume_deviation", newSound.config.gainDeviation);
         sRS.set("speed_deviation", newSound.config.speedDeviation);
+        sRS.set("random_chance", newSound.config.randomChance);
         sRS.set("random_delay", newSound.config.randomDelay);
         
         newSound.sample = game.content.sounds.list.get(soundINameStr, soundINameNode);
@@ -918,7 +919,7 @@ void MobType::loadFromDataNode(
                     );
                 }
             }
-
+            
             if(category->id == MOB_CATEGORY_ENEMIES) {
                 DataNode* reviveStateNameNode =
                     scriptFile.getChildByName("revive_state");
