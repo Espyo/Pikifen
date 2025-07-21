@@ -1,0 +1,33 @@
+name = Nugget Pile
+description = A pile of gold nuggets.
+
+can_drop_multiple = true
+contents = nugget
+custom_category_name = Treasure
+delete_when_finished = true
+health_per_resource = 40
+height = 100
+hide_when_empty = true
+max_amount = 30
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 50
+show_amount = true
+show_health = false
+size_animation_suffixes = _empty;_low;_mid;_high
+target_type = explodable_pikmin_obstacle
+
+sounds {
+    hit {
+        sound = misc/ceramic_hit
+        volume = 50
+        speed = 130
+        speed_deviation = 10
+        random_delay = 0.05
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

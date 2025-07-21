@@ -1,0 +1,22 @@
+name=Nugget animations
+description=Animations for the Nugget.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=treasures/nugget
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+	}
+}
+body_parts

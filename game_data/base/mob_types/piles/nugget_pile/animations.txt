@@ -1,0 +1,96 @@
+name=Nugget Pile animations
+description=Animations for the Nugget Pile.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
+animations{
+	idling_empty{
+		frames{
+			idling_empty{
+				duration=0.1000
+			}
+		}
+	}
+	idling_high{
+		frames{
+			idling_high{
+				duration=0.1000
+			}
+		}
+	}
+	idling_low{
+		frames{
+			idling_low{
+				duration=0.1000
+			}
+		}
+	}
+	idling_mid{
+		frames{
+			idling_mid{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_empty{
+		file=treasures/nugget_pile
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_high{
+		file=treasures/nugget_pile
+		file_pos=0.0000 0.0000
+		file_size=100.0000 100.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_low{
+		file=treasures/nugget_pile
+		file_pos=202.0000 0.0000
+		file_size=100.0000 100.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_mid{
+		file=treasures/nugget_pile
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hit
+}

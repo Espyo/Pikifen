@@ -1,0 +1,20 @@
+name = Nugget
+description = A small nugget of gold.
+
+can_walk_on_others = true
+carrying_destination = ship
+custom_category_name = Treasure
+delivery_result = add_points
+height = 20
+max_carriers = 1
+point_amount = 100
+pushable = true
+pushes = false
+radius = 14
+return_to_pile_on_vanish = false
+vanish_on_drop = false
+weight = 1
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

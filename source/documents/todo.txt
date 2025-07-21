@@ -15,14 +15,12 @@ Next tasks (roughly sorted most important first)
         Shouldn't clicking out of a textbox have full control, and not allow the canvas to receive the event?
 
     --- 0.26 ---
-    Try to implement the motif into Coastal Pavement
     Revamp sounds
         Candidate list of all needed sounds, for now
             HUD
                 Pausing
             Leader
                 Alph, Brittany, and Charlie
-                Swarming
             Enemies
                 Burrow-nit screeching when dying
                 Burrow-nit squeaking while moving
@@ -35,7 +33,6 @@ Next tasks (roughly sorted most important first)
                 Water Dumple growling
                 Water Dumple waddling
             Others
-                Onion spinning up to generate
                 Ambiance sounds
                     Wind
                     Leaves rustling
@@ -61,6 +58,7 @@ Next tasks (roughly sorted most important first)
         Make Rock Pikmin colors darker (thanks Nataly171)
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
+    Try to implement the motif into Coastal Pavement
     Misc. graphical improvements
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         Bulborbs need a few more frames for fluidity
@@ -70,7 +68,6 @@ Next tasks (roughly sorted most important first)
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Add a glow to the smack effect particle?
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    Add nuggets
     More particles
         More across the board -- check all mobs too
     Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area
@@ -98,6 +95,7 @@ Next tasks (roughly sorted most important first)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies, right?
+    Swarming jingle
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -687,6 +685,8 @@ Misc things (so I don't forget)
         Editor music options: off, standard editor music, area's music (area editor only), area's music but with a low-pass filter (area editor only)
             Mix tracks, like for when the player is drawing something, or dragging something, or whatever else
         The audio options menu should have a button to playback one or two sound effects
+        More sounds
+            Onion spinning up to generate
     Radar
         Details
             Sparkles on treasures
