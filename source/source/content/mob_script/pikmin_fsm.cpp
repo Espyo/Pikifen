@@ -3105,7 +3105,7 @@ void PikminFsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
     m->setTimer(PIKMIN::DISMISS_TIMEOUT);
     
     m->setAnimation(
-        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
+        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING_LIGHT,
         START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
@@ -3786,6 +3786,9 @@ void PikminFsm::reachCarriableObject(Mob* m, void* info1, void* info2) {
     
     pikPtr->inCarryStruggleAnimation = false;
     pikPtr->setAnimation(PIKMIN_ANIM_CARRYING);
+    pikPtr->playSound(
+        pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_CARRYING_GRAB]
+    );
 }
 
 
@@ -4060,7 +4063,7 @@ void PikminFsm::startChasingLeader(Mob* m, void* info1, void* info2) {
     m->focusOnMob(m->followingGroup);
     PikminFsm::updateInGroupChasing(m, nullptr, nullptr);
     m->setAnimation(
-        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
+        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING_LIGHT,
         START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
@@ -4110,6 +4113,8 @@ void PikminFsm::startDying(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::startFlailing(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) m;
+    
     PikminFsm::releaseTool(m, nullptr, nullptr);
     
     //If the Pikmin is following a moveable point, let's change it to
@@ -4128,6 +4133,7 @@ void PikminFsm::startFlailing(Mob* m, void* info1, void* info2) {
     m->setTimer(1.0f);
     
     m->setAnimation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
+    m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SUFFERING]);
 }
 
 
@@ -4206,6 +4212,7 @@ void PikminFsm::startPanicking(Mob* m, void* info1, void* info2) {
     m->setAnimation(
         PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
+    m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SUFFERING]);
 }
 
 

@@ -141,6 +141,7 @@ AnimConversionVector PikminType::getAnimConversions() const {
     a(PIKMIN_ANIM_SIGHING,            "sighing");
     a(PIKMIN_ANIM_SHAKING,            "shaking");
     a(PIKMIN_ANIM_CARRYING,           "carrying");
+    a(PIKMIN_ANIM_CARRYING_LIGHT,     "carrying_light");
     a(PIKMIN_ANIM_CARRYING_STRUGGLE,  "carrying_struggle");
     a(PIKMIN_ANIM_SPROUT,             "sprout");
     a(PIKMIN_ANIM_PLUCKING,           "plucking");
@@ -233,6 +234,8 @@ void PikminType::loadCatProperties(DataNode* file) {
             soundDataIdxs[PIKMIN_SOUND_LATCH] = s;
         } else if(sounds[s].name == "seed_landing") {
             soundDataIdxs[PIKMIN_SOUND_SEED_LANDING] = s;
+        } else if(sounds[s].name == "suffering") {
+            soundDataIdxs[PIKMIN_SOUND_SUFFERING] = s;
         } else if(sounds[s].name == "thrown") {
             soundDataIdxs[PIKMIN_SOUND_THROWN] = s;
         }

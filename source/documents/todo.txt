@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Pikmin ding detection still isn't working quite right
     Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
@@ -17,17 +18,6 @@ Next tasks (roughly sorted most important first)
     Try to implement the motif into Coastal Pavement
     Revamp sounds
         Candidate list of all needed sounds, for now
-            Pikmin
-                Squealing in pain
-                Struggling to lift
-                Carrying (and climbing)
-                Carrying grab (and picking up)
-                Knocked back
-                Drowning
-                Crushed
-                Celebrating
-                Gentle bored sound
-                Sighing
             HUD
                 Pausing
             Leader
@@ -71,14 +61,7 @@ Next tasks (roughly sorted most important first)
         Make Rock Pikmin colors darker (thanks Nataly171)
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
-    Leader animations
-        New animations
-            Thrown (add to the logic of bouncers too, including Pikmin)
-            Climbing (add the track logic too)
-            Sliding (add the track logic too)
-            Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
     Misc. graphical improvements
-        Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         Bulborbs need a few more frames for fluidity
             Definitely add one or two Bolbert frames
@@ -86,7 +69,6 @@ Next tasks (roughly sorted most important first)
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Add a glow to the smack effect particle?
-        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies, right?
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     Add nuggets
     More particles
@@ -108,6 +90,14 @@ Next tasks (roughly sorted most important first)
     --- Future ---
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
+    Leader animations
+        Thrown (add to the logic of bouncers too, including Pikmin)
+        Climbing (add the track logic too)
+        Sliding (add the track logic too)
+        Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
+    Misc. graphical improvements
+        Onions should be shaded with hue shifting
+        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies, right?
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -753,8 +743,7 @@ Misc things (so I don't forget)
     Pikmin behaviors
         When Pikmin destroy something that drops something (Pellet Posy, Flukeweed, enemy corpse, enemy spoils, etc.), they should focus on retrieving that ASAP instead of just idling and leaving it up to chance whether they pick it up or not. This is especially important for Rock Pikmin, which usually bounce far away after attacking and killing an enemy
         Winged Pikmin that fall in the water should fly up when whistled
-        Pikmin should want to go to nectar by themselves when idling
-            Particularly important because Winged Pikmin don't drink nectar on their own
+        Pikmin should want to go to nectar by themselves when idling. Particularly important because Winged Pikmin don't drink nectar on their own
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
         Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion

@@ -49,6 +49,7 @@ animations{
 			}
 			idling_01{
 				duration=0.1000
+				sound=celebrating
 			}
 			thrown_01{
 				duration=0.1000
@@ -90,6 +91,23 @@ animations{
 			}
 			grabbing_walk_01{
 				duration=0.1500
+				sound=carrying
+			}
+			grabbing{
+				duration=0.1500
+			}
+			grabbing_walk_02{
+				duration=0.1500
+			}
+		}
+	}
+	carrying_light{
+		frames{
+			grabbing{
+				duration=0.1500
+			}
+			grabbing_walk_01{
+				duration=0.1500
 			}
 			grabbing{
 				duration=0.1500
@@ -110,6 +128,7 @@ animations{
 			grabbing_far{
 				duration=0.0800
 				interpolate=true
+				sound=carrying_struggle
 			}
 			grabbing_shake{
 				duration=0.0800
@@ -151,6 +170,7 @@ animations{
 			}
 			climbing_02{
 				duration=0.1000
+				sound=carrying
 			}
 			climbing_01{
 				duration=0.1000
@@ -350,10 +370,14 @@ animations{
 		}
 	}
 	knocked_back{
-		loop_frame=1
+		loop_frame=2
 		frames{
 			idling_01{
 				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+				sound=knocked_back
 			}
 			half_lying{
 				duration=0.1000
@@ -392,6 +416,7 @@ animations{
 			looking_around_03{
 				duration=0.1000
 				interpolate=true
+				sound=misc_m
 			}
 			looking_around_04{
 				duration=0.3000
@@ -451,6 +476,7 @@ animations{
 			lounging_01{
 				duration=0.0800
 				interpolate=true
+				sound=misc_e
 			}
 			lounging_02{
 				duration=0.5000
@@ -515,6 +541,7 @@ animations{
 			crouching{
 				duration=0.2000
 				interpolate=true
+				sound=ooh
 			}
 			picking_up{
 				duration=0.2000
@@ -642,6 +669,7 @@ animations{
 			crouching{
 				duration=0.2000
 				interpolate=true
+				sound=sigh
 			}
 			crouching{
 				duration=0.1700
@@ -705,6 +733,7 @@ animations{
 			sitting_01{
 				duration=0.0800
 				interpolate=true
+				sound=misc_o
 			}
 			sitting_02{
 				duration=0.5000
@@ -742,7 +771,17 @@ animations{
 		}
 	}
 	sliding{
+		loop_frame=2
 		frames{
+			sliding_01{
+				duration=0.1000
+				interpolate=true
+			}
+			sliding_02{
+				duration=0.1000
+				interpolate=true
+				sound=ooh
+			}
 			sliding_01{
 				duration=0.1000
 				interpolate=true
@@ -798,6 +837,7 @@ animations{
 			twirling_01{
 				duration=0.1000
 				interpolate=true
+				sound=celebrating
 			}
 			twirling_02{
 				duration=0.1000

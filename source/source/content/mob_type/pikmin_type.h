@@ -215,8 +215,11 @@ enum PIKMIN_ANIM {
     //Attacking.
     PIKMIN_ANIM_ATTACKING,
     
-    //Carrying.
+    //Carrying something that isn't light.
     PIKMIN_ANIM_CARRYING,
+    
+    //Carrying something light.
+    PIKMIN_ANIM_CARRYING_LIGHT,
     
     //Carrying, but struggling to lift.
     PIKMIN_ANIM_CARRYING_STRUGGLE,
@@ -316,6 +319,9 @@ enum PIKMIN_SOUND {
     
     //Seed landing.
     PIKMIN_SOUND_SEED_LANDING,
+    
+    //Suffering from a hazard.
+    PIKMIN_SOUND_SUFFERING,
     
     //Thrown by a leader.
     PIKMIN_SOUND_THROWN,

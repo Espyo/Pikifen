@@ -31,6 +31,7 @@ weight = 10
 sounds {
     attack {
         sound = pikmin/pikmin_attack
+        speed_deviation = 2
     }
     butt_stomp {
         sound = misc/thump
@@ -40,21 +41,41 @@ sounds {
     }
     called {
         sound = pikmin/pikmin_called
+        speed_deviation = 2
     }
     carrying {
         sound = pikmin/pikmin_carrying
+        speed_deviation = 3
+        stack_mode = never
+        random_delay = 0.05
     }
     carrying_grab {
         sound = pikmin/pikmin_carrying_grab
+        speed_deviation = 5
+        stack_min_pos = 0.5
+        volume = 50
+    }
+    carrying_struggle {
+        sound = pikmin/pikmin_carrying_struggle
+        volume = 35
+        stack_mode = never
+        speed_deviation = 5
     }
     caught {
         sound = pikmin/pikmin_caught
+    }
+    celebrating {
+        sound = pikmin/pikmin_celebrating
+        volume = 70
+        stack_mode = never
+        random_delay = 0.1
     }
     drinking {
         sound = misc/slurp_straw
         volume = 30
         speed = 120
         speed_deviation = 10
+        stack_mode = never
     }
     dying {
         sound = pikmin/pikmin_dying
@@ -65,12 +86,67 @@ sounds {
         speed = 95
         speed_deviation = 40
         random_delay = 0.05
+        stack_min_pos = 0.2
     }
     held {
         sound = pikmin/pikmin_held
     }
     idle {
         sound = pikmin/pikmin_idle
+        speed_deviation = 3
+    }
+    knocked_back {
+        sound = pikmin/pikmin_knocked_back
+        volume = 60
+        speed_deviation = 10
+    }
+    misc_a {
+        sound = pikmin/pikmin_misc_a
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
+    }
+    misc_e {
+        sound = pikmin/pikmin_misc_e
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
+    }
+    misc_i {
+        sound = pikmin/pikmin_misc_i
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
+    }
+    misc_m {
+        sound = pikmin/pikmin_misc_m
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
+    }
+    misc_o {
+        sound = pikmin/pikmin_misc_o
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
+    }
+    misc_u {
+        sound = pikmin/pikmin_misc_u
+        volume = 10
+        speed_deviation = 10
+        stack_mode = never
+        random_chance = 5
+        random_delay = 0.1
     }
     latch {
         sound = pikmin/latch
@@ -82,11 +158,22 @@ sounds {
         speed = 60
         speed_deviation = 10
     }
+    ooh {
+        sound = pikmin/pikmin_ooh
+    }
     pluck_ground {
         sound = effects/pluck
+        speed_deviation = 10
     }
     plucked {
         sound = pikmin/pikmin_plucked
+        speed_deviation = 3
+    }
+    sigh {
+        sound = pikmin/pikmin_sigh
+        speed_deviation = 3
+        stack_mode = never
+        volume = 30
     }
     seed_landing {
         sound = pikmin/seed_landing
@@ -98,6 +185,13 @@ sounds {
         sound = creature_misc/shaking
         volume = 50
         speed = 140
+        speed_deviation = 5
+    }
+    suffering {
+        sound = pikmin/pikmin_suffering
+        speed_deviation = 5
+        stack_min_pos = 0.3
+        volume = 80
     }
     thrown {
         sound = pikmin/pikmin_thrown
