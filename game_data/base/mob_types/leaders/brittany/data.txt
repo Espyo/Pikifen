@@ -25,6 +25,9 @@ sounds {
         volume = 50
         speed_deviation = 10
     }
+    name_call {
+        sound = leaders/brittany_name_call
+    }
     whistling {
         sound = leaders/olimar_whistle
     }
