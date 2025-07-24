@@ -1033,7 +1033,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     medalGotItJuiceTimer = 0.0f;
                     game.audio.createUiSoundsource(
                         game.sysContent.sndMedalGotIt,
-                    { .gain = 0.50f }
+                    { .volume = 0.50f }
                     );
                 }
                 
@@ -1122,7 +1122,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     game.states.gameplay->bigMsg.set(BIG_MESSAGE_ONE_MIN_LEFT);
                     game.audio.createUiSoundsource(
                         game.sysContent.sndOneMinuteLeft,
-                    { .gain = 0.5f }
+                    { .volume = 0.5f }
                     );
                 }
             }

@@ -450,8 +450,8 @@
 
     <ul>
       <li>Fixed Rock Pikmin not causing damage by charging. Custom Pikmin that attack via lunging need their <code>attacking</code> animation changed.</li>
-      <li>Fixed a crash if Pikmin were thrown at an object and it disappeared during their <code>mob_landing</code> state. (Thanks Sharker, Kman)</li>
-      <li>Fixed the manual's header not working under Chrome. (Thanks Kman)</li>
+      <li>Fixed a crash if Pikmin were thrown at an object and it disappeared during their <code>mob_landing</code> state. (Thanks Sharker, Helodity)</li>
+      <li>Fixed the manual's header not working under Chrome. (Thanks Helodity)</li>
     </ul>
     
     <h2 id="0.21.0">0.21.0</h2>
@@ -683,17 +683,17 @@
       <li>
         Expanded the <code>get_info</code> action:
         <ul>
-          <li>Added new data: <code>x</code>, <code>y</code>, and <code>z</code>. Use these to get the object's coordinates. (Thanks Kman)</li>
+          <li>Added new data: <code>x</code>, <code>y</code>, and <code>z</code>. Use these to get the object's coordinates. (Thanks Helodity)</li>
           <li>Also added <code>focus_distance</code>. Use this to get the distance between this object and its focused object.</li>
-          <li>Added a new action: <code>get_focus_info</code>. It works like <code>get_info</code>, but when applicable, gets info from the focused mob instead. (Thanks Kman)</li>
+          <li>Added a new action: <code>get_focus_info</code>. It works like <code>get_info</code>, but when applicable, gets info from the focused mob instead. (Thanks Helodity)</li>
         </ul>
       </li>
-      <li>Added a mob script event, <code>on_leave_hazard</code>, and added a way to get the name of the hazard via the <code>get_info</code> action, both for this event and <code>on_touch_hazard</code>. (Thanks Kman)</li>
+      <li>Added a mob script event, <code>on_leave_hazard</code>, and added a way to get the name of the hazard via the <code>get_info</code> action, both for this event and <code>on_touch_hazard</code>. (Thanks Helodity)</li>
       <li>Pikmin now push each other slightly.</li>
-      <li>Health wheels now transition smoothly to their target value, and also fade away when they are empty. (Thanks Kman)</li>
+      <li>Health wheels now transition smoothly to their target value, and also fade away when they are empty. (Thanks Helodity)</li>
       <li>Added new system assets: <code>bubble_box</code>, used to draw box-like bubbles in the HUD and menus, <code>focus_box</code>, used to show which GUI item is focused, and <code>more</code>, used for menus to indicate there's more content beyond.</li>
       <li>Holding Shift when the snapping mode is "nothing" will now snap to the grid in the area editor. The snapping mode is now also saved to the options. Finally, Shift+Plus and Shift+Minus change the grid spacing. (Thanks Nutty171, Neo)</li>
-      <li>Players can now customize the colors of the GUI widgets in the editors. (Thanks Kman)</li>
+      <li>Players can now customize the colors of the GUI widgets in the editors. (Thanks Helodity)</li>
       <li>The Beady Long Legs's logic was slightly cleaned up.</li>
       <li>Revamped code and added instructions to make it possible to compile on Mac OS. (Thanks MidnightWhisper)</li>
     </ul>
@@ -703,7 +703,7 @@
     <ul>
       <li>Onion types now use the <code>pikmin_types</code> property instead of <code>pikmin_type</code>.</li>
       <li>The mouse cursor graphic now displays at full-size, all the time. If you made a custom one, you'll probably want to resize its image file to 70% its old size.</li>
-      <li>The pre-packaged Pellet Posy graphics files are now split per-type, as opposed to per-size. This makes more sense for adding new types of Pikmin/pellet. (Thanks Kman)</li>
+      <li>The pre-packaged Pellet Posy graphics files are now split per-type, as opposed to per-size. This makes more sense for adding new types of Pikmin/pellet. (Thanks Helodity)</li>
       <li>The counter font now also includes a dot and a colon. If you changed this font, please update it accordingly.</li>
       <li>The gameplay HUD information is now stored in <code>game_data/gui/gameplay.txt</code>, and the title screen logo information now goes in <code>game_data/gui/main_menu.txt</code>.</li>
       <li>The sector property "always casts shadow" has been removed, and wall shadows should be slightly less dark than before in general. If you have walls that you need to look the same as before, you'll want to go to the edge properties and tweak their shadow's length and color.</li>
@@ -728,17 +728,17 @@
           <li>Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)</li>
           <li>Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.</li>
           <li>The animation editor now has a grid too, and animations have a simple timeline.</li>
-          <li>Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)</li>
+          <li>Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Helodity)</li>
           <li>Added a way to resize and rotate selected vertexes together; enable it in the area editor options.</li>
           <li>Several other small things have been tweaked.</li>
         </ul>
       </li>
       <li>Added a performance monitor to the maker tools (previous known as "creator tools"). When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a report file gets written when you leave. It can help you figure out what the heaviest parts of your content are.</li>
       <li>Added a way to add actions, events, and states to object types that have hardcoded scripts.</li>
-      <li>If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)</li>
+      <li>If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Helodity)</li>
       <li>Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.</li>
       <li>Fixed cardboard boxes not blocking the way if they are not in place, but for this to work, you'll need to use a "Dummy obstacle target" object as a target.</li>
-      <li>Fixed a few miscellaneous glitches. (Thanks Kman)</li>
+      <li>Fixed a few miscellaneous glitches. (Thanks Helodity)</li>
       <li>Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)</li>
     </ul>
     
@@ -833,7 +833,7 @@
           <li>You can now use variables in script actions. Example: <code>set_timer $extra_time</code>.</li>
           <li>As a result of the above, some complex actions got split and simplified, some redundant actions got removed, and the whole scripting system was made more robust (see the compatibility warnings).</li>
           <li>New actions: <code>goto</code> and <code>label</code>. When a <code>goto</code> action is run, it jumps to the equivalent <code>label</code> action. Useful for loops.</li>
-          <li>New action: <code>order_release</code>. Use this to get a tool to order the Pikmin that is holding it to release it. (Thanks Kman)</li>
+          <li>New action: <code>order_release</code>. Use this to get a tool to order the Pikmin that is holding it to release it. (Thanks Helodity)</li>
           <li>New action: <code>set_huntable</code>. If this is false, an object cannot be hunted down. Useful for Pellet Posy sprouts, for instance.</li>
           <li>New action: <code>drain_liquid</code>. Drains the liquid of the sector the object is in, if it has any hazard with an associated liquid. It also affects neighboring sectors with liquid. This drain takes place over the course of two seconds.</li>
           <li>New action: <code>set_height</code>. An object's height can now be controlled by the script, and is by default whatever the object type specifies.</li>
@@ -865,11 +865,11 @@
         </ul>
       </li>
       <li>The throw physics have been revamped &#8211; thrown Pikmin and leaders will now land exactly where the cursor is (if possible), even if it is on a sector with a different height or atop an object. Pikmin throw heights have also been slightly tweaked. (Thanks Yoshi2)</li>
-      <li>Tool types now have the <code>dropped_when_pikmin_is_whistled</code> parameter, which lets them be dropped when a thrown Pikmin is whistled, like in the first <i>Pikmin</i> game. (Thanks Kman)</li>
+      <li>Tool types now have the <code>dropped_when_pikmin_is_whistled</code> parameter, which lets them be dropped when a thrown Pikmin is whistled, like in the first <i>Pikmin</i> game. (Thanks Helodity)</li>
       <li>Objects that spawn children can now use the <code>hold_rotation_method</code> parameter to control how the child object rotates: never, rotates to always face the parent's center, or matches the angle of the parent.</li>
       <li>Pikmin will now stop attacking and sigh when their attacks fail to cause damage four times in a row. Zero-damage attacks now also spawn a "Ding!" particle.</li>
       <li>1-weight objects now show the carrying numbers again, but only if they're going to an Onion.</li>
-      <li>Minor tweaks and fixes. (Thanks Kman, Jimble)</li>
+      <li>Minor tweaks and fixes. (Thanks Helodity, Jimble)</li>
     </ul>
     
     <p><b>Compatibility warnings</b></p>
@@ -925,16 +925,16 @@
       <li>
         Bug fixes:
         <ul>
-          <li>Fixed screenshots (normal ones, crash ones, or area ones) not being saved on Windows. Semicolons are not allowed, so I replaced them with dots. Since I was editing the filenames, I figured I'd replace the space with an underscore, too. (Thanks Kman, Neo)</li>
+          <li>Fixed screenshots (normal ones, crash ones, or area ones) not being saved on Windows. Semicolons are not allowed, so I replaced them with dots. Since I was editing the filenames, I figured I'd replace the space with an underscore, too. (Thanks Helodity, Neo)</li>
           <li>Fixed leaders having a pseudo-whistle at the start of an area, if the player left the previous area in the middle of a whistle. (Thanks Tenortio)</li>
           <li>Fixed players being able to press Enter on editor pickers that didn't allow creating new content. (Thanks Neo)</li>
-          <li>Fixed the set_holdable action being unable to be empty. (Thanks Kman)</li>
-          <li>Fixed the best path preview in the area editor using any path, instead of the best one. Also, added a path debugger (F5). (Thanks Kman)</li>
-          <li>Fixed object links being lost when you undo. (Thanks Kman)</li>
+          <li>Fixed the set_holdable action being unable to be empty. (Thanks Helodity)</li>
+          <li>Fixed the best path preview in the area editor using any path, instead of the best one. Also, added a path debugger (F5). (Thanks Helodity)</li>
+          <li>Fixed object links being lost when you undo. (Thanks Helodity)</li>
           <li>Fixed an area editor sector corruption glitch. (Thanks Neo)</li>
           <li>Fixed more area editor glitches.</li>
           <li>Fixed Yellow Pikmin not being able to reach the Beady Long Legs's head.</li>
-          <li>Fixed objects losing track of their focused objects too quickly. This caused enemies to shake violently when they had several Pikmin swung in front of them, for instance. (Thanks Kman)</li>
+          <li>Fixed objects losing track of their focused objects too quickly. This caused enemies to shake violently when they had several Pikmin swung in front of them, for instance. (Thanks Helodity)</li>
         </ul>
       </li>
       <li>Pikmin carrying bridge fragments can now no longer be pushed. This should make them a bit more effective when there are traffic jams. (Thanks Neo)</li>
@@ -1049,7 +1049,7 @@
       <li>Fixed several area editor sector glitches.</li>
       <li>The framerate print is now a general system print. It also includes a framerate chart, number of mobs, number of particles, screen resolution, area version and creator, Pikifen version, and game version. Also, I've revamped the creator tool prints in general.</li>
       <li>Improved performance during gameplay.</li>
-      <li>Other minor improvements and fixes. (Thanks, Kman and Neo)</li>
+      <li>Other minor improvements and fixes. (Thanks, Helodity and Neo)</li>
     </ul>
     
     <p><b>Compatibility warnings</b></p>
@@ -1077,7 +1077,7 @@
       <li>Status effects can now also make the object glow. (Thanks Neo)</li>
       <li>You can now use the <code>mob_type</code> comparand in the <code>on_pikmin_land</code> event.</li>
       <li>The starting number of sprays can now be set per-area. You can set this in the area editor's "Info" panel. (Thanks Neo)</li>
-      <li>Fixed Armored Cannon Beetle not turning. (Thanks Kman, Neo)</li>
+      <li>Fixed Armored Cannon Beetle not turning. (Thanks Helodity, Neo)</li>
       <li>Fixed a couple of carrying path-related crashes and glitches. (Thanks Neo)</li>
       <li>Hopefully fixed random Pikmin carrying-related crashes. (Thanks Pikminfanboy9003)</li>
       <li>Added some custom asserts to the code, which should make debugging certain crashes easier.</li>
@@ -1098,8 +1098,8 @@
       <li>The Beady Long Legs's feet are no longer punchable.</li>
       <li>Limbs now draw with effects, like darkening from being in a different sector.</li>
       <li>Added the <code>remove_status</code> action, to remove a status effect. (Thanks Neo)</li>
-      <li>Fixed leaders and some other objects not becoming darker when they are inside darker sectors. (Thanks Kman)</li>
-      <li>Fixed area editor crash when loading an area with an unknown object. (Thanks Kman)</li>
+      <li>Fixed leaders and some other objects not becoming darker when they are inside darker sectors. (Thanks Helodity)</li>
+      <li>Fixed area editor crash when loading an area with an unknown object. (Thanks Helodity)</li>
       <li>Fixed area editor crash when deleting a sector. (Thanks Neo)</li>
       <li>Fixed Pikmin told to swarm trying to attack an object higher than them. (Thanks Neo)</li>
     </ul>
@@ -1167,7 +1167,7 @@
         Onion changes:
         <ul>
           <li>Pikmin in Onions are now controlled per-Onion, instead of globally. The Onion also keeps track of the amount of Pikmin of each maturity.</li>
-          <li>The whistle button can now stow away one Pikmin in the Onion you are close to. This feature is temporary until a proper Onion system is in place. (Thanks Kman)</li>
+          <li>The whistle button can now stow away one Pikmin in the Onion you are close to. This feature is temporary until a proper Onion system is in place. (Thanks Helodity)</li>
         </ul>
       </li>
       <li>
@@ -1176,9 +1176,9 @@
           <li>Added a <code>turns_invisible</code> parameter to status effects. If true, objects with this status are invisible to opponent objects.</li>
           <li>Added a <code>maturity_change_amount</code> parameter to status effects. These allow Pikmin to mature or whither.</li>
           <li>Added a <code>buries_pikmin</code> parameter to sprays. If true, using the spray on a Pikmin will bury it and turn it into a sprout.</li>
-          <li>Added a <code>receive_status</code> action. This can be used to give an object a status effect. (Thanks Kman)</li>
-          <li>Added a <code>move away_from_focused_mob</code> action. (Thanks Kman)</li>
-          <li>Added <code>field_pikmin</code> as a comparand for <code>if</code> actions. This can be used to know how many Pikmin are currently on the field. (Thanks Kman)</li>
+          <li>Added a <code>receive_status</code> action. This can be used to give an object a status effect. (Thanks Helodity)</li>
+          <li>Added a <code>move away_from_focused_mob</code> action. (Thanks Helodity)</li>
+          <li>Added <code>field_pikmin</code> as a comparand for <code>if</code> actions. This can be used to know how many Pikmin are currently on the field. (Thanks Helodity)</li>
           <li>Added a <code>pushes_with_hitboxes</code> attribute.</li>
           <li>Added a <code>can_free_move</code> attribute, that allows an object to move in any direction freely regardless of where it's facing.</li>
           <li>Added the <code>start_height_effect</code> and <code>stop_height_effect</code> actions to control the object height effect.</li>
@@ -1187,9 +1187,9 @@
       <li>
         Other changes:
         <ul>
-          <li>Attacks with hitboxes with hazards can now miss, like normal attacks. (Thanks Kman)</li>
+          <li>Attacks with hitboxes with hazards can now miss, like normal attacks. (Thanks Helodity)</li>
           <li>The area selection menu now uses the areas' names, instead of the folder names.</li>
-          <li>Minor bug fixes and tweaks. (Thanks Kman)</li>
+          <li>Minor bug fixes and tweaks. (Thanks Helodity)</li>
         </ul>
       </li>
     </ul>
@@ -1253,8 +1253,8 @@
       </li>
       <li>Added <code>on_land</code> as an event usable in the mob script.</li>
       <li>If there were errors loading the area, a quick notification will be shown after the area loads.</li>
-      <li>Added Yellow Wollywog. (thanks Kman, Neo, Scruffy, Untitled)</li>
-      <li>Fixed minor glitches (thanks Kman)</li>
+      <li>Added Yellow Wollywog. (thanks Helodity, Neo, Scruffy, Untitled)</li>
+      <li>Fixed minor glitches (thanks Helodity)</li>
     </ul>
     
     <p><b>Format change warnings</b></p>
@@ -1297,7 +1297,7 @@
             Added some mob type parameters:
             <ul>
               <li><code>blocks_carrier_pikmin</code>, which can make an object block carrier Pikmin if it is alive.</li>
-              <li><code>appears_in_editor</code>, which can make a mob type not appear in the area editor's list. (Thanks Kman)</li>
+              <li><code>appears_in_editor</code>, which can make a mob type not appear in the area editor's list. (Thanks Helodity)</li>
               <li><code>is_projectile</code>, which is useful for objects that are meant to cause destruction and harm.</li>
               <li><code>projectiles_can_damage</code>, which is useful for obstacles that shouldn't lose health when projectiles hit.</li>
             </ul>
@@ -1316,7 +1316,7 @@
           <li>Rebalanced some enemies.</li>
           <li>Fixed dead leaders locking up gameplay. If the active leader dies, the game switches to the next, and if all die, returns to the main menu.</li>
           <li>Changed the default zoom level from 1.5 to 1.4.</li>
-          <li>Other minor tweaks and bug fixes. (Thanks Neo, Kman)</li>
+          <li>Other minor tweaks and bug fixes. (Thanks Neo, Helodity)</li>
         </ul>
       </li>
     </ul>

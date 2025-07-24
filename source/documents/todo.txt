@@ -6,8 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Playful Yard should use the S.S. Drake since it uses Koppaites
     Pikmin ding detection still isn't working quite right
+        canContinueAttacking is getting set to false because it's a basic distance check, even though the gate is still within the Pikmin's near reach
     Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
+        The holding state keeps the previous state's animation
     Leaders following your leader will just endlelessly repeat their current animation and not walk
     If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
     Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
@@ -16,8 +19,6 @@ Next tasks (roughly sorted most important first)
     --- 0.26 ---
     Revamp sounds
         Candidate list of all needed sounds, for now
-            Leader
-                Alph, Brittany, and Charlie
             Enemies
                 Burrow-nit screeching when dying
                 Burrow-nit squeaking while moving
@@ -673,6 +674,8 @@ Misc things (so I don't forget)
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, etc.
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
+        Weird limitations
+            If Pikmin are already carrying something elsewhere in the area, far away, the Pikmin told to carry something here will rarely play their sound, because the others are already doing it. Likewise, I think only a few geysers in DEV Lab actually play a sound. I can't make 0-volume sounds not play, otherwise stuff like geysers that are far away at spawn will never play sounds...
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture

@@ -29,16 +29,16 @@ const float DEF_STACK_MIN_POS = 0.1f;
 //Change speed for interlude volume changes, measured in amount per second.
 const float INTERLUDE_GAIN_SPEED = 2.0f;
 
-//Change speed for a mix track's gain, measured in amount per second.
+//Change speed for a mix track's volume, measured in amount per second.
 const float MIX_TRACK_GAIN_SPEED = 1.0f;
 
-//Change speed for a playback's gain, measured in amount per second.
+//Change speed for a playback's volume, measured in amount per second.
 const float PLAYBACK_GAIN_SPEED = 3.0f;
 
 //Change speed for a playback's pan, measured in amount per second.
 const float PLAYBACK_PAN_SPEED = 8.0f;
 
-//Change speed of playback gain when un/pausing, measured in amount per second.
+//Change speed of playback volume when un/pausing, measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 
 //Distance to an audio source where it'll be considered close, i.e. it will
@@ -52,14 +52,14 @@ const float PLAYBACK_RANGE_FAR_GAIN = 450.0f;
 //fully left/right.
 const float PLAYBACK_RANGE_FAR_PAN = 300.0f;
 
-//Change speed of playback gain when stopping, measured in amount per second.
+//Change speed of playback volume when stopping, measured in amount per second.
 const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
 
-//Change speed for a song's gain, measured in amount per second.
+//Change speed for a song's volume, measured in amount per second.
 const float SONG_GAIN_SPEED = 1.0f;
 
-//Gain for when a song is softened, due to a game pause.
-const float SONG_SOFTENED_GAIN = 0.4f;
+//Volume for when a song is softened, due to a game pause.
+const float SONG_SOFTENED_VOLUME = 0.4f;
 
 }
 
@@ -358,20 +358,20 @@ bool AudioManager::emit(size_t sourceId) {
     playbackPtr->allegroSampleInstance = al_create_sample_instance(sample);
     if(!playbackPtr->allegroSampleInstance) return false;
     
-    playbackPtr->baseGain = sourcePtr->config.gain;
-    if(sourcePtr->config.gainDeviation != 0.0f) {
-        playbackPtr->baseGain +=
+    playbackPtr->baseVolume = sourcePtr->config.volume;
+    if(sourcePtr->config.volumeDeviation != 0.0f) {
+        playbackPtr->baseVolume +=
             game.rng.f(
-                -sourcePtr->config.gainDeviation,
-                sourcePtr->config.gainDeviation
+                -sourcePtr->config.volumeDeviation,
+                sourcePtr->config.volumeDeviation
             );
-        playbackPtr->baseGain =
-            std::clamp(playbackPtr->baseGain, 0.0f, 1.0f);
+        playbackPtr->baseVolume =
+            std::clamp(playbackPtr->baseVolume, 0.0f, 1.0f);
     }
     
     //Play.
-    updatePlaybackTargetGainAndPan(playbacks.size() - 1);
-    playbackPtr->gain = playbackPtr->targetGain;
+    updatePlaybackTargetVolAndPan(playbacks.size() - 1);
+    playbackPtr->volume = playbackPtr->targetVolume;
     playbackPtr->pan = playbackPtr->targetPan;
     
     ALLEGRO_MIXER* mixer = nullptr;
@@ -410,7 +410,7 @@ bool AudioManager::emit(size_t sourceId) {
     }
     speed = std::max(0.0f, speed);
     al_set_sample_instance_speed(playbackPtr->allegroSampleInstance, speed);
-    updatePlaybackGainAndPan(playbacks.size() - 1);
+    updatePlaybackVolumeAndPan(playbacks.size() - 1);
     
     al_set_sample_instance_position(
         playbackPtr->allegroSampleInstance,
@@ -447,7 +447,7 @@ SoundSource* AudioManager::getSource(size_t sourceId) {
 void AudioManager::handleInterludeEnd(bool instant) {
     inInterlude = false;
     if(instant) {
-        interludeGain = 1.0f;
+        interludeVolume = 1.0f;
         updateMixerVolumes();
     }
 }
@@ -462,7 +462,7 @@ void AudioManager::handleInterludeEnd(bool instant) {
 void AudioManager::handleInterludeStart(bool instant) {
     inInterlude = true;
     if(instant) {
-        interludeGain = 0.0f;
+        interludeVolume = 0.0f;
         updateMixerVolumes();
     }
 }
@@ -777,7 +777,7 @@ bool AudioManager::setCurrentSong(
                 startSongTrack(songPtr, m.second, fromStart, fadeIn, loop);
             }
         }
-        songPtr->gain = fadeIn ? 0.0f : 1.0f;
+        songPtr->volume = fadeIn ? 0.0f : 1.0f;
         songPtr->state = fadeIn ? SONG_STATE_STARTING : SONG_STATE_PLAYING;
     }
     }
@@ -943,15 +943,15 @@ void AudioManager::tick(float deltaT) {
             destroySoundPlayback(p);
             
         } else {
-            //Update target gain and pan, based on in-world position,
+            //Update target volume and pan, based on in-world position,
             //if applicable.
-            updatePlaybackTargetGainAndPan(p);
+            updatePlaybackTargetVolAndPan(p);
             
-            //Inch the gain and pan to the target values.
-            playbackPtr->gain =
+            //Inch the volume and pan to the target values.
+            playbackPtr->volume =
                 inchTowards(
-                    playbackPtr->gain,
-                    playbackPtr->targetGain,
+                    playbackPtr->volume,
+                    playbackPtr->targetVolume,
                     AUDIO::PLAYBACK_GAIN_SPEED * deltaT
                 );
             playbackPtr->pan =
@@ -963,10 +963,10 @@ void AudioManager::tick(float deltaT) {
                 
             //Pausing and unpausing.
             if(playbackPtr->state == SOUND_PLAYBACK_STATE_PAUSING) {
-                playbackPtr->stateGainMult -=
+                playbackPtr->stateVolumeMult -=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * deltaT;
-                if(playbackPtr->stateGainMult <= 0.0f) {
-                    playbackPtr->stateGainMult = 0.0f;
+                if(playbackPtr->stateVolumeMult <= 0.0f) {
+                    playbackPtr->stateVolumeMult = 0.0f;
                     playbackPtr->state = SOUND_PLAYBACK_STATE_PAUSED;
                     playbackPtr->prePausePos =
                         al_get_sample_instance_position(
@@ -978,25 +978,25 @@ void AudioManager::tick(float deltaT) {
                     );
                 }
             } else if(playbackPtr->state == SOUND_PLAYBACK_STATE_UNPAUSING) {
-                playbackPtr->stateGainMult +=
+                playbackPtr->stateVolumeMult +=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * deltaT;
-                if(playbackPtr->stateGainMult >= 1.0f) {
-                    playbackPtr->stateGainMult = 1.0f;
+                if(playbackPtr->stateVolumeMult >= 1.0f) {
+                    playbackPtr->stateVolumeMult = 1.0f;
                     playbackPtr->state = SOUND_PLAYBACK_STATE_PLAYING;
                 }
             }
             
             //Stopping.
             if(playbackPtr->state == SOUND_PLAYBACK_STATE_STOPPING) {
-                playbackPtr->stateGainMult -=
+                playbackPtr->stateVolumeMult -=
                     AUDIO::PLAYBACK_STOP_GAIN_SPEED * deltaT;
-                if(playbackPtr->stateGainMult <= 0.0f) {
+                if(playbackPtr->stateVolumeMult <= 0.0f) {
                     destroySoundPlayback(p);
                 }
             }
             
-            //Update the final gain and pan values.
-            updatePlaybackGainAndPan(p);
+            //Update the final volume and pan values.
+            updatePlaybackVolumeAndPan(p);
         }
     }
     
@@ -1028,14 +1028,14 @@ void AudioManager::tick(float deltaT) {
         
         switch(songPtr->state) {
         case SONG_STATE_STARTING: {
-            songPtr->gain =
+            songPtr->volume =
                 inchTowards(
-                    songPtr->gain,
+                    songPtr->volume,
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->gain);
-            if(songPtr->gain == 1.0f) {
+            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            if(songPtr->volume == 1.0f) {
                 songPtr->state = SONG_STATE_PLAYING;
             }
             break;
@@ -1043,14 +1043,14 @@ void AudioManager::tick(float deltaT) {
             //Nothing to do.
             break;
         } case SONG_STATE_SOFTENING: {
-            songPtr->gain =
+            songPtr->volume =
                 inchTowards(
-                    songPtr->gain,
-                    AUDIO::SONG_SOFTENED_GAIN,
+                    songPtr->volume,
+                    AUDIO::SONG_SOFTENED_VOLUME,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->gain);
-            if(songPtr->gain == AUDIO::SONG_SOFTENED_GAIN) {
+            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            if(songPtr->volume == AUDIO::SONG_SOFTENED_VOLUME) {
                 songPtr->state = SONG_STATE_SOFTENED;
             }
             break;
@@ -1058,26 +1058,26 @@ void AudioManager::tick(float deltaT) {
             //Nothing to do.
             break;
         } case SONG_STATE_UNSOFTENING: {
-            songPtr->gain =
+            songPtr->volume =
                 inchTowards(
-                    songPtr->gain,
+                    songPtr->volume,
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->gain);
-            if(songPtr->gain == 1.0f) {
+            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            if(songPtr->volume == 1.0f) {
                 songPtr->state = SONG_STATE_PLAYING;
             }
             break;
         } case SONG_STATE_STOPPING: {
-            songPtr->gain =
+            songPtr->volume =
                 inchTowards(
-                    songPtr->gain,
+                    songPtr->volume,
                     0.0f,
                     AUDIO::SONG_GAIN_SPEED * deltaT
                 );
-            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->gain);
-            if(songPtr->gain == 0.0f) {
+            al_set_audio_stream_gain(songPtr->mainTrack, songPtr->volume);
+            if(songPtr->volume == 0.0f) {
                 al_set_audio_stream_playing(songPtr->mainTrack, false);
                 al_detach_audio_stream(songPtr->mainTrack);
                 for(auto& m : songPtr->mixTracks) {
@@ -1115,7 +1115,7 @@ void AudioManager::tick(float deltaT) {
             if(trackIt == songPtr->mixTracks.end()) continue;
             
             al_set_audio_stream_gain(
-                trackIt->second, mixVolumes[m] * songPtr->gain
+                trackIt->second, mixVolumes[m] * songPtr->volume
             );
         }
         
@@ -1128,16 +1128,16 @@ void AudioManager::tick(float deltaT) {
     
     //Update the volume of the sound effect mixers, depending on the interlude
     //status.
-    if(inInterlude && interludeGain > 0.0f) {
-        interludeGain =
+    if(inInterlude && interludeVolume > 0.0f) {
+        interludeVolume =
             inchTowards(
-                interludeGain, 0.0f, -AUDIO::INTERLUDE_GAIN_SPEED * deltaT
+                interludeVolume, 0.0f, -AUDIO::INTERLUDE_GAIN_SPEED * deltaT
             );
         updateMixerVolumes();
-    } else if(!inInterlude && interludeGain < 1.0f) {
-        interludeGain =
+    } else if(!inInterlude && interludeVolume < 1.0f) {
+        interludeVolume =
             inchTowards(
-                interludeGain, 1.0f, AUDIO::INTERLUDE_GAIN_SPEED * deltaT
+                interludeVolume, 1.0f, AUDIO::INTERLUDE_GAIN_SPEED * deltaT
             );
         updateMixerVolumes();
     }
@@ -1145,23 +1145,23 @@ void AudioManager::tick(float deltaT) {
 
 
 /**
- * @brief Instantly updates a playback's current gain and pan, using its member
+ * @brief Instantly updates a playback's current volume and pan, using its member
  * variables. This also clamps the variables if needed.
  *
  * @param playbackIdx Index of the playback in the list.
  */
-void AudioManager::updatePlaybackGainAndPan(size_t playbackIdx) {
+void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
     if(playbackIdx >= playbacks.size()) return;
     SoundPlayback* playbackPtr = &playbacks[playbackIdx];
     if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
-    playbackPtr->gain = std::clamp(playbackPtr->gain, 0.0f, 1.0f);
-    float finalGain = playbackPtr->gain * playbackPtr->stateGainMult;
-    finalGain *= playbackPtr->baseGain;
-    finalGain = std::clamp(finalGain, 0.0f, 1.0f);
+    playbackPtr->volume = std::clamp(playbackPtr->volume, 0.0f, 1.0f);
+    float finalVolume = playbackPtr->volume * playbackPtr->stateVolumeMult;
+    finalVolume *= playbackPtr->baseVolume;
+    finalVolume = std::clamp(finalVolume, 0.0f, 1.0f);
     al_set_sample_instance_gain(
         playbackPtr->allegroSampleInstance,
-        finalGain
+        finalVolume
     );
     
     playbackPtr->pan = std::clamp(playbackPtr->pan, -1.0f, 1.0f);
@@ -1174,16 +1174,16 @@ void AudioManager::updatePlaybackGainAndPan(size_t playbackIdx) {
 
 
 /**
- * @brief Updates a playback's target gain and target pan, based on distance
+ * @brief Updates a playback's target volume and target pan, based on distance
  * from the camera.
  *
- * This won't update the gain and pan yet, but each audio
- * manager tick will be responsible for bringing the gain and pan to these
+ * This won't update the volume and pan yet, but each audio
+ * manager tick will be responsible for bringing the volume and pan to these
  * values smoothly over time.
  *
  * @param playbackIdx Index of the playback in the list.
  */
-void AudioManager::updatePlaybackTargetGainAndPan(size_t playbackIdx) {
+void AudioManager::updatePlaybackTargetVolAndPan(size_t playbackIdx) {
     if(playbackIdx >= playbacks.size()) return;
     SoundPlayback* playbackPtr = &playbacks[playbackIdx];
     if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
@@ -1204,15 +1204,15 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playbackIdx) {
     float d = Distance(camCenter, sourcePtr->pos).toFloat();
     Point delta = sourcePtr->pos - camCenter;
     
-    //Set the gain.
-    float gain =
+    //Set the volume.
+    float volume =
         interpolateNumber(
             fabs(d),
             AUDIO::PLAYBACK_RANGE_CLOSE, AUDIO::PLAYBACK_RANGE_FAR_GAIN,
             1.0f, 0.0f
         );
-    gain = std::clamp(gain, 0.0f, 1.0f);
-    playbackPtr->targetGain = gain;
+    volume = std::clamp(volume, 0.0f, 1.0f);
+    playbackPtr->targetVolume = volume;
     
     //Set the pan.
     float panAbs =
@@ -1242,19 +1242,19 @@ void AudioManager::updateMixerVolumes() {
         std::clamp(baseAmbianceSoundMixerVolume, 0.0f, 1.0f);
     baseUiSoundMixerVolume =
         std::clamp(baseUiSoundMixerVolume, 0.0f, 1.0f);
-    interludeGain = std::clamp(interludeGain, 0.0f, 1.0f);
+    interludeVolume = std::clamp(interludeVolume, 0.0f, 1.0f);
     
     al_set_mixer_gain(
         masterMixer, baseMasterMixerVolume
     );
     al_set_mixer_gain(
-        gameplaySoundMixer, baseGameplaySoundMixerVolume * interludeGain
+        gameplaySoundMixer, baseGameplaySoundMixerVolume * interludeVolume
     );
     al_set_mixer_gain(
         musicMixer, baseMusicMixerVolume
     );
     al_set_mixer_gain(
-        ambianceSoundMixer, baseAmbianceSoundMixerVolume * interludeGain
+        ambianceSoundMixer, baseAmbianceSoundMixerVolume * interludeVolume
     );
     al_set_mixer_gain(
         uiSoundMixer, baseUiSoundMixerVolume

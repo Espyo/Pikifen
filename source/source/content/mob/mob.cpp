@@ -1475,7 +1475,7 @@ void Mob::doAttackEffects(
         //Play the sound.
         game.audio.createPosSoundSource(
             game.sysContent.sndAttack,
-            pos, false, { .gain = 0.6f }
+            pos, false, { .volume = 0.6f }
         );
         
         //Damage squash and stretch animation.
@@ -1486,7 +1486,7 @@ void Mob::doAttackEffects(
         //Play the sound.
         game.audio.createPosSoundSource(
             game.sysContent.sndDing,
-            pos, false, { .gain = 0.3f }
+            pos, false, { .volume = 0.3f }
         );
     }
 }

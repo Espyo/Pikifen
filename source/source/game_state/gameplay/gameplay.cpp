@@ -300,8 +300,8 @@ void GameplayMessageBox::tick(float deltaT) {
                     game.audio.createUiSoundsource(
                     game.sysContent.sndGameplayMsgChar, {
                         .stackMinPos = 0.05f,
-                        .gain = 0.5f,
-                        .gainDeviation = 0.1f,
+                        .volume = 0.5f,
+                        .volumeDeviation = 0.1f,
                         .speedDeviation = 0.1f,
                     }
                     );

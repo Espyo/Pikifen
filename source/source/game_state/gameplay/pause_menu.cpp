@@ -1592,7 +1592,7 @@ void PauseMenu::handlePlayerAction(const PlayerAction& action) {
         case PLAYER_ACTION_TYPE_RADAR: {
             if(action.value >= 0.5f) {
                 game.audio.createUiSoundsource(
-                    game.sysContent.sndMenuBack, { .gain = 0.75f }
+                    game.sysContent.sndMenuBack, { .volume = 0.75f }
                 );
                 startClosing(&radarGui);
                 handledByRadar = true;
@@ -1677,7 +1677,7 @@ void PauseMenu::handlePlayerAction(const PlayerAction& action) {
                     action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT
                 );
                 game.audio.createUiSoundsource(
-                    game.sysContent.sndMenuActivate, { .gain = 0.75f }
+                    game.sysContent.sndMenuActivate, { .volume = 0.75f }
                 );
             }
             

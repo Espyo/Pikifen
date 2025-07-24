@@ -62,7 +62,7 @@ extern const float PLAYBACK_RANGE_FAR_GAIN;
 extern const float PLAYBACK_RANGE_FAR_PAN;
 extern const float PLAYBACK_STOP_GAIN_SPEED;
 extern const float SONG_GAIN_SPEED;
-extern const float SONG_SOFTENED_GAIN;
+extern const float SONG_SOFTENED_VOLUME;
 }
 
 
@@ -199,14 +199,14 @@ struct SoundSourceConfig {
     //Minimum time of other playbacks before stacking. Avoid 0 (always stack).
     float stackMinPos = AUDIO::DEF_STACK_MIN_POS;
     
-    //Gain at which it plays. 0 to 1.
-    float gain = 1.0f;
+    //Volume at which it plays. 0 to 1.
+    float volume = 1.0f;
     
     //Speed at which it plays. Also affects pitch.
     float speed = 1.0f;
     
-    //Randomness to the gain every time it emits the sound. 0 for none.
-    float gainDeviation = 0.0f;
+    //Randomness to the volume every time it emits the sound. 0 for none.
+    float volumeDeviation = 0.0f;
     
     //Randomness to the speed every time it emits the sound. 0 for none.
     float speedDeviation = 0.0f;
@@ -271,14 +271,14 @@ struct SoundPlayback {
     //State.
     SOUND_PLAYBACK_STATE state = SOUND_PLAYBACK_STATE_PLAYING;
     
-    //Current gain.
-    float gain = 1.0f;
+    //Current volume.
+    float volume = 1.0f;
     
-    //Gain that it wants to be at.
-    float targetGain = 1.0f;
+    //Volume that it wants to be at.
+    float targetVolume = 1.0f;
     
-    //Base gain, before any position or fade-based operations.
-    float baseGain = 1.0f;
+    //Base volume, before any position or fade-based operations.
+    float baseVolume = 1.0f;
     
     //Current pan.
     float pan = 0.0f;
@@ -286,8 +286,8 @@ struct SoundPlayback {
     //Pan that it wants to be at.
     float targetPan = 0.0f;
     
-    //Multiply the gain by this much, due to the playback's state.
-    float stateGainMult = 1.0f;
+    //Multiply the volume by this much, due to the playback's state.
+    float stateVolumeMult = 1.0f;
     
     //Position before pausing.
     unsigned int prePausePos = 0;
@@ -314,8 +314,8 @@ struct Song : public Content {
     //Other tracks to mix in with the main track.
     map<MIX_TRACK_TYPE, ALLEGRO_AUDIO_STREAM*> mixTracks;
     
-    //Current gain.
-    float gain = 0.0f;
+    //Current volume.
+    float volume = 0.0f;
     
     //Point it was at when it stopped, if any.
     float stopPoint = 0.0f;
@@ -451,9 +451,9 @@ private:
     //Are we currently in an interlude?
     bool inInterlude = false;
     
-    //Current sound effect mixer gain multiplier,
+    //Current sound effect mixer volume multiplier,
     //based on whether we're in an interlude, 0 to 1.
-    float interludeGain = 0.0f;
+    float interludeVolume = 0.0f;
     
     //Top-left camera coordinates.
     Point camTL;
@@ -477,7 +477,7 @@ private:
         bool fromStart, bool fadeIn, bool loop
     );
     bool stopSoundPlayback(size_t playbackIdx);
-    void updatePlaybackGainAndPan(size_t playbackIdx);
-    void updatePlaybackTargetGainAndPan(size_t playbackIdx);
+    void updatePlaybackVolumeAndPan(size_t playbackIdx);
+    void updatePlaybackTargetVolAndPan(size_t playbackIdx);
     
 };

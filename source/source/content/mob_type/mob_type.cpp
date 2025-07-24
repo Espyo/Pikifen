@@ -665,12 +665,13 @@ void MobType::loadFromDataNode(
         sRS.set("loop", loopBool);
         sRS.set("volume", volumeFloat);
         sRS.set("speed", speedFloat);
-        sRS.set("volume_deviation", newSound.config.gainDeviation);
+        sRS.set("volume_deviation", newSound.config.volumeDeviation);
         sRS.set("speed_deviation", newSound.config.speedDeviation);
         sRS.set("random_chance", newSound.config.randomChance);
         sRS.set("random_delay", newSound.config.randomDelay);
         
-        newSound.sample = game.content.sounds.list.get(soundINameStr, soundINameNode);
+        newSound.sample =
+            game.content.sounds.list.get(soundINameStr, soundINameNode);
         
         if(typeNode) {
             if(typeStr == "gameplay_global") {
@@ -710,13 +711,13 @@ void MobType::loadFromDataNode(
             enableFlag(newSound.config.flags, SOUND_FLAG_LOOP);
         }
         
-        newSound.config.gain = volumeFloat / 100.0f;
-        newSound.config.gain = std::clamp(newSound.config.gain, 0.0f, 1.0f);
+        newSound.config.volume = volumeFloat / 100.0f;
+        newSound.config.volume = std::clamp(newSound.config.volume, 0.0f, 1.0f);
         
         newSound.config.speed = speedFloat / 100.0f;
         newSound.config.speed = std::max(0.0f, newSound.config.speed);
         
-        newSound.config.gainDeviation /= 100.0f;
+        newSound.config.volumeDeviation /= 100.0f;
         newSound.config.speedDeviation /= 100.0f;
         
         sounds.push_back(newSound);

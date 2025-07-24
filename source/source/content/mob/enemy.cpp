@@ -141,7 +141,7 @@ void Enemy::finishDyingClassSpecifics() {
         
         game.audio.createPosSoundSource(
             game.sysContent.sndEnemySoul, pos, false,
-        { .gain = 0.2f, .speed = soulPitch, .speedDeviation = 0.02f }
+        { .volume = 0.2f, .speed = soulPitch, .speedDeviation = 0.02f }
         );
     }
 }
