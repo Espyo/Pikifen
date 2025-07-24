@@ -2566,7 +2566,8 @@ void PikminFsm::circleOpponent(Mob* m, void* info1, void* info2) {
     );
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
 }
 
@@ -3177,7 +3178,8 @@ void PikminFsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
     
 }
@@ -3228,7 +3230,8 @@ void PikminFsm::goToGroupTask(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
     
     pikPtr->fsm.setState(PIKMIN_STATE_GOING_TO_GROUP_TASK);
@@ -3276,7 +3279,8 @@ void PikminFsm::goToOnion(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
 }
 
@@ -3334,7 +3338,8 @@ void PikminFsm::goToOpponent(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
     
     m->fsm.setState(PIKMIN_STATE_GOING_TO_OPPONENT);
@@ -3386,7 +3391,8 @@ void PikminFsm::goToTool(Mob* m, void* info1, void* info2) {
     pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
     
     pikPtr->fsm.setState(PIKMIN_STATE_GOING_TO_TOOL);
@@ -4208,7 +4214,8 @@ void PikminFsm::startPanicking(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     PikminFsm::panicNewChase(m, info1, info2);
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
+        true, m->type->moveSpeed
     );
     m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SUFFERING]);
 }

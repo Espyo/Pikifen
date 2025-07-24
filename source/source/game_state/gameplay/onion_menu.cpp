@@ -578,90 +578,6 @@ OnionMenu::~OnionMenu() {
 
 
 /**
- * @brief Transfers some Pikmin, if possible. This moves either one or ten
- * depending on changeTen, moves from either one type or from each type
- * depending on selectAll, and moves to either direction.
- *
- * @param toGroup Whether the transfer is to the group or to the Onion.
- * @param typeIdx Index of the Onion's Pikmin type, if applicable.
- * @return Success if any transfer succeeded, otherwise the failure reason.
- */
-ONION_TRANSFER_RESULT OnionMenu::transfer(bool toGroup, size_t typeIdx) {
-    bool success = false;
-    ONION_TRANSFER_RESULT latestError = ONION_TRANSFER_RESULT_OK;
-    const size_t amountToTransfer = changeTen ? 10 : 1;
-    const size_t firstTypeIdx = selectAll ? 0 : typeIdx;
-    const size_t lastTypeIdx = selectAll ? types.size() - 1 : typeIdx;
-    
-    for(size_t p = 0; p < amountToTransfer; p++) {
-        for(size_t t = firstTypeIdx; t <= lastTypeIdx; t++) {
-        
-            size_t onWindowIdx = types[t].onWindowIdx;
-            ONION_TRANSFER_RESULT oneResult =
-                toGroup ? canAddToGroup(t) : canAddToOnion(t);
-                
-            switch(oneResult) {
-            case ONION_TRANSFER_RESULT_OK: {
-                if(toGroup) {
-                    types[t].delta++;
-                    if(onWindowIdx != INVALID) {
-                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
-                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                        );
-                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
-                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                        );
-                    }
-                    fieldAmountText->startJuiceAnimation(
-                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                    );
-                } else {
-                    types[t].delta--;
-                    size_t onWindowIdx = types[t].onWindowIdx;
-                    if(onWindowIdx != INVALID) {
-                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
-                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                        );
-                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
-                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                        );
-                    }
-                    fieldAmountText->startJuiceAnimation(
-                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                    );
-                }
-                success = true;
-                break;
-                
-            } case ONION_TRANSFER_RESULT_NONE_IN_ONION: {
-                if(onWindowIdx != INVALID) {
-                    makeGuiItemRed(onionAmountItems[onWindowIdx]);
-                }
-                latestError = oneResult;
-                break;
-                
-            } case ONION_TRANSFER_RESULT_NONE_IN_GROUP: {
-                if(onWindowIdx != INVALID) {
-                    makeGuiItemRed(groupAmountItems[onWindowIdx]);
-                }
-                latestError = oneResult;
-                break;
-                
-            } case ONION_TRANSFER_RESULT_FIELD_FULL: {
-                makeGuiItemRed(fieldAmountText);
-                latestError = oneResult;
-                break;
-                
-            }
-            }
-        }
-    }
-    
-    return success ? ONION_TRANSFER_RESULT_OK : latestError;
-}
-
-
-/**
  * @brief Returns whether it's possible to add one Pikmin from the
  * Onion to the group.
  *
@@ -935,6 +851,90 @@ void OnionMenu::toggleSelectAll() {
     selectAll = !selectAll;
     
     update();
+}
+
+
+/**
+ * @brief Transfers some Pikmin, if possible. This moves either one or ten
+ * depending on changeTen, moves from either one type or from each type
+ * depending on selectAll, and moves to either direction.
+ *
+ * @param toGroup Whether the transfer is to the group or to the Onion.
+ * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ * @return Success if any transfer succeeded, otherwise the failure reason.
+ */
+ONION_TRANSFER_RESULT OnionMenu::transfer(bool toGroup, size_t typeIdx) {
+    bool success = false;
+    ONION_TRANSFER_RESULT latestError = ONION_TRANSFER_RESULT_OK;
+    const size_t amountToTransfer = changeTen ? 10 : 1;
+    const size_t firstTypeIdx = selectAll ? 0 : typeIdx;
+    const size_t lastTypeIdx = selectAll ? types.size() - 1 : typeIdx;
+    
+    for(size_t p = 0; p < amountToTransfer; p++) {
+        for(size_t t = firstTypeIdx; t <= lastTypeIdx; t++) {
+        
+            size_t onWindowIdx = types[t].onWindowIdx;
+            ONION_TRANSFER_RESULT oneResult =
+                toGroup ? canAddToGroup(t) : canAddToOnion(t);
+                
+            switch(oneResult) {
+            case ONION_TRANSFER_RESULT_OK: {
+                if(toGroup) {
+                    types[t].delta++;
+                    if(onWindowIdx != INVALID) {
+                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                    }
+                    fieldAmountText->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                } else {
+                    types[t].delta--;
+                    size_t onWindowIdx = types[t].onWindowIdx;
+                    if(onWindowIdx != INVALID) {
+                        onionAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                        groupAmountItems[onWindowIdx]->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                        );
+                    }
+                    fieldAmountText->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                }
+                success = true;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_NONE_IN_ONION: {
+                if(onWindowIdx != INVALID) {
+                    makeGuiItemRed(onionAmountItems[onWindowIdx]);
+                }
+                latestError = oneResult;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_NONE_IN_GROUP: {
+                if(onWindowIdx != INVALID) {
+                    makeGuiItemRed(groupAmountItems[onWindowIdx]);
+                }
+                latestError = oneResult;
+                break;
+                
+            } case ONION_TRANSFER_RESULT_FIELD_FULL: {
+                makeGuiItemRed(fieldAmountText);
+                latestError = oneResult;
+                break;
+                
+            }
+            }
+        }
+    }
+    
+    return success ? ONION_TRANSFER_RESULT_OK : latestError;
 }
 
 

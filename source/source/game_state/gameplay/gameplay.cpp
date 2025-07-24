@@ -167,9 +167,9 @@ void BigMessageInfo::set(BIG_MESSAGE id) {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void BigMessageInfo::tick(float delta_t) {
+void BigMessageInfo::tick(float deltaT) {
     if(curId != BIG_MESSAGE_NONE) {
-        curTime += delta_t;
+        curTime += deltaT;
     }
 }
 
@@ -1785,8 +1785,8 @@ void InterludeInfo::set(INTERLUDE id, bool instantVolumeChange) {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void InterludeInfo::tick(float delta_t) {
+void InterludeInfo::tick(float deltaT) {
     if(curId != INTERLUDE_NONE) {
-        curTime += delta_t;
+        curTime += deltaT;
     }
 }

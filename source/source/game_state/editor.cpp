@@ -3344,6 +3344,17 @@ float Editor::ChangesManager::getUnsavedTimeDelta() const {
 
 
 /**
+ * @brief Returns the current unsaved changes warning action callback.
+ *
+ * @return The callback.
+ */
+const std::function<void()>&
+Editor::ChangesManager::getUnsavedWarningActionCallback() const {
+    return unsavedWarningActionCallback;
+}
+
+
+/**
  * @brief Returns the current unsaved changes warning long action text.
  *
  * @return The text.
@@ -3359,20 +3370,8 @@ const {
  *
  * @return The text.
  */
-const string& Editor::ChangesManager::getUnsavedWarningActionShort()
-const {
+const string& Editor::ChangesManager::getUnsavedWarningActionShort() const {
     return unsavedWarningActionShort;
-}
-
-
-/**
- * @brief Returns the current unsaved changes warning action callback.
- *
- * @return The callback.
- */
-const std::function<void()>&
-Editor::ChangesManager::getUnsavedWarningActionCallback() const {
-    return unsavedWarningActionCallback;
 }
 
 

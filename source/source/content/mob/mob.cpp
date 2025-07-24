@@ -658,6 +658,77 @@ bool Mob::calculateAttackBasics(
 
 
 /**
+ * @brief Calculates how much damage an attack will cause.
+ *
+ * @param victim The mob that'll take the damage.
+ * @param attackH Hitbox used for the attack.
+ * @param victimH Victim's hitbox that got hit.
+ * @param offenseMultiplier Pre-calculated attack offense multiplier.
+ * @param defenseMultiplier Pre-calculated victim defense multiplier.
+ * @param outDamage Return the calculated damage here.
+ * @return Whether the attack will hit.
+ * Returns true even if it will end up causing zero damage.
+ * Returns false if it cannot hit (e.g. the victim hitbox is not valid).
+ */
+bool Mob::calculateAttackDamage(
+    Mob* victim, Hitbox* attackH, const Hitbox* victimH,
+    float offenseMultiplier, float defenseMultiplier, float* outDamage
+) const {
+    if(victimH->value == 0.0f || defenseMultiplier == LARGE_FLOAT) {
+        //Invulnerable!
+        *outDamage = 0;
+        return true;
+    }
+    
+    float attackStrength = attackH ? attackH->value : 1.0f;
+    
+    if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
+        //It's easier to calculate the maturity attack boost here.
+        Pikmin* pikPtr = (Pikmin*) this;
+        attackStrength *=
+            1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
+    }
+    
+    *outDamage =
+        attackStrength * offenseMultiplier * (1.0f / defenseMultiplier);
+    return true;
+}
+
+
+/**
+ * @brief Calculates how much knockback an attack will cause.
+ *
+ * @param victim The mob that'll take the damage.
+ * @param attackH The hitbox of the attacker mob, if any.
+ * @param victimH The hitbox of the victim mob, if any.
+ * @param offenseMultiplier Pre-calculated attack offense multiplier.
+ * @param defenseMultiplier Pre-calculated victim defense multiplier.
+ * @param outKbStrength The variable to return the knockback amount to.
+ * @param outKbAngle The variable to return the angle of the knockback to.
+ */
+void Mob::calculateAttackKnockback(
+    const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
+    float offenseMultiplier, float defenseMultiplier,
+    float* outKbStrength, float* outKbAngle
+) const {
+    if(attackH) {
+        *outKbStrength = attackH->knockback;
+        *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+        if(attackH->knockbackOutward) {
+            *outKbAngle =
+                getAngle(attackH->getCurPos(pos, angle), victim->pos);
+        } else {
+            *outKbAngle =
+                angle + attackH->knockbackAngle;
+        }
+    } else {
+        *outKbStrength = 0;
+        *outKbAngle = 0;
+    }
+}
+
+
+/**
  * @brief Calculates the final carrying target, and the final carrying position,
  * given the sort of carry destination, what Pikmin are holding on, etc.
  *
@@ -886,77 +957,6 @@ Ship* Mob::calculateCarryingShip() const {
         }
     }
     return closestShip;
-}
-
-
-/**
- * @brief Calculates how much damage an attack will cause.
- *
- * @param victim The mob that'll take the damage.
- * @param attackH Hitbox used for the attack.
- * @param victimH Victim's hitbox that got hit.
- * @param offenseMultiplier Pre-calculated attack offense multiplier.
- * @param defenseMultiplier Pre-calculated victim defense multiplier.
- * @param outDamage Return the calculated damage here.
- * @return Whether the attack will hit.
- * Returns true even if it will end up causing zero damage.
- * Returns false if it cannot hit (e.g. the victim hitbox is not valid).
- */
-bool Mob::calculateAttackDamage(
-    Mob* victim, Hitbox* attackH, const Hitbox* victimH,
-    float offenseMultiplier, float defenseMultiplier, float* outDamage
-) const {
-    if(victimH->value == 0.0f || defenseMultiplier == LARGE_FLOAT) {
-        //Invulnerable!
-        *outDamage = 0;
-        return true;
-    }
-    
-    float attackStrength = attackH ? attackH->value : 1.0f;
-    
-    if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
-        //It's easier to calculate the maturity attack boost here.
-        Pikmin* pikPtr = (Pikmin*) this;
-        attackStrength *=
-            1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
-    }
-    
-    *outDamage =
-        attackStrength * offenseMultiplier * (1.0f / defenseMultiplier);
-    return true;
-}
-
-
-/**
- * @brief Calculates how much knockback an attack will cause.
- *
- * @param victim The mob that'll take the damage.
- * @param attackH The hitbox of the attacker mob, if any.
- * @param victimH The hitbox of the victim mob, if any.
- * @param offenseMultiplier Pre-calculated attack offense multiplier.
- * @param defenseMultiplier Pre-calculated victim defense multiplier.
- * @param outKbStrength The variable to return the knockback amount to.
- * @param outKbAngle The variable to return the angle of the knockback to.
- */
-void Mob::calculateAttackKnockback(
-    const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
-    float offenseMultiplier, float defenseMultiplier,
-    float* outKbStrength, float* outKbAngle
-) const {
-    if(attackH) {
-        *outKbStrength = attackH->knockback;
-        *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
-        if(attackH->knockbackOutward) {
-            *outKbAngle =
-                getAngle(attackH->getCurPos(pos, angle), victim->pos);
-        } else {
-            *outKbAngle =
-                angle + attackH->knockbackAngle;
-        }
-    } else {
-        *outKbStrength = 0;
-        *outKbAngle = 0;
-    }
 }
 
 

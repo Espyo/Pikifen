@@ -24,17 +24,17 @@
 
 namespace ENEMY {
 
-//Maximum diameter an enemy's soul can be.
-const float SOUL_MAX_SIZE = 128;
-
-//Minimum diameter an enemy's soul can be.
-const float SOUL_MIN_SIZE = 16;
-
 //Maximum pitch an enemy's soul sound can have.
 const float SOUL_MAX_PITCH = 1.1f;
 
+//Maximum diameter an enemy's soul can be.
+const float SOUL_MAX_SIZE = 128;
+
 //Minimum pitch an enemy's soul sound can have.
 const float SOUL_MIN_PITCH = 0.85f;
+
+//Minimum diameter an enemy's soul can be.
+const float SOUL_MIN_SIZE = 16;
 
 //Normally, the soul's diameter is the enemy's. Multiply the soul by this.
 const float SOUL_SIZE_MULT = 0.7;

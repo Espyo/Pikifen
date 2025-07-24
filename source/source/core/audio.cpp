@@ -38,7 +38,8 @@ const float PLAYBACK_GAIN_SPEED = 3.0f;
 //Change speed for a playback's pan, measured in amount per second.
 const float PLAYBACK_PAN_SPEED = 8.0f;
 
-//Change speed of playback volume when un/pausing, measured in amount per second.
+//Change speed of playback volume when un/pausing,
+//measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 
 //Distance to an audio source where it'll be considered close, i.e. it will
@@ -1145,35 +1146,6 @@ void AudioManager::tick(float deltaT) {
 
 
 /**
- * @brief Instantly updates a playback's current volume and pan, using its member
- * variables. This also clamps the variables if needed.
- *
- * @param playbackIdx Index of the playback in the list.
- */
-void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
-    if(playbackIdx >= playbacks.size()) return;
-    SoundPlayback* playbackPtr = &playbacks[playbackIdx];
-    if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
-    
-    playbackPtr->volume = std::clamp(playbackPtr->volume, 0.0f, 1.0f);
-    float finalVolume = playbackPtr->volume * playbackPtr->stateVolumeMult;
-    finalVolume *= playbackPtr->baseVolume;
-    finalVolume = std::clamp(finalVolume, 0.0f, 1.0f);
-    al_set_sample_instance_gain(
-        playbackPtr->allegroSampleInstance,
-        finalVolume
-    );
-    
-    playbackPtr->pan = std::clamp(playbackPtr->pan, -1.0f, 1.0f);
-    
-    al_set_sample_instance_pan(
-        playbackPtr->allegroSampleInstance,
-        playbackPtr->pan
-    );
-}
-
-
-/**
  * @brief Updates a playback's target volume and target pan, based on distance
  * from the camera.
  *
@@ -1224,6 +1196,35 @@ void AudioManager::updatePlaybackTargetVolAndPan(size_t playbackIdx) {
     panAbs = std::clamp(panAbs, 0.0f, 1.0f);
     float pan = delta.x > 0.0f ? panAbs : -panAbs;
     playbackPtr->targetPan = pan;
+}
+
+
+/**
+ * @brief Instantly updates a playback's current volume and pan, using its
+ * member variables. This also clamps the variables if needed.
+ *
+ * @param playbackIdx Index of the playback in the list.
+ */
+void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
+    if(playbackIdx >= playbacks.size()) return;
+    SoundPlayback* playbackPtr = &playbacks[playbackIdx];
+    if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
+    
+    playbackPtr->volume = std::clamp(playbackPtr->volume, 0.0f, 1.0f);
+    float finalVolume = playbackPtr->volume * playbackPtr->stateVolumeMult;
+    finalVolume *= playbackPtr->baseVolume;
+    finalVolume = std::clamp(finalVolume, 0.0f, 1.0f);
+    al_set_sample_instance_gain(
+        playbackPtr->allegroSampleInstance,
+        finalVolume
+    );
+    
+    playbackPtr->pan = std::clamp(playbackPtr->pan, -1.0f, 1.0f);
+    
+    al_set_sample_instance_pan(
+        playbackPtr->allegroSampleInstance,
+        playbackPtr->pan
+    );
 }
 
 

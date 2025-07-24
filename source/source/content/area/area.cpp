@@ -2106,6 +2106,7 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
  * @param type The mob type.
  * @param angle Angle it is facing.
  * @param vars String representation of the script vars.
+ * @param boss Whether it is a boss encounter.
  */
 MobGen::MobGen(
     const Point& pos, MobType* type, float angle, const string& vars,
