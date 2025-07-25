@@ -2,7 +2,7 @@ name=Yellow Wollyhop animations
 description=Animations for the Yellow Wollyhop.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 animations{
 	croaking{
 		frames{
@@ -439,7 +439,7 @@ sprites{
 				height=60.0000
 				radius=48.0000
 				type=1
-				value=40.0000
+				value=35.0000
 				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
@@ -464,7 +464,7 @@ sprites{
 				height=60.0000
 				radius=48.0000
 				type=1
-				value=40.0000
+				value=35.0000
 				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
@@ -489,7 +489,7 @@ sprites{
 				height=60.0000
 				radius=48.0000
 				type=1
-				value=40.0000
+				value=35.0000
 				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
@@ -514,7 +514,7 @@ sprites{
 				height=60.0000
 				radius=48.0000
 				type=1
-				value=40.0000
+				value=35.0000
 				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
@@ -724,7 +724,7 @@ sprites{
 				height=100.0000
 				radius=49.0000
 				type=1
-				value=20.0000
+				value=5.0000
 				knockback_outward=true
 				knockback=0.4000
 				wither_chance=30

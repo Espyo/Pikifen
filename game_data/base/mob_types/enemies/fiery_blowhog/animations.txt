@@ -220,7 +220,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire2{
@@ -228,7 +228,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire3{
@@ -236,7 +236,7 @@ sprites{
 				height=130.0000
 				radius=18.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 		}
@@ -260,7 +260,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire2{
@@ -268,7 +268,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire3{
@@ -276,7 +276,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 		}
@@ -300,7 +300,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire2{
@@ -308,7 +308,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire3{
@@ -316,7 +316,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 		}
@@ -340,7 +340,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire2{
@@ -348,7 +348,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire3{
@@ -356,7 +356,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 		}
@@ -388,7 +388,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			fire3{
@@ -396,7 +396,7 @@ sprites{
 				height=130.0000
 				radius=30.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 		}
@@ -523,7 +523,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -561,7 +561,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -599,7 +599,7 @@ sprites{
 				height=120.0000
 				radius=50.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback=3.0000
 				wither_chance=5
 			}

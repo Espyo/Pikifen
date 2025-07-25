@@ -205,7 +205,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -223,7 +223,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -241,7 +241,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -259,7 +259,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -277,7 +277,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -302,7 +302,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -320,7 +320,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -338,7 +338,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -356,7 +356,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -374,7 +374,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -399,7 +399,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -417,7 +417,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -435,7 +435,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -453,7 +453,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -471,7 +471,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -497,7 +497,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -515,7 +515,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -533,7 +533,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -551,7 +551,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -569,7 +569,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -595,7 +595,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -613,7 +613,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -631,7 +631,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -649,7 +649,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -667,7 +667,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -692,7 +692,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -710,7 +710,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -728,7 +728,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -746,7 +746,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -764,7 +764,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -789,7 +789,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -807,7 +807,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -825,7 +825,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -843,7 +843,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -861,7 +861,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -886,7 +886,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -904,7 +904,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -922,7 +922,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -940,7 +940,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -958,7 +958,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -984,7 +984,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1002,7 +1002,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1020,7 +1020,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1038,7 +1038,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1056,7 +1056,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1082,7 +1082,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1100,7 +1100,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1118,7 +1118,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1136,7 +1136,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1154,7 +1154,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1179,7 +1179,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1197,7 +1197,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1215,7 +1215,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1233,7 +1233,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1251,7 +1251,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1276,7 +1276,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1294,7 +1294,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1312,7 +1312,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1330,7 +1330,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1348,7 +1348,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1373,7 +1373,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1391,7 +1391,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1409,7 +1409,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1427,7 +1427,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1445,7 +1445,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1471,7 +1471,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1489,7 +1489,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1507,7 +1507,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1525,7 +1525,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1543,7 +1543,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1569,7 +1569,7 @@ sprites{
 				height=0.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1587,7 +1587,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1605,7 +1605,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1623,7 +1623,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000
@@ -1641,7 +1641,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				hazard=electricity_stunning
 				knockback_outward=true
 				knockback=1.0000

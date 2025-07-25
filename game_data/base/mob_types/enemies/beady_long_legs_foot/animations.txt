@@ -176,7 +176,7 @@ sprites{
 				height=64.0000
 				radius=40.0000
 				type=1
-				value=60.0000
+				value=35.0000
 				hazard=crush
 				knockback_outward=true
 				knockback=0.5000

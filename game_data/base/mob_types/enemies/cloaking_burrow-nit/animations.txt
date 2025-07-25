@@ -516,7 +516,7 @@ sprites{
 				height=130.0000
 				radius=12.0000
 				type=1
-				value=30.0000
+				value=15.0000
 				hazard=stab
 				knockback=1.0000
 			}
@@ -525,7 +525,7 @@ sprites{
 				height=130.0000
 				radius=12.0000
 				type=1
-				value=30.0000
+				value=15.0000
 				knockback=1.0000
 			}
 		}
@@ -556,7 +556,7 @@ sprites{
 				height=130.0000
 				radius=24.0000
 				type=1
-				value=30.0000
+				value=15.0000
 				hazard=stab
 				knockback=1.0000
 			}
@@ -565,7 +565,7 @@ sprites{
 				height=130.0000
 				radius=24.0000
 				type=1
-				value=30.0000
+				value=15.0000
 				knockback=1.0000
 			}
 		}
@@ -1417,7 +1417,7 @@ sprites{
 				height=100.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=5
@@ -1427,7 +1427,7 @@ sprites{
 				height=100.0000
 				radius=34.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=5
@@ -1460,7 +1460,7 @@ sprites{
 				height=100.0000
 				radius=28.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=5
@@ -1470,7 +1470,7 @@ sprites{
 				height=100.0000
 				radius=34.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=5

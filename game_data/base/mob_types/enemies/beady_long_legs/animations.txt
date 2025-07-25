@@ -1207,7 +1207,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1253,7 +1253,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1299,7 +1299,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1344,7 +1344,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1390,7 +1390,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1436,7 +1436,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50
@@ -1482,7 +1482,7 @@ sprites{
 				height=140.0000
 				radius=71.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=50

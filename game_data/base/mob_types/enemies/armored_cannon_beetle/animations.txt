@@ -882,7 +882,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{
@@ -1401,7 +1401,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{
@@ -1440,7 +1440,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{
@@ -1480,7 +1480,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{
@@ -1520,7 +1520,7 @@ sprites{
 				height=100.0000
 				radius=110.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{
@@ -1595,7 +1595,7 @@ sprites{
 				height=100.0000
 				radius=100.0000
 				type=1
-				value=10.0000
+				value=5.0000
 				hazard=fire
 			}
 			blowhole{

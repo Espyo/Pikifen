@@ -294,7 +294,7 @@ sprites{
 				height=64.0000
 				radius=16.0000
 				type=1
-				value=20.0000
+				value=15.0000
 			}
 		}
 	}
@@ -317,7 +317,7 @@ sprites{
 				height=64.0000
 				radius=16.0000
 				type=1
-				value=20.0000
+				value=15.0000
 			}
 		}
 	}
@@ -883,7 +883,7 @@ sprites{
 				height=64.0000
 				radius=30.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=1.0000
 				wither_chance=5
@@ -909,7 +909,7 @@ sprites{
 				height=64.0000
 				radius=30.0000
 				type=1
-				value=0.0000
+				value=2.0000
 				knockback_outward=true
 				knockback_angle=4.7100
 				knockback=1.0000

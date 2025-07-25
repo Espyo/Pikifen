@@ -1021,7 +1021,7 @@ sprites{
 				height=200.0000
 				radius=60.5700
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1031,7 +1031,7 @@ sprites{
 				height=200.0000
 				radius=36.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1063,7 +1063,7 @@ sprites{
 				height=200.0000
 				radius=60.5700
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1073,7 +1073,7 @@ sprites{
 				height=200.0000
 				radius=36.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1106,7 +1106,7 @@ sprites{
 				height=200.0000
 				radius=60.5700
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=1.5700
 				knockback=3.0000
 				wither_chance=10
@@ -1116,7 +1116,7 @@ sprites{
 				height=200.0000
 				radius=36.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=1.5700
 				knockback=3.0000
 				wither_chance=10
@@ -1149,7 +1149,7 @@ sprites{
 				height=200.0000
 				radius=60.5700
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=1.5700
 				knockback=3.0000
 				wither_chance=10
@@ -1159,7 +1159,7 @@ sprites{
 				height=200.0000
 				radius=36.0000
 				type=1
-				value=30.0000
+				value=5.0000
 				knockback_angle=1.5700
 				knockback=3.0000
 				wither_chance=10

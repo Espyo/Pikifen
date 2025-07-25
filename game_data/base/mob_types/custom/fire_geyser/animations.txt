@@ -91,7 +91,7 @@ sprites{
 				height=128.0000
 				radius=28.0000
 				type=1
-				value=1.0000
+				value=20.0000
 				hazard=fire
 			}
 			hit{
@@ -134,7 +134,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			hit{
@@ -157,7 +157,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			hit{
@@ -180,7 +180,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			hit{
@@ -204,7 +204,7 @@ sprites{
 				height=128.0000
 				radius=32.0000
 				type=1
-				value=30.0000
+				value=20.0000
 				hazard=fire
 			}
 			hit{

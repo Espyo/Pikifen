@@ -230,7 +230,7 @@ sprites{
 				height=24.0000
 				radius=24.0000
 				type=1
-				value=1.0000
+				value=10.0000
 				hazard=stab
 			}
 		}
@@ -254,7 +254,7 @@ sprites{
 				height=24.0000
 				radius=24.0000
 				type=1
-				value=1.0000
+				value=10.0000
 				hazard=stab
 			}
 		}
@@ -588,7 +588,7 @@ sprites{
 				height=24.0000
 				radius=35.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -613,7 +613,7 @@ sprites{
 				height=24.0000
 				radius=35.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -638,7 +638,7 @@ sprites{
 				height=24.0000
 				radius=35.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -663,7 +663,7 @@ sprites{
 				height=24.0000
 				radius=35.0000
 				type=1
-				value=1.0000
+				value=2.0000
 				knockback_outward=true
 				knockback=1.0000
 			}
