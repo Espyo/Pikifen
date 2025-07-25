@@ -17,7 +17,7 @@ pushes_softly = true
 radius = 16
 rotation_speed = 200
 target_type = enemy
-territory_radius = 300
+territory_radius = 200
 weight = 2
 
 reaches {

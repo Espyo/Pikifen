@@ -22,7 +22,7 @@ radius = 42
 rotation_speed = 114
 target_type = enemy
 terrain_radius = 64
-territory_radius = 600
+territory_radius = 300
 weight = 7
 
 children {

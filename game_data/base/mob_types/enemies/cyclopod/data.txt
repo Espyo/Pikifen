@@ -21,7 +21,7 @@ radius = 24
 rotation_speed = 160
 target_type = enemy
 terrain_radius = 40
-territory_radius = 200
+territory_radius = 150
 weight = 7
 
 reaches {
