@@ -314,8 +314,7 @@ void ResourceFsm::vanish(Mob* m, void* info1, void* info2) {
     Resource* resPtr = (Resource*) m;
     if(resPtr->resType->returnToPileOnVanish && resPtr->originPile) {
         resPtr->originPile->changeAmount(+1);
+        resPtr->becomeUncarriable();
+        resPtr->toDelete = true;
     }
-    
-    resPtr->becomeUncarriable();
-    resPtr->toDelete = true;
 }

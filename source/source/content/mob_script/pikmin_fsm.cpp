@@ -2082,8 +2082,6 @@ void PikminFsm::becomeIdle(Mob* m, void* info1, void* info2) {
     }
     
     m->unfocusFromMob();
-    pikPtr->wasLastHitDing = false;
-    pikPtr->consecutiveDings = 0;
     
     m->setAnimation(
         PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true

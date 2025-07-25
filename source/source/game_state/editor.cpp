@@ -344,11 +344,7 @@ Point Editor::getLastWidgetPost() {
  * @return Whether it needs the keyboard.
  */
 bool Editor::guiNeedsKeyboard() {
-    //WantCaptureKeyboard returns true if LMB is held, and I'm not quite sure
-    //why. If we know LMB is held because of the canvas, then we can
-    //safely assume it's none of Dear ImGui's business, so we can ignore
-    //WantCaptureKeyboard's true.
-    return ImGui::GetIO().WantCaptureKeyboard && !isM1Pressed;
+    return ImGui::GetIO().WantCaptureKeyboard;
 }
 
 
