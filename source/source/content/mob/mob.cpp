@@ -3119,7 +3119,7 @@ void Mob::setAnimation(
         anim.curFrameIdx = INVALID;
     } else {
         if(
-            !hasFlag(options, START_ANIM_OPTION_NO_RESTART) ||
+            options != START_ANIM_OPTION_NO_RESTART ||
             anim.curFrameIdx >= anim.curAnim->frames.size()
         ) {
             anim.toStart();

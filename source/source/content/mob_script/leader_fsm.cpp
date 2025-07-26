@@ -293,6 +293,9 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("holding", LEADER_STATE_HOLDING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(LeaderFsm::setCorrectStandingAnim);
+        }
         efc.newEvent(LEADER_EV_THROW); {
             efc.changeState("throwing");
         }
@@ -648,6 +651,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     
     efc.newState("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::startChasingLeader);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
@@ -702,6 +706,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     
     efc.newState("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::stopInGroup);
         }
         efc.newEvent(MOB_EV_ON_LEAVE); {
@@ -1934,7 +1939,6 @@ void LeaderFsm::doThrow(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::enterActive(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->isInWalkingAnim = false;
     m->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -2415,36 +2419,32 @@ void LeaderFsm::searchSeed(Mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief When a leader needs to update its animation in the active state.
+ * @brief When a leader needs to update its animation to one of the "standing"
+ * animations.
  *
  * @param m The mob.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setCorrectActiveAnim(Mob* m, void* info1, void* info2) {
+void LeaderFsm::setCorrectStandingAnim(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
+    
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
     size_t idleAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_IDLING];
-    if(
-        leaPtr->anim.curAnim !=
-        leaPtr->anim.animDb->animations[walkAnimIdx] &&
-        leaPtr->anim.curAnim !=
-        leaPtr->anim.animDb->animations[idleAnimIdx]
-    ) {
-        //The leader's doing some other animation, so let that happen.
-        return;
-    }
-    
     bool mustUseWalkingAnim =
         leaPtr->isActiveWalking || leaPtr->isActiveTurning;
+    bool inWalkingAnim =
+        leaPtr->anim.curAnim ==
+        leaPtr->leaType->animDb->animations[walkAnimIdx];
+    bool inIdlingAnim =
+        leaPtr->anim.curAnim ==
+        leaPtr->leaType->animDb->animations[idleAnimIdx];
         
-    if(mustUseWalkingAnim && !leaPtr->isInWalkingAnim) {
-        leaPtr->isInWalkingAnim = true;
+    if(mustUseWalkingAnim && !inWalkingAnim) {
         leaPtr->setAnimation(LEADER_ANIM_WALKING);
-    } else if(!mustUseWalkingAnim && leaPtr->isInWalkingAnim) {
-        leaPtr->isInWalkingAnim = false;
+    } else if(!mustUseWalkingAnim && !inIdlingAnim) {
         leaPtr->setAnimation(LEADER_ANIM_IDLING);
     }
 }
@@ -2461,7 +2461,7 @@ void LeaderFsm::setIsTurningFalse(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     if(leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = false;
-        LeaderFsm::setCorrectActiveAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
     }
 }
 
@@ -2477,7 +2477,7 @@ void LeaderFsm::setIsTurningTrue(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     if(!leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = true;
-        LeaderFsm::setCorrectActiveAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
     }
 }
 
@@ -2493,7 +2493,7 @@ void LeaderFsm::setIsWalkingFalse(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     if(leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = false;
-        LeaderFsm::setCorrectActiveAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
     }
 }
 
@@ -2509,7 +2509,7 @@ void LeaderFsm::setIsWalkingTrue(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     if(!leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = true;
-        LeaderFsm::setCorrectActiveAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
     }
 }
 
@@ -3049,6 +3049,34 @@ void LeaderFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     for(size_t e = 0; e < s->effects.size(); e++) {
         l->applyStatusEffect(s->effects[e], false, false);
     }
+}
+
+
+/**
+ * @brief When a leader tries to update its animation to one of the "standing"
+ * ones, if he's not in another animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::trySetCorrectStandingAnim(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
+    size_t walkAnimIdx =
+        leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
+    size_t idleAnimIdx =
+        leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_IDLING];
+    if(
+        leaPtr->anim.curAnim !=
+        leaPtr->anim.animDb->animations[walkAnimIdx] &&
+        leaPtr->anim.curAnim !=
+        leaPtr->anim.animDb->animations[idleAnimIdx]
+    ) {
+        //The leader's doing some other animation, so let that happen.
+        return;
+    }
+    
+    LeaderFsm::setCorrectStandingAnim(m, info1, info2);
 }
 
 

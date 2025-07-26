@@ -93,9 +93,6 @@ public:
     //Mid Go Here.
     bool midGoHere = false;
     
-    //Is the leader currently in the walking animation?
-    bool isInWalkingAnim = false;
-    
     //Is the leader currently turning in place, in the active state?
     bool isActiveTurning = false;
     
