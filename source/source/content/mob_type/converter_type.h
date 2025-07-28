@@ -108,6 +108,9 @@ public:
     //Time left until it converts what is in the buffer.
     float autoConversionTimeout = 5.0f;
     
+    //Sound data index for the Pikmin reception sound. Cache for performance.
+    size_t soundReceptionIdx = INVALID;
+    
     
     //--- Function declarations ---
     

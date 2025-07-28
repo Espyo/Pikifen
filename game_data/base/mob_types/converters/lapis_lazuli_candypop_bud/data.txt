@@ -37,6 +37,11 @@ sounds {
         volume = 40
         speed_deviation = 8
     }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed_deviation = 15
+    }
 }
 
 maker = Espyo

@@ -212,6 +212,7 @@ void ConverterFsm::handlePikmin(Mob* m, void* info1, void* info2) {
             game.sysContentNames.parConverterInsertion, m
         );
     m->particleGenerators.push_back(pg);
+    conPtr->playSound(conPtr->conType->soundReceptionIdx);
 }
 
 

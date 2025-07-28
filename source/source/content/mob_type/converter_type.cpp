@@ -110,4 +110,10 @@ void ConverterType::loadCatProperties(DataNode* file) {
             typeAnimSuffixesNode
         );
     }
+
+    for(size_t s = 0; s < sounds.size(); s++) {
+        if(sounds[s].name == "reception") {
+            soundReceptionIdx = s;
+        }
+    }
 }
