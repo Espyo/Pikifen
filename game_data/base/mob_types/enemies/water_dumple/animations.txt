@@ -11,8 +11,11 @@ animations{
 				duration=0.1000
 			}
 			attacking_01{
-				duration=0.3000
+				duration=0.2000
 				sound=growl
+			}
+			idling_01{
+				duration=0.2000
 			}
 			attacking_02{
 				duration=0.1000
@@ -28,7 +31,7 @@ animations{
 				duration=0.1000
 			}
 			idling_01{
-				duration=0.1000
+				duration=0.5000
 			}
 		}
 	}

@@ -2596,7 +2596,10 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
         if(mPtr == this || mPtr == targetMob) continue;
         if(hasFlag(mPtr->flags, MOB_FLAG_INTANGIBLE)) continue;
         
-        const float mPtrMaxZ = mPtr->z + mPtr->height;
+        const float mPtrMaxZ =
+            mPtr->height == 0.0f ?
+            FLT_MAX :
+            (mPtr->z + mPtr->height);
         if(mPtrMaxZ < selfMaxZ || mPtrMaxZ < targetMobMaxZ) continue;
         if(
             mPtr->z > z + height &&

@@ -47,7 +47,7 @@ sprites{
 				height=70.0000
 				radius=34.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -66,7 +66,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -85,7 +85,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -123,7 +123,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -142,7 +142,7 @@ sprites{
 				height=140.0000
 				radius=68.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
@@ -160,7 +160,7 @@ sprites{
 				height=40.0000
 				radius=26.0000
 				type=1
-				value=40.0000
+				value=600.0000
 				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000

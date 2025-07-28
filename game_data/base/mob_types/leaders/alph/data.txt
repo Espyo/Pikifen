@@ -76,6 +76,7 @@ sounds {
 vulnerabilities {
     poison = 0
     water = 0
+    explosion = 8
 }
 
 maker = Espyo

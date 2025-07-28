@@ -747,7 +747,7 @@ sprites{
 			}
 			damage{
 				coords=3.0000 0.0000 -8.0000
-				height=130.0000
+				height=100.0000
 				radius=60.0000
 				type=1
 				value=0.0000

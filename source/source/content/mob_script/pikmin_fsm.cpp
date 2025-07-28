@@ -1932,6 +1932,7 @@ void PikminFsm::createFsm(MobType* typ) {
     
     efc.newState("crushed", PIKMIN_STATE_CRUSHED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::beCrushed);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1941,6 +1942,7 @@ void PikminFsm::createFsm(MobType* typ) {
     
     efc.newState("knocked_down_dying", PIKMIN_STATE_KNOCKED_DOWN_DYING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::startKnockedDownDying);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1950,6 +1952,7 @@ void PikminFsm::createFsm(MobType* typ) {
     
     efc.newState("dying", PIKMIN_STATE_DYING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::startDying);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {

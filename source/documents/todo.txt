@@ -6,24 +6,16 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Leaders can grab Pikmin from behind gates
-    Bomb rocks don't blow up in a chain now, and reinforced walls need more than 3
     Pikmin don't make a noise when starting to carry a cardboard box, and don't celebrate at the end
     Winged Pikmin holding up a bamboo gate are annoying with the carrying noise
     Pellet Posies, Spotcaps, etc. don't wobble when hurt like enemies do
     Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
+    The Beady Long Legs's shine, on the joint connecting the head to the feet, is coming from the NE angle instead of NW
+    The debris graphics left behind by gates are drawn above the leaders and Pikmin
 
     --- 0.26 ---
-    Other base content changes
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
-            In general, they could all stand to be slightly easier, and to take longer to react to things
-            Shake hitboxes last way too long across the board
-            Red Bulborb could be a smidge tougher
-            For the dumples, longer startup lag and endlag
-            Skutterchuck should wait a bit before throwing, and should throw bomb rocks
-            Do _something_ to the Yellow Wollyhop
-        Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
+    Add Pro Controller controls to the default controls
     Add a cupcake treasure
     Try to implement the motif into Coastal Pavement
     Misc. graphical improvements
@@ -857,6 +849,7 @@ Misc things (so I don't forget)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
+        Skutterchucks should throw bomb rocks
     Fix bridges and dummies emitting light during blackout (Darthvato)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
