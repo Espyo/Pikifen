@@ -238,7 +238,7 @@ animations{
 			idling{
 				duration=0.1500
 			}
-			shaking_02{
+			shaking_04{
 				duration=0.1500
 			}
 			idling{
@@ -1103,29 +1103,54 @@ sprites{
 		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=50.0000 -8.0000 -32.0000
-				height=192.0000
-				radius=60.0000
-				type=1
-				value=5.0000
-				knockback_outward=true
-				knockback_angle=4.7100
-				knockback=3.0000
-				wither_chance=10
+				coords=51.0000 -10.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			back{
-				coords=-13.0000 0.0000 -32.0000
-				height=192.0000
-				radius=64.0000
-				type=1
-				value=5.0000
-				knockback_outward=true
-				knockback_angle=4.7100
-				knockback=3.0000
-				wither_chance=10
+				coords=-12.0000 1.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
 			}
 			mouth{
-				coords=85.0000 -14.0000 0.0000
+				coords=90.0000 -13.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_04{
+		file=enemies/red_bulborb
+		file_pos=515.0000 252.0000
+		file_size=159.0000 105.0000
+		offset=16.0000 0.0000
+		hitboxes{
+			body{
+				coords=51.0000 10.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 -1.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 13.0000 0.0000
 				height=128.0000
 				radius=16.0000
 				type=2

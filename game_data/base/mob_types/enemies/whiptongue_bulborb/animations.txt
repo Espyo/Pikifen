@@ -1105,34 +1105,30 @@ sprites{
 		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=-1.7700 8.7600 -32.0000
-				height=200.0000
-				radius=60.5700
-				type=1
-				value=5.0000
-				knockback_angle=1.5700
-				knockback=3.0000
-				wither_chance=10
+				coords=1.0000 2.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
 			}
 			head{
-				coords=70.0000 0.0000 -32.0000
-				height=200.0000
-				radius=36.0000
-				type=1
-				value=5.0000
-				knockback_angle=1.5700
-				knockback=3.0000
-				wither_chance=10
+				coords=75.0000 2.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			tongue1{
-				coords=109.0000 -5.0000 0.0000
+				coords=110.0000 2.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			tongue2{
-				coords=109.0000 -5.0000 0.0000
+				coords=110.0000 2.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
@@ -1148,34 +1144,30 @@ sprites{
 		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=-1.0000 16.0000 -32.0000
-				height=200.0000
-				radius=60.5700
-				type=1
-				value=5.0000
-				knockback_angle=1.5700
-				knockback=3.0000
-				wither_chance=10
+				coords=1.0000 14.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
 			}
 			head{
-				coords=70.0000 10.0000 -32.0000
-				height=200.0000
-				radius=36.0000
-				type=1
-				value=5.0000
-				knockback_angle=1.5700
-				knockback=3.0000
-				wither_chance=10
+				coords=75.0000 18.0000 0.0000
+				height=128.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			tongue1{
-				coords=109.0000 -10.0000 0.0000
+				coords=110.0000 -13.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			tongue2{
-				coords=109.0000 -10.0000 0.0000
+				coords=110.0000 -13.0000 0.0000
 				height=128.0000
 				radius=8.0000
 				type=2

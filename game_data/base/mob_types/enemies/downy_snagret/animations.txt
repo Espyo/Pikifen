@@ -650,14 +650,13 @@ sprites{
 			body{
 				coords=1.7980 0.2566 0.0000
 				height=24.0000
-				radius=35.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=1.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			mouth{
-				coords=33.8802 5.0173 0.0000
+				coords=33.6942 0.3884 0.0000
 				height=24.0000
 				radius=8.0000
 				type=2
@@ -673,16 +672,15 @@ sprites{
 		angle=0.2618
 		hitboxes{
 			body{
-				coords=1.7980 0.2566 0.0000
+				coords=2.4480 3.7570 0.0000
 				height=24.0000
-				radius=35.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=1.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			mouth{
-				coords=33.8802 5.0173 0.0000
+				coords=33.6942 0.3884 0.0000
 				height=24.0000
 				radius=8.0000
 				type=2

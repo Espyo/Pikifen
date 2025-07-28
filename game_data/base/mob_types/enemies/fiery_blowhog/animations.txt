@@ -94,13 +94,16 @@ animations{
 				sound=woosh
 			}
 			bucking_05{
-				duration=0.3000
+				duration=0.1000
 			}
-			bucking_05{
+			bucking_06{
+				duration=0.2000
+			}
+			bucking_06{
 				duration=0.1000
 				interpolate=true
 			}
-			bucking_06{
+			bucking_07{
 				duration=0.1000
 			}
 			idling{
@@ -592,33 +595,69 @@ sprites{
 		file=enemies/fiery_blowhog
 		file_pos=370.0000 183.0000
 		file_size=98.0000 58.0000
-		offset=15.0000 0.0000
+		offset=19.0000 0.0000
 		hitboxes{
 			body{
-				coords=8.0000 0.0000 -32.0000
-				height=120.0000
-				radius=50.0000
-				type=1
-				value=5.0000
-				knockback=3.0000
-				wither_chance=5
+				coords=9.5000 0.0000 0.0000
+				height=70.0000
+				radius=35.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			fire1{
-				coords=60.3100 -1.1100 0.0000
+				coords=70.0000 0.0000 0.0000
 				height=70.0000
 				radius=6.0000
 				type=2
 				value=1.0000
 			}
 			fire2{
-				coords=60.0300 -1.1100 0.0000
+				coords=70.0000 0.0000 0.0000
 				height=70.0000
 				radius=6.0000
 				type=2
 				value=1.0000
 			}
 			fire3{
-				coords=60.0300 -0.8300 0.0000
+				coords=70.0000 0.0000 0.0000
+				height=70.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	bucking_07{
+		file=enemies/fiery_blowhog
+		file_pos=370.0000 183.0000
+		file_size=98.0000 58.0000
+		offset=15.0000 0.0000
+		hitboxes{
+			body{
+				coords=6.5000 0.0000 0.0000
+				height=70.0000
+				radius=35.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			fire1{
+				coords=70.0000 0.0000 0.0000
+				height=70.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+			fire2{
+				coords=70.0000 0.0000 0.0000
+				height=70.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+			fire3{
+				coords=70.0000 0.0000 0.0000
 				height=70.0000
 				radius=6.0000
 				type=2

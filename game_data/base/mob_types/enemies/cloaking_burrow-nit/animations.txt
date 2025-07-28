@@ -338,11 +338,11 @@ animations{
 				duration=0.1400
 				interpolate=true
 			}
-			shaking_04{
+			shaking_06{
 				duration=0.1400
 				interpolate=true
 			}
-			shaking_05{
+			shaking_07{
 				duration=0.1400
 				interpolate=true
 			}
@@ -1489,6 +1489,82 @@ sprites{
 				radius=6.0000
 				type=2
 				value=0.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_06{
+		file=enemies/cloaking_burrow-nit
+		file_pos=325.0000 0.0000
+		file_size=58.0000 56.0000
+		offset=-1.0000 0.0000
+		angle=0.5236
+		hitboxes{
+			face{
+				coords=2.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			hide{
+				coords=-6.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=0.0000
+			}
+			mouth{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_07{
+		file=enemies/cloaking_burrow-nit
+		file_pos=325.0000 0.0000
+		file_size=58.0000 56.0000
+		offset=-1.0000 0.0000
+		angle=5.7596
+		hitboxes{
+			face{
+				coords=2.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			hide{
+				coords=-6.0000 0.0000 0.0000
+				height=64.0000
+				radius=25.0000
+				type=0
+				value=0.0000
+			}
+			mouth{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 			mouth_kb{
 				coords=40.0000 0.0000 0.0000

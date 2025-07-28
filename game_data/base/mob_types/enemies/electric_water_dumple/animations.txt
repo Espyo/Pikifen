@@ -197,7 +197,7 @@ animations{
 			shaking_04{
 				duration=0.1000
 			}
-			shaking_03{
+			shaking_05{
 				duration=0.1000
 			}
 			idling_01{
@@ -949,6 +949,36 @@ sprites{
 				knockback_outward=true
 				knockback=2.0000
 				wither_chance=10
+			}
+			mouth{
+				coords=43.0000 0.0000 0.0000
+				height=56.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			zapping{
+				coords=70.0000 0.0000 0.0000
+				height=56.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_05{
+		file=enemies/electric_water_dumple
+		file_pos=635.0000 89.0000
+		file_size=142.0000 97.0000
+		offset=-4.0000 0.0000
+		hitboxes{
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=56.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			mouth{
 				coords=43.0000 0.0000 0.0000

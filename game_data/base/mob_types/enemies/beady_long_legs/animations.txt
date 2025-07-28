@@ -1037,6 +1037,7 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -1080,6 +1081,7 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=5.0100 2.9300 132.0000
@@ -1123,6 +1125,7 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=6.5800 2.5900 132.0000
@@ -1166,6 +1169,7 @@ sprites{
 				radius=71.0000
 				type=0
 				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=6.5800 2.5900 132.0000
@@ -1344,11 +1348,9 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=4.0000 4.0000 132.0000
@@ -1390,11 +1392,9 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=5.0100 2.9300 132.0000
@@ -1436,11 +1436,9 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=6.4100 1.0900 132.0000
@@ -1482,11 +1480,9 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=140.0000
 				radius=71.0000
-				type=1
-				value=2.0000
-				knockback_outward=true
-				knockback=2.0000
-				wither_chance=50
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			front_right{
 				coords=6.1100 -0.1300 132.0000

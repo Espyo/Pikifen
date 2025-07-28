@@ -200,7 +200,7 @@ animations{
 			shaking_04{
 				duration=0.1000
 			}
-			shaking_03{
+			shaking_05{
 				duration=0.1000
 			}
 			idling_01{
@@ -697,6 +697,29 @@ sprites{
 				knockback_outward=true
 				knockback=1.0000
 				wither_chance=5
+			}
+			mouth{
+				coords=25.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_05{
+		file=enemies/water_dumple
+		file_pos=327.0000 51.0000
+		file_size=68.0000 55.0000
+		offset=-1.0000 0.0000
+		hitboxes{
+			body{
+				coords=3.0000 0.0000 0.0000
+				height=32.0000
+				radius=29.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 			mouth{
 				coords=25.0000 0.0000 0.0000

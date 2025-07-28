@@ -23,11 +23,11 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_01{
+			attacking_safe_01{
 				duration=0.1000
 				interpolate=true
 			}
-			attacking_gas_02{
+			attacking_safe_02{
 				duration=0.1000
 				interpolate=true
 			}
