@@ -156,8 +156,8 @@ script {
     dropping_treasure {
         on_enter {
             stop
-            set_animation releasing
             if $has_treasure = true
+                set_animation releasing
                 remove_status dweevil_with_treasure
                 load_focused_mob_memory 1
                 get_mob_info a self angle

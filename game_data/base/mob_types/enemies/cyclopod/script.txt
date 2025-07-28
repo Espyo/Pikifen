@@ -378,6 +378,7 @@ script {
     dying {
         on_enter {
             start_dying
+            stop_particles
             if $underwater = true
                 start_particles bubble_explosion_small
             end_if
