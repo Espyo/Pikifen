@@ -247,6 +247,12 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
                 game.states.gameplay->players[0].view.cam.setPos(
                     game.states.gameplay->players[0].view.cursorWorldPos
                 );
+            } else {
+                //Tick it once so it can run its teleportation code.
+                //This is useful if the player teleports it far away,
+                //where it'd be marked as inactive. It's slightly hacky,
+                //but it's just a maker tool, so no sweat.
+                mobToTeleport->tick(FLT_MIN);
             }
         }
         usedHelpingTools = true;

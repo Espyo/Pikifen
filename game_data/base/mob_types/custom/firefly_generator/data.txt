@@ -3,6 +3,8 @@ description = A decorative object whose only purpose is to emit firefly particle
 
 casts_shadow = false
 custom_category_name = Decoration
+
+//Used to help visualize the reach in the area editor.
 territory_radius = 300
 
 maker = Helodity

@@ -122,6 +122,7 @@ animations{
 		frames{
 			idling_01_yellow{
 				duration=0.3000
+				interpolate=true
 			}
 			idling_02_yellow{
 				duration=0.3000

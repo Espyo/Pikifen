@@ -7576,8 +7576,8 @@ mobs{
 		p=-576.0000 -48.0000
 	}
 	ship{
-		type=hocotate_ship
-		p=-64.0000 288.0000
+		type=ss_drake
+		p=-128.0000 288.0000
 	}
 	leader{
 		type=brittany
@@ -8199,11 +8199,7 @@ mobs{
 	}
 	decoration{
 		type=leaves
-		p=-160.0000 224.0000
-	}
-	decoration{
-		type=leaves
-		p=-160.0000 368.0000
+		p=-128.0000 416.0000
 	}
 	decoration{
 		type=leaves

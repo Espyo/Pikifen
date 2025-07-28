@@ -6,30 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Playful Yard should use the S.S. Drake since it uses Koppaites
-    Pikmin ding detection still isn't working quite right
-        canContinueAttacking is getting set to false because it's a basic distance check, even though the gate is still within the Pikmin's near reach
-    Double-clicking to throw a Pikmin leads to the leader repeating the throw animation
-        The holding state keeps the previous state's animation
-    Leaders following your leader will just endlelessly repeat their current animation and not walk
-    If you teleport a mob with the maker tool to a spot far away from where it was, it'll be invisible till you go back to that spot
-    Changing a script var's value on a mob, then without unfocusing the textbox clicking on another mob, it'll make both mobs take in the same value change
-        Shouldn't clicking out of a textbox have full control, and not allow the canvas to receive the event?
+    
 
     --- 0.26 ---
     Revamp sounds
-        Candidate list of all needed sounds, for now
-            Enemies
-                Burrow-nit screeching when dying
-                Burrow-nit squeaking while moving
-                Dwarf Bulborb screaming
-                Munge Dweevil squeaking
-                Red Bulborb screaming when dying
-                Red Bulborb growling
-                Skutterchuck squeaking
-                Skutterchuck walking
-                Water Dumple growling
-                Water Dumple waddling
         Try to improve these sounds:
             Spitting
             Exhaling; make it stronger
@@ -46,12 +26,9 @@ Next tasks (roughly sorted most important first)
             For the dumples, longer startup lag and endlag
             Skutterchuck should wait a bit before throwing, and should throw bomb rocks
             Do _something_ to the Yellow Wollyhop
-        Leader damage from enemies should be standardized
-        Leaf Pikmin should be able to follow leaders in walking
-        Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
-        Make Rock Pikmin colors darker (thanks Nataly171)
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
+    Add a cupcake treasure
     Try to implement the motif into Coastal Pavement
     Misc. graphical improvements
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
@@ -60,6 +37,7 @@ Next tasks (roughly sorted most important first)
         Yellow Wollyhop should close its eyes when struggling
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
+            Animate lights and such using particles?
         Add a glow to the smack effect particle?
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     More particles
@@ -671,7 +649,7 @@ Misc things (so I don't forget)
             Nectars: Work like in the engine, or like in the classics?
         Figure out what to do with sleeping now that Go Here exists. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
             Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
-        Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, etc.
+        Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
         Weird limitations
@@ -881,6 +859,7 @@ Misc things (so I don't forget)
     Base content to tweak
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
+        Make Rock Pikmin colors darker (thanks Nataly171)
     Fix bridges and dummies emitting light during blackout (Darthvato)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
