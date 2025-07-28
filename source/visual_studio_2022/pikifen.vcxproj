@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <CompileAsManaged>false</CompileAsManaged>
       <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_WINDOWS;_CMATH_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsCpp</CompileAs>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
@@ -175,7 +175,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
