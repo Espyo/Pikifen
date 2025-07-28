@@ -35,6 +35,23 @@ sounds {
         sound = effects/swish
         volume = 50
     }
+    walk {
+        sound = creature_vocals/squeak_1
+        volume = 10
+        speed = 120
+        speed_deviation = 10
+        stack_mode = never
+    }
+    squeak_1 {
+        sound = creature_vocals/squeak_1
+        volume = 30
+        speed_deviation = 10
+    }
+    squeak_2 {
+        sound = creature_vocals/squeak_2
+        volume = 30
+        speed_deviation = 10
+    }
     shaking {
         sound = creature_misc/shaking
         volume = 60

@@ -30,6 +30,21 @@ reaches {
 }
 
 sounds {
+    growl {
+        sound = creature_vocals/water_dumple_growl
+        volume = 60
+        speed_deviation = 5
+    }
+    scream {
+        sound = creature_vocals/water_dumple_scream
+        volume = 60
+        speed_deviation = 5
+    }
+    waddle {
+        sound = creature_vocals/water_dumple_waddle
+        volume = 20
+        speed_deviation = 5
+    }
     bite {
         sound = creature_misc/bite
         volume = 70

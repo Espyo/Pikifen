@@ -13,6 +13,7 @@ animations{
 			attacking_02{
 				duration=0.1200
 				interpolate=true
+				sound=squeak_1
 			}
 			attacking_03{
 				duration=0.1100
@@ -21,6 +22,7 @@ animations{
 			attacking_02{
 				duration=0.1000
 				interpolate=true
+				sound=squeak_1
 			}
 			attacking_03{
 				duration=0.0900
@@ -84,6 +86,7 @@ animations{
 			dying_01{
 				duration=0.2000
 				interpolate=true
+				sound=squeak_2
 			}
 			dying_02{
 				duration=0.2000
@@ -123,6 +126,7 @@ animations{
 			}
 			dying_08{
 				duration=0.0500
+				sound=squeak_1
 			}
 			dying_10{
 				duration=0.0500
@@ -135,6 +139,7 @@ animations{
 			}
 			dying_08{
 				duration=0.0500
+				sound=squeak_1
 			}
 			dying_10{
 				duration=0.0500
@@ -151,6 +156,7 @@ animations{
 			}
 			eating_02{
 				duration=0.2000
+				sound=squeak_2
 			}
 			eating_01{
 				duration=0.2000
@@ -273,6 +279,7 @@ animations{
 			}
 			moving_01{
 				duration=0.1000
+				sound=walk
 			}
 			idling{
 				duration=0.1000
@@ -292,6 +299,7 @@ animations{
 			shaking_02{
 				duration=0.1000
 				interpolate=true
+				sound=squeak_1
 			}
 			shaking_03{
 				duration=0.0800

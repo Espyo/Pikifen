@@ -29,6 +29,29 @@ reaches {
 }
 
 sounds {
+    squeak_short {
+        sound = creature_vocals/dweevil_short
+        volume = 30
+        speed_deviation = 10
+    }
+    squeak_long {
+        sound = creature_vocals/dweevil_long
+        volume = 30
+        speed_deviation = 10
+    }
+    squeak_dying {
+        sound = creature_vocals/dweevil_long
+        volume = 30
+        speed = 80
+        speed_deviation = 10
+    }
+    squeak_walking {
+        sound = creature_vocals/dweevil_short
+        volume = 20
+        speed = 110
+        speed_deviation = 10
+        random_chance = 20
+    }
     gas {
         sound = misc/spray
         volume = 40

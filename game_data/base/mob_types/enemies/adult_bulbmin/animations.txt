@@ -33,6 +33,7 @@ animations{
 			}
 			dying_03{
 				duration=1.0000
+				sound=dying
 			}
 			dying_02{
 				duration=0.1000
@@ -98,6 +99,7 @@ animations{
 			}
 			failing_03{
 				duration=0.2000
+				sound=growl
 			}
 			attacking_01{
 				duration=0.1000
@@ -154,6 +156,7 @@ animations{
 			idling{
 				duration=0.1000
 				interpolate=true
+				sound=groan
 			}
 			shaking_01{
 				duration=0.1000

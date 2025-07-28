@@ -30,6 +30,7 @@ animations{
 			}
 			crushed_01{
 				duration=0.9000
+				sound=groan
 			}
 		}
 	}
@@ -44,6 +45,7 @@ animations{
 			}
 			dying_03{
 				duration=1.0000
+				sound=dying
 			}
 			dying_02{
 				duration=0.1000
@@ -184,6 +186,7 @@ animations{
 			idling{
 				duration=0.1500
 				interpolate=true
+				sound=groan
 			}
 			shaking_01{
 				duration=0.1500

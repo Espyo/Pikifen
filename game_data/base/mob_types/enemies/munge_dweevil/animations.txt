@@ -87,6 +87,7 @@ animations{
 			dying_01{
 				duration=0.1000
 				interpolate=true
+				sound=squeak_dying
 			}
 			dying_02{
 				duration=0.1000
@@ -155,6 +156,7 @@ animations{
 			}
 			moving_02{
 				duration=0.1000
+				sound=squeak_walking
 			}
 			moving_03{
 				duration=0.1000
@@ -178,6 +180,7 @@ animations{
 			}
 			picking_up_02{
 				duration=0.1000
+				sound=squeak_short
 			}
 			picking_up_02{
 				duration=0.1000
@@ -204,6 +207,7 @@ animations{
 			}
 			idling_01{
 				duration=0.5000
+				sound=squeak_short
 			}
 		}
 	}
@@ -215,6 +219,7 @@ animations{
 			}
 			idling_01{
 				duration=0.1000
+				sound=squeak_long
 			}
 			shaking_02{
 				duration=0.1000

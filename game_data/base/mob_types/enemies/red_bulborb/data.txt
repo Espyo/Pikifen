@@ -33,6 +33,28 @@ reaches {
 }
 
 sounds {
+    growl {
+        sound = creature_vocals/bulborb_growl
+        volume = 40
+        speed_deviation = 5
+    }
+    yawn {
+        sound = creature_vocals/bulborb_scream
+        volume = 50
+        speed = 110
+        speed_deviation = 5
+    }
+    dying {
+        sound = creature_vocals/bulborb_scream
+        volume = 50
+        speed = 90
+        speed_deviation = 5
+    }
+    groan {
+        sound = creature_vocals/bulborb_misc
+        volume = 40
+        speed_deviation = 5
+    }
     step {
         sound = misc/stomp_quick
         volume = 20

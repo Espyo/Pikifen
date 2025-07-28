@@ -8,7 +8,11 @@ animations{
 		hit_rate=50
 		frames{
 			attacking_01{
-				duration=0.4000
+				duration=0.1000
+			}
+			attacking_01{
+				duration=0.3000
+				sound=growl
 			}
 			attacking_02{
 				duration=0.1000
@@ -38,6 +42,7 @@ animations{
 			dying_01{
 				duration=0.0500
 				interpolate=true
+				sound=scream
 			}
 			dying_02{
 				duration=0.1000
@@ -131,6 +136,7 @@ animations{
 			}
 			moving_01{
 				duration=0.1000
+				sound=waddle
 			}
 			moving_02{
 				duration=0.1000
@@ -150,6 +156,7 @@ animations{
 			shaking_02{
 				duration=0.1000
 				interpolate=true
+				sound=growl
 			}
 			shaking_01{
 				duration=0.1000
