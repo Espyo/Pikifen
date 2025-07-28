@@ -64,6 +64,7 @@ animations{
 			}
 			opening_01{
 				duration=0.1000
+				sound=open
 			}
 			opening_02{
 				duration=0.1000

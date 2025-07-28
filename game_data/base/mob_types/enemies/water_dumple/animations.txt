@@ -288,23 +288,16 @@ sprites{
 		scale=1.1000 1.1000
 		hitboxes{
 			body{
-				coords=-5.0000 0.0000 0.0000
-				height=56.0000
-				radius=50.0000
+				coords=3.0000 0.0000 0.0000
+				height=32.0000
+				radius=29.0000
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=43.0000 0.0000 0.0000
-				height=56.0000
-				radius=18.0000
-				type=2
-				value=1.0000
-			}
-			zapping{
-				coords=70.0000 0.0000 0.0000
-				height=56.0000
-				radius=32.0000
+				coords=25.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
 				type=2
 				value=1.0000
 			}
@@ -316,23 +309,16 @@ sprites{
 		file_size=66.0000 50.0000
 		hitboxes{
 			body{
-				coords=-5.0000 0.0000 0.0000
-				height=56.0000
-				radius=50.0000
+				coords=3.0000 0.0000 0.0000
+				height=32.0000
+				radius=29.0000
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=43.0000 0.0000 0.0000
-				height=56.0000
-				radius=18.0000
-				type=2
-				value=1.0000
-			}
-			zapping{
-				coords=70.0000 0.0000 0.0000
-				height=56.0000
-				radius=32.0000
+				coords=25.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
 				type=2
 				value=1.0000
 			}
@@ -345,23 +331,16 @@ sprites{
 		scale=1.1000 0.9000
 		hitboxes{
 			body{
-				coords=-5.0000 0.0000 0.0000
-				height=56.0000
-				radius=50.0000
+				coords=3.0000 0.0000 0.0000
+				height=32.0000
+				radius=29.0000
 				type=2
 				value=1.0000
 			}
 			mouth{
-				coords=43.0000 0.0000 0.0000
-				height=56.0000
-				radius=18.0000
-				type=2
-				value=1.0000
-			}
-			zapping{
-				coords=70.0000 0.0000 0.0000
-				height=56.0000
-				radius=32.0000
+				coords=25.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
 				type=2
 				value=1.0000
 			}

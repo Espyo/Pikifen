@@ -61,14 +61,20 @@ sounds {
         speed_deviation = 5
     }
     step {
-        sound = misc/stomp_quick
+        sound = misc/stomp_small
         volume = 30
         speed = 160
         speed_deviation = 5
     }
     thump {
-        sound = misc/thump
+        sound = misc/stomp_mid
         speed_deviation = 10
+        volume = 70
+    }
+    thump_death {
+        sound = misc/thump
+        speed = 130
+        volume = 80
     }
     thump_quiet {
         sound = misc/thump

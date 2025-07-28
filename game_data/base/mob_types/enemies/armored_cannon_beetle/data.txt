@@ -34,22 +34,22 @@ sounds {
     inhaling {
         sound = creature_vocals/inhaling
         loop = true
-        volume = 50
+        volume = 35
     }
     spit {
         sound = creature_vocals/spit
-        volume = 60
+        volume = 80
     }
     stomp {
-        sound = misc/stomp_quick
-        volume = 70
-        speed = 30
+        sound = misc/stomp_mid
+        volume = 20
+        speed = 110
         speed_deviation = 5
         stack_min_pos = 0.01
     }
     wings {
         sound = creature_misc/page_flip
-        volume = 30
+        volume = 60
         speed = 25
     }
     steam {
@@ -58,12 +58,12 @@ sounds {
         volume = 40
     }
     dying {
-        sound = misc/stomp_long
+        sound = misc/stomp_big
         volume = 80
         speed = 120
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 30
         speed = 50
     }

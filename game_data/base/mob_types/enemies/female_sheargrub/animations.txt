@@ -91,6 +91,7 @@ animations{
 			}
 			moving_01{
 				duration=0.1000
+				sound=moving
 			}
 			moving_02{
 				duration=0.1000

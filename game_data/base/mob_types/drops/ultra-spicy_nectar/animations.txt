@@ -62,6 +62,7 @@ animations{
 			}
 			landing_02{
 				duration=0.1000
+				sound=splat
 			}
 			landing_03{
 				duration=0.1000

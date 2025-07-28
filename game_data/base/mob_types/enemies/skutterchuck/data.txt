@@ -37,13 +37,23 @@ sounds{
     thud {
         sound = misc/thump
         speed = 160
-        volume = 15
+        volume = 60
     }
     woosh {
         sound = effects/woosh
         speed = 120
         volume = 40
     }
+    squeak {
+        sound = creature_vocals/dweevil_long
+        volume = 30
+        speed = 180
+        speed_deviation = 10
+    }
+}
+
+vulnerabilities {
+    crush = 500
 }
 
 maker = Espyo

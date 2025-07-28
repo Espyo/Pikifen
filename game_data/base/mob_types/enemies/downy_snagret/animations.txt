@@ -33,12 +33,14 @@ animations{
 			}
 			idling{
 				duration=0.2000
+				sound=clamp
 			}
 			chewing_1{
 				duration=0.2000
 			}
 			idling{
 				duration=0.2000
+				sound=clamp
 			}
 			chewing_1{
 				duration=0.1000
@@ -55,17 +57,27 @@ animations{
 			}
 			idling{
 				duration=0.1000
+				sound=clamp
 			}
 		}
 	}
 	dying{
-		loop_frame=6
+		loop_frame=8
 		frames{
 			dying_1{
 				duration=0.2000
 			}
 			dying_2{
-				duration=0.8000
+				duration=0.2000
+				sound=chirp_1
+			}
+			dying_2{
+				duration=0.2000
+				sound=chirp_1
+			}
+			dying_2{
+				duration=0.4000
+				sound=chirp_2
 			}
 			dying_1{
 				duration=0.2000
@@ -114,7 +126,7 @@ animations{
 			jumping_1{
 				duration=0.1000
 				interpolate=true
-				signal=0
+				sound=thud
 			}
 			jumping_2{
 				duration=0.1000
@@ -137,6 +149,7 @@ animations{
 			}
 			idling{
 				duration=0.1000
+				sound=thud
 			}
 		}
 	}
@@ -150,6 +163,7 @@ animations{
 			idling{
 				duration=0.1000
 				interpolate=true
+				sound=chirp_1
 			}
 			shaking_windup_2{
 				duration=0.1000

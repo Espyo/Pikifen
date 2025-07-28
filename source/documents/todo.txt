@@ -6,18 +6,14 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Leaders can grab Pikmin from behind gates
+    Bomb rocks don't blow up in a chain now, and reinforced walls need more than 3
+    Pikmin don't make a noise when starting to carry a cardboard box, and don't celebrate at the end
+    Winged Pikmin holding up a bamboo gate are annoying with the carrying noise
+    Pellet Posies, Spotcaps, etc. don't wobble when hurt like enemies do
+    Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
 
     --- 0.26 ---
-    Revamp sounds
-        Try to improve these sounds:
-            Spitting
-            Exhaling; make it stronger
-            Shaking
-            Pikmin footsteps
-        All enemy stepping sounds should be audible
-        All enemies should make a thud sound when plopping down when dying
-        All sound files should be at peak amplitude
     Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
@@ -42,6 +38,7 @@ Next tasks (roughly sorted most important first)
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     More particles
         More across the board -- check all mobs too
+        Climbing stick complete
     Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area
     Manual updates
         Update screenshots that still show off the Play area

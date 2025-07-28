@@ -156,7 +156,7 @@ animations{
 			}
 			eating_02{
 				duration=0.2000
-				sound=squeak_2
+				sound=squeak_1
 			}
 			eating_01{
 				duration=0.2000

@@ -229,8 +229,13 @@ animations{
 	getting_up{
 		frames{
 			grounded_01{
+				duration=0.0100
+				interpolate=true
+			}
+			grounded_01{
 				duration=0.3000
 				interpolate=true
+				sound=stretch
 			}
 			grounded_stretch{
 				duration=0.2000
@@ -267,6 +272,7 @@ animations{
 		frames{
 			grounded_landing{
 				duration=0.0800
+				interpolate=true
 			}
 			grounded_01{
 				duration=0.0100

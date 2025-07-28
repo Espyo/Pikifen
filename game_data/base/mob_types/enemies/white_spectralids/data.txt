@@ -22,6 +22,15 @@ reaches {
     fear = 40 360
 }
 
+sounds {
+    wings {
+        sound = creature_misc/wing_small_woosh
+        volume = 10
+        speed = 150
+        speed_deviation = 60
+    }
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

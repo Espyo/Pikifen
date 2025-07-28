@@ -50,7 +50,7 @@ sounds {
     }
     pain {
         sound = leaders/pain
-        volume = 30
+        volume = 20
     }
     spray {
         sound = misc/spray

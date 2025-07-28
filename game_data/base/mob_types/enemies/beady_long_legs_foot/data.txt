@@ -20,7 +20,7 @@ team = enemy_2
 
 sounds {
     stomp {
-        sound = misc/stomp_long
+        sound = misc/stomp_big
         speed_deviation = 20
     }
 }

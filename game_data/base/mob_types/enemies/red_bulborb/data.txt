@@ -56,8 +56,8 @@ sounds {
         speed_deviation = 5
     }
     step {
-        sound = misc/stomp_quick
-        volume = 20
+        sound = misc/stomp_small
+        volume = 30
         speed = 130
         speed_deviation = 5
     }
@@ -71,7 +71,7 @@ sounds {
         speed = 90
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 60
     }
     snoring {
@@ -89,7 +89,7 @@ sounds {
     thud {
         sound = misc/thump
         speed = 130
-        volume = 20
+        volume = 80
     }
 }
 

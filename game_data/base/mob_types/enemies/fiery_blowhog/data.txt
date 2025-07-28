@@ -33,7 +33,7 @@ sounds {
     inhaling {
         sound = creature_vocals/inhaling
         loop = true
-        volume = 25
+        volume = 20
     }
     exhaling {
         sound = creature_vocals/exhaling
@@ -64,6 +64,10 @@ sounds {
         volume = 50
     }
     thud {
+        sound = misc/thump
+        volume = 80
+    }
+    thud_quiet {
         sound = misc/thump
         speed = 130
         speed_deviation = 20

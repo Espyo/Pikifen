@@ -16,6 +16,11 @@ sounds {
         volume = 40
         speed_deviation = 8
     }
+    splat {
+        sound = nature/wet_splat
+        volume = 40
+        speed_deviation = 8
+    }
 }
 
 maker = Espyo

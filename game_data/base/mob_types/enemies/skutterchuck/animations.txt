@@ -13,6 +13,7 @@ animations{
 			dying_02{
 				duration=0.1000
 				interpolate=true
+				sound=squeak
 			}
 			dying_03{
 				duration=0.1000
@@ -37,6 +38,7 @@ animations{
 			dying_02{
 				duration=0.1000
 				interpolate=true
+				sound=squeak
 			}
 			dying_03{
 				duration=0.1000
@@ -264,6 +266,7 @@ animations{
 			stunned_01{
 				duration=0.0700
 				interpolate=true
+				sound=squeak
 			}
 			stunned_02{
 				duration=0.0700

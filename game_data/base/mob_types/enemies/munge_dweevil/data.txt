@@ -45,7 +45,7 @@ sounds {
         speed = 80
         speed_deviation = 10
     }
-    squeak_walking {
+    squeak_rare {
         sound = creature_vocals/dweevil_short
         volume = 20
         speed = 110
@@ -66,7 +66,7 @@ sounds {
         volume = 30
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 40
         speed = 140
     }

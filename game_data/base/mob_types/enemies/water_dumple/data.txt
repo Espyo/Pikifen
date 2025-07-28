@@ -56,7 +56,7 @@ sounds {
         speed = 80
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 60
     }
     swallow {

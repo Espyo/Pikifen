@@ -82,7 +82,7 @@ animations{
 			}
 			dying_06{
 				duration=0.1000
-				sound=thump
+				sound=thump_death
 			}
 			dying_06{
 				duration=1.0000

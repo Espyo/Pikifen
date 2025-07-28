@@ -31,13 +31,27 @@ sounds {
         sound = effects/swish
         volume = 50
     }
+    clamp {
+        sound = misc/clamp
+        speed = 140
+        volume = 30
+        speed_deviation = 10
+    }
+    chirp_1 {
+        sound = creature_vocals/chick_1
+        speed_deviation = 5
+    }
+    chirp_2 {
+        sound = creature_vocals/chick_2
+        speed_deviation = 5
+    }
     thud {
         sound = misc/thump
         volume = 50
         speed = 200
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 50
         speed = 160
     }

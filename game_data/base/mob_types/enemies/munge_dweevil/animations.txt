@@ -140,6 +140,7 @@ animations{
 			}
 			idling_02{
 				duration=0.1000
+				sound=squeak_rare
 			}
 			idling_01{
 				duration=0.1000
@@ -156,7 +157,7 @@ animations{
 			}
 			moving_02{
 				duration=0.1000
-				sound=squeak_walking
+				sound=squeak_rare
 			}
 			moving_03{
 				duration=0.1000

@@ -39,10 +39,10 @@ sounds {
     inhaling {
         sound = creature_vocals/inhaling
         loop = true
-        volume = 35
+        volume = 30
     }
     shaking {
-        sound = creature_misc/shaking
+        sound = creature_misc/shaking_leather
         volume = 60
     }
     exhaling {
@@ -51,7 +51,13 @@ sounds {
         volume = 50
     }
     thump {
-        sound = misc/thump
+        sound = misc/stomp_mid
+        volume = 50
+    }
+    stretch {
+        sound = effects/stretch
+        volume = 50
+        speed = 160
     }
 }
 

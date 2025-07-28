@@ -188,14 +188,14 @@ animations{
 			}
 			moving_01{
 				duration=0.1000
-				sound=thud
+				sound=thud_quiet
 			}
 			idling{
 				duration=0.1000
 			}
 			moving_02{
 				duration=0.1000
-				sound=thud
+				sound=thud_quiet
 			}
 		}
 	}
