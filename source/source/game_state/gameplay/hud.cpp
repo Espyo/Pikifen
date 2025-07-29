@@ -199,40 +199,6 @@ Hud::Hud() :
             
             if(health.ratio <= 0.0f) return;
             
-            if(health.cautionTimer > 0.0f) {
-                float cautionRingScale =
-                    interpolateNumber(
-                        health.cautionTimer,
-                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION,
-                        1.0f, 2.0f
-                    );
-                unsigned char cautionRingAlpha =
-                    health.cautionTimer <
-                    LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f ?
-                    interpolateNumber(
-                        health.cautionTimer,
-                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
-                        0.0f, 192
-                    ) :
-                    interpolateNumber(
-                        health.cautionTimer,
-                        LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
-                        LEADER::HEALTH_CAUTION_RING_DURATION,
-                        192, 0
-                    );
-                float cautionRingSize =
-                    std::min(finalDraw.size.x, finalDraw.size.y) *
-                    cautionRingScale;
-                    
-                drawBitmap(
-                    game.sysContent.bmpDamageRing,
-                    finalDraw.center,
-                    Point(cautionRingSize),
-                    0.0f,
-                    al_map_rgba(255, 255, 255, cautionRingAlpha)
-                );
-            }
-            
             drawHealth(
                 finalDraw.center,
                 health.ratio,
@@ -246,6 +212,34 @@ Hud::Hud() :
                 finalDraw.size,
                 true
             );
+
+            if(health.cautionTimer > 0.0f) {
+                float animRatio = health.cautionTimer / LEADER::HEALTH_CAUTION_RING_DURATION;
+                float cautionRingScale =
+                    interpolateNumber(
+                        health.cautionTimer,
+                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION,
+                        1.2f, 1.8f
+                    );
+                
+                KeyframeInterpolator<float> alphaKeyframes(0);
+                alphaKeyframes.add(0.2f, 255);
+                alphaKeyframes.add(0.3f, 255);
+                alphaKeyframes.add(0.8f, 0);
+                alphaKeyframes.add(1.0f, 0);
+
+                float cautionRingSize =
+                    std::min(finalDraw.size.x, finalDraw.size.y) *
+                    cautionRingScale;
+                    
+                drawBitmap(
+                    game.sysContent.bmpDamageRing,
+                    finalDraw.center,
+                    Point(cautionRingSize),
+                    0.0f,
+                    al_map_rgba(255, 255, 255, alphaKeyframes.get(animRatio))
+                );
+            }
         };
         gui.addItem(leaderHealth, "leader_" + i2s(l + 1) + "_health");
         leaderHealthMgr.registerBubble(l, leaderHealth);
