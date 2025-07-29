@@ -73,7 +73,7 @@ const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
 const float HEALTH_CAUTION_RATIO = 0.3f;
 
 //How long the low health caution ring lasts for.
-const float HEALTH_CAUTION_RING_DURATION = 2.5f;
+const float HEALTH_CAUTION_RING_DURATION = 1.5f;
 
 //Angle at which leaders hold their group members.
 const float HELD_GROUP_MEMBER_ANGLE = TAU / 2;
