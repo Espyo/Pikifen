@@ -300,6 +300,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxNoCheck);
     game.sysContent.bmpCursor =
         game.content.bitmaps.list.get(game.sysContentNames.bmpCursor);
+    game.sysContent.bmpDamageRing =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpDamageRing);
     game.sysContent.bmpDiscordIcon =
         game.content.bitmaps.list.get(game.sysContentNames.bmpDiscordIcon);
     game.sysContent.bmpEnemySoul =
@@ -538,6 +540,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxNoCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCursor);
+    game.content.bitmaps.list.free(game.sysContent.bmpDamageRing);
     game.content.bitmaps.list.free(game.sysContent.bmpDiscordIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
     game.content.bitmaps.list.free(game.sysContent.bmpFocusBox);

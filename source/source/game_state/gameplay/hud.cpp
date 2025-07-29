@@ -225,11 +225,11 @@ Hud::Hud() :
                     cautionRingScale;
                     
                 drawBitmap(
-                    game.sysContent.bmpBrightRing,
+                    game.sysContent.bmpDamageRing,
                     finalDraw.center,
                     Point(cautionRingSize),
                     0.0f,
-                    al_map_rgba(255, 0, 0, cautionRingAlpha)
+                    al_map_rgba(255, 255, 255, cautionRingAlpha)
                 );
             }
             
