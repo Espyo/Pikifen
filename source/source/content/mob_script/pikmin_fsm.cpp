@@ -2748,7 +2748,7 @@ void PikminFsm::doImpactBounce(Mob* m, void* info1, void* info2) {
     pikPtr->speedZ = 500.0f;
     pikPtr->face(impactAngle + TAU / 2.0f, nullptr, true);
     
-    pikPtr->setAnimation(PIKMIN_ANIM_KNOCKED_BACK);
+    pikPtr->setAnimation(PIKMIN_ANIM_BOUNCED_BACK);
 }
 
 

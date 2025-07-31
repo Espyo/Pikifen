@@ -248,6 +248,9 @@ enum PIKMIN_ANIM {
     //Getting knocked back.
     PIKMIN_ANIM_KNOCKED_BACK,
     
+    //Bounced back from an impact attack.
+    PIKMIN_ANIM_BOUNCED_BACK,
+    
     //Lying on the ground.
     PIKMIN_ANIM_LYING,
     

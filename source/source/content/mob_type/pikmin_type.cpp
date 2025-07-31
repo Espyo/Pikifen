@@ -147,6 +147,7 @@ AnimConversionVector PikminType::getAnimConversions() const {
     a(PIKMIN_ANIM_PLUCKING,           "plucking");
     a(PIKMIN_ANIM_PLUCKING_THROWN,    "plucking_thrown");
     a(PIKMIN_ANIM_KNOCKED_BACK,       "knocked_back");
+    a(PIKMIN_ANIM_BOUNCED_BACK,       "bounced_back");
     a(PIKMIN_ANIM_LYING,              "lying");
     a(PIKMIN_ANIM_GETTING_UP,         "getting_up");
     a(PIKMIN_ANIM_FLAILING,           "flailing");

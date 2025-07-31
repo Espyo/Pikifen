@@ -76,6 +76,20 @@ animations{
 			}
 		}
 	}
+	bounced_back{
+		loop_frame=2
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+		}
+	}
 	called{
 		frames{
 			idling_01{
@@ -635,6 +649,7 @@ animations{
 			}
 			grabbing_02{
 				duration=0.0500
+				sound=carrying
 			}
 			grabbing_01{
 				duration=0.0500
