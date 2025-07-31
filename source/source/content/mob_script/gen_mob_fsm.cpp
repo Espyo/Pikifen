@@ -448,7 +448,7 @@ void GenMobFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carryInfo->spotInfo.size(); p++) {
         Mob* pikPtr = m->carryInfo->spotInfo[p].pikPtr;
         if(pikPtr) {
-            pikPtr->fsm.runEvent(MOB_EV_FINISHED_CARRYING);
+            pikPtr->fsm.runEvent(MOB_EV_FINISHED_TASK);
         }
     }
     

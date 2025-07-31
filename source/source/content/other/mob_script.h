@@ -188,8 +188,8 @@ enum MOB_EV {
     //When the mob is ordered to go to an Onion to be stored inside.
     MOB_EV_GO_TO_ONION,
     
-    //When the object the Pikmin was carrying gets delivered.
-    MOB_EV_FINISHED_CARRYING,
+    //When the Pikmin successfully finish their current task, like carrying.
+    MOB_EV_FINISHED_TASK,
     
     //When the Pikmin is near an object that can be carried.
     MOB_EV_NEAR_CARRIABLE_OBJECT,

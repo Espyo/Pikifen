@@ -945,7 +945,7 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_WHISTLED); {
             efc.changeState("called");
         }
-        efc.newEvent(MOB_EV_FINISHED_CARRYING); {
+        efc.newEvent(MOB_EV_FINISHED_TASK); {
             efc.run(PikminFsm::finishCarrying);
         }
         efc.newEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
@@ -1007,8 +1007,10 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.changeState("called");
         }
         efc.newEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
-            efc.run(PikminFsm::forgetGroupTask);
             efc.changeState("idling");
+        }
+        efc.newEvent(MOB_EV_FINISHED_TASK); {
+            efc.changeState("celebrating");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(PikminFsm::checkIncomingAttack);
@@ -4814,19 +4816,29 @@ void PikminFsm::workOnGroupTask(Mob* m, void* info1, void* info2) {
     
     switch(tasPtr->tasType->workerPikminPose) {
     case GROUP_TASK_PIKMIN_POSE_STOPPED: {
-        pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
-    }
-    case GROUP_TASK_PIKMIN_POSE_ARMS_OUT: {
-        pikPtr->setAnimation(PIKMIN_ANIM_ARMS_OUT);
+    } case GROUP_TASK_PIKMIN_POSE_ARMS_OUT: {
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_ARMS_OUT, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
-    }
-    case GROUP_TASK_PIKMIN_POSE_PUSHING: {
-        pikPtr->setAnimation(PIKMIN_ANIM_PUSHING);
+    } case GROUP_TASK_PIKMIN_POSE_PUSHING: {
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_PUSHING, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
-    }
-    case GROUP_TASK_PIKMIN_POSE_CARRYING: {
-        pikPtr->setAnimation(PIKMIN_ANIM_CARRYING);
+    } case GROUP_TASK_PIKMIN_POSE_CARRYING: {
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_CARRYING, START_ANIM_OPTION_RANDOM_TIME
+        );
+        break;
+    } case GROUP_TASK_PIKMIN_POSE_CARRYING_LIGHT: {
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_CARRYING_LIGHT, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
     }
     }

@@ -23,7 +23,7 @@ show_health = false
 spots_z = 180
 team = obstacle
 walkable = true
-worker_pikmin_pose = carrying
+worker_pikmin_pose = carrying_light
 
 children {
     left_pillar {

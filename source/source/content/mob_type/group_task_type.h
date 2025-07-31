@@ -28,6 +28,9 @@ enum GROUP_TASK_PIKMIN_POSE {
     //Carrying.
     GROUP_TASK_PIKMIN_POSE_CARRYING,
     
+    //Carrying, light (no carrying noise).
+    GROUP_TASK_PIKMIN_POSE_CARRYING_LIGHT,
+    
 };
 
 

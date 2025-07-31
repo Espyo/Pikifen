@@ -123,6 +123,7 @@ void GroupTask::finishTask() {
     ) {
         Pikmin* pikPtr = game.states.gameplay->mobs.pikmin[p];
         if(pikPtr->focusedMob && pikPtr->focusedMob == this) {
+            pikPtr->fsm.runEvent(MOB_EV_FINISHED_TASK);
             pikPtr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
