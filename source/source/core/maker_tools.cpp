@@ -59,7 +59,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
             );
         string fileName =
             FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-            sanitizeFileName(game.curAreaData->name) +
+            game.curAreaData->manifest->internalName +
             "_" + getCurrentTime(true) + ".png";
             
         if(!al_save_bitmap(fileName.c_str(), bmp)) {

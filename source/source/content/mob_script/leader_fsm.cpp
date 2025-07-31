@@ -2786,6 +2786,7 @@ void LeaderFsm::startGoHere(Mob* m, void* info1, void* info2) {
         );
         leaPtr->midGoHere = true;
         LeaderFsm::setIsWalkingTrue(m, nullptr, nullptr);
+        LeaderFsm::setCorrectStandingAnim(m, nullptr, nullptr);
     }
 }
 

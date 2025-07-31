@@ -3,6 +3,7 @@ description = Dummy object for area-making purposes.
 
 area_editor_recommend_links_to = true
 area_editor_tips = This object doesn't do anything, but you can link other objects to this one, if they need a link object with no behavior.
+blackout_radius = 0
 custom_category_name = Misc
 
 maker = Espyo

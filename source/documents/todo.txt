@@ -6,20 +6,16 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Pikmin don't make a noise when starting to carry a cardboard box, and don't celebrate at the end
-    Winged Pikmin holding up a bamboo gate are annoying with the carrying noise
-    Pellet Posies, Spotcaps, etc. don't wobble when hurt like enemies do
-    Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
+    "trying to open an animation when the animation.txt doesnt exist prevents the editor from loading" (Thanks Helodity)
+    There's a memory leak when you restart areas (Thanks Helodity)
     The Beady Long Legs's shine, on the joint connecting the head to the feet, is coming from the NE angle instead of NW
     The debris graphics left behind by gates are drawn above the leaders and Pikmin
 
     --- 0.26 ---
-    Create a release candidate for people to playtest
     Add Pro Controller controls to the default controls
-    Add a cupcake treasure
     Try to implement the motif into Coastal Pavement
     Misc. graphical improvements
-        Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
+        Add shading to the Dumples, Female Sheargrub
         Bulborbs need a few more frames for fluidity
             Definitely add one or two Bolbert frames
         Yellow Wollyhop should close its eyes when struggling
@@ -65,10 +61,9 @@ Next tasks (roughly sorted most important first)
         Remove some of the elements?
             Stuff like a leader's health might not be necessary if it's full
         A mission's data should control how each HUD element displays its information
-            Number of things the player's achieved vs. number of things remaining
-            Display a slash and an out-of-total count vs. not displaying it
+            Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
-        Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies
+        Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies (Thanks Tenacious)
         Show how close you are to concocting a new spray
     Discontinue system message boxes in favor of Dear ImGui ones
     Other menu improvements
@@ -569,7 +564,6 @@ Misc things (so I don't forget)
         [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them
-        "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)
         Earthquake effect
             See https://www.pikminwiki.com/Rumble
             If the earthquake emitter is at the center of the screen, full intensity. The farther it is, the weaker the intensity. I think 2x offscreen or more should be 0 intensity.
@@ -722,14 +716,14 @@ Misc things (so I don't forget)
         When they finish breaking a gate, or delivering something, they should probably return to the closest leader's group, right?
         When they kill an enemy that leaves a corpse, they should stay near it, waiting for the enemy to finish dying, so they can carry it right away
         [NEEDS BRAINSTORMING] Should Pikmin seeds that land on the ground have a state where they sprout pops out of the ground?
+        Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
-        Make the water ripples be via shader
-            https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
         Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
         Blur the background of the Onion menu, pause menu, etc.
         Enemy souls?
+        Coloring due to ultra-bitter spray
     Pathing
         Pikmin, leaders, and so on should be able to take climbing sticks, bouncy mushrooms, geysers, etc. in order to traverse paths
     Editor improvements
@@ -806,7 +800,7 @@ Misc things (so I don't forget)
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
-    Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar should automatically pick leaf Pikmin [PIKMIN 4]
+    Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar or Candypop Buds should automatically pick leaf Pikmin [PIKMIN 4]
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
@@ -850,7 +844,6 @@ Misc things (so I don't forget)
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
         Skutterchucks should throw bomb rocks
-    Fix bridges and dummies emitting light during blackout (Darthvato)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles

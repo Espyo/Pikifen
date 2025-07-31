@@ -129,7 +129,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_DISMISSED); {
             efc.run(PikminFsm::beDismissed);
-            efc.changeState("goingToDismissSpot");
+            efc.changeState("going_to_dismiss_spot");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(PikminFsm::checkIncomingAttack);
@@ -186,7 +186,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_DISMISSED); {
             efc.run(PikminFsm::beDismissed);
-            efc.changeState("goingToDismissSpot");
+            efc.changeState("going_to_dismiss_spot");
         }
         efc.newEvent(MOB_EV_TIMER); {
             efc.run(PikminFsm::startBoredomAnim);
@@ -243,7 +243,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_DISMISSED); {
             efc.run(PikminFsm::beDismissed);
-            efc.changeState("goingToDismissSpot");
+            efc.changeState("going_to_dismiss_spot");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(PikminFsm::checkIncomingAttack);
@@ -316,7 +316,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_DISMISSED); {
             efc.run(PikminFsm::beDismissed);
-            efc.changeState("goingToDismissSpot");
+            efc.changeState("going_to_dismiss_spot");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(PikminFsm::checkIncomingAttack);
@@ -466,7 +466,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState(
-        "goingToDismissSpot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT
+        "going_to_dismiss_spot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT
     ); {
         efc.newEvent(MOB_EV_WHISTLED); {
             efc.changeState("called");
@@ -1796,7 +1796,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_RELEASE_ORDER); {
             efc.run(PikminFsm::releaseTool);
-            efc.changeState("goingToDismissSpot");
+            efc.changeState("going_to_dismiss_spot");
         }
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(PikminFsm::goingToDismissSpot);
@@ -2089,7 +2089,7 @@ void PikminFsm::becomeIdle(Mob* m, void* info1, void* info2) {
     m->unfocusFromMob();
     
     m->setAnimation(
-        PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+        PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME, true
     );
     m->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
@@ -2112,7 +2112,7 @@ void PikminFsm::becomeSprout(Mob* m, void* info1, void* info2) {
     disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     ((Pikmin*) m)->isSeedOrSprout = true;
     m->setAnimation(
-        PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+        PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME, true
     );
 }
 
@@ -2148,7 +2148,6 @@ void PikminFsm::beDismissed(Mob* m, void* info1, void* info2) {
     
     m->chase(*((Point*) info1), m->z);
     
-    m->setAnimation(PIKMIN_ANIM_IDLING);
     m->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_IDLE]);
 }
 
@@ -2778,7 +2777,7 @@ void PikminFsm::enterOnion(Mob* m, void* info1, void* info2) {
         oniPtr, checkpoints, oniPtr->oniType->nest->pikminEnterSpeed
     );
     
-    pikPtr->setAnimation(PIKMIN_ANIM_CLIMBING);
+    pikPtr->setAnimation(PIKMIN_ANIM_CLIMBING, START_ANIM_OPTION_RANDOM_TIME);
 }
 
 
@@ -3658,7 +3657,7 @@ void PikminFsm::leaveOnion(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    m->setAnimation(PIKMIN_ANIM_SLIDING);
+    m->setAnimation(PIKMIN_ANIM_SLIDING, START_ANIM_OPTION_RANDOM_TIME);
 }
 
 
@@ -4322,10 +4321,10 @@ void PikminFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
         m->setAnimation(PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->setAnimation(PIKMIN_ANIM_CLIMBING);
+        m->setAnimation(PIKMIN_ANIM_CLIMBING, START_ANIM_OPTION_RANDOM_TIME);
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        m->setAnimation(PIKMIN_ANIM_SLIDING);
+        m->setAnimation(PIKMIN_ANIM_SLIDING, START_ANIM_OPTION_RANDOM_TIME);
         break;
     }
     }
@@ -4422,7 +4421,7 @@ void PikminFsm::stopInGroup(Mob* m, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    m->setAnimation(PIKMIN_ANIM_IDLING);
+    m->setAnimation(PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME);
     m->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
@@ -4444,13 +4443,18 @@ void PikminFsm::tickCarrying(Mob* m, void* info1, void* info2) {
         pikPtr->carryingMob->carryInfo->isMoving
     ) {
         pikPtr->inCarryStruggleAnimation = false;
-        pikPtr->setAnimation(PIKMIN_ANIM_CARRYING);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_CARRYING, START_ANIM_OPTION_RANDOM_TIME
+        );
+        
     } else if(
         !pikPtr->inCarryStruggleAnimation &&
         !pikPtr->carryingMob->carryInfo->isMoving
     ) {
         pikPtr->inCarryStruggleAnimation = true;
-        pikPtr->setAnimation(PIKMIN_ANIM_CARRYING_STRUGGLE);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_CARRYING_STRUGGLE, START_ANIM_OPTION_RANDOM_TIME
+        );
     }
 }
 

@@ -93,7 +93,7 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
             workerPikminPose = GROUP_TASK_PIKMIN_POSE_PUSHING;
         } else if(workerPikminPoseStr == "carrying") {
             workerPikminPose = GROUP_TASK_PIKMIN_POSE_CARRYING;
-        } else if(workerPikminPoseStr == "carrying_LIGHT") {
+        } else if(workerPikminPoseStr == "carrying_light") {
             workerPikminPose = GROUP_TASK_PIKMIN_POSE_CARRYING_LIGHT;
         } else {
             game.errors.report(

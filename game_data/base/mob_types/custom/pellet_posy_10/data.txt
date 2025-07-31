@@ -1,6 +1,7 @@
 name = Pellet Posy (10 pellet)
 description = This plant, when mature, houses a 10 pellet between its petals.
 
+blackout_radius = 30
 custom_category_name = Pellet Posy
 height = 128
 inactive_logic = ticks

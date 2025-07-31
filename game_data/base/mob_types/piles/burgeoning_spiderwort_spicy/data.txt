@@ -1,6 +1,7 @@
 name = Burgeoning Spiderwort (spicy)
 description = This Burgeoning Spiderwort grows ultra-spicy berries, which can be harvested.
 
+blackout_radius = 25
 can_drop_multiple = true
 contents = berry_spicy
 custom_category_name = Useful

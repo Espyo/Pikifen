@@ -2,6 +2,7 @@ name = Carry target
 description = A target to deliver carried things to, with absolutely no purpose.
 
 area_editor_recommend_links_to = true
+blackout_radius = 0
 can_block_paths = false
 casts_shadow = false
 custom_category_name = Misc
