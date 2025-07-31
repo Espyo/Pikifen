@@ -28,8 +28,8 @@ EnemyType::EnemyType() :
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_FRAGILE;
-        
     startingTeam = MOB_TEAM_ENEMY_1;
+    useDamageSquashAndStretch = true;
     
     addCarryingStates();
 }

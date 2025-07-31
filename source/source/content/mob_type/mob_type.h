@@ -290,6 +290,9 @@ public:
     //Does it cast a shadow?
     bool castsShadow = true;
     
+    //Whether to use the damage squash-and-stretch effect.
+    bool useDamageSquashAndStretch = false;
+    
     //How much light does it cast in a blackout? <0 to use the mob's radius.
     float blackoutRadius = -1.0f;
     

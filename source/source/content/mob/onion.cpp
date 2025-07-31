@@ -120,7 +120,8 @@ void Onion::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
-        SPRITE_BMP_EFFECT_DELIVERY
+        SPRITE_BMP_EFFECT_DELIVERY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
     eff.tintColor.a *= (seethrough / 255.0f);

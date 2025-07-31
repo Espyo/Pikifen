@@ -19,6 +19,7 @@ show_amount = false
 show_health = false
 size_animation_suffixes = _0;_1;_2;_3;_4;_5
 target_type = explodable_pikmin_obstacle
+use_damage_squash_and_stretch = true
 
 vulnerabilities {
     explosion = 400

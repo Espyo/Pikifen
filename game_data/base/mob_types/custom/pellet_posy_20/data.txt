@@ -11,6 +11,7 @@ pushes_softly = true
 radius = 10
 target_type = weak_plain_obstacle
 team = obstacle
+use_damage_squash_and_stretch = true
 
 area_editor_properties {
     Bloom time {

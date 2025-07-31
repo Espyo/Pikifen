@@ -238,7 +238,8 @@ void Bridge::drawComponent(Mob* m) {
     BitmapEffect eff;
     m->getSpriteBitmapEffects(
         nullptr, nullptr, 0.0f, &eff,
-        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        (m->type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
     Bridge* briPtr = (Bridge*) m->links[0];

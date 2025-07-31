@@ -12,6 +12,7 @@ rotation_speed = 3000
 show_health = false
 target_type = explodable_pikmin_obstacle
 team = obstacle
+use_damage_squash_and_stretch = true
 
 sounds {
     hit {

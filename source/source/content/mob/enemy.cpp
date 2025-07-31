@@ -91,7 +91,7 @@ void Enemy::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
-        SPRITE_BMP_EFFECT_DAMAGE |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0) |
         SPRITE_BMP_EFFECT_CARRY
     );
     drawBitmapWithEffects(curSPtr->bitmap, eff);

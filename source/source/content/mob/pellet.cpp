@@ -52,7 +52,8 @@ void Pellet::drawMob() {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY |
-        SPRITE_BMP_EFFECT_CARRY
+        SPRITE_BMP_EFFECT_CARRY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
     Point bmpSize = getBitmapDimensions(curSPtr->bitmap);
