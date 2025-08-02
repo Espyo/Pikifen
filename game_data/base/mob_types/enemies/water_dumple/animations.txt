@@ -481,7 +481,7 @@ sprites{
 		file=enemies/water_dumple
 		file_pos=67.0000 103.0000
 		file_size=67.0000 50.0000
-		offset=1.0000 0.0000
+		offset=0.5000 0.0000
 		hitboxes{
 			body{
 				coords=3.0000 0.0000 0.0000

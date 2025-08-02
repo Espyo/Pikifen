@@ -578,7 +578,7 @@ sprites{
 		file=enemies/electric_water_dumple
 		file_pos=0.0000 180.0000
 		file_size=136.0000 88.0000
-		offset=-2.0000 -0.2500
+		offset=-2.0000 0.2500
 		hitboxes{
 			body{
 				coords=-5.0000 0.0000 0.0000
