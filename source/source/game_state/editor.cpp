@@ -1866,9 +1866,9 @@ void Editor::processGuiBaseContentWarningDialog() {
     //Continue button.
     ImGui::SameLine();
     if(ImGui::Button("Continue", ImVec2(70, 30))) {
+        closeTopDialog();
         baseContentWarningDoPickCallback();
         baseContentWarningDoPickCallback = nullptr;
-        closeTopDialog();
     }
     
     //Open manual button.
