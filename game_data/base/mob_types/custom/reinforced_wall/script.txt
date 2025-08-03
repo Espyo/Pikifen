@@ -99,6 +99,8 @@ script {
             play_sound rock_breaking
             set_tangible false
             set_shadow_visibility false
+            //Set height to 1 so the debris show below the leaders.
+            set_height 1
         }
     }
 }

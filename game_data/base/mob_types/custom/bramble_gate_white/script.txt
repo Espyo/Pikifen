@@ -104,6 +104,8 @@ script {
             play_sound obstacle_cleared
             set_tangible false
             set_shadow_visibility false
+            //Set height to 1 so the debris show below the leaders.
+            set_height 1
         }
     }
 }

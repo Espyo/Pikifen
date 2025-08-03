@@ -161,7 +161,7 @@ public:
     Leader(const Point& pos, LeaderType* type, float angle);
     bool checkThrowOk() const;
     bool canGrabGroupMember(Mob* m) const;
-    void dismiss();
+    void dismiss(bool subtle = false);
     size_t getAmountOfGroupPikmin(const PikminType* filter);
     bool orderPikminToOnion(
         const PikminType* type, PikminNest* nPtr, size_t amount

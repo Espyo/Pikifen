@@ -4,6 +4,7 @@ tags=Short and sweet; Garden
 maker=Espyo
 version=1.1.0
 engine_version=1.0.0
+notes=This stage was inspired by Super Smash Bros.'s Break the Targets.
 subtitle
 difficulty=4
 bg_bmp=textures/grass_light

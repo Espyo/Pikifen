@@ -292,9 +292,14 @@ bool Leader::checkThrowOk() const {
  * @brief Makes a leader (try to) dismiss their group.
  * The group is then organized in subgroups, by type,
  * and is dismissed close to the leader.
+ *
+ * @param subtle If true, no sounds or particles will happen.
  */
-void Leader::dismiss() {
-    dismissDetails();
+void Leader::dismiss(bool subtle) {
+    setAnimation(LEADER_ANIM_DISMISSING);
+    if(!subtle) {
+        dismissDetails();
+    }
     if(!group->members.empty()) {
         dismissLogic();
     }
@@ -305,9 +310,6 @@ void Leader::dismiss() {
  * @brief Runs the aesthetic and secondary details about dismissing.
  */
 void Leader::dismissDetails() {
-    //Animation.
-    setAnimation(LEADER_ANIM_DISMISSING);
-    
     //Sound.
     MobType::Sound* sound =
         &type->sounds[leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]];

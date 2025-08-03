@@ -194,10 +194,10 @@ vector<string> folderToVector(
     //Normalize the folder's path.
     folderPath = standardizePath(folderPath);
     
-    ALLEGRO_FS_ENTRY* folder =
-        al_create_fs_entry(folderPath.c_str());
+    ALLEGRO_FS_ENTRY* folder = al_create_fs_entry(folderPath.c_str());
     if(!folder || !al_open_directory(folder)) {
         if(outFolderFound) *outFolderFound = false;
+        if(folder) al_destroy_fs_entry(folder);
         return v;
     }
     

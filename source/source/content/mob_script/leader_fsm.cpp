@@ -1883,11 +1883,11 @@ void LeaderFsm::die(Mob* m, void* info1, void* info2) {
  * @brief When a leader dismisses the group.
  *
  * @param m The mob.
- * @param info1 Unused.
+ * @param info1 If not nullptr, then the dismiss must be silent.
  * @param info2 Unused.
  */
 void LeaderFsm::dismiss(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->dismiss();
+    ((Leader*) m)->dismiss(info1 != nullptr);
 }
 
 

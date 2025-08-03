@@ -8,26 +8,19 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     "trying to open an animation when the animation.txt doesnt exist prevents the editor from loading" (Thanks Helodity)
     There's a memory leak when you restart areas (Thanks Helodity)
-    The Beady Long Legs's shine, on the joint connecting the head to the feet, is coming from the NE angle instead of NW
-    The debris graphics left behind by gates are drawn above the leaders and Pikmin
 
     --- 0.26 ---
     Add Pro Controller controls to the default controls
     Try to implement the motif into Coastal Pavement
     Misc. graphical improvements
-        Add shading to the Dumples, Female Sheargrub
-        Bulborbs need a few more frames for fluidity
-            Definitely add one or two Bolbert frames
-        Yellow Wollyhop should close its eyes when struggling
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
             Animate lights and such using particles?
         Add a glow to the smack effect particle?
-        Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     More particles
         More across the board -- check all mobs too
         Climbing stick complete
-    Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area
+    Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area. Smoothly fade between each one except at the end, so the viewer can tell when the gif ends
     Manual updates
         Update screenshots that still show off the Play area
         Update the history page to mention 1.0's launch
@@ -743,6 +736,7 @@ Misc things (so I don't forget)
             Add regression-testing in-game
             Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
             When you want to pick a song, a dialog should appear listing all of them, separating the area songs from the other ones, and also showing the tags and credits
+            A way to toggle the selection transformation widget via a button press (thanks Helodity)
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
@@ -817,6 +811,7 @@ Misc things (so I don't forget)
             Bulbears
             Scuttlebug?
             An enemy that follows you anywhere, but only at short-range. You can use this to goad it towards the Onion for less corpse carrying time, or to an opponent's Onion in multiplayer arenas
+        The Pikmin 4 default leader
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?

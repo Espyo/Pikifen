@@ -4,6 +4,7 @@ tags=Standard; Forest
 maker=Espyo
 version=1.1.0
 engine_version=1.0.0
+notes=This stage is an evolution of the "Play" stage from older versions of Pikifen, which in turn is based on the geometry of an unused stage in Pikmin, "tuto2".
 subtitle
 difficulty=2
 bg_bmp=textures/grass_dark
