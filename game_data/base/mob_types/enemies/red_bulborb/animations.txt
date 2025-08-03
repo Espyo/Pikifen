@@ -11,26 +11,63 @@ animations{
 				duration=0.2000
 			}
 			attacking_02{
-				duration=0.2000
+				duration=0.1000
+				interpolate=true
 			}
 			attacking_03{
+				duration=0.1000
+			}
+			attacking_04{
 				duration=0.2000
 				sound=bite
 			}
 		}
 	}
 	dying{
-		loop_frame=6
+		loop_frame=17
 		frames{
 			dying_01{
-				duration=0.2000
+				duration=0.1000
 			}
 			dying_02{
 				duration=0.1000
 			}
 			dying_03{
-				duration=1.0000
+				duration=0.1000
+			}
+			dying_04{
+				duration=0.1000
 				sound=dying
+			}
+			dying_05{
+				duration=0.1000
+			}
+			dying_04{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.1000
+			}
+			dying_04{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.1000
+			}
+			dying_04{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.1000
+			}
+			dying_04{
+				duration=0.1000
+			}
+			dying_05{
+				duration=0.1000
+			}
+			dying_03{
+				duration=0.1000
 			}
 			dying_02{
 				duration=0.1000
@@ -38,7 +75,7 @@ animations{
 			dying_01{
 				duration=0.2000
 			}
-			dying_04{
+			dying_06{
 				duration=0.1000
 				sound=thud
 			}
@@ -49,30 +86,39 @@ animations{
 	}
 	eating{
 		frames{
-			attacking_04{
+			attacking_05{
 				duration=0.2000
 			}
+			idling{
+				duration=0.1000
+			}
 			chomping_01{
-				duration=0.3000
+				duration=0.2000
 			}
 			chomping_02{
-				duration=0.1500
+				duration=0.1000
 			}
 			chomping_03{
 				duration=0.1500
 			}
 			chomping_02{
 				duration=0.1500
-				sound=chew
+				sound=bite
 			}
 			chomping_01{
 				duration=0.2000
 			}
 			chomping_02{
+				duration=0.1000
+			}
+			chomping_03{
+				duration=0.1000
+			}
+			chomping_04{
 				duration=0.1500
 			}
 			chomping_03{
-				duration=0.1500
+				duration=0.1000
 			}
 			chomping_02{
 				duration=0.1500
@@ -87,8 +133,11 @@ animations{
 		}
 	}
 	failing{
-		loop_frame=4
+		loop_frame=5
 		frames{
+			attacking_05{
+				duration=0.1000
+			}
 			failing_01{
 				duration=0.1000
 				interpolate=true
@@ -117,14 +166,20 @@ animations{
 			chomping_01{
 				duration=0.1000
 			}
-			chomping_03{
+			chomping_02{
+				duration=0.1000
+			}
+			chomping_04{
 				duration=0.8000
 				sound=yawn
 			}
-			chomping_01{
-				duration=0.2000
+			chomping_03{
+				duration=0.1000
 			}
-			attacking_02{
+			chomping_01{
+				duration=0.1000
+			}
+			attacking_03{
 				duration=0.1000
 			}
 			idling{
@@ -222,30 +277,40 @@ animations{
 				interpolate=true
 			}
 			idling{
-				duration=0.2000
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
 				interpolate=true
 			}
 			shaking_02{
-				duration=0.1500
-			}
-			idling{
-				duration=0.1500
+				duration=0.1000
 				sound=shaking
 			}
 			shaking_03{
-				duration=0.1500
-			}
-			idling{
-				duration=0.1500
+				duration=0.1000
 			}
 			shaking_04{
-				duration=0.1500
+				duration=0.1000
 			}
 			idling{
-				duration=0.1500
+				duration=0.1000
 			}
-			shaking_03{
-				duration=0.1500
+			shaking_05{
+				duration=0.1000
+			}
+			shaking_06{
+				duration=0.1000
+			}
+			shaking_05{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_04{
+				duration=0.2000
 			}
 			idling{
 				duration=0.3000
@@ -254,15 +319,18 @@ animations{
 	}
 	sleeping{
 		frames{
-			sleeping_01{
-				duration=0.7000
+			sleeping_02{
+				duration=0.1500
 			}
 			sleeping_01{
-				duration=0.1000
+				duration=0.7500
 				sound=snoring
 			}
 			sleeping_02{
-				duration=0.8000
+				duration=0.1500
+			}
+			sleeping_03{
+				duration=0.7500
 			}
 		}
 	}
@@ -274,21 +342,28 @@ animations{
 			sleeping_02{
 				duration=0.3000
 			}
-			failing_02{
-				duration=0.3000
+			failing_04{
+				duration=0.1000
+				interpolate=true
 				sound=groan
 			}
-			moving_01{
+			failing_03{
+				duration=0.3000
+			}
+			sleeping_01{
+				duration=0.1000
+			}
+			moving_03{
 				duration=0.2000
 			}
 			idling{
-				duration=0.1500
+				duration=0.1000
 			}
-			moving_03{
-				duration=0.1500
+			moving_01{
+				duration=0.1000
 			}
 			idling{
-				duration=0.1500
+				duration=0.2000
 			}
 		}
 	}
@@ -358,6 +433,38 @@ sprites{
 	}
 	attacking_03{
 		file=enemies/red_bulborb
+		file_pos=161.0000 116.0000
+		file_size=174.0000 110.0000
+		offset=34.6873 0.0000
+		scale=1.0717 0.9331
+		hitboxes{
+			body{
+				coords=55.0000 -2.0000 0.0000
+				height=128.0000
+				radius=45.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 4.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=104.0000 -10.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	attacking_04{
+		file=enemies/red_bulborb
 		file_pos=336.0000 116.0000
 		file_size=174.0000 103.0000
 		offset=28.0000 0.0000
@@ -387,7 +494,7 @@ sprites{
 			}
 		}
 	}
-	attacking_04{
+	attacking_05{
 		file=enemies/red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
@@ -478,6 +585,37 @@ sprites{
 		}
 	}
 	chomping_03{
+		file=enemies/red_bulborb
+		file_pos=455.0000 358.0000
+		file_size=110.0000 103.0000
+		offset=-6.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-14.0000 0.0000 0.0000
+				height=128.0000
+				radius=48.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=39.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	chomping_04{
 		file=enemies/red_bulborb
 		file_pos=226.0000 252.0000
 		file_size=115.0000 103.0000
@@ -596,6 +734,35 @@ sprites{
 	}
 	dying_03{
 		file=enemies/red_bulborb
+		file_pos=455.0000 358.0000
+		file_size=110.0000 103.0000
+		offset=-6.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-14.0000 0.0000 0.0000
+				height=128.0000
+				radius=48.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=39.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=enemies/red_bulborb
 		file_pos=226.0000 252.0000
 		file_size=115.0000 103.0000
 		offset=-4.0000 0.0000
@@ -623,7 +790,36 @@ sprites{
 			}
 		}
 	}
-	dying_04{
+	dying_05{
+		file=enemies/red_bulborb
+		file_pos=226.0000 252.0000
+		file_size=115.0000 103.0000
+		offset=-2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=2
+				value=1.0000
+			}
+			back{
+				coords=-14.0000 0.0000 0.0000
+				height=128.0000
+				radius=48.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=32.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_06{
 		file=enemies/red_bulborb
 		file_pos=0.0000 0.0000
 		file_size=153.0000 103.0000
@@ -720,6 +916,38 @@ sprites{
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
 		offset=20.0000 0.0000
+		hitboxes{
+			body{
+				coords=52.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=94.0000 12.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	failing_04{
+		file=enemies/red_bulborb
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=34.4984 0.0000
+		scale=1.1779 0.8490
 		hitboxes{
 			body{
 				coords=52.0000 0.0000 0.0000
@@ -1097,13 +1325,12 @@ sprites{
 	}
 	shaking_03{
 		file=enemies/red_bulborb
-		file_pos=515.0000 252.0000
-		file_size=159.0000 105.0000
+		file_pos=566.0000 358.0000
+		file_size=157.0000 111.0000
 		offset=16.0000 0.0000
-		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=51.0000 -10.0000 0.0000
+				coords=52.0000 15.0000 0.0000
 				height=128.0000
 				radius=40.0000
 				type=0
@@ -1111,7 +1338,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			back{
-				coords=-12.0000 1.0000 0.0000
+				coords=-12.0000 -4.0000 0.0000
 				height=128.0000
 				radius=50.0000
 				type=0
@@ -1119,7 +1346,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			mouth{
-				coords=90.0000 -13.0000 0.0000
+				coords=92.0000 6.0000 0.0000
 				height=128.0000
 				radius=16.0000
 				type=2
@@ -1151,6 +1378,70 @@ sprites{
 			}
 			mouth{
 				coords=90.0000 13.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_05{
+		file=enemies/red_bulborb
+		file_pos=515.0000 252.0000
+		file_size=159.0000 105.0000
+		offset=16.0000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=51.0000 -10.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 1.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 -13.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_06{
+		file=enemies/red_bulborb
+		file_pos=566.0000 358.0000
+		file_size=157.0000 111.0000
+		offset=16.0000 0.0000
+		scale=1.0000 -1.0000
+		hitboxes{
+			body{
+				coords=52.0000 -15.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 4.0000 0.0000
+				height=128.0000
+				radius=50.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=92.0000 -6.0000 0.0000
 				height=128.0000
 				radius=16.0000
 				type=2
@@ -1192,6 +1483,37 @@ sprites{
 	sleeping_02{
 		file=enemies/red_bulborb
 		file_pos=624.0000 0.0000
+		file_size=157.0000 103.0000
+		offset=14.0000 0.0000
+		hitboxes{
+			body{
+				coords=52.0000 0.0000 0.0000
+				height=128.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=-12.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=90.0000 0.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sleeping_03{
+		file=enemies/red_bulborb
+		file_pos=784.0000 0.0000
 		file_size=157.0000 103.0000
 		offset=14.0000 0.0000
 		hitboxes{
