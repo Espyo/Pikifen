@@ -24,7 +24,7 @@
     <h3 id="concepts">Key concepts</h3>
     
     <figure class="fig-right">
-      <img src="../images/polygon_overlap.png" alt="A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).">
+      <img src="../images/area_tutorial/polygon_overlap.png" alt="A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).">
       <figcaption>A layout made up of two overlapping polygons (like on the left) is not possible. It must be made up of three neighboring polygons (like on the right).</figcaption>
     </figure>
     
@@ -56,8 +56,8 @@
     <dl>
       <dt><b>Open the area editor.</b></dt>
       <dd>To do so, from the engine's main menu, choose the "Area editor" option.</dd>
-      <dt><b>In the dialog, type in the name of the new area and press Return.</b></dt>
-      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key. When asked what type of area to create, just pick simple for now. Let's call it <code>forest</code>. This is the <a href="making.html#content">internal name</a> of the area, not the name that will appear on the loading screen.</dd>
+      <dt><b>In the dialog, press "Create new...", then enter the internal name.</b></dt>
+      <dd>The <a href="making.html#content">internal name</a> is only used for development, and won't appear on the loading screen. Name it something like <code>forest</code> and leave the type as "Simple area" for this tutorial.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>A new area will already have a default sector with a grassy texture, as well as a leader object.</li>
@@ -80,7 +80,7 @@
     <h3 id="moving-vertexes">Moving vertexes</h3>
     
     <figure class="fig-right">
-      <img src="../images/moving_vertexes.png" alt="Moving the last edge to stretch out the sector.">
+      <img src="../images/area_tutorial/moving_vertexes.png" alt="Moving the last edge to stretch out the sector.">
       <figcaption>Moving the last edge to stretch out the sector.</figcaption>
     </figure>
     
@@ -100,7 +100,7 @@
     <h3 id="new-sector">Creating a new sector</h3>
     
     <figure class="fig-right">
-      <img src="../images/new_sector.png" alt="Creating a new sector, one click away from finishing.">
+      <img src="../images/area_tutorial/new_sector.png" alt="Creating a new sector, one click away from finishing.">
       <figcaption>Creating a new sector, one click away from finishing.</figcaption>
     </figure>
     
@@ -125,7 +125,7 @@
     <h3 id="adding-vertexes">Adding and removing vertexes</h3>
     
     <figure class="fig-right">
-      <img src="../images/adding_vertexes.png" alt="The rock, after adding some vertexes.">
+      <img src="../images/area_tutorial/adding_vertexes.png" alt="The rock, after adding some vertexes.">
       <figcaption>The rock, after adding some vertexes.</figcaption>
     </figure>
     
@@ -141,7 +141,7 @@
     <h3 id="sector-texture">Sector texture</h3>
     
     <figure class="fig-right">
-      <img src="../images/sector_texture.png" alt="Changing the rock sector's texture to a stone pattern.">
+      <img src="../images/area_tutorial/sector_texture.png" alt="Changing the rock sector's texture to a stone pattern.">
       <figcaption>Changing the rock sector's texture to a stone pattern.</figcaption>
     </figure>
     
@@ -153,7 +153,7 @@
       <dt><b>Click the "Choose image..." button in the "Appearance" section of the panel.</b></dt>
       <dd>This button will allow you to set the sector's texture.</dd>
       <dt><b>Choose a texture from the suggestions list, or browse for a new one.</b></dt>
-      <dd>Most likely, only the grassy texture will be available in the list for now. Textures can be found in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, though for the sake of organization they're usually placed in the <code>textures</code> subfolder. Click on "Choose another..." to pick a new bitmap to use. Let's pick <code>stone</code>.</dd>
+      <dd>Most likely, only the grassy texture will be available in the list for now. Textures can be found in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders, though for the sake of organization they're usually placed in the <code>textures</code> subfolder. Click on "Choose another..." to pick a new bitmap to use. Let's pick <code>textures/stone</code>.</dd>
     </dl>
 
     <h3 id="sector-height">Sector height</h3>
@@ -164,13 +164,13 @@
       <dt><b>Select the sector whose height you want to change.</b></dt>
       <dd>Like before, click inside a sector to select it. If you check the panel's "Behavior" section, the sector's height should be 0, the same as the ground.</dd>
       <dt><b>Change the number inside the "Height" textbox. Higher number means higher height.</b></dt>
-      <dd>For our rock, set it to something like 200. It may be hard to visualize how it ended up in your head, but know that 200 is much taller than a leader, but not tall enough that most Pikmin can't be thrown on top of it.</dd>
+      <dd>For our rock, set it to something like 200. It may be hard to visualize how it ended up in your head, but know that 200 is much taller than a leader, but short enough that Pikmin can be thrown on top of it.</dd>
     </dl>
 
     <h3 id="stitching">Stitching sectors</h3>
     
     <figure class="fig-right">
-      <img src="../images/smaller_rock.png" alt="The smaller rock connected to the main one.">
+      <img src="../images/area_tutorial/smaller_rock.png" alt="The smaller rock connected to the main one.">
       <figcaption>The smaller rock connected to the main one.</figcaption>
     </figure>
     
@@ -188,7 +188,7 @@
     <h3 id="blending-textures">Blending ground textures</h3>
     
     <figure class="fig-right">
-      <img src="../images/texture_blend.png" alt="Blending the two ground textures.">
+      <img src="../images/area_tutorial/texture_blend.png" alt="Blending the two ground textures.">
       <figcaption>Blending the two ground textures.</figcaption>
     </figure>
     
@@ -201,14 +201,14 @@
       <dd>This will cause the sector to take a look at the sectors around it, and blend one texture into the other! The thicker your blending sector, the longer the transition.</dd>
       <dt><b>If the blending is in the wrong direction, try making the blend sector longer and thinner.</b></dt>
       <dd>The engine decides the direction to blend in based on the thickness of its edges. If you make the sector too chubby, it may think that you want to blend the other, longer edges's sectors.</dd>
-      <dt><b>If the blending becomes broken in certain places (<a href="../images/broken_blend.png">example</a>), split the blending sector into more sectors (<a href="../images/fixed_blend.png">example</a>).</b></dt>
-      <dd>This is an engine and triangulation limitation. The blend may look a bit off in some angles, especially if your blend sector has a lot of curves. Just split it up and move it around until it works.</dd>
+      <dt><b>If the blending becomes broken in certain places (<a href="../images/area_tutorial/broken_blend.png">example</a>), split the blending sector into more sectors (<a href="../images/area_tutorial/fixed_blend.png">example</a>).</b></dt>
+      <dd>This is an engine and <a href="https://en.wikipedia.org/wiki/Triangulation_(geometry)">triangulation</a> limitation. The blend may look a bit off in some angles, especially if your blend sector has a lot of curves. Just split it up and move it around until it works.</dd>
     </dl>
 
     <h3 id="out-of-bounds">Out of bounds</h3>
     
     <figure class="fig-right">
-      <img src="../images/outer_sector.png" alt="The outer sector, as well as a fading sector to fade into the void.">
+      <img src="../images/area_tutorial/outer_sector.png" alt="The outer sector, as well as a fading sector to fade into the void.">
       <figcaption>The outer sector, as well as a fading sector to fade into the void.</figcaption>
     </figure>
     
@@ -226,7 +226,7 @@
     <h3 id="ramps">Ramps</h3>
     
     <figure class="fig-right">
-      <img src="../images/ramp.png" alt="The ramp leading up to the big rock.">
+      <img src="../images/area_tutorial/ramp.png" alt="The ramp leading up to the big rock.">
       <figcaption>The ramp leading up to the big rock.</figcaption>
     </figure>
     
@@ -242,7 +242,7 @@
     <h3 id="mobs">Objects</h3>
     
     <figure class="fig-right">
-      <img src="../images/objects.png" alt="The Onion and 10 Red Pikmin, near Olimar.">
+      <img src="../images/area_tutorial/objects.png" alt="The Onion and 10 Red Pikmin, near Olimar.">
       <figcaption>The Onion and 10 Red Pikmin, near Olimar.</figcaption>
     </figure>
     
@@ -271,7 +271,7 @@
     <h3 id="linked-mobs">Linked objects</h3>
 
     <figure class="fig-right">
-      <img src="../images/object_links.png" alt="The bridge object linking to the dummy object.">
+      <img src="../images/area_tutorial/object_links.png" alt="The bridge object linking to the dummy object.">
       <figcaption>The bridge object linking to the dummy object.</figcaption>
     </figure>
 
@@ -293,7 +293,7 @@
     <h3 id="water">Adding water</h3>
     
     <figure class="fig-right">
-      <img src="../images/water.png" alt="The pond of water, with a texture fader around it.">
+      <img src="../images/area_tutorial/water.png" alt="The pond of water, with a texture fader around it.">
       <figcaption>The pond of water, with a texture fader around it.</figcaption>
     </figure>
     
@@ -309,7 +309,7 @@
     <h3 id="paths">Carrying paths</h3>
     
     <figure class="fig-right">
-      <img src="../images/carrying_paths.png" alt="Some carrying paths all laid out.">
+      <img src="../images/area_tutorial/carrying_paths.png" alt="Some carrying paths all laid out.">
       <figcaption>Some carrying paths all laid out.</figcaption>
     </figure>
     
@@ -339,7 +339,7 @@
     <h3 id="tree-shadows">Tree shadows</h3>
     
     <figure class="fig-right">
-      <img src="../images/tree_shadow.png" alt="The standard tree shadow on top of the area.">
+      <img src="../images/area_tutorial/tree_shadow.png" alt="The standard tree shadow on top of the area.">
       <figcaption>The standard tree shadow on top of the area.</figcaption>
     </figure>
     
@@ -391,15 +391,15 @@
     </ul>
 
     <figure>
-      <img src="../images/delete_sector.png" alt="How to delete a sector by crushing it.">
+      <img src="../images/area_tutorial/delete_sector.png" alt="How to delete a sector by crushing it.">
       <figcaption>How to delete a sector by crushing it.</figcaption>
     </figure>
     <figure>
-      <img src="../images/unstitch_pull.png" alt="How to unstitch a sector by pulling the vertexes apart.">
+      <img src="../images/area_tutorial/unstitch_pull.png" alt="How to unstitch a sector by pulling the vertexes apart.">
       <figcaption>How to unstitch a sector by pulling the vertexes apart.</figcaption>
     </figure>
     <figure>
-      <img src="../images/unstitch_aux.png" alt="How to unstitch a sector with an auxiliary sector.">
+      <img src="../images/area_tutorial/unstitch_aux.png" alt="How to unstitch a sector with an auxiliary sector.">
       <figcaption>How to unstitch a sector with an auxiliary sector.</figcaption>
     </figure>
 
@@ -470,7 +470,7 @@
     <p>The "Find errors" feature might detect some of the more common problems you may get yourself into, but don't rely on it for everything.</p>
     
     <figure>
-      <img src="../images/inside_out_sector.png" alt="Don't turn a sector inside-out like this.">
+      <img src="../images/area_tutorial/inside_out.png" alt="Don't turn a sector inside-out like this.">
       <figcaption>Don't turn a sector inside-out like this.</figcaption>
     </figure>
     
@@ -484,7 +484,7 @@
     </ul>
 
     <figure>
-      <img src="../images/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
+      <img src="../images/area_tutorial/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
       <figcaption>Splitting a sector like this can cause it two divide into two sub-sectors.</figcaption>
     </figure>
 

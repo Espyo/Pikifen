@@ -9,6 +9,8 @@ Next tasks (roughly sorted most important first)
     "trying to open an animation when the animation.txt doesnt exist prevents the editor from loading" (Thanks Helodity)
         Looks like it's only if you're not an engine dev
     There's a memory leak when you restart areas (Thanks Helodity)
+    Dragging with left-click then temporarily dragging with right-click while still holding left-click results in it letting go
+    Having a fade sector towards the void looks weird
 
     --- 0.26 ---
     Add Pro Controller controls to the default controls
@@ -17,9 +19,6 @@ Next tasks (roughly sorted most important first)
         More across the board -- check all mobs too
         Climbing stick complete
     Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area. Smoothly fade between each one except at the end, so the viewer can tell when the gif ends
-    Manual updates
-        Update screenshots that still show off the Play area
-        Update the history page to mention 1.0's launch
     Cook up a better logo?
     Test it on the Steam Deck
     Test from a fresh save file
@@ -29,6 +28,7 @@ Next tasks (roughly sorted most important first)
     Check one final time for leaks, run a static analysis, etc.
     Check one final time that all content has the engine version as 1.0.0
     Make sure the readme's <50MB size claim is correct
+    Update the manual's history page to mention 1.0's launch
     
     --- Future ---
     A way to port content from previous versions

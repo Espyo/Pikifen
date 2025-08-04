@@ -66,7 +66,7 @@ function make_toc() {
 function create_header(title, bc_names, bc_links) {
   var header_div = document.createElement('div');
   header_div.innerHTML =
-    '<img src="../images/logo.png" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: top">' +
+    '<img src="../../game_data/base/graphics/gui/icon.png" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: top">' +
     '<b><i>Pikifen manual</i></b> ' +
     '<span style="margin-left: 10px; margin-right: 10px;">|</span> ' +
     '<a href="#top" title="Go to the top of the page.">&UpArrowBar;</a> ' +
