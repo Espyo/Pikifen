@@ -1,0 +1,14 @@
+script {
+    idling {
+        on_enter {
+            set_timer 0.01
+        }
+        on_timer {
+            start_particles drake_light 76 -76 250
+            start_particles drake_light 76 76 250
+            start_particles drake_light -76 76 250
+            start_particles drake_light -76 -76 250
+            set_timer 3
+        }
+    }
+}
