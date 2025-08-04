@@ -15,6 +15,7 @@
 #include "imgui_utils.h"
 
 #include "allegro_utils.h"
+#include "math_utils.h"
 
 
 /**
@@ -449,6 +450,76 @@ void ImGui::SetupButtonWrapping(
 void ImGui::SetupCentering(int upcomingItemsWidth) {
     int windowWidth = ImGui::GetWindowSize().x;
     ImGui::SetCursorPosX((windowWidth - upcomingItemsWidth) * 0.5f);
+}
+
+
+/**
+ * @brief Processes a SliderAngle widget but also adds a context menu with
+ * some helpful tools.
+ *
+ * @param label Widget label.
+ * @param vRad Value, in radians.
+ * @param vDegreesMin Minimum value.
+ * @param vDegreesMax Maximum value.
+ * @param format Text format.
+ * @param flags Flags.
+ * @return Whether the value was changed, be it from the widget or the
+ * context menu tools.
+ */
+bool ImGui::SliderAngleWithContext(
+    const char* label, float* vRad, float vDegreesMin,
+    float vDegreesMax, const char* format, ImGuiSliderFlags flags
+) {
+    bool changed =
+        ImGui::SliderAngle(
+            label, vRad, vDegreesMin, vDegreesMax, format, flags
+        );
+    if(ImGui::BeginPopupContextItem()) {
+        //East selectable.
+        if(ImGui::Selectable("East (0)")) {
+            *vRad = 0;
+            changed = true;
+        }
+        
+        //South selectable.
+        if(ImGui::Selectable("South (90)")) {
+            *vRad = TAU * 0.25f;
+            changed = true;
+        }
+        
+        //West selectable.
+        if(ImGui::Selectable("West (180)")) {
+            *vRad = TAU * 0.50f;
+            changed = true;
+        }
+        
+        //North selectable.
+        if(ImGui::Selectable("North (270)")) {
+            *vRad = TAU * 0.75f;
+            changed = true;
+        }
+        
+        //+90 selectable.
+        if(ImGui::Selectable("Quarter clockwise (+90)")) {
+            *vRad = normalizeAngle(*vRad + TAU * 0.25f);
+            changed = true;
+        }
+        
+        //+180 selectable.
+        if(ImGui::Selectable("Turn around (+180)")) {
+            *vRad = normalizeAngle(*vRad + TAU * 0.50f);
+            changed = true;
+        }
+        
+        //-90 selectable.
+        if(ImGui::Selectable("Quarter counterclockwise (-90)")) {
+            *vRad = normalizeAngle(*vRad - TAU * 0.25);
+            changed = true;
+        }
+        
+        ImGui::EndPopup();
+    }
+    return changed;
 }
 
 

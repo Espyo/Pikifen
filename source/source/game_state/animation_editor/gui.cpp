@@ -2535,7 +2535,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                     normalizeAngle(curHitbox->knockbackAngle);
                 ImGui::SetNextItemWidth(128.0f);
                 if(
-                    ImGui::SliderAngle(
+                    ImGui::SliderAngleWithContext(
                         "Knockback angle", &curHitbox->knockbackAngle,
                         0.0f, 360.0f, "%.2f"
                     )
@@ -2687,7 +2687,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         //Top angle value.
         curSprite->topAngle = normalizeAngle(curSprite->topAngle);
         if(
-            ImGui::SliderAngle(
+            ImGui::SliderAngleWithContext(
                 "Angle", &curSprite->topAngle, 0.0f, 360.0f, "%.2f"
             )
         ) {
@@ -2828,7 +2828,9 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     //Sprite angle value.
     curSprite->angle = normalizeAngle(curSprite->angle);
     if(
-        ImGui::SliderAngle("Angle", &curSprite->angle, 0.0f, 360.0f, "%.2f")
+        ImGui::SliderAngleWithContext(
+            "Angle", &curSprite->angle, 0.0f, 360.0f, "%.2f"
+        )
     ) {
         changesMgr.markAsChanged();
     }

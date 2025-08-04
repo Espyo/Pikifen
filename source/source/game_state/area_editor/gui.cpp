@@ -1569,7 +1569,11 @@ void AreaEditor::processGuiPanelDetails() {
                 
                 //Tree shadow angle value.
                 float shadowAngle = normalizeAngle(selectedShadow->angle);
-                if(ImGui::SliderAngle("Angle", &shadowAngle, 0, 360, "%.2f")) {
+                if(
+                    ImGui::SliderAngleWithContext(
+                        "Angle", &shadowAngle, 0, 360, "%.2f"
+                    )
+                ) {
                     registerChange("tree shadow angle change");
                     selectedShadow->angle = shadowAngle;
                 }
@@ -3982,7 +3986,7 @@ void AreaEditor::processGuiPanelMob() {
     //Object angle value.
     float mobAngle = normalizeAngle(mPtr->angle);
     ImGui::Spacer();
-    if(ImGui::SliderAngle("Angle", &mobAngle, 0, 360, "%.2f")) {
+    if(ImGui::SliderAngleWithContext("Angle", &mobAngle, 0, 360, "%.2f")) {
         registerChange("object angle change");
         mPtr->angle = mobAngle;
     }
@@ -5309,7 +5313,11 @@ void AreaEditor::processGuiPanelSector() {
             
             //Sector texture rotation value.
             float textureRotation = normalizeAngle(sPtr->textureInfo.rot);
-            if(ImGui::SliderAngle("Angle", &textureRotation, 0, 360, "%.2f")) {
+            if(
+                ImGui::SliderAngleWithContext(
+                    "Angle", &textureRotation, 0, 360, "%.2f"
+                )
+            ) {
                 registerChange("sector texture angle change");
                 sPtr->textureInfo.rot = textureRotation;
                 quickPreviewTimer.start();

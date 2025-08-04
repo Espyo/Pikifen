@@ -745,7 +745,7 @@ void ParticleEditor::processGuiPanelGenerator() {
     //Particle generator angle value.
     ImGui::SameLine();
     ImGui::SetNextItemWidth(85);
-    ImGui::SliderAngle("Angle", &generatorAngleOffset, 0.0f);
+    ImGui::SliderAngleWithContext("Angle", &generatorAngleOffset, 0.0f);
     setTooltip(
         "Rotate the generator's facing angle in the editor by this much.\n"
         "You can move the generator by just dragging the mouse in the canvas.",
@@ -994,7 +994,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 //Circle emission arc rotation value.
                 ImGui::SetNextItemWidth(150);
                 if(
-                    ImGui::SliderAngle(
+                    ImGui::SliderAngleWithContext(
                         "Arc rotation", &loadedGen.emission.circleArcRot,
                         0.0f
                     )
@@ -1198,7 +1198,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                     ImGui::Indent();
                     ImGui::SetNextItemWidth(85);
                     if(
-                        ImGui::SliderAngle(
+                        ImGui::SliderAngleWithContext(
                             "##imgAngle",
                             &loadedGen.baseParticle.bmpAngle, 0.0f
                         )

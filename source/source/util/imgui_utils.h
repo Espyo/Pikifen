@@ -73,9 +73,14 @@ bool ListBox(
     int heightInItems = -1
 );
 void Reset();
-void SetupCentering(int upcomingItemsWidth);
 void SetupButtonWrapping(
     int nextButtonWidth, int nextButtonIdx, int totalNButtons
+);
+void SetupCentering(int upcomingItemsWidth);
+bool SliderAngleWithContext(
+    const char* label, float* vRad, float vDegreesMin = -360.0f,
+    float vDegreesMax = +360.0f, const char* format = "%.0f deg",
+    ImGuiSliderFlags flags = 0
 );
 void Spacer();
 
