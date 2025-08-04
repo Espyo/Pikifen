@@ -15,13 +15,6 @@ right_rail_texture = textures/ceramic_bridge_rail_red_right
 show_health = false
 target_type = none
 
-children {
-    base {
-        spawn = base
-        parent_holds = false
-    }
-}
-
 sounds {
     click {
         sound = misc/ceramic
@@ -31,15 +24,6 @@ sounds {
     obstacle_cleared {
         sound = gui/obstacle_cleared
         type = gameplay_global
-    }
-}
-
-spawns {
-    base {
-        object = bridge_base_ceramic_red
-        relative = true
-        coordinates = -1 0
-        angle = 0
     }
 }
 

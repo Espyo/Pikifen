@@ -1,7 +1,7 @@
 name = Bridge base (ceramic, red)
 description = A small pile of fragments indicating the start or end of a red ceramic bridge.
 
-appears_in_area_editor = false
+area_editor_tips = You can link a ceramic bridge to this mob to use it as a stopping point. If it doesn't look aligned right, try flipping it 180 degrees.
 blackout_radius = 0
 can_block_paths = false
 casts_shadow = false

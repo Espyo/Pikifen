@@ -1302,18 +1302,18 @@ vertexes{
 	v=-960.0000 2944.0000
 	v=-960.0000 2368.0000
 	v=-384.0000 2496.0000
-	v=-768.0000 2496.0000
-	v=-768.0000 2560.0000
+	v=-816.0000 2496.0000
 	v=-816.0000 2560.0000
+	v=-864.0000 2560.0000
+	v=-864.0000 2624.0000
 	v=-816.0000 2624.0000
-	v=-768.0000 2624.0000
-	v=-768.0000 2880.0000
+	v=-816.0000 2880.0000
 	v=-384.0000 2880.0000
 	v=-448.0000 2560.0000
-	v=-704.0000 2560.0000
-	v=-704.0000 2816.0000
+	v=-752.0000 2560.0000
+	v=-752.0000 2816.0000
 	v=-448.0000 2816.0000
-	v=-832.0000 2592.0000
+	v=-880.0000 2592.0000
 	v=-384.0000 2560.0000
 	v=-384.0000 2624.0000
 	v=-320.0000 2560.0000
@@ -1823,6 +1823,13 @@ vertexes{
 	v=2496.0000 864.0000
 	v=2592.0000 864.0000
 	v=2592.0000 776.0000
+	v=-912.0000 2576.0000
+	v=-928.0000 2592.0000
+	v=-912.0000 2608.0000
+	v=-896.0000 2592.0000
+	v=-736.0000 2544.0000
+	v=-736.0000 2512.0000
+	v=-752.0000 2528.0000
 }
 edges{
 	e{
@@ -10092,6 +10099,34 @@ edges{
 		s=451 120
 		v=1822 1823
 	}
+	e{
+		s=452 328
+		v=1827 1824
+	}
+	e{
+		s=452 328
+		v=1824 1825
+	}
+	e{
+		s=452 328
+		v=1825 1826
+	}
+	e{
+		s=452 328
+		v=1826 1827
+	}
+	e{
+		s=453 330
+		v=1830 1828
+	}
+	e{
+		s=453 330
+		v=1828 1829
+	}
+	e{
+		s=453 330
+		v=1829 1830
+	}
 }
 sectors{
 	s{
@@ -12609,6 +12644,18 @@ sectors{
 		texture_scale=0.7500 0.7500
 		texture_tint=159 205 220
 	}
+	s{
+		z=-100.0000
+		texture=textures/grass_light
+		texture_scale=0.7500 0.7500
+		texture_tint=83 83 83
+	}
+	s{
+		z=-100.0000
+		texture=textures/stone
+		texture_scale=0.7500 0.7500
+		texture_tint=136 136 136
+	}
 }
 mobs{
 	leader{
@@ -13296,8 +13343,9 @@ mobs{
 		links=152
 	}
 	custom{
-		type=dummy
+		type=bridge_base_ceramic_red
 		p=1120.0000 -640.0000
+		angle=3.1416
 		vars=chunks=5
 	}
 	bridge{
@@ -14098,15 +14146,9 @@ mobs{
 		p=-288.0000 2720.0000
 		links=327
 	}
-	bridge{
-		type=bridge_ceramic_red
-		p=-864.0000 2592.0000
-		angle=3.1416
-		links=328
-	}
 	custom{
-		type=dummy
-		p=-928.0000 2592.0000
+		type=carry_target
+		p=-864.0000 2592.0000
 		angle=3.1416
 	}
 	interactable{
@@ -14163,7 +14205,7 @@ mobs{
 		type=pressure_plate
 		p=1536.0000 -1088.0000
 		vars=goal_number=3
-		links=339
+		links=338
 	}
 	custom{
 		type=dummy
@@ -14172,12 +14214,12 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-3040.0000 1632.0000
-		links=341
+		links=340
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-3104.0000 1760.0000
-		links=344
+		links=343
 	}
 	custom{
 		type=carry_target
@@ -14187,7 +14229,7 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-3040.0000 1760.0000
-		links=344
+		links=343
 	}
 	custom{
 		type=dummy
@@ -14196,7 +14238,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-3616.0000 1632.0000
-		links=346
+		links=345
 	}
 	custom{
 		type=clog
@@ -14205,7 +14247,7 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-3680.0000 1824.0000
-		links=350
+		links=349
 	}
 	custom{
 		type=carry_target
@@ -14219,12 +14261,12 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1056.0000 2400.0000
-		links=351
+		links=350
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-1120.0000 2528.0000
-		links=354
+		links=353
 	}
 	custom{
 		type=carry_target
@@ -14238,12 +14280,12 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1376.0000 2400.0000
-		links=355
+		links=354
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-1440.0000 2528.0000
-		links=358
+		links=357
 	}
 	custom{
 		type=carry_target
@@ -14257,12 +14299,12 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1824.0000 2400.0000
-		links=359
+		links=358
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-1952.0000 2464.0000
-		links=362
+		links=361
 	}
 	custom{
 		type=carry_target
@@ -14276,7 +14318,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-2144.0000 2400.0000
-		links=363
+		links=362
 	}
 	resource{
 		type=ceramic_fragment_red
@@ -14337,7 +14379,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=224.0000 3040.0000
-		links=380
+		links=379
 	}
 	custom{
 		type=dummy
@@ -14355,7 +14397,7 @@ mobs{
 	interactable{
 		type=lever
 		p=1824.0000 -1088.0000
-		links=382
+		links=381
 	}
 	custom{
 		type=automatic_gate
@@ -14364,7 +14406,7 @@ mobs{
 	interactable{
 		type=button
 		p=2240.0000 -1088.0000
-		links=384
+		links=383
 	}
 	custom{
 		type=automatic_gate
@@ -14375,17 +14417,17 @@ mobs{
 		type=pressure_plate
 		p=2368.0000 -1152.0000
 		vars=goal_number=3
-		links=389
+		links=388
 	}
 	interactable{
 		type=lever
 		p=2496.0000 -1152.0000
-		links=389
+		links=388
 	}
 	custom{
 		type=logic_or_gate
 		p=2432.0000 -1088.0000
-		links=386
+		links=385
 	}
 	custom{
 		type=automatic_gate
@@ -14396,17 +14438,17 @@ mobs{
 		type=pressure_plate
 		p=2688.0000 -1152.0000
 		vars=goal_number=3
-		links=393
+		links=392
 	}
 	interactable{
 		type=lever
 		p=2816.0000 -1152.0000
-		links=393
+		links=392
 	}
 	custom{
 		type=logic_and_gate
 		p=2752.0000 -1088.0000
-		links=390
+		links=389
 	}
 	custom{
 		type=automatic_gate
@@ -14417,12 +14459,12 @@ mobs{
 		type=pressure_plate
 		p=3328.0000 -1152.0000
 		vars=goal_number=3
-		links=396
+		links=395
 	}
 	custom{
 		type=logic_not_gate
 		p=3328.0000 -1088.0000
-		links=394
+		links=393
 	}
 	custom{
 		type=automatic_gate
@@ -14433,22 +14475,22 @@ mobs{
 		type=pressure_plate
 		p=2976.0000 -1152.0000
 		vars=goal_number=3
-		links=399
+		links=398
 	}
 	custom{
 		type=logic_xor_gate
 		p=3040.0000 -1088.0000
-		links=397
+		links=396
 	}
 	interactable{
 		type=lever
 		p=3104.0000 -1152.0000
-		links=399
+		links=398
 	}
 	bouncer{
 		type=geyser
 		p=-1888.0000 608.0000
-		links=402
+		links=401
 	}
 	custom{
 		type=dummy
@@ -14457,12 +14499,12 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-1888.0000 672.0000
-		links=405
+		links=404
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-1952.0000 672.0000
-		links=405
+		links=404
 	}
 	custom{
 		type=carry_target
@@ -14472,7 +14514,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1760.0000 160.0000
-		links=407
+		links=406
 	}
 	custom{
 		type=dummy
@@ -14486,22 +14528,22 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-2080.0000 288.0000
-		links=408
+		links=407
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-3264.0000 1760.0000
-		links=344
+		links=343
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-3200.0000 1760.0000
-		links=344
+		links=343
 	}
 	interactable{
 		type=timed_lever
 		p=2016.0000 -1088.0000
-		links=413
+		links=412
 	}
 	custom{
 		type=automatic_gate
@@ -14526,7 +14568,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-992.0000 -1248.0000
-		links=419
+		links=418
 	}
 	custom{
 		type=dummy
@@ -14794,7 +14836,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1696.0000 -736.0000
-		links=473
+		links=472
 	}
 	custom{
 		type=dummy
@@ -14815,7 +14857,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=1088.0000 -160.0000
-		links=478
+		links=477
 	}
 	custom{
 		type=dummy
@@ -14842,6 +14884,11 @@ mobs{
 	treasure{
 		type=cupcake
 		p=896.0000 -2720.0000
+	}
+	custom{
+		type=bridge_base_ceramic_red
+		p=768.0000 -640.0000
+		vars=chunks=5
 	}
 }
 path_stops{

@@ -14,7 +14,7 @@ animations{
 }
 sprites{
 	idling{
-		file=other_mobs/bridge_ceramic_red
+		file=other_mobs/bridge_base_ceramic_red
 		file_pos=0.0000 0.0000
 		file_size=48.0000 192.0000
 		offset=-20.0000 0.0000

@@ -6254,7 +6254,7 @@ mobs{
 		p=1380.3153 -135.2727
 	}
 	custom{
-		type=dummy
+		type=bridge_base_ceramic_red
 		p=679.9245 -68.4025
 		angle=2.9557
 	}
@@ -6813,6 +6813,11 @@ mobs{
 	custom{
 		type=dummy
 		p=431.8160 -1110.2068
+	}
+	custom{
+		type=bridge_base_ceramic_red
+		p=446.9377 -22.7792
+		angle=-0.1735
 	}
 }
 path_stops{

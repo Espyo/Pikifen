@@ -7,16 +7,12 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     "trying to open an animation when the animation.txt doesnt exist prevents the editor from loading" (Thanks Helodity)
+        Looks like it's only if you're not an engine dev
     There's a memory leak when you restart areas (Thanks Helodity)
 
     --- 0.26 ---
     Add Pro Controller controls to the default controls
     Try to implement the motif into Coastal Pavement
-    Misc. graphical improvements
-        Ceramic bridges should be reworked for the new bridge format
-        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
-            Animate lights and such using particles?
-        Add a glow to the smack effect particle?
     More particles
         More across the board -- check all mobs too
         Climbing stick complete
