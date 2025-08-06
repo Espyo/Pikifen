@@ -983,7 +983,7 @@ void MobAnimContentManager::fillCatManifestsFromPack(
                 categoryPath + "/" +
                 internalName + "/" +
                 FILE_NAMES::MOB_TYPE_ANIMATION,
-                FOLDER_NAMES::BASE_PACK
+                packName
             );
     }
 }
