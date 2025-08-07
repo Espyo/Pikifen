@@ -464,7 +464,7 @@ struct SystemContentList {
     ALLEGRO_BITMAP* bmpCursor = nullptr;
     
     //Damage ring.
-    ALLEGRO_BITMAP* bmpDamageRing = nullptr;
+    ALLEGRO_BITMAP* bmpLowHealthRing = nullptr;
     
     //Discord icon.
     ALLEGRO_BITMAP* bmpDiscordIcon = nullptr;
@@ -705,8 +705,8 @@ struct SystemContentNames {
     //Leader cursor.
     string bmpCursor = "gui/cursor";
     
-    //Damage ring.
-    string bmpDamageRing = "gui/damage_ring";
+    //Low Health ring.
+    string bmpLowHealthRing = "gui/low_health_ring";
     
     //Discord icon.
     string bmpDiscordIcon = "gui/discord_icon";

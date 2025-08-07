@@ -222,7 +222,7 @@ Hud::Hud() :
                         1.2f, 1.8f
                     );
                 
-                KeyframeInterpolator<float> alphaKeyframes(0);
+                KeyframeInterpolator<unsigned char> alphaKeyframes(0);
                 alphaKeyframes.add(0.2f, 255);
                 alphaKeyframes.add(0.3f, 255);
                 alphaKeyframes.add(0.8f, 0);
@@ -233,7 +233,7 @@ Hud::Hud() :
                     cautionRingScale;
                     
                 drawBitmap(
-                    game.sysContent.bmpDamageRing,
+                    game.sysContent.bmpLowHealthRing,
                     finalDraw.center,
                     Point(cautionRingSize),
                     0.0f,
