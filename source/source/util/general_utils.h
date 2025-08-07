@@ -390,6 +390,20 @@ private:
     float interpolate(float v1, float v2, float time) {
         return v1 + (v2 - v1) * time;
     }
+
+
+    /**
+     * @brief Interpolates between two chars, and returns the value at the
+     * specified time.
+     *
+     * @param v1 First value.
+     * @param v2 Second value.
+     * @param time Time (0 to 1).
+     * @return The value.
+     */
+    unsigned char interpolate(unsigned char v1, unsigned char v2, float time) {
+        return v1 + (v2 - v1) * time;
+    }
     
     
     /**

@@ -6,6 +6,7 @@ graphics {
     checkbox_check = gui/checkbox_check
     checkbox_no_check = gui/checkbox_no_check
     cursor = gui/cursor
+    low_health_ring = gui/low_health_ring
     discord_icon = gui/discord_icon
     editor_icons = gui/editor_icons
     enemy_soul = effects/enemy_soul
