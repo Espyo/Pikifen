@@ -4,6 +4,7 @@ death_state = exploding
 init {
     //This gets set by the engine when the Pikmin releases it gently (e.g. entering an Onion).
     set_var gentle_release false
+    set_var to_delete false
 }
 
 script {
@@ -54,17 +55,20 @@ script {
         }
         on_swallowed {
             stop_sound $sound_id
+            set_var to_delete true
             delete
         }
     }
     
     primed {
         on_enter {
-            set_animation primed
-            set_holdable enemies
-            receive_status bomb_rock_health_drain
-            play_sound wick sound_id
-            stop
+            if $to_delete = false
+                set_animation primed
+                set_holdable enemies
+                receive_status bomb_rock_health_drain
+                play_sound wick sound_id
+                stop
+            end_if
         }
         on_hitbox_touch_eat {
             get_chomped
@@ -79,6 +83,7 @@ script {
         on_enter {
             spawn explosion
             stop_sound $sound_id
+            set_var to_delete true
             delete
         }
     }

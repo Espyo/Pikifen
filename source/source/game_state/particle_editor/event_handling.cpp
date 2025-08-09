@@ -78,12 +78,12 @@ void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         partMgrPlaybackToggleCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
-        if(!guiNeedsKeyboard()) {
+        if(!guiFocusedText()) {
             partGenPlaybackToggleCmd(1.0f);
         }
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
-        if(!guiNeedsKeyboard()) {
+        if(!guiFocusedText()) {
             clearParticlesCmd(1.0f);
         }
         

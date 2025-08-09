@@ -703,7 +703,7 @@ protected:
     );
     void drawOpErrorCursor();
     Point getLastWidgetPost();
-    bool guiNeedsKeyboard();
+    bool guiFocusedText();
     bool keyCheck(
         int pressedKey, int matchKey,
         bool needsCtrl = false, bool needsShift = false

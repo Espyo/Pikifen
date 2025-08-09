@@ -1146,6 +1146,41 @@ void AudioManager::tick(float deltaT) {
 
 
 /**
+ * @brief Updates the volumes of all mixers, based on the values of the
+ * various variables in charge.
+ */
+void AudioManager::updateMixerVolumes() {
+    baseMasterMixerVolume =
+        std::clamp(baseMasterMixerVolume, 0.0f, 1.0f);
+    baseGameplaySoundMixerVolume =
+        std::clamp(baseGameplaySoundMixerVolume, 0.0f, 1.0f);
+    baseMusicMixerVolume =
+        std::clamp(baseMusicMixerVolume, 0.0f, 1.0f);
+    baseAmbianceSoundMixerVolume =
+        std::clamp(baseAmbianceSoundMixerVolume, 0.0f, 1.0f);
+    baseUiSoundMixerVolume =
+        std::clamp(baseUiSoundMixerVolume, 0.0f, 1.0f);
+    interludeVolume = std::clamp(interludeVolume, 0.0f, 1.0f);
+    
+    al_set_mixer_gain(
+        masterMixer, baseMasterMixerVolume
+    );
+    al_set_mixer_gain(
+        gameplaySoundMixer, baseGameplaySoundMixerVolume * interludeVolume
+    );
+    al_set_mixer_gain(
+        musicMixer, baseMusicMixerVolume
+    );
+    al_set_mixer_gain(
+        ambianceSoundMixer, baseAmbianceSoundMixerVolume * interludeVolume
+    );
+    al_set_mixer_gain(
+        uiSoundMixer, baseUiSoundMixerVolume
+    );
+}
+
+
+/**
  * @brief Updates a playback's target volume and target pan, based on distance
  * from the camera.
  *
@@ -1224,41 +1259,6 @@ void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
     al_set_sample_instance_pan(
         playbackPtr->allegroSampleInstance,
         playbackPtr->pan
-    );
-}
-
-
-/**
- * @brief Updates the volumes of all mixers, based on the values of the
- * various variables in charge.
- */
-void AudioManager::updateMixerVolumes() {
-    baseMasterMixerVolume =
-        std::clamp(baseMasterMixerVolume, 0.0f, 1.0f);
-    baseGameplaySoundMixerVolume =
-        std::clamp(baseGameplaySoundMixerVolume, 0.0f, 1.0f);
-    baseMusicMixerVolume =
-        std::clamp(baseMusicMixerVolume, 0.0f, 1.0f);
-    baseAmbianceSoundMixerVolume =
-        std::clamp(baseAmbianceSoundMixerVolume, 0.0f, 1.0f);
-    baseUiSoundMixerVolume =
-        std::clamp(baseUiSoundMixerVolume, 0.0f, 1.0f);
-    interludeVolume = std::clamp(interludeVolume, 0.0f, 1.0f);
-    
-    al_set_mixer_gain(
-        masterMixer, baseMasterMixerVolume
-    );
-    al_set_mixer_gain(
-        gameplaySoundMixer, baseGameplaySoundMixerVolume * interludeVolume
-    );
-    al_set_mixer_gain(
-        musicMixer, baseMusicMixerVolume
-    );
-    al_set_mixer_gain(
-        ambianceSoundMixer, baseAmbianceSoundMixerVolume * interludeVolume
-    );
-    al_set_mixer_gain(
-        uiSoundMixer, baseUiSoundMixerVolume
     );
 }
 

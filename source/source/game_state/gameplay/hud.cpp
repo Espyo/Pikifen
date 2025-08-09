@@ -214,7 +214,8 @@ Hud::Hud() :
             );
 
             if(health.cautionTimer > 0.0f) {
-                float animRatio = health.cautionTimer / LEADER::HEALTH_CAUTION_RING_DURATION;
+                float animRatio =
+                    health.cautionTimer / LEADER::HEALTH_CAUTION_RING_DURATION;
                 float cautionRingScale =
                     interpolateNumber(
                         health.cautionTimer,

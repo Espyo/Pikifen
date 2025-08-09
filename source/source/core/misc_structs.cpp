@@ -33,6 +33,12 @@ namespace GAMEPLAY_MSG_BOX {
 //How quickly the advance button icon fades, in alpha (0-1) per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
 
+//Multiply the button offset animation's offset by this much.
+const float BUTTON_OFFSET_MULT = 4.0f;
+
+//Multiply the button offset animation's time factor by this much.
+const float BUTTON_OFFSET_TIME_MULT = 3.0f;
+
 //How many pixels of margin between the message box and window borders.
 const float MARGIN = 16.0f;
 
@@ -1791,7 +1797,6 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("checkbox_check", bmpCheckboxCheck);
     graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
     graRS.set("cursor", bmpCursor);
-    graRS.set("low_health_ring", bmpLowHealthRing);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);
     graRS.set("enemy_soul", bmpEnemySoul);
@@ -1804,6 +1809,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("key_box", bmpKeyBox);
     graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
     graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
+    graRS.set("low_health_ring", bmpLowHealthRing);
     graRS.set("medal_bronze", bmpMedalBronze);
     graRS.set("medal_gold", bmpMedalGold);
     graRS.set("medal_got_it", bmpMedalGotIt);

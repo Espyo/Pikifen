@@ -338,13 +338,13 @@ Point Editor::getLastWidgetPost() {
 
 
 /**
- * @brief Returns whether or not Dear ImGui currently needs the keyboard
- * right now.
+ * @brief Returns whether or not Dear ImGui is currently focused on
+ * a text widget.
  *
- * @return Whether it needs the keyboard.
+ * @return Whether it's focused.
  */
-bool Editor::guiNeedsKeyboard() {
-    return ImGui::GetIO().WantCaptureKeyboard;
+bool Editor::guiFocusedText() {
+    return ImGui::GetIO().WantTextInput;
 }
 
 
@@ -421,7 +421,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         ) {
             //Double-click.
             
-            if(guiNeedsKeyboard()) {
+            if(guiFocusedText()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -448,7 +448,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         } else {
             //Single-click.
             
-            if(guiNeedsKeyboard()) {
+            if(guiFocusedText()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -568,7 +568,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         
         if(dialogs.empty()) {
             handleKeyDownAnywhere(ev);
-            if(!guiNeedsKeyboard()) {
+            if(!guiFocusedText()) {
                 handleKeyDownCanvas(ev);
             }
         }
@@ -606,7 +606,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         
         if(dialogs.empty()) {
             handleKeyUpAnywhere(ev);
-            if(!guiNeedsKeyboard()) {
+            if(!guiFocusedText()) {
                 handleKeyUpCanvas(ev);
             }
         }
@@ -616,7 +616,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         
         if(dialogs.empty()) {
             handleKeyCharAnywhere(ev);
-            if(!guiNeedsKeyboard()) {
+            if(!guiFocusedText()) {
                 handleKeyCharCanvas(ev);
             }
         }

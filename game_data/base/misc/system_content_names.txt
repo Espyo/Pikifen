@@ -6,7 +6,6 @@ graphics {
     checkbox_check = gui/checkbox_check
     checkbox_no_check = gui/checkbox_no_check
     cursor = gui/cursor
-    low_health_ring = gui/low_health_ring
     discord_icon = gui/discord_icon
     editor_icons = gui/editor_icons
     enemy_soul = effects/enemy_soul
@@ -19,6 +18,7 @@ graphics {
     key_box = gui/key_box
     leader_silhouette_side = gui/leader_silhouette_side
     leader_silhouette_top = gui/leader_silhouette_top
+    low_health_ring = gui/low_health_ring
     medal_bronze = gui/medal_bronze
     medal_gold = gui/medal_gold
     medal_got_it = gui/medal_got_it

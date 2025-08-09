@@ -6,25 +6,16 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    "trying to open an animation when the animation.txt doesnt exist prevents the editor from loading" (Thanks Helodity)
-        Looks like it's only if you're not an engine dev
     There's a memory leak when you restart areas (Thanks Helodity)
-    Dragging with left-click then temporarily dragging with right-click while still holding left-click results in it letting go
-    Having a fade sector towards the void looks weird
 
     --- 0.26 ---
-    Add Pro Controller controls to the default controls
-    Try to implement the motif into Coastal Pavement
     More particles
         More across the board -- check all mobs too
-        Climbing stick complete
     Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area. Smoothly fade between each one except at the end, so the viewer can tell when the gif ends
-    Cook up a better logo?
-    Test it on the Steam Deck
-    Test from a fresh save file
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states
+    Test from a fresh save file
     Check one final time for leaks, run a static analysis, etc.
     Check one final time that all content has the engine version as 1.0.0
     Make sure the readme's <50MB size claim is correct
@@ -128,6 +119,8 @@ Next tasks (roughly sorted most important first)
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
+        Add Pro Controller controls to the default controls
+        Test it on the Steam Deck
     Ice Pikmin
         Status buildup
         Water freezing
@@ -835,6 +828,7 @@ Misc things (so I don't forget)
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
         Skutterchucks should throw bomb rocks
+        Try to implement the Pikifen motif into Coastal Pavement, since it's used for a tutorial stage
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles

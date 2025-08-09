@@ -12,8 +12,12 @@ script{
     }
     destroyed {
         on_enter {
+            set_animation destroyed
             spawn full_stick
+            start_particles dust_explosion_stick 64 0 260
             play_sound obstacle_cleared
+        }
+        on_animation_end {
             delete
         }
     }

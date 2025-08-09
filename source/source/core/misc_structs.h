@@ -43,6 +43,8 @@ using std::vector;
 
 namespace GAMEPLAY_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
+extern const float BUTTON_OFFSET_MULT;
+extern const float BUTTON_OFFSET_TIME_MULT;
 extern const float MARGIN;
 extern const float PADDING;
 extern const float MISINPUT_PROTECTION_DURATION;
@@ -463,9 +465,6 @@ struct SystemContentList {
     //Leader cursor.
     ALLEGRO_BITMAP* bmpCursor = nullptr;
     
-    //Damage ring.
-    ALLEGRO_BITMAP* bmpLowHealthRing = nullptr;
-    
     //Discord icon.
     ALLEGRO_BITMAP* bmpDiscordIcon = nullptr;
     
@@ -498,6 +497,9 @@ struct SystemContentList {
     
     //Leader silhouette from the top.
     ALLEGRO_BITMAP* bmpLeaderSilhouetteTop = nullptr;
+    
+    //Leader low health ring.
+    ALLEGRO_BITMAP* bmpLowHealthRing = nullptr;
     
     //Bronze mission medal.
     ALLEGRO_BITMAP* bmpMedalBronze = nullptr;
@@ -705,9 +707,6 @@ struct SystemContentNames {
     //Leader cursor.
     string bmpCursor = "gui/cursor";
     
-    //Low Health ring.
-    string bmpLowHealthRing = "gui/low_health_ring";
-    
     //Discord icon.
     string bmpDiscordIcon = "gui/discord_icon";
     
@@ -743,6 +742,9 @@ struct SystemContentNames {
     
     //Leader silhouette from the top.
     string bmpLeaderSilhouetteTop = "gui/leader_silhouette_top";
+    
+    //Leader low health ring.
+    string bmpLowHealthRing = "gui/low_health_ring";
     
     //Bronze medal.
     string bmpMedalBronze = "gui/medal_bronze";

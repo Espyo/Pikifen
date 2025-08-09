@@ -300,8 +300,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxNoCheck);
     game.sysContent.bmpCursor =
         game.content.bitmaps.list.get(game.sysContentNames.bmpCursor);
-    game.sysContent.bmpLowHealthRing =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpLowHealthRing);
     game.sysContent.bmpDiscordIcon =
         game.content.bitmaps.list.get(game.sysContentNames.bmpDiscordIcon);
     game.sysContent.bmpEnemySoul =
@@ -326,6 +324,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(
             game.sysContentNames.bmpLeaderSilhouetteTop
         );
+    game.sysContent.bmpLowHealthRing =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpLowHealthRing);
     game.sysContent.bmpMedalBronze =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalBronze);
     game.sysContent.bmpMedalGold =
@@ -540,7 +540,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxNoCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCursor);
-    game.content.bitmaps.list.free(game.sysContent.bmpLowHealthRing);
     game.content.bitmaps.list.free(game.sysContent.bmpDiscordIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
     game.content.bitmaps.list.free(game.sysContent.bmpFocusBox);
@@ -552,6 +551,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpKeyBox);
     game.content.bitmaps.list.free(game.sysContent.bmpLeaderSilhouetteSide);
     game.content.bitmaps.list.free(game.sysContent.bmpLeaderSilhouetteTop);
+    game.content.bitmaps.list.free(game.sysContent.bmpLowHealthRing);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalBronze);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalGold);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalGotIt);

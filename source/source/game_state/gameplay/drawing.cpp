@@ -725,6 +725,11 @@ void GameplayState::drawGameplayMessageBox() {
     }
     
     //Draw the button to advance, if it's time.
+    float advanceButtonYOffset =
+        sin(
+            msgBox->totalTokenAnimTime *
+            GAMEPLAY_MSG_BOX::BUTTON_OFFSET_TIME_MULT
+        ) * GAMEPLAY_MSG_BOX::BUTTON_OFFSET_MULT;
     drawPlayerInputSourceIcon(
         game.sysContent.fntSlim,
         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
@@ -734,7 +739,7 @@ void GameplayState::drawGameplayMessageBox() {
             (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
             game.winH -
             (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
-            offset
+            offset + advanceButtonYOffset
         ),
         Point(32.0f),
         msgBox->advanceButtonAlpha * 255
