@@ -8,8 +8,10 @@
  * Struct that holds the game's configuration, and related functions.
  */
 
-#include "../util/string_utils.h"
 #include "game_config.h"
+
+#include "../util/string_utils.h"
+#include "game.h"
 
 
 namespace GAME_CONFIG {
@@ -274,4 +276,10 @@ void GameConfig::load(DataNode* file) {
         rRS.set("zoom_closest_reach", rules.zoomClosestReach);
         rRS.set("zoom_farthest_reach", rules.zoomFarthestReach);
     }
+    
+    game.options.advanced.zoomMediumReach =
+        std::clamp(
+            game.options.advanced.zoomMediumReach,
+            rules.zoomClosestReach, rules.zoomFarthestReach
+        );
 }

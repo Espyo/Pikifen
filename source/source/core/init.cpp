@@ -953,13 +953,6 @@ void initMisc() {
     game.states.gameplay->particles =
         ParticleManager(game.options.advanced.maxParticles);
         
-    game.options.advanced.zoomMediumReach =
-        std::clamp(
-            game.options.advanced.zoomMediumReach,
-            game.config.rules.zoomClosestReach,
-            game.config.rules.zoomFarthestReach
-        );
-        
     game.liquidLimitEffectBuffer = al_create_bitmap(game.winW, game.winH);
     game.wallOffsetEffectBuffer = al_create_bitmap(game.winW, game.winH);
     
