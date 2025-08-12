@@ -106,10 +106,12 @@ script {
             stop
             set_animation inhaling
             play_sound inhaling sound_id
+            start_particles armored_cannon_beetle_inhale 114 0 120
             start_chomping 1 blowhole
         }
         on_leave {
             stop_sound $sound_id
+            stop_particles
         }
         on_tick {
             get_mob_info t self chomped_pikmin

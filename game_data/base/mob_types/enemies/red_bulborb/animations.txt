@@ -330,7 +330,8 @@ animations{
 				duration=0.1500
 			}
 			sleeping_03{
-				duration=0.7500
+				duration=1.2000
+				signal=0
 			}
 		}
 	}

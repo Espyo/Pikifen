@@ -21,6 +21,9 @@ script {
         on_touch_opponent {
             set_state waking_up
         }
+        on_frame_signal {
+            start_particles bulborb_sleep 76 0 200
+        }
     }
     
     waking_up {

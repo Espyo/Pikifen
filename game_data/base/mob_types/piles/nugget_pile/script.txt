@@ -3,5 +3,14 @@ script {
         on_damage {
             play_sound hit
         }
+        on_receive_message {
+            get_event_info m message
+            if $m = dropped_resource
+                start_particles pile_sparkles_large 0 0 120
+            end_if
+            if $m = grown_resource
+                start_particles pile_sparkles_large 0 0 120
+            end_if
+        }
     }
 }

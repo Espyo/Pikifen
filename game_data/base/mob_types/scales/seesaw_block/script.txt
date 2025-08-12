@@ -23,6 +23,7 @@ script {
             set_var height 128
             set_height 128
             set_animation up
+            stop_particles
             if $weight > $pair_weight
                 set_state lowering
             end_if
@@ -48,6 +49,7 @@ script {
     lowering {
         on_enter {
             set_animation lowering
+            start_particles dust_falling_seesaw 0 0 0
         }
         on_frame_signal {
             calculate height $height - 20
@@ -71,6 +73,7 @@ script {
             set_var height 8
             set_height 8
             set_animation down
+            stop_particles
             if $weight < $pair_weight
                 set_state rising
             end_if
@@ -96,6 +99,7 @@ script {
     rising {
         on_enter {
             set_animation rising
+            start_particles dust_falling 0 0 0
         }
         on_frame_signal {
             calculate height $height + 20

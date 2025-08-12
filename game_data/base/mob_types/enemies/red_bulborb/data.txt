@@ -76,7 +76,7 @@ sounds {
     }
     snoring {
         sound = creature_vocals/snoring
-        volume = 10
+        volume = 30
         volume_deviation = 3
         speed_deviation = 5
     }

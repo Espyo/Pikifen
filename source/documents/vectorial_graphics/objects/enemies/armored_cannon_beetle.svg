@@ -7,9 +7,9 @@
    viewBox="0 0 1708 1887.0001"
    version="1.1"
    id="svg837"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
-   sodipodi:docname="Armored_Cannon_Beetle.svg"
-   inkscape:export-filename="../../../../../Game_data/Graphics/Armored_Cannon_Beetle.png"
+   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   sodipodi:docname="armored_cannon_beetle.svg"
+   inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/enemies/armored_cannon_beetle.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -5469,11 +5469,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.40399361"
-     inkscape:cx="764.86358"
-     inkscape:cy="952.98537"
+     inkscape:zoom="0.46363236"
+     inkscape:cx="849.81126"
+     inkscape:cy="942.55716"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1051"
@@ -7390,18 +7390,6 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Armored_Cannon_Beetle.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <path
-       style="display:inline;opacity:0.7;fill:none;fill-rule:nonzero;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 1699,1278.5197 c -5.1454,5.4444 -10.8499,12.3659 -19,15"
-       id="path8822"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 1682,1340.5197 c -3.6736,-3.889 -7.4298,-8.7337 -16,-10"
-       id="path8839"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
     <use
        x="0"
        y="0"
@@ -7566,24 +7554,6 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Armored_Cannon_Beetle.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 267,1671.5197 c -5.14545,5.4444 -15.84993,11.3659 -24,14"
-       id="path8822-7"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 251,1721.5197 c -3.67362,-3.889 -10.4298,-7.7337 -19,-9"
-       id="path8839-8"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 257,1705.5197 c 5.319,-0.035 11.28363,1.8795 14,4"
-       id="path8954-2"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
     <use
        x="0"
        y="0"
@@ -7748,18 +7718,6 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Armored_Cannon_Beetle.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <path
-       style="display:inline;opacity:0.7;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 540,1680.5198 c -5.1454,5.4444 -16.8499,9.3659 -25,12"
-       id="path8822-75"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 527,1704.5198 c 5.319,-0.035 18.2836,2.8795 21,5"
-       id="path8954-4"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
     <use
        x="0"
        y="0"
@@ -7924,18 +7882,6 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Armored_Cannon_Beetle.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 844.0001,1733.5197 c -3.6736,-3.889 -10,-6 -14,-7"
-       id="path8839-8-1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="display:inline;opacity:0.7;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 799.0001,1702.5197 c 5.319,-0.035 13,2 18,4"
-       id="path8954-2-0"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
     <use
        x="0"
        y="0"
