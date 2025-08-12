@@ -7,11 +7,11 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     There's a memory leak when you restart areas (Thanks Helodity)
+    "oh new crash found / get_mob_info mob_type  when the triggering mob is a bridge component / type->manifest is null so when it tries to read type->manifest->internalName it crashes" -Helodity
 
     --- 0.26 ---
     More particles
         More across the board -- check all mobs too
-    Add a gif to the readme. It should show three scenes: normal gameplay, someone editing the area, gameplay on the newly-edited area. Smoothly fade between each one except at the end, so the viewer can tell when the gif ends
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states

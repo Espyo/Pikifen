@@ -6,7 +6,7 @@
 _Pikifen_, a fan-made _Pikmin_-based engine for players to make and play their own _Pikmin_ fan content in.  
 Made with ♡ by Espyo.
 
-> **[⬇️ Download for Windows!](#windows)**
+> **[⤓ Download for Windows! ⤓](#windows)**
 
 [![GitHub Downloads (all assets, latest release)](
     https://img.shields.io/github/downloads-pre/Espyo/Pikifen/latest/total?style=plastic&logo=github&label=Latest%20version%20downloads
@@ -38,7 +38,12 @@ Made with ♡ by Espyo.
     https://img.shields.io/badge/Platforms-Windows%2C%20Linux%2C%20MacOS-lightgray?style=plastic
 )
 
+![Gameplay and editor footage.](manual/images/footage.gif)
+
 </div>
+
+---
+<br>
 
 > * [Overview](#overview)
 > * [Notable features](#notable-features)
@@ -73,9 +78,10 @@ Depending on the area the player selects, they can either explore around freely 
 * Scripting for custom objects using finite state machines.
 * Tools to help with debugging custom content.
 * A comprehensive but easy-to-follow manual to help with making content.
+* A pack system, designed to make sharing custom content easy.
 * Customizable control schemes.
 * Filled with quality-of-life features and details, both for gameplay and for content-making.
-* Fairly low system requirements, no special permissions to run, no need to install, and less than 50 MB when extracted.
+* Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 50 MB when extracted.
 * Made almost entirely from scratch, as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
 * Organized codebase with very few external dependencies.
 * The source "code" for some of the graphics and songs is also available.
