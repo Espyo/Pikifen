@@ -111,6 +111,9 @@ struct CarryInfo {
     
     //Is the Pikmin meant to return somewhere after carrying?
     bool mustReturn = false;
+
+    //Does a new target need to be calculated?
+    bool mustRecalculate = false;
     
     //Location to return to once they finish carrying.
     Point returnPoint;
