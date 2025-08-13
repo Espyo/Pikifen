@@ -201,11 +201,14 @@ void AreaContentManager::loadAreaIntoVector(
     ContentManifest* manifest, AREA_TYPE type, bool fromBackup
 ) {
     Area* newArea = new Area();
-    list[type].push_back(newArea);
-    loadArea(
-        newArea, manifest->path, manifest,
-        CONTENT_LOAD_LEVEL_BASIC, fromBackup
-    );
+    if (
+        loadArea(
+            newArea, manifest->path, manifest,
+            CONTENT_LOAD_LEVEL_BASIC, fromBackup
+        )
+    ) {
+        list[type].push_back(newArea);
+    }
 }
 
 
