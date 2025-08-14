@@ -50,7 +50,7 @@ const float PADDING = 4.0f;
 
 namespace DRAWING {
 
-//Default healt wheel radius.
+//Default health wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 
 //Liquid surfaces wobble by offsetting X by this much, at most.
@@ -269,14 +269,14 @@ void drawFraction(
 
 
 /**
- * @brief Draws a health wheel, with a pieslice that's fuller the more
+ * @brief Draws a health wheel, with a pie-slice that's fuller the more
  * HP is full.
  *
  * @param center Center of the wheel.
  * @param ratio Ratio of health that is filled. 0 is empty, 1 is full.
  * @param alpha Total opacity of the health wheel.
- * @param radius Radius of the wheel (the whole wheel, not just the pieslice).
- * @param justChart If true, only draw the actual pieslice (pie-chart).
+ * @param radius Radius of the wheel (the whole wheel, not just the pie-slice).
+ * @param justChart If true, only draw the actual pie-slice (pie-chart).
  * Used for leader HP on the HUD.
  */
 void drawHealth(
@@ -356,7 +356,7 @@ void drawLiquid(
      * We need to get a list of edges that the shader needs to check,
      * this can extend to other sectors whenever a liquid occupies more
      * than one sector, so we need to loop through all of the connected sectors.
-     * This could likely be optimized, but this has no noticable impact
+     * This could likely be optimized, but this has no noticeable impact
      * on performance.
     
     vector<sector*> checkedS {sPtr};

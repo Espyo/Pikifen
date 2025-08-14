@@ -228,7 +228,7 @@ float noise(vec3 v) {
     vec3 p2 = vec3(a1.xy,h.z);
     vec3 p3 = vec3(a1.zw,h.w);
 
-    //Normalise gradients
+    //Normalize gradients
     vec4 norm = taylor_inv_sqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
     p0 *= norm.x;
     p1 *= norm.y;
@@ -416,7 +416,7 @@ void main() {
 
     float max_dist = foam_size;
 
-    //Apply some effects to make sure the foam isnt a straight line.
+    //Apply some effects to make sure the foam isn't a straight line.
     //These parameters aren't super intuitive, so they aren't exposed to the liquid proper.
     float effect_scale = max_dist / 25;
 

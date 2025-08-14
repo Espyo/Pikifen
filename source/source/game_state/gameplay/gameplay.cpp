@@ -297,7 +297,7 @@ void GameplayMessageBox::tick(float deltaT) {
                 curToken =
                     std::min(curToken, tokensInSection + 1);
                 if(prevToken != curToken) {
-                    game.audio.createUiSoundsource(
+                    game.audio.createUiSoundSource(
                     game.sysContent.sndGameplayMsgChar, {
                         .stackMinPos = 0.05f,
                         .volume = 0.5f,
@@ -499,10 +499,10 @@ void GameplayState::endMission(bool cleared) {
     
     if(cleared) {
         bigMsg.set(BIG_MESSAGE_MISSION_CLEAR);
-        game.audio.createUiSoundsource(game.sysContent.sndMissionClear);
+        game.audio.createUiSoundSource(game.sysContent.sndMissionClear);
     } else {
         bigMsg.set(BIG_MESSAGE_MISSION_FAILED);
-        game.audio.createUiSoundsource(game.sysContent.sndMissionFailed);
+        game.audio.createUiSoundSource(game.sysContent.sndMissionFailed);
     }
     game.audio.setCurrentSong("");
     
@@ -625,7 +625,7 @@ void GameplayState::enter() {
         interlude.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
         bigMsg.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
     } else {
-        game.audio.createUiSoundsource(game.sysContent.sndReady);
+        game.audio.createUiSoundSource(game.sysContent.sndReady);
     }
 }
 

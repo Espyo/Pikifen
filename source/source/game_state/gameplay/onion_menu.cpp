@@ -651,7 +651,7 @@ void OnionMenu::confirm() {
 
 /**
  * @brief Returns "ten" or "one", depending on the amount of Pikmin slated to
- * be transfered each transfer. Used in tooltips.
+ * be transferred each transfer. Used in tooltips.
  *
  * @return "ten" or "one".
  */

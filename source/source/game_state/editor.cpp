@@ -1138,7 +1138,7 @@ void Editor::keyframeVisualizer(
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
     
-    //Draw the classic alpha checkboard background.
+    //Draw the classic alpha checkerboard background.
     ImGui::RenderColorRectWithAlphaCheckerboard(
         drawList, pos,
         ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
@@ -2814,7 +2814,7 @@ void Editor::processGuiUnsavedChangesDialog() {
 
 
 /**
- * @brief Processes an ImGui::TreeNode, except it pre-emptively opens it or
+ * @brief Processes an ImGui::TreeNode, except it preemptively opens it or
  * closes it based on the user's preferences.
  *
  * It also saves the user's preferences as they open and close the node.

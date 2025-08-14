@@ -358,7 +358,7 @@ struct ParticleGenerator : public Content {
     //Maximum random deviation of speed.
     Point linearSpeedDeviation = Point(0.0f);
     
-    //How many degress linear speed can be rotated by.
+    //How many degrees linear speed can be rotated by.
     float linearSpeedAngleDeviation = 0.0f;
     
     //Are the directions and angles provided absolute, or relative (to a mob)?

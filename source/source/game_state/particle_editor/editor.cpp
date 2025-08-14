@@ -691,7 +691,7 @@ void ParticleEditor::saveCmd(float inputValue) {
 /**
  * @brief Saves the particle generator to the disk.
  *
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool ParticleEditor::savePartGen() {
     loadedGen.engineVersion = getEngineVersionString();
@@ -704,7 +704,7 @@ bool ParticleEditor::savePartGen() {
             nullptr, "Save failed!",
             "Could not save the particle generator!",
             (
-                "An error occured while saving the particle generator "
+                "An error occurred while saving the particle generator "
                 "to the file \"" +
                 manifest.path + "\". Make sure that the folder it is saving to "
                 "exists and it is not read-only, and try again."

@@ -574,7 +574,7 @@ void GuiEditor::saveCmd(float inputValue) {
 /**
  * @brief Saves the GUI file to the the disk.
  *
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool GuiEditor::saveGuiDef() {
     DataNode* positionsNode = fileNode.getChildByName("positions");
@@ -588,7 +588,7 @@ bool GuiEditor::saveGuiDef() {
             nullptr, "Save failed!",
             "Could not save the GUI definition!",
             (
-                "An error occured while saving the GUI definition to the "
+                "An error occurred while saving the GUI definition to the "
                 "file \"" + manifest.path + "\". Make sure that the folder it "
                 "is saving to exists and it is not read-only, and try again."
             ).c_str(),
@@ -620,7 +620,7 @@ void GuiEditor::setupForNewGuiDef() {
     //via the auto start maker tool, processGui() won't have a chance
     //to run before we load the file, and that function is what gives
     //us the canvas coordinates necessary for camera centering.
-    //Let's flag the need for recentering so it gets handled when possible.
+    //Let's flag the need for re-centering so it gets handled when possible.
     mustRecenterCam = true;
 }
 

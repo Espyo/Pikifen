@@ -2778,7 +2778,7 @@ bool Mob::isPointOn(const Point& p) const {
  * given list.
  *
  * @param hazards List of hazards to check.
- * @return Whether it is resitant.
+ * @return Whether it is resistant.
  */
 bool Mob::isResistantToHazards(const vector<Hazard*>& hazards) const {
     for(size_t h = 0; h < hazards.size(); h++) {
@@ -2906,7 +2906,7 @@ size_t Mob::playSound(size_t soundDataIdx) {
         break;
     } case SOUND_TYPE_UI: {
         return
-            game.audio.createUiSoundsource(
+            game.audio.createUiSoundSource(
                 sound->sample, sound->config
             );
     }
@@ -3489,7 +3489,7 @@ void Mob::stopTrackRide() {
 
 
 /**
- * @brief Makes a mob stop wanting to turn towards some direciton.
+ * @brief Makes a mob stop wanting to turn towards some direction.
  */
 void Mob::stopTurning() {
     face(angle, nullptr, true);
@@ -3580,7 +3580,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
  * you first think about rotating your body to face that
  * point, and then think about moving your legs.
  * Then, the actual physics go into place, your nerves
- * send signals to the muscles, and gravity, intertia, etc.
+ * send signals to the muscles, and gravity, inertia, etc.
  * take over the rest, to make you move.
  *
  * @param deltaT How long the frame's tick is, in seconds.

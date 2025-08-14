@@ -770,18 +770,18 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.addItem(showCounterOnCursorCheck, "show_counter_on_cursor");
     
     //Show HUD player input icons checkbox.
-    CheckGuiItem* showHudinputIconsCheck =
+    CheckGuiItem* showHudInputIconsCheck =
         new CheckGuiItem(
         &game.options.misc.showHudInputIcons,
         "Show input icons on HUD", game.sysContent.fntStandard
     );
-    showHudinputIconsCheck->onGetTooltip =
+    showHudInputIconsCheck->onGetTooltip =
     [] () {
         return
             "Show icons of the player inputs near relevant HUD items? "
             "Default: " + b2s(OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS) + ".";
     };
-    miscGui.addItem(showHudinputIconsCheck, "show_hud_input_icons");
+    miscGui.addItem(showHudInputIconsCheck, "show_hud_input_icons");
     
     //Leaving confirmation mode.
     leavingConfirmationPicker =

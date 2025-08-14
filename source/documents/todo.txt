@@ -132,7 +132,7 @@ Next tasks (roughly sorted most important first)
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
-        Glow Pellets should be internally pellets, but only able to be received by Luminkolls
+        Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
         Glowmob?
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
@@ -279,7 +279,7 @@ Next tasks (roughly sorted most important first)
                     Majority:
                         First team to clear X objectives wins, X being the highest number possible where other teams cannot possibly reach
                 Compatibility data:
-                    What objects are elligible to belong in the objective cell universe, including duplicates. If not specified, random treasures or enemies from the area are selected, and if there are none, choose random objects and enemies from the whole game
+                    What objects are eligible to belong in the objective cell universe, including duplicates. If not specified, random treasures or enemies from the area are selected, and if there are none, choose random objects and enemies from the whole game
                 When (if) time is up:
                     Player that's got the most incomplete (3 out of 4) line gets 1 point in their overall standing. No points are awarded in the case of a first-place tie
                 [NEEDS BRAINSTORMING] Maybe more objectives than just "Kill an X"?
@@ -293,7 +293,7 @@ Next tasks (roughly sorted most important first)
             Build a Wonder?
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
             Tag?
-                One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
+                One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in choke-points, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
             Time?
                 When time is up, the player with the most Pikmin raised wins. Or with the most enemy defeats. Or treasure points collected. Or mission points for custom competitive missions. And so on.
             Delivery?
@@ -325,7 +325,7 @@ Next tasks (roughly sorted most important first)
             New area data
                 Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
                 Area makers can specify where cherries can spawn. If they don't, no cherries spawn
-                If you try to play with a number of players/teams not marked as compatbile by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
+                If you try to play with a number of players/teams not marked as compatible by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
                     It should spawn them in the same coordinates, though maybe slightly offset
                     It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
             For simple-type areas and mission-type...
@@ -415,7 +415,7 @@ Next tasks (roughly sorted most important first)
                     In the filler type, the maker specifies how many objects of this group to spawn, and each entry specifies the odds (the user specifies the weight, but the GUI should show the percentage as well)
                     Every entry lets you pick the object, fall type (or maybe for a future version), and spawn location
                         Spawn locations should be easy enemies, hard enemies, special, decoration, cave unit seams, corridors, or dead ends
-                    The editor has to somehow detect if the cave the maker is trying to create will have enough space to accomodate all objects
+                    The editor has to somehow detect if the cave the maker is trying to create will have enough space to accommodate all objects
         Randomization algorithm
         Thoughts
             When the game places units, can it just place the unit's sectors in the void and call it a day? In terms of collision it might work. What about wall shadows? I guess they may not render to the side that's facing the void, but walls leading into the doorway may have their shadows shrink to a small size because the tip of the wall is adjacent to the void...
@@ -596,7 +596,7 @@ Misc things (so I don't forget)
                 A button that locks the cursor in place
                 If on the floor, it just locks the cursor there
                 If on an enemy, it locks to that position (hitbox + offset) of the enemy, like its back
-                While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their perhipheral
+                While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their peripheral
                 An option in the options for it to either lock with holding the button, or toggling
             Throwing or charging (or dismissing) Pikmin onto a locked-on target should make them work exclusively on that
         Charge
@@ -613,7 +613,7 @@ Misc things (so I don't forget)
         Game config parameters:
             Nectars: Work like in the engine, or like in the classics?
         Figure out what to do with sleeping now that Go Here exists. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
-            Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
+            Maybe make it a different feature, one that makes the leader play dead so enemies stop targeting them (thanks Kolabold)
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
@@ -806,7 +806,7 @@ Misc things (so I don't forget)
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
         A tall grass mob
-        A turnstyle mob
+        A turnstile mob
         Sounds
             Menus
                 https://fxbsky.app/profile/wafflesmogumogu.bsky.social/post/3l7atb5e2rd2h
@@ -821,7 +821,7 @@ Misc things (so I don't forget)
             Results screen
                 Item run-up ticking
                 Item run-up finished
-                Katching for getting a medal
+                Ka-ching for getting a medal
                 Puff for the complete/failed stamp
     Base content to tweak
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
@@ -1007,7 +1007,7 @@ Tasks for later on (I might never implement these)
     Stuff that isn't really justifiable yet, but may be one day
         Should the leader's throw preview indicate collisions against mobs? It's not really necessary, and there are all sorts of weird cases, like decorative vs. combat mobs, untouchable hitboxes, etc.
         The ability for status effects to add/remove HP in absolute amounts, not relative
-        Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
+        Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geometry and try to move it
         Suggestions
             Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
             An action with which to change a mob's home

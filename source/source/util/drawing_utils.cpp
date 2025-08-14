@@ -412,18 +412,18 @@ void drawTexturedBox(
     //Workaround: For some reason there's a seam visible when the edges are
     //around < 6 pixels wide. I can't figure out why. So I'm bumping
     //this threshold to be 8 pixels longer than normal.
-    const Point cornerTreshold(
+    const Point cornerThreshold(
         std::max(8.0f, size.x / 2.0f - 8),
         std::max(8.0f, size.y / 2.0f - 8)
     );
     //Corner size.
     Point cornerSize(bmpW / 3.0f, bmpH / 3.0f);
-    if(cornerTreshold.x < cornerSize.x) {
-        cornerSize.x = cornerTreshold.x;
+    if(cornerThreshold.x < cornerSize.x) {
+        cornerSize.x = cornerThreshold.x;
         cornerSize.y = cornerSize.x * (bmpW / bmpH);
     }
-    if(cornerTreshold.y < cornerSize.y) {
-        cornerSize.y = cornerTreshold.y;
+    if(cornerThreshold.y < cornerSize.y) {
+        cornerSize.y = cornerThreshold.y;
         cornerSize.x = cornerSize.y * (bmpH / bmpW);
     }
     

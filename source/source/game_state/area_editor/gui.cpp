@@ -2392,7 +2392,7 @@ void AreaEditor::processGuiPanelInfo() {
         }
         setTooltip(
             "How far away the background texture is. "
-            "Affects paralax scrolling.\n"
+            "Affects parallax scrolling.\n"
             "2 is a good value.",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -4267,7 +4267,7 @@ void AreaEditor::processGuiPanelMobs() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
-                    "delMobButtonn", editorIcons[EDITOR_ICON_REMOVE],
+                    "delMobButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {

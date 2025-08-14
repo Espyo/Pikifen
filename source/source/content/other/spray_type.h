@@ -60,7 +60,7 @@ public:
     //Bitmap for the spray count.
     ALLEGRO_BITMAP* bmpSpray = nullptr;
     
-    //How many ingredients are needed in order to concot a new spray.
+    //How many ingredients are needed in order to concoct a new spray.
     //0 means there are no ingredients for this spray type.
     size_t ingredientsNeeded = 10;
     

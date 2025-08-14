@@ -380,7 +380,7 @@ public:
         ALLEGRO_SAMPLE* sample, const Point& pos, bool ambiance = false,
         const SoundSourceConfig& config = SoundSourceConfig()
     );
-    size_t createUiSoundsource(
+    size_t createUiSoundSource(
         ALLEGRO_SAMPLE* sample,
         const SoundSourceConfig& config = SoundSourceConfig()
     );

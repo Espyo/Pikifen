@@ -35,7 +35,7 @@ void CategoryManager::clear() {
 
 /**
  * @brief Finds a mob type given its name.
- * This finds the first occurence, in case multiple categories have a mob
+ * This finds the first occurrence, in case multiple categories have a mob
  * type of that name.
  *
  * @param name Name of the mob type.

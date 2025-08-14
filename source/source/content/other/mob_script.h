@@ -224,7 +224,7 @@ enum MOB_EV {
     //When the mob needs to stop moving, as it's no longer being carried.
     MOB_EV_CARRY_STOP_MOVE,
     
-    //When the mob was sucessfully delivered
+    //When the mob was successfully delivered
     //to its destination after being carried.
     MOB_EV_CARRY_DELIVERED,
     

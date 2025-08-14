@@ -269,7 +269,7 @@ private:
         //Trying to draw along an existing edge.
         DRAWING_LINE_RESULT_ALONG_EDGE,
         
-        //Crosses exsting edges.
+        //Crosses existing edges.
         DRAWING_LINE_RESULT_CROSSES_EDGES,
         
         //Crosses previous parts of the drawing.

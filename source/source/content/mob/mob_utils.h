@@ -318,7 +318,7 @@ struct Group {
     
     //--- Function declarations ---
     
-    explicit Group(Mob* leaderptr);
+    explicit Group(Mob* leaderPtr);
     void initSpots(Mob* affectedMobPtr = nullptr);
     void sort(SubgroupType* leadingType);
     void changeStandbyTypeIfNeeded();
@@ -370,7 +370,7 @@ struct HoldInfo {
     //--- Function declarations ---
     
     void clear();
-    Point getFinalPos(float* outz) const;
+    Point getFinalPos(float* outZ) const;
     
 };
 

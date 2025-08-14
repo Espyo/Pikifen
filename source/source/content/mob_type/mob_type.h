@@ -97,7 +97,7 @@ public:
         //Spawn in coordinates relative to the spawner?
         bool relative = true;
         
-        //Coordenates to spawn on.
+        //Coordinates to spawn on.
         Point coordsXY;
         
         //Z coordinate to spawn on.
@@ -336,7 +336,7 @@ public:
     //Can be pushed by other mobs.
     bool pushable = false;
     
-    //If true, the push is soft and allows squeezing through with persistance.
+    //If true, the push is soft and allows squeezing through with persistence.
     bool pushesSoftly = false;
     
     //If true, the push is via hitbox, as opposed to the mob's radius.

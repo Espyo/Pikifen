@@ -327,7 +327,7 @@ void Results::load() {
             nullptr, "Save failed!",
             "Could not save this result!",
             (
-                "An error occured while saving the mission record to the "
+                "An error occurred while saving the mission record to the "
                 "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
                 "\". Make sure that "
                 "the folder it is saving to exists and it is not read-only, "

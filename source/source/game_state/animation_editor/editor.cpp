@@ -870,7 +870,7 @@ void AnimationEditor::playSound(size_t soundIdx) {
     if(!loadedMobType) return;
     MobType::Sound* soundData = &loadedMobType->sounds[soundIdx];
     if(!soundData->sample) return;
-    game.audio.createUiSoundsource(soundData->sample, soundData->config);
+    game.audio.createUiSoundSource(soundData->sample, soundData->config);
 }
 
 
@@ -1190,7 +1190,7 @@ void AnimationEditor::restartAnimCmd(float inputValue) {
 /**
  * @brief Saves the animation database onto the mob's file.
  *
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool AnimationEditor::saveAnimDb() {
     db.engineVersion = getEngineVersionString();
@@ -1208,7 +1208,7 @@ bool AnimationEditor::saveAnimDb() {
             nullptr, "Save failed!",
             "Could not save the animation database!",
             (
-                "An error occured while saving the animation database to "
+                "An error occurred while saving the animation database to "
                 "the file \"" + manifest.path + "\". Make sure that the "
                 "folder it is saving to exists and it is not read-only, "
                 "and try again."

@@ -94,7 +94,7 @@ Polygon::Polygon(const vector<Vertex*>& vertexes) :
  * @brief Cleans a polygon's vertexes.
  * This deletes 0-length edges, and 180-degree vertexes.
  *
- * @param recursive If true, clean the children polyon too recursively.
+ * @param recursive If true, clean the children polygon too, recursively.
  */
 void Polygon::clean(bool recursive) {
     for(size_t v = 0; v < vertexes.size();) {
@@ -165,7 +165,7 @@ void Polygon::cut() {
         Vertex* start = childPtr->getRightmostVertex();
         
         if(!start) {
-            //Some error occured.
+            //Some error occurred.
             continue;
         }
         
@@ -213,7 +213,7 @@ void Polygon::cut() {
         }
         
         if(!closestVertex && !closestEdgeV1) {
-            //Some error occured.
+            //Some error occurred.
             continue;
         }
         
@@ -500,7 +500,7 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
  * Because at each vertex there can be multiple edges, including multiple
  * edges that belong to the sector we are looking for, we should pick
  * the next edge carefully.
- * Based on information from the previous edge, we should continue travelling
+ * Based on information from the previous edge, we should continue traveling
  * via the edge with the smallest angle difference (depending on the rotation
  * direction we're heading.
  *

@@ -31,7 +31,7 @@
  * @param id Its ID.
  * @param category Its category.
  * @param name Its name.
- * @param description Its descripton.
+ * @param description Its description.
  * @param internalName The name of its property in the options file.
  * @param defaultBindStr String representing of this action's default
  * control bind.
@@ -206,7 +206,7 @@ PfePlayerActionType ControlsMediator::getPlayerActionType(
 
 /**
  * @brief Returns the internal name from an input ID,
- * used in the on_input_recieved event.
+ * used in the on_input_received event.
  *
  * @param actionId ID of the player action.
  * @return The name, or an empty string on failure.

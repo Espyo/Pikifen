@@ -742,18 +742,18 @@ bool circleIntersectsLineSeg(
     
     float vx = lineP2.x - lineP1.x;
     float vy = lineP2.y - lineP1.y;
-    float xdiff = lineP1.x - circle.x;
-    float ydiff = lineP1.y - circle.y;
+    float xDiff = lineP1.x - circle.x;
+    float yDiff = lineP1.y - circle.y;
     float a = vx * vx + vy * vy;
-    float b = 2 * ((vx * xdiff) + (vy * ydiff));
-    float c = xdiff * xdiff + ydiff * ydiff - radius * radius;
+    float b = 2 * ((vx * xDiff) + (vy * yDiff));
+    float c = xDiff * xDiff + yDiff * yDiff - radius * radius;
     float quad = b * b - (4 * a * c);
     if(quad >= 0) {
         //An infinite collision is happening, but let's not stop here.
-        float quadsqrt = (float) sqrt(quad);
+        float quadSqrt = (float) sqrt(quad);
         for(int i = -1; i <= 1; i += 2) {
             //Returns the two coordinates of the intersection points.
-            float t = (i * -b + quadsqrt) / (2 * a);
+            float t = (i * -b + quadSqrt) / (2 * a);
             float x = lineP1.x + (i * vx * t);
             float y = lineP1.y + (i * vy * t);
             //If one of them is in the boundaries of the segment, it collides.

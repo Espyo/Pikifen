@@ -1031,7 +1031,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     game.curAreaData->mission.getScoreMedal(missionScore);
                 if(oldMedal < newMedal) {
                     medalGotItJuiceTimer = 0.0f;
-                    game.audio.createUiSoundsource(
+                    game.audio.createUiSoundSource(
                         game.sysContent.sndMedalGotIt,
                     { .volume = 0.50f }
                     );
@@ -1120,7 +1120,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     timeLeftPrevFrame > 60.0f && timeLeftCurFrame <= 60.0f
                 ) {
                     game.states.gameplay->bigMsg.set(BIG_MESSAGE_ONE_MIN_LEFT);
-                    game.audio.createUiSoundsource(
+                    game.audio.createUiSoundSource(
                         game.sysContent.sndOneMinuteLeft,
                     { .volume = 0.5f }
                     );
@@ -1143,7 +1143,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     timeLeftCurFrame > 0.0f &&
                     floor(timeLeftPrevFrame) > floor(timeLeftCurFrame)
                 ) {
-                    game.audio.createUiSoundsource(
+                    game.audio.createUiSoundSource(
                         game.sysContent.sndCountdownTick
                     );
                 }
@@ -1536,7 +1536,7 @@ void GameplayState::doMenuLogic() {
     } case BIG_MESSAGE_READY: {
         if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_READY_DUR) {
             bigMsg.set(BIG_MESSAGE_GO);
-            game.audio.createUiSoundsource(game.sysContent.sndGo);
+            game.audio.createUiSoundSource(game.sysContent.sndGo);
         }
         break;
     } case BIG_MESSAGE_GO: {

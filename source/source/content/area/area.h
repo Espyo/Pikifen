@@ -170,7 +170,7 @@ struct TreeShadow {
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string& bmpname = "", const Point& sway = Point(1.0f)
+        const string& bmpName = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();
     
@@ -268,7 +268,7 @@ struct Area : public Content {
     void checkStability();
     void cleanup(bool* outdeleted_sectors = nullptr);
     void clone(Area& other);
-    void connectEdgeToSector(Edge* eptr, Sector* sPtr, size_t side);
+    void connectEdgeToSector(Edge* ePtr, Sector* sPtr, size_t side);
     void connectEdgeToVertex(Edge* ePtr, Vertex* vPtr, size_t endpoint);
     void connectSectorEdges(Sector* sPtr);
     void connectVertexEdges(Vertex* vPtr);

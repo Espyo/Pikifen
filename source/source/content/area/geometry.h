@@ -51,7 +51,7 @@ extern const float SMOOTHING_MAX_LENGTH;
 //Possible errors after a triangulation operation.
 enum TRIANGULATION_ERROR {
 
-    //No error occured.
+    //No error occurred.
     TRIANGULATION_ERROR_NONE,
     
     //Invalid arguments provided.

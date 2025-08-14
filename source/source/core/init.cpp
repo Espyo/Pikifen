@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Program initializer and deinitializer functions.
+ * Program initializer and uninitializer functions.
  */
 
 #include <algorithm>

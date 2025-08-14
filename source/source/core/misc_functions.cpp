@@ -474,11 +474,11 @@ ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr) {
  * @return The length.
  */
 float getLiquidLimitLength(Edge* ePtr) {
-    //Let's vary the length randomly by the topleftmost edge coordinates.
+    //Let's vary the length randomly by the top-leftmost edge coordinates.
     //It's better to use this than using just the first edge, for instance,
     //because that would result in many cases of edges that share a first
     //vertex. So it wouldn't look as random.
-    //It is much more rare for two edges to share a topleftmost vertex.
+    //It is much more rare for two edges to share a top-leftmost vertex.
     Point minCoords = v2p(ePtr->vertexes[0]);
     updateMinCoords(minCoords, v2p(ePtr->vertexes[1]));
     float r =
@@ -1465,7 +1465,7 @@ vector<vector<StringToken> > splitLongStringWithTokens(
                 caret > 0 && caretAfterWord > maxWidth;
                 
             if(lineWillBeTooLong) {
-                //Break to a new line before comitting the word.
+                //Break to a new line before committing the word.
                 tokensPerLine.push_back(vector<StringToken>());
                 caret = 0;
                 curLineIdx++;
@@ -1495,7 +1495,7 @@ vector<vector<StringToken> > splitLongStringWithTokens(
             wordBufferWidth = 0;
             
             if(tokenIsLineBreak) {
-                //Break the line after comitting the word.
+                //Break the line after committing the word.
                 tokensPerLine.push_back(vector<StringToken>());
                 caret = 0;
                 curLineIdx++;
@@ -1702,7 +1702,7 @@ string unescapeString(const string& s) {
 
 
 /**
- * @brief Convertes a vertex to a point.
+ * @brief Converts a vertex to a point.
  *
  * @param v Vertex to convert.
  * @return The point.

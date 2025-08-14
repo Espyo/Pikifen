@@ -23,7 +23,7 @@ namespace AUDIO {
 //Default min stack pos. Let's use a value higher than 0, since if for any
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SOUND_STACK_MODE_NORMAL mode,
-//thus perventing a super-loud sound.
+//thus preventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
 
 //Change speed for interlude volume changes, measured in amount per second.
@@ -192,7 +192,7 @@ size_t AudioManager::createSoundSource(
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createUiSoundsource(
+size_t AudioManager::createUiSoundSource(
     ALLEGRO_SAMPLE* sample,
     const SoundSourceConfig& config
 ) {

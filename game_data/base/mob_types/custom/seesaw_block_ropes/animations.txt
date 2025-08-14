@@ -1,4 +1,4 @@
-name=Seesawl block ropes animations
+name=Seesaw block ropes animations
 description=Animations for the ropes on a seesaw block.
 maker=Espyo
 version=1.0.0

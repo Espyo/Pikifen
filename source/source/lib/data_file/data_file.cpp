@@ -338,7 +338,7 @@ size_t DataNode::getNrOfChildren() const {
 
 
 /**
- * @brief Returns the number of occurences of a child name
+ * @brief Returns the number of occurrences of a child name
  * (direct children only).
  *
  * @param name Name the children must have.
@@ -574,7 +574,7 @@ bool DataNode::remove(DataNode* nodeToRemove) {
  * @param includeEmptyValues If true, even nodes with an empty value
  * will be saved.
  * @param encrypted If true, the file must be encrypted.
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool DataNode::saveFile(
     string destinationFilePath, bool childrenOnly,

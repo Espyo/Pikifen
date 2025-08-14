@@ -297,7 +297,7 @@ bool GuiItem::activate(const Point& cursorPos) {
         playFailSound ?
         game.sysContent.sndMenuFail :
         game.sysContent.sndMenuActivate;
-    game.audio.createUiSoundsource(sample, { .volume = 0.75f });
+    game.audio.createUiSoundSource(sample, { .volume = 0.75f });
     playFailSound = false;
     
     return true;
@@ -1151,7 +1151,7 @@ void GuiManager::setSelectedItem(GuiItem* item, bool silent) {
     }
     
     if(selectedItem && !silent) {
-        game.audio.createUiSoundsource(
+        game.audio.createUiSoundSource(
             game.sysContent.sndMenuSelect,
         { .stackMinPos = 0.01f, .volume = 0.5f, .speedDeviation = 0.1f }
         );
@@ -1170,7 +1170,7 @@ void GuiManager::showItems() {
 /**
  * @brief Starts an animation that affects all items.
  *
- * @param type Type of aniimation to start.
+ * @param type Type of animation to start.
  * @param duration Total duration of the animation.
  */
 void GuiManager::startAnimation(
