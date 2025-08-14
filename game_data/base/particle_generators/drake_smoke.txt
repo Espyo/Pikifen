@@ -2,7 +2,7 @@ name=S.S. Drake smoke
 description=Smoke coming out of the S.S. Drake's exhausts.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 emission{
 	number=3
 	number_deviation=1

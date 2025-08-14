@@ -2,7 +2,7 @@ name=Pile sparkles (large)
 description=An explosion of sparkles, used when a large pile pile loses or gains a resource.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 emission{
 	number=20
 	number_deviation=4

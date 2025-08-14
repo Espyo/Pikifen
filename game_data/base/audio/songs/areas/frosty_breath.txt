@@ -1,4 +1,5 @@
 name = Frosty Breath
+description = A windy theme with a flute lead.
 
 tags = Area; Calm; Cold
 maker = Helodity

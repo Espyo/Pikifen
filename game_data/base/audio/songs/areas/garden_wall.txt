@@ -1,4 +1,5 @@
 name = Garden Wall
+description = A dark theme filled with unease.
 
 tags = Area; Mysterious; Eerie
 maker = Helodity

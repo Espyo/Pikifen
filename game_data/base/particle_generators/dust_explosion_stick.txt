@@ -2,7 +2,7 @@ name=Dust explosion (climbing stick)
 description=A generic climbing-stick-sized explosion of dust. Used, for instance, when a a climbing stick pile is finished.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 emission{
 	number=32
 	number_deviation=0

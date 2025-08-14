@@ -40,7 +40,7 @@ script {
         on_touch_object {
             get_mob_info t trigger mob_category
             if $t != pikmin
-                if $t != Decoration
+                if $t != decoration
                     set_state destroying
                 end_if
             end_if

@@ -3,7 +3,7 @@ description = This is the base pack that comes included with Pikifen. It has a b
 
 maker = Espyo
 version = 1.0.0
-engine_version = 0.25.0
+engine_version = 1.0.0
 tags = Engine
 dependencies = 
 conflicts = 

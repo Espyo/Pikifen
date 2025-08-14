@@ -2,7 +2,7 @@ name=Spiderwort sparkles
 description=An explosion of sparkles, used when a Burgeoning Spiderwort loses or gains a berry.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 emission{
 	number=15
 	number_deviation=3

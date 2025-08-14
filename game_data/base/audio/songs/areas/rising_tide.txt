@@ -1,4 +1,5 @@
 name = Rising Tide
+description = A calm harp-led theme filled with ebb and flow.
 
 tags = Area; Calm; Reflective
 maker = Helodity

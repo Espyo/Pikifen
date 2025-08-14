@@ -2,7 +2,7 @@ name=Hocotate Ship smoke
 description=Smoke coming out of the Hocotate ship.
 maker=Espyo
 version=1.0.0
-engine_version=0.25.0
+engine_version=1.0.0
 emission{
 	number=3
 	number_deviation=1
