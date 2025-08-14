@@ -172,8 +172,11 @@ size_t AudioManager::createSoundSource(
     if(!hasFlag(config.flags, SOUND_FLAG_DONT_EMIT_ON_CREATION)) {
         scheduleEmission(id, true);
         if(sources[id].emitTimeLeft <= 0.0f) {
-            emit(id);
-            scheduleEmission(id, false);
+            if(emit(id)) {
+                scheduleEmission(id, false);
+            } else {
+                sources[id].destroyed = true;
+            }
         }
     }
     
@@ -924,8 +927,11 @@ void AudioManager::tick(float deltaT) {
         
         s.second.emitTimeLeft -= deltaT;
         if(s.second.emitTimeLeft <= 0.0f) {
-            emit(s.first);
-            scheduleEmission(s.first, false);
+            if(emit(s.first)) {
+                scheduleEmission(s.first, false);
+            } else {
+                sources[s.first].destroyed = true;
+            }
         }
     }
     
