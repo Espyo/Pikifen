@@ -1311,7 +1311,8 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
             }
             for(size_t l = 0; l < m2Ptr->links.size(); l++) {
                 if(m2Ptr->links[l] == mPtr) {
-                    m2Ptr->links[l] = nullptr;
+                    m2Ptr->links.erase(m2Ptr->links.begin() + l);
+                    l--;
                 }
             }
             if(m2Ptr->storedInsideAnother == mPtr) {
@@ -1328,6 +1329,9 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                         m2Ptr->carryInfo->spotInfo[c].state =
                             CARRY_SPOT_STATE_FREE;
                     }
+                }
+                if(m2Ptr->carryInfo->intendedMob == mPtr){
+                    m2Ptr->carryInfo->mustRecalculate = true;
                 }
             }
         }

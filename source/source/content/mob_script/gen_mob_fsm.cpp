@@ -415,12 +415,11 @@ void GenMobFsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void GenMobFsm::handleDelivery(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
-    
-    m->focusedMob->fsm.runEvent(
-        MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
-    );
-    
+    if(m->focusedMob) {
+        m->focusedMob->fsm.runEvent(
+            MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
+        );
+    }
     m->toDelete = true;
 }
 

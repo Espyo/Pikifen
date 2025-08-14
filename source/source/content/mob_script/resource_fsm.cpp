@@ -180,7 +180,8 @@ void ResourceFsm::handleDelivery(Mob* m, void* info1, void* info2) {
     Resource* resPtr = (Resource*) m;
     if(
         resPtr->resType->deliveryResult ==
-        RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
+        RESOURCE_DELIVERY_RESULT_DAMAGE_MOB &&
+        resPtr->focusedMob
     ) {
         resPtr->focusedMob->setHealth(
             true, false, -resPtr->resType->damageMobAmount

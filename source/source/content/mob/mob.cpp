@@ -3748,6 +3748,19 @@ void Mob::tickBrain(float deltaT) {
         );
     }
     
+    //Being carried.
+    if(carryInfo) {
+        if(carryInfo->mustRecalculate) {
+            carryInfo->destinationExists =
+                calculateCarryingDestination(
+                    &carryInfo->intendedPikType,
+                    &carryInfo->intendedMob, &carryInfo->intendedPoint
+                );
+            fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
+            carryInfo->mustRecalculate = false;
+        }
+    }
+
     //Chasing a target.
     if(
         chaseInfo.state == CHASE_STATE_CHASING &&
