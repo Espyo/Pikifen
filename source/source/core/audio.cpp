@@ -175,7 +175,7 @@ size_t AudioManager::createSoundSource(
             if(emit(id)) {
                 scheduleEmission(id, false);
             } else {
-                sources[id].destroyed = true;
+                destroySoundSource(id);
             }
         }
     }
@@ -930,7 +930,7 @@ void AudioManager::tick(float deltaT) {
             if(emit(s.first)) {
                 scheduleEmission(s.first, false);
             } else {
-                sources[s.first].destroyed = true;
+                destroySoundSource(s.first);
             }
         }
     }

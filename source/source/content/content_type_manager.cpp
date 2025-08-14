@@ -208,6 +208,8 @@ void AreaContentManager::loadAreaIntoVector(
         )
     ) {
         list[type].push_back(newArea);
+    } else {
+        delete newArea;
     }
 }
 
