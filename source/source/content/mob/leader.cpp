@@ -926,7 +926,7 @@ void Leader::signalSwarmStart() const {
  * @param leaderPos Position of the leader to use.
  */
 void Leader::specificDismiss(
-    const vector<Mob*> members,
+    const vector<Mob*>& members,
     const Point& relCenter, const Point& leaderPos
 ) {
     size_t curRowidx = 0;

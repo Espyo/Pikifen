@@ -1326,7 +1326,6 @@ PikminType* Mob::decideCarryPikminType(
         }
         
         if(decidedType) {
-            game.states.gameplay->lastCarryingTieBreaker = decidedType;
             candidateTypes = { decidedType };
         } else {
             //Panic check. Just use the first available type instead.
@@ -3760,7 +3759,7 @@ void Mob::tickBrain(float deltaT) {
             carryInfo->mustRecalculate = false;
         }
     }
-
+    
     //Chasing a target.
     if(
         chaseInfo.state == CHASE_STATE_CHASING &&

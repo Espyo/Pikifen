@@ -243,8 +243,8 @@ ParticleGenerator::ParticleGenerator(
     const float emissionInterval,
     const Particle& baseParticle, const size_t number
 ) :
-    baseParticle(baseParticle) {
-    emission = ParticleEmission(emissionInterval, number);
+    baseParticle(baseParticle),
+    emission(emissionInterval, number) {
 }
 
 

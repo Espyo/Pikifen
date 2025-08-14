@@ -165,7 +165,7 @@ bool getPolysIsOuter(
 );
 Vertex* getRightmostVertex(const unordered_set<Edge*>& edges);
 Vertex* getRightmostVertex(Vertex* v1, Vertex* v2);
-bool isPolygonClockwise(vector<Vertex*>& vertexes);
+bool isPolygonClockwise(const vector<Vertex*>& vertexes);
 bool isVertexConvex(const vector<Vertex*>& vec, size_t idx);
 bool isVertexEar(
     const vector<Vertex*>& vec, const vector<size_t>& concaves, size_t idx

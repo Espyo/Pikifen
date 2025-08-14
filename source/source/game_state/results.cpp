@@ -678,7 +678,7 @@ void Results::load() {
  * 
  * @param oldRecord Old record.
  */
-void Results::populateStatsList(MissionRecord oldRecord) {
+void Results::populateStatsList(const MissionRecord& oldRecord) {
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
         game.curAreaData->mission.startingPoints != 0

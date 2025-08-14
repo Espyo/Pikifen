@@ -6,20 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    There's a memory leak when you restart areas (Thanks Helodity)
-    "oh new crash found / get_mob_info mob_type  when the triggering mob is a bridge component / type->manifest is null so when it tries to read type->manifest->internalName it crashes" -Helodity
 
-    --- 0.26 ---
-    More particles
-        More across the board -- check all mobs too
+
+    --- 1.0 ---
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states
     Test from a fresh save file
-    Check one final time for leaks, run a static analysis, etc.
-    Check one final time that all content has the engine version as 1.0.0
-    Make sure the readme's <50MB size claim is correct
-    Update the manual's history page to mention 1.0's launch
     
     --- Future ---
     A way to port content from previous versions
@@ -31,8 +24,8 @@ Next tasks (roughly sorted most important first)
         Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
     Misc. graphical improvements
         Onions should be shaded with hue shifting
-        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies, right?
     Swarming jingle
+    Update to Dear ImGui v1.92.2b
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -824,6 +817,8 @@ Misc things (so I don't forget)
                 Ka-ching for getting a medal
                 Puff for the complete/failed stamp
     Base content to tweak
+        Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
+            Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
@@ -1021,6 +1016,7 @@ Tasks for later on (I might never implement these)
             Plus, anything involving script variables, states, focuses, and so on will just lead to endless spaghetti for the engine and for the script maker
         Action groups for mob scripts (like functions)
             Not really necessary since you can just create an aux state to do those
+        Optimize the Armored Cannon Beetle's spritesheet, ever since its inhale sprites stopped using drawn lines and started using dust particles
     Possible solutions to known issues
         Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

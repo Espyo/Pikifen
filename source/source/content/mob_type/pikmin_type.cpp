@@ -106,14 +106,14 @@ PikminType::PikminType() :
     areaEditorProps.push_back(aepSprout);
     
     AreaEditorProp aepFollowLink;
-    aepSprout.name = "Follow link as leader";
-    aepSprout.var = "follow_link_as_leader";
-    aepSprout.type = AEMP_TYPE_BOOL;
-    aepSprout.defValue = "false";
-    aepSprout.tooltip =
-        "True if this Pikmin should follow its linked object, "
-        "as if it were its leader.";
-    areaEditorProps.push_back(aepSprout);
+    aepFollowLink.name = "Follow link as leader";
+    aepFollowLink.var = "follow_link_as_leader";
+    aepFollowLink.type = AEMP_TYPE_BOOL;
+    aepFollowLink.defValue = "false";
+    aepFollowLink.tooltip =
+        "True if this Pikmin should follow its linked object "
+        "as its leader.";
+    areaEditorProps.push_back(aepFollowLink);
     
     PikminFsm::createFsm(this);
 }

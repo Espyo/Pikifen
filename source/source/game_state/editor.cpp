@@ -3804,12 +3804,12 @@ void Editor::Picker::process() {
                 ImGui::PopID();
             }
             
-            if(!secCatNames[tc][sc].empty() && secCatOpened) {
+            if(!secCatNames[tc][sc].empty()) {
                 ImGui::TreePop();
             }
         }
         
-        if(!topCatNames[tc].empty() && topCatOpened) {
+        if(!topCatNames[tc].empty()) {
             ImGui::TreePop();
         }
     }

@@ -38,7 +38,7 @@ constParameterReference:mob_script_action.cpp
 // +------------------
 
 //Don't notify about Dear ImGui problems.
-*:libs/imgui/*
+*:lib/imgui/*
 
 
 

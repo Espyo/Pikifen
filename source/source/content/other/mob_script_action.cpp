@@ -284,7 +284,7 @@ bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
         call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN);
     } else {
         call.customError =
-            "Unknown info type \"" + call.args[0] + "\"! "
+            "Unknown info type \"" + call.args[1] + "\"! "
             "Try using \"get_mob_info\" or \"get_event_info\".";
         return false;
     }
@@ -371,7 +371,7 @@ bool MobActionLoaders::getMobInfo(MobActionCall& call) {
         call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Z);
     } else {
         call.customError =
-            "Unknown info type \"" + call.args[0] + "\"! "
+            "Unknown info type \"" + call.args[2] + "\"! "
             "Try using \"get_event_info\" or \"get_area_info\".";
         return false;
     }
@@ -1258,7 +1258,7 @@ void MobActionRunners::getMobInfo(MobActionRunData& data) {
         if(target->maxHealth != 0.0f) {
             *var = f2s(target->health / target->maxHealth);
         } else {
-            *var = 0.0f;
+            *var = "0";
         }
         break;
         
@@ -1279,7 +1279,11 @@ void MobActionRunners::getMobInfo(MobActionRunData& data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
-        *var = target->type->manifest->internalName;
+        if(target->type->manifest) {
+            *var = target->type->manifest->internalName;
+        } else {
+            *var = "";
+        }
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {

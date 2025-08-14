@@ -203,7 +203,7 @@ private:
     void dismissLogic();
     size_t getDismissRows(size_t nMembers) const;
     void specificDismiss(
-        const vector<Mob*> members,
+        const vector<Mob*>& members,
         const Point& relCenter, const Point& leaderPos
     );
     

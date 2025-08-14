@@ -835,7 +835,7 @@ Vertex* getRightmostVertex(Vertex* v1, Vertex* v2) {
  * @param vertexes Vertexes to check.
  * @return Whether it is clockwise.
  */
-bool isPolygonClockwise(vector<Vertex*>& vertexes) {
+bool isPolygonClockwise(const vector<Vertex*>& vertexes) {
     //Solution by http://stackoverflow.com/a/1165943
     float sum = 0;
     for(size_t v = 0; v < vertexes.size(); v++) {

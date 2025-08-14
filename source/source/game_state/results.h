@@ -66,7 +66,7 @@ private:
     );
     void continuePlaying();
     void leave();
-    void populateStatsList(MissionRecord oldRecord);
+    void populateStatsList(const MissionRecord& oldRecord);
     void retryArea();
     
 };

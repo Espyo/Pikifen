@@ -1346,8 +1346,6 @@ void AnimationEditor::setBestFrameSprite() {
  * takes place.
  */
 void AnimationEditor::setupForNewAnimDbPost() {
-    vector<string> filePathParts = split(manifest.path, "/");
-    
     if(
         manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") !=
         string::npos

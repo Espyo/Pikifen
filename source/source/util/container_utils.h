@@ -181,7 +181,7 @@ bool isPermutation(const Container1T& cont1, const Container2T& cont2) {
  */
 template<typename ContentT>
 vector<ContentT> shuffleVector(
-    const vector<ContentT>& v, const vector<float> pickRandomFloats
+    const vector<ContentT>& v, const vector<float>& pickRandomFloats
 ) {
     vector<ContentT> result;
     vector<ContentT> itemsAvailable = v;
@@ -214,7 +214,7 @@ vector<ContentT> shuffleVector(
  */
 template<typename ContentT>
 vector<ContentT> sortVectorWithPreferenceList(
-    const vector<ContentT>& v, const vector<ContentT> preferenceList,
+    const vector<ContentT>& v, const vector<ContentT>& preferenceList,
     vector<ContentT>* unknowns = nullptr
 ) {
     vector<ContentT> result;

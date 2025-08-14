@@ -1254,17 +1254,17 @@ Mob* createMob(
  * @return The new mob.
  */
 Mob* createMob(MobGen* gen) {
-    Mob* mPtr = 
-    createMob(
-        gen->type->category, gen->pos, gen->type,
-        gen->angle, gen->vars
-    );
-
+    Mob* mPtr =
+        createMob(
+            gen->type->category, gen->pos, gen->type,
+            gen->angle, gen->vars
+        );
+        
     if(mPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
         Enemy* ePtr = (Enemy*)mPtr;
         ePtr->isBoss = gen->isBoss;
     }
-
+    
     return mPtr;
 }
 
@@ -1330,7 +1330,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                             CARRY_SPOT_STATE_FREE;
                     }
                 }
-                if(m2Ptr->carryInfo->intendedMob == mPtr){
+                if(m2Ptr->carryInfo->intendedMob == mPtr) {
                     m2Ptr->carryInfo->mustRecalculate = true;
                 }
             }
