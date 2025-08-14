@@ -4,7 +4,7 @@ For licenses on the various assets, please read the user manual's credits.
 
 The MIT License (MIT)
 
-Copyright (c) 2016 André Luís Gomes da Silva
+Copyright (c) 2016 AndrÃ© LuÃ­s Gomes da Silva
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

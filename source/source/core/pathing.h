@@ -137,7 +137,7 @@ enum PATH_BLOCK_REASON {
     //The link requires the path to be from a script, but it isn't.
     PATH_BLOCK_REASON_NOT_IN_SCRIPT,
     
-    //The link requires a light load, but the object isn't travelling light.
+    //The link requires a light load, but the object isn't traveling light.
     PATH_BLOCK_REASON_NOT_LIGHT_LOAD,
     
     //The link requires an airborne mob, but the object isn't.

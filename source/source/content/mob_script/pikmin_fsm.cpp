@@ -2452,7 +2452,7 @@ void PikminFsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    //If we got to this point, then greenlight for the attack.
+    //If we got to this point, then green light for the attack.
     m->fsm.runEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED, info1, info2);
 }
 

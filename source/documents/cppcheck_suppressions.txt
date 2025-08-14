@@ -5,7 +5,7 @@
 //Pikifen uses C-style casts a lot, and I've never had a problem with them.
 cstyleCast
 
-//IMO, using an STL algorithm is often overengineering and more verbose than just writing the code directly.
+//IMO, using an STL algorithm is often over-engineering and more verbose than just writing the code directly.
 useStlAlgorithm
 
 //Not really very important.
@@ -37,7 +37,7 @@ constParameterReference:mob_script_action.cpp
 // | OUT OF SCOPE
 // +------------------
 
-//Don't notifiy about Dear ImGui problems.
+//Don't notify about Dear ImGui problems.
 *:libs/imgui/*
 
 

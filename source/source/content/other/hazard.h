@@ -30,7 +30,7 @@ class StatusType;
 
 
 /**
- * @brief An hazard is the likes of fire, water, electricty, crushing, etc.
+ * @brief An hazard is the likes of fire, water, electricity, crushing, etc.
  *
  * Pikmin can be vulnerable or invulnerable to these.
  * Most of the time, hazards are elements (of nature), but

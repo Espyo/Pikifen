@@ -528,7 +528,7 @@ PATH_RESULT aStar(
 
 
 /**
- * @brief Checks if a path stop can be taken given some contraints.
+ * @brief Checks if a path stop can be taken given some constraints.
  *
  * @param stopPtr Stop to check.
  * @param settings Settings about how the path should be followed.
@@ -557,7 +557,7 @@ bool canTakePathStop(
 
 
 /**
- * @brief Checks if a path stop can be taken given some contraints.
+ * @brief Checks if a path stop can be taken given some constraints.
  *
  * @param stopPtr Stop to check.
  * @param settings Settings about how the path should be followed.
@@ -635,7 +635,7 @@ bool canTakePathStop(
 
 
 /**
- * @brief Checks if a link can be traversed given some contraints.
+ * @brief Checks if a link can be traversed given some constraints.
  *
  * @param linkPtr Link to check.
  * @param settings Settings about how the path should be followed.

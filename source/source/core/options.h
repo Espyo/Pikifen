@@ -169,7 +169,7 @@ struct Options {
 
     //--- Members ---
     
-    //Advanced. These typicall don't appear in any options menu.
+    //Advanced. These typically don't appear in any options menu.
     struct {
     
         //Draw a trail behind the mouse cursor?

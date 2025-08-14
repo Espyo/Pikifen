@@ -168,7 +168,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     map<Sector*, Distance> neighbors;
     Sector* textureSector[2] = {nullptr, nullptr};
     
-    //The two neighboring sectors with the lenghtiest edges are picked.
+    //The two neighboring sectors with the lengthiest edges are picked.
     //So save all sector/length pairs.
     //Sectors with different heights from the current one are also saved,
     //but they have lower priority compared to same-heigh sectors.

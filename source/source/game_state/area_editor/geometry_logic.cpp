@@ -1137,7 +1137,7 @@ void AreaEditor::findProblemsNonSimpleSector() {
             break;
         } case TRIANGULATION_ERROR_INVALID_ARGS: {
             problemDescription =
-                "An unknown error has occured with the sector.";
+                "An unknown error has occurred with the sector.";
             break;
         } case TRIANGULATION_ERROR_NONE: {
             problemDescription.clear();
@@ -1628,7 +1628,7 @@ Edge* AreaEditor::getCorrectPostSplitEdge(
  * even if the sector is the void, or false if something's gone wrong.
  *
  * @param result The outer sector, if any, is returned here.
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool AreaEditor::getDrawingOuterSector(Sector** result) const {
     //Start by checking if there's a node on a sector. If so, that's it!
@@ -2052,7 +2052,7 @@ bool AreaEditor::mergeSectors(Sector* s1, Sector* s2) {
         }
     }
     
-    //However, if there are no common edges beween sectors,
+    //However, if there are no common edges between sectors,
     //this operation is invalid.
     if(commonEdges.empty()) {
         setStatus("Those two sectors are not neighbors!", true);

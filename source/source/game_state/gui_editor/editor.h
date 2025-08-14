@@ -90,7 +90,7 @@ private:
     //The list of items must focus on the currently selected item.
     bool mustFocusOnCurItem = false;
     
-    //Small hack -- does the camera need recentering in processGui()?
+    //Small hack -- does the camera need re-centering in processGui()?
     bool mustRecenterCam = false;
     
     //Position of the reload widget.

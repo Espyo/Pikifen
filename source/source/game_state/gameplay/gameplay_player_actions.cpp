@@ -250,7 +250,7 @@ void GameplayState::doPlayerActionSwitchType(
     }
     
     if(switchSuccessful) {
-        game.audio.createUiSoundsource(
+        game.audio.createUiSoundSource(
             game.sysContent.sndSwitchPikmin
         );
     }
@@ -405,7 +405,7 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
         }
     }
     
-    game.audio.createUiSoundsource(game.sysContent.sndCamera);
+    game.audio.createUiSoundSource(game.sysContent.sndCamera);
 }
 
 
@@ -527,7 +527,7 @@ void GameplayState::doPlayerActionZoom(
         player->view.cam.targetZoom = zoomLevels[2];
     }
     
-    game.audio.createUiSoundsource(
+    game.audio.createUiSoundSource(
         game.sysContent.sndCamera,
     { .stackMode = SOUND_STACK_MODE_NEVER }
     );
@@ -546,7 +546,7 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
     bool isDown = (action.value >= 0.5);
     
     //Before we do the actions, we'll tell the leader object
-    //it's recieved an input, which will trigger an event.
+    //it's received an input, which will trigger an event.
     if(player->leaderPtr) {
         player->leaderPtr->fsm.runEvent(
             MOB_EV_INPUT_RECEIVED,

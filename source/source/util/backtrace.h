@@ -38,7 +38,7 @@ const size_t MAX_SYMBOL_LENGTH = 512;
  * @param symbol The symbol to demangle.
  * @return The demangled symbol.
  */
-string demangeSymbol(const string& symbol) {
+string demangleSymbol(const string& symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
     size_t moduleSize = 0;
     size_t nameSize = 0;
@@ -114,7 +114,7 @@ vector<string> getBacktrace() {
     char** symbols = backtrace_symbols(stack, nSymbols);
     
     for(size_t s = 0; s < nSymbols; s++) {
-        result.push_back(demangeSymbol(symbols[s]));
+        result.push_back(demangleSymbol(symbols[s]));
     }
     
     free(symbols);

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Interectable mob category class.
+ * Interactable mob category class.
  */
 
 #include <algorithm>

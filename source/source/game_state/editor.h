@@ -474,7 +474,7 @@ protected:
         //Whether the content exists in the disk.
         bool inDisk = true;
         
-        //Cummulative number of unsaved changes since the last save.
+        //Cumulative number of unsaved changes since the last save.
         size_t unsavedChanges = 0;
         
         //When did it last go from saved to unsaved? 0 = no unsaved changes.

@@ -60,7 +60,7 @@ public:
 
 
 /**
- * @brief A hitbox in a sprite. Despite the name, it is a cilinder.
+ * @brief A hitbox in a sprite. Despite the name, it is a cylinder.
  */
 class Hitbox {
 

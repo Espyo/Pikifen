@@ -1258,7 +1258,7 @@ void AreaEditor::emitTriangulationErrorStatusBarMessage(
         break;
     } case TRIANGULATION_ERROR_INVALID_ARGS: {
         setStatus(
-            "An unknown error has occured with some sectors!",
+            "An unknown error has occurred with some sectors!",
             true
         );
         break;
@@ -2801,7 +2801,7 @@ void AreaEditor::rollbackToPreparedState(Area* preparedState) {
  *
  * @param toBackup If false, save normally.
  * If true, save to an auto-backup file.
- * @return Whether it succeded.
+ * @return Whether it succeeded.
  */
 bool AreaEditor::saveArea(bool toBackup) {
 
@@ -2849,7 +2849,7 @@ bool AreaEditor::saveArea(bool toBackup) {
             nullptr, "Save failed!",
             "Could not save the area!",
             (
-                "An error occured while saving the area to the folder \"" +
+                "An error occurred while saving the area to the folder \"" +
                 baseFolderPath + "\". "
                 "Make sure that the folder exists and it is not read-only, "
                 "and try again."
@@ -3536,7 +3536,7 @@ void AreaEditor::traverseSectorForSplit(
             
             if(!firstEPtr) {
                 firstEPtr = nextEPtr;
-                //In stage 1, travelling in this direction, is the
+                //In stage 1, traveling in this direction, is the
                 //working sector to the left or to the right?
                 if(nextEPtr->vertexes[0] == begin) {
                     //This edge travels in the same direction as us. Side 0 is

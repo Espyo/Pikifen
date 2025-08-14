@@ -98,7 +98,7 @@ enum PIKMIN_STATE {
     //Picking something up.
     PIKMIN_STATE_PICKING_UP,
     
-    //Working on grop task.
+    //Working on group task.
     PIKMIN_STATE_ON_GROUP_TASK,
     
     //Sighing.
@@ -116,7 +116,7 @@ enum PIKMIN_STATE {
     //Attacking, latched.
     PIKMIN_STATE_ATTACKING_LATCHED,
     
-    //Goign to a carriable object.
+    //Going to a carriable object.
     PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
     
     //Going to a tool.

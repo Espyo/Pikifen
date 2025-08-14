@@ -1,5 +1,5 @@
 name = Electricity (fatal)
-description = Powerful eletrical current that eletrocutes the victim, killing them. Used, for instance, by an electrical wire's electricity arc.
+description = Powerful electrical current that electrocutes the victim, killing them. Used, for instance, by an electrical wire's electricity arc.
 
 color = 255 255 128
 effects = electrocuted

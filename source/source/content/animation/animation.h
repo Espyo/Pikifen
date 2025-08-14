@@ -52,7 +52,7 @@ class MobType;
  *
  * To get a mob to display an animation,
  * you need to create an animation INSTANCE.
- * This can be played, rewinded, etc., and
+ * This can be played, rewound, etc., and
  * every mob may have a different animation
  * instance, with a different progress time and such.
  *
@@ -290,7 +290,7 @@ public:
 
 
 /**
- * @brief Instance of a running animation. This can be played, rewinded, etc.
+ * @brief Instance of a running animation. This can be played, rewound, etc.
  */
 class AnimationInstance {
 

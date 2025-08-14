@@ -1574,7 +1574,7 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
         );
     }
     setTooltip(
-        "Add a new frame after the curret one, by copying "
+        "Add a new frame after the current one, by copying "
         "data from the current one."
     );
     
@@ -2950,7 +2950,7 @@ void AnimationEditor::processGuiPanelTools() {
     }
     setTooltip(
         "Resize everything by the given multiplier.\n"
-        "0.5 resizes everyting to half size, 2.0 to double, etc."
+        "0.5 resizes everything to half size, 2.0 to double, etc."
     );
     
     //Set sprite scales value.

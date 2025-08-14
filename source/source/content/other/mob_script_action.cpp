@@ -2500,7 +2500,7 @@ void insertEventActions(
  *
  * @param mt The type of mob the events are going to.
  * @param node The data node.
- * @param outActions The oaded actions are returned here.
+ * @param outActions The loaded actions are returned here.
  * @param outSettings If not nullptr, the settings for how to load the
  * events are returned here.
  */

@@ -465,7 +465,7 @@ void Leader::dismissLogic() {
         
     //Let's move the current standby type to the first element.
     //This way, when dismissing all Pikmin while keeping the standby type,
-    //there will be a gap where that group would go, and dimissing again
+    //there will be a gap where that group would go, and dismissing again
     //will place those Pikmin in that missing group's place.
     auto firstSubgroup =
         std::find_if(

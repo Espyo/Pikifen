@@ -249,7 +249,7 @@ public:
     //If this mob is a sub-mob, this points to the parent mob.
     Parent* parent = nullptr;
     
-    //Miscellanous flags. Use MOB_FLAG.
+    //Miscellaneous flags. Use MOB_FLAG.
     Bitmask16 flags = 0;
     
     //-Interactions with other mobs-
