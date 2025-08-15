@@ -20,6 +20,8 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">Menu icons spritesheet</title>
   <defs
      id="defs2109">
     <linearGradient
@@ -405,16 +407,6 @@
          stdDeviation="0.25"
          id="feGaussianBlur58" />
     </filter>
-    <mask
-       maskUnits="userSpaceOnUse"
-       id="mask7-8">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g6"
-         id="use7-1"
-         transform="translate(0,100)" />
-    </mask>
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
@@ -448,16 +440,6 @@
          id="use15"
          transform="matrix(-1,0,0,1,419.00012,100)"
          style="display:inline" />
-    </mask>
-    <mask
-       maskUnits="userSpaceOnUse"
-       id="mask17-3">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g6"
-         id="use18-6"
-         transform="translate(322.99218,95.810498)" />
     </mask>
     <filter
        inkscape:collect="always"
@@ -493,9 +475,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1476449"
+     inkscape:zoom="1.1268116"
      inkscape:cx="552"
-     inkscape:cy="-18.298342"
+     inkscape:cy="-17.749196"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -538,6 +520,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:title>Menu icons spritesheet</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the menu icons in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

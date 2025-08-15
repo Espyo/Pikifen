@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.52519169"
-     inkscape:cx="446.50363"
-     inkscape:cy="462.6882"
+     inkscape:zoom="0.62468672"
+     inkscape:cx="298.54965"
+     inkscape:cy="313.75727"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -860,10 +860,6 @@
          operator="in"
          in="SourceGraphic" />
     </filter>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       id="filter94"
-       inkscape:label="filter9" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath95">
@@ -883,15 +879,6 @@
          xlink:href="#path900"
          id="use99"
          transform="translate(-450,330)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath6-0">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path900"
-         id="use7-2" />
     </clipPath>
     <linearGradient
        inkscape:collect="always"

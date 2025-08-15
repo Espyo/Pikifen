@@ -547,7 +547,7 @@ Procedure for every version release
                     https://opensource.org/licenses/MIT
                 Make sure they have metadata
                     Title: <Object name> spritesheet
-                    Author: Andr� "Espyo" Silva
+                    Author: André "Espyo" Silva
                     Keywords: Pikifen spritesheet
                     Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
             

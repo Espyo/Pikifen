@@ -6924,46 +6924,6 @@
        r="5"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(1,0.99999523)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#shine"
-       id="radialGradient2-2"
-       cx="65"
-       cy="15.000005"
-       fx="65"
-       fy="15.000005"
-       r="5"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#shine"
-       id="radialGradient1"
-       cx="65"
-       cy="15.000005"
-       fx="65"
-       fy="15.000005"
-       r="5"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#shine"
-       id="radialGradient2-9"
-       cx="65"
-       cy="15.000005"
-       fx="65"
-       fy="15.000005"
-       r="5"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#shine"
-       id="radialGradient1-0"
-       cx="65"
-       cy="15.000005"
-       fx="65"
-       fy="15.000005"
-       r="5"
-       gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#Olimar_shoe"

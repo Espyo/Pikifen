@@ -2263,37 +2263,6 @@
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath50-3">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path5563-21-05"
-         id="use51-6" />
-    </clipPath>
-    <radialGradient
-       r="76.250023"
-       fy="1000.9672"
-       fx="143.39"
-       cy="1000.9672"
-       cx="143.39"
-       gradientTransform="matrix(1.9037539,-8.4637985e-7,7.7464216e-7,2.8852416,-42.980059,-1531.6699)"
-       gradientUnits="userSpaceOnUse"
-       id="radialGradient3851-0-7"
-       xlink:href="#Body"
-       inkscape:collect="always" />
-    <radialGradient
-       r="76.250023"
-       fy="1000.9672"
-       fx="143.39"
-       cy="1000.9672"
-       cx="143.39"
-       gradientTransform="matrix(1.9037539,-8.4637985e-7,7.7464216e-7,2.8852416,-42.980059,-1531.6699)"
-       gradientUnits="userSpaceOnUse"
-       id="radialGradient1"
-       xlink:href="#Body"
-       inkscape:collect="always" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
        id="clipPath23">
       <use
          x="0"
@@ -2309,15 +2278,6 @@
          y="0"
          xlink:href="#path22"
          id="use32" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath23-2">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path5563-21-0-9"
-         id="use24-7" />
     </clipPath>
     <filter
        inkscape:collect="always"
@@ -2415,16 +2375,6 @@
        fx="162.36778"
        fy="1004.4332"
        r="76.250023" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath74">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path62"
-         id="use74"
-         transform="rotate(-15.985607,-1084.5896,4200.1163)" />
-    </clipPath>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#Feet"
@@ -2447,38 +2397,6 @@
        x2="244"
        y2="956.54968"
        spreadMethod="pad" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath44-8">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path5563-6-6"
-         id="use45-7"
-         transform="translate(-930.88606,-252.21362)" />
-    </clipPath>
-    <radialGradient
-       r="76.250023"
-       fy="1001.3138"
-       fx="156.01361"
-       cy="1001.3138"
-       cx="156.01361"
-       gradientTransform="matrix(2.3606551,-8.4637985e-7,9.6055637e-7,2.8852416,466.70471,-1531.67)"
-       gradientUnits="userSpaceOnUse"
-       id="radialGradient6852-0-9"
-       xlink:href="#Body"
-       inkscape:collect="always" />
-    <radialGradient
-       r="76.250023"
-       fy="1001.3138"
-       fx="156.01361"
-       cy="1001.3138"
-       cx="156.01361"
-       gradientTransform="matrix(2.3606551,-8.4637985e-7,9.6055637e-7,2.8852416,466.70471,-1531.67)"
-       gradientUnits="userSpaceOnUse"
-       id="radialGradient1-7"
-       xlink:href="#Body"
-       inkscape:collect="always" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath79">
@@ -2627,17 +2545,6 @@
     <radialGradient
        inkscape:collect="always"
        xlink:href="#Tongue"
-       id="radialGradient25-8"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.8823532,-3.7535413e-6,2.9324536e-6,1.4705882,152.43716,-532.1698)"
-       cx="195"
-       cy="1356.9623"
-       fx="195"
-       fy="1356.9623"
-       r="21.25" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Tongue"
        id="radialGradient103"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.8823532,-3.7535413e-6,2.9324536e-6,1.4705882,152.43716,-532.1698)"
@@ -2654,9 +2561,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3025477"
-     inkscape:cx="471.00003"
-     inkscape:cy="261.02691"
+     inkscape:zoom="0.53611048"
+     inkscape:cx="638.86085"
+     inkscape:cy="244.35262"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"

@@ -1630,15 +1630,6 @@
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath63-6">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g15"
-         id="use64-2" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
        id="clipPath68">
       <use
          x="0"
@@ -1685,9 +1676,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="326.66667"
-     inkscape:cy="188"
+     inkscape:zoom="1.0963013"
+     inkscape:cx="193.83358"
+     inkscape:cy="137.73586"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"

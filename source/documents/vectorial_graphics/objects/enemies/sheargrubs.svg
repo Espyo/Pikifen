@@ -453,42 +453,6 @@
        gradientTransform="translate(0,-1.6642075e-5)" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath10">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4859"
-         id="use11" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath12">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g12"
-         id="use13" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath14">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g13"
-         id="use15" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath16">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4463"
-         id="use17" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
        id="clipPath18">
       <use
          x="0"
@@ -624,9 +588,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.7859894"
-     inkscape:cx="41.65234"
-     inkscape:cy="29.035656"
+     inkscape:zoom="4.3569724"
+     inkscape:cx="41.657368"
+     inkscape:cy="28.919164"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"

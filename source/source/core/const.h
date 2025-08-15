@@ -27,8 +27,8 @@ using std::string;
 
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resource (.rc) file.
-constexpr unsigned char VERSION_MAJOR = 0;
-constexpr unsigned char VERSION_MINOR = 25;
+constexpr unsigned char VERSION_MAJOR = 1;
+constexpr unsigned char VERSION_MINOR = 0;
 constexpr unsigned char VERSION_REV   = 0;
 
 //The following constants need to be in this file because C++ sucks.
