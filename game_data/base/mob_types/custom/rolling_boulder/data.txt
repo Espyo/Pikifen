@@ -20,6 +20,11 @@ reaches {
 }
 
 sounds {
+    destroyed {
+        sound = misc/rock_breaking
+        speed = 130
+        volume = 50
+    }
     rolling {
         sound = misc/rolling_boulder
         volume = 30

@@ -83,8 +83,8 @@ reaches {
 sounds {
     shaking {
         sound = creature_misc/shaking_leather
-        volume = 30
-        speed = 50
+        volume = 80
+        speed = 80
     }
     open {
         sound = effects/snap

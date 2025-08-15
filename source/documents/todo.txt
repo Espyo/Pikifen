@@ -6,15 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    It's impossible to go on the inner triangle on DEV Lab at 1465, 370
+    Pikmin that get crushed or zapped (at least on the sector hazards) emit the maturity down particles, but don't actually decrease in maturity, Rock Pikmin included
+    The sector hazards in DEV Lab should be labeled
 
-
-    --- 1.0 ---
-    Test everything in the regression tests
-    Test everything in DEV Lab
-    Test all Pikmin and leader states
-    Test from a fresh save file
-    
-    --- Future ---
+    --- Next ---
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     Leader animations
@@ -575,6 +571,7 @@ Misc things (so I don't forget)
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
             The Pikmin flowers should render a small shadow under them too
+        Healing at the ship should make a sound
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
@@ -824,6 +821,7 @@ Misc things (so I don't forget)
         Make Rock Pikmin colors darker (thanks Nataly171)
         Skutterchucks should throw bomb rocks
         Try to implement the Pikifen motif into Coastal Pavement, since it's used for a tutorial stage
+        1 Pellet Posies should instantly lose their pellet if thrown at it
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles

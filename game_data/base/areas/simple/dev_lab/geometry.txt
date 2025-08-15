@@ -14396,7 +14396,7 @@ mobs{
 	}
 	interactable{
 		type=lever
-		p=1824.0000 -1088.0000
+		p=1792.0000 -1088.0000
 		links=381
 	}
 	custom{
@@ -14405,7 +14405,7 @@ mobs{
 	}
 	interactable{
 		type=button
-		p=2240.0000 -1088.0000
+		p=2176.0000 -1088.0000
 		links=383
 	}
 	custom{
@@ -14532,17 +14532,17 @@ mobs{
 	}
 	resource{
 		type=ceramic_fragment_red
-		p=-3264.0000 1760.0000
+		p=-3296.0000 1760.0000
 		links=343
 	}
 	resource{
 		type=ceramic_fragment_red
-		p=-3200.0000 1760.0000
+		p=-3232.0000 1760.0000
 		links=343
 	}
 	interactable{
 		type=timed_lever
-		p=2016.0000 -1088.0000
+		p=1984.0000 -1088.0000
 		links=412
 	}
 	custom{
@@ -14831,7 +14831,7 @@ mobs{
 	interactable{
 		type=orb_sign
 		p=1056.0000 3072.0000
-		vars=text=Sector with two sub-sectors,\nsharing a vertex.
+		vars=text=Outer sector with two sub-sectors,\nsharing a vertex.
 	}
 	bouncer{
 		type=geyser
