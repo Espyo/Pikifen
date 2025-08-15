@@ -1610,7 +1610,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 );
             } else if(
                 pathPreviewResult == PATH_RESULT_DIRECT ||
-                pathPreviewResult == PATH_RESULT_DIRECT_NO_STOPS
+                pathPreviewResult == PATH_RESULT_DIRECT_NO_STOPS ||
+                pathPreviewResult == PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS
             ) {
                 al_draw_line(
                     pathPreviewCheckpoints[0].x,

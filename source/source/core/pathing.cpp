@@ -822,6 +822,11 @@ PATH_RESULT getPath(
             closestToEnd = sPtr;
         }
     }
+
+    //No valid start or end point could be found, return a direct path.
+    if(!closestToStart || !closestToEnd) {
+        return PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS;
+    }
     
     if(outStartStop) *outStartStop = closestToStart;
     if(outEndStop) *outEndStop = closestToEnd;
@@ -938,7 +943,10 @@ string pathResultToString(PATH_RESULT result) {
         return "Go directly";
         break;
     } case PATH_RESULT_DIRECT_NO_STOPS: {
-        return "No stops, so go directly";
+        return "No stops in area, so go directly";
+        break;
+    } case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS: {
+        return "No accessible stops, so go directly";
         break;
     } case PATH_RESULT_END_STOP_UNREACHABLE: {
         return "Final stop cannot be reached from first stop";
