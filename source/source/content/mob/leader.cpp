@@ -682,6 +682,7 @@ void Leader::dismissLogic() {
         if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
             group->members[m]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
             group->members[m]->leaveGroup();
+            m--;
         }
     }
 }
