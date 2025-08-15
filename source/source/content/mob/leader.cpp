@@ -680,8 +680,8 @@ void Leader::dismissLogic() {
     //Dismiss leaders now.
     for(size_t m = 0; m < group->members.size(); m++) {
         if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
-            group->members[0]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
-            group->members[0]->leaveGroup();
+            group->members[m]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
+            group->members[m]->leaveGroup();
         }
     }
 }
