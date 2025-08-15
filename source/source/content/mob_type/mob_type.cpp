@@ -673,7 +673,7 @@ void MobType::loadFromDataNode(
         
         newSound.sample =
             game.content.sounds.list.get(soundINameStr, soundINameNode);
-        
+            
         if(typeNode) {
             if(typeStr == "gameplay_global") {
                 newSound.type = SOUND_TYPE_GAMEPLAY_GLOBAL;

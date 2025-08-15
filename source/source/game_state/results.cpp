@@ -675,7 +675,7 @@ void Results::load() {
 
 /**
  * @brief Populates the list of statistics.
- * 
+ *
  * @param oldRecord Old record.
  */
 void Results::populateStatsList(const MissionRecord& oldRecord) {

@@ -34,16 +34,16 @@ enum ONION_TRANSFER_RESULT {
 
     //OK.
     ONION_TRANSFER_RESULT_OK,
-
+    
     //No more Pikmin inside the Onion to take out.
     ONION_TRANSFER_RESULT_NONE_IN_ONION,
-
+    
     //No more Pikmin in the group to store.
     ONION_TRANSFER_RESULT_NONE_IN_GROUP,
-
+    
     //No more space in the field.
     ONION_TRANSFER_RESULT_FIELD_FULL,
-
+    
 };
 
 

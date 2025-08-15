@@ -212,7 +212,7 @@ Hud::Hud() :
                 finalDraw.size,
                 true
             );
-
+            
             if(health.cautionTimer > 0.0f) {
                 float animRatio =
                     health.cautionTimer / LEADER::HEALTH_CAUTION_RING_DURATION;
@@ -222,13 +222,13 @@ Hud::Hud() :
                         0.0f, LEADER::HEALTH_CAUTION_RING_DURATION,
                         1.2f, 1.8f
                     );
-                
+                    
                 KeyframeInterpolator<unsigned char> alphaKeyframes(0);
                 alphaKeyframes.add(0.2f, 255);
                 alphaKeyframes.add(0.3f, 255);
                 alphaKeyframes.add(0.8f, 0);
                 alphaKeyframes.add(1.0f, 0);
-
+                
                 float cautionRingSize =
                     std::min(finalDraw.size.x, finalDraw.size.y) *
                     cautionRingScale;

@@ -372,16 +372,16 @@ struct Options {
     
         //Cursor camera movement weight.
         float cursorCamWeight = OPTIONS::MISC_D::CURSOR_CAM_WEIGHT;
-
+        
         //Dismissing dismisses all.
         bool dismissAll = OPTIONS::MISC_D::DISMISS_ALL;
         
         //Pause menu leaving confirmation question mode.
         LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;
-
+        
         //Idle Pikmin leader bumping distance.
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
-
+        
         //Show a standby type counter on the leader cursor?
         bool showCounterOnCursor = OPTIONS::MISC_D::SHOW_COUNTER_ON_CURSOR;
         

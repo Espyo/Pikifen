@@ -148,7 +148,7 @@ void StatsMenu::initGuiMain() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
     gui.addItem(tooltipText, "tooltip");
-
+    
     //Finishing touches.
     gui.setSelectedItem(gui.backItem, true);
 }

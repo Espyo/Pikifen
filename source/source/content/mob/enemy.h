@@ -38,7 +38,7 @@ public:
     
     //Is it a boss encounter?
     bool isBoss = false;
-
+    
     //--- Function declarations ---
     
     Enemy(const Point& pos, EnemyType* type, float angle);

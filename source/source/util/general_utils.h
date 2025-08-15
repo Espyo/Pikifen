@@ -390,8 +390,8 @@ private:
     float interpolate(float v1, float v2, float time) {
         return v1 + (v2 - v1) * time;
     }
-
-
+    
+    
     /**
      * @brief Interpolates between two chars, and returns the value at the
      * specified time.
