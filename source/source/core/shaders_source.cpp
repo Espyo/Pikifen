@@ -18,7 +18,7 @@ namespace SHADER_SOURCE_FILES {
 //Allegro default vertex shader.
 const char* DEFAULT_VERT_SHADER = R"(
 
-#version 430
+#version 130
 in vec4 al_pos;
 in vec4 al_color;
 in vec2 al_texcoord;
@@ -48,23 +48,10 @@ const char* LIQUID_FRAG_SHADER = R"(
  * ========================
  */
 
-#version 430
-#extension GL_ARB_shader_storage_buffer_object: enable
-
+#version 130
 #ifdef GL_ES
 precision mediump float;
 #endif
-
-//2^26, this can go to 8 million and still fit under OpenGl standards.
-//But there should almost never be this many edges in a single puddle.
-//See https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object
-#define MAX_FOAM_EDGES 65535
-
-readonly layout(std430, binding = 3) buffer foam_layout {
-    //Formatted as "x1, y1, x2, y2".
-    readonly float foam_edges[];
-};
-
 
 //Fragment shader input for texture coordinates.
 in vec2 varying_texcoord;
@@ -84,15 +71,6 @@ out vec4 frag_color;
 
 // Time passed in the area.
 uniform float area_time;
-
-//How many edges there are in this sector.
-uniform int edge_count;
-
-//Color to tint the foam with.
-uniform vec4 foam_tint;
-
-//How far from the shore the foam reaches.
-uniform float foam_size;
 
 //Multiply the general distortion by this much.
 uniform vec2 distortion_amount;
@@ -290,38 +268,6 @@ vec2 world_to_tex_coords(vec2 xy) {
     return result;
 }
 
-//Returns the distance from the closest edge.
-float get_closest_edge_dist(vec2 xy) {
-    //Arbitrarily large number my beloved.
-    float min_dist = 100000;
-    for(int i = 0; i < MAX_FOAM_EDGES; i++) {
-        if(i >= edge_count) return min_dist;
-        vec2 v1 = vec2(foam_edges[4 * i], foam_edges[(4 * i) + 1]);
-        vec2 v2 = vec2(foam_edges[(4 * i) + 2], foam_edges[(4 * i) + 3]);
-
-        //code from http://stackoverflow.com/a/3122532
-        vec2 v1_to_p = xy - v1;
-        vec2 v1_to_v2 = v2 - v1;
-
-        float v1_to_v2_squared = (v1_to_v2.x * v1_to_v2.x) + (v1_to_v2.y * v1_to_v2.y);
-
-        float v1_to_p_dot_v1_to_v2 = (v1_to_p.x * v1_to_v2.x) + (v1_to_p.y * v1_to_v2.y);
-
-        float r = max(0.0, min(1.0, v1_to_p_dot_v1_to_v2 / v1_to_v2_squared));
-
-        vec2 closest_point = v1 + (v1_to_v2 * r);
-
-        vec2 p_to_c = closest_point - xy;
-
-        float dist = sqrt(pow(p_to_c.x, 2.0) + pow(p_to_c.y, 2.0));
-
-        //Add a lowest possible value to prevent seams.
-        min_dist = max(1.0, min(min_dist, dist));
-    }
-    return min_dist;
-}
-
-
 /*
  * ========================
  * Main function
@@ -408,43 +354,6 @@ void main() {
     final_pixel.b = final_pixel.b + (shine_color.b - final_pixel.b) * shine_scale;
 
     // TODO: remove these two lines when edge foam becomes shader-side.
-    frag_color = final_pixel;
-    return;
-
-
-    //--- Edge foam ---
-
-    float max_dist = foam_size;
-
-    //Apply some effects to make sure the foam isn't a straight line.
-    //These parameters aren't super intuitive, so they aren't exposed to the liquid proper.
-    float effect_scale = max_dist / 25;
-
-    //Next, add a simplex noise effect to introduce an uneven fade.
-    max_dist += ((2 * simplex_noise(world_coords, 0.02, noise_func_step, 0.2)) - 1) * 7 * effect_scale;
-
-    //Prevent foam from entirely disappearing...
-    max_dist = max(1.0, max_dist);
-
-    //...unless we're draining the liquid.
-    max_dist *= opacity;
-
-    //Now using this distance, get a 0-1 number for how far away it is.
-    float edge_scale = max_dist - get_closest_edge_dist(world_coords);
-    edge_scale /= max_dist;
-
-    //This ensures there's no negatives, and also adds a small flattening as it approaches 1.
-    edge_scale = clamp(edge_scale, 0.0, 1.0);
-
-    //Add the alpha and brightness.
-    edge_scale *= foam_tint.a;
-    edge_scale *= sector_brightness;
-
-    //And add it to the full thing!
-    final_pixel.r = final_pixel.r + (foam_tint.r - final_pixel.r) * edge_scale;
-    final_pixel.g = final_pixel.g + (foam_tint.g - final_pixel.g) * edge_scale;
-    final_pixel.b = final_pixel.b + (foam_tint.b - final_pixel.b) * edge_scale;
-
     frag_color = final_pixel;
 }
 
