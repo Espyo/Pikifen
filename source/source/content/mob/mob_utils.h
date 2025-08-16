@@ -635,7 +635,7 @@ struct Path {
         const PathFollowSettings& settings
     );
     bool checkBlockage(PATH_BLOCK_REASON* outReason = nullptr);
-    
+    bool isDirect() const;
 };
 
 

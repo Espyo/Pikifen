@@ -793,6 +793,18 @@ bool Path::checkBlockage(PATH_BLOCK_REASON* outReason) {
 
 
 /**
+ * @brief Checks whether a path should directly go to the target destination.
+ *
+ * @return Whether the path is direct.
+ */
+bool Path::isDirect() const {
+    return  result == PATH_RESULT_DIRECT ||
+            result == PATH_RESULT_DIRECT_NO_STOPS ||
+            result == PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS;
+}
+
+
+/**
  * @brief Constructs a new Pikmin nest struct object.
  *
  * @param mPtr Nest mob responsible.

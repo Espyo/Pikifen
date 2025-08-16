@@ -1099,7 +1099,8 @@ void PauseMenu::drawRadar(
         
         switch(lPtr->pathInfo->result) {
         case PATH_RESULT_DIRECT:
-        case PATH_RESULT_DIRECT_NO_STOPS: {
+        case PATH_RESULT_DIRECT_NO_STOPS: 
+        case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS: {
             //Go directly from A to B.
             
             drawGoHereSegment(
@@ -1152,7 +1153,8 @@ void PauseMenu::drawRadar(
     float pathTexturePoint = 0.0f;
     switch(goHerePathResult) {
     case PATH_RESULT_DIRECT:
-    case PATH_RESULT_DIRECT_NO_STOPS: {
+    case PATH_RESULT_DIRECT_NO_STOPS:
+    case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS: {
         //Go directly from A to B.
         
         drawGoHereSegment(
@@ -2399,6 +2401,7 @@ void PauseMenu::initRadarPage() {
             switch(goHerePathResult) {
             case PATH_RESULT_DIRECT:
             case PATH_RESULT_DIRECT_NO_STOPS:
+            case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS:
             case PATH_RESULT_NORMAL_PATH:
             case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
                 cursorInfoText->text = "\\k menu_ok \\k Go here!";
@@ -2661,6 +2664,7 @@ void PauseMenu::radarConfirm() {
     } else if(
         goHerePathResult == PATH_RESULT_DIRECT ||
         goHerePathResult == PATH_RESULT_DIRECT_NO_STOPS ||
+        goHerePathResult == PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS ||
         goHerePathResult == PATH_RESULT_NORMAL_PATH ||
         goHerePathResult == PATH_RESULT_PATH_WITH_SINGLE_STOP
     ) {

@@ -1014,8 +1014,7 @@ void GameplayState::drawIngameText(Player* player) {
         }
         
         if(
-            path->result == PATH_RESULT_DIRECT ||
-            path->result == PATH_RESULT_DIRECT_NO_STOPS ||
+            path->isDirect() ||
             path->curPathStopIdx == path->path.size()
         ) {
             bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;

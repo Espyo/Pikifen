@@ -1741,11 +1741,8 @@ bool Mob::followPath(
         }
     }
     
-    bool direct =
-        pathInfo->result == PATH_RESULT_DIRECT ||
-        pathInfo->result == PATH_RESULT_DIRECT_NO_STOPS;
     //Now, let's figure out how the mob should start its journey.
-    if(direct) {
+    if(pathInfo->isDirect()) {
         //The path info is telling us to just go to the destination directly.
         moveToPathEnd(speed, acceleration);
         
@@ -3793,11 +3790,7 @@ void Mob::tickBrain(float deltaT) {
         } else {
             //Reached the chase location.
             bool direct =
-                pathInfo &&
-                (
-                    pathInfo->result == PATH_RESULT_DIRECT ||
-                    pathInfo->result == PATH_RESULT_DIRECT_NO_STOPS
-                );
+                pathInfo && pathInfo->isDirect();
             if(
                 pathInfo && !direct &&
                 pathInfo->blockReason == PATH_BLOCK_REASON_NONE
