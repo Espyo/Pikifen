@@ -4726,10 +4726,12 @@ void PikminFsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
         targetPos = *((Point*) info1);
     }
     
-    m->chase(
-        targetPos,
-        pikPtr->followingGroup->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
-    );
+    float targetZ = pikPtr->followingGroup->z;
+    if(pikPtr->pikType->canFly) {
+        targetZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
+    }
+
+    m->chase(targetPos, targetZ);
     
 }
 
