@@ -60,11 +60,11 @@ string getCurrentTime(bool fileNameFriendly) {
  */
 bool openFileExplorer(const string& path) {
 #ifdef _WIN32
-    string command = "explorer " + path;
+    string command = "explorer \"" + path + "\"";
 #elif __APPLE__
-    string command = "open " + path;
+    string command = "open \"" + path + "\"";
 #elif __linux__
-    string command = "xdg-open " + path;
+    string command = "xdg-open \"" + path + "\"";
 #else
     return false;
 #endif
@@ -80,11 +80,11 @@ bool openFileExplorer(const string& path) {
  */
 bool openWebBrowser(const string& url) {
 #ifdef _WIN32
-    string command = "start " + url;
+    string command = "start \"" + url + "\"";
 #elif __APPLE__
-    string command = "open " + url;
+    string command = "open \"" + url + "\"";
 #elif __linux__
-    string command = "xdg-open " + url;
+    string command = "xdg-open \"" + url + "\"";
 #else
     return false;
 #endif

@@ -1085,6 +1085,8 @@ void GameplayState::load() {
     leadersKod = 0;
     medalGotItJuiceTimer = 0.0f;
     lastCarryingTieBreaker = nullptr;
+    pikminBornPerType.clear();
+    pikminDeathsPerType.clear();
     
     game.framerateLastAvgPoint = 0;
     game.framerateHistory.clear();

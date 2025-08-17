@@ -7,12 +7,11 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
-    Pikmin that get crushed or zapped (at least on the sector hazards) emit the maturity down particles, but don't actually decrease in maturity, Rock Pikmin included
-    The sector hazards in DEV Lab should be labeled
 
     --- Next ---
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
+    People should ideally not accidentally press one of the maker tool buttons when just playing
     Leader animations
         Thrown (add to the logic of bouncers too, including Pikmin)
         Climbing (add the track logic too)
@@ -545,6 +544,7 @@ Misc things (so I don't forget)
                 Don't offset the camera negatively, but use something like offsetX = maxOffset * shakeMult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shakeMult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
         Leaders getting hurt should make their HUD icon turn red and shake
+        The sparkle particles on treasures need to be more obvious
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         There should be some petal particle effects when a Pikmin loses their maturity
@@ -630,10 +630,8 @@ Misc things (so I don't forget)
         When there are multiple Onions or ships that something can be delivered to, choose the closest
             If there is no path to that one, then choose the second closest, and so on (thanks Neo)
         Smoother turns when carrying
-        [NEEDS BRAINSTORMING] If a Red Pikmin is carrying a 1 pellet, and a Yellow joined, shouldn't the destination be Red, and not randomized?
-        When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
-            Or instead make it so the Pikmin choose the color with the smallest Pikmin population [PIKMIN 4]
         Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
+        Carried objects should be able to push other objects that are either carriable or have the pushable property
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
         Spawning
@@ -822,6 +820,8 @@ Misc things (so I don't forget)
         Skutterchucks should throw bomb rocks
         Try to implement the Pikifen motif into Coastal Pavement, since it's used for a tutorial stage
         1 Pellet Posies should instantly lose their pellet if thrown at it
+        Leaf White Pikmin should be able to keep pace with a leader, right?
+        The sector hazards in DEV Lab should be labeled
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles

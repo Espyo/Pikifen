@@ -441,7 +441,7 @@ bool Pikmin::increaseMaturity(int amount) {
         particleGenerators.push_back(pg);
         playSound(pikType->soundDataIdxs[PIKMIN_SOUND_MATURING]);
         
-    } else {
+    } else if(maturity < oldMaturity) {
         ParticleGenerator pg =
             standardParticleGenSetup(
                 game.sysContentNames.parSproutRegression, this

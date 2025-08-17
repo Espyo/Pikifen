@@ -28,10 +28,10 @@ def change_version_numbers():
                 r = re.search('(.*PRODUCTVERSION ).*,.*,.*(,.*)', line)
                 if r is not None:
                     line = r.group(1) + new_parts[0] + ',' + new_parts[1] + ',' + new_parts[2] + r.group(2) + '\n'
-                r = re.search('(.*FileVersion\', \').*\..*\..*(\..*)', line)
+                r = re.search('(.*FileVersion", ").*\..*\..*(\..*)', line)
                 if r is not None:
                     line = r.group(1) + new_parts[0] + '.' + new_parts[1] + '.' + new_parts[2] + r.group(2) + '\n'
-                r = re.search('(.*ProductVersion\', \').*\..*\..*(\..*)', line)
+                r = re.search('(.*ProductVersion", ").*\..*\..*(\..*)', line)
                 if r is not None:
                     line = r.group(1) + new_parts[0] + '.' + new_parts[1] + '.' + new_parts[2] + r.group(2) + '\n'
                 

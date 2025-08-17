@@ -3789,8 +3789,7 @@ void Mob::tickBrain(float deltaT) {
             
         } else {
             //Reached the chase location.
-            bool direct =
-                pathInfo && pathInfo->isDirect();
+            bool direct = pathInfo && pathInfo->isDirect();
             if(
                 pathInfo && !direct &&
                 pathInfo->blockReason == PATH_BLOCK_REASON_NONE

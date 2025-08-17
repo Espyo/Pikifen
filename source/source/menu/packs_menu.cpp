@@ -378,7 +378,7 @@ void PacksMenu::initGuiMain() {
     [] () {
         return
             "Opens the packs folder on your operative system. "
-            "Place downloaded packs here!";
+            "Place downloaded pack folders here!";
     };
     gui.addItem(openFolderButton, "open_folder");
     

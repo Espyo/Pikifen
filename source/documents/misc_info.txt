@@ -97,6 +97,7 @@ Technical prowesses
 
 
 Bag of notes (useful stuff)
+    It took 2226 commits to reach version 1.0
     If mobs start moving so fast that they can clip through walls
         Keep track of its sector before the move. If after the move, no wall collisions were registered, but it's on a different sector, then that's all you need to know: a collision happened
     If there's a crash in imgui_impl_allegro5.cpp's al_draw_indexed_prim function call...
