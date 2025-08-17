@@ -1320,9 +1320,12 @@ void GameplayState::load() {
     }
     
     //Figure out the total amount of enemies and their points.
-    enemyTotal = mobs.enemies.size();
+    enemyTotal = 0;
     for(size_t e = 0; e < mobs.enemies.size(); e++) {
-        enemyPointsTotal += mobs.enemies[e]->eneType->points;
+        if(!mobs.enemies[e]->parent) {
+            enemyTotal++;
+            enemyPointsTotal += mobs.enemies[e]->eneType->points;
+        }
     }
     
     //Initialize the area's active cells.
