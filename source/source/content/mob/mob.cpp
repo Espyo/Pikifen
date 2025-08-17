@@ -3028,6 +3028,11 @@ void Mob::releaseStoredMobs() {
             mPtr->speed.x = cos(a) * momentum;
             mPtr->speed.y = sin(a) * momentum;
             mPtr->speedZ = momentum * 7;
+
+            //A new leader is accessible
+            if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+                game.states.gameplay->updateAvailableLeaders();
+            }
         }
     }
 }
