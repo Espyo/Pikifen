@@ -468,10 +468,10 @@ Procedure for every version release
             Options
             FAQ
             Roadmap
-            Changelog
-                Particularly the update's version number, release day, and nickname
-                Double-check that it's organized, or if it could be sorted differently
-                In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count), move older versions to the older changelog document if needed
+        Update the changelog
+            Particularly the update's version number, release day, and nickname
+            Double-check that it's organized, or if it could be sorted differently
+            In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count), move older versions to the older changelog document if needed
     Release candidate
         Compile it for Windows
             Use GitHub Actions

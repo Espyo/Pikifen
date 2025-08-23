@@ -29,7 +29,7 @@ using std::string;
 //update the numbers in the resource (.rc) file.
 constexpr unsigned char VERSION_MAJOR = 1;
 constexpr unsigned char VERSION_MINOR = 0;
-constexpr unsigned char VERSION_REV   = 0;
+constexpr unsigned char VERSION_REV   = 1;
 
 //The following constants need to be in this file because C++ sucks.
 //Too many files need these constants, and because of the one-definition rule,
