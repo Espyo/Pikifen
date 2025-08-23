@@ -18,6 +18,11 @@ Made with ♡ by Espyo.
 )](
     https://discord.gg/qbhz4u3
 )
+[![Bluesky](
+    https://img.shields.io/badge/-Bluesky-gray?style=plastic&logo=Bluesky
+)](
+    https://bsky.app/profile/pikifen.bsky.social
+)
 [![Pikmin Fanon](
     https://img.shields.io/badge/Pikmin%20Fanon%20page-green?style=plastic
 )](
@@ -58,7 +63,7 @@ The included manual (download _Pikifen_ and open `manual.html`) contains, amongs
 
 ## Overview
 
-**_Pikifen_** (formerly Pikmin fangame engine) is an game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin Maker_". It is a free open-source game with gameplay very similar to the [_Pikmin_ games](https://www.pikminwiki.com/Pikmin_series), in that leaders can whistle and throw Pikmin, Pikmin can carry objects, and so on.
+**_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin Maker_". It is a free open-source game with gameplay very similar to the [_Pikmin_ games](https://www.pikminwiki.com/Pikmin_series), in that leaders can whistle and throw Pikmin, Pikmin can carry objects, and so on.
 
 The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (like physics, scripting, and so on) as well as reading said content to turn it all into something playable. That said, the project also comes with some base content, so you can experiment with its features right away.
 

@@ -147,6 +147,7 @@ void AnimationEditor::changeState(const EDITOR_STATE newState) {
     comparisonSprite = nullptr;
     state = newState;
     setStatus();
+    stopSounds();
 }
 
 
@@ -870,7 +871,9 @@ void AnimationEditor::playSound(size_t soundIdx) {
     if(!loadedMobType) return;
     MobType::Sound* soundData = &loadedMobType->sounds[soundIdx];
     if(!soundData->sample) return;
-    game.audio.createUiSoundSource(soundData->sample, soundData->config);
+    size_t id =
+        game.audio.createUiSoundSource(soundData->sample, soundData->config);
+    animSoundIds.push_back(id);
 }
 
 
@@ -885,8 +888,11 @@ void AnimationEditor::quitCmd(float inputValue) {
     changesMgr.askIfUnsaved(
         quitWidgetPos,
         "quitting", "quit",
-        std::bind(&AnimationEditor::leave, this),
-        std::bind(&AnimationEditor::saveAnimDb, this)
+    [this] () {
+        stopSounds();
+        leave();
+    },
+    std::bind(&AnimationEditor::saveAnimDb, this)
     );
 }
 
@@ -1568,6 +1574,17 @@ void AnimationEditor::spriteBmpFloodFill(
             }
         }
     }
+}
+
+
+/**
+ * @brief Stops all of the mob's sounds that are playing.
+ */
+void AnimationEditor::stopSounds() {
+    for(size_t s = 0; s < animSoundIds.size(); s++) {
+        game.audio.destroySoundSource(animSoundIds[s]);
+    }
+    animSoundIds.clear();
 }
 
 

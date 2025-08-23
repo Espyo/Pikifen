@@ -6,9 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
 
-    --- Next ---
+    --- 1.1.0 ---
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     People should ideally not accidentally press one of the maker tool buttons when just playing
@@ -28,8 +29,6 @@ Next tasks (roughly sorted most important first)
             This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
         Remove some of the elements?
             Stuff like a leader's health might not be necessary if it's full
-        A mission's data should control how each HUD element displays its information
-            Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
         Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies (Thanks Tenacious)
         Show how close you are to concocting a new spray
@@ -43,7 +42,7 @@ Next tasks (roughly sorted most important first)
             [NEEDS BRAINSTORMING] Maybe make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types. But how will this work for mouse control?
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
-        The difficulty listing in the area menu should use fire icons instead of numbers
+        t The difficulty listing in the area menu should use fire icons instead of numbers
     GUI things
         Game state refactor
             Add a gui.startTransition function so that we don't have to do the responsive = true/false thing when we call gui.startAnimation
@@ -59,6 +58,7 @@ Next tasks (roughly sorted most important first)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
         The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
             Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
+            Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
         Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
             Same for holding down Enter to continuously activate a button and such
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
@@ -79,6 +79,9 @@ Next tasks (roughly sorted most important first)
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
                 Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
+            Implement low-pass filtering, so that for analog inputs, it uses the past frame(s)'s values to smoothen out the current frame's
+            Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
+            Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
             Panning the radar with an analog stick will also move the menu selector, if there are binds for it to move with the analog stick
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
@@ -109,6 +112,8 @@ Next tasks (roughly sorted most important first)
         Make it so a player can control their leader via mouse cursor
         Add Pro Controller controls to the default controls
         Test it on the Steam Deck
+
+    --- 1.2.0 ---
     Ice Pikmin
         Status buildup
         Water freezing
@@ -124,6 +129,12 @@ Next tasks (roughly sorted most important first)
         Glowmob?
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
+    [NEEDS BRAINSTORMING] Re-think how missions work
+        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
+        I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
+        Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
+        A mission's data should control how each HUD element displays its information
+            Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
         Maximum Pikmin in field
@@ -155,10 +166,8 @@ Next tasks (roughly sorted most important first)
             Misc
                 Does it make sense to create a FOF above a bottomless pit?
                 https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
-    [NEEDS BRAINSTORMING] Re-think how missions work
-        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
-        I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
-        Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
+    
+    --- 2.0.0 ---
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
@@ -333,7 +342,9 @@ Next tasks (roughly sorted most important first)
         Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
         An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
     Buried treasure
-    Breadbugs should carry treasure
+    Solid logic for enemies carrying treasures
+        Breadbugs tug-of-war logic
+        Pikmin thrown at a treasure a Dweevil is carrying will latch on to the treasure (thanks Enderdude6)
     Weather improvements
         Add a weather editor
         [NEEDS BRAINSTORMING] Maybe call it ambiance?
@@ -572,6 +583,7 @@ Misc things (so I don't forget)
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
             The Pikmin flowers should render a small shadow under them too
         Healing at the ship should make a sound
+        When quick-testing from the area editor, make the loading screen text fade out quickly, so it's more snappy and so that the "GO!" text doesn't overlap it
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
@@ -822,6 +834,7 @@ Misc things (so I don't forget)
         1 Pellet Posies should instantly lose their pellet if thrown at it
         Leaf White Pikmin should be able to keep pace with a leader, right?
         The sector hazards in DEV Lab should be labeled
+        The Yellow Wollyhop should throw Pikmin farther away when landing, so that the Pikmin don't land immediately in crushing distance of the next jump (thanks Gatling Groink)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles

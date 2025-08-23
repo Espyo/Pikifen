@@ -3028,9 +3028,9 @@ void Mob::releaseStoredMobs() {
             mPtr->speed.x = cos(a) * momentum;
             mPtr->speed.y = sin(a) * momentum;
             mPtr->speedZ = momentum * 7;
-
-            //A new leader is accessible
+            
             if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+                //A new leader is accessible.
                 game.states.gameplay->updateAvailableLeaders();
             }
         }
@@ -3776,10 +3776,12 @@ void Mob::tickBrain(float deltaT) {
         if(chaseInfo.origZ) finalTargetZ += *chaseInfo.origZ;
         float vertDist = fabs(z - finalTargetZ);
         
-        //Mobs stuck on the ground can have a slight gap for picking up on slopes.
-        float maxVertDistDiff = 
-            hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) ? 1.0f : GEOMETRY::STEP_HEIGHT;
-
+        //Grounded mobs can have a slight tolerance for slopes.
+        float maxVertDistDiff =
+            hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) ?
+            1.0f :
+            GEOMETRY::STEP_HEIGHT;
+            
         if(
             horizDist > chaseInfo.targetDist ||
             vertDist > maxVertDistDiff

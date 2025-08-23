@@ -195,6 +195,9 @@ private:
     //Keep the aspect ratio when resizing the Pikmin top?
     bool topKeepAspectRatio = true;
     
+    //Animation sounds being played.
+    vector<size_t> animSoundIds;
+    
     //Whether to use a background texture.
     bool useBg = false;
     
@@ -279,6 +282,7 @@ private:
     void spriteBmpFloodFill(
         ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );
+    void stopSounds();
     void updateCurHitbox();
     void updateHitboxes();
     static void drawCanvasDearImGuiCallback(
