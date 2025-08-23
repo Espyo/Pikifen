@@ -532,6 +532,7 @@ protected:
     
     //--- Function declarations ---
     
+    void chaseNextPathStop(float speed, float acceleration = LARGE_FLOAT);
     PikminType* decideCarryPikminType(
         const unordered_set<PikminType*>& availableTypes
     ) const;

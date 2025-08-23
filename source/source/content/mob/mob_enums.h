@@ -82,6 +82,10 @@ enum CHASE_FLAG {
     //The mob can move in any angle instead of just where it's facing.
     CHASE_FLAG_ANY_ANGLE = 1 << 2,
     
+    //When deciding if it reached the destination, grounded mobs will
+    //allow it if they're above the spot.
+    CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED = 1 << 3,
+    
 };
 
 

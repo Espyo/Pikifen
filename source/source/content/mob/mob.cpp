@@ -1153,6 +1153,33 @@ void Mob::chase(
 
 
 /**
+ * @brief Starts chasing the next stop in a path.
+ *
+ * @param speed Speed at which to go.
+ * @param acceleration Speed acceleration.
+ * LARGE_FLOAT makes it use the mob's standard acceleration.
+ */
+void Mob::chaseNextPathStop(float speed, float acceleration) {
+    PathStop* nextStop = pathInfo->path[pathInfo->curPathStopIdx];
+    
+    float nextStopZ = z;
+    if(nextStop->sectorPtr) {
+        nextStopZ = nextStop->sectorPtr->z;
+    }
+    if(hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
+        nextStopZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
+    }
+    
+    chase(
+        nextStop->pos, nextStopZ,
+        CHASE_FLAG_ANY_ANGLE | CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED,
+        PATHS::DEF_CHASE_TARGET_DISTANCE,
+        speed, acceleration
+    );
+}
+
+
+/**
  * @brief Makes a mob chomp another mob. Mostly applicable for enemies chomping
  * on Pikmin.
  *
@@ -1748,24 +1775,7 @@ bool Mob::followPath(
         
     } else if(!pathInfo->path.empty()) {
         //Head to the first stop.
-        PathStop* nextStop =
-            pathInfo->path[pathInfo->curPathStopIdx];
-        float nextStopZ = z;
-        if(
-            hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
-            nextStop->sectorPtr
-        ) {
-            nextStopZ =
-                nextStop->sectorPtr->z +
-                PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
-        }
-        
-        chase(
-            nextStop->pos, nextStopZ,
-            CHASE_FLAG_ANY_ANGLE,
-            PATHS::DEF_CHASE_TARGET_DISTANCE,
-            speed, acceleration
-        );
+        chaseNextPathStop(speed, acceleration);
         
     } else {
         //No valid path.
@@ -3775,13 +3785,32 @@ void Mob::tickBrain(float deltaT) {
         float finalTargetZ = chaseInfo.offsetZ;
         if(chaseInfo.origZ) finalTargetZ += *chaseInfo.origZ;
         float vertDist = fabs(z - finalTargetZ);
+        float maxVertDistDiff = 0.0f;
         
-        //Grounded mobs can have a slight tolerance for slopes.
-        float maxVertDistDiff =
-            hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) ?
-            1.0f :
-            GEOMETRY::STEP_HEIGHT;
-            
+        if(hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
+            //Airborne mobs need to match Z.
+            maxVertDistDiff = 1.0f;
+        } else {
+            if(
+                hasFlag(chaseInfo.flags, CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED) &&
+                z >= finalTargetZ
+            ) {
+                //Accept the Z difference! This is useful for a pathing
+                //workaround, since the mob may have reached the stop
+                //horizontally, but is still above it vertically,
+                //and can't descend because it's teetering on a ledge.
+                //It's better to keep going with the path. And honestly,
+                //by continuining, gravity will hopefully step in and make
+                //the mob fall to the intended Z anyway.
+                maxVertDistDiff = 1.0f;
+                vertDist = 0.0f;
+            } else {
+                //Normal check, so it has to match Z, but let's add enough
+                //tolerance to account for slopes.
+                maxVertDistDiff = GEOMETRY::STEP_HEIGHT;
+            }
+        }
+        
         if(
             horizDist > chaseInfo.targetDist ||
             vertDist > maxVertDistDiff
@@ -3813,27 +3842,7 @@ void Mob::tickBrain(float deltaT) {
                         fsm.runEvent(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
-                        PathStop* nextStop =
-                            pathInfo->path[pathInfo->curPathStopIdx];
-                        float nextStopZ = z;
-                        if(
-                            (
-                                pathInfo->settings.flags&
-                                PATH_FOLLOW_FLAG_AIRBORNE
-                            ) &&
-                            nextStop->sectorPtr
-                        ) {
-                            nextStopZ =
-                                nextStop->sectorPtr->z +
-                                PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
-                        }
-                        
-                        chase(
-                            nextStop->pos, nextStopZ,
-                            CHASE_FLAG_ANY_ANGLE,
-                            PATHS::DEF_CHASE_TARGET_DISTANCE,
-                            chaseInfo.maxSpeed
-                        );
+                        chaseNextPathStop(chaseInfo.maxSpeed);
                     }
                     
                 } else if(
