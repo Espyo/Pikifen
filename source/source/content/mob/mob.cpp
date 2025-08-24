@@ -1923,6 +1923,7 @@ FRACTION_NR_VISIBILITY Mob::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     if(!carryInfo) return FRACTION_NR_VISIBILITY_NONE;
+    if(storedInsideAnother) return FRACTION_NR_VISIBILITY_NONE;
     
     *outValueNr = carryInfo->curCarryingStrength;
     *outReqNr = type->weight;

@@ -50,6 +50,10 @@ const float PADDING = 4.0f;
 
 namespace DRAWING {
 
+//Alpha change speed for the enemy/treasure point value near the leader cursor,
+//in amount per second.
+const float CURSOR_MOB_POINTS_ALPHA_SPEED = 3.0f;
+
 //Default health wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 

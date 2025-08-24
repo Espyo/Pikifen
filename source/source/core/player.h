@@ -98,6 +98,12 @@ struct Player {
     //Sector that the leader's cursor is on, if any.
     Sector* leaderCursorSector = nullptr;
     
+    //Amount of enemy or treasure points to show next to the leader cursor.
+    int leaderCursorMobPoints = 0;
+    
+    //Alpha of the enemy or treasure points to show next to the leader cursor.
+    float leaderCursorMobPointsAlpha = 0.0f;
+    
     //Current notification, if any.
     Notification notification;
     

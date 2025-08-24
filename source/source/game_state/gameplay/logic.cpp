@@ -15,6 +15,8 @@
 
 #include "../../content/mob/group_task.h"
 #include "../../content/mob/pikmin.h"
+#include "../../content/mob/pile.h"
+#include "../../content/mob/resource.h"
 #include "../../content/mob/tool.h"
 #include "../../core/const.h"
 #include "../../core/drawing.h"
@@ -134,6 +136,72 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             (player->leaderCursorSector->z - player->leaderPtr->z) * 0.001;
         player->cursorHeightDiffLight =
             std::clamp(player->cursorHeightDiffLight, -0.1f, 0.1f);
+    }
+    
+    //Enemy or treasure points.
+    int curLeaderCursorMobPoints = 0;
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+        Mob* mPtr = getEnemyOrTreasureOnCursor(player);
+        if(mPtr) {
+            if(
+                mPtr->type->category->id == MOB_CATEGORY_ENEMIES &&
+                game.curAreaData->mission.pointsPerEnemyPoint != 0
+            ) {
+                Enemy* enePtr = (Enemy*) mPtr;
+                curLeaderCursorMobPoints = enePtr->eneType->points;
+                
+            } else if(
+                mPtr->type->category->id == MOB_CATEGORY_TREASURES &&
+                game.curAreaData->mission.pointsPerTreasurePoint != 0
+            ) {
+                Treasure* trePtr = (Treasure*) mPtr;
+                curLeaderCursorMobPoints = trePtr->treType->points;
+                
+            } else if(
+                mPtr->type->category->id == MOB_CATEGORY_RESOURCES &&
+                game.curAreaData->mission.pointsPerTreasurePoint != 0
+            ) {
+                Resource* resPtr = (Resource*) mPtr;
+                if(
+                    resPtr->resType->deliveryResult ==
+                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                ) {
+                    curLeaderCursorMobPoints = resPtr->resType->pointAmount;
+                }
+                
+            } else if(
+                mPtr->type->category->id == MOB_CATEGORY_PILES &&
+                game.curAreaData->mission.pointsPerTreasurePoint != 0
+            ) {
+                Pile* pilPtr = (Pile*) mPtr;
+                if(
+                    pilPtr->pilType->contents->deliveryResult ==
+                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                ) {
+                    curLeaderCursorMobPoints =
+                        pilPtr->pilType->contents->pointAmount *
+                        pilPtr->amount;
+                }
+                
+            }
+        }
+    }
+    
+    if(curLeaderCursorMobPoints != 0) {
+        player->leaderCursorMobPoints = curLeaderCursorMobPoints;
+        player->leaderCursorMobPointsAlpha =
+            inchTowards(
+                player->leaderCursorMobPointsAlpha,
+                1.0f,
+                DRAWING::CURSOR_MOB_POINTS_ALPHA_SPEED * deltaT
+            );
+    } else {
+        player->leaderCursorMobPointsAlpha =
+            inchTowards(
+                player->leaderCursorMobPointsAlpha,
+                0.0f,
+                DRAWING::CURSOR_MOB_POINTS_ALPHA_SPEED * deltaT
+            );
     }
     
 }

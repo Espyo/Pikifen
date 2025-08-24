@@ -179,7 +179,8 @@ uint32_t hashNr2(unsigned int input1, unsigned int input2) {
  *
  * @param start Starting value.
  * @param target Target value.
- * @param maxStep Maximum change in value allowed.
+ * @param maxStep Maximum change in value allowed. This value must be positive,
+ * regardless of inch direction.
  * @return The inched number.
  */
 float inchTowards(float start, float target, float maxStep) {

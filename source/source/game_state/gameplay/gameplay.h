@@ -499,6 +499,7 @@ private:
     Mob* getClosestGroupMember(
         Player* player, const SubgroupType* type, bool* distant = nullptr
     );
+    Mob* getEnemyOrTreasureOnCursor(Player* player) const;
     void handlePlayerAction(const PlayerAction& action);
     bool isMissionClearMet();
     bool isMissionFailMet(MISSION_FAIL_COND* reason);

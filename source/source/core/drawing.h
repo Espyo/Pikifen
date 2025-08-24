@@ -29,6 +29,7 @@ extern const float OUTLINE_THICKNESS;
 
 
 namespace DRAWING {
+extern const float CURSOR_MOB_POINTS_ALPHA_SPEED;
 extern const float DEF_HEALTH_WHEEL_RADIUS;
 extern const float LIQUID_WOBBLE_DELTA_X;
 extern const float LIQUID_WOBBLE_TIME_SCALE;

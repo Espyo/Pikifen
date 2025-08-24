@@ -14,6 +14,7 @@
 
 #include "../../content/mob/group_task.h"
 #include "../../content/mob/pile.h"
+#include "../../content/mob/resource.h"
 #include "../../content/mob/scale.h"
 #include "../../core/drawing.h"
 #include "../../core/game.h"
@@ -1251,16 +1252,31 @@ void GameplayState::drawLeaderCursor(
     
     al_use_transform(&game.identityTransform);
     
-    float countOffset =
+    float extrasXOffset =
         std::max(bmpCursorSize.x, bmpCursorSize.y) * 0.18f *
         player->view.cam.zoom;
-        
+    float extrasYOffset = extrasXOffset;
+    float standbyCountHeight = 0.0f;
+    
     if(nStandbyPikmin > 0) {
+        standbyCountHeight = game.winH * 0.02f;
         drawText(
             i2s(nStandbyPikmin), game.sysContent.fntCursorCounter,
             player->leaderCursorWin +
-            Point(countOffset),
+            Point(extrasXOffset, extrasYOffset),
             Point(LARGE_FLOAT, game.winH * 0.02f), color,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
+        );
+    }
+    
+    if(player->leaderCursorMobPointsAlpha != 0) {
+        drawText(
+            "$" + i2s(player->leaderCursorMobPoints),
+            game.sysContent.fntValue,
+            player->leaderCursorWin +
+            Point(extrasXOffset, extrasYOffset + standbyCountHeight),
+            Point(LARGE_FLOAT, game.winH * 0.02f),
+            changeAlpha(COLOR_GOLD, player->leaderCursorMobPointsAlpha * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
     }

@@ -534,7 +534,7 @@ Mob* getNextMobNearCursor(
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(view.cursorWorldPos, mPtr->pos);
+        Distance d(view.cursorWorldPos, mPtr->pos);
         if(d < 8.0f) {
             mobsNearCursor.push_back(mPtr);
         }
