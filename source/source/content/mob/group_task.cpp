@@ -187,14 +187,14 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
  * @param outColor The fraction's color is returned here.
  * @return Whether the fraction numbers should be shown.
  */
-bool GroupTask::getFractionNumbersInfo(
+FRACTION_NR_VISIBILITY GroupTask::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
-    if(getPower() <= 0) return false;
     *outValueNr = getPower();
     *outReqNr = powerGoal;
     *outColor = game.config.aestheticGen.carryingColorStop;
-    return true;
+    if(getPower() <= 0) return FRACTION_NR_VISIBILITY_CURSOR;
+    return FRACTION_NR_VISIBILITY_ALWAYS;
 }
 
 

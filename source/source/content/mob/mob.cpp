@@ -1919,17 +1919,25 @@ float Mob::getDrawingHeight() const {
  * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
-bool Mob::getFractionNumbersInfo(
+FRACTION_NR_VISIBILITY Mob::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
-    if(!carryInfo || carryInfo->curCarryingStrength <= 0) return false;
-    bool destinationHasPikminType =
-        carryInfo->intendedMob &&
-        carryInfo->intendedPikType;
-    if(type->weight <= 1 && !destinationHasPikminType) return false;
+    if(!carryInfo) return FRACTION_NR_VISIBILITY_NONE;
     
     *outValueNr = carryInfo->curCarryingStrength;
     *outReqNr = type->weight;
+    *outColor = game.config.aestheticGen.carryingColorStop;
+    
+    if(carryInfo->curCarryingStrength <= 0) {
+        return FRACTION_NR_VISIBILITY_CURSOR;
+    }
+    bool destinationHasPikminType =
+        carryInfo->intendedMob &&
+        carryInfo->intendedPikType;
+    if(type->weight <= 1 && !destinationHasPikminType) {
+        return FRACTION_NR_VISIBILITY_CURSOR;
+    }
+    
     if(carryInfo->isMoving) {
         if(
             carryInfo->destination ==
@@ -1946,7 +1954,7 @@ bool Mob::getFractionNumbersInfo(
     } else {
         *outColor = game.config.aestheticGen.carryingColorStop;
     }
-    return true;
+    return FRACTION_NR_VISIBILITY_ALWAYS;
 }
 
 
@@ -3978,23 +3986,35 @@ void Mob::tickMiscLogic(float deltaT) {
     }
     
     //Fraction numbers.
+    bool isCursorOn = false;
+    for(const Player& player : game.states.gameplay->players) {
+        if(!player.leaderPtr) continue;
+        isCursorOn |=
+            bBoxCheck(
+                player.leaderCursorWorld, pos,
+                player.leaderPtr->radius + radius
+            );
+    }
     float fractionValueNr = 0.0f;
     float fractionReqNr = 0.0f;
     ALLEGRO_COLOR fractionColor = COLOR_BLACK;
-    bool shouldShowFraction =
+    FRACTION_NR_VISIBILITY fractionVisibility =
         getFractionNumbersInfo(
             &fractionValueNr, &fractionReqNr, &fractionColor
         );
+    bool showFraction =
+        fractionVisibility == FRACTION_NR_VISIBILITY_ALWAYS ||
+        (fractionVisibility == FRACTION_NR_VISIBILITY_CURSOR && isCursorOn);
         
-    if(!fraction && shouldShowFraction) {
+    if(!fraction && showFraction) {
         fraction = new InWorldFraction(this);
-    } else if(fraction && !shouldShowFraction) {
+    } else if(fraction && !showFraction) {
         fraction->startFading();
     }
     
     if(fraction) {
         fraction->tick(deltaT);
-        if(shouldShowFraction) {
+        if(showFraction) {
             //Only update the numbers if we want to show a fraction, i.e.
             //if we actually KNOW the numbers. Otherwise, keep the old data.
             fraction->setColor(fractionColor);

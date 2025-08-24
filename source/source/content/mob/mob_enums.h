@@ -137,6 +137,21 @@ enum ENEMY_EXTRA_STATE {
 };
 
 
+//Ways fraction numbers should be shown.
+enum FRACTION_NR_VISIBILITY {
+
+    //There is nothing to show.
+    FRACTION_NR_VISIBILITY_NONE,
+
+    //There is info, but should stay hidden till the cursor is on it.
+    FRACTION_NR_VISIBILITY_CURSOR,
+
+    //There is information that should be shown.
+    FRACTION_NR_VISIBILITY_ALWAYS,
+    
+};
+
+
 //Possible results for a horizontal movement operation.
 enum H_MOVE_RESULT {
 

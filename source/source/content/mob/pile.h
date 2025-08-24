@@ -42,7 +42,7 @@ public:
     void changeAmount(int change);
     void recharge();
     void update();
-    bool getFractionNumbersInfo(
+    FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     void readScriptVars(const ScriptVarReader& svr) override;

@@ -70,15 +70,17 @@ float Scale::calculateCurWeight() const {
  * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
-bool Scale::getFractionNumbersInfo(
+FRACTION_NR_VISIBILITY Scale::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     float weight = calculateCurWeight();
-    if(weight <= 0 || health <= 0) return false;
+    if(health <= 0) return FRACTION_NR_VISIBILITY_NONE;
+    
     *outValueNr = weight;
     *outReqNr = goalNumber;
     *outColor = game.config.aestheticGen.carryingColorStop;
-    return true;
+    if(weight <= 0) return FRACTION_NR_VISIBILITY_CURSOR;
+    return FRACTION_NR_VISIBILITY_ALWAYS;
 }
 
 

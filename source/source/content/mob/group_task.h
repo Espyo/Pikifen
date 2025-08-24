@@ -72,7 +72,7 @@ public:
     void addWorker(Pikmin* who);
     void finishTask();
     void freeUpSpot(Pikmin* whose);
-    bool getFractionNumbersInfo(
+    FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     GroupTaskSpot* getFreeSpot();

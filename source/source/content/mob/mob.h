@@ -502,7 +502,7 @@ public:
     virtual void getGroupSpotInfo(
         Point* outSpot, float* outDist
     ) const;
-    virtual bool getFractionNumbersInfo(
+    virtual FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const;
     virtual void handleStatusEffectGain(StatusType* staType);

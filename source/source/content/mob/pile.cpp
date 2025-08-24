@@ -68,14 +68,16 @@ void Pile::changeAmount(int change) {
  * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
-bool Pile::getFractionNumbersInfo(
+FRACTION_NR_VISIBILITY Pile::getFractionNumbersInfo(
     float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
-    if(amount == 0 || !pilType->showAmount) return false;
+    if(!pilType->showAmount) return FRACTION_NR_VISIBILITY_NONE;
+    
     *outValueNr = amount;
     *outReqNr = 0;
     *outColor = game.config.aestheticGen.carryingColorStop;
-    return true;
+    if(amount == 0) return FRACTION_NR_VISIBILITY_CURSOR;
+    return FRACTION_NR_VISIBILITY_ALWAYS;
 }
 
 

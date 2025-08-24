@@ -36,7 +36,7 @@ public:
     
     Scale(const Point& pos, ScaleType* type, float angle);
     float calculateCurWeight() const;
-    bool getFractionNumbersInfo(
+    FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     void readScriptVars(const ScriptVarReader& svr) override;
