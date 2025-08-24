@@ -91,8 +91,8 @@ private:
     //Description text item.
     TextGuiItem* descriptionText = nullptr;
     
-    //Difficulty text item.
-    TextGuiItem* difficultyText = nullptr;
+    //Difficulty item.
+    GuiItem* difficultyItem = nullptr;
     
     //Tags text item.
     TextGuiItem* tagsText = nullptr;

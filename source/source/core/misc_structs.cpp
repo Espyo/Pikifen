@@ -1775,6 +1775,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("checkbox_check", bmpCheckboxCheck);
     graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
     graRS.set("cursor", bmpCursor);
+    graRS.set("difficulty", bmpDifficulty);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);
     graRS.set("enemy_soul", bmpEnemySoul);

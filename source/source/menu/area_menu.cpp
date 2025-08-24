@@ -81,7 +81,7 @@ void AreaMenu::animateInfoAndSpecs() {
     descriptionText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
-    difficultyText->startJuiceAnimation(
+    difficultyItem->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     tagsText->startJuiceAnimation(
@@ -133,7 +133,6 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     infoNameText->text.clear();
     subtitleText->text.clear();
     descriptionText->text.clear();
-    difficultyText->text.clear();
     curThumb = nullptr;
     tagsText->text.clear();
     makerText->text.clear();
@@ -159,31 +158,6 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             areaPtr->mission.goal
         );
     descriptionText->text = areaPtr->description;
-    if(areaPtr->difficulty == 0) {
-        difficultyText->text.clear();
-    } else {
-        difficultyText->text =
-            "Difficulty: " +
-            i2s(areaPtr->difficulty) + "/5 - ";
-        switch(areaPtr->difficulty) {
-        case 1: {
-            difficultyText->text += "Very easy";
-            break;
-        } case 2: {
-            difficultyText->text += "Easy";
-            break;
-        } case 3: {
-            difficultyText->text += "Medium";
-            break;
-        } case 4: {
-            difficultyText->text += "Hard";
-            break;
-        } case 5: {
-            difficultyText->text += "Very hard";
-            break;
-        }
-        }
-    }
     tagsText->text =
         (areaPtr->tags.empty() ? "" : "Tags: " + areaPtr->tags);
     makerText->text =
@@ -488,13 +462,41 @@ void AreaMenu::initGuiInfoPage() {
             gui.addItem(recordDateText, "record_date");
         }
         
-        //Difficulty text.
-        difficultyText =
-            new TextGuiItem(
-            "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-        );
-        infoBox->addChild(difficultyText);
-        gui.addItem(difficultyText, "difficulty");
+        //Difficulty item.
+        difficultyItem = new GuiItem();
+        difficultyItem->onDraw = [this] (const DrawInfo & draw) {
+            Area* areaPtr = game.content.areas.list[areaType][curAreaIdx];
+            if(areaPtr->difficulty == 0) return;
+            const string difficultyText = "Difficulty: ";
+            
+            drawText(
+                difficultyText, game.sysContent.fntStandard,
+                Point(draw.center.x - draw.size.x / 2.0f, draw.center.y),
+                draw.size,
+                COLOR_WHITE, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+                TEXT_SETTING_FLAG_CANT_GROW,
+                Point(1.0 + difficultyItem->getJuiceValue())
+            );
+            
+            Point iconSize =
+                resizeToBoxKeepingAspectRatio(
+                    getBitmapDimensions(game.sysContent.bmpDifficulty),
+                    Point(draw.size.x / 5.0f, draw.size.y)
+                );
+            const float iconsX2 = draw.center.x + draw.size.x / 2.0f;
+            for(unsigned char i = 0; i < areaPtr->difficulty; i++) {
+                drawBitmap(
+                    game.sysContent.bmpDifficulty,
+                    Point(
+                        iconsX2 - iconSize.x * i - iconSize.x / 2.0f,
+                        draw.center.y
+                    ),
+                    iconSize
+                );
+            }
+        };
+        infoBox->addChild(difficultyItem);
+        gui.addItem(difficultyItem, "difficulty");
         
         //Tags text.
         tagsText =

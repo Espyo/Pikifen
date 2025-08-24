@@ -465,6 +465,9 @@ struct SystemContentList {
     //Leader cursor.
     ALLEGRO_BITMAP* bmpCursor = nullptr;
     
+    //Mission difficulty.
+    ALLEGRO_BITMAP* bmpDifficulty = nullptr;
+    
     //Discord icon.
     ALLEGRO_BITMAP* bmpDiscordIcon = nullptr;
     
@@ -706,6 +709,9 @@ struct SystemContentNames {
     
     //Leader cursor.
     string bmpCursor = "gui/cursor";
+    
+    //Mission difficulty.
+    string bmpDifficulty = "gui/difficulty";
     
     //Discord icon.
     string bmpDiscordIcon = "gui/discord_icon";

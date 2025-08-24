@@ -2018,12 +2018,7 @@ void AreaEditor::processGuiPanelInfo() {
         //Difficulty value.
         int difficulty = game.curAreaData->difficulty;
         vector<string> difficultyOptions = {
-            "Not specified",
-            "1 - Very easy",
-            "2 - Easy",
-            "3 - Medium",
-            "4 - Hard",
-            "5 - Very hard"
+            "Not specified", "1", "2", "3", "4", "5"
         };
         if(ImGui::Combo("Difficulty", &difficulty, difficultyOptions, 15)) {
             registerChange("difficulty change");

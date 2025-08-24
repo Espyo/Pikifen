@@ -40,7 +40,6 @@ Next tasks (roughly sorted most important first)
             [NEEDS BRAINSTORMING] Maybe make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types. But how will this work for mouse control?
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
-        t The difficulty listing in the area menu should use fire icons instead of numbers
     GUI things
         Game state refactor
             Add a gui.startTransition function so that we don't have to do the responsive = true/false thing when we call gui.startAnimation
