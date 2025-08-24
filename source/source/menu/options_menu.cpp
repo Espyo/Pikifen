@@ -665,12 +665,13 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.registerCoords("back",                   12,     5, 20,   6);
     miscGui.registerCoords("back_input",              3,     7,  4,   4);
     miscGui.registerCoords("header",                 50,    10, 50,   6);
-    miscGui.registerCoords("pikmin_bump",            50, 28.75, 70, 7.5);
-    miscGui.registerCoords("dismiss_all",            50, 38.75, 70, 7.5);
-    miscGui.registerCoords("cursor_cam_weight",      50, 48.75, 70, 7.5);
-    miscGui.registerCoords("show_counter_on_cursor", 50, 58.75, 70, 7.5);
-    miscGui.registerCoords("show_hud_input_icons",   50, 68.75, 70, 7.5);
-    miscGui.registerCoords("leaving_confirmation",   50, 78.75, 70, 7.5);
+    miscGui.registerCoords("pikmin_bump",            50, 23.75, 70, 7.5);
+    miscGui.registerCoords("dismiss_all",            50, 33.75, 70, 7.5);
+    miscGui.registerCoords("cursor_cam_weight",      50, 43.75, 70, 7.5);
+    miscGui.registerCoords("show_counter_on_cursor", 50, 53.75, 70, 7.5);
+    miscGui.registerCoords("show_hud_input_icons",   50, 63.75, 70, 7.5);
+    miscGui.registerCoords("leaving_confirmation",   50, 73.75, 70, 7.5);
+    miscGui.registerCoords("maker_tools_in_play",    50, 83.75, 70, 7.5);
     miscGui.registerCoords("tooltip",                50,    96, 96,   4);
     miscGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
@@ -803,6 +804,20 @@ void OptionsMenu::initGuiMiscPage() {
     };
     leavingConfirmationPicker->init();
     miscGui.addItem(leavingConfirmationPicker, "leaving_confirmation");
+    
+    //Maker tools in play check.
+    CheckGuiItem* makerToolsInPlayCheck =
+        new CheckGuiItem(
+        &game.options.misc.makerToolsInPlay,
+        "Maker tools in normal gameplay", game.sysContent.fntStandard
+    );
+    makerToolsInPlayCheck->onGetTooltip =
+    [] () {
+        return
+            "Freely allow maker tools in normal gameplay? Or ask to confirm? "
+            "Default: " + b2s(OPTIONS::MISC_D::MAKER_TOOLS_IN_PLAY) + ".";
+    };
+    miscGui.addItem(makerToolsInPlayCheck, "maker_tools_in_play");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

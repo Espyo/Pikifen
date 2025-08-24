@@ -144,6 +144,7 @@ namespace MISC_D {
 extern const float CURSOR_CAM_WEIGHT;
 extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
+extern const bool MAKER_TOOLS_IN_PLAY;
 extern const float PIKMIN_BUMP_DIST;
 extern const bool SHOW_COUNTER_ON_CURSOR;
 extern const bool SHOW_HUD_INPUT_ICONS;
@@ -378,6 +379,9 @@ struct Options {
         
         //Pause menu leaving confirmation question mode.
         LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;
+        
+        //Whether to freely allow maker tools in the play mode.
+        bool makerToolsInPlay = false;
         
         //Idle Pikmin leader bumping distance.
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;

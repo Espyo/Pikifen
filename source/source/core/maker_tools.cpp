@@ -15,11 +15,82 @@
 #include "misc_functions.h"
 
 
+namespace MAKER_TOOLS {
+
+//Internal names of each maker tool.
+const string NAMES[N_MAKER_TOOLS] = {
+    "",
+    "area_image",
+    "change_speed",
+    "collision",
+    "geometry_info",
+    "hitboxes",
+    "hud",
+    "hurt_mob",
+    "mob_info",
+    "new_pikmin",
+    "path_info",
+    "set_song_pos_near_loop",
+    "teleport"
+};
+
+//Time the player has to confirm a maker tool usage in normal play.
+const float PLAY_CONFIRMATION_TIMER = 1.0f;
+
+}
+
+
 /**
  * @brief Constructs a new maker tools info object.
  */
 MakerTools::MakerTools() {
     infoPrintTimer = Timer(1.0f, [this] () { infoPrintText.clear(); });
+}
+
+
+/**
+ * @brief Checks whether maker tools are allowed, and if not, sets up
+ * code to warn the player and let them allow it, if applicable.
+ *
+ * @param inputValue Input value.
+ * @return Whether they are allowed.
+ */
+bool MakerTools::checkMakerToolsAllowed(float inputValue) {
+    if(!enabled) return false;
+    bool isInPlay =
+        game.states.gameplay->loaded &&
+        game.states.areaEd->quickPlayAreaPath.empty();
+        
+    if(
+        !game.options.misc.makerToolsInPlay && isInPlay && !allowedInPlayNow &&
+        inputValue >= 0.5f
+    ) {
+        if(playConfirmationPresses == 0) {
+            printInfo(
+                "You've tried to use a maker tool, which isn't fit for "
+                "normal gameplay.\n"
+                "Are you sure? Quickly press a maker tool button three times "
+                "to confirm.",
+                15
+            );
+            playConfirmationTimer = MAKER_TOOLS::PLAY_CONFIRMATION_TIMER;
+            playConfirmationPresses++;
+            return false;
+        } else if(playConfirmationPresses == 2) {
+            printInfo(
+                "Maker tools are now allowed till you leave the area.\n"
+                "Check the options to always allow maker tools in normal "
+                "gameplay.",
+                15
+            );
+            allowedInPlayNow = true;
+            return false;
+        } else {
+            playConfirmationPresses++;
+            return false;
+        }
+    }
+    return true;
 }
 
 
@@ -46,7 +117,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
         game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS;
     if(!isGameplayToolAction) return false;
-    if(!enabled) return true;
+    if(!checkMakerToolsAllowed(action.value)) return true;
     if(action.value < 0.5f) return false;
     
     switch(action.actionTypeId) {
@@ -276,7 +347,7 @@ bool MakerTools::handleGeneralPlayerAction(const PlayerAction& action) {
         game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS;
     if(!isGeneralToolAction) return false;
-    if(!enabled) return true;
+    if(!checkMakerToolsAllowed(action.value)) return true;
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AUTO_START: {
@@ -439,7 +510,11 @@ void MakerTools::resetForGameplay() {
     infoLock = nullptr;
     lastPikminType = nullptr;
     pathInfo = false;
+    
     usedHelpingTools = false;
+    allowedInPlayNow = false;
+    playConfirmationPresses = 0;
+    playConfirmationTimer = 0.0f;
 }
 
 
@@ -517,5 +592,21 @@ void MakerTools::saveToDataNode(DataNode* node) {
         GetterWriter pGW(perfMonNode);
         
         pGW.write("enabled", usePerfMon);
+    }
+}
+
+
+/**
+ * @brief Ticks one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void MakerTools::tick(float deltaT) {
+    if(playConfirmationTimer > 0.0f) {
+        playConfirmationTimer -= deltaT;
+        if(playConfirmationTimer <= 0.0f) {
+            playConfirmationTimer = 0.0f;
+            playConfirmationPresses = 0;
+        }
     }
 }

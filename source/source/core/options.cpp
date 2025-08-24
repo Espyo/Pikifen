@@ -209,6 +209,9 @@ const bool DISMISS_ALL = true;
 //Default value for the pause menu leaving confirmation mode.
 const LEAVING_CONF_MODE LEAVING_CONF = LEAVING_CONF_MODE_ALWAYS;
 
+//Default value for whether to freely allow maker tools in play mode.
+const bool MAKER_TOOLS_IN_PLAY = false;
+
 //Default value for the Pikmin bumping distance.
 const float PIKMIN_BUMP_DIST = 50.0f;
 
@@ -459,6 +462,7 @@ void Options::loadFromDataNode(DataNode* file) {
         mRS.set("cursor_cam_weight", misc.cursorCamWeight);
         mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leaving_confirmation_mode", leavingConfModeChar);
+        mRS.set("maker_tools_in_play", misc.makerToolsInPlay);
         mRS.set("pikmin_bump_dist", misc.pikminBumpDist);
         mRS.set("show_counter_on_cursor", misc.showCounterOnCursor);
         mRS.set("show_hud_input_icons", misc.showHudInputIcons);
@@ -652,6 +656,7 @@ void Options::saveToDataNode(DataNode* file) const {
         mGW.write("cursor_cam_weight", misc.cursorCamWeight);
         mGW.write("dismiss_all", misc.dismissAll);
         mGW.write("leaving_confirmation_mode", misc.leavingConfMode);
+        mGW.write("maker_tools_in_play", misc.makerToolsInPlay);
         mGW.write("pikmin_bump_dist", misc.pikminBumpDist);
         mGW.write("show_counter_on_cursor", misc.showCounterOnCursor);
         mGW.write("show_hud_input_icons", misc.showHudInputIcons);

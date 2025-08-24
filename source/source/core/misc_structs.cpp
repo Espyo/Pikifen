@@ -119,28 +119,6 @@ const float RINGS_INTERVAL = 0.1f;
 }
 
 
-namespace MAKER_TOOLS {
-
-//Internal names of each maker tool.
-const string NAMES[N_MAKER_TOOLS] = {
-    "",
-    "area_image",
-    "change_speed",
-    "collision",
-    "geometry_info",
-    "hitboxes",
-    "hud",
-    "hurt_mob",
-    "mob_info",
-    "new_pikmin",
-    "path_info",
-    "set_song_pos_near_loop",
-    "teleport"
-};
-
-}
-
-
 /**
  * @brief Loads an audio stream for the manager.
  *

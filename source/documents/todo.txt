@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     --- 1.1.0 ---
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
-    People should ideally not accidentally press one of the maker tool buttons when just playing
     Leader animations
         Thrown (add to the logic of bouncers too, including Pikmin)
         Climbing (add the track logic too)
@@ -30,7 +29,6 @@ Next tasks (roughly sorted most important first)
         Remove some of the elements?
             Stuff like a leader's health might not be necessary if it's full
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
-        Putting your cursor on top of a carriable object should show the carrying numbers, as well as the points for treasures and enemies (Thanks Tenacious)
         Show how close you are to concocting a new spray
     Discontinue system message boxes in favor of Dear ImGui ones
     Other menu improvements
@@ -707,6 +705,7 @@ Misc things (so I don't forget)
         Enemy souls?
         Coloring due to ultra-bitter spray
     Pathing
+        Just make all pathing always ignore the Z of stops if said Z is below them? Currently, grounded mobs ignore it, but airborne mobs don't. This is so that mobs that are horizontally on a stop, but vertically stuck above it teetering on a ledge can still continue their path. I can't find any reason to want to respect Z, be it for grounded or airborne mobs, especially since the game has no ceilings. But just make sure to have the Z coordinate be respected when reaching the Onion, ship, bridge, etc. at the end of the path
         Pikmin, leaders, and so on should be able to take climbing sticks, bouncy mushrooms, geysers, etc. in order to traverse paths
     Editor improvements
         Area editor

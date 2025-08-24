@@ -77,6 +77,7 @@ enum MAKER_TOOL_TYPE {
 
 namespace MAKER_TOOLS {
 extern const string NAMES[N_MAKER_TOOLS];
+extern const float PLAY_CONFIRMATION_TIMER;
 }
 
 
@@ -108,6 +109,9 @@ struct MakerTools {
     
     //Are the tools enabled?
     bool enabled = true;
+    
+    //If maker tools are limited in play mode, are they allowed now?
+    bool allowedInPlayNow = false;
     
     //Different area image settings.
     AreaImageSettings areaImageSettings[3];
@@ -175,6 +179,13 @@ struct MakerTools {
     //Show path info?
     bool pathInfo = false;
     
+    //How many times the player has pressed a maker tool button to confirm,
+    //when tools are limited in play mode.
+    unsigned char playConfirmationPresses = 0;
+    
+    //Time left to confirm, when tools are limited in play mode.
+    float playConfirmationTimer = 0.0f;
+    
     //Use the performance monitor?
     bool usePerfMon = false;
     
@@ -185,11 +196,13 @@ struct MakerTools {
     //--- Function declarations ---
     
     MakerTools();
+    bool checkMakerToolsAllowed(float inputValue);
     bool handleGameplayPlayerAction(const PlayerAction& action);
     bool handleGeneralPlayerAction(const PlayerAction& action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
     void saveToDataNode(DataNode* node);
+    void tick(float deltaT);
     
     
 private:

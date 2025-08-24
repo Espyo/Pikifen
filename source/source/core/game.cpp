@@ -240,6 +240,9 @@ void Game::globalLogic() {
     
     //Audio.
     audio.tick(deltaT);
+
+    //Maker tools.
+    makerTools.tick(deltaT);
     
     //Dear ImGui.
     ImGui_ImplAllegro5_NewFrame();
