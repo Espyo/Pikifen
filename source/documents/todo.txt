@@ -340,7 +340,7 @@ Next tasks (roughly sorted most important first)
         An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
     Buried treasure
     Solid logic for enemies carrying treasures
-        Breadbugs tug-of-war logic
+        Breadbug tug-of-war logic
         Pikmin thrown at a treasure a Dweevil is carrying will latch on to the treasure (thanks Enderdude6)
     Weather improvements
         Add a weather editor
@@ -542,16 +542,6 @@ Misc things (so I don't forget)
         [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them
-        Earthquake effect
-            See https://www.pikminwiki.com/Rumble
-            If the earthquake emitter is at the center of the screen, full intensity. The farther it is, the weaker the intensity. I think 2x offscreen or more should be 0 intensity.
-            https://www.reddit.com/r/justgamedevthings/comments/7g3qty/what_do_you_mean_dont_overdo_it_with_the/
-            https://www.youtube.com/watch?v=tu-Qe66AvtY
-                Have a "trauma" variable (0-1) that goes up (something like 0.4) every time a shake happens, and goes down over time
-                When shaking the screen, the multiplier of the amount to shake should be trauma^2 or trauma^3 so it's smooth
-                Don't offset the camera negatively, but use something like offsetX = maxOffset * shakeMult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shakeMult * GetPerlinNoise(seed + 1, time);
-                    Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
-        Leaders getting hurt should make their HUD icon turn red and shake
         The sparkle particles on treasures need to be more obvious
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly

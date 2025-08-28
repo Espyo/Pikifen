@@ -217,7 +217,11 @@ Hud::Hud() :
                 bmpHardBubble,
                 finalDraw.center,
                 finalDraw.size,
-                true
+                true, 0.0f,
+                interpolateColor(
+                    health.redness, 0.0f, 1.0f,
+                    COLOR_WHITE, al_map_rgb(255, 0, 0)
+                )
             );
             
             if(health.cautionTimer > 0.0f) {
@@ -1840,6 +1844,7 @@ void Hud::tick(float deltaT) {
             lPtr->healthWheelShaker.getOffsets(
                 &health.offset.x, &health.offset.y
             );
+            health.redness = lPtr->healthWheelShaker.getTrauma();
         }
         leaderHealthMgr.update(l, lPtr, health);
     }

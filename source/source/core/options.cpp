@@ -172,6 +172,9 @@ const bool USE_CUSTOM_STYLE = false;
 
 namespace GRAPHICS_D {
 
+//Default value for the camera shake multiplier.
+const float CAM_SHAKE_MULT = 1.0f;
+
 //Default value for whether to use true fullscreen.
 const bool TRUE_FULLSCREEN = false;
 
@@ -428,6 +431,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
         string resolutionStr;
         
+        gRS.set("cam_shake_mult", graphics.camShakeMult);
         gRS.set("fullscreen", graphics.intendedWinFullscreen);
         gRS.set("resolution", resolutionStr);
         gRS.set("true_fullscreen", graphics.trueFullscreen);
@@ -437,6 +441,8 @@ void Options::loadFromDataNode(DataNode* file) {
             graphics.intendedWinW = std::max(1, s2i(resolutionParts[0]));
             graphics.intendedWinH = std::max(1, s2i(resolutionParts[1]));
         }
+        
+        graphics.camShakeMult = std::clamp(graphics.camShakeMult, 0.0f, 1.0f);
         
     }
     
@@ -634,6 +640,7 @@ void Options::saveToDataNode(DataNode* file) const {
             i2s(graphics.intendedWinW) + " " + i2s(graphics.intendedWinH);
         GetterWriter gGW(file->addNew("graphics"));
         
+        gGW.write("cam_shake_mult", graphics.camShakeMult);
         gGW.write("fullscreen", graphics.intendedWinFullscreen);
         gGW.write("resolution", resolutionStr);
         gGW.write("true_fullscreen", graphics.trueFullscreen);

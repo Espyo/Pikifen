@@ -1959,6 +1959,7 @@ void Viewport::updateTransformations() {
     Point shakeOffset;
     shaker.getOffsets(&shakeOffset.x, &shakeOffset.y, nullptr);
     shakeOffset *= DRAWING::CAM_SHAKE_MAX_OFFSET;
+    shakeOffset *= game.options.graphics.camShakeMult;
     
     //World coordinates to window coordinates.
     worldToWindowTransform = game.identityTransform;

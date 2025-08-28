@@ -127,6 +127,7 @@ extern const bool USE_CUSTOM_STYLE;
 
 
 namespace GRAPHICS_D {
+extern const float CAM_SHAKE_MULT;
 extern const bool TRUE_FULLSCREEN;
 extern const bool WIN_FULLSCREEN;
 extern const unsigned int WIN_H;
@@ -337,6 +338,9 @@ struct Options {
     //Graphics.
     struct {
     
+        //Camera shake strength multiplier.
+        float camShakeMult = GRAPHICS_D::CAM_SHAKE_MULT;
+        
         //Player's intended option for fullscreen, before restarting the game.
         bool intendedWinFullscreen = GRAPHICS_D::WIN_FULLSCREEN;
         

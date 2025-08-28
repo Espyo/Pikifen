@@ -233,6 +233,16 @@ void Shaker::getOffsets(
 
 
 /**
+ * @brief Returns the current internal trauma value (0 to 1).
+ *
+ * @return The trauma value.
+ */
+float Shaker::getTrauma() const {
+    return trauma;
+}
+
+
+/**
  * @brief Adds some shaking.
  *
  * @param strength Strength of the shake. 0 to 1.

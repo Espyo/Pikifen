@@ -496,6 +496,7 @@ struct Shaker {
         float* xOffset = nullptr, float* yOffset = nullptr,
         float* angleOffset = nullptr
     ) const;
+    float getTrauma() const;
     void tick(float deltaT);
     
     

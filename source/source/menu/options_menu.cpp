@@ -553,6 +553,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     graphicsGui.registerCoords("header",          50, 10,   50,  6);
     graphicsGui.registerCoords("fullscreen",      50, 25,   70, 10);
     graphicsGui.registerCoords("resolution",      50, 42.5, 70, 10);
+    graphicsGui.registerCoords("cam_shake_mult",  50, 60,   70, 10);
     graphicsGui.registerCoords("tooltip",         50, 96,   96,  4);
     graphicsGui.registerCoords("restart_warning", 50, 85,   70,  6);
     graphicsGui.readCoords(
@@ -634,6 +635,19 @@ void OptionsMenu::initGuiGraphicsPage() {
     };
     resolutionPicker->init();
     graphicsGui.addItem(resolutionPicker, "resolution");
+    
+    //Camera shake multiplier picker.
+    OptionsMenuPickerGuiItem<float>* camShakeMultPicker =
+        new OptionsMenuPickerGuiItem<float>(
+        "Camera shake: ",
+        &game.options.graphics.camShakeMult,
+        OPTIONS::GRAPHICS_D::CAM_SHAKE_MULT,
+    { 0.00f, 0.25f, 0.50f, 0.75f, 1.00f },
+    { "Off", "25%", "50%", "75%", "100%" },
+    "Strength of the camera shaking effects."
+    );
+    camShakeMultPicker->init();
+    graphicsGui.addItem(camShakeMultPicker, "cam_shake_mult");
     
     //Warning text.
     warningText =
