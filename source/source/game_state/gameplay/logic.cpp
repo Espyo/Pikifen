@@ -213,9 +213,12 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::doAestheticLogic(float deltaT) {
-    //Leader stuff.
     for(Player& player : players) {
+        //Leader stuff.
         doAestheticLeaderLogic(&player, deltaT);
+
+        //Camera shake.
+        player.view.shaker.tick(deltaT);
     }
     
     //Specific animations.

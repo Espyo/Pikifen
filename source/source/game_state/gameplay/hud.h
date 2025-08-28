@@ -19,6 +19,7 @@
 namespace HUD {
 extern const float GOAL_INDICATOR_SMOOTHNESS_MULT;
 extern const string GUI_FILE_NAME;
+extern const float HEALTH_SHAKE_MAX_OFFSET;
 extern const float LEADER_SWAP_JUICE_DURATION;
 extern const float MEDAL_GOT_IT_JUICE_DURATION;
 extern const float MEDAL_ICON_SCALE_CUR;
@@ -88,6 +89,9 @@ struct Hud {
         
         //Timer for the low-health caution animation.
         float cautionTimer = 0.0f;
+        
+        //Offset, for when the leader takes damage.
+        Point offset;
         
     };
     

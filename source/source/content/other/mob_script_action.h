@@ -207,6 +207,9 @@ enum MOB_ACTION {
     //Set a script variable.
     MOB_ACTION_SET_VAR,
     
+    //Shake the camera.
+    MOB_ACTION_SHAKE_CAMERA,
+    
     //Show a message that is inside a script variable.
     MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
     
@@ -732,6 +735,7 @@ void setTangible(MobActionRunData& data);
 void setTeam(MobActionRunData& data);
 void setTimer(MobActionRunData& data);
 void setVar(MobActionRunData& data);
+void shakeCamera(MobActionRunData& data);
 void showMessageFromVar(MobActionRunData& data);
 void spawn(MobActionRunData& data);
 void stabilizeZ(MobActionRunData& data);

@@ -471,6 +471,52 @@ struct MovementInfo {
 
 
 /**
+ * @brief Represents something shaking, like the camera during an earthquake.
+ *
+ * Special thanks to https://www.youtube.com/watch?v=tu-Qe66AvtY
+ */
+struct Shaker {
+
+    //--- Members ---
+    
+    //Trauma amount to decrease per second.
+    float decreaseAmount = 1.0f;
+    
+    //Scale time by this much, for the offset calculations.
+    float timeScale = 30.0f;
+    
+    //Random noise function seed to use.
+    unsigned int seed = 0;
+    
+    
+    //--- Function declarations ---
+    Shaker(std::function<float(float, float)> getRandomFloat);
+    void shake(float strength);
+    void getOffsets(
+        float* xOffset = nullptr, float* yOffset = nullptr,
+        float* angleOffset = nullptr
+    ) const;
+    void tick(float deltaT);
+    
+    
+    private:
+    
+    //--- Members ---
+    
+    //Current trauma amount (raw shake factor).
+    float trauma = 0.0f;
+    
+    //Time spent so far.
+    float time = 0.0f;
+    
+    //Callback for when a random noise function value is needed.
+    //The first parameter is the seed number, the second is the time spent.
+    std::function<float(float, float)> getRandomFloat;
+    
+};
+
+
+/**
  * @brief A timer. You can set it to start at a pre-determined time,
  * to tick, etc.
  */

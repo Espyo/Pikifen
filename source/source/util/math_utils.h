@@ -38,6 +38,9 @@ enum EASING_METHOD {
     //Gradually goes in normally, then eased as it goes out.
     EASE_METHOD_OUT,
     
+    //Eased as it goes in and also as it goes out.
+    EASE_METHOD_IN_OUT,
+    
     //Goes backwards before going in.
     EASE_METHOD_IN_BACK,
     
@@ -69,8 +72,8 @@ enum EASING_METHOD {
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float ease(const EASING_METHOD method, float n);
-uint32_t hashNr(unsigned int input);
-uint32_t hashNr2(unsigned int input1, unsigned int input2);
+uint32_t hashNr(uint32_t input);
+uint32_t hashNr2(uint32_t input1, uint32_t input2);
 float inchTowards(float start, float target, float maxStep);
 float interpolateNumber(
     float input, float inputStart, float inputEnd,
@@ -80,5 +83,6 @@ int32_t linearCongruentialGenerator(int32_t* state);
 size_t getRandomIdxWithWeights(
     const vector<float>& weights, float pointRandomFloat
 );
+float simpleNoise(uint32_t seed, float x);
 int sumAndWrap(int nr, int sum, int wrapLimit);
 float wrapFloat(float nr, float minimum, float maximum);

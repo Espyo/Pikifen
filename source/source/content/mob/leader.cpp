@@ -148,7 +148,8 @@ const float TIDY_SINGLE_DISMISS_DURATION = 3.0f;
 Leader::Leader(const Point& pos, LeaderType* type, float angle) :
     Mob(pos, type, angle),
     leaType(type),
-    autoThrowRepeater(&game.autoThrowSettings) {
+    autoThrowRepeater(&game.autoThrowSettings),
+    healthWheelShaker([] (float s, float t) { return simpleNoise(s, t); }) {
     
     team = MOB_TEAM_PLAYER_1;
     invulnPeriod = Timer(LEADER::INVULN_PERIOD_NORMAL);
@@ -1141,6 +1142,8 @@ void Leader::tickClassSpecifics(float deltaT) {
     if(tidySingleDismissTime > 0.0f) {
         tidySingleDismissTime -= deltaT;
     }
+    
+    healthWheelShaker.tick(deltaT);
     
     //Health wheel logic.
     healthWheelVisibleRatio +=

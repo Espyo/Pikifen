@@ -50,6 +50,14 @@ const float PADDING = 4.0f;
 
 namespace DRAWING {
 
+//Distance after which camera shakes from mob actions no longer have
+//an effect.
+const float CAM_SHAKE_DROPOFF_DIST = 1000.0f;
+
+//Maximum amount in any direction that the camera is allowed to offset
+//when shaking.
+const float CAM_SHAKE_MAX_OFFSET = 30.0f;
+
 //Alpha change speed for the enemy/treasure point value near the leader cursor,
 //in amount per second.
 const float CURSOR_MOB_POINTS_ALPHA_SPEED = 3.0f;

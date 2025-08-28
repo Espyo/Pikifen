@@ -155,6 +155,7 @@ script {
             set_gravity 1
             set_animation landing
             start_particles dust_explosion 0 0
+            shake_camera 25
         }
         on_animation_end {
             set_state resting

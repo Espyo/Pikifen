@@ -29,6 +29,8 @@ extern const float OUTLINE_THICKNESS;
 
 
 namespace DRAWING {
+extern const float CAM_SHAKE_DROPOFF_DIST;
+extern const float CAM_SHAKE_MAX_OFFSET;
 extern const float CURSOR_MOB_POINTS_ALPHA_SPEED;
 extern const float DEF_HEALTH_WHEEL_RADIUS;
 extern const float LIQUID_WOBBLE_DELTA_X;

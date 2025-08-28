@@ -1598,6 +1598,14 @@ void initMobActions() {
         nullptr
     );
     
+    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_SHAKE_CAMERA,
+        "shake_camera",
+        MobActionRunners::shakeCamera,
+        nullptr
+    );
+    
     regParam("var name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,

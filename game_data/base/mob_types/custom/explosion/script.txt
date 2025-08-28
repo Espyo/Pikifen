@@ -47,6 +47,8 @@ script {
             if $floating = false
                 start_particles explosion_crater 0 0 1
             end_if
+
+            shake_camera 40
         }
         on_animation_end {
             delete

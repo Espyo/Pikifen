@@ -1544,6 +1544,7 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
         else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
     }
     
+    leaPtr->healthWheelShaker.shake(1.0f);
     game.states.gameplay->lastHurtLeaderPos = m->pos;
     if(healthBefore > 0.0f && m->health < healthBefore) {
         game.statistics.leaderDamageSuffered += healthBefore - m->health;

@@ -27,25 +27,32 @@ float ease(const EASING_METHOD method, float n) {
     switch(method) {
     case EASE_METHOD_NONE: {
         return n;
+        
     } case EASE_METHOD_IN: {
         return (float) pow(n, 3);
-    }
-    case EASE_METHOD_OUT: {
+        
+    } case EASE_METHOD_OUT: {
         return (float) (1 - (pow((1 - n), 3)));
-    }
-    case EASE_METHOD_IN_BACK: {
+        
+    } case EASE_METHOD_IN_OUT: {
+        return
+            n < 0.5f ?
+            4.0f * n * n * n :
+            1.0f - pow(-2.0f * n + 2.0f, 3.0f) / 2.0f;
+            
+    } case EASE_METHOD_IN_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 + 1.0f;
         return (float) (mag2 * n * n * n - mag1 * n * n);
-    }
-    case EASE_METHOD_OUT_BACK: {
+        
+    } case EASE_METHOD_OUT_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 + 1.0f;
         return
             (float)
             (1.0f + mag2 * pow(n - 1.0f, 3) + mag1 * pow(n - 1.0f, 2));
-    }
-    case EASE_METHOD_IN_OUT_BACK: {
+            
+    } case EASE_METHOD_IN_OUT_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 * 1.525f;
         return
@@ -54,6 +61,7 @@ float ease(const EASING_METHOD method, float n) {
             (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
             (float)
             (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
+            
     } case EASE_METHOD_IN_ELASTIC: {
         const float mag = TAU / 3;
         return
@@ -63,8 +71,8 @@ float ease(const EASING_METHOD method, float n) {
             1.0f :
             (float) - pow(2.0f, 10.0f * n - 10.0f) *
             (float) sin((n * 10.0f - 10.75f) * mag);
-    }
-    case EASE_METHOD_OUT_ELASTIC: {
+            
+    } case EASE_METHOD_OUT_ELASTIC: {
         const float mag = TAU / 3;
         return
             n == 0.0f ?
@@ -73,11 +81,11 @@ float ease(const EASING_METHOD method, float n) {
             1.0f :
             (float) pow(2.0f, -10.0f * n) *
             (float) sin((n * 10.0f - 0.75f) * mag) + 1.0f;
-    }
-    case EASE_METHOD_UP_AND_DOWN: {
+            
+    } case EASE_METHOD_UP_AND_DOWN: {
         return (float) sin(n * TAU / 2);
-    }
-    case EASE_METHOD_UP_AND_DOWN_ELASTIC: {
+        
+    } case EASE_METHOD_UP_AND_DOWN_ELASTIC: {
         const float cp1 = 0.50f;
         const float cp2 = 0.80f;
         const float mag1 = -0.4f;
@@ -95,8 +103,8 @@ float ease(const EASING_METHOD method, float n) {
             aux *= 1.0f / (1.0f - cp2);
             return (float) sin(aux * TAU / 2) * mag2;
         }
+        
     }
-    
     }
     
     return n;
@@ -135,7 +143,7 @@ size_t getRandomIdxWithWeights(
  * @param input The input number.
  * @return The hash.
  */
-uint32_t hashNr(unsigned int input) {
+uint32_t hashNr(uint32_t input) {
     //Robert Jenkins' 32 bit integer hash function.
     //From https://gist.github.com/badboy/6267743
     //This algorithm is the simplest, lightest, fairest one I could find.
@@ -157,7 +165,7 @@ uint32_t hashNr(unsigned int input) {
  * @param input2 Second input number.
  * @return The hash.
  */
-uint32_t hashNr2(unsigned int input1, unsigned int input2) {
+uint32_t hashNr2(uint32_t input1, uint32_t input2) {
     uint32_t n1 = hashNr(input1);
     
     //Same algorithm as in hashNr() with one argument,
@@ -225,6 +233,26 @@ int32_t linearCongruentialGenerator(int32_t* state) {
     int32_t result = ((*state * 1103515245U) + 12345U) & 0x7fffffff;
     *state = result;
     return result;
+}
+
+
+/**
+ * @brief Simple noise function.
+ *
+ * @param seed Seed value for the hashing function.
+ * @param x Point of the function to return.
+ * @return The noise value, from 0 to 1.
+ */
+float simpleNoise(uint32_t seed, float x) {
+    uint32_t x1i = floor(x);
+    uint32_t x2i = x1i + 1;
+    uint32_t y1i = hashNr2(seed, x1i);
+    uint32_t y2i = hashNr2(seed, x2i);
+    float y1f = y1i / (float) UINT32_MAX;
+    float y2f = y2i / (float) UINT32_MAX;
+    float t = x - x1i;
+    t = ease(EASE_METHOD_IN_OUT, t);
+    return interpolateNumber(t, 0.0f, 1.0f, y1f, y2f);
 }
 
 

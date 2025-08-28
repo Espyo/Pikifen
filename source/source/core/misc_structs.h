@@ -146,6 +146,9 @@ struct Viewport {
     //Camera.
     Camera cam;
     
+    //Camera shakiness manager.
+    Shaker shaker;
+    
     //Top-left and bottom-right world coordinates that this camera can see.
     //These also include the specified margin.
     Point box[2];
@@ -159,6 +162,7 @@ struct Viewport {
     
     //--- Function declarations ---
     
+    Viewport();
     Point getBottomRight();
     Point getTopLeft();
     void updateBox();

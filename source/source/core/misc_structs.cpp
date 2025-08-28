@@ -1885,6 +1885,15 @@ void SystemContentNames::load(DataNode* file) {
 
 
 /**
+ * @brief Constructs a new viewport object.
+ */
+Viewport::Viewport() :
+    shaker([] (float s, float t) { return simpleNoise(s, t); } ) {
+    
+}
+
+
+/**
  * @brief Returns the bottom-right corner's coordinates, in window coordinates.
  *
  * @return The coordinates.
@@ -1947,12 +1956,16 @@ void Viewport::updateCursor(const Point& windowPos) {
  * zoom, etc.
  */
 void Viewport::updateTransformations() {
+    Point shakeOffset;
+    shaker.getOffsets(&shakeOffset.x, &shakeOffset.y, nullptr);
+    shakeOffset *= DRAWING::CAM_SHAKE_MAX_OFFSET;
+    
     //World coordinates to window coordinates.
     worldToWindowTransform = game.identityTransform;
     al_translate_transform(
         &worldToWindowTransform,
-        -cam.pos.x + center.x / cam.zoom,
-        -cam.pos.y + center.y / cam.zoom
+        -cam.pos.x + shakeOffset.x +  center.x / cam.zoom,
+        -cam.pos.y + shakeOffset.y + center.y / cam.zoom
     );
     al_scale_transform(
         &worldToWindowTransform, cam.zoom, cam.zoom

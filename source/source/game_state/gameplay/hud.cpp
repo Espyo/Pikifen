@@ -17,6 +17,8 @@
 #include "../../util/string_utils.h"
 #include "gameplay.h"
 
+#include "hud.h"
+
 
 using DrawInfo = GuiItem::DrawInfo;
 
@@ -28,6 +30,10 @@ const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
 //Name of the GUI information file.
 const string GUI_FILE_NAME = "gameplay";
+
+//Maximum amount in any direction that the leader health wheel is allowed
+//to offset when shaking.
+const float HEALTH_SHAKE_MAX_OFFSET = 20.0f;
 
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
@@ -196,6 +202,7 @@ Hud::Hud() :
             this->leaderHealthMgr.getDrawingInfo(
                 l, &health, &finalDraw
             );
+            finalDraw.center += health.offset * HUD::HEALTH_SHAKE_MAX_OFFSET;
             
             if(health.ratio <= 0.0f) return;
             
@@ -1830,6 +1837,9 @@ void Hud::tick(float deltaT) {
         if(lPtr) {
             health.ratio = lPtr->healthWheelVisibleRatio;
             health.cautionTimer = lPtr->healthWheelCautionTimer;
+            lPtr->healthWheelShaker.getOffsets(
+                &health.offset.x, &health.offset.y
+            );
         }
         leaderHealthMgr.update(l, lPtr, health);
     }

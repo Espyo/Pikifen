@@ -1949,6 +1949,24 @@ void MobActionRunners::setVar(MobActionRunData& data) {
 
 
 /**
+ * @brief Code for the shake camera script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::shakeCamera(MobActionRunData& data) {
+    for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+        Player* pPtr = &game.states.gameplay->players[p];
+        float d = Distance(data.m->pos, pPtr->view.cam.pos).toFloat();
+        float strengthMult =
+            interpolateNumber(
+                d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
+            );
+        pPtr->view.shaker.shake(s2f(data.args[0]) / 100.0f * strengthMult);
+    }
+}
+
+
+/**
  * @brief Code for the show message from var mob script action.
  *
  * @param data Data about the action call.

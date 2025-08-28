@@ -181,6 +181,80 @@ void MovementInfo::reset() {
 
 
 /**
+ * @brief Constructs a new shaker object.
+ *
+ * @param getRandomFloat Callback for when a random noise function value
+ * is needed. The first parameter is the seed number,
+ * the second is the time spent.
+ */
+Shaker::Shaker(std::function<float(float, float)> getRandomFloat) :
+    getRandomFloat(getRandomFloat) {
+    
+}
+
+
+/**
+ * @brief Returns the offsets for the shaking effect, for the current frame.
+ *
+ * @param xOffset If not nullptr, the X offset (-1 to 1) is returned here.
+ * @param yOffset If not nullptr, the Y offset (-1 to 1) is returned here.
+ * @param angleOffset If not nullptr, the rotational offset (-1 to 1) is
+ * returned here.
+ */
+void Shaker::getOffsets(
+    float* xOffset, float* yOffset, float* angleOffset
+) const {
+    if(!getRandomFloat || trauma == 0.0f) {
+        if(xOffset) *xOffset = 0.0f;
+        if(yOffset) *yOffset = 0.0f;
+        if(angleOffset) *angleOffset = 0.0f;
+        return;
+    }
+    
+    //Square the trauma so it's smoother.
+    float factor = trauma * trauma;
+    
+    if(xOffset) {
+        float f = getRandomFloat(seed + 0, time * timeScale);
+        f = f * 2.0f - 1.0f;
+        *xOffset = factor * f;
+    }
+    if(yOffset) {
+        float f = getRandomFloat(seed + 1, time * timeScale);
+        f = f * 2.0f - 1.0f;
+        *yOffset = factor * f;
+    }
+    if(angleOffset) {
+        float f = getRandomFloat(seed + 2, time * timeScale);
+        f = f * 2.0f - 1.0f;
+        *angleOffset = factor * f;
+    }
+}
+
+
+/**
+ * @brief Adds some shaking.
+ *
+ * @param strength Strength of the shake. 0 to 1.
+ */
+void Shaker::shake(float strength) {
+    trauma = std::clamp(trauma + strength, 0.0f, 1.0f);
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void Shaker::tick(float deltaT) {
+    time += deltaT;
+    trauma = std::clamp(trauma - (decreaseAmount * deltaT), 0.0f, 1.0f);
+}
+
+
+
+/**
  * @brief Constructs a new timer object.
  *
  * @param duration How long before it reaches the end, in seconds.
