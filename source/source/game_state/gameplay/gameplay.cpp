@@ -955,7 +955,7 @@ Mob* GameplayState::getClosestGroupMember(
  */
 Mob* GameplayState::getEnemyOrTreasureOnCursor(Player* player) const {
     if(!player || !player->leaderPtr) return nullptr;
-
+    
     Mob* closest = nullptr;
     Distance closestDist;
     for(size_t m = 0; m < mobs.all.size(); m++) {
@@ -967,18 +967,18 @@ Mob* GameplayState::getEnemyOrTreasureOnCursor(Player* player) const {
         Distance d(player->leaderCursorWorld, mPtr->pos);
         if(d > mPtr->radius) continue;
         if(closest && d > closestDist) continue;
-
+        
         if(
             mPtr->type->category->id != MOB_CATEGORY_ENEMIES &&
             mPtr->type->category->id != MOB_CATEGORY_TREASURES &&
             mPtr->type->category->id != MOB_CATEGORY_PILES &&
             mPtr->type->category->id != MOB_CATEGORY_RESOURCES
         ) continue;
-
+        
         closest = mPtr;
         closestDist = d;
     }
-
+    
     return closest;
 }
 
@@ -1124,6 +1124,7 @@ void GameplayState::load() {
     lastCarryingTieBreaker = nullptr;
     pikminBornPerType.clear();
     pikminDeathsPerType.clear();
+    printActionLogLines.clear();
     
     game.framerateLastAvgPoint = 0;
     game.framerateHistory.clear();
@@ -1489,6 +1490,7 @@ void GameplayState::load() {
     if(game.perfMon) {
         game.perfMon->setAreaName(game.curAreaData->name);
         game.perfMon->leaveState();
+        printInfo("The performance monitor maker tool is running.", 10);
     }
     
     enter();

@@ -1142,7 +1142,8 @@ void PerformanceMonitor::Page::writeMeasurement(
     float perc = dur / total * 100.0;
     str +=
         "  " + name + "\n" +
-        "    " + boxString(std::to_string(dur), 8, "s") +
+        "    " +
+        resizeString(std::to_string(dur), 8, true, true, false, ' ', "s") +
         " (" + f2s(perc) + "%)\n    ";
     for(unsigned char p = 0; p < 100; p++) {
         if(p < perc) {

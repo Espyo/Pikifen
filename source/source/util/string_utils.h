@@ -43,9 +43,6 @@ string amountStr(
     int amount, const string& singularText,
     const string& pluralText = ""
 );
-string boxString(
-    const string& s, size_t size, const string& finisher = ""
-);
 string b2s(bool b);
 void duplicateString(const string& origStr, string& newStr);
 string f2s(float f);
@@ -56,6 +53,11 @@ string padString(const string& s, size_t size, char padding);
 string removeExtension(const string& s);
 string replaceAll(
     string s, const string& search, const string& replacement
+);
+string resizeString(
+    const string& s, float intendedSize,
+    bool canShrink = true, bool canGrow = true, bool changeLeft = false,
+    unsigned char filler = ' ', const string& between = ""
 );
 bool s2b(const string& s);
 double s2f(const string& s);

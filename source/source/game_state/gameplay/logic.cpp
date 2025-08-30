@@ -1312,31 +1312,31 @@ void GameplayState::doMenuLogic() {
         }
         
         string headerStr =
-            boxString("", 12) +
-            boxString("Now", 12) +
-            boxString("Average", 12) +
-            boxString("Target", 12);
+            resizeString("", 12) +
+            resizeString("Now", 12) +
+            resizeString("Average", 12) +
+            resizeString("Target", 12);
         string fpsStr =
-            boxString("FPS:", 12) +
-            boxString(std::to_string(1.0f / realDeltaT), 12) +
-            boxString(std::to_string(1.0f / sampleAvgCapped), 12) +
-            boxString(i2s(game.options.advanced.targetFps), 12);
+            resizeString("FPS:", 12) +
+            resizeString(std::to_string(1.0f / realDeltaT), 12) +
+            resizeString(std::to_string(1.0f / sampleAvgCapped), 12) +
+            resizeString(i2s(game.options.advanced.targetFps), 12);
         string fpsUncappedStr =
-            boxString("FPS uncap.:", 12) +
-            boxString(std::to_string(1.0f / game.curFrameProcessTime), 12) +
-            boxString(std::to_string(1.0f / sampleAvg), 12) +
-            boxString("-", 12);
+            resizeString("FPS uncap.:", 12) +
+            resizeString(std::to_string(1.0f / game.curFrameProcessTime), 12) +
+            resizeString(std::to_string(1.0f / sampleAvg), 12) +
+            resizeString("-", 12);
         string frameTimeStr =
-            boxString("Frame time:", 12) +
-            boxString(std::to_string(game.curFrameProcessTime), 12) +
-            boxString(std::to_string(sampleAvg), 12) +
-            boxString(
+            resizeString("Frame time:", 12) +
+            resizeString(std::to_string(game.curFrameProcessTime), 12) +
+            resizeString(std::to_string(sampleAvg), 12) +
+            resizeString(
                 std::to_string(1.0f / game.options.advanced.targetFps), 12
             );
         string nMobsStr =
-            boxString(i2s(mobs.all.size()), 7);
+            resizeString(i2s(mobs.all.size()), 7);
         string nParticlesStr =
-            boxString(i2s(particles.getCount()), 7);
+            resizeString(i2s(particles.getCount()), 7);
         string resolutionStr =
             i2s(game.winW) + "x" + i2s(game.winH);
         string areaVStr =
@@ -1380,16 +1380,16 @@ void GameplayState::doMenuLogic() {
     //Print info on a mob.
     if(game.makerTools.infoLock) {
         string nameStr =
-            boxString(
+            resizeString(
                 "#" + i2s(game.makerTools.infoLock->id) + " " +
                 game.makerTools.infoLock->type->name,
                 26
             );
         string coordsStr =
-            boxString(
-                boxString(f2s(game.makerTools.infoLock->pos.x), 8, " ") +
-                boxString(f2s(game.makerTools.infoLock->pos.y), 8, " ") +
-                boxString(f2s(game.makerTools.infoLock->z), 7),
+            resizeString(
+                resizeString(f2s(game.makerTools.infoLock->pos.x), 8, " ") +
+                resizeString(f2s(game.makerTools.infoLock->pos.y), 8, " ") +
+                resizeString(f2s(game.makerTools.infoLock->z), 7),
                 23
             );
         string stateHStr =
@@ -1407,13 +1407,11 @@ void GameplayState::doMenuLogic() {
             game.makerTools.infoLock->anim.curAnim->name :
             "(None!)";
         string healthStr =
-            boxString(
-                boxString(f2s(game.makerTools.infoLock->health), 6) +
+            resizeString(
+                resizeString(f2s(game.makerTools.infoLock->health), 6) +
                 " / " +
-                boxString(
-                    f2s(game.makerTools.infoLock->maxHealth), 6
-                ),
-                23
+                resizeString(f2s(game.makerTools.infoLock->maxHealth), 6),
+                23, true, true
             );
         string timerStr =
             f2s(game.makerTools.infoLock->scriptTimer.timeLeft);
@@ -1448,9 +1446,9 @@ void GameplayState::doMenuLogic() {
             string resultStr = pathResultToString(path->result);
             
             string stopsStr =
-                boxString(i2s(path->curPathStopIdx + 1), 3) +
+                resizeString(i2s(path->curPathStopIdx + 1), 3) +
                 "/" +
-                boxString(i2s(path->path.size()), 3);
+                resizeString(i2s(path->path.size()), 3);
                 
             string settingsStr;
             auto flags = path->settings.flags;
@@ -1512,16 +1510,16 @@ void GameplayState::doMenuLogic() {
             getSector(players[0].view.cursorWorldPos, nullptr, true);
             
         string coordsStr =
-            boxString(f2s(players[0].view.cursorWorldPos.x), 6) + " " +
-            boxString(f2s(players[0].view.cursorWorldPos.y), 6);
+            resizeString(f2s(players[0].view.cursorWorldPos.x), 6) + " " +
+            resizeString(f2s(players[0].view.cursorWorldPos.y), 6);
         string blockmapStr =
-            boxString(
+            resizeString(
                 i2s(
                     game.curAreaData->bmap.getCol(
                         players[0].view.cursorWorldPos.x
                     )
                 ),
-                5, " "
+                5
             ) +
             i2s(
                 game.curAreaData->bmap.getRow(
@@ -1531,9 +1529,9 @@ void GameplayState::doMenuLogic() {
         string sectorZStr, sectorLightStr, sectorTexStr;
         if(mouseSector) {
             sectorZStr =
-                boxString(f2s(mouseSector->z), 6);
+                resizeString(f2s(mouseSector->z), 6);
             sectorLightStr =
-                boxString(i2s(mouseSector->brightness), 3);
+                resizeString(i2s(mouseSector->brightness), 3);
             sectorTexStr =
                 mouseSector->textureInfo.bmpName;
         }

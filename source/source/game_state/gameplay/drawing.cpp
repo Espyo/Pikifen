@@ -499,10 +499,10 @@ void GameplayState::drawDebugTools() {
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
-            boxString(
+            resizeString(
                 (rawStickCoords.x >= 0.0f ? " " : "") +
                 f2s(rawStickCoords.x), 6
-            ) + " " + boxString(
+            ) + " " + resizeString(
                 (rawStickCoords.y >= 0.0f ? " " : "") +
                 f2s(rawStickCoords.y), 6
             )
@@ -514,10 +514,10 @@ void GameplayState::drawDebugTools() {
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
-            boxString(
+            resizeString(
                 (rawStickAngle >= 0.0f ? " " : "") +
                 f2s(rawStickAngle), 6
-            ) + " " + boxString(
+            ) + " " + resizeString(
                 (rawStickMag >= 0.0f ? " " : "") +
                 f2s(rawStickMag), 6
             )
@@ -602,10 +602,10 @@ void GameplayState::drawDebugTools() {
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
-            boxString(
+            resizeString(
                 (cleanStickCoords.x >= 0.0f ? " " : "") +
                 f2s(cleanStickCoords.x), 6
-            ) + " " + boxString(
+            ) + " " + resizeString(
                 (cleanStickCoords.y >= 0.0f ? " " : "") +
                 f2s(cleanStickCoords.y), 6
             )
@@ -618,10 +618,10 @@ void GameplayState::drawDebugTools() {
         1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
-            boxString(
+            resizeString(
                 (cleanStickAngle >= 0.0f ? " " : "") +
                 f2s(cleanStickAngle), 6
-            ) + " " + boxString(
+            ) + " " + resizeString(
                 (cleanStickMag >= 0.0f ? " " : "") +
                 f2s(cleanStickMag), 6
             )

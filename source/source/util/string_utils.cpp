@@ -57,27 +57,6 @@ string b2s(bool b) {
 
 
 /**
- * @brief Boxes a string so that it becomes a specific size.
- * Truncates if it's too big, pads with spaces if it's too small.
- *
- * @param s String to box.
- * @param size Maximum size of the return string.
- * @param finisher This comes after s and before the padding (if any).
- * This must always be present, even if that means that s needs to
- * get truncated.
- * @return The boxed string.
- */
-string boxString(const string& s, size_t size, const string& finisher) {
-    assert(size > finisher.size());
-    size_t coreSize = std::min(s.size(), size - finisher.size());
-    return
-        s.substr(0, coreSize) +
-        finisher +
-        string(size - coreSize - finisher.size(), ' ');
-}
-
-
-/**
  * @brief Duplicates a string.
  *
  * This is necessary because under C++11, with _GLIBCXX_USE_CXX11_ABI=0,
@@ -217,6 +196,57 @@ string replaceAll(string s, const string& search, const string& replacement) {
     };
     
     return s;
+}
+
+
+/**
+ * @brief Changes a string to be of the specified size, if necessary.
+ * It achieves this by removing characters from either side, or by
+ * adding characters to either side.
+ *
+ * @param s Input string.
+ * @param intendedSize The final intended string size.
+ * @param canShrink Whether characters can be removed to fit the intended size,
+ * in case the intended size is smaller.
+ * @param canGrow Whether characters can be added to fit the intended size,
+ * in case the intended size is larger.
+ * @param changeLeft When removing or adding characters, change the left side,
+ * or the right side?
+ * @param filler When characters need to be added, use this character.
+ * @param between If not empty, this string will be placed between the input
+ * string and the filler, if it needs growing. If it needs shrinking, the input
+ * string is shrunk and this is placed to its left or right. Regardless, this
+ * string is always present.
+ * @return The final string.
+ */
+string resizeString(
+    const string& s, float intendedSize, bool canShrink, bool canGrow,
+    bool changeLeft, unsigned char filler, const string& between
+) {
+    size_t coreSize = s.size() + between.size();
+    
+    if(coreSize < intendedSize && canGrow) {
+        //Grow it.
+        string fillerStr = string(intendedSize - coreSize, filler);
+        if(changeLeft) {
+            return fillerStr + between + s;
+        } else {
+            return s + between + fillerStr;
+        }
+    } else if(coreSize > intendedSize && canShrink) {
+        //Shrink it.
+        if(changeLeft) {
+            return between + s.substr(coreSize - intendedSize, intendedSize);
+        } else {
+            return s.substr(0, intendedSize - between.size()) + between;
+        }
+    }
+    
+    if(changeLeft) {
+        return between + s;
+    } else {
+        return s + between;
+    }
 }
 
 

@@ -1558,11 +1558,31 @@ void MobActionRunners::playSound(MobActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::print(MobActionRunData& data) {
-    string text = vectorTailToString(data.args, 0);
-    printInfo(
-        "[DEBUG PRINT] " + data.m->type->name + " says:\n" + text,
-        10.0f
+    size_t seconds = floor(game.states.gameplay->gameplayTimePassed);
+    size_t centiseconds =
+        (game.states.gameplay->gameplayTimePassed - seconds) * 100;
+    string timestamp =
+        resizeString(i2s(seconds), 4, true, true, true, ' ') + "." +
+        resizeString(i2s(centiseconds), 2, true, true, true, '0');
+        
+    string scriptText = vectorTailToString(data.args, 0);
+    game.states.gameplay->printActionLogLines.push_back(
+        "[@" + timestamp + "s " + data.m->type->name + " said]: " + scriptText
     );
+    if(game.states.gameplay->printActionLogLines.size() > 10) {
+        game.states.gameplay->printActionLogLines.erase(
+            game.states.gameplay->printActionLogLines.begin()
+        );
+    }
+    
+    string log;
+    for(
+        size_t l = 0; l < game.states.gameplay->printActionLogLines.size(); l++
+    ) {
+        log += "\n" + game.states.gameplay->printActionLogLines[l];
+    }
+    
+    printInfo("=== DEBUG MOB SCRIPT PRINTS ===" + log, 15.0f);
 }
 
 
