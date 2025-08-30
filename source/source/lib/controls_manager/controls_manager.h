@@ -70,6 +70,18 @@ enum PLAYER_ACTION_FLAG {
 };
 
 
+//Possible types of value a player action can have.
+enum PLAYER_ACTION_VALUE_TYPE {
+
+    //A float from 0 to 1.
+    PLAYER_ACTION_VALUE_TYPE_ANALOG,
+
+    //Either 0 or 1 (basically up or down).
+    PLAYER_ACTION_VALUE_TYPE_BOOLEAN,
+
+};
+
+
 
 /**
  * @brief Defines a specific interactable thing in the player's hardware,
@@ -131,7 +143,7 @@ struct ControlBind {
     //Action type ID.
     int actionTypeId = 0;
     
-    //Player number, starting at 1. Use 0 if N/A.
+    //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
     //Player input source bound.
@@ -149,6 +161,9 @@ struct PlayerActionType {
     
     //Action type ID.
     int id = 0;
+
+    //Type of value it can take.
+    PLAYER_ACTION_VALUE_TYPE valueType = PLAYER_ACTION_VALUE_TYPE_ANALOG;
     
     //Auto-repeat. 0 if disabled, otherwise this indicates the threshold (0 - 1)
     //after which the input will start auto-repeating. The manager's
@@ -170,7 +185,7 @@ struct PlayerAction {
     //Action type ID.
     int actionTypeId = 0;
     
-    //Player number, starting at 1. Use 0 if N/A.
+    //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
     //Value associated. 0 to 1.
@@ -262,7 +277,7 @@ public:
     //Are we ignoring player actions right now?
     bool ignoringActions = false;
     
-    //Options.
+    //Options of the manager itself.
     ControlsManagerOptions options;
     
     
@@ -298,6 +313,7 @@ private:
     //--- Function declarations ---
     
     void cleanStick(const PlayerInput& input);
+    float convertActionValue(int actionTypeId, float value);
     vector<int> getActionTypesFromInput(
         const PlayerInput& input
     );

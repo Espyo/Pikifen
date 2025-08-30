@@ -35,12 +35,14 @@
  * @param internalName The name of its property in the options file.
  * @param defaultBindStr String representing of this action's default
  * control bind.
+ * @param valueType Type of value an action can have.
  * @param autoRepeat Auto-repeat threshold.
  */
 void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string& name, const string& description, const string& internalName,
-    const string& defaultBindStr, float autoRepeat
+    const string& defaultBindStr, PLAYER_ACTION_VALUE_TYPE valueType,
+    float autoRepeat
 ) {
     PfePlayerActionType a;
     a.id = id;
@@ -49,6 +51,7 @@ void ControlsMediator::addPlayerActionType(
     a.description = description;
     a.internalName = internalName;
     a.defaultBindStr = defaultBindStr;
+    a.valueType = valueType;
     a.autoRepeat = autoRepeat;
     
     playerActionTypes.push_back(a);

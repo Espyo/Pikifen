@@ -45,6 +45,32 @@ void ControlsManager::cleanStick(const PlayerInput& input) {
 
 
 /**
+ * @brief Given a player input value, converts it to an analog or boolean value,
+ * according to the action type.
+ * 
+ * @param actionTypeId ID of the action type.
+ * @param value Value to convert.
+ * @return The converted value.
+ */
+float ControlsManager::convertActionValue(int actionTypeId, float value) {
+    auto it = actionTypes.find(actionTypeId);
+    if(it != actionTypes.end()) {
+        switch(it->second.valueType) {
+        case PLAYER_ACTION_VALUE_TYPE_ANALOG: {
+            return value;
+            break;
+        } case PLAYER_ACTION_VALUE_TYPE_BOOLEAN: {
+            return value >= 0.5f ? 1.0f : 0.0f;
+            break;
+        }
+        }
+    }
+
+    return value;
+}
+
+
+/**
  * @brief Returns a list of action types that get triggered by the given input.
  *
  * @param input The input.
@@ -105,7 +131,7 @@ void ControlsManager::handleCleanInput(
             //Add it to the action queue directly.
             PlayerAction newAction;
             newAction.actionTypeId = actionTypes[a];
-            newAction.value = input.value;
+            newAction.value = convertActionValue(actionTypes[a], input.value);
             actionQueue.push_back(newAction);
         } else {
             //Update each game action type's current input state,
@@ -117,7 +143,7 @@ void ControlsManager::handleCleanInput(
 
 
 /**
- * @brief Handles an input from the player.
+ * @brief Handles a hardware input from the player.
  *
  * @param input The input.
  */

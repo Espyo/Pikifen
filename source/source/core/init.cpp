@@ -169,7 +169,7 @@ void initControls() {
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NONE,
         PLAYER_ACTION_CAT_NONE,
-        "---", "", "", ""
+        "---", "", "", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     
     //Main.
@@ -178,119 +178,119 @@ void initControls() {
         PLAYER_ACTION_CAT_MAIN,
         "Move right",
         "Move the leader right.",
-        "move_right", "k_4"
+        "move_right", "k_4", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_UP,
         PLAYER_ACTION_CAT_MAIN,
         "Move up",
         "Move the leader up.",
-        "move_up", "k_23"
+        "move_up", "k_23", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEFT,
         PLAYER_ACTION_CAT_MAIN,
         "Move left",
         "Move the leader left.",
-        "move_left", "k_1"
+        "move_left", "k_1", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_DOWN,
         PLAYER_ACTION_CAT_MAIN,
         "Move down",
         "Move the leader down.",
-        "move_down", "k_19"
+        "move_down", "k_19", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_THROW,
         PLAYER_ACTION_CAT_MAIN,
         "Throw",
         "Throw a Pikmin.",
-        "throw", "mb_1"
+        "throw", "mb_1", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_WHISTLE,
         PLAYER_ACTION_CAT_MAIN,
         "Whistle",
         "Whistle around the cursor.",
-        "whistle", "mb_2"
+        "whistle", "mb_2", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Next Pikmin",
         "Change to the next Pikmin type in the group.",
-        "next_type", "mwd"
+        "next_type", "mwd", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Prev. Pikmin",
         "Change to the previous Pikmin type in the group.",
-        "prev_type", "mwu"
+        "prev_type", "mwu", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_LEADER,
         PLAYER_ACTION_CAT_MAIN,
         "Next leader",
         "Change to the next leader.",
-        "next_leader", "k_215"
+        "next_leader", "k_215", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_CURSOR,
         PLAYER_ACTION_CAT_MAIN,
         "Swarm to cursor",
         "Swarm all Pikmin towards the cursor.",
-        "swarm_cursor", "k_75"
+        "swarm_cursor", "k_75", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_DISMISS,
         PLAYER_ACTION_CAT_MAIN,
         "Dismiss",
         "Dismiss all Pikmin.",
-        "dismiss", "k_217"
+        "dismiss", "k_217", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_USE_SPRAY_1,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray 1",
         "Use the spray in slot 1.",
-        "use_spray_1", "k_18"
+        "use_spray_1", "k_18", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_USE_SPRAY_2,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray 2",
         "Use the spray in slot 2.",
-        "use_spray_2", "k_6"
+        "use_spray_2", "k_6", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_USE_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray",
         "Use the currently selected spray.",
-        "use_spray", "k_18"
+        "use_spray", "k_18", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Next spray",
         "Change to the next spray.",
-        "next_spray", "k_5"
+        "next_spray", "k_5", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_SPRAY,
         PLAYER_ACTION_CAT_MAIN,
         "Prev. spray",
         "Change to the previous spray.",
-        "prev_spray", "k_17"
+        "prev_spray", "k_17", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PAUSE,
         PLAYER_ACTION_CAT_MAIN,
         "Pause",
         "Pause the game.",
-        "pause", "k_59"
+        "pause", "k_59", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     
     //Menus.
@@ -299,77 +299,77 @@ void initControls() {
         PLAYER_ACTION_CAT_MENUS,
         "Menu right",
         "Navigate right in a menu.",
-        "menu_right", "k_83", 0.5f
+        "menu_right", "k_83", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
         "Navigate up in a menu.",
-        "menu_up", "k_84", 0.5f
+        "menu_up", "k_84", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Menu left",
         "Navigate left in a menu.",
-        "menu_left", "k_82", 0.5f
+        "menu_left", "k_82", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Menu down",
         "Navigate down in a menu.",
-        "menu_down", "k_85", 0.5f
+        "menu_down", "k_85", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_OK,
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
-        "menu_ok", "k_67", 0.5f
+        "menu_ok", "k_67", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_RIGHT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan right",
         "Pan the radar to the right.",
-        "menu_radar_right", "k_4"
+        "menu_radar_right", "k_4", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan up",
         "Pan the radar upward.",
-        "menu_radar_up", "k_23"
+        "menu_radar_up", "k_23", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan left",
         "Pan the radar to the left.",
-        "menu_radar_left", "k_1"
+        "menu_radar_left", "k_1", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan down",
         "Pan the radar downward.",
-        "menu_radar_down", "k_19"
+        "menu_radar_down", "k_19", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom in",
         "Zoom the radar in.",
-        "menu_radar_zoom_in", "k_18"
+        "menu_radar_zoom_in", "k_18", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom out",
         "Zoom the radar out.",
-        "menu_radar_zoom_out", "k_6"
+        "menu_radar_zoom_out", "k_6", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     
     //Advanced.
@@ -378,154 +378,154 @@ void initControls() {
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor right",
         "Move the cursor right. Useful if it's not mouse-controlled.",
-        "cursor_right", ""
+        "cursor_right", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CURSOR_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor up",
         "Move the cursor up. Useful if it's not mouse-controlled.",
-        "cursor_up", ""
+        "cursor_up", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CURSOR_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor left",
         "Move the cursor left. Useful if it's not mouse-controlled.",
-        "cursor_left", ""
+        "cursor_left", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CURSOR_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor down",
         "Move the cursor down. Useful if it's not mouse-controlled.",
-        "cursor_down", ""
+        "cursor_down", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm right",
         "Swarm all Pikmin right.",
-        "swarm_right", ""
+        "swarm_right", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm up",
         "Swarm all Pikmin up.",
-        "swarm_up", ""
+        "swarm_up", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm left",
         "Swarm all Pikmin left.",
-        "swarm_left", ""
+        "swarm_left", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm down",
         "Swarm all Pikmin down.",
-        "swarm_down", ""
+        "swarm_down", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_LEADER,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. leader",
         "Change to the previous leader.",
-        "prev_leader", ""
+        "prev_leader", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_CAT_ADVANCED,
         "Change zoom",
         "Change the current zoom level.",
-        "change_zoom", "k_3"
+        "change_zoom", "k_3", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_ZOOM_IN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom in",
         "Change to a closer zoom level.",
-        "zoom_in", ""
+        "zoom_in", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_ZOOM_OUT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom out",
         "Change to a farther zoom level.",
-        "zoom_out", ""
+        "zoom_out", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Next maturity",
         "Change to a Pikmin of the next maturity.",
-        "next_maturity", ""
+        "next_maturity", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. maturity",
         "Change to a Pikmin of the previous maturity.",
-        "prev_maturity", ""
+        "prev_maturity", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LIE_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Lie down",
         "Lie down so Pikmin can carry you.",
-        "lie_down", "k_26"
+        "lie_down", "k_26", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",
         "Custom action A, if the current leader supports it.",
-        "custom_a", ""
+        "custom_a", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_B,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom B",
         "Custom action B, if the current leader supports it.",
-        "custom_b", ""
+        "custom_b", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_C,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom C",
         "Custom action C, if the current leader supports it.",
-        "custom_c", ""
+        "custom_c", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR,
         PLAYER_ACTION_CAT_ADVANCED,
         "Radar",
         "Open or close the radar.",
-        "radar", "k_64"
+        "radar", "k_64", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_BACK,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
-        "menu_back", "k_59", 0.5f
+        "menu_back", "k_59", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - left page",
         "Go to the page to the left in a menu.",
-        "menu_page_left", "k_17", 0.5f
+        "menu_page_left", "k_17", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - right page",
         "Go to the page to the right in a menu.",
-        "menu_page_right", "k_5", 0.5f
+        "menu_page_right", "k_5", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     
     //General maker tool things.
@@ -534,28 +534,28 @@ void initControls() {
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Auto-start",
         "Make the game auto-start on the current state (and content).",
-        "mt_auto_start", "k_56"
+        "mt_auto_start", "k_56", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Set song pos near loop",
         "Set the current song's position to be near the loop point.",
-        "mt_set_song_pos_near_loop", ""
+        "mt_set_song_pos_near_loop", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_MOD_1,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 1",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_1", "k_216"
+        "mt_mod_1", "k_216", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_MOD_2,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 2",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_2", "k_218"
+        "mt_mod_2", "k_218", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     
     //Gameplay maker tools.
@@ -564,14 +564,14 @@ void initControls() {
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Area image",
         "Save an image of the current area.",
-        "mt_area_image", "k_36"
+        "mt_area_image", "k_36", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Change speed",
         "Change the gameplay speed.",
-        "mt_change_speed", "k_28"
+        "mt_change_speed", "k_28", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
@@ -579,70 +579,70 @@ void initControls() {
         "Frame advance",
         "Pause gameplay and advance by one frame each time. "
         "Use \"modifier 1\" to unpause.",
-        "mt_frame_advance", "", 0.5f
+        "mt_frame_advance", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
         "Toggle info about the geometry under the cursor.",
-        "mt_geometry_info", "k_33"
+        "mt_geometry_info", "k_33", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_HUD,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "HUD",
         "Toggle the HUD.",
-        "mt_hud", "k_35"
+        "mt_hud", "k_35", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_HURT_MOB,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Hurt mob",
         "Hurt the mob under the cursor.",
-        "mt_hurt_mob", "k_30", 0.5f
+        "mt_hurt_mob", "k_30", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_MOB_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Mob info",
         "Toggle info about the mob under the cursor.",
-        "mt_mob_info", "k_32", 0.5f
+        "mt_mob_info", "k_32", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "New Pikmin",
         "Create a new Pikmin under the cursor.",
-        "mt_new_pikmin", "k_31", 0.5f
+        "mt_new_pikmin", "k_31", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_PATH_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Path info",
         "Toggle info about paths the info'd mob is taking.",
-        "mt_path_info", "k_34"
+        "mt_path_info", "k_34", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show collision",
         "Toggle drawing each mob's collision.",
-        "mt_show_collision", ""
+        "mt_show_collision", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show hitboxes",
         "Toggle drawing each mob's hitboxes.",
-        "mt_show_hitboxes", ""
+        "mt_show_hitboxes", "", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Teleport",
         "Teleport the leader to the cursor.",
-        "mt_teleport", "k_29", 0.5f
+        "mt_teleport", "k_29", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     
     //System.
@@ -651,14 +651,14 @@ void initControls() {
         PLAYER_ACTION_CAT_SYSTEM,
         "System info",
         "Toggle showing system and performance information.",
-        "system_info", "k_47"
+        "system_info", "k_47", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_SCREENSHOT,
         PLAYER_ACTION_CAT_SYSTEM,
         "Take a screenshot",
         "Take a screenshot and save it in the user data folder.",
-        "screenshot", "k_58"
+        "screenshot", "k_58", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     
     

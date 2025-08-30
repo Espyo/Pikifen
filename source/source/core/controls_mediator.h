@@ -326,6 +326,7 @@ struct ControlsMediator {
         const string& description,
         const string& internalName,
         const string& defaultBindStr,
+        PLAYER_ACTION_VALUE_TYPE valueType,
         float autoRepeat = 0.0f
     );
     const vector<PfePlayerActionType>& getAllPlayerActionTypes() const;
