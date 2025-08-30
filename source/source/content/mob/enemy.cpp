@@ -148,6 +148,24 @@ void Enemy::finishDyingClassSpecifics() {
 
 
 /**
+ * @brief Returns how many mission points this mob is currently worth, or
+ * 0 if not applicable.
+ * 
+ * @param applicableInThisMission If not nullptr, whether the points are
+ * applicable in this mission or not is returned here.
+ * @return The point amount.
+ */
+int Enemy::getMissionPoints(bool* applicableInThisMission) const {
+    if(applicableInThisMission) {
+        *applicableInThisMission =
+            game.curAreaData->mission.pointsPerEnemyPoint != 0;
+    }
+    if(parent) return parent->m->getMissionPoints(applicableInThisMission);
+    return eneType->points;
+}
+
+
+/**
  * @brief Brings the enemy back to life by taking it out of its death states.
  */
 void Enemy::revive() {

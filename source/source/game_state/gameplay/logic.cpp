@@ -143,47 +143,9 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
         Mob* mPtr = getEnemyOrTreasureOnCursor(player);
         if(mPtr) {
-            if(
-                mPtr->type->category->id == MOB_CATEGORY_ENEMIES &&
-                game.curAreaData->mission.pointsPerEnemyPoint != 0
-            ) {
-                Enemy* enePtr = (Enemy*) mPtr;
-                curLeaderCursorMobPoints = enePtr->eneType->points;
-                
-            } else if(
-                mPtr->type->category->id == MOB_CATEGORY_TREASURES &&
-                game.curAreaData->mission.pointsPerTreasurePoint != 0
-            ) {
-                Treasure* trePtr = (Treasure*) mPtr;
-                curLeaderCursorMobPoints = trePtr->treType->points;
-                
-            } else if(
-                mPtr->type->category->id == MOB_CATEGORY_RESOURCES &&
-                game.curAreaData->mission.pointsPerTreasurePoint != 0
-            ) {
-                Resource* resPtr = (Resource*) mPtr;
-                if(
-                    resPtr->resType->deliveryResult ==
-                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-                ) {
-                    curLeaderCursorMobPoints = resPtr->resType->pointAmount;
-                }
-                
-            } else if(
-                mPtr->type->category->id == MOB_CATEGORY_PILES &&
-                game.curAreaData->mission.pointsPerTreasurePoint != 0
-            ) {
-                Pile* pilPtr = (Pile*) mPtr;
-                if(
-                    pilPtr->pilType->contents->deliveryResult ==
-                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-                ) {
-                    curLeaderCursorMobPoints =
-                        pilPtr->pilType->contents->pointAmount *
-                        pilPtr->amount;
-                }
-                
-            }
+            bool applicable;
+            curLeaderCursorMobPoints = mPtr->getMissionPoints(&applicable);
+            if(!applicable) curLeaderCursorMobPoints = 0;
         }
     }
     

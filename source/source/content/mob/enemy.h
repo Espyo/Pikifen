@@ -44,6 +44,7 @@ public:
     Enemy(const Point& pos, EnemyType* type, float angle);
     bool canReceiveStatus(StatusType* s) const override;
     void drawMob() override;
+    int getMissionPoints(bool* applicableInThisMission) const override;
     void revive();
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;

@@ -2090,6 +2090,23 @@ float Mob::getLatchedPikminWeight() const {
 
 
 /**
+ * @brief Returns how many mission points this mob is currently worth, or
+ * 0 if not applicable.
+ * 
+ * @param applicableInThisMission If not nullptr, whether the points are
+ * applicable in this mission or not is returned here.
+ * @return The point amount.
+ */
+int Mob::getMissionPoints(bool* applicableInThisMission) const {
+    if(applicableInThisMission) {
+        *applicableInThisMission = false;
+    }
+    if(parent) return parent->m->getMissionPoints(applicableInThisMission);
+    return 0;
+}
+
+
+/**
  * @brief If this mob belongs to a player's team, this returns the player team
  * index number (0 for team 1, 1 for team 2, etc.).
  * Otherwise, it returns INVALID.
@@ -3809,7 +3826,7 @@ void Mob::tickBrain(float deltaT) {
                 //horizontally, but is still above it vertically,
                 //and can't descend because it's teetering on a ledge.
                 //It's better to keep going with the path. And honestly,
-                //by continuining, gravity will hopefully step in and make
+                //by continuing, gravity will hopefully step in and make
                 //the mob fall to the intended Z anyway.
                 maxVertDistDiff = 1.0f;
                 vertDist = 0.0f;

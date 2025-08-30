@@ -36,5 +36,6 @@ public:
     //--- Function declarations ---
     
     Resource(const Point& pos, ResourceType* type, float angle);
+    int getMissionPoints(bool* applicableInThisMission) const override;
     
 };

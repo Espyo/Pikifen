@@ -505,6 +505,7 @@ public:
     virtual FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const;
+    virtual int getMissionPoints(bool* applicableInThisMission) const;
     virtual void handleStatusEffectGain(StatusType* staType);
     virtual void handleStatusEffectLoss(StatusType* staType);
     virtual void readScriptVars(const ScriptVarReader& svr);

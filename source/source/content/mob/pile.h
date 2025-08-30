@@ -45,6 +45,7 @@ public:
     FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
+    int getMissionPoints(bool* applicableInThisMission) const override;
     void readScriptVars(const ScriptVarReader& svr) override;
     
 protected:

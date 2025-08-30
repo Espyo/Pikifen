@@ -82,6 +82,30 @@ FRACTION_NR_VISIBILITY Pile::getFractionNumbersInfo(
 
 
 /**
+ * @brief Returns how many mission points this mob is currently worth, or
+ * 0 if not applicable.
+ * 
+ * @param applicableInThisMission If not nullptr, whether the points are
+ * applicable in this mission or not is returned here.
+ * @return The point amount.
+ */
+int Pile::getMissionPoints(bool* applicableInThisMission) const {
+    if(applicableInThisMission) {
+        *applicableInThisMission =
+            game.curAreaData->mission.pointsPerTreasurePoint != 0;
+    }
+    if(parent) return parent->m->getMissionPoints(applicableInThisMission);
+    if(
+        pilType->contents->deliveryResult ==
+        RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+    ) {
+        return pilType->contents->pointAmount * amount;
+    }
+    return 0;
+}
+
+
+/**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
  * @param svr Script var reader to use.
