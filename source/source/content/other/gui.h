@@ -136,6 +136,7 @@ public:
         
         //Pixel dimensions.
         Point size;
+
     };
     
     
@@ -193,13 +194,13 @@ public:
     std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
     
     //What to do when the item is activated.
-    std::function<void(const Point& cursor_pos)> onActivate = nullptr;
+    std::function<void(const Point& cursorPos)> onActivate = nullptr;
     
     //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const Point& cursor_pos)> onMouseOver = nullptr;
+    std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
-    std::function<bool(size_t button_id)> onMenuDirButton = nullptr;
+    std::function<bool(size_t buttonId)> onMenuDirButton = nullptr;
     
     //What to do when it gets selected.
     std::function<void()> onSelected = nullptr;
@@ -220,17 +221,17 @@ public:
     explicit GuiItem(bool selectable = false);
     virtual ~GuiItem() = default;
     bool activate(const Point& cursorPos);
-    void addChild(GuiItem* item);
-    void deleteAllChildren();
-    float getChildBottom();
-    float getJuiceValue();
-    Point getReferenceCenter();
-    Point getReferenceSize();
-    bool isMouseOn(const Point& cursorPos);
-    bool isResponsive();
-    bool isVisible();
-    void removeChild(GuiItem* item);
-    void startJuiceAnimation(JUICE_TYPE type);
+    bool addChild(GuiItem* item);
+    bool deleteAllChildren();
+    float getChildBottom() const;
+    float getJuiceValue() const;
+    Point getReferenceCenter() const;
+    Point getReferenceSize() const;
+    bool isMouseOn(const Point& cursorPos) const;
+    bool isResponsive() const;
+    bool isVisible() const;
+    bool removeChild(GuiItem* item);
+    bool startJuiceAnimation(JUICE_TYPE type);
     
 };
 
@@ -331,7 +332,7 @@ public:
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     explicit CheckGuiItem(
-        bool* value_ptr, const string& text, ALLEGRO_FONT* font,
+        bool* valuePtr, const string& text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     
@@ -524,7 +525,7 @@ private:
  *
  * This manager is not used in the editors, since those work with
  * Dear ImGui. It is responsible for holding information about all GUI
- * elements present on the game window, managing their coordinates, which one is
+ * items present on the game window, managing their coordinates, which one is
  * selected, ordering them to be rendered or to handle being activated, etc.
  * Due to the system's flexibility, this is used both to manage the game's
  * heads-up display (HUD) during gameplay, as well as the interactable elements
@@ -539,10 +540,7 @@ public:
     //List of items.
     vector<GuiItem*> items;
     
-    //Which item is currently selected.
-    GuiItem* selectedItem = nullptr;
-    
-    //Item to activate when the user chooses to go back.
+    //Item to activate when the user chooses to go back, if any.
     GuiItem* backItem = nullptr;
     
     //Is it currently responding to input?
@@ -558,31 +556,35 @@ public:
     //--- Function declarations ---
     
     GuiManager();
-    void addItem(GuiItem* item, const string& id = "");
-    void draw();
-    void tick(float deltaT);
-    string getCurrentTooltip();
-    bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw);
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool addItem(GuiItem* item, const string& id = "");
+    bool draw();
+    bool tick(float deltaT);
+    string getCurrentTooltip() const;
+    bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
+    GuiItem* getSelectedItem() const;
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const PlayerAction& action);
-    void hideItems();
-    void readCoords(DataNode* node);
-    void registerCoords(
+    bool hideItems();
+    bool readCoords(DataNode* node);
+    bool registerCoords(
         const string& id,
         float cx, float cy, float w, float h
     );
-    void removeItem(GuiItem* item);
-    void setSelectedItem(GuiItem* item, bool silent = false);
-    void showItems();
-    void startAnimation(
+    bool removeItem(GuiItem* item);
+    bool setSelectedItem(GuiItem* item, bool silent = false);
+    bool showItems();
+    bool startAnimation(
         const GUI_MANAGER_ANIM type, float duration
     );
-    bool wasLastInputMouse();
-    void destroy();
+    bool wasLastInputMouse() const;
+    bool destroy();
     
 private:
 
     //--- Members ---
+
+    //Which item is currently selected.
+    GuiItem* selectedItem = nullptr;
     
     //Registered default centers.
     map<string, Point> registeredCenters;

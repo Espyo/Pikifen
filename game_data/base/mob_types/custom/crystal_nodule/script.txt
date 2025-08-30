@@ -40,6 +40,7 @@ script {
             stop
             set_animation landing
             start_particles dust_explosion
+            shake_camera 25
         }
         on_animation_end {
             set_state idling

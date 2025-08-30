@@ -70,6 +70,7 @@ script {
             start_particles rock_explosion 0 0
             stop_sound $sound_id
             play_sound destroyed
+            shake_camera 30
             set_animation destroyed
         }
         on_animation_end {

@@ -2,7 +2,7 @@ name=Crystal nodule animations
 description=Animations for the crystal nodule.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.0.1
 animations{
 	destroyed{
 		frames{
@@ -26,14 +26,17 @@ animations{
 		}
 	}
 	landing{
-		loop_frame=1
+		loop_frame=2
 		frames{
 			landing{
 				duration=0.0100
 			}
 			landing{
-				duration=0.2000
+				duration=0.0100
 				sound=thump
+			}
+			landing{
+				duration=0.2000
 			}
 		}
 	}

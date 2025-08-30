@@ -65,7 +65,7 @@ const Point STANDARD_CONTENT_SIZE = Point(0.95f, 0.80f);
 
 
 /**
- * @brief Constructs a new bullet point gui item object.
+ * @brief Constructs a new bullet point GUI item object.
  *
  * @param text Text to display on the bullet point.
  * @param font Font for the button's text.
@@ -132,7 +132,7 @@ void BulletGuiItem::defDrawCode(
 
 
 /**
- * @brief Constructs a new button gui item object.
+ * @brief Constructs a new button GUI item object.
  *
  * @param text Text to display on the button.
  * @param font Font for the button's text.
@@ -170,7 +170,7 @@ void ButtonGuiItem::defDrawCode(
 
 
 /**
- * @brief Constructs a new check gui item object.
+ * @brief Constructs a new check GUI item object.
  *
  * @param value Current value.
  * @param text Text to display on the checkbox.
@@ -200,7 +200,7 @@ CheckGuiItem::CheckGuiItem(
 
 
 /**
- * @brief Constructs a new check gui item object.
+ * @brief Constructs a new check GUI item object.
  *
  * @param valuePtr Pointer to the boolean that stores the current value.
  * @param text Text to display on the checkbox.
@@ -308,23 +308,30 @@ bool GuiItem::activate(const Point& cursorPos) {
  * @brief Adds a child item.
  *
  * @param item Item to add as a child item.
+ * @return Whether it succeeded.
  */
-void GuiItem::addChild(GuiItem* item) {
+bool GuiItem::addChild(GuiItem* item) {
+    if(!item) return false;
     children.push_back(item);
     item->parent = this;
+    return true;
 }
 
 
 /**
  * @brief Removes and deletes all children items.
+ *
+ * @return Whether all of the deletions succeeded.
  */
-void GuiItem::deleteAllChildren() {
+bool GuiItem::deleteAllChildren() {
+    bool success = true;
     while(!children.empty()) {
         GuiItem* iPtr = children[0];
         removeChild(iPtr);
-        manager->removeItem(iPtr);
+        success &= manager->removeItem(iPtr);
         delete iPtr;
     }
+    return success;
 }
 
 
@@ -334,7 +341,7 @@ void GuiItem::deleteAllChildren() {
  *
  * @return The Y coordinate.
  */
-float GuiItem::getChildBottom() {
+float GuiItem::getChildBottom() const {
     float bottommost = 0.0f;
     for(size_t c = 0; c < children.size(); c++) {
         GuiItem* cPtr = children[c];
@@ -353,7 +360,7 @@ float GuiItem::getChildBottom() {
  *
  * @return The juice value, or 0 if there's no animation.
  */
-float GuiItem::getJuiceValue() {
+float GuiItem::getJuiceValue() const {
     switch(juiceType) {
     case JUICE_TYPE_GROW_TEXT_LOW: {
         float animRatio =
@@ -417,7 +424,7 @@ float GuiItem::getJuiceValue() {
  *
  * @return The center.
  */
-Point GuiItem::getReferenceCenter() {
+Point GuiItem::getReferenceCenter() const {
     if(parent) {
         Point parentS =
             parent->getReferenceSize() - (parent->padding * 2.0f);
@@ -439,7 +446,7 @@ Point GuiItem::getReferenceCenter() {
  *
  * @return The size.
  */
-Point GuiItem::getReferenceSize() {
+Point GuiItem::getReferenceSize() const {
     Point mult;
     if(parent) {
         mult = parent->getReferenceSize() - (parent->padding * 2.0f);
@@ -457,7 +464,7 @@ Point GuiItem::getReferenceSize() {
  * @param cursorPos Position of the mouse cursor, in window coordinates.
  * @return Whether the cursor is on top.
  */
-bool GuiItem::isMouseOn(const Point& cursorPos) {
+bool GuiItem::isMouseOn(const Point& cursorPos) const {
     if(parent && !parent->isMouseOn(cursorPos)) {
         return false;
     }
@@ -479,7 +486,7 @@ bool GuiItem::isMouseOn(const Point& cursorPos) {
  *
  * @return Whether it is responsive.
  */
-bool GuiItem::isResponsive() {
+bool GuiItem::isResponsive() const {
     if(parent) return parent->isResponsive();
     return responsive;
 }
@@ -490,7 +497,7 @@ bool GuiItem::isResponsive() {
  *
  * @return Whether it is visible.
  */
-bool GuiItem::isVisible() {
+bool GuiItem::isVisible() const {
     if(parent) return parent->isVisible();
     return visible;
 }
@@ -500,15 +507,18 @@ bool GuiItem::isVisible() {
  * @brief Removes an item from the list of children, without deleting it.
  *
  * @param item Child item to remove.
+ * @return Whether it succeeded.
  */
-void GuiItem::removeChild(GuiItem* item) {
+bool GuiItem::removeChild(GuiItem* item) {
+    bool success = false;
     for(size_t c = 0; c < children.size(); c++) {
         if(children[c] == item) {
             children.erase(children.begin() + c);
+            item->parent = nullptr;
+            success = true;
         }
     }
-    
-    item->parent = nullptr;
+    return success;
 }
 
 
@@ -516,8 +526,9 @@ void GuiItem::removeChild(GuiItem* item) {
  * @brief Starts some juice animation.
  *
  * @param type Type of juice animation.
+ * @return Whether it succeeded.
  */
-void GuiItem::startJuiceAnimation(JUICE_TYPE type) {
+bool GuiItem::startJuiceAnimation(JUICE_TYPE type) {
     juiceType = type;
     switch(type) {
     case JUICE_TYPE_GROW_TEXT_LOW:
@@ -525,15 +536,18 @@ void GuiItem::startJuiceAnimation(JUICE_TYPE type) {
     case JUICE_TYPE_GROW_TEXT_HIGH:
     case JUICE_TYPE_GROW_ICON: {
         juiceTimer = GUI::JUICY_GROW_DURATION;
+        return true;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         juiceTimer = GUI::JUICY_GROW_ELASTIC_DURATION;
+        return true;
         break;
     }
     default: {
+        return false;
         break;
     }
     }
@@ -541,7 +555,7 @@ void GuiItem::startJuiceAnimation(JUICE_TYPE type) {
 
 
 /**
- * @brief Constructs a new gui manager object.
+ * @brief Constructs a new GUI manager object.
  */
 GuiManager::GuiManager() :
     autoRepeater(&autoRepeaterSettings) {
@@ -574,8 +588,11 @@ GuiManager::GuiManager() :
  * @param item Pointer to the new item.
  * @param id If this item has an associated ID, specify it here.
  * Empty string if none.
+ * @return Whether it succeeded.
  */
-void GuiManager::addItem(GuiItem* item, const string& id) {
+bool GuiManager::addItem(GuiItem* item, const string& id) {
+    if(!item) return false;
+    
     auto c = registeredCenters.find(id);
     if(c != registeredCenters.end()) {
         item->ratioCenter = c->second;
@@ -587,13 +604,17 @@ void GuiManager::addItem(GuiItem* item, const string& id) {
     
     items.push_back(item);
     item->manager = this;
+    
+    return true;
 }
 
 
 /**
  * @brief Destroys and deletes all items and information.
+ *
+ * @return Whether it succeeded.
  */
-void GuiManager::destroy() {
+bool GuiManager::destroy() {
     setSelectedItem(nullptr);
     backItem = nullptr;
     for(size_t i = 0; i < items.size(); i++) {
@@ -602,14 +623,17 @@ void GuiManager::destroy() {
     items.clear();
     registeredCenters.clear();
     registeredSizes.clear();
+    return true;
 }
 
 
 /**
  * @brief Draws all items.
+ *
+ * @return Whether it succeeded.
  */
-void GuiManager::draw() {
-    if(!visible) return;
+bool GuiManager::draw() {
+    if(!visible) return false;
     
     int ocrX = 0;
     int ocrY = 0;
@@ -648,6 +672,8 @@ void GuiManager::draw() {
             al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
         }
     }
+    
+    return true;
 }
 
 
@@ -656,7 +682,7 @@ void GuiManager::draw() {
  *
  * @return The tooltip.
  */
-string GuiManager::getCurrentTooltip() {
+string GuiManager::getCurrentTooltip() const {
     if(!selectedItem) return string();
     if(!selectedItem->onGetTooltip) return string();
     return selectedItem->onGetTooltip();
@@ -672,7 +698,7 @@ string GuiManager::getCurrentTooltip() {
  */
 bool GuiManager::getItemDrawInfo(
     GuiItem* item, DrawInfo* draw
-) {
+) const {
     if(!item->isVisible()) return false;
     if(item->ratioSize.x == 0.0f) return false;
     
@@ -803,15 +829,27 @@ bool GuiManager::getItemDrawInfo(
 
 
 /**
+ * @brief Returns which item is currently selected.
+ *
+ * @return The item, or nullptr for none.
+ */
+GuiItem* GuiManager::getSelectedItem() const {
+    return selectedItem;
+}
+
+
+/**
  * @brief Handle an Allegro event.
  * Controls are handled in handlePlayerAction.
  *
  * @param ev Event.
+ * @return Whether it got handled.
  */
-void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    if(!responsive) return;
-    if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return;
+bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    if(!responsive) return false;
+    if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
     
+    bool handled = false;
     bool mouseMoved = false;
     
     //Mousing over an item and clicking.
@@ -836,6 +874,7 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
         setSelectedItem(selectionResult);
         mouseMoved = true;
+        handled = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
@@ -848,11 +887,13 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             autoRepeater.start();
         }
         mouseMoved = true;
+        handled = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
         autoRepeater.stop();
         mouseMoved = true;
+        handled = true;
     }
     
     for(size_t i = 0; i < items.size(); i++) {
@@ -862,6 +903,8 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     }
     
     if(mouseMoved) lastInputWasMouse = true;
+    
+    return handled;
 }
 
 
@@ -1051,9 +1094,13 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
 
 /**
  * @brief Hides all items until an animation shows them again.
+ *
+ * @return Whether it succeeded.
  */
-void GuiManager::hideItems() {
+bool GuiManager::hideItems() {
+    if(!visible) return false;
     visible = false;
+    return true;
 }
 
 
@@ -1061,8 +1108,9 @@ void GuiManager::hideItems() {
  * @brief Reads item default centers and sizes from a data node.
  *
  * @param node Data node to read from.
+ * @return Whether it succeeded.
  */
-void GuiManager::readCoords(DataNode* node) {
+bool GuiManager::readCoords(DataNode* node) {
     size_t nItems = node->getNrOfChildren();
     for(size_t i = 0; i < nItems; i++) {
         DataNode* itemNode = node->getChild(i);
@@ -1075,6 +1123,7 @@ void GuiManager::readCoords(DataNode* node) {
             s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
         );
     }
+    return true;
 }
 
 
@@ -1086,15 +1135,14 @@ void GuiManager::readCoords(DataNode* node) {
  * @param cy Center Y, in window percentage.
  * @param w Width, in window percentage.
  * @param h Height, in window percentage.
+ * @return Whether it succeeded.
  */
-void GuiManager::registerCoords(
-    const string& id,
-    float cx, float cy, float w, float h
+bool GuiManager::registerCoords(
+    const string& id, float cx, float cy, float w, float h
 ) {
-    registeredCenters[id] =
-        Point(cx / 100.0f, cy / 100.0f);
-    registeredSizes[id] =
-        Point(w / 100.0f, h / 100.0f);
+    registeredCenters[id] = Point(cx / 100.0f, cy / 100.0f);
+    registeredSizes[id] = Point(w / 100.0f, h / 100.0f);
+    return true;
 }
 
 
@@ -1102,8 +1150,12 @@ void GuiManager::registerCoords(
  * @brief Removes an item from the list.
  *
  * @param item Item to remove.
+ * @return Whether it succeeded.
  */
-void GuiManager::removeItem(GuiItem* item) {
+bool GuiManager::removeItem(GuiItem* item) {
+    if(!item) return false;
+    bool success = false;
+    
     if(selectedItem == item) {
         setSelectedItem(nullptr);
     }
@@ -1114,9 +1166,12 @@ void GuiManager::removeItem(GuiItem* item) {
     for(size_t i = 0; i < items.size(); i++) {
         if(items[i] == item) {
             items.erase(items.begin() + i);
+            item->manager = nullptr;
+            success = true;
         }
     }
-    item->manager = nullptr;
+    
+    return success;
 }
 
 
@@ -1127,11 +1182,10 @@ void GuiManager::removeItem(GuiItem* item) {
  * @param silent If true, no sound effect will play.
  * Useful if you want the item to be selected not because of user input,
  * but because it's the default selected item when the GUI loads.
+ * @return Whether it succeeded.
  */
-void GuiManager::setSelectedItem(GuiItem* item, bool silent) {
-    if(selectedItem == item) {
-        return;
-    }
+bool GuiManager::setSelectedItem(GuiItem* item, bool silent) {
+    if(selectedItem == item) return false;
     
     autoRepeater.stop();
     
@@ -1156,14 +1210,20 @@ void GuiManager::setSelectedItem(GuiItem* item, bool silent) {
         { .stackMinPos = 0.01f, .volume = 0.5f, .speedDeviation = 0.1f }
         );
     }
+    
+    return true;
 }
 
 
 /**
  * @brief Shows all items, if they were hidden.
+ *
+ * @return Whether it succeeded.
  */
-void GuiManager::showItems() {
+bool GuiManager::showItems() {
+    if(visible) return false;
     visible = true;
+    return true;
 }
 
 
@@ -1172,13 +1232,15 @@ void GuiManager::showItems() {
  *
  * @param type Type of animation to start.
  * @param duration Total duration of the animation.
+ * @return Whether it succeeded.
  */
-void GuiManager::startAnimation(
+bool GuiManager::startAnimation(
     const GUI_MANAGER_ANIM type, float duration
 ) {
     animType = type;
     animTimer.start(duration);
     visible = true;
+    return true;
 }
 
 
@@ -1186,8 +1248,9 @@ void GuiManager::startAnimation(
  * @brief Ticks the time of all items by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
+ * @return Whether it succeeded.
  */
-void GuiManager::tick(float deltaT) {
+bool GuiManager::tick(float deltaT) {
     //Tick the animation.
     animTimer.tick(deltaT);
     
@@ -1215,6 +1278,8 @@ void GuiManager::tick(float deltaT) {
             selectedItem->activate(Point(LARGE_FLOAT));
         }
     }
+    
+    return true;
 }
 
 
@@ -1223,13 +1288,13 @@ void GuiManager::tick(float deltaT) {
  *
  * @return Whether it was a mouse input.
  */
-bool GuiManager::wasLastInputMouse() {
+bool GuiManager::wasLastInputMouse() const {
     return lastInputWasMouse;
 }
 
 
 /**
- * @brief Constructs a new list gui item object.
+ * @brief Constructs a new list GUI item object.
  */
 ListGuiItem::ListGuiItem() :
     GuiItem() {
@@ -1414,7 +1479,7 @@ void ListGuiItem::defTickCode(float deltaT) {
 
 
 /**
- * @brief Constructs a new picker gui item object.
+ * @brief Constructs a new picker GUI item object.
  *
  * @param baseText Text to display before the current option's name.
  * @param option Text that matches the current option.
@@ -1601,7 +1666,7 @@ void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
 
 
 /**
- * @brief Constructs a new scroll gui item object.
+ * @brief Constructs a new scroll GUI item object.
  */
 ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
@@ -1711,7 +1776,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Constructs a new text gui item object.
+ * @brief Constructs a new text GUI item object.
  *
  * @param text Text to display.
  * @param font Font to use for the text.
@@ -1803,7 +1868,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Constructs a new tooltip gui item object.
+ * @brief Constructs a new tooltip GUI item object.
  *
  * @param gui Pointer to the GUI it belongs to.
  */
