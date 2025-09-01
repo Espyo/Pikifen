@@ -107,6 +107,9 @@ public:
     
     //Player controls mediator.
     ControlsMediator controls;
+
+    //Console.
+    Console console;
     
     //Total amount of time the current frame took to process, in seconds.
     double curFrameProcessTime = 0.0f;
@@ -303,10 +306,12 @@ private:
     
     //--- Function declarations ---
     
+    void drawFramerateChart() const;
     void globalDrawing();
     void globalLogic();
     void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool globalHandleSystemPlayerAction(const PlayerAction& action);
+    void processSystemInfo();
     
 };
 

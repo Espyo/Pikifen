@@ -152,18 +152,6 @@ struct MakerTools {
     //Mob currently locked-on to for the mob information tool. nullptr if off.
     Mob* infoLock = nullptr;
     
-    //If any maker info is being printed, this is how long it stays visible for.
-    float infoPrintDuration = 5.0f;
-    
-    //If any maker info is being printed, this is how long its fade lasts.
-    float infoPrintFadeDuration = 3.0f;
-    
-    //If any maker info is being printed, this is its text.
-    string infoPrintText;
-    
-    //If any maker info is being printed, this represents its time to live.
-    Timer infoPrintTimer;
-    
     //When we last spawned a Pikmin, what was its type?
     PikminType* lastPikminType = nullptr;
     
@@ -195,7 +183,6 @@ struct MakerTools {
     
     //--- Function declarations ---
     
-    MakerTools();
     bool checkMakerToolsAllowed(float inputValue);
     bool handleGameplayPlayerAction(const PlayerAction& action);
     bool handleGeneralPlayerAction(const PlayerAction& action);

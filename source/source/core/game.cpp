@@ -50,7 +50,7 @@ const float FADE_DURATION = 0.15f;
 const float FADE_SLOW_DURATION = 0.5f;
 
 //When getting a framerate average, use a sample of this size.
-const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
+const size_t FRAMERATE_AVG_SAMPLE_SIZE = 60;
 
 //Only save the latest N FPS samples.
 const size_t FRAMERATE_HISTORY_SIZE = 300;
@@ -121,6 +121,54 @@ void Game::changeState(
 
 
 /**
+ * @brief Draws the framerate chart for the system information visualizer.
+ */
+void Game::drawFramerateChart() const {
+    if(showSystemInfo && !framerateHistory.empty()) {
+        //Draw the framerate chart.
+        al_draw_filled_rectangle(
+            winW - GAME::FRAMERATE_HISTORY_SIZE, 0,
+            winW, 100,
+            al_map_rgba(0, 0, 0, 192)
+        );
+        double chartMin = 1.0f; //1 FPS.
+        double chartMax =
+            options.advanced.targetFps +
+            options.advanced.targetFps * 0.05f;
+        for(size_t f = 0; f < framerateHistory.size(); f++) {
+            float fps =
+                std::min(
+                    (float) (1.0f / framerateHistory[f]),
+                    (float) options.advanced.targetFps
+                );
+            float fpsY =
+                interpolateNumber(
+                    fps,
+                    chartMin, chartMax,
+                    0, 100
+                );
+            al_draw_line(
+                winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
+                winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fpsY,
+                al_map_rgba(24, 96, 192, 192), 1
+            );
+        }
+        float targetFpsY =
+            interpolateNumber(
+                options.advanced.targetFps,
+                chartMin, chartMax,
+                0, 100
+            );
+        al_draw_line(
+            winW - GAME::FRAMERATE_HISTORY_SIZE, targetFpsY,
+            winW, targetFpsY,
+            al_map_rgba(128, 224, 128, 48), 1
+        );
+    }
+}
+
+
+/**
  * @brief Returns the name of the current state.
  *
  * @return The name.
@@ -145,10 +193,14 @@ void Game::globalDrawing() {
     } else {
         skipDearImGuiFrame = false;
     }
+
+    //Console.
+    console.draw();
+    drawFramerateChart();
     
     //Fade manager.
     if(!debug.showDearImGuiDemo) {
-        game.fadeMgr.draw();
+        fadeMgr.draw();
     }
 }
 
@@ -170,7 +222,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.
-        game.audio.handleStreamFinished(
+        audio.handleStreamFinished(
             (ALLEGRO_AUDIO_STREAM*) (ev.any.source)
         );
         
@@ -243,6 +295,11 @@ void Game::globalLogic() {
 
     //Maker tools.
     makerTools.tick(deltaT);
+
+    //Console.
+    console.tick(deltaT);
+
+    processSystemInfo();
     
     //Dear ImGui.
     ImGui_ImplAllegro5_NewFrame();
@@ -323,6 +380,164 @@ void Game::mainLoop() {
         }
         }
     }
+}
+
+
+/**
+ * @brief Processes the system information visualizer for this frame.
+ */
+void Game::processSystemInfo() {
+    if(!showSystemInfo) {
+        framerateLastAvgPoint = 0;
+        framerateHistory.clear();
+        return;
+    }
+    
+    //Make sure that speed changes don't affect the FPS calculation.
+    double realDeltaT = deltaT;
+    if(makerTools.changeSpeed) {
+        realDeltaT /=
+            makerTools.changeSpeedSettings[
+                makerTools.changeSpeedSettingIdx
+            ];
+    }
+    
+    framerateHistory.push_back(curFrameProcessTime);
+    if(framerateHistory.size() > GAME::FRAMERATE_HISTORY_SIZE) {
+        framerateHistory.erase(framerateHistory.begin());
+    }
+    
+    framerateLastAvgPoint++;
+    
+    double sampleAvg;
+    double sampleAvgCapped;
+    
+    if(framerateLastAvgPoint >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
+        //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
+        //If we can fit a sample of this size using the most recent
+        //unsampled frames, then use those. Otherwise, keep using the last
+        //block, which starts at framerateLastAvgPoint.
+        //This makes it so the average stays the same for a bit of time,
+        //so the player can actually read it.
+        if(
+            framerateLastAvgPoint >
+            GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2
+        ) {
+            framerateLastAvgPoint =
+                GAME::FRAMERATE_AVG_SAMPLE_SIZE;
+        }
+        double sampleAvgSum = 0;
+        double sampleAvgCappedSum = 0;
+        size_t sampleAvgPointCount = 0;
+        size_t sampleSize =
+            std::min(
+                (size_t) GAME::FRAMERATE_AVG_SAMPLE_SIZE,
+                framerateHistory.size()
+            );
+            
+        for(size_t f = 0; f < sampleSize; f++) {
+            size_t idx =
+                framerateHistory.size() -
+                framerateLastAvgPoint + f;
+            sampleAvgSum += framerateHistory[idx];
+            sampleAvgCappedSum +=
+                std::max(
+                    framerateHistory[idx],
+                    (double) (1.0f / options.advanced.targetFps)
+                );
+            sampleAvgPointCount++;
+        }
+        
+        sampleAvg =
+            sampleAvgSum / (float) sampleAvgPointCount;
+        sampleAvgCapped =
+            sampleAvgCappedSum / (float) sampleAvgPointCount;
+            
+    } else {
+        //If there are fewer than FRAMERATE_AVG_SAMPLE_SIZE frames in
+        //the history, the average will change every frame until we get
+        //that. This defeats the purpose of a smoothly-updating number,
+        //so until that requirement is filled, let's stick to the oldest
+        //record.
+        sampleAvg = framerateHistory[0];
+        sampleAvgCapped =
+            std::max(
+                framerateHistory[0],
+                (double) (1.0f / options.advanced.targetFps)
+            );
+            
+    }
+    
+    string headerStr =
+        resizeString("", 12) +
+        resizeString("Now", 12) +
+        resizeString("Average", 12) +
+        resizeString("Target", 12);
+    string fpsStr =
+        resizeString("FPS:", 12) +
+        resizeString(std::to_string(1.0f / realDeltaT), 12) +
+        resizeString(std::to_string(1.0f / sampleAvgCapped), 12) +
+        resizeString(i2s(options.advanced.targetFps), 12);
+    string fpsUncappedStr =
+        resizeString("FPS uncap.:", 12) +
+        resizeString(std::to_string(1.0f / curFrameProcessTime), 12) +
+        resizeString(std::to_string(1.0f / sampleAvg), 12) +
+        resizeString("-", 12);
+    string frameTimeStr =
+        resizeString("Frame time:", 12) +
+        resizeString(std::to_string(curFrameProcessTime), 12) +
+        resizeString(std::to_string(sampleAvg), 12) +
+        resizeString(
+            std::to_string(1.0f / options.advanced.targetFps), 12
+        );
+    string nMobsStr = "-";
+    string nParticlesStr = "-";
+    string nBitmapsLoaded = i2s(content.bitmaps.list.getListSize());
+    string nBitmapUses = i2s(content.bitmaps.list.getTotalUses());
+    string nSoundsLoaded = i2s(content.sounds.list.getListSize());
+    string nSoundUses = i2s(content.sounds.list.getTotalUses());
+    string resolutionStr = i2s(winW) + "x" + i2s(winH);
+    string areaVersionStr = "-";
+    string areaMakerStr = "-";
+    string gameVersionStr =
+        config.general.version.empty() ? "-" : config.general.version;
+
+    if(states.gameplay->loaded) {
+        nMobsStr =
+            resizeString(i2s(states.gameplay->mobs.all.size()), 7);
+        nParticlesStr =
+            resizeString(i2s(states.gameplay->particles.getCount()), 7);
+        areaVersionStr =
+            curAreaData->version.empty() ? "-" : curAreaData->version;
+        areaMakerStr =
+            curAreaData->maker.empty() ? "-" : curAreaData->maker;
+    }
+        
+    console.write(
+        headerStr +
+        "\n" +
+        fpsStr +
+        "\n" +
+        fpsUncappedStr +
+        "\n" +
+        frameTimeStr +
+        "\n"
+        "\n"
+        "Area version " + areaVersionStr + ", by " + areaMakerStr +
+        "\n"
+        "Mobs: " + nMobsStr + ". Particles: " + nParticlesStr +
+        "\n"
+        "\n"
+        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses). " +
+        "Sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses). " +
+        "\n"
+        "\n"
+        "Resolution: " + resolutionStr +
+        "\n"
+        "Pikifen version " + getEngineVersionString() +
+        ", game version " + gameVersionStr,
+        1.0f, 1.0f
+    );
 }
 
 

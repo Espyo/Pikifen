@@ -173,6 +173,43 @@ struct Viewport {
 
 
 /**
+ * @brief Represents the non-interactive "console" that shows up at the
+ * top of the screen, mostly in maker tool and system contexts.
+ */
+struct Console {
+
+    //--- Function declarations ---
+
+    Console();
+    void clear();
+    void draw() const;
+    void tick(float deltaT);
+    void write(
+        const string& text,
+        float totalDuration = 5.0f, float fadeDuration = 3.0f
+    );
+
+
+private:
+
+    //--- Members ---
+    
+    //Timer that controls visibility.
+    Timer visibilityTimer;
+
+    //If it's visible, this is how long it stays visible for.
+    float visibilityDuration = 5.0f;
+    
+    //How long its fade period lasts.
+    float fadeDuration = 3.0f;
+    
+    //Text it is showing, if any.
+    string text;
+
+};
+
+
+/**
  * @brief Manages any errors that occur with the engine's content or logic.
  */
 struct ErrorManager {

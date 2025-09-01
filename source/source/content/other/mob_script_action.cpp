@@ -1582,7 +1582,7 @@ void MobActionRunners::print(MobActionRunData& data) {
         log += "\n" + game.states.gameplay->printActionLogLines[l];
     }
     
-    printInfo("=== DEBUG MOB SCRIPT PRINTS ===" + log, 15.0f);
+    game.console.write("=== DEBUG MOB SCRIPT PRINTS ===" + log, 15.0f);
 }
 
 

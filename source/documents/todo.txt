@@ -13,7 +13,7 @@ Next tasks (roughly sorted most important first)
     A way to port content from previous versions
         It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     Leader animations
-        Thrown (add to the logic of bouncers too, including Pikmin)
+        Thrown (add to the logic of bouncers too)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
         Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
@@ -119,6 +119,7 @@ Next tasks (roughly sorted most important first)
             Logic to turn the sector solid and navigable by non-Blues
             Logic to freeze all enemies in the water
             Logic to call the Pikmin out and thawing
+        Ice hazard for Pikmin attacks, and ice hazard for enemy attacks
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
@@ -518,6 +519,7 @@ Small tasks (for when I'm feeling lazy)
         Document the code with comments
         Use #pragma region in header files?
         Remove parameter names in function declarations?
+        Struct/class contents in header files have comments with --- separating them, but those comments should also say whether it's the public or private things, so it's easier to navigate
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
@@ -839,7 +841,6 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
-        A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         A mob's reach visualizer
         A modifier for the cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup

@@ -1233,150 +1233,6 @@ void GameplayState::doMenuLogic() {
         player.hud->tick(game.deltaT);
     }
     
-    //Process and print framerate and system info.
-    if(game.showSystemInfo) {
-    
-        //Make sure that speed changes don't affect the FPS calculation.
-        double realDeltaT = game.deltaT;
-        if(game.makerTools.changeSpeed) {
-            realDeltaT /=
-                game.makerTools.changeSpeedSettings[
-                    game.makerTools.changeSpeedSettingIdx
-                ];
-        }
-        
-        game.framerateHistory.push_back(game.curFrameProcessTime);
-        if(game.framerateHistory.size() > GAME::FRAMERATE_HISTORY_SIZE) {
-            game.framerateHistory.erase(game.framerateHistory.begin());
-        }
-        
-        game.framerateLastAvgPoint++;
-        
-        double sampleAvg;
-        double sampleAvgCapped;
-        
-        if(game.framerateLastAvgPoint >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
-            //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
-            //If we can fit a sample of this size using the most recent
-            //unsampled frames, then use those. Otherwise, keep using the last
-            //block, which starts at framerateLastAvgPoint.
-            //This makes it so the average stays the same for a bit of time,
-            //so the player can actually read it.
-            if(
-                game.framerateLastAvgPoint >
-                GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2
-            ) {
-                game.framerateLastAvgPoint =
-                    GAME::FRAMERATE_AVG_SAMPLE_SIZE;
-            }
-            double sampleAvgSum = 0;
-            double sampleAvgCappedSum = 0;
-            size_t sampleAvgPointCount = 0;
-            size_t sampleSize =
-                std::min(
-                    (size_t) GAME::FRAMERATE_AVG_SAMPLE_SIZE,
-                    game.framerateHistory.size()
-                );
-                
-            for(size_t f = 0; f < sampleSize; f++) {
-                size_t idx =
-                    game.framerateHistory.size() -
-                    game.framerateLastAvgPoint + f;
-                sampleAvgSum += game.framerateHistory[idx];
-                sampleAvgCappedSum +=
-                    std::max(
-                        game.framerateHistory[idx],
-                        (double) (1.0f / game.options.advanced.targetFps)
-                    );
-                sampleAvgPointCount++;
-            }
-            
-            sampleAvg =
-                sampleAvgSum / (float) sampleAvgPointCount;
-            sampleAvgCapped =
-                sampleAvgCappedSum / (float) sampleAvgPointCount;
-                
-        } else {
-            //If there are fewer than FRAMERATE_AVG_SAMPLE_SIZE frames in
-            //the history, the average will change every frame until we get
-            //that. This defeats the purpose of a smoothly-updating number,
-            //so until that requirement is filled, let's stick to the oldest
-            //record.
-            sampleAvg = game.framerateHistory[0];
-            sampleAvgCapped =
-                std::max(
-                    game.framerateHistory[0],
-                    (double) (1.0f / game.options.advanced.targetFps)
-                );
-                
-        }
-        
-        string headerStr =
-            resizeString("", 12) +
-            resizeString("Now", 12) +
-            resizeString("Average", 12) +
-            resizeString("Target", 12);
-        string fpsStr =
-            resizeString("FPS:", 12) +
-            resizeString(std::to_string(1.0f / realDeltaT), 12) +
-            resizeString(std::to_string(1.0f / sampleAvgCapped), 12) +
-            resizeString(i2s(game.options.advanced.targetFps), 12);
-        string fpsUncappedStr =
-            resizeString("FPS uncap.:", 12) +
-            resizeString(std::to_string(1.0f / game.curFrameProcessTime), 12) +
-            resizeString(std::to_string(1.0f / sampleAvg), 12) +
-            resizeString("-", 12);
-        string frameTimeStr =
-            resizeString("Frame time:", 12) +
-            resizeString(std::to_string(game.curFrameProcessTime), 12) +
-            resizeString(std::to_string(sampleAvg), 12) +
-            resizeString(
-                std::to_string(1.0f / game.options.advanced.targetFps), 12
-            );
-        string nMobsStr =
-            resizeString(i2s(mobs.all.size()), 7);
-        string nParticlesStr =
-            resizeString(i2s(particles.getCount()), 7);
-        string resolutionStr =
-            i2s(game.winW) + "x" + i2s(game.winH);
-        string areaVStr =
-            game.curAreaData->version.empty() ?
-            "-" :
-            game.curAreaData->version;
-        string areaMakerStr =
-            game.curAreaData->maker.empty() ?
-            "-" :
-            game.curAreaData->maker;
-        string gameVStr =
-            game.config.general.version.empty() ?
-            "-" : game.config.general.version;
-            
-        printInfo(
-            headerStr +
-            "\n" +
-            fpsStr +
-            "\n" +
-            fpsUncappedStr +
-            "\n" +
-            frameTimeStr +
-            "\n"
-            "\n"
-            "Mobs: " + nMobsStr + " Particles: " + nParticlesStr +
-            "\n"
-            "Resolution: " + resolutionStr +
-            "\n"
-            "Area version " + areaVStr + ", by " + areaMakerStr +
-            "\n"
-            "Pikifen version " + getEngineVersionString() +
-            ", game version " + gameVStr,
-            1.0f, 1.0f
-        );
-        
-    } else {
-        game.framerateLastAvgPoint = 0;
-        game.framerateHistory.clear();
-    }
-    
     //Print info on a mob.
     if(game.makerTools.infoLock) {
         string nameStr =
@@ -1428,7 +1284,7 @@ void GameplayState::doMenuLogic() {
             varsStr = "(None)";
         }
         
-        printInfo(
+        game.console.write(
             "Mob: " + nameStr + "Coords: " + coordsStr + "\n"
             "Last states: " + stateHStr + "\n"
             "Animation: " + animStr + "\n"
@@ -1486,7 +1342,7 @@ void GameplayState::doMenuLogic() {
             
             string blockStr = pathBlockReasonToString(path->blockReason);
             
-            printInfo(
+            game.console.write(
                 "Path calculation result: " + resultStr +
                 "\n" +
                 "Heading to stop " + stopsStr +
@@ -1499,7 +1355,7 @@ void GameplayState::doMenuLogic() {
             
         } else {
         
-            printInfo("Mob is not following any path.", 5.0f, 3.0f);
+            game.console.write("Mob is not following any path.", 5.0f, 3.0f);
             
         }
     }
@@ -1553,10 +1409,8 @@ void GameplayState::doMenuLogic() {
             str += "None";
         }
         
-        printInfo(str, 1.0f, 1.0f);
+        game.console.write(str, 1.0f, 1.0f);
     }
-    
-    game.makerTools.infoPrintTimer.tick(game.deltaT);
     
     //Big message.
     bigMsg.tick(game.deltaT);

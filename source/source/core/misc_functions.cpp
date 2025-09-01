@@ -1161,23 +1161,6 @@ bool openManual(const string& page) {
 
 
 /**
- * @brief Prints a bit of info onto the game window, for some seconds.
- *
- * @param text Text to print. Can use line breaks.
- * @param totalDuration Total amount of time in which the text is present.
- * @param fadeDuration When closing, fade out in the last N seconds.
- */
-void printInfo(
-    const string& text, float totalDuration, float fadeDuration
-) {
-    game.makerTools.infoPrintText = text;
-    game.makerTools.infoPrintDuration = totalDuration;
-    game.makerTools.infoPrintFadeDuration = fadeDuration;
-    game.makerTools.infoPrintTimer.start(totalDuration);
-}
-
-
-/**
  * @brief Reports a fatal error to the user and shuts down the program.
  *
  * @param s String explaining the error.

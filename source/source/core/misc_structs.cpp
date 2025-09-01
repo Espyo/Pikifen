@@ -225,6 +225,80 @@ void Camera::tick(float deltaT) {
 
 
 /**
+ * @brief Constructs a new console object.
+ */
+Console::Console() {
+    visibilityTimer = Timer(1.0f, [this] () { clear(); });
+}
+
+
+/**
+ * @brief Clears the contents of the console instantly.
+ */
+void Console::clear() {
+    text.clear();
+}
+
+
+/**
+ * @brief Draws the console onto the game window.
+ */
+void Console::draw() const {
+    if(text.empty()) return;
+
+    float alphaMult = 1;
+    if(visibilityTimer.timeLeft < fadeDuration) {
+        alphaMult = visibilityTimer.timeLeft / fadeDuration;
+    }
+    
+    size_t nLines = split(text, "\n", true).size();
+    int fh = al_get_font_line_height(game.sysContent.fntBuiltin);
+    //We add nLines - 1 because there is a 1px gap between each line.
+    int totalHeight = (int) nLines * fh + (int) (nLines - 1);
+    
+    al_draw_filled_rectangle(
+        0, 0, game.winW, totalHeight + 16,
+        al_map_rgba(0, 0, 0, 96 * alphaMult)
+    );
+    drawTextLines(
+        text,
+        game.sysContent.fntBuiltin,
+        Point(8.0f),
+        Point(LARGE_FLOAT),
+        al_map_rgba(255, 255, 255, 128 * alphaMult),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
+    );
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void Console::tick(float deltaT) {
+    visibilityTimer.tick(game.deltaT);
+}
+
+
+/**
+ * @brief Prints some text onto the console for some seconds.
+ *
+ * @param text Text to print. Can use line breaks.
+ * @param totalDuration Total amount of time in which the text is present.
+ * @param fadeDuration When closing, fade out in the last N seconds.
+ */
+void Console::write(
+    const string& text, float totalDuration, float fadeDuration
+) {
+    this->text = text;
+    this->visibilityDuration = totalDuration;
+    this->fadeDuration = fadeDuration;
+    this->visibilityTimer.start(totalDuration);
+}
+
+
+/**
  * @brief Emits an error in the gameplay "info" window.
  *
  * @param s Full error description.
@@ -234,7 +308,7 @@ void ErrorManager::emitInGameplay(const string& s) {
         "\n\n\n"
         "ERROR: " + s + "\n\n"
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
-    printInfo(infoStr, 30.0f, 3.0f);
+    game.console.write(infoStr, 30.0f, 3.0f);
 }
 
 
@@ -358,7 +432,7 @@ void ErrorManager::reportAreaLoadErrors() {
     infoStr +=
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
         
-    printInfo(infoStr, 30.0f, 3.0f);
+    game.console.write(infoStr, 30.0f, 3.0f);
 }
 
 

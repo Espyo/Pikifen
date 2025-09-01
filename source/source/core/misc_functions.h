@@ -184,11 +184,6 @@ bool monoSelectable(
     const ImVec2& size = ImVec2(0, 0)
 );
 bool openManual(const string& page);
-void printInfo(
-    const string& text,
-    float totalDuration = 5.0f,
-    float fadeDuration = 3.0f
-);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
 void saveOptions();

@@ -41,14 +41,6 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
 
 
 /**
- * @brief Constructs a new maker tools info object.
- */
-MakerTools::MakerTools() {
-    infoPrintTimer = Timer(1.0f, [this] () { infoPrintText.clear(); });
-}
-
-
-/**
  * @brief Checks whether maker tools are allowed, and if not, sets up
  * code to warn the player and let them allow it, if applicable.
  *
@@ -66,7 +58,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
         inputValue >= 0.5f
     ) {
         if(playConfirmationPresses == 0) {
-            printInfo(
+            game.console.write(
                 "You've tried to use a maker tool, which isn't fit for "
                 "normal gameplay.\n"
                 "Are you sure? Quickly press a maker tool button three times "
@@ -77,7 +69,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
             playConfirmationPresses++;
             return false;
         } else if(playConfirmationPresses == 2) {
-            printInfo(
+            game.console.write(
                 "Maker tools are now allowed till you leave the area.\n"
                 "Check the options to always allow maker tools in normal "
                 "gameplay.",
@@ -234,7 +226,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
             prevLockMob != nullptr &&
             infoLock == nullptr
         ) {
-            printInfo("Mob: None.", 2.0f, 2.0f);
+            game.console.write("Mob: None.", 2.0f, 2.0f);
         }
         usedHelpingTools = true;
         break;

@@ -491,7 +491,6 @@ private:
     void drawOnionMenu();
     void drawPauseMenu();
     void drawPrecipitation();
-    void drawSystemStuff();
     void drawThrowPreview(Player* player);
     void drawTreeShadows();
     void drawWorldComponents(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);

@@ -185,8 +185,6 @@ void GameplayState::doGameDrawing(
     
     //Layer 9 -- System stuff.
     if(game.makerTools.hud) {
-        drawSystemStuff();
-        
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
                 game.curAreaData->name,
@@ -1455,85 +1453,6 @@ void GameplayState::drawPrecipitation() {
                 3, COLOR_WHITE
             );
         }
-    }
-}
-
-
-/**
- * @brief Draws system stuff.
- */
-void GameplayState::drawSystemStuff() {
-    if(!game.makerTools.infoPrintText.empty()) {
-        float alphaMult = 1;
-        if(
-            game.makerTools.infoPrintTimer.timeLeft <
-            game.makerTools.infoPrintFadeDuration
-        ) {
-            alphaMult =
-                game.makerTools.infoPrintTimer.timeLeft /
-                game.makerTools.infoPrintFadeDuration;
-        }
-        
-        size_t nLines =
-            split(game.makerTools.infoPrintText, "\n", true).size();
-        int fh = al_get_font_line_height(game.sysContent.fntBuiltin);
-        //We add nLines - 1 because there is a 1px gap between each line.
-        int totalHeight = (int) nLines * fh + (int) (nLines - 1);
-        
-        al_draw_filled_rectangle(
-            0, 0, game.winW, totalHeight + 16,
-            al_map_rgba(0, 0, 0, 96 * alphaMult)
-        );
-        drawTextLines(
-            game.makerTools.infoPrintText,
-            game.sysContent.fntBuiltin,
-            Point(8.0f),
-            Point(LARGE_FLOAT),
-            al_map_rgba(255, 255, 255, 128 * alphaMult),
-            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
-        );
-    }
-    
-    if(game.showSystemInfo && !game.framerateHistory.empty()) {
-        //Draw the framerate chart.
-        al_draw_filled_rectangle(
-            game.winW - GAME::FRAMERATE_HISTORY_SIZE, 0,
-            game.winW, 100,
-            al_map_rgba(0, 0, 0, 192)
-        );
-        double chartMin = 1.0f; //1 FPS.
-        double chartMax =
-            game.options.advanced.targetFps +
-            game.options.advanced.targetFps * 0.05f;
-        for(size_t f = 0; f < game.framerateHistory.size(); f++) {
-            float fps =
-                std::min(
-                    (float) (1.0f / game.framerateHistory[f]),
-                    (float) game.options.advanced.targetFps
-                );
-            float fpsY =
-                interpolateNumber(
-                    fps,
-                    chartMin, chartMax,
-                    0, 100
-                );
-            al_draw_line(
-                game.winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                game.winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fpsY,
-                al_map_rgba(24, 96, 192, 192), 1
-            );
-        }
-        float targetFpsY =
-            interpolateNumber(
-                game.options.advanced.targetFps,
-                chartMin, chartMax,
-                0, 100
-            );
-        al_draw_line(
-            game.winW - GAME::FRAMERATE_HISTORY_SIZE, targetFpsY,
-            game.winW, targetFpsY,
-            al_map_rgba(128, 224, 128, 48), 1
-        );
     }
 }
 

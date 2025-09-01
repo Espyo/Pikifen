@@ -1490,7 +1490,7 @@ void GameplayState::load() {
     if(game.perfMon) {
         game.perfMon->setAreaName(game.curAreaData->name);
         game.perfMon->leaveState();
-        printInfo("The performance monitor maker tool is running.", 10);
+        game.console.write("The performance monitor maker tool is running.", 10);
     }
     
     enter();
@@ -1635,7 +1635,7 @@ void GameplayState::unload() {
         delete pauseMenu;
         pauseMenu = nullptr;
     }
-    game.makerTools.infoPrintText.clear();
+    game.console.clear();
     
     unloading = false;
 }
