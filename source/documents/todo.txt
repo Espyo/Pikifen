@@ -41,22 +41,22 @@ Next tasks (roughly sorted most important first)
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     GUI things
-        Game state refactor
-            Add a gui.startTransition function so that we don't have to do the responsive = true/false thing when we call gui.startAnimation
-            Some sort of sub-menus manager so we don't have to have half a dozen if(subGui) subGui.handlePlayerAction() and stuff like that
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
-        The selector cursor should be a part of the GUI manager itself
-            It should smoothly jump from item to item as you choose which one is selected
-            It should fade out when nothing is selected, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
+        The focus cursor should be a part of the GUI manager itself
+            It should smoothly jump from item to item as you choose which one is focused
+            It should fade out when nothing is focused, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
-        The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
+        The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, focus "Retry" and press right. It'll focus an unrelated item in the stats list
             Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
-        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
+            The name for this is "spatial navigation"
+            https://github.com/WICG/spatial-navigation
+            https://github.com/NoriginMedia/Norigin-Spatial-Navigation
+        Make it so the player can hold down a directional key and the menu focus cursor moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
             Same for holding down Enter to continuously activate a button and such
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
@@ -80,7 +80,7 @@ Next tasks (roughly sorted most important first)
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
-            Panning the radar with an analog stick will also move the menu selector, if there are binds for it to move with the analog stick
+            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
         Menus
             Options menu
@@ -179,7 +179,7 @@ Next tasks (roughly sorted most important first)
             In competitive modes, tint each player's HUD with their team color or something
             Show each player's name in their screen somewhere
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
-            The cursor that highlights the currently selected GUI item should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
+            The cursor that highlights the currently focused GUI item should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts

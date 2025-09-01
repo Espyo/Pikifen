@@ -2234,31 +2234,31 @@ Point scaleRectangleToBox(
 /**
  * @brief Given a list of items, chooses which item comes next
  * geometrically in the specified direction. Useful for menus with
- * several buttons the player can select multidirectionally in.
+ * several buttons the player can focus multidirectionally in.
  * Also, it loops around.
  *
  * @param itemCoordinates Vector with the center coordinates of all items.
- * @param selectedItem Index of the selected item.
+ * @param focusedItem Index of the focused item.
  * @param direction Angle specifying the direction.
  * @param loopRegion Width and height of the loop region.
  * @return The next item's index in the list.
  */
-size_t selectNextItemDirectionally(
-    const vector<Point>& itemCoordinates, size_t selectedItem,
+size_t focusNextItemDirectionally(
+    const vector<Point>& itemCoordinates, size_t focusedItem,
     float direction, const Point& loopRegion
 ) {
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
     float normalizedDir = normalizeAngle(direction);
-    const Point& selCoords = itemCoordinates[selectedItem];
+    const Point& selCoords = itemCoordinates[focusedItem];
     float bestScore = FLT_MAX;
-    size_t bestItem = selectedItem;
+    size_t bestItem = focusedItem;
     
     //Check each item that isn't the current one.
     for(size_t i = 0; i < itemCoordinates.size(); i++) {
     
-        if(i == selectedItem) continue;
+        if(i == focusedItem) continue;
         
         Point iBaseCoords = itemCoordinates[i];
         
@@ -2286,7 +2286,7 @@ size_t selectNextItemDirectionally(
         }
         
         if(iCoords.x > 0.0f) {
-            //If this item is in front of the selected one,
+            //If this item is in front of the focused one,
             //give it a score like normal.
             float score = iCoords.x + (float) fabs(iCoords.y);
             if(score < bestScore) {
@@ -2298,7 +2298,7 @@ size_t selectNextItemDirectionally(
             //If the item is behind, we'll need to loop its coordinates
             //and score those loop coordinates that land in front.
             //Unfortunately, there's no way to know how the coordinates
-            //should be looped in order to land in front of the selected
+            //should be looped in order to land in front of the focused
             //item, so we should just check all loop variations: above, below
             //to the left, to the right, and combinations.
             
@@ -2322,8 +2322,8 @@ size_t selectNextItemDirectionally(
                     //lands to the right.
                     iCoords = rotatePoint(iCoords, -normalizedDir);
                     
-                    //If these coordinates are behind the selected item,
-                    //they cannot be selected.
+                    //If these coordinates are behind the focused item,
+                    //they cannot be focused.
                     if(iCoords.x < 0.0f) {
                         continue;
                     }

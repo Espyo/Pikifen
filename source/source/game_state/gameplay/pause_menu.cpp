@@ -281,7 +281,7 @@ void PauseMenu::addPikminStatusLine(
         pikType ?
         "Number of " + pikType->name + " " :
         "Total number of Pikmin ";
-    bool canSelect = pikType || isTotals;
+    bool canFocus = pikType || isTotals;
     
     if(pikType) {
     
@@ -321,15 +321,15 @@ void PauseMenu::addPikminStatusLine(
     //Group Pikmin.
     TextGuiItem* groupTextItem =
         new TextGuiItem(groupText, font);
-    groupTextItem->selectable = canSelect;
-    groupTextItem->showSelectionBox = canSelect;
+    groupTextItem->focusable = canFocus;
+    groupTextItem->showFocusBox = canFocus;
     groupTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 1,
             itemY
         );
     groupTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         groupTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "in your active leader's group.";
@@ -344,15 +344,15 @@ void PauseMenu::addPikminStatusLine(
     //Idle Pikmin.
     TextGuiItem* idleTextItem =
         new TextGuiItem(idleText, font);
-    idleTextItem->selectable = canSelect;
-    idleTextItem->showSelectionBox = canSelect;
+    idleTextItem->focusable = canFocus;
+    idleTextItem->showFocusBox = canFocus;
     idleTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 2,
             itemY
         );
     idleTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         idleTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "idling in the field.";
@@ -367,15 +367,15 @@ void PauseMenu::addPikminStatusLine(
     //Field Pikmin.
     TextGuiItem* fieldTextItem =
         new TextGuiItem(fieldText, font);
-    fieldTextItem->selectable = canSelect;
-    fieldTextItem->showSelectionBox = canSelect;
+    fieldTextItem->focusable = canFocus;
+    fieldTextItem->showFocusBox = canFocus;
     fieldTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 3,
             itemY
         );
     fieldTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         fieldTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "out in the field.";
@@ -390,15 +390,15 @@ void PauseMenu::addPikminStatusLine(
     //Onion Pikmin.
     TextGuiItem* onionTextItem =
         new TextGuiItem(onionText, font);
-    onionTextItem->selectable = canSelect;
-    onionTextItem->showSelectionBox = canSelect;
+    onionTextItem->focusable = canFocus;
+    onionTextItem->showFocusBox = canFocus;
     onionTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 4,
             itemY
         );
     onionTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         onionTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "inside Onions.";
@@ -413,15 +413,15 @@ void PauseMenu::addPikminStatusLine(
     //Total Pikmin.
     TextGuiItem* totalTextItem =
         new TextGuiItem(totalText, font, COLOR_GOLD);
-    totalTextItem->selectable = canSelect;
-    totalTextItem->showSelectionBox = canSelect;
+    totalTextItem->focusable = canFocus;
+    totalTextItem->showFocusBox = canFocus;
     totalTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 5,
             itemY
         );
     totalTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         totalTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "you have.";
@@ -452,15 +452,15 @@ void PauseMenu::addPikminStatusLine(
     //New Pikmin.
     TextGuiItem* newTextItem =
         new TextGuiItem(newText, font, al_map_rgb(210, 255, 210));
-    newTextItem->selectable = canSelect;
-    newTextItem->showSelectionBox = canSelect;
+    newTextItem->focusable = canFocus;
+    newTextItem->showFocusBox = canFocus;
     newTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 6,
             itemY
         );
     newTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         newTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "born today.";
@@ -475,15 +475,15 @@ void PauseMenu::addPikminStatusLine(
     //Lost Pikmin.
     TextGuiItem* lostTextItem =
         new TextGuiItem(lostText, font, al_map_rgb(255, 210, 210));
-    lostTextItem->selectable = canSelect;
-    lostTextItem->showSelectionBox = canSelect;
+    lostTextItem->focusable = canFocus;
+    lostTextItem->showFocusBox = canFocus;
     lostTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 7,
             itemY
         );
     lostTextItem->ratioSize = Point(itemWidth, numberItemHeight);
-    if(canSelect) {
+    if(canFocus) {
         lostTextItem->onGetTooltip =
         [tooltipStart] () {
             return tooltipStart + "lost today.";
@@ -1634,7 +1634,7 @@ void PauseMenu::handlePlayerAction(const PlayerAction& action) {
     
     if(!handledByRadar) {
         //Only let the GUIs handle it if the radar didn't need it, otherwise
-        //we could see GUI item selections move around or such because
+        //we could see the GUI item focus move around or such because
         //radar and menus actions share binds.
         gui.handlePlayerAction(action);
         radarGui.handlePlayerAction(action);
@@ -1764,7 +1764,7 @@ void PauseMenu::initConfirmationPage() {
     confirmationGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    confirmationGui.setSelectedItem(confirmationGui.backItem, true);
+    confirmationGui.setFocusedItem(confirmationGui.backItem, true);
     confirmationGui.responsive = false;
     confirmationGui.hideItems();
 }
@@ -2024,7 +2024,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setSelectedItem(gui.backItem, true);
+    gui.setFocusedItem(gui.backItem, true);
     gui.responsive = false;
     gui.hideItems();
 }
@@ -2155,7 +2155,7 @@ void PauseMenu::initMissionPage() {
     missionGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    missionGui.setSelectedItem(missionGui.backItem, true);
+    missionGui.setFocusedItem(missionGui.backItem, true);
     missionGui.responsive = false;
     missionGui.hideItems();
 }
@@ -2446,7 +2446,7 @@ void PauseMenu::initRadarPage() {
     radarGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    radarGui.setSelectedItem(nullptr);
+    radarGui.setFocusedItem(nullptr);
     radarGui.responsive = false;
     radarGui.hideItems();
 }
@@ -2630,7 +2630,7 @@ void PauseMenu::initStatusPage() {
     );
     
     //Finishing touches.
-    statusGui.setSelectedItem(statusGui.backItem, true);
+    statusGui.setFocusedItem(statusGui.backItem, true);
     statusGui.responsive = false;
     statusGui.hideItems();
 }

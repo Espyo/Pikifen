@@ -346,7 +346,7 @@ void OptionsMenu::initGuiAudioPage() {
     audioGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    audioGui.setSelectedItem(masterVolPicker, true);
+    audioGui.setFocusedItem(masterVolPicker, true);
     audioGui.responsive = false;
     audioGui.hideItems();
 }
@@ -411,7 +411,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    bindsGui.setSelectedItem(bindsGui.backItem, true);
+    bindsGui.setFocusedItem(bindsGui.backItem, true);
     bindsGui.responsive = false;
     bindsGui.hideItems();
     al_reconfigure_joysticks();
@@ -537,7 +537,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    controlsGui.setSelectedItem(normalBindsButton, true);
+    controlsGui.setFocusedItem(normalBindsButton, true);
     controlsGui.responsive = false;
     controlsGui.hideItems();
 }
@@ -665,7 +665,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     graphicsGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    graphicsGui.setSelectedItem(fullscreenCheck, true);
+    graphicsGui.setFocusedItem(fullscreenCheck, true);
     graphicsGui.responsive = false;
     graphicsGui.hideItems();
 }
@@ -839,7 +839,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    miscGui.setSelectedItem(cursorCamWeightPicker, true);
+    miscGui.setFocusedItem(cursorCamWeightPicker, true);
     miscGui.responsive = false;
     miscGui.hideItems();
 }
@@ -914,7 +914,7 @@ void OptionsMenu::initGuiTopPage() {
         drawButton(
             draw.center, draw.size,
             controlsButton->text, controlsButton->font,
-            controlsButton->color, controlsButton->selected,
+            controlsButton->color, controlsButton->focused,
             controlsButton->getJuiceValue()
         );
     };
@@ -940,7 +940,7 @@ void OptionsMenu::initGuiTopPage() {
         drawButton(
             draw.center, draw.size,
             graphicsButton->text, graphicsButton->font,
-            graphicsButton->color, graphicsButton->selected,
+            graphicsButton->color, graphicsButton->focused,
             graphicsButton->getJuiceValue()
         );
     };
@@ -966,7 +966,7 @@ void OptionsMenu::initGuiTopPage() {
         drawButton(
             draw.center, draw.size,
             audioButton->text, audioButton->font,
-            audioButton->color, audioButton->selected,
+            audioButton->color, audioButton->focused,
             audioButton->getJuiceValue()
         );
     };
@@ -992,7 +992,7 @@ void OptionsMenu::initGuiTopPage() {
         drawButton(
             draw.center, draw.size,
             packsButton->text, packsButton->font,
-            packsButton->color, packsButton->selected,
+            packsButton->color, packsButton->focused,
             packsButton->getJuiceValue()
         );
     };
@@ -1028,7 +1028,7 @@ void OptionsMenu::initGuiTopPage() {
         drawButton(
             draw.center, draw.size,
             miscButton->text, miscButton->font,
-            miscButton->color, miscButton->selected,
+            miscButton->color, miscButton->focused,
             miscButton->getJuiceValue()
         );
     };
@@ -1064,7 +1064,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    topGui.setSelectedItem(controlsButton, true);
+    topGui.setFocusedItem(controlsButton, true);
 }
 
 
@@ -1137,7 +1137,7 @@ void OptionsMenu::load() {
  * @brief Populates the list of binds.
  */
 void OptionsMenu::populateBinds() {
-    GuiItem* itemToSelect = nullptr;
+    GuiItem* itemToFocus = nullptr;
     
     unordered_set<PLAYER_ACTION_CAT> allowedCategories;
     switch(bindsMenuType) {
@@ -1275,7 +1275,7 @@ void OptionsMenu::populateBinds() {
         bindsListBox->addChild(moreButton);
         bindsGui.addItem(moreButton);
         if(actionType.id == curActionType) {
-            itemToSelect = moreButton;
+            itemToFocus = moreButton;
         }
         
         vector<ControlBind> aBinds = bindsPerActionType[actionType.id];
@@ -1299,7 +1299,7 @@ void OptionsMenu::populateBinds() {
                 drawButton(
                     draw.center, draw.size,
                     "", game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->selected,
+                    bindButton->focused,
                     bindButton->getJuiceValue()
                 );
             };
@@ -1326,7 +1326,7 @@ void OptionsMenu::populateBinds() {
                     drawButton(
                         draw.center, draw.size, "X",
                         game.sysContent.fntStandard, COLOR_WHITE,
-                        removeBindButton->selected,
+                        removeBindButton->focused,
                         removeBindButton->getJuiceValue()
                     );
                 };
@@ -1370,7 +1370,7 @@ void OptionsMenu::populateBinds() {
                 drawButton(
                     draw.center, draw.size, "",
                     game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->selected,
+                    bindButton->focused,
                     bindButton->getJuiceValue()
                 );
             };
@@ -1502,10 +1502,10 @@ void OptionsMenu::populateBinds() {
         bindsGui.addItem(line);
     }
     
-    if(itemToSelect) {
-        bindsGui.setSelectedItem(itemToSelect, true);
+    if(itemToFocus) {
+        bindsGui.setFocusedItem(itemToFocus, true);
         //Try to center it.
-        bindsListBox->onChildDirSelected(itemToSelect);
+        bindsListBox->onChildDirFocused(itemToFocus);
     }
 }
 

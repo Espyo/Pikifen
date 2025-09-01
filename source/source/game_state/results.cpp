@@ -668,7 +668,7 @@ void Results::load() {
     //Finishing touches.
     game.audio.setCurrentSong(game.sysContentNames.sngResults);
     game.fadeMgr.startFade(true, nullptr);
-    gui.setSelectedItem(gui.backItem, true);
+    gui.setFocusedItem(gui.backItem, true);
     guiTimeSpent = 0.0f;
 }
 

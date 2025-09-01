@@ -121,7 +121,7 @@ void BulletGuiItem::defDrawCode(
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0 + juicyGrowAmount)
     );
-    if(selected) {
+    if(focused) {
         drawTexturedBox(
             draw.center,
             draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
@@ -163,7 +163,7 @@ void ButtonGuiItem::defDrawCode(
 ) {
     drawButton(
         draw.center, draw.size,
-        this->text, this->font, this->color, selected,
+        this->text, this->font, this->color, focused,
         getJuiceValue()
     );
 }
@@ -254,13 +254,13 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
     );
     
     ALLEGRO_COLOR boxTint =
-        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
     );
     
-    if(selected) {
+    if(focused) {
         drawTexturedBox(
             draw.center,
             draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
@@ -273,10 +273,10 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
 /**
  * @brief Constructs a new GUI item object.
  *
- * @param selectable Can the item be selected by the player?
+ * @param focusable Can the item be focused by the player?
  */
-GuiItem::GuiItem(bool selectable) :
-    selectable(selectable) {
+GuiItem::GuiItem(bool focusable) :
+    focusable(focusable) {
     
 }
 
@@ -615,7 +615,7 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
  * @return Whether it succeeded.
  */
 bool GuiManager::destroy() {
-    setSelectedItem(nullptr);
+    setFocusedItem(nullptr);
     backItem = nullptr;
     for(size_t i = 0; i < items.size(); i++) {
         delete items[i];
@@ -678,14 +678,14 @@ bool GuiManager::draw() {
 
 
 /**
- * @brief Returns the currently selected item's tooltip, if any.
+ * @brief Returns the currently focused item's tooltip, if any.
  *
  * @return The tooltip.
  */
 string GuiManager::getCurrentTooltip() const {
-    if(!selectedItem) return string();
-    if(!selectedItem->onGetTooltip) return string();
-    return selectedItem->onGetTooltip();
+    if(!focusedItem) return string();
+    if(!focusedItem->onGetTooltip) return string();
+    return focusedItem->onGetTooltip();
 }
 
 
@@ -829,12 +829,12 @@ bool GuiManager::getItemDrawInfo(
 
 
 /**
- * @brief Returns which item is currently selected.
+ * @brief Returns which item is currently focused.
  *
  * @return The item, or nullptr for none.
  */
-GuiItem* GuiManager::getSelectedItem() const {
-    return selectedItem;
+GuiItem* GuiManager::getFocusedItem() const {
+    return focusedItem;
 }
 
 
@@ -857,33 +857,33 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
-        GuiItem* selectionResult = nullptr;
+        GuiItem* focusResult = nullptr;
         for(size_t i = 0; i < items.size(); i++) {
             GuiItem* iPtr = items[i];
             if(
                 iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
                 iPtr->isResponsive() &&
-                iPtr->selectable
+                iPtr->focusable
             ) {
-                selectionResult = iPtr;
+                focusResult = iPtr;
                 if(iPtr->onMouseOver) {
                     iPtr->onMouseOver(Point(ev.mouse.x, ev.mouse.y));
                 }
                 break;
             }
         }
-        setSelectedItem(selectionResult);
+        setFocusedItem(focusResult);
         mouseMoved = true;
         handled = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
         if(
-            selectedItem &&
-            selectedItem->isResponsive() &&
-            selectedItem->onActivate
+            focusedItem &&
+            focusedItem->isResponsive() &&
+            focusedItem->onActivate
         ) {
-            selectedItem->activate(Point(ev.mouse.x, ev.mouse.y));
+            focusedItem->activate(Point(ev.mouse.x, ev.mouse.y));
             autoRepeater.start();
         }
         mouseMoved = true;
@@ -934,7 +934,7 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
     case PLAYER_ACTION_TYPE_MENU_LEFT:
     case PLAYER_ACTION_TYPE_MENU_DOWN: {
 
-        //Selecting a different item with the arrow keys.
+        //Focusing a different item with the arrow keys.
         size_t pressed = PLAYER_ACTION_TYPE_NONE;
         
         switch(action.actionTypeId) {
@@ -969,25 +969,25 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
         
         if(pressed == PLAYER_ACTION_TYPE_NONE) break;
         
-        if(!selectedItem) {
+        if(!focusedItem) {
             for(size_t i = 0; i < items.size(); i++) {
-                if(items[i]->isResponsive() && items[i]->selectable) {
-                    setSelectedItem(items[i]);
+                if(items[i]->isResponsive() && items[i]->focusable) {
+                    setFocusedItem(items[i]);
                     break;
                 }
             }
-            if(selectedItem) {
+            if(focusedItem) {
                 break;
             }
         }
-        if(!selectedItem) {
-            //No item can be selected.
+        if(!focusedItem) {
+            //No item can be focused.
             break;
         }
         
-        vector<Point> selectables;
-        vector<GuiItem*> selectablePtrs;
-        size_t selectableIdx = INVALID;
+        vector<Point> focusables;
+        vector<GuiItem*> focusablePtrs;
+        size_t focusableIdx = INVALID;
         float direction = 0.0f;
         
         switch(pressed) {
@@ -1006,11 +1006,11 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
         }
         
         if(
-            selectedItem &&
-            selectedItem->isResponsive() &&
-            selectedItem->onMenuDirButton
+            focusedItem &&
+            focusedItem->isResponsive() &&
+            focusedItem->onMenuDirButton
         ) {
-            if(selectedItem->onMenuDirButton(pressed)) {
+            if(focusedItem->onMenuDirButton(pressed)) {
                 //If it returned true, that means the following logic about
                 //changing the current item needs to be skipped.
                 break;
@@ -1022,36 +1022,36 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
         
         for(size_t i = 0; i < items.size(); i++) {
             GuiItem* iPtr = items[i];
-            if(iPtr->isResponsive() && iPtr->selectable) {
+            if(iPtr->isResponsive() && iPtr->focusable) {
                 Point iCenter = iPtr->getReferenceCenter();
-                if(iPtr == selectedItem) {
-                    selectableIdx = selectables.size();
+                if(iPtr == focusedItem) {
+                    focusableIdx = focusables.size();
                 }
                 
                 minY = std::min(minY, iCenter.y);
                 maxY = std::max(maxY, iCenter.y);
                 
-                selectablePtrs.push_back(iPtr);
-                selectables.push_back(iPtr->getReferenceCenter());
+                focusablePtrs.push_back(iPtr);
+                focusables.push_back(iPtr->getReferenceCenter());
             }
         }
         
-        size_t newSelectableIdx =
-            selectNextItemDirectionally(
-                selectables,
-                selectableIdx,
+        size_t newFocusableIdx =
+            focusNextItemDirectionally(
+                focusables,
+                focusableIdx,
                 direction,
                 Point(game.winW, maxY - minY)
             );
             
-        if(newSelectableIdx != selectableIdx) {
-            setSelectedItem(selectablePtrs[newSelectableIdx]);
+        if(newFocusableIdx != focusableIdx) {
+            setFocusedItem(focusablePtrs[newFocusableIdx]);
             if(
-                selectedItem->parent &&
-                selectedItem->parent->onChildDirSelected
+                focusedItem->parent &&
+                focusedItem->parent->onChildDirFocused
             ) {
-                selectedItem->parent->onChildDirSelected(
-                    selectedItem
+                focusedItem->parent->onChildDirFocused(
+                    focusedItem
                 );
             }
         }
@@ -1061,11 +1061,11 @@ bool GuiManager::handlePlayerAction(const PlayerAction& action) {
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(
             isDown &&
-            selectedItem &&
-            selectedItem->onActivate &&
-            selectedItem->isResponsive()
+            focusedItem &&
+            focusedItem->onActivate &&
+            focusedItem->isResponsive()
         ) {
-            selectedItem->activate(Point(LARGE_FLOAT));
+            focusedItem->activate(Point(LARGE_FLOAT));
             autoRepeater.start();
         } else if(!isDown) {
             autoRepeater.stop();
@@ -1156,8 +1156,8 @@ bool GuiManager::removeItem(GuiItem* item) {
     if(!item) return false;
     bool success = false;
     
-    if(selectedItem == item) {
-        setSelectedItem(nullptr);
+    if(focusedItem == item) {
+        setFocusedItem(nullptr);
     }
     if(backItem == item) {
         backItem = nullptr;
@@ -1176,37 +1176,37 @@ bool GuiManager::removeItem(GuiItem* item) {
 
 
 /**
- * @brief Sets the given item as the one that is selected, or none.
+ * @brief Sets the given item as the one that is focused, or none.
  *
- * @param item Item to select, or nullptr for none.
+ * @param item Item to focus, or nullptr for none.
  * @param silent If true, no sound effect will play.
- * Useful if you want the item to be selected not because of user input,
- * but because it's the default selected item when the GUI loads.
+ * Useful if you want the item to be focused not because of user input,
+ * but because it's the default focused item when the GUI loads.
  * @return Whether it succeeded.
  */
-bool GuiManager::setSelectedItem(GuiItem* item, bool silent) {
-    if(selectedItem == item) return false;
+bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
+    if(focusedItem == item) return false;
     
     autoRepeater.stop();
     
-    if(selectedItem) {
-        selectedItem->selected = false;
+    if(focusedItem) {
+        focusedItem->focused = false;
     }
-    selectedItem = item;
-    if(selectedItem) {
-        selectedItem->selected = true;
+    focusedItem = item;
+    if(focusedItem) {
+        focusedItem->focused = true;
     }
     
-    if(onSelectionChanged) onSelectionChanged();
-    if(selectedItem) {
-        if(selectedItem->onSelected) {
-            selectedItem->onSelected();
+    if(onFocusChanged) onFocusChanged();
+    if(focusedItem) {
+        if(focusedItem->onFocused) {
+            focusedItem->onFocused();
         }
     }
     
-    if(selectedItem && !silent) {
+    if(focusedItem && !silent) {
         game.audio.createUiSoundSource(
-            game.sysContent.sndMenuSelect,
+            game.sysContent.sndMenuFocus,
         { .stackMinPos = 0.01f, .volume = 0.5f, .speedDeviation = 0.1f }
         );
     }
@@ -1268,14 +1268,14 @@ bool GuiManager::tick(float deltaT) {
         }
     }
     
-    //Auto-repeat activations of the selected item, if applicable.
+    //Auto-repeat activations of the focused item, if applicable.
     size_t autoRepeatTriggers = autoRepeater.tick(deltaT);
     if(
-        selectedItem &&
-        selectedItem->canAutoRepeat && selectedItem->onActivate
+        focusedItem &&
+        focusedItem->canAutoRepeat && focusedItem->onActivate
     ) {
         for(size_t r = 0; r < autoRepeatTriggers; r++) {
-            selectedItem->activate(Point(LARGE_FLOAT));
+            focusedItem->activate(Point(LARGE_FLOAT));
         }
     }
     
@@ -1312,19 +1312,19 @@ ListGuiItem::ListGuiItem() :
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
-    onChildDirSelected =
+    onChildDirFocused =
     [this] (const GuiItem * child) {
-        this->defChildDirSelectedCode(child);
+        this->defChildDirFocusedCode(child);
     };
 }
 
 
 /**
- * @brief Default list GUI item child directionally selected code.
+ * @brief Default list GUI item child directionally focused code.
  *
  * @param child The child item.
  */
-void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
+void ListGuiItem::defChildDirFocusedCode(const GuiItem* child) {
     //Try to center the child.
     float childBottom = getChildBottom();
     if(childBottom <= 1.0f && offset == 0.0f) {
@@ -1484,7 +1484,7 @@ void ListGuiItem::defTickCode(float deltaT) {
  * @param baseText Text to display before the current option's name.
  * @param option Text that matches the current option.
  * @param nrOptions Total amount of options.
- * @param curOptionIdx Index of the currently selected option.
+ * @param curOptionIdx Index of the currently chosen option.
  */
 PickerGuiItem::PickerGuiItem(
     const string& baseText, const string& option,
@@ -1538,7 +1538,7 @@ void PickerGuiItem::defActivateCode(const Point& cursorPos) {
  * @param draw Information on how to draw.
  */
 void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
-    if(this->nrOptions != 0 && selected) {
+    if(this->nrOptions != 0 && focused) {
         Point optionBoxesStart(
             draw.center.x - draw.size.x / 2.0f + 20.0f,
             draw.center.y + draw.size.y / 2.0f - 12.0f
@@ -1560,7 +1560,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     
     unsigned char realArrowHighlight = 255;
     if(
-        selected &&
+        focused &&
         manager &&
         manager->wasLastInputMouse()
     ) {
@@ -1621,13 +1621,13 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     );
     
     ALLEGRO_COLOR boxTint =
-        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
     );
     
-    if(selected) {
+    if(focused) {
         drawTexturedBox(
             draw.center,
             draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
@@ -1857,7 +1857,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         
     }
     
-    if(selected && showSelectionBox) {
+    if(focused && showFocusBox) {
         drawTexturedBox(
             draw.center,
             draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,

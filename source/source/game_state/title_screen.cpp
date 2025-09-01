@@ -240,7 +240,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             playButton->text, playButton->font,
-            playButton->color, playButton->selected,
+            playButton->color, playButton->focused,
             playButton->getJuiceValue()
         );
     };
@@ -268,7 +268,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             makeButton->text, makeButton->font,
-            makeButton->color, makeButton->selected,
+            makeButton->color, makeButton->focused,
             makeButton->getJuiceValue()
         );
     };
@@ -294,7 +294,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             helpButton->text, helpButton->font,
-            helpButton->color, helpButton->selected,
+            helpButton->color, helpButton->focused,
             helpButton->getJuiceValue()
         );
     };
@@ -323,7 +323,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             optionsButton->text, optionsButton->font,
-            optionsButton->color, optionsButton->selected,
+            optionsButton->color, optionsButton->focused,
             optionsButton->getJuiceValue()
         );
     };
@@ -354,7 +354,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             statsButton->text, statsButton->font,
-            statsButton->color, statsButton->selected,
+            statsButton->color, statsButton->focused,
             statsButton->getJuiceValue()
         );
     };
@@ -385,7 +385,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             discordButton->text, discordButton->font,
-            discordButton->color, discordButton->selected,
+            discordButton->color, discordButton->focused,
             discordButton->getJuiceValue()
         );
     };
@@ -412,7 +412,7 @@ void TitleScreen::initGuiMainPage() {
         drawButton(
             draw.center, draw.size,
             githubButton->text, githubButton->font,
-            githubButton->color, githubButton->selected,
+            githubButton->color, githubButton->focused,
             githubButton->getJuiceValue()
         );
     };
@@ -437,7 +437,7 @@ void TitleScreen::initGuiMainPage() {
             ((ButtonGuiItem*) mainGui.backItem)->text,
             ((ButtonGuiItem*) mainGui.backItem)->font,
             ((ButtonGuiItem*) mainGui.backItem)->color,
-            mainGui.backItem->selected,
+            mainGui.backItem->focused,
             mainGui.backItem->getJuiceValue()
         );
     };
@@ -464,7 +464,7 @@ void TitleScreen::initGuiMainPage() {
     mainGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    mainGui.setSelectedItem(playButton, true);
+    mainGui.setFocusedItem(playButton, true);
     mainGui.responsive = false;
     mainGui.hideItems();
 }
@@ -512,7 +512,7 @@ void TitleScreen::initGuiMakePage() {
         drawButton(
             draw.center, draw.size,
             animEdButton->text, animEdButton->font,
-            animEdButton->color, animEdButton->selected,
+            animEdButton->color, animEdButton->focused,
             animEdButton->getJuiceValue()
         );
     };
@@ -537,7 +537,7 @@ void TitleScreen::initGuiMakePage() {
         drawButton(
             draw.center, draw.size,
             areaEdButton->text, areaEdButton->font,
-            areaEdButton->color, areaEdButton->selected,
+            areaEdButton->color, areaEdButton->focused,
             areaEdButton->getJuiceValue()
         );
     };
@@ -563,7 +563,7 @@ void TitleScreen::initGuiMakePage() {
         drawButton(
             draw.center, draw.size,
             partEdButton->text, partEdButton->font,
-            partEdButton->color, partEdButton->selected,
+            partEdButton->color, partEdButton->focused,
             partEdButton->getJuiceValue()
         );
     };
@@ -588,7 +588,7 @@ void TitleScreen::initGuiMakePage() {
         drawButton(
             draw.center, draw.size,
             guiEdButton->text, guiEdButton->font,
-            guiEdButton->color, guiEdButton->selected,
+            guiEdButton->color, guiEdButton->focused,
             guiEdButton->getJuiceValue()
         );
     };
@@ -642,7 +642,7 @@ void TitleScreen::initGuiMakePage() {
     makeGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    makeGui.setSelectedItem(animEdButton, true);
+    makeGui.setFocusedItem(animEdButton, true);
     makeGui.responsive = false;
     makeGui.hideItems();
 }
@@ -685,7 +685,7 @@ void TitleScreen::initGuiPlayPage() {
         drawButton(
             draw.center, draw.size,
             simpleButton->text, simpleButton->font,
-            simpleButton->color, simpleButton->selected,
+            simpleButton->color, simpleButton->focused,
             simpleButton->getJuiceValue()
         );
     };
@@ -714,7 +714,7 @@ void TitleScreen::initGuiPlayPage() {
         drawButton(
             draw.center, draw.size,
             missionButton->text, missionButton->font,
-            missionButton->color, missionButton->selected,
+            missionButton->color, missionButton->focused,
             missionButton->getJuiceValue()
         );
     };
@@ -761,7 +761,7 @@ void TitleScreen::initGuiPlayPage() {
     playGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    playGui.setSelectedItem(simpleButton, true);
+    playGui.setFocusedItem(simpleButton, true);
     playGui.responsive = false;
     playGui.hideItems();
 }
@@ -841,7 +841,7 @@ void TitleScreen::initGuiTutorialPage() {
     tutorialGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    tutorialGui.setSelectedItem(yesButton, true);
+    tutorialGui.setFocusedItem(yesButton, true);
     tutorialGui.responsive = false;
     tutorialGui.hideItems();
 }

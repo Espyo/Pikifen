@@ -150,7 +150,7 @@ void StatsMenu::initGuiMain() {
     gui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setSelectedItem(gui.backItem, true);
+    gui.setFocusedItem(gui.backItem, true);
 }
 
 

@@ -162,7 +162,7 @@ void PacksMenu::initGuiMain() {
         Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
     baseBullet->ratioSize =
         Point(0.70f, ITEM_HEIGHT);
-    baseBullet->onSelected =
+    baseBullet->onFocused =
     [this] () { changeInfo(-1); };
     packsList->addChild(baseBullet);
     gui.addItem(baseBullet);
@@ -179,7 +179,7 @@ void PacksMenu::initGuiMain() {
         );
         bullet->ratioCenter = Point(0.37f, rowCenterY);
         bullet->ratioSize = Point(0.70f, ITEM_HEIGHT);
-        bullet->onSelected = [p, this] () { changeInfo((int) p); };
+        bullet->onFocused = [p, this] () { changeInfo((int) p); };
         packsList->addChild(bullet);
         gui.addItem(bullet);
         packBullets.push_back(bullet);
@@ -206,7 +206,7 @@ void PacksMenu::initGuiMain() {
             }
             triggerRestartWarning();
         };
-        check->onSelected = [p, this] () { changeInfo((int) p); };
+        check->onFocused = [p, this] () { changeInfo((int) p); };
         check->onGetTooltip =
         [] () {
             return "Enable or disable this pack.";
@@ -237,7 +237,7 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            upButton->onSelected = [p, this] () { changeInfo((int) p); };
+            upButton->onFocused = [p, this] () { changeInfo((int) p); };
             upButton->onGetTooltip =
             [] () {
                 return "Move up on the list (make it be loaded earlier).";
@@ -268,7 +268,7 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            downButton->onSelected = [p, this] () { changeInfo((int) p); };
+            downButton->onFocused = [p, this] () { changeInfo((int) p); };
             downButton->onGetTooltip =
             [] () {
                 return "Move down on the list (make it be loaded later).";
@@ -390,7 +390,7 @@ void PacksMenu::initGuiMain() {
     populatePacksList();
     
     //Finishing touches.
-    gui.setSelectedItem(gui.backItem, true);
+    gui.setFocusedItem(gui.backItem, true);
     changeInfo(-1);
 }
 

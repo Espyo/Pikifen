@@ -301,7 +301,7 @@ Point scaleRectangleToBox(
     bool canShrinkX, bool canShrinkY,
     bool canChangeRatio
 );
-size_t selectNextItemDirectionally(
+size_t focusNextItemDirectionally(
     const vector<Point>& itemCoordinates, size_t selectedItem,
     float direction, const Point& loopRegion
 );

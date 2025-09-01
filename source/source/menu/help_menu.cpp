@@ -239,8 +239,8 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     gui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setSelectedItem(gui.backItem, true);
-    gui.onSelectionChanged =
+    gui.setFocusedItem(gui.backItem, true);
+    gui.onFocusChanged =
     [this] () {
         curTidbit = nullptr;
     };
@@ -341,7 +341,7 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
         tidbitBullet->onGetTooltip = [this, tPtr] () {
             return tPtr->description;
         };
-        tidbitBullet->onSelected = [this, tPtr] () {
+        tidbitBullet->onFocused = [this, tPtr] () {
             curTidbit = tPtr;
         };
         tidbitBullet->startJuiceAnimation(

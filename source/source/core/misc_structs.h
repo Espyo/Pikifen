@@ -695,8 +695,8 @@ struct SystemContentList {
     //Menu item activation fail.
     ALLEGRO_SAMPLE* sndMenuFail = nullptr;
     
-    //Menu item selection.
-    ALLEGRO_SAMPLE* sndMenuSelect = nullptr;
+    //Menu item focus.
+    ALLEGRO_SAMPLE* sndMenuFocus = nullptr;
     
     //"Mission clear!" big message.
     ALLEGRO_SAMPLE* sndMissionClear = nullptr;
@@ -941,8 +941,8 @@ struct SystemContentNames {
     //Menu item fail.
     string sndMenuFail = "gui/menu_fail";
     
-    //Menu item selection.
-    string sndMenuSelect = "gui/menu_select";
+    //Menu item focus.
+    string sndMenuFocus = "gui/menu_focus";
     
     //"Mission clear!" big message.
     string sndMissionClear = "gui/mission_clear";

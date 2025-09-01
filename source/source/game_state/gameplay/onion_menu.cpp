@@ -188,7 +188,7 @@ OnionMenu::OnionMenu(
         selectAllCheck->value = selectAll;
     };
     selectAllCheck->visible = types.size() > 1;
-    selectAllCheck->selectable = types.size() > 1;
+    selectAllCheck->focusable = types.size() > 1;
     selectAllCheck->onGetTooltip =
     [] () { return "Control all Pikmin types at once?"; };
     gui.addItem(selectAllCheck, "select_all");
@@ -239,7 +239,7 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                onionButton->selected
+                onionButton->focused
             );
         };
         onionButton->onActivate =
@@ -273,7 +273,7 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            onionAllButton->selected
+            onionAllButton->focused
         );
     };
     onionAllButton->onActivate =
@@ -359,7 +359,7 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                groupButton->selected
+                groupButton->focused
             );
         };
         groupButton->onActivate =
@@ -393,7 +393,7 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            groupAllButton->selected
+            groupAllButton->focused
         );
     };
     groupAllButton->onActivate =
@@ -515,7 +515,7 @@ OnionMenu::OnionMenu(
         drawButton(
             draw.center, draw.size, "",
             game.sysContent.fntStandard, COLOR_WHITE,
-            prevPageButton->selected,
+            prevPageButton->focused,
             prevPageButton->getJuiceValue()
         );
     };
@@ -524,7 +524,7 @@ OnionMenu::OnionMenu(
         goToPage(sumAndWrap((int) page, -1, (int) nrPages));
     };
     prevPageButton->visible = nrPages > 1;
-    prevPageButton->selectable = nrPages > 1;
+    prevPageButton->focusable = nrPages > 1;
     prevPageButton->onGetTooltip =
     [] () { return "Go to the previous page of Pikmin types."; };
     gui.addItem(prevPageButton, "prev_page");
@@ -541,7 +541,7 @@ OnionMenu::OnionMenu(
         drawButton(
             draw.center, draw.size, "",
             game.sysContent.fntStandard, COLOR_WHITE,
-            nextPageButton->selected,
+            nextPageButton->focused,
             nextPageButton->getJuiceValue()
         );
     };
@@ -550,7 +550,7 @@ OnionMenu::OnionMenu(
         goToPage(sumAndWrap((int) page, 1, (int) nrPages));
     };
     nextPageButton->visible = nrPages > 1;
-    nextPageButton->selectable = nrPages > 1;
+    nextPageButton->focusable = nrPages > 1;
     nextPageButton->onGetTooltip =
     [] () { return "Go to the next page of Pikmin types."; };
     gui.addItem(nextPageButton, "next_page");
@@ -953,11 +953,11 @@ void OnionMenu::update() {
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         onionIconItems[t]->visible = false;
         onionButtonItems[t]->visible = false;
-        onionButtonItems[t]->selectable = false;
+        onionButtonItems[t]->focusable = false;
         onionAmountItems[t]->visible = false;
         groupIconItems[t]->visible = false;
         groupButtonItems[t]->visible = false;
-        groupButtonItems[t]->selectable = false;
+        groupButtonItems[t]->focusable = false;
         groupAmountItems[t]->visible = false;
     }
     
@@ -1006,9 +1006,9 @@ void OnionMenu::update() {
         groupAmountItems[t]->visible = true;
         if(!selectAll) {
             onionButtonItems[t]->visible = true;
-            onionButtonItems[t]->selectable = true;
+            onionButtonItems[t]->focusable = true;
             groupButtonItems[t]->visible = true;
-            groupButtonItems[t]->selectable = true;
+            groupButtonItems[t]->focusable = true;
         }
     }
     
@@ -1036,9 +1036,9 @@ void OnionMenu::update() {
     groupAllButton->ratioSize.x = rightmost - leftmost;
     
     onionAllButton->visible = selectAll;
-    onionAllButton->selectable = selectAll;
+    onionAllButton->focusable = selectAll;
     groupAllButton->visible = selectAll;
-    groupAllButton->selectable = selectAll;
+    groupAllButton->focusable = selectAll;
 }
 
 

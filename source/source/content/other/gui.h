@@ -157,11 +157,11 @@ public:
     //Is it currently responsive?
     bool responsive = true;
     
-    //Can it be selected?
-    bool selectable = false;
+    //Can it be focused?
+    bool focusable = false;
     
-    //Is it currently the selected item?
-    bool selected = false;
+    //Is it currently the focused item?
+    bool focused = false;
     
     //If it is placed inside of another item, specify it here.
     GuiItem* parent = nullptr;
@@ -199,15 +199,15 @@ public:
     //What to do when the mouse cursor is on top of it this frame.
     std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
     
-    //What to do when a directional button's pressed with the item selected.
+    //What to do when a directional button's pressed with the item focused.
     std::function<bool(size_t buttonId)> onMenuDirButton = nullptr;
     
-    //What to do when it gets selected.
-    std::function<void()> onSelected = nullptr;
+    //What to do when it gets focused.
+    std::function<void()> onFocused = nullptr;
     
-    //What to do when one of its children became the selected item via
-    //directional selection.
-    std::function<void(const GuiItem* child)> onChildDirSelected = nullptr;
+    //What to do when one of its children became the focused item via
+    //directional focus.
+    std::function<void(const GuiItem* child)> onChildDirFocused = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> onGetTooltip = nullptr;
@@ -218,7 +218,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit GuiItem(bool selectable = false);
+    explicit GuiItem(bool focusable = false);
     virtual ~GuiItem() = default;
     bool activate(const Point& cursorPos);
     bool addChild(GuiItem* item);
@@ -361,7 +361,7 @@ public:
     
     ListGuiItem();
     
-    void defChildDirSelectedCode(const GuiItem* child);
+    void defChildDirFocusedCode(const GuiItem* child);
     void defDrawCode(const DrawInfo& draw);
     void defEventCode(const ALLEGRO_EVENT& ev);
     void defTickCode(float deltaT);
@@ -379,16 +379,16 @@ public:
 
     //--- Members ---
     
-    //The text to show before the currently selected option.
+    //The text to show before the currently chosen option.
     string baseText;
     
-    //The currently selected option.
+    //The currently chosen option.
     string option;
     
     //Total amount of options. Optional.
     size_t nrOptions = 0;
     
-    //Index of the currently selected option. Only used if nrOptions > 0.
+    //Index of the currently chosen option. Only used if nrOptions > 0.
     size_t curOptionIdx = INVALID;
     
     //What to do when the user picks the previous option.
@@ -472,8 +472,8 @@ public:
     //Wrap long lines. Also enables markup.
     bool lineWrap = false;
     
-    //Whether to show a selection box when selected.
-    bool showSelectionBox = false;
+    //Whether to show a focus box when focused.
+    bool showFocusBox = false;
     
     
     //--- Function declarations ---
@@ -526,7 +526,7 @@ private:
  * This manager is not used in the editors, since those work with
  * Dear ImGui. It is responsible for holding information about all GUI
  * items present on the game window, managing their coordinates, which one is
- * selected, ordering them to be rendered or to handle being activated, etc.
+ * focused, ordering them to be rendered or to handle being activated, etc.
  * Due to the system's flexibility, this is used both to manage the game's
  * heads-up display (HUD) during gameplay, as well as the interactable elements
  * of menus.
@@ -549,8 +549,8 @@ public:
     //Should it ignore input while animating?
     bool ignoreInputOnAnimation = true;
     
-    //What to do when the currently selected item changes.
-    std::function<void()> onSelectionChanged = nullptr;
+    //What to do when the currently focused item changes.
+    std::function<void()> onFocusChanged = nullptr;
     
     
     //--- Function declarations ---
@@ -561,7 +561,7 @@ public:
     bool tick(float deltaT);
     string getCurrentTooltip() const;
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
-    GuiItem* getSelectedItem() const;
+    GuiItem* getFocusedItem() const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const PlayerAction& action);
     bool hideItems();
@@ -571,7 +571,7 @@ public:
         float cx, float cy, float w, float h
     );
     bool removeItem(GuiItem* item);
-    bool setSelectedItem(GuiItem* item, bool silent = false);
+    bool setFocusedItem(GuiItem* item, bool silent = false);
     bool showItems();
     bool startAnimation(
         const GUI_MANAGER_ANIM type, float duration
@@ -583,8 +583,8 @@ private:
 
     //--- Members ---
 
-    //Which item is currently selected.
-    GuiItem* selectedItem = nullptr;
+    //Which item is currently focused.
+    GuiItem* focusedItem = nullptr;
     
     //Registered default centers.
     map<string, Point> registeredCenters;

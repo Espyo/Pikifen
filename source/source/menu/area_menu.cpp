@@ -609,7 +609,7 @@ void AreaMenu::initGuiMain() {
                     game.changeState(game.states.gameplay);
                 });
             };
-            areaButton->onSelected =
+            areaButton->onFocused =
             [this, a] () { changeInfo(a); };
             areaButton->onGetTooltip =
             [areaPtr] () { return "Play " + areaPtr->name + "."; };
@@ -711,7 +711,7 @@ void AreaMenu::initGuiMain() {
             drawButton(
                 draw.center, draw.size, "",
                 game.sysContent.fntStandard, COLOR_WHITE,
-                randomButton->selected
+                randomButton->focused
             );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
@@ -904,7 +904,7 @@ void AreaMenu::load() {
         specsBox->responsive = false;
     }
     if(firstAreaButton) {
-        gui.setSelectedItem(firstAreaButton, true);
+        gui.setFocusedItem(firstAreaButton, true);
     }
     
     //Finish the menu class setup.

@@ -1918,7 +1918,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("menu_activate", sndMenuActivate);
     sndRS.set("menu_back", sndMenuBack);
     sndRS.set("menu_fail", sndMenuFail);
-    sndRS.set("menu_select", sndMenuSelect);
+    sndRS.set("menu_focus", sndMenuFocus);
     sndRS.set("mission_clear", sndMissionClear);
     sndRS.set("mission_failed", sndMissionFailed);
     sndRS.set("one_minute_left", sndOneMinuteLeft);
