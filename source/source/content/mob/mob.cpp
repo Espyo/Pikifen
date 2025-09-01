@@ -312,6 +312,32 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
 
 
 /**
+ * @brief Applies a status effect.
+ *
+ * @param s Status effect to use.
+ * @param givenByParent If true, this status effect was given to the mob
+ * by its parent mob.
+ * @param fromHazard If true, this status effect was given from a hazard.
+ */
+void Mob::applyStatus(
+    StatusType* s, bool givenByParent, bool fromHazard
+) {
+    //Initial checks.
+    if(!givenByParent && !canReceiveStatus(s)) {
+        return;
+    }
+    
+    //Parent and buildup logic.
+    if(applyStatusParentLogic(s, givenByParent, fromHazard)) {
+        return;
+    }
+    
+    //At this point the mob must really be given the status effect's effects.
+    applyStatusEffects(s, givenByParent, fromHazard);
+}
+
+
+/**
  * @brief Applies a status effect's effects.
  *
  * @param s Status effect to use.
@@ -319,32 +345,15 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
  */
-void Mob::applyStatusEffect(
+void Mob::applyStatusEffects(
     StatusType* s, bool givenByParent, bool fromHazard
 ) {
-    if(parent && parent->relayStatuses && !givenByParent) {
-        parent->m->applyStatusEffect(s, false, fromHazard);
-        if(!parent->handleStatuses) return;
-    }
-    
-    if(!givenByParent && !canReceiveStatus(s)) {
-        return;
-    }
-    
-    //Let's start by sending the status to the child mobs.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m2Ptr = game.states.gameplay->mobs.all[m];
-        if(m2Ptr->parent && m2Ptr->parent->m == this) {
-            m2Ptr->applyStatusEffect(s, true, fromHazard);
-        }
-    }
-    
     //Get the vulnerabilities to this status.
     auto vulnIt = type->statusVulnerabilities.find(s);
     if(vulnIt != type->statusVulnerabilities.end()) {
         if(vulnIt->second.statusToApply) {
             //It must instead receive this status.
-            applyStatusEffect(
+            applyStatus(
                 vulnIt->second.statusToApply, givenByParent, fromHazard
             );
             return;
@@ -352,8 +361,8 @@ void Mob::applyStatusEffect(
     }
     
     //Check if the mob is already under this status.
-    for(size_t ms = 0; ms < this->statuses.size(); ms++) {
-        if(this->statuses[ms].type == s) {
+    for(size_t ms = 0; ms < statuses.size(); ms++) {
+        if(statuses[ms].type == s) {
             //Already exists. What do we do with the time left?
             
             switch(s->reapplyRule) {
@@ -361,11 +370,11 @@ void Mob::applyStatusEffect(
                 break;
             }
             case STATUS_REAPPLY_RULE_RESET_TIME: {
-                this->statuses[ms].timeLeft = s->autoRemoveTime;
+                statuses[ms].timeLeft = s->autoRemoveTime;
                 break;
             }
             case STATUS_REAPPLY_RULE_ADD_TIME: {
-                this->statuses[ms].timeLeft += s->autoRemoveTime;
+                statuses[ms].timeLeft += s->autoRemoveTime;
                 break;
             }
             }
@@ -377,7 +386,7 @@ void Mob::applyStatusEffect(
     //This status is not already inflicted. Let's do so.
     Status newStatus(s);
     newStatus.fromHazard = fromHazard;
-    this->statuses.push_back(newStatus);
+    statuses.push_back(newStatus);
     handleStatusEffectGain(s);
     
     if(!s->animationChange.empty()) {
@@ -401,6 +410,38 @@ void Mob::applyStatusEffect(
     if(s->freezesAnimation) {
         getSpriteData(&forcedSprite, nullptr, nullptr);
     }
+}
+
+
+/**
+ * @brief Does parent-child logic when applying a status effect.
+ *
+ * @param s Status effect to use.
+ * @param givenByParent If true, this status effect was given to the mob
+ * by its parent mob.
+ * @param fromHazard If true, this status effect was given from a hazard.
+ * @return True if the work got delegated to a parent, and so status
+ * application logic shouldn't continue. False if the status application
+ * logic should continue.
+ */
+bool Mob::applyStatusParentLogic(
+    StatusType* s, bool givenByParent, bool fromHazard
+) {
+    //Send the status to the child mobs.
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        Mob* m2Ptr = game.states.gameplay->mobs.all[m];
+        if(m2Ptr->parent && m2Ptr->parent->m == this) {
+            m2Ptr->applyStatus(s, true, fromHazard);
+        }
+    }
+    
+    //Relay it to the parent mob, if applicable.
+    if(parent && parent->relayStatuses && !givenByParent) {
+        parent->m->applyStatus(s, false, fromHazard);
+        if(!parent->handleStatuses) return true;
+    }
+    
+    return false;
 }
 
 
@@ -638,9 +679,11 @@ bool Mob::calculateAttackBasics(
     
     //Calculate the status multipliers.
     for(size_t s = 0; s < statuses.size(); s++) {
+        if(!statuses[s].isActive()) continue;
         *outOffenseMultiplier *= statuses[s].type->attackMultiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); s++) {
+        if(!victim->statuses[s].isActive()) continue;
         float statusDefMult =
             victim->statuses[s].type->defenseMultiplier - 1.0f;
         auto statusVulnIt =
@@ -1056,7 +1099,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     }
     
     if(type->spikeDamage->statusToApply) {
-        victim->applyStatusEffect(
+        victim->applyStatus(
             type->spikeDamage->statusToApply, false, false
         );
     }
@@ -1077,7 +1120,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         v != victim->type->spikeDamageVulnerabilities.end() &&
         v->second.statusToApply
     ) {
-        victim->applyStatusEffect(
+        victim->applyStatus(
             v->second.statusToApply, false, false
         );
     }
@@ -1413,7 +1456,7 @@ void Mob::deleteOldStatusEffects() {
     
     //Apply new status effects.
     for(size_t s = 0; s < newStatusesToApply.size(); s++) {
-        applyStatusEffect(
+        applyStatus(
             newStatusesToApply[s].first,
             false, newStatusesToApply[s].second
         );
@@ -1426,7 +1469,7 @@ void Mob::deleteOldStatusEffects() {
     //Update some flags.
     hasInvisibilityStatus = false;
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(statuses[s].type->turnsInvisible) {
+        if(statuses[s].isActive() && statuses[s].type->turnsInvisible) {
             hasInvisibilityStatus = true;
             break;
         }
@@ -2092,7 +2135,7 @@ float Mob::getLatchedPikminWeight() const {
 /**
  * @brief Returns how many mission points this mob is currently worth, or
  * 0 if not applicable.
- * 
+ *
  * @param applicableInThisMission If not nullptr, whether the points are
  * applicable in this mission or not is returned here.
  * @return The point amount.
@@ -2128,15 +2171,14 @@ size_t Mob::getPlayerTeamIdx() const {
  */
 float Mob::getSpeedMultiplier() const {
     float moveSpeedMult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); s++) {
-        if(!statuses[s].toDelete) {
-            float vulnMult = this->statuses[s].type->speedMultiplier - 1.0f;
-            auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
-            if(vulnIt != type->statusVulnerabilities.end()) {
-                vulnMult *= vulnIt->second.effectMult;
-            }
-            moveSpeedMult *= (vulnMult + 1.0f);
+    for(size_t s = 0; s < statuses.size(); s++) {
+        if(!statuses[s].isActive()) continue;
+        float vulnMult = statuses[s].type->speedMultiplier - 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+        if(vulnIt != type->statusVulnerabilities.end()) {
+            vulnMult *= vulnIt->second.effectMult;
         }
+        moveSpeedMult *= (vulnMult + 1.0f);
     }
     return moveSpeedMult;
 }
@@ -2187,7 +2229,8 @@ void Mob::getSpriteBitmapEffects(
         ALLEGRO_COLOR glowColorSum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); s++) {
-            StatusType* t = this->statuses[s].type;
+            if(!statuses[s].isActive()) continue;
+            StatusType* t = statuses[s].type;
             if(
                 t->tint.r == 1.0f &&
                 t->tint.g == 1.0f &&
@@ -2567,8 +2610,9 @@ void Mob::getSpriteData(
  */
 ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
     *bmpScale = 0.0f;
-    for(size_t st = 0; st < this->statuses.size(); st++) {
-        StatusType* t = this->statuses[st].type;
+    for(size_t st = 0; st < statuses.size(); st++) {
+        if(!statuses[st].isActive()) continue;
+        StatusType* t = statuses[st].type;
         if(t->overlayAnimation.empty()) continue;
         Sprite* sp;
         t->overlayAnim.getSpriteData(&sp, nullptr, nullptr);
@@ -3698,8 +3742,9 @@ void Mob::tick(float deltaT) {
  */
 void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); s++) {
-        float vulnMult = this->statuses[s].type->animSpeedMultiplier - 1.0f;
+    for(size_t s = 0; s < statuses.size(); s++) {
+        if(!statuses[s].isActive()) continue;
+        float vulnMult = statuses[s].type->animSpeedMultiplier - 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
             vulnMult *= vulnIt->second.effectMult;
@@ -3927,8 +3972,10 @@ void Mob::tickMiscLogic(float deltaT) {
     
     invulnPeriod.tick(deltaT);
     
-    for(size_t s = 0; s < this->statuses.size(); s++) {
+    for(size_t s = 0; s < statuses.size(); s++) {
         statuses[s].tick(deltaT);
+        
+        if(!statuses[s].isActive()) continue;
         
         float damageMult = 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
@@ -4263,6 +4310,7 @@ void Mob::tickScript(float deltaT) {
         
         bool savedByWhistle = false;
         for(size_t s = 0; s < statuses.size(); s++) {
+            if(!statuses[s].isActive()) continue;
             if(statuses[s].type->removableWithWhistle) {
                 statuses[s].toDelete = true;
                 if(

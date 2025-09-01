@@ -483,7 +483,7 @@ void GenMobFsm::touchHazard(Mob* m, void* info1, void* info2) {
     Hazard* h = (Hazard*) info1;
     
     for(size_t e = 0; e < h->effects.size(); e++) {
-        m->applyStatusEffect(h->effects[e], false, true);
+        m->applyStatus(h->effects[e], false, true);
     }
 }
 
@@ -501,6 +501,6 @@ void GenMobFsm::touchSpray(Mob* m, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->applyStatusEffect(s->effects[e], false, false);
+        m->applyStatus(s->effects[e], false, false);
     }
 }

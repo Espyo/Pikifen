@@ -1592,7 +1592,7 @@ void MobActionRunners::print(MobActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::receiveStatus(MobActionRunData& data) {
-    data.m->applyStatusEffect(
+    data.m->applyStatus(
         game.content.statusTypes.list[data.args[0]], false, false
     );
 }

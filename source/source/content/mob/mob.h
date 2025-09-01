@@ -492,7 +492,7 @@ public:
     void arachnorbPlanLogic(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorbFootMoveLogic();
     
-    void applyStatusEffect(
+    void applyStatus(
         StatusType* s, bool givenByParent, bool fromHazard
     );
     void deleteOldStatusEffects();
@@ -533,6 +533,12 @@ protected:
     
     //--- Function declarations ---
     
+    void applyStatusEffects(
+        StatusType* s, bool givenByParent, bool fromHazard
+    );
+    bool applyStatusParentLogic(
+        StatusType* s, bool givenByParent, bool fromHazard
+    );
     void chaseNextPathStop(float speed, float acceleration = LARGE_FLOAT);
     PikminType* decideCarryPikminType(
         const unordered_set<PikminType*>& availableTypes

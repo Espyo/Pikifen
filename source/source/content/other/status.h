@@ -220,6 +220,7 @@ struct Status {
     //--- Function declarations ---
     
     explicit Status(StatusType* type);
+    bool isActive() const;
     void tick(float deltaT);
     
 };

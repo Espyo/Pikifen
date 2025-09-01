@@ -2869,7 +2869,7 @@ void PikminFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         pikPtr->increaseMaturity(droPtr->droType->increaseAmount);
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        pikPtr->applyStatusEffect(
+        pikPtr->applyStatus(
             droPtr->droType->statusToGive, false, false
         );
         break;
@@ -4557,6 +4557,7 @@ void PikminFsm::touchedEatHitbox(Mob* m, void* info1, void* info2) {
     }
     
     for(size_t s = 0; s < m->statuses.size(); s++) {
+        if(!m->statuses[s].isActive()) continue;
         if(m->statuses[s].type->turnsInedible) {
             return;
         }
@@ -4621,11 +4622,11 @@ void PikminFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            pikPtr->applyStatusEffect(hazPtr->effects[e], false, true);
+            pikPtr->applyStatus(hazPtr->effects[e], false, true);
         }
     }
     if(vuln.statusToApply) {
-        pikPtr->applyStatusEffect(vuln.statusToApply, false, true);
+        pikPtr->applyStatus(vuln.statusToApply, false, true);
     }
 }
 
@@ -4643,7 +4644,7 @@ void PikminFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->applyStatusEffect(s->effects[e], false, false);
+        m->applyStatus(s->effects[e], false, false);
     }
     
     if(s->buriesPikmin) {

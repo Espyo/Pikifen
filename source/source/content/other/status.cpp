@@ -31,6 +31,18 @@ Status::Status(StatusType* type) :
 
 
 /**
+ * @brief Returns whether or not the status is currently active, i.e. whether
+ * its effects are being applied right now.
+ * 
+ * @return Whether it's active.
+ */
+bool Status::isActive() const {
+    if(toDelete) return false;
+    return true;
+}
+
+
+/**
  * @brief Ticks a status effect instance's time by one frame of logic,
  * but does not tick its effects logic.
  *
