@@ -219,6 +219,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     ) {
         //Mouse cursor.
         mouseCursor.updatePos(ev);
+        mouseCursor.movedThisFrame = true;
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.
@@ -271,9 +272,17 @@ bool Game::globalHandleSystemPlayerAction(const PlayerAction& action) {
 
 
 /**
- * @brief Performs some global logic to run every frame.
+ * @brief Performs some global logic to run every frame, after the state's logic.
  */
-void Game::globalLogic() {
+void Game::globalLogicPost() {
+    mouseCursor.movedThisFrame = false;
+}
+
+
+/**
+ * @brief Performs some global logic to run every frame, before the state's logic.
+ */
+void Game::globalLogicPre() {
     //Player action handling.
     for(size_t a = 0; a < playerActions.size();) {
         if(makerTools.handleGeneralPlayerAction(playerActions[a])) {
@@ -356,9 +365,10 @@ void Game::mainLoop() {
                 GameState* prevState = curState;
                 
                 playerActions = controls.newFrame(deltaT);
-                globalLogic();
+                globalLogicPre();
                 curState->doLogic();
-                
+                globalLogicPost();
+
                 if(curState == prevState) {
                     //Only draw if we didn't change states in the meantime.
                     curState->doDrawing();

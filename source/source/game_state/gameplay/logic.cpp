@@ -516,28 +516,35 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     player->notification.tick(deltaT);
     
-    /********************
-    *             .-.   *
-    *   Cursor   ( = )> *
-    *             `-´   *
-    ********************/
+    /***************************
+    *                    .-.   *
+    *   Leader cursor   ( = )> *
+    *                    `-´   *
+    ****************************/
     
-    Point mouseCursorSpeed;
+    Point leaderCursorSpeed;
     float dummyMagnitude;
     player->cursorMovement.getInfo(
-        &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
+        &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
     );
-    mouseCursorSpeed =
-        mouseCursorSpeed * deltaT * game.options.controls.cursorSpeed;
-        
-    player->leaderCursorWorld = player->view.cursorWorldPos;
+    leaderCursorSpeed =
+        leaderCursorSpeed * deltaT * game.options.controls.cursorSpeed;
+    
+    if(
+        leaderCursorSpeed.x == 0.0f && leaderCursorSpeed.y == 0.0f &&
+        game.mouseCursor.movedThisFrame
+    ) {
+        player->leaderCursorWorld = player->view.cursorWorldPos;
+    } else {
+        player->leaderCursorWorld += leaderCursorSpeed;
+    }
     
     float cursorAngle =
         getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-        
     Distance leaderToCursorDist(
         player->leaderPtr->pos, player->leaderCursorWorld
     );
+
     if(leaderToCursorDist > game.config.rules.cursorMaxDist) {
         //Cursor goes beyond the range limit.
         player->leaderCursorWorld.x =
@@ -546,17 +553,6 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->leaderCursorWorld.y =
             player->leaderPtr->pos.y +
             (sin(cursorAngle) * game.config.rules.cursorMaxDist);
-            
-        if(mouseCursorSpeed.x != 0 || mouseCursorSpeed.y != 0) {
-            //If we're speeding the mouse cursor (via analog stick),
-            //don't let it go beyond the edges.
-            player->view.cursorWorldPos = player->leaderCursorWorld;
-            game.mouseCursor.winPos = player->view.cursorWorldPos;
-            al_transform_coordinates(
-                &player->view.worldToWindowTransform,
-                &game.mouseCursor.winPos.x, &game.mouseCursor.winPos.y
-            );
-        }
     }
     
     player->leaderCursorWin = player->leaderCursorWorld;
@@ -700,25 +696,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *   Timer things - gameplay   ( L ) *
         *                              `-´  *
         *************************************/
-        
-        //Mouse cursor.
-        Point mouseCursorSpeed;
-        float dummyAngle;
-        float dummyMagnitude;
-        players[0].cursorMovement.getInfo(
-            &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
-        );
-        mouseCursorSpeed =
-            mouseCursorSpeed * deltaT * game.options.controls.cursorSpeed;
-            
-        game.mouseCursor.winPos += mouseCursorSpeed;
-        
-        game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
-        al_transform_coordinates(
-            &game.editorsView.windowToWorldTransform,
-            &game.editorsView.cursorWorldPos.x,
-            &game.editorsView.cursorWorldPos.y
-        );
         
         areaTimePassed += deltaT;
         if(interlude.get() == INTERLUDE_NONE) {

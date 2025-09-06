@@ -272,6 +272,9 @@ struct MouseCursor {
     
     //Position, in window coordinates.
     Point winPos;
+
+    //Whether it was moved this frame.
+    bool movedThisFrame = false;
     
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.

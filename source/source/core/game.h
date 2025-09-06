@@ -308,7 +308,8 @@ private:
     
     void drawFramerateChart() const;
     void globalDrawing();
-    void globalLogic();
+    void globalLogicPost();
+    void globalLogicPre();
     void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool globalHandleSystemPlayerAction(const PlayerAction& action);
     void processSystemInfo();
