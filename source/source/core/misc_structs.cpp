@@ -752,7 +752,7 @@ void MouseCursor::init() {
 
 
 /**
- * @brief Resets the cursor's state.
+ * @brief Resets the mouse cursor's state.
  */
 void MouseCursor::reset() {
     ALLEGRO_MOUSE_STATE mouseState;
@@ -1849,7 +1849,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("button_box", bmpButtonBox);
     graRS.set("checkbox_check", bmpCheckboxCheck);
     graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
-    graRS.set("cursor", bmpCursor);
+    graRS.set("cursor", bmpLeaderCursor);
     graRS.set("difficulty", bmpDifficulty);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);
@@ -1897,7 +1897,7 @@ void SystemContentNames::load(DataNode* file) {
     
     fntRS.set("area_name", fntAreaName);
     fntRS.set("counter", fntCounter);
-    fntRS.set("cursor_counter", fntCursorCounter);
+    fntRS.set("cursor_counter", fntLeaderCursorCounter);
     fntRS.set("editor_header", fntEditorHeader);
     fntRS.set("editor_monospace", fntEditorMonospace);
     fntRS.set("editor_standard", fntEditorStandard);
@@ -2013,15 +2013,15 @@ void Viewport::updateBox() {
 
 /**
  * @brief Updates the mouse cursor position, given the game window
- * cursor coordinates.
+ * mouse cursor coordinates.
  *
- * @param windowPos Window coordinates.
+ * @param windowMouseCursorPos Window mouse cursor coordinates.
  */
-void Viewport::updateCursor(const Point& windowPos) {
-    cursorWorldPos = windowPos;
+void Viewport::updateMouseCursor(const Point& windowMouseCursorPos) {
+    mouseCursorWorldPos = windowMouseCursorPos;
     al_transform_coordinates(
         &windowToWorldTransform,
-        &cursorWorldPos.x, &cursorWorldPos.y
+        &mouseCursorWorldPos.x, &mouseCursorWorldPos.y
     );
 }
 
@@ -2095,8 +2095,8 @@ void Whistle::stopWhistling() {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  * @param center What its center is on this frame.
- * @param whistleRange How far the whistle can reach from the cursor center.
- * @param leaderToCursorDist Distance between the leader and the cursor.
+ * @param whistleRange How far the whistle can reach from the leader cursor center.
+ * @param leaderToCursorDist Distance between the leader and their cursor.
  */
 void Whistle::tick(
     float deltaT, const Point& center,
@@ -2125,7 +2125,7 @@ void Whistle::tick(
     }
     
     for(size_t r = 0; r < rings.size(); ) {
-        //Erase rings that go beyond the cursor.
+        //Erase rings that go beyond the leader's cursor.
         rings[r] += WHISTLE::RING_SPEED * deltaT;
         if(leaderToCursorDist < rings[r]) {
             rings.erase(rings.begin() + r);

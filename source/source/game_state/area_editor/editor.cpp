@@ -605,12 +605,12 @@ void AreaEditor::createDrawingVertexes() {
 
 
 /**
- * @brief Creates a new mob where the cursor is.
+ * @brief Creates a new mob where the mouse cursor is.
  */
 void AreaEditor::createMobUnderCursor() {
     registerChange("object creation");
     subState = EDITOR_SUB_STATE_NONE;
-    Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+    Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
     
     if(lastMobCustomCatName.empty()) {
         lastMobCustomCatName =
@@ -1686,20 +1686,20 @@ string AreaEditor::getFolderTooltip(
 void AreaEditor::getHoveredLayoutElement(
     Vertex** hoveredVertex, Edge** hoveredEdge, Sector** hoveredSector
 ) const {
-    *hoveredVertex = getVertexUnderPoint(game.editorsView.cursorWorldPos);
+    *hoveredVertex = getVertexUnderPoint(game.editorsView.mouseCursorWorldPos);
     *hoveredEdge = nullptr;
     *hoveredSector = nullptr;
     
     if(*hoveredVertex) return;
     
     if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-        *hoveredEdge = getEdgeUnderPoint(game.editorsView.cursorWorldPos);
+        *hoveredEdge = getEdgeUnderPoint(game.editorsView.mouseCursorWorldPos);
     }
     
     if(*hoveredEdge) return;
     
     if(selectionFilter == SELECTION_FILTER_SECTORS) {
-        *hoveredSector = getSectorUnderPoint(game.editorsView.cursorWorldPos);
+        *hoveredSector = getSectorUnderPoint(game.editorsView.mouseCursorWorldPos);
     }
 }
 
@@ -3114,7 +3114,7 @@ void AreaEditor::setNewCircleSectorPoints() {
     float anchorAngle =
         getAngle(newCircleSectorCenter, newCircleSectorAnchor);
     float cursorAngle =
-        getAngle(newCircleSectorCenter, game.editorsView.cursorWorldPos);
+        getAngle(newCircleSectorCenter, game.editorsView.mouseCursorWorldPos);
     float radius =
         Distance(
             newCircleSectorCenter, newCircleSectorAnchor
@@ -3413,7 +3413,7 @@ void AreaEditor::startMobMove() {
     for(auto const& m : selectedMobs) {
         preMoveMobCoords[m] = m->pos;
         
-        Distance d(game.editorsView.cursorWorldPos, m->pos);
+        Distance d(game.editorsView.mouseCursorWorldPos, m->pos);
         if(!moveClosestMob || d < moveClosestMobDist) {
             moveClosestMob = m;
             moveClosestMobDist = d;
@@ -3421,7 +3421,7 @@ void AreaEditor::startMobMove() {
         }
     }
     
-    moveMouseStartPos = game.editorsView.cursorWorldPos;
+    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
     moving = true;
 }
 
@@ -3440,7 +3440,7 @@ void AreaEditor::startPathStopMove() {
     ) {
         preMoveStopCoords[*s] = (*s)->pos;
         
-        Distance d(game.editorsView.cursorWorldPos, (*s)->pos);
+        Distance d(game.editorsView.mouseCursorWorldPos, (*s)->pos);
         if(!moveClosestStop || d < moveClosestStopDist) {
             moveClosestStop = *s;
             moveClosestStopDist = d;
@@ -3448,7 +3448,7 @@ void AreaEditor::startPathStopMove() {
         }
     }
     
-    moveMouseStartPos = game.editorsView.cursorWorldPos;
+    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
     moving = true;
 }
 
@@ -3465,7 +3465,7 @@ void AreaEditor::startVertexMove() {
         Point p = v2p(v);
         preMoveVertexCoords[v] = p;
         
-        Distance d(game.editorsView.cursorWorldPos, p);
+        Distance d(game.editorsView.mouseCursorWorldPos, p);
         if(!moveClosestVertex || d < moveClosestVertexDist) {
             moveClosestVertex = v;
             moveClosestVertexDist = d;
@@ -3473,7 +3473,7 @@ void AreaEditor::startVertexMove() {
         }
     }
     
-    moveMouseStartPos = game.editorsView.cursorWorldPos;
+    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
     moving = true;
 }
 

@@ -26,11 +26,11 @@ const ALLEGRO_COLOR CARRYING_COLOR_MOVE =
 const ALLEGRO_COLOR CARRYING_COLOR_STOP =
 { 0.38f, 0.75f, 0.75f, 1.00f };
 
-//Default value for the cursor spin speed.
-const float CURSOR_SPIN_SPEED = degToRad(180.0f);
-
 //Default value for the gameplay message character interval.
 const float GAMEPLAY_MSG_CHAR_INTERVAL = 0.03f;
+
+//Default value for the mouse cursor spin speed.
+const float MOUSE_CURSOR_SPIN_SPEED = degToRad(180.0f);
 
 //Default value for the color that represents no Pikmin.
 const ALLEGRO_COLOR NO_PIKMIN_COLOR = { 0.66f, 0.74f, 0.90f, 1.0f };
@@ -137,20 +137,20 @@ namespace RULES_D {
 //Default value for whether leaders can throw leaders.
 const bool CAN_THROW_LEADERS = true;
 
-//Default value for the cursor maximum distance.
-const float CURSOR_MAX_DIST = 200.0f;
+//Default value for the leader cursor maximum distance.
+const float LEADER_CURSOR_MAX_DIST = 200.0f;
 
 //Default value for the maximum number of Pikmin in the field.
 const size_t MAX_PIKMIN_IN_FIELD = 100;
 
 //Default value for the maximum throw distance.
-const float THROW_MAX_DIST = CURSOR_MAX_DIST;
+const float THROW_MAX_DIST = LEADER_CURSOR_MAX_DIST;
 
 //Default value for the whistle growth speed.
 const float WHISTLE_GROWTH_SPEED = 180.0f;
 
 //Default value for the maximum whistle distance.
-const float WHISTLE_MAX_DIST = CURSOR_MAX_DIST;
+const float WHISTLE_MAX_DIST = LEADER_CURSOR_MAX_DIST;
 
 //Default value for the zoom closest reach.
 const float ZOOM_CLOSEST_REACH = 295.0f;
@@ -177,14 +177,14 @@ void GameConfig::load(DataNode* file) {
         
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
         aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
-        aRS.set("cursor_spin_speed", aestheticGen.cursorSpinSpeed);
+        aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set(
             "gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval
         );
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
         
-        aestheticGen.cursorSpinSpeed =
-            degToRad(aestheticGen.cursorSpinSpeed);
+        aestheticGen.mouseCursorSpinSpeed =
+            degToRad(aestheticGen.mouseCursorSpinSpeed);
     }
     
     //Aesthetic radar.
@@ -268,7 +268,7 @@ void GameConfig::load(DataNode* file) {
         ReaderSetter rRS(file->getChildByName("rules"));
         
         rRS.set("can_throw_leaders", rules.canThrowLeaders);
-        rRS.set("cursor_max_dist", rules.cursorMaxDist);
+        rRS.set("cursor_max_dist", rules.leaderCursorMaxDist);
         rRS.set("max_pikmin_in_field", rules.maxPikminInField);
         rRS.set("throw_max_dist", rules.throwMaxDist);
         rRS.set("whistle_growth_speed", rules.whistleGrowthSpeed);

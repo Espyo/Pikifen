@@ -270,7 +270,7 @@ void Editor::drawGrid(
 
 
 /**
- * @brief Draws a small red X on the cursor, signifying an operation has failed.
+ * @brief Draws a small red X on the mouse cursor, signifying an operation has failed.
  */
 void Editor::drawOpErrorCursor() {
     float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
@@ -757,7 +757,7 @@ void Editor::handleMmbUp(const ALLEGRO_EVENT& ev) {}
  * @param ev Event to process.
  */
 void Editor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
-    game.editorsView.updateCursor(game.mouseCursor.winPos);
+    game.editorsView.updateMouseCursor(game.mouseCursor.winPos);
 }
 
 
@@ -3188,7 +3188,7 @@ void Editor::updateStyle() {
  */
 void Editor::zoomWithCursor(float newZoom) {
     //Keep a backup of the old mouse coordinates.
-    Point oldMousePos = game.editorsView.cursorWorldPos;
+    Point oldMousePos = game.editorsView.mouseCursorWorldPos;
     
     //Do the zoom.
     game.editorsView.cam.setZoom(
@@ -3197,29 +3197,29 @@ void Editor::zoomWithCursor(float newZoom) {
     game.editorsView.updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
-    game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
+    game.editorsView.mouseCursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
+        &game.editorsView.mouseCursorWorldPos.x, &game.editorsView.mouseCursorWorldPos.y
     );
     
     //Readjust the transformation by shifting the camera
-    //so that the cursor ends up where it was before.
+    //so that the mouse cursor ends up where it was before.
     game.editorsView.cam.setPos(
         Point(
             game.editorsView.cam.pos.x +=
-                (oldMousePos.x - game.editorsView.cursorWorldPos.x),
+                (oldMousePos.x - game.editorsView.mouseCursorWorldPos.x),
             game.editorsView.cam.pos.y +=
-                (oldMousePos.y - game.editorsView.cursorWorldPos.y)
+                (oldMousePos.y - game.editorsView.mouseCursorWorldPos.y)
         )
     );
     
     //Update the mouse coordinates again.
     game.editorsView.updateTransformations();
-    game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
+    game.editorsView.mouseCursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
+        &game.editorsView.mouseCursorWorldPos.x, &game.editorsView.mouseCursorWorldPos.y
     );
 }
 

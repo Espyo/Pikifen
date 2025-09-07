@@ -193,7 +193,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
 
         unsigned char settingIdx = getMakerToolSettingIdx();
         Mob* m =
-            getClosestMobToCursor(game.states.gameplay->players[0].view, true);
+            getClosestMobToMouseCursor(game.states.gameplay->players[0].view, true);
         if(m) {
             m->setHealth(
                 true, true,
@@ -216,7 +216,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
             m = nullptr;
         } else {
             m =
-                getClosestMobToCursor(
+                getClosestMobToMouseCursor(
                     game.states.gameplay->players[0].view, false
                 );
         }
@@ -261,7 +261,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
             
             createMob(
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-                game.states.gameplay->players[0].view.cursorWorldPos,
+                game.states.gameplay->players[0].view.mouseCursorWorldPos,
                 newPikminType, 0,
                 mod2 ? "maturity=0" : "maturity=2"
             );
@@ -298,17 +298,17 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
             
         Sector* mouseSector =
             getSector(
-                game.states.gameplay->players[0].view.cursorWorldPos,
+                game.states.gameplay->players[0].view.mouseCursorWorldPos,
                 nullptr, true
             );
         if(mouseSector && mobToTeleport) {
             mobToTeleport->chase(
-                game.states.gameplay->players[0].view.cursorWorldPos,
+                game.states.gameplay->players[0].view.mouseCursorWorldPos,
                 mouseSector->z, CHASE_FLAG_TELEPORT
             );
             if(mobToTeleport == game.states.gameplay->players[0].leaderPtr) {
                 game.states.gameplay->players[0].view.cam.setPos(
-                    game.states.gameplay->players[0].view.cursorWorldPos
+                    game.states.gameplay->players[0].view.mouseCursorWorldPos
                 );
             } else {
                 //Tick it once so it can run its teleportation code.

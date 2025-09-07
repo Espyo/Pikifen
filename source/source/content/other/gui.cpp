@@ -284,7 +284,7 @@ GuiItem::GuiItem(bool focusable) :
 /**
  * @brief Activates the item.
  *
- * @param cursorPos Cursor coordinates, if applicable.
+ * @param cursorPos Mouse cursor coordinates, if applicable.
  * @return Whether it could activate it.
  */
 bool GuiItem::activate(const Point& cursorPos) {
@@ -1521,7 +1521,7 @@ PickerGuiItem::PickerGuiItem(
 /**
  * @brief Default picker GUI item activate code.
  *
- * @param cursorPos Cursor position.
+ * @param cursorPos Mouse cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point& cursorPos) {
     if(cursorPos.x >= getReferenceCenter().x) {
@@ -1657,7 +1657,7 @@ bool PickerGuiItem::defMenuDirCode(size_t actionId) {
 /**
  * @brief Default picker GUI item mouse over code.
  *
- * @param cursorPos Cursor position.
+ * @param cursorPos Mouse cursor position.
  */
 void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
     arrowHighlight =

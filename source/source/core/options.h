@@ -110,7 +110,7 @@ extern const AreaEditor::VIEW_MODE VIEW_MODE;
 
 namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
-extern const float CURSOR_SPEED;
+extern const float LEADER_CURSOR_SPEED;
 }
 
 
@@ -142,12 +142,12 @@ extern const bool SNAP;
 
 
 namespace MISC_D {
-extern const float CURSOR_CAM_WEIGHT;
+extern const float LEADER_CURSOR_CAM_WEIGHT;
 extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const bool MAKER_TOOLS_IN_PLAY;
 extern const float PIKMIN_BUMP_DIST;
-extern const bool SHOW_COUNTER_ON_CURSOR;
+extern const bool SHOW_COUNTER_ON_LEADER_CURSOR;
 extern const bool SHOW_HUD_INPUT_ICONS;
 }
 
@@ -261,7 +261,7 @@ struct Options {
         //Snap mode to use.
         AreaEditor::SNAP_MODE snapMode = AREA_ED_D::SNAP_MODE;
         
-        //Snap when the cursor is this close to a vertex/edge.
+        //Snap when the mouse cursor is this close to a vertex/edge.
         size_t snapThreshold = AREA_ED_D::SNAP_THRESHOLD;
         
         //Maximum number of undo operations.
@@ -298,8 +298,8 @@ struct Options {
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
         
-        //Cursor speed, in pixels per second. N/A when using the mouse.
-        float cursorSpeed = CONTROLS_D::CURSOR_SPEED;
+        //Leader cursor speed, in pixels per second. N/A when using the mouse.
+        float leaderCursorSpeed = CONTROLS_D::LEADER_CURSOR_SPEED;
         
     } controls;
     
@@ -375,11 +375,11 @@ struct Options {
     //Misc.
     struct {
     
-        //Cursor camera movement weight.
-        float cursorCamWeight = OPTIONS::MISC_D::CURSOR_CAM_WEIGHT;
-        
         //Dismissing dismisses all.
         bool dismissAll = OPTIONS::MISC_D::DISMISS_ALL;
+        
+        //Leader cursor camera movement weight.
+        float leaderCursorCamWeight = OPTIONS::MISC_D::LEADER_CURSOR_CAM_WEIGHT;
         
         //Pause menu leaving confirmation question mode.
         LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;
@@ -391,7 +391,7 @@ struct Options {
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
         //Show a standby type counter on the leader cursor?
-        bool showCounterOnCursor = OPTIONS::MISC_D::SHOW_COUNTER_ON_CURSOR;
+        bool showCounterOnLeaderCursor = OPTIONS::MISC_D::SHOW_COUNTER_ON_LEADER_CURSOR;
         
         //Show control bind icons on top of HUD elements?
         bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;

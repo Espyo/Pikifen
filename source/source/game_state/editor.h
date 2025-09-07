@@ -630,7 +630,7 @@ protected:
     //Number of the mouse button pressed.
     size_t lastMouseClick = INVALID;
     
-    //Window location of the cursor on the last mouse button press.
+    //Window location of the mouse cursor on the last mouse button press.
     Point lastMouseClickPos;
     
     //Editor sub-state during the last mouse click.

@@ -205,14 +205,14 @@ void initControls() {
         PLAYER_ACTION_TYPE_THROW,
         PLAYER_ACTION_CAT_MAIN,
         "Throw",
-        "Throw a Pikmin.",
+        "Throw a Pikmin at the leader's cursor.",
         "throw", "mb_1", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_WHISTLE,
         PLAYER_ACTION_CAT_MAIN,
         "Whistle",
-        "Whistle around the cursor.",
+        "Whistle around the leader's cursor.",
         "whistle", "mb_2", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
@@ -240,7 +240,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_GROUP_CURSOR,
         PLAYER_ACTION_CAT_MAIN,
         "Swarm to cursor",
-        "Swarm all Pikmin towards the cursor.",
+        "Swarm all Pikmin towards the leader's cursor.",
         "swarm_cursor", "k_75", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
@@ -374,31 +374,31 @@ void initControls() {
     
     //Advanced.
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor right",
-        "Move the cursor right. Useful if it's not mouse-controlled.",
+        "Move the leader's cursor right. Useful if it's not mouse-controlled.",
         "cursor_right", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_CURSOR_UP,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor up",
-        "Move the cursor up. Useful if it's not mouse-controlled.",
+        "Move the leader's cursor up. Useful if it's not mouse-controlled.",
         "cursor_up", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_CURSOR_LEFT,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor left",
-        "Move the cursor left. Useful if it's not mouse-controlled.",
+        "Move the leader's cursor left. Useful if it's not mouse-controlled.",
         "cursor_left", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_CURSOR_DOWN,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Cursor down",
-        "Move the cursor down. Useful if it's not mouse-controlled.",
+        "Move the leader's cursor down. Useful if it's not mouse-controlled.",
         "cursor_down", "", PLAYER_ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
@@ -585,7 +585,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
-        "Toggle info about the geometry under the cursor.",
+        "Toggle info about the geometry under the mouse cursor.",
         "mt_geometry_info", "k_33", PLAYER_ACTION_VALUE_TYPE_BOOLEAN
     );
     game.controls.addPlayerActionType(
@@ -599,21 +599,21 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_HURT_MOB,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Hurt mob",
-        "Hurt the mob under the cursor.",
+        "Hurt the mob under the mouse cursor.",
         "mt_hurt_mob", "k_30", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_MOB_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Mob info",
-        "Toggle info about the mob under the cursor.",
+        "Toggle info about the mob under the mouse cursor.",
         "mt_mob_info", "k_32", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "New Pikmin",
-        "Create a new Pikmin under the cursor.",
+        "Create a new Pikmin under the mouse cursor.",
         "mt_new_pikmin", "k_31", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
@@ -641,7 +641,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_TELEPORT,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Teleport",
-        "Teleport the leader to the cursor.",
+        "Teleport the leader to the mouse cursor.",
         "mt_teleport", "k_29", PLAYER_ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     

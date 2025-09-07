@@ -143,7 +143,7 @@ enum FRACTION_NR_VISIBILITY {
     //There is nothing to show.
     FRACTION_NR_VISIBILITY_NONE,
 
-    //There is info, but should stay hidden till the cursor is on it.
+    //There is info, but should stay hidden till the leader cursor is on it.
     FRACTION_NR_VISIBILITY_CURSOR,
 
     //There is information that should be shown.

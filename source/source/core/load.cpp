@@ -230,10 +230,10 @@ void loadFonts() {
             32
         );
         
-    //Cursor counter font.
-    game.sysContent.fntCursorCounter =
+    //Leader cursor counter font.
+    game.sysContent.fntLeaderCursorCounter =
         loadFont(
-            game.sysContentNames.fntCursorCounter,
+            game.sysContentNames.fntLeaderCursorCounter,
             JUST_NUMBERS_FONT_RANGES_SIZE / 2, JUST_NUMBERS_FONT_RANGES,
             16
         );
@@ -298,8 +298,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxCheck);
     game.sysContent.bmpCheckboxNoCheck =
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxNoCheck);
-    game.sysContent.bmpCursor =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpCursor);
+    game.sysContent.bmpLeaderCursor =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderCursor);
     game.sysContent.bmpDifficulty =
         game.content.bitmaps.list.get(game.sysContentNames.bmpDifficulty);
     game.sysContent.bmpDiscordIcon =
@@ -541,7 +541,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpButtonBox);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxNoCheck);
-    game.content.bitmaps.list.free(game.sysContent.bmpCursor);
+    game.content.bitmaps.list.free(game.sysContent.bmpLeaderCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpDifficulty);
     game.content.bitmaps.list.free(game.sysContent.bmpDiscordIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
@@ -586,7 +586,7 @@ void unloadMiscResources() {
     //Fonts.
     al_destroy_font(game.sysContent.fntAreaName);
     al_destroy_font(game.sysContent.fntCounter);
-    al_destroy_font(game.sysContent.fntCursorCounter);
+    al_destroy_font(game.sysContent.fntLeaderCursorCounter);
     al_destroy_font(game.sysContent.fntSlim);
     al_destroy_font(game.sysContent.fntStandard);
     al_destroy_font(game.sysContent.fntValue);

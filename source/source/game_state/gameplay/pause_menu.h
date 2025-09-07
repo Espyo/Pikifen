@@ -93,7 +93,7 @@ struct PauseMenu {
         //The selected leader.
         GO_HERE_SEGMENT_SPOT_LEADER,
         
-        //The cursor position.
+        //The radar cursor position.
         GO_HERE_SEGMENT_SPOT_CURSOR,
         
         //A path stop.
@@ -232,7 +232,7 @@ private:
     //Selected leader in the radar.
     Mob* radarSelectedLeader = nullptr;
     
-    //Leader under the cursor in the radar.
+    //Leader under the radar cursor.
     Mob* radarCursorLeader = nullptr;
     
     //Time left before another Go Here calculation.

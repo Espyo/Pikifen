@@ -51,7 +51,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             
         Distance maxDist =
             (player->swarmMagnitude > 0) ?
-            Distance(game.config.rules.cursorMaxDist * player->swarmMagnitude) :
+            Distance(game.config.rules.leaderCursorMaxDist * player->swarmMagnitude) :
             leaderToCursorDist;
             
         if(maxDist < player->leaderPtr->swarmArrows[a]) {
@@ -83,8 +83,8 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         player->leaderPtr->leaType->whistleRange, whistleDist
     );
     
-    //Where the cursor is.
-    player->cursorHeightDiffLight = 0;
+    //Where the leader cursor is.
+    player->leaderCursorHeightDiffLight = 0;
     
     if(leaderToCursorDist > game.config.rules.throwMaxDist) {
         float throwAngle =
@@ -100,7 +100,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* mPtr = mobs.all[m];
         if(!bBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
-            //Too far away; of course the cursor isn't on it.
+            //Too far away; of course the leader's cursor isn't on it.
             continue;
         }
         if(!mPtr->type->pushable && !mPtr->type->walkable) {
@@ -118,7 +118,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             continue;
         }
         if(!mPtr->isPointOn(player->throwDest)) {
-            //The cursor is not really on top of this mob.
+            //The leader's cursor is not really on top of this mob.
             continue;
         }
         
@@ -132,16 +132,16 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         getSector(player->throwDest, nullptr, true);
         
     if(player->leaderCursorSector) {
-        player->cursorHeightDiffLight =
+        player->leaderCursorHeightDiffLight =
             (player->leaderCursorSector->z - player->leaderPtr->z) * 0.001;
-        player->cursorHeightDiffLight =
-            std::clamp(player->cursorHeightDiffLight, -0.1f, 0.1f);
+        player->leaderCursorHeightDiffLight =
+            std::clamp(player->leaderCursorHeightDiffLight, -0.1f, 0.1f);
     }
     
     //Enemy or treasure points.
     int curLeaderCursorMobPoints = 0;
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
-        Mob* mPtr = getEnemyOrTreasureOnCursor(player);
+        Mob* mPtr = getPointMobOnLeaderCursor(player);
         if(mPtr) {
             bool applicable;
             curLeaderCursorMobPoints = mPtr->getMissionPoints(&applicable);
@@ -155,14 +155,14 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             inchTowards(
                 player->leaderCursorMobPointsAlpha,
                 1.0f,
-                DRAWING::CURSOR_MOB_POINTS_ALPHA_SPEED * deltaT
+                DRAWING::LEADER_CURSOR_PTS_ALPHA_SPEED * deltaT
             );
     } else {
         player->leaderCursorMobPointsAlpha =
             inchTowards(
                 player->leaderCursorMobPointsAlpha,
                 0.0f,
-                DRAWING::CURSOR_MOB_POINTS_ALPHA_SPEED * deltaT
+                DRAWING::LEADER_CURSOR_PTS_ALPHA_SPEED * deltaT
             );
     }
     
@@ -242,7 +242,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     if(interlude.get() == INTERLUDE_NONE) {
         //Adjust the camera position.
         float leaderWeight = 1.0f;
-        float cursorWeight = game.options.misc.cursorCamWeight;
+        float leaderCursorWeight = game.options.misc.leaderCursorCamWeight;
         float groupWeight = 0.0f;
         
         Point groupCenter = player->leaderPtr->pos;
@@ -267,15 +267,15 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             }
         }
         
-        float weightSums = leaderWeight + cursorWeight + groupWeight;
+        float weightSums = leaderWeight + leaderCursorWeight + groupWeight;
         if(weightSums == 0.0f) weightSums = 0.01f;
         leaderWeight /= weightSums;
-        cursorWeight /= weightSums;
+        leaderCursorWeight /= weightSums;
         groupWeight /= weightSums;
         
         player->view.cam.targetPos =
             player->leaderPtr->pos * leaderWeight +
-            player->leaderCursorWorld * cursorWeight +
+            player->leaderCursorWorld * leaderCursorWeight +
             groupCenter * groupWeight;
     }
     
@@ -524,35 +524,35 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     Point leaderCursorSpeed;
     float dummyMagnitude;
-    player->cursorMovement.getInfo(
+    player->leaderCursorMov.getInfo(
         &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
     );
     leaderCursorSpeed =
-        leaderCursorSpeed * deltaT * game.options.controls.cursorSpeed;
+        leaderCursorSpeed * deltaT * game.options.controls.leaderCursorSpeed;
     
     if(
         leaderCursorSpeed.x == 0.0f && leaderCursorSpeed.y == 0.0f &&
         game.mouseCursor.movedThisFrame
     ) {
-        player->leaderCursorWorld = player->view.cursorWorldPos;
+        player->leaderCursorWorld = player->view.mouseCursorWorldPos;
     } else {
         player->leaderCursorWorld += leaderCursorSpeed;
     }
     
-    float cursorAngle =
+    float leaderCursorAngle =
         getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
     Distance leaderToCursorDist(
         player->leaderPtr->pos, player->leaderCursorWorld
     );
 
-    if(leaderToCursorDist > game.config.rules.cursorMaxDist) {
-        //Cursor goes beyond the range limit.
+    if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
+        //Leader's cursor goes beyond the range limit.
         player->leaderCursorWorld.x =
             player->leaderPtr->pos.x +
-            (cos(cursorAngle) * game.config.rules.cursorMaxDist);
+            (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
         player->leaderCursorWorld.y =
             player->leaderPtr->pos.y +
-            (sin(cursorAngle) * game.config.rules.cursorMaxDist);
+            (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
     }
     
     player->leaderCursorWin = player->leaderCursorWorld;
@@ -586,12 +586,12 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->swarmAngle = newSwarmAngle;
     }
     
-    if(player->swarmCursor) {
-        player->swarmAngle = cursorAngle;
+    if(player->swarmToLeaderCursor) {
+        player->swarmAngle = leaderCursorAngle;
         leaderToCursorDist =
             Distance(player->leaderPtr->pos, player->leaderCursorWorld);
         player->swarmMagnitude =
-            leaderToCursorDist.toFloat() / game.config.rules.cursorMaxDist;
+            leaderToCursorDist.toFloat() / game.config.rules.leaderCursorMaxDist;
     }
     
     if(oldSwarmMagnitude != player->swarmMagnitude) {
@@ -1340,23 +1340,23 @@ void GameplayState::doMenuLogic() {
     //Print mouse coordinates.
     if(game.makerTools.geometryInfo) {
         Sector* mouseSector =
-            getSector(players[0].view.cursorWorldPos, nullptr, true);
+            getSector(players[0].view.mouseCursorWorldPos, nullptr, true);
             
         string coordsStr =
-            resizeString(f2s(players[0].view.cursorWorldPos.x), 6) + " " +
-            resizeString(f2s(players[0].view.cursorWorldPos.y), 6);
+            resizeString(f2s(players[0].view.mouseCursorWorldPos.x), 6) + " " +
+            resizeString(f2s(players[0].view.mouseCursorWorldPos.y), 6);
         string blockmapStr =
             resizeString(
                 i2s(
                     game.curAreaData->bmap.getCol(
-                        players[0].view.cursorWorldPos.x
+                        players[0].view.mouseCursorWorldPos.x
                     )
                 ),
                 5
             ) +
             i2s(
                 game.curAreaData->bmap.getRow(
-                    players[0].view.cursorWorldPos.y
+                    players[0].view.mouseCursorWorldPos.y
                 )
             );
         string sectorZStr, sectorLightStr, sectorTexStr;

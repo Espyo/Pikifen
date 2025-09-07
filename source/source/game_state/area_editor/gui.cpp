@@ -1145,7 +1145,7 @@ void AreaEditor::processGuiOptionsDialog() {
             0.1f, 0, INT_MAX
         );
         setTooltip(
-            "Cursor must be these many pixels close\n"
+            "Mouse cursor must be these many pixels close\n"
             "to a vertex/edge in order to snap there.\n"
             "Default: " +
             i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
@@ -1170,7 +1170,7 @@ void AreaEditor::processGuiOptionsDialog() {
             0.1f, 0, INT_MAX
         );
         setTooltip(
-            "Cursor must move these many pixels to be considered a drag.\n"
+            "Mouse cursor must move these many pixels to be considered a drag.\n"
             "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
@@ -5637,8 +5637,8 @@ void AreaEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            resizeString(f2s(game.editorsView.cursorWorldPos.x), 7).c_str(),
-            resizeString(f2s(game.editorsView.cursorWorldPos.y), 7).c_str()
+            resizeString(f2s(game.editorsView.mouseCursorWorldPos.x), 7).c_str(),
+            resizeString(f2s(game.editorsView.mouseCursorWorldPos.y), 7).c_str()
         );
     }
 }

@@ -146,14 +146,14 @@ struct Player {
     //Points to a ship close enough for the player to heal in, if any.
     Ship* closeToShipToHeal = nullptr;
     
-    //Ligthten the cursor by this due to leader/cursor height difference.
-    float cursorHeightDiffLight = 0.0f;
+    //Ligthten the leader cursor by this due to leader/cursor height difference.
+    float leaderCursorHeightDiffLight = 0.0f;
     
-    //Movement of the cursor via non-mouse means.
-    MovementInfo cursorMovement;
+    //Movement of the leader cursor via non-mouse means.
+    MovementInfo leaderCursorMov;
     
-    //Is the player holding the "swarm to cursor" button?
-    bool swarmCursor = false;
+    //Is the player holding the "swarm to leader cursor" button?
+    bool swarmToLeaderCursor = false;
     
     //Reach of swarming.
     MovementInfo swarmMovement;

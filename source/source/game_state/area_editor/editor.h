@@ -67,7 +67,7 @@ public:
 
     //--- Misc. declarations ---
     
-    //Ways for the cursor to snap.
+    //Ways for the mouse cursor to snap.
     enum SNAP_MODE {
     
         //Snap to grid.

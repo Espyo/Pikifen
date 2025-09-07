@@ -1716,8 +1716,8 @@ void ParticleEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            resizeString(f2s(game.editorsView.cursorWorldPos.x), 7).c_str(),
-            resizeString(f2s(game.editorsView.cursorWorldPos.y), 7).c_str()
+            resizeString(f2s(game.editorsView.mouseCursorWorldPos.x), 7).c_str(),
+            resizeString(f2s(game.editorsView.mouseCursorWorldPos.y), 7).c_str()
         );
     }
 }

@@ -30,8 +30,8 @@ namespace GAME_CONFIG {
 namespace AESTHETIC_GENERAL_D {
 extern const ALLEGRO_COLOR CARRYING_COLOR_MOVE;
 extern const ALLEGRO_COLOR CARRYING_COLOR_STOP;
-extern const float CURSOR_SPIN_SPEED;
 extern const float GAMEPLAY_MSG_CHAR_INTERVAL;
+extern const float MOUSE_CURSOR_SPIN_SPEED;
 extern const ALLEGRO_COLOR NO_PIKMIN_COLOR;
 }
 
@@ -81,7 +81,7 @@ extern const float SWARM_TASK_RANGE;
 
 namespace RULES_D {
 extern const bool CAN_THROW_LEADERS;
-extern const float CURSOR_MAX_DIST;
+extern const float LEADER_CURSOR_MAX_DIST;
 extern const size_t MAX_PIKMIN_IN_FIELD;
 extern const float THROW_MAX_DIST;
 extern const float WHISTLE_GROWTH_SPEED;
@@ -115,14 +115,14 @@ struct GameConfig {
         ALLEGRO_COLOR carryingColorStop =
             AESTHETIC_GENERAL_D::CARRYING_COLOR_STOP;
             
-        //How much the cursor spins per second.
-        float cursorSpinSpeed =
-            AESTHETIC_GENERAL_D::CURSOR_SPIN_SPEED;
-            
         //These many seconds until a new character of
         //the gameplay message is drawn.
         float gameplayMsgChInterval =
             AESTHETIC_GENERAL_D::GAMEPLAY_MSG_CHAR_INTERVAL;
+            
+        //How much the mouse cursor spins per second.
+        float mouseCursorSpinSpeed =
+            AESTHETIC_GENERAL_D::MOUSE_CURSOR_SPIN_SPEED;
             
         //Color that represents the absence of Pikmin.
         ALLEGRO_COLOR noPikminColor =
@@ -259,8 +259,8 @@ struct GameConfig {
         //Can a leader throw other leaders?
         bool canThrowLeaders = RULES_D::CAN_THROW_LEADERS;
         
-        //Maximum distance from the leader the cursor can go.
-        float cursorMaxDist = RULES_D::CURSOR_MAX_DIST;
+        //Maximum distance from the leader their cursor can go.
+        float leaderCursorMaxDist = RULES_D::LEADER_CURSOR_MAX_DIST;
         
         //Maximum number of Pikmin that can be out in the field at once.
         size_t maxPikminInField = RULES_D::MAX_PIKMIN_IN_FIELD;

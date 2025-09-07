@@ -1505,7 +1505,7 @@ string PauseMenu::getMissionGoalStatus() {
  * @param ev Event to handle.
  */
 void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    radarView.updateCursor(game.mouseCursor.winPos);
+    radarView.updateMouseCursor(game.mouseCursor.winPos);
     
     gui.handleAllegroEvent(ev);
     radarGui.handleAllegroEvent(ev);
@@ -2827,7 +2827,7 @@ void PauseMenu::tick(float deltaT) {
             );
             
         if(mouseInRadar) {
-            radarCursor = radarView.cursorWorldPos;
+            radarCursor = radarView.mouseCursorWorldPos;
         } else {
             radarCursor = radarView.cam.pos;
         }
@@ -2870,7 +2870,7 @@ void PauseMenu::zoomRadar(float amount) {
 void PauseMenu::zoomRadarWithMouse(
     float amount, const Point& radarCenter, const Point& radarSize
 ) {
-    //Keep a backup of the old cursor coordinates.
+    //Keep a backup of the old radar cursor coordinates.
     Point oldCursorPos = radarCursor;
     
     //Do the zoom.

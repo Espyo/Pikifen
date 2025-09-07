@@ -359,7 +359,7 @@ void AreaEditor::drawCanvas() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+            Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
             
             al_draw_line(
                 drawingNodes.back().snappedSpot.x,
@@ -460,7 +460,7 @@ void AreaEditor::drawCanvas() {
     //Path drawing.
     if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(pathDrawingStop1) {
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+            Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
             al_draw_line(
                 pathDrawingStop1->pos.x,
                 pathDrawingStop1->pos.y,
@@ -504,7 +504,7 @@ void AreaEditor::drawCanvas() {
         subState == EDITOR_SUB_STATE_PATH_DRAWING ||
         subState == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
-        Point marker = game.editorsView.cursorWorldPos;
+        Point marker = game.editorsView.mouseCursorWorldPos;
         
         if(subState != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snapPoint(marker);
@@ -530,7 +530,7 @@ void AreaEditor::drawCanvas() {
     if(
         subState == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        Point marker = game.editorsView.cursorWorldPos;
+        Point marker = game.editorsView.mouseCursorWorldPos;
         
         al_draw_line(
             marker.x - 10 / game.editorsView.cam.zoom,
@@ -798,8 +798,8 @@ void AreaEditor::drawCrossSectionGraph() {
         getClosestPointInLineSeg(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1],
             Point(
-                game.editorsView.cursorWorldPos.x,
-                game.editorsView.cursorWorldPos.y
+                game.editorsView.mouseCursorWorldPos.x,
+                game.editorsView.mouseCursorWorldPos.y
             ),
             &cursorSegmentRatio
         );
@@ -1557,7 +1557,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 PathStop* sPtr = game.curAreaData->pathStops[s];
                 float d =
                     Distance(
-                        game.editorsView.cursorWorldPos, sPtr->pos
+                        game.editorsView.mouseCursorWorldPos, sPtr->pos
                     ).toFloat() -
                     sPtr->radius;
                     
@@ -1569,8 +1569,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             
             if(closest) {
                 al_draw_line(
-                    game.editorsView.cursorWorldPos.x,
-                    game.editorsView.cursorWorldPos.y,
+                    game.editorsView.mouseCursorWorldPos.x,
+                    game.editorsView.mouseCursorWorldPos.y,
                     closest->pos.x, closest->pos.y,
                     al_map_rgb(192, 128, 32), 2.0 / game.editorsView.cam.zoom
                 );

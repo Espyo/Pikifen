@@ -257,11 +257,11 @@ private:
     //Resolution picker widget.
     OptionsMenuPickerGuiItem<std::pair<int, int> >* resolutionPicker = nullptr;
     
-    //Cursor speed picker widget.
-    OptionsMenuPickerGuiItem<float>* cursorSpeedPicker = nullptr;
+    //Leader cursor speed picker widget.
+    OptionsMenuPickerGuiItem<float>* leaderCursorSpeedPicker = nullptr;
     
-    //Cursor camera weight picker widget.
-    OptionsMenuPickerGuiItem<float>* cursorCamWeightPicker = nullptr;
+    //Leader cursor camera weight picker widget.
+    OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
     
     //Leaving confirmation picker widget.
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*

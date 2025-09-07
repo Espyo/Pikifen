@@ -132,7 +132,7 @@ void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
-    generatorPosOffset = game.editorsView.cursorWorldPos;
+    generatorPosOffset = game.editorsView.mouseCursorWorldPos;
 }
 
 
@@ -142,7 +142,7 @@ void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    generatorPosOffset = game.editorsView.cursorWorldPos;
+    generatorPosOffset = game.editorsView.mouseCursorWorldPos;
 }
 
 

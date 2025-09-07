@@ -150,7 +150,7 @@ void GameplayState::doGameDrawing(
         }
         if(player.leaderPtr && game.makerTools.hud) {
             cursorColor =
-                changeColorLighting(cursorColor, player.cursorHeightDiffLight);
+                changeColorLighting(cursorColor, player.leaderCursorHeightDiffLight);
             drawLeaderCursor(&player, cursorColor);
         }
         
@@ -1108,7 +1108,7 @@ void GameplayState::drawLeaderCursor(
                 (int) (
                     191 *
                     (player->leaderPtr->swarmArrows[a] /
-                     (game.config.rules.cursorMaxDist * 0.4))
+                     (game.config.rules.leaderCursorMaxDist * 0.4))
                 )
             );
         drawBitmap(
@@ -1116,7 +1116,7 @@ void GameplayState::drawLeaderCursor(
             player->leaderPtr->pos + pos,
             Point(
                 16 * (1 + player->leaderPtr->swarmArrows[a] /
-                      game.config.rules.cursorMaxDist),
+                      game.config.rules.leaderCursorMaxDist),
                 -1
             ),
             player->swarmAngle,
@@ -1126,28 +1126,28 @@ void GameplayState::drawLeaderCursor(
     
     //Whistle rings.
     size_t nRings = player->whistle.rings.size();
-    float cursorAngle =
+    float leaderCursorAngle =
         getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-    float cursorDistance =
+    float leaderCursorDist =
         Distance(player->leaderPtr->pos, player->leaderCursorWorld).toFloat();
     for(size_t r = 0; r < nRings; r++) {
         Point pos(
-            player->leaderPtr->pos.x + cos(cursorAngle) *
+            player->leaderPtr->pos.x + cos(leaderCursorAngle) *
             player->whistle.rings[r],
-            player->leaderPtr->pos.y + sin(cursorAngle) *
+            player->leaderPtr->pos.y + sin(leaderCursorAngle) *
             player->whistle.rings[r]
         );
-        float ringToWhistleDist = cursorDistance - player->whistle.rings[r];
+        float ringToWhistleDist = leaderCursorDist - player->whistle.rings[r];
         float scale =
             interpolateNumber(
                 ringToWhistleDist,
-                0, cursorDistance,
+                0, leaderCursorDist,
                 player->whistle.radius * 2, 0
             );
         float alpha =
             interpolateNumber(
                 ringToWhistleDist,
-                0, cursorDistance,
+                0, leaderCursorDist,
                 0, 100
             );
         unsigned char n = player->whistle.ringColors[r];
@@ -1213,16 +1213,16 @@ void GameplayState::drawLeaderCursor(
     }
     
     //Leader cursor.
-    Point bmpCursorSize = getBitmapDimensions(game.sysContent.bmpCursor);
+    Point bmpCursorSize = getBitmapDimensions(game.sysContent.bmpLeaderCursor);
     
     drawBitmap(
-        game.sysContent.bmpCursor,
+        game.sysContent.bmpLeaderCursor,
         player->leaderCursorWorld,
         bmpCursorSize / 2.0f,
-        cursorAngle,
+        leaderCursorAngle,
         changeColorLighting(
             color,
-            player->cursorHeightDiffLight
+            player->leaderCursorHeightDiffLight
         )
     );
     
@@ -1232,7 +1232,7 @@ void GameplayState::drawLeaderCursor(
     //Standby type count.
     size_t nStandbyPikmin = 0;
     if(
-        game.options.misc.showCounterOnCursor &&
+        game.options.misc.showCounterOnLeaderCursor &&
         player->leaderPtr->group->curStandbyType
     ) {
         for(
@@ -1259,7 +1259,7 @@ void GameplayState::drawLeaderCursor(
     if(nStandbyPikmin > 0) {
         standbyCountHeight = game.winH * 0.02f;
         drawText(
-            i2s(nStandbyPikmin), game.sysContent.fntCursorCounter,
+            i2s(nStandbyPikmin), game.sysContent.fntLeaderCursorCounter,
             player->leaderCursorWin +
             Point(extrasXOffset, extrasYOffset),
             Point(LARGE_FLOAT, game.winH * 0.02f), color,

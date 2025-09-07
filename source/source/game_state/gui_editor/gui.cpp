@@ -754,11 +754,11 @@ void GuiEditor::processGuiStatusBar() {
         monoText(
             "%s, %s",
             resizeString(
-                f2s(game.editorsView.cursorWorldPos.x),
+                f2s(game.editorsView.mouseCursorWorldPos.x),
                 7, true, true, false, ' ', "%"
             ).c_str(),
             resizeString(
-                f2s(game.editorsView.cursorWorldPos.y),
+                f2s(game.editorsView.mouseCursorWorldPos.y),
                 7, true, true, false, ' ', "%"
             ).c_str()
         );

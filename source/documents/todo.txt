@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -66,7 +66,7 @@ Next tasks (roughly sorted most important first)
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by deltaT
             If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
-                It should probably use the largest value of all inputs. Like if you bind move cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
+                It should probably use the largest value of all inputs. Like if you bind move leader cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
                 Add an option to allow event coalescing? Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
@@ -94,7 +94,7 @@ Next tasks (roughly sorted most important first)
                     Confirm that these work both on Linux and on Windows
                 If the player assigns an input that is already assigned to something else, it should give a warning
                 If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
-                When you set a leader move direction/group swarm direction/cursor direction, show a pop-up asking if you want to set all four automatically
+                When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
             Player setup menu
                 For each player, it shows their name (which can be changed by the player), what control scheme they're using, and what controllers, if any, they are using
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
@@ -179,7 +179,7 @@ Next tasks (roughly sorted most important first)
             In competitive modes, tint each player's HUD with their team color or something
             Show each player's name in their screen somewhere
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
-            The cursor that highlights the currently focused GUI item should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
+            The widget focus cursor should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts
@@ -543,7 +543,7 @@ Misc things (so I don't forget)
     Aesthetic
         [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
-        A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them
+        A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the leader cursor goes over them
         The sparkle particles on treasures need to be more obvious
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
@@ -584,8 +584,8 @@ Misc things (so I don't forget)
                 An option to set the radius in which auto lock-on applies
                 An option to toggle this on or off
             Manual [PIKMIN 3][PIKMIN 4]
-                A button that locks the cursor in place
-                If on the floor, it just locks the cursor there
+                A button that locks the leader cursor in place
+                If on the floor, it just locks the leader cursor there
                 If on an enemy, it locks to that position (hitbox + offset) of the enemy, like its back
                 While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their peripheral
                 An option in the options for it to either lock with holding the button, or toggling
@@ -737,7 +737,7 @@ Misc things (so I don't forget)
             Juice
                 Pop sound and pop line particles when something gets created
                 Poof sound and puff of smoke particles when something gets deleted
-                Change the cursor for when you're dragging, drawing, placing something new, etc.
+                Change the mouse cursor for when you're dragging, drawing, placing something new, etc.
                     Normal cursor
                     For when you're drawing something
                     For when you can place something
@@ -826,7 +826,7 @@ Misc things (so I don't forget)
         The sector hazards in DEV Lab should be labeled
         The Yellow Wollyhop should throw Pikmin farther away when landing, so that the Pikmin don't land immediately in crushing distance of the next jump (thanks Gatling Groink)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
-    The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
+    The ability for any object to fade when the leader/'s cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
     Missions
         A goal where you reach X sprays of type Y
@@ -842,7 +842,7 @@ Misc things (so I don't forget)
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
         A mob's reach visualizer
-        A modifier for the cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
+        A modifier for the mouse cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
@@ -916,7 +916,7 @@ Tasks for later on (I might never implement these)
         Area editor
             [NEEDS BRAINSTORMING] Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
             A tool that checks every point in the map (more like every 2 units) and checks if the closest carrying point is on the other side of a wall or something
-            The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
+            The area editor could have a button to start testing from where the mouse cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
             When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Backups
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.

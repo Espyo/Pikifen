@@ -398,7 +398,7 @@ bool doesEdgeHaveWallShadow(
  * (health and max health > 0).
  * @return The mob.
  */
-Mob* getClosestMobToCursor(const Viewport& view, bool mustHaveHealth) {
+Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
     Distance closestMobToCursorDist;
     Mob* closestMobToCursor = nullptr;
     
@@ -410,7 +410,7 @@ Mob* getClosestMobToCursor(const Viewport& view, bool mustHaveHealth) {
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(view.cursorWorldPos, mPtr->pos);
+        Distance d = Distance(view.mouseCursorWorldPos, mPtr->pos);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
             closestMobToCursor = mPtr;
             closestMobToCursorDist = d;
@@ -509,7 +509,7 @@ string getMissionRecordEntryName(Area* areaPtr) {
 
 
 /**
- * @brief Scans a circle of radius 8 around the cursor, and finds the mob
+ * @brief Scans a circle of radius 8 around the mouse cursor, and finds the mob
  * that comes after this one. i.e. the one with the next
  * highest ID number. If it's already the highest, it loops back around
  * to the lowest.
@@ -525,7 +525,7 @@ Mob* getNextMobNearCursor(
 ) {
     vector<Mob*> mobsNearCursor;
     
-    //First, get all mobs that are close to the cursor.
+    //First, get all mobs that are close to the mouse cursor.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         
@@ -534,7 +534,7 @@ Mob* getNextMobNearCursor(
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->fsm.curState) continue;
         
-        Distance d(view.cursorWorldPos, mPtr->pos);
+        Distance d(view.mouseCursorWorldPos, mPtr->pos);
         if(d < 8.0f) {
             mobsNearCursor.push_back(mPtr);
         }
@@ -586,10 +586,10 @@ string getSubtitleOrMissionGoal(
  * @param vertexes The array of vertexes to fill.
  * Must have room for at least 16.
  * @param start Start the line at this point.
- * This is a ratio from the leader (0) to the cursor (1).
+ * This is a ratio from the leader (0) to the leader cursor (1).
  * @param end Same as start, but for the end point.
  * @param leaderPos Position of the leader.
- * @param cursorPos Position of the cursor.
+ * @param leaderCursorPos Position of the leader cursor.
  * @param color Color of the line.
  * @param uOffset Offset the texture u by this much.
  * @param uScale Scale the texture u by this much.
@@ -600,7 +600,7 @@ string getSubtitleOrMissionGoal(
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const Point& leaderPos, const Point& cursorPos,
+    const Point& leaderPos, const Point& leaderCursorPos,
     const ALLEGRO_COLOR& color,
     float uOffset, float uScale,
     bool varyThickness
@@ -616,7 +616,7 @@ unsigned char getThrowPreviewVertexes(
         LEADER::THROW_PREVIEW_DEF_MAX_THICKNESS :
         LEADER::THROW_PREVIEW_MIN_THICKNESS;
         
-    float leaderToCursorDist = Distance(leaderPos, cursorPos).toFloat();
+    float leaderToCursorDist = Distance(leaderPos, leaderCursorPos).toFloat();
     unsigned char curV = 0;
     
     auto getThickness =
@@ -688,7 +688,7 @@ unsigned char getThrowPreviewVertexes(
         //Rotate and move all points. For the sake of simplicity, up until now,
         //they were assuming the throw is perfectly to the right (0 degrees),
         //and that it starts on the world origin.
-        p = rotatePoint(p, getAngle(leaderPos, cursorPos));
+        p = rotatePoint(p, getAngle(leaderPos, leaderCursorPos));
         p += leaderPos;
         vertexes[v].x = p.x;
         vertexes[v].y = p.y;

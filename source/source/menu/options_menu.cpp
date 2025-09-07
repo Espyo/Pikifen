@@ -498,21 +498,21 @@ void OptionsMenu::initGuiControlsPage() {
     [] () { return "Choose what buttons do what special features."; };
     controlsGui.addItem(specialBindsButton, "special_binds");
     
-    //Cursor speed.
-    cursorSpeedPicker =
+    //Leader cursor speed.
+    leaderCursorSpeedPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor speed: ",
-        &game.options.controls.cursorSpeed,
-        OPTIONS::CONTROLS_D::CURSOR_SPEED,
+        &game.options.controls.leaderCursorSpeed,
+        OPTIONS::CONTROLS_D::LEADER_CURSOR_SPEED,
     {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
-    "Cursor speed, when controlling without a mouse."
+    "Leader cursor speed, when controlling without a mouse."
     );
-    cursorSpeedPicker->valueToString = [] (float v) {
+    leaderCursorSpeedPicker->valueToString = [] (float v) {
         return f2s(v);
     };
-    cursorSpeedPicker->init();
-    controlsGui.addItem(cursorSpeedPicker, "cursor_speed");
+    leaderCursorSpeedPicker->init();
+    controlsGui.addItem(leaderCursorSpeedPicker, "cursor_speed");
     
     //Auto-throw mode.
     autoThrowPicker =
@@ -754,33 +754,33 @@ void OptionsMenu::initGuiMiscPage() {
     };
     miscGui.addItem(dismissAllCheckbox, "dismiss_all");
     
-    //Cursor camera weight picker.
-    cursorCamWeightPicker =
+    //Leader cursor camera weight picker.
+    leaderCursorCamWeightPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor cam weight: ",
-        &game.options.misc.cursorCamWeight,
-        OPTIONS::MISC_D::CURSOR_CAM_WEIGHT,
+        &game.options.misc.leaderCursorCamWeight,
+        OPTIONS::MISC_D::LEADER_CURSOR_CAM_WEIGHT,
     {0.0f, 0.1f, 0.3f, 0.6f},
     {"None", "Small", "Medium", "Large"},
-    "When you move the cursor, how much does it affect the camera?"
+    "When you move the leader cursor, how much does it affect the camera?"
     );
-    cursorCamWeightPicker->valueToString = [] (float v) {
+    leaderCursorCamWeightPicker->valueToString = [] (float v) {
         return f2s(v);
     };
-    cursorCamWeightPicker->init();
-    miscGui.addItem(cursorCamWeightPicker, "cursor_cam_weight");
+    leaderCursorCamWeightPicker->init();
+    miscGui.addItem(leaderCursorCamWeightPicker, "cursor_cam_weight");
     
     //Show counter on cursor checkbox.
     CheckGuiItem* showCounterOnCursorCheck =
         new CheckGuiItem(
-        &game.options.misc.showCounterOnCursor,
+        &game.options.misc.showCounterOnLeaderCursor,
         "Show counter on cursor", game.sysContent.fntStandard
     );
     showCounterOnCursorCheck->onGetTooltip =
     [] () {
         return
             "Show a standby type counter on the leader's cursor? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_COUNTER_ON_CURSOR) + ".";
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_COUNTER_ON_LEADER_CURSOR) + ".";
     };
     miscGui.addItem(showCounterOnCursorCheck, "show_counter_on_cursor");
     
@@ -839,7 +839,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    miscGui.setFocusedItem(cursorCamWeightPicker, true);
+    miscGui.setFocusedItem(leaderCursorCamWeightPicker, true);
     miscGui.responsive = false;
     miscGui.hideItems();
 }

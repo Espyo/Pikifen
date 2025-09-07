@@ -58,12 +58,12 @@ const float CAM_SHAKE_DROPOFF_DIST = 1000.0f;
 //when shaking.
 const float CAM_SHAKE_MAX_OFFSET = 30.0f;
 
-//Alpha change speed for the enemy/treasure point value near the leader cursor,
-//in amount per second.
-const float CURSOR_MOB_POINTS_ALPHA_SPEED = 3.0f;
-
 //Default health wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
+
+//Alpha change speed for the enemy/treasure point value near the leader cursor,
+//in amount per second.
+const float LEADER_CURSOR_PTS_ALPHA_SPEED = 3.0f;
 
 //Liquid surfaces wobble by offsetting X by this much, at most.
 const float LIQUID_WOBBLE_DELTA_X = 3.0f;
@@ -1009,7 +1009,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
         game.sysContent.bmpMouseCursor,
         game.mouseCursor.winPos,
         getBitmapDimensions(game.sysContent.bmpMouseCursor),
-        -(game.timePassed * game.config.aestheticGen.cursorSpinSpeed),
+        -(game.timePassed * game.config.aestheticGen.mouseCursorSpinSpeed),
         color
     );
 }

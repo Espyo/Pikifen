@@ -4174,7 +4174,7 @@ void Mob::tickMiscLogic(float deltaT) {
             group->anchor = pos + newAnchorRelPos;
             
             float intensityDist =
-                game.config.rules.cursorMaxDist *
+                game.config.rules.leaderCursorMaxDist *
                 playerIfLeader->swarmMagnitude;
             al_identity_transform(&group->transform);
             al_translate_transform(

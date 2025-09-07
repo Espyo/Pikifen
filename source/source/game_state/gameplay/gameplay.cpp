@@ -440,7 +440,7 @@ void GameplayState::doLogic() {
     }
     
     for(Player& player : players) {
-        player.view.updateCursor(game.mouseCursor.winPos);
+        player.view.updateMouseCursor(game.mouseCursor.winPos);
     }
     
     //Controls.
@@ -590,7 +590,7 @@ void GameplayState::enter() {
     for(Player& player : players) {
         player.hud->gui.hideItems();
         player.notification.reset();
-        player.leaderCursorWorld = player.view.cursorWorldPos;
+        player.leaderCursorWorld = player.view.mouseCursorWorldPos;
         player.leaderCursorWin = game.mouseCursor.winPos;
         if(player.leaderPtr) {
             player.leaderPtr->stopWhistling();
@@ -947,13 +947,23 @@ Mob* GameplayState::getClosestGroupMember(
 
 
 /**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
+ */
+string GameplayState::getName() const {
+    return "gameplay";
+}
+
+
+/**
  * @brief Returns a mob on the leader cursor that either has enemy
  * or treasure points.
  *
  * @param player The player responsible.
  * @return The mob, or nullptr if none.
  */
-Mob* GameplayState::getEnemyOrTreasureOnCursor(Player* player) const {
+Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
     if(!player || !player->leaderPtr) return nullptr;
     
     Mob* closest = nullptr;
@@ -980,16 +990,6 @@ Mob* GameplayState::getEnemyOrTreasureOnCursor(Player* player) const {
     }
     
     return closest;
-}
-
-
-/**
- * @brief Returns the name of this state.
- *
- * @return The name.
- */
-string GameplayState::getName() const {
-    return "gameplay";
 }
 
 

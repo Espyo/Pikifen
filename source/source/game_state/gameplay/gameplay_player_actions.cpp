@@ -686,28 +686,28 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
         
         break;
         
-    } case PLAYER_ACTION_TYPE_CURSOR_RIGHT:
-    case PLAYER_ACTION_TYPE_CURSOR_UP:
-    case PLAYER_ACTION_TYPE_CURSOR_LEFT:
-    case PLAYER_ACTION_TYPE_CURSOR_DOWN: {
-        /********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             '-'   *
-        ********************/
+    } case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT:
+    case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP:
+    case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT:
+    case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
+        /***************************
+        *                    .-.   *
+        *   Leader cursor   ( = )> *
+        *                    '-'   *
+        ***************************/
         
         switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_CURSOR_RIGHT: {
-            player->cursorMovement.right = action.value;
+        case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT: {
+            player->leaderCursorMov.right = action.value;
             break;
-        } case PLAYER_ACTION_TYPE_CURSOR_LEFT: {
-            player->cursorMovement.left = action.value;
+        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT: {
+            player->leaderCursorMov.left = action.value;
             break;
-        } case PLAYER_ACTION_TYPE_CURSOR_UP: {
-            player->cursorMovement.up = action.value;
+        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
+            player->leaderCursorMov.up = action.value;
             break;
-        } case PLAYER_ACTION_TYPE_CURSOR_DOWN: {
-            player->cursorMovement.down = action.value;
+        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
+            player->leaderCursorMov.down = action.value;
             break;
         } default: {
             break;
@@ -748,7 +748,7 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
         
     } case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
 
-        player->swarmCursor = isDown;
+        player->swarmToLeaderCursor = isDown;
         
         break;
         
@@ -770,10 +770,10 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
 bool GameplayState::shouldIgnorePlayerAction(const PlayerAction& action) {
     const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
-        PLAYER_ACTION_TYPE_CURSOR_DOWN,
-        PLAYER_ACTION_TYPE_CURSOR_LEFT,
-        PLAYER_ACTION_TYPE_CURSOR_RIGHT,
-        PLAYER_ACTION_TYPE_CURSOR_UP,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
         PLAYER_ACTION_TYPE_ZOOM_IN,
         PLAYER_ACTION_TYPE_ZOOM_OUT,
     };

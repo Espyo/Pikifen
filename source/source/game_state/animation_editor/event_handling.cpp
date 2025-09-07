@@ -154,7 +154,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         Point curSpriteSize = curSprite->scale * curSprite->bmpSize;
         if(
             curTransformationWidget.handleMouseDown(
-                game.editorsView.cursorWorldPos,
+                game.editorsView.mouseCursorWorldPos,
                 &curSprite->offset,
                 &curSpriteSize,
                 &curSprite->angle,
@@ -175,7 +175,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                     );
                     twHandled =
                         curTransformationWidget.handleMouseDown(
-                            game.editorsView.cursorWorldPos,
+                            game.editorsView.mouseCursorWorldPos,
                             &curHitbox->pos,
                             &hitboxSize,
                             nullptr,
@@ -191,7 +191,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                     );
                     twHandled =
                         curTransformationWidget.handleMouseDown(
-                            game.editorsView.cursorWorldPos,
+                            game.editorsView.mouseCursorWorldPos,
                             &hitboxCenter,
                             &hitboxSize,
                             nullptr,
@@ -218,7 +218,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                         if(
                             bBoxCheck(
                                 tl, br,
-                                game.editorsView.cursorWorldPos,
+                                game.editorsView.mouseCursorWorldPos,
                                 1.0f / game.editorsView.cam.zoom
                             )
                         ) {
@@ -227,7 +227,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                     } else {
                         if(
                             Distance(
-                                game.editorsView.cursorWorldPos, hPtr->pos
+                                game.editorsView.mouseCursorWorldPos, hPtr->pos
                             ) <=
                             hPtr->radius
                         ) {
@@ -269,7 +269,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         if(curSprite && curSprite->parentBmp) {
             Point bmpSize = getBitmapDimensions(curSprite->parentBmp);
             Point bmpPos = 0.0f - bmpSize / 2.0f;
-            Point bmpClickPos = game.editorsView.cursorWorldPos;
+            Point bmpClickPos = game.editorsView.mouseCursorWorldPos;
             bmpClickPos.x = floor(bmpClickPos.x - bmpPos.x);
             bmpClickPos.y = floor(bmpClickPos.y - bmpPos.y);
             
@@ -337,7 +337,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_TOP: {
         if(curSprite && curSprite->topVisible) {
             curTransformationWidget.handleMouseDown(
-                game.editorsView.cursorWorldPos,
+                game.editorsView.mouseCursorWorldPos,
                 &curSprite->topPos,
                 &curSprite->topSize,
                 &curSprite->topAngle,
@@ -367,7 +367,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         Point curSpriteSize = curSprite->scale * curSprite->bmpSize;
         if(
             curTransformationWidget.handleMouseMove(
-                game.editorsView.cursorWorldPos,
+                game.editorsView.mouseCursorWorldPos,
                 &curSprite->offset,
                 &curSpriteSize,
                 &curSprite->angle,
@@ -392,7 +392,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 );
                 twHandled =
                     curTransformationWidget.handleMouseMove(
-                        game.editorsView.cursorWorldPos,
+                        game.editorsView.mouseCursorWorldPos,
                         &curHitbox->pos,
                         &hitboxSize,
                         nullptr,
@@ -413,7 +413,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 );
                 twHandled =
                     curTransformationWidget.handleMouseMove(
-                        game.editorsView.cursorWorldPos,
+                        game.editorsView.mouseCursorWorldPos,
                         &hitboxCenter,
                         &hitboxSize,
                         nullptr,
@@ -439,7 +439,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         if(curSprite && curSprite->topVisible) {
             if(
                 curTransformationWidget.handleMouseMove(
-                    game.editorsView.cursorWorldPos,
+                    game.editorsView.mouseCursorWorldPos,
                     &curSprite->topPos,
                     &curSprite->topSize,
                     &curSprite->topAngle,

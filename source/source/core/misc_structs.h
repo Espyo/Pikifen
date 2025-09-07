@@ -156,8 +156,8 @@ struct Viewport {
     //Margin for the box coordinates.
     Point boxMargin;
     
-    //Cursor position, in world coordinates, if any.
-    Point cursorWorldPos;
+    //Mouse cursor position, in world coordinates, if applicable.
+    Point mouseCursorWorldPos;
     
     
     //--- Function declarations ---
@@ -166,7 +166,7 @@ struct Viewport {
     Point getBottomRight();
     Point getTopLeft();
     void updateBox();
-    void updateCursor(const Point& windowPos);
+    void updateMouseCursor(const Point& windowPos);
     void updateTransformations();
     
 };
@@ -506,9 +506,6 @@ struct SystemContentList {
     //Checkbox without a checkmark.
     ALLEGRO_BITMAP* bmpCheckboxNoCheck = nullptr;
     
-    //Leader cursor.
-    ALLEGRO_BITMAP* bmpCursor = nullptr;
-    
     //Mission difficulty.
     ALLEGRO_BITMAP* bmpDifficulty = nullptr;
     
@@ -538,6 +535,9 @@ struct SystemContentList {
     
     //9-slice texture for player input keys.
     ALLEGRO_BITMAP* bmpKeyBox = nullptr;
+    
+    //Leader cursor.
+    ALLEGRO_BITMAP* bmpLeaderCursor = nullptr;
     
     //Leader silhouette from the side.
     ALLEGRO_BITMAP* bmpLeaderSilhouetteSide = nullptr;
@@ -640,8 +640,8 @@ struct SystemContentList {
     //Font for HUD counters.
     ALLEGRO_FONT* fntCounter = nullptr;
     
-    //Counter displayed next to the cursor.
-    ALLEGRO_FONT* fntCursorCounter = nullptr;
+    //Counter displayed next to the leader cursor.
+    ALLEGRO_FONT* fntLeaderCursorCounter = nullptr;
     
     //Font for slim text.
     ALLEGRO_FONT* fntSlim = nullptr;
@@ -751,9 +751,6 @@ struct SystemContentNames {
     //Checkbox without a checkmark.
     string bmpCheckboxNoCheck = "gui/checkbox_no_check";
     
-    //Leader cursor.
-    string bmpCursor = "gui/cursor";
-    
     //Mission difficulty.
     string bmpDifficulty = "gui/difficulty";
     
@@ -786,6 +783,9 @@ struct SystemContentNames {
     
     //9-slice texture for player input keys.
     string bmpKeyBox = "gui/key_box";
+    
+    //Leader cursor.
+    string bmpLeaderCursor = "gui/cursor";
     
     //Leader silhouette from the side.
     string bmpLeaderSilhouetteSide = "gui/leader_silhouette_side";
@@ -888,8 +888,8 @@ struct SystemContentNames {
     //Font for HUD counters.
     string fntCounter = "fonts/counter";
     
-    //Font displayed next to the cursor.
-    string fntCursorCounter = "fonts/cursor_counter";
+    //Font displayed next to the leader cursor.
+    string fntLeaderCursorCounter = "fonts/cursor_counter";
     
     //TTF Dear ImGui header font for editors.
     string fntEditorHeader = "fonts/editor_header";

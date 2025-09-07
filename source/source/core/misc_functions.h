@@ -90,7 +90,7 @@ bool doesEdgeHaveWallShadow(
 void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx, const Viewport& view
 );
-Mob* getClosestMobToCursor(const Viewport& view, bool mustHaveHealth = false);
+Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth = false);
 void getEdgeOffsetEdgeInfo(
     Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
     float edgeProcessAngle,
@@ -132,7 +132,7 @@ string getSubtitleOrMissionGoal(
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const Point& leaderPos, const Point& cursorPos,
+    const Point& leaderPos, const Point& leaderCursorPos,
     const ALLEGRO_COLOR& color,
     float uOffset, float uScale,
     bool varyThickness

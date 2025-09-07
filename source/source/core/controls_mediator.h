@@ -64,7 +64,7 @@ enum PLAYER_ACTION_TYPE {
     //Swap to next leader.
     PLAYER_ACTION_TYPE_NEXT_LEADER,
     
-    //Swarm group towards cursor.
+    //Swarm group towards leader cursor.
     PLAYER_ACTION_TYPE_GROUP_CURSOR,
     
     //Dismiss.
@@ -125,17 +125,17 @@ enum PLAYER_ACTION_TYPE {
     
     //Advanced.
     
-    //Move cursor right.
-    PLAYER_ACTION_TYPE_CURSOR_RIGHT,
+    //Move leader cursor right.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
     
-    //Move cursor up.
-    PLAYER_ACTION_TYPE_CURSOR_UP,
+    //Move leader cursor up.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
     
-    //Move cursor left.
-    PLAYER_ACTION_TYPE_CURSOR_LEFT,
+    //Move leader cursor left.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
     
-    //Move cursor down.
-    PLAYER_ACTION_TYPE_CURSOR_DOWN,
+    //Move leader cursor down.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
     
     //Swarm group right.
     PLAYER_ACTION_TYPE_GROUP_RIGHT,
