@@ -219,7 +219,7 @@ const bool MAKER_TOOLS_IN_PLAY = false;
 const float PIKMIN_BUMP_DIST = 50.0f;
 
 //Default value for whether to show the standby type counter on the leader cursor.
-const bool SHOW_COUNTER_ON_LEADER_CURSOR = false;
+const bool SHOW_LEADER_CURSOR_COUNTER = false;
 
 //Default value for whether to show player input icons on the HUD.
 const bool SHOW_HUD_INPUT_ICONS = true;
@@ -385,8 +385,11 @@ void Options::loadFromDataNode(DataNode* file) {
         
         unsigned char autoThrowModeChar = controls.autoThrowMode;
         
-        cRS.set("auto_throw_mode", autoThrowModeChar);
+        //DEPRECATED in 1.1.0 by "leader_cursor_speed".
         cRS.set("cursor_speed", controls.leaderCursorSpeed);
+
+        cRS.set("auto_throw_mode", autoThrowModeChar);
+        cRS.set("leader_cursor_speed", controls.leaderCursorSpeed);
         
         autoThrowModeChar =
             std::min(
@@ -446,7 +449,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
     }
     
-    //Gui editor.
+    //GUI editor.
     {
         ReaderSetter gRS(file->getChildByName("gui_editor"));
         
@@ -465,12 +468,17 @@ void Options::loadFromDataNode(DataNode* file) {
         
         unsigned char leavingConfModeChar = misc.leavingConfMode;
         
-        mRS.set("dismiss_all", misc.dismissAll);
+        //DEPRECATED in 1.1.0 by "leader_cursor_cam_weight".
         mRS.set("cursor_cam_weight", misc.leaderCursorCamWeight);
+        //DEPRECATED in 1.1.0 by "show_leader_cursor_counter".
+        mRS.set("show_counter_on_cursor", misc.showLeaderCursorCounter);
+
+        mRS.set("dismiss_all", misc.dismissAll);
+        mRS.set("leader_cursor_cam_weight", misc.leaderCursorCamWeight);
         mRS.set("leaving_confirmation_mode", leavingConfModeChar);
         mRS.set("maker_tools_in_play", misc.makerToolsInPlay);
         mRS.set("pikmin_bump_dist", misc.pikminBumpDist);
-        mRS.set("show_counter_on_cursor", misc.showCounterOnLeaderCursor);
+        mRS.set("show_leader_cursor_counter", misc.showLeaderCursorCounter);
         mRS.set("show_hud_input_icons", misc.showHudInputIcons);
         
         leavingConfModeChar =
@@ -609,9 +617,9 @@ void Options::saveToDataNode(DataNode* file) const {
     //Controls.
     {
         GetterWriter cGW(file->addNew("controls"));
-        
+
         cGW.write("auto_throw_mode", controls.autoThrowMode);
-        cGW.write("cursor_speed", controls.leaderCursorSpeed);
+        cGW.write("leader_cursor_speed", controls.leaderCursorSpeed);
     }
     
     //Editors.
@@ -661,11 +669,11 @@ void Options::saveToDataNode(DataNode* file) const {
         GetterWriter mGW(file->addNew("misc"));
         
         mGW.write("dismiss_all", misc.dismissAll);
-        mGW.write("cursor_cam_weight", misc.leaderCursorCamWeight);
+        mGW.write("leader_cursor_cam_weight", misc.leaderCursorCamWeight);
         mGW.write("leaving_confirmation_mode", misc.leavingConfMode);
         mGW.write("maker_tools_in_play", misc.makerToolsInPlay);
         mGW.write("pikmin_bump_dist", misc.pikminBumpDist);
-        mGW.write("show_counter_on_cursor", misc.showCounterOnLeaderCursor);
+        mGW.write("show_leader_cursor_counter", misc.showLeaderCursorCounter);
         mGW.write("show_hud_input_icons", misc.showHudInputIcons);
     }
     

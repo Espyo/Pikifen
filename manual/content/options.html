@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -279,7 +279,7 @@
         <td>0</td>
       </tr>
       <tr>
-        <td><code>cursor_speed</code></td>
+        <td><code>leader_cursor_speed</code></td>
         <td>The speed at which the leader cursor moves, used when controlling it without a mouse. This is in window pixels per second.</td>
         <td>Number</td>
         <td>500</td>
@@ -417,16 +417,16 @@
 
     <table class="props-t props-t-o">
       <tr>
-        <td><code>cursor_cam_weight</code></td>
-        <td>When moving the leader's cursor, how much does it influence the movement of the camera? 0 means none, 1 means just as much as the leader's position. 0.5 is something in-between. You can use values beyond these ranges, but be warned that things will likely be weird.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
-      <tr>
         <td><code>dismiss_all</code></td>
         <td>Whether dismissing should dismiss all Pikmin, or keep the current standby type.</td>
         <td>Boolean</td>
         <td>true</td>
+      </tr>
+      <tr>
+        <td><code>leader_cursor_cam_weight</code></td>
+        <td>When moving the leader's cursor, how much does it influence the movement of the camera? 0 means none, 1 means just as much as the leader's position. 0.5 is something in-between. You can use values beyond these ranges, but be warned that things will likely be weird.</td>
+        <td>Number</td>
+        <td>0</td>
       </tr>
       <tr>
         <td><code>leaving_confirmation_mode</code></td>
@@ -447,7 +447,7 @@
         <td>50</td>
       </tr>
       <tr>
-        <td><code>show_counter_on_cursor</code></td>
+        <td><code>show_leader_cursor_counter</code></td>
         <td>Whether to show a standby type counter on the leader's cursor.</td>
         <td>Boolean</td>
         <td>false</td>

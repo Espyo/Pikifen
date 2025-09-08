@@ -1232,7 +1232,7 @@ void GameplayState::drawLeaderCursor(
     //Standby type count.
     size_t nStandbyPikmin = 0;
     if(
-        game.options.misc.showCounterOnLeaderCursor &&
+        game.options.misc.showLeaderCursorCounter &&
         player->leaderPtr->group->curStandbyType
     ) {
         for(

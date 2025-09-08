@@ -5,7 +5,6 @@ graphics {
     button_box = gui/button_box
     checkbox_check = gui/checkbox_check
     checkbox_no_check = gui/checkbox_no_check
-    cursor = gui/cursor
     difficulty = gui/difficulty
     discord_icon = gui/discord_icon
     editor_icons = gui/editor_icons
@@ -17,6 +16,7 @@ graphics {
     icon = gui/icon
     idle_glow = effects/idle_glow
     key_box = gui/key_box
+    leader_cursor = gui/leader_cursor
     leader_silhouette_side = gui/leader_silhouette_side
     leader_silhouette_top = gui/leader_silhouette_top
     low_health_ring = gui/low_health_ring
@@ -53,10 +53,10 @@ graphics {
 fonts {
     area_name = fonts/area_name
     counter = fonts/counter
-    cursor_counter = fonts/cursor_counter
     editor_header = fonts/editor_header
     editor_monospace = fonts/editor_monospace
     editor_standard = fonts/editor_standard
+    leader_cursor_counter = fonts/leader_cursor_counter
     slim = fonts/slim
     standard = fonts/standard
     value = fonts/value

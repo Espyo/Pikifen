@@ -33,6 +33,7 @@
       <li><span class="cl-a">Added</span> a shaking effect to the leader's health wheel when said leader gets hurt.</li>
       <li><span class="cl-c">Changed</span> the way difficulty is shown for an area in the area menu to use more subjective and stylish flame icons, instead of overly-specific text.</li>
       <li><span class="cl-c">Changed</span> the <a href="misc_features.html#system-info">system info</a>'s logic to work in menus and editors, not just the gameplay state.</li>
+      <li><span class="cl-f">Fixed</span> the leader cursor getting stuck as well as being sluggish, when controlling it outside of a mouse.</li>
     </ul>
 
     <h3 id="1.1.0-making">Content-making changes</h3>
@@ -44,10 +45,20 @@
       <li><span class="cl-c">Changed</span> the <code>print</code> <a href="events_and_actions.html">script action</a> to show the latest and the past lines, instead of just the latest.</li>
     </ul>
 
-    <h3 id="1.0.0-breaking">Breaking changes</h3>
+    <h3 id="1.1.0-breaking">Breaking changes</h3>
 
     <ul>
       <li><span class="cl-c">Changed</span> the <code>menu_selected</code> <a href="system_content_names.html">system content</a> sound to <code>menu_focused</code>.</li>
+      <li><span class="cl-c">Changed</span> the <code>cursor.png</code> and <code>cursor_counter.png</code> images to <code>leader_cursor.png</code>and <code>leader_cursor_counter.png</code>.</li>
+    </ul>
+
+    <h3 id="1.1.0-deprecations">Deprecations</h3>
+
+    <ul>
+      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code> and <code>show_counter_on_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code> and <code>show_leader_cursor_counter</code>.</li>
+      <li><span class="cl-d">Deprecated</span> the <code>cursor</code> and <code>cursor_counter</code> <a href="system_content_names.html">system content</a> properties. Please rename them to <code>leader_cursor</code> and <code>leader_cursor_counter</code>.</li>
+      <li><span class="cl-d">Deprecated</span> the <code>cursor_spin_speed</code> and <code>cursor_max_dist</code> <a href="game_config.html">game configurations</a>. Please rename them to <code>mouse_cursor_spin_speed</code> and <code>leader_cursor_max_dist</code>.</li>
+      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code> and <code>show_counter_on_cursor</code> options <a href="gui.html">GUI items</a>. Please rename them to <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code> and <code>show_leader_cursor_counter</code>.</li>
     </ul>
 
     <h2 id="1.0.1">1.0.1</h2>

@@ -423,14 +423,14 @@ void OptionsMenu::initGuiControlBindsPage() {
  */
 void OptionsMenu::initGuiControlsPage() {
     //Menu items.
-    controlsGui.registerCoords("back",          12,    5, 20,  6);
-    controlsGui.registerCoords("back_input",     3,    7,  4,  4);
-    controlsGui.registerCoords("header",        50,   10, 50,  6);
-    controlsGui.registerCoords("normal_binds",  50,   25, 70, 10);
-    controlsGui.registerCoords("special_binds", 50, 36.5, 58,  9);
-    controlsGui.registerCoords("cursor_speed",  50,   54, 70, 10);
-    controlsGui.registerCoords("auto_throw",    50,   70, 70, 10);
-    controlsGui.registerCoords("tooltip",       50,   96, 96,  4);
+    controlsGui.registerCoords("back",                12,    5, 20,  6);
+    controlsGui.registerCoords("back_input",           3,    7,  4,  4);
+    controlsGui.registerCoords("header",              50,   10, 50,  6);
+    controlsGui.registerCoords("normal_binds",        50,   25, 70, 10);
+    controlsGui.registerCoords("special_binds",       50, 36.5, 58,  9);
+    controlsGui.registerCoords("leader_cursor_speed", 50,   54, 70, 10);
+    controlsGui.registerCoords("auto_throw",          50,   70, 70, 10);
+    controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
     controlsGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         getChildByName("positions")
@@ -512,7 +512,7 @@ void OptionsMenu::initGuiControlsPage() {
         return f2s(v);
     };
     leaderCursorSpeedPicker->init();
-    controlsGui.addItem(leaderCursorSpeedPicker, "cursor_speed");
+    controlsGui.addItem(leaderCursorSpeedPicker, "leader_cursor_speed");
     
     //Auto-throw mode.
     autoThrowPicker =
@@ -676,17 +676,17 @@ void OptionsMenu::initGuiGraphicsPage() {
  */
 void OptionsMenu::initGuiMiscPage() {
     //Menu items.
-    miscGui.registerCoords("back",                   12,     5, 20,   6);
-    miscGui.registerCoords("back_input",              3,     7,  4,   4);
-    miscGui.registerCoords("header",                 50,    10, 50,   6);
-    miscGui.registerCoords("pikmin_bump",            50, 23.75, 70, 7.5);
-    miscGui.registerCoords("dismiss_all",            50, 33.75, 70, 7.5);
-    miscGui.registerCoords("cursor_cam_weight",      50, 43.75, 70, 7.5);
-    miscGui.registerCoords("show_counter_on_cursor", 50, 53.75, 70, 7.5);
-    miscGui.registerCoords("show_hud_input_icons",   50, 63.75, 70, 7.5);
-    miscGui.registerCoords("leaving_confirmation",   50, 73.75, 70, 7.5);
-    miscGui.registerCoords("maker_tools_in_play",    50, 83.75, 70, 7.5);
-    miscGui.registerCoords("tooltip",                50,    96, 96,   4);
+    miscGui.registerCoords("back",                       12,     5, 20,   6);
+    miscGui.registerCoords("back_input",                  3,     7,  4,   4);
+    miscGui.registerCoords("header",                     50,    10, 50,   6);
+    miscGui.registerCoords("pikmin_bump",                50, 23.75, 70, 7.5);
+    miscGui.registerCoords("dismiss_all",                50, 33.75, 70, 7.5);
+    miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70, 7.5);
+    miscGui.registerCoords("show_leader_cursor_counter", 50, 53.75, 70, 7.5);
+    miscGui.registerCoords("show_hud_input_icons",       50, 63.75, 70, 7.5);
+    miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70, 7.5);
+    miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70, 7.5);
+    miscGui.registerCoords("tooltip",                    50,    96, 96,   4);
     miscGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
         getChildByName("positions")
@@ -768,21 +768,21 @@ void OptionsMenu::initGuiMiscPage() {
         return f2s(v);
     };
     leaderCursorCamWeightPicker->init();
-    miscGui.addItem(leaderCursorCamWeightPicker, "cursor_cam_weight");
+    miscGui.addItem(leaderCursorCamWeightPicker, "leader_cursor_cam_weight");
     
-    //Show counter on cursor checkbox.
-    CheckGuiItem* showCounterOnCursorCheck =
+    //Show leader cursor counter checkbox.
+    CheckGuiItem* showLeaderCursorCounterCheck =
         new CheckGuiItem(
-        &game.options.misc.showCounterOnLeaderCursor,
-        "Show counter on cursor", game.sysContent.fntStandard
+        &game.options.misc.showLeaderCursorCounter,
+        "Show leader cursor counter", game.sysContent.fntStandard
     );
-    showCounterOnCursorCheck->onGetTooltip =
+    showLeaderCursorCounterCheck->onGetTooltip =
     [] () {
         return
             "Show a standby type counter on the leader's cursor? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_COUNTER_ON_LEADER_CURSOR) + ".";
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
     };
-    miscGui.addItem(showCounterOnCursorCheck, "show_counter_on_cursor");
+    miscGui.addItem(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
     
     //Show HUD player input icons checkbox.
     CheckGuiItem* showHudInputIconsCheck =

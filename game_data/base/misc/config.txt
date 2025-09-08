@@ -1,8 +1,8 @@
 aesthetic_general {
     carrying_color_move = 255 255 255
     carrying_color_stop = 96 192 192
-    cursor_spin_speed = 180
     gameplay_msg_char_interval = 0.03
+    mouse_cursor_spin_speed = 180
     no_pikmin_color = 168 190 230
 }
 
@@ -55,7 +55,7 @@ pikmin {
 
 rules {
     can_throw_leaders = true
-    cursor_max_dist = 200
+    leader_cursor_max_dist = 200
     max_pikmin_in_field = 100
     throw_max_dist = 200
     whistle_growth_speed = 180

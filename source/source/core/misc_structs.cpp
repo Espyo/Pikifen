@@ -1843,13 +1843,15 @@ void SubgroupTypeManager::registerType(
 void SystemContentNames::load(DataNode* file) {
     ReaderSetter graRS(file->getChildByName("graphics"));
     
+    //DEPRECATED in 1.1.0 by "leader_cursor".
+    graRS.set("cursor", bmpLeaderCursor);
+
     graRS.set("bright_circle", bmpBrightCircle);
     graRS.set("bright_ring", bmpBrightRing);
     graRS.set("bubble_box", bmpBubbleBox);
     graRS.set("button_box", bmpButtonBox);
     graRS.set("checkbox_check", bmpCheckboxCheck);
     graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
-    graRS.set("cursor", bmpLeaderCursor);
     graRS.set("difficulty", bmpDifficulty);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);
@@ -1861,6 +1863,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("icon", bmpIcon);
     graRS.set("idle_glow", bmpIdleGlow);
     graRS.set("key_box", bmpKeyBox);
+    graRS.set("leader_cursor", bmpLeaderCursor);
     graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
     graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
     graRS.set("low_health_ring", bmpLowHealthRing);
@@ -1892,15 +1895,18 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
     graRS.set("title_screen_bg", bmpTitleScreenBg);
     graRS.set("wave_ring", bmpWaveRing);
-    
+
     ReaderSetter fntRS(file->getChildByName("fonts"));
     
+    //DEPRECATED in 1.1.0 by "leader_cursor_counter".
+    fntRS.set("cursor_counter", fntLeaderCursorCounter);
+
     fntRS.set("area_name", fntAreaName);
     fntRS.set("counter", fntCounter);
-    fntRS.set("cursor_counter", fntLeaderCursorCounter);
     fntRS.set("editor_header", fntEditorHeader);
     fntRS.set("editor_monospace", fntEditorMonospace);
     fntRS.set("editor_standard", fntEditorStandard);
+    fntRS.set("leader_cursor_counter", fntLeaderCursorCounter);
     fntRS.set("slim", fntSlim);
     fntRS.set("standard", fntStandard);
     fntRS.set("value", fntValue);

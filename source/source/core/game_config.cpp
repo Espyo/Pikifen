@@ -174,13 +174,16 @@ void GameConfig::load(DataNode* file) {
     //Aesthetic general.
     {
         ReaderSetter aRS(file->getChildByName("aesthetic_general"));
-        
+
+        //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
+        aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
+
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
         aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
-        aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set(
             "gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval
         );
+        aRS.set("mouse_cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
         
         aestheticGen.mouseCursorSpinSpeed =
@@ -266,9 +269,12 @@ void GameConfig::load(DataNode* file) {
     //Rules.
     {
         ReaderSetter rRS(file->getChildByName("rules"));
-        
-        rRS.set("can_throw_leaders", rules.canThrowLeaders);
+
+        //DEPRECATED in 1.1.0 by "leader_cursor_max_dist".
         rRS.set("cursor_max_dist", rules.leaderCursorMaxDist);
+
+        rRS.set("can_throw_leaders", rules.canThrowLeaders);
+        rRS.set("leader_cursor_max_dist", rules.leaderCursorMaxDist);
         rRS.set("max_pikmin_in_field", rules.maxPikminInField);
         rRS.set("throw_max_dist", rules.throwMaxDist);
         rRS.set("whistle_growth_speed", rules.whistleGrowthSpeed);

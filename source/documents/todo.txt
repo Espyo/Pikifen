@@ -1,5 +1,5 @@
-Point I left on (so I can continue the next day without losing my train of thought)
-    
+﻿Point I left on (so I can continue the next day without losing my train of thought)
+
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -80,7 +80,7 @@ Next tasks (roughly sorted most important first)
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
-            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick
+            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for imenu_focusedt to move with the analog stick
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
         Menus
             Options menu

@@ -785,7 +785,7 @@ struct SystemContentNames {
     string bmpKeyBox = "gui/key_box";
     
     //Leader cursor.
-    string bmpLeaderCursor = "gui/cursor";
+    string bmpLeaderCursor = "gui/leader_cursor";
     
     //Leader silhouette from the side.
     string bmpLeaderSilhouetteSide = "gui/leader_silhouette_side";
@@ -889,7 +889,7 @@ struct SystemContentNames {
     string fntCounter = "fonts/counter";
     
     //Font displayed next to the leader cursor.
-    string fntLeaderCursorCounter = "fonts/cursor_counter";
+    string fntLeaderCursorCounter = "fonts/leader_cursor_counter";
     
     //TTF Dear ImGui header font for editors.
     string fntEditorHeader = "fonts/editor_header";

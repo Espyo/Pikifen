@@ -147,7 +147,7 @@ extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const bool MAKER_TOOLS_IN_PLAY;
 extern const float PIKMIN_BUMP_DIST;
-extern const bool SHOW_COUNTER_ON_LEADER_CURSOR;
+extern const bool SHOW_LEADER_CURSOR_COUNTER;
 extern const bool SHOW_HUD_INPUT_ICONS;
 }
 
@@ -391,7 +391,7 @@ struct Options {
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
         //Show a standby type counter on the leader cursor?
-        bool showCounterOnLeaderCursor = OPTIONS::MISC_D::SHOW_COUNTER_ON_LEADER_CURSOR;
+        bool showLeaderCursorCounter = OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
         
         //Show control bind icons on top of HUD elements?
         bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;

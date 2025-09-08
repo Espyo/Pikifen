@@ -9,7 +9,7 @@ positions{
 	header=50.0000 10.0000 50.0000 6.0000
 	pikmin_bump=50.0000 23.7500 70.0000 7.5000
 	dismiss_all=50.0000 33.7500 70.0000 7.5000
-	cursor_cam_weight=50.0000 43.7500 70.0000 7.5000
+	leader_cursor_cam_weight=50.0000 43.7500 70.0000 7.5000
 	show_counter_on_cursor=50.0000 53.7500 70.0000 7.5000
 	show_hud_input_icons=50.0000 63.7500 70.0000 7.5000
 	leaving_confirmation=50.0000 73.7500 70.0000 7.5000

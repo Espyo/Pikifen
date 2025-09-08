@@ -248,7 +248,8 @@ table.props-t-o tr.props td:nth-child(4) {
 .cl-a,
 .cl-c,
 .cl-r,
-.cl-f {
+.cl-f,
+.cl-d {
   font-weight: bold;
 }
 
@@ -266,4 +267,8 @@ table.props-t-o tr.props td:nth-child(4) {
 
 .cl-f {
   color: #36C;
+}
+
+.cl-d {
+  color: #952;
 }
