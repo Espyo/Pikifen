@@ -217,9 +217,17 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
-        //Mouse cursor.
+        //Mouse cursor movement.
         mouseCursor.updatePos(ev);
         mouseCursor.movedThisFrame = true;
+        
+    } else if(ev.type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY) {
+        //Mouse cursor left window.
+        mouseCursor.onWindow = false;
+        
+    } else if(ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
+        //Mouse cursor entered window.
+        mouseCursor.onWindow = true;
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.

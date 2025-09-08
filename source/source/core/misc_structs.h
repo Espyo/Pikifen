@@ -275,6 +275,9 @@ struct MouseCursor {
 
     //Whether it was moved this frame.
     bool movedThisFrame = false;
+
+    //Whether it is on the game window.
+    bool onWindow = true;
     
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.

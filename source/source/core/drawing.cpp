@@ -1005,13 +1005,15 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
     }
     
     //Mouse cursor graphic.
-    drawBitmap(
-        game.sysContent.bmpMouseCursor,
-        game.mouseCursor.winPos,
-        getBitmapDimensions(game.sysContent.bmpMouseCursor),
-        -(game.timePassed * game.config.aestheticGen.mouseCursorSpinSpeed),
-        color
-    );
+    if(game.mouseCursor.onWindow) {
+        drawBitmap(
+            game.sysContent.bmpMouseCursor,
+            game.mouseCursor.winPos,
+            getBitmapDimensions(game.sysContent.bmpMouseCursor),
+            -(game.timePassed * game.config.aestheticGen.mouseCursorSpinSpeed),
+            color
+        );
+    }
 }
 
 
