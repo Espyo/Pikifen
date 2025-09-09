@@ -550,6 +550,7 @@ void GameplayState::enter() {
         }
         player.view.cam.setZoom(zoomLevels[1]);
         player.view.updateTransformations();
+        player.view.updateMouseCursor(game.mouseCursor.winPos);
         particles.viewports.push_back(&player.view);
     }
     
@@ -590,8 +591,22 @@ void GameplayState::enter() {
     for(Player& player : players) {
         player.hud->gui.hideItems();
         player.notification.reset();
-        player.leaderCursorWorld = player.view.mouseCursorWorldPos;
-        player.leaderCursorWin = game.mouseCursor.winPos;
+        if(game.mouseCursor.onWindow) {
+            player.leaderCursorWorld = player.view.mouseCursorWorldPos;
+            player.leaderCursorWin = game.mouseCursor.winPos;
+        } else if(player.leaderPtr) {
+            player.leaderCursorWorld =
+                player.leaderPtr->pos +
+                angleToCoordinates(
+                    player.leaderPtr->angle,
+                    game.config.rules.leaderCursorMaxDist / 2.0f
+                );
+            player.leaderCursorWin = player.leaderCursorWorld;
+            al_transform_coordinates(
+                &player.view.worldToWindowTransform,
+                &player.leaderCursorWin.x, &player.leaderCursorWin.y
+            );
+        }
         if(player.leaderPtr) {
             player.leaderPtr->stopWhistling();
         }
