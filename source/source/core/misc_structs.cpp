@@ -1913,6 +1913,9 @@ void SystemContentNames::load(DataNode* file) {
     
     ReaderSetter sndRS(file->getChildByName("sounds"));
     
+    //DEPRECATED in 1.1.0 by "menu_focus".
+    sndRS.set("menu_selected", sndMenuFocus);
+
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
     sndRS.set("countdown_tick", sndCountdownTick);
