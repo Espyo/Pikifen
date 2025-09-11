@@ -322,7 +322,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* groupTextItem =
         new TextGuiItem(groupText, font);
     groupTextItem->focusable = canFocus;
-    groupTextItem->showFocusBox = canFocus;
     groupTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 1,
@@ -345,7 +344,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* idleTextItem =
         new TextGuiItem(idleText, font);
     idleTextItem->focusable = canFocus;
-    idleTextItem->showFocusBox = canFocus;
     idleTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 2,
@@ -368,7 +366,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* fieldTextItem =
         new TextGuiItem(fieldText, font);
     fieldTextItem->focusable = canFocus;
-    fieldTextItem->showFocusBox = canFocus;
     fieldTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 3,
@@ -391,7 +388,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* onionTextItem =
         new TextGuiItem(onionText, font);
     onionTextItem->focusable = canFocus;
-    onionTextItem->showFocusBox = canFocus;
     onionTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 4,
@@ -414,7 +410,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* totalTextItem =
         new TextGuiItem(totalText, font, COLOR_GOLD);
     totalTextItem->focusable = canFocus;
-    totalTextItem->showFocusBox = canFocus;
     totalTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 5,
@@ -453,7 +448,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* newTextItem =
         new TextGuiItem(newText, font, al_map_rgb(210, 255, 210));
     newTextItem->focusable = canFocus;
-    newTextItem->showFocusBox = canFocus;
     newTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 6,
@@ -476,7 +470,6 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* lostTextItem =
         new TextGuiItem(lostText, font, al_map_rgb(255, 210, 210));
     lostTextItem->focusable = canFocus;
-    lostTextItem->showFocusBox = canFocus;
     lostTextItem->ratioCenter =
         Point(
             firstX + itemXInterval * 7,
@@ -1099,7 +1092,7 @@ void PauseMenu::drawRadar(
         
         switch(lPtr->pathInfo->result) {
         case PATH_RESULT_DIRECT:
-        case PATH_RESULT_DIRECT_NO_STOPS: 
+        case PATH_RESULT_DIRECT_NO_STOPS:
         case PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS: {
             //Go directly from A to B.
             

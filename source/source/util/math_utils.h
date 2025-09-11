@@ -27,7 +27,7 @@ constexpr float TAU = (float)M_PI * 2.0f;
 
 
 //Methods for easing numbers.
-enum EASING_METHOD {
+enum EASE_METHOD {
 
     //No easing. AKA linear interpolation.
     EASE_METHOD_NONE,
@@ -71,7 +71,7 @@ enum EASING_METHOD {
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
-float ease(const EASING_METHOD method, float n);
+float ease(const EASE_METHOD method, float n);
 uint32_t hashNr(uint32_t input);
 uint32_t hashNr2(uint32_t input1, uint32_t input2);
 float inchTowards(float start, float target, float maxStep);

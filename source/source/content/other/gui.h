@@ -37,6 +37,12 @@ extern const float AUTO_REPEAT_MIN_INTERVAL;
 extern const float AUTO_REPEAT_RAMP_TIME;
 extern const float BULLET_PADDING;
 extern const float BULLET_RADIUS;
+extern const float FOCUS_CURSOR_ALPHA_SPEED;
+extern const float FOCUS_CURSOR_BOB_OFFSET;
+extern const float FOCUS_CURSOR_BOB_TIME_MULT;
+extern const float FOCUS_CURSOR_FADE_GROW_OFFSET;
+extern const float FOCUS_CURSOR_SIZE_ADDER;
+extern const float FOCUS_CURSOR_SMOOTHNESS_MULT;
 extern const float JUICY_GROW_DURATION;
 extern const float JUICY_GROW_ELASTIC_DURATION;
 extern const float JUICY_GROW_ICON_MULT;
@@ -136,7 +142,7 @@ public:
         
         //Pixel dimensions.
         Point size;
-
+        
     };
     
     
@@ -472,9 +478,6 @@ public:
     //Wrap long lines. Also enables markup.
     bool lineWrap = false;
     
-    //Whether to show a focus box when focused.
-    bool showFocusBox = false;
-    
     
     //--- Function declarations ---
     
@@ -582,9 +585,18 @@ public:
 private:
 
     //--- Members ---
-
+    
     //Which item is currently focused.
     GuiItem* focusedItem = nullptr;
+    
+    //Focus cursor's current center coordinates.
+    Point focusCursorPos;
+    
+    //Focus cursor's current base width and height.
+    Point focusCursorSize;
+    
+    //Focus cursor's current base opacity (0 to 1).
+    float focusCursorAlpha = 0.0f;
     
     //Registered default centers.
     map<string, Point> registeredCenters;

@@ -23,7 +23,7 @@
  * @param n The number to ease, in the range [0, 1].
  * @return The eased number.
  */
-float ease(const EASING_METHOD method, float n) {
+float ease(const EASE_METHOD method, float n) {
     switch(method) {
     case EASE_METHOD_NONE: {
         return n;

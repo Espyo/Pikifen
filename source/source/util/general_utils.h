@@ -203,7 +203,7 @@ struct KeyframeInterpolator {
      */
     void add(
         float t, const InterT& value,
-        EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
+        EASE_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         size_t newIdx = getInsertionIdx(t);
         
@@ -227,7 +227,7 @@ struct KeyframeInterpolator {
      */
     void addOrSet(
         float t, const InterT& value,
-        EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
+        EASE_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         for(size_t k = 0; k < keyframeTimes.size(); ++k) {
             if(keyframeTimes[k] == t) {
@@ -357,7 +357,7 @@ private:
     vector<InterT> keyframeValues;
     
     //Keyframe easing methods.
-    vector<EASING_METHOD> keyframeEases;
+    vector<EASE_METHOD> keyframeEases;
     
     
     //--- Function definitions ---

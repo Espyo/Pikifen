@@ -40,6 +40,24 @@ const float BULLET_PADDING = 6.0f;
 //Radius of the circle that represents the bullet in a bullet point item.
 const float BULLET_RADIUS = 4.0f;
 
+//Speed at which the focus cursor's alpha changes.
+const float FOCUS_CURSOR_ALPHA_SPEED = 4.0f;
+
+//The focus cursor's bobbing makes it offset its size by this much at most.
+const float FOCUS_CURSOR_BOB_OFFSET = 2.0f;
+
+//The focus cursor's bobbing speed is multiplied by this much.
+const float FOCUS_CURSOR_BOB_TIME_MULT = TAU;
+
+//When fading away, the cursor grows these many pixels at most.
+const float FOCUS_CURSOR_FADE_GROW_OFFSET = 30.0f;
+
+//The focus cursor's is these many pixels larger than the item.
+const float FOCUS_CURSOR_SIZE_ADDER = 10.0f;
+
+//Dampen the focus cursor's position or size changes by this much.
+const float FOCUS_CURSOR_SMOOTHNESS_MULT = 15.0f;
+
 //When an item does a juicy grow, this is the full effect duration.
 const float JUICY_GROW_DURATION = 0.3f;
 
@@ -121,13 +139,6 @@ void BulletGuiItem::defDrawCode(
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0 + juicyGrowAmount)
     );
-    if(focused) {
-        drawTexturedBox(
-            draw.center,
-            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
-            game.sysContent.bmpFocusBox
-        );
-    }
 }
 
 
@@ -259,14 +270,6 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
     );
-    
-    if(focused) {
-        drawTexturedBox(
-            draw.center,
-            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
-            game.sysContent.bmpFocusBox
-        );
-    }
 }
 
 
@@ -671,6 +674,19 @@ bool GuiManager::draw() {
         if(iPtr->parent) {
             al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
         }
+    }
+    
+    if(focusCursorAlpha > 0.0f) {
+        float sizeAddition =
+            GUI::FOCUS_CURSOR_SIZE_ADDER +
+            sin(game.timePassed * GUI::FOCUS_CURSOR_BOB_TIME_MULT) *
+            GUI::FOCUS_CURSOR_BOB_OFFSET +
+            GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursorAlpha);
+        drawTexturedBox(
+            focusCursorPos, focusCursorSize + sizeAddition,
+            game.sysContent.bmpFocusBox,
+            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursorAlpha))
+        );
     }
     
     return true;
@@ -1279,6 +1295,38 @@ bool GuiManager::tick(float deltaT) {
         }
     }
     
+    //Tick the focus cursor.
+    DrawInfo focusedItemDraw;
+    bool mustDrawFocusedItem = false;
+    if(focusedItem) {
+        mustDrawFocusedItem = getItemDrawInfo(focusedItem, &focusedItemDraw);
+    }
+    if(
+        focusedItem && mustDrawFocusedItem &&
+        focusedItem->focusable
+    ) {
+        if(focusCursorAlpha == 0.0f) {
+            focusCursorPos = focusedItemDraw.center;
+            focusCursorSize = focusedItemDraw.size;
+        } else {
+            Point posDelta = focusedItemDraw.center - focusCursorPos;
+            Point sizeDelta = focusedItemDraw.size - focusCursorSize;
+            focusCursorPos +=
+                posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+            focusCursorSize +=
+                sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        }
+        focusCursorAlpha =
+            inchTowards(
+                focusCursorAlpha, 1.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+            );
+    } else {
+        focusCursorAlpha =
+            inchTowards(
+                focusCursorAlpha, 0.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+            );
+    }
+    
     return true;
 }
 
@@ -1626,14 +1674,6 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
     );
-    
-    if(focused) {
-        drawTexturedBox(
-            draw.center,
-            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
-            game.sysContent.bmpFocusBox
-        );
-    }
 }
 
 
@@ -1855,14 +1895,6 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
             Point(1.0 + juicyGrowAmount)
         );
         
-    }
-    
-    if(focused && showFocusBox) {
-        drawTexturedBox(
-            draw.center,
-            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
-            game.sysContent.bmpFocusBox
-        );
     }
 }
 

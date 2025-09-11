@@ -8,6 +8,10 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
+    Smaller enemies go for Winged Pikmin in vain
+    BLL legs stay floating in the air? (Thanks Neo)
+    The leader cursor stays behind if the leader moves
+    If you have analog stick inputs and D-pad inputs bound to navigating menus, the D-pad ones STILL won't work
 
     --- 1.1.0 ---
     A way to port content from previous versions
@@ -43,9 +47,6 @@ Next tasks (roughly sorted most important first)
     GUI things
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
-        The focus cursor should be a part of the GUI manager itself
-            It should smoothly jump from item to item as you choose which one is focused
-            It should fade out when nothing is focused, and fade back in when something now is. This fade should go through an exponential ease, so that it stays visible longer than it stays invisible, meaning that if the player has their mouse on an item and moves it to a new item, it doesn't quickly start fading away only to quickly fade back in, and instead looks more natural
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
@@ -80,7 +81,7 @@ Next tasks (roughly sorted most important first)
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
-            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for imenu_focusedt to move with the analog stick
+            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
         Menus
             Options menu
@@ -573,6 +574,9 @@ Misc things (so I don't forget)
             The Pikmin flowers should render a small shadow under them too
         Healing at the ship should make a sound
         When quick-testing from the area editor, make the loading screen text fade out quickly, so it's more snappy and so that the "GO!" text doesn't overlap it
+        Cursor trail improvements
+            In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
+            If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow

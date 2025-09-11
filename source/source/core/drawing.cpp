@@ -226,14 +226,6 @@ void drawButton(
     drawTexturedBox(
         center, size, game.sysContent.bmpBubbleBox, boxTint
     );
-    
-    if(selected) {
-        drawTexturedBox(
-            center,
-            size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
-            game.sysContent.bmpFocusBox
-        );
-    }
 }
 
 
