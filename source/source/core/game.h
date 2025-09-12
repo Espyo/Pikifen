@@ -25,7 +25,7 @@
 #include "../game_state/particle_editor/editor.h"
 #include "../game_state/results.h"
 #include "../game_state/title_screen.h"
-#include "../lib/controls_manager/controls_manager.h"
+#include "../lib/inpution/inpution.h"
 #include "audio.h"
 #include "game_config.h"
 #include "misc_structs.h"
@@ -203,7 +203,7 @@ public:
     PerformanceMonitor* perfMon = nullptr;
     
     //Player actions in this frame.
-    vector<PlayerAction> playerActions;
+    vector<Inpution::Action> playerActions;
     
     //Randomness manager.
     RngManager rng;
@@ -311,7 +311,7 @@ private:
     void globalLogicPost();
     void globalLogicPre();
     void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
-    bool globalHandleSystemPlayerAction(const PlayerAction& action);
+    bool globalHandleSystemPlayerAction(const Inpution::Action& action);
     void processSystemInfo();
     
 };

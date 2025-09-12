@@ -2,17 +2,19 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Controls manager class and related functions.
- *
- * Please read the header file for more information.
+ * Source code for the Inpution middleware.
+ * Please read the included readme file.
  */
 
 #include <algorithm>
 #include <cmath>
 
-#include "controls_manager.h"
+#include "inpution.h"
 
 #include "../analog_stick_cleaner/analog_stick_cleaner.h"
+
+
+namespace Inpution {
 
 
 /**
@@ -23,7 +25,7 @@
  *
  * @param input Input to clean.
  */
-void ControlsManager::cleanStick(const PlayerInput& input) {
+void Manager::cleanStick(const Input& input) {
     rawSticks[input.source.deviceNr]
     [input.source.stickNr][input.source.axisNr] =
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
@@ -45,21 +47,21 @@ void ControlsManager::cleanStick(const PlayerInput& input) {
 
 
 /**
- * @brief Given a player input value, converts it to an analog or boolean value,
+ * @brief Given an input value, converts it to an analog or boolean value,
  * according to the action type.
  * 
  * @param actionTypeId ID of the action type.
  * @param value Value to convert.
  * @return The converted value.
  */
-float ControlsManager::convertActionValue(int actionTypeId, float value) {
+float Manager::convertActionValue(int actionTypeId, float value) {
     auto it = actionTypes.find(actionTypeId);
     if(it != actionTypes.end()) {
         switch(it->second.valueType) {
-        case PLAYER_ACTION_VALUE_TYPE_ANALOG: {
+        case ACTION_VALUE_TYPE_ANALOG: {
             return value;
             break;
-        } case PLAYER_ACTION_VALUE_TYPE_BOOLEAN: {
+        } case ACTION_VALUE_TYPE_BOOLEAN: {
             return value >= 0.5f ? 1.0f : 0.0f;
             break;
         }
@@ -76,13 +78,13 @@ float ControlsManager::convertActionValue(int actionTypeId, float value) {
  * @param input The input.
  * @return The action types.
  */
-vector<int> ControlsManager::getActionTypesFromInput(
-    const PlayerInput& input
+vector<int> Manager::getActionTypesFromInput(
+    const Input& input
 ) {
     vector<int> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
-        const ControlBind& bind = binds[b];
+        const Bind& bind = binds[b];
         if(bind.inputSource == input.source) {
             actionTypes.push_back(bind.actionTypeId);
         }
@@ -93,13 +95,13 @@ vector<int> ControlsManager::getActionTypesFromInput(
 
 
 /**
- * @brief Returns the current value of a given player action type.
+ * @brief Returns the current value of a given action type.
  *
- * @param playerActionTypeId ID of the player action type.
+ * @param actionTypeId ID of the action type.
  * @return The value, or 0 on failure.
  */
-float ControlsManager::getValue(int playerActionTypeId) const {
-    auto it = actionTypeStatuses.find(playerActionTypeId);
+float Manager::getValue(int actionTypeId) const {
+    auto it = actionTypeStatuses.find(actionTypeId);
     if(it == actionTypeStatuses.end()) return 0.0f;
     return it->second.value;
 }
@@ -108,15 +110,15 @@ float ControlsManager::getValue(int playerActionTypeId) const {
 /**
  * @brief Handles a final clean input.
  *
- * @param input Player input to process.
- * @param addDirectly If true, the player actions bound to this input will
+ * @param input Input to process.
+ * @param addDirectly If true, the actions bound to this input will
  * be added to the queue of actions directly.
- * If false, the manager will save the player actions' current state, and
+ * If false, the manager will save the actions' current state, and
  * only add the actions at the end of the frame, if their state is different
  * from the last frame's state.
  */
-void ControlsManager::handleCleanInput(
-    const PlayerInput& input, bool addDirectly
+void Manager::handleCleanInput(
+    const Input& input, bool addDirectly
 ) {
     if(processInputIgnoring(input)) {
         //We have to ignore this one.
@@ -129,7 +131,7 @@ void ControlsManager::handleCleanInput(
     for(size_t a = 0; a < actionTypes.size(); a++) {
         if(addDirectly) {
             //Add it to the action queue directly.
-            PlayerAction newAction;
+            Action newAction;
             newAction.actionTypeId = actionTypes[a];
             newAction.value = convertActionValue(actionTypes[a], input.value);
             actionQueue.push_back(newAction);
@@ -147,8 +149,8 @@ void ControlsManager::handleCleanInput(
  *
  * @param input The input.
  */
-void ControlsManager::handleInput(
-    const PlayerInput& input
+void Manager::handleInput(
+    const Input& input
 ) {
     if(
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
@@ -163,7 +165,7 @@ void ControlsManager::handleInput(
         //If a player goes from walking left to walking right very quickly
         //in one frame, the "walking left" action may never receive a zero
         //value. So we should inject the zero manually with two more inputs.
-        PlayerInput xPosInput = input;
+        Input xPosInput = input;
         xPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
         xPosInput.source.axisNr = 0;
         xPosInput.value =
@@ -173,7 +175,7 @@ void ControlsManager::handleInput(
             );
         handleCleanInput(xPosInput, false);
         
-        PlayerInput xNegInput = input;
+        Input xNegInput = input;
         xNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
         xNegInput.source.axisNr = 0;
         xNegInput.value =
@@ -183,7 +185,7 @@ void ControlsManager::handleInput(
             );
         handleCleanInput(xNegInput, false);
         
-        PlayerInput yPosInput = input;
+        Input yPosInput = input;
         yPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
         yPosInput.source.axisNr = 1;
         yPosInput.value =
@@ -193,7 +195,7 @@ void ControlsManager::handleInput(
             );
         handleCleanInput(yPosInput, false);
         
-        PlayerInput yNegInput = input;
+        Input yNegInput = input;
         yNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
         yNegInput.source.axisNr = 1;
         yNegInput.value =
@@ -214,7 +216,7 @@ void ControlsManager::handleInput(
         //using the mouse wheel. So whatever player actions we decide here
         //have to be added to this frame's action queue directly.
         for(unsigned int i = 0; i < input.value; i++) {
-            PlayerInput singleInput = input;
+            Input singleInput = input;
             singleInput.value = 1.0f;
             handleCleanInput(singleInput, true);
         }
@@ -228,16 +230,16 @@ void ControlsManager::handleInput(
 
 
 /**
- * @brief Returns the player actions that occurred during the last frame of
+ * @brief Returns the actions that occurred during the last frame of
  * gameplay, and begins a new frame.
  *
  * @param deltaT How much time has passed since the last frame.
  * @return The actions.
  */
-vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
+vector<Action> Manager::newFrame(float deltaT) {
     for(auto& a : actionTypeStatuses) {
         if(a.second.oldValue != a.second.value) {
-            PlayerAction newAction;
+            Action newAction;
             newAction.actionTypeId = a.first;
             newAction.value = a.second.value;
             actionQueue.push_back(newAction);
@@ -249,7 +251,7 @@ vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
         processAutoRepeats(a, deltaT);
     }
     
-    vector<PlayerAction> result;
+    vector<Action> result;
     if(!ignoringActions) {
         result = actionQueue;
     }
@@ -265,12 +267,12 @@ vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
 
 
 /**
- * @brief Processes logic for auto-repeating player actions.
+ * @brief Processes logic for auto-repeating actions.
  *
  * @param it Iterator of the map of action type statuses.
  * @param deltaT How much time has passed since the last frame.
  */
-void ControlsManager::processAutoRepeats(
+void Manager::processAutoRepeats(
     std::pair<const int, ActionTypeStatus>& it, float deltaT
 ) {
     float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
@@ -286,10 +288,10 @@ void ControlsManager::processAutoRepeats(
     
     while(it.second.stateDuration >= it.second.nextAutoRepeatActivation) {
         //Auto-repeat!
-        PlayerAction newAction;
+        Action newAction;
         newAction.actionTypeId = it.first;
         newAction.value = it.second.value;
-        newAction.flags |= PLAYER_ACTION_FLAG_REPEAT;
+        newAction.flags |= ACTION_FLAG_REPEAT;
         actionQueue.push_back(newAction);
         
         //Set the next activation.
@@ -313,8 +315,8 @@ void ControlsManager::processAutoRepeats(
  * @param input Input to check.
  * @return Whether it should be ignored.
  */
-bool ControlsManager::processInputIgnoring(
-    const PlayerInput& input
+bool Manager::processInputIgnoring(
+    const Input& input
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == input.source) {
@@ -340,7 +342,7 @@ bool ControlsManager::processInputIgnoring(
  * @param it Iterator of the map of action type statuses.
  * @param deltaT How much time has passed since the last frame.
  */
-void ControlsManager::processStateTimers(
+void Manager::processStateTimers(
     std::pair<const int, ActionTypeStatus>& it, float deltaT
 ) {
     bool isActive = it.second.value != 0.0f;
@@ -357,15 +359,15 @@ void ControlsManager::processStateTimers(
 
 
 /**
- * @brief Sets the current value of a given player action type.
+ * @brief Sets the current value of a given action type.
  *
- * @param playerActionTypeId ID of the player action type.
+ * @param actionTypeId ID of the action type.
  * @param value The value.
  */
-void ControlsManager::setValue(int playerActionTypeId, float value) {
+void Manager::setValue(int actionTypeId, float value) {
     value = std::min(value, 1.0f);
     value = std::max(0.0f, value);
-    actionTypeStatuses[playerActionTypeId].value = value;
+    actionTypeStatuses[actionTypeId].value = value;
 }
 
 
@@ -375,8 +377,8 @@ void ControlsManager::setValue(int playerActionTypeId, float value) {
  *
  * @param inputSource Input source to ignore.
  */
-void ControlsManager::startIgnoringInputSource(
-    const PlayerInputSource& inputSource
+void Manager::startIgnoringInputSource(
+    const InputSource& inputSource
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == inputSource) {
@@ -394,7 +396,7 @@ void ControlsManager::startIgnoringInputSource(
  * @param s2 The other input source.
  * @return Whether they are the same.
  */
-bool PlayerInputSource::operator==(const PlayerInputSource& s2) const {
+bool InputSource::operator==(const InputSource& s2) const {
     return
         type == s2.type &&
         deviceNr == s2.deviceNr &&
@@ -402,3 +404,6 @@ bool PlayerInputSource::operator==(const PlayerInputSource& s2) const {
         stickNr == s2.stickNr &&
         axisNr == s2.axisNr;
 }
+
+
+};

@@ -257,7 +257,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool Game::globalHandleSystemPlayerAction(const PlayerAction& action) {
+bool Game::globalHandleSystemPlayerAction(const Inpution::Action& action) {
     bool isSystemAction =
         controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_SYSTEM;

@@ -1104,7 +1104,7 @@ struct Notification {
     float getVisibility() const;
     void reset();
     void setContents(
-        const PlayerInputSource& inputSource,
+        const Inpution::InputSource& inputSource,
         const string& text, const Point& pos
     );
     void setEnabled(bool enabled);
@@ -1118,7 +1118,7 @@ struct Notification {
     bool enabled = true;
     
     //What player input source icon to show.
-    PlayerInputSource inputSource;
+    Inpution::InputSource inputSource;
     
     //What text to write.
     string text;

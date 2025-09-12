@@ -211,7 +211,7 @@ void drawMenuButtonIcon(
 );
 void drawMouseCursor(const ALLEGRO_COLOR& color);
 void drawPlayerInputSourceIcon(
-    const ALLEGRO_FONT* const font, const PlayerInputSource& s,
+    const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
     bool condensed, const Point& where, const Point& maxSize,
     unsigned char alpha = 228
 );
@@ -233,12 +233,12 @@ void drawStringTokens(
     const Point& scale = Point(1.0f)
 );
 void getPlayerInputIconInfo(
-    const PlayerInputSource& s, bool condensed,
+    const Inpution::InputSource& s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmapSprite,
     string* text
 );
 float getPlayerInputIconWidth(
-    const ALLEGRO_FONT* font, const PlayerInputSource& s, bool condensed,
+    const ALLEGRO_FONT* font, const Inpution::InputSource& s, bool condensed,
     float maxBitmapHeight = 0
 );

@@ -230,7 +230,7 @@ public:
     void draw() override;
     void load() override;
     void handleAllegroEvent(const ALLEGRO_EVENT& ev) override;
-    void handlePlayerAction(const PlayerAction& action) override;
+    void handlePlayerAction(const Inpution::Action& action) override;
     void unload() override;
     void tick(float deltaT) override;
     
@@ -308,7 +308,7 @@ private:
     bool showingBindsMore = false;
     
     //List of binds per player action type.
-    vector<vector<ControlBind> > bindsPerActionType;
+    vector<vector<Inpution::Bind> > bindsPerActionType;
     
     //Current player action type.
     PLAYER_ACTION_TYPE curActionType = PLAYER_ACTION_TYPE_NONE;

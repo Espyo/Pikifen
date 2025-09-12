@@ -1026,7 +1026,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
  * @param alpha Opacity.
  */
 void drawPlayerInputSourceIcon(
-    const ALLEGRO_FONT* const font, const PlayerInputSource& s,
+    const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
     bool condensed, const Point& where, const Point& maxSize,
     unsigned char alpha
 ) {
@@ -1369,7 +1369,7 @@ void drawStringTokens(
  * empty string is returned if there's nothing to write.
  */
 void getPlayerInputIconInfo(
-    const PlayerInputSource& s, bool condensed,
+    const Inpution::InputSource& s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmapSprite,
     string* text
@@ -1378,11 +1378,11 @@ void getPlayerInputIconInfo(
     *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
-    if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+    if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
     
     //Figure out if it's one of those that has a bitmap icon.
     //If so, just return that.
-    if(s.type == INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
+    if(s.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
         if(s.buttonNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LMB;
@@ -1396,15 +1396,15 @@ void getPlayerInputIconInfo(
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MMB;
             return;
         }
-    } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP) {
+    } else if(s.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
         *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MWU;
         return;
-    } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN) {
+    } else if(s.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
         *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
-    } else if(s.type == INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
+    } else if(s.type == Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
         if(s.buttonNr == ALLEGRO_KEY_UP) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_UP;
@@ -1444,7 +1444,7 @@ void getPlayerInputIconInfo(
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
             return;
         }
-    } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG && condensed) {
+    } else if(s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG && condensed) {
         if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
@@ -1454,7 +1454,7 @@ void getPlayerInputIconInfo(
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
             return;
         }
-    } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS && condensed) {
+    } else if(s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS && condensed) {
         if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
@@ -1468,13 +1468,13 @@ void getPlayerInputIconInfo(
     
     //Otherwise, use an actual shape and some text inside.
     switch(s.type) {
-    case INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
+    case Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
         *shape = PLAYER_INPUT_ICON_SHAPE_RECTANGLE;
         *text = getKeyName(s.buttonNr, condensed);
         break;
         
-    } case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG:
-    case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS: {
+    } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG:
+    case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
@@ -1482,29 +1482,29 @@ void getPlayerInputIconInfo(
                 " stick " + i2s(s.stickNr + 1);
             if(
                 s.axisNr == 0 &&
-                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
+                s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " left";
             } else if(
                 s.axisNr == 0 &&
-                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
+                s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " right";
             } else if(
                 s.axisNr == 1 &&
-                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
+                s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " up";
             } else if(
                 s.axisNr == 1 &&
-                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
+                s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " down";
             } else {
                 *text +=
                     " axis " + i2s(s.axisNr) +
                     (
-                        s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ?
+                        s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ?
                         "-" :
                         "+"
                     );
@@ -1515,7 +1515,7 @@ void getPlayerInputIconInfo(
         }
         break;
         
-    } case INPUT_SOURCE_TYPE_CONTROLLER_BUTTON: {
+    } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
@@ -1526,7 +1526,7 @@ void getPlayerInputIconInfo(
         }
         break;
         
-    } case INPUT_SOURCE_TYPE_MOUSE_BUTTON: {
+    } case Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse button " + i2s(s.buttonNr);
@@ -1535,7 +1535,7 @@ void getPlayerInputIconInfo(
         }
         break;
         
-    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT: {
+    } case Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel left";
@@ -1544,7 +1544,7 @@ void getPlayerInputIconInfo(
         }
         break;
         
-    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT: {
+    } case Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel right";
@@ -1577,7 +1577,7 @@ void getPlayerInputIconInfo(
  * @return The width.
  */
 float getPlayerInputIconWidth(
-    const ALLEGRO_FONT* font, const PlayerInputSource& s, bool condensed,
+    const ALLEGRO_FONT* font, const Inpution::InputSource& s, bool condensed,
     float maxBitmapHeight
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;

@@ -1141,14 +1141,14 @@ void MobActionRunners::getEventInfo(MobActionRunData& data) {
         if(data.call->parentEvent == MOB_EV_INPUT_RECEIVED) {
             *var =
                 game.controls.getPlayerActionTypeInternalName(
-                    ((PlayerAction*) (data.customData1))->actionTypeId
+                    ((Inpution::Action*) (data.customData1))->actionTypeId
                 );
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
         if(data.call->parentEvent == MOB_EV_INPUT_RECEIVED) {
-            *var = f2s(((PlayerAction*) (data.customData1))->value);
+            *var = f2s(((Inpution::Action*) (data.customData1))->value);
         }
         break;
         

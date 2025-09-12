@@ -821,7 +821,7 @@ void Notification::draw(const Viewport& view) const {
         mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(inputSource.type != INPUT_SOURCE_TYPE_NONE) {
+    if(inputSource.type != Inpution::INPUT_SOURCE_TYPE_NONE) {
         textBoxX1 +=
             DRAWING::NOTIFICATION_INPUT_SIZE + DRAWING::NOTIFICATION_PADDING;
         drawPlayerInputSourceIcon(
@@ -874,7 +874,7 @@ float Notification::getVisibility() const {
  */
 void Notification::reset() {
     enabled = true;
-    inputSource.type = INPUT_SOURCE_TYPE_NONE;
+    inputSource.type = Inpution::INPUT_SOURCE_TYPE_NONE;
     text.clear();
     pos = Point();
     visibility = 0.0f;
@@ -889,7 +889,7 @@ void Notification::reset() {
  * @param pos Where to show it in the game world.
  */
 void Notification::setContents(
-    const PlayerInputSource& inputSource, const string& text, const Point& pos
+    const Inpution::InputSource& inputSource, const string& text, const Point& pos
 ) {
     this->inputSource = inputSource;
     this->text = text;

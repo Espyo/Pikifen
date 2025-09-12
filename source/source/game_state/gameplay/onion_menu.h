@@ -180,7 +180,7 @@ struct OnionMenu {
     void goToPage(size_t page);
     void growButtons();
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    void handlePlayerAction(const PlayerAction& action);
+    void handlePlayerAction(const Inpution::Action& action);
     void startClosing();
     void tick(float deltaT);
     void toggleSelectAll();

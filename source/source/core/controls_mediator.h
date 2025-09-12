@@ -20,7 +20,7 @@
 #include <allegro5/allegro.h>
 
 #include "../lib/data_file/data_file.h"
-#include "../lib/controls_manager/controls_manager.h"
+#include "../lib/inpution/inpution.h"
 
 
 using std::size_t;
@@ -285,7 +285,7 @@ enum PLAYER_ACTION_CAT {
  * @brief Data about a type of action that can be performed in the game.
  * This data is pertinent only to Pikifen, not the library.
  */
-struct PfePlayerActionType : public PlayerActionType {
+struct PlayerActionType : public Inpution::ActionType {
 
     //--- Members ---
     
@@ -326,33 +326,33 @@ struct ControlsMediator {
         const string& description,
         const string& internalName,
         const string& defaultBindStr,
-        PLAYER_ACTION_VALUE_TYPE valueType,
+        Inpution::ACTION_VALUE_TYPE valueType,
         float autoRepeat = 0.0f
     );
-    const vector<PfePlayerActionType>& getAllPlayerActionTypes() const;
-    vector<ControlBind>& binds();
-    string inputSourceToStr(const PlayerInputSource& s) const;
-    ControlBind findBind(
+    const vector<PlayerActionType>& getAllPlayerActionTypes() const;
+    vector<Inpution::Bind>& binds();
+    string inputSourceToStr(const Inpution::InputSource& s) const;
+    Inpution::Bind findBind(
         const PLAYER_ACTION_TYPE actionTypeId
     ) const;
-    ControlBind findBind(
+    Inpution::Bind findBind(
         const string& actionTypeName
     ) const;
-    PfePlayerActionType getPlayerActionType(int actionId) const;
+    PlayerActionType getPlayerActionType(int actionId) const;
     string getPlayerActionTypeInternalName(int actionId);
     float getPlayerActionTypeValue(
         PLAYER_ACTION_TYPE playerActionTypeId
     );
     void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
-    PlayerInputSource strToInputSource(const string& s) const;
-    PlayerInput allegroEventToInput(const ALLEGRO_EVENT& ev) const;
+    Inpution::InputSource strToInputSource(const string& s) const;
+    Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    vector<PlayerAction> newFrame(float deltaT);
+    vector<Inpution::Action> newFrame(float deltaT);
     void releaseAll();
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
-    void setOptions(const ControlsManagerOptions& options);
+    void setOptions(const Inpution::ManagerOptions& options);
     void startIgnoringActions();
-    void startIgnoringInputSource(const PlayerInputSource& inputSource);
+    void startIgnoringInputSource(const Inpution::InputSource& inputSource);
     void stopIgnoringActions();
     
     private:
@@ -360,9 +360,9 @@ struct ControlsMediator {
     //--- Members ---
     
     //List of registered player action types.
-    vector<PfePlayerActionType> playerActionTypes;
+    vector<PlayerActionType> playerActionTypes;
     
-    //Controls manager.
-    ControlsManager mgr;
+    //Inpution manager.
+    Inpution::Manager mgr;
     
 };

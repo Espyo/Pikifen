@@ -2,9 +2,8 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Header for the controls manager class and related functions.
- *
- * This library manages the connections between inputs and player actions.
+ * Header for the Inpution middleware.
+ * Please read the included readme file.
  */
 
 #pragma once
@@ -20,6 +19,9 @@ using std::map;
 using std::string;
 using std::tuple;
 using std::vector;
+
+
+namespace Inpution {
 
 
 //Possible types of hardware sources for inputs.
@@ -61,23 +63,23 @@ enum INPUT_SOURCE_TYPE {
 };
 
 
-//Possible flags for emitted player actions.
-enum PLAYER_ACTION_FLAG {
+//Possible flags for emitted actions.
+enum ACTION_FLAG {
 
     //This action was issued as an auto-repeat.
-    PLAYER_ACTION_FLAG_REPEAT = 1 << 0,
+    ACTION_FLAG_REPEAT = 1 << 0,
     
 };
 
 
-//Possible types of value a player action can have.
-enum PLAYER_ACTION_VALUE_TYPE {
+//Possible types of value a action can have.
+enum ACTION_VALUE_TYPE {
 
     //A float from 0 to 1.
-    PLAYER_ACTION_VALUE_TYPE_ANALOG,
+    ACTION_VALUE_TYPE_ANALOG,
 
     //Either 0 or 1 (basically up or down).
-    PLAYER_ACTION_VALUE_TYPE_BOOLEAN,
+    ACTION_VALUE_TYPE_BOOLEAN,
 
 };
 
@@ -88,7 +90,7 @@ enum PLAYER_ACTION_VALUE_TYPE {
  * like a specific button on a specific game controller, a specific key on
  * the keyboard, etc.
  */
-struct PlayerInputSource {
+struct InputSource {
 
     //--- Members ---
     
@@ -110,7 +112,7 @@ struct PlayerInputSource {
     
     //--- Function declarations ---
     
-    bool operator==(const PlayerInputSource& s2) const;
+    bool operator==(const InputSource& s2) const;
     
 };
 
@@ -119,12 +121,12 @@ struct PlayerInputSource {
  * @brief Defines an instance of a specific input: a specific gesture made
  * by a human on a specific source of a specific piece of hardware.
  */
-struct PlayerInput {
+struct Input {
 
     //--- Members ---
     
     //Hardware source.
-    PlayerInputSource source;
+    InputSource source;
     
     //Value associated, if applicable.
     float value = 0.0f;
@@ -134,9 +136,9 @@ struct PlayerInput {
 
 /**
  * @brief Defines a bind between a specific input source and
- * a player action type. This is what's typically set in the game's options.
+ * an action type. This is what's typically set in the game's options.
  */
-struct ControlBind {
+struct Bind {
 
     //--- Members ---
     
@@ -146,8 +148,8 @@ struct ControlBind {
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
-    //Player input source bound.
-    PlayerInputSource inputSource;
+    //Input source bound.
+    InputSource inputSource;
     
 };
 
@@ -155,7 +157,7 @@ struct ControlBind {
 /**
  * @brief Represents one of the game's possible actions.
  */
-struct PlayerActionType {
+struct ActionType {
 
     //--- Members ---
     
@@ -163,7 +165,7 @@ struct PlayerActionType {
     int id = 0;
 
     //Type of value it can take.
-    PLAYER_ACTION_VALUE_TYPE valueType = PLAYER_ACTION_VALUE_TYPE_ANALOG;
+    ACTION_VALUE_TYPE valueType = ACTION_VALUE_TYPE_ANALOG;
     
     //Auto-repeat. 0 if disabled, otherwise this indicates the threshold (0 - 1)
     //after which the input will start auto-repeating. The manager's
@@ -174,11 +176,11 @@ struct PlayerActionType {
 
 
 /**
- * @brief Defines an instance of a specific player action. This is an abstract
+ * @brief Defines an instance of a specific action. This is an abstract
  * gameplay activity, without any notion of hardware input. It's a pure
  * representation of what the player wants to do regardless of how they did it.
  */
-struct PlayerAction {
+struct Action {
 
     //--- Members ---
     
@@ -191,7 +193,7 @@ struct PlayerAction {
     //Value associated. 0 to 1.
     float value = 0.0f;
     
-    //Flags. Use PLAYER_ACTION_FLAG.
+    //Flags. Use ACTION_FLAG.
     uint8_t flags = 0;
     
 };
@@ -200,7 +202,7 @@ struct PlayerAction {
 /**
  * @brief Info about a control manager's options.
  */
-struct ControlsManagerOptions {
+struct ManagerOptions {
 
     //--- Members ---
     
@@ -223,7 +225,7 @@ struct ControlsManagerOptions {
 
 
 /**
- * @brief Manages the connections between inputs and player actions.
+ * @brief Manages the connections between inputs and actions.
  *
  * The idea of this class is to be game-agnostic.
  * An input is data about some hardware signal. For instance, the fact
@@ -236,14 +238,14 @@ struct ControlsManagerOptions {
  * It also has logic to do some cleanup like normalizing a game controller's
  * stick positions.
  */
-struct ControlsManager {
+struct Manager {
 
-    private:
+protected:
     
     //--- Structs ---
     
     /**
-     * @brief Information about a player action type's current status.
+     * @brief Information about an action type's current status.
      */
     struct ActionTypeStatus {
     
@@ -268,37 +270,37 @@ public:
 
     //--- Members ---
     
-    //Map of all registered player action types, using their IDs as the key.
-    map<int, PlayerActionType> actionTypes;
+    //Map of all registered action types, using their IDs as the key.
+    map<int, ActionType> actionTypes;
     
     //All registered control binds.
-    vector<ControlBind> binds;
+    vector<Bind> binds;
     
-    //Are we ignoring player actions right now?
+    //Are we ignoring actions right now?
     bool ignoringActions = false;
     
     //Options of the manager itself.
-    ControlsManagerOptions options;
+    ManagerOptions options;
     
     
     //--- Function declarations ---
     
-    float getValue(int playerActionTypeId) const;
-    void handleInput(const PlayerInput& input);
-    void startIgnoringInputSource(const PlayerInputSource& inputSource);
-    vector<PlayerAction> newFrame(float deltaT);
-    void setValue(int playerActionTypeId, float value);
+    float getValue(int actionTypeId) const;
+    void handleInput(const Input& input);
+    void startIgnoringInputSource(const InputSource& inputSource);
+    vector<Action> newFrame(float deltaT);
+    void setValue(int actionTypeId, float value);
     
     
-private:
+protected:
 
     //--- Members ---
     
-    //Status of each player action type.
+    //Status of each action type.
     map<int, ActionTypeStatus> actionTypeStatuses;
     
     //Queue of actions the game needs to handle this frame.
-    vector<PlayerAction> actionQueue;
+    vector<Action> actionQueue;
     
     //Raw state of each game controller stick.
     map<int, map<int, map<int, float> > > rawSticks;
@@ -307,22 +309,25 @@ private:
     map<int, map<int, map<int, float> > > cleanSticks;
     
     //Input sources currently being ignored.
-    vector<PlayerInputSource> ignoredInputSources;
+    vector<InputSource> ignoredInputSources;
     
     
     //--- Function declarations ---
     
-    void cleanStick(const PlayerInput& input);
+    void cleanStick(const Input& input);
     float convertActionValue(int actionTypeId, float value);
     vector<int> getActionTypesFromInput(
-        const PlayerInput& input
+        const Input& input
     );
-    void handleCleanInput(const PlayerInput& input, bool addDirectly);
+    void handleCleanInput(const Input& input, bool addDirectly);
     void processAutoRepeats(
         std::pair<const int, ActionTypeStatus>& it, float deltaT
     );
-    bool processInputIgnoring(const PlayerInput& input);
+    bool processInputIgnoring(const Input& input);
     void processStateTimers(
         std::pair<const int, ActionTypeStatus>& it, float deltaT
     );
+};
+
+
 };

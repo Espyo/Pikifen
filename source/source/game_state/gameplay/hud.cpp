@@ -265,10 +265,10 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
-        const PlayerInputSource& s =
+        const Inpution::InputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_LEADER).
             inputSource;
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
@@ -441,10 +441,10 @@ Hud::Hud() :
         ) {
             return;
         }
-        const PlayerInputSource& s =
+        const Inpution::InputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_TYPE).
             inputSource;
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
             this->standbyItemsOpacity * 255
@@ -484,10 +484,10 @@ Hud::Hud() :
         ) {
             return;
         }
-        const PlayerInputSource s =
+        const Inpution::InputSource s =
             game.controls.findBind(PLAYER_ACTION_TYPE_PREV_TYPE).
             inputSource;
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
             this->standbyItemsOpacity * 255
@@ -811,7 +811,7 @@ Hud::Hud() :
             return;
         }
         
-        PlayerInputSource s;
+        Inpution::InputSource s;
         if(
             game.content.sprayTypes.list.size() > 2
         ) {
@@ -826,7 +826,7 @@ Hud::Hud() :
                 game.controls.findBind(PLAYER_ACTION_TYPE_USE_SPRAY_1).
                 inputSource;
         }
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
@@ -907,13 +907,13 @@ Hud::Hud() :
             return;
         }
         
-        PlayerInputSource s;
+        Inpution::InputSource s;
         if(game.content.sprayTypes.list.size() == 2) {
             s =
                 game.controls.findBind(PLAYER_ACTION_TYPE_USE_SPRAY_2).
                 inputSource;
         }
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
@@ -951,13 +951,13 @@ Hud::Hud() :
         }
         if(prevSprayIdx == INVALID) return;
         
-        PlayerInputSource s;
+        Inpution::InputSource s;
         if(game.content.sprayTypes.list.size() >= 3) {
             s =
                 game.controls.findBind(PLAYER_ACTION_TYPE_PREV_SPRAY).
                 inputSource;
         }
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
@@ -995,13 +995,13 @@ Hud::Hud() :
         }
         if(nextSprayIdx == INVALID) return;
         
-        PlayerInputSource s;
+        Inpution::InputSource s;
         if(game.content.sprayTypes.list.size() >= 3) {
             s =
                 game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_SPRAY).
                 inputSource;
         }
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,

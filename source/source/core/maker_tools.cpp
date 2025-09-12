@@ -104,7 +104,7 @@ unsigned char MakerTools::getMakerToolSettingIdx() const {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
+bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     bool isGameplayToolAction =
         game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS;
@@ -334,7 +334,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction& action) {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool MakerTools::handleGeneralPlayerAction(const PlayerAction& action) {
+bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
     bool isGeneralToolAction =
         game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS;

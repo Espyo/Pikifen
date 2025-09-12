@@ -539,7 +539,7 @@ void GameplayState::doPlayerActionZoom(
  *
  * @param action Data about the action.
  */
-void GameplayState::handlePlayerAction(const PlayerAction& action) {
+void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     if(shouldIgnorePlayerAction(action)) return;
     
     Player* player = &players[0];
@@ -767,7 +767,7 @@ void GameplayState::handlePlayerAction(const PlayerAction& action) {
  * @param action Action to check.
  * @return Whether it should be ignored.
  */
-bool GameplayState::shouldIgnorePlayerAction(const PlayerAction& action) {
+bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action& action) {
     const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,

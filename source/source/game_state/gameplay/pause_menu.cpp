@@ -713,10 +713,10 @@ void PauseMenu::createPageButtons(
     leftPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const PlayerInputSource& s =
+        const Inpution::InputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).
             inputSource;
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
@@ -733,10 +733,10 @@ void PauseMenu::createPageButtons(
     rightPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const PlayerInputSource& s =
+        const Inpution::InputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).
             inputSource;
-        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
@@ -1571,7 +1571,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  *
  * @param action Data about the player action.
  */
-void PauseMenu::handlePlayerAction(const PlayerAction& action) {
+void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
     if(openingLockoutTimer > 0.0f) {
         //Don't accept inputs shortly after the menu opens.
         //This helps errant inputs from before the menu bleeding into the menu

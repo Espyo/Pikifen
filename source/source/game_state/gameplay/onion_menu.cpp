@@ -714,7 +714,7 @@ void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  *
  * @param action Data about the player action.
  */
-void OnionMenu::handlePlayerAction(const PlayerAction& action) {
+void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
     gui.handlePlayerAction(action);
 }
 

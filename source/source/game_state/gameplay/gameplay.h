@@ -502,7 +502,7 @@ private:
         Player* player, const SubgroupType* type, bool* distant = nullptr
     );
     Mob* getPointMobOnLeaderCursor(Player* player) const;
-    void handlePlayerAction(const PlayerAction& action);
+    void handlePlayerAction(const Inpution::Action& action);
     bool isMissionClearMet();
     bool isMissionFailMet(MISSION_FAIL_COND* reason);
     void loadGameContent();
@@ -525,7 +525,7 @@ private:
     void processMobTouches(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d
     );
-    bool shouldIgnorePlayerAction(const PlayerAction& action);
+    bool shouldIgnorePlayerAction(const Inpution::Action& action);
     void unloadGameContent();
     void updateAreaActiveCells();
     void updateMobIsActiveFlag();

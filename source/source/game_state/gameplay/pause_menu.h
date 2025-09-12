@@ -138,7 +138,7 @@ struct PauseMenu {
     ~PauseMenu();
     void draw();
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    void handlePlayerAction(const PlayerAction& action);
+    void handlePlayerAction(const Inpution::Action& action);
     void tick(float deltaT);
     
 private:

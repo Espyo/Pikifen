@@ -925,12 +925,12 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Handles a player input.
+ * @brief Handles a player action.
  *
  * @param action Data about the player action.
- * @return Whether the input was used.
+ * @return Whether the action was consumed.
  */
-bool GuiManager::handlePlayerAction(const PlayerAction& action) {
+bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     if(!responsive) {
         return false;
     }

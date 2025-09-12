@@ -566,7 +566,7 @@ public:
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
     GuiItem* getFocusedItem() const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    bool handlePlayerAction(const PlayerAction& action);
+    bool handlePlayerAction(const Inpution::Action& action);
     bool hideItems();
     bool readCoords(DataNode* node);
     bool registerCoords(

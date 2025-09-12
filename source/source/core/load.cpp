@@ -463,7 +463,7 @@ void loadOptions() {
     game.winW = game.options.graphics.intendedWinW;
     game.winH = game.options.graphics.intendedWinH;
     
-    ControlsManagerOptions controlsMgrOptions;
+    Inpution::ManagerOptions controlsMgrOptions;
     controlsMgrOptions.stickMinDeadzone =
         game.options.advanced.joystickMinDeadzone;
     controlsMgrOptions.stickMaxDeadzone =

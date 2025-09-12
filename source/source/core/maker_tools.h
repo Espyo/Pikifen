@@ -184,8 +184,8 @@ struct MakerTools {
     //--- Function declarations ---
     
     bool checkMakerToolsAllowed(float inputValue);
-    bool handleGameplayPlayerAction(const PlayerAction& action);
-    bool handleGeneralPlayerAction(const PlayerAction& action);
+    bool handleGameplayPlayerAction(const Inpution::Action& action);
+    bool handleGeneralPlayerAction(const Inpution::Action& action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
     void saveToDataNode(DataNode* node);

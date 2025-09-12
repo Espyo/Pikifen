@@ -72,7 +72,7 @@ void OptionsMenu::chooseInput(
     capturingInputTimeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
     game.controls.startIgnoringActions();
     
-    const vector<ControlBind>& allBinds = game.controls.binds();
+    const vector<Inpution::Bind>& allBinds = game.controls.binds();
     size_t bindsCounted = 0;
     curActionType = actionType;
     curBindIdx = allBinds.size();
@@ -98,7 +98,7 @@ void OptionsMenu::chooseInput(
 void OptionsMenu::deleteBind(
     const PLAYER_ACTION_TYPE actionType, size_t bindIdx
 ) {
-    vector<ControlBind>& allBinds = game.controls.binds();
+    vector<Inpution::Bind>& allBinds = game.controls.binds();
     size_t bindsCounted = 0;
     
     for(size_t b = 0; b < allBinds.size(); b++) {
@@ -157,11 +157,11 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         break;
     } case 1: {
         //Actively capturing.
-        PlayerInput input = game.controls.allegroEventToInput(ev);
+        Inpution::Input input = game.controls.allegroEventToInput(ev);
         if(input.value >= 0.5f) {
-            vector<ControlBind>& allBinds = game.controls.binds();
+            vector<Inpution::Bind>& allBinds = game.controls.binds();
             if(curBindIdx >= allBinds.size()) {
-                ControlBind newBind;
+                Inpution::Bind newBind;
                 newBind.actionTypeId = curActionType;
                 newBind.playerNr = 0;
                 newBind.inputSource = input.source;
@@ -194,7 +194,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  *
  * @param action Data about the player action.
  */
-void OptionsMenu::handlePlayerAction(const PlayerAction& action) {
+void OptionsMenu::handlePlayerAction(const Inpution::Action& action) {
     if(capturingInput != 0) return;
     Menu::handlePlayerAction(action);
     if(packsMenu) packsMenu->handlePlayerAction(action);
@@ -1160,18 +1160,18 @@ void OptionsMenu::populateBinds() {
     
     bindsListBox->deleteAllChildren();
     
-    const vector<PfePlayerActionType>& allPlayerActionTypes =
+    const vector<PlayerActionType>& allPlayerActionTypes =
         game.controls.getAllPlayerActionTypes();
-    vector<ControlBind>& allBinds = game.controls.binds();
+    vector<Inpution::Bind>& allBinds = game.controls.binds();
     
     bindsPerActionType.clear();
     bindsPerActionType.assign(
-        allPlayerActionTypes.size(), vector<ControlBind>()
+        allPlayerActionTypes.size(), vector<Inpution::Bind>()
     );
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < allBinds.size(); b++) {
-        const ControlBind& bind = allBinds[b];
+        const Inpution::Bind& bind = allBinds[b];
         if(bind.playerNr != 0) continue;
         bindsPerActionType[bind.actionTypeId].push_back(bind);
     }
@@ -1179,7 +1179,7 @@ void OptionsMenu::populateBinds() {
     PLAYER_ACTION_CAT lastCat = PLAYER_ACTION_CAT_NONE;
     
     for(size_t a = 0; a < allPlayerActionTypes.size(); a++) {
-        const PfePlayerActionType& actionType = allPlayerActionTypes[a];
+        const PlayerActionType& actionType = allPlayerActionTypes[a];
         
         if(actionType.internalName.empty()) continue;
         if(!isInContainer(allowedCategories, actionType.category)) continue;
@@ -1278,7 +1278,7 @@ void OptionsMenu::populateBinds() {
             itemToFocus = moreButton;
         }
         
-        vector<ControlBind> aBinds = bindsPerActionType[actionType.id];
+        vector<Inpution::Bind> aBinds = bindsPerActionType[actionType.id];
         for(size_t b = 0; b < aBinds.size(); b++) {
         
             //Change bind button.
@@ -1461,7 +1461,7 @@ void OptionsMenu::populateBinds() {
             );
             
             //Default icon.
-            PlayerInputSource defInputSource =
+            Inpution::InputSource defInputSource =
                 game.controls.strToInputSource(actionType.defaultBindStr);
             GuiItem* defaultIcon = new GuiItem();
             defaultIcon->ratioCenter =
@@ -1518,9 +1518,9 @@ void OptionsMenu::populateBinds() {
 void OptionsMenu::restoreDefaultBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) {
-    const PfePlayerActionType& actionType =
+    const PlayerActionType& actionType =
         game.controls.getPlayerActionType(actionTypeId);
-    vector<ControlBind>& allBinds =
+    vector<Inpution::Bind>& allBinds =
         game.controls.binds();
         
     for(size_t b = 0; b < allBinds.size();) {
@@ -1534,11 +1534,11 @@ void OptionsMenu::restoreDefaultBinds(
         }
     }
     
-    PlayerInputSource defInputSource =
+    Inpution::InputSource defInputSource =
         game.controls.strToInputSource(actionType.defaultBindStr);
-    ControlBind newBind;
+    Inpution::Bind newBind;
     
-    if(defInputSource.type != INPUT_SOURCE_TYPE_NONE) {
+    if(defInputSource.type != Inpution::INPUT_SOURCE_TYPE_NONE) {
         newBind.actionTypeId = actionTypeId;
         newBind.playerNr = 0;
         newBind.inputSource = defInputSource;
