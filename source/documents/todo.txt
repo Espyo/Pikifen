@@ -14,11 +14,6 @@ Next tasks (roughly sorted most important first)
     If you have analog stick inputs and D-pad inputs bound to navigating menus, the D-pad ones STILL won't work
 
     --- 1.1.0 ---
-    Leader animations
-        Thrown (add to the logic of bouncers too)
-        Climbing (add the track logic too)
-        Sliding (add the track logic too)
-        Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
     Swarming jingle
     Update to Dear ImGui v1.92.2b
     Some tweaks to the HUD

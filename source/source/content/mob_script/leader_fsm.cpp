@@ -58,7 +58,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TIMER); {
             efc.run(LeaderFsm::startBoredomAnim);
@@ -101,7 +101,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -162,7 +162,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_PLUCK); {
             efc.run(LeaderFsm::goPluck);
@@ -220,7 +220,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::startGoHere);
@@ -266,7 +266,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::startGoHere);
@@ -321,7 +321,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -371,7 +371,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::startGoHere);
@@ -430,7 +430,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("thrown");
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -448,7 +448,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::touchedSpray);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -557,7 +557,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::fallDownPit);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -592,7 +592,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::fallDownPit);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -643,9 +643,9 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
-    efc.newState("dying", LEADER_STATE_DYING); {
+    efc.newState("ko", LEADER_STATE_KO); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(LeaderFsm::die);
+            efc.run(LeaderFsm::getKod);
         }
     }
     
@@ -679,7 +679,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_TRACK); {
             efc.changeState("inactive_riding_track");
@@ -740,7 +740,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_TRACK); {
             efc.changeState("inactive_riding_track");
@@ -778,7 +778,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::stopAutoPluck);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
             efc.run(LeaderFsm::becomeInactive);
@@ -852,7 +852,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::stopAutoPluck);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
             efc.run(LeaderFsm::becomeActive);
@@ -927,7 +927,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::stopGoHere);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::stopGoHere);
@@ -976,7 +976,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::stopGoHere);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::stopGoHere);
@@ -1034,7 +1034,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -1083,7 +1083,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1140,7 +1140,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1196,7 +1196,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -1247,7 +1247,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1308,7 +1308,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1354,7 +1354,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1444,7 +1444,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::touchedSpray);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.changeState("dying");
+            efc.changeState("ko");
         }
     }
     
@@ -1676,7 +1676,7 @@ void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
     ((Leader*) m)->startThrowTrail();
-    m->setAnimation(LEADER_ANIM_IDLING);
+    m->setAnimation(LEADER_ANIM_THROWN);
 }
 
 
@@ -1690,7 +1690,7 @@ void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
 void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     leaPtr->startThrowTrail();
-    leaPtr->setAnimation(LEADER_ANIM_IDLING);
+    leaPtr->setAnimation(LEADER_ANIM_THROWN);
     if(!leaPtr->player) {
         leaPtr->leaveGroup();
     }
@@ -1846,37 +1846,6 @@ void LeaderFsm::decidePluckAction(Mob* m, void* info1, void* info2) {
     } else {
         leaPtr->fsm.runEvent(LEADER_EV_CANCEL);
     }
-}
-
-
-/**
- * @brief When a leader dies.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void LeaderFsm::die(Mob* m, void* info1, void* info2) {
-    if(game.states.gameplay->unloading) {
-        return;
-    }
-    
-    Leader* leaPtr = (Leader*) m;
-    
-    m->startDying();
-    m->finishDying();
-    
-    game.states.gameplay->updateAvailableLeaders();
-    if(leaPtr->player) {
-        changeToNextLeader(leaPtr->player, true, true, true);
-    }
-    
-    LeaderFsm::release(m, info1, info2);
-    LeaderFsm::dismiss(m, info1, info2);
-    m->becomeUncarriable();
-    m->setAnimation(LEADER_ANIM_KO);
-    
-    game.states.gameplay->lastHurtLeaderPos = m->pos;
 }
 
 
@@ -2126,6 +2095,37 @@ void LeaderFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
     m->setTimer(leaPtr->leaType->knockedDownDuration);
     
     m->setAnimation(LEADER_ANIM_LYING);
+}
+
+
+/**
+ * @brief When a leader gets KO'd (dies).
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::getKod(Mob* m, void* info1, void* info2) {
+    if(game.states.gameplay->unloading) {
+        return;
+    }
+    
+    Leader* leaPtr = (Leader*) m;
+    
+    m->startDying();
+    m->finishDying();
+    
+    game.states.gameplay->updateAvailableLeaders();
+    if(leaPtr->player) {
+        changeToNextLeader(leaPtr->player, true, true, true);
+    }
+    
+    LeaderFsm::release(m, info1, info2);
+    LeaderFsm::dismiss(m, info1, info2);
+    m->becomeUncarriable();
+    m->setAnimation(LEADER_ANIM_KO);
+    
+    game.states.gameplay->lastHurtLeaderPos = m->pos;
 }
 
 
@@ -2840,10 +2840,10 @@ void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
         m->setAnimation(LEADER_ANIM_WALKING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->setAnimation(LEADER_ANIM_WALKING); //TODO
+        m->setAnimation(LEADER_ANIM_CLIMBING);
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        m->setAnimation(LEADER_ANIM_WALKING); //TODO
+        m->setAnimation(LEADER_ANIM_SLIDING);
         break;
     }
     }

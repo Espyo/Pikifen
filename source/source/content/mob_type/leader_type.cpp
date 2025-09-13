@@ -74,6 +74,7 @@ AnimConversionVector LeaderType::getAnimConversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_GETTING_UP,   "getting_up"));
     v.push_back(std::make_pair(LEADER_ANIM_DISMISSING,   "dismissing"));
     v.push_back(std::make_pair(LEADER_ANIM_THROWING,     "throwing"));
+    v.push_back(std::make_pair(LEADER_ANIM_THROWN,       "thrown"));
     v.push_back(std::make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
     v.push_back(std::make_pair(LEADER_ANIM_PUNCHING,     "punching"));
     v.push_back(std::make_pair(LEADER_ANIM_LYING,        "lying"));
@@ -81,6 +82,8 @@ AnimConversionVector LeaderType::getAnimConversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_BACK, "knocked_back"));
     v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
     v.push_back(std::make_pair(LEADER_ANIM_DRINKING,     "drinking"));
+    v.push_back(std::make_pair(LEADER_ANIM_CLIMBING,     "climbing"));
+    v.push_back(std::make_pair(LEADER_ANIM_SLIDING,      "sliding"));
     v.push_back(std::make_pair(LEADER_ANIM_KO,           "ko"));
     return v;
 }

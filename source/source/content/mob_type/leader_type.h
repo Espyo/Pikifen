@@ -78,8 +78,8 @@ enum LEADER_STATE {
     //Getting up from the floor, inactive.
     LEADER_STATE_INACTIVE_GETTING_UP,
     
-    //Dying.
-    LEADER_STATE_DYING,
+    //KO (dying).
+    LEADER_STATE_KO,
     
     //In group, chasing.
     LEADER_STATE_IN_GROUP_CHASING,
@@ -184,6 +184,9 @@ enum LEADER_ANIM {
     //Throwing.
     LEADER_ANIM_THROWING,
     
+    //Thrown.
+    LEADER_ANIM_THROWN,
+    
     //Whistling.
     LEADER_ANIM_WHISTLING,
     
@@ -204,6 +207,12 @@ enum LEADER_ANIM {
     
     //Drinking a drop.
     LEADER_ANIM_DRINKING,
+    
+    //Climbing.
+    LEADER_ANIM_CLIMBING,
+    
+    //Sliding.
+    LEADER_ANIM_SLIDING,
     
     //KO (dead).
     LEADER_ANIM_KO,

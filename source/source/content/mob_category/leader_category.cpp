@@ -82,7 +82,7 @@ void LeaderCategory::eraseMob(Mob* m) {
             (Leader*) m
         )
     );
-    LeaderFsm::die((Leader*) m, nullptr, nullptr);
+    LeaderFsm::getKod((Leader*) m, nullptr, nullptr);
 }
 
 
