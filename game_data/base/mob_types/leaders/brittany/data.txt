@@ -3,7 +3,7 @@ description = A professional botanist from Koppai. Loves fruit.
 
 acceleration = 800
 can_walk_on_others = true
-height = 46
+height = 51
 icon = leaders/brittany_icon
 main_color = 238 85 221
 max_carriers = 5

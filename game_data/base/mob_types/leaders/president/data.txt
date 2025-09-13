@@ -3,7 +3,7 @@ description = President of Hocotate Freight from Hocotate. Treats his employees 
 
 acceleration = 500
 can_walk_on_others = true
-height = 46
+height = 54
 icon = leaders/president_icon
 main_color = 238 238 34
 max_carriers = 5

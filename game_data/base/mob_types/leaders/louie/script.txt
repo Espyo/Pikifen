@@ -14,4 +14,12 @@ script {
             end_if
         }
     }
+    ko {
+        on_enter {
+            set_height 20
+        }
+        on_leave {
+            set_height 54
+        }
+    }
 }

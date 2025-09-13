@@ -3,7 +3,7 @@ description = A quiet freight worker from Hocotate. Acts in mysterious and somet
 
 acceleration = 500
 can_walk_on_others = true
-height = 46
+height = 54
 icon = leaders/louie_icon
 main_color = 34 17 238
 max_carriers = 5

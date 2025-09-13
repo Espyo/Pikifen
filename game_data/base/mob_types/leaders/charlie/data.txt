@@ -3,7 +3,7 @@ description = A sturdy captain from Koppai. Has a hardy exterior, but a soft hea
 
 acceleration = 800
 can_walk_on_others = true
-height = 46
+height = 66
 icon = leaders/charlie_icon
 main_color = 119 238 102
 max_carriers = 5
