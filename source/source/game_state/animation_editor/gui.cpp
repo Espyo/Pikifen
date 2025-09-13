@@ -1621,6 +1621,35 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             "Delete the current frame."
         );
         
+        //Misc. frame tools button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "frameMiscButton", editorIcons[EDITOR_ICON_TOOLS],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("frameMisc");
+        }
+        setTooltip("Miscellaneous frame tools.");
+        
+        //Frame misc. popup.
+        if(ImGui::BeginPopup("frameMisc")) {
+            if(escapeWasPressed) {
+                ImGui::CloseCurrentPopup();
+            }
+            
+            //Go to sprite selectable.
+            if(ImGui::Selectable("Go to sprite")) {
+                curSprite = framePtr->spritePtr;
+                changeState(EDITOR_STATE_SPRITE);
+            }
+            setTooltip(
+                "Go to the sprite used in this frame."
+            );
+            
+            ImGui::EndPopup();
+        }
     }
 }
 
@@ -2041,26 +2070,98 @@ void AnimationEditor::processGuiPanelSprite() {
             renameSprite(curSprite, renameSpriteName);
         }
         
-        //Resize sprite button.
-        static string resizeSpriteMult;
+        //Misc. sprite tools button.
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
-                "resizeSpriteButton", editorIcons[EDITOR_ICON_RESIZE],
+                "spriteMiscButton", editorIcons[EDITOR_ICON_TOOLS],
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
+            ImGui::OpenPopup("spriteMisc");
+        }
+        setTooltip("Miscellaneous sprite tools.");
+        
+        //Sprite misc. popup.
+        bool mustOpenResizePopup = false;
+        if(ImGui::BeginPopup("spriteMisc")) {
+            if(escapeWasPressed) {
+                ImGui::CloseCurrentPopup();
+            }
+            
+            //Resize sprite selectable.
+            if(ImGui::Selectable("Resize sprite")) {
+                mustOpenResizePopup = true;
+            }
+            setTooltip(
+                "Resize the current sprite."
+            );
+            
+            //Uses in animations selectable.
+            if(ImGui::BeginMenu("Uses in animations")) {
+            
+                map<string, vector<size_t> > entries;
+                for(size_t a = 0; a < db.animations.size(); a++) {
+                    Animation* aPtr = db.animations[a];
+                    for(size_t f = 0; f < aPtr->frames.size(); f++) {
+                        if(aPtr->frames[f].spritePtr == curSprite) {
+                            entries[aPtr->name].push_back(f);
+                        }
+                    }
+                }
+                
+                if(entries.empty()) {
+                    ImGui::BeginDisabled();
+                    ImGui::Selectable("No uses.");
+                    ImGui::EndDisabled();
+                    setTooltip(
+                        "The sprite is not used in any animation."
+                    );
+                }
+                
+                for(const auto& e : entries) {
+                
+                    //Entry selectable.
+                    ImGui::PushFont(
+                        game.sysContent.fntDearImGuiMonospace,
+                        game.sysContent.fntDearImGuiMonospace->LegacySize
+                    );
+                    if(ImGui::Selectable(e.first.c_str())) {
+                        pickAnimation(e.first, "", "", nullptr, false);
+                        changeState(EDITOR_STATE_ANIMATION);
+                        animPlaying = false;
+                        curAnimInst.curFrameIdx = e.second[0];
+                        curAnimInst.curFrameTime = 0.0f;
+                    }
+                    ImGui::PopFont();
+                    setTooltip(
+                        "The sprite is used in this animation " +
+                        amountStr(e.second.size(), "time") + ".\n"
+                        "Click to go to this animation."
+                    );
+                    
+                }
+                
+                ImGui::EndMenu();
+                
+            }
+            setTooltip(
+                "Check in what animations this sprite gets used as a frame."
+            );
+            
+            ImGui::EndPopup();
+        }
+        
+        static string resizeSpriteMult;
+        if(mustOpenResizePopup) {
             resizeSpriteMult = "1.0";
             openInputPopup("resizeSprite");
         }
-        setTooltip(
-            "Resize the current sprite."
-        );
         
         //Resize sprite popup.
         if(
             processGuiInputPopup(
-                "resizeSprite", "Resize by:", &resizeSpriteMult
+                "resizeSprite", "Resize sprite by:", &resizeSpriteMult
             )
         ) {
             resizeSprite(curSprite, s2f(resizeSpriteMult));

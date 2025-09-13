@@ -1,5 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-
+    
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -14,15 +14,11 @@ Next tasks (roughly sorted most important first)
     If you have analog stick inputs and D-pad inputs bound to navigating menus, the D-pad ones STILL won't work
 
     --- 1.1.0 ---
-    A way to port content from previous versions
-        It could check each loaded pack's engine version, and if there are known breaking changes, tell the user about it. If it's possible to auto-port, ask the user if they want to do so, and just run some simple code to port it, mostly via find-and-replace (if instead you load and save data files you risk ruining spacing and comments)
     Leader animations
         Thrown (add to the logic of bouncers too)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
         Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
-    Misc. graphical improvements
-        Onions should be shaded with hue shifting
     Swarming jingle
     Update to Dear ImGui v1.92.2b
     Some tweaks to the HUD
@@ -91,7 +87,7 @@ Next tasks (roughly sorted most important first)
                     Each one should be saved to a folder, that way players can share the data file of a scheme they've created
                 When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
                 A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
-                It should come pre-packed with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc.
+                It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
                     Confirm that these work both on Linux and on Windows
                 If the player assigns an input that is already assigned to something else, it should give a warning
                 If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
@@ -108,7 +104,6 @@ Next tasks (roughly sorted most important first)
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
-        Add Pro Controller controls to the default controls
         Test it on the Steam Deck
 
     --- 1.2.0 ---
@@ -783,6 +778,8 @@ Misc things (so I don't forget)
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions
+    If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
+        "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact
@@ -829,6 +826,7 @@ Misc things (so I don't forget)
         Leaf White Pikmin should be able to keep pace with a leader, right?
         The sector hazards in DEV Lab should be labeled
         The Yellow Wollyhop should throw Pikmin farther away when landing, so that the Pikmin don't land immediately in crushing distance of the next jump (thanks Gatling Groink)
+        Onions should be shaded with hue shifting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/'s cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
@@ -959,7 +957,6 @@ Tasks for later on (I might never implement these)
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the menu highlighters move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
-        In gameplay message boxes, the "menu ok" input that makes it say the next message should oscillate in size
         Particles
             Splash particles for going in water
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
