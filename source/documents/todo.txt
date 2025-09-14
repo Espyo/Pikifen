@@ -103,7 +103,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     Ice Pikmin
-        Status buildup
         Water freezing
             How does the area maker specify the amount for each body of water? Should they, or should it be determined by the area?
             The indicator for the amount of Ice Pikmin on it should be where the first Ice Pikmin was placed

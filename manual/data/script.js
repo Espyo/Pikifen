@@ -109,7 +109,7 @@ function populate_prop_tables() {
       //Name.
       tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
 
-      //TYpe.
+      //Type.
       switch (tds[2].innerHTML) {
         case "Text":
           tds[2].innerHTML = "<a href=\"making.html#data-file-text\">Text</a>";

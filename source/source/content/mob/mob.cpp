@@ -331,9 +331,62 @@ void Mob::applyStatus(
     if(applyStatusParentLogic(s, givenByParent, fromHazard)) {
         return;
     }
+    if(!applyStatusBuildup(s, givenByParent, fromHazard)) {
+        return;
+    }
     
     //At this point the mob must really be given the status effect's effects.
     applyStatusEffects(s, givenByParent, fromHazard);
+}
+
+
+/**
+ * @brief Applies buildup logic for a status effect, if applicable.
+ *
+ * @param statusType Status effect to use.
+ * @param givenByParent If true, this status effect was given to the mob
+ * by its parent mob.
+ * @param fromHazard If true, this status effect was given from a hazard.
+ * @return True if enough buildup was caused to apply the effect, or if no
+ * buildup is required to apply the effect. False if buildup was applied and
+ * nothing else happened.
+ */
+bool Mob::applyStatusBuildup(
+    StatusType* statusType, bool givenByParent, bool fromHazard
+) {
+    if(statusType->buildup == 0.0f) {
+        //No buildup.
+        return true;
+    }
+    
+    //Add it to the list if it's not already there.
+    auto statusIt =
+        std::find_if(
+            statuses.begin(), statuses.end(),
+    [statusType] (const Status & s) {
+        return s.type == statusType;
+    }
+        );
+        
+    if(statusIt == statuses.end()) {
+        Status newStatus(statusType);
+        newStatus.fromHazard = fromHazard;
+        statuses.push_back(newStatus);
+        statusIt = statuses.end() - 1;
+    }
+    
+    if(statusIt->buildup == 1.0f) return true;
+    
+    //Apply the buildup.
+    statusIt->buildup += statusType->buildup;
+    statusIt->buildupRemovalTimeLeft = statusType->buildupRemovalDuration;
+    
+    if(statusIt->buildup >= 1.0f) {
+        statusIt->buildup = 1.0f;
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -1434,7 +1487,12 @@ void Mob::deleteOldStatusEffects() {
                 removedForcedSprite = true;
             }
             
-            if(sPtr.type->replacementOnTimeout && sPtr.timeLeft <= 0.0f) {
+            bool justBuildup =
+                sPtr.type->buildup != 0.0f && sPtr.buildup < 1.0f;
+            if(
+                !justBuildup &&
+                sPtr.type->replacementOnTimeout && sPtr.timeLeft <= 0.0f
+            ) {
                 newStatusesToApply.push_back(
                     std::make_pair(
                         sPtr.type->replacementOnTimeout,
@@ -4036,9 +4094,16 @@ void Mob::tickMiscLogic(float deltaT) {
         !hasFlag(flags, MOB_FLAG_HIDDEN) &&
         health > 0.0f &&
         health < maxHealth;
-    if(!healthWheel && shouldShowHealth) {
+    bool shouldShowStatusBuildups = false;
+    for(size_t s = 0; s < statuses.size(); s++) {
+        if(statuses[s].buildup >= 0.0f) {
+            shouldShowStatusBuildups = true;
+            break;
+        }
+    }
+    if(!healthWheel && (shouldShowHealth || shouldShowStatusBuildups)) {
         healthWheel = new InWorldHealthWheel(this);
-    } else if(healthWheel && !shouldShowHealth) {
+    } else if(healthWheel && !(shouldShowHealth || shouldShowStatusBuildups)) {
         healthWheel->startFading();
     }
     

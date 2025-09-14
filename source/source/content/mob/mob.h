@@ -533,6 +533,9 @@ protected:
     
     //--- Function declarations ---
     
+    bool applyStatusBuildup(
+        StatusType* s, bool givenByParent, bool fromHazard
+    );
     void applyStatusEffects(
         StatusType* s, bool givenByParent, bool fromHazard
     );

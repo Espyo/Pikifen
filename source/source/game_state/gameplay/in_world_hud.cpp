@@ -67,6 +67,29 @@ const float TRANSITION_OUT_DURATION = 1.5f;
 }
 
 
+namespace IN_WORLD_STATUS_BUILDUP {
+
+//Corner radius of each bar.
+const float CORNER_RADIUS = 4.0f;
+
+//Height of each bar.
+const float HEIGHT = 16.0f;
+
+//Standard opacity (0 to 1).
+const float OPACITY = 0.85f;
+
+//Size of the dark outline between the total bar and the filled portion.
+const float OUTLINE_SIZE = 2.0f;
+
+//Padding between health wheel and bars, and also between each bar.
+const float PADDING = 4.0f;
+
+//Width of each bar.
+const float WIDTH = 64.0f;
+
+}
+
+
 /**
  * @brief Constructs a new in-world fraction object.
  *
@@ -256,11 +279,13 @@ InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
 
 
 /**
- * @brief Draws an in-world health wheel.
+ * @brief Draws an in-world health wheel, and any status buildup bars.
  */
 void InWorldHealthWheel::draw() {
+    //Setup.
     float alphaMult = 1.0f;
     float sizeMult = 1.0f;
+    
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
         float timerRatio =
@@ -280,17 +305,58 @@ void InWorldHealthWheel::draw() {
     }
     }
     
-    float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * sizeMult;
-    drawHealth(
+    float wheelRadius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * sizeMult;
+    Point buildupBarSize =
         Point(
-            m->pos.x,
-            m->pos.y - m->radius -
-            radius - IN_WORLD_HEALTH_WHEEL::PADDING
-        ),
+            IN_WORLD_STATUS_BUILDUP::WIDTH, IN_WORLD_STATUS_BUILDUP::HEIGHT
+        ) * sizeMult;
+    float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING + wheelRadius;
+    
+    //Draw the health wheel.
+    drawHealth(
+        Point(m->pos.x, m->pos.y - curYOffset),
         visibleRatio,
         IN_WORLD_HEALTH_WHEEL::OPACITY * alphaMult,
-        radius
+        wheelRadius
     );
+    
+    curYOffset += wheelRadius + IN_WORLD_STATUS_BUILDUP::PADDING;
+    
+    //Draw any status effect buildup bars.
+    for(size_t s = 0; s < m->statuses.size(); s++) {
+        Status* sPtr = &m->statuses[s];
+        if(sPtr->type->buildup == 0.0f) continue;
+        
+        curYOffset +=
+            IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
+            
+        drawFilledRoundedRectangle(
+            Point(m->pos.x, m->pos.y - curYOffset),
+            buildupBarSize,
+            IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
+            changeAlpha(
+                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::OPACITY * alphaMult
+            )
+        );
+        
+        float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * sPtr->buildup;
+        drawFilledRoundedRectangle(
+            Point(
+                m->pos.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
+                filledWidth / 2.0f,
+                m->pos.y - curYOffset
+            ),
+            Point(
+                filledWidth, IN_WORLD_STATUS_BUILDUP::HEIGHT
+            ) - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE * 2.0f
+            * sizeMult,
+            IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
+            changeAlpha(
+                sPtr->type->color,
+                255 * IN_WORLD_STATUS_BUILDUP::OPACITY * alphaMult
+            )
+        );
+    }
 }
 
 

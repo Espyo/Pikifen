@@ -79,6 +79,18 @@
         <td>Internal name</td>
         <td></td>
       </tr>
+      <tr>
+        <td>buildup</td>
+        <td>If you want this status effect to not be applied instantly, and to instead build a bar up, only applying when the bar is full, then specify a value higher than 0 here. This value is a percentage of how much the bar should fill up each time.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>buildup_removal_duration</td>
+        <td>If using buildup, then if these many seconds pass without a contribution to the buildup bar, it will be completely emptied. This won't happen if the bar is full and the effect has been successfully applied. 0 means it never empties with time.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
     </table>
 
     <h3 id="props-gameplay-effects">Gameplay effects</h3>

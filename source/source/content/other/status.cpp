@@ -33,11 +33,12 @@ Status::Status(StatusType* type) :
 /**
  * @brief Returns whether or not the status is currently active, i.e. whether
  * its effects are being applied right now.
- * 
+ *
  * @return Whether it's active.
  */
 bool Status::isActive() const {
     if(toDelete) return false;
+    if(type->buildup != 0.0f && buildup < 1.0f) return false;
     return true;
 }
 
@@ -49,9 +50,18 @@ bool Status::isActive() const {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Status::tick(float deltaT) {
-    if(type->autoRemoveTime > 0.0f) {
+    if(type->autoRemoveTime > 0.0f && isActive()) {
         timeLeft -= deltaT;
         if(timeLeft <= 0.0f) {
+            toDelete = true;
+        }
+    }
+    if(
+        type->buildup != 0.0f && type->buildupRemovalDuration != 0.0f &&
+        buildup < 1.0f
+    ) {
+        buildupRemovalTimeLeft -= deltaT;
+        if(buildupRemovalTimeLeft <= 0.0f) {
             toDelete = true;
         }
     }
@@ -80,35 +90,38 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     DataNode* reapplyRuleNode = nullptr;
     DataNode* scTypeNode = nullptr;
     DataNode* particleGenNode = nullptr;
+    DataNode* buildupNode = nullptr;
     
-    sRS.set("color",                   color);
-    sRS.set("tint",                    tint);
-    sRS.set("glow",                    glow);
-    sRS.set("affects",                 affectsStr);
-    sRS.set("removable_with_whistle",  removableWithWhistle);
-    sRS.set("remove_on_hazard_leave",  removeOnHazardLeave);
-    sRS.set("auto_remove_time",        autoRemoveTime);
-    sRS.set("reapply_rule",            reapplyRuleStr, &reapplyRuleNode);
-    sRS.set("health_change",           healthChange);
-    sRS.set("health_change_ratio",     healthChangeRatio);
-    sRS.set("state_change_type",       scTypeStr, &scTypeNode);
-    sRS.set("state_change_name",       stateChangeName);
-    sRS.set("animation_change",        animationChange);
-    sRS.set("speed_multiplier",        speedMultiplier);
-    sRS.set("attack_multiplier",       attackMultiplier);
-    sRS.set("defense_multiplier",      defenseMultiplier);
-    sRS.set("maturity_change_amount",  maturityChangeAmount);
-    sRS.set("disables_attack",         disablesAttack);
-    sRS.set("turns_inedible",          turnsInedible);
-    sRS.set("turns_invisible",         turnsInvisible);
-    sRS.set("anim_speed_multiplier",   animSpeedMultiplier);
-    sRS.set("freezes_animation",       freezesAnimation);
-    sRS.set("shaking_effect",          shakingEffect);
-    sRS.set("overlay_animation",       overlayAnimation);
-    sRS.set("overlay_anim_mob_scale",  overlayAnimMobScale);
-    sRS.set("particle_generator",      particleGenStr, &particleGenNode);
-    sRS.set("particle_offset",         particleOffsetStr);
-    sRS.set("replacement_on_timeout",  replacementOnTimeoutStr);
+    sRS.set("color",                    color);
+    sRS.set("tint",                     tint);
+    sRS.set("glow",                     glow);
+    sRS.set("affects",                  affectsStr);
+    sRS.set("removable_with_whistle",   removableWithWhistle);
+    sRS.set("remove_on_hazard_leave",   removeOnHazardLeave);
+    sRS.set("auto_remove_time",         autoRemoveTime);
+    sRS.set("reapply_rule",             reapplyRuleStr, &reapplyRuleNode);
+    sRS.set("health_change",            healthChange);
+    sRS.set("health_change_ratio",      healthChangeRatio);
+    sRS.set("state_change_type",        scTypeStr, &scTypeNode);
+    sRS.set("state_change_name",        stateChangeName);
+    sRS.set("animation_change",         animationChange);
+    sRS.set("speed_multiplier",         speedMultiplier);
+    sRS.set("attack_multiplier",        attackMultiplier);
+    sRS.set("defense_multiplier",       defenseMultiplier);
+    sRS.set("maturity_change_amount",   maturityChangeAmount);
+    sRS.set("disables_attack",          disablesAttack);
+    sRS.set("turns_inedible",           turnsInedible);
+    sRS.set("turns_invisible",          turnsInvisible);
+    sRS.set("anim_speed_multiplier",    animSpeedMultiplier);
+    sRS.set("freezes_animation",        freezesAnimation);
+    sRS.set("shaking_effect",           shakingEffect);
+    sRS.set("overlay_animation",        overlayAnimation);
+    sRS.set("overlay_anim_mob_scale",   overlayAnimMobScale);
+    sRS.set("particle_generator",       particleGenStr, &particleGenNode);
+    sRS.set("particle_offset",          particleOffsetStr);
+    sRS.set("replacement_on_timeout",   replacementOnTimeoutStr);
+    sRS.set("buildup",                  buildup, &buildupNode);
+    sRS.set("buildup_removal_duration", buildupRemovalDuration);
     
     affects = 0;
     vector<string> affectsStrParts = semicolonListToVector(affectsStr);
@@ -175,6 +188,10 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
             particleOffsetPos =
                 s2p(particleOffsetStr, &particleOffsetZ);
         }
+    }
+    
+    if(buildupNode) {
+        buildup /= 100.0f;
     }
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
