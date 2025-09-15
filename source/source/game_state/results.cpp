@@ -23,7 +23,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace RESULTS {
 
-//Name of the GUI information file.
+//Name of the GUI definition file.
 const string GUI_FILE_NAME = "results_menu";
 
 }

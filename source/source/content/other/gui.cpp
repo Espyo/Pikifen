@@ -339,22 +339,25 @@ bool GuiItem::deleteAllChildren() {
 
 
 /**
- * @brief Returns the bottommost Y coordinate, in height ratio,
+ * @brief Returns the bottommost Y coordinate (in height ratio),
+ * or the rightmost X coordinate (in width ratio),
  * of the item's children items.
  *
- * @return The Y coordinate.
+ * @param horizontal If true, check the horizontal reach (width). If false,
+ * check the vertical reach (height).
+ * @return The X or Y coordinate.
  */
-float GuiItem::getChildBottom() const {
-    float bottommost = 0.0f;
+float GuiItem::getChildrenSpan(bool horizontal) const {
+    float span = 0.0f;
     for(size_t c = 0; c < children.size(); c++) {
         GuiItem* cPtr = children[c];
-        bottommost =
-            std::max(
-                bottommost,
-                cPtr->ratioCenter.y + (cPtr->ratioSize.y / 2.0f)
-            );
+        float cCoord =
+            horizontal ?
+            cPtr->ratioCenter.x + (cPtr->ratioSize.x / 2.0f) :
+            cPtr->ratioCenter.y + (cPtr->ratioSize.y / 2.0f);
+        span = std::max(span, cCoord);
     }
-    return bottommost;
+    return span;
 }
 
 
@@ -435,8 +438,9 @@ Point GuiItem::getReferenceCenter() const {
             parent->getReferenceCenter();
         Point result = ratioCenter * parentS;
         result.x += parentC.x - parentS.x / 2.0f;
+        result.x -= parentS.x * parent->offset.x;
         result.y += parentC.y - parentS.y / 2.0f;
-        result.y -= parentS.y * parent->offset;
+        result.y -= parentS.y * parent->offset.y;
         return result;
     } else {
         return Point(ratioCenter.x * game.winW, ratioCenter.y * game.winH);
@@ -501,8 +505,9 @@ bool GuiItem::isResponsive() const {
  * @return Whether it is visible.
  */
 bool GuiItem::isVisible() const {
+    if(!visible) return false;
     if(parent) return parent->isVisible();
-    return visible;
+    return true;
 }
 
 
@@ -1374,16 +1379,12 @@ ListGuiItem::ListGuiItem() :
  */
 void ListGuiItem::defChildDirFocusedCode(const GuiItem* child) {
     //Try to center the child.
-    float childBottom = getChildBottom();
-    if(childBottom <= 1.0f && offset == 0.0f) {
-        return;
-    }
-    targetOffset =
-        std::clamp(
-            child->ratioCenter.y - 0.5f,
-            0.0f,
-            childBottom - 1.0f
-        );
+    float childrenSpan = getChildrenSpan(horizontal);
+    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    float coord = !horizontal ? child->ratioCenter.y : child->ratioCenter.x;
+    
+    if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
+    targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);
 }
 
 
@@ -1397,7 +1398,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         draw.center, draw.size, game.sysContent.bmpFrameBox,
         COLOR_TRANSPARENT_WHITE
     );
-    if(offset > 0.0f) {
+    if(offset.y > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1435,8 +1436,10 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childBottom = getChildBottom();
-    if(childBottom > 1.0f && offset < childBottom - 1.0f) {
+    float childrenVSpan = getChildrenSpan();
+    if(
+        childrenVSpan > 1.0f && offset.y < childrenVSpan - 1.0f && !horizontal
+    ) {
         //Shade effect at the bottom.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1474,6 +1477,84 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
+    
+    if(offset.x > 0.0f && horizontal) {
+        //Shade effect at the left.
+        ALLEGRO_VERTEX vertexes[8];
+        for(size_t v = 0; v < 8; v++) {
+            vertexes[v].z = 0.0f;
+        }
+        float x1 = draw.center.x - draw.size.x / 2.0f;
+        float x2 = x1 + 20.0f;
+        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
+        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
+        vertexes[0].x = x1;
+        vertexes[0].y = draw.center.y - draw.size.y * 0.49;
+        vertexes[0].color = cEmpty;
+        vertexes[1].x = x2;
+        vertexes[1].y = draw.center.y - draw.size.y * 0.49;
+        vertexes[1].color = cEmpty;
+        vertexes[2].x = x1;
+        vertexes[2].y = draw.center.y - draw.size.y * 0.47;
+        vertexes[2].color = cOpaque;
+        vertexes[3].x = x2;
+        vertexes[3].y = draw.center.y - draw.size.y * 0.47;
+        vertexes[3].color = cEmpty;
+        vertexes[4].x = x1;
+        vertexes[4].y = draw.center.y + draw.size.y * 0.47;
+        vertexes[4].color = cOpaque;
+        vertexes[5].x = x2;
+        vertexes[5].y = draw.center.y + draw.size.y * 0.47;
+        vertexes[5].color = cEmpty;
+        vertexes[6].x = x1;
+        vertexes[6].y = draw.center.y + draw.size.y * 0.49;
+        vertexes[6].color = cEmpty;
+        vertexes[7].x = x2;
+        vertexes[7].y = draw.center.y + draw.size.y * 0.49;
+        vertexes[7].color = cEmpty;
+        al_draw_prim(
+            vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+        );
+    }
+    float childrenHSpan = getChildrenSpan(true);
+    if(childrenHSpan > 1.0f && offset.x < childrenHSpan - 1.0f && horizontal) {
+        //Shade effect at the right.
+        ALLEGRO_VERTEX vertexes[8];
+        for(size_t v = 0; v < 8; v++) {
+            vertexes[v].z = 0.0f;
+        }
+        float x1 = draw.center.x + draw.size.x / 2.0f;
+        float x2 = x1 - 20.0f;
+        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
+        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
+        vertexes[0].x = x1;
+        vertexes[0].y = draw.center.y - draw.size.y * 0.49;
+        vertexes[0].color = cEmpty;
+        vertexes[1].x = x2;
+        vertexes[1].y = draw.center.y - draw.size.y * 0.49;
+        vertexes[1].color = cEmpty;
+        vertexes[2].x = x1;
+        vertexes[2].y = draw.center.y - draw.size.y * 0.47;
+        vertexes[2].color = cOpaque;
+        vertexes[3].x = x2;
+        vertexes[3].y = draw.center.y - draw.size.y * 0.47;
+        vertexes[3].color = cEmpty;
+        vertexes[4].x = x1;
+        vertexes[4].y = draw.center.y + draw.size.y * 0.47;
+        vertexes[4].color = cOpaque;
+        vertexes[5].x = x2;
+        vertexes[5].y = draw.center.y + draw.size.y * 0.47;
+        vertexes[5].color = cEmpty;
+        vertexes[6].x = x1;
+        vertexes[6].y = draw.center.y + draw.size.y * 0.49;
+        vertexes[6].color = cEmpty;
+        vertexes[7].x = x2;
+        vertexes[7].y = draw.center.y + draw.size.y * 0.49;
+        vertexes[7].color = cEmpty;
+        al_draw_prim(
+            vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+        );
+    }
 }
 
 
@@ -1488,15 +1569,15 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
         ev.mouse.dz != 0.0f
     ) {
-        float childBottom = getChildBottom();
-        if(childBottom <= 1.0f && offset == 0.0f) {
+        float childrenSpan = getChildrenSpan(horizontal);
+        if(childrenSpan <= 1.0f && offset.y == 0.0f) {
             return;
         }
         targetOffset =
             std::clamp(
                 targetOffset + (-ev.mouse.dz) * 0.2f,
                 0.0f,
-                childBottom - 1.0f
+                childrenSpan - 1.0f
             );
     }
 }
@@ -1508,18 +1589,19 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
-    float childBottom = getChildBottom();
-    if(childBottom < 1.0f) {
+    float childrenSpan = getChildrenSpan(horizontal);
+    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    if(childrenSpan < 1.0f) {
         targetOffset = 0.0f;
-        offset = 0.0f;
+        *offsetPtr = 0.0f;
     } else {
-        targetOffset = std::clamp(targetOffset, 0.0f, childBottom - 1.0f);
-        offset += (targetOffset - offset) * (10.0f * deltaT);
-        offset = std::clamp(offset, 0.0f, childBottom - 1.0f);
-        if(offset <= 0.01f) offset = 0.0f;
-        if(childBottom > 1.0f) {
-            if(childBottom - offset - 1.0f <= 0.01f) {
-                offset = childBottom - 1.0f;
+        targetOffset = std::clamp(targetOffset, 0.0f, childrenSpan - 1.0f);
+        *offsetPtr += (targetOffset - *offsetPtr) * (10.0f * deltaT);
+        *offsetPtr = std::clamp(*offsetPtr, 0.0f, childrenSpan - 1.0f);
+        if(*offsetPtr <= 0.01f) *offsetPtr = 0.0f;
+        if(childrenSpan > 1.0f) {
+            if(childrenSpan - *offsetPtr - 1.0f <= 0.01f) {
+                *offsetPtr = childrenSpan - 1.0f;
             }
         }
     }
@@ -1728,33 +1810,64 @@ ScrollGuiItem::ScrollGuiItem() :
  * @param draw Information on how to draw.
  */
 void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
-    float barY = 0.0f; //Top, in height ratio.
-    float barH = 0.0f; //In height ratio.
-    float listBottom = listItem->getChildBottom();
-    unsigned char alpha = 48;
-    if(listBottom > 1.0f) {
-        float offset = std::min(listItem->offset, listBottom - 1.0f);
-        barY = offset / listBottom;
-        barH = 1.0f / listBottom;
-        alpha = 128;
-    }
-    
-    drawTexturedBox(
-        draw.center, draw.size, game.sysContent.bmpFrameBox,
-        al_map_rgba(255, 255, 255, alpha)
-    );
-    
-    if(barH != 0.0f) {
+    if(!horizontal) {
+        float barY = 0.0f; //Top, in height ratio.
+        float barH = 0.0f; //In height ratio.
+        float listBottom = listItem->getChildrenSpan();
+        unsigned char alpha = 48;
+        if(listBottom > 1.0f) {
+            float offset = std::min(listItem->offset.y, listBottom - 1.0f);
+            barY = offset / listBottom;
+            barH = 1.0f / listBottom;
+            alpha = 128;
+        }
+        
         drawTexturedBox(
-            Point(
-                draw.center.x,
-                (draw.center.y - draw.size.y * 0.5) +
-                (draw.size.y * barY) +
-                (draw.size.y * barH * 0.5f)
-            ),
-            Point(draw.size.x, (draw.size.y * barH)),
-            game.sysContent.bmpBubbleBox
+            draw.center, draw.size, game.sysContent.bmpFrameBox,
+            al_map_rgba(255, 255, 255, alpha)
         );
+        
+        if(barH != 0.0f) {
+            drawTexturedBox(
+                Point(
+                    draw.center.x,
+                    (draw.center.y - draw.size.y * 0.5f) +
+                    (draw.size.y * barY) +
+                    (draw.size.y * barH * 0.5f)
+                ),
+                Point(draw.size.x, (draw.size.y * barH)),
+                game.sysContent.bmpBubbleBox
+            );
+        }
+    } else {
+        float barX = 0.0f; //Left, in width ratio.
+        float barW = 0.0f; //In width ratio.
+        float listDepth = listItem->getChildrenSpan(true);
+        unsigned char alpha = 48;
+        if(listDepth > 1.0f) {
+            float offset = std::min(listItem->offset.x, listDepth - 1.0f);
+            barX = offset / listDepth;
+            barW = 1.0f / listDepth;
+            alpha = 128;
+        }
+        
+        drawTexturedBox(
+            draw.center, draw.size, game.sysContent.bmpFrameBox,
+            al_map_rgba(255, 255, 255, alpha)
+        );
+        
+        if(barW != 0.0f) {
+            drawTexturedBox(
+                Point(
+                    (draw.center.x - draw.size.x * 0.5f) +
+                    (draw.size.x * barX) +
+                    (draw.size.x * barW * 0.5f),
+                    draw.center.y
+                ),
+                Point((draw.size.x * barW), draw.size.y),
+                game.sysContent.bmpBubbleBox
+            );
+        }
     }
 }
 
@@ -1770,22 +1883,8 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         ev.mouse.button == 1 &&
         isMouseOn(Point(ev.mouse.x, ev.mouse.y))
     ) {
-        float listBottom = listItem->getChildBottom();
         isMouseDragging = true;
-        
-        if(listBottom <= 1.0f) {
-            return;
-        }
-        
-        Point c = getReferenceCenter();
-        Point s = getReferenceSize();
-        float barH = (1.0f / listBottom) * s.y;
-        float y1 = (c.y - s.y / 2.0f) + barH / 2.0f;
-        float y2 = (c.y + s.y / 2.0f) - barH / 2.0f;
-        float click = (ev.mouse.y - y1) / (y2 - y1);
-        click = std::clamp(click, 0.0f, 1.0f);
-        
-        listItem->targetOffset = click * (listBottom - 1.0f);
+        setOffsetFromMouse(ev.mouse.x, ev.mouse.y);
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
@@ -1797,7 +1896,23 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         isMouseDragging
     ) {
-        float listBottom = listItem->getChildBottom();
+        setOffsetFromMouse(ev.mouse.x, ev.mouse.y);
+    }
+}
+
+
+/**
+ * @brief Sets the list box's offset based on where the mouse cursor is
+ * pointing in the scroll item.
+ *
+ * @param x Mouse's X coordinate, in window coordinates.
+ * @param y Mouse's Y coordinate, in window coordinates.
+ */
+void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
+    if(!horizontal) {
+        float listBottom = listItem->getChildrenSpan();
+        isMouseDragging = true;
+        
         if(listBottom <= 1.0f) {
             return;
         }
@@ -1807,10 +1922,29 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         float barH = (1.0f / listBottom) * s.y;
         float y1 = (c.y - s.y / 2.0f) + barH / 2.0f;
         float y2 = (c.y + s.y / 2.0f) - barH / 2.0f;
-        float click = (ev.mouse.y - y1) / (y2 - y1);
+        float click = (y - y1) / (y2 - y1);
         click = std::clamp(click, 0.0f, 1.0f);
         
         listItem->targetOffset = click * (listBottom - 1.0f);
+        
+    } else {
+        float listDepth = listItem->getChildrenSpan(true);
+        isMouseDragging = true;
+        
+        if(listDepth <= 1.0f) {
+            return;
+        }
+        
+        Point c = getReferenceCenter();
+        Point s = getReferenceSize();
+        float barW = (1.0f / listDepth) * s.x;
+        float x1 = (c.x - s.x / 2.0f) + barW / 2.0f;
+        float x2 = (c.x + s.x / 2.0f) - barW / 2.0f;
+        float click = (x - x1) / (x2 - x1);
+        click = std::clamp(click, 0.0f, 1.0f);
+        
+        listItem->targetOffset = click * (listDepth - 1.0f);
+        
     }
 }
 

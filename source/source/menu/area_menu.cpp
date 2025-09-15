@@ -26,16 +26,16 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace AREA_MENU {
 
-//Name of the main GUI information file.
+//Name of the main GUI definition file.
 const string GUI_FILE_NAME = "area_menu";
 
-//Path to the area info GUI information file.
+//Path to the area info GUI definition file.
 const string INFO_GUI_FILE_NAME = "area_menu_info";
 
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
 
-//Path to the mission specs GUI information file.
+//Path to the mission specs GUI definition file.
 const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 }

@@ -24,7 +24,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace OPTIONS_MENU {
 
-//Name of the audio menu GUI information file.
+//Name of the audio menu GUI definition file.
 const string AUDIO_GUI_FILE_NAME = "options_menu_audio";
 
 //Height of each bind button.
@@ -33,13 +33,13 @@ const float BIND_BUTTON_HEIGHT = 0.07f;
 //Padding between each bind button.
 const float BIND_BUTTON_PADDING = 0.01f;
 
-//Name of the GUI information file.
+//Name of the GUI definition file.
 const string CONTROL_BINDS_GUI_FILE_NAME = "options_menu_control_binds";
 
-//Name of the controls menu GUI information file.
+//Name of the controls menu GUI definition file.
 const string CONTROLS_GUI_FILE_NAME = "options_menu_controls";
 
-//Name of the graphics menu GUI information file.
+//Name of the graphics menu GUI definition file.
 const string GRAPHICS_GUI_FILE_NAME = "options_menu_graphics";
 
 //How long the menu items take to move when switching pages.
@@ -48,10 +48,10 @@ const float HUD_MOVE_TIME = 0.5f;
 //Timeout before the input capturing cancels.
 const float INPUT_CAPTURE_TIMEOUT_DURATION = 5.0f;
 
-//Name of the misc menu GUI information file.
+//Name of the misc menu GUI definition file.
 const string MISC_GUI_FILE_NAME = "options_menu_misc";
 
-//Name of the top-level menu GUI information file.
+//Name of the top-level menu GUI definition file.
 const string TOP_GUI_FILE_NAME = "options_menu_top";
 
 }
@@ -1185,7 +1185,7 @@ void OptionsMenu::populateBinds() {
         if(!isInContainer(allowedCategories, actionType.category)) continue;
         
         float actionY =
-            bindsListBox->getChildBottom() +
+            bindsListBox->getChildrenSpan() +
             OPTIONS_MENU::BIND_BUTTON_PADDING;
             
         if(actionType.category != lastCat) {
@@ -1228,7 +1228,7 @@ void OptionsMenu::populateBinds() {
             bindsGui.addItem(sectionText);
             
             actionY =
-                bindsListBox->getChildBottom() +
+                bindsListBox->getChildrenSpan() +
                 OPTIONS_MENU::BIND_BUTTON_PADDING;
                 
             lastCat = actionType.category;
@@ -1484,7 +1484,7 @@ void OptionsMenu::populateBinds() {
         GuiItem* line = new GuiItem();
         line->ratioCenter =
             Point(
-                0.50f, bindsListBox->getChildBottom() + 0.02f
+                0.50f, bindsListBox->getChildrenSpan() + 0.02f
             );
         line->ratioSize = Point(0.90f, 0.02f);
         line->onDraw =

@@ -398,9 +398,9 @@
       </ul>
     </ul>
     
-    <h3 id="onion-menu">Onion menu</h3>
+    <h3 id="onion-menu-main">Onion menu &ndash; main</h3>
 
-    <p>The menu accessed by having the player's leader interact with an Onion. Note that due to the way the Onion menu's layout is dynamically generated based on the Pikmin types the Onion has, some of these settings will be overridden by the game in real time. These settings will also change the look of ship Pikmin management menus.</p>
+    <p>The menu accessed by having the player's leader interact with an Onion. These definitions will also change the look of ship Pikmin management menus. This definition has no data on how the individual Pikmin columns work; for that, see <a href="#onion-menu-pikmin-type">the Pikmin type definition</a>.</p>
     
     <ul>
       <li><b>Internal name:</b> <code>onion_menu</code></li>
@@ -411,19 +411,26 @@
         <li><code>ok</code>: Ok button.</li>
         <li><code>field</code>: Amount of Pikmin currently on the field.</li>
         <li><code>select_all</code>: Checkbox that toggles the "select all" mode.</li>
-        <li><code>onion_&lt;number&gt;_button</code>: Button of the first, second, etc. Pikmin type's Onion.</li>
-        <li><code>onion_&lt;number&gt;_amount</code>: Amount of Pikmin inside the first, second, etc. Pikmin type's Onion.</li>
-        <li><code>group_&lt;number&gt;_button</code>: Button of the first, second, etc. Pikmin type's group.</li>
-        <li><code>group_&lt;number&gt;_amount</code>: Amount of Pikmin in the first, second, etc. Pikmin type's group.</li>
-        <li><code>onion_all</code>: Button that controls all Onions at once.</li>
-        <li><code>group_all</code>: Button that controls all groups at once.</li>
-        <li><code>prev_page</code>: Previous page button.</li>
-        <li><code>next_page</code>: Next page button.</li>
-        <li><code>onion_left_more</code>: Icon that indicates there are more Pikmin types to the left, in the list of Onion icons.</li>
-        <li><code>onion_right_more</code>: Icon that indicates there are more Pikmin types to the right, in the list of Onion icons.</li>
-        <li><code>group_left_more</code>: Icon that indicates there are more Pikmin types to the left, in the list of group icons.</li>
-        <li><code>group_right_more</code>: Icon that indicates there are more Pikmin types to the right, in the list of group icons.</li>
+        <li><code>list</code>: List with all the Pikmin type columns.</li>
+        <li><code>list_scroll</code>: Horizontal scrollbar for the list.</li>
         <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="onion-menu-pikmin-type">Onion menu &ndash; Pikmin type</h3>
+
+    <p>Definition for the GUI items that go inside the <a href="#onion-menu-main">Onion menu</a>'s list. This includes the overarching "all" buttons, as well as a single definition for each GUI item you'll find in a Pikmin type column. Note that due to the way the Onion menu's layout is dynamically generated based on the Pikmin types the Onion has, the X coordinate of these items will be overridden by the game in real time, as well as the width of the "all" buttons.</p>
+    
+    <ul>
+      <li><b>Internal name:</b> <code>onion_menu_pikmin_type</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>onion_button</code>: Button for the Pikmin type column's Onion.</li>
+        <li><code>onion_amount</code>: Text for how many Pikmin are in the Pikmin type column's Onion.</li>
+        <li><code>group_button</code>: Button for the Pikmin type column's group.</li>
+        <li><code>group_amount</code>: Text for how many Pikmin are in the Pikmin type column's group.</li>
+        <li><code>onion_all_button</code>: Overarching "all types" Onion button.</li>
+        <li><code>group_all_button</code>: Overarching "all types" group button.</li>
       </ul>
     </ul>
     

@@ -175,8 +175,8 @@ public:
     //List of children items, that are placed inside this one.
     vector<GuiItem*> children;
     
-    //Vertical offset (height percentage) of the items inside of it, if any.
-    float offset = 0.0f;
+    //Offset (width/height percentage) of the items inside of it, if any.
+    Point offset;
     
     //Padding amount, if it has items inside of it.
     float padding = 0.0f;
@@ -229,7 +229,7 @@ public:
     bool activate(const Point& cursorPos);
     bool addChild(GuiItem* item);
     bool deleteAllChildren();
-    float getChildBottom() const;
+    float getChildrenSpan(bool horizontal = false) const;
     float getJuiceValue() const;
     Point getReferenceCenter() const;
     Point getReferenceSize() const;
@@ -362,6 +362,9 @@ public:
     //What the offset is supposed to be, after it finishes animating.
     float targetOffset = 0.0f;
     
+    //Whether it's meant to be horizontal or vertical.
+    bool horizontal = false;
+    
     
     //--- Function declarations ---
     
@@ -439,6 +442,9 @@ public:
     //What item this scrollbar is in charge of controlling.
     ListGuiItem* listItem = nullptr;
     
+    //Whether it's meant to be horizontal or vertical.
+    bool horizontal = false;
+    
     //Is the left mouse button being dragged, starting on this widget?
     bool isMouseDragging = false;
     
@@ -449,6 +455,13 @@ public:
     
     void defDrawCode(const DrawInfo& draw);
     void defEventCode(const ALLEGRO_EVENT& ev);
+    
+    
+private:
+
+    //--- Function declarations ---
+    
+    void setOffsetFromMouse(float x, float y);
     
 };
 

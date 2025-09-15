@@ -24,8 +24,9 @@ class PikminType;
 
 namespace ONION_MENU {
 extern const string GUI_FILE_PATH;
+extern const size_t NR_TYPES_VISIBLE;
 extern const float RED_TEXT_DURATION;
-extern const size_t TYPES_PER_PAGE;
+extern const string TYPE_GUI_FILE_PATH;
 }
 
 
@@ -59,9 +60,6 @@ struct OnionMenuPikminType {
     
     //Index of this type in the Onion's list. Cache for convenience.
     size_t typeIdx = INVALID;
-    
-    //Index in the on-window list, or INVALID. Cache for convenience.
-    size_t onWindowIdx = INVALID;
     
     //Pikmin type associated. Cache for convenience.
     PikminType* pikType = nullptr;
@@ -102,17 +100,8 @@ struct OnionMenu {
     //Is "change ten" currently on?
     bool changeTen = false;
     
-    //If it manages more than 5, this is the Pikmin type page index.
-    size_t page = 0;
-    
     //Which GUI items are in red right now, if any, and how much time left.
     map<GuiItem*, float> redItems;
-    
-    //Total page amount. Cache for convenience.
-    size_t nrPages = 0;
-    
-    //Pikmin types currently on-window. Cache for convenience.
-    vector<OnionMenuPikminType*> onWindowTypes;
     
     //List of GUI items for the Onion icons. Cache for convenience.
     vector<GuiItem*> onionIconItems;
@@ -138,26 +127,14 @@ struct OnionMenu {
     //The button that controls all groups. Cache for convenience.
     GuiItem* groupAllButton = nullptr;
     
-    //Left Onion "more..." icon. Cache for convenience.
-    GuiItem* onionMoreLIcon = nullptr;
-    
-    //Right Onion "more..." icon. Cache for convenience.
-    GuiItem* onionMoreRIcon = nullptr;
-    
-    //Left group "more..." icon. Cache for convenience.
-    GuiItem* groupMoreLIcon = nullptr;
-    
-    //Right group "more..." icon. Cache for convenience.
-    GuiItem* groupMoreRIcon = nullptr;
-    
-    //Previous page button. Cache for convenience.
-    GuiItem* prevPageButton = nullptr;
-    
-    //Next page button. Cache for convenience.
-    GuiItem* nextPageButton = nullptr;
-    
     //Field amount text. Cache for convenience.
     GuiItem* fieldAmountText = nullptr;
+    
+    //GUI item for the list of types. Cache for convenience.
+    ListGuiItem* listItem = nullptr;
+    
+    //Dummy item used to help with padding the list. Cache for convenience.
+    GuiItem* listPaddingDummyItem = nullptr;
     
     //Multiply the background alpha by this much.
     float bgAlphaMult = 0.0f;
@@ -177,7 +154,6 @@ struct OnionMenu {
     ONION_TRANSFER_RESULT canAddToGroup(size_t typeIdx);
     ONION_TRANSFER_RESULT canAddToOnion(size_t typeIdx);
     void confirm();
-    void goToPage(size_t page);
     void growButtons();
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void handlePlayerAction(const Inpution::Action& action);

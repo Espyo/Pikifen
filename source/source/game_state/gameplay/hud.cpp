@@ -28,7 +28,7 @@ namespace HUD {
 //Dampen the mission goal indicator's movement by this much.
 const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 
-//Name of the GUI information file.
+//Name of the GUI definition file.
 const string GUI_FILE_NAME = "gameplay";
 
 //Maximum amount in any direction that the leader health wheel is allowed

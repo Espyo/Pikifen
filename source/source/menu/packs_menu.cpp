@@ -23,7 +23,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace PACKS_MENU {
 
-//Name of the pack management menu GUI information file.
+//Name of the pack management menu GUI definition file.
 const string GUI_FILE_NAME = "packs_menu";
 
 }
@@ -168,7 +168,7 @@ void PacksMenu::initGuiMain() {
     gui.addItem(baseBullet);
     
     for(size_t p = 0; p < packOrder.size(); p++) {
-        float listBottomY = packsList->getChildBottom();
+        float listBottomY = packsList->getChildrenSpan();
         float rowCenterY = listBottomY + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
         //Pack bullet.

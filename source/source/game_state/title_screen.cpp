@@ -26,19 +26,19 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace TITLE_SCREEN {
 
-//Name of the GUI information file.
+//Name of the GUI definition file.
 const string GUI_FILE_NAME = "main_menu_top";
 
 //How long the menu items take to move when switching pages.
 const float HUD_MOVE_TIME = 0.5f;
 
-//Name of the make page GUI information file.
+//Name of the make page GUI definition file.
 const string MAKE_GUI_FILE_NAME = "main_menu_make";
 
-//Name of the play page GUI information file.
+//Name of the play page GUI definition file.
 const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
-//Name of the tutorial question page GUI information file.
+//Name of the tutorial question page GUI definition file.
 const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 
 }

@@ -20,7 +20,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace HELP_MENU {
 
-//Name of the help menu GUI information file.
+//Name of the help menu GUI definition file.
 const string GUI_FILE_NAME = "help_menu";
 
 }

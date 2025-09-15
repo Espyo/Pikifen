@@ -26,7 +26,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace PAUSE_MENU {
 
-//Name of the leaving confirmation page GUI information file.
+//Name of the leaving confirmation page GUI definition file.
 const string CONFIRMATION_GUI_FILE_NAME = "pause_menu_confirmation";
 
 //Control lockout time after entering the menu.
@@ -35,16 +35,16 @@ const float ENTRY_LOCKOUT_TIME = 0.15f;
 //Interval between calculations of the Go Here path.
 const float GO_HERE_CALC_INTERVAL = 0.15f;
 
-//Name of the GUI information file.
+//Name of the GUI definition file.
 const string GUI_FILE_NAME = "pause_menu_system";
 
-//Name of the mission page GUI information file.
+//Name of the mission page GUI definition file.
 const string MISSION_GUI_FILE_NAME = "pause_menu_mission";
 
 //Default radar zoom level.
 const float RADAR_DEF_ZOOM = 0.4f;
 
-//Name of the radar page GUI information file.
+//Name of the radar page GUI definition file.
 const string RADAR_GUI_FILE_NAME = "pause_menu_radar";
 
 //Maximum radar zoom level.
@@ -65,7 +65,7 @@ const float RADAR_PAN_SPEED = 600.0f;
 //Max radar zoom speed when not using mouse, in amount per second.
 const float RADAR_ZOOM_SPEED = 2.5f;
 
-//Name of the status page GUI information file.
+//Name of the status page GUI definition file.
 const string STATUS_GUI_FILE_NAME = "pause_menu_status";
 
 }
@@ -267,7 +267,7 @@ void PauseMenu::addPikminStatusLine(
     const float firstX = x1 + itemXInterval / 2.0f;
     const float itemWidth = itemXInterval - 0.02f;
     
-    const float y1 = isSingle ? 0.0f : list->getChildBottom();
+    const float y1 = isSingle ? 0.0f : list->getChildrenSpan();
     const float itemHeight = isSingle ? 1.0f : 0.17f;
     const float numberItemHeight = isSingle ? itemHeight : itemHeight * 0.60f;
     const float itemYSpacing = isSingle ? 0.0f : 0.03f;
