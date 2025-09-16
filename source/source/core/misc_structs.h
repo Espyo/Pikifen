@@ -179,7 +179,7 @@ struct Viewport {
 struct Console {
 
     //--- Function declarations ---
-
+    
     Console();
     void clear();
     void draw() const;
@@ -188,15 +188,15 @@ struct Console {
         const string& text,
         float totalDuration = 5.0f, float fadeDuration = 3.0f
     );
-
-
-private:
-
+    
+    
+    private:
+    
     //--- Members ---
     
     //Timer that controls visibility.
     Timer visibilityTimer;
-
+    
     //If it's visible, this is how long it stays visible for.
     float visibilityDuration = 5.0f;
     
@@ -205,7 +205,7 @@ private:
     
     //Text it is showing, if any.
     string text;
-
+    
 };
 
 
@@ -272,10 +272,10 @@ struct MouseCursor {
     
     //Position, in window coordinates.
     Point winPos;
-
+    
     //Whether it was moved this frame.
     bool movedThisFrame = false;
-
+    
     //Whether it is on the game window.
     bool onWindow = true;
     
@@ -587,6 +587,18 @@ struct SystemContentList {
     //Notification.
     ALLEGRO_BITMAP* bmpNotification = nullptr;
     
+    //Onion menu change 1 icon.
+    ALLEGRO_BITMAP* bmpOnionMenu1 = nullptr;
+    
+    //Onion menu change 10 icon.
+    ALLEGRO_BITMAP* bmpOnionMenu10 = nullptr;
+    
+    //Onion menu all types icon.
+    ALLEGRO_BITMAP* bmpOnionMenuAll = nullptr;
+    
+    //Onion menu single type icon.
+    ALLEGRO_BITMAP* bmpOnionMenuSingle = nullptr;
+    
     //Pikmin soul.
     ALLEGRO_BITMAP* bmpPikminSoul = nullptr;
     
@@ -834,6 +846,18 @@ struct SystemContentNames {
     
     //Notification.
     string bmpNotification = "gui/notification";
+    
+    //Onion menu change 1 icon.
+    string bmpOnionMenu1 = "gui/onion_menu_1";
+    
+    //Onion menu change 10 icon.
+    string bmpOnionMenu10 = "gui/onion_menu_10";
+    
+    //Onion menu all types icon.
+    string bmpOnionMenuAll = "gui/onion_menu_all";
+    
+    //Onion menu single type icon.
+    string bmpOnionMenuSingle = "gui/onion_menu_single";
     
     //Pikmin soul.
     string bmpPikminSoul = "effects/pikmin_soul";

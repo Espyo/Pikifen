@@ -352,6 +352,14 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMouseCursor);
     game.sysContent.bmpNotification =
         game.content.bitmaps.list.get(game.sysContentNames.bmpNotification);
+    game.sysContent.bmpOnionMenu1 =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpOnionMenu1);
+    game.sysContent.bmpOnionMenu10 =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpOnionMenu10);
+    game.sysContent.bmpOnionMenuAll =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpOnionMenuAll);
+    game.sysContent.bmpOnionMenuSingle =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpOnionMenuSingle);
     game.sysContent.bmpPikminSoul =
         game.content.bitmaps.list.get(game.sysContentNames.bmpPikminSoul);
     game.sysContent.bmpPlayerInputIcons =
@@ -567,6 +575,10 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpNotification);
+    game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu1);
+    game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu10);
+    game.content.bitmaps.list.free(game.sysContent.bmpOnionMenuAll);
+    game.content.bitmaps.list.free(game.sysContent.bmpOnionMenuSingle);
     game.content.bitmaps.list.free(game.sysContent.bmpPikminSoul);
     game.content.bitmaps.list.free(game.sysContent.bmpPlayerInputIcons);
     game.content.bitmaps.list.free(game.sysContent.bmpRandom);

@@ -158,44 +158,82 @@ OnionMenu::OnionMenu(
     };
     gui.addItem(fieldAmountText, "field");
     
-    //Select all checkbox.
-    CheckGuiItem* selectAllCheck =
-        new CheckGuiItem(
-        &selectAll,
-        "Select all", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
+    //Select all button.
+    ButtonGuiItem* selectAllButton =
+        new ButtonGuiItem(
+        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
-    selectAllCheck->onActivate =
-    [this, selectAllCheck] (const Point&) {
+    selectAllButton->onActivate =
+    [this, selectAllButton] (const Point&) {
         growButtons();
-        selectAllCheck->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        selectAllButton->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
         toggleSelectAll();
-        selectAllCheck->value = selectAll;
     };
-    selectAllCheck->visible = types.size() > 1;
-    selectAllCheck->focusable = types.size() > 1;
-    selectAllCheck->onGetTooltip =
-    [] () { return "Control all Pikmin types at once?"; };
-    gui.addItem(selectAllCheck, "select_all");
+    selectAllButton->onDraw =
+    [this, selectAllButton] (const DrawInfo & draw) {
+        float juicyGrowAmount = selectAllButton->getJuiceValue();
+        drawBitmapInBox(
+            selectAll ?
+            game.sysContent.bmpOnionMenuAll :
+            game.sysContent.bmpOnionMenuSingle,
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
+        );
+        selectAllButton->defDrawCode(draw);
+    };
+    selectAllButton->visible = types.size() > 1;
+    selectAllButton->focusable = types.size() > 1;
+    selectAllButton->onGetTooltip =
+    [this] () {
+        if(selectAll) {
+            return
+                "Controlling all Pikmin types at once. "
+                "Press to control one at a time.";
+        } else {
+            return
+                "Controlling one Pikmin type at a time. "
+                "Press to control all at once.";
+        }
+    };
+    gui.addItem(selectAllButton, "select_all");
     
-    //Change ten at a time checkbox.
-    CheckGuiItem* changeTenCheck =
-        new CheckGuiItem(
-        &changeTen,
-        "Change ten", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
+    //Change ten at a time button.
+    ButtonGuiItem* changeTenButton =
+        new ButtonGuiItem(
+        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
-    changeTenCheck->onActivate =
-    [this, changeTenCheck] (const Point&) {
-        changeTenCheck->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+    changeTenButton->onActivate =
+    [this, changeTenButton] (const Point&) {
+        changeTenButton->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
         changeTen = !changeTen;
-        changeTenCheck->value = changeTen;
     };
-    changeTenCheck->onGetTooltip =
-    [] () { return "Change the numbers by ten at a time?"; };
-    gui.addItem(changeTenCheck, "change_ten");
+    changeTenButton->onDraw =
+    [this, changeTenButton] (const DrawInfo & draw) {
+        float juicyGrowAmount = changeTenButton->getJuiceValue();
+        drawBitmapInBox(
+            changeTen ?
+            game.sysContent.bmpOnionMenu10 :
+            game.sysContent.bmpOnionMenu1,
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
+        );
+        changeTenButton->defDrawCode(draw);
+    };
+    changeTenButton->onGetTooltip =
+    [this] () {
+        if(changeTen) {
+            return
+                "Changing the numbers by ten at a time. "
+                "Press to change by one.";
+        } else {
+            return
+                "Changing the numbers by one at a time. "
+                "Press to change by ten.";
+        }
+    };
+    gui.addItem(changeTenButton, "change_ten");
     
     //List box.
     listItem = new ListGuiItem();

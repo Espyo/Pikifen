@@ -245,7 +245,7 @@ void Console::clear() {
  */
 void Console::draw() const {
     if(text.empty()) return;
-
+    
     float alphaMult = 1;
     if(visibilityTimer.timeLeft < fadeDuration) {
         alphaMult = visibilityTimer.timeLeft / fadeDuration;
@@ -1845,7 +1845,7 @@ void SystemContentNames::load(DataNode* file) {
     
     //DEPRECATED in 1.1.0 by "leader_cursor".
     graRS.set("cursor", bmpLeaderCursor);
-
+    
     graRS.set("bright_circle", bmpBrightCircle);
     graRS.set("bright_ring", bmpBrightRing);
     graRS.set("bubble_box", bmpBubbleBox);
@@ -1879,6 +1879,10 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
     graRS.set("notification", bmpNotification);
+    graRS.set("onion_menu_1", bmpOnionMenu1);
+    graRS.set("onion_menu_10", bmpOnionMenu10);
+    graRS.set("onion_menu_all", bmpOnionMenuAll);
+    graRS.set("onion_menu_single", bmpOnionMenuSingle);
     graRS.set("pikmin_soul", bmpPikminSoul);
     graRS.set("player_input_icons", bmpPlayerInputIcons);
     graRS.set("random", bmpRandom);
@@ -1895,12 +1899,12 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
     graRS.set("title_screen_bg", bmpTitleScreenBg);
     graRS.set("wave_ring", bmpWaveRing);
-
+    
     ReaderSetter fntRS(file->getChildByName("fonts"));
     
     //DEPRECATED in 1.1.0 by "leader_cursor_counter".
     fntRS.set("cursor_counter", fntLeaderCursorCounter);
-
+    
     fntRS.set("area_name", fntAreaName);
     fntRS.set("counter", fntCounter);
     fntRS.set("editor_header", fntEditorHeader);
@@ -1915,7 +1919,7 @@ void SystemContentNames::load(DataNode* file) {
     
     //DEPRECATED in 1.1.0 by "menu_focus".
     sndRS.set("menu_selected", sndMenuFocus);
-
+    
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
     sndRS.set("countdown_tick", sndCountdownTick);
