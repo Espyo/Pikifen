@@ -45,8 +45,6 @@ Next tasks (roughly sorted most important first)
             The name for this is "spatial navigation"
             https://github.com/WICG/spatial-navigation
             https://github.com/NoriginMedia/Norigin-Spatial-Navigation
-        Make it so the player can hold down a directional key and the menu focus cursor moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
-            Same for holding down Enter to continuously activate a button and such
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
@@ -93,7 +91,6 @@ Next tasks (roughly sorted most important first)
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
-        Make it so a player can control their leader via mouse cursor
         Test it on the Steam Deck
 
     --- 1.2.0 ---

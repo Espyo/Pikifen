@@ -71,6 +71,7 @@ extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
 extern const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS];
+extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
@@ -198,6 +199,14 @@ struct Options {
             ADVANCED_D::MOUSE_MOVES_CURSOR[1],
             ADVANCED_D::MOUSE_MOVES_CURSOR[2],
             ADVANCED_D::MOUSE_MOVES_CURSOR[3]
+        };
+        
+        //For each player, does the mouse move their leader?
+        bool mouseMovesLeader[MAX_PLAYERS] = {
+            ADVANCED_D::MOUSE_MOVES_LEADER[0],
+            ADVANCED_D::MOUSE_MOVES_LEADER[1],
+            ADVANCED_D::MOUSE_MOVES_LEADER[2],
+            ADVANCED_D::MOUSE_MOVES_LEADER[3]
         };
         
         //True to use interpolation when graphics are scaled up/down.

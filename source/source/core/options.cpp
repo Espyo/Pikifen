@@ -41,8 +41,11 @@ const size_t MAX_PARTICLES = 1000;
 //Default value for whether mipmaps are enabled.
 const bool MIPMAPS_ENABLED = true;
 
-//Default value for whether the mouse moves the cursor, for each player.
+//Default value for whether the mouse moves the leader cursor, for each player.
 const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+
+//Default value for whether the mouse moves the leader, for each player.
+const bool MOUSE_MOVES_LEADER[MAX_PLAYERS] = {false, false, false, false};
 
 //Default value for whether to use smooth scaling.
 const bool SMOOTH_SCALING = true;
@@ -280,6 +283,9 @@ void Options::loadFromDataNode(DataNode* file) {
             aRS.set(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 advanced.mouseMovesCursor[p]
+            ); aRS.set(
+                "p" + i2s((p + 1)) + "_mouse_moves_leader",
+                advanced.mouseMovesLeader[p]
             );
         }
         aRS.set("smooth_scaling", advanced.smoothScaling);
@@ -387,7 +393,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
         //DEPRECATED in 1.1.0 by "leader_cursor_speed".
         cRS.set("cursor_speed", controls.leaderCursorSpeed);
-
+        
         cRS.set("auto_throw_mode", autoThrowModeChar);
         cRS.set("leader_cursor_speed", controls.leaderCursorSpeed);
         
@@ -472,7 +478,7 @@ void Options::loadFromDataNode(DataNode* file) {
         mRS.set("cursor_cam_weight", misc.leaderCursorCamWeight);
         //DEPRECATED in 1.1.0 by "show_leader_cursor_counter".
         mRS.set("show_counter_on_cursor", misc.showLeaderCursorCounter);
-
+        
         mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leader_cursor_cam_weight", misc.leaderCursorCamWeight);
         mRS.set("leaving_confirmation_mode", leavingConfModeChar);
@@ -559,6 +565,10 @@ void Options::saveToDataNode(DataNode* file) const {
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 advanced.mouseMovesCursor[p]
             );
+            aGW.write(
+                "p" + i2s((p + 1)) + "_mouse_moves_leader",
+                advanced.mouseMovesLeader[p]
+            );
         }
         aGW.write("smooth_scaling", advanced.smoothScaling);
         aGW.write("window_position_hack", advanced.windowPosHack);
@@ -617,7 +627,7 @@ void Options::saveToDataNode(DataNode* file) const {
     //Controls.
     {
         GetterWriter cGW(file->addNew("controls"));
-
+        
         cGW.write("auto_throw_mode", controls.autoThrowMode);
         cGW.write("leader_cursor_speed", controls.leaderCursorSpeed);
     }

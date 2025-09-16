@@ -178,7 +178,7 @@ void GameplayState::doAestheticLogic(float deltaT) {
     for(Player& player : players) {
         //Leader stuff.
         doAestheticLeaderLogic(&player, deltaT);
-
+        
         //Camera shake.
         player.view.shaker.tick(deltaT);
     }
@@ -529,10 +529,11 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     );
     leaderCursorSpeed =
         leaderCursorSpeed * deltaT * game.options.controls.leaderCursorSpeed;
-    
+        
     if(
         leaderCursorSpeed.x == 0.0f && leaderCursorSpeed.y == 0.0f &&
-        game.mouseCursor.movedThisFrame
+        game.mouseCursor.movedThisFrame &&
+        game.options.advanced.mouseMovesCursor[player->playerNr]
     ) {
         player->leaderCursorWorld = player->view.mouseCursorWorldPos;
     } else {
@@ -544,7 +545,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     Distance leaderToCursorDist(
         player->leaderPtr->pos, player->leaderCursorWorld
     );
-
+    
     if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
         //Leader's cursor goes beyond the range limit.
         player->leaderCursorWorld.x =
@@ -591,7 +592,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         leaderToCursorDist =
             Distance(player->leaderPtr->pos, player->leaderCursorWorld);
         player->swarmMagnitude =
-            leaderToCursorDist.toFloat() / game.config.rules.leaderCursorMaxDist;
+            leaderToCursorDist.toFloat() /
+            game.config.rules.leaderCursorMaxDist;
     }
     
     if(oldSwarmMagnitude != player->swarmMagnitude) {
@@ -649,6 +651,38 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             }
             }
         }
+    }
+    
+    if(
+        readyForInput && isInputAllowed && interlude.get() == INTERLUDE_NONE &&
+        game.options.advanced.mouseMovesLeader[player->playerNr]
+    ) {
+        float leaderToMouseCursorDist =
+            Distance(
+                player->leaderPtr->pos,
+                player->view.mouseCursorWorldPos
+            ).toFloat();
+        float moveStrength =
+            leaderToMouseCursorDist /
+            (game.config.rules.leaderCursorMaxDist / player->view.cam.zoom);
+        moveStrength = interpolateNumber(moveStrength, 0.75f, 1.0f, 0.0f, 1.0f);
+        moveStrength = std::clamp(moveStrength, 0.0f, 1.0f);
+        
+        float leaderToMouseCursorAngle =
+            getAngle(
+                player->leaderPtr->pos,
+                player->view.mouseCursorWorldPos
+            );
+        float leaderToMouseCursorCos = cos(leaderToMouseCursorAngle);
+        float leaderToMouseCursorSin = sin(leaderToMouseCursorAngle);
+        player->leaderMovement.right =
+            leaderToMouseCursorCos * moveStrength;
+        player->leaderMovement.left =
+            -leaderToMouseCursorCos * moveStrength;
+        player->leaderMovement.down =
+            leaderToMouseCursorSin * moveStrength;
+        player->leaderMovement.up =
+            -leaderToMouseCursorSin * moveStrength;
     }
     
     if(game.perfMon) {
