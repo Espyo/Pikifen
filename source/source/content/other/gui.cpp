@@ -884,7 +884,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             if(
                 iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
                 iPtr->isResponsive() &&
-                iPtr->focusable
+                iPtr->focusable && iPtr->focusableFromMouse
             ) {
                 focusResult = iPtr;
                 if(iPtr->onMouseOver) {
@@ -988,7 +988,10 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
         if(!focusedItem) {
             for(size_t i = 0; i < items.size(); i++) {
-                if(items[i]->isResponsive() && items[i]->focusable) {
+                if(
+                    items[i]->isResponsive() &&
+                    items[i]->focusable && items[i]->focusableFromDirNav
+                ) {
                     setFocusedItem(items[i]);
                     break;
                 }
@@ -1039,7 +1042,10 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
         for(size_t i = 0; i < items.size(); i++) {
             GuiItem* iPtr = items[i];
-            if(iPtr->isResponsive() && iPtr->focusable) {
+            if(
+                iPtr->isResponsive() &&
+                iPtr->focusable && iPtr->focusableFromDirNav
+            ) {
                 Point iCenter = iPtr->getReferenceCenter();
                 if(iPtr == focusedItem) {
                     focusableIdx = focusables.size();

@@ -121,11 +121,17 @@ struct OnionMenu {
     //List of GUI items for the group amounts. Cache for convenience.
     vector<GuiItem*> groupAmountItems;
     
+    //List of GUI items for the full type controls. Cache for convenience.
+    vector<GuiItem*> fullTypeItems;
+    
     //The button that controls all Onions. Cache for convenience.
     GuiItem* onionAllButton = nullptr;
     
     //The button that controls all groups. Cache for convenience.
     GuiItem* groupAllButton = nullptr;
+    
+    //The item that controls all Pikmin types at once. Cache for convenience.
+    GuiItem* fullTypeAllItem = nullptr;
     
     //Field amount text. Cache for convenience.
     GuiItem* fieldAmountText = nullptr;
@@ -165,8 +171,8 @@ struct OnionMenu {
     void handlePlayerAction(const Inpution::Action& action);
     void startClosing();
     void tick(float deltaT);
-    void toggleChangeTen();
-    void toggleSelectAll();
+    bool toggleChangeTen();
+    bool toggleSelectAll();
     
     private:
     

@@ -56,12 +56,12 @@ OnionMenu::OnionMenu(
         );
     }
     
-    gui.registerCoords("instructions",       50,  3.75,   90,  7.5);
+    gui.registerCoords("instructions",       50,     5,   90,    5);
     gui.registerCoords("cancel",           8.75, 16.25, 12.5, 12.5);
     gui.registerCoords("cancel_input",      2.5,  22.5,    4,    4);
     gui.registerCoords("ok",               8.75, 71.25, 12.5, 12.5);
-    gui.registerCoords("ok_input",               8.75, 71.25, 12.5, 12.5);
-    gui.registerCoords("field",            57.5,  87.5,   30,    5);
+    gui.registerCoords("ok_input",          2.5,  77.5,    4,    4);
+    gui.registerCoords("field",              50,  87.5,   30,    5);
     gui.registerCoords("change_ten",          5,    37,    5,    8);
     gui.registerCoords("change_ten_input",  2.5,    41,    4,    4);
     gui.registerCoords("select_all",          5,    50,    5,    8);
@@ -74,12 +74,14 @@ OnionMenu::OnionMenu(
         getChildByName("positions")
     );
     
-    gui.registerCoords("onion_button",       50,    15, 12.5,  20);
-    gui.registerCoords("onion_amount",       50, 33.75, 12.5, 7.5);
-    gui.registerCoords("group_button",       50,    85, 12.5,  20);
-    gui.registerCoords("group_amount",       50, 66.25, 12.5, 7.5);
-    gui.registerCoords("onion_all_button", 27.5,    15,   20,  20);
-    gui.registerCoords("group_all_button", 27.5,    85,   20,  20);
+    gui.registerCoords("onion_button",     11.25,    15, 12.5,  20);
+    gui.registerCoords("onion_amount",     11.25, 33.75, 12.5, 7.5);
+    gui.registerCoords("group_button",     11.25,    85, 12.5,  20);
+    gui.registerCoords("group_amount",     11.25, 66.25, 12.5, 7.5);
+    gui.registerCoords("full_type",         77.5,    50, 12.5,  90);
+    gui.registerCoords("onion_all_button",    40,    15, 12.5,  20);
+    gui.registerCoords("group_all_button",    40,    85, 12.5,  20);
+    gui.registerCoords("full_type_all",     57.5,    50, 12.5,  90);
     gui.readCoords(
         game.content.guiDefs.list[ONION_MENU::TYPE_GUI_FILE_NAME].
         getChildByName("positions")
@@ -273,6 +275,7 @@ OnionMenu::OnionMenu(
             game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
+    selectAllInput->visible = types.size() > 1;
     gui.addItem(selectAllInput, "select_all_input");
     
     //List box.
@@ -328,6 +331,7 @@ OnionMenu::OnionMenu(
             return doButtonDirLogic(playerActionId, t);
         };
         onionButton->canAutoRepeat = true;
+        onionButton->focusableFromDirNav = false;
         onionButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -417,6 +421,7 @@ OnionMenu::OnionMenu(
             return doButtonDirLogic(playerActionId, t);
         };
         groupButton->canAutoRepeat = true;
+        groupButton->focusableFromDirNav = false;
         groupButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -466,6 +471,24 @@ OnionMenu::OnionMenu(
         listItem->addChild(groupAmountText);
         gui.addItem(groupAmountText, "group_amount");
         groupAmountItems.push_back(groupAmountText);
+        
+        //Full type item.
+        GuiItem* fullTypeItem = new GuiItem();
+        fullTypeItem->onMenuDirButton =
+        [this, t] (size_t playerActionId) {
+            return doButtonDirLogic(playerActionId, t);
+        };
+        fullTypeItem->focusableFromMouse = false;
+        fullTypeItem->onGetTooltip =
+        [this, t] () {
+            OnionMenuPikminType* tPtr = &this->types[t];
+            return
+                "Call or store " + getTransferAmountStr() + " " +
+                tPtr->pikType->name + ".";
+        };
+        listItem->addChild(fullTypeItem);
+        gui.addItem(fullTypeItem, "full_type");
+        fullTypeItems.push_back(fullTypeItem);
     }
     
     //Onion's all button.
@@ -490,6 +513,7 @@ OnionMenu::OnionMenu(
         return doButtonDirLogic(playerActionId, 0);
     };
     onionAllButton->canAutoRepeat = true;
+    onionAllButton->focusableFromDirNav = false;
     onionAllButton->onGetTooltip =
     [this] () {
         return
@@ -521,6 +545,7 @@ OnionMenu::OnionMenu(
         return doButtonDirLogic(playerActionId, 0);
     };
     groupAllButton->canAutoRepeat = true;
+    groupAllButton->focusableFromDirNav = false;
     groupAllButton->onGetTooltip =
     [this] () {
         return
@@ -529,6 +554,23 @@ OnionMenu::OnionMenu(
     };
     listItem->addChild(groupAllButton);
     gui.addItem(groupAllButton, "group_all_button");
+    
+    //All types item.
+    fullTypeAllItem = new GuiItem();
+    fullTypeAllItem->onMenuDirButton =
+    [this] (size_t playerActionId) {
+        return doButtonDirLogic(playerActionId, 0);
+    };
+    fullTypeAllItem->focusableFromMouse = false;
+    fullTypeAllItem->onGetTooltip =
+    [this] () {
+        return
+            "Call or store " + getTransferAmountStr() + " " +
+            "Pikmin of each type.";
+    };
+    listItem->addChild(fullTypeAllItem);
+    gui.addItem(fullTypeAllItem, "full_type_all");
+    fullTypeItems.push_back(fullTypeAllItem);
     
     //List padding dummy item.
     listPaddingDummyItem = new GuiItem();
@@ -712,7 +754,7 @@ string OnionMenu::getTransferAmountStr() {
  * @brief Makes the Onion and group buttons juicy grow.
  */
 void OnionMenu::growButtons() {
-    for(size_t t = 0; t < ONION_MENU::NR_TYPES_VISIBLE; t++) {
+    for(size_t t = 0; t < types.size(); t++) {
         onionIconItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
@@ -725,11 +767,17 @@ void OnionMenu::growButtons() {
         groupButtonItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
+        fullTypeItems[t]->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_ICON
+        );
     }
     onionAllButton->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_ICON
     );
     groupAllButton->startJuiceAnimation(
+        GuiItem::JUICE_TYPE_GROW_ICON
+    );
+    fullTypeAllItem->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_ICON
     );
 }
@@ -764,10 +812,11 @@ void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
         break;
     } case PLAYER_ACTION_TYPE_ONION_SELECT_ALL: {
         if(action.value >= 0.5f) {
-            toggleSelectAll();
-            game.audio.createUiSoundSource(
-                game.sysContent.sndMenuActivate, { .volume = 0.75f }
-            );
+            if(toggleSelectAll()) {
+                game.audio.createUiSoundSource(
+                    game.sysContent.sndMenuActivate, { .volume = 0.75f }
+                );
+            }
         }
         break;
     } case PLAYER_ACTION_TYPE_MENU_OK: {
@@ -913,19 +962,26 @@ void OnionMenu::tick(float deltaT) {
 
 /**
  * @brief Toggles the "change 10" mode.
+ *
+ * @return Whether it succeeded.
  */
-void OnionMenu::toggleChangeTen() {
+bool OnionMenu::toggleChangeTen() {
     changeTenButton->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
     );
     changeTen = !changeTen;
+    return true;
 }
 
 
 /**
  * @brief Toggles the "select all" mode.
+ *
+ * @return Whether it succeeded.
  */
-void OnionMenu::toggleSelectAll() {
+bool OnionMenu::toggleSelectAll() {
+    if(types.size() <= 1) return false;
+    
     selectAll = !selectAll;
     growButtons();
     selectAllButton->startJuiceAnimation(
@@ -933,6 +989,8 @@ void OnionMenu::toggleSelectAll() {
     );
     
     update();
+    
+    return true;
 }
 
 
@@ -1019,6 +1077,7 @@ void OnionMenu::update() {
     columnWidth = std::max(columnWidth, onionAmountItems[0]->ratioSize.x);
     columnWidth = std::max(columnWidth, groupButtonItems[0]->ratioSize.x);
     columnWidth = std::max(columnWidth, groupAmountItems[0]->ratioSize.x);
+    columnWidth = std::max(columnWidth, fullTypeItems[0]->ratioSize.x);
     float visibleColWidthSums = columnWidth * ONION_MENU::NR_TYPES_VISIBLE;
     float visibleColPaddingSums = 1.0f - visibleColWidthSums;
     float columnPadding =
@@ -1041,6 +1100,7 @@ void OnionMenu::update() {
         groupIconItems[t]->ratioCenter.x = curX;
         groupButtonItems[t]->ratioCenter.x = curX;
         groupAmountItems[t]->ratioCenter.x = curX;
+        fullTypeItems[t]->ratioCenter.x = curX;
         curX += columnWidth / 2.0f;
     }
     
@@ -1050,11 +1110,14 @@ void OnionMenu::update() {
         onionButtonItems[t]->focusable = !selectAll;
         groupButtonItems[t]->visible = !selectAll;
         groupButtonItems[t]->focusable = !selectAll;
+        fullTypeItems[t]->focusable = !selectAll;
     }
     onionAllButton->visible = selectAll;
     onionAllButton->focusable = selectAll;
     groupAllButton->visible = selectAll;
     groupAllButton->focusable = selectAll;
+    fullTypeAllItem->visible = selectAll;
+    fullTypeAllItem->focusable = selectAll;
     
     //Make the "all" buttons fit.
     float onionAllButtonX1 = FLT_MAX;
@@ -1087,6 +1150,8 @@ void OnionMenu::update() {
                 groupButtonItems[t]->ratioSize.x / 2.0f
             );
     }
+    float fullTypeAllButtonX1 = std::min(onionAllButtonX1, groupAllButtonX1);
+    float fullTypeAllButtonX2 = std::max(onionAllButtonX2, groupAllButtonX2);
     onionAllButton->ratioCenter.x =
         (onionAllButtonX1 + onionAllButtonX2) / 2.0f;
     onionAllButton->ratioSize.x =
@@ -1095,6 +1160,10 @@ void OnionMenu::update() {
         (groupAllButtonX1 + groupAllButtonX2) / 2.0f;
     groupAllButton->ratioSize.x =
         (groupAllButtonX2 - groupAllButtonX1);
+    fullTypeAllItem->ratioCenter.x =
+        (fullTypeAllButtonX1 + fullTypeAllButtonX2) / 2.0f;
+    fullTypeAllItem->ratioSize.x =
+        (fullTypeAllButtonX2 - fullTypeAllButtonX1);
         
     //If the list has more than ONION_MENU::NR_TYPES_VISIBLE type, the final
     //type won't have padding to the right since the scrollbar calculations

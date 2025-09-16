@@ -184,6 +184,12 @@ public:
     //Can this item's activation be auto-repeated by holding the button down?
     bool canAutoRepeat = false;
     
+    //Is this item focusable from the mouse?
+    bool focusableFromMouse = true;
+    
+    //Is this item focusable from directional navigation?
+    bool focusableFromDirNav = true;
+    
     //Type of the current juice animation.
     JUICE_TYPE juiceType = JUICE_TYPE_NONE;
     

@@ -3,11 +3,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        A series of icon-only buttons on the left side (though tooltips should still work)
-            Store all -- sets the numbers to store all the Pikmin you have of the applicable Onions
-            Call max -- sets the numbers to call as many Pikmin from the Onion as possible, in equal amounts for each available type in the Onion
-            The player input to toggle changing all types together
-        Add player actions for selecting all and changing 10
         Blur the background of the Onion menu, pause menu, etc.
         If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
             "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
