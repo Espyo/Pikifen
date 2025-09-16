@@ -60,6 +60,7 @@ OnionMenu::OnionMenu(
     gui.registerCoords("cancel",           8.75, 16.25, 12.5, 12.5);
     gui.registerCoords("cancel_input",      2.5,  22.5,    4,    4);
     gui.registerCoords("ok",               8.75, 71.25, 12.5, 12.5);
+    gui.registerCoords("ok_input",               8.75, 71.25, 12.5, 12.5);
     gui.registerCoords("field",            57.5,  87.5,   30,    5);
     gui.registerCoords("change_ten",          5,    37,    5,    8);
     gui.registerCoords("change_ten_input",  2.5,    41,    4,    4);
@@ -116,11 +117,25 @@ OnionMenu::OnionMenu(
     okButton->onActivate =
     [this] (const Point&) {
         confirm();
-        startClosing();
     };
     okButton->onGetTooltip =
     [] () { return "Confirm changes."; };
     gui.addItem(okButton, "ok");
+    
+    //Ok input.
+    GuiItem* okInput = new GuiItem();
+    okInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showHudInputIcons) return;
+        const Inpution::InputSource& s =
+            game.controls.findBind(PLAYER_ACTION_TYPE_MENU_OK).
+            inputSource;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
+        drawPlayerInputSourceIcon(
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
+        );
+    };
+    gui.addItem(okInput, "ok_input");
     
     //Field amount text.
     fieldAmountText =
@@ -527,6 +542,7 @@ OnionMenu::OnionMenu(
     
     //Finishing touches.
     update();
+    gui.setFocusedItem(okButton, true);
     gui.startAnimation(
         GUI_MANAGER_ANIM_UP_TO_CENTER,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -611,6 +627,8 @@ void OnionMenu::confirm() {
             );
         }
     }
+    
+    startClosing();
 }
 
 
@@ -735,8 +753,6 @@ void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
     if(!gui.responsive) return;
     
-    gui.handlePlayerAction(action);
-    
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_ONION_CHANGE_10: {
         if(action.value >= 0.5f) {
@@ -754,8 +770,18 @@ void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
             );
         }
         break;
+    } case PLAYER_ACTION_TYPE_MENU_OK: {
+        if(action.value >= 0.5f) {
+            confirm();
+            game.audio.createUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        }
+        break;
     }
     }
+    
+    gui.handlePlayerAction(action);
 }
 
 
@@ -778,6 +804,7 @@ void OnionMenu::startClosing() {
     gui.startAnimation(
         GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
+    gui.responsive = false;
     for(Player& player : game.states.gameplay->players) {
         player.hud->gui.startAnimation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
