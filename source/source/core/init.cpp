@@ -371,6 +371,20 @@ void initControls() {
         "Zoom the radar out.",
         "menu_radar_zoom_out", "k_6", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_ONION_CHANGE_10,
+        PLAYER_ACTION_CAT_MENUS,
+        "Onion menu change 10",
+        "Toggle the \"change 10\" mode in the Onion menu.",
+        "menu_onion_change_10", "k_215", Inpution::ACTION_VALUE_TYPE_BOOLEAN
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_ONION_SELECT_ALL,
+        PLAYER_ACTION_CAT_MENUS,
+        "Onion menu select all",
+        "Toggle the \"select all\" mode in the Onion menu.",
+        "menu_onion_select_all", "k_217", Inpution::ACTION_VALUE_TYPE_BOOLEAN
+    );
     
     //Advanced.
     game.controls.addPlayerActionType(

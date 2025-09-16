@@ -56,16 +56,18 @@ OnionMenu::OnionMenu(
         );
     }
     
-    gui.registerCoords("instructions",   50,  3.75,   90,  7.5);
-    gui.registerCoords("cancel",       8.75,    15, 12.5,   10);
-    gui.registerCoords("cancel_input",    3,    19,    4,    4);
-    gui.registerCoords("ok",           8.75,  72.5, 12.5,   10);
-    gui.registerCoords("field",        57.5,  87.5,   30,    5);
-    gui.registerCoords("select_all",      5, 38.75,    5,  7.5);
-    gui.registerCoords("change_ten",      5, 48.75,    5,  7.5);
-    gui.registerCoords("list",         57.5, 43.75,   80, 67.5);
-    gui.registerCoords("list_scroll",  57.5, 81.25,   80,  2.5);
-    gui.registerCoords("tooltip",        50,    95,   95,    8);
+    gui.registerCoords("instructions",       50,  3.75,   90,  7.5);
+    gui.registerCoords("cancel",           8.75, 16.25, 12.5, 12.5);
+    gui.registerCoords("cancel_input",      2.5,  22.5,    4,    4);
+    gui.registerCoords("ok",               8.75, 71.25, 12.5, 12.5);
+    gui.registerCoords("field",            57.5,  87.5,   30,    5);
+    gui.registerCoords("change_ten",          5,    37,    5,    8);
+    gui.registerCoords("change_ten_input",  2.5,    41,    4,    4);
+    gui.registerCoords("select_all",          5,    50,    5,    8);
+    gui.registerCoords("select_all_input",  2.5,    54,    4,    4);
+    gui.registerCoords("list",             57.5, 43.75,   80, 67.5);
+    gui.registerCoords("list_scroll",      57.5, 81.25,   80,  2.5);
+    gui.registerCoords("tooltip",            50,    95,   95,    8);
     gui.readCoords(
         game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME].
         getChildByName("positions")
@@ -158,21 +160,66 @@ OnionMenu::OnionMenu(
     };
     gui.addItem(fieldAmountText, "field");
     
+    //Change ten at a time button.
+    changeTenButton =
+        new ButtonGuiItem(
+        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
+    );
+    changeTenButton->onActivate =
+    [this] (const Point&) {
+        toggleChangeTen();
+    };
+    changeTenButton->onDraw =
+    [this] (const DrawInfo & draw) {
+        float juicyGrowAmount = changeTenButton->getJuiceValue();
+        drawBitmapInBox(
+            changeTen ?
+            game.sysContent.bmpOnionMenu10 :
+            game.sysContent.bmpOnionMenu1,
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
+        );
+        changeTenButton->defDrawCode(draw);
+    };
+    changeTenButton->onGetTooltip =
+    [this] () {
+        if(changeTen) {
+            return
+                "Changing the numbers by ten at a time. "
+                "Press to change by one.";
+        } else {
+            return
+                "Changing the numbers by one at a time. "
+                "Press to change by ten.";
+        }
+    };
+    gui.addItem(changeTenButton, "change_ten");
+    
+    //Change ten at a time input.
+    GuiItem* changeTenInput = new GuiItem();
+    changeTenInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showHudInputIcons) return;
+        const Inpution::InputSource& s =
+            game.controls.findBind(PLAYER_ACTION_TYPE_ONION_CHANGE_10).
+            inputSource;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
+        drawPlayerInputSourceIcon(
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
+        );
+    };
+    gui.addItem(changeTenInput, "change_ten_input");
+    
     //Select all button.
-    ButtonGuiItem* selectAllButton =
+    selectAllButton =
         new ButtonGuiItem(
         "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
     selectAllButton->onActivate =
-    [this, selectAllButton] (const Point&) {
-        growButtons();
-        selectAllButton->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );
+    [this] (const Point&) {
         toggleSelectAll();
     };
     selectAllButton->onDraw =
-    [this, selectAllButton] (const DrawInfo & draw) {
+    [this] (const DrawInfo & draw) {
         float juicyGrowAmount = selectAllButton->getJuiceValue();
         drawBitmapInBox(
             selectAll ?
@@ -198,42 +245,20 @@ OnionMenu::OnionMenu(
     };
     gui.addItem(selectAllButton, "select_all");
     
-    //Change ten at a time button.
-    ButtonGuiItem* changeTenButton =
-        new ButtonGuiItem(
-        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
-    );
-    changeTenButton->onActivate =
-    [this, changeTenButton] (const Point&) {
-        changeTenButton->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+    //Select all input.
+    GuiItem* selectAllInput = new GuiItem();
+    selectAllInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showHudInputIcons) return;
+        const Inpution::InputSource& s =
+            game.controls.findBind(PLAYER_ACTION_TYPE_ONION_SELECT_ALL).
+            inputSource;
+        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
+        drawPlayerInputSourceIcon(
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
-        changeTen = !changeTen;
     };
-    changeTenButton->onDraw =
-    [this, changeTenButton] (const DrawInfo & draw) {
-        float juicyGrowAmount = changeTenButton->getJuiceValue();
-        drawBitmapInBox(
-            changeTen ?
-            game.sysContent.bmpOnionMenu10 :
-            game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
-        );
-        changeTenButton->defDrawCode(draw);
-    };
-    changeTenButton->onGetTooltip =
-    [this] () {
-        if(changeTen) {
-            return
-                "Changing the numbers by ten at a time. "
-                "Press to change by one.";
-        } else {
-            return
-                "Changing the numbers by one at a time. "
-                "Press to change by ten.";
-        }
-    };
-    gui.addItem(changeTenButton, "change_ten");
+    gui.addItem(selectAllInput, "select_all_input");
     
     //List box.
     listItem = new ListGuiItem();
@@ -641,7 +666,29 @@ void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @param action Data about the player action.
  */
 void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
+    if(!gui.responsive) return;
+    
     gui.handlePlayerAction(action);
+    
+    switch(action.actionTypeId) {
+    case PLAYER_ACTION_TYPE_ONION_CHANGE_10: {
+        if(action.value >= 0.5f) {
+            toggleChangeTen();
+            game.audio.createUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        }
+        break;
+    } case PLAYER_ACTION_TYPE_ONION_SELECT_ALL: {
+        if(action.value >= 0.5f) {
+            toggleSelectAll();
+            game.audio.createUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        }
+        break;
+    }
+    }
 }
 
 
@@ -771,10 +818,25 @@ void OnionMenu::tick(float deltaT) {
 
 
 /**
+ * @brief Toggles the "change 10" mode.
+ */
+void OnionMenu::toggleChangeTen() {
+    changeTenButton->startJuiceAnimation(
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+    );
+    changeTen = !changeTen;
+}
+
+
+/**
  * @brief Toggles the "select all" mode.
  */
 void OnionMenu::toggleSelectAll() {
     selectAll = !selectAll;
+    growButtons();
+    selectAllButton->startJuiceAnimation(
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+    );
     
     update();
 }

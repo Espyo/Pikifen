@@ -2247,6 +2247,8 @@ size_t focusNextItemDirectionally(
     const vector<Point>& itemCoordinates, size_t focusedItem,
     float direction, const Point& loopRegion
 ) {
+    if(focusedItem >= itemCoordinates.size()) return 0;
+    
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     

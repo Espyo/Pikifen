@@ -133,6 +133,12 @@ struct OnionMenu {
     //GUI item for the list of types. Cache for convenience.
     ListGuiItem* listItem = nullptr;
     
+    //"Change 10" mode toggle button.
+    ButtonGuiItem* changeTenButton = nullptr;
+    
+    //"Select all" mode toggle button.
+    ButtonGuiItem* selectAllButton = nullptr;
+    
     //Dummy item used to help with padding the list. Cache for convenience.
     GuiItem* listPaddingDummyItem = nullptr;
     
@@ -159,6 +165,7 @@ struct OnionMenu {
     void handlePlayerAction(const Inpution::Action& action);
     void startClosing();
     void tick(float deltaT);
+    void toggleChangeTen();
     void toggleSelectAll();
     
     private:

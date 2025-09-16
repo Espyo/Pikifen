@@ -123,6 +123,12 @@ enum PLAYER_ACTION_TYPE {
     //Radar zoom out.
     PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT,
     
+    //Onion menu change 10 toggle.
+    PLAYER_ACTION_TYPE_ONION_CHANGE_10,
+    
+    //Onion menu select all toggle.
+    PLAYER_ACTION_TYPE_ONION_SELECT_ALL,
+    
     //Advanced.
     
     //Move leader cursor right.
