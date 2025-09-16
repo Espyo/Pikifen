@@ -617,18 +617,6 @@ private:
     //Registered default sizes.
     map<string, Point> registeredSizes;
     
-    //Is the right button pressed?
-    bool rightPressed = false;
-    
-    //Is the up button pressed?
-    bool upPressed = false;
-    
-    //Is the left button pressed?
-    bool leftPressed = false;
-    
-    //Is the down button pressed?
-    bool downPressed = false;
-    
     //Is the OK button pressed?
     bool okPressed = false;
     

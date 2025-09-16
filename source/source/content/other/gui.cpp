@@ -960,28 +960,24 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_MENU_RIGHT: {
-            if(!rightPressed && isDown) {
+            if(isDown) {
                 pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
             }
-            rightPressed = isDown;
             break;
         } case PLAYER_ACTION_TYPE_MENU_UP: {
-            if(!upPressed && isDown) {
+            if(isDown) {
                 pressed = PLAYER_ACTION_TYPE_MENU_UP;
             }
-            upPressed = isDown;
             break;
         } case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            if(!leftPressed && isDown) {
+            if(isDown) {
                 pressed = PLAYER_ACTION_TYPE_MENU_LEFT;
             }
-            leftPressed = isDown;
             break;
         } case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            if(!downPressed && isDown) {
+            if(isDown) {
                 pressed = PLAYER_ACTION_TYPE_MENU_DOWN;
             }
-            downPressed = isDown;
             break;
         } default: {
             break;
@@ -1062,6 +1058,8 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
                 focusables,
                 focusableIdx,
                 direction,
+                hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
+                Point() :
                 Point(game.winW, maxY - minY)
             );
             

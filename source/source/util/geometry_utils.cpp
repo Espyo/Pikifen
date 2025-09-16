@@ -2235,12 +2235,12 @@ Point scaleRectangleToBox(
  * @brief Given a list of items, chooses which item comes next
  * geometrically in the specified direction. Useful for menus with
  * several buttons the player can focus multidirectionally in.
- * Also, it loops around.
+ * Also, it optionally loops around.
  *
  * @param itemCoordinates Vector with the center coordinates of all items.
  * @param focusedItem Index of the focused item.
  * @param direction Angle specifying the direction.
- * @param loopRegion Width and height of the loop region.
+ * @param loopRegion Width and height of the loop region. 0 to disable looping.
  * @return The next item's index in the list.
  */
 size_t focusNextItemDirectionally(
@@ -2296,7 +2296,7 @@ size_t focusNextItemDirectionally(
                 bestItem = i;
             }
             
-        } else {
+        } else if(loopRegion.x > 0.0f && loopRegion.y > 0.0f) {
             //If the item is behind, we'll need to loop its coordinates
             //and score those loop coordinates that land in front.
             //Unfortunately, there's no way to know how the coordinates
