@@ -206,7 +206,7 @@ public:
     std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
     
     //What to do when a directional button's pressed with the item focused.
-    std::function<bool(size_t buttonId)> onMenuDirButton = nullptr;
+    std::function<bool(size_t playerActionId)> onMenuDirButton = nullptr;
     
     //What to do when it gets focused.
     std::function<void()> onFocused = nullptr;
@@ -416,7 +416,7 @@ public:
     
     void defActivateCode(const Point& cursorPos);
     void defDrawCode(const DrawInfo& draw);
-    bool defMenuDirCode(size_t buttonId);
+    bool defMenuDirCode(size_t playerActionId);
     void defMouseOverCode(const Point& cursorPos);
     
     

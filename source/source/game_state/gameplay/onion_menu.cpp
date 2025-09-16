@@ -306,12 +306,11 @@ OnionMenu::OnionMenu(
         };
         onionButton->onActivate =
         [this, t, onionButton] (const Point&) {
-            if(
-                transfer(false, t) !=
-                ONION_TRANSFER_RESULT_OK
-            ) {
-                onionButton->playFailSound = true;
-            }
+            doButtonLogic(false, t, false);
+        };
+        onionButton->onMenuDirButton =
+        [this, t] (size_t playerActionId) {
+            return doButtonDirLogic(playerActionId, t);
         };
         onionButton->canAutoRepeat = true;
         onionButton->onGetTooltip =
@@ -396,12 +395,11 @@ OnionMenu::OnionMenu(
         };
         groupButton->onActivate =
         [this, t, groupButton] (const Point&) {
-            if(
-                transfer(true, t) !=
-                ONION_TRANSFER_RESULT_OK
-            ) {
-                groupButton->playFailSound = true;
-            }
+            doButtonLogic(true, t, false);
+        };
+        groupButton->onMenuDirButton =
+        [this, t] (size_t playerActionId) {
+            return doButtonDirLogic(playerActionId, t);
         };
         groupButton->canAutoRepeat = true;
         groupButton->onGetTooltip =
@@ -470,9 +468,11 @@ OnionMenu::OnionMenu(
     };
     onionAllButton->onActivate =
     [this] (const Point&) {
-        if(transfer(false, 0) != ONION_TRANSFER_RESULT_OK) {
-            onionAllButton->playFailSound = true;
-        }
+        doButtonLogic(false, 0, false);
+    };
+    onionAllButton->onMenuDirButton =
+    [this] (size_t playerActionId) {
+        return doButtonDirLogic(playerActionId, 0);
     };
     onionAllButton->canAutoRepeat = true;
     onionAllButton->onGetTooltip =
@@ -499,9 +499,11 @@ OnionMenu::OnionMenu(
     };
     groupAllButton->onActivate =
     [this] (const Point&) {
-        if(transfer(true, 0) != ONION_TRANSFER_RESULT_OK) {
-            groupAllButton->playFailSound = true;
-        }
+        doButtonLogic(true, 0, false);
+    };
+    groupAllButton->onMenuDirButton =
+    [this] (size_t playerActionId) {
+        return doButtonDirLogic(playerActionId, 0);
     };
     groupAllButton->canAutoRepeat = true;
     groupAllButton->onGetTooltip =
@@ -606,6 +608,71 @@ void OnionMenu::confirm() {
         } else if(types[t].delta < 0) {
             leaderPtr->orderPikminToOnion(
                 types[t].pikType, nestPtr, -types[t].delta
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Does all of the logic for the player having chosen to store or
+ * call a Pikmin via directional menu inputs.
+ *
+ * @param buttonId Player action.
+ * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ * @return Whether the action was consumed.
+ */
+bool OnionMenu::doButtonDirLogic(int playerActionId, size_t typeIdx) {
+    if(playerActionId == PLAYER_ACTION_TYPE_MENU_UP) {
+        doButtonLogic(false, typeIdx, true);
+        return true;
+    } else if(playerActionId == PLAYER_ACTION_TYPE_MENU_DOWN) {
+        doButtonLogic(true, typeIdx, true);
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Does all of the logic for either an Onion or a group button
+ * having been pressed, no matter which way that happened.
+ *
+ * @param toGroup Whether the transfer is to the group or to the Onion.
+ * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ */
+void OnionMenu::doButtonLogic(
+    bool toGroup, size_t typeIdx, bool fromDirection
+) {
+    GuiItem* relevantItem = nullptr;
+    if(toGroup) {
+        if(selectAll) {
+            relevantItem = groupAllButton;
+        } else {
+            relevantItem = groupButtonItems[typeIdx];
+        }
+    } else {
+        if(selectAll) {
+            relevantItem = onionAllButton;
+        } else {
+            relevantItem = onionButtonItems[typeIdx];
+        }
+    }
+    
+    ONION_TRANSFER_RESULT result = transfer(toGroup, typeIdx);
+    
+    if(!fromDirection) {
+        if(result != ONION_TRANSFER_RESULT_OK) {
+            relevantItem->playFailSound = true;
+        }
+    } else {
+        if(result == ONION_TRANSFER_RESULT_OK) {
+            game.audio.createUiSoundSource(
+                game.sysContent.sndMenuActivate, { .volume = 0.75f }
+            );
+        } else {
+            game.audio.createUiSoundSource(
+                game.sysContent.sndMenuFail, { .volume = 0.75f }
             );
         }
     }

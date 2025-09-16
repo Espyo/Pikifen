@@ -1637,8 +1637,8 @@ PickerGuiItem::PickerGuiItem(
     };
     
     onMenuDirButton =
-    [this] (size_t buttonId) -> bool{
-        return this->defMenuDirCode(buttonId);
+    [this] (size_t playerActionId) -> bool{
+        return this->defMenuDirCode(playerActionId);
     };
     
     onMouseOver =
