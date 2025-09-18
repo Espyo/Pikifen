@@ -64,6 +64,7 @@ enum LEAVING_CONF_MODE {
 namespace OPTIONS {
 
 namespace ADVANCED_D {
+extern const bool ENABLE_COMPATABILITY_MODE;
 extern const bool DRAW_CURSOR_TRAIL;
 extern const bool ENGINE_DEV;
 extern const bool HIDE_STOPPED_MOUSE_CURSOR;
@@ -176,6 +177,9 @@ struct Options {
     //Advanced. These typically don't appear in any options menu.
     struct {
     
+        //Enables or disables compatability mode, disables shader rendering.
+        bool compatabilityEnabled = ADVANCED_D::ENABLE_COMPATABILITY_MODE;
+
         //Draw a trail behind the mouse cursor?
         bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
         
