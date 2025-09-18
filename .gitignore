@@ -2,6 +2,7 @@ source/visual_studio_2022/.vs/
 source/visual_studio_2022/packages/
 source/visual_studio_2022/Win32/
 source/visual_studio_2022/x64/
+source/visual_studio_2022/pikifen
 source/visual_studio_2022/pikifen.vcxproj.user
 source/gnu_make/pikifen
 *__pycache__*
