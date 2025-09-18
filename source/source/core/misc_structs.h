@@ -351,19 +351,27 @@ struct GetterWriter {
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const size_t& var,
+        const string& childName, const int8_t& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const int& var,
+        const string& childName, const uint8_t& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const unsigned int& var,
+        const string& childName, const int32_t& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const unsigned char& var,
+        const string& childName, const uint32_t& var,
+        DataNode** outChildNode = nullptr
+    );
+    void write(
+        const string& childName, const int64_t& var,
+        DataNode** outChildNode = nullptr
+    );
+    void write(
+        const string& childName, const uint64_t& var,
         DataNode** outChildNode = nullptr
     );
     void write(
@@ -413,19 +421,27 @@ struct ReaderSetter {
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, size_t& var,
+        const string& childName, int8_t& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, int& var,
+        const string& childName, uint8_t& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, unsigned int& var,
+        const string& childName, int32_t& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, unsigned char& var,
+        const string& childName, uint32_t& var,
+        DataNode** outChildNode = nullptr
+    );
+    void set(
+        const string& childName, int64_t& var,
+        DataNode** outChildNode = nullptr
+    );
+    void set(
+        const string& childName, uint64_t& var,
         DataNode** outChildNode = nullptr
     );
     void set(

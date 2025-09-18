@@ -593,7 +593,7 @@ void GetterWriter::write(
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
  * @param childName Name of the child node.
- * @param var The var to get. This is a string.
+ * @param var The var to get. This is a C string.
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
@@ -608,11 +608,11 @@ void GetterWriter::write(
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
  * @param childName Name of the child node.
- * @param var The var to get. This is an integer.
+ * @param var The var to get. This is an 8-bit signed integer.
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string& childName, const size_t& var, DataNode** outChildNode
+    const string& childName, const int8_t& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -623,11 +623,11 @@ void GetterWriter::write(
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
  * @param childName Name of the child node.
- * @param var The var to get. This is an integer.
+ * @param var The var to get. This is an 8-bit unsigned integer.
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string& childName, const int& var, DataNode** outChildNode
+    const string& childName, const uint8_t& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -638,11 +638,11 @@ void GetterWriter::write(
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
  * @param childName Name of the child node.
- * @param var The var to get. This is an unsigned integer.
+ * @param var The var to get. This is a 32-bit signed integer.
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string& childName, const unsigned int& var, DataNode** outChildNode
+    const string& childName, const int32_t& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -653,11 +653,41 @@ void GetterWriter::write(
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
  * @param childName Name of the child node.
- * @param var The var to get. This is an unsigned char.
+ * @param var The var to get. This is a 32-bit unsigned integer.
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string& childName, const unsigned char& var, DataNode** outChildNode
+    const string& childName, const uint32_t& var, DataNode** outChildNode
+) {
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param childName Name of the child node.
+ * @param var The var to get. This is a 64-bit signed integer.
+ * @param outChildNode If not nullptr, the new node is returned here.
+ */
+void GetterWriter::write(
+    const string& childName, const int64_t& var, DataNode** outChildNode
+) {
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param childName Name of the child node.
+ * @param var The var to get. This is a 64-bit unsigned integer.
+ * @param outChildNode If not nullptr, the new node is returned here.
+ */
+void GetterWriter::write(
+    const string& childName, const uint64_t& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -1292,13 +1322,13 @@ void ReaderSetter::set(
  * Will not do anything if the child's value is empty.
  *
  * @param childName Name of the child node.
- * @param var The var to set. This is an integer.
+ * @param var The var to set. This is an 8-bit signed integer.
  * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string& childName, size_t& var, DataNode** outChildNode
+    const string& childName, int8_t& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1315,13 +1345,13 @@ void ReaderSetter::set(
  * Will not do anything if the child's value is empty.
  *
  * @param childName Name of the child node.
- * @param var The var to set. This is an integer.
+ * @param var The var to set. This is an 8-bit unsigned integer.
  * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string& childName, int& var, DataNode** outChildNode
+    const string& childName, uint8_t& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1338,13 +1368,13 @@ void ReaderSetter::set(
  * Will not do anything if the child's value is empty.
  *
  * @param childName Name of the child node.
- * @param var The var to set. This is an unsigned integer.
+ * @param var The var to set. This is a 32-bit signed integer.
  * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string& childName, unsigned int& var, DataNode** outChildNode
+    const string& childName, int32_t& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1361,13 +1391,59 @@ void ReaderSetter::set(
  * Will not do anything if the child's value is empty.
  *
  * @param childName Name of the child node.
- * @param var The var to set. This is an unsigned char.
+ * @param var The var to set. This is a 32-bit unsigned integer.
  * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string& childName, unsigned char& var, DataNode** outChildNode
+    const string& childName, uint32_t& var, DataNode** outChildNode
+) {
+    DataNode* n = node->getChildByName(childName);
+    if(!n->value.empty()) {
+        if(outChildNode) *outChildNode = n;
+        var = s2i(n->value);
+    } else {
+        if(outChildNode) *outChildNode = nullptr;
+    }
+}
+
+
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ *
+ * @param childName Name of the child node.
+ * @param var The var to set. This is a 64-bit signed integer.
+ * @param outChildNode If not nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
+ * no value.
+ */
+void ReaderSetter::set(
+    const string& childName, int64_t& var, DataNode** outChildNode
+) {
+    DataNode* n = node->getChildByName(childName);
+    if(!n->value.empty()) {
+        if(outChildNode) *outChildNode = n;
+        var = s2i(n->value);
+    } else {
+        if(outChildNode) *outChildNode = nullptr;
+    }
+}
+
+
+/**
+ * @brief Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ *
+ * @param childName Name of the child node.
+ * @param var The var to set. This is a 64-bit unsigned integer.
+ * @param outChildNode If not nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
+ * no value.
+ */
+void ReaderSetter::set(
+    const string& childName, uint64_t& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
