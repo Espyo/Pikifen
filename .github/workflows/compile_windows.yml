@@ -21,7 +21,7 @@ jobs:
       run: nuget restore source\visual_studio_2022\pikifen.sln
 
     - name: Build app for release
-      run: msbuild /p:CL_MPCount=4 source\visual_studio_2022\pikifen.vcxproj -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=x64
+      run: msbuild source\visual_studio_2022\pikifen.vcxproj -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=x64
       
     - name: Copy Files to build directory
       run: |
