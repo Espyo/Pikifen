@@ -326,12 +326,12 @@ OnionMenu::OnionMenu(
         [this, t, onionButton] (const Point&) {
             doButtonLogic(false, t, false);
         };
-        onionButton->onMenuDirButton =
+        onionButton->onMenuSNAction =
         [this, t] (size_t playerActionId) {
-            return doButtonDirLogic(playerActionId, t);
+            return doButtonSNLogic(playerActionId, t);
         };
         onionButton->canAutoRepeat = true;
-        onionButton->focusableFromDirNav = false;
+        onionButton->focusableFromSN = false;
         onionButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -416,12 +416,12 @@ OnionMenu::OnionMenu(
         [this, t, groupButton] (const Point&) {
             doButtonLogic(true, t, false);
         };
-        groupButton->onMenuDirButton =
+        groupButton->onMenuSNAction =
         [this, t] (size_t playerActionId) {
-            return doButtonDirLogic(playerActionId, t);
+            return doButtonSNLogic(playerActionId, t);
         };
         groupButton->canAutoRepeat = true;
-        groupButton->focusableFromDirNav = false;
+        groupButton->focusableFromSN = false;
         groupButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -474,9 +474,9 @@ OnionMenu::OnionMenu(
         
         //Full type item.
         GuiItem* fullTypeItem = new GuiItem();
-        fullTypeItem->onMenuDirButton =
+        fullTypeItem->onMenuSNAction =
         [this, t] (size_t playerActionId) {
-            return doButtonDirLogic(playerActionId, t);
+            return doButtonSNLogic(playerActionId, t);
         };
         fullTypeItem->focusableFromMouse = false;
         fullTypeItem->onGetTooltip =
@@ -508,12 +508,12 @@ OnionMenu::OnionMenu(
     [this] (const Point&) {
         doButtonLogic(false, 0, false);
     };
-    onionAllButton->onMenuDirButton =
+    onionAllButton->onMenuSNAction =
     [this] (size_t playerActionId) {
-        return doButtonDirLogic(playerActionId, 0);
+        return doButtonSNLogic(playerActionId, 0);
     };
     onionAllButton->canAutoRepeat = true;
-    onionAllButton->focusableFromDirNav = false;
+    onionAllButton->focusableFromSN = false;
     onionAllButton->onGetTooltip =
     [this] () {
         return
@@ -540,12 +540,12 @@ OnionMenu::OnionMenu(
     [this] (const Point&) {
         doButtonLogic(true, 0, false);
     };
-    groupAllButton->onMenuDirButton =
+    groupAllButton->onMenuSNAction =
     [this] (size_t playerActionId) {
-        return doButtonDirLogic(playerActionId, 0);
+        return doButtonSNLogic(playerActionId, 0);
     };
     groupAllButton->canAutoRepeat = true;
-    groupAllButton->focusableFromDirNav = false;
+    groupAllButton->focusableFromSN = false;
     groupAllButton->onGetTooltip =
     [this] () {
         return
@@ -557,9 +557,9 @@ OnionMenu::OnionMenu(
     
     //All types item.
     fullTypeAllItem = new GuiItem();
-    fullTypeAllItem->onMenuDirButton =
+    fullTypeAllItem->onMenuSNAction =
     [this] (size_t playerActionId) {
-        return doButtonDirLogic(playerActionId, 0);
+        return doButtonSNLogic(playerActionId, 0);
     };
     fullTypeAllItem->focusableFromMouse = false;
     fullTypeAllItem->onGetTooltip =
@@ -682,7 +682,7 @@ void OnionMenu::confirm() {
  * @param typeIdx Index of the Onion's Pikmin type, if applicable.
  * @return Whether the action was consumed.
  */
-bool OnionMenu::doButtonDirLogic(int playerActionId, size_t typeIdx) {
+bool OnionMenu::doButtonSNLogic(int playerActionId, size_t typeIdx) {
     if(playerActionId == PLAYER_ACTION_TYPE_MENU_UP) {
         doButtonLogic(false, typeIdx, true);
         return true;

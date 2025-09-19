@@ -758,7 +758,7 @@ void GetterWriter::write(
 /**
  * @brief Hides the OS mouse in the game window.
  */
-void MouseCursor::hide() const {
+void MouseCursor::hideInOS() const {
     al_hide_mouse_cursor(game.display);
 }
 
@@ -767,7 +767,7 @@ void MouseCursor::hide() const {
  * @brief Initializes everything.
  */
 void MouseCursor::init() {
-    hide();
+    hideInOS();
     reset();
     
     saveTimer.onEnd = [this] () {
@@ -796,7 +796,7 @@ void MouseCursor::reset() {
 /**
  * @brief Shows the OS mouse in the game window.
  */
-void MouseCursor::show() const {
+void MouseCursor::showInOS() const {
     al_show_mouse_cursor(game.display);
 }
 

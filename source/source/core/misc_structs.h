@@ -289,10 +289,10 @@ struct MouseCursor {
     
     //--- Function declarations ---
     
-    void hide() const;
+    void hideInOS() const;
     void init();
     void reset();
-    void show() const;
+    void showInOS() const;
     void updatePos(const ALLEGRO_EVENT& ev);
     
 };

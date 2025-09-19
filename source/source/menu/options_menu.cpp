@@ -1505,7 +1505,7 @@ void OptionsMenu::populateBinds() {
     if(itemToFocus) {
         bindsGui.setFocusedItem(itemToFocus, true);
         //Try to center it.
-        bindsListBox->onChildDirFocused(itemToFocus);
+        bindsListBox->onChildFocusedViaSN(itemToFocus);
     }
 }
 

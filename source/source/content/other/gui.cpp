@@ -955,132 +955,9 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     case PLAYER_ACTION_TYPE_MENU_LEFT:
     case PLAYER_ACTION_TYPE_MENU_DOWN: {
 
-        //Focusing a different item with the arrow keys.
-        size_t pressed = PLAYER_ACTION_TYPE_NONE;
-        
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_MENU_RIGHT: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_UP: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_UP;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_LEFT;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_DOWN;
-            }
-            break;
-        } default: {
-            break;
+        if(isDown) {
+            handleSpatialNavigationAction(action);
         }
-        }
-        
-        if(pressed == PLAYER_ACTION_TYPE_NONE) break;
-        
-        if(!focusedItem) {
-            for(size_t i = 0; i < items.size(); i++) {
-                if(
-                    items[i]->isResponsive() &&
-                    items[i]->focusable && items[i]->focusableFromDirNav
-                ) {
-                    setFocusedItem(items[i]);
-                    break;
-                }
-            }
-            if(focusedItem) {
-                break;
-            }
-        }
-        if(!focusedItem) {
-            //No item can be focused.
-            break;
-        }
-        
-        vector<Point> focusables;
-        vector<GuiItem*> focusablePtrs;
-        size_t focusableIdx = INVALID;
-        float direction = 0.0f;
-        
-        switch(pressed) {
-        case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            direction = TAU * 0.25f;
-            break;
-        }
-        case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            direction = TAU * 0.50f;
-            break;
-        }
-        case PLAYER_ACTION_TYPE_MENU_UP: {
-            direction = TAU * 0.75f;
-            break;
-        }
-        }
-        
-        if(
-            focusedItem &&
-            focusedItem->isResponsive() &&
-            focusedItem->onMenuDirButton
-        ) {
-            if(focusedItem->onMenuDirButton(pressed)) {
-                //If it returned true, that means the following logic about
-                //changing the current item needs to be skipped.
-                break;
-            }
-        }
-        
-        float minY = 0;
-        float maxY = game.winH;
-        
-        for(size_t i = 0; i < items.size(); i++) {
-            GuiItem* iPtr = items[i];
-            if(
-                iPtr->isResponsive() &&
-                iPtr->focusable && iPtr->focusableFromDirNav
-            ) {
-                Point iCenter = iPtr->getReferenceCenter();
-                if(iPtr == focusedItem) {
-                    focusableIdx = focusables.size();
-                }
-                
-                minY = std::min(minY, iCenter.y);
-                maxY = std::max(maxY, iCenter.y);
-                
-                focusablePtrs.push_back(iPtr);
-                focusables.push_back(iPtr->getReferenceCenter());
-            }
-        }
-        
-        size_t newFocusableIdx =
-            focusNextItemDirectionally(
-                focusables,
-                focusableIdx,
-                direction,
-                hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
-                Point() :
-                Point(game.winW, maxY - minY)
-            );
-            
-        if(newFocusableIdx != focusableIdx) {
-            setFocusedItem(focusablePtrs[newFocusableIdx]);
-            if(
-                focusedItem->parent &&
-                focusedItem->parent->onChildDirFocused
-            ) {
-                focusedItem->parent->onChildDirFocused(
-                    focusedItem
-                );
-            }
-        }
-        
         break;
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
@@ -1114,6 +991,94 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         lastInputWasMouse = false;
     }
     return buttonRecognized;
+}
+
+
+/**
+ * @brief Handles a spatial navigation-related player action.
+ * 
+ * @param action Data about the player action.
+ */
+void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
+    //Check if the currently-focused item wants to consume the action.
+    if(
+        focusedItem &&
+        focusedItem->isResponsive() &&
+        focusedItem->onMenuSNAction
+    ) {
+        if(focusedItem->onMenuSNAction(action.actionTypeId)) {
+            //If the function returned true, that means the following logic
+            //about changing the current item focus needs to be skipped.
+            return;
+        }
+    }
+    
+    //Fill in the data for the spatial navigation algorithm.
+    vector<Point> focusables;
+    vector<GuiItem*> focusablePtrs;
+    size_t curFocusableIdx = INVALID;
+    float direction = 0.0f;
+    float minY = 0;
+    float maxY = game.winH;
+    
+    switch(action.actionTypeId) {
+    case PLAYER_ACTION_TYPE_MENU_DOWN: {
+        direction = TAU * 0.25f;
+        break;
+    }
+    case PLAYER_ACTION_TYPE_MENU_LEFT: {
+        direction = TAU * 0.50f;
+        break;
+    }
+    case PLAYER_ACTION_TYPE_MENU_UP: {
+        direction = TAU * 0.75f;
+        break;
+    }
+    }
+    
+    for(size_t i = 0; i < items.size(); i++) {
+        GuiItem* iPtr = items[i];
+        if(
+            iPtr->isResponsive() &&
+            iPtr->focusable && iPtr->focusableFromSN
+        ) {
+            Point iCenter = iPtr->getReferenceCenter();
+            if(iPtr == focusedItem) {
+                curFocusableIdx = focusables.size();
+            }
+            
+            minY = std::min(minY, iCenter.y);
+            maxY = std::max(maxY, iCenter.y);
+            
+            focusablePtrs.push_back(iPtr);
+            focusables.push_back(iCenter);
+        }
+    }
+
+    if(focusables.empty()) {
+        //There is no item that can be focused via spatial navigation.
+        return;
+    }
+    
+    size_t newFocusableIdx =
+        spatialNavigation(
+            focusables,
+            curFocusableIdx,
+            direction,
+            hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
+            Point() :
+            Point(game.winW, maxY - minY)
+        );
+        
+    if(newFocusableIdx != curFocusableIdx) {
+        setFocusedItem(focusablePtrs[newFocusableIdx]);
+        if(
+            focusedItem->parent &&
+            focusedItem->parent->onChildFocusedViaSN
+        ) {
+            focusedItem->parent->onChildFocusedViaSN(focusedItem);
+        }
+    }
 }
 
 
@@ -1369,19 +1334,19 @@ ListGuiItem::ListGuiItem() :
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
-    onChildDirFocused =
+    onChildFocusedViaSN =
     [this] (const GuiItem * child) {
-        this->defChildDirFocusedCode(child);
+        this->defChildFocusedViaSNCode(child);
     };
 }
 
 
 /**
- * @brief Default list GUI item child directionally focused code.
+ * @brief Default list GUI item child focused via spatial navigation code.
  *
  * @param child The child item.
  */
-void ListGuiItem::defChildDirFocusedCode(const GuiItem* child) {
+void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
     float childrenSpan = getChildrenSpan(horizontal);
     float* offsetPtr = !horizontal ? &offset.y : &offset.x;
@@ -1640,7 +1605,7 @@ PickerGuiItem::PickerGuiItem(
         this->defActivateCode(cursorPos);
     };
     
-    onMenuDirButton =
+    onMenuSNAction =
     [this] (size_t playerActionId) -> bool{
         return this->defMenuDirCode(playerActionId);
     };

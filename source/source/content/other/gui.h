@@ -187,8 +187,8 @@ public:
     //Is this item focusable from the mouse?
     bool focusableFromMouse = true;
     
-    //Is this item focusable from directional navigation?
-    bool focusableFromDirNav = true;
+    //Is this item focusable from spatial navigation?
+    bool focusableFromSN = true;
     
     //Type of the current juice animation.
     JUICE_TYPE juiceType = JUICE_TYPE_NONE;
@@ -211,15 +211,17 @@ public:
     //What to do when the mouse cursor is on top of it this frame.
     std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
     
-    //What to do when a directional button's pressed with the item focused.
-    std::function<bool(size_t playerActionId)> onMenuDirButton = nullptr;
+    //What to do when a spatial navigation action is performed
+    //when the item is focused. The return value is whether the logic
+    //to change focused items should be skipped.
+    std::function<bool(size_t playerActionId)> onMenuSNAction = nullptr;
     
     //What to do when it gets focused.
     std::function<void()> onFocused = nullptr;
     
     //What to do when one of its children became the focused item via
-    //directional focus.
-    std::function<void(const GuiItem* child)> onChildDirFocused = nullptr;
+    //spatial navigation.
+    std::function<void(const GuiItem* child)> onChildFocusedViaSN = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> onGetTooltip = nullptr;
@@ -376,7 +378,7 @@ public:
     
     ListGuiItem();
     
-    void defChildDirFocusedCode(const GuiItem* child);
+    void defChildFocusedViaSNCode(const GuiItem* child);
     void defDrawCode(const DrawInfo& draw);
     void defEventCode(const ALLEGRO_EVENT& ev);
     void defTickCode(float deltaT);
@@ -646,5 +648,9 @@ private:
     
     //Are the items currently visible?
     bool visible = true;
+
+
+    //--- Function declarations ---
+    void handleSpatialNavigationAction(const Inpution::Action& action);
     
 };

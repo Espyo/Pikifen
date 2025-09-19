@@ -990,7 +990,7 @@ void TitleScreen::load() {
         game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);
     }
     game.fadeMgr.startFade(true, nullptr);
-    if(game.debug.showDearImGuiDemo) game.mouseCursor.show();
+    if(game.debug.showDearImGuiDemo) game.mouseCursor.showInOS();
 }
 
 
