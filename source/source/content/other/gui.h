@@ -610,15 +610,6 @@ private:
     //Which item is currently focused.
     GuiItem* focusedItem = nullptr;
     
-    //Focus cursor's current center coordinates.
-    Point focusCursorPos;
-    
-    //Focus cursor's current base width and height.
-    Point focusCursorSize;
-    
-    //Focus cursor's current base opacity (0 to 1).
-    float focusCursorAlpha = 0.0f;
-    
     //Registered default centers.
     map<string, Point> registeredCenters;
     
@@ -648,8 +639,28 @@ private:
     
     //Are the items currently visible?
     bool visible = true;
-
-
+    
+    //Focus cursor.
+    struct FocusCursor {
+    
+        //Current center coordinates.
+        Point curPos;
+        
+        //Current base width and height.
+        Point curSize;
+        
+        //Intended center coordinates.
+        Point intendedPos;
+        
+        //Intended base width and height.
+        Point intendedSize;
+        
+        //Current base opacity (0 to 1).
+        float alpha = 0.0f;
+        
+    } focusCursor;
+    
+    
     //--- Function declarations ---
     void handleSpatialNavigationAction(const Inpution::Action& action);
     

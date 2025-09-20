@@ -681,16 +681,16 @@ bool GuiManager::draw() {
         }
     }
     
-    if(focusCursorAlpha > 0.0f) {
+    if(focusCursor.alpha > 0.0f) {
         float sizeAddition =
             GUI::FOCUS_CURSOR_SIZE_ADDER +
             sin(game.timePassed * GUI::FOCUS_CURSOR_BOB_TIME_MULT) *
             GUI::FOCUS_CURSOR_BOB_OFFSET +
-            GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursorAlpha);
+            GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursor.alpha);
         drawTexturedBox(
-            focusCursorPos, focusCursorSize + sizeAddition,
+            focusCursor.curPos, focusCursor.curSize + sizeAddition,
             game.sysContent.bmpFocusBox,
-            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursorAlpha))
+            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursor.alpha))
         );
     }
     
@@ -996,7 +996,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
 
 /**
  * @brief Handles a spatial navigation-related player action.
- * 
+ *
  * @param action Data about the player action.
  */
 void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
@@ -1054,7 +1054,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
             focusables.push_back(iCenter);
         }
     }
-
+    
     if(focusables.empty()) {
         //There is no item that can be focused via spatial navigation.
         return;
@@ -1279,28 +1279,31 @@ bool GuiManager::tick(float deltaT) {
         focusedItem && mustDrawFocusedItem &&
         focusedItem->focusable
     ) {
-        if(focusCursorAlpha == 0.0f) {
-            focusCursorPos = focusedItemDraw.center;
-            focusCursorSize = focusedItemDraw.size;
-        } else {
-            Point posDelta = focusedItemDraw.center - focusCursorPos;
-            Point sizeDelta = focusedItemDraw.size - focusCursorSize;
-            focusCursorPos +=
-                posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
-            focusCursorSize +=
-                sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        focusCursor.intendedPos = focusedItemDraw.center;
+        focusCursor.intendedSize = focusedItemDraw.size;
+        if(focusCursor.alpha == 0.0f) {
+            //Teleport.
+            focusCursor.curPos = focusCursor.intendedPos;
+            focusCursor.curSize = focusCursor.intendedSize;
         }
-        focusCursorAlpha =
+        focusCursor.alpha =
             inchTowards(
-                focusCursorAlpha, 1.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+                focusCursor.alpha, 1.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
             );
     } else {
-        focusCursorAlpha =
+        focusCursor.alpha =
             inchTowards(
-                focusCursorAlpha, 0.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+                focusCursor.alpha, 0.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
             );
     }
     
+    Point posDelta = focusCursor.intendedPos - focusCursor.curPos;
+    Point sizeDelta = focusCursor.intendedSize - focusCursor.curSize;
+    focusCursor.curPos +=
+        posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+    focusCursor.curSize +=
+        sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        
     return true;
 }
 
