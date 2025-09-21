@@ -30,7 +30,7 @@
 
 namespace GAMEPLAY_MSG_BOX {
 
-//How quickly the advance button icon fades, in alpha (0-1) per second.
+//How quickly the advance button icon fades, in alpha [0 - 1] per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
 
 //Multiply the button offset animation's offset by this much.
@@ -278,11 +278,8 @@ void Console::draw() const {
         al_map_rgba(0, 0, 0, 96 * alphaMult)
     );
     drawTextLines(
-        text,
-        game.sysContent.fntBuiltin,
-        Point(8.0f),
-        Point(LARGE_FLOAT),
-        al_map_rgba(255, 255, 255, 128 * alphaMult),
+        text, game.sysContent.fntBuiltin,
+        Point(8.0f), Point(LARGE_FLOAT), mapAlpha(128 * alphaMult),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
     );
 }

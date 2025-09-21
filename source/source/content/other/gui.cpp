@@ -109,9 +109,7 @@ BulletGuiItem::BulletGuiItem(
  *
  * @param draw Information on how to draw.
  */
-void BulletGuiItem::defDrawCode(
-    const DrawInfo& draw
-) {
+void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
     float itemXStart = draw.center.x - draw.size.x * 0.5;
     float textXOffset =
         GUI::BULLET_RADIUS * 2 +
@@ -717,9 +715,7 @@ string GuiManager::getCurrentTooltip() const {
  * @param draw Information on how to draw.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool GuiManager::getItemDrawInfo(
-    GuiItem* item, DrawInfo* draw
-) const {
+bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
     if(item->ratioSize.x == 0.0f) return false;
     
@@ -1002,12 +998,11 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
 void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     //Check if the currently-focused item wants to consume the action.
     if(
-        focusedItem &&
-        focusedItem->isResponsive() &&
+        focusedItem && focusedItem->isResponsive() &&
         focusedItem->onMenuSNAction
     ) {
         if(focusedItem->onMenuSNAction(action.actionTypeId)) {
-            //If the function returned true, that means the following logic
+            //The function returning true means the following logic
             //about changing the current item focus needs to be skipped.
             return;
         }

@@ -1484,7 +1484,7 @@ sprites{
 	sleeping_02{
 		file=enemies/red_bulborb
 		file_pos=624.0000 0.0000
-		file_size=157.0000 103.0000
+		file_size=159.0000 103.0000
 		offset=14.0000 0.0000
 		hitboxes{
 			body{

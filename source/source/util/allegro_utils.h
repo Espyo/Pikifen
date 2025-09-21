@@ -55,10 +55,10 @@ enum FS_DELETE_RESULT {
 };
 
 
-//Returns a white color with the specified alpha.
+//Returns a white color with the specified alpha [0 - 255].
 #define mapAlpha(a) al_map_rgba(255, 255, 255, (a))
 
-//Returns a gray with all indexes the same as specified value;
+//Returns a gray with all indexes [0 - 255] the same as specified value;
 //it's fully opaque.
 #define mapGray(g) al_map_rgb((g), (g), (g))
 

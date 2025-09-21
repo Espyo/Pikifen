@@ -415,7 +415,7 @@ void PacksMenu::load() {
         string thumbPath =
             FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
         ALLEGRO_BITMAP* thumbBmp =
-            loadBmp(thumbPath, nullptr, true, false, false);
+            loadBmp(thumbPath, nullptr, false, false, false);
         packThumbs[pack] = thumbBmp;
     }
     

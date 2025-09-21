@@ -80,7 +80,7 @@ string c2s(const ALLEGRO_COLOR& c) {
  * @brief Returns the color that was provided, but with the alpha changed.
  *
  * @param c The color to change the alpha on.
- * @param a The new alpha, [0-255].
+ * @param a The new alpha, [0 - 255].
  * @return The new color.
  */
 ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a) {

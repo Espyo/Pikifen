@@ -1643,7 +1643,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
  * @param m Index of the mob.
  */
 void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
-    vector<PendingIntermobEvent> pendingIntermobEvents;
+    vector<PendingInterMobEvent> pendingInterMobEvents;
     MobState* stateBefore = mPtr->fsm.curState;
     
     size_t nMobs = mobs.all.size();
@@ -1693,7 +1693,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
             !m2Ptr->hasInvisibilityStatus
         ) {
             processMobReaches(
-                mPtr, m2Ptr, m, m2, dBetween, pendingIntermobEvents
+                mPtr, m2Ptr, m, m2, dBetween, pendingInterMobEvents
             );
         }
         
@@ -1703,7 +1703,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
         }
         
         processMobMiscInteractions(
-            mPtr, m2Ptr, m, m2, d, dBetween, pendingIntermobEvents
+            mPtr, m2Ptr, m, m2, d, dBetween, pendingInterMobEvents
         );
         
         if(game.perfMon) {
@@ -1717,8 +1717,8 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     
     //Check the pending inter-mob events.
     sort(
-        pendingIntermobEvents.begin(), pendingIntermobEvents.end(),
-    [mPtr] (PendingIntermobEvent e1, PendingIntermobEvent e2) -> bool {
+        pendingInterMobEvents.begin(), pendingInterMobEvents.end(),
+    [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
         return
         (
             e1.d.toFloat() -
@@ -1730,15 +1730,15 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     }
     );
     
-    for(size_t e = 0; e < pendingIntermobEvents.size(); e++) {
+    for(size_t e = 0; e < pendingInterMobEvents.size(); e++) {
         if(mPtr->fsm.curState != stateBefore) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
             break;
         }
-        if(!pendingIntermobEvents[e].eventPtr) continue;
-        pendingIntermobEvents[e].eventPtr->run(
-            mPtr, (void*) pendingIntermobEvents[e].mobPtr
+        if(!pendingInterMobEvents[e].eventPtr) continue;
+        pendingInterMobEvents[e].eventPtr->run(
+            mPtr, (void*) pendingInterMobEvents[e].mobPtr
         );
         
     }
@@ -1759,12 +1759,12 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
  * @param m2 Index of the mob to check against.
  * @param d Distance between the two's centers.
  * @param dBetween Distance between the two.
- * @param pendingIntermobEvents Vector of events to be processed.
+ * @param pendingInterMobEvents Vector of events to be processed.
  */
 void GameplayState::processMobMiscInteractions(
     Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
     const Distance& d, const Distance& dBetween,
-    vector<PendingIntermobEvent>& pendingIntermobEvents
+    vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Find a carriable mob to grab.
     MobEvent* ncoEvent =
@@ -1777,8 +1777,8 @@ void GameplayState::processMobMiscInteractions(
     ) {
         Pikmin* pikPtr = (Pikmin*) mPtr;
         if(dBetween <= pikPtr->getTaskRange()) {
-            pendingIntermobEvents.push_back(
-                PendingIntermobEvent(dBetween, ncoEvent, m2Ptr)
+            pendingInterMobEvents.push_back(
+                PendingInterMobEvent(dBetween, ncoEvent, m2Ptr)
             );
         }
     }
@@ -1797,8 +1797,8 @@ void GameplayState::processMobMiscInteractions(
             if(tooPtr->reserved && tooPtr->reserved != mPtr) {
                 //Another Pikmin is already going for it. Ignore it.
             } else {
-                pendingIntermobEvents.push_back(
-                    PendingIntermobEvent(dBetween, ntoEvent, m2Ptr)
+                pendingInterMobEvents.push_back(
+                    PendingInterMobEvent(dBetween, ntoEvent, m2Ptr)
                 );
             }
         }
@@ -1820,8 +1820,8 @@ void GameplayState::processMobMiscInteractions(
             if(!freeSpot) {
                 //There are no free spots here. Ignore it.
             } else {
-                pendingIntermobEvents.push_back(
-                    PendingIntermobEvent(dBetween, ngtoEvent, m2Ptr)
+                pendingInterMobEvents.push_back(
+                    PendingInterMobEvent(dBetween, ngtoEvent, m2Ptr)
                 );
             }
         }
@@ -1841,8 +1841,8 @@ void GameplayState::processMobMiscInteractions(
                 m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
                 dBetween <= game.options.misc.pikminBumpDist
             ) {
-                pendingIntermobEvents.push_back(
-                    PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)
+                pendingInterMobEvents.push_back(
+                    PendingInterMobEvent(dBetween, touchLeEv, m2Ptr)
                 );
             }
         }
@@ -1859,11 +1859,11 @@ void GameplayState::processMobMiscInteractions(
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
  * @param dBetween Distance between the two.
- * @param pendingIntermobEvents Vector of events to be processed.
+ * @param pendingInterMobEvents Vector of events to be processed.
  */
 void GameplayState::processMobReaches(
     Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance& dBetween,
-    vector<PendingIntermobEvent>& pendingIntermobEvents
+    vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Check reaches.
     MobEvent* obirEv =
@@ -1882,15 +1882,15 @@ void GameplayState::processMobReaches(
         
     if(isMobInReach(rPtr, dBetween, angleDiff)) {
         if(obirEv) {
-            pendingIntermobEvents.push_back(
-                PendingIntermobEvent(
+            pendingInterMobEvents.push_back(
+                PendingInterMobEvent(
                     dBetween, obirEv, m2Ptr
                 )
             );
         }
         if(opirEv && mPtr->canHunt(m2Ptr)) {
-            pendingIntermobEvents.push_back(
-                PendingIntermobEvent(
+            pendingInterMobEvents.push_back(
+                PendingInterMobEvent(
                     dBetween, opirEv, m2Ptr
                 )
             );

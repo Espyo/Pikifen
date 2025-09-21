@@ -484,7 +484,7 @@ private:
     void drawBackground(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools();
     void drawLeaderCursor(Player* player, const ALLEGRO_COLOR& color);
-    void drawIngameText(Player* player);
+    void drawInGameText(Player* player);
     void drawBigMsg();
     void drawLightingFilter(const Viewport& view);
     void drawGameplayMessageBox();
@@ -517,11 +517,11 @@ private:
     void processMobMiscInteractions(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
         const Distance& d, const Distance& dBetween,
-        vector<PendingIntermobEvent>& pendingIntermobEvents
+        vector<PendingInterMobEvent>& pendingInterMobEvents
     );
     void processMobReaches(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance& dBetween,
-        vector<PendingIntermobEvent>& pendingIntermobEvents
+        vector<PendingInterMobEvent>& pendingInterMobEvents
     );
     void processMobTouches(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d

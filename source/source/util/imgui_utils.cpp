@@ -22,9 +22,9 @@
  * @brief Adjusts the hue, saturation, and value of a given Dear ImGui color.
  *
  * @param color Color to edit.
- * @param hDelta Hue amount (0-1) to add or subtract.
- * @param sDelta Saturation amount (0-1) to add or subtract.
- * @param vDelta Value amount (0-1) to add or subtract.
+ * @param hDelta Hue amount [0 - 1] to add or subtract.
+ * @param sDelta Saturation amount [0 - 1] to add or subtract.
+ * @param vDelta Value amount [0 - 1] to add or subtract.
  */
 void ImGui::AdjustColorHSV(
     ImVec4& color, float hDelta, float sDelta, float vDelta

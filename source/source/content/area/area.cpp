@@ -2145,7 +2145,7 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * @param center Center coordinates.
  * @param size Width and height.
  * @param angle Angle it is rotated by.
- * @param alpha How opaque it is [0-255].
+ * @param alpha How opaque it is [0 - 255].
  * @param bmpName Internal name of the tree shadow texture's bitmap.
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.

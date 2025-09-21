@@ -1294,8 +1294,7 @@ void PauseMenu::drawRadar(
             scanLineY,
             center.x + size.x / 2.0f,
             scanLineY,
-            al_map_rgba(255, 255, 255, 8),
-            2.0f
+            mapAlpha(8), 2.0f
         );
         scanLineY += 16.0f;
     }
@@ -1306,8 +1305,7 @@ void PauseMenu::drawRadar(
             center.y - size.y / 2.0f,
             scanLineX,
             center.y + size.y / 2.0f,
-            al_map_rgba(255, 255, 255, 8),
-            2.0f
+            mapAlpha(8), 2.0f
         );
         scanLineX += 16.0f;
     }

@@ -286,10 +286,10 @@ struct MouseCursor {
     //Whether it is on the game window.
     bool onWindow = true;
     
-    //Current alpha (0-1).
+    //Current alpha [0 - 1].
     float alpha = 1.0f;
     
-    //Intended alpha (0-1).
+    //Intended alpha [0 - 1].
     float intendedAlpha = 1.0f;
     
     //Timer that keeps track of how long the cursor's been stopped for.

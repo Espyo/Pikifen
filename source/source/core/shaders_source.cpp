@@ -81,10 +81,10 @@ uniform vec4 surface_color;
 //Color of the caustic shines.
 uniform vec4 shine_color;
 
-//Noise values under this will have no shine (0-1).
+//Noise values under this will have no shine [0 - 1].
 uniform float shine_min_threshold;
 
-//Noise values above this will have full shine (0-1).
+//Noise values above this will have full shine [0 - 1].
 uniform float shine_max_threshold;
 
 //Opacity of the liquid.
@@ -330,8 +330,8 @@ void main() {
     //This puts our scale from 0 - `shine_amount`
     shine_scale -= max(0.0, min(shine_min_threshold, 1.0));
 
-    //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
-    //Multiply by the reciprocal to bring it back to 0 - 1.
+    //Now that we're below the threshold, multiply it to return it to a [0 - 1] scale.
+    //Multiply by the reciprocal to bring it back to [0 - 1].
     //Add a min value of 0.1 to prevent divide by 0 errors.
     shine_scale *= (1 / max(0.1, shine_min_threshold));
 

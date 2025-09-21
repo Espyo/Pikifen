@@ -272,19 +272,19 @@ struct Options {
     //Audio.
     struct {
     
-        //Ambiance sound volume (0 - 1).
+        //Ambiance sound volume [0 - 1].
         float ambianceSoundVol = AUDIO_D::AMBIANCE_SOUND_VOl;
         
-        //Gameplay sound effects volume (0 - 1).
+        //Gameplay sound effects volume [0 - 1].
         float gameplaySoundVol = AUDIO_D::GAMEPLAY_SOUND_VOL;
         
-        //Master sound volume (0 - 1).
+        //Master sound volume [0 - 1].
         float masterVol = AUDIO_D::MASTER_VOL;
         
-        //Music volume (0 - 1).
+        //Music volume [0 - 1].
         float musicVol = AUDIO_D::MUSIC_VOL;
         
-        //UI sound effects volume (0 - 1).
+        //UI sound effects volume [0 - 1].
         float uiSoundVol = AUDIO_D::UI_SOUND_VOL;
         
     } audio;

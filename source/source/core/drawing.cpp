@@ -648,7 +648,7 @@ void drawLoadingScreen(
         }
         al_draw_tinted_bitmap(
             game.loadingTextBmp,
-            al_map_rgba(255, 255, 255, 255.0 * opacity),
+            mapAlpha(255.0 * opacity),
             game.winW * 0.5 - textW * 0.5, textY, 0
         );
         
@@ -661,7 +661,7 @@ void drawLoadingScreen(
     
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
-            al_map_rgba(255, 255, 255, 255.0 * opacity),
+            mapAlpha(255.0 * opacity),
             game.winW * 0.5 - subtextW * 0.5, subtextY, 0
         );
         
@@ -680,28 +680,28 @@ void drawLoadingScreen(
         textVertexes[0].z = 0;
         textVertexes[0].u = 0;
         textVertexes[0].v = textH;
-        textVertexes[0].color = al_map_rgba(255, 255, 255, reflectionAlpha);
+        textVertexes[0].color = mapAlpha(reflectionAlpha);
         //Top-right vertex.
         textVertexes[1].x = textX + textW;
         textVertexes[1].y = textY + textH;
         textVertexes[1].z = 0;
         textVertexes[1].u = textW;
         textVertexes[1].v = textH;
-        textVertexes[1].color = al_map_rgba(255, 255, 255, reflectionAlpha);
+        textVertexes[1].color = mapAlpha(reflectionAlpha);
         //Bottom-right vertex.
         textVertexes[2].x = textX + textW;
         textVertexes[2].y = textY + textH + textReflectionH;
         textVertexes[2].z = 0;
         textVertexes[2].u = textW;
         textVertexes[2].v = textH - textReflectionH;
-        textVertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[2].color = COLOR_EMPTY_WHITE;
         //Bottom-left vertex.
         textVertexes[3].x = textX;
         textVertexes[3].y = textY + textH + textReflectionH;
         textVertexes[3].z = 0;
         textVertexes[3].u = 0;
         textVertexes[3].v = textH - textReflectionH;
-        textVertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[3].color = COLOR_EMPTY_WHITE;
         
         al_draw_prim(
             textVertexes, nullptr, game.loadingTextBmp,
@@ -721,30 +721,28 @@ void drawLoadingScreen(
         subtextVertexes[0].z = 0;
         subtextVertexes[0].u = 0;
         subtextVertexes[0].v = subtextH;
-        subtextVertexes[0].color =
-            al_map_rgba(255, 255, 255, reflectionAlpha);
+        subtextVertexes[0].color = mapAlpha(reflectionAlpha);
         //Top-right vertex.
         subtextVertexes[1].x = subtextX + subtextW;
         subtextVertexes[1].y = subtextY + subtextH;
         subtextVertexes[1].z = 0;
         subtextVertexes[1].u = subtextW;
         subtextVertexes[1].v = subtextH;
-        subtextVertexes[1].color =
-            al_map_rgba(255, 255, 255, reflectionAlpha);
+        subtextVertexes[1].color = mapAlpha(reflectionAlpha);
         //Bottom-right vertex.
         subtextVertexes[2].x = subtextX + subtextW;
         subtextVertexes[2].y = subtextY + subtextH + subtextReflectionH;
         subtextVertexes[2].z = 0;
         subtextVertexes[2].u = subtextW;
         subtextVertexes[2].v = subtextH - subtextReflectionH;
-        subtextVertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[2].color = COLOR_EMPTY_WHITE;
         //Bottom-left vertex.
         subtextVertexes[3].x = subtextX;
         subtextVertexes[3].y = subtextY + subtextH + subtextReflectionH;
         subtextVertexes[3].z = 0;
         subtextVertexes[3].u = 0;
         subtextVertexes[3].v = subtextH - subtextReflectionH;
-        subtextVertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[3].color = COLOR_EMPTY_WHITE;
         
         al_draw_prim(
             subtextVertexes, nullptr, game.loadingSubtextBmp,
@@ -781,7 +779,7 @@ void drawLoadingScreen(
             drawBitmap(
                 game.sysContent.bmpIcon, iconPos,
                 Point(-1, textBox.y),
-                0, al_map_rgba(255, 255, 255, opacity * 255.0)
+                0, mapAlpha(opacity * 255.0)
             );
         }
         
@@ -1125,7 +1123,7 @@ void drawPlayerInputSourceIcon(
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
- * @param opacity Draw the textures at this opacity, 0 - 1.
+ * @param opacity Draw the textures at this opacity [0 - 1].
  */
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float opacity

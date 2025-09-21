@@ -33,7 +33,7 @@ using std::vector;
  * @param frames List of frames.
  * @param loopFrame Loop frame index.
  * @param hitRate If this has an attack, this is the chance of hitting.
- * 0 - 100.
+ * [0 - 100].
  */
 Animation::Animation(
     const string& name, const vector<Frame>& frames,
