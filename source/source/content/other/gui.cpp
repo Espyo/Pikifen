@@ -126,14 +126,15 @@ void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
             draw.center.y
         ),
         Point(GUI::BULLET_RADIUS * 2),
-        0.0f, this->color
+        0.0f, tintColor(this->color, draw.tint)
     );
     float juicyGrowAmount = getJuiceValue();
     drawText(
         this->text, this->font,
         Point(itemXStart + textXOffset, draw.center.y),
         textSpace * GUI::STANDARD_CONTENT_SIZE,
-        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        tintColor(this->color, draw.tint),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0 + juicyGrowAmount)
     );
@@ -172,8 +173,8 @@ void ButtonGuiItem::defDrawCode(
 ) {
     drawButton(
         draw.center, draw.size,
-        this->text, this->font, this->color, focused,
-        getJuiceValue()
+        this->text, this->font, this->color,
+        focused, getJuiceValue(), draw.tint
     );
 }
 
@@ -247,7 +248,8 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
         this->text, this->font,
         Point(draw.center.x - draw.size.x * 0.45, draw.center.y),
         Point(draw.size.x * 0.95, draw.size.y) * GUI::STANDARD_CONTENT_SIZE,
-        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        tintColor(this->color, draw.tint),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0f + juicyGrowAmount)
     );
@@ -259,11 +261,13 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
         this->text.empty() ?
         draw.center :
         Point((draw.center.x + draw.size.x * 0.5) - 40, draw.center.y),
-        Point(32, -1)
+        Point(32, -1), 0.0f, draw.tint
     );
     
     ALLEGRO_COLOR boxTint =
-        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ?
+        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        draw.tint;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
@@ -1363,8 +1367,11 @@ void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
 void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpFrameBox,
-        COLOR_TRANSPARENT_WHITE
+        tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
     );
+    ALLEGRO_COLOR cOpaque = tintColor(mapAlpha(64), draw.tint);
+    ALLEGRO_COLOR cEmpty = COLOR_EMPTY_WHITE;
+
     if(offset.y > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
@@ -1373,8 +1380,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float y1 = draw.center.y - draw.size.y / 2.0f;
         float y2 = y1 + 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = cEmpty;
@@ -1414,8 +1419,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float y1 = draw.center.y + draw.size.y / 2.0f;
         float y2 = y1 - 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = cEmpty;
@@ -1453,8 +1456,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float x1 = draw.center.x - draw.size.x / 2.0f;
         float x2 = x1 + 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = x1;
         vertexes[0].y = draw.center.y - draw.size.y * 0.49;
         vertexes[0].color = cEmpty;
@@ -1492,8 +1493,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float x1 = draw.center.x + draw.size.x / 2.0f;
         float x2 = x1 - 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = x1;
         vertexes[0].y = draw.center.y - draw.size.y * 0.49;
         vertexes[0].color = cEmpty;
@@ -1649,8 +1648,8 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
                 x1, y1,
                 x1 + optionBoxesInterval * 0.5f, y1 + 4.0f,
                 this->curOptionIdx == o ?
-                al_map_rgba(255, 255, 255, 160) :
-                al_map_rgba(255, 255, 255, 64)
+                tintColor(mapAlpha(160), draw.tint) :
+                tintColor(mapAlpha(64), draw.tint)
             );
         }
     }
@@ -1663,8 +1662,9 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     ) {
         realArrowHighlight = arrowHighlight;
     }
-    ALLEGRO_COLOR arrowHighlightColor = al_map_rgb(87, 200, 208);
-    ALLEGRO_COLOR arrowRegularColor = COLOR_WHITE;
+    ALLEGRO_COLOR arrowHighlightColor =
+        tintColor(al_map_rgb(87, 200, 208), draw.tint);
+    ALLEGRO_COLOR arrowRegularColor = draw.tint;
     Point arrowHighlightScale = Point(1.4f);
     Point arrowRegularScale = Point(1.0f);
     
@@ -1710,15 +1710,16 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
         this->baseText + this->option,
         game.sysContent.fntStandard,
         Point(draw.center.x - draw.size.x * 0.40, draw.center.y),
-        textBox,
-        COLOR_WHITE,
+        textBox, draw.tint,
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0f + juicyGrowAmount)
     );
     
     ALLEGRO_COLOR boxTint =
-        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ?
+        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        draw.tint;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
@@ -1791,7 +1792,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            al_map_rgba(255, 255, 255, alpha)
+            tintColor(mapAlpha(alpha), draw.tint)
         );
         
         if(barH != 0.0f) {
@@ -1803,7 +1804,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
                     (draw.size.y * barH * 0.5f)
                 ),
                 Point(draw.size.x, (draw.size.y * barH)),
-                game.sysContent.bmpBubbleBox
+                game.sysContent.bmpBubbleBox, draw.tint
             );
         }
     } else {
@@ -1820,7 +1821,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            al_map_rgba(255, 255, 255, alpha)
+            tintColor(mapAlpha(alpha), draw.tint)
         );
         
         if(barW != 0.0f) {
@@ -1832,7 +1833,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
                     draw.center.y
                 ),
                 Point((draw.size.x * barW), draw.size.y),
-                game.sysContent.bmpBubbleBox
+                game.sysContent.bmpBubbleBox, draw.tint
             );
         }
     }
@@ -1983,7 +1984,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
                 ),
                 this->flags,
                 Point(draw.size.x, lineHeight),
-                Point(1.0f + juicyGrowAmount)
+                Point(1.0f + juicyGrowAmount), draw.tint
             );
         }
         
@@ -1991,7 +1992,8 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
     
         drawText(
             this->text, this->font, Point(textX, textY), draw.size,
-            this->color, this->flags, V_ALIGN_MODE_CENTER,
+            tintColor(this->color, draw.tint),
+            this->flags, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW,
             Point(1.0 + juicyGrowAmount)
         );
@@ -2030,8 +2032,8 @@ void TooltipGuiItem::defDrawCode(const DrawInfo& draw) {
     float juicyGrowAmount = getJuiceValue();
     drawText(
         curText, game.sysContent.fntStandard,
-        draw.center, draw.size,
-        COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        draw.center, draw.size, draw.tint,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(0.7f + juicyGrowAmount)
     );

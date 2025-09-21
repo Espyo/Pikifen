@@ -201,14 +201,14 @@ void OptionsMenu::addBindEntryItems(
             (const DrawInfo & draw) {
                 drawPlayerInputSourceIcon(
                     game.sysContent.fntSlim, aBinds[b].inputSource, false,
-                    draw.center, draw.size * 0.8f
+                    draw.center, draw.size * 0.8f, draw.tint
                 );
                 
                 drawButton(
                     draw.center, draw.size,
                     "", game.sysContent.fntStandard, COLOR_WHITE,
                     bindButton->focused,
-                    bindButton->getJuiceValue()
+                    bindButton->getJuiceValue(), draw.tint
                 );
             };
             bindButton->ratioCenter =
@@ -235,7 +235,7 @@ void OptionsMenu::addBindEntryItems(
                         draw.center, draw.size, "X",
                         game.sysContent.fntStandard, COLOR_WHITE,
                         removeBindButton->focused,
-                        removeBindButton->getJuiceValue()
+                        removeBindButton->getJuiceValue(), draw.tint
                     );
                 };
                 removeBindButton->ratioCenter =
@@ -279,7 +279,7 @@ void OptionsMenu::addBindEntryItems(
                     draw.center, draw.size, "",
                     game.sysContent.fntStandard, COLOR_WHITE,
                     bindButton->focused,
-                    bindButton->getJuiceValue()
+                    bindButton->getJuiceValue(), draw.tint
                 );
             };
             bindButton->ratioCenter =
@@ -380,7 +380,7 @@ void OptionsMenu::addBindEntryItems(
             [defInputSource] (const DrawInfo & draw) {
                 drawPlayerInputSourceIcon(
                     game.sysContent.fntSlim, defInputSource,
-                    false, draw.center, draw.size
+                    false, draw.center, draw.size, draw.tint
                 );
             };
             bindsListBox->addChild(defaultIcon);
@@ -403,7 +403,7 @@ void OptionsMenu::addBindEntryItems(
             draw.center.y,
             draw.center.x + draw.size.x / 2.0f,
             draw.center.y,
-            COLOR_TRANSPARENT_WHITE,
+            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint),
             1.0f
         );
     };
@@ -778,16 +778,15 @@ void OptionsMenu::initGuiControlBindsPage() {
  */
 void OptionsMenu::initGuiControlsPage() {
     //Menu items.
-    controlsGui.registerCoords("back",                       12,    5, 20,  6);
-    controlsGui.registerCoords("back_input",                  3,    7,  4,  4);
-    controlsGui.registerCoords("header",                     50,   10, 50,  6);
-    controlsGui.registerCoords("normal_binds",               50,   25, 70, 10);
-    controlsGui.registerCoords("special_binds",              50, 36.5, 58,  9);
-    controlsGui.registerCoords("leader_cursor_mouse",        50, 52.5, 70, 10);
-    controlsGui.registerCoords("leader_cursor_speed",        50,   65, 70, 10);
-    controlsGui.registerCoords("leader_cursor_speed_strike", 50,   65, 70, 10);
-    controlsGui.registerCoords("auto_throw",                 50, 77.5, 70, 10);
-    controlsGui.registerCoords("tooltip",                    50,   96, 96,  4);
+    controlsGui.registerCoords("back",                12,    5, 20,  6);
+    controlsGui.registerCoords("back_input",           3,    7,  4,  4);
+    controlsGui.registerCoords("header",              50,   10, 50,  6);
+    controlsGui.registerCoords("normal_binds",        50,   25, 70, 10);
+    controlsGui.registerCoords("special_binds",       50, 36.5, 58,  9);
+    controlsGui.registerCoords("leader_cursor_mouse", 50, 52.5, 70, 10);
+    controlsGui.registerCoords("leader_cursor_speed", 50,   65, 70, 10);
+    controlsGui.registerCoords("auto_throw",          50, 77.5, 70, 10);
+    controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
     controlsGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         getChildByName("positions")
@@ -884,25 +883,19 @@ void OptionsMenu::initGuiControlsPage() {
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
     "Leader cursor speed, when controlling without buttons/keys."
     );
+    leaderCursorSpeedPicker->onDraw =
+    [this] (const DrawInfo & draw) {
+        DrawInfo newDraw = draw;
+        if(game.options.controls.mouseMovesLeaderCursor[0]) {
+            newDraw.tint.a = 0.33f;
+        }
+        leaderCursorSpeedPicker->defDrawCode(newDraw);
+    };
     leaderCursorSpeedPicker->valueToString = [] (float v) {
         return f2s(v);
     };
     leaderCursorSpeedPicker->init();
     controlsGui.addItem(leaderCursorSpeedPicker, "leader_cursor_speed");
-    
-    //Leader cursor speed strikethrough item.
-    leaderCursorSpeedStrike = new GuiItem();
-    leaderCursorSpeedStrike->onDraw =
-    [] (const DrawInfo & draw) {
-        al_draw_line(
-            draw.center.x - draw.size.x / 2.0f,
-            draw.center.y + draw.size.y * 0.25f,
-            draw.center.x + draw.size.x / 2.0f,
-            draw.center.y - draw.size.y * 0.25f,
-            mapGray(128), 8.0f
-        );
-    };
-    controlsGui.addItem(leaderCursorSpeedStrike, "leader_cursor_speed_strike");
     
     //Auto-throw mode.
     autoThrowPicker =
@@ -1300,13 +1293,15 @@ void OptionsMenu::initGuiTopPage() {
     controlsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft
+            MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             controlsButton->text, controlsButton->font,
-            controlsButton->color, controlsButton->focused,
-            controlsButton->getJuiceValue()
+            controlsButton->color,
+            controlsButton->focused,
+            controlsButton->getJuiceValue(), draw.tint
         );
     };
     controlsButton->onActivate =
@@ -1326,13 +1321,15 @@ void OptionsMenu::initGuiTopPage() {
     graphicsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft
+            MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             graphicsButton->text, graphicsButton->font,
-            graphicsButton->color, graphicsButton->focused,
-            graphicsButton->getJuiceValue()
+            graphicsButton->color,
+            graphicsButton->focused,
+            graphicsButton->getJuiceValue(), draw.tint
         );
     };
     graphicsButton->onActivate =
@@ -1352,13 +1349,13 @@ void OptionsMenu::initGuiTopPage() {
     audioButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft
+            MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             audioButton->text, audioButton->font,
             audioButton->color, audioButton->focused,
-            audioButton->getJuiceValue()
+            audioButton->getJuiceValue(), draw.tint
         );
     };
     audioButton->onActivate =
@@ -1378,13 +1375,13 @@ void OptionsMenu::initGuiTopPage() {
     packsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft
+            MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             packsButton->text, packsButton->font,
             packsButton->color, packsButton->focused,
-            packsButton->getJuiceValue()
+            packsButton->getJuiceValue(), draw.tint
         );
     };
     packsButton->onActivate =
@@ -1414,13 +1411,14 @@ void OptionsMenu::initGuiTopPage() {
     miscButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft
+            MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             miscButton->text, miscButton->font,
             miscButton->color, miscButton->focused,
-            miscButton->getJuiceValue()
+            miscButton->getJuiceValue(), draw.tint
         );
     };
     miscButton->onActivate =
@@ -1704,6 +1702,4 @@ void OptionsMenu::updateControlsPage() {
         !game.options.controls.mouseMovesLeaderCursor[0];
     leaderCursorSpeedPicker->focusable =
         !game.options.controls.mouseMovesLeaderCursor[0];
-    leaderCursorSpeedStrike->visible =
-        game.options.controls.mouseMovesLeaderCursor[0];
 }

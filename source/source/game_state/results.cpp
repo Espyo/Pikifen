@@ -395,7 +395,7 @@ void Results::load() {
                 game.sysContent.bmpMissionClear :
                 game.sysContent.bmpMissionFail,
                 draw.center, draw.size,
-                true
+                true, 0.0f, draw.tint
             );
         };
         gui.addItem(goalStampItem, "goal_stamp");
@@ -500,7 +500,7 @@ void Results::load() {
                 break;
             }
             }
-            drawBitmapInBox(bmp, draw.center, draw.size, true);
+            drawBitmapInBox(bmp, draw.center, draw.size, true, 0.0f, draw.tint);
         };
         gui.addItem(medalItem, "medal");
         
@@ -594,7 +594,7 @@ void Results::load() {
         );
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            COLOR_TRANSPARENT_WHITE
+            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
     populateStatsList(oldRecord);

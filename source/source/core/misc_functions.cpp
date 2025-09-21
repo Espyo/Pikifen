@@ -826,7 +826,7 @@ void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
         );
     };
     gui->addItem(backInput, itemName);

@@ -134,7 +134,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
         );
     };
     gui.addItem(okInput, "ok_input");
@@ -151,7 +151,7 @@ OnionMenu::OnionMenu(
         
         drawFilledRoundedRectangle(
             draw.center, draw.size, game.winW * 0.01,
-            al_map_rgba(188, 230, 230, 128)
+            tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
         );
         
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
@@ -161,7 +161,8 @@ OnionMenu::OnionMenu(
                 interpolateColor(
                     redIt->second,
                     0, ONION_MENU::RED_TEXT_DURATION,
-                    color, al_map_rgb(224, 0, 0)
+                    tintColor(color, draw.tint),
+                    tintColor(al_map_rgb(224, 0, 0), draw.tint)
                 );
         }
         
@@ -193,7 +194,8 @@ OnionMenu::OnionMenu(
             changeTen ?
             game.sysContent.bmpOnionMenu10 :
             game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
+            0.0f, draw.tint
         );
         changeTenButton->defDrawCode(draw);
     };
@@ -221,7 +223,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
         );
     };
     gui.addItem(changeTenInput, "change_ten_input");
@@ -242,7 +244,8 @@ OnionMenu::OnionMenu(
             selectAll ?
             game.sysContent.bmpOnionMenuAll :
             game.sysContent.bmpOnionMenuSingle,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
+            0.0f, draw.tint
         );
         selectAllButton->defDrawCode(draw);
     };
@@ -272,7 +275,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
         );
     };
     selectAllInput->visible = types.size() > 1;
@@ -301,7 +304,8 @@ OnionMenu::OnionMenu(
                 float juicyGrowAmount = onionIcon->getJuiceValue();
                 drawBitmapInBox(
                     tPtr->pikType->bmpOnionIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true
+                    (draw.size * 0.8f) + juicyGrowAmount, true,
+                    0.0f, draw.tint
                 );
             }
         };
@@ -319,7 +323,7 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                onionButton->focused
+                onionButton->focused, 0.0f, draw.tint
             );
         };
         onionButton->onActivate =
@@ -355,7 +359,7 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRectangle(
                 draw.center, draw.size, game.winW * 0.01,
-                al_map_rgba(188, 230, 230, 128)
+                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
@@ -365,7 +369,7 @@ OnionMenu::OnionMenu(
                     interpolateColor(
                         redIt->second,
                         0, ONION_MENU::RED_TEXT_DURATION,
-                        color, al_map_rgb(224, 0, 0)
+                        color, tintColor(al_map_rgb(224, 0, 0), draw.tint)
                     );
             }
             
@@ -391,7 +395,7 @@ OnionMenu::OnionMenu(
             if(tPtr->pikType->bmpIcon) {
                 drawBitmapInBox(
                     tPtr->pikType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true
+                    (draw.size * 0.8f) + juicyGrowAmount, true, 0.0f, draw.tint
                 );
             }
         };
@@ -409,7 +413,7 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                groupButton->focused
+                groupButton->focused, 0.0f, draw.tint
             );
         };
         groupButton->onActivate =
@@ -445,10 +449,10 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRectangle(
                 draw.center, draw.size, game.winW * 0.01,
-                al_map_rgba(188, 230, 230, 128)
+                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
             );
             
-            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            ALLEGRO_COLOR color = draw.tint;
             const auto& redIt = this->redItems.find(groupAmountText);
             if(redIt != this->redItems.end()) {
                 color =
@@ -501,7 +505,7 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            onionAllButton->focused
+            onionAllButton->focused, 0.0f, draw.tint
         );
     };
     onionAllButton->onActivate =
@@ -533,7 +537,7 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            groupAllButton->focused
+            groupAllButton->focused, 0.0f, draw.tint
         );
     };
     groupAllButton->onActivate =

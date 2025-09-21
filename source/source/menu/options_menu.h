@@ -263,9 +263,6 @@ private:
     //Leader cursor speed picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorSpeedPicker = nullptr;
     
-    //Leader cursor speed strikethrough item.
-    GuiItem* leaderCursorSpeedStrike = nullptr;
-    
     //Leader cursor camera weight picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
     

@@ -235,13 +235,13 @@ void TitleScreen::initGuiMainPage() {
     playButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_PLAY, draw.center, draw.size, playIconLeft
+            MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             playButton->text, playButton->font,
             playButton->color, playButton->focused,
-            playButton->getJuiceValue()
+            playButton->getJuiceValue(), draw.tint
         );
     };
     playButton->onActivate =
@@ -263,13 +263,13 @@ void TitleScreen::initGuiMainPage() {
     makeButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft
+            MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             makeButton->text, makeButton->font,
             makeButton->color, makeButton->focused,
-            makeButton->getJuiceValue()
+            makeButton->getJuiceValue(), draw.tint
         );
     };
     makeButton->onActivate =
@@ -289,13 +289,13 @@ void TitleScreen::initGuiMainPage() {
     helpButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_HELP, draw.center, draw.size, helpIconLeft
+            MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             helpButton->text, helpButton->font,
             helpButton->color, helpButton->focused,
-            helpButton->getJuiceValue()
+            helpButton->getJuiceValue(), draw.tint
         );
     };
     helpButton->onActivate =
@@ -318,13 +318,14 @@ void TitleScreen::initGuiMainPage() {
     optionsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft
+            MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             optionsButton->text, optionsButton->font,
             optionsButton->color, optionsButton->focused,
-            optionsButton->getJuiceValue()
+            optionsButton->getJuiceValue(), draw.tint
         );
     };
     optionsButton->onActivate =
@@ -349,13 +350,14 @@ void TitleScreen::initGuiMainPage() {
     statsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft
+            MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             statsButton->text, statsButton->font,
             statsButton->color, statsButton->focused,
-            statsButton->getJuiceValue()
+            statsButton->getJuiceValue(), draw.tint
         );
     };
     statsButton->onActivate =
@@ -380,13 +382,14 @@ void TitleScreen::initGuiMainPage() {
     discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true
+            game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true,
+            0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             discordButton->text, discordButton->font,
             discordButton->color, discordButton->focused,
-            discordButton->getJuiceValue()
+            discordButton->getJuiceValue(), draw.tint
         );
     };
     discordButton->onActivate =
@@ -407,13 +410,14 @@ void TitleScreen::initGuiMainPage() {
     githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
-            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true
+            game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true,
+            0.0f, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             githubButton->text, githubButton->font,
             githubButton->color, githubButton->focused,
-            githubButton->getJuiceValue()
+            githubButton->getJuiceValue(), draw.tint
         );
     };
     githubButton->onActivate =
@@ -430,15 +434,16 @@ void TitleScreen::initGuiMainPage() {
     mainGui.backItem->onDraw =
     [this, quitIconLeft] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft
+            MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
         );
+        ButtonGuiItem* backButtonPtr = (ButtonGuiItem*) mainGui.backItem;
         drawButton(
             draw.center, draw.size,
-            ((ButtonGuiItem*) mainGui.backItem)->text,
-            ((ButtonGuiItem*) mainGui.backItem)->font,
-            ((ButtonGuiItem*) mainGui.backItem)->color,
+            backButtonPtr->text,
+            backButtonPtr->font,
+            backButtonPtr->color,
             mainGui.backItem->focused,
-            mainGui.backItem->getJuiceValue()
+            mainGui.backItem->getJuiceValue(), draw.tint
         );
     };
     mainGui.backItem->onActivate =
@@ -507,13 +512,14 @@ void TitleScreen::initGuiMakePage() {
     animEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft
+            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             animEdButton->text, animEdButton->font,
             animEdButton->color, animEdButton->focused,
-            animEdButton->getJuiceValue()
+            animEdButton->getJuiceValue(), draw.tint
         );
     };
     animEdButton->onActivate =
@@ -532,13 +538,14 @@ void TitleScreen::initGuiMakePage() {
     areaEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft
+            MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             areaEdButton->text, areaEdButton->font,
             areaEdButton->color, areaEdButton->focused,
-            areaEdButton->getJuiceValue()
+            areaEdButton->getJuiceValue(), draw.tint
         );
     };
     areaEdButton->onActivate =
@@ -558,13 +565,13 @@ void TitleScreen::initGuiMakePage() {
     [ = ](const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
-            particleEditorIconLeft
+            particleEditorIconLeft, draw.tint
         );
         drawButton(
             draw.center, draw.size,
             partEdButton->text, partEdButton->font,
             partEdButton->color, partEdButton->focused,
-            partEdButton->getJuiceValue()
+            partEdButton->getJuiceValue(), draw.tint
         );
     };
     partEdButton->onActivate =
@@ -583,13 +590,14 @@ void TitleScreen::initGuiMakePage() {
     guiEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft
+            MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             guiEdButton->text, guiEdButton->font,
             guiEdButton->color, guiEdButton->focused,
-            guiEdButton->getJuiceValue()
+            guiEdButton->getJuiceValue(), draw.tint
         );
     };
     guiEdButton->onActivate =
@@ -680,13 +688,14 @@ void TitleScreen::initGuiPlayPage() {
     simpleButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft
+            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             simpleButton->text, simpleButton->font,
             simpleButton->color, simpleButton->focused,
-            simpleButton->getJuiceValue()
+            simpleButton->getJuiceValue(), draw.tint
         );
     };
     simpleButton->onActivate =
@@ -709,13 +718,14 @@ void TitleScreen::initGuiPlayPage() {
     missionButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft
+            MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,
+            draw.tint
         );
         drawButton(
             draw.center, draw.size,
             missionButton->text, missionButton->font,
             missionButton->color, missionButton->focused,
-            missionButton->getJuiceValue()
+            missionButton->getJuiceValue(), draw.tint
         );
     };
     missionButton->onActivate =

@@ -143,6 +143,9 @@ public:
         //Pixel dimensions.
         Point size;
         
+        //Tint color.
+        ALLEGRO_COLOR tint = COLOR_WHITE;
+        
     };
     
     

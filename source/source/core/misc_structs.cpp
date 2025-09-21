@@ -880,7 +880,7 @@ void Notification::draw(const Viewport& view) const {
                 DRAWING::NOTIFICATION_INPUT_SIZE,
                 DRAWING::NOTIFICATION_INPUT_SIZE
             ),
-            visibility * 255
+            mapAlpha(visibility * 255)
         );
     }
     
