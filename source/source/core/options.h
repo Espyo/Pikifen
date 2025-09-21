@@ -71,8 +71,6 @@ extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
-extern const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS];
-extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
@@ -113,6 +111,8 @@ extern const AreaEditor::VIEW_MODE VIEW_MODE;
 namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
 extern const float LEADER_CURSOR_SPEED;
+extern const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS];
+extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
 }
 
 
@@ -196,22 +196,6 @@ struct Options {
         
         //Enables or disables mipmaps.
         bool mipmapsEnabled = ADVANCED_D::MIPMAPS_ENABLED;
-        
-        //For each player, does the mouse move their leader's cursor?
-        bool mouseMovesCursor[MAX_PLAYERS] = {
-            ADVANCED_D::MOUSE_MOVES_CURSOR[0],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[1],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[2],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[3]
-        };
-        
-        //For each player, does the mouse move their leader?
-        bool mouseMovesLeader[MAX_PLAYERS] = {
-            ADVANCED_D::MOUSE_MOVES_LEADER[0],
-            ADVANCED_D::MOUSE_MOVES_LEADER[1],
-            ADVANCED_D::MOUSE_MOVES_LEADER[2],
-            ADVANCED_D::MOUSE_MOVES_LEADER[3]
-        };
         
         //True to use interpolation when graphics are scaled up/down.
         bool smoothScaling = ADVANCED_D::SMOOTH_SCALING;
@@ -313,6 +297,22 @@ struct Options {
         
         //Leader cursor speed, in pixels per second. N/A when using the mouse.
         float leaderCursorSpeed = CONTROLS_D::LEADER_CURSOR_SPEED;
+        
+        //For each player, does the mouse move their leader's cursor?
+        bool mouseMovesLeaderCursor[MAX_PLAYERS] = {
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[0],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[1],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[2],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[3]
+        };
+        
+        //For each player, does the mouse move their leader?
+        bool mouseMovesLeader[MAX_PLAYERS] = {
+            CONTROLS_D::MOUSE_MOVES_LEADER[0],
+            CONTROLS_D::MOUSE_MOVES_LEADER[1],
+            CONTROLS_D::MOUSE_MOVES_LEADER[2],
+            CONTROLS_D::MOUSE_MOVES_LEADER[3]
+        };
         
     } controls;
     

@@ -251,42 +251,48 @@ private:
     //Information about the current pack management menu, if any.
     PacksMenu* packsMenu = nullptr;
     
-    //Auto-throw picker widget.
+    //Auto-throw picker item.
     OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* autoThrowPicker = nullptr;
     
-    //Resolution picker widget.
+    //Resolution picker item.
     OptionsMenuPickerGuiItem<std::pair<int, int> >* resolutionPicker = nullptr;
     
-    //Leader cursor speed picker widget.
+    //Leader cursor with mouse item.
+    CheckGuiItem* leaderCursorMouseCheck = nullptr;
+    
+    //Leader cursor speed picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorSpeedPicker = nullptr;
     
-    //Leader cursor camera weight picker widget.
+    //Leader cursor speed strikethrough item.
+    GuiItem* leaderCursorSpeedStrike = nullptr;
+    
+    //Leader cursor camera weight picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
     
-    //Leaving confirmation picker widget.
+    //Leaving confirmation picker item.
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*
     leavingConfirmationPicker = nullptr;
     
-    //Pikmin bump picker widget.
+    //Pikmin bump picker item.
     OptionsMenuPickerGuiItem<float>*
     pikminBumpPicker = nullptr;
     
-    //Master volume picker widget.
+    //Master volume picker item.
     OptionsMenuPickerGuiItem<float>* masterVolPicker = nullptr;
     
-    //Gameplay sound effects volume picker widget.
+    //Gameplay sound effects volume picker item.
     OptionsMenuPickerGuiItem<float>* gameplaySoundVolPicker = nullptr;
     
-    //Music volume picker widget.
+    //Music volume picker item.
     OptionsMenuPickerGuiItem<float>* musicVolPicker = nullptr;
     
-    //Ambiance sound effects volume picker widget.
+    //Ambiance sound effects volume picker item.
     OptionsMenuPickerGuiItem<float>* ambianceSoundVolPicker = nullptr;
     
-    //UI sound effects volume picker widget.
+    //UI sound effects volume picker item.
     OptionsMenuPickerGuiItem<float>* uiSoundVolPicker = nullptr;
     
-    //Restart warning text widget.
+    //Restart warning text item.
     TextGuiItem* warningText = nullptr;
     
     //Type of control binds to show.
@@ -322,6 +328,10 @@ private:
     
     //--- Function declarations ---
     
+    void addBindEntryItems(
+        const PlayerActionType& actionType, bool addSectionHeader,
+        GuiItem** itemToFocus
+    );
     void initGuiAudioPage();
     void initGuiControlsPage();
     void initGuiControlBindsPage();
@@ -337,5 +347,6 @@ private:
     );
     void populateBinds();
     void restoreDefaultBinds(const PLAYER_ACTION_TYPE actionType);
+    void updateControlsPage();
     
 };

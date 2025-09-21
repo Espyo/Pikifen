@@ -57,6 +57,361 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
 }
 
 
+
+/**
+ * @brief Adds the GUI items for a control bind entry in the control binds menu.
+ *
+ * @param actionType Relevant action type.
+ * @param addSectionHeader If true, add items that indicate the start of
+ * a new section.
+ * @param itemToFocus If one of the GUI items should be the focused item,
+ * specify it here.
+ */
+void OptionsMenu::addBindEntryItems(
+    const PlayerActionType& actionType, bool addSectionHeader,
+    GuiItem** itemToFocus
+) {
+    string overrideNote;
+    if(game.options.controls.mouseMovesLeaderCursor[0]) {
+        if(
+            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN ||
+            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT ||
+            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT ||
+            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_UP
+        ) {
+            overrideNote = "Mouse cursor";
+        }
+    }
+    
+    float actionY =
+        bindsListBox->getChildrenSpan() +
+        OPTIONS_MENU::BIND_BUTTON_PADDING;
+        
+    if(addSectionHeader) {
+        //Section header text.
+        string sectionName;
+        switch(actionType.category) {
+        case PLAYER_ACTION_CAT_NONE: {
+            break;
+        } case PLAYER_ACTION_CAT_MAIN: {
+            sectionName = "Main";
+            break;
+        } case PLAYER_ACTION_CAT_MENUS: {
+            sectionName = "Menus";
+            break;
+        } case PLAYER_ACTION_CAT_ADVANCED: {
+            sectionName = "Advanced";
+            break;
+        } case PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS: {
+            sectionName = "General maker tools";
+            break;
+        } case PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS: {
+            sectionName = "Gameplay maker tools";
+            break;
+        } case PLAYER_ACTION_CAT_SYSTEM: {
+            sectionName = "System";
+            break;
+        }
+        }
+        TextGuiItem* sectionText =
+            new TextGuiItem(sectionName, game.sysContent.fntAreaName);
+        sectionText->ratioCenter =
+            Point(
+                0.50f,
+                actionY + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
+            );
+        sectionText->ratioSize =
+            Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+        bindsListBox->addChild(sectionText);
+        bindsGui.addItem(sectionText);
+        
+        actionY =
+            bindsListBox->getChildrenSpan() +
+            OPTIONS_MENU::BIND_BUTTON_PADDING;
+    }
+    
+    float curY = actionY + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
+    
+    //Action type name bullet.
+    BulletGuiItem* nameBullet =
+        new BulletGuiItem(actionType.name, game.sysContent.fntStandard);
+    nameBullet->ratioCenter =
+        Point(0.22f, curY);
+    nameBullet->ratioSize =
+        Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+    nameBullet->onGetTooltip =
+    [actionType] () { return actionType.description; };
+    bindsListBox->addChild(nameBullet);
+    bindsGui.addItem(nameBullet);
+    
+    //Note that overrides the other items.
+    if(!overrideNote.empty()) {
+        TextGuiItem* overrideNoteText =
+            new TextGuiItem(overrideNote, game.sysContent.fntSlim);
+        overrideNoteText->ratioCenter =
+            Point(0.63f, curY);
+        overrideNoteText->ratioSize =
+            Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+        bindsListBox->addChild(overrideNoteText);
+        bindsGui.addItem(overrideNoteText);
+        
+    } else {
+    
+        //More button.
+        ButtonGuiItem* moreButton =
+            new ButtonGuiItem("...", game.sysContent.fntStandard);
+        moreButton->onActivate =
+        [this, actionType] (const Point&) {
+            if(showingBindsMore && actionType.id == curActionType) {
+                showingBindsMore = false;
+            } else {
+                curActionType = actionType.id;
+                showingBindsMore = true;
+            }
+            mustPopulateBinds = true;
+        };
+        moreButton->ratioCenter =
+            Point(0.92f, curY);
+        moreButton->ratioSize =
+            Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+        string tooltip =
+            (showingBindsMore && actionType.id == curActionType) ?
+            "Hide options." :
+            "Show information and options for this action.";
+        moreButton->onGetTooltip =
+        [tooltip] () { return tooltip; };
+        bindsListBox->addChild(moreButton);
+        bindsGui.addItem(moreButton);
+        if(actionType.id == curActionType) {
+            *itemToFocus = moreButton;
+        }
+        
+        vector<Inpution::Bind> aBinds = bindsPerActionType[actionType.id];
+        for(size_t b = 0; b < aBinds.size(); b++) {
+        
+            //Change bind button.
+            ButtonGuiItem* bindButton =
+                new ButtonGuiItem("", game.sysContent.fntStandard);
+            bindButton->onActivate =
+            [this, actionType, b] (const Point&) {
+                chooseInput(actionType.id, b);
+            };
+            bindButton->onDraw =
+                [this, b, aBinds, bindButton]
+            (const DrawInfo & draw) {
+                drawPlayerInputSourceIcon(
+                    game.sysContent.fntSlim, aBinds[b].inputSource, false,
+                    draw.center, draw.size * 0.8f
+                );
+                
+                drawButton(
+                    draw.center, draw.size,
+                    "", game.sysContent.fntStandard, COLOR_WHITE,
+                    bindButton->focused,
+                    bindButton->getJuiceValue()
+                );
+            };
+            bindButton->ratioCenter =
+                Point(0.63f, curY);
+            bindButton->ratioSize =
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            bindButton->onGetTooltip =
+            [] () { return "Change the input for this action."; };
+            bindsListBox->addChild(bindButton);
+            bindsGui.addItem(bindButton);
+            
+            if(showingBindsMore && actionType.id == curActionType) {
+                //Remove bind button.
+                ButtonGuiItem* removeBindButton =
+                    new ButtonGuiItem("", game.sysContent.fntStandard);
+                removeBindButton->onActivate =
+                [this, actionType, b] (const Point&) {
+                    deleteBind(actionType.id, b);
+                };
+                removeBindButton->onDraw =
+                    [this, removeBindButton]
+                (const DrawInfo & draw) {
+                    drawButton(
+                        draw.center, draw.size, "X",
+                        game.sysContent.fntStandard, COLOR_WHITE,
+                        removeBindButton->focused,
+                        removeBindButton->getJuiceValue()
+                    );
+                };
+                removeBindButton->ratioCenter =
+                    Point(0.85f, curY);
+                removeBindButton->ratioSize =
+                    Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                removeBindButton->onGetTooltip =
+                [] () { return "Remove this input from this action."; };
+                bindsListBox->addChild(removeBindButton);
+                bindsGui.addItem(removeBindButton);
+                removeBindButton->startJuiceAnimation(
+                    GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                );
+            }
+            
+            if(actionType.id == curActionType) {
+                bindButton->startJuiceAnimation(
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                );
+            }
+            
+            curY +=
+                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
+                OPTIONS_MENU::BIND_BUTTON_PADDING;
+                
+        }
+        
+        if(aBinds.empty()) {
+        
+            //Add first bind button.
+            ButtonGuiItem* bindButton =
+                new ButtonGuiItem("", game.sysContent.fntStandard);
+            bindButton->onActivate =
+            [this, actionType] (const Point&) {
+                chooseInput(actionType.id, 0);
+            };
+            bindButton->onDraw =
+                [this, bindButton]
+            (const DrawInfo & draw) {
+                drawButton(
+                    draw.center, draw.size, "",
+                    game.sysContent.fntStandard, COLOR_WHITE,
+                    bindButton->focused,
+                    bindButton->getJuiceValue()
+                );
+            };
+            bindButton->ratioCenter =
+                Point(0.63f, curY);
+            bindButton->ratioSize =
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            bindButton->onGetTooltip =
+            [] () { return "Choose an input for this action."; };
+            bindsListBox->addChild(bindButton);
+            bindsGui.addItem(bindButton);
+            bindButton->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
+            
+            curY +=
+                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
+                OPTIONS_MENU::BIND_BUTTON_PADDING;
+                
+        } else if(showingBindsMore && actionType.id == curActionType) {
+        
+            //Add button.
+            ButtonGuiItem* addButton =
+                new ButtonGuiItem("Add...", game.sysContent.fntStandard);
+            addButton->ratioCenter =
+                Point(0.63f, curY);
+            addButton->ratioSize =
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            addButton->onActivate =
+            [this, actionType, aBinds] (const Point&) {
+                chooseInput(actionType.id, aBinds.size());
+            };
+            addButton->onGetTooltip =
+            [] () { return "Add another input to this action."; };
+            bindsListBox->addChild(addButton);
+            bindsGui.addItem(addButton);
+            addButton->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+            );
+            
+            curY +=
+                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
+                OPTIONS_MENU::BIND_BUTTON_PADDING;
+                
+        }
+        
+        if(showingBindsMore && actionType.id == curActionType) {
+        
+            //Restore default button.
+            ButtonGuiItem* restoreButton =
+                new ButtonGuiItem(
+                "Restore defaults", game.sysContent.fntStandard
+            );
+            restoreButton->ratioCenter =
+                Point(0.63f, curY);
+            restoreButton->ratioSize =
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            restoreButton->onActivate =
+            [this, actionType] (const Point&) {
+                restoreDefaultBinds(actionType.id);
+            };
+            restoreButton->onGetTooltip =
+            [] () { return "Restore this action's default inputs."; };
+            bindsListBox->addChild(restoreButton);
+            bindsGui.addItem(restoreButton);
+            restoreButton->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
+            
+            curY +=
+                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
+                OPTIONS_MENU::BIND_BUTTON_PADDING;
+                
+            //Default label.
+            TextGuiItem* defaultLabelText =
+                new TextGuiItem(
+                "Default:", game.sysContent.fntStandard,
+                COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            );
+            defaultLabelText->ratioCenter =
+                Point(0.63f, curY);
+            defaultLabelText->ratioSize =
+                Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            bindsListBox->addChild(defaultLabelText);
+            bindsGui.addItem(defaultLabelText);
+            defaultLabelText->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
+            
+            //Default icon.
+            Inpution::InputSource defInputSource =
+                game.controls.strToInputSource(actionType.defaultBindStr);
+            GuiItem* defaultIcon = new GuiItem();
+            defaultIcon->ratioCenter =
+                Point(0.68f, curY);
+            defaultIcon->ratioSize =
+                Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            defaultIcon->onDraw =
+            [defInputSource] (const DrawInfo & draw) {
+                drawPlayerInputSourceIcon(
+                    game.sysContent.fntSlim, defInputSource,
+                    false, draw.center, draw.size
+                );
+            };
+            bindsListBox->addChild(defaultIcon);
+            bindsGui.addItem(defaultIcon);
+            
+        }
+    }
+    
+    //Spacer line.
+    GuiItem* line = new GuiItem();
+    line->ratioCenter =
+        Point(
+            0.50f, bindsListBox->getChildrenSpan() + 0.02f
+        );
+    line->ratioSize = Point(0.90f, 0.02f);
+    line->onDraw =
+    [] (const DrawInfo & draw) {
+        al_draw_line(
+            draw.center.x - draw.size.x / 2.0f,
+            draw.center.y,
+            draw.center.x + draw.size.x / 2.0f,
+            draw.center.y,
+            COLOR_TRANSPARENT_WHITE,
+            1.0f
+        );
+    };
+    bindsListBox->addChild(line);
+    bindsGui.addItem(line);
+}
+
+
 /**
  * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
@@ -423,14 +778,16 @@ void OptionsMenu::initGuiControlBindsPage() {
  */
 void OptionsMenu::initGuiControlsPage() {
     //Menu items.
-    controlsGui.registerCoords("back",                12,    5, 20,  6);
-    controlsGui.registerCoords("back_input",           3,    7,  4,  4);
-    controlsGui.registerCoords("header",              50,   10, 50,  6);
-    controlsGui.registerCoords("normal_binds",        50,   25, 70, 10);
-    controlsGui.registerCoords("special_binds",       50, 36.5, 58,  9);
-    controlsGui.registerCoords("leader_cursor_speed", 50,   54, 70, 10);
-    controlsGui.registerCoords("auto_throw",          50,   70, 70, 10);
-    controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
+    controlsGui.registerCoords("back",                       12,    5, 20,  6);
+    controlsGui.registerCoords("back_input",                  3,    7,  4,  4);
+    controlsGui.registerCoords("header",                     50,   10, 50,  6);
+    controlsGui.registerCoords("normal_binds",               50,   25, 70, 10);
+    controlsGui.registerCoords("special_binds",              50, 36.5, 58,  9);
+    controlsGui.registerCoords("leader_cursor_mouse",        50, 52.5, 70, 10);
+    controlsGui.registerCoords("leader_cursor_speed",        50,   65, 70, 10);
+    controlsGui.registerCoords("leader_cursor_speed_strike", 50,   65, 70, 10);
+    controlsGui.registerCoords("auto_throw",                 50, 77.5, 70, 10);
+    controlsGui.registerCoords("tooltip",                    50,   96, 96,  4);
     controlsGui.readCoords(
         game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         getChildByName("positions")
@@ -498,21 +855,54 @@ void OptionsMenu::initGuiControlsPage() {
     [] () { return "Choose what buttons do what special features."; };
     controlsGui.addItem(specialBindsButton, "special_binds");
     
-    //Leader cursor speed.
+    //Leader cursor mouse check.
+    leaderCursorMouseCheck =
+        new CheckGuiItem(
+        &game.options.controls.mouseMovesLeaderCursor[0],
+        "Leader cursor with mouse", game.sysContent.fntStandard
+    );
+    leaderCursorMouseCheck->onActivate =
+    [this] (const Point&) {
+        leaderCursorMouseCheck->defActivateCode();
+        updateControlsPage();
+    };
+    leaderCursorMouseCheck->onGetTooltip =
+    [] () {
+        return
+            "Whether the leader's cursor is controlled with the mouse "
+            "or with buttons/keys.";
+    };
+    controlsGui.addItem(leaderCursorMouseCheck, "leader_cursor_mouse");
+    
+    //Leader cursor speed picker.
     leaderCursorSpeedPicker =
         new OptionsMenuPickerGuiItem<float>(
-        "Cursor speed: ",
+        "Leader cursor speed: ",
         &game.options.controls.leaderCursorSpeed,
         OPTIONS::CONTROLS_D::LEADER_CURSOR_SPEED,
     {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
-    "Leader cursor speed, when controlling without a mouse."
+    "Leader cursor speed, when controlling without buttons/keys."
     );
     leaderCursorSpeedPicker->valueToString = [] (float v) {
         return f2s(v);
     };
     leaderCursorSpeedPicker->init();
     controlsGui.addItem(leaderCursorSpeedPicker, "leader_cursor_speed");
+    
+    //Leader cursor speed strikethrough item.
+    leaderCursorSpeedStrike = new GuiItem();
+    leaderCursorSpeedStrike->onDraw =
+    [] (const DrawInfo & draw) {
+        al_draw_line(
+            draw.center.x - draw.size.x / 2.0f,
+            draw.center.y + draw.size.y * 0.25f,
+            draw.center.x + draw.size.x / 2.0f,
+            draw.center.y - draw.size.y * 0.25f,
+            mapGray(128), 8.0f
+        );
+    };
+    controlsGui.addItem(leaderCursorSpeedStrike, "leader_cursor_speed_strike");
     
     //Auto-throw mode.
     autoThrowPicker =
@@ -537,6 +927,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
+    updateControlsPage();
     controlsGui.setFocusedItem(normalBindsButton, true);
     controlsGui.responsive = false;
     controlsGui.hideItems();
@@ -1137,7 +1528,7 @@ void OptionsMenu::load() {
  * @brief Populates the list of binds.
  */
 void OptionsMenu::populateBinds() {
-    GuiItem* itemToFocus = nullptr;
+    bindsListBox->deleteAllChildren();
     
     unordered_set<PLAYER_ACTION_CAT> allowedCategories;
     switch(bindsMenuType) {
@@ -1158,8 +1549,8 @@ void OptionsMenu::populateBinds() {
     }
     }
     
-    bindsListBox->deleteAllChildren();
-    
+    PLAYER_ACTION_CAT lastCat = PLAYER_ACTION_CAT_NONE;
+    GuiItem* itemToFocus = nullptr;
     const vector<PlayerActionType>& allPlayerActionTypes =
         game.controls.getAllPlayerActionTypes();
     vector<Inpution::Bind>& allBinds = game.controls.binds();
@@ -1176,330 +1567,19 @@ void OptionsMenu::populateBinds() {
         bindsPerActionType[bind.actionTypeId].push_back(bind);
     }
     
-    PLAYER_ACTION_CAT lastCat = PLAYER_ACTION_CAT_NONE;
-    
     for(size_t a = 0; a < allPlayerActionTypes.size(); a++) {
         const PlayerActionType& actionType = allPlayerActionTypes[a];
         
         if(actionType.internalName.empty()) continue;
         if(!isInContainer(allowedCategories, actionType.category)) continue;
         
-        float actionY =
-            bindsListBox->getChildrenSpan() +
-            OPTIONS_MENU::BIND_BUTTON_PADDING;
-            
+        bool addSectionHeader = false;
         if(actionType.category != lastCat) {
-        
-            //Section header text.
-            string sectionName;
-            switch(actionType.category) {
-            case PLAYER_ACTION_CAT_NONE: {
-                break;
-            } case PLAYER_ACTION_CAT_MAIN: {
-                sectionName = "Main";
-                break;
-            } case PLAYER_ACTION_CAT_MENUS: {
-                sectionName = "Menus";
-                break;
-            } case PLAYER_ACTION_CAT_ADVANCED: {
-                sectionName = "Advanced";
-                break;
-            } case PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS: {
-                sectionName = "General maker tools";
-                break;
-            } case PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS: {
-                sectionName = "Gameplay maker tools";
-                break;
-            } case PLAYER_ACTION_CAT_SYSTEM: {
-                sectionName = "System";
-                break;
-            }
-            }
-            TextGuiItem* sectionText =
-                new TextGuiItem(sectionName, game.sysContent.fntAreaName);
-            sectionText->ratioCenter =
-                Point(
-                    0.50f,
-                    actionY + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
-                );
-            sectionText->ratioSize =
-                Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bindsListBox->addChild(sectionText);
-            bindsGui.addItem(sectionText);
-            
-            actionY =
-                bindsListBox->getChildrenSpan() +
-                OPTIONS_MENU::BIND_BUTTON_PADDING;
-                
+            addSectionHeader = true;
             lastCat = actionType.category;
-            
         }
         
-        float curY = actionY + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
-        
-        //Action type name bullet.
-        BulletGuiItem* nameBullet =
-            new BulletGuiItem(actionType.name, game.sysContent.fntStandard);
-        nameBullet->ratioCenter =
-            Point(0.22f, curY);
-        nameBullet->ratioSize =
-            Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-        nameBullet->onGetTooltip =
-        [actionType] () { return actionType.description; };
-        bindsListBox->addChild(nameBullet);
-        bindsGui.addItem(nameBullet);
-        
-        //More button.
-        ButtonGuiItem* moreButton =
-            new ButtonGuiItem("...", game.sysContent.fntStandard);
-        moreButton->onActivate =
-        [this, actionType] (const Point&) {
-            if(showingBindsMore && actionType.id == curActionType) {
-                showingBindsMore = false;
-            } else {
-                curActionType = actionType.id;
-                showingBindsMore = true;
-            }
-            mustPopulateBinds = true;
-        };
-        moreButton->ratioCenter =
-            Point(0.92f, curY);
-        moreButton->ratioSize =
-            Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-        string tooltip =
-            (showingBindsMore && actionType.id == curActionType) ?
-            "Hide options." :
-            "Show information and options for this action.";
-        moreButton->onGetTooltip =
-        [tooltip] () { return tooltip; };
-        bindsListBox->addChild(moreButton);
-        bindsGui.addItem(moreButton);
-        if(actionType.id == curActionType) {
-            itemToFocus = moreButton;
-        }
-        
-        vector<Inpution::Bind> aBinds = bindsPerActionType[actionType.id];
-        for(size_t b = 0; b < aBinds.size(); b++) {
-        
-            //Change bind button.
-            ButtonGuiItem* bindButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard);
-            bindButton->onActivate =
-            [this, actionType, b] (const Point&) {
-                chooseInput(actionType.id, b);
-            };
-            bindButton->onDraw =
-                [this, b, aBinds, bindButton]
-            (const DrawInfo & draw) {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim, aBinds[b].inputSource, false,
-                    draw.center, draw.size * 0.8f
-                );
-                
-                drawButton(
-                    draw.center, draw.size,
-                    "", game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue()
-                );
-            };
-            bindButton->ratioCenter =
-                Point(0.63f, curY);
-            bindButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bindButton->onGetTooltip =
-            [] () { return "Change the input for this action."; };
-            bindsListBox->addChild(bindButton);
-            bindsGui.addItem(bindButton);
-            
-            if(showingBindsMore && actionType.id == curActionType) {
-                //Remove bind button.
-                ButtonGuiItem* removeBindButton =
-                    new ButtonGuiItem("", game.sysContent.fntStandard);
-                removeBindButton->onActivate =
-                [this, actionType, b] (const Point&) {
-                    deleteBind(actionType.id, b);
-                };
-                removeBindButton->onDraw =
-                    [this, removeBindButton]
-                (const DrawInfo & draw) {
-                    drawButton(
-                        draw.center, draw.size, "X",
-                        game.sysContent.fntStandard, COLOR_WHITE,
-                        removeBindButton->focused,
-                        removeBindButton->getJuiceValue()
-                    );
-                };
-                removeBindButton->ratioCenter =
-                    Point(0.85f, curY);
-                removeBindButton->ratioSize =
-                    Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-                removeBindButton->onGetTooltip =
-                [] () { return "Remove this input from this action."; };
-                bindsListBox->addChild(removeBindButton);
-                bindsGui.addItem(removeBindButton);
-                removeBindButton->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                );
-            }
-            
-            if(actionType.id == curActionType) {
-                bindButton->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-                );
-            }
-            
-            curY +=
-                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
-                OPTIONS_MENU::BIND_BUTTON_PADDING;
-                
-        }
-        
-        if(aBinds.empty()) {
-        
-            //Add first bind button.
-            ButtonGuiItem* bindButton =
-                new ButtonGuiItem("", game.sysContent.fntStandard);
-            bindButton->onActivate =
-            [this, actionType] (const Point&) {
-                chooseInput(actionType.id, 0);
-            };
-            bindButton->onDraw =
-                [this, bindButton]
-            (const DrawInfo & draw) {
-                drawButton(
-                    draw.center, draw.size, "",
-                    game.sysContent.fntStandard, COLOR_WHITE,
-                    bindButton->focused,
-                    bindButton->getJuiceValue()
-                );
-            };
-            bindButton->ratioCenter =
-                Point(0.63f, curY);
-            bindButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bindButton->onGetTooltip =
-            [] () { return "Choose an input for this action."; };
-            bindsListBox->addChild(bindButton);
-            bindsGui.addItem(bindButton);
-            bindButton->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-            );
-            
-            curY +=
-                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
-                OPTIONS_MENU::BIND_BUTTON_PADDING;
-                
-        } else if(showingBindsMore && actionType.id == curActionType) {
-        
-            //Add button.
-            ButtonGuiItem* addButton =
-                new ButtonGuiItem("Add...", game.sysContent.fntStandard);
-            addButton->ratioCenter =
-                Point(0.63f, curY);
-            addButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            addButton->onActivate =
-            [this, actionType, aBinds] (const Point&) {
-                chooseInput(actionType.id, aBinds.size());
-            };
-            addButton->onGetTooltip =
-            [] () { return "Add another input to this action."; };
-            bindsListBox->addChild(addButton);
-            bindsGui.addItem(addButton);
-            addButton->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-            );
-            
-            curY +=
-                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
-                OPTIONS_MENU::BIND_BUTTON_PADDING;
-                
-        }
-        
-        if(showingBindsMore && actionType.id == curActionType) {
-        
-            //Restore default button.
-            ButtonGuiItem* restoreButton =
-                new ButtonGuiItem(
-                "Restore defaults", game.sysContent.fntStandard
-            );
-            restoreButton->ratioCenter =
-                Point(0.63f, curY);
-            restoreButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            restoreButton->onActivate =
-            [this, actionType] (const Point&) {
-                restoreDefaultBinds(actionType.id);
-            };
-            restoreButton->onGetTooltip =
-            [] () { return "Restore this action's default inputs."; };
-            bindsListBox->addChild(restoreButton);
-            bindsGui.addItem(restoreButton);
-            restoreButton->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-            );
-            
-            curY +=
-                OPTIONS_MENU::BIND_BUTTON_HEIGHT +
-                OPTIONS_MENU::BIND_BUTTON_PADDING;
-                
-            //Default label.
-            TextGuiItem* defaultLabelText =
-                new TextGuiItem(
-                "Default:", game.sysContent.fntStandard,
-                COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-            );
-            defaultLabelText->ratioCenter =
-                Point(0.63f, curY);
-            defaultLabelText->ratioSize =
-                Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bindsListBox->addChild(defaultLabelText);
-            bindsGui.addItem(defaultLabelText);
-            defaultLabelText->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
-            );
-            
-            //Default icon.
-            Inpution::InputSource defInputSource =
-                game.controls.strToInputSource(actionType.defaultBindStr);
-            GuiItem* defaultIcon = new GuiItem();
-            defaultIcon->ratioCenter =
-                Point(0.68f, curY);
-            defaultIcon->ratioSize =
-                Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            defaultIcon->onDraw =
-            [defInputSource] (const DrawInfo & draw) {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim, defInputSource,
-                    false, draw.center, draw.size
-                );
-            };
-            bindsListBox->addChild(defaultIcon);
-            bindsGui.addItem(defaultIcon);
-            
-        }
-        
-        //Spacer line.
-        GuiItem* line = new GuiItem();
-        line->ratioCenter =
-            Point(
-                0.50f, bindsListBox->getChildrenSpan() + 0.02f
-            );
-        line->ratioSize = Point(0.90f, 0.02f);
-        line->onDraw =
-        [] (const DrawInfo & draw) {
-            al_draw_line(
-                draw.center.x - draw.size.x / 2.0f,
-                draw.center.y,
-                draw.center.x + draw.size.x / 2.0f,
-                draw.center.y,
-                COLOR_TRANSPARENT_WHITE,
-                1.0f
-            );
-        };
-        bindsListBox->addChild(line);
-        bindsGui.addItem(line);
+        addBindEntryItems(actionType, addSectionHeader, &itemToFocus);
     }
     
     if(itemToFocus) {
@@ -1613,4 +1693,17 @@ void OptionsMenu::unload() {
     }
     
     Menu::unload();
+}
+
+
+/**
+ * @brief Updates the controls page.
+ */
+void OptionsMenu::updateControlsPage() {
+    leaderCursorSpeedPicker->responsive =
+        !game.options.controls.mouseMovesLeaderCursor[0];
+    leaderCursorSpeedPicker->focusable =
+        !game.options.controls.mouseMovesLeaderCursor[0];
+    leaderCursorSpeedStrike->visible =
+        game.options.controls.mouseMovesLeaderCursor[0];
 }

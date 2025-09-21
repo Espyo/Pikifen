@@ -393,7 +393,7 @@ public:
     
     //Last Pikmin type chosen to resolve a carrying tie, if any.
     PikminType* lastCarryingTieBreaker = nullptr;
-
+    
     //Lines of the text to show for the print debug mob script action.
     vector<string> printActionLogLines;
     
@@ -512,6 +512,7 @@ private:
     void markAreaCellsActive(
         int fromX, int toX, int fromY, int toY
     );
+    void processLeaderCursor(Player* player, float deltaT);
     void processMobInteractions(Mob* mPtr, size_t m);
     void processMobMiscInteractions(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,

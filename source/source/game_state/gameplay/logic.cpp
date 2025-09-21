@@ -522,45 +522,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     *                    `-´   *
     ****************************/
     
-    Point leaderCursorSpeed;
-    float dummyMagnitude;
-    player->leaderCursorMov.getInfo(
-        &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
-    );
-    leaderCursorSpeed =
-        leaderCursorSpeed * deltaT * game.options.controls.leaderCursorSpeed;
-        
-    if(
-        leaderCursorSpeed.x == 0.0f && leaderCursorSpeed.y == 0.0f &&
-        game.mouseCursor.movedThisFrame &&
-        game.options.advanced.mouseMovesCursor[player->playerNr]
-    ) {
-        player->leaderCursorWorld = player->view.mouseCursorWorldPos;
-    } else {
-        player->leaderCursorWorld += leaderCursorSpeed;
-    }
-    
-    float leaderCursorAngle =
-        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-    Distance leaderToCursorDist(
-        player->leaderPtr->pos, player->leaderCursorWorld
-    );
-    
-    if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
-        //Leader's cursor goes beyond the range limit.
-        player->leaderCursorWorld.x =
-            player->leaderPtr->pos.x +
-            (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
-        player->leaderCursorWorld.y =
-            player->leaderPtr->pos.y +
-            (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
-    }
-    
-    player->leaderCursorWin = player->leaderCursorWorld;
-    al_transform_coordinates(
-        &player->view.worldToWindowTransform,
-        &player->leaderCursorWin.x, &player->leaderCursorWin.y
-    );
+    processLeaderCursor(player, deltaT);
     
     
     /***********************************
@@ -587,10 +549,14 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->swarmAngle = newSwarmAngle;
     }
     
+    float leaderCursorAngle =
+        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+        
     if(player->swarmToLeaderCursor) {
         player->swarmAngle = leaderCursorAngle;
-        leaderToCursorDist =
-            Distance(player->leaderPtr->pos, player->leaderCursorWorld);
+        Distance leaderToCursorDist(
+            player->leaderPtr->pos, player->leaderCursorWorld
+        );
         player->swarmMagnitude =
             leaderToCursorDist.toFloat() /
             game.config.rules.leaderCursorMaxDist;
@@ -655,7 +621,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     if(
         readyForInput && isInputAllowed && interlude.get() == INTERLUDE_NONE &&
-        game.options.advanced.mouseMovesLeader[player->playerNr]
+        game.options.controls.mouseMovesLeader[player->playerNr]
     ) {
         float leaderToMouseCursorDist =
             Distance(
@@ -1618,6 +1584,54 @@ void GameplayState::markAreaCellsActive(
             areaActiveCells[x][y] = true;
         }
     }
+}
+
+
+/**
+ * @brief Processes the leader's cursor for this frame.
+ *
+ * @param player The player responsible.
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void GameplayState::processLeaderCursor(Player* player, float deltaT) {
+    //Move the leader cursor freely, using the current control scheme.
+    if(game.options.controls.mouseMovesLeaderCursor[player->playerNr]) {
+        player->leaderCursorWorld = player->view.mouseCursorWorldPos;
+    } else {
+        Point leaderCursorSpeed;
+        float dummyMagnitude, dummyAngle;
+        player->leaderCursorMov.getInfo(
+            &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
+        );
+        leaderCursorSpeed =
+            leaderCursorSpeed * deltaT *
+            game.options.controls.leaderCursorSpeed;
+            
+        player->leaderCursorWorld += leaderCursorSpeed;
+    }
+    
+    //Make sure it doesn't go beyond the range limit.
+    Distance leaderToCursorDist(
+        player->leaderPtr->pos, player->leaderCursorWorld
+    );
+    
+    if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
+        float leaderCursorAngle =
+            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+        player->leaderCursorWorld.x =
+            player->leaderPtr->pos.x +
+            (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
+        player->leaderCursorWorld.y =
+            player->leaderPtr->pos.y +
+            (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
+    }
+    
+    //Update the leader cursor window coordinates.
+    player->leaderCursorWin = player->leaderCursorWorld;
+    al_transform_coordinates(
+        &player->view.worldToWindowTransform,
+        &player->leaderCursorWin.x, &player->leaderCursorWin.y
+    );
 }
 
 
