@@ -193,7 +193,7 @@ void Game::globalDrawing() {
     } else {
         skipDearImGuiFrame = false;
     }
-
+    
     //Console.
     console.draw();
     drawFramerateChart();
@@ -283,6 +283,22 @@ bool Game::globalHandleSystemPlayerAction(const Inpution::Action& action) {
  * @brief Performs some global logic to run every frame, after the state's logic.
  */
 void Game::globalLogicPost() {
+    if(mouseCursor.movedThisFrame) {
+        mouseCursor.stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
+        mouseCursor.intendedAlpha = 1.0f;
+    } else {
+        mouseCursor.stoppedTimer -= deltaT;
+        if(mouseCursor.stoppedTimer <= 0.0f) {
+            mouseCursor.intendedAlpha = 0.0f;
+        }
+    }
+    mouseCursor.alpha =
+        inchTowards(
+            mouseCursor.alpha, mouseCursor.intendedAlpha,
+            mouseCursor.intendedAlpha > mouseCursor.alpha ?
+            (MOUSE_CURSOR::HIDE_UP_SPEED * deltaT) :
+            (MOUSE_CURSOR::HIDE_DOWN_SPEED * deltaT)
+        );
     mouseCursor.movedThisFrame = false;
 }
 
@@ -309,13 +325,13 @@ void Game::globalLogicPre() {
     
     //Audio.
     audio.tick(deltaT);
-
+    
     //Maker tools.
     makerTools.tick(deltaT);
-
+    
     //Console.
     console.tick(deltaT);
-
+    
     processSystemInfo();
     
     //Dear ImGui.
@@ -376,7 +392,7 @@ void Game::mainLoop() {
                 globalLogicPre();
                 curState->doLogic();
                 globalLogicPost();
-
+                
                 if(curState == prevState) {
                     //Only draw if we didn't change states in the meantime.
                     curState->doDrawing();
@@ -519,7 +535,7 @@ void Game::processSystemInfo() {
     string areaMakerStr = "-";
     string gameVersionStr =
         config.general.version.empty() ? "-" : config.general.version;
-
+        
     if(states.gameplay->loaded) {
         nMobsStr =
             resizeString(i2s(states.gameplay->mobs.all.size()), 7);
@@ -530,7 +546,7 @@ void Game::processSystemInfo() {
         areaMakerStr =
             curAreaData->maker.empty() ? "-" : curAreaData->maker;
     }
-        
+    
     console.write(
         headerStr +
         "\n" +

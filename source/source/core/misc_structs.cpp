@@ -69,6 +69,23 @@ const float TOKEN_SWIPE_Y_AMOUNT = -15.0f;
 }
 
 
+namespace MOUSE_CURSOR {
+
+//How quickly to lower the mouse cursor's alpha, if we're hiding the cursor
+//when it is stopped.
+const float HIDE_DOWN_SPEED = 0.3f;
+
+//How many seconds to wait before lowering the cursor's alpha, if we're
+//hiding the cursor when it is stopped.
+const float HIDE_TIMER_DURATION = 4.0f;
+
+//How quickly to raise the mouse cursor's alpha, if we're hiding the cursor
+//when it is stopped.
+const float HIDE_UP_SPEED = 3.0f;
+
+}
+
+
 namespace NOTIFICATION {
 
 //How quickly it fades, in alpha per second.

@@ -889,6 +889,8 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
  * @param color Color to tint it with.
  */
 void drawMouseCursor(const ALLEGRO_COLOR& color) {
+    if(game.mouseCursor.alpha == 0.0f) return;
+    
     al_use_transform(&game.identityTransform);
     
     //Cursor trail.
@@ -913,7 +915,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             unsigned char startAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * startRatio;
             ALLEGRO_COLOR startColor =
-                changeAlpha(color, startAlpha);
+                changeAlpha(color, startAlpha * game.mouseCursor.alpha);
             Point startP1;
             Point startP2;
             
@@ -924,7 +926,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             unsigned char endAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * endRatio;
             ALLEGRO_COLOR endColor =
-                changeAlpha(color, endAlpha);
+                changeAlpha(color, endAlpha * game.mouseCursor.alpha);
             Point endP1;
             Point endP2;
             
@@ -1003,7 +1005,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             game.mouseCursor.winPos,
             getBitmapDimensions(game.sysContent.bmpMouseCursor),
             -(game.timePassed * game.config.aestheticGen.mouseCursorSpinSpeed),
-            color
+            changeAlpha(color, 255 * game.mouseCursor.alpha)
         );
     }
 }

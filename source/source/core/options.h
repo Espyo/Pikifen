@@ -66,6 +66,7 @@ namespace OPTIONS {
 namespace ADVANCED_D {
 extern const bool DRAW_CURSOR_TRAIL;
 extern const bool ENGINE_DEV;
+extern const bool HIDE_STOPPED_MOUSE_CURSOR;
 extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
@@ -180,6 +181,9 @@ struct Options {
         
         //Is the player a developer of the engine?
         bool engineDev = ADVANCED_D::ENGINE_DEV;
+        
+        //Should the mouse cursor be hidden when stopped for some seconds?
+        bool hideStoppedMouseCursor = ADVANCED_D::HIDE_STOPPED_MOUSE_CURSOR;
         
         //Maximum deadzone for joysticks.
         float joystickMaxDeadzone = ADVANCED_D::JOYSTICK_MAX_DEADZONE;
