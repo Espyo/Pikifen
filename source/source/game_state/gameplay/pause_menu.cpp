@@ -41,6 +41,12 @@ const string GUI_FILE_NAME = "pause_menu_system";
 //Name of the mission page GUI definition file.
 const string MISSION_GUI_FILE_NAME = "pause_menu_mission";
 
+//Multiply time by this much to animate the mission mob marker.
+const float MISSION_MOB_MARKER_TIME_MULT = 3.0f;
+
+//Width and height of the mission mob marker.
+const float MISSION_MOB_MARKER_SIZE = 24.0f;
+
 //Default radar zoom level.
 const float RADAR_DEF_ZOOM = 0.4f;
 
@@ -1092,6 +1098,32 @@ void PauseMenu::drawRadar(
             Point(40.0f / radarView.cam.zoom),
             o->angle
         );
+    }
+    
+    //Mission mob markers.
+    if(!game.states.gameplay->missionRemainingMobIds.empty()) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+            Mob* mPtr = game.states.gameplay->mobs.all[m];
+            if(
+                !isInContainer(
+                    game.states.gameplay->missionRemainingMobIds, mPtr->id
+                )
+            ) continue;
+            
+            float alpha =
+                (
+                    sin(
+                        game.timePassed *
+                        PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
+                    )
+                ) + 0.5f;
+            alpha = std::clamp(alpha, 0.0f, 1.0f);
+            drawBitmap(
+                game.sysContent.bmpMissionMob, mPtr->pos,
+                Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) / radarView.cam.zoom,
+                0.0f, multAlpha(COLOR_GOLD, alpha)
+            );
+        };
     }
     
     //Currently-active Go Here paths.

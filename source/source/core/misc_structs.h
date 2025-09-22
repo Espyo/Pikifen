@@ -610,6 +610,9 @@ struct SystemContentList {
     //Mission fail stamp.
     ALLEGRO_BITMAP* bmpMissionFail = nullptr;
     
+    //Mission mob marker.
+    ALLEGRO_BITMAP* bmpMissionMob = nullptr;
+    
     //"More..." icon.
     ALLEGRO_BITMAP* bmpMore = nullptr;
     
@@ -869,6 +872,9 @@ struct SystemContentNames {
     
     //Mission fail stamp.
     string bmpMissionFail = "gui/mission_fail";
+    
+    //Mission mob marker.
+    string bmpMissionMob = "gui/mission_mob";
     
     //"More..." icon.
     string bmpMore = "gui/more";

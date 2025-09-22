@@ -31,6 +31,8 @@ extern const float ENTRY_LOCKOUT_TIME;
 extern const float GO_HERE_CALC_INTERVAL;
 extern const string GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
+extern const float MISSION_MOB_MARKER_TIME_MULT;
+extern const float MISSION_MOB_MARKER_SIZE;
 extern const float RADAR_DEF_ZOOM;
 extern const string RADAR_GUI_FILE_PATH;
 extern const float RADAR_MAX_ZOOM;

@@ -1966,6 +1966,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("menu_icons", bmpMenuIcons);
     graRS.set("mission_clear", bmpMissionClear);
     graRS.set("mission_fail", bmpMissionFail);
+    graRS.set("mission_mob", bmpMissionMob);
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
     graRS.set("notification", bmpNotification);
