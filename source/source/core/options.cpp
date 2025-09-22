@@ -24,7 +24,7 @@ namespace OPTIONS {
 namespace ADVANCED_D {
 
 //Default value for whether compatability mode is enabled.
-const bool ENABLE_COMPATABILITY_MODE = false;
+const bool ENABLE_COMPATIBILITY_MODE = false;
 
 //Default value for the cursor trail.
 const bool DRAW_CURSOR_TRAIL = true;
@@ -275,7 +275,7 @@ void Options::loadFromDataNode(DataNode* file) {
     {
         ReaderSetter aRS(file->getChildByName("advanced"));
         
-        aRS.set("compatability_mode", advanced.compatabilityEnabled);
+        aRS.set("compatibility_mode", advanced.compatibilityEnabled);
         aRS.set("draw_cursor_trail", advanced.drawCursorTrail);
         aRS.set("engine_developer", advanced.engineDev);
         aRS.set("fps", advanced.targetFps);
@@ -557,7 +557,7 @@ void Options::saveToDataNode(DataNode* file) const {
     {
         GetterWriter aGW(file->addNew("advanced"));
         
-        aGW.write("compatability_mode", advanced.compatabilityEnabled);
+        aGW.write("compatibility_mode", advanced.compatibilityEnabled);
         aGW.write("draw_cursor_trail", advanced.drawCursorTrail);
         aGW.write("engine_developer", advanced.engineDev);
         aGW.write("fps", advanced.targetFps);
