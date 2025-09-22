@@ -1024,6 +1024,14 @@ void PikminNest::tick(float deltaT) {
 
 
 /**
+ * @brief Destroys the nest type object.
+ */
+PikminNestType::~PikminNestType(){
+    al_destroy_bitmap(menuColormap);
+}
+
+
+/**
  * @brief Loads nest-related properties from a data file.
  *
  * @param file File to read from.

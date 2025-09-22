@@ -671,6 +671,8 @@ struct PikminNestType {
     
     //--- Function declarations ---
     
+    ~PikminNestType();
+
     void loadProperties(DataNode* file, MobType* mobType);
     void createColormap();
 };
