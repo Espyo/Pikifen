@@ -62,8 +62,8 @@ void ShaderManager::tryAttachShader(
     ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
 ) {
     if(!al_attach_shader_source(shader, type, source)) {
-        if(!game.options.advanced.compatabilityEnabled) {
-            crash("Shader Compilation Failure", al_get_shader_log(shader), 1);
+        if(!game.options.advanced.compatibilityEnabled) {
+            crash("Shader compilation failure", al_get_shader_log(shader), 1);
         }
     }
 }
