@@ -1603,3 +1603,46 @@ float getPlayerInputIconWidth(
             BIND_INPUT_ICON::PADDING * 2;
     }
 }
+
+
+/**
+ * @brief Draws a rectangular region that is highlighted with an outline
+ * and some pulsating inward waves. Used for drawing either on the area
+ * or on the radar.
+ *
+ * @param center Center coordinates of the region.
+ * @param size Width and height of the region.
+ * @param color Color of the highlight.
+ * @param timeSpent Total time spent. Used for animating.
+ */
+void drawHighlightedRectRegion(
+    const Point& center, const Point& size, const ALLEGRO_COLOR& color,
+    float timeSpent
+) {
+    const float CORNER_RADIUS = 2.0f;
+    const float DURATION = 3.0f;
+    const size_t N_INNER_RECTS = 2;
+    const float SIZE_OFFSET = 30.0f;
+    const float THICKNESS = 4.0f;
+    
+    //Outer rectangle.
+    drawRoundedRectangle(center, size, CORNER_RADIUS, color, THICKNESS);
+    
+    //Inner rectangles.
+    for(size_t i = 0; i < N_INNER_RECTS; i++) {
+        float iTotalTime = timeSpent + (DURATION / (float) N_INNER_RECTS) * i;
+        float iAnimTime = fmod(iTotalTime, DURATION);
+        Point iSize =
+            interpolatePoint(
+                iAnimTime, 0.0f, DURATION, size, size - SIZE_OFFSET
+            );
+        float alpha =
+            interpolateNumber(
+                iAnimTime, 0.0f, DURATION, 1.0f, 0.0f
+            );
+            
+        drawRoundedRectangle(
+            center, iSize, CORNER_RADIUS, multAlpha(color, alpha), THICKNESS
+        );
+    }
+}

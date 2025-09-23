@@ -242,3 +242,7 @@ float getPlayerInputIconWidth(
     const ALLEGRO_FONT* font, const Inpution::InputSource& s, bool condensed,
     float maxBitmapHeight = 0
 );
+void drawHighlightedRectRegion(
+    const Point& center, const Point& size, const ALLEGRO_COLOR& color,
+    float timeSpent
+);

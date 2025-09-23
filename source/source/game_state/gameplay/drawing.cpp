@@ -1080,7 +1080,20 @@ void GameplayState::drawIngameText(Player* player) {
         }
     }
     
+    //Player notification.
     player->notification.draw(player->view);
+    
+    //Mission exit region.
+    if(
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.goal == MISSION_GOAL_GET_TO_EXIT
+    ) {
+        drawHighlightedRectRegion(
+            game.curAreaData->mission.goalExitCenter,
+            game.curAreaData->mission.goalExitSize,
+            changeAlpha(COLOR_GOLD, 192), areaTimePassed
+        );
+    }
 }
 
 
