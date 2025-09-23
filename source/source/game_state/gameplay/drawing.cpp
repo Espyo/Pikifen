@@ -1428,18 +1428,27 @@ void GameplayState::drawOnionMenu() {
     //Using a shader requires drawing a bitmap
     ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
     ALLEGRO_SHADER* menuShader = game.shaders.getShader(SHADER_TYPE_ONION);
-    al_use_shader(menuShader);
-    al_set_shader_sampler("colormap", onionMenu->nestPtr->nestType->menuColormap, 1);
-    al_set_shader_float("area_time", game.timePassed);
-    al_set_shader_float("brightness", 0.4f);
-    al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
 
-    al_draw_bitmap(bmp, 0, 0, 0);
-    al_use_shader(NULL);
+    if (menuShader) {
+        ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
+        al_use_shader(menuShader);
+        al_set_shader_sampler("colormap", onionMenu->nestPtr->nestType->menuColormap, 1);
+        al_set_shader_float("area_time", game.timePassed);
+        al_set_shader_float("brightness", 0.4f);
+        al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
+
+        al_draw_bitmap(bmp, 0, 0, 0);
+        al_use_shader(NULL);
+        al_destroy_bitmap(bmp);
+    }
+    else {
+        al_draw_filled_rectangle(
+            0, 0, game.winW, game.winH,
+            al_map_rgba(24, 64, 60, 220 * onionMenu->bgAlphaMult)
+        );
+    }
 
     onionMenu->gui.draw();
-    
-    al_destroy_bitmap(bmp);
 
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
