@@ -32,9 +32,6 @@ const bool DRAW_CURSOR_TRAIL = true;
 //Default value for whether the player is an engine developer.
 const bool ENGINE_DEV = false;
 
-//Default value for whether to hide the mouse cursor when stopped.
-const bool HIDE_STOPPED_MOUSE_CURSOR = false;
-
 //Default value for the joystick maximum deadzone.
 const float JOYSTICK_MAX_DEADZONE = 0.9f;
 
@@ -46,6 +43,12 @@ const size_t MAX_PARTICLES = 1000;
 
 //Default value for whether mipmaps are enabled.
 const bool MIPMAPS_ENABLED = true;
+
+//Default value for whether the mouse moves the leader cursor, for each player.
+const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+
+//Default value for whether the mouse moves the leader, for each player.
+const bool MOUSE_MOVES_LEADER[MAX_PLAYERS] = {false, false, false, false};
 
 //Default value for whether to use smooth scaling.
 const bool SMOOTH_SCALING = true;
@@ -140,12 +143,6 @@ const AUTO_THROW_MODE AUTO_THROW = AUTO_THROW_MODE_OFF;
 
 //Default value for the leader cursor speed.
 const float LEADER_CURSOR_SPEED = 500.0f;
-
-//Default value for whether the mouse moves the leader cursor, for each player.
-const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS] = {true, false, false, false};
-
-//Default value for whether the mouse moves the leader, for each player.
-const bool MOUSE_MOVES_LEADER[MAX_PLAYERS] = {false, false, false, false};
 
 }
 
@@ -279,21 +276,22 @@ void Options::loadFromDataNode(DataNode* file) {
         ReaderSetter aRS(file->getChildByName("advanced"));
         
         aRS.set("compatibility_mode", advanced.compatibilityEnabled);
-        //DEPRECATED in 1.1.0 by "controls" > "p*_mouse_moves_leader_cursor".
-        for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            aRS.set(
-                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
-                controls.mouseMovesLeaderCursor[p]
-            );
-        }
         aRS.set("draw_cursor_trail", advanced.drawCursorTrail);
         aRS.set("engine_developer", advanced.engineDev);
         aRS.set("fps", advanced.targetFps);
-        aRS.set("hide_stopped_mouse_cursor", advanced.hideStoppedMouseCursor);
         aRS.set("joystick_max_deadzone", advanced.joystickMaxDeadzone);
         aRS.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aRS.set("max_particles", advanced.maxParticles);
         aRS.set("mipmaps", advanced.mipmapsEnabled);
+        for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+            aRS.set(
+                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
+                advanced.mouseMovesCursor[p]
+            ); aRS.set(
+                "p" + i2s((p + 1)) + "_mouse_moves_leader",
+                advanced.mouseMovesLeader[p]
+            );
+        }
         aRS.set("smooth_scaling", advanced.smoothScaling);
         aRS.set("window_position_hack", advanced.windowPosHack);
         aRS.set("zoom_medium_reach", advanced.zoomMediumReach);
@@ -402,17 +400,6 @@ void Options::loadFromDataNode(DataNode* file) {
         
         cRS.set("auto_throw_mode", autoThrowModeChar);
         cRS.set("leader_cursor_speed", controls.leaderCursorSpeed);
-        
-        for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            cRS.set(
-                "p" + i2s((p + 1)) + "_mouse_moves_leader_cursor",
-                controls.mouseMovesLeaderCursor[p]
-            );
-            cRS.set(
-                "p" + i2s((p + 1)) + "_mouse_moves_leader",
-                controls.mouseMovesLeader[p]
-            );
-        }
         
         autoThrowModeChar =
             std::min(
@@ -574,11 +561,20 @@ void Options::saveToDataNode(DataNode* file) const {
         aGW.write("draw_cursor_trail", advanced.drawCursorTrail);
         aGW.write("engine_developer", advanced.engineDev);
         aGW.write("fps", advanced.targetFps);
-        aGW.write("hide_stopped_mouse_cursor", advanced.hideStoppedMouseCursor);
         aGW.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);
         aGW.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aGW.write("max_particles", advanced.maxParticles);
         aGW.write("mipmaps", advanced.mipmapsEnabled);
+        for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+            aGW.write(
+                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
+                advanced.mouseMovesCursor[p]
+            );
+            aGW.write(
+                "p" + i2s((p + 1)) + "_mouse_moves_leader",
+                advanced.mouseMovesLeader[p]
+            );
+        }
         aGW.write("smooth_scaling", advanced.smoothScaling);
         aGW.write("window_position_hack", advanced.windowPosHack);
         aGW.write("zoom_medium_reach", advanced.zoomMediumReach);
@@ -639,17 +635,6 @@ void Options::saveToDataNode(DataNode* file) const {
         
         cGW.write("auto_throw_mode", controls.autoThrowMode);
         cGW.write("leader_cursor_speed", controls.leaderCursorSpeed);
-        
-        for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            cGW.write(
-                "p" + i2s((p + 1)) + "_mouse_moves_leader_cursor",
-                controls.mouseMovesLeaderCursor[p]
-            );
-            cGW.write(
-                "p" + i2s((p + 1)) + "_mouse_moves_leader",
-                controls.mouseMovesLeader[p]
-            );
-        }
     }
     
     //Editors.

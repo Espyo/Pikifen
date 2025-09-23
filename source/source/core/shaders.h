@@ -24,7 +24,6 @@ TODO: Add a OpenGL extension library when it'll compile on windows
 namespace SHADER_SOURCE_FILES {
 extern const char* DEFAULT_VERT_SHADER;
 extern const char* LIQUID_FRAG_SHADER;
-extern const char* ONION_FRAG_SHADER;
 };
 
 
@@ -33,9 +32,6 @@ enum SHADER_TYPE {
 
     //Liquid sectors, like bodies of water.
     SHADER_TYPE_LIQUID,
-
-    //Onion swirls, used for the onion menus
-    SHADER_TYPE_ONION,
     
     //Total number of shader types.
     N_SHADER_TYPES

@@ -190,7 +190,7 @@ void drawEdgeOffsetOnBuffer(
  *
  * @param sPtr Sector to draw the effects of.
  * @param buffer Buffer to draw from.
- * @param opacity Draw at this opacity, [0 - 1].
+ * @param opacity Draw at this opacity, 0 - 1.
  * @param view Viewport to draw to.
  */
 void drawSectorEdgeOffsets(

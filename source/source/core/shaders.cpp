@@ -33,23 +33,6 @@ void ShaderManager::compileShaders() {
         al_destroy_shader(compiledShaders[SHADER_TYPE_LIQUID]);
         compiledShaders[SHADER_TYPE_LIQUID] = nullptr;
     };
-
-    //Onion Menu
-    compiledShaders[SHADER_TYPE_ONION] =
-        al_create_shader(ALLEGRO_SHADER_GLSL);
-        
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_ONION],
-        ALLEGRO_PIXEL_SHADER, SHADER_SOURCE_FILES::ONION_FRAG_SHADER
-    );
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_ONION],
-        ALLEGRO_VERTEX_SHADER, SHADER_SOURCE_FILES::DEFAULT_VERT_SHADER
-    );
-    if (!al_build_shader(compiledShaders[SHADER_TYPE_ONION])) {
-        al_destroy_shader(compiledShaders[SHADER_TYPE_ONION]);
-        compiledShaders[SHADER_TYPE_ONION] = nullptr;
-    };
     
 }
 

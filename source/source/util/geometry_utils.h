@@ -213,7 +213,6 @@ void getTransformedRectangleBBox(
     const Point& center, const Point& dimensions, float angle,
     Point* minCoords, Point* maxCoords
 );
-float getVerticalAlignOffset(V_ALIGN_MODE mode, float height);
 float interpolateAngle(
     float input, float inputStart, float inputEnd,
     float& outputStart, float& outputEnd
@@ -302,7 +301,8 @@ Point scaleRectangleToBox(
     bool canShrinkX, bool canShrinkY,
     bool canChangeRatio
 );
-size_t spatialNavigation(
-    const vector<Point>& itemCoordinates, size_t selectedItemIdx,
+size_t focusNextItemDirectionally(
+    const vector<Point>& itemCoordinates, size_t selectedItem,
     float direction, const Point& loopRegion
 );
+float getVerticalAlignOffset(V_ALIGN_MODE mode, float height);

@@ -36,7 +36,7 @@ Decoration::Decoration(
     individualTint =
         interpolateColor(
             tintInterpolRatio, 0.0, 1.0,
-            tintLimit, COLOR_WHITE
+            tintLimit, al_map_rgba(255, 255, 255, 255)
         );
         
     float alphaInterpolRatio = game.rng.f(0.0f, 1.0f);

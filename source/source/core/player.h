@@ -92,10 +92,10 @@ struct Player {
     //Is the group member closest to the leader distant?
     bool closestGroupMemberDistant = false;
     
-    //Leader cursor's current position, in window coordinates.
+    //Leader cursor, in window coordinates.
     Point leaderCursorWin;
     
-    //Leader cursor's current position, in world coordinates.
+    //Leader cursor, in world coordinates.
     Point leaderCursorWorld;
     
     //Sector that the leader's cursor is on, if any.

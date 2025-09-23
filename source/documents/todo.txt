@@ -12,11 +12,13 @@ Next tasks (roughly sorted most important first)
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
+    BLL legs stay floating in the air? (Thanks Neo)
+    The leader cursor stays behind if the leader moves
     If you have analog stick inputs and D-pad inputs bound to navigating menus, the D-pad ones STILL won't work
 
     --- 1.1.0 ---
     Swarming jingle
-    Update to Dear ImGui v1.92.3
+    Update to Dear ImGui v1.92.2b
     Some tweaks to the HUD
         Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
         Prefer populating corners over populating sides/bottom/top
@@ -31,6 +33,7 @@ Next tasks (roughly sorted most important first)
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     GUI things
+        GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
@@ -38,8 +41,8 @@ Next tasks (roughly sorted most important first)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
         The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, focus "Retry" and press right. It'll focus an unrelated item in the stats list
             Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
-            Or instead it should be hierarchical, in that an item with children is a candidate for being "focused", except when it's its time to act it dispatches it to the children list
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
+            The name for this is "spatial navigation"
             https://github.com/WICG/spatial-navigation
             https://github.com/NoriginMedia/Norigin-Spatial-Navigation
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
@@ -279,7 +282,7 @@ Next tasks (roughly sorted most important first)
                 What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
                     An area can choose a recommended number, so there should be a "recommended" selection in the picker, which uses the area's recommended, or the global default for that victory condition
                 Roulette item frequency: off, normal, common
-                Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item, spawn in specific spots at specific intervals
+                Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item
                 Starting Pikmin for each team
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
@@ -314,9 +317,7 @@ Next tasks (roughly sorted most important first)
                 The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
             Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
         Mission high scores need to be saved independently for each player amount
-        Results screen
-            Take ideas from the Today's Report section of this file
-            Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
+        Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
         Save stats for how much time was spent in normal gameplay, and how much time was spent in competitive modes
         Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
         An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
@@ -475,7 +476,6 @@ Next tasks (roughly sorted most important first)
                 Total number of Pikmin left in the Onion
                 What objective items were collected today
                 Total of the objective collected, and total remaining
-                Total amount of time in which you had any idle Pikmin, and a percentage
                 The player can press a button somewhere to watch a replay, or click to continue
         Final Results
             Completion time, in seconds

@@ -134,7 +134,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     gui.addItem(okInput, "ok_input");
@@ -151,7 +151,7 @@ OnionMenu::OnionMenu(
         
         drawFilledRoundedRectangle(
             draw.center, draw.size, game.winW * 0.01,
-            tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
+            al_map_rgba(188, 230, 230, 128)
         );
         
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
@@ -161,8 +161,7 @@ OnionMenu::OnionMenu(
                 interpolateColor(
                     redIt->second,
                     0, ONION_MENU::RED_TEXT_DURATION,
-                    tintColor(color, draw.tint),
-                    tintColor(al_map_rgb(224, 0, 0), draw.tint)
+                    color, al_map_rgb(224, 0, 0)
                 );
         }
         
@@ -194,8 +193,7 @@ OnionMenu::OnionMenu(
             changeTen ?
             game.sysContent.bmpOnionMenu10 :
             game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
-            0.0f, draw.tint
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
         );
         changeTenButton->defDrawCode(draw);
     };
@@ -223,7 +221,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     gui.addItem(changeTenInput, "change_ten_input");
@@ -244,8 +242,7 @@ OnionMenu::OnionMenu(
             selectAll ?
             game.sysContent.bmpOnionMenuAll :
             game.sysContent.bmpOnionMenuSingle,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
-            0.0f, draw.tint
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true
         );
         selectAllButton->defDrawCode(draw);
     };
@@ -275,7 +272,7 @@ OnionMenu::OnionMenu(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     selectAllInput->visible = types.size() > 1;
@@ -304,8 +301,7 @@ OnionMenu::OnionMenu(
                 float juicyGrowAmount = onionIcon->getJuiceValue();
                 drawBitmapInBox(
                     tPtr->pikType->bmpOnionIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true,
-                    0.0f, draw.tint
+                    (draw.size * 0.8f) + juicyGrowAmount, true
                 );
             }
         };
@@ -323,19 +319,19 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                onionButton->focused, 0.0f, draw.tint
+                onionButton->focused
             );
         };
         onionButton->onActivate =
         [this, t, onionButton] (const Point&) {
             doButtonLogic(false, t, false);
         };
-        onionButton->onMenuSNAction =
+        onionButton->onMenuDirButton =
         [this, t] (size_t playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
+            return doButtonDirLogic(playerActionId, t);
         };
         onionButton->canAutoRepeat = true;
-        onionButton->focusableFromSN = false;
+        onionButton->focusableFromDirNav = false;
         onionButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -359,7 +355,7 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRectangle(
                 draw.center, draw.size, game.winW * 0.01,
-                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
+                al_map_rgba(188, 230, 230, 128)
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
@@ -369,7 +365,7 @@ OnionMenu::OnionMenu(
                     interpolateColor(
                         redIt->second,
                         0, ONION_MENU::RED_TEXT_DURATION,
-                        color, tintColor(al_map_rgb(224, 0, 0), draw.tint)
+                        color, al_map_rgb(224, 0, 0)
                     );
             }
             
@@ -395,7 +391,7 @@ OnionMenu::OnionMenu(
             if(tPtr->pikType->bmpIcon) {
                 drawBitmapInBox(
                     tPtr->pikType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true, 0.0f, draw.tint
+                    (draw.size * 0.8f) + juicyGrowAmount, true
                 );
             }
         };
@@ -413,19 +409,19 @@ OnionMenu::OnionMenu(
                 draw.center,
                 draw.size + juicyGrowAmount,
                 "", game.sysContent.fntStandard, COLOR_WHITE,
-                groupButton->focused, 0.0f, draw.tint
+                groupButton->focused
             );
         };
         groupButton->onActivate =
         [this, t, groupButton] (const Point&) {
             doButtonLogic(true, t, false);
         };
-        groupButton->onMenuSNAction =
+        groupButton->onMenuDirButton =
         [this, t] (size_t playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
+            return doButtonDirLogic(playerActionId, t);
         };
         groupButton->canAutoRepeat = true;
-        groupButton->focusableFromSN = false;
+        groupButton->focusableFromDirNav = false;
         groupButton->onGetTooltip =
         [this, t] () {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -449,10 +445,10 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRectangle(
                 draw.center, draw.size, game.winW * 0.01,
-                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
+                al_map_rgba(188, 230, 230, 128)
             );
             
-            ALLEGRO_COLOR color = draw.tint;
+            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
             const auto& redIt = this->redItems.find(groupAmountText);
             if(redIt != this->redItems.end()) {
                 color =
@@ -478,9 +474,9 @@ OnionMenu::OnionMenu(
         
         //Full type item.
         GuiItem* fullTypeItem = new GuiItem();
-        fullTypeItem->onMenuSNAction =
+        fullTypeItem->onMenuDirButton =
         [this, t] (size_t playerActionId) {
-            return doButtonSNLogic(playerActionId, t);
+            return doButtonDirLogic(playerActionId, t);
         };
         fullTypeItem->focusableFromMouse = false;
         fullTypeItem->onGetTooltip =
@@ -505,19 +501,19 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            onionAllButton->focused, 0.0f, draw.tint
+            onionAllButton->focused
         );
     };
     onionAllButton->onActivate =
     [this] (const Point&) {
         doButtonLogic(false, 0, false);
     };
-    onionAllButton->onMenuSNAction =
+    onionAllButton->onMenuDirButton =
     [this] (size_t playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
+        return doButtonDirLogic(playerActionId, 0);
     };
     onionAllButton->canAutoRepeat = true;
-    onionAllButton->focusableFromSN = false;
+    onionAllButton->focusableFromDirNav = false;
     onionAllButton->onGetTooltip =
     [this] () {
         return
@@ -537,19 +533,19 @@ OnionMenu::OnionMenu(
             draw.center,
             draw.size + juicyGrowAmount,
             "", game.sysContent.fntStandard, COLOR_WHITE,
-            groupAllButton->focused, 0.0f, draw.tint
+            groupAllButton->focused
         );
     };
     groupAllButton->onActivate =
     [this] (const Point&) {
         doButtonLogic(true, 0, false);
     };
-    groupAllButton->onMenuSNAction =
+    groupAllButton->onMenuDirButton =
     [this] (size_t playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
+        return doButtonDirLogic(playerActionId, 0);
     };
     groupAllButton->canAutoRepeat = true;
-    groupAllButton->focusableFromSN = false;
+    groupAllButton->focusableFromDirNav = false;
     groupAllButton->onGetTooltip =
     [this] () {
         return
@@ -561,9 +557,9 @@ OnionMenu::OnionMenu(
     
     //All types item.
     fullTypeAllItem = new GuiItem();
-    fullTypeAllItem->onMenuSNAction =
+    fullTypeAllItem->onMenuDirButton =
     [this] (size_t playerActionId) {
-        return doButtonSNLogic(playerActionId, 0);
+        return doButtonDirLogic(playerActionId, 0);
     };
     fullTypeAllItem->focusableFromMouse = false;
     fullTypeAllItem->onGetTooltip =
@@ -686,7 +682,7 @@ void OnionMenu::confirm() {
  * @param typeIdx Index of the Onion's Pikmin type, if applicable.
  * @return Whether the action was consumed.
  */
-bool OnionMenu::doButtonSNLogic(int playerActionId, size_t typeIdx) {
+bool OnionMenu::doButtonDirLogic(int playerActionId, size_t typeIdx) {
     if(playerActionId == PLAYER_ACTION_TYPE_MENU_UP) {
         doButtonLogic(false, typeIdx, true);
         return true;

@@ -1024,14 +1024,6 @@ void PikminNest::tick(float deltaT) {
 
 
 /**
- * @brief Destroys the nest type object.
- */
-PikminNestType::~PikminNestType(){
-    al_destroy_bitmap(menuColormap);
-}
-
-
-/**
  * @brief Loads nest-related properties from a data file.
  *
  * @param file File to read from.
@@ -1083,41 +1075,6 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
             soundPikminExitIdx = s;
         }
     }
-}
-
-
-/**
- * @brief Creates a bitmap containing smoothed colors between the nest's
- * types.
- *
- */
-void PikminNestType::createColormap(){
-    if(pikTypes.size() == 0){
-        return;
-    }
-
-    //Create a keyframe interpolator that smoothly transitions between each type's color
-    KeyframeInterpolator<ALLEGRO_COLOR> ki(pikTypes[0]->mainColor);
-    float span = 1;
-    if(pikTypes.size() > 1){
-        span = 1.0f / (pikTypes.size() - 1);
-    }
-    for(int i = 1; i < pikTypes.size(); i++){
-        ki.add(span * i, pikTypes[i]->mainColor,
-        EASE_METHOD_IN_OUT);
-    }
-
-    //Create the texture
-    ALLEGRO_BITMAP* backup = al_get_target_bitmap();
-    int oldFlags = al_get_new_bitmap_flags();
-    al_set_new_bitmap_flags(0); //Prevents automatic smoothing -- leads to gaps 
-    menuColormap = al_create_bitmap(100, 1);
-    al_set_target_bitmap(menuColormap);
-    for(int i = 0; i < 100; i++){
-        al_put_pixel(i, 0, ki.get(i / (float)100));
-    }
-    al_set_target_bitmap(backup);
-    al_set_new_bitmap_flags(oldFlags);
 }
 
 

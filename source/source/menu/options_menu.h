@@ -251,45 +251,42 @@ private:
     //Information about the current pack management menu, if any.
     PacksMenu* packsMenu = nullptr;
     
-    //Auto-throw picker item.
+    //Auto-throw picker widget.
     OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* autoThrowPicker = nullptr;
     
-    //Resolution picker item.
+    //Resolution picker widget.
     OptionsMenuPickerGuiItem<std::pair<int, int> >* resolutionPicker = nullptr;
     
-    //Leader cursor with mouse item.
-    CheckGuiItem* leaderCursorMouseCheck = nullptr;
-    
-    //Leader cursor speed picker item.
+    //Leader cursor speed picker widget.
     OptionsMenuPickerGuiItem<float>* leaderCursorSpeedPicker = nullptr;
     
-    //Leader cursor camera weight picker item.
+    //Leader cursor camera weight picker widget.
     OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
     
-    //Leaving confirmation picker item.
+    //Leaving confirmation picker widget.
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*
     leavingConfirmationPicker = nullptr;
     
-    //Pikmin bump picker item.
+    //Pikmin bump picker widget.
     OptionsMenuPickerGuiItem<float>*
     pikminBumpPicker = nullptr;
     
-    //Master volume picker item.
+    //Master volume picker widget.
     OptionsMenuPickerGuiItem<float>* masterVolPicker = nullptr;
     
-    //Gameplay sound effects volume picker item.
+    //Gameplay sound effects volume picker widget.
     OptionsMenuPickerGuiItem<float>* gameplaySoundVolPicker = nullptr;
     
-    //Music volume picker item.
+    //Music volume picker widget.
     OptionsMenuPickerGuiItem<float>* musicVolPicker = nullptr;
     
-    //Ambiance sound effects volume picker item.
+    //Ambiance sound effects volume picker widget.
     OptionsMenuPickerGuiItem<float>* ambianceSoundVolPicker = nullptr;
     
-    //UI sound effects volume picker item.
+    //UI sound effects volume picker widget.
     OptionsMenuPickerGuiItem<float>* uiSoundVolPicker = nullptr;
     
-    //Restart warning text item.
+    //Restart warning text widget.
     TextGuiItem* warningText = nullptr;
     
     //Type of control binds to show.
@@ -325,10 +322,6 @@ private:
     
     //--- Function declarations ---
     
-    void addBindEntryItems(
-        const PlayerActionType& actionType, bool addSectionHeader,
-        GuiItem** itemToFocus
-    );
     void initGuiAudioPage();
     void initGuiControlsPage();
     void initGuiControlBindsPage();
@@ -344,6 +337,5 @@ private:
     );
     void populateBinds();
     void restoreDefaultBinds(const PLAYER_ACTION_TYPE actionType);
-    void updateControlsPage();
     
 };

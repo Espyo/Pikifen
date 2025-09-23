@@ -175,18 +175,18 @@ Hud::Hud() :
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y,
                 std::min(finalDraw.size.x, finalDraw.size.y) / 2.0f,
-                tintColor(
-                    changeAlpha(icon.color, 128),
-                    draw.tint
+                changeAlpha(
+                    icon.color,
+                    128
                 )
             );
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true
             );
             drawBitmapInBox(
                 bmpBubble,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true
             );
         };
         gui.addItem(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
@@ -209,7 +209,7 @@ Hud::Hud() :
             drawHealth(
                 finalDraw.center,
                 health.ratio,
-                draw.tint.a,
+                1.0f,
                 std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f,
                 true
             );
@@ -218,12 +218,9 @@ Hud::Hud() :
                 finalDraw.center,
                 finalDraw.size,
                 true, 0.0f,
-                tintColor(
-                    interpolateColor(
-                        health.redness, 0.0f, 1.0f,
-                        COLOR_WHITE, al_map_rgb(255, 0, 0)
-                    ),
-                    draw.tint
+                interpolateColor(
+                    health.redness, 0.0f, 1.0f,
+                    COLOR_WHITE, al_map_rgb(255, 0, 0)
                 )
             );
             
@@ -252,9 +249,7 @@ Hud::Hud() :
                     finalDraw.center,
                     Point(cautionRingSize),
                     0.0f,
-                    tintColor(
-                        mapAlpha(alphaKeyframes.get(animRatio)), draw.tint
-                    )
+                    al_map_rgba(255, 255, 255, alphaKeyframes.get(animRatio))
                 );
             }
         };
@@ -275,7 +270,7 @@ Hud::Hud() :
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     gui.addItem(leaderNextInput, "leader_next_input");
@@ -314,24 +309,24 @@ Hud::Hud() :
         drawBitmap(
             bmpHardBubble,
             Point(firstDotX + dotsSpan * 0.0, dotsY),
-            Point(sunRadius * 0.9), 0.0f, draw.tint
+            Point(sunRadius * 0.9)
         );
         drawBitmap(
             bmpHardBubble,
             Point(firstDotX + dotsSpan * 0.5, dotsY),
-            Point(sunRadius * 0.9), 0.0f, draw.tint
+            Point(sunRadius * 0.9)
         );
         drawBitmap(
             bmpHardBubble,
             Point(firstDotX + dotsSpan * 1.0, dotsY),
-            Point(sunRadius * 0.9), 0.0f, draw.tint
+            Point(sunRadius * 0.9)
         );
         
         for(unsigned char h = 0; h < nHours + 1; h++) {
             drawBitmap(
                 bmpHardBubble,
                 Point(firstDotX + h * dotInterval, dotsY),
-                Point(sunRadius * 0.6), 0.0f, draw.tint
+                Point(sunRadius * 0.6)
             );
         }
         al_hold_bitmap_drawing(false);
@@ -343,14 +338,14 @@ Hud::Hud() :
         drawBitmap(
             bmpSun,
             Point(firstDotX + dayPassedRatio * dotsSpan, dotsY),
-            sunSize, 0.0f, draw.tint
+            sunSize
         );
         //Spinning sun.
         drawBitmap(
             bmpSun,
             Point(firstDotX + dayPassedRatio * dotsSpan, dotsY),
             sunSize,
-            sunMeterSunAngle, draw.tint
+            sunMeterSunAngle
         );
         //Bubble in front the sun.
         drawBitmap(
@@ -358,7 +353,7 @@ Hud::Hud() :
             Point(firstDotX + dayPassedRatio * dotsSpan, dotsY),
             sunSize,
             0.0f,
-            tintColor(al_map_rgb(255, 192, 128), draw.tint)
+            al_map_rgb(255, 192, 128)
         );
     };
     sunMeter->onTick =
@@ -392,9 +387,7 @@ Hud::Hud() :
     GuiItem* dayBubble = new GuiItem();
     dayBubble->onDraw =
     [this] (const DrawInfo & draw) {
-        drawBitmapInBox(
-            bmpDayBubble, draw.center, draw.size, true, 0.0f, draw.tint
-        );
+        drawBitmapInBox(bmpDayBubble, draw.center, draw.size, true);
     };
     gui.addItem(dayBubble, "day_bubble");
     
@@ -406,7 +399,7 @@ Hud::Hud() :
         drawText(
             i2s(game.states.gameplay->day),
             game.sysContent.fntCounter, draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f)
         );
     };
     gui.addItem(dayNr, "day_number");
@@ -454,7 +447,7 @@ Hud::Hud() :
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            this->standbyItemsOpacity * 255
         );
     };
     gui.addItem(standbyNextInput, "standby_next_input");
@@ -497,7 +490,7 @@ Hud::Hud() :
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            this->standbyItemsOpacity * 255
         );
     };
     gui.addItem(standbyPrevInput, "standby_prev_input");
@@ -542,12 +535,12 @@ Hud::Hud() :
                 standbyMatBmp, draw.center,
                 (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
                 true,
-                0.0f, tintColor(color, draw.tint)
+                0.0f, color
             );
             drawBitmapInBox(
                 bmpBubble, draw.center,
                 draw.size + standbyMaturityIcon->getJuiceValue(),
-                true, 0.0f, tintColor(color, draw.tint)
+                true, 0.0f, color
             );
         }
         
@@ -573,7 +566,7 @@ Hud::Hud() :
             bmpCounterBubbleStandby,
             draw.center, draw.size,
             0.0f,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            mapAlpha(this->standbyItemsOpacity * 255)
         );
     };
     gui.addItem(standbyBubble, "standby_bubble");
@@ -605,7 +598,7 @@ Hud::Hud() :
         drawText(
             i2s(nStandbyPikmin), game.sysContent.fntCounter,
             draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint),
+            mapAlpha(this->standbyItemsOpacity * 255),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + standbyAmount->getJuiceValue())
         );
@@ -620,7 +613,7 @@ Hud::Hud() :
         if(!player->leaderPtr) return;
         drawBitmap(
             bmpCounterBubbleGroup,
-            draw.center, draw.size, 0.0f, draw.tint
+            draw.center, draw.size
         );
     };
     gui.addItem(groupBubble, "group_bubble");
@@ -643,7 +636,7 @@ Hud::Hud() :
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
             draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + groupAmount->getJuiceValue())
         );
@@ -657,7 +650,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleField,
-            draw.center, draw.size, 0.0f, draw.tint
+            draw.center, draw.size
         );
     };
     gui.addItem(fieldBubble, "field_bubble");
@@ -679,7 +672,7 @@ Hud::Hud() :
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
             draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + fieldAmount->getJuiceValue())
         );
@@ -693,7 +686,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleTotal,
-            draw.center, draw.size, 0.0f, draw.tint
+            draw.center, draw.size
         );
     };
     gui.addItem(totalBubble, "total_bubble");
@@ -715,7 +708,7 @@ Hud::Hud() :
         drawText(
             i2s(totalCountNr), game.sysContent.fntCounter,
             draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + totalAmount->getJuiceValue())
         );
@@ -729,7 +722,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         drawText(
             "x", game.sysContent.fntCounter, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            mapAlpha(this->standbyItemsOpacity * 255)
         );
     };
     gui.addItem(countersX, "counters_x");
@@ -742,8 +735,7 @@ Hud::Hud() :
         [this] (const DrawInfo & draw) {
             if(!player->leaderPtr) return;
             drawText(
-                "/", game.sysContent.fntCounter, draw.center, draw.size,
-                draw.tint
+                "/", game.sysContent.fntCounter, draw.center, draw.size
             );
         };
         gui.addItem(counterSlash, "counters_slash_" + i2s(s + 1));
@@ -790,7 +782,7 @@ Hud::Hud() :
             "x" +
             i2s(curAmount), game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint),
+            mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + spray1Amount->getJuiceValue())
         );
@@ -838,7 +830,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(spray1Input, "spray_1_input");
@@ -860,7 +852,7 @@ Hud::Hud() :
             game.config.misc.sprayOrder[bottomSprayIdx]->bmpSpray,
             draw.center, draw.size, true,
             0.0f,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
+            mapAlpha(this->sprayItemsOpacity * 255)
         );
     };
     gui.addItem(spray2Icon, "spray_2_icon");
@@ -891,7 +883,7 @@ Hud::Hud() :
             "x" +
             i2s(curAmount), game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint),
+            mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + spray2Amount->getJuiceValue())
         );
@@ -925,7 +917,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(spray2Input, "spray_2_input");
@@ -969,7 +961,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(prevSprayInput, "spray_prev_input");
@@ -1013,7 +1005,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(nextSprayInput, "spray_next_input");
@@ -1038,8 +1030,7 @@ Hud::Hud() :
                 draw.size.y
             );
             drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
-                tintColor(al_map_rgba(86, 149, 50, 160), draw.tint)
+                draw.center, draw.size, 20.0f, al_map_rgba(86, 149, 50, 160)
             );
             setCombinedClippingRectangles(
                 cx, cy, cw, ch,
@@ -1050,13 +1041,12 @@ Hud::Hud() :
                 draw.size.y
             );
             drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
-                tintColor(al_map_rgba(34, 102, 102, 80), draw.tint)
+                draw.center, draw.size, 20.0f, al_map_rgba(34, 102, 102, 80)
             );
             al_set_clipping_rectangle(cx, cy, cw, ch);
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpBubbleBox,
-                tintColor(mapAlpha(200), draw.tint)
+                al_map_rgba(255, 255, 255, 200)
             );
         };
         gui.addItem(missionGoalBubble, "mission_goal_bubble");
@@ -1074,8 +1064,7 @@ Hud::Hud() :
             (const DrawInfo & draw) {
                 drawText(
                     goalCurLabelText, game.sysContent.fntStandard,
-                    draw.center, draw.size,
-                    tintColor(mapAlpha(128), draw.tint)
+                    draw.center, draw.size, al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.addItem(missionGoalCurLabel, "mission_goal_cur_label");
@@ -1102,7 +1091,7 @@ Hud::Hud() :
                     missionGoalCur->getJuiceValue();
                 drawText(
                     text, game.sysContent.fntCounter, draw.center, draw.size,
-                    draw.tint, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                    COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                     Point(1.0 + juicyGrowAmount)
                 );
             };
@@ -1116,7 +1105,7 @@ Hud::Hud() :
             [this] (const DrawInfo & draw) {
                 drawText(
                     "Goal", game.sysContent.fntStandard, draw.center, draw.size,
-                    tintColor(mapAlpha(128), draw.tint)
+                    al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.addItem(missionGoalReqLabel, "mission_goal_req_label");
@@ -1139,8 +1128,7 @@ Hud::Hud() :
                     text = i2s(value);
                 }
                 drawText(
-                    text, game.sysContent.fntCounter, draw.center, draw.size,
-                    draw.tint
+                    text, game.sysContent.fntCounter, draw.center, draw.size
                 );
             };
             gui.addItem(missionGoalReq, "mission_goal_req");
@@ -1151,8 +1139,7 @@ Hud::Hud() :
             missionGoalSlash->onDraw =
             [this] (const DrawInfo & draw) {
                 drawText(
-                    "/", game.sysContent.fntCounter, draw.center, draw.size,
-                    draw.tint
+                    "/", game.sysContent.fntCounter, draw.center, draw.size
                 );
             };
             gui.addItem(missionGoalSlash, "mission_goal_slash");
@@ -1166,8 +1153,7 @@ Hud::Hud() :
                 drawText(
                     game.missionGoals[game.curAreaData->mission.goal]->
                     getName(), game.sysContent.fntStandard,
-                    draw.center, draw.size,
-                    tintColor(mapAlpha(128), draw.tint)
+                    draw.center, draw.size, al_map_rgba(255, 255, 255, 128)
                 );
             };
             gui.addItem(missionGoalName, "mission_goal_name");
@@ -1187,12 +1173,11 @@ Hud::Hud() :
         missionScoreBubble->onDraw =
         [this] (const DrawInfo & draw) {
             drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
-                tintColor(al_map_rgba(86, 149, 50, 160), draw.tint)
+                draw.center, draw.size, 20.0f, al_map_rgba(86, 149, 50, 160)
             );
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpBubbleBox,
-                tintColor(mapAlpha(200), draw.tint)
+                al_map_rgba(255, 255, 255, 200)
             );
         };
         gui.addItem(missionScoreBubble, "mission_score_bubble");
@@ -1206,7 +1191,7 @@ Hud::Hud() :
                 "Score:", game.sysContent.fntStandard,
                 Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
                 draw.size,
-                tintColor(mapAlpha(128), draw.tint), ALLEGRO_ALIGN_RIGHT
+                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
         gui.addItem(missionScoreScoreLabel, "mission_score_score_label");
@@ -1220,7 +1205,7 @@ Hud::Hud() :
             float juicyGrowAmount = missionScorePoints->getJuiceValue();
             drawText(
                 i2s(game.states.gameplay->missionScore),
-                game.sysContent.fntCounter, draw.center, draw.size, draw.tint,
+                game.sysContent.fntCounter, draw.center, draw.size, COLOR_WHITE,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 Point(1.0 + juicyGrowAmount)
             );
@@ -1237,8 +1222,7 @@ Hud::Hud() :
                 "pts", game.sysContent.fntStandard,
                 Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
                 draw.size,
-                tintColor(mapAlpha(128), draw.tint),
-                ALLEGRO_ALIGN_RIGHT,
+                al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT,
                 V_ALIGN_MODE_CENTER, 0, 0.66f
             );
         };
@@ -1289,7 +1273,7 @@ Hud::Hud() :
                     (float) game.curAreaData->mission.platinumReq
                 )
             };
-            ALLEGRO_COLOR segColorsTop[] = {
+            const ALLEGRO_COLOR segColorsTop[] = {
                 al_map_rgba(152, 160, 152, 96),  //Negatives.
                 al_map_rgba(204, 229, 172, 160), //No medal.
                 al_map_rgb(229, 175, 126),       //Bronze.
@@ -1297,7 +1281,7 @@ Hud::Hud() :
                 al_map_rgb(229, 212, 110),       //Gold.
                 al_map_rgb(110, 229, 193)        //Platinum.
             };
-            ALLEGRO_COLOR segColorsBottom[] = {
+            const ALLEGRO_COLOR segColorsBottom[] = {
                 al_map_rgba(152, 160, 152, 96),  //Negatives.
                 al_map_rgba(190, 214, 160, 160), //No medal.
                 al_map_rgb(214, 111, 13),        //Bronze.
@@ -1305,10 +1289,6 @@ Hud::Hud() :
                 al_map_rgb(214, 184, 4),         //Gold.
                 al_map_rgb(3, 214, 144)          //Platinum.
             };
-            for(unsigned char c = 0; c < 6; c++) {
-                segColorsTop[c] = tintColor(segColorsTop[c], draw.tint);
-                segColorsTop[c] = tintColor(segColorsBottom[c], draw.tint);
-            }
             ALLEGRO_BITMAP* segIcons[] = {
                 nullptr,
                 nullptr,
@@ -1403,7 +1383,7 @@ Hud::Hud() :
                     draw.center.y - draw.size.y / 2.0f,
                     markingX - 2.0f,
                     draw.center.y - draw.size.y / 2.0f,
-                    tintColor(al_map_rgb(100, 110, 180), draw.tint)
+                    al_map_rgb(100, 110, 180)
                 );
             }
             
@@ -1441,7 +1421,7 @@ Hud::Hud() :
                 drawBitmap(
                     segIcons[s],
                     Point(iconX, draw.center.y),
-                    Point(-1, draw.size.y * iconScale), 0.0f, draw.tint
+                    Point(-1, draw.size.y * iconScale)
                 );
                 if(curSeg == s) {
                     gotItX = iconX;
@@ -1456,7 +1436,7 @@ Hud::Hud() :
                 drawBitmap(
                     segIcons[lastPassedSeg],
                     Point(startX, draw.center.y),
-                    Point(-1, draw.size.y * curMedalScale), 0.0f, draw.tint
+                    Point(-1, draw.size.y * curMedalScale)
                 );
                 gotItX = startX;
             }
@@ -1473,7 +1453,7 @@ Hud::Hud() :
                         -1,
                         draw.size.y * ease(EASE_METHOD_OUT_ELASTIC, juiceTime)
                     ),
-                    TAU * 0.05f, draw.tint
+                    TAU * 0.05f
                 );
             }
             
@@ -1483,14 +1463,14 @@ Hud::Hud() :
                 draw.center.x, draw.center.y,
                 draw.center.x + (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                tintColor(al_map_rgb(64, 186, 64), draw.tint)
+                al_map_rgb(64, 186, 64)
             );
             al_draw_filled_triangle(
                 draw.center.x, draw.center.y + draw.size.y / 2.0f,
                 draw.center.x, draw.center.y,
                 draw.center.x - (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                tintColor(al_map_rgb(75, 218, 75), draw.tint)
+                al_map_rgb(75, 218, 75)
             );
         };
         gui.addItem(missionScoreRuler, "mission_score_ruler");
@@ -1598,8 +1578,7 @@ void Hud::createMissionFailCondItems(bool primary) {
             draw.size.y
         );
         drawFilledRoundedRectangle(
-            draw.center, draw.size, 20.0f,
-            tintColor(al_map_rgba(149, 80, 50, 160), draw.tint)
+            draw.center, draw.size, 20.0f, al_map_rgba(149, 80, 50, 160)
         );
         setCombinedClippingRectangles(
             cx, cy, cw, ch,
@@ -1610,13 +1589,12 @@ void Hud::createMissionFailCondItems(bool primary) {
             draw.size.y
         );
         drawFilledRoundedRectangle(
-            draw.center, draw.size, 20.0f,
-            tintColor(al_map_rgba(149, 130, 50, 160), draw.tint)
+            draw.center, draw.size, 20.0f, al_map_rgba(149, 130, 50, 160)
         );
         al_set_clipping_rectangle(cx, cy, cw, ch);
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpBubbleBox,
-            tintColor(mapAlpha(200), draw.tint)
+            al_map_rgba(255, 255, 255, 200)
         );
     };
     gui.addItem(
@@ -1637,7 +1615,7 @@ void Hud::createMissionFailCondItems(bool primary) {
                 game.missionFailConds[cond]->
                 getHudLabel(game.states.gameplay),
                 game.sysContent.fntStandard, draw.center, draw.size,
-                tintColor(mapAlpha(128), draw.tint)
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.addItem(
@@ -1665,7 +1643,7 @@ void Hud::createMissionFailCondItems(bool primary) {
             float juicyGrowAmount = missionFailCur->getJuiceValue();
             drawText(
                 text, game.sysContent.fntCounter, draw.center, draw.size,
-                draw.tint, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 Point(1.0 + juicyGrowAmount)
             );
         };
@@ -1689,7 +1667,7 @@ void Hud::createMissionFailCondItems(bool primary) {
         (const DrawInfo & draw) {
             drawText(
                 "Fail", game.sysContent.fntStandard, draw.center, draw.size,
-                tintColor(mapAlpha(128), draw.tint)
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.addItem(
@@ -1714,8 +1692,7 @@ void Hud::createMissionFailCondItems(bool primary) {
                 text = i2s(value);
             }
             drawText(
-                text, game.sysContent.fntCounter, draw.center, draw.size,
-                draw.tint
+                text, game.sysContent.fntCounter, draw.center, draw.size
             );
         };
         gui.addItem(
@@ -1731,8 +1708,7 @@ void Hud::createMissionFailCondItems(bool primary) {
         missionFailSlash->onDraw =
         [this] (const DrawInfo & draw) {
             drawText(
-                "/", game.sysContent.fntCounter, draw.center, draw.size,
-                draw.tint
+                "/", game.sysContent.fntCounter, draw.center, draw.size
             );
         };
         gui.addItem(
@@ -1752,7 +1728,7 @@ void Hud::createMissionFailCondItems(bool primary) {
                 "Fail: " +
                 game.missionFailConds[cond]->getName(),
                 game.sysContent.fntStandard, draw.center, draw.size,
-                tintColor(mapAlpha(128), draw.tint)
+                al_map_rgba(255, 255, 255, 128)
             );
         };
         gui.addItem(
@@ -1785,7 +1761,7 @@ void Hud::drawSprayIcon(BUBBLE_RELATION which) {
     if(!icon) return;
     drawBitmapInBox(
         icon, draw.center, draw.size, true, 0.0f,
-        tintColor(mapAlpha(sprayItemsOpacity * 255), draw.tint)
+        mapAlpha(sprayItemsOpacity * 255)
     );
 }
 
@@ -1807,9 +1783,8 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     
     if(!icon) return;
     
-    ALLEGRO_COLOR color =
-        tintColor(mapAlpha(standbyItemsOpacity * 255), draw.tint);
-        
+    ALLEGRO_COLOR color = mapAlpha(standbyItemsOpacity * 255);
+    
     drawBitmapInBox(icon, draw.center, draw.size * 0.8, true, 0.0f, color);
     
     if(

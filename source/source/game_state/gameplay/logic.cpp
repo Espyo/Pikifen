@@ -522,7 +522,45 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     *                    `-´   *
     ****************************/
     
-    processLeaderCursor(player, deltaT);
+    Point leaderCursorSpeed;
+    float dummyMagnitude;
+    player->leaderCursorMov.getInfo(
+        &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
+    );
+    leaderCursorSpeed =
+        leaderCursorSpeed * deltaT * game.options.controls.leaderCursorSpeed;
+        
+    if(
+        leaderCursorSpeed.x == 0.0f && leaderCursorSpeed.y == 0.0f &&
+        game.mouseCursor.movedThisFrame &&
+        game.options.advanced.mouseMovesCursor[player->playerNr]
+    ) {
+        player->leaderCursorWorld = player->view.mouseCursorWorldPos;
+    } else {
+        player->leaderCursorWorld += leaderCursorSpeed;
+    }
+    
+    float leaderCursorAngle =
+        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+    Distance leaderToCursorDist(
+        player->leaderPtr->pos, player->leaderCursorWorld
+    );
+    
+    if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
+        //Leader's cursor goes beyond the range limit.
+        player->leaderCursorWorld.x =
+            player->leaderPtr->pos.x +
+            (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
+        player->leaderCursorWorld.y =
+            player->leaderPtr->pos.y +
+            (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
+    }
+    
+    player->leaderCursorWin = player->leaderCursorWorld;
+    al_transform_coordinates(
+        &player->view.worldToWindowTransform,
+        &player->leaderCursorWin.x, &player->leaderCursorWin.y
+    );
     
     
     /***********************************
@@ -549,14 +587,10 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->swarmAngle = newSwarmAngle;
     }
     
-    float leaderCursorAngle =
-        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-        
     if(player->swarmToLeaderCursor) {
         player->swarmAngle = leaderCursorAngle;
-        Distance leaderToCursorDist(
-            player->leaderPtr->pos, player->leaderCursorWorld
-        );
+        leaderToCursorDist =
+            Distance(player->leaderPtr->pos, player->leaderCursorWorld);
         player->swarmMagnitude =
             leaderToCursorDist.toFloat() /
             game.config.rules.leaderCursorMaxDist;
@@ -621,7 +655,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     if(
         readyForInput && isInputAllowed && interlude.get() == INTERLUDE_NONE &&
-        game.options.controls.mouseMovesLeader[player->playerNr]
+        game.options.advanced.mouseMovesLeader[player->playerNr]
     ) {
         float leaderToMouseCursorDist =
             Distance(
@@ -1588,54 +1622,6 @@ void GameplayState::markAreaCellsActive(
 
 
 /**
- * @brief Processes the leader's cursor for this frame.
- *
- * @param player The player responsible.
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void GameplayState::processLeaderCursor(Player* player, float deltaT) {
-    //Move the leader cursor freely, using the current control scheme.
-    if(game.options.controls.mouseMovesLeaderCursor[player->playerNr]) {
-        player->leaderCursorWorld = player->view.mouseCursorWorldPos;
-    } else {
-        Point leaderCursorSpeed;
-        float dummyMagnitude, dummyAngle;
-        player->leaderCursorMov.getInfo(
-            &leaderCursorSpeed, &dummyAngle, &dummyMagnitude
-        );
-        leaderCursorSpeed =
-            leaderCursorSpeed * deltaT *
-            game.options.controls.leaderCursorSpeed;
-            
-        player->leaderCursorWorld += leaderCursorSpeed;
-    }
-    
-    //Make sure it doesn't go beyond the range limit.
-    Distance leaderToCursorDist(
-        player->leaderPtr->pos, player->leaderCursorWorld
-    );
-    
-    if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
-        float leaderCursorAngle =
-            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-        player->leaderCursorWorld.x =
-            player->leaderPtr->pos.x +
-            (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
-        player->leaderCursorWorld.y =
-            player->leaderPtr->pos.y +
-            (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
-    }
-    
-    //Update the leader cursor window coordinates.
-    player->leaderCursorWin = player->leaderCursorWorld;
-    al_transform_coordinates(
-        &player->view.worldToWindowTransform,
-        &player->leaderCursorWin.x, &player->leaderCursorWin.y
-    );
-}
-
-
-/**
  * @brief Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  *
@@ -1643,7 +1629,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
  * @param m Index of the mob.
  */
 void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
-    vector<PendingInterMobEvent> pendingInterMobEvents;
+    vector<PendingIntermobEvent> pendingIntermobEvents;
     MobState* stateBefore = mPtr->fsm.curState;
     
     size_t nMobs = mobs.all.size();
@@ -1693,7 +1679,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
             !m2Ptr->hasInvisibilityStatus
         ) {
             processMobReaches(
-                mPtr, m2Ptr, m, m2, dBetween, pendingInterMobEvents
+                mPtr, m2Ptr, m, m2, dBetween, pendingIntermobEvents
             );
         }
         
@@ -1703,7 +1689,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
         }
         
         processMobMiscInteractions(
-            mPtr, m2Ptr, m, m2, d, dBetween, pendingInterMobEvents
+            mPtr, m2Ptr, m, m2, d, dBetween, pendingIntermobEvents
         );
         
         if(game.perfMon) {
@@ -1717,8 +1703,8 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     
     //Check the pending inter-mob events.
     sort(
-        pendingInterMobEvents.begin(), pendingInterMobEvents.end(),
-    [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
+        pendingIntermobEvents.begin(), pendingIntermobEvents.end(),
+    [mPtr] (PendingIntermobEvent e1, PendingIntermobEvent e2) -> bool {
         return
         (
             e1.d.toFloat() -
@@ -1730,15 +1716,15 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     }
     );
     
-    for(size_t e = 0; e < pendingInterMobEvents.size(); e++) {
+    for(size_t e = 0; e < pendingIntermobEvents.size(); e++) {
         if(mPtr->fsm.curState != stateBefore) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
             break;
         }
-        if(!pendingInterMobEvents[e].eventPtr) continue;
-        pendingInterMobEvents[e].eventPtr->run(
-            mPtr, (void*) pendingInterMobEvents[e].mobPtr
+        if(!pendingIntermobEvents[e].eventPtr) continue;
+        pendingIntermobEvents[e].eventPtr->run(
+            mPtr, (void*) pendingIntermobEvents[e].mobPtr
         );
         
     }
@@ -1759,12 +1745,12 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
  * @param m2 Index of the mob to check against.
  * @param d Distance between the two's centers.
  * @param dBetween Distance between the two.
- * @param pendingInterMobEvents Vector of events to be processed.
+ * @param pendingIntermobEvents Vector of events to be processed.
  */
 void GameplayState::processMobMiscInteractions(
     Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
     const Distance& d, const Distance& dBetween,
-    vector<PendingInterMobEvent>& pendingInterMobEvents
+    vector<PendingIntermobEvent>& pendingIntermobEvents
 ) {
     //Find a carriable mob to grab.
     MobEvent* ncoEvent =
@@ -1777,8 +1763,8 @@ void GameplayState::processMobMiscInteractions(
     ) {
         Pikmin* pikPtr = (Pikmin*) mPtr;
         if(dBetween <= pikPtr->getTaskRange()) {
-            pendingInterMobEvents.push_back(
-                PendingInterMobEvent(dBetween, ncoEvent, m2Ptr)
+            pendingIntermobEvents.push_back(
+                PendingIntermobEvent(dBetween, ncoEvent, m2Ptr)
             );
         }
     }
@@ -1797,8 +1783,8 @@ void GameplayState::processMobMiscInteractions(
             if(tooPtr->reserved && tooPtr->reserved != mPtr) {
                 //Another Pikmin is already going for it. Ignore it.
             } else {
-                pendingInterMobEvents.push_back(
-                    PendingInterMobEvent(dBetween, ntoEvent, m2Ptr)
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, ntoEvent, m2Ptr)
                 );
             }
         }
@@ -1820,8 +1806,8 @@ void GameplayState::processMobMiscInteractions(
             if(!freeSpot) {
                 //There are no free spots here. Ignore it.
             } else {
-                pendingInterMobEvents.push_back(
-                    PendingInterMobEvent(dBetween, ngtoEvent, m2Ptr)
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, ngtoEvent, m2Ptr)
                 );
             }
         }
@@ -1841,8 +1827,8 @@ void GameplayState::processMobMiscInteractions(
                 m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
                 dBetween <= game.options.misc.pikminBumpDist
             ) {
-                pendingInterMobEvents.push_back(
-                    PendingInterMobEvent(dBetween, touchLeEv, m2Ptr)
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)
                 );
             }
         }
@@ -1859,11 +1845,11 @@ void GameplayState::processMobMiscInteractions(
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
  * @param dBetween Distance between the two.
- * @param pendingInterMobEvents Vector of events to be processed.
+ * @param pendingIntermobEvents Vector of events to be processed.
  */
 void GameplayState::processMobReaches(
     Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance& dBetween,
-    vector<PendingInterMobEvent>& pendingInterMobEvents
+    vector<PendingIntermobEvent>& pendingIntermobEvents
 ) {
     //Check reaches.
     MobEvent* obirEv =
@@ -1882,15 +1868,15 @@ void GameplayState::processMobReaches(
         
     if(isMobInReach(rPtr, dBetween, angleDiff)) {
         if(obirEv) {
-            pendingInterMobEvents.push_back(
-                PendingInterMobEvent(
+            pendingIntermobEvents.push_back(
+                PendingIntermobEvent(
                     dBetween, obirEv, m2Ptr
                 )
             );
         }
         if(opirEv && mPtr->canHunt(m2Ptr)) {
-            pendingInterMobEvents.push_back(
-                PendingInterMobEvent(
+            pendingIntermobEvents.push_back(
+                PendingIntermobEvent(
                     dBetween, opirEv, m2Ptr
                 )
             );

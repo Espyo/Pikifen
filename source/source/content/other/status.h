@@ -117,7 +117,7 @@ public:
     //Rule to follow when re-applying the status effect.
     STATUS_REAPPLY_RULE reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
     
-    //If 0, apply instantly. Otherwise, apply this much buildup [0 - 1].
+    //If 0, apply instantly. Otherwise, apply this much buildup (0 - 1).
     float buildup = 0.0f;
     
     //If it uses buildup, all of it is gone after these many seconds
@@ -214,7 +214,7 @@ struct Status {
     //Status type.
     StatusType* type = nullptr;
     
-    //Buildup, if applicable [0 - 1].
+    //Buildup, if applicable (0 - 1).
     float buildup = 0.0f;
     
     //Time left until the buildup is removed, if applicable.

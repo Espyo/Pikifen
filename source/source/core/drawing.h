@@ -183,8 +183,9 @@ void drawBitmapWithEffects(
 );
 void drawButton(
     const Point& center, const Point& size, const string& text,
-    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& textColor, bool focused,
-    float juicyGrowAmount = 0.0f, const ALLEGRO_COLOR& tint = COLOR_WHITE
+    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
+    bool selected,
+    float juicyGrowAmount = 0.0f
 );
 void drawFraction(
     const Point& bottom, size_t valueNr,
@@ -206,13 +207,13 @@ void drawLoadingScreen(
 );
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
-    bool leftSide, const ALLEGRO_COLOR& tint
+    bool leftSide
 );
 void drawMouseCursor(const ALLEGRO_COLOR& color);
 void drawPlayerInputSourceIcon(
     const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
     bool condensed, const Point& where, const Point& maxSize,
-    const ALLEGRO_COLOR& tint = COLOR_WHITE
+    unsigned char alpha = 228
 );
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float opacity
@@ -229,7 +230,7 @@ void drawStringTokens(
     const vector<StringToken>& tokens, const ALLEGRO_FONT* const textFont,
     const ALLEGRO_FONT* const inputFont, bool inputCondensed,
     const Point& where, int flags, const Point& maxSize,
-    const Point& scale = Point(1.0f), const ALLEGRO_COLOR& tint = COLOR_WHITE
+    const Point& scale = Point(1.0f)
 );
 void getPlayerInputIconInfo(
     const Inpution::InputSource& s, bool condensed,

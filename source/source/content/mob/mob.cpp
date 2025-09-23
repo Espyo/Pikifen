@@ -4096,7 +4096,7 @@ void Mob::tickMiscLogic(float deltaT) {
         health < maxHealth;
     bool shouldShowStatusBuildups = false;
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(statuses[s].buildup > 0.0f) {
+        if(statuses[s].buildup >= 0.0f) {
             shouldShowStatusBuildups = true;
             break;
         }

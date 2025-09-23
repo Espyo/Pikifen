@@ -80,11 +80,14 @@ string c2s(const ALLEGRO_COLOR& c) {
  * @brief Returns the color that was provided, but with the alpha changed.
  *
  * @param c The color to change the alpha on.
- * @param a The new alpha, [0 - 255].
+ * @param a The new alpha, [0-255].
  * @return The new color.
  */
 ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a) {
-    return { c.r, c.g, c.b, a / 255.0f };
+    ALLEGRO_COLOR c2;
+    c2.r = c.r; c2.g = c.g; c2.b = c.b;
+    c2.a = a / 255.0;
+    return c2;
 }
 
 
@@ -552,19 +555,6 @@ ALLEGRO_COLOR interpolateColor(
 
 
 /**
- * @brief Returns the color that was provided, but with the alpha multiplied
- * by a given value.
- *
- * @param c The color to change the alpha on.
- * @param mult The multiplier.
- * @return The new color.
- */
-ALLEGRO_COLOR multAlpha(const ALLEGRO_COLOR& c, float mult) {
-    return { c.r, c.g, c.b, c.a * mult };
-}
-
-
-/**
  * @brief Creates and opens an Allegro native file dialog.
  *
  * @param initialPath Initial path for the dialog.
@@ -767,24 +757,6 @@ int showSystemMessageBox(
     setlocale(LC_ALL, "C");
     
     return ret;
-}
-
-
-/**
- * @brief Returns the color that was provided, but tinted with the second
- * color. i.e. The values are multiplied with one another.
- *
- * @param c The color to change the tint of.
- * @param t The tint color.
- * @return The new color.
- */
-ALLEGRO_COLOR tintColor(const ALLEGRO_COLOR& c, const ALLEGRO_COLOR& t) {
-    return {
-        c.r * t.r,
-        c.g * t.g,
-        c.b * t.b,
-        c.a * t.a,
-    };
 }
 
 

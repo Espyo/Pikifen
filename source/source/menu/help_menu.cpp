@@ -34,12 +34,11 @@ const string GUI_FILE_NAME = "help_menu";
  * @param maxSize Maximum width or height the text can occupy.
  * A value of zero in one of these coordinates makes it not have a
  * limit in that dimension.
- * @param tint Color to tint with.
  * @param text Text to draw.
  */
 void HelpMenu::drawTidbit(
     const ALLEGRO_FONT* const font, const Point& where,
-    const Point& maxSize, const ALLEGRO_COLOR& tint, const string& text
+    const Point& maxSize, const string& text
 ) {
     //Get the tokens that make up the tidbit.
     vector<StringToken> tokens = tokenizeString(text);
@@ -78,8 +77,7 @@ void HelpMenu::drawTidbit(
                 where.y + l * (lineHeight + 4) * yScale -
                 (tokensPerLine.size() * lineHeight * yScale / 2.0f)
             ),
-            ALLEGRO_ALIGN_CENTER, Point(maxSize.x, lineHeight * yScale),
-            Point(1.0f), tint
+            ALLEGRO_ALIGN_CENTER, Point(maxSize.x, lineHeight * yScale)
         );
     }
 }
@@ -222,7 +220,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         if(curTidbit->image == nullptr) return;
         drawBitmapInBox(
             curTidbit->image,
-            draw.center, draw.size, false, 0.0f, draw.tint
+            draw.center, draw.size, false
         );
     };
     gui.addItem(imageItem, "image");
@@ -234,7 +232,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         [this]
     (const DrawInfo & draw) {
         drawTidbit(
-            game.sysContent.fntStandard, draw.center, draw.size, draw.tint,
+            game.sysContent.fntStandard, draw.center, draw.size,
             gui.getCurrentTooltip()
         );
     };

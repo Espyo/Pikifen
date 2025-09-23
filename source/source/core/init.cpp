@@ -202,34 +202,6 @@ void initControls() {
         "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
-        PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor right",
-        "Move the leader's cursor right.",
-        "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
-        PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor up",
-        "Move the leader's cursor up.",
-        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
-        PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor left",
-        "Move the leader's cursor left.",
-        "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
-        PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor down",
-        "Move the leader's cursor down.",
-        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
-    );
-    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_THROW,
         PLAYER_ACTION_CAT_MAIN,
         "Throw",
@@ -415,6 +387,34 @@ void initControls() {
     );
     
     //Advanced.
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor right",
+        "Move the leader's cursor right. Useful if it's not mouse-controlled.",
+        "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor up",
+        "Move the leader's cursor up. Useful if it's not mouse-controlled.",
+        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor left",
+        "Move the leader's cursor left. Useful if it's not mouse-controlled.",
+        "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor down",
+        "Move the leader's cursor down. Useful if it's not mouse-controlled.",
+        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+    );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,

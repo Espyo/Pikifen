@@ -77,7 +77,6 @@ void ShipType::loadCatProperties(DataNode* file) {
     sRS.set("receptacle_offset", receptacleOffset);
     
     nest->loadProperties(file, this);
-    nest->createColormap();
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "beam") {

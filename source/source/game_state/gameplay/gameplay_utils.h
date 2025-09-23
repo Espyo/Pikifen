@@ -28,7 +28,7 @@ class PikminType;
  * We can then go through a vector of these pending intermob events in order.
  *
  */
-struct PendingInterMobEvent {
+struct PendingIntermobEvent {
 
     //--- Members ---
     
@@ -44,7 +44,7 @@ struct PendingInterMobEvent {
     
     //--- Function definitions ---
     
-    PendingInterMobEvent(
+    PendingIntermobEvent(
         const Distance& d, MobEvent* eventPtr, Mob* mobPtr
     ):
         d(d),

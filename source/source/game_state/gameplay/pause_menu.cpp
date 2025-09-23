@@ -290,7 +290,7 @@ void PauseMenu::addPikminStatusLine(
         typeItem->onDraw =
         [pikType] (const DrawInfo & draw) {
             drawBitmapInBox(
-                pikType->bmpIcon, draw.center, draw.size, true, 0.0f, draw.tint
+                pikType->bmpIcon, draw.center, draw.size, true
             );
         };
         typeItem->ratioCenter =
@@ -438,7 +438,7 @@ void PauseMenu::addPikminStatusLine(
         al_draw_line(
             draw.center.x, draw.center.y - draw.size.y / 2.0f,
             draw.center.x, draw.center.y + draw.size.y / 2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint), 5.0f
+            COLOR_TRANSPARENT_WHITE, 5.0f
         );
     };
     list->addChild(separatorItem);
@@ -718,7 +718,7 @@ void PauseMenu::createPageButtons(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     curGui->addItem(leftPageInput, "left_page_input");
@@ -738,7 +738,7 @@ void PauseMenu::createPageButtons(
             inputSource;
         if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     curGui->addItem(rightPageInput, "right_page_input");
@@ -1294,7 +1294,8 @@ void PauseMenu::drawRadar(
             scanLineY,
             center.x + size.x / 2.0f,
             scanLineY,
-            mapAlpha(8), 2.0f
+            al_map_rgba(255, 255, 255, 8),
+            2.0f
         );
         scanLineY += 16.0f;
     }
@@ -1305,7 +1306,8 @@ void PauseMenu::drawRadar(
             center.y - size.y / 2.0f,
             scanLineX,
             center.y + size.y / 2.0f,
-            mapAlpha(8), 2.0f
+            al_map_rgba(255, 255, 255, 8),
+            2.0f
         );
         scanLineX += 16.0f;
     }
@@ -1807,7 +1809,7 @@ void PauseMenu::initMainPauseMenu() {
             draw.center,
             Point(draw.size.x, 3.0f),
             2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     gui.addItem(line, "line");
@@ -2068,7 +2070,7 @@ void PauseMenu::initMissionPage() {
             draw.center,
             Point(draw.size.x, 3.0f),
             2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     missionGui.addItem(line, "line");
@@ -2224,7 +2226,7 @@ void PauseMenu::initRadarPage() {
             draw.center,
             Point(draw.size.x, 3.0f),
             2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     radarGui.addItem(line, "line");
@@ -2334,14 +2336,14 @@ void PauseMenu::initRadarPage() {
                     draw.center.y - textH / 2.0f + l * lineHeight
                 ),
                 cursorInfoText->flags,
-                Point(draw.size.x, lineHeight), Point(1.0f), draw.tint
+                Point(draw.size.x, lineHeight)
             );
         }
         
         //Draw a box around it.
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
         
         //Draw a connection from here to the radar cursor.
@@ -2486,7 +2488,7 @@ void PauseMenu::initStatusPage() {
             draw.center,
             Point(draw.size.x, 3.0f),
             2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     statusGui.addItem(line, "line");

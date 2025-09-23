@@ -813,7 +813,7 @@ void AreaEditor::drawCrossSectionGraph() {
                 (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
                 cursorSegmentRatio,
                 crossSectionWindowEnd.y,
-                mapAlpha(128), 1
+                al_map_rgba(255, 255, 255, 128), 1
             );
         }
         
@@ -1867,7 +1867,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                     -sPtr->size.y / 2.0,
                     sPtr->size.x / 2.0,
                     sPtr->size.y / 2.0,
-                    mapAlpha(96 * (sPtr->alpha / 255.0))
+                    al_map_rgba(255, 255, 255, 96 * (sPtr->alpha / 255.0))
                 );
                 
                 al_use_transform(&current);

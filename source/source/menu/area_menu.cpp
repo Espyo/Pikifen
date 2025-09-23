@@ -395,13 +395,11 @@ void AreaMenu::initGuiInfoPage() {
                 (draw.center.y - draw.size.y / 2.0f) + finalSize.y / 2.0f
             );
             if(curThumb) {
-                drawBitmap(
-                    curThumb, finalCenter, finalSize - 4.0f, 0.0f, draw.tint
-                );
+                drawBitmap(curThumb, finalCenter, finalSize - 4.0f);
             }
             drawTexturedBox(
                 finalCenter, finalSize, game.sysContent.bmpFrameBox,
-                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                COLOR_TRANSPARENT_WHITE
             );
         };
         infoBox->addChild(thumbItem);
@@ -435,7 +433,7 @@ void AreaMenu::initGuiInfoPage() {
             [this] (const DrawInfo & draw) {
                 if(curStamp) {
                     drawBitmapInBox(
-                        curStamp, draw.center, draw.size, true, 0.0f, draw.tint
+                        curStamp, draw.center, draw.size, true
                     );
                 }
             };
@@ -448,7 +446,7 @@ void AreaMenu::initGuiInfoPage() {
             [this] (const DrawInfo & draw) {
                 if(curMedal) {
                     drawBitmapInBox(
-                        curMedal, draw.center, draw.size, true, 0.0f, draw.tint
+                        curMedal, draw.center, draw.size, true
                     );
                 }
             };
@@ -475,7 +473,7 @@ void AreaMenu::initGuiInfoPage() {
                 difficultyText, game.sysContent.fntStandard,
                 Point(draw.center.x - draw.size.x / 2.0f, draw.center.y),
                 draw.size,
-                draw.tint, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+                COLOR_WHITE, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
                 TEXT_SETTING_FLAG_CANT_GROW,
                 Point(1.0 + difficultyItem->getJuiceValue())
             );
@@ -493,7 +491,7 @@ void AreaMenu::initGuiInfoPage() {
                         iconsX2 - iconSize.x * i - iconSize.x / 2.0f,
                         draw.center.y
                     ),
-                    iconSize, 0.0f, draw.tint
+                    iconSize
                 );
             }
         };
@@ -634,7 +632,7 @@ void AreaMenu::initGuiMain() {
                     if(areaRecords[a].clear) {
                         drawBitmapInBox(
                             game.sysContent.bmpMissionClear,
-                            draw.center, draw.size, true, 0.0f, draw.tint
+                            draw.center, draw.size, true
                         );
                     }
                 };
@@ -685,8 +683,7 @@ void AreaMenu::initGuiMain() {
                     
                     if(medalBmp) {
                         drawBitmapInBox(
-                            medalBmp, draw.center, draw.size, true,
-                            0.0f, draw.tint
+                            medalBmp, draw.center, draw.size, true
                         );
                     }
                 };
@@ -701,7 +698,7 @@ void AreaMenu::initGuiMain() {
         [] (const DrawInfo & draw) {
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpFrameBox,
-                tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                COLOR_TRANSPARENT_WHITE
             );
         };
         gui.addItem(infoBox, "info_box");
@@ -714,11 +711,11 @@ void AreaMenu::initGuiMain() {
             drawButton(
                 draw.center, draw.size, "",
                 game.sysContent.fntStandard, COLOR_WHITE,
-                randomButton->focused, 0.0f, draw.tint
+                randomButton->focused
             );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
-                draw.center, draw.size - 8, true, 0.0f, draw.tint
+                draw.center, draw.size - 8, true
             );
         };
         randomButton->onActivate =
@@ -770,7 +767,7 @@ void AreaMenu::initGuiMain() {
             [] (const DrawInfo & draw) {
                 drawTexturedBox(
                     draw.center, draw.size, game.sysContent.bmpFrameBox,
-                    tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+                    COLOR_TRANSPARENT_WHITE
                 );
             };
             gui.addItem(specsBox, "specs_box");

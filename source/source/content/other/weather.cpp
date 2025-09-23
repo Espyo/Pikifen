@@ -91,7 +91,7 @@ ALLEGRO_COLOR Weather::getDaylightColor() {
     if(success) {
         return interpolateColor(ratio, 0.0f, 1.0f, color1, color2);
     } else {
-        return COLOR_EMPTY_WHITE;
+        return al_map_rgba(255, 255, 255, 0);
     }
 }
 
@@ -114,13 +114,13 @@ ALLEGRO_COLOR Weather::getFogColor() {
     if(success) {
         return interpolateColor(ratio, 0.0f, 1.0f, color1, color2);
     } else {
-        return COLOR_EMPTY_WHITE;
+        return al_map_rgba(255, 255, 255, 0);
     }
 }
 
 
 /**
- * @brief Returns the sun strength for the current time [0 - 1].
+ * @brief Returns the sun strength for the current time, in the range 0 - 1.
  *
  * @return The sun strength.
  */

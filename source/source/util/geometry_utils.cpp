@@ -2232,37 +2232,35 @@ Point scaleRectangleToBox(
 
 
 /**
- * @brief Given a list of items and the currently-focused item,
- * chooses which item comes next geometrically in the specified direction.
- * Useful for menus with several buttons the player can navigate directionally
- * in. It can optionally loop around.
+ * @brief Given a list of items, chooses which item comes next
+ * geometrically in the specified direction. Useful for menus with
+ * several buttons the player can focus multidirectionally in.
+ * Also, it optionally loops around.
  *
  * @param itemCoordinates Vector with the center coordinates of all items.
- * @param focusedItemIdx Index of the focused item.
+ * @param focusedItem Index of the focused item.
  * @param direction Angle specifying the direction.
  * @param loopRegion Width and height of the loop region. 0 to disable looping.
  * @return The next item's index in the list.
  */
-size_t spatialNavigation(
-    const vector<Point>& itemCoordinates, size_t focusedItemIdx,
+size_t focusNextItemDirectionally(
+    const vector<Point>& itemCoordinates, size_t focusedItem,
     float direction, const Point& loopRegion
 ) {
-    if(focusedItemIdx >= itemCoordinates.size()) {
-        //Return the first one possible.
-        return 0;
-    }
+    if(focusedItem >= itemCoordinates.size()) return 0;
     
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
     float normalizedDir = normalizeAngle(direction);
-    const Point& selCoords = itemCoordinates[focusedItemIdx];
+    const Point& selCoords = itemCoordinates[focusedItem];
     float bestScore = FLT_MAX;
-    size_t bestItem = focusedItemIdx;
+    size_t bestItem = focusedItem;
     
     //Check each item that isn't the current one.
     for(size_t i = 0; i < itemCoordinates.size(); i++) {
-        if(i == focusedItemIdx) continue;
+    
+        if(i == focusedItem) continue;
         
         Point iBaseCoords = itemCoordinates[i];
         
@@ -2277,9 +2275,12 @@ size_t spatialNavigation(
         //Check if it's between the blind spot angles.
         //We get the same result whether the Y is positive or negative,
         //so let's simplify things and make it positive.
-        float relAngle = getAngle(Point(iCoords.x, (float) fabs(iCoords.y)));
-
-        if(relAngle >= MIN_BLINDSPOT_ANGLE && relAngle <= MAX_BLINDSPOT_ANGLE) {
+        float relAngle =
+            getAngle(Point(iCoords.x, (float) fabs(iCoords.y)));
+        if(
+            relAngle >= MIN_BLINDSPOT_ANGLE &&
+            relAngle <= MAX_BLINDSPOT_ANGLE
+        ) {
             //If so, never let this item be chosen, no matter what. This is
             //useful to stop a list of items with no vertical variance from
             //picking another item when the direction is up, for instance.
@@ -2307,7 +2308,7 @@ size_t spatialNavigation(
                 for(char r = -1; r < 2; r++) {
                 
                     //If it's the same "screen" as the regular one,
-                    //forget it, since we already checked in the code above.
+                    //forget it, since we already checked above.
                     if(c == 0 && r == 0) {
                         continue;
                     }

@@ -108,7 +108,7 @@ public:
     //Knockback strength.
     float knockback = 0.0f;
     
-    //Chance of this attack withering a Pikmin's maturity [0 - 100].
+    //Chance of this attack withering a Pikmin's maturity (0-100).
     unsigned char witherChance = 0.0f;
     
     //Can the Pikmin latch on to this hitbox to continue inflicting damage?

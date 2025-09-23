@@ -395,7 +395,7 @@ void Results::load() {
                 game.sysContent.bmpMissionClear :
                 game.sysContent.bmpMissionFail,
                 draw.center, draw.size,
-                true, 0.0f, draw.tint
+                true
             );
         };
         gui.addItem(goalStampItem, "goal_stamp");
@@ -500,7 +500,7 @@ void Results::load() {
                 break;
             }
             }
-            drawBitmapInBox(bmp, draw.center, draw.size, true, 0.0f, draw.tint);
+            drawBitmapInBox(bmp, draw.center, draw.size, true);
         };
         gui.addItem(medalItem, "medal");
         
@@ -516,7 +516,8 @@ void Results::load() {
     string conclusionLabel = "Conclusion:";
     TextGuiItem* conclusionLabelText =
         new TextGuiItem(
-        conclusionLabel, game.sysContent.fntStandard, mapAlpha(192)
+        conclusionLabel, game.sysContent.fntStandard,
+        al_map_rgba(255, 255, 255, 192)
     );
     gui.addItem(conclusionLabelText, "conclusion_label");
     
@@ -580,7 +581,7 @@ void Results::load() {
     //Stats label text.
     TextGuiItem* statsLabelText =
         new TextGuiItem(
-        "Stats:", game.sysContent.fntStandard, mapAlpha(192)
+        "Stats:", game.sysContent.fntStandard, al_map_rgba(255, 255, 255, 192)
     );
     gui.addItem(statsLabelText, "stats_label");
     
@@ -589,12 +590,11 @@ void Results::load() {
     statsList->onDraw =
     [this] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
-            draw.center, draw.size, 16.0f,
-            al_map_rgba(0, 0, 0, 40 * draw.tint.a)
+            draw.center, draw.size, 16.0f, al_map_rgba(0, 0, 0, 40)
         );
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     populateStatsList(oldRecord);

@@ -55,10 +55,10 @@ enum FS_DELETE_RESULT {
 };
 
 
-//Returns a white color with the specified alpha [0 - 255].
+//Returns a white color with the specified alpha.
 #define mapAlpha(a) al_map_rgba(255, 255, 255, (a))
 
-//Returns a gray with all indexes [0 - 255] the same as specified value;
+//Returns a gray with all indexes the same as specified value;
 //it's fully opaque.
 #define mapGray(g) al_map_rgb((g), (g), (g))
 
@@ -88,7 +88,6 @@ ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
     const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 );
-ALLEGRO_COLOR multAlpha(const ALLEGRO_COLOR& c, float mult);
 vector<string> promptFileDialog(
     const string& initialPath, const string& title,
     const string& patterns, int mode, ALLEGRO_DISPLAY* display
@@ -108,7 +107,6 @@ int showSystemMessageBox(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 );
-ALLEGRO_COLOR tintColor(const ALLEGRO_COLOR& c, const ALLEGRO_COLOR& t);
 FS_DELETE_RESULT wipeFolder(
     const string& folderPath, const vector<string>& nonImportantFiles
 );

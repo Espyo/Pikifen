@@ -57,13 +57,6 @@ extern const float TOKEN_SWIPE_Y_AMOUNT;
 }
 
 
-namespace MOUSE_CURSOR {
-extern const float HIDE_DOWN_SPEED;
-extern const float HIDE_TIMER_DURATION;
-extern const float HIDE_UP_SPEED;
-}
-
-
 namespace NOTIFICATION {
 extern const float FADE_SPEED;
 }
@@ -286,15 +279,6 @@ struct MouseCursor {
     //Whether it is on the game window.
     bool onWindow = true;
     
-    //Current alpha [0 - 1].
-    float alpha = 1.0f;
-    
-    //Intended alpha [0 - 1].
-    float intendedAlpha = 1.0f;
-    
-    //Timer that keeps track of how long the cursor's been stopped for.
-    float stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
-    
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.
     vector<Point> history;
@@ -305,10 +289,10 @@ struct MouseCursor {
     
     //--- Function declarations ---
     
-    void hideInOS() const;
+    void hide() const;
     void init();
     void reset();
-    void showInOS() const;
+    void show() const;
     void updatePos(const ALLEGRO_EVENT& ev);
     
 };

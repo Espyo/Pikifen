@@ -30,7 +30,7 @@
     <ul>
       <li><span class="cl-a">Added</span> logic for the fraction numbers to always show up, as well as for the enemy/treasure points to display, if the leader's cursor is over an applicable object. (Thanks Tenacious)</li>
       <li><span class="cl-a">Added</span> camera shake to some things, like bomb rock explosions or the Beady Long Legs falling. Its strength can be controlled in the <a href="options.html">options</a>.</li>
-      <li><span class="cl-a">Added</span> <a href="options.html">options</a> to allow the mouse cursor to move the leader, and to make the mouse cursor automatically hide when it hasn't been moved in a while.</li>
+      <li><span class="cl-a">Added</span> <a href="options.html">options</a> to allow the mouse cursor to move the leader.</li>
       <li><span class="cl-a">Added</span> a shaking effect to the leader's health wheel when said leader gets hurt.</li>
       <li><span class="cl-a">Added</span> thrown, KO'd, climbing, and sliding animations to <a href="mob_leader.html">leaders</a>. The KO animation existed already, but is now completely new, with the leader falling stomach-down.</li>
       <li><span class="cl-c">Changed</span> how the Onion menu works so it's easier to navigate without the mouse, and so that when there are too many Pikmin types, the list can be scrolled through smoothly instead of in concrete pages.</li>
@@ -61,7 +61,6 @@
     <h3 id="1.1.0-deprecations">Deprecations</h3>
 
     <ul>
-      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, <code>show_counter_on_cursor</code>, and <code>advanced</code> &gt; <code>p*_mouse_moves_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, <code>show_leader_cursor_counter</code>, and <code>controls</code> &gt; <code>p*_mouse_moves_leader_cursor</code>.</li>
       <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, and <code>show_counter_on_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, and <code>show_leader_cursor_counter</code>.</li>
       <li><span class="cl-d">Deprecated</span> the <code>menu_selected</code>, <code>cursor</code>, and <code>cursor_counter</code> <a href="system_content_names.html">system content</a> properties. Please rename them to <code>menu_focused</code>, <code>leader_cursor</code>, and <code>leader_cursor_counter</code>.</li>
       <li><span class="cl-d">Deprecated</span> the <code>cursor_spin_speed</code> and <code>cursor_max_dist</code> <a href="game_config.html">game configurations</a>. Please rename them to <code>mouse_cursor_spin_speed</code> and <code>leader_cursor_max_dist</code>.</li>
