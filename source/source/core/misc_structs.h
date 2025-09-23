@@ -375,19 +375,27 @@ struct GetterWriter {
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const int32_t& var,
+        const string& childName, const signed int& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const uint32_t& var,
+        const string& childName, const unsigned int& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const int64_t& var,
+        const string& childName, const signed long& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string& childName, const uint64_t& var,
+        const string& childName, const unsigned long& var,
+        DataNode** outChildNode = nullptr
+    );
+    void write(
+        const string& childName, const signed long long& var,
+        DataNode** outChildNode = nullptr
+    );
+    void write(
+        const string& childName, const unsigned long long& var,
         DataNode** outChildNode = nullptr
     );
     void write(
@@ -445,19 +453,27 @@ struct ReaderSetter {
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, int32_t& var,
+        const string& childName, signed int& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, uint32_t& var,
+        const string& childName, unsigned int& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, int64_t& var,
+        const string& childName, signed long& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string& childName, uint64_t& var,
+        const string& childName, unsigned long& var,
+        DataNode** outChildNode = nullptr
+    );
+    void set(
+        const string& childName, signed long long& var,
+        DataNode** outChildNode = nullptr
+    );
+    void set(
+        const string& childName, unsigned long long& var,
         DataNode** outChildNode = nullptr
     );
     void set(
