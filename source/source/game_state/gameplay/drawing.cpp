@@ -47,7 +47,7 @@ void GameplayState::doGameDrawing(
     
     ALLEGRO_TRANSFORM oldWorldToWindowTransform;
     int blendOldOp, blendOldSrc, blendOldDst,
-        blendOldAop, blendOldAsrc, blendOldAdst;
+        blendOldAOp, blendOldASrc, blendOldADst;
         
     if(bmpOutput) {
         oldWorldToWindowTransform = players[0].view.worldToWindowTransform;
@@ -55,7 +55,7 @@ void GameplayState::doGameDrawing(
         al_set_target_bitmap(bmpOutput);
         al_get_separate_blender(
             &blendOldOp, &blendOldSrc, &blendOldDst,
-            &blendOldAop, &blendOldAsrc, &blendOldAdst
+            &blendOldAOp, &blendOldASrc, &blendOldADst
         );
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
@@ -92,7 +92,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->startMeasurement("Drawing -- In-game text");
         }
         if(!bmpOutput && game.makerTools.hud) {
-            drawIngameText(&player);
+            drawInGameText(&player);
         }
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
@@ -124,7 +124,7 @@ void GameplayState::doGameDrawing(
         if(bmpOutput) {
             al_set_separate_blender(
                 blendOldOp, blendOldSrc, blendOldDst,
-                blendOldAop, blendOldAsrc, blendOldAdst
+                blendOldAOp, blendOldASrc, blendOldADst
             );
             players[0].view.worldToWindowTransform = oldWorldToWindowTransform;
             al_set_target_backbuffer(game.display);
@@ -741,7 +741,7 @@ void GameplayState::drawGameplayMessageBox() {
             offset + advanceButtonYOffset
         ),
         Point(32.0f),
-        msgBox->advanceButtonAlpha * 255
+        mapAlpha(msgBox->advanceButtonAlpha * 255)
     );
     
     //Draw the message's text.
@@ -861,7 +861,7 @@ void GameplayState::drawGameplayMessageBox() {
  *
  * @param player Player whose viewport to draw to.
  */
-void GameplayState::drawIngameText(Player* player) {
+void GameplayState::drawInGameText(Player* player) {
     //Mob things.
     size_t nMobs = mobs.all.size();
     for(size_t m = 0; m < nMobs; m++) {
@@ -1351,9 +1351,9 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         //For starters, the whole window is dark (white in the map).
         al_clear_to_color(mapGray(blackoutS));
         
-        int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
+        int oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst;
         al_get_separate_blender(
-            &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
+            &oldOp, &oldSrc, &oldDst, &oldAOp, &oldASrc, &oldADst
         );
         al_set_separate_blender(
             ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
@@ -1400,7 +1400,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         al_draw_bitmap(lightmapBmp, 0, 0, 0);
         
         al_set_separate_blender(
-            oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
+            oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst
         );
         
     }
@@ -1412,13 +1412,22 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
  * @brief Draws the current Onion menu.
  */
 void GameplayState::drawOnionMenu() {
-    al_draw_filled_rectangle(
-        0, 0, game.winW, game.winH,
-        al_map_rgba(24, 64, 60, 220 * onionMenu->bgAlphaMult)
-    );
-    
+    //Using a shader requires drawing a bitmap
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
+    ALLEGRO_SHADER* menuShader = game.shaders.getShader(SHADER_TYPE_ONION);
+    al_use_shader(menuShader);
+    al_set_shader_sampler("colormap", onionMenu->nestPtr->nestType->menuColormap, 1);
+    al_set_shader_float("area_time", game.timePassed);
+    al_set_shader_float("brightness", 0.4f);
+    al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
+
+    al_draw_bitmap(bmp, 0, 0, 0);
+    al_use_shader(NULL);
+
     onionMenu->gui.draw();
     
+    al_destroy_bitmap(bmp);
+
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
 

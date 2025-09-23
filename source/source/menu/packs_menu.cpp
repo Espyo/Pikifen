@@ -289,7 +289,7 @@ void PacksMenu::initGuiMain() {
     [] (const DrawInfo & draw) {
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            COLOR_TRANSPARENT_WHITE
+            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
     gui.addItem(infoBox, "info_box");
@@ -318,12 +318,12 @@ void PacksMenu::initGuiMain() {
         if(!curPackName.empty() && packThumbs[curPackName]) {
             drawBitmap(
                 packThumbs[curPackName],
-                finalCenter, finalSize - 4.0f
+                finalCenter, finalSize - 4.0f, 0.0f, draw.tint
             );
         }
         drawTexturedBox(
             finalCenter, finalSize, game.sysContent.bmpFrameBox,
-            COLOR_TRANSPARENT_WHITE
+            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
     gui.addItem(packThumbItem, "pack_thumbnail");
@@ -415,7 +415,7 @@ void PacksMenu::load() {
         string thumbPath =
             FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
         ALLEGRO_BITMAP* thumbBmp =
-            loadBmp(thumbPath, nullptr, true, false, false);
+            loadBmp(thumbPath, nullptr, false, false, false);
         packThumbs[pack] = thumbBmp;
     }
     

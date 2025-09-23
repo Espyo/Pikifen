@@ -77,10 +77,10 @@ enum ACTION_VALUE_TYPE {
 
     //A float from 0 to 1.
     ACTION_VALUE_TYPE_ANALOG,
-
+    
     //Either 0 or 1 (basically up or down).
     ACTION_VALUE_TYPE_BOOLEAN,
-
+    
 };
 
 
@@ -163,11 +163,11 @@ struct ActionType {
     
     //Action type ID.
     int id = 0;
-
+    
     //Type of value it can take.
     ACTION_VALUE_TYPE valueType = ACTION_VALUE_TYPE_ANALOG;
     
-    //Auto-repeat. 0 if disabled, otherwise this indicates the threshold (0 - 1)
+    //Auto-repeat. 0 if disabled, otherwise this indicates the threshold [0 - 1]
     //after which the input will start auto-repeating. The manager's
     //auto-repeating settings have to be configured for this to work.
     float autoRepeat = 0.0f;
@@ -240,7 +240,7 @@ struct ManagerOptions {
  */
 struct Manager {
 
-protected:
+    protected:
     
     //--- Structs ---
     
@@ -251,7 +251,7 @@ protected:
     
         //--- Members ---
         
-        //Current value (0 - 1).
+        //Current value [0 - 1].
         float value = 0.0f;
         
         //Value in the previous frame.

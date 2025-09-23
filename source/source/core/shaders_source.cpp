@@ -81,10 +81,10 @@ uniform vec4 surface_color;
 //Color of the caustic shines.
 uniform vec4 shine_color;
 
-//Noise values under this will have no shine (0-1).
+//Noise values under this will have no shine [0 - 1].
 uniform float shine_min_threshold;
 
-//Noise values above this will have full shine (0-1).
+//Noise values above this will have full shine [0 - 1].
 uniform float shine_max_threshold;
 
 //Opacity of the liquid.
@@ -330,8 +330,8 @@ void main() {
     //This puts our scale from 0 - `shine_amount`
     shine_scale -= max(0.0, min(shine_min_threshold, 1.0));
 
-    //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
-    //Multiply by the reciprocal to bring it back to 0 - 1.
+    //Now that we're below the threshold, multiply it to return it to a [0 - 1] scale.
+    //Multiply by the reciprocal to bring it back to [0 - 1].
     //Add a min value of 0.1 to prevent divide by 0 errors.
     shine_scale *= (1 / max(0.1, shine_min_threshold));
 
@@ -360,5 +360,198 @@ void main() {
     )";
 
 #pragma endregion
+#pragma region Onion Fragment Shader
+//Fragment shader for sector liquids.
+const char* ONION_FRAG_SHADER = R"(
 
+/*
+ * ========================
+ * Setup
+ * ========================
+ */
+
+#version 130
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+//Fragment shader input for texture coordinates.
+in vec2 varying_texcoord;
+
+//Fragment shader input for the tint.
+in vec4 varying_color;
+
+//Fragment shader output for the final color of the fragment.
+out vec4 frag_color;
+
+
+/*
+ * ========================
+ * Uniforms
+ * ========================
+ */
+
+// Time passed in the area.
+uniform float area_time;
+
+//Multiply the general distortion by this much.
+uniform vec2 distortion_amount;
+
+//Opacity of the liquid.
+uniform float opacity;
+
+//The Allegro texture for the colormap.
+uniform sampler2D colormap;
+
+//Brightness to use.
+uniform float brightness;
+
+
+/*
+ * ========================
+ * Simplex noise functions
+ * ========================
+ */
+
+//
+// Description : Array and textureless GLSL 2D/3D/4D simplex
+//               noise functions.
+//      Author : Ian McEwan, Ashima Arts.
+//  Maintainer : stegu
+//     Lastmod : 20201014 (stegu)
+//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+//               Distributed under the MIT License. See LICENSE file.
+//               https://github.com/ashima/webgl-noise
+//               https://github.com/stegu/webgl-noise
+//
+
+vec3 mod289(vec3 x) {
+    return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 mod289(vec4 x) {
+    return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 permute(vec4 x) {
+    return mod289(((x*34.0)+10.0)*x);
+}
+
+vec4 taylor_inv_sqrt(vec4 r) {
+    return 1.79284291400159 - 0.85373472095314 * r;
+}
+
+float noise(vec3 v) {
+    const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+    const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+
+    // First corner
+    vec3 i  = floor(v + dot(v, C.yyy) );
+    vec3 x0 =   v - i + dot(i, C.xxx) ;
+
+    // Other corners
+    vec3 g = step(x0.yzx, x0.xyz);
+    vec3 l = 1.0 - g;
+    vec3 i1 = min( g.xyz, l.zxy );
+    vec3 i2 = max( g.xyz, l.zxy );
+
+    //   x0 = x0 - 0.0 + 0.0 * C.xxx;
+    //   x1 = x0 - i1  + 1.0 * C.xxx;
+    //   x2 = x0 - i2  + 2.0 * C.xxx;
+    //   x3 = x0 - 1.0 + 3.0 * C.xxx;
+    vec3 x1 = x0 - i1 + C.xxx;
+    vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+    vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+
+    // Permutations
+    i = mod289(i);
+    vec4 p = permute( permute( permute(
+                i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+            + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
+            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+
+    // Gradients: 7x7 points over a square, mapped onto an octahedron.
+    // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+    float n_ = 0.142857142857; // 1.0/7.0
+    vec3  ns = n_ * D.wyz - D.xzx;
+
+    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+
+    vec4 x_ = floor(j * ns.z);
+    vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+
+    vec4 x = x_ *ns.x + ns.yyyy;
+    vec4 y = y_ *ns.x + ns.yyyy;
+    vec4 h = 1.0 - abs(x) - abs(y);
+
+    vec4 b0 = vec4( x.xy, y.xy );
+    vec4 b1 = vec4( x.zw, y.zw );
+
+    //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;
+    //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;
+    vec4 s0 = floor(b0)*2.0 + 1.0;
+    vec4 s1 = floor(b1)*2.0 + 1.0;
+    vec4 sh = -step(h, vec4(0.0));
+
+    vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+    vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+
+    vec3 p0 = vec3(a0.xy,h.x);
+    vec3 p1 = vec3(a0.zw,h.y);
+    vec3 p2 = vec3(a1.xy,h.z);
+    vec3 p3 = vec3(a1.zw,h.w);
+
+    //Normalize gradients
+    vec4 norm = taylor_inv_sqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+    p0 *= norm.x;
+    p1 *= norm.y;
+    p2 *= norm.z;
+    p3 *= norm.w;
+
+    // Mix final noise value
+    vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+    m = m * m;
+    return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
+                                    dot(p2,x2), dot(p3,x3) ) );
+}
+
+float color(vec2 xy, float time_scale) { return noise(vec3(1.5*xy, time_scale * area_time)); }
+
+float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
+    float x = 0;
+    x += 0.5 * color(xy * 2.0 * noise_scale - step, time_scale);
+    x += 0.25 * color(xy * 4.0 * noise_scale - 2.0 * step, time_scale);
+    x += 0.125 * color(xy * 8.0 * noise_scale - 4.0 * step, time_scale);
+    x += 0.0625 * color(xy * 16.0 * noise_scale - 6.0 * step, time_scale);
+    x += 0.03125 * color(xy * 32.0 * noise_scale - 8.0 * step, time_scale);
+    return x;
+}
+
+
+/*
+ * ========================
+ * Main function
+ * ========================
+ */
+
+void main() {
+    //--- Basics ---
+
+    //Define some variables that'll be used throughout the shader.
+    vec2 noise_func_step = vec2(1.3, 1.7);
+    float noise_func_scale = 0.1;
+
+    //Calculate simplex noise effects.
+    float raw_noise_value = simplex_noise(varying_texcoord, noise_func_scale, noise_func_step, 0.02);
+    raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, noise_func_scale, noise_func_step, 0.02);
+    vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
+    final_pixel.a = opacity;
+    final_pixel.r *= brightness;
+    final_pixel.g *= brightness;
+    final_pixel.b *= brightness;
+    frag_color = final_pixel;
+
+}
+
+    )";
 }

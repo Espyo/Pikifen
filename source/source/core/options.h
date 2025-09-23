@@ -67,12 +67,11 @@ namespace ADVANCED_D {
 extern const bool ENABLE_COMPATIBILITY_MODE;
 extern const bool DRAW_CURSOR_TRAIL;
 extern const bool ENGINE_DEV;
+extern const bool HIDE_STOPPED_MOUSE_CURSOR;
 extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
-extern const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS];
-extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
@@ -113,6 +112,8 @@ extern const AreaEditor::VIEW_MODE VIEW_MODE;
 namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
 extern const float LEADER_CURSOR_SPEED;
+extern const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS];
+extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
 }
 
 
@@ -185,6 +186,9 @@ struct Options {
         //Is the player a developer of the engine?
         bool engineDev = ADVANCED_D::ENGINE_DEV;
         
+        //Should the mouse cursor be hidden when stopped for some seconds?
+        bool hideStoppedMouseCursor = ADVANCED_D::HIDE_STOPPED_MOUSE_CURSOR;
+        
         //Maximum deadzone for joysticks.
         float joystickMaxDeadzone = ADVANCED_D::JOYSTICK_MAX_DEADZONE;
         
@@ -196,22 +200,6 @@ struct Options {
         
         //Enables or disables mipmaps.
         bool mipmapsEnabled = ADVANCED_D::MIPMAPS_ENABLED;
-        
-        //For each player, does the mouse move their leader's cursor?
-        bool mouseMovesCursor[MAX_PLAYERS] = {
-            ADVANCED_D::MOUSE_MOVES_CURSOR[0],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[1],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[2],
-            ADVANCED_D::MOUSE_MOVES_CURSOR[3]
-        };
-        
-        //For each player, does the mouse move their leader?
-        bool mouseMovesLeader[MAX_PLAYERS] = {
-            ADVANCED_D::MOUSE_MOVES_LEADER[0],
-            ADVANCED_D::MOUSE_MOVES_LEADER[1],
-            ADVANCED_D::MOUSE_MOVES_LEADER[2],
-            ADVANCED_D::MOUSE_MOVES_LEADER[3]
-        };
         
         //True to use interpolation when graphics are scaled up/down.
         bool smoothScaling = ADVANCED_D::SMOOTH_SCALING;
@@ -288,19 +276,19 @@ struct Options {
     //Audio.
     struct {
     
-        //Ambiance sound volume (0 - 1).
+        //Ambiance sound volume [0 - 1].
         float ambianceSoundVol = AUDIO_D::AMBIANCE_SOUND_VOl;
         
-        //Gameplay sound effects volume (0 - 1).
+        //Gameplay sound effects volume [0 - 1].
         float gameplaySoundVol = AUDIO_D::GAMEPLAY_SOUND_VOL;
         
-        //Master sound volume (0 - 1).
+        //Master sound volume [0 - 1].
         float masterVol = AUDIO_D::MASTER_VOL;
         
-        //Music volume (0 - 1).
+        //Music volume [0 - 1].
         float musicVol = AUDIO_D::MUSIC_VOL;
         
-        //UI sound effects volume (0 - 1).
+        //UI sound effects volume [0 - 1].
         float uiSoundVol = AUDIO_D::UI_SOUND_VOL;
         
     } audio;
@@ -313,6 +301,22 @@ struct Options {
         
         //Leader cursor speed, in pixels per second. N/A when using the mouse.
         float leaderCursorSpeed = CONTROLS_D::LEADER_CURSOR_SPEED;
+        
+        //For each player, does the mouse move their leader's cursor?
+        bool mouseMovesLeaderCursor[MAX_PLAYERS] = {
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[0],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[1],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[2],
+            CONTROLS_D::MOUSE_MOVES_LEADER_CURSOR[3]
+        };
+        
+        //For each player, does the mouse move their leader?
+        bool mouseMovesLeader[MAX_PLAYERS] = {
+            CONTROLS_D::MOUSE_MOVES_LEADER[0],
+            CONTROLS_D::MOUSE_MOVES_LEADER[1],
+            CONTROLS_D::MOUSE_MOVES_LEADER[2],
+            CONTROLS_D::MOUSE_MOVES_LEADER[3]
+        };
         
     } controls;
     

@@ -203,25 +203,29 @@ void drawBitmapWithEffects(
  * @param size Width and height.
  * @param text Text inside the button.
  * @param font What font to write the text in.
- * @param color Color to draw the text with.
- * @param selected Is the button currently selected?
+ * @param textColor Color to draw the text with.
+ * @param focused Is the button currently focused?
  * @param juicyGrowAmount If it's in the middle of a juicy grow animation,
  * specify the amount here.
+ * @param tint General tint color.
  */
 void drawButton(
     const Point& center, const Point& size, const string& text,
-    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
-    bool selected, float juicyGrowAmount
+    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& textColor,
+    bool focused, float juicyGrowAmount, const ALLEGRO_COLOR& tint
 ) {
     drawText(
-        text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
+        text, font, center, size * GUI::STANDARD_CONTENT_SIZE,
+        tintColor(textColor, tint),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0 + juicyGrowAmount)
     );
     
     ALLEGRO_COLOR boxTint =
-        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ?
+        tintColor(al_map_rgb(87, 200, 208), tint) :
+        tint;
         
     drawTexturedBox(
         center, size, game.sysContent.bmpBubbleBox, boxTint
@@ -648,7 +652,7 @@ void drawLoadingScreen(
         }
         al_draw_tinted_bitmap(
             game.loadingTextBmp,
-            al_map_rgba(255, 255, 255, 255.0 * opacity),
+            mapAlpha(255.0 * opacity),
             game.winW * 0.5 - textW * 0.5, textY, 0
         );
         
@@ -661,7 +665,7 @@ void drawLoadingScreen(
     
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
-            al_map_rgba(255, 255, 255, 255.0 * opacity),
+            mapAlpha(255.0 * opacity),
             game.winW * 0.5 - subtextW * 0.5, subtextY, 0
         );
         
@@ -680,28 +684,28 @@ void drawLoadingScreen(
         textVertexes[0].z = 0;
         textVertexes[0].u = 0;
         textVertexes[0].v = textH;
-        textVertexes[0].color = al_map_rgba(255, 255, 255, reflectionAlpha);
+        textVertexes[0].color = mapAlpha(reflectionAlpha);
         //Top-right vertex.
         textVertexes[1].x = textX + textW;
         textVertexes[1].y = textY + textH;
         textVertexes[1].z = 0;
         textVertexes[1].u = textW;
         textVertexes[1].v = textH;
-        textVertexes[1].color = al_map_rgba(255, 255, 255, reflectionAlpha);
+        textVertexes[1].color = mapAlpha(reflectionAlpha);
         //Bottom-right vertex.
         textVertexes[2].x = textX + textW;
         textVertexes[2].y = textY + textH + textReflectionH;
         textVertexes[2].z = 0;
         textVertexes[2].u = textW;
         textVertexes[2].v = textH - textReflectionH;
-        textVertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[2].color = COLOR_EMPTY_WHITE;
         //Bottom-left vertex.
         textVertexes[3].x = textX;
         textVertexes[3].y = textY + textH + textReflectionH;
         textVertexes[3].z = 0;
         textVertexes[3].u = 0;
         textVertexes[3].v = textH - textReflectionH;
-        textVertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[3].color = COLOR_EMPTY_WHITE;
         
         al_draw_prim(
             textVertexes, nullptr, game.loadingTextBmp,
@@ -721,30 +725,28 @@ void drawLoadingScreen(
         subtextVertexes[0].z = 0;
         subtextVertexes[0].u = 0;
         subtextVertexes[0].v = subtextH;
-        subtextVertexes[0].color =
-            al_map_rgba(255, 255, 255, reflectionAlpha);
+        subtextVertexes[0].color = mapAlpha(reflectionAlpha);
         //Top-right vertex.
         subtextVertexes[1].x = subtextX + subtextW;
         subtextVertexes[1].y = subtextY + subtextH;
         subtextVertexes[1].z = 0;
         subtextVertexes[1].u = subtextW;
         subtextVertexes[1].v = subtextH;
-        subtextVertexes[1].color =
-            al_map_rgba(255, 255, 255, reflectionAlpha);
+        subtextVertexes[1].color = mapAlpha(reflectionAlpha);
         //Bottom-right vertex.
         subtextVertexes[2].x = subtextX + subtextW;
         subtextVertexes[2].y = subtextY + subtextH + subtextReflectionH;
         subtextVertexes[2].z = 0;
         subtextVertexes[2].u = subtextW;
         subtextVertexes[2].v = subtextH - subtextReflectionH;
-        subtextVertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[2].color = COLOR_EMPTY_WHITE;
         //Bottom-left vertex.
         subtextVertexes[3].x = subtextX;
         subtextVertexes[3].y = subtextY + subtextH + subtextReflectionH;
         subtextVertexes[3].z = 0;
         subtextVertexes[3].u = 0;
         subtextVertexes[3].v = subtextH - subtextReflectionH;
-        subtextVertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[3].color = COLOR_EMPTY_WHITE;
         
         al_draw_prim(
             subtextVertexes, nullptr, game.loadingSubtextBmp,
@@ -781,7 +783,7 @@ void drawLoadingScreen(
             drawBitmap(
                 game.sysContent.bmpIcon, iconPos,
                 Point(-1, textBox.y),
-                0, al_map_rgba(255, 255, 255, opacity * 255.0)
+                0, mapAlpha(opacity * 255.0)
             );
         }
         
@@ -803,10 +805,11 @@ void drawLoadingScreen(
  * @param buttonSize Dimensions of the button.
  * @param leftSide If true, place the icon to the left side of the button.
  * If false, place it to the right.
+ * @param tint Color to tint with.
  */
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
-    bool leftSide
+    bool leftSide, const ALLEGRO_COLOR& tint
 ) {
     //All icons are square, and in a row, so the spritesheet height works.
     int iconSize =
@@ -826,7 +829,7 @@ void drawMenuButtonIcon(
     drawBitmapInBox(
         bmp, iconCenter,
         Point(buttonSize.y),
-        true
+        true, 0.0f, tint
     );
     al_destroy_bitmap(bmp);
 }
@@ -889,6 +892,8 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
  * @param color Color to tint it with.
  */
 void drawMouseCursor(const ALLEGRO_COLOR& color) {
+    if(game.mouseCursor.alpha == 0.0f) return;
+    
     al_use_transform(&game.identityTransform);
     
     //Cursor trail.
@@ -913,7 +918,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             unsigned char startAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * startRatio;
             ALLEGRO_COLOR startColor =
-                changeAlpha(color, startAlpha);
+                changeAlpha(color, startAlpha * game.mouseCursor.alpha);
             Point startP1;
             Point startP2;
             
@@ -924,7 +929,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             unsigned char endAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * endRatio;
             ALLEGRO_COLOR endColor =
-                changeAlpha(color, endAlpha);
+                changeAlpha(color, endAlpha * game.mouseCursor.alpha);
             Point endP1;
             Point endP2;
             
@@ -1003,7 +1008,7 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
             game.mouseCursor.winPos,
             getBitmapDimensions(game.sysContent.bmpMouseCursor),
             -(game.timePassed * game.config.aestheticGen.mouseCursorSpinSpeed),
-            color
+            changeAlpha(color, 255 * game.mouseCursor.alpha)
         );
     }
 }
@@ -1023,19 +1028,23 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
  * @param where Center of the place to draw at.
  * @param maxSize Max width or height. Used to compress it if needed.
  * 0 = unlimited.
- * @param alpha Opacity.
+ * @param tint Color to tint the icon with.
  */
 void drawPlayerInputSourceIcon(
     const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
     bool condensed, const Point& where, const Point& maxSize,
-    unsigned char alpha
+    const ALLEGRO_COLOR& tint
 ) {
-    if(alpha == 0) return;
+    if(tint.a == 0) return;
     
     //Final text color.
-    const ALLEGRO_COLOR finalTextColor =
-        changeAlpha(BIND_INPUT_ICON::BASE_TEXT_COLOR, alpha);
-        
+    const ALLEGRO_COLOR finalTextColor = {
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.r * tint.r,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.g * tint.g,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.b * tint.b,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.a * tint.a,
+    };
+    
     //Start by getting the icon's info for drawing.
     PLAYER_INPUT_ICON_SHAPE shape;
     PLAYER_INPUT_ICON_SPRITE bitmapSprite;
@@ -1056,7 +1065,7 @@ void drawPlayerInputSourceIcon(
                 (icon_size + 1) * (int) bitmapSprite, 0,
                 icon_size, icon_size
             );
-        drawBitmapInBox(bmp, where, maxSize, true, 0.0f, mapAlpha(alpha));
+        drawBitmapInBox(bmp, where, maxSize, true, 0.0f, tint);
         al_destroy_bitmap(bmp);
         return;
     }
@@ -1088,14 +1097,14 @@ void drawPlayerInputSourceIcon(
     case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
         drawTexturedBox(
             where, Point(totalWidth, totalHeight),
-            game.sysContent.bmpKeyBox
+            game.sysContent.bmpKeyBox, tint
         );
         break;
     }
     case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
         drawTexturedBox(
             where, Point(totalWidth, totalHeight),
-            game.sysContent.bmpButtonBox
+            game.sysContent.bmpButtonBox, tint
         );
         break;
     }
@@ -1123,7 +1132,7 @@ void drawPlayerInputSourceIcon(
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
- * @param opacity Draw the textures at this opacity, 0 - 1.
+ * @param opacity Draw the textures at this opacity [0 - 1].
  */
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float opacity
@@ -1287,12 +1296,13 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect& effects) {
  * @param flags Allegro text flags.
  * @param maxSize Maximum width and height of the whole thing.
  * @param scale Scale each token by this amount.
+ * @param tint Color to tint the tokens with.
  */
 void drawStringTokens(
     const vector<StringToken>& tokens, const ALLEGRO_FONT* const textFont,
     const ALLEGRO_FONT* const inputFont, bool inputCondensed,
     const Point& where, int flags, const Point& maxSize,
-    const Point& scale
+    const Point& scale, const ALLEGRO_COLOR& tint
 ) {
     unsigned int totalWidth = 0;
     float xScale = 1.0f;
@@ -1322,7 +1332,7 @@ void drawStringTokens(
         case STRING_TOKEN_CHAR: {
             drawText(
                 tokens[t].content, textFont, Point(caret, where.y),
-                Point(LARGE_FLOAT), COLOR_WHITE,
+                Point(LARGE_FLOAT), tint,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                 TEXT_SETTING_FLAG_CANT_GROW,
                 Point(xScale * scale.x, yScale * scale.y)
@@ -1338,7 +1348,8 @@ void drawStringTokens(
                     caret + tokenFinalWidth / 2.0f,
                     where.y + maxSize.y / 2.0f
                 ),
-                Point(tokenFinalWidth * scale.x, maxSize.y * scale.y)
+                Point(tokenFinalWidth * scale.x, maxSize.y * scale.y),
+                tint
             );
             break;
         }

@@ -2232,35 +2232,37 @@ Point scaleRectangleToBox(
 
 
 /**
- * @brief Given a list of items, chooses which item comes next
- * geometrically in the specified direction. Useful for menus with
- * several buttons the player can focus multidirectionally in.
- * Also, it optionally loops around.
+ * @brief Given a list of items and the currently-focused item,
+ * chooses which item comes next geometrically in the specified direction.
+ * Useful for menus with several buttons the player can navigate directionally
+ * in. It can optionally loop around.
  *
  * @param itemCoordinates Vector with the center coordinates of all items.
- * @param focusedItem Index of the focused item.
+ * @param focusedItemIdx Index of the focused item.
  * @param direction Angle specifying the direction.
  * @param loopRegion Width and height of the loop region. 0 to disable looping.
  * @return The next item's index in the list.
  */
-size_t focusNextItemDirectionally(
-    const vector<Point>& itemCoordinates, size_t focusedItem,
+size_t spatialNavigation(
+    const vector<Point>& itemCoordinates, size_t focusedItemIdx,
     float direction, const Point& loopRegion
 ) {
-    if(focusedItem >= itemCoordinates.size()) return 0;
+    if(focusedItemIdx >= itemCoordinates.size()) {
+        //Return the first one possible.
+        return 0;
+    }
     
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
     float normalizedDir = normalizeAngle(direction);
-    const Point& selCoords = itemCoordinates[focusedItem];
+    const Point& selCoords = itemCoordinates[focusedItemIdx];
     float bestScore = FLT_MAX;
-    size_t bestItem = focusedItem;
+    size_t bestItem = focusedItemIdx;
     
     //Check each item that isn't the current one.
     for(size_t i = 0; i < itemCoordinates.size(); i++) {
-    
-        if(i == focusedItem) continue;
+        if(i == focusedItemIdx) continue;
         
         Point iBaseCoords = itemCoordinates[i];
         
@@ -2275,12 +2277,9 @@ size_t focusNextItemDirectionally(
         //Check if it's between the blind spot angles.
         //We get the same result whether the Y is positive or negative,
         //so let's simplify things and make it positive.
-        float relAngle =
-            getAngle(Point(iCoords.x, (float) fabs(iCoords.y)));
-        if(
-            relAngle >= MIN_BLINDSPOT_ANGLE &&
-            relAngle <= MAX_BLINDSPOT_ANGLE
-        ) {
+        float relAngle = getAngle(Point(iCoords.x, (float) fabs(iCoords.y)));
+
+        if(relAngle >= MIN_BLINDSPOT_ANGLE && relAngle <= MAX_BLINDSPOT_ANGLE) {
             //If so, never let this item be chosen, no matter what. This is
             //useful to stop a list of items with no vertical variance from
             //picking another item when the direction is up, for instance.
@@ -2308,7 +2307,7 @@ size_t focusNextItemDirectionally(
                 for(char r = -1; r < 2; r++) {
                 
                     //If it's the same "screen" as the regular one,
-                    //forget it, since we already checked above.
+                    //forget it, since we already checked in the code above.
                     if(c == 0 && r == 0) {
                         continue;
                     }

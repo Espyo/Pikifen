@@ -1512,7 +1512,7 @@ void Editor::load() {
     manifest.clear();
     setStatus();
     changesMgr.reset();
-    game.mouseCursor.show();
+    game.mouseCursor.showInOS();
     game.editorsView.updateTransformations();
     game.editorsView.cam.setPos(Point());
     game.editorsView.cam.setZoom(1.0f);
@@ -2978,7 +2978,7 @@ void Editor::unload() {
     }
     customCatNameIdxs.clear();
     customCatTypes.clear();
-    game.mouseCursor.hide();
+    game.mouseCursor.hideInOS();
 }
 
 

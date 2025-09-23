@@ -109,9 +109,7 @@ BulletGuiItem::BulletGuiItem(
  *
  * @param draw Information on how to draw.
  */
-void BulletGuiItem::defDrawCode(
-    const DrawInfo& draw
-) {
+void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
     float itemXStart = draw.center.x - draw.size.x * 0.5;
     float textXOffset =
         GUI::BULLET_RADIUS * 2 +
@@ -128,14 +126,15 @@ void BulletGuiItem::defDrawCode(
             draw.center.y
         ),
         Point(GUI::BULLET_RADIUS * 2),
-        0.0f, this->color
+        0.0f, tintColor(this->color, draw.tint)
     );
     float juicyGrowAmount = getJuiceValue();
     drawText(
         this->text, this->font,
         Point(itemXStart + textXOffset, draw.center.y),
         textSpace * GUI::STANDARD_CONTENT_SIZE,
-        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        tintColor(this->color, draw.tint),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0 + juicyGrowAmount)
     );
@@ -174,8 +173,8 @@ void ButtonGuiItem::defDrawCode(
 ) {
     drawButton(
         draw.center, draw.size,
-        this->text, this->font, this->color, focused,
-        getJuiceValue()
+        this->text, this->font, this->color,
+        focused, getJuiceValue(), draw.tint
     );
 }
 
@@ -249,7 +248,8 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
         this->text, this->font,
         Point(draw.center.x - draw.size.x * 0.45, draw.center.y),
         Point(draw.size.x * 0.95, draw.size.y) * GUI::STANDARD_CONTENT_SIZE,
-        this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+        tintColor(this->color, draw.tint),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0f + juicyGrowAmount)
     );
@@ -261,11 +261,13 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
         this->text.empty() ?
         draw.center :
         Point((draw.center.x + draw.size.x * 0.5) - 40, draw.center.y),
-        Point(32, -1)
+        Point(32, -1), 0.0f, draw.tint
     );
     
     ALLEGRO_COLOR boxTint =
-        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ?
+        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        draw.tint;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
@@ -681,16 +683,16 @@ bool GuiManager::draw() {
         }
     }
     
-    if(focusCursorAlpha > 0.0f) {
+    if(focusCursor.alpha > 0.0f) {
         float sizeAddition =
             GUI::FOCUS_CURSOR_SIZE_ADDER +
             sin(game.timePassed * GUI::FOCUS_CURSOR_BOB_TIME_MULT) *
             GUI::FOCUS_CURSOR_BOB_OFFSET +
-            GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursorAlpha);
+            GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursor.alpha);
         drawTexturedBox(
-            focusCursorPos, focusCursorSize + sizeAddition,
+            focusCursor.curPos, focusCursor.curSize + sizeAddition,
             game.sysContent.bmpFocusBox,
-            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursorAlpha))
+            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursor.alpha))
         );
     }
     
@@ -717,9 +719,7 @@ string GuiManager::getCurrentTooltip() const {
  * @param draw Information on how to draw.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool GuiManager::getItemDrawInfo(
-    GuiItem* item, DrawInfo* draw
-) const {
+bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
     if(item->ratioSize.x == 0.0f) return false;
     
@@ -955,132 +955,9 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     case PLAYER_ACTION_TYPE_MENU_LEFT:
     case PLAYER_ACTION_TYPE_MENU_DOWN: {
 
-        //Focusing a different item with the arrow keys.
-        size_t pressed = PLAYER_ACTION_TYPE_NONE;
-        
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_MENU_RIGHT: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_UP: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_UP;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_LEFT;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            if(isDown) {
-                pressed = PLAYER_ACTION_TYPE_MENU_DOWN;
-            }
-            break;
-        } default: {
-            break;
+        if(isDown) {
+            handleSpatialNavigationAction(action);
         }
-        }
-        
-        if(pressed == PLAYER_ACTION_TYPE_NONE) break;
-        
-        if(!focusedItem) {
-            for(size_t i = 0; i < items.size(); i++) {
-                if(
-                    items[i]->isResponsive() &&
-                    items[i]->focusable && items[i]->focusableFromDirNav
-                ) {
-                    setFocusedItem(items[i]);
-                    break;
-                }
-            }
-            if(focusedItem) {
-                break;
-            }
-        }
-        if(!focusedItem) {
-            //No item can be focused.
-            break;
-        }
-        
-        vector<Point> focusables;
-        vector<GuiItem*> focusablePtrs;
-        size_t focusableIdx = INVALID;
-        float direction = 0.0f;
-        
-        switch(pressed) {
-        case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            direction = TAU * 0.25f;
-            break;
-        }
-        case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            direction = TAU * 0.50f;
-            break;
-        }
-        case PLAYER_ACTION_TYPE_MENU_UP: {
-            direction = TAU * 0.75f;
-            break;
-        }
-        }
-        
-        if(
-            focusedItem &&
-            focusedItem->isResponsive() &&
-            focusedItem->onMenuDirButton
-        ) {
-            if(focusedItem->onMenuDirButton(pressed)) {
-                //If it returned true, that means the following logic about
-                //changing the current item needs to be skipped.
-                break;
-            }
-        }
-        
-        float minY = 0;
-        float maxY = game.winH;
-        
-        for(size_t i = 0; i < items.size(); i++) {
-            GuiItem* iPtr = items[i];
-            if(
-                iPtr->isResponsive() &&
-                iPtr->focusable && iPtr->focusableFromDirNav
-            ) {
-                Point iCenter = iPtr->getReferenceCenter();
-                if(iPtr == focusedItem) {
-                    focusableIdx = focusables.size();
-                }
-                
-                minY = std::min(minY, iCenter.y);
-                maxY = std::max(maxY, iCenter.y);
-                
-                focusablePtrs.push_back(iPtr);
-                focusables.push_back(iPtr->getReferenceCenter());
-            }
-        }
-        
-        size_t newFocusableIdx =
-            focusNextItemDirectionally(
-                focusables,
-                focusableIdx,
-                direction,
-                hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
-                Point() :
-                Point(game.winW, maxY - minY)
-            );
-            
-        if(newFocusableIdx != focusableIdx) {
-            setFocusedItem(focusablePtrs[newFocusableIdx]);
-            if(
-                focusedItem->parent &&
-                focusedItem->parent->onChildDirFocused
-            ) {
-                focusedItem->parent->onChildDirFocused(
-                    focusedItem
-                );
-            }
-        }
-        
         break;
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
@@ -1114,6 +991,93 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         lastInputWasMouse = false;
     }
     return buttonRecognized;
+}
+
+
+/**
+ * @brief Handles a spatial navigation-related player action.
+ *
+ * @param action Data about the player action.
+ */
+void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
+    //Check if the currently-focused item wants to consume the action.
+    if(
+        focusedItem && focusedItem->isResponsive() &&
+        focusedItem->onMenuSNAction
+    ) {
+        if(focusedItem->onMenuSNAction(action.actionTypeId)) {
+            //The function returning true means the following logic
+            //about changing the current item focus needs to be skipped.
+            return;
+        }
+    }
+    
+    //Fill in the data for the spatial navigation algorithm.
+    vector<Point> focusables;
+    vector<GuiItem*> focusablePtrs;
+    size_t curFocusableIdx = INVALID;
+    float direction = 0.0f;
+    float minY = 0;
+    float maxY = game.winH;
+    
+    switch(action.actionTypeId) {
+    case PLAYER_ACTION_TYPE_MENU_DOWN: {
+        direction = TAU * 0.25f;
+        break;
+    }
+    case PLAYER_ACTION_TYPE_MENU_LEFT: {
+        direction = TAU * 0.50f;
+        break;
+    }
+    case PLAYER_ACTION_TYPE_MENU_UP: {
+        direction = TAU * 0.75f;
+        break;
+    }
+    }
+    
+    for(size_t i = 0; i < items.size(); i++) {
+        GuiItem* iPtr = items[i];
+        if(
+            iPtr->isResponsive() &&
+            iPtr->focusable && iPtr->focusableFromSN
+        ) {
+            Point iCenter = iPtr->getReferenceCenter();
+            if(iPtr == focusedItem) {
+                curFocusableIdx = focusables.size();
+            }
+            
+            minY = std::min(minY, iCenter.y);
+            maxY = std::max(maxY, iCenter.y);
+            
+            focusablePtrs.push_back(iPtr);
+            focusables.push_back(iCenter);
+        }
+    }
+    
+    if(focusables.empty()) {
+        //There is no item that can be focused via spatial navigation.
+        return;
+    }
+    
+    size_t newFocusableIdx =
+        spatialNavigation(
+            focusables,
+            curFocusableIdx,
+            direction,
+            hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
+            Point() :
+            Point(game.winW, maxY - minY)
+        );
+        
+    if(newFocusableIdx != curFocusableIdx) {
+        setFocusedItem(focusablePtrs[newFocusableIdx]);
+        if(
+            focusedItem->parent &&
+            focusedItem->parent->onChildFocusedViaSN
+        ) {
+            focusedItem->parent->onChildFocusedViaSN(focusedItem);
+        }
+    }
 }
 
 
@@ -1314,28 +1278,31 @@ bool GuiManager::tick(float deltaT) {
         focusedItem && mustDrawFocusedItem &&
         focusedItem->focusable
     ) {
-        if(focusCursorAlpha == 0.0f) {
-            focusCursorPos = focusedItemDraw.center;
-            focusCursorSize = focusedItemDraw.size;
-        } else {
-            Point posDelta = focusedItemDraw.center - focusCursorPos;
-            Point sizeDelta = focusedItemDraw.size - focusCursorSize;
-            focusCursorPos +=
-                posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
-            focusCursorSize +=
-                sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        focusCursor.intendedPos = focusedItemDraw.center;
+        focusCursor.intendedSize = focusedItemDraw.size;
+        if(focusCursor.alpha == 0.0f) {
+            //Teleport.
+            focusCursor.curPos = focusCursor.intendedPos;
+            focusCursor.curSize = focusCursor.intendedSize;
         }
-        focusCursorAlpha =
+        focusCursor.alpha =
             inchTowards(
-                focusCursorAlpha, 1.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+                focusCursor.alpha, 1.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
             );
     } else {
-        focusCursorAlpha =
+        focusCursor.alpha =
             inchTowards(
-                focusCursorAlpha, 0.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
+                focusCursor.alpha, 0.0f, GUI::FOCUS_CURSOR_ALPHA_SPEED * deltaT
             );
     }
     
+    Point posDelta = focusCursor.intendedPos - focusCursor.curPos;
+    Point sizeDelta = focusCursor.intendedSize - focusCursor.curSize;
+    focusCursor.curPos +=
+        posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+    focusCursor.curSize +=
+        sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        
     return true;
 }
 
@@ -1369,19 +1336,19 @@ ListGuiItem::ListGuiItem() :
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
-    onChildDirFocused =
+    onChildFocusedViaSN =
     [this] (const GuiItem * child) {
-        this->defChildDirFocusedCode(child);
+        this->defChildFocusedViaSNCode(child);
     };
 }
 
 
 /**
- * @brief Default list GUI item child directionally focused code.
+ * @brief Default list GUI item child focused via spatial navigation code.
  *
  * @param child The child item.
  */
-void ListGuiItem::defChildDirFocusedCode(const GuiItem* child) {
+void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
     float childrenSpan = getChildrenSpan(horizontal);
     float* offsetPtr = !horizontal ? &offset.y : &offset.x;
@@ -1400,8 +1367,11 @@ void ListGuiItem::defChildDirFocusedCode(const GuiItem* child) {
 void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpFrameBox,
-        COLOR_TRANSPARENT_WHITE
+        tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
     );
+    ALLEGRO_COLOR cOpaque = tintColor(mapAlpha(64), draw.tint);
+    ALLEGRO_COLOR cEmpty = COLOR_EMPTY_WHITE;
+
     if(offset.y > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
@@ -1410,8 +1380,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float y1 = draw.center.y - draw.size.y / 2.0f;
         float y2 = y1 + 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = cEmpty;
@@ -1451,8 +1419,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float y1 = draw.center.y + draw.size.y / 2.0f;
         float y2 = y1 - 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = cEmpty;
@@ -1490,8 +1456,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float x1 = draw.center.x - draw.size.x / 2.0f;
         float x2 = x1 + 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = x1;
         vertexes[0].y = draw.center.y - draw.size.y * 0.49;
         vertexes[0].color = cEmpty;
@@ -1529,8 +1493,6 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         }
         float x1 = draw.center.x + draw.size.x / 2.0f;
         float x2 = x1 - 20.0f;
-        ALLEGRO_COLOR cOpaque = al_map_rgba(255, 255, 255, 64);
-        ALLEGRO_COLOR cEmpty = al_map_rgba(255, 255, 255, 0);
         vertexes[0].x = x1;
         vertexes[0].y = draw.center.y - draw.size.y * 0.49;
         vertexes[0].color = cEmpty;
@@ -1640,7 +1602,7 @@ PickerGuiItem::PickerGuiItem(
         this->defActivateCode(cursorPos);
     };
     
-    onMenuDirButton =
+    onMenuSNAction =
     [this] (size_t playerActionId) -> bool{
         return this->defMenuDirCode(playerActionId);
     };
@@ -1686,8 +1648,8 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
                 x1, y1,
                 x1 + optionBoxesInterval * 0.5f, y1 + 4.0f,
                 this->curOptionIdx == o ?
-                al_map_rgba(255, 255, 255, 160) :
-                al_map_rgba(255, 255, 255, 64)
+                tintColor(mapAlpha(160), draw.tint) :
+                tintColor(mapAlpha(64), draw.tint)
             );
         }
     }
@@ -1700,8 +1662,9 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     ) {
         realArrowHighlight = arrowHighlight;
     }
-    ALLEGRO_COLOR arrowHighlightColor = al_map_rgb(87, 200, 208);
-    ALLEGRO_COLOR arrowRegularColor = COLOR_WHITE;
+    ALLEGRO_COLOR arrowHighlightColor =
+        tintColor(al_map_rgb(87, 200, 208), draw.tint);
+    ALLEGRO_COLOR arrowRegularColor = draw.tint;
     Point arrowHighlightScale = Point(1.4f);
     Point arrowRegularScale = Point(1.0f);
     
@@ -1747,15 +1710,16 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
         this->baseText + this->option,
         game.sysContent.fntStandard,
         Point(draw.center.x - draw.size.x * 0.40, draw.center.y),
-        textBox,
-        COLOR_WHITE,
+        textBox, draw.tint,
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0f + juicyGrowAmount)
     );
     
     ALLEGRO_COLOR boxTint =
-        focused ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
+        focused ?
+        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        draw.tint;
         
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpBubbleBox, boxTint
@@ -1828,7 +1792,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            al_map_rgba(255, 255, 255, alpha)
+            tintColor(mapAlpha(alpha), draw.tint)
         );
         
         if(barH != 0.0f) {
@@ -1840,7 +1804,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
                     (draw.size.y * barH * 0.5f)
                 ),
                 Point(draw.size.x, (draw.size.y * barH)),
-                game.sysContent.bmpBubbleBox
+                game.sysContent.bmpBubbleBox, draw.tint
             );
         }
     } else {
@@ -1857,7 +1821,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            al_map_rgba(255, 255, 255, alpha)
+            tintColor(mapAlpha(alpha), draw.tint)
         );
         
         if(barW != 0.0f) {
@@ -1869,7 +1833,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
                     draw.center.y
                 ),
                 Point((draw.size.x * barW), draw.size.y),
-                game.sysContent.bmpBubbleBox
+                game.sysContent.bmpBubbleBox, draw.tint
             );
         }
     }
@@ -2020,7 +1984,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
                 ),
                 this->flags,
                 Point(draw.size.x, lineHeight),
-                Point(1.0f + juicyGrowAmount)
+                Point(1.0f + juicyGrowAmount), draw.tint
             );
         }
         
@@ -2028,7 +1992,8 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
     
         drawText(
             this->text, this->font, Point(textX, textY), draw.size,
-            this->color, this->flags, V_ALIGN_MODE_CENTER,
+            tintColor(this->color, draw.tint),
+            this->flags, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW,
             Point(1.0 + juicyGrowAmount)
         );
@@ -2067,8 +2032,8 @@ void TooltipGuiItem::defDrawCode(const DrawInfo& draw) {
     float juicyGrowAmount = getJuiceValue();
     drawText(
         curText, game.sysContent.fntStandard,
-        draw.center, draw.size,
-        COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        draw.center, draw.size, draw.tint,
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(0.7f + juicyGrowAmount)
     );
