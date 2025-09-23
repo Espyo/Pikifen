@@ -74,9 +74,9 @@ void OptionsMenu::addBindEntryItems(
     string overrideNote;
     if(game.options.controls.mouseMovesLeaderCursor[0]) {
         if(
+            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT ||
             actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN ||
             actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT ||
-            actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT ||
             actionType.id == PLAYER_ACTION_TYPE_LEADER_CURSOR_UP
         ) {
             overrideNote = "Mouse cursor";

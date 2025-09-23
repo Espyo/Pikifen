@@ -1639,16 +1639,16 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
             radarPan.right = action.value;
             handledByRadar = true;
             break;
-        } case PLAYER_ACTION_TYPE_RADAR_UP: {
-            radarPan.up = action.value;
+        } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
+            radarPan.down = action.value;
             handledByRadar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_LEFT: {
             radarPan.left = action.value;
             handledByRadar = true;
             break;
-        } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
-            radarPan.down = action.value;
+        } case PLAYER_ACTION_TYPE_RADAR_UP: {
+            radarPan.up = action.value;
             handledByRadar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {

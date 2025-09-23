@@ -40,14 +40,14 @@ enum PLAYER_ACTION_TYPE {
     //Move right.
     PLAYER_ACTION_TYPE_RIGHT,
     
-    //Move up.
-    PLAYER_ACTION_TYPE_UP,
+    //Move down.
+    PLAYER_ACTION_TYPE_DOWN,
     
     //Move left.
     PLAYER_ACTION_TYPE_LEFT,
     
-    //Move down.
-    PLAYER_ACTION_TYPE_DOWN,
+    //Move up.
+    PLAYER_ACTION_TYPE_UP,
     
     //Throw.
     PLAYER_ACTION_TYPE_THROW,
@@ -108,14 +108,14 @@ enum PLAYER_ACTION_TYPE {
     //Radar pan right.
     PLAYER_ACTION_TYPE_RADAR_RIGHT,
     
-    //Radar pan up.
-    PLAYER_ACTION_TYPE_RADAR_UP,
+    //Radar pan down.
+    PLAYER_ACTION_TYPE_RADAR_DOWN,
     
     //Radar pan left.
     PLAYER_ACTION_TYPE_RADAR_LEFT,
     
-    //Radar pan down.
-    PLAYER_ACTION_TYPE_RADAR_DOWN,
+    //Radar pan up.
+    PLAYER_ACTION_TYPE_RADAR_UP,
     
     //Radar zoom in.
     PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
@@ -134,26 +134,26 @@ enum PLAYER_ACTION_TYPE {
     //Move leader cursor right.
     PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
     
-    //Move leader cursor up.
-    PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
+    //Move leader cursor down.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
     
     //Move leader cursor left.
     PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
     
-    //Move leader cursor down.
-    PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
+    //Move leader cursor up.
+    PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
     
     //Swarm group right.
     PLAYER_ACTION_TYPE_GROUP_RIGHT,
     
-    //Swarm group up.
-    PLAYER_ACTION_TYPE_GROUP_UP,
+    //Swarm group down.
+    PLAYER_ACTION_TYPE_GROUP_DOWN,
     
     //Swarm group left.
     PLAYER_ACTION_TYPE_GROUP_LEFT,
     
-    //Swarm group down.
-    PLAYER_ACTION_TYPE_GROUP_DOWN,
+    //Swarm group up.
+    PLAYER_ACTION_TYPE_GROUP_UP,
     
     //Swap to previous leader.
     PLAYER_ACTION_TYPE_PREV_LEADER,

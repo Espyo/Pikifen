@@ -134,17 +134,17 @@ enum PLAYER_INPUT_ICON_SPRITE {
     //Mouse wheel down.
     PLAYER_INPUT_ICON_SPRITE_MWD,
     
-    //Up key.
-    PLAYER_INPUT_ICON_SPRITE_UP,
-    
-    //Left key.
-    PLAYER_INPUT_ICON_SPRITE_LEFT,
+    //Right key.
+    PLAYER_INPUT_ICON_SPRITE_RIGHT,
     
     //Down key.
     PLAYER_INPUT_ICON_SPRITE_DOWN,
     
-    //Right key.
-    PLAYER_INPUT_ICON_SPRITE_RIGHT,
+    //Left key.
+    PLAYER_INPUT_ICON_SPRITE_LEFT,
+    
+    //Up key.
+    PLAYER_INPUT_ICON_SPRITE_UP,
     
     //Backspace key.
     PLAYER_INPUT_ICON_SPRITE_BACKSPACE,
@@ -158,17 +158,17 @@ enum PLAYER_INPUT_ICON_SPRITE {
     //Enter key.
     PLAYER_INPUT_ICON_SPRITE_ENTER,
     
-    //Game controller stick up.
-    PLAYER_INPUT_ICON_SPRITE_STICK_UP,
-    
-    //Game controller stick left.
-    PLAYER_INPUT_ICON_SPRITE_STICK_LEFT,
+    //Game controller stick right.
+    PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
     
     //Game controller stick down.
     PLAYER_INPUT_ICON_SPRITE_STICK_DOWN,
     
-    //Game controller stick right.
-    PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
+    //Game controller stick left.
+    PLAYER_INPUT_ICON_SPRITE_STICK_LEFT,
+    
+    //Game controller stick up.
+    PLAYER_INPUT_ICON_SPRITE_STICK_UP,
     
 };
 

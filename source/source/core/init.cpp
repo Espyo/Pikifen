@@ -181,11 +181,11 @@ void initControls() {
         "move_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_UP,
+        PLAYER_ACTION_TYPE_DOWN,
         PLAYER_ACTION_CAT_MAIN,
-        "Move up",
-        "Move the leader up.",
-        "move_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Move down",
+        "Move the leader down.",
+        "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEFT,
@@ -195,11 +195,11 @@ void initControls() {
         "move_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_DOWN,
+        PLAYER_ACTION_TYPE_UP,
         PLAYER_ACTION_CAT_MAIN,
-        "Move down",
-        "Move the leader down.",
-        "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Move up",
+        "Move the leader up.",
+        "move_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
@@ -209,11 +209,11 @@ void initControls() {
         "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
         PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor up",
-        "Move the leader's cursor up.",
-        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Leader cursor down",
+        "Move the leader's cursor down.",
+        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
@@ -223,11 +223,11 @@ void initControls() {
         "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
         PLAYER_ACTION_CAT_MAIN,
-        "Leader cursor down",
-        "Move the leader's cursor down.",
-        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Leader cursor up",
+        "Move the leader's cursor up.",
+        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_THROW,
@@ -330,11 +330,11 @@ void initControls() {
         "menu_right", "k_83", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_MENU_UP,
+        PLAYER_ACTION_TYPE_MENU_DOWN,
         PLAYER_ACTION_CAT_MENUS,
-        "Menu up",
-        "Navigate up in a menu.",
-        "menu_up", "k_84", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
+        "Menu down",
+        "Navigate down in a menu.",
+        "menu_down", "k_85", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_LEFT,
@@ -344,11 +344,11 @@ void initControls() {
         "menu_left", "k_82", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_MENU_DOWN,
+        PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
-        "Menu down",
-        "Navigate down in a menu.",
-        "menu_down", "k_85", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
+        "Menu up",
+        "Navigate up in a menu.",
+        "menu_up", "k_84", Inpution::ACTION_VALUE_TYPE_BOOLEAN, 0.5f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_OK,
@@ -365,11 +365,11 @@ void initControls() {
         "menu_radar_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_RADAR_UP,
+        PLAYER_ACTION_TYPE_RADAR_DOWN,
         PLAYER_ACTION_CAT_MENUS,
-        "Radar pan up",
-        "Pan the radar upward.",
-        "menu_radar_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Radar pan down",
+        "Pan the radar downward.",
+        "menu_radar_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_LEFT,
@@ -379,11 +379,11 @@ void initControls() {
         "menu_radar_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_RADAR_DOWN,
+        PLAYER_ACTION_TYPE_RADAR_UP,
         PLAYER_ACTION_CAT_MENUS,
-        "Radar pan down",
-        "Pan the radar downward.",
-        "menu_radar_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Radar pan up",
+        "Pan the radar upward.",
+        "menu_radar_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
@@ -423,11 +423,11 @@ void initControls() {
         "swarm_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_GROUP_UP,
+        PLAYER_ACTION_TYPE_GROUP_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
-        "Swarm up",
-        "Swarm all Pikmin up.",
-        "swarm_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Swarm down",
+        "Swarm all Pikmin down.",
+        "swarm_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_LEFT,
@@ -437,11 +437,11 @@ void initControls() {
         "swarm_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_GROUP_DOWN,
+        PLAYER_ACTION_TYPE_GROUP_UP,
         PLAYER_ACTION_CAT_ADVANCED,
-        "Swarm down",
-        "Swarm all Pikmin down.",
-        "swarm_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "Swarm up",
+        "Swarm all Pikmin up.",
+        "swarm_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_LEADER,

@@ -951,9 +951,9 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MENU_RIGHT:
-    case PLAYER_ACTION_TYPE_MENU_UP:
+    case PLAYER_ACTION_TYPE_MENU_DOWN:
     case PLAYER_ACTION_TYPE_MENU_LEFT:
-    case PLAYER_ACTION_TYPE_MENU_DOWN: {
+    case PLAYER_ACTION_TYPE_MENU_UP: {
 
         if(isDown) {
             handleSpatialNavigationAction(action);

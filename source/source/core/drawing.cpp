@@ -1416,21 +1416,21 @@ void getPlayerInputIconInfo(
         *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
     } else if(s.type == Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
-        if(s.buttonNr == ALLEGRO_KEY_UP) {
+        if(s.buttonNr == ALLEGRO_KEY_RIGHT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_UP;
-            return;
-        } else if(s.buttonNr == ALLEGRO_KEY_LEFT) {
-            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_DOWN) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
             return;
-        } else if(s.buttonNr == ALLEGRO_KEY_RIGHT) {
+        } else if(s.buttonNr == ALLEGRO_KEY_LEFT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
+            return;
+        } else if(s.buttonNr == ALLEGRO_KEY_UP) {
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_UP;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_BACKSPACE) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;

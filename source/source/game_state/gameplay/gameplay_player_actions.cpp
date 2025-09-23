@@ -657,9 +657,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     //Those go here.
     switch (action.actionTypeId) {
     case PLAYER_ACTION_TYPE_RIGHT:
-    case PLAYER_ACTION_TYPE_UP:
+    case PLAYER_ACTION_TYPE_DOWN:
     case PLAYER_ACTION_TYPE_LEFT:
-    case PLAYER_ACTION_TYPE_DOWN: {
+    case PLAYER_ACTION_TYPE_UP: {
         /*******************
         *               O_ *
         *   Move   --->/|  *
@@ -670,14 +670,14 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         case PLAYER_ACTION_TYPE_RIGHT: {
             player->leaderMovement.right = action.value;
             break;
+        } case PLAYER_ACTION_TYPE_DOWN: {
+            player->leaderMovement.down = action.value;
+            break;
         } case PLAYER_ACTION_TYPE_LEFT: {
             player->leaderMovement.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_UP: {
             player->leaderMovement.up = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_DOWN: {
-            player->leaderMovement.down = action.value;
             break;
         } default: {
             break;
@@ -687,9 +687,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         break;
         
     } case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT:
-    case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP:
+    case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN:
     case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT:
-    case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
+    case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
         /***************************
         *                    .-.   *
         *   Leader cursor   ( = )> *
@@ -700,14 +700,14 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT: {
             player->leaderCursorMov.right = action.value;
             break;
+        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
+            player->leaderCursorMov.down = action.value;
+            break;
         } case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT: {
             player->leaderCursorMov.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
             player->leaderCursorMov.up = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
-            player->leaderCursorMov.down = action.value;
             break;
         } default: {
             break;
@@ -717,9 +717,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         break;
         
     } case PLAYER_ACTION_TYPE_GROUP_RIGHT:
-    case PLAYER_ACTION_TYPE_GROUP_UP:
+    case PLAYER_ACTION_TYPE_GROUP_DOWN:
     case PLAYER_ACTION_TYPE_GROUP_LEFT:
-    case PLAYER_ACTION_TYPE_GROUP_DOWN: {
+    case PLAYER_ACTION_TYPE_GROUP_UP: {
         /******************
         *            ***  *
         *   Group   ****O *
@@ -730,14 +730,14 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         case PLAYER_ACTION_TYPE_GROUP_RIGHT: {
             player->swarmMovement.right = action.value;
             break;
+        } case PLAYER_ACTION_TYPE_GROUP_DOWN: {
+            player->swarmMovement.down = action.value;
+            break;
         } case PLAYER_ACTION_TYPE_GROUP_LEFT: {
             player->swarmMovement.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_GROUP_UP: {
             player->swarmMovement.up = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_GROUP_DOWN: {
-            player->swarmMovement.down = action.value;
             break;
         } default: {
             break;
@@ -770,9 +770,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
 bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action& action) {
     const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
+        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
         PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
         PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
-        PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
         PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
         PLAYER_ACTION_TYPE_ZOOM_IN,
         PLAYER_ACTION_TYPE_ZOOM_OUT,
