@@ -64,7 +64,6 @@ enum LEAVING_CONF_MODE {
 namespace OPTIONS {
 
 namespace ADVANCED_D {
-extern const bool ENABLE_COMPATIBILITY_MODE;
 extern const bool DRAW_CURSOR_TRAIL;
 extern const bool ENGINE_DEV;
 extern const bool HIDE_STOPPED_MOUSE_CURSOR;
@@ -72,6 +71,7 @@ extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
+extern const bool SHADER_COMPATIBILITY_MODE;
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
@@ -177,9 +177,6 @@ struct Options {
     //Advanced. These typically don't appear in any options menu.
     struct {
     
-        //Enables or disables compatability mode, disables shader rendering.
-        bool compatibilityEnabled = ADVANCED_D::ENABLE_COMPATIBILITY_MODE;
-
         //Draw a trail behind the mouse cursor?
         bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
         
@@ -200,6 +197,9 @@ struct Options {
         
         //Enables or disables mipmaps.
         bool mipmapsEnabled = ADVANCED_D::MIPMAPS_ENABLED;
+        
+        //Shader compatibility mode, which simply disables failed shaders.
+        bool shaderCompatMode = ADVANCED_D::SHADER_COMPATIBILITY_MODE;
         
         //True to use interpolation when graphics are scaled up/down.
         bool smoothScaling = ADVANCED_D::SMOOTH_SCALING;

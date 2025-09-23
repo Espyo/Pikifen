@@ -29,7 +29,7 @@ void ShaderManager::compileShaders() {
         compiledShaders[SHADER_TYPE_LIQUID],
         ALLEGRO_VERTEX_SHADER, SHADER_SOURCE_FILES::DEFAULT_VERT_SHADER
     );
-    if (!al_build_shader(compiledShaders[SHADER_TYPE_LIQUID])) {
+    if(!al_build_shader(compiledShaders[SHADER_TYPE_LIQUID])) {
         al_destroy_shader(compiledShaders[SHADER_TYPE_LIQUID]);
         compiledShaders[SHADER_TYPE_LIQUID] = nullptr;
     };
@@ -52,7 +52,7 @@ ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shaderType) {
 
 /**
  * @brief Tries to attach shader code to a shader. Crashes the engine if it
- * fails unless compatability mode is enabled.
+ * fails unless compatibility mode is enabled.
  *
  * @param shader Shader to attach to.
  * @param type Allegro shader type.
@@ -62,8 +62,12 @@ void ShaderManager::tryAttachShader(
     ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
 ) {
     if(!al_attach_shader_source(shader, type, source)) {
-        if(!game.options.advanced.compatibilityEnabled) {
-            crash("Shader compilation failure", al_get_shader_log(shader), 1);
+        if(!game.options.advanced.shaderCompatMode) {
+            crash(
+                "Shader compilation failure "
+                "(try enabling the shader compatibility mode option?)",
+                al_get_shader_log(shader), 1
+            );
         }
     }
 }

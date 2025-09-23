@@ -23,9 +23,6 @@ namespace OPTIONS {
 
 namespace ADVANCED_D {
 
-//Default value for whether compatability mode is enabled.
-const bool ENABLE_COMPATIBILITY_MODE = false;
-
 //Default value for the cursor trail.
 const bool DRAW_CURSOR_TRAIL = true;
 
@@ -46,6 +43,9 @@ const size_t MAX_PARTICLES = 1000;
 
 //Default value for whether mipmaps are enabled.
 const bool MIPMAPS_ENABLED = true;
+
+//Default value for whether shader compatibility mode is enabled.
+const bool SHADER_COMPATIBILITY_MODE = false;
 
 //Default value for whether to use smooth scaling.
 const bool SMOOTH_SCALING = true;
@@ -286,7 +286,6 @@ void Options::loadFromDataNode(DataNode* file) {
             );
         }
         
-        aRS.set("compatibility_mode", advanced.compatibilityEnabled);
         aRS.set("draw_cursor_trail", advanced.drawCursorTrail);
         aRS.set("engine_developer", advanced.engineDev);
         aRS.set("fps", advanced.targetFps);
@@ -295,6 +294,7 @@ void Options::loadFromDataNode(DataNode* file) {
         aRS.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aRS.set("max_particles", advanced.maxParticles);
         aRS.set("mipmaps", advanced.mipmapsEnabled);
+        aRS.set("shader_compatibility_mode", advanced.shaderCompatMode);
         aRS.set("smooth_scaling", advanced.smoothScaling);
         aRS.set("window_position_hack", advanced.windowPosHack);
         aRS.set("zoom_medium_reach", advanced.zoomMediumReach);
@@ -571,7 +571,6 @@ void Options::saveToDataNode(DataNode* file) const {
     {
         GetterWriter aGW(file->addNew("advanced"));
         
-        aGW.write("compatibility_mode", advanced.compatibilityEnabled);
         aGW.write("draw_cursor_trail", advanced.drawCursorTrail);
         aGW.write("engine_developer", advanced.engineDev);
         aGW.write("fps", advanced.targetFps);
@@ -580,6 +579,7 @@ void Options::saveToDataNode(DataNode* file) const {
         aGW.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aGW.write("max_particles", advanced.maxParticles);
         aGW.write("mipmaps", advanced.mipmapsEnabled);
+        aGW.write("shader_compatibility_mode", advanced.shaderCompatMode);
         aGW.write("smooth_scaling", advanced.smoothScaling);
         aGW.write("window_position_hack", advanced.windowPosHack);
         aGW.write("zoom_medium_reach", advanced.zoomMediumReach);
