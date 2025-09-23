@@ -177,7 +177,7 @@ struct Options {
     struct {
     
         //Enables or disables compatability mode, disables shader rendering.
-        bool compatibilityEnabled = ADVANCED_D::ENABLE_COMPATABILITY_MODE;
+        bool compatibilityEnabled = ADVANCED_D::ENABLE_COMPATIBILITY_MODE;
 
         //Draw a trail behind the mouse cursor?
         bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
