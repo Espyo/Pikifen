@@ -111,6 +111,10 @@ void drawFilledRoundedRectangle(
     const Point& center, const Point& size, float radii,
     const ALLEGRO_COLOR& color
 );
+void drawPrimRect(
+    const Point& tl, const Point& size, const ALLEGRO_COLOR color,
+    ALLEGRO_BITMAP* texture = nullptr
+);
 void drawRotatedRectangle(
     const Point& center, const Point& dimensions,
     float angle, const ALLEGRO_COLOR& color, float thickness

@@ -1425,30 +1425,30 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
  * @brief Draws the current Onion menu.
  */
 void GameplayState::drawOnionMenu() {
-    ALLEGRO_SHADER* menuShader = game.shaders.getShader(SHADER_TYPE_ONION);
-
-    if (menuShader) {
-        //Using a shader requires drawing a bitmap
-        ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
-        al_use_shader(menuShader);
-        al_set_shader_sampler("colormap", onionMenu->nestPtr->nestType->menuColormap, 1);
+    ALLEGRO_SHADER* bgShader = game.shaders.getShader(SHADER_TYPE_ONION);
+    
+    if (bgShader) {
+        al_use_shader(bgShader);
+        al_set_shader_sampler(
+            "colormap", onionMenu->nestPtr->nestType->menuColormap, 1
+        );
         al_set_shader_float("area_time", game.timePassed);
         al_set_shader_float("brightness", 0.4f);
         al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
-
-        al_draw_bitmap(bmp, 0, 0, 0);
+        
+        drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
         al_use_shader(NULL);
-        al_destroy_bitmap(bmp);
-    }
-    else {
+        
+    } else {
         al_draw_filled_rectangle(
             0, 0, game.winW, game.winH,
             al_map_rgba(24, 64, 60, 220 * onionMenu->bgAlphaMult)
         );
+        
     }
-
+    
     onionMenu->gui.draw();
-
+    
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
 

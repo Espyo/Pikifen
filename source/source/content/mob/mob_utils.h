@@ -664,15 +664,15 @@ struct PikminNestType {
     
     //Sound data index for the Pikmin exit sound. Cache for performance.
     size_t soundPikminExitIdx = INVALID;
-
-    //Color data for menu rendering. Cache for performance.
+    
+    //Color data for menu background rendering. Cache for performance.
     ALLEGRO_BITMAP* menuColormap = nullptr;
     
     
     //--- Function declarations ---
     
     ~PikminNestType();
-
+    
     void loadProperties(DataNode* file, MobType* mobType);
     void createColormap();
 };

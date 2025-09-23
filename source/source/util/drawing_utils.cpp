@@ -177,6 +177,49 @@ void drawFilledRoundedRectangle(
 
 
 /**
+ * @brief Draws a simple rectangle, but using "al_draw_prim" instead of
+ * "al_draw_filled_rectangle". This is useful, for instance, to bypass
+ * Allegro's limitations on shaders in its simple drawing routines.
+ *
+ * @param tl Top-left corner coordinates.
+ * @param size Width and height.
+ * @param color Color of the rectangle.
+ * @param texture Texture, if any.
+ */
+void drawPrimRect(
+    const Point& tl, const Point& size, const ALLEGRO_COLOR color,
+    ALLEGRO_BITMAP* texture
+) {
+    ALLEGRO_VERTEX vertexes[4];
+    for(unsigned char v = 0; v < 4; v++) {
+        vertexes[v].z = 0.0f;
+        vertexes[v].color = color;
+    }
+    
+    vertexes[0].x = tl.x;
+    vertexes[0].y = tl.y;
+    vertexes[0].u = 0.0f;
+    vertexes[0].v = 0.0f;
+    vertexes[1].x = tl.x + size.x;
+    vertexes[1].y = tl.y;
+    vertexes[1].u = 1.0f;
+    vertexes[1].v = 0.0f;
+    vertexes[2].x = tl.x;
+    vertexes[2].y = tl.y + size.y;
+    vertexes[2].u = 0.0f;
+    vertexes[2].v = 1.0f;
+    vertexes[3].x = tl.x + size.x;
+    vertexes[3].y = tl.y + size.y;
+    vertexes[3].u = 1.0f;
+    vertexes[3].v = 1.0f;
+    
+    al_draw_prim(
+        vertexes, nullptr, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+    );
+}
+
+
+/**
  * @brief Draws a rotated rectangle.
  *
  * @param center Center of the rectangle.

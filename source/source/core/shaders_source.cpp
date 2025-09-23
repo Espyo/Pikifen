@@ -13,7 +13,7 @@
 
 namespace SHADER_SOURCE_FILES {
 
-#pragma region Default Vertex Shader
+#pragma region Default vertex shader
 
 //Allegro default vertex shader.
 const char* DEFAULT_VERT_SHADER = R"(
@@ -37,7 +37,7 @@ gl_Position = al_projview_matrix * al_pos;
 
 
 #pragma endregion
-#pragma region Liquid Fragment Shader
+#pragma region Liquid fragment shader
 
 //Fragment shader for sector liquids.
 const char* LIQUID_FRAG_SHADER = R"(
@@ -360,8 +360,8 @@ void main() {
     )";
 
 #pragma endregion
-#pragma region Onion Fragment Shader
-//Fragment shader for sector liquids.
+#pragma region Onion fragment shader
+//Fragment shader for the Onion menu's background.
 const char* ONION_FRAG_SHADER = R"(
 
 /*
@@ -400,7 +400,7 @@ uniform vec2 distortion_amount;
 //Opacity of the liquid.
 uniform float opacity;
 
-//The Allegro texture for the colormap.
+//Texture for the colormap.
 uniform sampler2D colormap;
 
 //Brightness to use.

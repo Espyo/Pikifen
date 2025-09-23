@@ -33,8 +33,8 @@ enum SHADER_TYPE {
 
     //Liquid sectors, like bodies of water.
     SHADER_TYPE_LIQUID,
-
-    //Onion swirls, used for the onion menus
+    
+    //Onion swirls, used for the Onion menu's background.
     SHADER_TYPE_ONION,
     
     //Total number of shader types.
