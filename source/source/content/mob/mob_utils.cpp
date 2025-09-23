@@ -1106,6 +1106,16 @@ void PikminNestType::createColormap(){
         ki.add(span * i, pikTypes[i]->mainColor,
         EASE_METHOD_IN_OUT);
     }
+    //Add a darker variant for single type onions
+    if (pikTypes.size() == 1) {
+        ALLEGRO_COLOR c =
+            al_map_rgb_f(
+                pikTypes[0]->mainColor.r * 0.4f,
+                pikTypes[0]->mainColor.g * 0.4f,
+                pikTypes[0]->mainColor.b * 0.4f
+            );
+        ki.add(1.0, c, EASE_METHOD_IN_OUT);
+    }
 
     //Create the texture
     ALLEGRO_BITMAP* backup = al_get_target_bitmap();
