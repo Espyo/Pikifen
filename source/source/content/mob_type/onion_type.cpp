@@ -73,6 +73,7 @@ AnimConversionVector OnionType::getAnimConversions() const {
  */
 void OnionType::loadCatProperties(DataNode* file) {
     nest->loadProperties(file, this);
+    nest->createColormap();
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
