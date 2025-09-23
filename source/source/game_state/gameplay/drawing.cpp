@@ -1425,11 +1425,10 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
  * @brief Draws the current Onion menu.
  */
 void GameplayState::drawOnionMenu() {
-    //Using a shader requires drawing a bitmap
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
     ALLEGRO_SHADER* menuShader = game.shaders.getShader(SHADER_TYPE_ONION);
 
     if (menuShader) {
+        //Using a shader requires drawing a bitmap
         ALLEGRO_BITMAP* bmp = al_create_bitmap(game.winW, game.winH);
         al_use_shader(menuShader);
         al_set_shader_sampler("colormap", onionMenu->nestPtr->nestType->menuColormap, 1);
