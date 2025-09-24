@@ -1231,8 +1231,8 @@ struct BitmapEffect {
     //Tint the bitmap by this color. Also makes it transparent.
     ALLEGRO_COLOR tintColor = COLOR_WHITE;
     
-    //Re-draws the bitmap on top, in additive blend, with this color.
-    ALLEGRO_COLOR glowColor = COLOR_BLACK;
+    //Colorize the bitmap by this color. Alpha indicates strength.
+    ALLEGRO_COLOR colorize = COLOR_EMPTY;
     
 };
 

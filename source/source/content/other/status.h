@@ -102,8 +102,8 @@ public:
     //Tint affected mobs with this color.
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
-    //Make affected mobs glow with this color.
-    ALLEGRO_COLOR glow = COLOR_EMPTY;
+    //Make affected mobs get colorized with this color.
+    ALLEGRO_COLOR colorize = COLOR_EMPTY;
     
     //Can the status effect be removed if the affected mob is whistled?
     bool removableWithWhistle = false;

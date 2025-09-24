@@ -229,7 +229,7 @@ struct DeliveryInfo {
     //Ratio of time left in the animation.
     float animTimeRatioLeft = 1.0f;
     
-    //Color to make the mob glow with.
+    //Color to colorize the mob with.
     ALLEGRO_COLOR color;
     
     //Intended delivery Pikmin type, in the case of Onions.

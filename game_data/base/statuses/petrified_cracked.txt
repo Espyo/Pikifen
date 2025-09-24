@@ -5,6 +5,7 @@ affects = enemies
 anim_speed_multiplier = 0
 auto_remove_time = 0.001
 color = 128 0 255
+colorize = 64 64 64 240
 defense_multiplier = 1.2
 disables_attack = true
 freezes_animation = true
@@ -13,7 +14,6 @@ particle_offset = 0 0 1000
 reapply_rule = keep_time
 shaking_effect = 1.5
 speed_multiplier = 0
-tint = 64 64 64
 
 maker = Espyo
 version = 1.0.0

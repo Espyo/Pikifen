@@ -2283,8 +2283,8 @@ void Mob::getSpriteBitmapEffects(
     
     //Status effects.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STATUS)) {
-        size_t nGlowColors = 0;
-        ALLEGRO_COLOR glowColorSum = COLOR_EMPTY;
+        size_t nColorizes = 0;
+        ALLEGRO_COLOR colorizeSum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); s++) {
             if(!statuses[s].isActive()) continue;
@@ -2294,7 +2294,7 @@ void Mob::getSpriteBitmapEffects(
                 t->tint.g == 1.0f &&
                 t->tint.b == 1.0f &&
                 t->tint.a == 1.0f &&
-                t->glow.a == 0.0f
+                t->colorize.a == 0.0f
             ) {
                 continue;
             }
@@ -2304,19 +2304,19 @@ void Mob::getSpriteBitmapEffects(
             info->tintColor.b *= t->tint.b;
             info->tintColor.a *= t->tint.a;
             
-            if(t->glow.a > 0) {
-                glowColorSum.r += t->glow.r;
-                glowColorSum.g += t->glow.g;
-                glowColorSum.b += t->glow.b;
-                glowColorSum.a += t->glow.a;
-                nGlowColors++;
+            if(t->colorize.a > 0) {
+                colorizeSum.r += t->colorize.r;
+                colorizeSum.g += t->colorize.g;
+                colorizeSum.b += t->colorize.b;
+                colorizeSum.a += t->colorize.a;
+                nColorizes++;
             }
             
-            if(nGlowColors > 0) {
-                t->glow.r = glowColorSum.r / nGlowColors;
-                t->glow.g = glowColorSum.g / nGlowColors;
-                t->glow.b = glowColorSum.b / nGlowColors;
-                t->glow.a = glowColorSum.a / nGlowColors;
+            if(nColorizes > 0) {
+                info->colorize.r = colorizeSum.r / nColorizes;
+                info->colorize.g = colorizeSum.g / nColorizes;
+                info->colorize.b = colorizeSum.b / nColorizes;
+                info->colorize.a = colorizeSum.a / nColorizes;
             }
             
             if(t->shakingEffect != 0.0f) {
@@ -2433,7 +2433,8 @@ void Mob::getSpriteBitmapEffects(
     ) {
         switch(deliveryInfo->animType) {
         case DELIVERY_ANIM_SUCK: {
-            ALLEGRO_COLOR newGlow;
+            ALLEGRO_COLOR colorizerColor = deliveryInfo->color;
+            colorizerColor.a = 0.5f;
             float newScale;
             Point newOffset;
             
@@ -2459,19 +2460,17 @@ void Mob::getSpriteBitmapEffects(
                 
             if(deliveryInfo->animTimeRatioLeft > 0.6) {
                 //Changing color.
-                newGlow =
-                    interpolateColor(
+                colorizerColor.a =
+                    interpolateNumber(
                         deliveryInfo->animTimeRatioLeft, 0.6, 1.0,
-                        deliveryInfo->color, mapGray(0)
+                        0.5f, 0.0f
                     );
                 newScale = 1.0f;
             } else if(deliveryInfo->animTimeRatioLeft > 0.4) {
                 //Fixed in color.
-                newGlow = deliveryInfo->color;
                 newScale = 1.0f;
             } else {
                 //Shrinking.
-                newGlow = deliveryInfo->color;
                 newScale =
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft, 0.0, 0.4,
@@ -2497,15 +2496,7 @@ void Mob::getSpriteBitmapEffects(
                 newOffset += endOffset * absorbRatio;
             }
             
-            info->glowColor.r =
-                std::clamp(info->glowColor.r + newGlow.r, 0.0f, 1.0f);
-            info->glowColor.g =
-                std::clamp(info->glowColor.g + newGlow.g, 0.0f, 1.0f);
-            info->glowColor.b =
-                std::clamp(info->glowColor.b + newGlow.b, 0.0f, 1.0f);
-            info->glowColor.a =
-                std::clamp(info->glowColor.a + newGlow.a, 0.0f, 1.0f);
-                
+            info->colorize = colorizerColor;
             info->scale *= newScale;
             info->translation += newOffset;
             break;

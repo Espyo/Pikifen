@@ -120,6 +120,11 @@
       <dt>Clear</dt>
       <dd>A mission being cleared means the mission has ended because the player has completed the mission's goal. It has no bearing on the medal the player receives.</dd>
     </dl>
+    <dl id="colorize">
+      <dt>Colorize</dt>
+      <dd>An operation done when drawing graphics, where the pixel colors are shifted with a new color. Internally, the red, green, and blue components, with values ranging from 0 to 1, are moved towards the colorize color's components. The amount they're moved by depends on the colorize color's alpha component. For instance, if the colorize color is an 80% opaque red, the final image will be the initial one but 80% of the way to being full red, like if an 80% opaque red texture was applied on top.</dd>
+      <dd>See also: <a href="#tint">Tint</a>.</dd>
+    </dl>
     <dl id="commit">
       <dt>Commit</dt>
       <dd>A change made to the engine's <a href="#source-code">source code</a> or base content, using <a href="#git">git</a>. A change can be just one altered character of text, a block of text that gets deleted, an entirely new code file, a bunch of small changes spread throughout an area's geometry file, and so on.</dd>
@@ -222,10 +227,6 @@
     <dl id="git">
       <dt>Git</dt>
       <dd>The <a href="https://en.wikipedia.org/wiki/Version_control">version control system</a> used in the <i>Pikifen</i> project. This is how all changes (<a href="#commit">commits</a>) get added together into a cohesive project, it's how outside contributors can share their own changes, it's what makes it possible to go back in time to see the reason for a specific change, and so on.</dd>
-    </dl>
-    <dl id="glow">
-      <dt>Glow</dt>
-      <dd>A way to brighten up an object. Due to Allegro limitations, it's not a real glow in the current versions of the engine because: 1. the brightness is limited to the bitmap's original pixels &#8211; darker bitmaps have a harder time becoming brighter; 2. the glow doesn't bleed and fade out, but is limited to the exact shape of the original bitmap.</dd>
     </dl>
     <dl id="group">
       <dt>Group</dt>
@@ -559,6 +560,7 @@
     <dl id="tint">
       <dt>Tint</dt>
       <dd>An operation done when drawing graphics, where the pixel colors are tinted with a new color. Internally, the red, green, blue, and alpha components, with values ranging from 0 to 1, are <a href="https://en.wikipedia.org/wiki/Blend_modes#Multiply">multiplied</a> by the tint color's components. Because of how multiplications on numbers from 0 to 1 work, this will always create a darker color, and some components of the color may be unchanged. It's a limited, but fast system.</dd>
+      <dd>See also: <a href="#colorize">Colorize</a>.</dd>
     </dl>
     <dl id="top">
       <dt>Top</dt>

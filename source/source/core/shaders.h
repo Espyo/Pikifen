@@ -21,7 +21,8 @@ TODO: Add a OpenGL extension library when it'll compile on windows
 #include <epoxy/glx.h>
 */
 
-namespace SHADER_SOURCE_FILES {
+namespace SHADER_SOURCES {
+extern const char* COLORIZER_FRAG_SHADER;
 extern const char* DEFAULT_VERT_SHADER;
 extern const char* LIQUID_FRAG_SHADER;
 extern const char* ONION_FRAG_SHADER;
@@ -31,6 +32,9 @@ extern const char* ONION_FRAG_SHADER;
 //Types of shaders.
 enum SHADER_TYPE {
 
+    //Colorizer. Blends between the input and a solid color.
+    SHADER_TYPE_COLORIZER,
+    
     //Liquid sectors, like bodies of water.
     SHADER_TYPE_LIQUID,
     
@@ -64,6 +68,10 @@ struct ShaderManager {
     
     //--- Function declarations ---
     
+    void compileShader(
+        SHADER_TYPE type,
+        const char* fragShaderSource, const char* vertShaderSource
+    );
     void tryAttachShader(
         ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
     );

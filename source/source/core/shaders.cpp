@@ -14,42 +14,55 @@
 
 
 /**
+ * @brief Compiles a shader from its source.
+ *
+ * @param type Type of shader.
+ * @param fragShaderSource GLSL source code for the fragment shader.
+ * @param vertShaderSource GLSL source code for the vertex shader.
+ */
+void ShaderManager::compileShader(
+    SHADER_TYPE type, const char* fragShaderSource, const char* vertShaderSource
+) {
+    compiledShaders[type] = al_create_shader(ALLEGRO_SHADER_GLSL);
+    
+    tryAttachShader(
+        compiledShaders[type], ALLEGRO_PIXEL_SHADER, fragShaderSource
+    );
+    tryAttachShader(
+        compiledShaders[type], ALLEGRO_VERTEX_SHADER, vertShaderSource
+    );
+    
+    if(!al_build_shader(compiledShaders[type])) {
+        al_destroy_shader(compiledShaders[type]);
+        compiledShaders[type] = nullptr;
+    };
+}
+
+
+/**
  * @brief Compiles all shaders from their source.
  */
 void ShaderManager::compileShaders() {
+    //Colorizer.
+    compileShader(
+        SHADER_TYPE_COLORIZER,
+        SHADER_SOURCES::COLORIZER_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
+    );
+    
     //Liquid.
-    compiledShaders[SHADER_TYPE_LIQUID] =
-        al_create_shader(ALLEGRO_SHADER_GLSL);
-        
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_LIQUID],
-        ALLEGRO_PIXEL_SHADER, SHADER_SOURCE_FILES::LIQUID_FRAG_SHADER
+    compileShader(
+        SHADER_TYPE_LIQUID,
+        SHADER_SOURCES::LIQUID_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
     );
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_LIQUID],
-        ALLEGRO_VERTEX_SHADER, SHADER_SOURCE_FILES::DEFAULT_VERT_SHADER
-    );
-    if(!al_build_shader(compiledShaders[SHADER_TYPE_LIQUID])) {
-        al_destroy_shader(compiledShaders[SHADER_TYPE_LIQUID]);
-        compiledShaders[SHADER_TYPE_LIQUID] = nullptr;
-    };
     
     //Onion menu background.
-    compiledShaders[SHADER_TYPE_ONION] =
-        al_create_shader(ALLEGRO_SHADER_GLSL);
-        
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_ONION],
-        ALLEGRO_PIXEL_SHADER, SHADER_SOURCE_FILES::ONION_FRAG_SHADER
+    compileShader(
+        SHADER_TYPE_ONION,
+        SHADER_SOURCES::ONION_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
     );
-    tryAttachShader(
-        compiledShaders[SHADER_TYPE_ONION],
-        ALLEGRO_VERTEX_SHADER, SHADER_SOURCE_FILES::DEFAULT_VERT_SHADER
-    );
-    if(!al_build_shader(compiledShaders[SHADER_TYPE_ONION])) {
-        al_destroy_shader(compiledShaders[SHADER_TYPE_ONION]);
-        compiledShaders[SHADER_TYPE_ONION] = nullptr;
-    };
     
 }
 

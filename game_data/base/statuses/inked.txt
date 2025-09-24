@@ -4,6 +4,7 @@ description = Pikmin that are inked will have a harmless glob of ink on their to
 affects = pikmin
 auto_remove_time = 5
 color = 64 64 64
+colorize = 32 32 32 192
 maturity_change_amount = -1
 overlay_anim_mob_scale = 1.5
 overlay_animation = ink
@@ -11,7 +12,6 @@ reapply_rule = keep_time
 removable_with_whistle = true
 speed_multiplier = 2.0
 state_change_type = panic
-tint = 128 128 128
 
 maker = Espyo
 version = 1.0.0

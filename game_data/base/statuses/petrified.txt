@@ -5,13 +5,13 @@ affects = enemies
 anim_speed_multiplier = 0
 auto_remove_time = 2.5
 color = 128 0 255
+colorize = 64 64 64 240
 defense_multiplier = 1.2
 disables_attack = true
 freezes_animation = true
 reapply_rule = keep_time
 replacement_on_timeout = petrified_cracking
 speed_multiplier = 0
-tint = 64 64 64
 
 maker = Espyo
 version = 1.0.0

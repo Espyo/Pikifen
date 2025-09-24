@@ -11,7 +11,7 @@
 #include "shaders.h"
 
 
-namespace SHADER_SOURCE_FILES {
+namespace SHADER_SOURCES {
 
 #pragma region Default vertex shader
 
@@ -35,6 +35,65 @@ gl_Position = al_projview_matrix * al_pos;
 
     )";
 
+
+#pragma endregion
+#pragma region Colorizer fragment shader
+
+//Fragment shader for the colorizer.
+const char* COLORIZER_FRAG_SHADER = R"(
+
+#version 130
+
+uniform sampler2D al_tex;
+uniform bool al_use_tex;
+uniform bool al_alpha_test;
+uniform int al_alpha_func;
+uniform float al_alpha_test_val;
+uniform vec4 colorizer_color;
+varying vec4 varying_color;
+varying vec2 varying_texcoord;
+
+bool alpha_test_func(float x, int op, float compare);
+
+void main() {
+  //Setup.
+  float colorizer_weight = colorizer_color.a;
+  float texture_weight = 1 - colorizer_weight;
+  vec4 result;
+
+  //Standard vertex tinting.
+  if(al_use_tex) {
+    result = varying_color * texture2D(al_tex, varying_texcoord);
+  } else {
+    result = varying_color;
+  }
+  if(al_alpha_test && !alpha_test_func(result.a, al_alpha_func, al_alpha_test_val)) {
+    discard;
+  }
+  
+  //Colorize it.
+  result.r = result.r * texture_weight + colorizer_color.r * colorizer_weight;
+  result.g = result.g * texture_weight + colorizer_color.g * colorizer_weight;
+  result.b = result.b * texture_weight + colorizer_color.b * colorizer_weight;
+  
+  //Finish up.
+  gl_FragColor = result;
+}
+
+bool alpha_test_func(float x, int op, float compare)
+{
+  if (op == 0) return false;
+  else if (op == 1) return true;
+  else if (op == 2) return x < compare;
+  else if (op == 3) return x == compare;
+  else if (op == 4) return x <= compare;
+  else if (op == 5) return x > compare;
+  else if (op == 6) return x != compare;
+  else if (op == 7) return x >= compare;
+  return false;
+}
+
+    )";
 
 #pragma endregion
 #pragma region Liquid fragment shader

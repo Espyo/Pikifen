@@ -164,6 +164,14 @@ void drawBitmapWithEffects(
         (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
     float scaleY =
         (effects.scale.y == LARGE_FLOAT) ? effects.scale.x : effects.scale.y;
+        
+    if(effects.colorize.a > 0.0f) {
+        al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER));
+        al_set_shader_float_vector(
+            "colorizer_color", 4, (float*) &effects.colorize, 1
+        );
+    }
+    
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         effects.tintColor,
@@ -174,24 +182,8 @@ void drawBitmapWithEffects(
         0
     );
     
-    if(effects.glowColor.a > 0) {
-        int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
-        al_get_separate_blender(
-            &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
-        );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        al_draw_tinted_scaled_rotated_bitmap(
-            bmp,
-            effects.glowColor,
-            bmpSize.x / 2, bmpSize.y / 2,
-            effects.translation.x, effects.translation.y,
-            scaleX, scaleY,
-            effects.rotation,
-            0
-        );
-        al_set_separate_blender(
-            oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
-        );
+    if(effects.colorize.a > 0.0f) {
+        al_use_shader(nullptr);
     }
 }
 

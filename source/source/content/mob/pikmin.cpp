@@ -148,10 +148,6 @@ void Pikmin::drawMob() {
         fsm.curState->id == PIKMIN_STATE_IDLING_H ||
         fsm.curState->id == PIKMIN_STATE_SPROUT;
         
-    if(isIdle) {
-        mobEff.glowColor = COLOR_WHITE;
-    }
-    
     drawBitmapWithEffects(curSPtr->bitmap, pikSpriteEff);
     
     //Top.
@@ -173,14 +169,10 @@ void Pikmin::drawMob() {
         //will be more than enough.
         float avgScale = (topEff.scale.x + topEff.scale.y) / 2.0f;
         Point topBmpSize = getBitmapDimensions(topBmp);
-        topEff.translation +=
-            pos + rotatePoint(topCoords, angle) * avgScale;
+        topEff.translation += pos + rotatePoint(topCoords, angle) * avgScale;
         topEff.scale *= topSize / topBmpSize;
-        topEff.rotation +=
-            angle + topAngle;
-        topEff.glowColor =
-            mapGray(0);
-            
+        topEff.rotation += angle + topAngle;
+        
         drawBitmapWithEffects(topBmp, topEff);
     }
     
@@ -196,7 +188,7 @@ void Pikmin::drawMob() {
             game.states.gameplay->areaTimePassed *
             PIKMIN::IDLE_GLOW_SPIN_SPEED;
         idleEff.tintColor = type->mainColor;
-        idleEff.glowColor = mapGray(0);
+        idleEff.colorize = mapAlpha(64);
         
         drawBitmapWithEffects(game.sysContent.bmpIdleGlow, idleEff);
     }

@@ -667,9 +667,7 @@ Misc things (so I don't forget)
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
-        Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
         Enemy souls?
-        Coloring due to ultra-bitter spray
     Pathing
         Just make all pathing always ignore the Z of stops if said Z is below them? Currently, grounded mobs ignore it, but airborne mobs don't. This is so that mobs that are horizontally on a stop, but vertically stuck above it teetering on a ledge can still continue their path. I can't find any reason to want to respect Z, be it for grounded or airborne mobs, especially since the game has no ceilings. But just make sure to have the Z coordinate be respected when reaching the Onion, ship, bridge, etc. at the end of the path
         Pikmin, leaders, and so on should be able to take climbing sticks, bouncy mushrooms, geysers, etc. in order to traverse paths

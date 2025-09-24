@@ -94,7 +94,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     sRS.set("color",                    color);
     sRS.set("tint",                     tint);
-    sRS.set("glow",                     glow);
+    sRS.set("colorize",                 colorize);
     sRS.set("affects",                  affectsStr);
     sRS.set("removable_with_whistle",   removableWithWhistle);
     sRS.set("remove_on_hazard_leave",   removeOnHazardLeave);
