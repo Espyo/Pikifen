@@ -2,13 +2,11 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Onion menu
-        Blur the background of the Onion menu, pause menu, etc.
-        If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
-            "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Arachnorb feet do not trigger on_reach_destination (thanks Neo)
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
@@ -18,20 +16,12 @@ Next tasks (roughly sorted most important first)
     Swarming jingle
     Update to Dear ImGui v1.92.3
     Some tweaks to the HUD
-        Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
-        Prefer populating corners over populating sides/bottom/top
-        Fade some elements (or all?) when the mouse is on them
-            This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
-        Remove some of the elements?
-            Stuff like a leader's health might not be necessary if it's full
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
-        Show how close you are to concocting a new spray
     Discontinue system message boxes in favor of Dear ImGui ones
     Other menu improvements
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     GUI things
-        GUI items could be told they are currently being activated, so that buttons can appear pressed in
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
@@ -84,6 +74,7 @@ Next tasks (roughly sorted most important first)
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
         Spray management should really be inventory management -- See the multiplayer section in this file for more info
+            Show how close you are to concocting a new spray
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
@@ -754,6 +745,8 @@ Misc things (so I don't forget)
         Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The loading screen's elements could be controlled with a GUI definition
+    If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
+        "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
@@ -929,6 +922,8 @@ Tasks for later on (I might never implement these)
                 b. Have the icon represent the next mode?
                 c. Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
     Blood (optional, of course)
+    GUI items could be told they are currently being activated, so that buttons can appear pressed in
+        This would involve activation changing from just holding the button to holding + releasing, which might interfere with buttons that have auto-repeat activation
     HUD element for a digital clock?
     Resolution, window size, and zoom
         Players should be able to resize the window on-the-fly (GitHub issue #2)
@@ -1001,6 +996,9 @@ Tasks for later on (I might never implement these)
         Action groups for mob scripts (like functions)
             Not really necessary since you can just create an aux state to do those
         Optimize the Armored Cannon Beetle's spritesheet, ever since its inhale sprites stopped using drawn lines and started using dust particles
+        Fade some HUD items (or all?) when the mouse is on them? Would this be useful?
+            This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
+        Hide some of the HUD items? Stuff like a leader's health might not be necessary if it's full
     Possible solutions to known issues
         Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

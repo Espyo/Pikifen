@@ -571,7 +571,7 @@ void drawLiquid(
     }
     
     //Finish up.
-    al_use_shader(NULL);
+    al_use_shader(nullptr);
     
 }
 

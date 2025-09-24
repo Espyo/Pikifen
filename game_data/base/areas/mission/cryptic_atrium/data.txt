@@ -17,8 +17,8 @@ day_time_speed=120.0000
 spray_amounts
 mission_goal=Get to the exit
 mission_goal_all_mobs=true
-mission_goal_exit_center=-544.0000 -576.0000
-mission_goal_exit_size=320.0000 256.0000
+mission_goal_exit_center=-544.0000 -544.0000
+mission_goal_exit_size=320.0000 192.0000
 mission_fail_conditions=136
 mission_fail_pik_killed=1
 mission_grading_mode=1

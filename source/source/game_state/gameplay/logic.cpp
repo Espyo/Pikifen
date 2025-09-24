@@ -1220,10 +1220,10 @@ void GameplayState::doMenuLogic() {
             );
         string coordsStr =
             resizeString(
-                resizeString(f2s(game.makerTools.infoLock->pos.x), 8, " ") +
-                resizeString(f2s(game.makerTools.infoLock->pos.y), 8, " ") +
-                resizeString(f2s(game.makerTools.infoLock->z), 7),
-                23
+                resizeString(f2s(game.makerTools.infoLock->pos.x), 8) + " " +
+                resizeString(f2s(game.makerTools.infoLock->pos.y), 8) + " " +
+                resizeString(f2s(game.makerTools.infoLock->z), 8),
+                26
             );
         string stateHStr =
             (

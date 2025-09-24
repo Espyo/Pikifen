@@ -1437,7 +1437,7 @@ void GameplayState::drawOnionMenu() {
         al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
         
         drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
-        al_use_shader(NULL);
+        al_use_shader(nullptr);
         
     } else {
         al_draw_filled_rectangle(

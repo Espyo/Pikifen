@@ -559,11 +559,11 @@ void Game::processSystemInfo() {
         "\n"
         "Area version " + areaVersionStr + ", by " + areaMakerStr +
         "\n"
-        "Mobs: " + nMobsStr + ". Particles: " + nParticlesStr +
+        "Mobs: " + nMobsStr + " particles: " + nParticlesStr +
         "\n"
         "\n"
-        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses). " +
-        "Sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses). " +
+        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses) " +
+        "sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses) " +
         "\n"
         "\n"
         "Resolution: " + resolutionStr +

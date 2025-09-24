@@ -1249,7 +1249,7 @@ void changeToNextLeader(
 ) {
     if(game.states.gameplay->availableLeaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
-        if(player->leaderPtr) player->leaderPtr->player = NULL;
+        if(player->leaderPtr) player->leaderPtr->player = nullptr;
         player->leaderIdx = INVALID;
         player->leaderPtr = nullptr;
         game.states.gameplay->updateClosestGroupMembers(player);
