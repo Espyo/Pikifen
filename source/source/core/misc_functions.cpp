@@ -153,6 +153,8 @@ void crash(const string& reason, const string& info, int exitStatus) {
                 backbuffer
             );
         }
+        
+        al_destroy_display(game.display);
     }
     
     string errorStr = "Program crash!\n";

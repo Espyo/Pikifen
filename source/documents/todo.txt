@@ -17,7 +17,6 @@ Next tasks (roughly sorted most important first)
     Update to Dear ImGui v1.92.3
     Some tweaks to the HUD
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
-    Discontinue system message boxes in favor of Dear ImGui ones
     Other menu improvements
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score

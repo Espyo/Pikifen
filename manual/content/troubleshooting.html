@@ -37,41 +37,41 @@
     <h3 id="playing">Problems during gameplay</h3>
     
     <dl>
-      <dt><b>Why can't I see the game window?</b></dt>
-      <dd>Because windows sometimes break under Windows.</dd>
+      <dt><b>I can't see the game window.</b></dt>
+      <dd>Windows sometimes break under Microsoft Windows.</dd>
       <dd>In the <a href="options.html">options file</a>, there is a line that controls the window position hack feature. Set that property to <code>true</code>.</dd>
       
-      <dt><b>Why is it running slowly?</b></dt>
+      <dt><b>The game is running slowly.</b></dt>
       <dd>Well, it IS a complex engine running a lot of flexible logic that controls several dozens of entities, so it's only natural.</dd>
       <dd>You can check tweak some <a href="options.html">options</a> in order to sacrifice appearance for performance.</dd>
       <dd>If you suspect some of the content you've made is having an impact on performance, try the <a href="maker_toolkit.html#perf-mon">performance monitor</a>.</dd>
       
-      <dt><b>Why did it crash, complaining about something involving shaders?</b></dt>
+      <dt><b>The game crashed, complaining about something involving shaders.</b></dt>
       <dd>Your machine probably doesn't support <i>Pikifen</i>'s <a href="https://en.wikipedia.org/wiki/Shader">shaders</a>. You can enable the shader compatibility mode <a href="options.html">option</a>, which might fix the crashes, at the cost of making some graphical effects go missing altogether.</dd>
       
-      <dt><b>Why are some parts of the logic and physics so broken?</b></dt>
-      <dd>Because their code is still under construction, most likely.</dd>
-      
-      <dt><b>Why are some textures black, but not HUD elements?</b></dt>
+      <dt><b>Some textures are black, but not HUD elements.</b></dt>
       <dd>Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.</dd>
       
-      <dt><b>Why does the engine think I'm touching the analog stick when I'm not?</b></dt>
+      <dt><b>The game thinks I'm touching the analog stick when I'm not.</b></dt>
       <dd>You can open the <a href="options.html">options file</a> and adjust the option that controls the joystick minimum deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.</dd>
       
-      <dt><b>I'm on Linux, and things related to windows aren't working very well, why?</b></dt>
+      <dt><b>I'm on Linux, and things related to windows aren't working very well.</b></dt>
       <dd>If you're using Wayland, consider switching to X, since there are some known compatibility problems.</dd>
+      
+      <dt><b>Fullscreen looks weird or is broken.</b></dt>
+      <dd>Make sure the game resolution matches your monitor's resolution. You may need to edit the <a href="options.html">options</a> file manually. In addition, try toggling the <code>true_fullscreen</code> option.</dd>
     </dl>
     
     <h3 id="making">Problems while making content</h3>
     
     <dl>
-      <dt><b>Why do I see everything in a single line when I open a <a href="making.html#data-file">data file</a> with Notepad?</b></dt>
+      <dt><b>I see everything in a single line when I open a <a href="making.html#data-file">data file</a> with Notepad.</b></dt>
       <dd>Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use.</dd>
       <dd>Install Notepad++ and start using that instead, since it's better in every way.</dd>
 
-      <dt><b>Why are my graphics showing up as black and violet patterns?</b></dt>
+      <dt><b>My graphics are showing up as black and violet patterns.</b></dt>
       <dd>
-        That's what the engine shows when it can't open a texture. Make sure you're following these points:
+        That's what the engine shows when it can't open a texture. Make sure you keep these points in mind:
         <ul>
           <li>Internal names are based on <a href="glossary.html#file-name">file names</a>, which are case sensitive. Lowercase and uppercase matter.</li>
           <li>The engine only searches for the image in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code>.</li>
