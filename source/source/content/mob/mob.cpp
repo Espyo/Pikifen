@@ -532,7 +532,7 @@ void Mob::arachnorbFootMoveLogic() {
     
     finalPos += offset;
     
-    chase(finalPos, z);
+    chase(finalPos, z, CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED);
 }
 
 
