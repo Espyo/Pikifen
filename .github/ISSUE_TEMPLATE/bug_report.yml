@@ -1,9 +1,9 @@
 # Docs - https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
 name: Bug report
-description: Found a bug? Report it this way!
-title: <Enter a title for the bug report here>
+description: "Found a bug? Report it this way!"
+title: "<Enter a title for the bug report here>"
 labels: bug
-assignees: ''
+assignees: ""
 body:
   - type: markdown
     id: md_readme
@@ -15,35 +15,49 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: Description
+      label: "Description"
       description: "A description of the bug. If it's not painfully obvious, you should also explain what exactly is wrong, and what you expected to happen instead. If you have a screenshot or a video of the bug in action, that'd be very appreciated."
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Steps to reproduce
+      label: "Steps to reproduce"
       description: "I'll want to do the same things you did in order to face the bug myself, so it's important that you find and report a way to reproduce the bug. If you can't, please list off what you were doing in the moments leading up to the bug happening."
     validations:
       required: true
   - type: textarea
     id: log
     attributes:
-      label: Error log
+      label: "Error log"
       description: "Especially important for crashes, you should share the contents of your error log file. A screenshot may have also been created in the `user_data` folder, so share that too."
+    validations:
+      required: false
+  - type: input
+    id: packs
+    attributes:
+      label: "Content changes"
+      description: "If you're using some content pack or changed the base content, please let me know, since the problem might depend on those changes."
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: "Version"
+      description: "You should always be using the latest official version of _Pikifen_, but in case you're using an older version or on a git commit farther ahead than the latest official version, please specify that information too."
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: "OS"
+      description: "If your problem is related to something system-wide, like the game window, graphic or audio corruptions, file mishaps, etc., please specify your operating system."
     validations:
       required: false
   - type: textarea
     id: extra
     attributes:
-      label: Extra notes
-      description: "Any extra notes you feel are relevant to helping me figure out the issue. Scroll down for some ideas."
+      label: "Extra notes"
+      description: "Any extra notes you feel are relevant to helping me figure out the issue."
     validations:
       required: false
-  - type: markdown
-    id: extra_ideas
-    attributes:
-      value: |
-        * If you're using some content pack or changed the base content, please let me know what you have done, since the problem might depend on those changes.
-        * You should always be using the latest official version of _Pikifen_, but in case you're using an older version or on a git commit farther ahead than the latest official version, please specify that information too.
-        * If your problem is related to something system-wide, like the game window, graphic or audio corruptions, file mishaps, etc., please specify your operating system.
