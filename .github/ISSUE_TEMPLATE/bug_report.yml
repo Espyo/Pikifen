@@ -3,7 +3,6 @@ name: Bug report
 description: "Found a bug? Report it this way!"
 title: "<Enter a title for the bug report here>"
 labels: bug
-assignees: ""
 body:
   - type: markdown
     id: md_readme
