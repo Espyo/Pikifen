@@ -1445,7 +1445,10 @@ void MobActionRunners::moveToAbsolute(MobActionRunData& data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     float z = data.args.size() > 2 ? s2f(data.args[2]) : data.m->z;
-    data.m->chase(Point(x, y), z);
+    data.m->chase(
+        Point(x, y), z, 
+        CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+    );
 }
 
 
@@ -1459,7 +1462,10 @@ void MobActionRunners::moveToRelative(MobActionRunData& data) {
     float y = s2f(data.args[1]);
     float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
     Point p = rotatePoint(Point(x, y), data.m->angle);
-    data.m->chase(data.m->pos + p, data.m->z + z);
+    data.m->chase(
+        data.m->pos + p, data.m->z + z, 
+        CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+    );
 }
 
 
@@ -1477,7 +1483,11 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
             float a = getAngle(data.m->pos, data.m->focusedMob->pos);
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
-            data.m->chase(data.m->pos + offset, data.m->z);
+            data.m->chase(
+                data.m->pos + offset, 
+                data.m->z, 
+                CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+            );
         } else {
             data.m->stopChasing();
         }
@@ -1485,7 +1495,11 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS: {
         if(data.m->focusedMob) {
-            data.m->chase(&data.m->focusedMob->pos, &data.m->focusedMob->z);
+            data.m->chase(
+                &data.m->focusedMob->pos, 
+                &data.m->focusedMob->z, 
+                CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+            );
         } else {
             data.m->stopChasing();
         }
@@ -1493,14 +1507,22 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
         if(data.m->focusedMob) {
-            data.m->chase(data.m->focusedMob->pos, data.m->focusedMob->z);
+            data.m->chase(
+                data.m->focusedMob->pos, 
+                data.m->focusedMob->z, 
+                CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+            );
         } else {
             data.m->stopChasing();
         }
         break;
         
     } case MOB_ACTION_MOVE_TYPE_HOME: {
-        data.m->chase(data.m->home, data.m->z);
+        data.m->chase(
+            data.m->home, 
+            data.m->z, 
+            CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+        );
         break;
         
     } case MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC: {
@@ -1519,7 +1541,11 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
         }
         des = des / data.m->links.size();
         
-        data.m->chase(des, data.m->z);
+        data.m->chase(
+            des, 
+            data.m->z, 
+            CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
+        );
         break;
         
     }
