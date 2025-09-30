@@ -120,7 +120,7 @@ enum MOB_ACTION {
     //Play a sound.
     MOB_ACTION_PLAY_SOUND,
     
-    //Print some debug text.
+    //Print some content debug text.
     MOB_ACTION_PRINT,
     
     //Receive a status effect.

@@ -1249,36 +1249,38 @@ void PauseMenu::drawRadar(
     );
     
     //Debugging feature -- show area active cells.
-    /*
-    for(
-        size_t cellX = 0;
-        cellX < game.states.gameplay->areaActiveCells.size();
-        cellX++
-    ) {
+    if(game.debug.showAreaActiveCells) {
         for(
-            size_t cellY = 0;
-            cellY < game.states.gameplay->areaActiveCells[cellX].size();
-            cellY++
+            size_t cellX = 0;
+            cellX < game.states.gameplay->areaActiveCells.size();
+            cellX++
         ) {
-            float startX =
-                game.curAreaData->bmap.topLeftCorner.x +
-                cellX * GEOMETRY::AREA_CELL_SIZE;
-            float startY =
-                game.curAreaData->bmap.topLeftCorner.y +
-                cellY * GEOMETRY::AREA_CELL_SIZE;
-            al_draw_rectangle(
-                startX + (1.0f / radarCam.zoom),
-                startY + (1.0f / radarCam.zoom),
-                startX + GEOMETRY::AREA_CELL_SIZE - (1.0f / radarCam.zoom),
-                startY + GEOMETRY::AREA_CELL_SIZE - (1.0f / radarCam.zoom),
-                game.states.gameplay->areaActiveCells[cellX][cellY] ?
-                al_map_rgb(32, 192, 32) :
-                al_map_rgb(192, 32, 32),
-                1.0f / radarCam.zoom
-            );
+            for(
+                size_t cellY = 0;
+                cellY < game.states.gameplay->areaActiveCells[cellX].size();
+                cellY++
+            ) {
+                float startX =
+                    game.curAreaData->bmap.topLeftCorner.x +
+                    cellX * GEOMETRY::AREA_CELL_SIZE;
+                float startY =
+                    game.curAreaData->bmap.topLeftCorner.y +
+                    cellY * GEOMETRY::AREA_CELL_SIZE;
+                al_draw_rectangle(
+                    startX + (1.0f / radarView.cam.zoom),
+                    startY + (1.0f / radarView.cam.zoom),
+                    startX + GEOMETRY::AREA_CELL_SIZE -
+                    (1.0f / radarView.cam.zoom),
+                    startY + GEOMETRY::AREA_CELL_SIZE -
+                    (1.0f / radarView.cam.zoom),
+                    game.states.gameplay->areaActiveCells[cellX][cellY] ?
+                    al_map_rgb(32, 192, 32) :
+                    al_map_rgb(192, 32, 32),
+                    1.0f / radarView.cam.zoom
+                );
+            }
         }
     }
-    */
     
     //Return to normal drawing.
     al_use_transform(&oldTransform);

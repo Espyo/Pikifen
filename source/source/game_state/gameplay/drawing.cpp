@@ -200,7 +200,7 @@ void GameplayState::doGameDrawing(
         
     }
     
-    drawDebugTools();
+    drawDebugTools(&players[0]);
 }
 
 
@@ -416,9 +416,11 @@ void GameplayState::drawBigMsg() {
 
 
 /**
- * @brief Draws any debug visualization tools useful for debugging.
+ * @brief Draws any debug visualization tools useful for engine debugging.
+ *
+ * @param player Player that the view belongs to.
  */
-void GameplayState::drawDebugTools() {
+void GameplayState::drawDebugTools(Player* player) {
     //Tests using Dear ImGui.
     /*
     ImGui::GetIO().MouseDrawCursor = true;
@@ -628,42 +630,43 @@ void GameplayState::drawDebugTools() {
     */
     
     //Group stuff.
-    /*
-    al_use_transform(&game.view.worldToWindowTransform);
-    for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
-        point offset = player->leaderPtr->group->getSpotOffset(m);
-        al_draw_filled_circle(
-            player->leaderPtr->group->anchor.x + offset.x,
-            player->leaderPtr->group->anchor.y + offset.y,
+    if(game.debug.showGroupInfo && player->leaderPtr) {
+        al_use_transform(&player->view.worldToWindowTransform);
+        for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+            Point offset = player->leaderPtr->group->getSpotOffset(m);
+            al_draw_filled_circle(
+                player->leaderPtr->group->anchor.x + offset.x,
+                player->leaderPtr->group->anchor.y + offset.y,
+                3.0f,
+                al_map_rgba(0, 0, 0, 192)
+            );
+        }
+        al_draw_circle(
+            player->leaderPtr->group->anchor.x,
+            player->leaderPtr->group->anchor.y,
             3.0f,
-            al_map_rgba(0, 0, 0, 192)
+            player->leaderPtr->group->mode == Group::MODE_SHUFFLE ?
+            al_map_rgba(0, 255, 0, 192) :
+            player->leaderPtr->group->mode == Group::MODE_FOLLOW_BACK ?
+            al_map_rgba(255, 255, 0, 192) :
+            al_map_rgba(255, 0, 0, 192),
+            2.0f
         );
+        
+        Point groupMidPoint =
+            player->leaderPtr->group->anchor +
+            rotatePoint(
+                Point(player->leaderPtr->group->radius, 0.0f),
+                player->leaderPtr->group->anchorAngle
+            );
+        al_draw_filled_circle(
+            groupMidPoint.x,
+            groupMidPoint.y,
+            3.0f,
+            al_map_rgb(0, 0, 255)
+        );
+        al_use_transform(&game.identityTransform);
     }
-    al_draw_circle(
-        player->leaderPtr->group->anchor.x,
-        player->leaderPtr->group->anchor.y,
-        3.0f,
-        player->leaderPtr->group->mode == Group::MODE_SHUFFLE ?
-        al_map_rgba(0, 255, 0, 192) :
-        player->leaderPtr->group->mode == Group::MODE_FOLLOW_BACK ?
-        al_map_rgba(255, 255, 0, 192) :
-        al_map_rgba(255, 0, 0, 192),
-        2.0f
-    );
-    
-    point groupMidPoint =
-        player->leaderPtr->group->anchor +
-        rotatePoint(
-            point(player->leaderPtr->group->radius, 0.0f),
-            player->leaderPtr->group->anchorAngle
-        );
-    al_draw_filled_circle(
-        groupMidPoint.x,
-        groupMidPoint.y,
-        3.0f,
-        al_map_rgb(0, 0, 255)
-    );
-    */
 }
 
 

@@ -41,8 +41,8 @@ const unsigned char DEF_DIFFICULTY = 0;
  * @brief Checks to see if all indexes match their pointers,
  * for the various edges, vertexes, etc.
  *
- * This is merely a debugging tool. Aborts execution if any of the pointers
- * don't match.
+ * This is merely an engine debugging tool. Aborts execution if any of the
+ * pointers don't match.
  */
 void Area::checkStability() {
     for(size_t v = 0; v < vertexes.size(); v++) {

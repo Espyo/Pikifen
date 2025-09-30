@@ -107,7 +107,7 @@ public:
     
     //Player controls mediator.
     ControlsMediator controls;
-
+    
     //Console.
     Console console;
     
@@ -268,6 +268,12 @@ public:
         
         //Show and operate on a Dear ImGui demo window.
         bool showDearImGuiDemo = false;
+        
+        //Show visual information about the leader's group.
+        bool showGroupInfo = false;
+        
+        //Show which area cells are active in the radar.
+        bool showAreaActiveCells = false;
         
     } debug;
     

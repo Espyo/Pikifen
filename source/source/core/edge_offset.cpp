@@ -35,7 +35,8 @@ void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx,
     const Viewport& view
 ) {
-    //Keep the end opacity as a constant. Changing it helps with debugging.
+    //Keep the end opacity as a constant, since changing it helps with
+    //engine debugging.
     const float END_OPACITY = 0.0f;
     Edge* ePtr = game.curAreaData->edges[eIdx];
     

@@ -394,7 +394,7 @@ public:
     //Conversion between pre-named states and in-file states.
     vector<size_t> preNamedConversions;
     
-    //Knowing the previous states' names helps with debugging.
+    //Knowing the previous states' names helps with engine or content debugging.
     string prevStateNames[STATE_HISTORY_SIZE];
     
     //If this is INVALID, use the mob type's first state index. Else, use this.

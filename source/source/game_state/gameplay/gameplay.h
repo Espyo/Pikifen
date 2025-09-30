@@ -482,7 +482,7 @@ private:
     void doPlayerActionWhistle(Player* player, bool isDown);
     void doPlayerActionZoom(Player* player, float inputValue, bool zoomIn);
     void drawBackground(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
-    void drawDebugTools();
+    void drawDebugTools(Player* player);
     void drawLeaderCursor(Player* player, const ALLEGRO_COLOR& color);
     void drawInGameText(Player* player);
     void drawBigMsg();

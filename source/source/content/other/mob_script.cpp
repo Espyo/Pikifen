@@ -351,17 +351,6 @@ void MobFsm::runEvent(
     MobEvent* e = getEvent(type);
     if(e) {
         e->run(m, customData1, customData2);
-    } else {
-    
-#ifdef DEBUG_FSM
-        cout <<
-             "Missing event on runEvent() - Mob " <<
-             m << ", event " << type << ", state " <<
-             (this->curState ? this->curState->name : "[None]") <<
-             endl;
-#endif
-             
-        return;
     }
 }
 

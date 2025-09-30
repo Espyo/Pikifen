@@ -3043,7 +3043,7 @@ size_t Mob::playSound(size_t soundDataIdx) {
 
 /**
  * @brief Returns a string containing the FSM state history for this mob.
- * This is used for debugging crashes.
+ * This is used for debugging engine or content problems.
  *
  * @return The string.
  */
