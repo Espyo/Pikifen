@@ -1,16 +1,15 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    
+    ImGuiIO::ClearInputKeys, AddFocusEvent
+    add a fallback in compat mode for water
 
 Current tasks (tasks being worked on, but not yet committed)
     
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Arachnorb feet do not trigger on_reach_destination (thanks Neo)
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
-    If you have analog stick inputs and D-pad inputs bound to navigating menus, the D-pad ones STILL won't work
 
     --- 1.1.0 ---
     Swarming jingle
@@ -31,6 +30,11 @@ Next tasks (roughly sorted most important first)
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
             https://github.com/WICG/spatial-navigation
             https://github.com/NoriginMedia/Norigin-Spatial-Navigation
+            https://gist.github.com/rygorous/6981057
+        Logic to remember where it came from
+        Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
+        Logic to use the corners instead of centers
+        Logic to use Euclidean distance or taxicab distance
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
@@ -38,9 +42,6 @@ Next tasks (roughly sorted most important first)
                 Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by deltaT
-            If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
-                It should probably use the largest value of all inputs. Like if you bind move leader cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
-                Add an option to allow event coalescing? Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
                 If pressing an input generates both non-chord actions and chord actions, only do the chord actions
@@ -78,6 +79,7 @@ Next tasks (roughly sorted most important first)
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
+        If the player starts holding some inputs during the "Ready..." interlude, they should go into effect as soon as gameplay starts
         Test it on the Steam Deck
 
     --- 1.2.0 ---
@@ -338,7 +340,6 @@ Next tasks (roughly sorted most important first)
             Maybe have an option to make the flash much weaker, because of seizures?
         Types of blackout
             Only the leaders, only leaders + Pikmin, everything but leaders + Pikmin, etc.
-            Specific enemies that don't cast light, so you can have Phosbats
         Mist
             See if that clashes with fog, or if it can be its own thing
         Vignette
@@ -522,9 +523,6 @@ Misc things (so I don't forget)
         There should be some petal particle effects when a Pikmin loses their maturity
             Each Pikmin type needs to specify its own petal color
         If a Pikmin type has black as the color, the idle glow needs to... not be black
-        Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
-            Make it use the same logic as drawTexture, where a fade sector must draw the liquid twice, with the second time fading
-        Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animate the mission results screen. Basically, reveal one thing at a time
             Add sounds for an item's run-up ticking, an item's run-up finishing, a ka-ching for getting a medal, and a puff for the complete/failed stamp

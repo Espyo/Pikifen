@@ -348,9 +348,7 @@ vector<Inpution::Action> ControlsMediator::newFrame(float deltaT) {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::releaseAll() {
-    for(auto& a : mgr.actionTypes) {
-        mgr.setValue(a.first, 0.0f);
-    }
+    mgr.releaseEverything();
 }
 
 

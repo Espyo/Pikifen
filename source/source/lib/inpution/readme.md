@@ -133,6 +133,7 @@ int main() {
 * Support for multiple players.
 * Support for multiple controllers at once.
 * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
+* Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins).
 * Analog stick deadzone processing, with all sorts of interpolations.
 * Specific features, like temporarily ignoring given input sources.
 * Very agnostic, and with no external dependencies.

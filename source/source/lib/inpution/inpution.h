@@ -113,6 +113,7 @@ struct InputSource {
     //--- Function declarations ---
     
     bool operator==(const InputSource& s2) const;
+    bool operator<(const InputSource& s2) const;
     
 };
 
@@ -286,10 +287,10 @@ public:
     //--- Function declarations ---
     
     float getValue(int actionTypeId) const;
-    void handleInput(const Input& input);
-    void startIgnoringInputSource(const InputSource& inputSource);
+    bool handleInput(const Input& input);
+    bool startIgnoringInputSource(const InputSource& inputSource);
     vector<Action> newFrame(float deltaT);
-    void setValue(int actionTypeId, float value);
+    bool releaseEverything();
     
     
 protected:
@@ -307,6 +308,9 @@ protected:
     
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > cleanSticks;
+
+    //Values of each input source.
+    map<InputSource, float> inputSourceValues;
     
     //Input sources currently being ignored.
     vector<InputSource> ignoredInputSources;

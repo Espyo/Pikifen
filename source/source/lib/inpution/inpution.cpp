@@ -49,7 +49,7 @@ void Manager::cleanStick(const Input& input) {
 /**
  * @brief Given an input value, converts it to an analog or boolean value,
  * according to the action type.
- * 
+ *
  * @param actionTypeId ID of the action type.
  * @param value Value to convert.
  * @return The converted value.
@@ -67,7 +67,7 @@ float Manager::convertActionValue(int actionTypeId, float value) {
         }
         }
     }
-
+    
     return value;
 }
 
@@ -101,9 +101,15 @@ vector<int> Manager::getActionTypesFromInput(
  * @return The value, or 0 on failure.
  */
 float Manager::getValue(int actionTypeId) const {
-    auto it = actionTypeStatuses.find(actionTypeId);
-    if(it == actionTypeStatuses.end()) return 0.0f;
-    return it->second.value;
+    float highestValue = 0.0f;
+    for(const auto& bind : binds) {
+        if(bind.actionTypeId != actionTypeId) continue;
+        const auto sIt = inputSourceValues.find(bind.inputSource);
+        if(sIt == inputSourceValues.end()) continue;
+        float v = inputSourceValues.at(bind.inputSource);
+        highestValue = std::max(highestValue, v);
+    }
+    return highestValue;
 }
 
 
@@ -120,26 +126,24 @@ float Manager::getValue(int actionTypeId) const {
 void Manager::handleCleanInput(
     const Input& input, bool addDirectly
 ) {
+    inputSourceValues[input.source] = input.value;
+    
     if(processInputIgnoring(input)) {
         //We have to ignore this one.
         return;
     }
     
+    if(!addDirectly) return;
+    
     //Find what game action types are bound to this input.
     vector<int> actionTypes = getActionTypesFromInput(input);
     
     for(size_t a = 0; a < actionTypes.size(); a++) {
-        if(addDirectly) {
-            //Add it to the action queue directly.
-            Action newAction;
-            newAction.actionTypeId = actionTypes[a];
-            newAction.value = convertActionValue(actionTypes[a], input.value);
-            actionQueue.push_back(newAction);
-        } else {
-            //Update each game action type's current input state,
-            //so we can report them later.
-            actionTypeStatuses[actionTypes[a]].value = input.value;
-        }
+        //Add it to the action queue directly.
+        Action newAction;
+        newAction.actionTypeId = actionTypes[a];
+        newAction.value = convertActionValue(actionTypes[a], input.value);
+        actionQueue.push_back(newAction);
     }
 }
 
@@ -148,10 +152,9 @@ void Manager::handleCleanInput(
  * @brief Handles a hardware input from the player.
  *
  * @param input The input.
+ * @return Whether it succeeded.
  */
-void Manager::handleInput(
-    const Input& input
-) {
+bool Manager::handleInput(const Input& input) {
     if(
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
@@ -226,6 +229,8 @@ void Manager::handleInput(
         handleCleanInput(input, false);
         
     }
+    
+    return true;
 }
 
 
@@ -237,6 +242,10 @@ void Manager::handleInput(
  * @return The actions.
  */
 vector<Action> Manager::newFrame(float deltaT) {
+    for(auto& a : actionTypes) {
+        actionTypeStatuses[a.first].value = getValue(a.first);
+    }
+    
     for(auto& a : actionTypeStatuses) {
         if(a.second.oldValue != a.second.value) {
             Action newAction;
@@ -359,15 +368,13 @@ void Manager::processStateTimers(
 
 
 /**
- * @brief Sets the current value of a given action type.
+ * @brief Acts as if all buttons, keys, analog sticks, etc. have been released.
  *
- * @param actionTypeId ID of the action type.
- * @param value The value.
+ * @return Whether it succeeded.
  */
-void Manager::setValue(int actionTypeId, float value) {
-    value = std::min(value, 1.0f);
-    value = std::max(0.0f, value);
-    actionTypeStatuses[actionTypeId].value = value;
+bool Manager::releaseEverything() {
+    inputSourceValues.clear();
+    return true;
 }
 
 
@@ -376,17 +383,19 @@ void Manager::setValue(int actionTypeId, float value) {
  * input with value 0, at which point it becomes unignored.
  *
  * @param inputSource Input source to ignore.
+ * @return Whether it succeeded.
  */
-void Manager::startIgnoringInputSource(
+bool Manager::startIgnoringInputSource(
     const InputSource& inputSource
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == inputSource) {
             //Already ignored.
-            return;
+            return false;
         }
     }
     ignoredInputSources.push_back(inputSource);
+    return true;
 }
 
 
@@ -403,6 +412,34 @@ bool InputSource::operator==(const InputSource& s2) const {
         buttonNr == s2.buttonNr &&
         stickNr == s2.stickNr &&
         axisNr == s2.axisNr;
+}
+
+
+/**
+ * @brief Returns which input source should come first when sorting.
+ *
+ * @param s2 The other input source.
+ * @return Whether the current should come before s2.
+ */
+bool InputSource::operator<(const InputSource& s2) const {
+    if(type != s2.type) {
+        return type < s2.type;
+    }
+    
+    if(deviceNr != s2.deviceNr) {
+        return deviceNr < s2.deviceNr;
+    }
+    
+    if(buttonNr != s2.buttonNr) {
+        return buttonNr < s2.buttonNr;
+    }
+    
+    if(stickNr != s2.stickNr) {
+        return stickNr < s2.stickNr;
+    }
+    
+    return axisNr < s2.axisNr;
+    
 }
 
 
