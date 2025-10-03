@@ -1,6 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    ImGuiIO::ClearInputKeys, AddFocusEvent
-    add a fallback in compat mode for water
+    
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -13,7 +12,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Swarming jingle
-    Update to Dear ImGui v1.92.3
     Some tweaks to the HUD
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
     Other menu improvements
