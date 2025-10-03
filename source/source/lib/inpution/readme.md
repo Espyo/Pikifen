@@ -129,13 +129,14 @@ int main() {
 
 ## Features
 
-* Support for analog (0 to 1) and binary (just 0 or 1) input values.
+* Support for analog (range [0 - 1]) and digital (just 0 or 1) input values.
 * Support for multiple players.
 * Support for multiple controllers at once.
 * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
 * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins).
 * Analog stick deadzone processing, with all sorts of interpolations.
 * Specific features, like temporarily ignoring given input sources.
+* Fairly light, and fairly simple.
 * Very agnostic, and with no external dependencies.
 
 ## Key terms

@@ -12,8 +12,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Swarming jingle
-    Some tweaks to the HUD
-        When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
     Other menu improvements
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
@@ -957,6 +955,8 @@ Tasks for later on (I might never implement these)
             https://github.com/MikeLankamp/fpm
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
         Either prepare for or disallow changing options mid-game
+    If Allegro gets updated...
+        Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
@@ -992,6 +992,8 @@ Tasks for later on (I might never implement these)
         Fade some HUD items (or all?) when the mouse is on them? Would this be useful?
             This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
         Hide some of the HUD items? Stuff like a leader's health might not be necessary if it's full
+        When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
+            One mission might make getting 1000 points very easy while another might make getting 50 points very hard, so this might not work...
     Possible solutions to known issues
         Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

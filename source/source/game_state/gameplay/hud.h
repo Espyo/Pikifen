@@ -93,7 +93,7 @@ struct Hud {
         //Offset, for when the leader takes damage.
         Point offset;
         
-        //Redness amount, for when the leader takes damage. 0 to 1.
+        //Redness amount, for when the leader takes damage. [0 - 1].
         float redness = 0.0f;
         
     };

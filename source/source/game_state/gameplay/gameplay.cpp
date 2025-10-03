@@ -1021,10 +1021,6 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         pauseMenu->handleAllegroEvent(ev);
     }
     
-    if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-        game.controls.releaseAll();
-    }
-    
     //Finally, let the HUD handle events.
     for(Player& player : players) {
         player.hud->gui.handleAllegroEvent(ev);

@@ -823,7 +823,7 @@ size_t AnimationInstance::getNextFrameIdx(bool* outReachedEnd) const {
  * @param outNextSpritePtr If not nullptr, the next sprite in the animation
  * is returned here.
  * @param outInterpolationFactor If not nullptr, the interpolation factor
- * (0 to 1) between the current sprite and the next one is returned here.
+ * [0 - 1] between the current sprite and the next one is returned here.
  */
 void AnimationInstance::getSpriteData(
     Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
@@ -1206,7 +1206,7 @@ void Sprite::setBitmap(
  * @param curSpritePtr The current sprite.
  * @param nextSpritePtr The next sprite, if any.
  * @param interpolationFactor Amount to interpolate the two sprites by, if any.
- * Ranges from 0 to 1.
+ * [0 - 1].
  * @param outEffTrans If not nullptr, the final translation is
  * returned here.
  * @param outEffAngle If not nullptr, the final rotation angle is
@@ -1303,7 +1303,7 @@ void getSpriteBasicEffects(
  * @param curSpritePtr The current sprite.
  * @param nextSpritePtr The next sprite, if any.
  * @param interpolationFactor Amount to interpolate the two sprites by, if any.
- * Ranges from 0 to 1.
+ * [0 - 1].
  * @param outEffTrans If not nullptr, the top's final translation is
  * returned here.
  * @param outEffAngle If not nullptr, the top's final rotation angle is

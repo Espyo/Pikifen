@@ -195,7 +195,7 @@ struct KeyframeInterpolator {
     /**
      * @brief Adds a keyframe.
      *
-     * @param t Time (0 to 1).
+     * @param t Time [0 - 1].
      * @param value Value at that point.
      * @param ease Easing method between it and the previous keyframe.
      * @param outIdx If not nullptr, the index of the newly added keyframe
@@ -219,7 +219,7 @@ struct KeyframeInterpolator {
      * @brief Adds a keyframe, or sets the data of the keyframe at the
      * specified time.
      *
-     * @param t Time (0 to 1).
+     * @param t Time [0 - 1].
      * @param value Value at that point.
      * @param ease Easing method between it and the previous keyframe.
      * @param outIdx If not nullptr, the index of the newly added keyframe
@@ -384,7 +384,7 @@ private:
      *
      * @param v1 First value.
      * @param v2 Second value.
-     * @param time Time (0 to 1).
+     * @param time Time [0 - 1].
      * @return The value.
      */
     float interpolate(float v1, float v2, float time) {
@@ -398,7 +398,7 @@ private:
      *
      * @param v1 First value.
      * @param v2 Second value.
-     * @param time Time (0 to 1).
+     * @param time Time [0 - 1].
      * @return The value.
      */
     unsigned char interpolate(unsigned char v1, unsigned char v2, float time) {
@@ -412,7 +412,7 @@ private:
      *
      * @param c1 First color.
      * @param c2 Second color.
-     * @param time Time (0 to 1).
+     * @param time Time [0 - 1].
      * @return The color.
      */
     ALLEGRO_COLOR interpolate(
@@ -428,7 +428,7 @@ private:
      *
      * @param c1 First point.
      * @param c2 Second point.
-     * @param time Time (0 to 1).
+     * @param time Time [0 - 1].
      * @return The point.
      */
     Point interpolate(

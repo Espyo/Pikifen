@@ -61,7 +61,7 @@ float Manager::convertActionValue(int actionTypeId, float value) {
         case ACTION_VALUE_TYPE_ANALOG: {
             return value;
             break;
-        } case ACTION_VALUE_TYPE_BOOLEAN: {
+        } case ACTION_VALUE_TYPE_DIGITAL: {
             return value >= 0.5f ? 1.0f : 0.0f;
             break;
         }

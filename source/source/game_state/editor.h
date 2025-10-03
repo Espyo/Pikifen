@@ -512,7 +512,7 @@ protected:
     /**
      * @brief Function executed by some command in the editor.
      *
-     * The first parameter is the main value (0 to 1).
+     * The first parameter is the main value [0 - 1].
      */
     typedef std::function<void(float)> CommandFunc;
     

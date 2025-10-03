@@ -92,7 +92,7 @@ ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a) {
  * @brief Returns the color provided, but darker or lighter by l amount.
  *
  * @param c The color to change the lighting on.
- * @param l Lighting amount, positive or negative, from 0 to 1.
+ * @param l Lighting amount, positive or negative [0 - 1].
  * @return The new color.
  */
 ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l) {

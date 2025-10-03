@@ -126,7 +126,7 @@ public:
         bool encrypted = false
     ) const;
     
-private:
+protected:
 
     //--- Members ---
     

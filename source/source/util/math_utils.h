@@ -23,7 +23,8 @@
 using std::vector;
 
 
-constexpr float TAU = (float)M_PI * 2.0f;
+//Full circle, in radians.
+constexpr float TAU = (float) M_PI * 2.0f;
 
 
 //Methods for easing numbers.

@@ -239,6 +239,9 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Hitting the X on the game window.
         isGameRunning = false;
         
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+        controls.releaseAll();
+        
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
         //On Windows, when you tab out then back in, sometimes you'd see
         //weird artifacts. This workaround fixes it.

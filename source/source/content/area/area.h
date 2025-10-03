@@ -232,7 +232,7 @@ struct Area : public Content {
     //Thumbnail, if any.
     std::shared_ptr<ALLEGRO_BITMAP> thumbnail = nullptr;
     
-    //Area difficulty, if applicable. Goes from 1 to 5, or 0 for undefined.
+    //Area difficulty, if applicable. [1 - 5], or 0 for undefined.
     unsigned char difficulty = AREA::DEF_DIFFICULTY;
     
     //String representing the starting amounts of each spray.

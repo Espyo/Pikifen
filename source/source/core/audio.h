@@ -199,7 +199,7 @@ struct SoundSourceConfig {
     //Minimum time of other playbacks before stacking. Avoid 0 (always stack).
     float stackMinPos = AUDIO::DEF_STACK_MIN_POS;
     
-    //Volume at which it plays. 0 to 1.
+    //Volume at which it plays. [0 - 1].
     float volume = 1.0f;
     
     //Speed at which it plays. Also affects pitch.
@@ -211,7 +211,8 @@ struct SoundSourceConfig {
     //Randomness to the speed every time it emits the sound. 0 for none.
     float speedDeviation = 0.0f;
     
-    //X% chance for the sound to actually play. 0 to 100. 100 for normal chance.
+    //X% chance for the sound to actually play. [0 - 100].
+    //100 for normal chance.
     unsigned char randomChance = 100;
     
     //Randomly delay the emission between 0 and this amount. 0 for none.
@@ -452,7 +453,7 @@ private:
     bool inInterlude = false;
     
     //Current sound effect mixer volume multiplier,
-    //based on whether we're in an interlude, 0 to 1.
+    //based on whether we're in an interlude, [0 - 1].
     float interludeVolume = 0.0f;
     
     //Top-left camera coordinates.

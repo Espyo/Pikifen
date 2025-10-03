@@ -373,7 +373,7 @@ void main() {
 
     //--- Random caustic shines ---
 
-    //This value has a range of -1 to 1. Let's convert it to 0 to 1.
+    //This value has a range of [-1 - 1]. Let's convert it to [0 - 1].
     float shine_scale = raw_noise_value;
     shine_scale += 1;
     shine_scale /= 2;

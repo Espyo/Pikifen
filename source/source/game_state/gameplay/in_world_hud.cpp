@@ -75,7 +75,7 @@ const float CORNER_RADIUS = 4.0f;
 //Height of each bar.
 const float HEIGHT = 16.0f;
 
-//Standard opacity (0 to 1).
+//Standard opacity [0 - 1].
 const float OPACITY = 0.85f;
 
 //Size of the dark outline between the total bar and the filled portion.

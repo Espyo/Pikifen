@@ -49,13 +49,13 @@ public:
              */
             struct Radial {
             
-                //Inner radial deadzone size, in radius (0 to 1).
+                //Inner radial deadzone size, in radius [0 - 1].
                 //This is your typical analog stick deadzone value.
                 //Something like 0.2 is recommended for most analog sticks.
                 //Use 0 for no inner radial deadzone.
                 float inner = 0.2f;
                 
-                //Outer radial deadzone size, in radius (0 to 1).
+                //Outer radial deadzone size, in radius [0 - 1].
                 //Like the inner radial deadzone, except this is for values near
                 //the edges, since most analog sticks never physically reach the
                 //exact edge of the input circle.
@@ -78,7 +78,7 @@ public:
              */
             struct Angular {
             
-                //Deadzone size, in radians (0 to PI/4), for the left and right
+                //Deadzone size, in radians [0 - PI/4], for the left and right
                 //inputs' angular deadzone.
                 //If the player wants to hold directly left or directly right,
                 //subtle movements up or down can veer the player off-course.
@@ -88,13 +88,13 @@ public:
                 //Use 0 for no horizontal angular deadzone.
                 float horizontal = 0.0f;
                 
-                //Deadzone size, in radians (0 to PI/4), for the up and down
+                //Deadzone size, in radians [0 - PI/4], for the up and down
                 //inputs' angular deadzone.
                 //Same as angularHorizontalDeadzone, but for up and down.
                 //Use 0 for no vertical angular deadzone.
                 float vertical = 0.0f;
                 
-                //Deadzone size, in radians (0 to PI/4), for the four diagonal
+                //Deadzone size, in radians [0 - PI/4], for the four diagonal
                 //inputs' angular deadzone.
                 //Same as angularHorizontalDeadzone, but for up and down.
                 //Use 0 for no diagonal angular deadzone.
@@ -122,7 +122,7 @@ public:
     );
     
     
-private:
+protected:
 
     //--- Function declarations ---
     

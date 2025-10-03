@@ -1245,8 +1245,8 @@ void saveScreenshot() {
         );
         
     unsigned char* row = (unsigned char*) region->data;
-    int bmpW = ceil(al_get_bitmap_width(screenshot));
-    int bmpH = ceil(al_get_bitmap_height(screenshot));
+    int bmpW = al_get_bitmap_width(screenshot);
+    int bmpH = al_get_bitmap_height(screenshot);
     for(int y = 0; y < bmpH; y++) {
         for(int x = 0; x < bmpW; x++) {
             row[(x) * 4 + 3] = 255;

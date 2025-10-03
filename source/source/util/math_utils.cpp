@@ -241,7 +241,7 @@ int32_t linearCongruentialGenerator(int32_t* state) {
  *
  * @param seed Seed value for the hashing function.
  * @param x Point of the function to return.
- * @return The noise value, from 0 to 1.
+ * @return The noise value, range [0 - 1].
  */
 float simpleNoise(uint32_t seed, float x) {
     uint32_t x1i = floor(x);

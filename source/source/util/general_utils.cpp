@@ -196,9 +196,9 @@ Shaker::Shaker(std::function<float(float, float)> getRandomFloat) :
 /**
  * @brief Returns the offsets for the shaking effect, for the current frame.
  *
- * @param xOffset If not nullptr, the X offset (-1 to 1) is returned here.
- * @param yOffset If not nullptr, the Y offset (-1 to 1) is returned here.
- * @param angleOffset If not nullptr, the rotational offset (-1 to 1) is
+ * @param xOffset If not nullptr, the X offset [-1 - 1] is returned here.
+ * @param yOffset If not nullptr, the Y offset [-1 - 1] is returned here.
+ * @param angleOffset If not nullptr, the rotational offset [-1 - 1] is
  * returned here.
  */
 void Shaker::getOffsets(
@@ -233,7 +233,7 @@ void Shaker::getOffsets(
 
 
 /**
- * @brief Returns the current internal trauma value (0 to 1).
+ * @brief Returns the current internal trauma value [0 - 1].
  *
  * @return The trauma value.
  */
@@ -245,7 +245,7 @@ float Shaker::getTrauma() const {
 /**
  * @brief Adds some shaking.
  *
- * @param strength Strength of the shake. 0 to 1.
+ * @param strength Strength of the shake. [0 - 1].
  */
 void Shaker::shake(float strength) {
     trauma = std::clamp(trauma + strength, 0.0f, 1.0f);

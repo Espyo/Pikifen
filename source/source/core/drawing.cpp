@@ -574,7 +574,7 @@ void drawLiquid(
  * @param text The main text to show, optional.
  * @param subtext Subtext to show under the main text, optional.
  * @param maker Name of the maker, optional.
- * @param opacity 0 to 1. The background blackness lowers in opacity
+ * @param opacity [0 - 1]. The background blackness lowers in opacity
  * much faster.
  */
 void drawLoadingScreen(

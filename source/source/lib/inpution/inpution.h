@@ -75,11 +75,11 @@ enum ACTION_FLAG {
 //Possible types of value a action can have.
 enum ACTION_VALUE_TYPE {
 
-    //A float from 0 to 1.
+    //A float in the range [0 - 1].
     ACTION_VALUE_TYPE_ANALOG,
     
     //Either 0 or 1 (basically up or down).
-    ACTION_VALUE_TYPE_BOOLEAN,
+    ACTION_VALUE_TYPE_DIGITAL,
     
 };
 
@@ -191,7 +191,7 @@ struct Action {
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
-    //Value associated. 0 to 1.
+    //Value associated. [0 - 1].
     float value = 0.0f;
     
     //Flags. Use ACTION_FLAG.
