@@ -15,7 +15,6 @@
  * https://www.gamedeveloper.com/design/interpreting-analog-sticks-in-inversus
  *
  * Future ideas:
- *   Snapback reduction
  *   Axis deadzones
  */
 
@@ -112,13 +111,31 @@ public:
             
         } deadzones;
         
+        /**
+         * @brief Applies a low-pass filter to the coordinate values,
+         * avoiding jitter caused by natural human imprecision. Helps to
+         * prevent snapback as well.
+         * In order for this to work, the cleaned values given the previous
+         * frame need to be provided too.
+         */
+        struct LowPassFilter {
+        
+            //Filter factor [0 - 1]. 0 to disable. This is how much the current
+            //values factor into the final result, compared to the previous
+            //frame's values. If you want this feature enabled, a value of 0.9
+            //or so is recommended.
+            float factor = 0.0f;
+            
+        } lowPassFilter;
+        
         Settings() {}
     };
     
     //--- Function declarations ---
     
     static void clean(
-        float coords[2], const Settings& settings = Settings()
+        float coords[2], const Settings& settings = Settings(),
+        float previousFrameCoords[2] = nullptr
     );
     
     
@@ -135,6 +152,9 @@ protected:
     );
     static void processAngularDeadzones(
         float coords[2], const Settings& settings
+    );
+    static void processLowPassFilter(
+        float coords[2], float previousFrameCoords[2], const Settings& settings
     );
     static void processRadialDeadzones(
         float coords[2], const Settings& settings

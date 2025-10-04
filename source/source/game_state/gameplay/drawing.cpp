@@ -433,7 +433,7 @@ void GameplayState::drawDebugTools(Player* player) {
     const float RAW_STICK_VIEWER_Y = 8;
     const float RAW_STICK_VIEWER_SIZE = 100;
     
-    point rawStickCoords;
+    Point rawStickCoords;
     rawStickCoords.x = game.controls.mgr.rawSticks[0][0][0];
     rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
     float rawStickAngle;
@@ -477,7 +477,7 @@ void GameplayState::drawDebugTools(Player* player) {
         al_map_rgba(240, 240, 240, 200),
         1
     );
-    point rawDrawCoords =
+    Point rawDrawCoords =
         rawStickCoords * RAW_STICK_VIEWER_SIZE / 2.0f;
     al_draw_filled_circle(
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f +
@@ -531,7 +531,7 @@ void GameplayState::drawDebugTools(Player* player) {
     const float CLEAN_STICK_VIEWER_Y = 8;
     const float CLEAN_STICK_VIEWER_SIZE = 100;
     
-    point cleanStickCoords;
+    Point cleanStickCoords;
     cleanStickCoords.x =
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_RIGHT) -
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_LEFT);
@@ -579,7 +579,7 @@ void GameplayState::drawDebugTools(Player* player) {
         al_map_rgba(240, 240, 240, 200),
         1
     );
-    point cleanDrawCoords =
+    Point cleanDrawCoords =
         cleanStickCoords * CLEAN_STICK_VIEWER_SIZE / 2.0f;
     al_draw_filled_circle(
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f +

@@ -21,16 +21,25 @@
  * respectively. When the cleaning process ends, this array will contain
  * the cleaned up coordinates.
  * @param settings Settings to use.
+ * @param previousFrameCoords Pointer to an array of the coordinates given by
+ * the cleaner in the previous frame. This is only necessary if
+ * low-pass filtering is enabled in the settings.
  */
-void AnalogStickCleaner::clean(float coords[2], const Settings& settings) {
-    //First, sanitize the function arguments.
+void AnalogStickCleaner::clean(
+    float coords[2], const Settings& settings, float previousFrameCoords[2]
+) {
+    //Sanitize the function arguments.
+    if(!coords) return;
     coords[0] = std::clamp(coords[0], -1.0f, 1.0f);
     coords[1] = std::clamp(coords[1], -1.0f, 1.0f);
     
-    //Step 1: Process radial deadzones.
+    //Step 1: Low-pass filter.
+    processLowPassFilter(coords, previousFrameCoords, settings);
+    
+    //Step 2: Process radial deadzones.
     processRadialDeadzones(coords, settings);
     
-    //Step 2: Process angular deadzones.
+    //Step 3: Process angular deadzones.
     processAngularDeadzones(coords, settings);
 }
 
@@ -100,6 +109,25 @@ float AnalogStickCleaner::interpolateAndClamp(
 void AnalogStickCleaner::processAngularDeadzones(
     float coords[2], const Settings& settings
 ) {
+    //Check if we even have anything to do.
+    if(
+        settings.deadzones.angular.horizontal == 0.0f &&
+        settings.deadzones.angular.vertical == 0.0f &&
+        settings.deadzones.angular.diagonal == 0.0f &&
+        !settings.deadzones.angular.interpolate
+    ) {
+        return;
+    }
+    
+    //Sanitize the settings.
+    Settings sanitizedSettings = settings;
+    sanitizedSettings.deadzones.angular.horizontal =
+        std::clamp(sanitizedSettings.deadzones.angular.horizontal, 0.0f, 1.0f);
+    sanitizedSettings.deadzones.angular.vertical =
+        std::clamp(sanitizedSettings.deadzones.angular.vertical, 0.0f, 1.0f);
+    sanitizedSettings.deadzones.angular.diagonal =
+        std::clamp(sanitizedSettings.deadzones.angular.diagonal, 0.0f, 1.0f);
+        
     //Get the basics.
     float radius, angle;
     toPolar(coords, angle, radius);
@@ -116,9 +144,9 @@ void AnalogStickCleaner::processAngularDeadzones(
     float nextSnapDirAngle =
         (float) (M_PI_4 * nextSnapDirIdx);
     float prevSnapDirDeadzone =
-        getSnapDirDeadzone(prevSnapDirIdx, settings);
+        getSnapDirDeadzone(prevSnapDirIdx, sanitizedSettings);
     float nextSnapDirDeadzone =
-        getSnapDirDeadzone(nextSnapDirIdx, settings);
+        getSnapDirDeadzone(nextSnapDirIdx, sanitizedSettings);
         
     //Do the clean up.
     const float inputSpaceStart =
@@ -130,7 +158,7 @@ void AnalogStickCleaner::processAngularDeadzones(
     const float outputSpaceEnd =
         nextSnapDirAngle;
         
-    if(settings.deadzones.angular.interpolate) {
+    if(sanitizedSettings.deadzones.angular.interpolate) {
         //Interpolate.
         angle =
             interpolateAndClamp(
@@ -155,6 +183,54 @@ void AnalogStickCleaner::processAngularDeadzones(
 
 
 /**
+ * @brief Process low-pass filtering cleaning logic.
+ *
+ * @param coords Coordinates to clean.
+ * @param settings Settings to use.
+ * @param previousFrameCoords Pointer to an array of the coordinates given by
+ * the cleaner in the previous frame.
+ */
+void AnalogStickCleaner::processLowPassFilter(
+    float coords[2], float previousFrameCoords[2], const Settings& settings
+) {
+    //Check if we even have anything to do.
+    if(settings.lowPassFilter.factor == 0.0f) return;
+    if(!previousFrameCoords) return;
+    
+    //Sanitize the settings.
+    Settings sanitizedSettings = settings;
+    sanitizedSettings.lowPassFilter.factor =
+        std::clamp(sanitizedSettings.lowPassFilter.factor, 0.0f, 1.0f);
+        
+    //Filter.
+    float finalCoords[2];
+    if(sanitizedSettings.lowPassFilter.factor > 0.0f) {
+        finalCoords[0] =
+            (
+                coords[0] *
+                sanitizedSettings.lowPassFilter.factor
+            ) +
+            (
+                previousFrameCoords[0] *
+                (1.0f - sanitizedSettings.lowPassFilter.factor)
+            );
+        finalCoords[1] =
+            (
+                coords[1] *
+                sanitizedSettings.lowPassFilter.factor
+            ) +
+            (
+                previousFrameCoords[1] *
+                (1.0f - sanitizedSettings.lowPassFilter.factor)
+            );
+    }
+    
+    coords[0] = finalCoords[0];
+    coords[1] = finalCoords[1];
+}
+
+
+/**
  * @brief Process radial deadzone cleaning logic.
  *
  * @param coords Coordinates to clean.
@@ -163,21 +239,37 @@ void AnalogStickCleaner::processAngularDeadzones(
 void AnalogStickCleaner::processRadialDeadzones(
     float coords[2], const Settings& settings
 ) {
+    //Check if we even have anything to do.
+    if(
+        settings.deadzones.radial.inner == 0.0f &&
+        settings.deadzones.radial.outer == 1.0f &&
+        !settings.deadzones.radial.interpolate
+    ) {
+        return;
+    }
+    
+    //Sanitize the settings.
+    Settings sanitizedSettings = settings;
+    sanitizedSettings.deadzones.radial.inner =
+        std::clamp(sanitizedSettings.deadzones.radial.inner, 0.0f, 1.0f);
+    sanitizedSettings.deadzones.radial.outer =
+        std::clamp(sanitizedSettings.deadzones.radial.outer, 0.0f, 1.0f);
+        
     //Get the basics.
     float radius, angle;
     toPolar(coords, angle, radius);
     
     //Do the clean up.
     const float inputSpaceStart =
-        settings.deadzones.radial.inner;
+        sanitizedSettings.deadzones.radial.inner;
     const float inputSpaceEnd =
-        settings.deadzones.radial.outer;
+        sanitizedSettings.deadzones.radial.outer;
     const float outputSpaceStart =
         0.0f;
     const float outputSpaceEnd =
         1.0f;
         
-    if(settings.deadzones.radial.interpolate) {
+    if(sanitizedSettings.deadzones.radial.interpolate) {
         //Interpolate.
         radius =
             interpolateAndClamp(
