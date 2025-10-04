@@ -34,10 +34,7 @@ Next tasks (roughly sorted most important first)
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
-            Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
-                Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
-                Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
-            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by deltaT
+            Digital inputs should only emit down actions if it previously reached an up state. As it is right now, moving the analog stick causes a bunch of "1" actions
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
                 If pressing an input generates both non-chord actions and chord actions, only do the chord actions
@@ -46,7 +43,6 @@ Next tasks (roughly sorted most important first)
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
                 Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
-            Implement low-pass filtering, so that for analog inputs, it uses the past frame(s)'s values to smoothen out the current frame's
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
@@ -960,6 +956,8 @@ Tasks for later on (I might never implement these)
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
+    Stuff I don't know how to tackle yet
+        If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
     Possible cleanup
         Timers
             Have a timer manager, so I don't have to remember to do a .tick() to every single one

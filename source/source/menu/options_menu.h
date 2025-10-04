@@ -230,7 +230,7 @@ public:
     void draw() override;
     void load() override;
     void handleAllegroEvent(const ALLEGRO_EVENT& ev) override;
-    void handlePlayerAction(const Inpution::Action& action) override;
+    bool handlePlayerAction(const Inpution::Action& action) override;
     void unload() override;
     void tick(float deltaT) override;
     

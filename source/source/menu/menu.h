@@ -63,7 +63,7 @@ public:
     virtual void draw();
     virtual void enter();
     virtual void handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    virtual void handlePlayerAction(const Inpution::Action& action);
+    virtual bool handlePlayerAction(const Inpution::Action& action);
     virtual void leave();
     virtual void tick(float deltaT);
     

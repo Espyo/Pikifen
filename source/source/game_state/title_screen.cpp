@@ -181,7 +181,10 @@ void TitleScreen::doLogic() {
     
     if(!game.fadeMgr.isFading()) {
         for(size_t a = 0; a < game.playerActions.size(); a++) {
-            mainMenu.handlePlayerAction(game.playerActions[a]);
+            bool handled = mainMenu.handlePlayerAction(game.playerActions[a]);
+            if(!handled) {
+                game.controls.reinsertAction(game.playerActions[a]);
+            }
         }
     }
     

@@ -57,15 +57,19 @@ void Menu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @brief Handles a player action.
  *
  * @param action Data about the player action.
+ * @return Whether the action was handled in any of the GUIs.
  */
-void Menu::handlePlayerAction(const Inpution::Action& action) {
-    if(!loaded || !active) return;
+bool Menu::handlePlayerAction(const Inpution::Action& action) {
+    if(!loaded || !active) return false;
     
+    bool handled = false;
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
-            guis[g]->handlePlayerAction(action);
+            handled |= guis[g]->handlePlayerAction(action);
         }
     }
+    
+    return handled;
 }
 
 

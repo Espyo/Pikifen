@@ -548,11 +548,13 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @brief Handles a player action.
  *
  * @param action Data about the player action.
+ * @return Whether any of the GUIs handled the action.
  */
-void OptionsMenu::handlePlayerAction(const Inpution::Action& action) {
-    if(capturingInput != 0) return;
-    Menu::handlePlayerAction(action);
-    if(packsMenu) packsMenu->handlePlayerAction(action);
+bool OptionsMenu::handlePlayerAction(const Inpution::Action& action) {
+    if(capturingInput != 0) return false;
+    bool handled = Menu::handlePlayerAction(action);
+    if(packsMenu) handled |= packsMenu->handlePlayerAction(action);
+    return handled;
 }
 
 
