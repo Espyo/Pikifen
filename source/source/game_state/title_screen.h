@@ -13,13 +13,14 @@
 #include <string>
 
 #include "../content/other/gui.h"
+#include "../menu/menu.h"
 #include "game_state.h"
 
 
 using std::string;
 
 
-namespace TITLE_SCREEN {
+namespace MAIN_MENU {
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
@@ -39,6 +40,48 @@ enum MAIN_MENU_PAGE {
     
     //Make page.
     MAIN_MENU_PAGE_MAKE,
+    
+};
+
+
+/**
+ * @brief Info about the main menu present in the title screen.
+ */
+class MainMenu : public Menu {
+
+public:
+
+    //--- Members ---
+    
+    //What page to load when it is created.
+    MAIN_MENU_PAGE pageToLoad = MAIN_MENU_PAGE_MAIN;
+    
+    //GUI for the main page.
+    GuiManager mainGui;
+    
+    //GUI for the play page.
+    GuiManager playGui;
+    
+    //GUI for the make page.
+    GuiManager makeGui;
+    
+    //GUI for the tutorial question page.
+    GuiManager tutorialGui;
+    
+    
+    //--- Function declarations ---
+    
+    void load() override;
+    
+    
+private:
+
+    //--- Function declarations ---
+    
+    void initGuiMainPage();
+    void initGuiMakePage();
+    void initGuiPlayPage();
+    void initGuiTutorialPage();
     
 };
 
@@ -65,6 +108,7 @@ public:
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;
+    
     
 private:
 
@@ -106,23 +150,14 @@ private:
     
     //--- Members ---
     
+    //Main menu.
+    MainMenu mainMenu;
+    
     //Bitmap of the menu background.
     ALLEGRO_BITMAP* bmpMenuBg = nullptr;
     
     //List of Pikmin that make up the logo.
     vector<LogoPikmin> logoPikmin;
-    
-    //GUI for the main page.
-    GuiManager mainGui;
-    
-    //GUI for the play page.
-    GuiManager playGui;
-    
-    //GUI for the make page.
-    GuiManager makeGui;
-    
-    //GUI for the tutorial question page.
-    GuiManager tutorialGui;
     
     //Top-left coordinates of the logo, in window percentage.
     Point logoMinWindowLimit = Point(10.0f);
@@ -155,13 +190,5 @@ private:
     
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logoTypeBitmaps;
-    
-    
-    //--- Function declarations ---
-    
-    void initGuiMainPage();
-    void initGuiMakePage();
-    void initGuiPlayPage();
-    void initGuiTutorialPage();
     
 };

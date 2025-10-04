@@ -1641,7 +1641,7 @@ void OptionsMenu::tick(float deltaT) {
         mustPopulateBinds = false;
     }
     
-    //Tick the GUIs.
+    //Tick the packs menu.
     if(packsMenu) {
         if(packsMenu->loaded) {
             packsMenu->tick(game.deltaT);

@@ -24,7 +24,7 @@
 using DrawInfo = GuiItem::DrawInfo;
 
 
-namespace TITLE_SCREEN {
+namespace MAIN_MENU {
 
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "main_menu_top";
@@ -41,6 +41,41 @@ const string PLAY_GUI_FILE_NAME = "main_menu_play";
 //Name of the tutorial question page GUI definition file.
 const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 
+}
+
+
+/**
+ * @brief Loads the main menu.
+ */
+void MainMenu::load() {
+    initGuiMainPage();
+    initGuiPlayPage();
+    initGuiMakePage();
+    initGuiTutorialPage();
+    
+    switch(pageToLoad) {
+    case MAIN_MENU_PAGE_MAIN: {
+        mainGui.responsive = true;
+        mainGui.showItems();
+        break;
+    } case MAIN_MENU_PAGE_PLAY: {
+        playGui.responsive = true;
+        playGui.showItems();
+        break;
+    } case MAIN_MENU_PAGE_MAKE: {
+        makeGui.responsive = true;
+        makeGui.showItems();
+        break;
+    }
+    }
+    pageToLoad = MAIN_MENU_PAGE_MAIN;
+    
+    guis.push_back(&mainGui);
+    guis.push_back(&playGui);
+    guis.push_back(&makeGui);
+    guis.push_back(&tutorialGui);
+    
+    Menu::load();
 }
 
 
@@ -101,10 +136,7 @@ void TitleScreen::doDrawing() {
         ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
     );
     
-    mainGui.draw();
-    playGui.draw();
-    makeGui.draw();
-    tutorialGui.draw();
+    mainMenu.draw();
     
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -149,17 +181,11 @@ void TitleScreen::doLogic() {
     
     if(!game.fadeMgr.isFading()) {
         for(size_t a = 0; a < game.playerActions.size(); a++) {
-            mainGui.handlePlayerAction(game.playerActions[a]);
-            playGui.handlePlayerAction(game.playerActions[a]);
-            makeGui.handlePlayerAction(game.playerActions[a]);
-            tutorialGui.handlePlayerAction(game.playerActions[a]);
+            mainMenu.handlePlayerAction(game.playerActions[a]);
         }
     }
     
-    mainGui.tick(game.deltaT);
-    playGui.tick(game.deltaT);
-    makeGui.tick(game.deltaT);
-    tutorialGui.tick(game.deltaT);
+    mainMenu.tick(game.deltaT);
     
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
@@ -188,18 +214,15 @@ string TitleScreen::getName() const {
 void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
-    mainGui.handleAllegroEvent(ev);
-    playGui.handleAllegroEvent(ev);
-    makeGui.handleAllegroEvent(ev);
-    tutorialGui.handleAllegroEvent(ev);
+    mainMenu.handleAllegroEvent(ev);
 }
 
 
 /**
  * @brief Loads the GUI elements for the main menu's main page.
  */
-void TitleScreen::initGuiMainPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
+void MainMenu::initGuiMainPage() {
+    DataNode* guiFile = &game.content.guiDefs.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -250,7 +273,7 @@ void TitleScreen::initGuiMainPage() {
             mainGui,
             game.statistics.areaEntries == 0 ? tutorialGui : playGui,
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            TITLE_SCREEN::HUD_MOVE_TIME
+            MAIN_MENU::HUD_MOVE_TIME
         );
     };
     playButton->onGetTooltip =
@@ -276,7 +299,7 @@ void TitleScreen::initGuiMainPage() {
     [this] (const Point&) {
         transitionGuis(
             mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
+            MAIN_MENU::HUD_MOVE_TIME
         );
     };
     makeButton->onGetTooltip =
@@ -478,9 +501,9 @@ void TitleScreen::initGuiMainPage() {
 /**
  * @brief Loads the GUI elements for the main menu's make page.
  */
-void TitleScreen::initGuiMakePage() {
+void MainMenu::initGuiMakePage() {
     DataNode* guiFile =
-        &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
+        &game.content.guiDefs.list[MAIN_MENU::MAKE_GUI_FILE_NAME];
         
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -617,7 +640,7 @@ void TitleScreen::initGuiMakePage() {
     [this] (const Point&) {
         transitionGuis(
             makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            TITLE_SCREEN::HUD_MOVE_TIME
+            MAIN_MENU::HUD_MOVE_TIME
         );
     };
     makeGui.backItem->onGetTooltip =
@@ -659,9 +682,9 @@ void TitleScreen::initGuiMakePage() {
 /**
  * @brief Loads the GUI elements for the main menu's play page.
  */
-void TitleScreen::initGuiPlayPage() {
+void MainMenu::initGuiPlayPage() {
     DataNode* guiFile =
-        &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
+        &game.content.guiDefs.list[MAIN_MENU::PLAY_GUI_FILE_NAME];
         
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -753,7 +776,7 @@ void TitleScreen::initGuiPlayPage() {
     [this] (const Point&) {
         transitionGuis(
             playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
+            MAIN_MENU::HUD_MOVE_TIME
         );
     };
     playGui.backItem->onGetTooltip =
@@ -780,9 +803,9 @@ void TitleScreen::initGuiPlayPage() {
 /**
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
-void TitleScreen::initGuiTutorialPage() {
+void MainMenu::initGuiTutorialPage() {
     DataNode* guiFile =
-        &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
+        &game.content.guiDefs.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
         
     //Menu items.
     tutorialGui.registerCoords("question", 50,     60, 60,  12.5);
@@ -810,7 +833,7 @@ void TitleScreen::initGuiTutorialPage() {
     [this] (const Point&) {
         transitionGuis(
             tutorialGui, playGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            TITLE_SCREEN::HUD_MOVE_TIME
+            MAIN_MENU::HUD_MOVE_TIME
         );
     };
     tutorialGui.backItem->onGetTooltip =
@@ -874,30 +897,11 @@ void TitleScreen::load() {
     );
     
     //Misc. initializations.
-    initGuiMainPage();
-    initGuiPlayPage();
-    initGuiMakePage();
-    initGuiTutorialPage();
-    
-    switch(pageToLoad) {
-    case MAIN_MENU_PAGE_MAIN: {
-        mainGui.responsive = true;
-        mainGui.showItems();
-        break;
-    } case MAIN_MENU_PAGE_PLAY: {
-        playGui.responsive = true;
-        playGui.showItems();
-        break;
-    } case MAIN_MENU_PAGE_MAKE: {
-        makeGui.responsive = true;
-        makeGui.showItems();
-        break;
-    }
-    }
-    pageToLoad = MAIN_MENU_PAGE_MAIN;
+    mainMenu.pageToLoad = pageToLoad;
+    mainMenu.load();
     
     DataNode* settingsFile =
-        &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
+        &game.content.guiDefs.list[MAIN_MENU::GUI_FILE_NAME];
         
     //Resources.
     bmpMenuBg =
@@ -1017,10 +1021,7 @@ void TitleScreen::unload() {
     logoTypeBitmaps.clear();
     
     //Menu items.
-    mainGui.destroy();
-    playGui.destroy();
-    makeGui.destroy();
-    tutorialGui.destroy();
+    mainMenu.unload();
     
     //Misc.
     logoPikmin.clear();
