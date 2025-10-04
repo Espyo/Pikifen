@@ -177,7 +177,20 @@ struct ActionType {
     //after which the input will start auto-repeating. The manager's
     //auto-repeating settings have to be configured for this to work.
     float autoRepeat = 0.0f;
-
+    
+    //If true, any input event that Inpution receives that's bound to this
+    //action type will immediately add an event to the list that gets returned
+    //by newFrame(). This can be useful, for instance, if you have two buttons
+    //bound to the same action, and want either button's down press event
+    //to trigger an action, like in a fast-paced rhythm game.
+    //If false, input events feed an internal hardware state inside Inpution,
+    //which is processed every frame to deliver the list in newFrame(). This
+    //is useful for most cases, since if you have two inputs for the same
+    //action, only the highest value of the two at any moment will be returned.
+    //For example, if you have an analog stick and a D-pad bound to menu
+    //focus movement.
+    bool directEvents = false;
+    
     //Actions can be told to return to the queue given by newFrame(). This is
     //useful as a buffer, where if the game can't handle that action, it can
     //throw it back into the queue to try to handle it in one of the next few
@@ -347,7 +360,7 @@ protected:
     vector<int> getActionTypesFromInput(
         const Input& input
     );
-    void handleCleanInput(const Input& input, bool addDirectly);
+    void handleCleanInput(const Input& input, bool forceDirectEvent);
     void processAutoRepeats(
         std::pair<const int, ActionTypeStatus>& it, float deltaT
     );

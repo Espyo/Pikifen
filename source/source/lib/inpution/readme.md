@@ -132,6 +132,7 @@ int main() {
 * Many settings:
   * Analog (range [0 - 1]) and digital (just 0 or 1) input values, and conversions between them (see `ActionType::valueType`).
   * Auto-repeated action events as long as the input is held (see `ActionType::autoRepeat`).
+  * Actions can be generated directly from input events, or from the total combined internal hardware state (see `ActionType::directEvents`).
   * Reinserting actions into the queue for a buffer effect (see `ActionType::reinsertionTTL`).
   * Multiple players (see `Action::playerNr`).
   * Analog stick deadzone processing, with all sorts of interpolations (see `ManagerOptions`).

@@ -117,32 +117,38 @@ float Manager::getValue(int actionTypeId) const {
  * @brief Handles a final clean input.
  *
  * @param input Input to process.
- * @param addDirectly If true, the actions bound to this input will
- * be added to the queue of actions directly.
- * If false, the manager will save the actions' current state, and
- * only add the actions at the end of the frame, if their state is different
- * from the last frame's state.
+ * @param forceDirectEvent If true, the actions bound to this input will
+ * forcefully be added to the queue of actions directly.
+ * If false, use the action type's discretion.
  */
 void Manager::handleCleanInput(
-    const Input& input, bool addDirectly
+    const Input& input, bool forceDirectEvent
 ) {
-    inputSourceValues[input.source] = input.value;
-    
     if(processInputIgnoring(input)) {
         //We have to ignore this one.
         return;
     }
     
-    if(!addDirectly) return;
+    if(!forceDirectEvent) {
+        inputSourceValues[input.source] = input.value;
+    }
     
     //Find what game action types are bound to this input.
-    vector<int> actionTypes = getActionTypesFromInput(input);
+    vector<int> actionTypesIds = getActionTypesFromInput(input);
     
-    for(size_t a = 0; a < actionTypes.size(); a++) {
+    for(size_t a = 0; a < actionTypesIds.size(); a++) {
+        if(
+            !actionTypes[actionTypesIds[a]].directEvents &&
+            !forceDirectEvent
+        ) {
+            continue;
+        }
         //Add it to the action queue directly.
         Action newAction;
-        newAction.actionTypeId = actionTypes[a];
-        newAction.value = convertActionValue(actionTypes[a], input.value);
+        newAction.actionTypeId = actionTypesIds[a];
+        newAction.value = convertActionValue(actionTypesIds[a], input.value);
+        newAction.reinsertionLifetime =
+            actionTypes[actionTypesIds[a]].reinsertionTTL;
         actionQueue.push_back(newAction);
     }
 }
@@ -249,6 +255,10 @@ vector<Action> Manager::newFrame(float deltaT) {
     }
     
     for(auto& a : actionTypeStatuses) {
+        if(actionTypes[a.first].directEvents) {
+            //Already added to the queue in handleCleanInput().
+            continue;
+        }
         if(a.second.oldValue != a.second.value) {
             Action newAction;
             newAction.actionTypeId = a.first;
