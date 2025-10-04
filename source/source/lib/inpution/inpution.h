@@ -356,7 +356,7 @@ protected:
     //--- Function declarations ---
     
     void cleanStick(const Input& input);
-    float convertActionValue(int actionTypeId, float value);
+    float convertActionValue(int actionTypeId, float value) const;
     vector<int> getActionTypesFromInput(
         const Input& input
     );

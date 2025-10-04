@@ -54,7 +54,7 @@ void Manager::cleanStick(const Input& input) {
  * @param value Value to convert.
  * @return The converted value.
  */
-float Manager::convertActionValue(int actionTypeId, float value) {
+float Manager::convertActionValue(int actionTypeId, float value) const {
     auto it = actionTypes.find(actionTypeId);
     if(it != actionTypes.end()) {
         switch(it->second.valueType) {
@@ -109,7 +109,7 @@ float Manager::getValue(int actionTypeId) const {
         float v = inputSourceValues.at(bind.inputSource);
         highestValue = std::max(highestValue, v);
     }
-    return highestValue;
+    return convertActionValue(actionTypeId, highestValue);
 }
 
 
