@@ -37,12 +37,13 @@
  * control bind.
  * @param valueType Type of value an action can have.
  * @param autoRepeat Auto-repeat threshold.
+ * @param reinsertionTTL Time to live when reinserted into the queue.
  */
 void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string& name, const string& description, const string& internalName,
     const string& defaultBindStr, Inpution::ACTION_VALUE_TYPE valueType,
-    float autoRepeat
+    float autoRepeat, float reinsertionTTL
 ) {
     PlayerActionType a;
     a.id = id;
@@ -53,6 +54,7 @@ void ControlsMediator::addPlayerActionType(
     a.defaultBindStr = defaultBindStr;
     a.valueType = valueType;
     a.autoRepeat = autoRepeat;
+    a.reinsertionTTL = reinsertionTTL;
     
     playerActionTypes.push_back(a);
     mgr.actionTypes[id] = a;
@@ -340,6 +342,16 @@ void ControlsMediator::loadBindsFromDataNode(
  */
 vector<Inpution::Action> ControlsMediator::newFrame(float deltaT) {
     return mgr.newFrame(deltaT);
+}
+
+
+/**
+ * @brief Reinserts an action into the queue, decreasing its time-to-live.
+ *
+ * @param action The action.
+ */
+void ControlsMediator::reinsertAction(const Inpution::Action& action) {
+    mgr.reinsertAction(action);
 }
 
 

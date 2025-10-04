@@ -475,7 +475,7 @@ private:
     void doPlayerActionSwitchMaturity(Player* player, bool isDown, bool isNext);
     void doPlayerActionSwitchSpray(Player* player, bool isDown, bool isNext);
     void doPlayerActionSwitchType(Player* player, bool isDown, bool isNext);
-    void doPlayerActionThrow(Player* player, bool isDown);
+    bool doPlayerActionThrow(Player* player, bool isDown);
     void doPlayerActionToggleZoom(Player* player, bool isDown);
     void doPlayerActionUseCurrentSpray(Player* player, bool isDown);
     void doPlayerActionUseSpray(Player* player, bool isDown, bool second);

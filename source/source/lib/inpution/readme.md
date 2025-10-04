@@ -129,15 +129,21 @@ int main() {
 
 ## Features
 
-* Support for analog (range [0 - 1]) and digital (just 0 or 1) input values.
-* Support for multiple players.
-* Support for multiple controllers at once.
-* Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
-* Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins).
-* Analog stick deadzone processing, with all sorts of interpolations.
-* Specific features, like temporarily ignoring given input sources.
-* Fairly light, and fairly simple.
-* Very agnostic, and with no external dependencies.
+* Many settings:
+  * Analog (range [0 - 1]) and digital (just 0 or 1) input values, and conversions between them (see `ActionType::valueType`).
+  * Auto-repeated action events as long as the input is held (see `ActionType::autoRepeat`).
+  * Reinserting actions into the queue for a buffer effect (see `ActionType::reinsertionTTL`).
+  * Multiple players (see `Action::playerNr`).
+  * Analog stick deadzone processing, with all sorts of interpolations (see `ManagerOptions`).
+* Varied support:
+  * Support for multiple controllers at once.
+  * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
+  * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins).
+* Specific features:
+  * Temporarily ignoring given input sources (see `Manager::startIgnoringInputSource()`).
+* About the library:
+  * Fairly light, and fairly simple.
+  * Very agnostic, and with no external dependencies.
 
 ## Key terms
 

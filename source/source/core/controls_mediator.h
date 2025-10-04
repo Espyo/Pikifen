@@ -333,7 +333,8 @@ struct ControlsMediator {
         const string& internalName,
         const string& defaultBindStr,
         Inpution::ACTION_VALUE_TYPE valueType,
-        float autoRepeat = 0.0f
+        float autoRepeat = 0.0f,
+        float reinsertionTTL = 0.0f
     );
     const vector<PlayerActionType>& getAllPlayerActionTypes() const;
     vector<Inpution::Bind>& binds();
@@ -354,6 +355,7 @@ struct ControlsMediator {
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     vector<Inpution::Action> newFrame(float deltaT);
+    void reinsertAction(const Inpution::Action& action);
     void releaseAll();
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
     void setOptions(const Inpution::ManagerOptions& options);

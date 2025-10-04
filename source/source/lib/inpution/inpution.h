@@ -69,10 +69,13 @@ enum ACTION_FLAG {
     //This action was issued as an auto-repeat.
     ACTION_FLAG_REPEAT = 1 << 0,
     
+    //This action was reinserted into the queue.
+    ACTION_FLAG_REINSERTED = 1 << 1,
+    
 };
 
 
-//Possible types of value a action can have.
+//Possible types of value an action can have.
 enum ACTION_VALUE_TYPE {
 
     //A float in the range [0 - 1].
@@ -165,13 +168,27 @@ struct ActionType {
     //Action type ID.
     int id = 0;
     
-    //Type of value it can take.
+    //Type of value it can take. If digital but the input source is analog,
+    //the value is rounded to 0 or 1 (i.e. depends on whether it's more than
+    //or less than pressed halfway in).
     ACTION_VALUE_TYPE valueType = ACTION_VALUE_TYPE_ANALOG;
     
     //Auto-repeat. 0 if disabled, otherwise this indicates the threshold [0 - 1]
     //after which the input will start auto-repeating. The manager's
     //auto-repeating settings have to be configured for this to work.
     float autoRepeat = 0.0f;
+
+    //Actions can be told to return to the queue given by newFrame(). This is
+    //useful as a buffer, where if the game can't handle that action, it can
+    //throw it back into the queue to try to handle it in one of the next few
+    //frames. For instance, the player pressed the kick button while mid-air,
+    //close to the ground. The game can't perform a kick now, so it sends the
+    //action back to the queue. In a few frames, the character lands, and the
+    //action event can now be processed, even if it happened some frames after
+    //the player really pressed the button.
+    //This number controls the maximum time to live for a re-inserted action.
+    //0 means it cannot be reinserted.
+    float reinsertionTTL = 0.0f;
     
 };
 
@@ -196,6 +213,9 @@ struct Action {
     
     //Flags. Use ACTION_FLAG.
     uint8_t flags = 0;
+    
+    //Queue reinsertion lifetime. See ActionType::insertionTTL.
+    float reinsertionLifetime = 0.0f;
     
 };
 
@@ -237,7 +257,7 @@ struct ManagerOptions {
  * it scans through all binds to figure out what actions should be
  * triggered.
  * It also has logic to do some cleanup like normalizing a game controller's
- * stick positions.
+ * analog stick positions.
  */
 struct Manager {
 
@@ -290,6 +310,7 @@ public:
     bool handleInput(const Input& input);
     bool startIgnoringInputSource(const InputSource& inputSource);
     vector<Action> newFrame(float deltaT);
+    bool reinsertAction(const Action& action);
     bool releaseEverything();
     
     
@@ -308,12 +329,15 @@ protected:
     
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > cleanSticks;
-
+    
     //Values of each input source.
     map<InputSource, float> inputSourceValues;
     
     //Input sources currently being ignored.
     vector<InputSource> ignoredInputSources;
+    
+    //Last known time delta.
+    float lastDeltaT = 0.0f;
     
     
     //--- Function declarations ---

@@ -234,7 +234,8 @@ void initControls() {
         PLAYER_ACTION_CAT_MAIN,
         "Throw",
         "Throw a Pikmin at the leader's cursor.",
-        "throw", "mb_1", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "throw", "mb_1", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.2f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_WHISTLE,
@@ -355,7 +356,7 @@ void initControls() {
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
-        "menu_ok", "k_67", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_ok", "k_67", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f, 0.4f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR_RIGHT,
@@ -525,7 +526,7 @@ void initControls() {
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
-        "menu_back", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_back", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f, 0.4f
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
@@ -959,7 +960,7 @@ void initMisc() {
     al_reserve_samples(16);
     
     al_identity_transform(&game.identityTransform);
-
+    
     //Inhibit the screensaver for controller-only players.
     al_inhibit_screensaver(true);
     

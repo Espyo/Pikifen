@@ -262,9 +262,10 @@ void GameplayState::doPlayerActionSwitchType(
  *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @return Whether the action was consumed.
  */
-void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
-    if(!player->leaderPtr) return;
+bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
+    if(!player->leaderPtr) return true;
     
     if(isDown) { //Button press.
         bool done = false;
@@ -358,8 +359,15 @@ void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         
         //Now check if the leader should punch.
         if(!done) {
-            player->leaderPtr->fsm.runEvent(LEADER_EV_PUNCH);
-            done = true;
+            MobEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
+            if(ev) {
+                ev->run(player->leaderPtr);
+                done = true;
+            }
+        }
+        
+        if(!done) {
+            return false;
         }
         
     } else { //Button release.
@@ -378,6 +386,8 @@ void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         }
         
     }
+    
+    return true;
 }
 
 
@@ -558,7 +568,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_THROW: {
-            doPlayerActionThrow(player, isDown);
+            if(!doPlayerActionThrow(player, isDown)) {
+                game.controls.reinsertAction(action);
+            }
             break;
             
         } case PLAYER_ACTION_TYPE_WHISTLE: {

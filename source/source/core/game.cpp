@@ -307,7 +307,8 @@ void Game::globalLogicPost() {
 
 
 /**
- * @brief Performs some global logic to run every frame, before the state's logic.
+ * @brief Performs some global logic to run every frame, before the state's
+ * logic.
  */
 void Game::globalLogicPre() {
     //Player action handling.

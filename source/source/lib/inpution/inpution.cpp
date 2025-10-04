@@ -242,6 +242,8 @@ bool Manager::handleInput(const Input& input) {
  * @return The actions.
  */
 vector<Action> Manager::newFrame(float deltaT) {
+    lastDeltaT = deltaT;
+    
     for(auto& a : actionTypes) {
         actionTypeStatuses[a.first].value = getValue(a.first);
     }
@@ -251,6 +253,7 @@ vector<Action> Manager::newFrame(float deltaT) {
             Action newAction;
             newAction.actionTypeId = a.first;
             newAction.value = a.second.value;
+            newAction.reinsertionLifetime = actionTypes[a.first].reinsertionTTL;
             actionQueue.push_back(newAction);
         }
     }
@@ -301,6 +304,7 @@ void Manager::processAutoRepeats(
         newAction.actionTypeId = it.first;
         newAction.value = it.second.value;
         newAction.flags |= ACTION_FLAG_REPEAT;
+        newAction.reinsertionLifetime = actionTypes[it.first].reinsertionTTL;
         actionQueue.push_back(newAction);
         
         //Set the next activation.
@@ -364,6 +368,27 @@ void Manager::processStateTimers(
         //Same state, increase the timer.
         it.second.stateDuration += deltaT;
     }
+}
+
+
+/**
+ * @brief Reinserts an action event into the queue, so it can have a chance
+ * at being processed again at a later frame. See ActionType::reinsertionTTL
+ * for more information.
+ *
+ * @param action Action to reinsert.
+ * @return Whether it succeeded.
+ */
+bool Manager::reinsertAction(const Action& action) {
+    if(actionTypes[action.actionTypeId].reinsertionTTL <= 0.0f) return false;
+    if(action.reinsertionLifetime <= 0.0f) return false;
+    if(lastDeltaT == 0.0f) return false;
+    
+    Action newAction = action;
+    newAction.reinsertionLifetime -= lastDeltaT;
+    newAction.flags |= ACTION_FLAG_REINSERTED;
+    actionQueue.push_back(newAction);
+    return true;
 }
 
 
