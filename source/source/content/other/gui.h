@@ -427,7 +427,7 @@ public:
     
     void defActivateCode(const Point& cursorPos);
     void defDrawCode(const DrawInfo& draw);
-    bool defMenuDirCode(size_t playerActionId);
+    bool defMenuSNCode(size_t playerActionId);
     void defMouseOverCode(const Point& cursorPos);
     
     

@@ -17,6 +17,7 @@
 #include "../../core/drawing.h"
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
+#include "../../lib/spatial_navigation/spatial_navigation.h"
 #include "../../util/string_utils.h"
 
 
@@ -1013,64 +1014,59 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     
     //Fill in the data for the spatial navigation algorithm.
-    vector<Point> focusables;
-    vector<GuiItem*> focusablePtrs;
-    size_t curFocusableIdx = INVALID;
-    float direction = 0.0f;
-    float minY = 0;
-    float maxY = game.winH;
-    
+    SpatNav::Interface sNInterface;
+    bool hasItems = false;
+    SpatNav::DIRECTION direction = SpatNav::DIRECTION_RIGHT;
     switch(action.actionTypeId) {
-    case PLAYER_ACTION_TYPE_MENU_DOWN: {
-        direction = TAU * 0.25f;
-        break;
-    }
-    case PLAYER_ACTION_TYPE_MENU_LEFT: {
-        direction = TAU * 0.50f;
-        break;
-    }
     case PLAYER_ACTION_TYPE_MENU_UP: {
-        direction = TAU * 0.75f;
+        direction = SpatNav::DIRECTION_UP;
+        break;
+    } case PLAYER_ACTION_TYPE_MENU_LEFT: {
+        direction = SpatNav::DIRECTION_LEFT;
+        break;
+    } case PLAYER_ACTION_TYPE_MENU_DOWN: {
+        direction = SpatNav::DIRECTION_DOWN;
         break;
     }
     }
     
     for(size_t i = 0; i < items.size(); i++) {
         GuiItem* iPtr = items[i];
-        if(
-            iPtr->isResponsive() &&
-            iPtr->focusable && iPtr->focusableFromSN
-        ) {
-            Point iCenter = iPtr->getReferenceCenter();
-            if(iPtr == focusedItem) {
-                curFocusableIdx = focusables.size();
-            }
-            
-            minY = std::min(minY, iCenter.y);
-            maxY = std::max(maxY, iCenter.y);
-            
-            focusablePtrs.push_back(iPtr);
-            focusables.push_back(iCenter);
+        if(!iPtr->isResponsive()) continue;
+        
+        bool navigable = iPtr->focusable && iPtr->focusableFromSN;
+        bool hasChildren = !iPtr->children.empty();
+        if(!navigable && !hasChildren) continue;
+        
+        Point center = iPtr->getReferenceCenter();
+        Point size = iPtr->getReferenceSize();
+        
+        sNInterface.addItem((void*) iPtr, center.x, center.y, size.x, size.y);
+        if(iPtr->parent) {
+            sNInterface.setParentItem((void*) iPtr, (void*) iPtr->parent);
         }
+        
+        hasItems = true;
     }
     
-    if(focusables.empty()) {
-        //There is no item that can be focused via spatial navigation.
+    //If there is no item that can be focused via spatial navigation, give up.
+    if(!hasItems) {
         return;
     }
     
-    size_t newFocusableIdx =
-        spatialNavigation(
-            focusables,
-            curFocusableIdx,
-            direction,
-            hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) ?
-            Point() :
-            Point(game.winW, maxY - minY)
-        );
+    //Navigate.
+    sNInterface.settings.limitX1 = 0.0f;
+    sNInterface.settings.limitY1 = 0.0f;
+    sNInterface.settings.limitX2 = game.winW;
+    sNInterface.settings.limitY2 = game.winH;
+    sNInterface.settings.loop =
+        !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
+    GuiItem* newFocusablePtr =
+        (GuiItem*) sNInterface.navigate(direction, (void*) focusedItem);
         
-    if(newFocusableIdx != curFocusableIdx) {
-        setFocusedItem(focusablePtrs[newFocusableIdx]);
+    //Set it!
+    if(newFocusablePtr) {
+        setFocusedItem(newFocusablePtr);
         if(
             focusedItem->parent &&
             focusedItem->parent->onChildFocusedViaSN
@@ -1371,7 +1367,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     );
     ALLEGRO_COLOR cOpaque = tintColor(mapAlpha(64), draw.tint);
     ALLEGRO_COLOR cEmpty = COLOR_EMPTY_WHITE;
-
+    
     if(offset.y > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
@@ -1604,7 +1600,7 @@ PickerGuiItem::PickerGuiItem(
     
     onMenuSNAction =
     [this] (size_t playerActionId) -> bool{
-        return this->defMenuDirCode(playerActionId);
+        return this->defMenuSNCode(playerActionId);
     };
     
     onMouseOver =
@@ -1728,11 +1724,11 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
- * @brief Default picker GUI item menu dir code.
+ * @brief Default picker GUI item menu spatial navigation code.
  *
  * @param actionId ID of the player action.
  */
-bool PickerGuiItem::defMenuDirCode(size_t actionId) {
+bool PickerGuiItem::defMenuSNCode(size_t actionId) {
     if(actionId == PLAYER_ACTION_TYPE_MENU_RIGHT) {
         onNext();
         return true;

@@ -1,0 +1,453 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ *
+ * === FILE DESCRIPTION ===
+ * Source code for the spatial navigation library.
+ * Please read the included readme file.
+ */
+
+#include <algorithm>
+#include <cmath>
+#include <float.h>
+#include <limits.h>
+
+#include "spatial_navigation.h"
+
+
+namespace SpatNav {
+
+
+/**
+ * @brief Destroys the interface object.
+ */
+Interface::~Interface() {
+    clearItems();
+}
+
+
+/**
+ * @brief Adds an item to the interface, or to the currently opened parent item.
+ *
+ * @param id Identifier. This can be anything you want, but ensure every item
+ * has a unique identifier, and that the value nullptr (0) is not used. You
+ * can use a pointer to your own data type, or an index (starting at 1).
+ * @param x X coordinate of its center.
+ * @param y Y coordinate of its center.
+ * @param w Width.
+ * @param h Height.
+ * @return Whether it succeeded.
+ */
+bool Interface::addItem(void* id, float x, float y, float w, float h) {
+    if(items.find(id) != items.end()) return false;
+    
+    Item* newItem = new Item();
+    newItem->id = id;
+    newItem->x = x;
+    newItem->y = y;
+    newItem->w = w;
+    newItem->h = h;
+    items[id] = newItem;
+    return true;
+}
+
+
+/**
+ * @brief Checks if this item passes the heuristics tests.
+ *
+ * @param itemRelX X coordinate of its center, relative to the focus.
+ * @param itemRelY Y coordinate of its center, relative to the focus.
+ * @param itemRelW Width, relative to the focus.
+ * @param itemRelH Height, relative to the focus.
+ * @return Whether it passed.
+ */
+bool Interface::checkHeuristicsPass(
+    double itemRelX, double itemRelY, double itemRelW, double itemRelH
+) {
+    if(
+        heuristics.minBlindspotAngle >= 0.0f ||
+        heuristics.maxBlindspotAngle >= 0.0f
+    ) {
+        //Check if it's between the blind spot angles.
+        //We get the same result whether the Y is positive or negative,
+        //so let's simplify things and make it positive.
+        float itemRelAngle = (float) atan2((float) fabs(itemRelY), itemRelX);
+        
+        if(
+            itemRelAngle >= heuristics.minBlindspotAngle &&
+            itemRelAngle <= heuristics.maxBlindspotAngle
+        ) {
+            //If so, never let this item be chosen, no matter what. This is
+            //useful to stop a list of items with no vertical variance from
+            //picking another item when the direction is up, for instance.
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Checks if an item that's behind the focus needs to be placed
+ * in front of the focus. This behavior is what allows looping from the edges
+ * of the interface.
+ *
+ * @param direction Current navigation direction.
+ * @param itemRelX Relative X coordinate. It gets updated if needed.
+ * @param limitX1 Top-left corner's X coordinate.
+ * @param limitY1 Top-left corner's Y coordinate.
+ * @param limitX2 Bottom-right corner's X coordinate.
+ * @param limitY2 Bottom-right corner's Y coordinate.
+ */
+void Interface::checkLoopRelativeCoordinates(
+    DIRECTION direction, double* itemRelX,
+    double limitX1, double limitY1, double limitX2, double limitY2
+) {
+    if(*itemRelX >= 0.0f || !settings.loop) return;
+    
+    if(direction == DIRECTION_DOWN || direction == DIRECTION_UP) {
+        *itemRelX += limitY2 - limitY1;
+    } else {
+        *itemRelX += limitX2 - limitX1;
+    }
+}
+
+
+/**
+ * @brief Deletes and clears all items.
+ *
+ * @return Whether it succeeded.
+ */
+bool Interface::clearItems() {
+    if(items.empty()) return false;
+    
+    for(auto i : items) {
+        delete i.second;
+    }
+    items.clear();
+    
+    parents.clear();
+    children.clear();
+    
+    return true;
+}
+
+
+/**
+ * @brief Navigates in a given direction.
+ *
+ * @param direction Navigation direction.
+ * @param focusedItemId Identifier of the currently-focused item.
+ * @param focusX X coordinate of the current focus.
+ * @param focusY Y coordinate of the current focus.
+ * @param convertFocusCoordinateSpace If true, the focus coordinates are
+ * assumed to be in relation to the specified parent, and so they must be
+ * converted to coordinates in relation to the limits.
+ * @return Identifier of the newly-focused item.
+ */
+void* Interface::doNavigation(
+    DIRECTION direction, void* focusedItemId, float focusX, float focusY,
+    bool convertFocusCoordinateSpace
+) {
+    flattenItems();
+    
+    double limitX1, limitY1, limitX2, limitY2;
+    getLimits(&limitX1, &limitY1, &limitX2, &limitY2);
+    
+    double bestScore = FLT_MAX;
+    void* bestItemId = nullptr;
+    
+    for(auto& i : items) {
+        if(i.first == focusedItemId) continue;
+        
+        double itemRelX, itemRelY, itemRelW, itemRelH;
+        getItemRelativeUnits(
+            i.second, direction, focusX, focusY,
+            &itemRelX, &itemRelY, &itemRelW, &itemRelH
+        );
+        
+        if(settings.loop) {
+            checkLoopRelativeCoordinates(
+                direction, &itemRelX,
+                settings.limitX1, settings.limitY1, limitX2, limitY2
+            );
+        }
+        
+        if(!checkHeuristicsPass(itemRelX, itemRelY, itemRelW, itemRelH)) {
+            continue;
+        }
+        
+        if(itemRelX > 0.0f) {
+            //If this item is in front of the focused one,
+            //give it a score like normal.
+            float score = getItemScore(itemRelX, itemRelY, itemRelW, itemRelH);
+            if(score < bestScore) {
+                bestScore = score;
+                bestItemId = i.first;
+            }
+            
+        }
+    }
+    
+    return bestItemId;
+}
+
+
+/**
+ * @brief Flattens any children items that go outside their parents' limits.
+ * This only affects children items that are completely outside, not partially.
+ */
+void Interface::flattenItems() {
+    //Start with the top-level items.
+    std::vector<Item*> list;
+    for(const auto& i : items) {
+        if(getItemParent(i.first)) continue;
+        list.push_back(i.second);
+    }
+    flattenItemsInList(
+        list,
+        settings.limitX1, settings.limitY1, settings.limitX2, settings.limitY2
+    );
+}
+
+
+/**
+ * @brief Recursively flattens items in the given list.
+ * 
+ * @param list List of items.
+ * @param limitX1 Top-left X coordinate of the limit they must abide.
+ * @param limitY1 Top-left Y coordinate of the limit they must abide.
+ * @param limitX2 Bottom-right X coordinate of the limit they must abide.
+ * @param limitY2 Bottom-right Y coordinate of the limit they must abide.
+ */
+void Interface::flattenItemsInList(
+    std::vector<Item*> list,
+    float limitX1, float limitY1, float limitX2, float limitY2
+) {
+    for(size_t i = 0; i < list.size(); i++) {
+        //Flatten the item proper first.
+        Item* iPtr = list[i];
+        
+        iPtr->flatX = iPtr->x;
+        iPtr->flatY = iPtr->y;
+        iPtr->flatW = iPtr->w;
+        iPtr->flatH = iPtr->h;
+        
+        const float iX1 = iPtr->x - iPtr->w / 2.0f;
+        const float iX2 = iPtr->x + iPtr->w / 2.0f;
+        const float iY1 = iPtr->y - iPtr->h / 2.0f;
+        const float iY2 = iPtr->y + iPtr->h / 2.0f;
+        const float diffX1 = limitX1 - iX1;
+        const float diffY1 = limitY1 - iY1;
+        const float diffX2 = iX2 - limitX2;
+        const float diffY2 = iY2 - limitY2;
+        
+        if(diffX1 > 0.0f) {
+            iPtr->flatX = limitX1 - diffX1 * FLATTEN_FACTOR;
+            iPtr->flatW = iPtr->w * FLATTEN_FACTOR;
+        }
+        if(diffY1 > 0.0f) {
+            iPtr->flatY = limitY1 - diffY1 * FLATTEN_FACTOR;
+            iPtr->flatH = iPtr->h * FLATTEN_FACTOR;
+        }
+        if(diffX2 > 0.0f) {
+            iPtr->flatX = limitX2 + diffX2 * FLATTEN_FACTOR;
+            iPtr->flatW = iPtr->w * FLATTEN_FACTOR;
+        }
+        if(diffY2 > 0.0f) {
+            iPtr->flatY = limitY2 + diffY2 * FLATTEN_FACTOR;
+            iPtr->flatH = iPtr->h * FLATTEN_FACTOR;
+        }
+        
+        //Now, flatten the children.
+        flattenItemsInList(
+            getItemChildren(iPtr->id),
+            iPtr->flatX - iPtr->flatW / 2.0f,
+            iPtr->flatY - iPtr->flatH / 2.0f,
+            iPtr->flatX + iPtr->flatW / 2.0f,
+            iPtr->flatY + iPtr->flatH / 2.0f
+        );
+    }
+}
+
+
+/**
+ * @brief Returns an item's children items, if any.
+ *
+ * @param id Identifier of the item whose children to check.
+ * @return The children, or an empty vector if none.
+ */
+std::vector<Interface::Item*> Interface::getItemChildren(void* id) {
+    std::vector<Item*> result;
+    const auto& it = children.find(id);
+    if(it != children.end()) {
+        for(size_t c = 0; c < it->second.size(); c++) {
+            result.push_back(items[it->second[c]]);
+        }
+    }
+    return result;
+}
+
+
+/**
+ * @brief Converts the standard coordinates of an item to ones relative
+ * to the current focus coordinates, and rotated so they're to its right.
+ *
+ * @param iPtr Item to check.
+ * @param direction Navigation direction.
+ * @param focusX X coordinate of the current focus.
+ * @param focusY Y coordinate of the current focus.
+ * @param outRelX The relative X coordinate is returned here.
+ * @param outRelY The relative Y coordinate is returned here.
+ * @param outRelW The relative width is returned here.
+ * @param outRelH The relative height is returned here.
+ */
+void Interface::getItemRelativeUnits(
+    Item* iPtr, DIRECTION direction, float focusX, float focusY,
+    double* outRelX, double* outRelY, double* outRelW, double* outRelH
+) {
+    double resultX, resultY, resultW, resultH;
+    
+    //Translate.
+    double diffX = iPtr->flatX - focusX;
+    double diffY = iPtr->flatY - focusY;
+    
+    //Rotate the position, and the size if needed.
+    switch(direction) {
+    case DIRECTION_RIGHT: {
+        resultX = diffX;
+        resultY = diffY;
+        resultW = iPtr->flatW;
+        resultH = iPtr->flatH;
+        break;
+    } case DIRECTION_DOWN: {
+        resultX = diffY;
+        resultY = -diffX;
+        resultW = iPtr->flatH;
+        resultH = iPtr->flatW;
+        break;
+    } case DIRECTION_LEFT: {
+        resultX = -diffX;
+        resultY = -diffY;
+        resultW = iPtr->flatW;
+        resultH = iPtr->flatH;
+        break;
+    } case DIRECTION_UP: {
+        resultX = -diffY;
+        resultY = diffX;
+        resultW = iPtr->flatH;
+        resultH = iPtr->flatW;
+        break;
+    }
+    }
+    
+    *outRelX = resultX;
+    *outRelY = resultY;
+    *outRelW = resultW;
+    *outRelH = resultH;
+}
+
+
+/**
+ * @brief Returns an item's parent item, if any.
+ *
+ * @param id Identifier of the item whose parent to check.
+ * @return The parent, or nullptr if none.
+ */
+Interface::Item* Interface::getItemParent(void* id) {
+    const auto& it = parents.find(id);
+    if(it == parents.end()) return nullptr;
+    return items[it->second];
+}
+
+
+/**
+ * @brief Returns an item's score. Lower is better.
+ *
+ * @param itemRelX X coordinate of its center, relative to the focus.
+ * @param itemRelY Y coordinate of its center, relative to the focus.
+ * @param itemRelW Width, relative to the focus.
+ * @param itemRelH Height, relative to the focus.
+ * @return Its score.
+ */
+double Interface::getItemScore(
+    double itemRelX, double itemRelY, double itemRelW, double itemRelH
+) {
+    return itemRelX + fabs(itemRelY);
+}
+
+
+/**
+ * @brief Returns the limits of the given items.
+ *
+ * @param limitX1 The top-left corner's X coordinate is returned here.
+ * @param limitY1 The top-left corner's Y coordinate is returned here.
+ * @param limitX2 The bottom-right corner's X coordinate is returned here.
+ * @param limitY2 The bottom-right corner's Y coordinate is returned here.
+ */
+void Interface::getLimits(
+    double* limitX1, double* limitY1, double* limitX2, double* limitY2
+) const {
+    *limitX1 = settings.limitX1;
+    *limitY1 = settings.limitY1;
+    *limitX2 = settings.limitX2;
+    *limitY2 = settings.limitY2;
+    
+    for(const auto& i : items) {
+        Item* iPtr = i.second;
+        *limitX1 = std::min(*limitX1, iPtr->flatX - iPtr->flatW / 2.0f);
+        *limitY1 = std::min(*limitY1, iPtr->flatY - iPtr->flatH / 2.0f);
+        *limitX2 = std::max(*limitX2, iPtr->flatX + iPtr->flatW / 2.0f);
+        *limitY2 = std::max(*limitY2, iPtr->flatY + iPtr->flatH / 2.0f);
+    }
+}
+
+
+/**
+ * @brief Navigates in a given direction.
+ *
+ * @param direction Navigation direction.
+ * @param focusedItemId Identifier of the currently-focused item.
+ * @return Identifier of the newly-focused item.
+ */
+void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
+    if(items.find(focusedItemId) == items.end()) focusedItemId = nullptr;
+    
+    return
+        doNavigation(
+            direction, focusedItemId,
+            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->x,
+            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->y,
+            false
+        );
+}
+
+
+/**
+ * @brief Navigates in a given direction.
+ *
+ * @param direction Navigation direction.
+ * @param focusX X coordinate of the current focus.
+ * @param focusY Y coordinate of the current focus.
+ * @return Identifier of the newly-focused item.
+ */
+void* Interface::navigate(DIRECTION direction, float focusX, float focusY) {
+    return
+        doNavigation(direction, nullptr, focusX, focusY, false);
+}
+
+
+/**
+ * @brief Sets a child item's parent.
+ *
+ * @param childId Identifier of the child item.
+ * @param parentId Identifier of the parent item.
+ * @return Whether it succeeded.
+ */
+bool Interface::setParentItem(void* childId, void* parentId) {
+    parents[childId] = parentId;
+    children[parentId].push_back(childId);
+    return true;
+}
+
+}

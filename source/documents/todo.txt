@@ -12,17 +12,11 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Swarming jingle
-    Other menu improvements
-        Results menu
-            Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     GUI things
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
-        The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, focus "Retry" and press right. It'll focus an unrelated item in the stats list
-            Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
-            Or instead it should be hierarchical, in that an item with children is a candidate for being "focused", except when it's its time to act it dispatches it to the children list
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
             https://github.com/WICG/spatial-navigation
             https://github.com/NoriginMedia/Norigin-Spatial-Navigation
@@ -96,6 +90,7 @@ Next tasks (roughly sorted most important first)
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
         A mission's data should control how each HUD element displays its information
             Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
+        The results menu should show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
         Maximum Pikmin in field
@@ -179,6 +174,9 @@ Next tasks (roughly sorted most important first)
                 If I go with an on-screen "dial", it has to be four-way, not eight. Eight is too much information, and detecting which direction you _released_ is pretty hard (what if you do A+D and release D slightly before A?)
                 Whatever inventory menu shows up cannot pause the game, otherwise all players pause just because one needs to pick something. This also means it shouldn't be fullscreen
                 What if the "up" selection is the most recently-used inventory item, "right" opens up a full menu, and "left" and "down" are just some fixed things?
+                Should there be a "standby" item, like the one you most recently used?
+                A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
+                    When you select, should it set it as the aforementioned "standby" item, use it, or do both?
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off
