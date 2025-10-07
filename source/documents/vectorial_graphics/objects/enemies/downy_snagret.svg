@@ -33,9 +33,9 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="3.034722"
-     inkscape:cx="116.48513"
-     inkscape:cy="144.00001"
+     inkscape:zoom="3.0347219"
+     inkscape:cx="116.48514"
+     inkscape:cy="144.00002"
      inkscape:window-width="1872"
      inkscape:window-height="1051"
      inkscape:window-x="48"
@@ -1872,6 +1872,55 @@
        inkscape:export-filename="../../../../../Game_data/Graphics/Armored_Cannon_Beetle.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <g
+       id="g4760"
+       style="display:inline"
+       transform="matrix(0.26458333,0,0,0.26458333,-1.1230683e-7,-278.43749)">
+      <ellipse
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
+         id="path3782"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="-6.7031322"
+         cy="1036.3622"
+         rx="3.203124"
+         ry="3.5000007" />
+      <circle
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path3770-7"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="-16"
+         cy="1036.3622"
+         r="15" />
+      <circle
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
+         id="path3780"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="-18"
+         cy="1036.3622"
+         r="9.5" />
+      <path
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
+         id="path3824"
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
+         id="path3824-4"
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </g>
     <rect
        style="opacity:1;fill:#10720f;fill-opacity:1;stroke:none;stroke-width:0.557309;stroke-linecap:square"
        id="rect27639"
