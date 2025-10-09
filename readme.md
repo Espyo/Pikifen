@@ -91,6 +91,12 @@ Depending on the area you select, you can either explore around freely without a
 * Organized codebase with very few external dependencies.
 * The source "code" for some of the graphics and songs is also available.
 
+[Accessible Games Initiative](https://accessiblegames.com/accessibility-tags/) tags:
+
+* Auditory features: [Multiple Volume Controls](https://accessiblegames.com/accessibility-tags/multiple-volume-controls/)
+* Input features: [Full Input Remapping](https://accessiblegames.com/accessibility-tags/full-remapping/), [Playable with Buttons Only](https://accessiblegames.com/accessibility-tags/buttons-only-option/), [Playable with Keyboard Only](https://accessiblegames.com/accessibility-tags/keyboard-only-option/), [Playable with Mouse Only](https://accessiblegames.com/accessibility-tags/mouse-only-option/), [Playable without Button Holds](https://accessiblegames.com/accessibility-tags/playable-without-button-holds/), [Stick Inversion](https://accessiblegames.com/accessibility-tags/stick-inversion/)
+* Visual features: [Camera Confort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
+
 ## Get the latest version
 
 ### Upgrading from an older version
