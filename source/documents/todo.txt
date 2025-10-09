@@ -28,15 +28,9 @@ Next tasks (roughly sorted most important first)
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
-            Digital inputs should only emit down actions if it previously reached an up state. As it is right now, moving the analog stick causes a bunch of "1" actions
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
                 If pressing an input generates both non-chord actions and chord actions, only do the chord actions
-            Implement a screen stack system, with push&pop
-                If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
-                If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
-                If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
-                Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left

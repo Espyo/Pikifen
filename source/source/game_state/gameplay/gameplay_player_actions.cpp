@@ -57,16 +57,12 @@ void GameplayState::doPlayerActionPause(
     
     pauseMenu = new PauseMenu(radar);
     paused = true;
+    game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
     game.audio.handleWorldPause();
     player->hud->gui.startAnimation(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
-    
-    //TODO replace with a better solution.
-    if(player->leaderPtr) {
-        player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
-    }
 }
 
 
@@ -314,10 +310,8 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
             paused = true;
+            game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
             game.audio.handleWorldPause();
-            
-            //TODO replace with a better solution.
-            player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
             
             done = true;
         }

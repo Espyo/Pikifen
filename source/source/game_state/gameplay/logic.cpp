@@ -1193,6 +1193,7 @@ void GameplayState::doMenuLogic() {
             delete onionMenu;
             onionMenu = nullptr;
             paused = false;
+            game.controls.setGameState(CONTROLS_GAME_STATE_GAMEPLAY);
             game.audio.handleWorldUnpause();
         }
     } else if(pauseMenu) {
@@ -1202,12 +1203,14 @@ void GameplayState::doMenuLogic() {
             delete pauseMenu;
             pauseMenu = nullptr;
             paused = false;
+            game.controls.setGameState(CONTROLS_GAME_STATE_GAMEPLAY);
             game.audio.handleWorldUnpause();
         }
     }
     
     for(Player& player : players) {
         player.hud->tick(game.deltaT);
+        player.inventory->tick(game.deltaT);
     }
     
     //Print info on a mob.

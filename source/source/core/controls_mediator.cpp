@@ -405,6 +405,27 @@ void ControlsMediator::saveBindsToDataNode(
 
 
 /**
+ * @brief Sets the game state for the controls manager.
+ * 
+ * @param state The state.
+ */
+void ControlsMediator::setGameState(CONTROLS_GAME_STATE state) {
+    switch(state) {
+    case CONTROLS_GAME_STATE_MENUS: {
+        mgr.setGameState("menus");
+        break;
+    } case CONTROLS_GAME_STATE_INTERLUDE: {
+        mgr.setGameState("interlude");
+        break;
+    } case CONTROLS_GAME_STATE_GAMEPLAY: {
+        mgr.setGameState("gameplay");
+        break;
+    }
+    }
+}
+
+
+/**
  * @brief Sets the options for the controls manager.
  *
  * @param options Options.

@@ -1045,6 +1045,7 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     
     game.audio.stopAllPlaybacks();
     game.audio.setCurrentSong("");
+    game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     saveStatistics();
     
@@ -1829,8 +1830,10 @@ void InterludeInfo::set(INTERLUDE id, bool instantVolumeChange) {
     
     if(!wasInInterlude && isInInterlude) {
         game.audio.handleInterludeStart(instantVolumeChange);
+        game.controls.setGameState(CONTROLS_GAME_STATE_INTERLUDE);
     } else if(wasInInterlude && !isInInterlude) {
         game.audio.handleInterludeEnd(instantVolumeChange);
+        game.controls.setGameState(CONTROLS_GAME_STATE_GAMEPLAY);
     }
 }
 

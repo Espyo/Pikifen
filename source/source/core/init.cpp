@@ -976,6 +976,8 @@ void initMisc() {
     game.wallOffsetEffectBuffer = al_create_bitmap(game.winW, game.winH);
     
     game.editorsView.boxMargin = GAMEPLAY::CAMERA_BOX_MARGIN;
+
+    game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
 }
 
 

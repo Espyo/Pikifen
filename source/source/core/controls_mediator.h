@@ -287,6 +287,21 @@ enum PLAYER_ACTION_CAT {
 };
 
 
+//Game states, as far as the controls are concerned.
+enum CONTROLS_GAME_STATE {
+
+    //Menus outside the gameplay state.
+    CONTROLS_GAME_STATE_MENUS,
+
+    //Interlude in the gameplay state.
+    CONTROLS_GAME_STATE_INTERLUDE,
+
+    //Normal gameplay.
+    CONTROLS_GAME_STATE_GAMEPLAY,
+
+};
+
+
 /**
  * @brief Data about a type of action that can be performed in the game.
  * This data is pertinent only to Pikifen, not the library.
@@ -358,6 +373,7 @@ struct ControlsMediator {
     void reinsertAction(const Inpution::Action& action);
     void releaseAll();
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
+    void setGameState(CONTROLS_GAME_STATE state);
     void setOptions(const Inpution::ManagerOptions& options);
     void startIgnoringActions();
     void startIgnoringInputSource(const Inpution::InputSource& inputSource);

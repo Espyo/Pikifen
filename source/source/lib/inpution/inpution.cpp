@@ -249,17 +249,18 @@ bool Manager::handleInput(const Input& input) {
  */
 vector<Action> Manager::newFrame(float deltaT) {
     lastDeltaT = deltaT;
+    auto& curGameState = gameStates[curGameStateName];
     
     for(auto& a : actionTypes) {
-        actionTypeStatuses[a.first].value = getValue(a.first);
+        actionTypeGlobalStatuses[a.first].value = getValue(a.first);
     }
     
-    for(auto& a : actionTypeStatuses) {
+    for(auto& a : actionTypeGlobalStatuses) {
         if(actionTypes[a.first].directEvents) {
             //Already added to the queue in handleCleanInput().
             continue;
         }
-        if(a.second.oldValue != a.second.value) {
+        if(curGameState.actionTypeStatuses[a.first].value != a.second.value) {
             Action newAction;
             newAction.actionTypeId = a.first;
             newAction.value = a.second.value;
@@ -268,7 +269,7 @@ vector<Action> Manager::newFrame(float deltaT) {
         }
     }
     
-    for(auto& a : actionTypeStatuses) {
+    for(auto& a : curGameState.actionTypeStatuses) {
         processStateTimers(a, deltaT);
         processAutoRepeats(a, deltaT);
     }
@@ -279,8 +280,8 @@ vector<Action> Manager::newFrame(float deltaT) {
     }
     
     //Prepare things for the next frame.
-    for(auto& a : actionTypeStatuses) {
-        a.second.oldValue = a.second.value;
+    for(auto& a : actionTypeGlobalStatuses) {
+        curGameState.actionTypeStatuses[a.first].value = a.second.value;
     }
     actionQueue.clear();
     
@@ -295,7 +296,7 @@ vector<Action> Manager::newFrame(float deltaT) {
  * @param deltaT How much time has passed since the last frame.
  */
 void Manager::processAutoRepeats(
-    std::pair<const int, ActionTypeStatus>& it, float deltaT
+    std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
 ) {
     float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
     if(actionTypeAutoRepeat == 0.0f) return;
@@ -304,11 +305,13 @@ void Manager::processAutoRepeats(
         (1.0f - actionTypeAutoRepeat);
     if(autoRepeatFactor <= 0.0f) return;
     if(it.second.value == 0.0f) return;
-    if(it.second.stateDuration == 0.0f) return;
-    float oldDuration = it.second.stateDuration - deltaT;
+    if(it.second.activationStateDuration == 0.0f) return;
+    float oldDuration = it.second.activationStateDuration - deltaT;
     if(oldDuration >= it.second.nextAutoRepeatActivation) return;
     
-    while(it.second.stateDuration >= it.second.nextAutoRepeatActivation) {
+    while(
+        it.second.activationStateDuration >= it.second.nextAutoRepeatActivation
+    ) {
         //Auto-repeat!
         Action newAction;
         newAction.actionTypeId = it.first;
@@ -320,7 +323,7 @@ void Manager::processAutoRepeats(
         //Set the next activation.
         float currentFrequency =
             options.autoRepeatMaxInterval +
-            (it.second.stateDuration / options.autoRepeatRampTime) *
+            (it.second.activationStateDuration / options.autoRepeatRampTime) *
             (options.autoRepeatMinInterval - options.autoRepeatMaxInterval);
         currentFrequency =
             std::max(options.autoRepeatMinInterval, currentFrequency);
@@ -366,17 +369,17 @@ bool Manager::processInputIgnoring(
  * @param deltaT How much time has passed since the last frame.
  */
 void Manager::processStateTimers(
-    std::pair<const int, ActionTypeStatus>& it, float deltaT
+    std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
 ) {
-    bool isActive = it.second.value != 0.0f;
-    bool wasActive = it.second.oldValue != 0.0f;
+    bool isActive = actionTypeGlobalStatuses[it.first].value != 0.0f;
+    bool wasActive = it.second.value != 0.0f;
     if(isActive != wasActive) {
         //State changed. Reset the timer.
-        it.second.stateDuration = 0.0f;
+        it.second.activationStateDuration = 0.0f;
         it.second.nextAutoRepeatActivation = options.autoRepeatMaxInterval;
     } else {
         //Same state, increase the timer.
-        it.second.stateDuration += deltaT;
+        it.second.activationStateDuration += deltaT;
     }
 }
 
@@ -409,6 +412,26 @@ bool Manager::reinsertAction(const Action& action) {
  */
 bool Manager::releaseEverything() {
     inputSourceValues.clear();
+    return true;
+}
+
+
+/**
+ * @brief Sets which game state to use from here on out, given its name. An
+ * empty string is the default game state name when no game state is specified.
+ * Changing to a different game state is useful when you want the previous
+ * game state to not be aware of any action changes that are happening. A good
+ * example is when you open the pause menu mid-gameplay. If the player was
+ * holding B to charge the character's special move, paused, let go off B for
+ * a second, held B again, and unpaused, tou probably don't want the regular
+ * gameplay state to be aware of the special move 0 and special move 1
+ * actions.
+ * 
+ * @param name Name of the game state.
+ * @return Whether it succeeded.
+ */
+bool Manager::setGameState(const string& name) {
+    curGameStateName = name;
     return true;
 }
 

@@ -274,32 +274,6 @@ struct ManagerOptions {
  */
 struct Manager {
 
-    protected:
-    
-    //--- Structs ---
-    
-    /**
-     * @brief Information about an action type's current status.
-     */
-    struct ActionTypeStatus {
-    
-        //--- Members ---
-        
-        //Current value [0 - 1].
-        float value = 0.0f;
-        
-        //Value in the previous frame.
-        float oldValue = 0.0f;
-        
-        //How long it's been been active (!= 0) or inactive (== 0) for.
-        float stateDuration = 0.0f;
-        
-        //How long until the next auto-repeat activation.
-        float nextAutoRepeatActivation = 0.0f;
-        
-    };
-    
-    
 public:
 
     //--- Members ---
@@ -325,15 +299,62 @@ public:
     vector<Action> newFrame(float deltaT);
     bool reinsertAction(const Action& action);
     bool releaseEverything();
+    bool setGameState(const string& name = "");
     
     
 protected:
 
+    //--- Structs ---
+    
+    /**
+     * @brief Information about an action type's current status in a global way,
+     * i.e. not in a specific game state.
+     */
+    struct ActionTypeGlobalStatus {
+    
+        //--- Members ---
+        
+        //Current value [0 - 1].
+        float value = 0.0f;
+        
+    };
+
+
+    /**
+     * @brief Represents an action type's status in a given game state.
+     */
+    struct ActionTypeGameStateStatus {
+
+        //Current value.
+        float value = 0.0f;
+
+        //How long it's been been active (!= 0) or inactive (== 0) for.
+        float activationStateDuration = 0.0f;
+        
+        //How long until the next auto-repeat activation.
+        float nextAutoRepeatActivation = 0.0f;
+
+    };
+
+
+    /**
+     * @brief Represents one of the game's macro states.
+     */
+    struct GameState {
+
+        //--- Members ---
+
+        //Status of each action type in this game state.
+        map<int, ActionTypeGameStateStatus> actionTypeStatuses;
+
+    };
+
+    
     //--- Members ---
     
-    //Status of each action type.
-    map<int, ActionTypeStatus> actionTypeStatuses;
-    
+    //Global status of each action type.
+    map<int, ActionTypeGlobalStatus> actionTypeGlobalStatuses;
+
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
     
@@ -348,6 +369,12 @@ protected:
     
     //Input sources currently being ignored.
     vector<InputSource> ignoredInputSources;
+
+    //Name of the current game state, or empty if none specified.
+    string curGameStateName;
+    
+    //Game states.
+    map<string, GameState> gameStates;
     
     //Last known time delta.
     float lastDeltaT = 0.0f;
@@ -362,11 +389,11 @@ protected:
     );
     void handleCleanInput(const Input& input, bool forceDirectEvent);
     void processAutoRepeats(
-        std::pair<const int, ActionTypeStatus>& it, float deltaT
+        std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
     );
     bool processInputIgnoring(const Input& input);
     void processStateTimers(
-        std::pair<const int, ActionTypeStatus>& it, float deltaT
+        std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
     );
 };
 
