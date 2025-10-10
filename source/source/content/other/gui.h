@@ -198,6 +198,10 @@ public:
     
     //Is this item focusable from spatial navigation?
     bool focusableFromSN = true;
+
+    //Its real final dimensions are square, such that they fit inside
+    //the reference dimensions.
+    bool isSquare = false;
     
     //Type of the current juice animation.
     JUICE_TYPE juiceType = JUICE_TYPE_NONE;
