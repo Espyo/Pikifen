@@ -88,6 +88,12 @@ enum GUI_MANAGER_ANIM {
     
     //Items are in view, and slide right out of view.
     GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+
+    //Fade in from complete transparency.
+    GUI_MANAGER_ANIM_FADE_IN,
+    
+    //Fade out to complete transparency.
+    GUI_MANAGER_ANIM_FADE_OUT,
     
 };
 

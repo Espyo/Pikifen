@@ -1635,6 +1635,9 @@ void transitionGuis(
     } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
         anim2 = GUI_MANAGER_ANIM_LEFT_TO_CENTER;
         break;
+    } case GUI_MANAGER_ANIM_FADE_OUT: {
+        anim2 = GUI_MANAGER_ANIM_FADE_IN;
+        break;
     } default: {
         break;
     }

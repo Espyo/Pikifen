@@ -579,7 +579,8 @@ GuiManager::GuiManager() :
         case GUI_MANAGER_ANIM_CENTER_TO_UP:
         case GUI_MANAGER_ANIM_CENTER_TO_DOWN:
         case GUI_MANAGER_ANIM_CENTER_TO_LEFT:
-        case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
+        case GUI_MANAGER_ANIM_CENTER_TO_RIGHT:
+        case GUI_MANAGER_ANIM_FADE_OUT: {
             visible = false;
             break;
         }
@@ -726,6 +727,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     
     Point finalCenter = item->getReferenceCenter();
     Point finalSize = item->getReferenceSize();
+    unsigned char finalAlpha = 255;
     
     if(animTimer.timeLeft > 0.0f) {
         switch(animType) {
@@ -837,6 +839,20 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
                 );
             break;
             
+        } case GUI_MANAGER_ANIM_FADE_IN: {
+            finalAlpha =
+                interpolateNumber(
+                    animTimer.getRatioLeft(), 0.0f, 1.0f, 255, 0
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_FADE_OUT: {
+            finalAlpha =
+                interpolateNumber(
+                    animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 255
+                );
+            break;
+            
         } default: {
             break;
             
@@ -846,6 +862,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     
     draw->center = finalCenter;
     draw->size = finalSize;
+    draw->tint = mapAlpha(finalAlpha);
     return true;
 }
 
