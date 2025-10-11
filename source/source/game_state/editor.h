@@ -703,6 +703,11 @@ protected:
     );
     void drawOpErrorCursor();
     Point getLastWidgetPost();
+    void getQuickPlayAreaList(
+        string selectedAreaPath,
+        vector<string>* outAreaNames, vector<string>* outAreaPaths,
+        int* outSelectedAreaIdx
+    ) const;
     bool guiFocusedText();
     bool keyCheck(
         int pressedKey, int matchKey,

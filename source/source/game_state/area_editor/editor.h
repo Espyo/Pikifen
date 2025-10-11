@@ -113,15 +113,6 @@ public:
     //Automatically load this folder upon boot-up of the editor, if any.
     string autoLoadFolder;
     
-    //Area being edited when using the quick-play button.
-    string quickPlayAreaPath;
-    
-    //Position the camera was it in the editor before quick-play.
-    Point quickPlayCamPos;
-    
-    //Editor camera zoom before quick-play.
-    float quickPlayCamZ = 1.0f;
-    
     //This hack fixes a glitch by skipping drawing for one frame.
     bool hackSkipDrawing = false;
     

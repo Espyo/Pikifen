@@ -321,6 +321,7 @@ private:
     void loadCmd(float inputValue);
     void mobRadiusToggleCmd(float inputValue);
     void playPauseAnimCmd(float inputValue);
+    void quickPlayCmd(float inputValue);
     void quitCmd(float inputValue);
     void reloadCmd(float inputValue);
     void restartAnimCmd(float inputValue);

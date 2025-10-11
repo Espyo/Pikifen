@@ -260,6 +260,28 @@ public:
     //Current window width.
     unsigned int winW = OPTIONS::GRAPHICS_D::WIN_W;
     
+    //Data for when the quick play feature is used in an editor.
+    struct {
+    
+        //--- Members ---
+        
+        //Path of the folder of the area to quick play.
+        string areaPath;
+        
+        //Editor to return to from the area.
+        GameState* editor = nullptr;
+        
+        //Path of the content that was being edited in the editor.
+        string content;
+        
+        //Editor camera position before quick play.
+        Point camPos;
+        
+        //Editor camera zoom before quick play.
+        float camZ = 1.0f;
+        
+    } quickPlay;
+    
     //Engine debugging tools.
     //Set them to true in the Game constructor as needed.
     struct {

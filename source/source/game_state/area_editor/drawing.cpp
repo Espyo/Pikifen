@@ -28,7 +28,7 @@
 void AreaEditor::doDrawing() {
     if(hackSkipDrawing) {
         //Skip drawing for one frame.
-        //This hack fixes a weird glitch where if you quick-play an area
+        //This hack fixes a weird glitch where if you quick play an area
         //with no leaders and get booted back into the area editor, the
         //engine would crash.
         hackSkipDrawing = false;

@@ -51,7 +51,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
     if(!enabled) return false;
     bool isInPlay =
         game.states.gameplay->loaded &&
-        game.states.areaEd->quickPlayAreaPath.empty();
+        game.quickPlay.areaPath.empty();
         
     if(
         !game.options.misc.makerToolsInPlay && isInPlay && !allowedInPlayNow &&

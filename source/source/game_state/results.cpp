@@ -225,14 +225,14 @@ void Results::leave() {
     game.fadeMgr.startFade(false, [] () {
         AREA_TYPE areaType = game.curAreaData->type;
         game.unloadLoadedState(game.states.gameplay);
-        if(game.states.areaEd->quickPlayAreaPath.empty()) {
+        if(game.quickPlay.areaPath.empty()) {
             game.states.annexScreen->areaMenuAreaType =
                 areaType;
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
             game.changeState(game.states.annexScreen);
         } else {
-            game.changeState(game.states.areaEd);
+            game.changeState(game.quickPlay.editor);
         }
     });
 }
@@ -307,7 +307,7 @@ void Results::load() {
     bool savedSuccessfully = true;
     if(
         isNewRecord &&
-        game.states.areaEd->quickPlayAreaPath.empty() &&
+        game.quickPlay.areaPath.empty() &&
         !game.makerTools.usedHelpingTools &&
         !game.states.gameplay->afterHours
     ) {
@@ -524,9 +524,9 @@ void Results::load() {
     string conclusion;
     switch(game.curAreaData->type) {
     case AREA_TYPE_SIMPLE: {
-        if(!game.states.areaEd->quickPlayAreaPath.empty()) {
+        if(!game.quickPlay.areaPath.empty()) {
             conclusion =
-                "Area editor playtest ended.";
+                "Editor playtest ended.";
         } else if(game.makerTools.usedHelpingTools) {
             conclusion =
                 "Nothing to report, other than maker tools being used.";
@@ -540,9 +540,9 @@ void Results::load() {
             conclusion =
                 "Played in after hours, so the "
                 "result past that point won't be saved.";
-        } else if(!game.states.areaEd->quickPlayAreaPath.empty()) {
+        } else if(!game.quickPlay.areaPath.empty()) {
             conclusion =
-                "This was an area editor playtest, "
+                "This was an editor playtest, "
                 "so the result won't be saved.";
         } else if(game.makerTools.usedHelpingTools) {
             conclusion =
@@ -639,7 +639,7 @@ void Results::load() {
     //Pick an area button.
     gui.backItem =
         new ButtonGuiItem(
-        game.states.areaEd->quickPlayAreaPath.empty() ?
+        game.quickPlay.areaPath.empty() ?
         "Pick an area" :
         "Back to editor",
         game.sysContent.fntStandard
@@ -651,9 +651,9 @@ void Results::load() {
     gui.backItem->onGetTooltip =
     [] () {
         return
-            game.states.areaEd->quickPlayAreaPath.empty() ?
+            game.quickPlay.areaPath.empty() ?
             "Return to the area selection menu." :
-            "Return to the area editor.";
+            "Return to the editor.";
     };
     gui.addItem(gui.backItem, "pick_area");
     

@@ -68,6 +68,9 @@ void GuiEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         loadCmd(1.0f);
         
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        quickPlayCmd(1.0f);
+        
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         quitCmd(1.0f);
         

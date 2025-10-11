@@ -759,6 +759,24 @@ void AnimationEditor::processGuiOptionsDialog() {
             ImGui::Unindent();
         }
         
+        //Quick play area combo.
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.animEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+            if(selectedAreaIdx == -1) {
+                game.options.animEd.quickPlayAreaPath.clear();
+            } else {
+                game.options.animEd.quickPlayAreaPath =
+                    areaPaths[selectedAreaIdx];
+            }
+        }
+        setTooltip("Area to play on when choosing the quick play feature.");
+        
         ImGui::TreePop();
         
     }
@@ -3195,6 +3213,42 @@ void AnimationEditor::processGuiToolbar() {
         "Ctrl + S"
     );
     
+    //Quick play button.
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "playButton", editorIcons[EDITOR_ICON_PLAY],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        quickPlayCmd(1.0f);
+    }
+    if(ImGui::BeginPopupContextItem()) {
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.animEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        for(int a = 0; a < (int) areaNames.size(); a++) {
+            if(ImGui::Selectable(areaNames[a].c_str(), a == selectedAreaIdx)) {
+                game.options.animEd.quickPlayAreaPath = areaPaths[a];
+                saveOptions();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        
+        ImGui::EndPopup();
+    }
+    setTooltip(
+        "Save, quit, and start playing the area chosen in the options.\n"
+        "Leaving will return to the editor.\n"
+        "This button will not do anything if the area is not set properly.\n"
+        "You can also right-click the button to choose the area.",
+        "Ctrl + P"
+    );
+    
     //Toggle grid button.
     ImGui::SameLine(0, 16);
     if(
@@ -3252,6 +3306,6 @@ void AnimationEditor::processGuiToolbar() {
     }
     setTooltip(
         "Toggle visibility of a leader silhouette.",
-        "Ctrl + P"
+        "Ctrl + E"
     );
 }

@@ -338,6 +338,44 @@ Point Editor::getLastWidgetPost() {
 
 
 /**
+ * @brief Returns a list of all areas for filling in quick play option-related
+ * widgets.
+ *
+ * @param selectedAreaPath Path of the currently selected area.
+ * @param outAreaNames The list of area names is returned here.
+ * @param outAreaPaths The list of area paths is returned here.
+ * @param outSelectedAreaIdx The index of which area is currently selected is
+ * returned here, or -1 if none.
+ */
+void Editor::getQuickPlayAreaList(
+    string selectedAreaPath,
+    vector<string>* outAreaNames, vector<string>* outAreaPaths,
+    int* outSelectedAreaIdx
+) const {
+    outAreaNames->clear();
+    outAreaPaths->clear();
+    *outSelectedAreaIdx = -1;
+    
+    auto scanAreas =
+        [&selectedAreaPath, outAreaNames, outAreaPaths, outSelectedAreaIdx]
+    (const vector<Area*> areas) {
+        for(size_t a = 0; a < areas.size(); a++) {
+            Area* aPtr = areas[a];
+            if(aPtr->manifest->path == selectedAreaPath) {
+                *outSelectedAreaIdx = outAreaNames->size();
+            }
+            outAreaNames->push_back(
+                aPtr->name + "##" + aPtr->manifest->internalName
+            );
+            outAreaPaths->push_back(aPtr->manifest->path);
+        }
+    };
+    scanAreas(game.content.areas.list[AREA_TYPE_SIMPLE]);
+    scanAreas(game.content.areas.list[AREA_TYPE_MISSION]);
+}
+
+
+/**
  * @brief Returns whether or not Dear ImGui is currently focused on
  * a text widget.
  *
@@ -1383,12 +1421,12 @@ void Editor::leave() {
     saveOptions();
     
     game.fadeMgr.startFade(false, [] () {
-        if(game.states.areaEd->quickPlayAreaPath.empty()) {
+        if(game.quickPlay.areaPath.empty()) {
             game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAKE;
             game.changeState(game.states.titleScreen);
         } else {
             game.states.gameplay->pathOfAreaToLoad =
-                game.states.areaEd->quickPlayAreaPath;
+                game.quickPlay.areaPath;
             game.changeState(game.states.gameplay);
         }
     });

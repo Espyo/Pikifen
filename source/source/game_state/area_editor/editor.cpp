@@ -2169,11 +2169,11 @@ void AreaEditor::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
     
     //Automatically load a file if needed, or show the load dialog.
-    if(!quickPlayAreaPath.empty()) {
-        loadAreaFolder(quickPlayAreaPath, false, true);
-        game.editorsView.cam.setPos(quickPlayCamPos);
-        game.editorsView.cam.setZoom(quickPlayCamZ);
-        quickPlayAreaPath.clear();
+    if(!game.quickPlay.areaPath.empty()) {
+        loadAreaFolder(game.quickPlay.content, false, true);
+        game.editorsView.cam.setPos(game.quickPlay.camPos);
+        game.editorsView.cam.setZoom(game.quickPlay.camZ);
+        game.quickPlay.areaPath.clear();
         
     } else if(!autoLoadFolder.empty()) {
         loadAreaFolder(autoLoadFolder, false, true);
@@ -2567,9 +2567,11 @@ void AreaEditor::quickPlayCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(!saveArea(false)) return;
-    quickPlayAreaPath = manifest.path;
-    quickPlayCamPos = game.editorsView.cam.pos;
-    quickPlayCamZ = game.editorsView.cam.zoom;
+    game.quickPlay.areaPath = manifest.path;
+    game.quickPlay.content = manifest.path;
+    game.quickPlay.editor = game.states.areaEd;
+    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camZ = game.editorsView.cam.zoom;
     leave();
 }
 

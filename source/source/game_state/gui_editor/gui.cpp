@@ -587,6 +587,30 @@ void GuiEditor::processGuiOptionsDialog() {
         
     }
     
+    //Misc. node.
+    if(saveableTreeNode("options", "Misc.")) {
+    
+        //Quick play area combo.
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.guiEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+            if(selectedAreaIdx == -1) {
+                game.options.guiEd.quickPlayAreaPath.clear();
+            } else {
+                game.options.guiEd.quickPlayAreaPath =
+                    areaPaths[selectedAreaIdx];
+            }
+        }
+        setTooltip("Area to play on when choosing the quick play feature.");
+        
+        ImGui::TreePop();
+    }
+    
     ImGui::Spacer();
     
     processGuiEditorStyle();
@@ -819,6 +843,42 @@ void GuiEditor::processGuiToolbar() {
     setTooltip(
         "Save the GUI definition to your disk.",
         "Ctrl + S"
+    );
+    
+    //Quick play button.
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "playButton", editorIcons[EDITOR_ICON_PLAY],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        quickPlayCmd(1.0f);
+    }
+    if(ImGui::BeginPopupContextItem()) {
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.guiEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        for(int a = 0; a < (int) areaNames.size(); a++) {
+            if(ImGui::Selectable(areaNames[a].c_str(), a == selectedAreaIdx)) {
+                game.options.guiEd.quickPlayAreaPath = areaPaths[a];
+                saveOptions();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        
+        ImGui::EndPopup();
+    }
+    setTooltip(
+        "Save, quit, and start playing the area chosen in the options.\n"
+        "Leaving will return to the editor.\n"
+        "This button will not do anything if the area is not set properly.\n"
+        "You can also right-click the button to choose the area.",
+        "Ctrl + P"
     );
     
     //Snap mode button.

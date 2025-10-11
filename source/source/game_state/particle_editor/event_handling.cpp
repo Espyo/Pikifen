@@ -68,6 +68,9 @@ void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         loadCmd(1.0f);
         
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        quickPlayCmd(1.0f);
+        
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         quitCmd(1.0f);
         
@@ -98,6 +101,8 @@ void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         
         if(!dialogs.empty()) {
             closeTopDialog();
+        } else {
+            quitCmd(1.0f);
         }
         
     }

@@ -226,6 +226,9 @@ struct Options {
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
         
+        //Quick play area folder path.
+        string quickPlayAreaPath;
+        
     } animEd;
     
     //Area editor.
@@ -384,6 +387,9 @@ struct Options {
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
         
+        //Quick play area folder path.
+        string quickPlayAreaPath;
+        
         //Snap to grid?
         bool snap = GUI_ED_D::SNAP;
         
@@ -438,6 +444,9 @@ struct Options {
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
+        
+        //Quick play area folder path.
+        string quickPlayAreaPath;
         
     } partEd;
     

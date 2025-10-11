@@ -150,6 +150,7 @@ private:
     void quitCmd(float inputValue);
     void reloadCmd(float inputValue);
     void reloadGuiDefs();
+    void quickPlayCmd(float inputValue);
     void saveCmd(float inputValue);
     void snapModeCmd(float inputValue);
     void zoomAndPosResetCmd(float inputValue);

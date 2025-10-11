@@ -324,6 +324,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
         aRS.set("bg_path", animEd.bgPath);
         aRS.set("history", historyStr);
+        aRS.set("quick_play_area_path", animEd.quickPlayAreaPath);
         
         animEd.history = loadEditorHistory(historyStr);
     }
@@ -481,6 +482,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
         gRS.set("grid_interval", guiEd.gridInterval);
         gRS.set("history", historyStr);
+        gRS.set("quick_play_area_path", guiEd.quickPlayAreaPath);
         gRS.set("snap", guiEd.snap);
         
         guiEd.history = loadEditorHistory(historyStr);
@@ -537,6 +539,7 @@ void Options::loadFromDataNode(DataNode* file) {
         pRS.set("bg_path", partEd.bgPath);
         pRS.set("grid_interval", partEd.gridInterval);
         pRS.set("history", historyStr);
+        pRS.set("quick_play_area_path", partEd.quickPlayAreaPath);
         
         partEd.history = loadEditorHistory(historyStr);
     }
@@ -592,6 +595,7 @@ void Options::saveToDataNode(DataNode* file) const {
         
         aGW.write("bg_path", animEd.bgPath);
         aGW.write("history", historyStr);
+        aGW.write("quick_play_area_path", animEd.quickPlayAreaPath);
     }
     
     //Area editor.
@@ -692,6 +696,7 @@ void Options::saveToDataNode(DataNode* file) const {
         
         gGW.write("grid_interval", guiEd.gridInterval);
         gGW.write("history", historyStr);
+        gGW.write("quick_play_area_path", guiEd.quickPlayAreaPath);
         gGW.write("snap", guiEd.snap);
     }
     
@@ -726,5 +731,6 @@ void Options::saveToDataNode(DataNode* file) const {
         pGW.write("bg_path", partEd.bgPath);
         pGW.write("grid_interval", partEd.gridInterval);
         pGW.write("history", historyStr);
+        pGW.write("quick_play_area_path", partEd.quickPlayAreaPath);
     }
 }

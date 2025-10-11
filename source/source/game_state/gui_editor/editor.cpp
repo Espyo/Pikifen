@@ -357,6 +357,12 @@ void GuiEditor::load() {
     },
     CONTENT_LOAD_LEVEL_EDITOR
     );
+    game.content.loadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
     
     //Misc. setup.
     mustRecenterCam = true;
@@ -364,10 +370,18 @@ void GuiEditor::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
     
     //Automatically load a file if needed, or show the load dialog.
-    if(!autoLoadFile.empty()) {
+    if(!game.quickPlay.areaPath.empty()) {
+        loadGuiDefFile(game.quickPlay.content, true);
+        game.editorsView.cam.setPos(game.quickPlay.camPos);
+        game.editorsView.cam.setZoom(game.quickPlay.camZ);
+        game.quickPlay.areaPath.clear();
+        
+    } else if(!autoLoadFile.empty()) {
         loadGuiDefFile(autoLoadFile, true);
+        
     } else {
         openLoadDialog();
+        
     }
 }
 
@@ -489,6 +503,39 @@ void GuiEditor::pickGuiDefFile(
     } else {
         reallyLoad();
     }
+}
+
+
+/**
+ * @brief Code to run for the quick play command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::quickPlayCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    bool areaFound = false;
+    for(size_t t = 0; t < 2; t++) {
+        for(size_t a = 0; a < game.content.areas.list[t].size(); a++) {
+            if(
+                game.content.areas.list[t][a]->manifest->path ==
+                game.options.guiEd.quickPlayAreaPath
+            ) {
+                areaFound = true;
+                break;
+            }
+        }
+    }
+    
+    if(!areaFound) return;
+    
+    if(!saveGuiDef()) return;
+    game.quickPlay.areaPath = game.options.guiEd.quickPlayAreaPath;
+    game.quickPlay.content = manifest.path;
+    game.quickPlay.editor = game.states.guiEd;
+    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camZ = game.editorsView.cam.zoom;
+    leave();
 }
 
 
@@ -692,6 +739,11 @@ void GuiEditor::unload() {
     items.clear();
     curItem = INVALID;
     
+    game.content.unloadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_AREA,
+    }
+    );
     game.content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,

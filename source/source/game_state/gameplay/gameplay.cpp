@@ -573,8 +573,8 @@ void GameplayState::enter() {
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     bool skipReadyInterlude = false;
     
-    if(!game.states.areaEd->quickPlayAreaPath.empty()) {
-        //If this is an area editor quick play, skip the "Ready..." interlude.
+    if(!game.quickPlay.areaPath.empty()) {
+        //If this is an editor quick play, skip the "Ready..." interlude.
         skipReadyInterlude = true;
     }
     
@@ -1060,14 +1060,14 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
         game.changeState(game.states.results, false);
         break;
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
-        if(game.states.areaEd->quickPlayAreaPath.empty()) {
+        if(game.quickPlay.areaPath.empty()) {
             game.states.annexScreen->areaMenuAreaType =
                 game.curAreaData->type;
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
             game.changeState(game.states.annexScreen);
         } else {
-            game.changeState(game.states.areaEd);
+            game.changeState(game.quickPlay.editor);
         }
         break;
     }
@@ -1178,7 +1178,7 @@ void GameplayState::load() {
             CONTENT_LOAD_LEVEL_FULL, false
         )
     ) {
-        game.changeState(game.states.titleScreen, true);
+        leave(GAMEPLAY_LEAVE_TARGET_AREA_SELECT);
         return;
     }
     

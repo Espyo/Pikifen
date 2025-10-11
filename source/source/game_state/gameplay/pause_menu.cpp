@@ -2033,7 +2033,7 @@ void PauseMenu::initMainPauseMenu() {
     //Quit button.
     ButtonGuiItem* quitButton =
         new ButtonGuiItem(
-        game.states.areaEd->quickPlayAreaPath.empty() ?
+        game.quickPlay.areaPath.empty() ?
         "Quit" :
         "Back to editor",
         game.sysContent.fntStandard
@@ -2048,9 +2048,9 @@ void PauseMenu::initMainPauseMenu() {
         return
             "Lose your progress and return to the " +
             string(
-                game.states.areaEd->quickPlayAreaPath.empty() ?
+                game.quickPlay.areaPath.empty() ?
                 "area selection menu" :
-                "area editor"
+                "editor"
             ) + ".";
     };
     gui.addItem(quitButton, "quit");

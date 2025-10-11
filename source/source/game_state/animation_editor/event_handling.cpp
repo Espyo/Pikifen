@@ -64,7 +64,10 @@ void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
-    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_E, true)) {
+        leaderSilhouetteToggleCmd(1.0f);
+        
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
         gridToggleCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_H, true)) {
@@ -74,7 +77,7 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         loadCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
-        leaderSilhouetteToggleCmd(1.0f);
+        quickPlayCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         quitCmd(1.0f);
