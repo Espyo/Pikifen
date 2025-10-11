@@ -511,6 +511,7 @@ void GameplayState::endMission(bool cleared) {
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
         );
+        player.inventory->close();
     }
 }
 
@@ -590,6 +591,7 @@ void GameplayState::enter() {
     
     for(Player& player : players) {
         player.hud->gui.hideItems();
+        player.inventory->close();
         player.notification.reset();
         if(game.mouseCursor.onWindow) {
             player.leaderCursorWorld = player.view.mouseCursorWorldPos;
@@ -1024,6 +1026,7 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     //Finally, let the HUD handle events.
     for(Player& player : players) {
         player.hud->gui.handleAllegroEvent(ev);
+        player.inventory->gui.handleAllegroEvent(ev);
     }
     
 }
@@ -1399,6 +1402,7 @@ void GameplayState::load() {
     for(Player& player : players) {
         player.hud = new Hud();
         player.hud->player = &player;
+        player.inventory = new Inventory(&player);
     }
     
     dayMinutes = game.curAreaData->dayTimeStart;
@@ -1593,6 +1597,9 @@ void GameplayState::unload() {
             player.hud->gui.destroy();
             delete player.hud;
             player.hud = nullptr;
+            player.inventory->gui.destroy();
+            delete player.inventory;
+            player.inventory = nullptr;
         }
         
         player.leaderIdx = INVALID;

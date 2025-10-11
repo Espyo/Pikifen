@@ -63,6 +63,7 @@ void GameplayState::doPlayerActionPause(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
+    player->inventory->close();
 }
 
 
@@ -309,6 +310,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
+            player->inventory->close();
             paused = true;
             game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
             game.audio.handleWorldPause();
@@ -558,10 +560,106 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         );
     }
     
-    if(!msgBox && !onionMenu && !pauseMenu) {
+    if(!msgBox && !onionMenu && !pauseMenu && !player->inventory->isOpen) {
     
         switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_THROW: {
+        case PLAYER_ACTION_TYPE_RIGHT:
+        case PLAYER_ACTION_TYPE_DOWN:
+        case PLAYER_ACTION_TYPE_LEFT:
+        case PLAYER_ACTION_TYPE_UP: {
+            /*******************
+            *               O_ *
+            *   Move   --->/|  *
+            *              V > *
+            *******************/
+            
+            switch(action.actionTypeId) {
+            case PLAYER_ACTION_TYPE_RIGHT: {
+                player->leaderMovement.right = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_DOWN: {
+                player->leaderMovement.down = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_LEFT: {
+                player->leaderMovement.left = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_UP: {
+                player->leaderMovement.up = action.value;
+                break;
+            } default: {
+                break;
+            }
+            }
+            
+            break;
+            
+        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT:
+        case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN:
+        case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT:
+        case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
+            /***************************
+            *                    .-.   *
+            *   Leader cursor   ( = )> *
+            *                    '-'   *
+            ***************************/
+            
+            switch(action.actionTypeId) {
+            case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT: {
+                player->leaderCursorMov.right = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
+                player->leaderCursorMov.down = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT: {
+                player->leaderCursorMov.left = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
+                player->leaderCursorMov.up = action.value;
+                break;
+            } default: {
+                break;
+            }
+            }
+            
+            break;
+            
+        } case PLAYER_ACTION_TYPE_GROUP_RIGHT:
+        case PLAYER_ACTION_TYPE_GROUP_DOWN:
+        case PLAYER_ACTION_TYPE_GROUP_LEFT:
+        case PLAYER_ACTION_TYPE_GROUP_UP: {
+            /******************
+            *            ***  *
+            *   Group   ****O *
+            *            ***  *
+            ******************/
+            
+            switch(action.actionTypeId) {
+            case PLAYER_ACTION_TYPE_GROUP_RIGHT: {
+                player->swarmMovement.right = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_GROUP_DOWN: {
+                player->swarmMovement.down = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_GROUP_LEFT: {
+                player->swarmMovement.left = action.value;
+                break;
+            } case PLAYER_ACTION_TYPE_GROUP_UP: {
+                player->swarmMovement.up = action.value;
+                break;
+            } default: {
+                break;
+            }
+            }
+            
+            break;
+            
+        } case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
+    
+            player->swarmToLeaderCursor = isDown;
+            
+            break;
+            
+        } case PLAYER_ACTION_TYPE_THROW: {
             if(!doPlayerActionThrow(player, isDown)) {
                 game.controls.reinsertAction(action);
             }
@@ -589,6 +687,10 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
                 player, isDown,
                 action.actionTypeId == PLAYER_ACTION_TYPE_RADAR
             );
+            break;
+            
+        } case PLAYER_ACTION_TYPE_INVENTORY: {
+            if(isDown) player->inventory->open();
             break;
             
         } case PLAYER_ACTION_TYPE_USE_SPRAY_1:
@@ -650,7 +752,6 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         }
         
     } else if(msgBox) {
-    
         //Displaying a message.
         if(action.actionTypeId == PLAYER_ACTION_TYPE_THROW && isDown) {
             msgBox->advance();
@@ -658,109 +759,10 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             msgBox->close();
         }
         
-    }
-    //Some inputs we don't want to ignore even if we're in a menu.
-    //Those go here.
-    switch (action.actionTypeId) {
-    case PLAYER_ACTION_TYPE_RIGHT:
-    case PLAYER_ACTION_TYPE_DOWN:
-    case PLAYER_ACTION_TYPE_LEFT:
-    case PLAYER_ACTION_TYPE_UP: {
-        /*******************
-        *               O_ *
-        *   Move   --->/|  *
-        *              V > *
-        *******************/
+    } else if(player->inventory->isOpen) {
+        //In the inventory.
+        player->inventory->handlePlayerAction(action);
         
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_RIGHT: {
-            player->leaderMovement.right = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_DOWN: {
-            player->leaderMovement.down = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_LEFT: {
-            player->leaderMovement.left = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_UP: {
-            player->leaderMovement.up = action.value;
-            break;
-        } default: {
-            break;
-        }
-        }
-        
-        break;
-        
-    } case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT:
-    case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN:
-    case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT:
-    case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
-        /***************************
-        *                    .-.   *
-        *   Leader cursor   ( = )> *
-        *                    '-'   *
-        ***************************/
-        
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT: {
-            player->leaderCursorMov.right = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN: {
-            player->leaderCursorMov.down = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT: {
-            player->leaderCursorMov.left = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_LEADER_CURSOR_UP: {
-            player->leaderCursorMov.up = action.value;
-            break;
-        } default: {
-            break;
-        }
-        }
-        
-        break;
-        
-    } case PLAYER_ACTION_TYPE_GROUP_RIGHT:
-    case PLAYER_ACTION_TYPE_GROUP_DOWN:
-    case PLAYER_ACTION_TYPE_GROUP_LEFT:
-    case PLAYER_ACTION_TYPE_GROUP_UP: {
-        /******************
-        *            ***  *
-        *   Group   ****O *
-        *            ***  *
-        ******************/
-        
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_GROUP_RIGHT: {
-            player->swarmMovement.right = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_GROUP_DOWN: {
-            player->swarmMovement.down = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_GROUP_LEFT: {
-            player->swarmMovement.left = action.value;
-            break;
-        } case PLAYER_ACTION_TYPE_GROUP_UP: {
-            player->swarmMovement.up = action.value;
-            break;
-        } default: {
-            break;
-        }
-        }
-        
-        break;
-        
-    } case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
-
-        player->swarmToLeaderCursor = isDown;
-        
-        break;
-        
-    } default: {
-        break;
-    }
     }
     
 }

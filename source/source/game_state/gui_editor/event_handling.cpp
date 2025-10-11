@@ -82,6 +82,8 @@ void GuiEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         
         if(!dialogs.empty()) {
             closeTopDialog();
+        } else {
+            quitCmd(1.0f);
         }
         
     }

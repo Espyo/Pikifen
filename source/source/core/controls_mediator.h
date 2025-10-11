@@ -70,6 +70,9 @@ enum PLAYER_ACTION_TYPE {
     //Dismiss.
     PLAYER_ACTION_TYPE_DISMISS,
     
+    //Inventory.
+    PLAYER_ACTION_TYPE_INVENTORY,
+    
     //Use spray #1.
     PLAYER_ACTION_TYPE_USE_SPRAY_1,
     

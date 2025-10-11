@@ -163,6 +163,7 @@ void GameplayState::doGameDrawing(
         
         if(game.makerTools.hud) {
             player.hud->gui.draw();
+            player.inventory->gui.draw();
             
             drawBigMsg();
             

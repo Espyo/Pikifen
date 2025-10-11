@@ -280,6 +280,13 @@ void initControls() {
         "dismiss", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL
     );
     game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_INVENTORY,
+        PLAYER_ACTION_CAT_MAIN,
+        "Open inventory",
+        "Open the item and special move inventory.",
+        "inventory", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_USE_SPRAY_1,
         PLAYER_ACTION_CAT_MAIN,
         "Use spray 1",

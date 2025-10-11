@@ -15,6 +15,7 @@
 
 #include "../content/mob/leader.h"
 #include "../game_state/gameplay/hud.h"
+#include "../game_state/gameplay/inventory.h"
 #include "../game_state/gameplay/pause_menu.h"
 #include "misc_structs.h"
 
@@ -76,6 +77,9 @@ struct Player {
     
     //The HUD.
     Hud* hud = nullptr;
+
+    //Inventory.
+    Inventory* inventory = nullptr;
     
     //Player team.
     PlayerTeam* team;

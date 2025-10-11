@@ -53,8 +53,14 @@ Next tasks (roughly sorted most important first)
                 For each player, it shows their name (which can be changed by the player), what control scheme they're using, and what controllers, if any, they are using
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
-        Spray management should really be inventory management -- See the multiplayer section in this file for more info
+        An inventory system
             Show how close you are to concocting a new spray
+            [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
+                But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
+            [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
+            Add shortcuts
+            A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
+                When you select, should it set it as the aforementioned "standby" item, use it, or do both?
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
@@ -156,21 +162,7 @@ Next tasks (roughly sorted most important first)
             Clock: Inflicts a status effect on Pikmin (maybe the leader too?) that makes them move at half speed for 10 seconds
             Conversion: Picks three Pikmin at random from the opposing team(s) and converts them to your team. If a team would end up with 0 Pikmin this way, then one of the randomly chosen Pikmin is instead unharmed
             Teleportation items: Bring opponent to you, teleport to opponent, swap places with opponent, teleport opponent somewhere random
-        An "inventory" system
-            With multiplayer, there will likely be players on keyboards and on controllers. Players on a controller can't really afford mapping 6 buttons just to manage sprays and the roulette item
-            Sprays and the roulette item should go in the same inventory
-            [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
-                But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
-            [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
-            I think making it work like the weapon selection quick menu in Breath of the Wild might be good
-            Further thoughts
-                Pikmin 4 has three basically: the action menu, the actual inventory, and the shortcuts. Shortcuts should be bindable in the options menu for Pikifen so it doesn't matter
-                If I go with an on-screen "dial", it has to be four-way, not eight. Eight is too much information, and detecting which direction you _released_ is pretty hard (what if you do A+D and release D slightly before A?)
-                Whatever inventory menu shows up cannot pause the game, otherwise all players pause just because one needs to pick something. This also means it shouldn't be fullscreen
-                What if the "up" selection is the most recently-used inventory item, "right" opens up a full menu, and "left" and "down" are just some fixed things?
-                Should there be a "standby" item, like the one you most recently used?
-                A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
-                    When you select, should it set it as the aforementioned "standby" item, use it, or do both?
+            The next item to use should go in a slot in the inventory
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off
