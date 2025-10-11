@@ -1742,7 +1742,7 @@ void PauseMenu::initConfirmationPage() {
     confirmationGui.registerCoords("explanation",      50, 40, 84, 20);
     confirmationGui.registerCoords("options_reminder", 50, 69, 92, 10);
     confirmationGui.registerCoords("tooltip",          50, 96, 96,  4);
-    confirmationGui.readCoords(guiFile->getChildByName("positions"));
+    confirmationGui.readDataFile(guiFile);
     
     //Cancel button.
     confirmationGui.backItem =
@@ -1812,6 +1812,7 @@ void PauseMenu::initConfirmationPage() {
  */
 void PauseMenu::initMainPauseMenu() {
     //Menu items.
+    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
     gui.registerCoords("header",           50,    5, 52,  6);
     gui.registerCoords("left_page",        12,    5, 20,  6);
     gui.registerCoords("left_page_input",   3,    7,  4,  4);
@@ -1829,10 +1830,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.registerCoords("stats",            81,   65, 26, 10);
     gui.registerCoords("quit",             87,   88, 22,  8);
     gui.registerCoords("tooltip",          50,   96, 96,  4);
-    gui.readCoords(
-        game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     //Header.
     TextGuiItem* headerText =
@@ -2093,7 +2091,7 @@ void PauseMenu::initMissionPage() {
     missionGui.registerCoords("grading_list",     48, 80, 92, 24);
     missionGui.registerCoords("grading_scroll",   97, 80,  2, 24);
     missionGui.registerCoords("tooltip",          50, 96, 96,  4);
-    missionGui.readCoords(guiFile->getChildByName("positions"));
+    missionGui.readDataFile(guiFile);
     
     //Header.
     TextGuiItem* headerText =
@@ -2249,7 +2247,7 @@ void PauseMenu::initRadarPage() {
     radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
     radarGui.registerCoords("instructions",        58.75, 16,    77.5,  4);
     radarGui.registerCoords("tooltip",             50,    96,    96,    4);
-    radarGui.readCoords(guiFile->getChildByName("positions"));
+    radarGui.readDataFile(guiFile);
     
     //Header.
     TextGuiItem* headerText =
@@ -2511,7 +2509,7 @@ void PauseMenu::initStatusPage() {
     statusGui.registerCoords("totals",           50,    89,   88,    8);
     statusGui.registerCoords("instructions",     58.75, 16,   77.5,  4);
     statusGui.registerCoords("tooltip",          50,    96,   96,    4);
-    statusGui.readCoords(guiFile->getChildByName("positions"));
+    statusGui.readDataFile(guiFile);
     
     //Header.
     TextGuiItem* headerText =

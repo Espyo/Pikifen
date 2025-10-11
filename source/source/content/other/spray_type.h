@@ -57,8 +57,8 @@ public:
     //Main color that represents this spray.
     ALLEGRO_COLOR mainColor = COLOR_EMPTY;
     
-    //Bitmap for the spray count.
-    ALLEGRO_BITMAP* bmpSpray = nullptr;
+    //Bitmap representing this spray type.
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     //How many ingredients are needed in order to concoct a new spray.
     //0 means there are no ingredients for this spray type.

@@ -99,16 +99,14 @@ TextGuiItem* StatsMenu::addStat(
  */
 void StatsMenu::initGuiMain() {
     //Menu items.
+    DataNode* guiFile = &game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",        12,  5, 20,  6);
     gui.registerCoords("back_input",   3,  7,  4,  4);
     gui.registerCoords("header",      50,  5, 50,  6);
     gui.registerCoords("list",        50, 51, 76, 82);
     gui.registerCoords("list_scroll", 91, 51,  2, 82);
     gui.registerCoords("tooltip",     50, 96, 96,  4);
-    gui.readCoords(
-        game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     //Back button.
     gui.backItem =

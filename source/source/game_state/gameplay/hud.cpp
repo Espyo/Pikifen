@@ -155,7 +155,7 @@ Hud::Hud() :
     gui.registerCoords("mission_fail_2_req",         90.5, 18.5, 13,  5);
     gui.registerCoords("mission_fail_2_slash",         82, 18.5,  4,  5);
     gui.registerCoords("mission_fail_2_name",          82,   20, 30,  8);
-    gui.readCoords(hudFileNode->getChildByName("positions"));
+    gui.readDataFile(hudFileNode);
     
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
@@ -857,7 +857,7 @@ Hud::Hud() :
         if(bottomSprayIdx == INVALID) return;
         
         drawBitmapInBox(
-            game.config.misc.sprayOrder[bottomSprayIdx]->bmpSpray,
+            game.config.misc.sprayOrder[bottomSprayIdx]->bmpIcon,
             draw.center, draw.size, true,
             0.0f,
             tintColor(mapAlpha(this->sprayItemsOpacity * 255), draw.tint)
@@ -1952,7 +1952,7 @@ void Hud::tick(float deltaT) {
         topSprayIdx == INVALID ? nullptr :
         &player->team->sprayStats[topSprayIdx],
         topSprayIdx == INVALID ? nullptr :
-        game.config.misc.sprayOrder[topSprayIdx]->bmpSpray
+        game.config.misc.sprayOrder[topSprayIdx]->bmpIcon
     );
     
     size_t prevSprayIdx = INVALID;
@@ -1969,7 +1969,7 @@ void Hud::tick(float deltaT) {
         prevSprayIdx == INVALID ? nullptr :
         &player->team->sprayStats[prevSprayIdx],
         prevSprayIdx == INVALID ? nullptr :
-        game.config.misc.sprayOrder[prevSprayIdx]->bmpSpray
+        game.config.misc.sprayOrder[prevSprayIdx]->bmpIcon
     );
     
     size_t nextSprayIdx = INVALID;
@@ -1986,7 +1986,7 @@ void Hud::tick(float deltaT) {
         nextSprayIdx == INVALID ? nullptr :
         &player->team->sprayStats[nextSprayIdx],
         nextSprayIdx == INVALID ? nullptr :
-        game.config.misc.sprayOrder[nextSprayIdx]->bmpSpray
+        game.config.misc.sprayOrder[nextSprayIdx]->bmpIcon
     );
     
     sprayIconMgr.tick(deltaT);

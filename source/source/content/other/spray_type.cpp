@@ -67,6 +67,6 @@ void SprayType::loadFromDataNode(
     angleRange = degToRad(angleRange);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        bmpSpray = game.content.bitmaps.list.get(iconStr, iconNode);
+        bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
     }
 }

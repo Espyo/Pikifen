@@ -2083,7 +2083,7 @@ void SprayTypeContentManager::pathToManifest(
  */
 void SprayTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     for(const auto& s : list) {
-        game.content.bitmaps.list.free(s.second.bmpSpray);
+        game.content.bitmaps.list.free(s.second.bmpIcon);
     }
     game.config.misc.sprayOrder.clear();
     list.clear();

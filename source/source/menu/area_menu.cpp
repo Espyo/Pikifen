@@ -349,6 +349,8 @@ void AreaMenu::changeInfo(size_t areaIdx) {
  * @brief Initializes the area info page GUI items.
  */
 void AreaMenu::initGuiInfoPage() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
     gui.registerCoords("info_name",    36,  6, 68,  8);
     gui.registerCoords("subtitle",     36, 16, 68,  8);
     gui.registerCoords("thumbnail",    85, 14, 26, 24);
@@ -362,10 +364,7 @@ void AreaMenu::initGuiInfoPage() {
     gui.registerCoords("tags",         50, 87, 96,  6);
     gui.registerCoords("maker",        28, 95, 52,  6);
     gui.registerCoords("version",      76, 95, 44,  6);
-    gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
     
@@ -532,6 +531,7 @@ void AreaMenu::initGuiInfoPage() {
  * @brief Initializes the main GUI items.
  */
 void AreaMenu::initGuiMain() {
+    DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",          12,  5, 20,  6);
     gui.registerCoords("back_input",     3,  7,  4,  4);
     gui.registerCoords("header",        40,  5, 32,  6);
@@ -543,11 +543,7 @@ void AreaMenu::initGuiMain() {
     gui.registerCoords("random",        95,  5,  6,  6);
     gui.registerCoords("tooltip",       50, 96, 96,  4);
     gui.registerCoords("no_areas_text", 50, 50, 96, 10);
-    
-    gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     //Back button.
     gui.backItem =
@@ -800,6 +796,8 @@ void AreaMenu::initGuiMain() {
  * @brief Initializes the mission specs page GUI items.
  */
 void AreaMenu::initGuiSpecsPage() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::SPECS_GUI_FILE_NAME];
     gui.registerCoords("specs_name",     50,  5, 96,  6);
     gui.registerCoords("goal_header",    50, 13, 96,  6);
     gui.registerCoords("goal",           50, 21, 96,  6);
@@ -809,10 +807,7 @@ void AreaMenu::initGuiSpecsPage() {
     gui.registerCoords("grading_header", 50, 67, 96,  6);
     gui.registerCoords("grading_list",   47, 85, 90, 26);
     gui.registerCoords("grading_scroll", 96, 85,  4, 26);
-    gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::SPECS_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
     

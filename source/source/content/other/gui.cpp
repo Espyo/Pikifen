@@ -1114,22 +1114,37 @@ bool GuiManager::hideItems() {
 /**
  * @brief Reads item default centers and sizes from a data node.
  *
- * @param node Data node to read from.
+ * @param node Data file to read from.
+ * @param coordsNodeName Name of the child data node that contains the
+ * default coordinates.
  * @return Whether it succeeded.
  */
-bool GuiManager::readCoords(DataNode* node) {
-    size_t nItems = node->getNrOfChildren();
+bool GuiManager::readDataFile(
+    DataNode* node, const string& coordsNodeName
+) {
+    auto readCoords = [] (const string& str, Point * center, Point * size) {
+        vector<string> words = split(str);
+        if(words.size() < 4) return false;
+        center->x = s2f(words[0]);
+        center->y = s2f(words[1]);
+        size->x = s2f(words[2]);
+        size->y = s2f(words[3]);
+        return true;
+    };
+    
+    //Read the registered coordinates.
+    DataNode* coordsNode = node->getChildByName(coordsNodeName);
+    size_t nItems = coordsNode->getNrOfChildren();
     for(size_t i = 0; i < nItems; i++) {
-        DataNode* itemNode = node->getChild(i);
-        vector<string> words = split(itemNode->value);
-        if(words.size() < 4) {
-            continue;
-        }
+        DataNode* itemNode = coordsNode->getChild(i);
+        Point center, size;
+        if(!readCoords(itemNode->value, &center, &size)) continue;
         registerCoords(
             itemNode->name,
-            s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
+            center.x, center.y, size.x, size.y
         );
     }
+    
     return true;
 }
 

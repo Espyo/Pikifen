@@ -563,6 +563,8 @@ bool OptionsMenu::handlePlayerAction(const Inpution::Action& action) {
  */
 void OptionsMenu::initGuiAudioPage() {
     //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME];
     audioGui.registerCoords("back",                  12,  5,   20,  6);
     audioGui.registerCoords("back_input",             3,  7,    4,  4);
     audioGui.registerCoords("header",                50, 10,   50,  6);
@@ -572,10 +574,7 @@ void OptionsMenu::initGuiAudioPage() {
     audioGui.registerCoords("ambiance_sound_volume", 50, 62.5, 65, 10);
     audioGui.registerCoords("ui_sound_volume",       50, 75,   65, 10);
     audioGui.registerCoords("tooltip",               50, 96,   96,  4);
-    audioGui.readCoords(
-        game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    audioGui.readDataFile(guiFile);
     
     //Back button.
     audioGui.backItem =
@@ -714,16 +713,15 @@ void OptionsMenu::initGuiAudioPage() {
  */
 void OptionsMenu::initGuiControlBindsPage() {
     //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME];
     bindsGui.registerCoords("back",        12,  5, 20,  6);
     bindsGui.registerCoords("back_input",   3,  7,  4,  4);
     bindsGui.registerCoords("header",      50,  5, 50,  6);
     bindsGui.registerCoords("list",        50, 51, 88, 82);
     bindsGui.registerCoords("list_scroll", 97, 51,  2, 82);
     bindsGui.registerCoords("tooltip",     50, 96, 96,  4);
-    bindsGui.readCoords(
-        game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    bindsGui.readDataFile(guiFile);
     
     //Back button.
     bindsGui.backItem =
@@ -780,6 +778,8 @@ void OptionsMenu::initGuiControlBindsPage() {
  */
 void OptionsMenu::initGuiControlsPage() {
     //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME];
     controlsGui.registerCoords("back",                12,    5, 20,  6);
     controlsGui.registerCoords("back_input",           3,    7,  4,  4);
     controlsGui.registerCoords("header",              50,   10, 50,  6);
@@ -789,10 +789,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.registerCoords("leader_cursor_speed", 50,   65, 70, 10);
     controlsGui.registerCoords("auto_throw",          50, 77.5, 70, 10);
     controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
-    controlsGui.readCoords(
-        game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    controlsGui.readDataFile(guiFile);
     
     //Back button.
     controlsGui.backItem =
@@ -934,6 +931,8 @@ void OptionsMenu::initGuiControlsPage() {
  */
 void OptionsMenu::initGuiGraphicsPage() {
     //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME];
     graphicsGui.registerCoords("back",            12,  5,   20,  6);
     graphicsGui.registerCoords("back_input",       3,  7,    4,  4);
     graphicsGui.registerCoords("header",          50, 10,   50,  6);
@@ -942,10 +941,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     graphicsGui.registerCoords("cam_shake_mult",  50, 60,   70, 10);
     graphicsGui.registerCoords("tooltip",         50, 96,   96,  4);
     graphicsGui.registerCoords("restart_warning", 50, 85,   70,  6);
-    graphicsGui.readCoords(
-        game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    graphicsGui.readDataFile(guiFile);
     
     //Back button.
     graphicsGui.backItem =
@@ -1062,6 +1058,8 @@ void OptionsMenu::initGuiGraphicsPage() {
  */
 void OptionsMenu::initGuiMiscPage() {
     //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME];
     miscGui.registerCoords("back",                       12,     5, 20,   6);
     miscGui.registerCoords("back_input",                  3,     7,  4,   4);
     miscGui.registerCoords("header",                     50,    10, 50,   6);
@@ -1073,10 +1071,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70, 7.5);
     miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70, 7.5);
     miscGui.registerCoords("tooltip",                    50,    96, 96,   4);
-    miscGui.readCoords(
-        game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    miscGui.readDataFile(guiFile);
     
     //Back button.
     miscGui.backItem =
@@ -1263,7 +1258,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.registerCoords("misc",       50, 73, 60, 10);
     topGui.registerCoords("advanced",   87, 86, 22,  8);
     topGui.registerCoords("tooltip",    50, 96, 96,  4);
-    topGui.readCoords(guiFile->getChildByName("positions"));
+    topGui.readDataFile(guiFile);
     
     //Back button.
     topGui.backItem =

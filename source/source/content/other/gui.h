@@ -602,7 +602,10 @@ public:
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     bool hideItems();
-    bool readCoords(DataNode* node);
+    bool readDataFile(
+        DataNode* node,
+        const string& coordsNodeName = "positions"
+    );
     bool registerCoords(
         const string& id,
         float cx, float cy, float w, float h

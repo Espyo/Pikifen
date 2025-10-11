@@ -253,7 +253,7 @@ void MainMenu::initGuiMainPage() {
     mainGui.registerCoords("exit",       91, 91, 14,  6);
     mainGui.registerCoords("exit_input", 97, 93,  4,  4);
     mainGui.registerCoords("tooltip",    50, 96, 96,  4);
-    mainGui.readCoords(guiFile->getChildByName("positions"));
+    mainGui.readDataFile(guiFile);
     
     //Play button.
     ButtonGuiItem* playButton =
@@ -530,7 +530,7 @@ void MainMenu::initGuiMakePage() {
     makeGui.registerCoords("back_input",          3, 93,  4,  4);
     makeGui.registerCoords("more",               91, 91, 14,  6);
     makeGui.registerCoords("tooltip",            50, 96, 96,  4);
-    makeGui.readCoords(guiFile->getChildByName("positions"));
+    makeGui.readDataFile(guiFile);
     
     //Animation editor button.
     ButtonGuiItem* animEdButton =
@@ -706,7 +706,7 @@ void MainMenu::initGuiPlayPage() {
     playGui.registerCoords("back",        9, 91, 14,    6);
     playGui.registerCoords("back_input",  3, 93,  4,    4);
     playGui.registerCoords("tooltip",    50, 96, 96,    4);
-    playGui.readCoords(guiFile->getChildByName("positions"));
+    playGui.readDataFile(guiFile);
     
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
@@ -816,7 +816,7 @@ void MainMenu::initGuiTutorialPage() {
     tutorialGui.registerCoords("no_input",  7,     85,  4,     4);
     tutorialGui.registerCoords("yes",      74,     81, 40,    10);
     tutorialGui.registerCoords("tooltip",  50,     96, 96,     4);
-    tutorialGui.readCoords(guiFile->getChildByName("positions"));
+    tutorialGui.readDataFile(guiFile);
     
     //Question text.
     TextGuiItem* questionText =

@@ -99,6 +99,7 @@ void PacksMenu::changeInfo(int idx) {
  */
 void PacksMenu::initGuiMain() {
     //Menu items.
+    DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",               12,    5, 20,  6);
     gui.registerCoords("back_input",          3,    7,  4,  4);
     gui.registerCoords("header",             61,    5, 74,  6);
@@ -114,10 +115,7 @@ void PacksMenu::initGuiMain() {
     gui.registerCoords("restart_warning",  35.5, 88.5, 67,  5);
     gui.registerCoords("open_folder",        84, 88.5, 28,  5);
     gui.registerCoords("tooltip",            50,   96, 96,  4);
-    gui.readCoords(
-        game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME].
-        getChildByName("positions")
-    );
+    gui.readDataFile(guiFile);
     
     //Back button.
     gui.backItem =

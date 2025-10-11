@@ -105,7 +105,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     gui.registerCoords("list_scroll", 96, 39,  2, 54);
     gui.registerCoords("image",       16, 83, 28, 30);
     gui.registerCoords("tooltip",     65, 83, 66, 30);
-    gui.readCoords(guiFile->getChildByName("positions"));
+    gui.readDataFile(guiFile);
     
     //Back button.
     gui.backItem =

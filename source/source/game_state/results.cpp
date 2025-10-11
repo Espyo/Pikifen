@@ -341,6 +341,7 @@ void Results::load() {
     textToAnimate.clear();
     
     //Menu items.
+    DataNode* guiFile = &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
     gui.registerCoords("area_name",        50,  7, 45, 10);
     gui.registerCoords("area_subtitle",    50, 18, 40, 10);
     gui.registerCoords("goal_stamp",       15, 15, 22, 22);
@@ -357,11 +358,7 @@ void Results::load() {
     gui.registerCoords("pick_area",        80, 88, 24,  8);
     gui.registerCoords("pick_area_input",  91, 91,  4,  4);
     gui.registerCoords("tooltip",          50, 96, 96,  4);
-    gui.readCoords(
-        game.content.guiDefs.list[RESULTS::GUI_FILE_NAME].getChildByName(
-            "positions"
-        )
-    );
+    gui.readDataFile(guiFile);
     
     //Area name text.
     TextGuiItem* areaNameText =
