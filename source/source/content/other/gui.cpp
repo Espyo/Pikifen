@@ -502,6 +502,7 @@ bool GuiItem::isMouseOn(const Point& cursorPos) const {
  * @return Whether it is responsive.
  */
 bool GuiItem::isResponsive() const {
+    if(!responsive) return false;
     if(parent) return parent->isResponsive();
     return responsive;
 }
@@ -2068,6 +2069,6 @@ void TooltipGuiItem::defDrawCode(const DrawInfo& draw) {
         draw.center, draw.size, draw.tint,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        Point(0.7f + juicyGrowAmount)
+        Point(1.0f + juicyGrowAmount)
     );
 }

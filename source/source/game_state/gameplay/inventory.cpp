@@ -25,7 +25,7 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace INVENTORY {
 
-//How many columns exist.
+//How many columns are visible by default.
 const size_t COLUMNS = 3;
 
 //How long to fade when opening/closing for.
@@ -37,8 +37,8 @@ const string GUI_FILE_NAME = "inventory";
 //Padding between item slots, in GUI width ratio.
 const float SLOT_PADDING = 0.1f;
 
-//How many rows are visible by default.
-const size_t VISIBLE_ROWS = 2;
+//How many rows exist.
+const size_t ROWS = 2;
 
 }
 
@@ -124,12 +124,12 @@ void Inventory::initGui() {
     DataNode* guiFile =
         &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
         
-    gui.registerCoords("background", 0,    0,  0,  0);
-    gui.registerCoords("list", 0,    0,  0,  0);
-    gui.registerCoords("list_scroll", 0,    0,  0,  0);
-    gui.registerCoords("name", 0,    0,  0,  0);
-    gui.registerCoords("close", 0,    0,  0,  0);
-    gui.registerCoords("close_input", 0,    0,  0,  0);
+    gui.registerCoords("background",  50, 49, 36, 42);
+    gui.registerCoords("list",        50, 50, 32, 28);
+    gui.registerCoords("list_scroll", 50, 67, 32,  2);
+    gui.registerCoords("name",        57, 32, 18,  4);
+    gui.registerCoords("close",       40, 32, 12,  4);
+    gui.registerCoords("close_input", 34, 34,  4,  4);
     gui.readDataFile(guiFile);
     
     //Background item.
@@ -145,10 +145,12 @@ void Inventory::initGui() {
     
     //Item list box.
     itemList = new ListGuiItem();
+    itemList->horizontal = true;
     gui.addItem(itemList, "list");
     
     //Item list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
+    listScroll->horizontal = true;
     listScroll->listItem = itemList;
     gui.addItem(listScroll, "list_scroll");
     
@@ -207,7 +209,9 @@ void Inventory::populateInventory() {
         };
         item.onUse =
         [this, s] () {
-            printf("SPRAYED\n"); //TODO
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_SPRAY, (void*) &s
+            );
         };
         items.push_back(item);
     }
@@ -226,21 +230,21 @@ void Inventory::populateInventoryListGui() {
     const float SLOT_HEIGHT =
         (
             1.0f -
-            INVENTORY::SLOT_PADDING * (INVENTORY::VISIBLE_ROWS - 1)
-        ) / (float) INVENTORY::VISIBLE_ROWS;
+            INVENTORY::SLOT_PADDING * (INVENTORY::ROWS - 1)
+        ) / (float) INVENTORY::ROWS;
     int rowIdx = 0;
     int columnIdx = 0;
     Point slotCenter(SLOT_WIDTH / 2.0f, SLOT_HEIGHT / 2.0f);
     
     auto nextSlot =
     [&columnIdx, &rowIdx, &slotCenter, SLOT_WIDTH, SLOT_HEIGHT] () {
-        columnIdx++;
-        slotCenter.x += SLOT_WIDTH + INVENTORY::SLOT_PADDING;
-        if(columnIdx >= (int) INVENTORY::COLUMNS) {
-            columnIdx = 0;
-            slotCenter.x = SLOT_WIDTH / 2.0f;
-            rowIdx++;
-            slotCenter.y += SLOT_HEIGHT + INVENTORY::SLOT_PADDING;
+        rowIdx++;
+        slotCenter.y += SLOT_HEIGHT + INVENTORY::SLOT_PADDING;
+        if(rowIdx >= (int) INVENTORY::ROWS) {
+            rowIdx = 0;
+            slotCenter.y = SLOT_HEIGHT / 2.0f;
+            columnIdx++;
+            slotCenter.x += SLOT_WIDTH + INVENTORY::SLOT_PADDING;
         }
     };
     
@@ -260,7 +264,7 @@ void Inventory::populateInventoryListGui() {
             button->defDrawCode(draw);
             ALLEGRO_COLOR bmpTint = draw.tint;
             if(!button->responsive) {
-                tintColor(bmpTint, al_map_rgba(128, 128, 128, 128));
+                bmpTint = tintColor(bmpTint, al_map_rgba(128, 128, 128, 128));
             }
             if(iPtr->icon) {
                 drawBitmapInBox(
@@ -292,10 +296,10 @@ void Inventory::populateInventoryListGui() {
     }
     
     //Add any missing placeholders.
-    int rowPlaceholdersNeeded = (int) (INVENTORY::COLUMNS) - columnIdx;
-    int placeholderRowsNeeded = (int) (INVENTORY::VISIBLE_ROWS) - (rowIdx + 1);
+    int colPlaceholdersNeeded = (int) (INVENTORY::ROWS) - rowIdx;
+    int placeholderColsNeeded = (int) (INVENTORY::COLUMNS) - (columnIdx + 1);
     int placeholdersNeeded =
-        rowPlaceholdersNeeded + placeholderRowsNeeded * INVENTORY::COLUMNS;
+        colPlaceholdersNeeded + placeholderColsNeeded * INVENTORY::ROWS;
         
     for(int p = 0; p < placeholdersNeeded; p++) {
         //Item placeholder item.

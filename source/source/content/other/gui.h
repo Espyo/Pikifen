@@ -88,7 +88,7 @@ enum GUI_MANAGER_ANIM {
     
     //Items are in view, and slide right out of view.
     GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-
+    
     //Fade in from complete transparency.
     GUI_MANAGER_ANIM_FADE_IN,
     
@@ -198,7 +198,7 @@ public:
     
     //Is this item focusable from spatial navigation?
     bool focusableFromSN = true;
-
+    
     //Its real final dimensions are square, such that they fit inside
     //the reference dimensions.
     bool isSquare = false;
@@ -383,7 +383,7 @@ public:
     //What the offset is supposed to be, after it finishes animating.
     float targetOffset = 0.0f;
     
-    //Whether it's meant to be horizontal or vertical.
+    //Whether it's designed to be scrolled horizontally or vertically.
     bool horizontal = false;
     
     

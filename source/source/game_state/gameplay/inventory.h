@@ -22,7 +22,7 @@ extern const size_t COLUMNS;
 extern const float FADE_DURATION;
 extern const string GUI_FILE_NAME;
 extern const float SLOT_PADDING;
-extern const size_t VISIBLE_ROWS;
+extern const size_t ROWS;
 }
 
 
