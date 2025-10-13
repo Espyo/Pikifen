@@ -140,15 +140,22 @@ bool Interface::clearItems() {
  * @param focusedItemId Identifier of the currently-focused item.
  * @param focusX X coordinate of the current focus.
  * @param focusY Y coordinate of the current focus.
+ * @param focusW Width of the current focus.
+ * @param focusH Height of the current focus.
  * @param convertFocusCoordinateSpace If true, the focus coordinates are
  * assumed to be in relation to the specified parent, and so they must be
  * converted to coordinates in relation to the limits.
  * @return Identifier of the newly-focused item.
  */
 void* Interface::doNavigation(
-    DIRECTION direction, void* focusedItemId, float focusX, float focusY,
+    DIRECTION direction, void* focusedItemId,
+    float focusX, float focusY, float focusW, float focusH,
     bool convertFocusCoordinateSpace
 ) {
+#ifdef SPAT_NAV_DEBUG
+    lastNavInfo.clear();
+#endif
+    
     flattenItems();
     
     double limitX1, limitY1, limitX2, limitY2;
@@ -159,10 +166,11 @@ void* Interface::doNavigation(
     
     for(auto& i : items) {
         if(i.first == focusedItemId) continue;
+        if(itemHasChildren(i.first)) continue;
         
         double itemRelX, itemRelY, itemRelW, itemRelH;
         getItemRelativeUnits(
-            i.second, direction, focusX, focusY,
+            i.second, direction, focusX, focusY, focusW, focusH,
             &itemRelX, &itemRelY, &itemRelW, &itemRelH
         );
         
@@ -180,12 +188,16 @@ void* Interface::doNavigation(
         if(itemRelX > 0.0f) {
             //If this item is in front of the focused one,
             //give it a score like normal.
-            float score = getItemScore(itemRelX, itemRelY, itemRelW, itemRelH);
+            double score = getItemScore(itemRelX, itemRelY, itemRelW, itemRelH);
             if(score < bestScore) {
                 bestScore = score;
                 bestItemId = i.first;
             }
             
+#ifdef SPAT_NAV_DEBUG
+            lastNavInfo[i.first].score = score;
+            lastNavInfo[i.first].accepted = true;
+#endif
         }
     }
     
@@ -213,7 +225,7 @@ void Interface::flattenItems() {
 
 /**
  * @brief Recursively flattens items in the given list.
- * 
+ *
  * @param list List of items.
  * @param limitX1 Top-left X coordinate of the limit they must abide.
  * @param limitY1 Top-left Y coordinate of the limit they must abide.
@@ -290,6 +302,70 @@ std::vector<Interface::Item*> Interface::getItemChildren(void* id) {
 
 
 /**
+ * @brief Returns the X and Y difference between the focus and the given item.
+ *
+ * @param focusX X coordinate of the current focus.
+ * @param focusY Y coordinate of the current focus.
+ * @param focusW Width of the current focus.
+ * @param focusH Height of the current focus.
+ * @param iPtr Item to use.
+ * @param direction Direction of navigation.
+ * @param outDiffX The X coordinate of the difference is returned here.
+ * @param outDiffY The Y coordinate of the difference  is returned here.
+ */
+void Interface::getItemDiffs(
+    float focusX, float focusY, float focusW, float focusH,
+    Item* iPtr, DIRECTION direction, double* outDiffX, double* outDiffY
+) {
+    double focusX1 = focusX - focusW / 2.0f;
+    double focusY1 = focusY - focusH / 2.0f;
+    double focusX2 = focusX + focusW / 2.0f;
+    double focusY2 = focusY + focusH / 2.0f;
+    double iX1 = iPtr->flatX - iPtr->flatW / 2.0f;
+    double iY1 = iPtr->flatY - iPtr->flatH / 2.0f;
+    double iX2 = iPtr->flatX + iPtr->flatW / 2.0f;
+    double iY2 = iPtr->flatY + iPtr->flatH / 2.0f;
+    
+    double workingX =
+        direction == DIRECTION_LEFT ?
+        focusX1 :
+        direction == DIRECTION_RIGHT ?
+        focusX2 :
+        focusX;
+    double workingY =
+        direction == DIRECTION_UP ?
+        focusY1 :
+        direction == DIRECTION_DOWN ?
+        focusY2 :
+        focusY;
+    double itemX =
+        direction == DIRECTION_LEFT ?
+        iX2 :
+        direction == DIRECTION_RIGHT ?
+        iX1 :
+        workingX;
+    double itemY =
+        direction == DIRECTION_UP ?
+        iY2 :
+        direction == DIRECTION_DOWN ?
+        iY1 :
+        workingY;
+        
+    itemX = std::clamp(itemX, iX1, iX2);
+    itemY = std::clamp(itemY, iY1, iY2);
+    *outDiffX = itemX - workingX;
+    *outDiffY = itemY - workingY;
+    
+#ifdef SPAT_NAV_DEBUG
+    lastNavInfo[iPtr->id].focusX = workingX;
+    lastNavInfo[iPtr->id].focusY = workingY;
+    lastNavInfo[iPtr->id].itemX = itemX;
+    lastNavInfo[iPtr->id].itemY = itemY;
+#endif
+}
+
+
+/**
  * @brief Converts the standard coordinates of an item to ones relative
  * to the current focus coordinates, and rotated so they're to its right.
  *
@@ -297,20 +373,35 @@ std::vector<Interface::Item*> Interface::getItemChildren(void* id) {
  * @param direction Navigation direction.
  * @param focusX X coordinate of the current focus.
  * @param focusY Y coordinate of the current focus.
+ * @param focusW Width of the current focus.
+ * @param focusH Height of the current focus.
  * @param outRelX The relative X coordinate is returned here.
  * @param outRelY The relative Y coordinate is returned here.
  * @param outRelW The relative width is returned here.
  * @param outRelH The relative height is returned here.
  */
 void Interface::getItemRelativeUnits(
-    Item* iPtr, DIRECTION direction, float focusX, float focusY,
+    Item* iPtr, DIRECTION direction,
+    float focusX, float focusY, float focusW, float focusH,
     double* outRelX, double* outRelY, double* outRelW, double* outRelH
 ) {
     double resultX, resultY, resultW, resultH;
-    
-    //Translate.
-    double diffX = iPtr->flatX - focusX;
-    double diffY = iPtr->flatY - focusY;
+    double diffX, diffY;
+    if(heuristics.centerOnly) {
+        diffX = iPtr->flatX - focusX;
+        diffY = iPtr->flatY - focusY;
+#ifdef SPAT_NAV_DEBUG
+        lastNavInfo[iPtr->id].focusX = focusX;
+        lastNavInfo[iPtr->id].focusY = focusY;
+        lastNavInfo[iPtr->id].itemX = iPtr->flatX;
+        lastNavInfo[iPtr->id].itemY = iPtr->flatY;
+#endif
+        
+    } else {
+        getItemDiffs(
+            focusX, focusY, focusW, focusH, iPtr, direction, &diffX, &diffY
+        );
+    }
     
     //Rotate the position, and the size if needed.
     switch(direction) {
@@ -373,7 +464,20 @@ Interface::Item* Interface::getItemParent(void* id) {
 double Interface::getItemScore(
     double itemRelX, double itemRelY, double itemRelW, double itemRelH
 ) {
-    return itemRelX + fabs(itemRelY);
+    switch(heuristics.distCalcMethod) {
+    case DIST_CALC_METHOD_EUCLIDEAN: {
+        return itemRelX * itemRelX + itemRelY * itemRelY;
+        break;
+    } case DIST_CALC_METHOD_TAXICAB: {
+        return itemRelX + fabs(itemRelY);
+        break;
+    } case DIST_CALC_METHOD_TAXICAB_2: {
+        return itemRelX + fabs(itemRelY * 2.0f);
+        break;
+    }
+    }
+    
+    return 0.0f;
 }
 
 
@@ -404,6 +508,17 @@ void Interface::getLimits(
 
 
 /**
+ * @brief Returns whether an item has children.
+ *
+ * @param id Identifier of the item to check.
+ * @return Whether it has children.
+ */
+bool Interface::itemHasChildren(void* id) const {
+    return children.find(id) != children.end();
+}
+
+
+/**
  * @brief Navigates in a given direction.
  *
  * @param direction Navigation direction.
@@ -418,6 +533,8 @@ void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
             direction, focusedItemId,
             focusedItemId == nullptr ? 0.0f : items[focusedItemId]->x,
             focusedItemId == nullptr ? 0.0f : items[focusedItemId]->y,
+            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->w,
+            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->h,
             false
         );
 }
@@ -429,11 +546,17 @@ void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
  * @param direction Navigation direction.
  * @param focusX X coordinate of the current focus.
  * @param focusY Y coordinate of the current focus.
+ * @param focusW Width of the current focus.
+ * @param focusH Height of the current focus.
  * @return Identifier of the newly-focused item.
  */
-void* Interface::navigate(DIRECTION direction, float focusX, float focusY) {
+void* Interface::navigate(
+    DIRECTION direction, float focusX, float focusY, float focusW, float focusH
+) {
     return
-        doNavigation(direction, nullptr, focusX, focusY, false);
+        doNavigation(
+            direction, nullptr, focusX, focusY, focusW, focusH, false
+        );
 }
 
 

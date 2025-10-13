@@ -44,5 +44,12 @@ void myProgram::doSpatialNavigation(SpatNav::DIRECTION direction) {
 * Support for looping around the edges of the GUI.
 * Support for parent items that have children items inside.
 * Customizable heuristics.
+* Basic debugging logic.
 * Fairly light, and fairly simple.
 * Very agnostic, and with no external dependencies.
+
+## Research
+
+* https://github.com/WICG/spatial-navigation
+* https://github.com/NoriginMedia/Norigin-Spatial-Navigation
+* https://gist.github.com/rygorous/6981057

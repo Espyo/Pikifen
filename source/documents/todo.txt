@@ -17,14 +17,11 @@ Next tasks (roughly sorted most important first)
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
+        Spatial navigation
+            It should only loop around if it couldn't find anything else
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
-            https://github.com/WICG/spatial-navigation
-            https://github.com/NoriginMedia/Norigin-Spatial-Navigation
-            https://gist.github.com/rygorous/6981057
-        Logic to remember where it came from
-        Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
-        Logic to use the corners instead of centers
-        Logic to use Euclidean distance or taxicab distance
+            Logic to remember where it came from
+            Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager

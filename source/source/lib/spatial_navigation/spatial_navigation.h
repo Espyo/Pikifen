@@ -14,6 +14,9 @@
 #include <vector>
 
 
+//#define SPAT_NAV_DEBUG
+
+
 namespace SpatNav {
 
 //Full circle, in radians.
@@ -38,12 +41,126 @@ enum DIRECTION {
 };
 
 
+//Ways to calculate the distance between two points, when scoring which item
+//is better.
+enum DIST_CALC_METHOD {
+
+    //Normal Euclidean distance.
+    DIST_CALC_METHOD_EUCLIDEAN,
+    
+    //Taxicab distance, i.e. dx + dy.
+    DIST_CALC_METHOD_TAXICAB,
+    
+    //Taxicab distance, but the axis that's not in the direction of navigation
+    //receives double the score.
+    DIST_CALC_METHOD_TAXICAB_2,
+    
+};
+
 
 /**
  * @brief Manager for the spatial navigation algorithm.
  */
 class Interface {
 
+public:
+
+    //--- Members ---
+    
+    //Settings for how it works.
+    struct Settings {
+    
+        //--- Members ---
+        
+        //Top-left corner's X coordinate.
+        float limitX1 = 0.0f;
+        
+        //Top-left corner's Y coordinate.
+        float limitY1 = 0.0f;
+        
+        //Bottom-right corner's X coordinate.
+        float limitX2 = 0.0f;
+        
+        //Bottom-right corner's Y coordinate.
+        float limitY2 = 0.0f;
+        
+        //Whether it loops around when it reaches a limit.
+        bool loop = true;
+        
+    } settings;
+    
+    //Heuristics for how it decides on items.
+    struct Heuristics {
+    
+        //If not zero, if the item's relative angle with the current focus
+        //position is within this reach, the item gets ignored. This is
+        //useful to stop a horizontal list of items with no vertical variance
+        //from picking another item when the navigation direction is up,
+        //for instance. [0 - TAU/4]
+        float minBlindspotAngle = (float) (TAU * 0.24f);
+        
+        //See minBlindspotAngle.
+        float maxBlindspotAngle = (float) (TAU * 0.25f);
+        
+        //If true, only use the center coordinates of items when comparing them.
+        //If false, use the closest point along the limits, which takes the
+        //item's width and height into account.
+        bool centerOnly = false;
+        
+        //Distance calculation method.
+        DIST_CALC_METHOD distCalcMethod = DIST_CALC_METHOD_TAXICAB;
+        
+    } heuristics;
+    
+    
+#ifdef SPAT_NAV_DEBUG
+    
+    /**
+     * @brief Represents an item when it was checked for the latest navigation.
+     */
+    struct DebugItem {
+    
+        //--- Members ---
+        
+        //X of the point on the focus that was checked.
+        double focusX = 0.0f;
+        
+        //Y of the point on the focus that was checked.
+        double focusY = 0.0f;
+        
+        //X of the point on the item that was checked.
+        double itemX = 0.0f;
+        
+        //Y of the point on the item that was checked.
+        double itemY = 0.0f;
+        
+        //Score that this item received.
+        double score = 0.0f;
+        
+        //Whether it got calculated or discarded.
+        bool accepted = false;
+        
+    };
+    
+    //Information about how each item fared in the latest navigation.
+    std::map<void*, DebugItem> lastNavInfo;
+    
+#endif
+    
+    
+    //--- Function declarations ---
+    
+    ~Interface();
+    bool addItem(void* id, float x, float y, float w, float h);
+    bool setParentItem(void* childId, void* parentId);
+    bool clearItems();
+    void* navigate(DIRECTION direction, void* focusedItemId);
+    void* navigate(
+        DIRECTION direction,
+        float focusX, float focusY, float focusW, float focusH
+    );
+    
+    
 protected:
 
     //--- Misc. definitions ---
@@ -52,8 +169,8 @@ protected:
     //How much to flatten the coordinates of children outside their parents'
     //limits by.
     static constexpr float FLATTEN_FACTOR = 0.0001f;
-
-
+    
+    
     /**
      * @brief Represents an item in the interface. It can be inside of a parent
      * item.
@@ -94,63 +211,6 @@ protected:
     };
     
     
-public:
-
-    //--- Members ---
-    
-    //Settings for how it works.
-    struct Settings {
-    
-        //--- Members ---
-        
-        //Top-left corner's X coordinate.
-        float limitX1 = 0.0f;
-        
-        //Top-left corner's Y coordinate.
-        float limitY1 = 0.0f;
-        
-        //Bottom-right corner's X coordinate.
-        float limitX2 = 0.0f;
-        
-        //Bottom-right corner's Y coordinate.
-        float limitY2 = 0.0f;
-        
-        //Whether it loops around when it reaches a limit.
-        bool loop = true;
-        
-    } settings;
-    
-    //Heuristics for how it decides on items.
-    struct Heuristics {
-    
-        //If not zero, if the item's relative angle with the current focus
-        //position is within this reach, the item gets ignored. This is
-        //useful to stop a horizontal list of items with no vertical variance
-        //from picking another item when the navigation direction is up,
-        //for instance.
-        float minBlindspotAngle = (float) (TAU * 0.17f);
-        
-        //See minBlindspotAngle.
-        float maxBlindspotAngle = (float) (TAU * 0.33f);
-        
-        //Only use the center coordinates of items, sans dimensions.
-        bool centerOnly = true; //TODO
-        
-    } heuristics;
-    
-    
-    //--- Function declarations ---
-    
-    ~Interface();
-    bool addItem(void* id, float x, float y, float w, float h);
-    bool setParentItem(void* childId, void* parentId);
-    bool clearItems();
-    void* navigate(DIRECTION direction, void* focusedItemId);
-    void* navigate(DIRECTION direction, float focusX, float focusY);
-    
-    
-protected:
-
     //--- Members ---
     
     //All registered items.
@@ -173,7 +233,8 @@ protected:
         double limitX1, double limitY1, double limitX2, double limitY2
     );
     void* doNavigation(
-        DIRECTION direction, void* focusedItemId, float focusX, float focusY,
+        DIRECTION direction, void* focusedItemId,
+        float focusX, float focusY, float focusW, float focusH,
         bool focusAtDirectionStart
     );
     void flattenItems();
@@ -182,10 +243,15 @@ protected:
         float limitX1, float limitY1, float limitX2, float limitY2
     );
     void getItemRelativeUnits(
-        Item* iPtr, DIRECTION direction, float focusX, float focusY,
+        Item* iPtr, DIRECTION direction,
+        float focusX, float focusY, float focusW, float focusH,
         double* outRelX, double* outRelY, double* outRelW, double* outRelH
     );
     std::vector<Item*> getItemChildren(void* id);
+    void getItemDiffs(
+        float focusX, float focusY, float focusW, float focusH,
+        Item* iPtr, DIRECTION direction, double* outDiffX, double* outDiffY
+    );
     Item* getItemParent(void* id);
     double getItemScore(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
@@ -193,6 +259,7 @@ protected:
     void getLimits(
         double* limitX1, double* limitY1, double* limitX2, double* limitY2
     ) const;
+    bool itemHasChildren(void* id) const;
     
 };
 
