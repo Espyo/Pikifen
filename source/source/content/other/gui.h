@@ -22,6 +22,7 @@
 #include "../../core/controls_mediator.h"
 #include "../../core/misc_structs.h"
 #include "../../lib/data_file/data_file.h"
+#include "../../lib/spatial_navigation/spatial_navigation.h"
 #include "../../util/drawing_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
@@ -655,6 +656,9 @@ private:
     
     //Are the items currently visible?
     bool visible = true;
+    
+    //Spatial navigation algorithm interface.
+    SpatNav::Interface sNInterface;
     
     //Focus cursor.
     struct FocusCursor {

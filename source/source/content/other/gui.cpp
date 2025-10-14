@@ -17,7 +17,6 @@
 #include "../../core/drawing.h"
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
-#include "../../lib/spatial_navigation/spatial_navigation.h"
 #include "../../util/string_utils.h"
 
 
@@ -704,6 +703,28 @@ bool GuiManager::draw() {
         );
     }
     
+#ifdef SPAT_NAV_DEBUG
+    for(const auto& i : sNInterface.lastNavInfo) {
+        al_draw_filled_circle(
+            i.second.focusX, i.second.focusY, 3, al_map_rgb(0, 0, 255)
+        );
+        al_draw_filled_circle(
+            i.second.itemX, i.second.itemY, 3,
+            i.second.accepted ?
+            al_map_rgba(0, 255, 0, 192) :
+            al_map_rgba(255, 0, 0, 192)
+        );
+        al_draw_text(
+            game.sysContent.fntBuiltin,
+            i.second.accepted ?
+            al_map_rgba(0, 255, 0, 192) :
+            al_map_rgba(255, 0, 0, 192),
+            i.second.itemX, i.second.itemY, ALLEGRO_ALIGN_CENTER,
+            f2s(i.second.score).c_str()
+        );
+    }
+#endif
+    
     return true;
 }
 
@@ -1037,7 +1058,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     
     //Fill in the data for the spatial navigation algorithm.
-    SpatNav::Interface sNInterface;
+    sNInterface.clearItems();
     bool hasItems = false;
     SpatNav::DIRECTION direction = SpatNav::DIRECTION_RIGHT;
     switch(action.actionTypeId) {
