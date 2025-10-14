@@ -295,13 +295,13 @@ enum CONTROLS_GAME_STATE {
 
     //Menus outside the gameplay state.
     CONTROLS_GAME_STATE_MENUS,
-
+    
     //Interlude in the gameplay state.
     CONTROLS_GAME_STATE_INTERLUDE,
-
+    
     //Normal gameplay.
     CONTROLS_GAME_STATE_GAMEPLAY,
-
+    
 };
 
 
@@ -343,6 +343,9 @@ struct ControlsMediator {
     
     //--- Function declarations ---
     
+    bool actionTypesShareInputSource(
+        const vector<PLAYER_ACTION_TYPE> actionTypes
+    );
     void addPlayerActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,
@@ -363,6 +366,7 @@ struct ControlsMediator {
     Inpution::Bind findBind(
         const string& actionTypeName
     ) const;
+    float getInputSourceValue(const Inpution::InputSource& source) const;
     PlayerActionType getPlayerActionType(int actionId) const;
     string getPlayerActionTypeInternalName(int actionId);
     float getPlayerActionTypeValue(
@@ -379,7 +383,9 @@ struct ControlsMediator {
     void setGameState(CONTROLS_GAME_STATE state);
     void setOptions(const Inpution::ManagerOptions& options);
     void startIgnoringActions();
-    void startIgnoringInputSource(const Inpution::InputSource& inputSource);
+    void startIgnoringInputSource(
+        const Inpution::InputSource& inputSource, bool nowOnly
+    );
     void stopIgnoringActions();
     
     private:

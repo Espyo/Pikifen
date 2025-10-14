@@ -274,8 +274,8 @@ struct ManagerOptions {
  */
 struct Manager {
 
-public:
-
+    public:
+    
     //--- Members ---
     
     //Map of all registered action types, using their IDs as the key.
@@ -293,17 +293,18 @@ public:
     
     //--- Function declarations ---
     
+    float getInputSourceValue(const Inpution::InputSource& source) const;
     float getValue(int actionTypeId) const;
     bool handleInput(const Input& input);
-    bool startIgnoringInputSource(const InputSource& inputSource);
     vector<Action> newFrame(float deltaT);
     bool reinsertAction(const Action& action);
     bool releaseEverything();
     bool setGameState(const string& name = "");
+    bool startIgnoringInputSource(const InputSource& inputSource, bool nowOnly);
     
     
-protected:
-
+    protected:
+    
     //--- Structs ---
     
     /**
@@ -318,43 +319,60 @@ protected:
         float value = 0.0f;
         
     };
-
-
+    
+    
     /**
      * @brief Represents an action type's status in a given game state.
      */
     struct ActionTypeGameStateStatus {
-
+    
         //Current value.
         float value = 0.0f;
-
+        
         //How long it's been been active (!= 0) or inactive (== 0) for.
         float activationStateDuration = 0.0f;
         
         //How long until the next auto-repeat activation.
         float nextAutoRepeatActivation = 0.0f;
-
+        
     };
-
-
+    
+    
     /**
      * @brief Represents one of the game's macro states.
      */
     struct GameState {
-
+    
         //--- Members ---
-
+        
         //Status of each action type in this game state.
         map<int, ActionTypeGameStateStatus> actionTypeStatuses;
-
+        
     };
-
+    
+    
+    /**
+     * @brief Rule for ignoring a given input source.
+     */
+    struct IgnoreRule {
+    
+        //--- Members ---
+        
+        //The input source to ignore.
+        InputSource source;
+        
+        //Whether it should only be ignored if it's active now, or if it can
+        //wait until the next time it's active.
+        bool nowOnly = true;
+        
+    };
+    
     
     //--- Members ---
     
     //Global status of each action type.
     map<int, ActionTypeGlobalStatus> actionTypeGlobalStatuses;
-
+    
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
     
@@ -368,8 +386,8 @@ protected:
     map<InputSource, float> inputSourceValues;
     
     //Input sources currently being ignored.
-    vector<InputSource> ignoredInputSources;
-
+    vector<IgnoreRule> ignoredInputSources;
+    
     //Name of the current game state, or empty if none specified.
     string curGameStateName;
     

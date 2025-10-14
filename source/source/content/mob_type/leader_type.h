@@ -111,6 +111,9 @@ enum LEADER_STATE {
     //Mid Go Here, inactive.
     LEADER_STATE_INACTIVE_MID_GO_HERE,
     
+    //In the inventory menu.
+    LEADER_STATE_IN_INVENTORY,
+    
     //Sleeping, waiting to move.
     LEADER_STATE_SLEEPING_WAITING,
     

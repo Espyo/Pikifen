@@ -290,6 +290,9 @@ enum MOB_EV {
     //When the leader uses a spray.
     LEADER_EV_SPRAY,
     
+    //When the leader opens the inventory.
+    LEADER_EV_INVENTORY,
+    
     //When the leader lies down.
     LEADER_EV_LIE_DOWN,
     
@@ -302,7 +305,7 @@ enum MOB_EV {
     //When the leader has to follow a path via Go Here.
     LEADER_EV_GO_HERE,
     
-    //When the leader's pluck is canceled.
+    //When the leader's current "thing" is canceled.
     LEADER_EV_CANCEL,
     
     

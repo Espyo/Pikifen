@@ -469,6 +469,7 @@ private:
     void doGameplayLogic(float deltaT);
     void doMenuLogic();
     void doPlayerActionDismiss(Player* player, bool isDown);
+    void doPlayerActionInventory(Player* player, bool isDown);
     void doPlayerActionLieDown(Player* player, bool isDown);
     void doPlayerActionPause(Player* player, bool isDown, bool radar);
     void doPlayerActionSwitchLeader(Player* player, bool isDown, bool isNext);

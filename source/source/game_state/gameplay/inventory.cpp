@@ -92,6 +92,13 @@ void Inventory::close() {
         GUI_MANAGER_ANIM_FADE_OUT, INVENTORY::FADE_DURATION
     );
     isOpen = false;
+    
+    //Ignore the mouse click used to press any of the inventory GUI items,
+    //if any.
+    Inpution::InputSource lmb;
+    lmb.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON;
+    lmb.buttonNr = 1;
+    game.controls.startIgnoringInputSource(lmb, true);
 }
 
 
@@ -164,7 +171,7 @@ void Inventory::initGui() {
         new ButtonGuiItem("Close", game.sysContent.fntStandard);
     gui.backItem->onActivate =
     [this] (const Point&) {
-        close();
+        requestClose();
     };
     gui.backItem->onGetTooltip =
     [] () { return "Close inventory"; };
@@ -174,6 +181,7 @@ void Inventory::initGui() {
     guiAddBackInputIcon(&gui, "close_input");
     
     //Finishing touches.
+    gui.responsive = false;
     gui.hideItems();
 }
 
@@ -327,6 +335,15 @@ void Inventory::populateInventoryListGui() {
 
 
 /**
+ * @brief Request to the leader that the inventory gets closed.
+ */
+void Inventory::requestClose() {
+    if(!player->leaderPtr) return;
+    player->leaderPtr->fsm.runEvent(LEADER_EV_CANCEL);
+}
+
+
+/**
  * @brief Ticks time by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -348,7 +365,6 @@ void Inventory::tick(float deltaT) {
  */
 void Inventory::tryUseItem(size_t itemIdx) {
     if(canUseItem(&items[itemIdx])) items[itemIdx].onUse();
-    close();
 }
 
 

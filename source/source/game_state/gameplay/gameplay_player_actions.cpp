@@ -30,6 +30,19 @@ void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
 
 
 /**
+ * @brief Does the logic for the inventory player action.
+ *
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionInventory(Player* player, bool isDown) {
+    if(!isDown) return;
+    
+    player->leaderPtr->fsm.runEvent(LEADER_EV_INVENTORY);
+}
+
+
+/**
  * @brief Does the logic for the lie down player action.
  *
  * @param player The player responsible.
@@ -63,7 +76,7 @@ void GameplayState::doPlayerActionPause(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
-    player->inventory->close();
+    player->inventory->requestClose();
 }
 
 
@@ -310,7 +323,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
-            player->inventory->close();
+            player->inventory->requestClose();
             paused = true;
             game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
             game.audio.handleWorldPause();
@@ -560,7 +573,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         );
     }
     
-    if(!msgBox && !onionMenu && !pauseMenu && !player->inventory->isOpen) {
+    if(!msgBox && !onionMenu && !pauseMenu) {
     
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_RIGHT:
@@ -683,6 +696,18 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             
         } case PLAYER_ACTION_TYPE_PAUSE:
         case PLAYER_ACTION_TYPE_RADAR: {
+            if(player->inventory->isOpen) {
+                bool backAndPauseMatch =
+                    game.controls.actionTypesShareInputSource(
+                {PLAYER_ACTION_TYPE_PAUSE, PLAYER_ACTION_TYPE_MENU_BACK}
+                    );
+                if(backAndPauseMatch) {
+                    //The player likely meant to just close the inventory,
+                    //not pause the game.
+                    break;
+                }
+            }
+            
             doPlayerActionPause(
                 player, isDown,
                 action.actionTypeId == PLAYER_ACTION_TYPE_RADAR
@@ -690,7 +715,9 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             break;
             
         } case PLAYER_ACTION_TYPE_INVENTORY: {
-            if(isDown) player->inventory->open();
+            doPlayerActionInventory(
+                player, isDown
+            );
             break;
             
         } case PLAYER_ACTION_TYPE_USE_SPRAY_1:
@@ -759,12 +786,13 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             msgBox->close();
         }
         
-    } else if(player->inventory->isOpen) {
+    }
+    
+    if(player->inventory->isOpen) {
         //In the inventory.
         player->inventory->handlePlayerAction(action);
         
     }
-    
 }
 
 

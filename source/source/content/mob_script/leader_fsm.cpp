@@ -154,6 +154,10 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(LEADER_EV_SPRAY); {
             efc.changeState("spraying");
         }
+        efc.newEvent(LEADER_EV_INVENTORY); {
+            efc.run(LeaderFsm::standStill);
+            efc.changeState("in_inventory");
+        }
         efc.newEvent(LEADER_EV_LIE_DOWN); {
             efc.run(LeaderFsm::fallAsleep);
             efc.changeState("sleeping_waiting");
@@ -997,6 +1001,37 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
+    efc.newState("in_inventory", LEADER_STATE_IN_INVENTORY); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(LeaderFsm::standStill);
+            efc.run(LeaderFsm::openInventory);
+        }
+        efc.newEvent(MOB_EV_ON_LEAVE); {
+            efc.run(LeaderFsm::closeInventory);
+        }
+        efc.newEvent(LEADER_EV_CANCEL); {
+            efc.changeState("active");
+        }
+        efc.newEvent(LEADER_EV_SPRAY); {
+            efc.changeState("spraying");
+        }
+        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(LeaderFsm::beAttacked);
+        }
+        efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(LeaderFsm::touchedHazard);
+        }
+        efc.newEvent(MOB_EV_LEFT_HAZARD); {
+            efc.run(LeaderFsm::leftHazard);
+        }
+        efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(LeaderFsm::touchedSpray);
+        }
+        efc.newEvent(MOB_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
+        }
+    }
+    
     efc.newState("sleeping_waiting", LEADER_STATE_SLEEPING_WAITING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
@@ -1815,6 +1850,20 @@ void LeaderFsm::clearTimer(Mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader closes the inventory.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::closeInventory(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
+    if(!leaPtr->player) return;
+    leaPtr->player->inventory->close();
+}
+
+
+/**
  * @brief When a leader must decide what to do next after plucking.
  *
  * @param m The mob.
@@ -2347,6 +2396,20 @@ void LeaderFsm::notifyPikminRelease(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     if(leaPtr->holding.empty()) return;
     leaPtr->holding[0]->fsm.runEvent(MOB_EV_RELEASED);
+}
+
+
+/**
+ * @brief When a leader opens the inventory.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::openInventory(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
+    if(!leaPtr->player) return;
+    leaPtr->player->inventory->open();
 }
 
 

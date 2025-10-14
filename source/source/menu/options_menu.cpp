@@ -526,7 +526,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             }
             capturingInput = 2;
             game.controls.stopIgnoringActions();
-            game.controls.startIgnoringInputSource(input.source);
+            game.controls.startIgnoringInputSource(input.source, true);
             mustPopulateBinds = true;
         }
         return;

@@ -95,6 +95,21 @@ vector<int> Manager::getActionTypesFromInput(
 
 
 /**
+ * @brief Returns the current value of an input source.
+ *
+ * @param source The source.
+ * @return The value, or 0.0f if not found.
+ */
+float Manager::getInputSourceValue(
+    const Inpution::InputSource& source
+) const {
+    const auto it = inputSourceValues.find(source);
+    if(it == inputSourceValues.end()) return 0.0f;
+    return inputSourceValues.at(source);
+}
+
+
+/**
  * @brief Returns the current value of a given action type.
  *
  * @param actionTypeId ID of the action type.
@@ -279,6 +294,19 @@ vector<Action> Manager::newFrame(float deltaT) {
         result = actionQueue;
     }
     
+    //Clear any ignore rules that were meant to apply now only, but their
+    //input isn't > 0, so they no longer valid.
+    for(size_t i = 0; i < ignoredInputSources.size();) {
+        if(
+            ignoredInputSources[i].nowOnly &&
+            inputSourceValues[ignoredInputSources[i].source] == 0.0f
+        ) {
+            ignoredInputSources.erase(ignoredInputSources.begin() + i);
+        } else {
+            i++;
+        }
+    }
+    
     //Prepare things for the next frame.
     for(auto& a : actionTypeGlobalStatuses) {
         curGameState.actionTypeStatuses[a.first].value = a.second.value;
@@ -341,11 +369,9 @@ void Manager::processAutoRepeats(
  * @param input Input to check.
  * @return Whether it should be ignored.
  */
-bool Manager::processInputIgnoring(
-    const Input& input
-) {
+bool Manager::processInputIgnoring(const Input& input) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
-        if(ignoredInputSources[i] == input.source) {
+        if(ignoredInputSources[i].source == input.source) {
             if(input.value != 0.0f) {
                 //We just ignore it and keep it on the list.
                 return true;
@@ -426,7 +452,10 @@ bool Manager::releaseEverything() {
  * a second, held B again, and unpaused, tou probably don't want the regular
  * gameplay state to be aware of the special move 0 and special move 1
  * actions.
- * 
+ * For menus, ideally you'd have some interval after the menu is closed in which
+ * no actions are processed, so that the "menu close 1" input doesn't get
+ * immediately consumed by normal gameplay.
+ *
  * @param name Name of the game state.
  * @return Whether it succeeded.
  */
@@ -441,18 +470,21 @@ bool Manager::setGameState(const string& name) {
  * input with value 0, at which point it becomes unignored.
  *
  * @param inputSource Input source to ignore.
+ * @param nowOnly If true, only apply to inputs that are currently already
+ * held down (> 0) this frame.
+ * If false, leave the ignore rule until the next time it's pressed down.
  * @return Whether it succeeded.
  */
 bool Manager::startIgnoringInputSource(
-    const InputSource& inputSource
+    const InputSource& inputSource, bool nowOnly
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
-        if(ignoredInputSources[i] == inputSource) {
+        if(ignoredInputSources[i].source == inputSource) {
             //Already ignored.
             return false;
         }
     }
-    ignoredInputSources.push_back(inputSource);
+    ignoredInputSources.push_back({ .source = inputSource, .nowOnly = nowOnly});
     return true;
 }
 

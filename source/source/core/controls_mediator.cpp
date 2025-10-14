@@ -26,6 +26,29 @@
 
 
 /**
+ * @brief Returns whether the given action types have any binds where any of
+ * them end up sharing an input source with another one.
+ *
+ * @param actionTypes List of action types to check.
+ * @return Whether there's any sharing.
+ */
+bool ControlsMediator::actionTypesShareInputSource(
+    const vector<PLAYER_ACTION_TYPE> actionTypes
+) {
+    set<Inpution::InputSource> sourcesUsed;
+    const vector<Inpution::Bind>& allBinds = binds();
+    for(size_t b = 0; b < allBinds.size(); b++) {
+        if(!isInContainer(actionTypes, allBinds[b].actionTypeId)) continue;
+        if(sourcesUsed.find(allBinds[b].inputSource) != sourcesUsed.end()) {
+            return true;
+        }
+        sourcesUsed.insert(allBinds[b].inputSource);
+    }
+    return false;
+}
+
+
+/**
  * @brief Adds a new player action to the list.
  *
  * @param id Its ID.
@@ -188,6 +211,19 @@ Inpution::Bind ControlsMediator::findBind(
 const vector<PlayerActionType>
 & ControlsMediator::getAllPlayerActionTypes() const {
     return playerActionTypes;
+}
+
+
+/**
+ * @brief Returns the current value of an input source.
+ *
+ * @param source The source.
+ * @return The value, or 0.0f if not found.
+ */
+float ControlsMediator::getInputSourceValue(
+    const Inpution::InputSource& source
+) const {
+    return mgr.getInputSourceValue(source);
 }
 
 
@@ -406,7 +442,7 @@ void ControlsMediator::saveBindsToDataNode(
 
 /**
  * @brief Sets the game state for the controls manager.
- * 
+ *
  * @param state The state.
  */
 void ControlsMediator::setGameState(CONTROLS_GAME_STATE state) {
@@ -448,11 +484,13 @@ void ControlsMediator::startIgnoringActions() {
  * input with value 0, at which point it becomes unignored.
  *
  * @param inputSource Input source to ignore.
+ * @param nowOnly If true, only apply to inputs that are currently held down.
+ * If false, leave the ignoring until the next time it's pressed down.
  */
 void ControlsMediator::startIgnoringInputSource(
-    const Inpution::InputSource& inputSource
+    const Inpution::InputSource& inputSource, bool nowOnly
 ) {
-    mgr.startIgnoringInputSource(inputSource);
+    mgr.startIgnoringInputSource(inputSource, nowOnly);
 }
 
 
