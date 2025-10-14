@@ -405,8 +405,13 @@ void MainMenu::initGuiMainPage() {
     //Discord server button.
     ButtonGuiItem* discordButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
+    discordButton->isSquare = true;
     discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
+        drawFilledRoundedRectangle(
+            draw.center, draw.size, 4.0f,
+            tintColor(al_map_rgba(128, 128, 128, 128), draw.tint)
+        );
         drawBitmapInBox(
             game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true,
             0.0f, draw.tint
@@ -433,8 +438,13 @@ void MainMenu::initGuiMainPage() {
     //GitHub page button.
     ButtonGuiItem* githubButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
+    githubButton->isSquare = true;
     githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
+        drawFilledRoundedRectangle(
+            draw.center, draw.size, 4.0f,
+            tintColor(al_map_rgba(192, 192, 192, 128), draw.tint)
+        );
         drawBitmapInBox(
             game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true,
             0.0f, draw.tint
@@ -451,7 +461,7 @@ void MainMenu::initGuiMainPage() {
         openWebBrowser(GITHUB_PAGE_URL);
     };
     githubButton->onGetTooltip =
-    [] () { return "Open the project's GitHub (development) page!"; };
+    [] () { return "Open the project's development page on GitHub!"; };
     mainGui.addItem(githubButton, "github");
     
     //Exit button.
