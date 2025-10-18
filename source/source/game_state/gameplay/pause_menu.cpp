@@ -1738,7 +1738,6 @@ void PauseMenu::initConfirmationPage() {
     confirmationGui.registerCoords("cancel",           19, 83, 30, 10);
     confirmationGui.registerCoords("cancel_input",      5, 87,  4,  4);
     confirmationGui.registerCoords("confirm",          81, 83, 30, 10);
-    confirmationGui.registerCoords("header",           50,  8, 92,  8);
     confirmationGui.registerCoords("explanation",      50, 40, 84, 20);
     confirmationGui.registerCoords("options_reminder", 50, 69, 92, 10);
     confirmationGui.registerCoords("tooltip",          50, 96, 96,  4);
@@ -1776,11 +1775,6 @@ void PauseMenu::initConfirmationPage() {
     };
     confirmationGui.addItem(confirmButton, "confirm");
     
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem("Are you sure?", game.sysContent.fntAreaName);
-    confirmationGui.addItem(headerText, "header");
-    
     //Explanation text.
     confirmationExplanationText =
         new TextGuiItem("", game.sysContent.fntStandard);
@@ -1797,7 +1791,7 @@ void PauseMenu::initConfirmationPage() {
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
-        new TooltipGuiItem(&gui);
+        new TooltipGuiItem(&confirmationGui);
     confirmationGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
@@ -1813,12 +1807,10 @@ void PauseMenu::initConfirmationPage() {
 void PauseMenu::initMainPauseMenu() {
     //Menu items.
     DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME];
-    gui.registerCoords("header",           50,    5, 52,  6);
     gui.registerCoords("left_page",        12,    5, 20,  6);
     gui.registerCoords("left_page_input",   3,    7,  4,  4);
     gui.registerCoords("right_page",       88,    5, 20,  6);
     gui.registerCoords("right_page_input", 97,    7,  4,  4);
-    gui.registerCoords("line",             50,   11, 96,  2);
     gui.registerCoords("area_name",        50,   20, 96,  8);
     gui.registerCoords("area_subtitle",    50, 28.5, 88,  9);
     gui.registerCoords("continue",         13,   88, 22,  8);
@@ -1832,29 +1824,8 @@ void PauseMenu::initMainPauseMenu() {
     gui.registerCoords("tooltip",          50,   96, 96,  4);
     gui.readDataFile(guiFile);
     
-    //Header.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "PAUSED", game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE
-    );
-    gui.addItem(headerText, "header");
-    
     //Page buttons and inputs.
     createPageButtons(PAUSE_MENU_PAGE_SYSTEM, &gui);
-    
-    //Line.
-    GuiItem* line = new GuiItem();
-    line->onDraw =
-    [] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center,
-            Point(draw.size.x, 3.0f),
-            2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
-    gui.addItem(line, "line");
     
     //Area name.
     TextGuiItem* areaNameText =
@@ -2073,12 +2044,10 @@ void PauseMenu::initMissionPage() {
         &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
         
     //Menu items.
-    missionGui.registerCoords("header",           50,  5, 52,  6);
     missionGui.registerCoords("left_page",        12,  5, 20,  6);
     missionGui.registerCoords("left_page_input",   3,  7,  4,  4);
     missionGui.registerCoords("right_page",       88,  5, 20,  6);
     missionGui.registerCoords("right_page_input", 97,  7,  4,  4);
-    missionGui.registerCoords("line",             50, 11, 96,  2);
     missionGui.registerCoords("continue",         10, 16, 16,  4);
     missionGui.registerCoords("continue_input",    3, 17,  4,  4);
     missionGui.registerCoords("goal_header",      50, 16, 60,  4);
@@ -2093,29 +2062,8 @@ void PauseMenu::initMissionPage() {
     missionGui.registerCoords("tooltip",          50, 96, 96,  4);
     missionGui.readDataFile(guiFile);
     
-    //Header.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "MISSION", game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE
-    );
-    missionGui.addItem(headerText, "header");
-    
     //Page buttons and inputs.
     createPageButtons(PAUSE_MENU_PAGE_MISSION, &missionGui);
-    
-    //Line.
-    GuiItem* line = new GuiItem();
-    line->onDraw =
-    [] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center,
-            Point(draw.size.x, 3.0f),
-            2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
-    missionGui.addItem(line, "line");
     
     //Continue button.
     missionGui.backItem =
@@ -2229,12 +2177,10 @@ void PauseMenu::initRadarPage() {
 #undef loader
     
     //Menu items.
-    radarGui.registerCoords("header",              50,     5,    52,    6);
     radarGui.registerCoords("left_page",           12,     5,    20,    6);
     radarGui.registerCoords("left_page_input",      3,     7,     4,    4);
     radarGui.registerCoords("right_page",          88,     5,    20,    6);
     radarGui.registerCoords("right_page_input",    97,     7,     4,    4);
-    radarGui.registerCoords("line",                50,    11,    96,    2);
     radarGui.registerCoords("continue",            10,    16,    16,    4);
     radarGui.registerCoords("continue_input",       3,    17,     4,    4);
     radarGui.registerCoords("radar",               37.5,  56.25, 70,   72.5);
@@ -2249,29 +2195,8 @@ void PauseMenu::initRadarPage() {
     radarGui.registerCoords("tooltip",             50,    96,    96,    4);
     radarGui.readDataFile(guiFile);
     
-    //Header.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "RADAR", game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE
-    );
-    radarGui.addItem(headerText, "header");
-    
     //Page buttons and inputs.
     createPageButtons(PAUSE_MENU_PAGE_RADAR, &radarGui);
-    
-    //Line.
-    GuiItem* line = new GuiItem();
-    line->onDraw =
-    [] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center,
-            Point(draw.size.x, 3.0f),
-            2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
-    radarGui.addItem(line, "line");
     
     //Continue button.
     radarGui.backItem =
@@ -2495,12 +2420,10 @@ void PauseMenu::initStatusPage() {
         &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
         
     //Menu items.
-    statusGui.registerCoords("header",           50,     5,   52,    6);
     statusGui.registerCoords("left_page",        12,     5,   20,    6);
     statusGui.registerCoords("left_page_input",   3,     7,    4,    4);
     statusGui.registerCoords("right_page",       88,     5,   20,    6);
     statusGui.registerCoords("right_page_input", 97,     7,    4,    4);
-    statusGui.registerCoords("line",             50,    11,   96,    2);
     statusGui.registerCoords("continue",         10,    16,   16,    4);
     statusGui.registerCoords("continue_input",    3,    17,    4,    4);
     statusGui.registerCoords("list_header",      50,    23.5, 88,    7);
@@ -2511,29 +2434,8 @@ void PauseMenu::initStatusPage() {
     statusGui.registerCoords("tooltip",          50,    96,   96,    4);
     statusGui.readDataFile(guiFile);
     
-    //Header.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "STATUS", game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE
-    );
-    statusGui.addItem(headerText, "header");
-    
     //Page buttons and inputs.
     createPageButtons(PAUSE_MENU_PAGE_STATUS, &statusGui);
-    
-    //Line.
-    GuiItem* line = new GuiItem();
-    line->onDraw =
-    [] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center,
-            Point(draw.size.x, 3.0f),
-            2.0f,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
-    statusGui.addItem(line, "line");
     
     //Continue button.
     statusGui.backItem =

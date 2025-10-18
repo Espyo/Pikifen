@@ -57,7 +57,6 @@ OnionMenu::OnionMenu(
     }
     
     DataNode* guiFile = &game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME];
-    gui.registerCoords("instructions",       50,     5,   90,    5);
     gui.registerCoords("cancel",           8.75, 16.25, 12.5, 12.5);
     gui.registerCoords("cancel_input",      2.5,  22.5,    4,    4);
     gui.registerCoords("ok",               8.75, 71.25, 12.5, 12.5);
@@ -83,14 +82,6 @@ OnionMenu::OnionMenu(
     gui.registerCoords("group_all_button",    40,    85, 12.5,  20);
     gui.registerCoords("full_type_all",     57.5,    50, 12.5,  90);
     gui.readDataFile(typeGuiFile);
-    
-    //Instructions text.
-    TextGuiItem* instructionsText =
-        new TextGuiItem(
-        "Call or store Pikmin", game.sysContent.fntStandard,
-        al_map_rgb(188, 230, 230)
-    );
-    gui.addItem(instructionsText, "instructions");
     
     //Cancel button.
     gui.backItem =

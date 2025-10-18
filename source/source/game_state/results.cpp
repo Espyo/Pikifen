@@ -348,9 +348,7 @@ void Results::load() {
     gui.registerCoords("end_reason",       15, 28, 26,  4);
     gui.registerCoords("medal",            85, 15, 22, 22);
     gui.registerCoords("medal_reason",     85, 28, 26,  4);
-    gui.registerCoords("conclusion_label", 50, 32, 36,  4);
     gui.registerCoords("conclusion",       50, 36, 96,  4);
-    gui.registerCoords("stats_label",      50, 42, 36,  4);
     gui.registerCoords("stats",            50, 63, 80, 38);
     gui.registerCoords("stats_scroll",     93, 63,  2, 38);
     gui.registerCoords("retry",            20, 88, 24,  8);
@@ -509,14 +507,6 @@ void Results::load() {
         gui.addItem(medalReasonText, "medal_reason");
     }
     
-    //Conclusion label text.
-    string conclusionLabel = "Conclusion:";
-    TextGuiItem* conclusionLabelText =
-        new TextGuiItem(
-        conclusionLabel, game.sysContent.fntStandard, mapAlpha(192)
-    );
-    gui.addItem(conclusionLabelText, "conclusion_label");
-    
     //Conclusion text.
     string conclusion;
     switch(game.curAreaData->type) {
@@ -573,13 +563,6 @@ void Results::load() {
     TextGuiItem* conclusionText =
         new TextGuiItem(conclusion, game.sysContent.fntStandard);
     gui.addItem(conclusionText, "conclusion");
-    
-    //Stats label text.
-    TextGuiItem* statsLabelText =
-        new TextGuiItem(
-        "Stats:", game.sysContent.fntStandard, mapAlpha(192)
-    );
-    gui.addItem(statsLabelText, "stats_label");
     
     //Stats box.
     statsList = new ListGuiItem();

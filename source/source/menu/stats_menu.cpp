@@ -102,7 +102,6 @@ void StatsMenu::initGuiMain() {
     DataNode* guiFile = &game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",        12,  5, 20,  6);
     gui.registerCoords("back_input",   3,  7,  4,  4);
-    gui.registerCoords("header",      50,  5, 50,  6);
     gui.registerCoords("list",        50, 51, 76, 82);
     gui.registerCoords("list_scroll", 91, 51,  2, 82);
     gui.registerCoords("tooltip",     50, 96, 96,  4);
@@ -122,15 +121,6 @@ void StatsMenu::initGuiMain() {
     
     //Back input icon.
     guiAddBackInputIcon(&gui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "STATISTICS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    gui.addItem(headerText, "header");
     
     //Statistics list.
     statsList = new ListGuiItem();

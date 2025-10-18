@@ -102,7 +102,6 @@ void PacksMenu::initGuiMain() {
     DataNode* guiFile = &game.content.guiDefs.list[PACKS_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",               12,    5, 20,  6);
     gui.registerCoords("back_input",          3,    7,  4,  4);
-    gui.registerCoords("header",             61,    5, 74,  6);
     gui.registerCoords("list",               26,   47, 48, 74);
     gui.registerCoords("list_scroll",        52,   47,  2, 74);
     gui.registerCoords("info_box",           76,   47, 44, 74);
@@ -133,15 +132,6 @@ void PacksMenu::initGuiMain() {
     
     //Back input icon.
     guiAddBackInputIcon(&gui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "PACKS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    gui.addItem(headerText, "header");
     
     //Packs list.
     packsList = new ListGuiItem();

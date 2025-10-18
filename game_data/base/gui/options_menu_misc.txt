@@ -6,7 +6,6 @@ engine_version=1.0.0
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	back_input=3.0000 7.0000 4.0000 4.0000
-	header=50.0000 10.0000 50.0000 6.0000
 	pikmin_bump=50.0000 23.7500 70.0000 7.5000
 	dismiss_all=50.0000 33.7500 70.0000 7.5000
 	leader_cursor_cam_weight=50.0000 43.7500 70.0000 7.5000
@@ -15,4 +14,13 @@ positions{
 	leaving_confirmation=50.0000 73.7500 70.0000 7.5000
 	maker_tools_in_play=50.0000 83.7500 70.0000 7.5000
 	tooltip=50.0000 96.0000 96.0000 4.0000
+}
+custom_items {
+	header {
+		type = text
+		coordinates = 50.0000 10.0000 50.0000 6.0000
+		color = 255 255 255 128
+		text = MISC. OPTIONS
+		font = area_name
+	}
 }

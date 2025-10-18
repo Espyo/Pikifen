@@ -567,7 +567,6 @@ void OptionsMenu::initGuiAudioPage() {
         &game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME];
     audioGui.registerCoords("back",                  12,  5,   20,  6);
     audioGui.registerCoords("back_input",             3,  7,    4,  4);
-    audioGui.registerCoords("header",                50, 10,   50,  6);
     audioGui.registerCoords("master_volume",         50, 25,   70, 10);
     audioGui.registerCoords("gameplay_sound_volume", 50, 37.5, 65, 10);
     audioGui.registerCoords("music_volume",          50, 50,   65, 10);
@@ -592,15 +591,6 @@ void OptionsMenu::initGuiAudioPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&audioGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "AUDIO OPTIONS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    audioGui.addItem(headerText, "header");
     
     vector<float> presetVolumeValues = {
         0.00f, 0.05f, 0.10f, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f,
@@ -717,7 +707,6 @@ void OptionsMenu::initGuiControlBindsPage() {
         &game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME];
     bindsGui.registerCoords("back",        12,  5, 20,  6);
     bindsGui.registerCoords("back_input",   3,  7,  4,  4);
-    bindsGui.registerCoords("header",      50,  5, 50,  6);
     bindsGui.registerCoords("list",        50, 51, 88, 82);
     bindsGui.registerCoords("list_scroll", 97, 51,  2, 82);
     bindsGui.registerCoords("tooltip",     50, 96, 96,  4);
@@ -741,15 +730,6 @@ void OptionsMenu::initGuiControlBindsPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&bindsGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "CONTROL BINDS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    bindsGui.addItem(headerText, "header");
     
     //Controls list box.
     bindsListBox = new ListGuiItem();
@@ -782,7 +762,6 @@ void OptionsMenu::initGuiControlsPage() {
         &game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME];
     controlsGui.registerCoords("back",                12,    5, 20,  6);
     controlsGui.registerCoords("back_input",           3,    7,  4,  4);
-    controlsGui.registerCoords("header",              50,   10, 50,  6);
     controlsGui.registerCoords("normal_binds",        50,   25, 70, 10);
     controlsGui.registerCoords("special_binds",       50, 36.5, 58,  9);
     controlsGui.registerCoords("leader_cursor_mouse", 50, 52.5, 70, 10);
@@ -807,15 +786,6 @@ void OptionsMenu::initGuiControlsPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&controlsGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "CONTROLS OPTIONS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    controlsGui.addItem(headerText, "header");
     
     //Normal control binds button.
     ButtonGuiItem* normalBindsButton =
@@ -935,7 +905,6 @@ void OptionsMenu::initGuiGraphicsPage() {
         &game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME];
     graphicsGui.registerCoords("back",            12,  5,   20,  6);
     graphicsGui.registerCoords("back_input",       3,  7,    4,  4);
-    graphicsGui.registerCoords("header",          50, 10,   50,  6);
     graphicsGui.registerCoords("fullscreen",      50, 25,   70, 10);
     graphicsGui.registerCoords("resolution",      50, 42.5, 70, 10);
     graphicsGui.registerCoords("cam_shake_mult",  50, 60,   70, 10);
@@ -959,15 +928,6 @@ void OptionsMenu::initGuiGraphicsPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&graphicsGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "GRAPHICS OPTIONS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    graphicsGui.addItem(headerText, "header");
     
     //Fullscreen checkbox.
     CheckGuiItem* fullscreenCheck =
@@ -1062,7 +1022,6 @@ void OptionsMenu::initGuiMiscPage() {
         &game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME];
     miscGui.registerCoords("back",                       12,     5, 20,   6);
     miscGui.registerCoords("back_input",                  3,     7,  4,   4);
-    miscGui.registerCoords("header",                     50,    10, 50,   6);
     miscGui.registerCoords("pikmin_bump",                50, 23.75, 70, 7.5);
     miscGui.registerCoords("dismiss_all",                50, 33.75, 70, 7.5);
     miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70, 7.5);
@@ -1089,15 +1048,6 @@ void OptionsMenu::initGuiMiscPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&miscGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "MISC. OPTIONS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    miscGui.addItem(headerText, "header");
     
     //Pikmin bump mode picker.
     vector<float> presetPikminBumpValues = {
@@ -1250,7 +1200,6 @@ void OptionsMenu::initGuiTopPage() {
     //Menu items.
     topGui.registerCoords("back",       12,  5, 20,  6);
     topGui.registerCoords("back_input",  3,  7,  4,  4);
-    topGui.registerCoords("header",     50, 10, 50,  6);
     topGui.registerCoords("controls",   50, 25, 65, 10);
     topGui.registerCoords("graphics",   50, 37, 65, 10);
     topGui.registerCoords("audio",      50, 49, 65, 10);
@@ -1274,15 +1223,6 @@ void OptionsMenu::initGuiTopPage() {
     
     //Back input icon.
     guiAddBackInputIcon(&topGui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "OPTIONS",
-        game.sysContent.fntAreaName,
-        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    topGui.addItem(headerText, "header");
     
     //Controls options button.
     ButtonGuiItem* controlsButton =

@@ -131,7 +131,6 @@ void Inventory::initGui() {
     DataNode* guiFile =
         &game.content.guiDefs.list[INVENTORY::GUI_FILE_NAME];
         
-    gui.registerCoords("background",  50, 49, 36, 42);
     gui.registerCoords("list",        50, 50, 32, 28);
     gui.registerCoords("list_scroll", 50, 67, 32,  2);
     gui.registerCoords("name",        57, 32, 18,  4);
@@ -139,20 +138,17 @@ void Inventory::initGui() {
     gui.registerCoords("close_input", 34, 34,  4,  4);
     gui.readDataFile(guiFile);
     
-    //Background item.
-    GuiItem* background = new GuiItem();
-    background->onDraw =
-    [] (const DrawInfo & draw) {
+    //Item list box.
+    itemList = new ListGuiItem();
+    itemList->horizontal = true;
+    itemList->onDraw =
+    [this] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center, draw.size, 20.0f,
             tintColor(al_map_rgba(24, 64, 60, 200), draw.tint)
         );
+        itemList->defDrawCode(draw);
     };
-    gui.addItem(background, "background");
-    
-    //Item list box.
-    itemList = new ListGuiItem();
-    itemList->horizontal = true;
     gui.addItem(itemList, "list");
     
     //Item list scrollbar.

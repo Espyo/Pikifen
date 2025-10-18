@@ -4,12 +4,10 @@ maker=Espyo
 version=1.0.0
 engine_version=1.0.0
 positions{
-	header=50.0000 5.0000 52.0000 6.0000
 	left_page=12.0000 5.0000 20.0000 6.0000
 	left_page_input=3.0000 7.0000 4.0000 4.0000
 	right_page=88.0000 5.0000 20.0000 6.0000
 	right_page_input=97.0000 7.0000 4.0000 4.0000
-	line=50.0000 11.0000 96.0000 2.0000
 	area_name=50.0000 20.0000 96.0000 8.0000
 	area_subtitle=50.0000 28.5000 88.0000 9.0000
 	continue=13.0000 88.0000 22.0000 8.0000
@@ -21,4 +19,19 @@ positions{
 	stats=81.0000 65.0000 26.0000 10.0000
 	quit=87.0000 88.0000 22.0000 8.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
+}
+custom_items {
+	header {
+		type = text
+		coordinates = 50.0000 5.0000 52.0000 6.0000
+		color = 255 255 255 128
+		text = PAUSED
+		font = area_name
+	}
+	line {
+		type = filled_rectangle
+		coordinates = 50.0000 11.0000 96.0000 0.5000
+		color = 255 255 255 128
+		rectangle_rounding = 2
+	}
 }

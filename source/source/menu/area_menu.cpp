@@ -530,7 +530,6 @@ void AreaMenu::initGuiMain() {
     DataNode* guiFile = &game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME];
     gui.registerCoords("back",          12,  5, 20,  6);
     gui.registerCoords("back_input",     3,  7,  4,  4);
-    gui.registerCoords("header",        40,  5, 32,  6);
     gui.registerCoords("list",          20, 51, 36, 82);
     gui.registerCoords("list_scroll",   40, 51,  2, 82);
     gui.registerCoords("view_toggle",   74,  5, 32,  6);
@@ -556,14 +555,6 @@ void AreaMenu::initGuiMain() {
     
     //Back input icon.
     guiAddBackInputIcon(&gui);
-    
-    //Header text.
-    TextGuiItem* headerText =
-        new TextGuiItem(
-        "PICK AN AREA:",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
-    );
-    gui.addItem(headerText, "header");
     
     if(!game.content.areas.list[areaType].empty()) {
     

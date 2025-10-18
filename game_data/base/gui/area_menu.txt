@@ -6,7 +6,6 @@ engine_version=1.0.0
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
 	back_input=3.0000 7.0000 4.0000 4.0000
-	header=40.0000 5.0000 32.0000 6.0000
 	list=20.0000 51.0000 36.0000 82.0000
 	list_scroll=40.0000 51.0000 2.0000 82.0000
 	view_toggle=74.0000 5.0000 32.0000 6.0000
@@ -15,4 +14,14 @@ positions{
 	random=95.0000 5.0000 6.0000 6.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
 	no_areas_text=50.0000 50.0000 96.0000 10.0000
+}
+custom_items {
+	header {
+		type = text
+		coordinates = 40.0000 5.0000 32.0000 6.0000
+		color = 255 255 255 128
+		text = PICK AN AREA:
+		font = area_name
+		text_alignment = 1
+	}
 }

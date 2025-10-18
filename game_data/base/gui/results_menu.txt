@@ -10,9 +10,7 @@ positions{
 	end_reason=15.0000 28.0000 26.0000 4.0000
 	medal=85.0000 15.0000 22.0000 22.0000
 	medal_reason=85.0000 28.0000 26.0000 4.0000
-	conclusion_label=50.0000 32.0000 36.0000 4.0000
 	conclusion=50.0000 36.0000 96.0000 4.0000
-	stats_label=50.0000 42.0000 36.0000 4.0000
 	stats=50.0000 63.0000 80.0000 38.0000
 	stats_scroll=93.0000 63.0000 2.0000 38.0000
 	retry=20.0000 88.0000 24.0000 8.0000
@@ -20,4 +18,20 @@ positions{
 	pick_area=80.0000 88.0000 24.0000 8.0000
 	pick_area_input=91.0000 91.0000 4.0000 4.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
+}
+custom_items {
+	conclusion_label {
+		type = text
+		coordinates = 50.0000 32.0000 36.0000 3.0000
+		color = 255 255 255 192
+		text = Conclusion:
+		font = standard
+	}
+	stats_label {
+		type = text
+		coordinates = 50.0000 42.0000 36.0000 3.0000
+		color = 255 255 255 192
+		text = Stats:
+		font = standard
+	}
 }

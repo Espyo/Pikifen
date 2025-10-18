@@ -6,6 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Some items aren't documented in the GUI manual page, and the packs menu and stats menu aren't even there
+    Bulborbs just shimmy instead of walk
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
@@ -16,7 +18,7 @@ Next tasks (roughly sorted most important first)
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
-            Move some non-essential hardcoded things, like the background images of existing menus, to this feature
+            Add them to the editor
         Spatial navigation
             It should only loop around if it couldn't find anything else
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
@@ -26,12 +28,11 @@ Next tasks (roughly sorted most important first)
     Controls improvements
         Controls manager
             Allow for button combinations
-                Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
+                Basically, the bind struct has a chord vector variable, of the input type, and if this is not-none-typed, then these inputs are required before the main input is performed
                 If pressing an input generates both non-chord actions and chord actions, only do the chord actions
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
-            Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
-            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick
+            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick. Same with cancelling out of the inventory and pausing the game
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
         Menus
             Options menu
@@ -56,13 +57,14 @@ Next tasks (roughly sorted most important first)
                 But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
             [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
             Add shortcuts
+                When you use a shortcut, it should show the thing you used plus its current amount on-screen, for a moment
             A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
                 When you select, should it set it as the aforementioned "standby" item, use it, or do both?
+            Document it in the GUI manual page
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
-        If the player starts holding some inputs during the "Ready..." interlude, they should go into effect as soon as gameplay starts
         Test it on the Steam Deck
 
     --- 1.2.0 ---

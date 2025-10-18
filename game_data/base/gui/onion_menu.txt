@@ -4,7 +4,6 @@ maker=Espyo
 version=1.0.0
 engine_version=1.0.0
 positions{
-	instructions=50.0000 5.0000 90.0000 5.0000
 	cancel=8.7500 16.2500 12.5000 12.5000
 	cancel_input=2.5000 22.5000 4.0000 4.0000
 	ok=8.7500 71.2500 12.5000 12.5000
@@ -17,4 +16,13 @@ positions{
 	list=57.5000 43.7500 80.0000 67.5000
 	list_scroll=57.5000 81.2500 80.0000 2.5000
 	tooltip=50.0000 95.0000 95.0000 8.0000
+}
+custom_items {
+	instructions {
+		type = text
+		coordinates = 50.0000 5.0000 90.0000 5.0000
+		color = 188 230 230
+		text = Call or store Pikmin
+		font = standard
+	}
 }
