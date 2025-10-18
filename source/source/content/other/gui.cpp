@@ -627,6 +627,125 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
 
 
 /**
+ * @brief Creates any registered custom items.
+ */
+void GuiManager::createCustomItems() {
+    for(size_t i = 0; i < customItems.size(); i++) {
+        CustomItem* infoPtr = &customItems[i];
+        
+        GuiItem* guiItem = new GuiItem();
+        guiItem->ratioCenter = infoPtr->center;
+        guiItem->ratioSize = infoPtr->size;
+        guiItem->onDraw =
+        [infoPtr] (const DrawInfo & draw) {
+            const auto getDimensions =
+            [] (const DrawInfo & draw, bool square) {
+                return
+                    square ?
+                    Point(std::min(draw.size.x / 2.0f, draw.size.y / 2.0f)) :
+                    draw.size;
+            };
+            
+            switch(infoPtr->type) {
+            case CUSTOM_ITEM_TYPE_BITMAP: {
+                if(infoPtr->bitmap) {
+                    drawBitmap(
+                        infoPtr->bitmap, draw.center, draw.size, 0.0f,
+                        tintColor(infoPtr->color, draw.tint)
+                    );
+                }
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_TEXT: {
+                int textX = draw.center.x;
+                switch(infoPtr->textAlignment) {
+                case ALLEGRO_ALIGN_LEFT: {
+                    textX = draw.center.x - draw.size.x / 2.0f;
+                    break;
+                } case ALLEGRO_ALIGN_RIGHT: {
+                    textX = draw.center.x + draw.size.x / 2.0f;
+                    break;
+                }
+                }
+                drawText(
+                    infoPtr->text, infoPtr->font,
+                    Point(textX, draw.center.y), draw.size,
+                    tintColor(infoPtr->color, draw.tint)
+                );
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_9_SLICE: {
+                if(infoPtr->bitmap) {
+                    drawTexturedBox(
+                        draw.center, draw.size, infoPtr->bitmap,
+                        tintColor(infoPtr->color, draw.tint)
+                    );
+                }
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_RECTANGLE:
+            case CUSTOM_ITEM_TYPE_SQUARE: {
+                Point finalSize =
+                    getDimensions(
+                        draw, infoPtr->type ==
+                        CUSTOM_ITEM_TYPE_SQUARE
+                    );
+                drawRoundedRectangle(
+                    draw.center, finalSize, infoPtr->rectangleRounding,
+                    tintColor(infoPtr->color, draw.tint),
+                    infoPtr->thickness
+                );
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_FILLED_RECTANGLE:
+            case CUSTOM_ITEM_TYPE_FILLED_SQUARE: {
+                Point finalSize =
+                    getDimensions(
+                        draw, infoPtr->type ==
+                        CUSTOM_ITEM_TYPE_FILLED_SQUARE
+                    );
+                drawFilledRoundedRectangle(
+                    draw.center, finalSize, infoPtr->rectangleRounding,
+                    tintColor(infoPtr->color, draw.tint)
+                );
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_ELLIPSE:
+            case CUSTOM_ITEM_TYPE_CIRCLE: {
+                Point finalSize =
+                    getDimensions(
+                        draw, infoPtr->type ==
+                        CUSTOM_ITEM_TYPE_CIRCLE
+                    );
+                al_draw_ellipse(
+                    draw.center.x, draw.center.y, finalSize.x, finalSize.y,
+                    tintColor(infoPtr->color, draw.tint),
+                    infoPtr->thickness
+                );
+                break;
+                
+            } case CUSTOM_ITEM_TYPE_FILLED_ELLIPSE:
+            case CUSTOM_ITEM_TYPE_FILLED_CIRCLE: {
+                Point finalSize =
+                    getDimensions(
+                        draw, infoPtr->type ==
+                        CUSTOM_ITEM_TYPE_FILLED_CIRCLE
+                    );
+                al_draw_filled_ellipse(
+                    draw.center.x, draw.center.y, finalSize.x, finalSize.y,
+                    tintColor(infoPtr->color, draw.tint)
+                );
+                break;
+                
+            }
+            }
+        };
+        addItem(guiItem);
+    }
+}
+
+
+/**
  * @brief Destroys and deletes all items and information.
  *
  * @return Whether it succeeded.
@@ -640,6 +759,12 @@ bool GuiManager::destroy() {
     items.clear();
     registeredCenters.clear();
     registeredSizes.clear();
+    for(size_t i = 0; i < customItems.size(); i++) {
+        if(customItems[i].bitmap) {
+            game.content.bitmaps.list.free(customItems[i].bitmap);
+        }
+    }
+    customItems.clear();
     return true;
 }
 
@@ -1134,15 +1259,18 @@ bool GuiManager::hideItems() {
 
 
 /**
- * @brief Reads item default centers and sizes from a data node.
+ * @brief Reads item default centers and sizes, as well as custom items,
+ * from a data file.
  *
  * @param node Data file to read from.
  * @param coordsNodeName Name of the child data node that contains the
  * default coordinates.
+ * @param customNodeName Name of the child data node that contains the
+ * custom items.
  * @return Whether it succeeded.
  */
 bool GuiManager::readDataFile(
-    DataNode* node, const string& coordsNodeName
+    DataNode* node, const string& coordsNodeName, const string& customNodeName
 ) {
     auto readCoords = [] (const string& str, Point * center, Point * size) {
         vector<string> words = split(str);
@@ -1166,6 +1294,95 @@ bool GuiManager::readDataFile(
             center.x, center.y, size.x, size.y
         );
     }
+    
+    //Read custom items.
+    DataNode* customNode = node->getChildByName(customNodeName);
+    size_t nCustomItems = customNode->getNrOfChildren();
+    for(size_t i = 0; i < nCustomItems; i++) {
+        DataNode* itemNode = customNode->getChild(i);
+        CustomItem item;
+        
+        ReaderSetter rs(itemNode);
+        
+        string typeStr;
+        string coordsStr;
+        string bitmapStr;
+        string fontStr;
+        DataNode* typeNode;
+        DataNode* bitmapNode;
+        DataNode* fontNode;
+        
+        rs.set("type", typeStr, &typeNode);
+        rs.set("coordinates", coordsStr);
+        rs.set("color", item.color);
+        rs.set("bitmap", bitmapStr, &bitmapNode);
+        rs.set("text", item.text);
+        rs.set("font", fontStr, &fontNode);
+        rs.set("text_alignment", item.textAlignment);
+        rs.set("thickness", item.thickness);
+        rs.set("rectangle_rounding", item.rectangleRounding);
+        
+        if(!readCoords(coordsStr, &item.center, &item.size)) continue;
+        item.center /= 100.0f;
+        item.size /= 100.0f;
+        
+        if(typeNode) {
+            readEnumProp(
+                typeStr,
+            (int*) &item.type, {
+                "bitmap",
+                "9_slice",
+                "text",
+                "rectangle",
+                "filled_rectangle",
+                "square",
+                "filled_square",
+                "ellipse",
+                "filled_ellipse",
+                "circle",
+                "filled_circle",
+            },
+            "custom GUI item type",
+            typeNode
+            );
+        }
+        
+        if(bitmapNode) {
+            item.bitmap = game.content.bitmaps.list.get(bitmapStr, bitmapNode);
+        }
+        
+        item.font = game.sysContent.fntStandard;
+        if(fontNode) {
+            vector<ALLEGRO_FONT*> fontPtrs = {
+                game.sysContent.fntAreaName,
+                game.sysContent.fntCounter,
+                game.sysContent.fntLeaderCursorCounter,
+                game.sysContent.fntSlim,
+                game.sysContent.fntStandard,
+                game.sysContent.fntValue,
+            };
+            vector<string> fontNames = {
+                "area_name",
+                "counter",
+                "leader_cursor_counter",
+                "slim",
+                "standard",
+                "value",
+            };
+            int idx;
+            if(
+                readEnumProp(
+                    fontStr, &idx, fontNames, "custom GUI item font", fontNode
+                )
+            ) {
+                item.font = fontPtrs[idx];
+            }
+        }
+        
+        customItems.push_back(item);
+    }
+    
+    createCustomItems();
     
     return true;
 }

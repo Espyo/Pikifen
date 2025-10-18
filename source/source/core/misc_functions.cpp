@@ -1163,6 +1163,43 @@ bool openManual(const string& page) {
 
 
 /**
+ * @brief Given a string value from a property in a data file, checks to see
+ * if it matches any of the possible values. If so, returns the
+ * index of the option. If not, it outputs an error.
+ *
+ * @param valueStr Value in the data file.
+ * @param outInt The index in the vector of possible values is returned here
+ * if the value matches any. INVALID is returned if not. Ideally, this is
+ * an integer of an enum type.
+ * @param possibleValues Possible values. If using an enum, make sure their
+ * order matches the enum declarations.
+ * @param errorThing What kind of thing this is. This is written to the
+ * error log.
+ * @param errorNode Data node this value was read from, if any. Used when
+ * reporting an error.
+ * @return Whether the value matched any of the possible values.
+ */
+bool readEnumProp(
+    const string& valueStr, int* outInt, const vector<string> possibleValues,
+    const string& errorThing, DataNode* errorNode
+) {
+    for(size_t v = 0; v < possibleValues.size(); v++) {
+        if(valueStr == possibleValues[v]) {
+            *outInt = v;
+            return true;
+        }
+    }
+    
+    game.errors.report(
+        "Unknown " + errorThing + " \"" + valueStr + "\"!",
+        errorNode
+    );
+    *outInt = INVALID;
+    return false;
+}
+
+
+/**
  * @brief Reports a fatal error to the user and shuts down the program.
  *
  * @param s String explaining the error.

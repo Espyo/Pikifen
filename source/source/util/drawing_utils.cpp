@@ -421,7 +421,7 @@ void drawTextLines(
 
 
 /**
- * @brief Draws a box, using a texture.
+ * @brief Draws a box, using a 9-slice texture.
  *
  * The texture is split into three-by-three.
  * The corners of the box will use the corners of the texture as they are.

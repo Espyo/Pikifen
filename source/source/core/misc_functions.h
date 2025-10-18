@@ -184,6 +184,10 @@ bool monoSelectable(
     const ImVec2& size = ImVec2(0, 0)
 );
 bool openManual(const string& page);
+bool readEnumProp(
+    const string& valueStr, int* outInt, const vector<string> possibleValues,
+    const string& errorThing, DataNode* errorNode
+);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
 void saveOptions();
