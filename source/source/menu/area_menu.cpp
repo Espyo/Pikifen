@@ -381,25 +381,21 @@ void AreaMenu::initGuiInfoPage() {
         
         //Thumbnail.
         GuiItem* thumbItem = new GuiItem();
+        thumbItem->forceSquare = true;
         thumbItem->onDraw =
         [this] (const DrawInfo & draw) {
-            //Make it a square.
-            Point finalSize(
-                std::min(draw.size.x, draw.size.y),
-                std::min(draw.size.x, draw.size.y)
-            );
             //Align it to the top-right corner.
             Point finalCenter(
-                (draw.center.x + draw.size.x / 2.0f) - finalSize.x / 2.0f,
-                (draw.center.y - draw.size.y / 2.0f) + finalSize.y / 2.0f
+                (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
+                (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
             );
             if(curThumb) {
                 drawBitmap(
-                    curThumb, finalCenter, finalSize - 4.0f, 0.0f, draw.tint
+                    curThumb, finalCenter, draw.size - 4.0f, 0.0f, draw.tint
                 );
             }
             drawTexturedBox(
-                finalCenter, finalSize, game.sysContent.bmpFrameBox,
+                finalCenter, draw.size, game.sysContent.bmpFrameBox,
                 tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
             );
         };
@@ -705,6 +701,7 @@ void AreaMenu::initGuiMain() {
         //Random button.
         ButtonGuiItem* randomButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
+        randomButton->forceSquare = true;
         randomButton->onDraw =
         [randomButton] (const DrawInfo & draw) {
             drawButton(

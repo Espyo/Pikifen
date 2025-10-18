@@ -464,7 +464,7 @@ Point GuiItem::getReferenceSize() const {
         mult.y = game.winH;
     }
     Point finalSize = ratioSize * mult;
-    if(isSquare) {
+    if(forceSquare) {
         finalSize =
             Point(finalSize.x < finalSize.y ? finalSize.x : finalSize.y);
     }

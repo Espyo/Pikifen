@@ -187,6 +187,7 @@ void PacksMenu::initGuiMain() {
             new CheckGuiItem(
             false, "", game.sysContent.fntStandard
         );
+        check->forceSquare = true;
         check->ratioCenter = Point(0.78f, rowCenterY);
         check->ratioSize = Point(0.08f, ITEM_HEIGHT);
         check->onActivate =
@@ -219,6 +220,7 @@ void PacksMenu::initGuiMain() {
                 new ButtonGuiItem(
                 "U", game.sysContent.fntStandard
             );
+            upButton->forceSquare = true;
             upButton->ratioCenter = Point(0.87f, rowCenterY);
             upButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
             upButton->onActivate =
@@ -250,6 +252,7 @@ void PacksMenu::initGuiMain() {
                 new ButtonGuiItem(
                 "D", game.sysContent.fntStandard
             );
+            downButton->forceSquare = true;
             downButton->ratioCenter = Point(0.95f, rowCenterY);
             downButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
             downButton->onActivate =
@@ -301,26 +304,22 @@ void PacksMenu::initGuiMain() {
     
     //Pack thumbnail.
     GuiItem* packThumbItem = new GuiItem();
+    packThumbItem->forceSquare = true;
     packThumbItem->onDraw =
     [this] (const DrawInfo & draw) {
-        //Make it a square.
-        Point finalSize(
-            std::min(draw.size.x, draw.size.y),
-            std::min(draw.size.x, draw.size.y)
-        );
         //Align it to the top-right corner.
         Point finalCenter(
-            (draw.center.x + draw.size.x / 2.0f) - finalSize.x / 2.0f,
-            (draw.center.y - draw.size.y / 2.0f) + finalSize.y / 2.0f
+            (draw.center.x + draw.size.x / 2.0f) - draw.size.x / 2.0f,
+            (draw.center.y - draw.size.y / 2.0f) + draw.size.y / 2.0f
         );
         if(!curPackName.empty() && packThumbs[curPackName]) {
             drawBitmap(
                 packThumbs[curPackName],
-                finalCenter, finalSize - 4.0f, 0.0f, draw.tint
+                finalCenter, draw.size - 4.0f, 0.0f, draw.tint
             );
         }
         drawTexturedBox(
-            finalCenter, finalSize, game.sysContent.bmpFrameBox,
+            finalCenter, draw.size, game.sysContent.bmpFrameBox,
             tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };

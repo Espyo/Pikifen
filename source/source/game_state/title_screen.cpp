@@ -405,7 +405,7 @@ void MainMenu::initGuiMainPage() {
     //Discord server button.
     ButtonGuiItem* discordButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
-    discordButton->isSquare = true;
+    discordButton->forceSquare = true;
     discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
@@ -438,7 +438,7 @@ void MainMenu::initGuiMainPage() {
     //GitHub page button.
     ButtonGuiItem* githubButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
-    githubButton->isSquare = true;
+    githubButton->forceSquare = true;
     githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(

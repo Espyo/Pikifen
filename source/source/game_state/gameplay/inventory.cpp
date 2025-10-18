@@ -266,7 +266,7 @@ void Inventory::populateInventoryListGui() {
         );
         button->ratioCenter = slotCenter;
         button->ratioSize = Point(SLOT_WIDTH, SLOT_HEIGHT);
-        button->isSquare = true;
+        button->forceSquare = true;
         button->onDraw =
         [button, iPtr] (const DrawInfo & draw) {
             button->defDrawCode(draw);
@@ -314,7 +314,7 @@ void Inventory::populateInventoryListGui() {
         GuiItem* placeholder = new GuiItem();
         placeholder->ratioCenter = slotCenter;
         placeholder->ratioSize = Point(SLOT_WIDTH, SLOT_HEIGHT);
-        placeholder->isSquare = true;
+        placeholder->forceSquare = true;
         placeholder->onDraw =
         [this] (const DrawInfo & draw) {
             drawTexturedBox(

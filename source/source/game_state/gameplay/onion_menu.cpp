@@ -180,6 +180,7 @@ OnionMenu::OnionMenu(
         new ButtonGuiItem(
         "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
+    changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
     [this] (const Point&) {
         toggleChangeTen();
@@ -230,6 +231,7 @@ OnionMenu::OnionMenu(
         new ButtonGuiItem(
         "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
+    selectAllButton->forceSquare = true;
     selectAllButton->onActivate =
     [this] (const Point&) {
         toggleSelectAll();
@@ -294,6 +296,7 @@ OnionMenu::OnionMenu(
     
         //Onion icon.
         GuiItem* onionIcon = new GuiItem(false);
+        onionIcon->forceSquare = true;
         onionIcon->onDraw =
         [this, t, onionIcon] (const DrawInfo & draw) {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -313,6 +316,7 @@ OnionMenu::OnionMenu(
         //Onion button.
         ButtonGuiItem* onionButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
+        onionButton->forceSquare = true;
         onionButton->onDraw =
         [this, onionButton] (const DrawInfo & draw) {
             float juicyGrowAmount = onionButton->getJuiceValue();
@@ -385,6 +389,7 @@ OnionMenu::OnionMenu(
         
         //Group icon.
         GuiItem* groupIcon = new GuiItem(false);
+        groupIcon->forceSquare = true;
         groupIcon->onDraw =
         [this, t, groupIcon] (const DrawInfo & draw) {
             OnionMenuPikminType* tPtr = &this->types[t];
@@ -403,6 +408,7 @@ OnionMenu::OnionMenu(
         //Group button.
         ButtonGuiItem* groupButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
+        groupButton->forceSquare = true;
         groupButton->onDraw =
         [this, groupButton] (const DrawInfo & draw) {
             float juicyGrowAmount = groupButton->getJuiceValue();
