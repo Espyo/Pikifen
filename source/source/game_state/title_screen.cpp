@@ -408,10 +408,6 @@ void MainMenu::initGuiMainPage() {
     discordButton->forceSquare = true;
     discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 4.0f,
-            tintColor(al_map_rgba(128, 128, 128, 128), draw.tint)
-        );
         drawBitmapInBox(
             game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true,
             0.0f, draw.tint
@@ -441,10 +437,6 @@ void MainMenu::initGuiMainPage() {
     githubButton->forceSquare = true;
     githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 4.0f,
-            tintColor(al_map_rgba(192, 192, 192, 128), draw.tint)
-        );
         drawBitmapInBox(
             game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true,
             0.0f, draw.tint

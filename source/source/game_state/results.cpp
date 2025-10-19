@@ -566,17 +566,6 @@ void Results::load() {
     
     //Stats box.
     statsList = new ListGuiItem();
-    statsList->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 16.0f,
-            al_map_rgba(0, 0, 0, 40 * draw.tint.a)
-        );
-        drawTexturedBox(
-            draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
-        );
-    };
     populateStatsList(oldRecord);
     gui.addItem(statsList, "stats");
     

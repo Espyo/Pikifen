@@ -1681,8 +1681,13 @@ bool GuiManager::writeItemDefsToDataFile(
     }
     
     //Custom items.
-    DataNode* customNode = file->getChildByName("custom_items");
-    customNode->clearChildren();
+    DataNode* customNode;
+    if(file->getNrOfChildrenByName("custom_items")) {
+        customNode = file->getChildByName("custom_items");
+        customNode->clearChildren();
+    } else {
+        customNode = file->addNew("custom_items");
+    }
     for(size_t i = 0; i < customItemDefs.size(); i++) {
         const CustomGuiItemDef* itemPtr = &customItemDefs[i];
         DataNode* itemNode = customNode->addNew(itemPtr->name);

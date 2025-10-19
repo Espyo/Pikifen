@@ -25,4 +25,11 @@ custom_items{
 		draw_before_hardcoded=true
 		bitmap=gui/frame_box
 	}
+	list_bg{
+		coordinates=50.0000 50.0000 32.0000 28.0000
+		type=filled_rectangle
+		color=24 64 60 200
+		draw_before_hardcoded=true
+		rectangle_rounding=20.0000
+	}
 }

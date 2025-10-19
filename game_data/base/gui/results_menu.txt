@@ -19,19 +19,28 @@ positions{
 	pick_area_input=91.0000 91.0000 4.0000 4.0000
 	tooltip=50.0000 96.0000 96.0000 4.0000
 }
-custom_items {
-	conclusion_label {
-		type = text
-		coordinates = 50.0000 32.0000 36.0000 3.0000
-		color = 255 255 255 192
-		text = Conclusion:
-		font = standard
+custom_items{
+	stats_bg{
+		coordinates=50.0000 63.0000 80.0000 38.0000
+		type=filled_rectangle
+		color=117 0 0 40
+		draw_before_hardcoded=true
+		rectangle_rounding=16.0000
 	}
-	stats_label {
-		type = text
-		coordinates = 50.0000 42.0000 36.0000 3.0000
-		color = 255 255 255 192
-		text = Stats:
-		font = standard
+	conclusion_label{
+		coordinates=50.0000 32.0000 36.0000 3.0000
+		type=text
+		color=255 255 255 192
+		text=Conclusion:
+		font=standard
+		text_alignment=1
+	}
+	stats_label{
+		coordinates=50.0000 42.0000 36.0000 3.0000
+		type=text
+		color=255 255 255 192
+		text=Stats:
+		font=standard
+		text_alignment=1
 	}
 }

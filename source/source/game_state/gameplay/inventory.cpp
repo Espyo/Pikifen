@@ -141,14 +141,6 @@ void Inventory::initGui() {
     //Item list box.
     itemList = new ListGuiItem();
     itemList->horizontal = true;
-    itemList->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 20.0f,
-            tintColor(al_map_rgba(24, 64, 60, 200), draw.tint)
-        );
-        itemList->defDrawCode(draw);
-    };
     gui.addItem(itemList, "list");
     
     //Item list scrollbar.

@@ -137,11 +137,6 @@ OnionMenu::OnionMenu(
             totalDelta += this->types[t].delta;
         }
         
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, game.winW * 0.01,
-            tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
-        );
-        
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
         const auto& redIt = this->redItems.find(fieldAmountText);
         if(redIt != this->redItems.end()) {
