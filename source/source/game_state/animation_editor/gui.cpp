@@ -1692,7 +1692,7 @@ void AnimationEditor::processGuiPanelInfo() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Name of this animation. Optional."
+        "Name of this animation database. Optional."
     );
     
     //Description input.
@@ -1700,7 +1700,7 @@ void AnimationEditor::processGuiPanelInfo() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Description of this animation. Optional."
+        "Description of this animation database. Optional."
     );
     
     //Version input.

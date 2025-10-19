@@ -73,33 +73,37 @@ void GuiEditor::drawCanvas() {
     al_get_clipping_rectangle(
         &origClipX, &origClipY, &origClipW, &origClipH
     );
-    for(size_t i = 0; i < hardcodedItems.size(); i++) {
-        if(hardcodedItems[i].size.x == 0.0f) continue;
-        
+    for(size_t i = 0; i < allItems.size(); i++) {
+        GuiItemDef* item = allItems[i];
+        if(item->size.x == 0.0f) continue;
+        bool isCustom = i >= hardcodedItems.size();
+        ALLEGRO_COLOR color =
+            isCustom ?
+            al_map_rgb(160, 224, 160) :
+            al_map_rgb(224, 160, 160);
+            
         drawFilledRoundedRectangle(
-            hardcodedItems[i].center,
-            hardcodedItems[i].size,
-            8.0f / game.editorsView.cam.zoom,
-            al_map_rgba(224, 224, 224, 64)
+            item->center, item->size,
+            8.0f / game.editorsView.cam.zoom, changeAlpha(color, 64)
         );
         
-        float clipX = hardcodedItems[i].center.x - hardcodedItems[i].size.x / 2.0f;
-        float clipY = hardcodedItems[i].center.y - hardcodedItems[i].size.y / 2.0f;
+        float clipX = item->center.x - item->size.x / 2.0f;
+        float clipY = item->center.y - item->size.y / 2.0f;
         al_transform_coordinates(
             &game.editorsView.worldToWindowTransform, &clipX, &clipY
         );
-        float clipW = hardcodedItems[i].size.x * game.editorsView.cam.zoom;
-        float clipH = hardcodedItems[i].size.y * game.editorsView.cam.zoom;
+        float clipW = item->size.x * game.editorsView.cam.zoom;
+        float clipH = item->size.y * game.editorsView.cam.zoom;
         setCombinedClippingRectangles(
             origClipX, origClipY, origClipW, origClipH,
             clipX, clipY, clipW, clipH
         );
         drawText(
-            hardcodedItems[i].name, game.sysContent.fntBuiltin,
+            item->name, game.sysContent.fntBuiltin,
             Point(
-                (hardcodedItems[i].center.x - hardcodedItems[i].size.x / 2.0f) +
+                (item->center.x - item->size.x / 2.0f) +
                 (4.0f / game.editorsView.cam.zoom),
-                (hardcodedItems[i].center.y - hardcodedItems[i].size.y / 2.0f) +
+                (item->center.y - item->size.y / 2.0f) +
                 (4.0f / game.editorsView.cam.zoom)
             ),
             Point(LARGE_FLOAT, 8.0 / game.editorsView.cam.zoom),
@@ -109,21 +113,20 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(curItem != i) {
+        if(curItemIdx != i) {
             drawRoundedRectangle(
-                hardcodedItems[i].center,
-                hardcodedItems[i].size,
+                item->center,
+                item->size,
                 8.0f / game.editorsView.cam.zoom,
-                al_map_rgb(224, 224, 224),
-                2.0f / game.editorsView.cam.zoom
+                color, 2.0f / game.editorsView.cam.zoom
             );
         }
     }
     
-    if(curItem != INVALID && hardcodedItems[curItem].size.x != 0.0f) {
+    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
         curTransformationWidget.draw(
-            &hardcodedItems[curItem].center,
-            &hardcodedItems[curItem].size,
+            &allItems[curItemIdx]->center,
+            &allItems[curItemIdx]->size,
             nullptr,
             1.0f / game.editorsView.cam.zoom
         );

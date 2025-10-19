@@ -122,12 +122,12 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     bool twHandled = false;
-    if(curItem != INVALID && hardcodedItems[curItem].size.x != 0.0f) {
+    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
         twHandled =
             curTransformationWidget.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
-                &hardcodedItems[curItem].center,
-                &hardcodedItems[curItem].size,
+                &allItems[curItemIdx]->center,
+                &allItems[curItemIdx]->size,
                 nullptr,
                 1.0f / game.editorsView.cam.zoom
             );
@@ -135,8 +135,11 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     
     if(!twHandled) {
         vector<size_t> clickedItems;
-        for(size_t i = 0; i < hardcodedItems.size(); i++) {
-            GuiItemDef* itemPtr = &hardcodedItems[i];
+        for(size_t i = 0; i < allItems.size(); i++) {
+            GuiItemDef* itemPtr = allItems[i];
+            bool isCustom = i >= hardcodedItems.size();
+            if(isCustom && state != EDITOR_STATE_CUSTOM) continue;
+            if(!isCustom && state != EDITOR_STATE_HARDCODED) continue;
             if(
                 isPointInRectangle(
                     game.editorsView.mouseCursorWorldPos,
@@ -149,27 +152,27 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         }
         
         if(clickedItems.empty()) {
-            curItem = INVALID;
+            curItemIdx = INVALID;
             
         } else {
-            size_t curItemIdx = INVALID;
+            size_t clickedItemsIdx = INVALID;
             for(size_t i = 0; i < clickedItems.size(); i++) {
-                if(curItem == clickedItems[i]) {
-                    curItemIdx = i;
+                if(curItemIdx == clickedItems[i]) {
+                    clickedItemsIdx = i;
                     break;
                 }
             }
             
-            if(curItemIdx == INVALID) {
-                curItemIdx = 0;
+            if(clickedItemsIdx == INVALID) {
+                clickedItemsIdx = 0;
             } else {
-                curItemIdx =
+                clickedItemsIdx =
                     sumAndWrap(
-                        (int) curItemIdx, 1,
+                        (int) clickedItemsIdx, 1,
                         (int) clickedItems.size()
                     );
             }
-            curItem = clickedItems[curItemIdx];
+            curItemIdx = clickedItems[clickedItemsIdx];
             mustFocusOnCurItem = true;
         }
     }
@@ -182,12 +185,12 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(curItem != INVALID && hardcodedItems[curItem].size.x != 0.0f) {
+    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
         bool twHandled =
             curTransformationWidget.handleMouseMove(
                 snapPoint(game.editorsView.mouseCursorWorldPos),
-                &hardcodedItems[curItem].center,
-                &hardcodedItems[curItem].size,
+                &allItems[curItemIdx]->center,
+                &allItems[curItemIdx]->size,
                 nullptr,
                 1.0f / game.editorsView.cam.zoom,
                 false,

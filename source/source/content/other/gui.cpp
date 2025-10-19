@@ -276,6 +276,17 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
 
 
 /**
+ * @brief Clears the custom GUI item definition object's data.
+ */
+void CustomGuiItemDef::clearBitmap() {
+    if(bitmap) {
+        game.content.bitmaps.list.free(bitmap);
+        bitmapName.clear();
+    }
+}
+
+
+/**
  * @brief Constructs a new GUI item object.
  *
  * @param focusable Can the item be focused by the player?
@@ -632,6 +643,8 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
 void GuiManager::createCustomItems() {
     for(size_t i = 0; i < customItemDefs.size(); i++) {
         CustomGuiItemDef* infoPtr = &customItemDefs[i];
+        infoPtr->center /= 100.0f;
+        infoPtr->size /= 100.0f;
         
         GuiItem* guiItem = new GuiItem();
         guiItem->ratioCenter = infoPtr->center;
@@ -760,9 +773,7 @@ bool GuiManager::destroy() {
     registeredCenters.clear();
     registeredSizes.clear();
     for(size_t i = 0; i < customItemDefs.size(); i++) {
-        if(customItemDefs[i].bitmap) {
-            game.content.bitmaps.list.free(customItemDefs[i].bitmap);
-        }
+        customItemDefs[i].clearBitmap();
     }
     customItemDefs.clear();
     return true;
@@ -914,7 +925,6 @@ bool GuiManager::getItemDefsFromDataFile(
         
         string typeStr;
         string coordsStr;
-        string bitmapStr;
         string fontStr;
         DataNode* typeNode;
         DataNode* bitmapNode;
@@ -923,7 +933,7 @@ bool GuiManager::getItemDefsFromDataFile(
         rs.set("type", typeStr, &typeNode);
         rs.set("coordinates", coordsStr);
         rs.set("color", item.color);
-        rs.set("bitmap", bitmapStr, &bitmapNode);
+        rs.set("bitmap", item.bitmapName, &bitmapNode);
         rs.set("text", item.text);
         rs.set("font", fontStr, &fontNode);
         rs.set("text_alignment", item.textAlignment);
@@ -931,8 +941,6 @@ bool GuiManager::getItemDefsFromDataFile(
         rs.set("rectangle_rounding", item.rectangleRounding);
         
         if(!readCoords(coordsStr, &item.center, &item.size)) continue;
-        item.center /= 100.0f;
-        item.size /= 100.0f;
         
         if(typeNode) {
             readEnumProp(
@@ -956,7 +964,8 @@ bool GuiManager::getItemDefsFromDataFile(
         }
         
         if(bitmapNode) {
-            item.bitmap = game.content.bitmaps.list.get(bitmapStr, bitmapNode);
+            item.bitmap =
+                game.content.bitmaps.list.get(item.bitmapName, bitmapNode);
         }
         
         item.font = game.sysContent.fntStandard;
@@ -977,16 +986,17 @@ bool GuiManager::getItemDefsFromDataFile(
                 "standard",
                 "value",
             };
-            int idx;
             if(
                 readEnumProp(
-                    fontStr, &idx, fontNames, "custom GUI item font", fontNode
+                    fontStr, (int*) &item.fontType,
+                    fontNames, "custom GUI item font", fontNode
                 )
             ) {
-                item.font = fontPtrs[idx];
+                item.font = fontPtrs[item.fontType];
             }
         }
         
+        item.name = itemNode->name;
         outCustomItemDefs->push_back(item);
     }
     
@@ -1614,6 +1624,92 @@ bool GuiManager::tick(float deltaT) {
  */
 bool GuiManager::wasLastInputMouse() const {
     return lastInputWasMouse;
+}
+
+
+/**
+ * @brief Writes the hardcoded item definitions and custom item definitions
+ * to a data file, leaving the rest of the blocks untouched.
+ *
+ * @param file File to write to.
+ * @param hardcodedItemDefs List of hardcoded GUI item definitions.
+ * @param customItemDefs List of custom GUI item definitions.
+ * @return Whether it succeeded.
+ */
+bool GuiManager::writeItemDefsToDataFile(
+    DataNode* file,
+    const vector<GuiItemDef>& hardcodedItemDefs,
+    const vector<CustomGuiItemDef>& customItemDefs
+) {
+    const auto writeCoordinates =
+    [] (const Point & center, const Point & size) {
+        return p2s(center) + " " + p2s(size);
+    };
+    
+    //Hardcoded items.
+    DataNode* hardcodedNode = file->getChildByName("positions");
+    hardcodedNode->clearChildren();
+    for(size_t i = 0; i < hardcodedItemDefs.size(); i++) {
+        const GuiItemDef* itemPtr = &hardcodedItemDefs[i];
+        hardcodedNode->addNew(
+            itemPtr->name,
+            writeCoordinates(itemPtr->center, itemPtr->size)
+        );
+    }
+    
+    //Custom items.
+    DataNode* customNode = file->getChildByName("custom_items");
+    customNode->clearChildren();
+    for(size_t i = 0; i < customItemDefs.size(); i++) {
+        const CustomGuiItemDef* itemPtr = &customItemDefs[i];
+        DataNode* itemNode = customNode->addNew(itemPtr->name);
+        
+        string coordsStr = writeCoordinates(itemPtr->center, itemPtr->size);
+        vector<string> typeStrs {
+            "bitmap",
+            "9_slice",
+            "text",
+            "rectangle",
+            "filled_rectangle",
+            "square",
+            "filled_square",
+            "ellipse",
+            "filled_ellipse",
+            "circle",
+            "filled_circle",
+        };
+        string typeStr = typeStrs[(size_t) itemPtr->type];
+        vector<string> fontNames {
+            "area_name",
+            "counter",
+            "leader_cursor_counter",
+            "slim",
+            "standard",
+            "value",
+        };
+        string fontStr = fontNames[(size_t) itemPtr->fontType];
+        
+        GetterWriter gw(itemNode);
+        gw.write("coordinates", coordsStr);
+        gw.write("type", typeStr);
+        gw.write("color", itemPtr->color);
+        if(itemPtr->bitmap) {
+            gw.write("bitmap", itemPtr->bitmapName);
+        }
+        if(!itemPtr->text.empty()) {
+            gw.write("text", itemPtr->text);
+            gw.write("font", fontStr);
+            gw.write("text_alignment", itemPtr->textAlignment);
+        }
+        if(itemPtr->thickness != 1.0f) {
+            gw.write("thickness", itemPtr->thickness);
+        }
+        if(itemPtr->rectangleRounding != 0.0f) {
+            gw.write("rectangle_rounding", itemPtr->rectangleRounding);
+        }
+    }
+    
+    return true;
 }
 
 

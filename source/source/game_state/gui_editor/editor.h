@@ -51,19 +51,46 @@ public:
     
 private:
 
+    //--- Misc. declarations ---
+    
+    //Editor states.
+    enum EDITOR_STATE {
+    
+        //Main menu.
+        EDITOR_STATE_MAIN,
+        
+        //Hardcoded items.
+        EDITOR_STATE_HARDCODED,
+        
+        //Custom items.
+        EDITOR_STATE_CUSTOM,
+        
+        //Info.
+        EDITOR_STATE_INFO,
+        
+    };
+    
+    
     //--- Members ---
     
-    //Currently selected item, or INVALID for none.
-    size_t curItem = INVALID;
+    //Index of the currently selected item, from the list of all items.
+    //INVALID for none.
+    size_t curItemIdx = INVALID;
     
     //Data node for the contents of the current GUI definition.
     DataNode fileNode;
+    
+    //Content metadata for the current GUI definition.
+    Content contentMd;
     
     //List of hardcoded item definitions for the current GUI definition.
     vector<GuiItemDef> hardcodedItems;
     
     //List of custom item definitions for the current GUI definition.
     vector<CustomGuiItemDef> customItems;
+    
+    //Pointers of all items. Cache for convenience.
+    vector<GuiItemDef*> allItems;
     
     //Picker info for the picker in the "load" dialog.
     Picker loadDialogPicker;
@@ -108,6 +135,7 @@ private:
     
     //--- Function declarations ---
     
+    void changeState(const EDITOR_STATE newState);
     void closeLoadDialog();
     void closeOptionsDialog();
     void createGuiDef(const string& internalName, const string& pack);
@@ -120,6 +148,7 @@ private:
         const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
     );
+    void rebuildAllItemsCache();
     bool saveGuiDef();
     void setupForNewGuiDef();
     Point snapPoint(const Point& p);
@@ -134,6 +163,8 @@ private:
     void quitCmd(float inputValue);
     void reloadCmd(float inputValue);
     void reloadGuiDefs();
+    void renameItem(GuiItemDef* item, const string& newName);
+    void setToDefaults(GuiItemDef* item);
     void quickPlayCmd(float inputValue);
     void saveCmd(float inputValue);
     void snapModeCmd(float inputValue);
@@ -147,8 +178,13 @@ private:
     void processGuiMenuBar();
     void processGuiNewDialog();
     void processGuiOptionsDialog();
+    void processGuiPanelCustom();
+    void processGuiPanelCustomItem();
+    void processGuiPanelHardcoded();
+    void processGuiPanelInfo();
     void processGuiPanelItem();
     void processGuiPanelItems();
+    void processGuiPanelMain();
     void processGuiStatusBar();
     void processGuiToolbar();
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;

@@ -133,7 +133,14 @@ void DataNode::clear() {
     fileWasOpened = false;
     filePath.clear();
     lineNr = 0;
-    
+    clearChildren();
+}
+
+
+/**
+ * @brief Clears the children data inside a node.
+ */
+void DataNode::clearChildren() {
     for(size_t c = 0; c < children.size(); c++) {
         delete children[c];
     }

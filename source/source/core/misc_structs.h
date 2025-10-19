@@ -100,6 +100,30 @@ enum STRING_TOKEN {
 };
 
 
+//Engine fonts.
+enum ENGINE_FONT {
+
+    //Area name.
+    ENGINE_FONT_AREA_NAME,
+    
+    //Counter.
+    ENGINE_FONT_COUNTER,
+    
+    //Leader cursor counter.
+    ENGINE_FONT_LEADER_CURSOR_COUNTER,
+    
+    //Slim.
+    ENGINE_FONT_SLIM,
+    
+    //Standard.
+    ENGINE_FONT_STANDARD,
+    
+    //Value.
+    ENGINE_FONT_VALUE,
+    
+};
+
+
 /**
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.

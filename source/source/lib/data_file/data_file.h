@@ -94,6 +94,7 @@ public:
     DataNode& operator=(const DataNode& dn2);
     ~DataNode();
     void clear();
+    void clearChildren();
     string getValueOrDefault(const string& def) const;
     size_t getNrOfChildren() const;
     DataNode* getChild(size_t number);

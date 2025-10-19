@@ -12,6 +12,7 @@
 
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
+#include "../../lib/imgui/imgui_stdlib.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/imgui_utils.h"
 #include "../../util/string_utils.h"
@@ -157,37 +158,24 @@ void GuiEditor::processGui() {
  * @brief Processes the Dear ImGui control panel for this frame.
  */
 void GuiEditor::processGuiControlPanel() {
-    if(manifest.internalName.empty()) return;
-    
     ImGui::BeginChild("panel");
     
-    //Current definition header text.
-    ImGui::Text("Definition: ");
-    
-    //Current definition text.
-    ImGui::SameLine();
-    monoText("%s", manifest.internalName.c_str());
-    string fileTooltip =
-        getFileTooltip(manifest.path) + "\n\n"
-        "File state: ";
-    if(!changesMgr.existsOnDisk()) {
-        fileTooltip += "Doesn't exist in your disk yet!";
-    } else if(changesMgr.hasUnsavedChanges()) {
-        fileTooltip += "You have unsaved changes.";
-    } else {
-        fileTooltip += "Everything ok.";
+    //Basically, just show the correct panel for the current state.
+    switch(state) {
+    case EDITOR_STATE_MAIN: {
+        processGuiPanelMain();
+        break;
+    } case EDITOR_STATE_HARDCODED: {
+        processGuiPanelHardcoded();
+        break;
+    } case EDITOR_STATE_CUSTOM: {
+        processGuiPanelCustom();
+        break;
+    } case EDITOR_STATE_INFO: {
+        processGuiPanelInfo();
+        break;
     }
-    setTooltip(fileTooltip);
-    
-    ImGui::Spacer();
-    
-    //Process the list of items.
-    processGuiPanelItems();
-    
-    ImGui::Spacer();
-    
-    //Process the currently selected item.
-    processGuiPanelItem();
+    }
     
     ImGui::EndChild();
 }
@@ -618,16 +606,307 @@ void GuiEditor::processGuiOptionsDialog() {
 
 
 /**
+ * @brief Processes the custom items panel for this frame.
+ */
+void GuiEditor::processGuiPanelCustom() {
+    ImGui::BeginChild("custom");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panelTitle("CUSTOM ITEMS");
+    
+    processGuiPanelItems();
+    
+    if(curItemIdx != INVALID) {
+        processGuiPanelItem();
+        processGuiPanelCustomItem();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the custom GUI item data panel for this frame.
+ */
+void GuiEditor::processGuiPanelCustomItem() {
+    if(curItemIdx == INVALID) return;
+    
+    CustomGuiItemDef* curItemPtr = (CustomGuiItemDef*) allItems[curItemIdx];
+    
+    if(curItemPtr->size.x == 0.0f) return;
+    
+    //Custom data header text.
+    ImGui::Spacer();
+    ImGui::Text("Custom data:");
+    
+    //Type combobox.
+    vector<string> typesList {
+        "Bitmap",
+        "9-slice texture",
+        "Text",
+        "Rectangle",
+        "Filled rectangle",
+        "Square",
+        "Filled square",
+        "Ellipse",
+        "Filled ellipse",
+        "Circle",
+        "Filled circle",
+    };
+    int typeInt = (int) curItemPtr->type;
+    if(ImGui::Combo("Type", &typeInt, typesList)) {
+        typeInt = std::max(typeInt, 0);
+        curItemPtr->type = (CUSTOM_GUI_ITEM_TYPE) typeInt;
+        curItemPtr->clearBitmap();
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Type of content that will be drawn inside the GUI item."
+    );
+    
+    //Color picker.
+    if(
+        ImGui::ColorEdit4(
+            "Color",
+            (float*) &curItemPtr->color
+        )
+    ) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Color to tint the bitmap with, or color of the text or shape to draw."
+    );
+    
+    if(
+        curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_BITMAP ||
+        curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_9_SLICE
+    ) {
+        //Choose the image button.
+        if(ImGui::Button("Choose image...")) {
+            openBitmapDialog(
+            [this, curItemPtr] (const string& bmp) {
+                if(bmp != curItemPtr->bitmapName) {
+                    //New image, delete the old one.
+                    if(curItemPtr->bitmap != game.bmpError) {
+                        game.content.bitmaps.list.free(
+                            curItemPtr->bitmapName
+                        );
+                    }
+                    curItemPtr->bitmapName = bmp;
+                    curItemPtr->bitmap =
+                        game.content.bitmaps.list.get(
+                            curItemPtr->bitmapName, nullptr, false
+                        );
+                    changesMgr.markAsChanged();
+                }
+                setStatus("Picked an image successfully.");
+            }
+            );
+        }
+        setTooltip(
+            "Choose which image to use from the game's content."
+        );
+        
+        //Image name text.
+        ImGui::SameLine();
+        monoText("%s", curItemPtr->bitmapName.c_str());
+        setTooltip("Internal name:\n" + curItemPtr->bitmapName);
+        
+    } else if(curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_TEXT) {
+        //Text input.
+        if(ImGui::InputText("Text", &curItemPtr->text)) {
+            changesMgr.markAsChanged();
+        }
+        setTooltip("Text to write in the GUI item.");
+        
+        //Font combobox.
+        vector<string> fontsList {
+            "Area name",
+            "Counter",
+            "Leader cursor counter",
+            "Slim",
+            "Standard",
+            "Value",
+        };
+        int fontInt = (int) curItemPtr->fontType;
+        if(ImGui::Combo("Font", &fontInt, fontsList)) {
+            fontInt = std::max(fontInt, 0);
+            curItemPtr->fontType = (ENGINE_FONT) fontInt;
+            changesMgr.markAsChanged();
+        }
+        setTooltip("Font to use for the text.");
+        
+        //Alignment combobox.
+        vector<string> alignmentsList {
+            "Left",
+            "Center",
+            "Right",
+        };
+        int alignmentInt = (int) curItemPtr->textAlignment;
+        if(ImGui::Combo("Alignment", &alignmentInt, alignmentsList)) {
+            alignmentInt = std::max(alignmentInt, 0);
+            curItemPtr->textAlignment = alignmentInt;
+            changesMgr.markAsChanged();
+        }
+        setTooltip("Text alignment.");
+        
+    } else {
+        if(
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_RECTANGLE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_SQUARE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_ELLIPSE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_CIRCLE
+        ) {
+            //Thickness value.
+            if(
+                ImGui::DragFloat(
+                    "Thickness", &curItemPtr->thickness, 0.05f, 0.001f, FLT_MAX
+                )
+            ) {
+                changesMgr.markAsChanged();
+            }
+            setTooltip(
+                "Thickness of the line that makes up the shape.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+        }
+        
+        if(
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_RECTANGLE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_FILLED_RECTANGLE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_SQUARE ||
+            curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
+        ) {
+            //Rounding value.
+            if(
+                ImGui::DragFloat(
+                    "Rounding", &curItemPtr->rectangleRounding, 0.05f
+                )
+            ) {
+                changesMgr.markAsChanged();
+            }
+            setTooltip(
+                "Radius of the rounding of the corners.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+        }
+        
+    }
+}
+
+
+/**
+ * @brief Processes the hardcoded items panel for this frame.
+ */
+void GuiEditor::processGuiPanelHardcoded() {
+    ImGui::BeginChild("hardcoded");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panelTitle("HARDCODED ITEMS");
+    
+    processGuiPanelItems();
+    
+    if(curItemIdx != INVALID) {
+        processGuiPanelItem();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui GUI definition info control panel
+ * for this frame.
+ */
+void GuiEditor::processGuiPanelInfo() {
+    ImGui::BeginChild("info");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panelTitle("INFO");
+    
+    //Name input.
+    if(ImGui::InputText("Name", &contentMd.name)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Name of this GUI definition. Optional."
+    );
+    
+    //Description input.
+    if(ImGui::InputText("Description", &contentMd.description)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Description of this GUI definition. Optional."
+    );
+    
+    //Version input.
+    if(monoInputText("Version", &contentMd.version)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Version of the definition, preferably in the \"X.Y.Z\" format. "
+        "Optional."
+    );
+    
+    //Maker input.
+    if(ImGui::InputText("Maker", &contentMd.maker)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Name (or nickname) of who made this definition. "
+        "Optional."
+    );
+    
+    //Maker notes input.
+    if(ImGui::InputText("Maker notes", &contentMd.makerNotes)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Extra notes or comments about the definition for other makers to see. "
+        "Optional."
+    );
+    
+    //Notes input.
+    if(ImGui::InputText("Notes", &contentMd.notes)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Extra notes or comments of any kind. "
+        "Optional."
+    );
+    
+    ImGui::EndChild();
+}
+
+
+/**
  * @brief Processes the GUI item info panel for this frame.
  */
 void GuiEditor::processGuiPanelItem() {
-    if(curItem == INVALID) return;
+    if(curItemIdx == INVALID) return;
     
-    GuiItemDef* curItemPtr = &hardcodedItems[curItem];
+    GuiItemDef* curItemPtr = allItems[curItemIdx];
     
     if(curItemPtr->size.x == 0.0f) return;
     
     //Item's name text.
+    ImGui::Spacer();
     ImGui::Text("Item \"%s\" data:", curItemPtr->name.c_str());
     
     //Center values.
@@ -707,26 +986,28 @@ void GuiEditor::processGuiPanelItems() {
     //Item list.
     if(
         ImGui::BeginChild(
-            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Borders
+            "itemsList", ImVec2(0.0f, 200.0f), ImGuiChildFlags_Borders
         )
     ) {
-        for(size_t i = 0; i < hardcodedItems.size(); i++) {
-        
+        for(size_t i = 0; i < allItems.size(); i++) {
+            GuiItemDef* item = allItems[i];
+            
+            bool isCustom = i >= hardcodedItems.size();
+            if(state == EDITOR_STATE_HARDCODED && isCustom) continue;
+            if(state == EDITOR_STATE_CUSTOM && !isCustom) continue;
+            
             //Item checkbox.
-            bool visible = hardcodedItems[i].size.x != 0.0f;
+            bool visible = item->size.x != 0.0f;
             if(
-                ImGui::Checkbox(("##v" + hardcodedItems[i].name).c_str(), &visible)
+                ImGui::Checkbox(("##v" + item->name).c_str(), &visible)
             ) {
                 if(visible) {
-                    hardcodedItems[i].center.x = 50.0f;
-                    hardcodedItems[i].center.y = 50.0f;
-                    hardcodedItems[i].size.x = 10.0f;
-                    hardcodedItems[i].size.y = 10.0f;
+                    setToDefaults(item);
                 } else {
-                    hardcodedItems[i].center.x = 0.0f;
-                    hardcodedItems[i].center.y = 0.0f;
-                    hardcodedItems[i].size.x = 0.0f;
-                    hardcodedItems[i].size.y = 0.0f;
+                    item->center.x = 0.0f;
+                    item->center.y = 0.0f;
+                    item->size.x = 0.0f;
+                    item->size.y = 0.0f;
                 }
                 changesMgr.markAsChanged();
             }
@@ -739,12 +1020,12 @@ void GuiEditor::processGuiPanelItems() {
             ImGui::Text("  ");
             
             //Item selectable.
-            bool selected = curItem == i;
+            bool selected = curItemIdx == i;
             ImGui::SameLine();
             if(
-                monoSelectable(hardcodedItems[i].name.c_str(), &selected)
+                monoSelectable(item->name.c_str(), &selected)
             ) {
-                curItem = i;
+                curItemIdx = i;
             }
             
             if(mustFocusOnCurItem && selected) {
@@ -755,6 +1036,225 @@ void GuiEditor::processGuiPanelItems() {
         }
         ImGui::EndChild();
     }
+    
+    if(state == EDITOR_STATE_CUSTOM) {
+    
+        CustomGuiItemDef* curItemPtr = nullptr;
+        if(curItemIdx != INVALID) {
+            curItemPtr = (CustomGuiItemDef*) allItems[curItemIdx];
+        }
+        
+        //New item button.
+        if(
+            ImGui::ImageButton(
+                "newItemButton", editorIcons[EDITOR_ICON_ADD],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            CustomGuiItemDef newItem;
+            newItem.name = "new_item";
+            setToDefaults(&newItem);
+            customItems.push_back(newItem);
+            rebuildAllItemsCache();
+            curItemIdx = allItems.size() - 1;
+            curItemPtr = (CustomGuiItemDef*) allItems[curItemIdx];;
+            setStatus("Created a new custom GUI item.");
+        }
+        setTooltip(
+            "Add a new custom GUI item."
+        );
+        
+        if(curItemPtr) {
+            //Delete item button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "delItemButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                string deletedItemName = curItemPtr->name;
+                size_t customIdx = curItemIdx - hardcodedItems.size();
+                curItemPtr->clearBitmap();
+                customItems.erase(customItems.begin() + customIdx);
+                rebuildAllItemsCache();
+                curItemIdx = INVALID;
+                changesMgr.markAsChanged();
+                setStatus("Deleted item \"" + deletedItemName + "\".");
+            }
+            setTooltip("Delete the current item.");
+            
+            //Rename item button.
+            static string renameItemName;
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "renameItemButton", editorIcons[EDITOR_ICON_INFO],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                duplicateString(curItemPtr->name, renameItemName);
+                openInputPopup("renameItem");
+            }
+            setTooltip(
+                "Rename the current GUI item."
+            );
+            
+            //Rename item popup.
+            if(
+                processGuiInputPopup(
+                    "renameItem", "New name:", &renameItemName, true
+                )
+            ) {
+                renameItem(curItemPtr, renameItemName);
+            }
+            
+            //Move item up button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "moveItemUpButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                size_t customIdx = curItemIdx - hardcodedItems.size();
+                if(customIdx > 0) {
+                    std::swap(
+                        customItems[customIdx], customItems[customIdx - 1]
+                    );
+                    rebuildAllItemsCache();
+                    curItemIdx--;
+                    changesMgr.markAsChanged();
+                    setStatus("Moved item up.");
+                } else {
+                    setStatus("This is already the topmost item.");
+                }
+            }
+            setTooltip(
+                "Move the current item up in the list.\n"
+                "Items are drawn in order from top to bottom."
+            );
+            
+            //Move item down button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "moveItemDownButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                size_t customIdx = curItemIdx - hardcodedItems.size();
+                if(customIdx < customItems.size() - 1) {
+                    std::swap(
+                        customItems[customIdx], customItems[customIdx + 1]
+                    );
+                    rebuildAllItemsCache();
+                    curItemIdx++;
+                    changesMgr.markAsChanged();
+                    setStatus("Moved item down.");
+                } else {
+                    setStatus("This is already the bottommost item.");
+                }
+            }
+            setTooltip(
+                "Move the current item down in the list.\n"
+                "Items are drawn in order from top to bottom."
+            );
+            
+        }
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui main control panel for this frame.
+ */
+void GuiEditor::processGuiPanelMain() {
+    if(manifest.internalName.empty()) return;
+    
+    ImGui::BeginChild("main");
+    
+    //Current definition header text.
+    ImGui::Text("Definition: ");
+    
+    //Current definition text.
+    ImGui::SameLine();
+    monoText("%s", manifest.internalName.c_str());
+    string fileTooltip =
+        getFileTooltip(manifest.path) + "\n\n"
+        "File state: ";
+    if(!changesMgr.existsOnDisk()) {
+        fileTooltip += "Doesn't exist in your disk yet!";
+    } else if(changesMgr.hasUnsavedChanges()) {
+        fileTooltip += "You have unsaved changes.";
+    } else {
+        fileTooltip += "Everything ok.";
+    }
+    setTooltip(fileTooltip);
+    
+    //Hardcoded items button.
+    ImGui::Spacer();
+    if(
+        ImGui::ImageButtonAndText(
+            "hardcodedButton", editorIcons[EDITOR_ICON_MOB_RADIUS],
+            Point(EDITOR::ICON_BMP_SIZE),
+            24.0f, "Hardcoded items"
+        )
+    ) {
+        changeState(EDITOR_STATE_HARDCODED);
+    }
+    setTooltip(
+        "Change the layout of the hardcoded GUI items the engine needs."
+    );
+    
+    //Custom items button.
+    if(
+        ImGui::ImageButtonAndText(
+            "customButton", editorIcons[EDITOR_ICON_DETAILS],
+            Point(EDITOR::ICON_BMP_SIZE),
+            24.0f, "Custom items"
+        )
+    ) {
+        changeState(EDITOR_STATE_CUSTOM);
+    }
+    setTooltip(
+        "Make entirely custom GUI items for added decoration."
+    );
+    
+    //Information button.
+    ImGui::Spacer();
+    if(
+        ImGui::ImageButtonAndText(
+            "infoButton", editorIcons[EDITOR_ICON_INFO],
+            Point(EDITOR::ICON_BMP_SIZE),
+            8.0f, "Info"
+        )
+    ) {
+        changeState(EDITOR_STATE_INFO);
+    }
+    setTooltip(
+        "Set the GUI definition's information here, if you want."
+    );
+    
+    //Stats node.
+    ImGui::Spacer();
+    if(saveableTreeNode("main", "Stats")) {
+    
+        //Hardcoded item amount text.
+        ImGui::BulletText(
+            "Hardcoded items: %i", (int) hardcodedItems.size()
+        );
+        
+        //Custom item amount text.
+        ImGui::BulletText(
+            "Custom items: %i", (int) customItems.size()
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::EndChild();
 }
 
 

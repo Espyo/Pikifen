@@ -56,21 +56,33 @@ void Content::resetMetadata() {
  * @param node Data node to save to.
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
-    GetterWriter mGW(node);
+    const auto doProp =
+    [node] (const string& name, const string& value) {
+        DataNode* propNode = nullptr;
+        if(node->getNrOfChildrenByName(name) > 0) {
+            propNode = node->getChildByName(name);
+        }
+        if(propNode) {
+            if(value.empty()) {
+                node->remove(propNode);
+            } else {
+                propNode->value = value;
+            }
+        } else {
+            if(!value.empty()) {
+                node->addNew(name, value);
+            }
+        }
+    };
     
-    mGW.write("name", name);
-    
-#define saveOpt(n, v) if(!v.empty()) mGW.write((n), (v))
-    
-    saveOpt("description", description);
-    saveOpt("tags", tags);
-    saveOpt("maker", maker);
-    saveOpt("version", version);
-    saveOpt("engine_version", engineVersion);
-    saveOpt("maker_notes", makerNotes);
-    saveOpt("notes", notes);
-    
-#undef saveOpt
+    doProp("name", name);
+    doProp("description", description);
+    doProp("tags", tags);
+    doProp("maker", maker);
+    doProp("version", version);
+    doProp("engine_version", engineVersion);
+    doProp("maker_notes", makerNotes);
+    doProp("notes", notes);
 }
 
 

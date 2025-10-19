@@ -18,7 +18,6 @@ Next tasks (roughly sorted most important first)
         Allow makers to add custom GUI items, by having them simply be bitmaps or text
             Make it so makers can choose whether the item is drawn before others (like a background image) or after
             Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
-            Add them to the editor
         Spatial navigation
             It should only loop around if it couldn't find anything else
             Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?

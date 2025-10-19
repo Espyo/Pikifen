@@ -67,6 +67,17 @@ GuiEditor::GuiEditor() :
 
 
 /**
+ * @brief Changes to a new state, cleaning up whatever is needed.
+ *
+ * @param newState The new state.
+ */
+void GuiEditor::changeState(const EDITOR_STATE newState) {
+    curItemIdx = INVALID;
+    state = newState;
+}
+
+
+/**
  * @brief Code to run when the load dialog is closed.
  */
 void GuiEditor::closeLoadDialog() {
@@ -367,6 +378,7 @@ void GuiEditor::load() {
     //Misc. setup.
     mustRecenterCam = true;
     
+    changeState(EDITOR_STATE_MAIN);
     game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
     
     //Automatically load a file if needed, or show the load dialog.
@@ -431,9 +443,11 @@ void GuiEditor::loadGuiDefFile(
         return;
     }
     
+    contentMd.loadMetadataFromDataNode(&fileNode);
     GuiManager::getItemDefsFromDataFile(
         &fileNode, &hardcodedItems, &customItems
     );
+    rebuildAllItemsCache();
     
     //Finish up.
     changesMgr.reset();
@@ -545,6 +559,20 @@ void GuiEditor::quitCmd(float inputValue) {
 
 
 /**
+ * @brief Rebuilds allItems.
+ */
+void GuiEditor::rebuildAllItemsCache() {
+    allItems.clear();
+    for(size_t h = 0; h < hardcodedItems.size(); h++) {
+        allItems.push_back(&hardcodedItems[h]);
+    }
+    for(size_t c = 0; c < customItems.size(); c++) {
+        allItems.push_back(&customItems[c]);
+    }
+}
+
+
+/**
  * @brief Code to run for the reload command.
  *
  * @param inputValue Value of the player input for the command.
@@ -582,6 +610,42 @@ void GuiEditor::reloadGuiDefs() {
 
 
 /**
+ * @brief Renames an item to the given name.
+ *
+ * @param item Item to rename.
+ * @param newName Its new name.
+ */
+void GuiEditor::renameItem(GuiItemDef* item, const string& newName) {
+    //Check if it's valid.
+    if(!item) {
+        return;
+    }
+    
+    const string oldName = item->name;
+    
+    //Check if the name is the same.
+    if(newName == oldName) {
+        setStatus();
+        return;
+    }
+    
+    //Check if the name is empty.
+    if(newName.empty()) {
+        setStatus("You need to specify the item's new name!", true);
+        return;
+    }
+    
+    //Rename!
+    item->name = newName;
+    
+    changesMgr.markAsChanged();
+    setStatus(
+        "Renamed item \"" + oldName + "\" to \"" + newName + "\"."
+    );
+}
+
+
+/**
  * @brief Resets the camera.
  *
  * @param instantaneous Whether the camera moves to its spot instantaneously
@@ -612,11 +676,8 @@ void GuiEditor::saveCmd(float inputValue) {
  * @return Whether it succeeded.
  */
 bool GuiEditor::saveGuiDef() {
-    DataNode* positionsNode = fileNode.getChildByName("positions");
-    for(size_t i = 0; i < hardcodedItems.size(); i++) {
-        DataNode* itemNode = positionsNode->getChild(i);
-        itemNode->value = p2s(hardcodedItems[i].center) + " " + p2s(hardcodedItems[i].size);
-    }
+    GuiManager::writeItemDefsToDataFile(&fileNode, hardcodedItems, customItems);
+    contentMd.saveMetadataToDataNode(&fileNode);
     
     if(!fileNode.saveFile(manifest.path)) {
         showSystemMessageBox(
@@ -643,13 +704,28 @@ bool GuiEditor::saveGuiDef() {
 
 
 /**
+ * @brief Sets some of the GUI item's properties to some defaults.
+ *
+ * @param item Item to change.
+ */
+void GuiEditor::setToDefaults(GuiItemDef* item) {
+    item->center.x = 50.0f;
+    item->center.y = 50.0f;
+    item->size.x = 10.0f;
+    item->size.y = 10.0f;
+}
+
+
+/**
  * @brief Sets up the editor for a new GUI definition,
  * be it from an existing file or from scratch.
  */
 void GuiEditor::setupForNewGuiDef() {
     manifest.clear();
     hardcodedItems.clear();
-    curItem = INVALID;
+    customItems.clear();
+    allItems.clear();
+    curItemIdx = INVALID;
     
     //We could reset the camera directly, but if the player enters the editor
     //via the auto start maker tool, processGui() won't have a chance
@@ -725,7 +801,9 @@ void GuiEditor::unload() {
     Editor::unload();
     
     hardcodedItems.clear();
-    curItem = INVALID;
+    customItems.clear();
+    allItems.clear();
+    curItemIdx = INVALID;
     
     game.content.unloadAll(
     vector<CONTENT_TYPE> {

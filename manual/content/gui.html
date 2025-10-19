@@ -33,6 +33,9 @@
 
       <dt><b>The editor only knows each GUI definition's internal name, but these are usually obvious.</b></dt>
       <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI definitions folder. So this dialog will show you the text file names, i.e. the internal names, instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#definitions">GUI definitions section</a> of this page, since that lists what each menu's file is.</dd>
+
+      <dt><b>GUI definitions have hardcoded items, which the engine expects and controls, and custom items.</b></dt>
+      <dd>Hardcoded items are GUI items that the engine needs for the menu to work properly. The engine expects these items to exist in order to change them, get feedback from them, control their appearance and behavior, etc. Custom items on the other hand are completely optional and only serve to decorate the GUI. You can add, edit, and remove as many custom GUI items as you want, as well as what they show inside, from images to text to shapes.</dd>
     </dl>
     
     <h3 id="coordinates">Canvas and coordinates</h3>
@@ -54,17 +57,20 @@
     <h3 id="panel">Panel</h3>
 
     <dl>
-      <dt><b>The panel on the right lists all items.</b></dt>
-      <dd>The right side of the editor has a panel that includes a list of all the items in the current GUI definition, as well as their internal names.</dd>
+      <dt><b>The panel on the right lists the items that exist.</b></dt>
+      <dd>When you're in the hardcoded items mode or the custom items mode, the right side of the editor has a panel that includes a list of all the items in the current GUI definition, as well as their internal names.</dd>
 
       <dt><b>In the list, checkboxes specify whether an item is visible.</b></dt>
-      <dd>You can click on an item's checkbox in the list to make it visible or invisible. If it is invisible, it won't show up in the canvas nor in-game.</dd>
+      <dd>You can click on an item's checkbox in the list to make it visible or invisible. If it is invisible, it won't show up in the canvas nor in-game, though it'll still exist in the GUI definition.</dd>
 
       <dt><b>Click an item in the list to select it.</b></dt>
       <dd>When you click an item (not its checkbox), you will see some information about that item appear below the list in the panel. You will also see some handles on the canvas, surrounding that item. Those handles are explained later.</dd>
 
       <dt><b>Edit the selected item's position or size in the widgets below the list.</b></dt>
       <dd>The numbers in the "center" and "size" widgets represent window percentages, as explained above. If instead you would like to specify where an item's top-left corner is, or bottom-right corner, there are some widgets to adjust things that way.</dd>
+
+      <dt><b>For custom items, change their settings in the widgets farther below.</b></dt>
+      <dd>Below the standard widgets for the position and size you'll find properties that control what a custom item shows. Certain properties will only be available for certain custom GUI item types.</dd>
     </dl>
 
     <h3 id="canvas">Interacting with the canvas</h3>
@@ -72,6 +78,9 @@
     <dl>
       <dt><b>Click an item's bubble in the canvas to select it.</b></dt>
       <dd>Instead of selecting an item through the panel's list, you can click on it in the canvas to select it. Doing so will also correctly select the corresponding item in the list.</dd>
+      
+      <dt><b>Red items are hardcoded, green items are custom.</b></dt>
+      <dd>You can only select hardcoded items in the hardcoded item mode of the editor, and the same applies to custom items and the custom item mode.</dd>
       
       <dt><b>When items overlap, keep clicking to select different ones.</b></dt>
       <dd>If you click somewhere where two items overlap, the editor will select one of them. But if you click there again, it will select the other one. You can keep clicking to change which item is selected, making it a good way to find the exact item you need when you've got a lot of them in a tight space.</dd>
@@ -95,8 +104,8 @@
       <dt><b>When you're done, save with the button in the toolbar.</b></dt>
       <dd>When you press the save button, the GUI definition gets saved to a file to your disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
 
-      <dt><b>The editor can only uses an item's internal name and draw a vague shape representing it.</b></dt>
-      <dd>Because each GUI item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#definitions">GUI definitions section</a> of this document.</dd>
+      <dt><b>The editor can only uses a hardcoded item's internal name and draw a vague shape representing it.</b></dt>
+      <dd>Because each GUI's hardcoded item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of the hardcoded items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#definitions">GUI definitions section</a> of this document.</dd>
 
       <dt><b>An item's size only specifies its maximum size.</b></dt>
       <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI definition simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>

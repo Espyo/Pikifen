@@ -10,16 +10,17 @@ positions{
 	close=40.0000 32.0000 12.0000 4.0000
 	close_input=34.0000 34.0000 4.0000 4.0000
 }
-custom_items {
-	background_1 {
-		type = filled_rectangle
-		coordinates = 50.0000 49.0000 36.0000 42.0000
-		color = 24 64 60 200
-		rectangle_rounding = 20
+custom_items{
+	background_rectangle{
+		coordinates=50.0000 49.0000 36.0000 42.0000
+		type=filled_rectangle
+		color=24 64 60 200
+		rectangle_rounding=20.0000
 	}
-	background_2 {
-		type = 9_slice
-		coordinates = 50.0000 49.0000 36.0000 42.0000
-		bitmap = gui/frame_box
+	background_frame{
+		coordinates=50.0000 49.0000 36.0000 42.0000
+		type=9_slice
+		color=255 255 255
+		bitmap=gui/frame_box
 	}
 }

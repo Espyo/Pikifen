@@ -172,8 +172,6 @@ public:
     string notes;
     
     
-protected:
-
     //--- Function declarations ---
     
     void loadMetadataFromDataNode(DataNode* node);

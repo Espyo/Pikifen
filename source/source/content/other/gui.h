@@ -176,11 +176,17 @@ struct CustomGuiItemDef : public GuiItemDef {
     //Tint or shape color.
     ALLEGRO_COLOR color = COLOR_WHITE;
     
+    //Internal name of the bitmap to use, if any.
+    string bitmapName;
+    
     //Image to use, if any.
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Text to write, if any.
     string text;
+    
+    //Type of the font for the text, if any.
+    ENGINE_FONT fontType = ENGINE_FONT_STANDARD;
     
     //Font for the text, if any.
     ALLEGRO_FONT* font = nullptr;
@@ -193,6 +199,11 @@ struct CustomGuiItemDef : public GuiItemDef {
     
     //Rectangle corner rounding, if any.
     float rectangleRounding = 0.0f;
+    
+    
+    //--- Function declarations ---
+    
+    void clearBitmap();
     
 };
 
@@ -715,6 +726,11 @@ public:
         const GUI_MANAGER_ANIM type, float duration
     );
     bool wasLastInputMouse() const;
+    static bool writeItemDefsToDataFile(
+        DataNode* file,
+        const vector<GuiItemDef>& hardcodedItemDefs,
+        const vector<CustomGuiItemDef>& customItemDefs
+    );
     bool destroy();
     
     
