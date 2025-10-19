@@ -682,6 +682,22 @@ void GuiEditor::processGuiPanelCustomItem() {
         "Color to tint the bitmap with, or color of the text or shape to draw."
     );
     
+    //Draw before hardcoded checkbox.
+    if(
+        ImGui::Checkbox(
+            "Draw before hardcoded items",
+            &curItemPtr->drawBeforeHardcoded
+        )
+    ) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "If checked, this item will be drawn before the hardcoded items.\n"
+        "Otherwise, it will be drawn after all the hardcoded items.\n"
+        "Whether other custom items that also have this checked will be drawn\n"
+        "before or after this one depends on the order in the list above."
+    );
+    
     if(
         curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_BITMAP ||
         curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_9_SLICE

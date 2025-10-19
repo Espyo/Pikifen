@@ -40,6 +40,15 @@ const float BULLET_PADDING = 6.0f;
 //Radius of the circle that represents the bullet in a bullet point item.
 const float BULLET_RADIUS = 4.0f;
 
+//Drawing layer for custom items meant to be drawn after the normal ones.
+const unsigned char DRAWING_LAYER_CUSTOM_AFTER = 20;
+
+//Drawing layer for custom items meant to be drawn after the normal ones.
+const unsigned char DRAWING_LAYER_CUSTOM_BEFORE = 0;
+
+//Drawing layer for normal items.
+const unsigned char DRAWING_LAYER_NORMAL = 10;
+
 //Speed at which the focus cursor's alpha changes.
 const float FOCUS_CURSOR_ALPHA_SPEED = 4.0f;
 
@@ -649,6 +658,10 @@ void GuiManager::createCustomItems() {
         GuiItem* guiItem = new GuiItem();
         guiItem->ratioCenter = infoPtr->center;
         guiItem->ratioSize = infoPtr->size;
+        guiItem->drawingLayer =
+            infoPtr->drawBeforeHardcoded ?
+            GUI::DRAWING_LAYER_CUSTOM_BEFORE :
+            GUI::DRAWING_LAYER_CUSTOM_AFTER;
         guiItem->onDraw =
         [infoPtr] (const DrawInfo & draw) {
             const auto getDimensions =
@@ -793,9 +806,18 @@ bool GuiManager::draw() {
     int ocrW = 0;
     int ocrH = 0;
     
-    for(size_t i = 0; i < items.size(); i++) {
+    //Sort them by layer.
+    vector<GuiItem*> drawingSortedItems = items;
+    std::stable_sort(
+        drawingSortedItems.begin(), drawingSortedItems.end(),
+    [] (GuiItem * i1, GuiItem * i2) {
+        return i1->drawingLayer < i2->drawingLayer;
+    }
+    );
     
-        GuiItem* iPtr = items[i];
+    for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+    
+        GuiItem* iPtr = drawingSortedItems[i];
         
         if(!iPtr->onDraw) continue;
         
@@ -933,6 +955,7 @@ bool GuiManager::getItemDefsFromDataFile(
         rs.set("type", typeStr, &typeNode);
         rs.set("coordinates", coordsStr);
         rs.set("color", item.color);
+        rs.set("draw_before_hardcoded", item.drawBeforeHardcoded);
         rs.set("bitmap", item.bitmapName, &bitmapNode);
         rs.set("text", item.text);
         rs.set("font", fontStr, &fontNode);
@@ -1693,6 +1716,9 @@ bool GuiManager::writeItemDefsToDataFile(
         gw.write("coordinates", coordsStr);
         gw.write("type", typeStr);
         gw.write("color", itemPtr->color);
+        if(itemPtr->drawBeforeHardcoded) {
+            gw.write("draw_before_hardcoded", itemPtr->drawBeforeHardcoded);
+        }
         if(itemPtr->bitmap) {
             gw.write("bitmap", itemPtr->bitmapName);
         }

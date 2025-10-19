@@ -38,6 +38,9 @@ extern const float AUTO_REPEAT_MIN_INTERVAL;
 extern const float AUTO_REPEAT_RAMP_TIME;
 extern const float BULLET_PADDING;
 extern const float BULLET_RADIUS;
+extern const unsigned char DRAWING_LAYER_CUSTOM_AFTER;
+extern const unsigned char DRAWING_LAYER_CUSTOM_BEFORE;
+extern const unsigned char DRAWING_LAYER_NORMAL;
 extern const float FOCUS_CURSOR_ALPHA_SPEED;
 extern const float FOCUS_CURSOR_BOB_OFFSET;
 extern const float FOCUS_CURSOR_BOB_TIME_MULT;
@@ -176,6 +179,9 @@ struct CustomGuiItemDef : public GuiItemDef {
     //Tint or shape color.
     ALLEGRO_COLOR color = COLOR_WHITE;
     
+    //Draw before the hardcoded items.
+    bool drawBeforeHardcoded = false;
+    
     //Internal name of the bitmap to use, if any.
     string bitmapName;
     
@@ -296,6 +302,9 @@ public:
     
     //Padding amount, if it has items inside of it.
     float padding = 0.0f;
+    
+    //Drawing layer. The lower the number, the sooner it'll be drawn.
+    unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;
     
     //Can this item's activation be auto-repeated by holding the button down?
     bool canAutoRepeat = false;

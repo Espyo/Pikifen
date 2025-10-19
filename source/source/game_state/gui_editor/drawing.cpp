@@ -73,10 +73,38 @@ void GuiEditor::drawCanvas() {
     al_get_clipping_rectangle(
         &origClipX, &origClipY, &origClipW, &origClipH
     );
+    
+    GuiItemDef* curItemPtr = nullptr;
+    if(curItemIdx != INVALID) curItemPtr = allItems[curItemIdx];
+    
+    //Sort them by layer.
+    vector<pair<GuiItemDef*, unsigned char> > drawingSortedItems;
     for(size_t i = 0; i < allItems.size(); i++) {
-        GuiItemDef* item = allItems[i];
-        if(item->size.x == 0.0f) continue;
         bool isCustom = i >= hardcodedItems.size();
+        unsigned char drawingLayer;
+        if(isCustom) {
+            CustomGuiItemDef* customData = (CustomGuiItemDef*) allItems[i];
+            drawingLayer =
+                customData->drawBeforeHardcoded ?
+                GUI::DRAWING_LAYER_CUSTOM_BEFORE :
+                GUI::DRAWING_LAYER_CUSTOM_AFTER;
+        } else {
+            drawingLayer = GUI::DRAWING_LAYER_NORMAL;
+        }
+        drawingSortedItems.push_back(std::make_pair(allItems[i], drawingLayer));
+    }
+    std::stable_sort(
+        drawingSortedItems.begin(), drawingSortedItems.end(),
+    [] (const auto & i1, const auto & i2) {
+        return i1.second < i2.second;
+    }
+    );
+    
+    for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+        GuiItemDef* item = drawingSortedItems[i].first;
+        if(item->size.x == 0.0f) continue;
+        bool isCustom =
+            drawingSortedItems[i].second != GUI::DRAWING_LAYER_NORMAL;
         ALLEGRO_COLOR color =
             isCustom ?
             al_map_rgb(160, 224, 160) :
@@ -113,7 +141,7 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(curItemIdx != i) {
+        if(curItemPtr != item) {
             drawRoundedRectangle(
                 item->center,
                 item->size,

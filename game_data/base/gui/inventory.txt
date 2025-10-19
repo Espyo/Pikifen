@@ -15,12 +15,14 @@ custom_items{
 		coordinates=50.0000 49.0000 36.0000 42.0000
 		type=filled_rectangle
 		color=24 64 60 200
+		draw_before_hardcoded=true
 		rectangle_rounding=20.0000
 	}
 	background_frame{
 		coordinates=50.0000 49.0000 36.0000 42.0000
 		type=9_slice
 		color=255 255 255
+		draw_before_hardcoded=true
 		bitmap=gui/frame_box
 	}
 }
