@@ -623,7 +623,7 @@ void GuiEditor::processGuiOptionsDialog() {
 void GuiEditor::processGuiPanelItem() {
     if(curItem == INVALID) return;
     
-    Item* curItemPtr = &items[curItem];
+    GuiItemDef* curItemPtr = &hardcodedItems[curItem];
     
     if(curItemPtr->size.x == 0.0f) return;
     
@@ -710,23 +710,23 @@ void GuiEditor::processGuiPanelItems() {
             "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Borders
         )
     ) {
-        for(size_t i = 0; i < items.size(); i++) {
+        for(size_t i = 0; i < hardcodedItems.size(); i++) {
         
             //Item checkbox.
-            bool visible = items[i].size.x != 0.0f;
+            bool visible = hardcodedItems[i].size.x != 0.0f;
             if(
-                ImGui::Checkbox(("##v" + items[i].name).c_str(), &visible)
+                ImGui::Checkbox(("##v" + hardcodedItems[i].name).c_str(), &visible)
             ) {
                 if(visible) {
-                    items[i].center.x = 50.0f;
-                    items[i].center.y = 50.0f;
-                    items[i].size.x = 10.0f;
-                    items[i].size.y = 10.0f;
+                    hardcodedItems[i].center.x = 50.0f;
+                    hardcodedItems[i].center.y = 50.0f;
+                    hardcodedItems[i].size.x = 10.0f;
+                    hardcodedItems[i].size.y = 10.0f;
                 } else {
-                    items[i].center.x = 0.0f;
-                    items[i].center.y = 0.0f;
-                    items[i].size.x = 0.0f;
-                    items[i].size.y = 0.0f;
+                    hardcodedItems[i].center.x = 0.0f;
+                    hardcodedItems[i].center.y = 0.0f;
+                    hardcodedItems[i].size.x = 0.0f;
+                    hardcodedItems[i].size.y = 0.0f;
                 }
                 changesMgr.markAsChanged();
             }
@@ -742,7 +742,7 @@ void GuiEditor::processGuiPanelItems() {
             bool selected = curItem == i;
             ImGui::SameLine();
             if(
-                monoSelectable(items[i].name.c_str(), &selected)
+                monoSelectable(hardcodedItems[i].name.c_str(), &selected)
             ) {
                 curItem = i;
             }

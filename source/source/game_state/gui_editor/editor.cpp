@@ -431,21 +431,9 @@ void GuiEditor::loadGuiDefFile(
         return;
     }
     
-    DataNode* positionsNode = fileNode.getChildByName("positions");
-    size_t nItems = positionsNode->getNrOfChildren();
-    
-    for(size_t i = 0; i < nItems; i++) {
-        Item newItem;
-        DataNode* itemNode = positionsNode->getChild(i);
-        newItem.name = itemNode->name;
-        vector<string> words = split(itemNode->value);
-        if(words.size() != 4) continue;
-        newItem.center.x = s2f(words[0]);
-        newItem.center.y = s2f(words[1]);
-        newItem.size.x = s2f(words[2]);
-        newItem.size.y = s2f(words[3]);
-        items.push_back(newItem);
-    }
+    GuiManager::getItemDefsFromDataFile(
+        &fileNode, &hardcodedItems, &customItems
+    );
     
     //Finish up.
     changesMgr.reset();
@@ -625,9 +613,9 @@ void GuiEditor::saveCmd(float inputValue) {
  */
 bool GuiEditor::saveGuiDef() {
     DataNode* positionsNode = fileNode.getChildByName("positions");
-    for(size_t i = 0; i < items.size(); i++) {
+    for(size_t i = 0; i < hardcodedItems.size(); i++) {
         DataNode* itemNode = positionsNode->getChild(i);
-        itemNode->value = p2s(items[i].center) + " " + p2s(items[i].size);
+        itemNode->value = p2s(hardcodedItems[i].center) + " " + p2s(hardcodedItems[i].size);
     }
     
     if(!fileNode.saveFile(manifest.path)) {
@@ -660,7 +648,7 @@ bool GuiEditor::saveGuiDef() {
  */
 void GuiEditor::setupForNewGuiDef() {
     manifest.clear();
-    items.clear();
+    hardcodedItems.clear();
     curItem = INVALID;
     
     //We could reset the camera directly, but if the player enters the editor
@@ -736,7 +724,7 @@ Point GuiEditor::snapPoint(const Point& p) {
 void GuiEditor::unload() {
     Editor::unload();
     
-    items.clear();
+    hardcodedItems.clear();
     curItem = INVALID;
     
     game.content.unloadAll(

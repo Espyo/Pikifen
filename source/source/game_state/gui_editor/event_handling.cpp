@@ -122,12 +122,12 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     bool twHandled = false;
-    if(curItem != INVALID && items[curItem].size.x != 0.0f) {
+    if(curItem != INVALID && hardcodedItems[curItem].size.x != 0.0f) {
         twHandled =
             curTransformationWidget.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
-                &items[curItem].center,
-                &items[curItem].size,
+                &hardcodedItems[curItem].center,
+                &hardcodedItems[curItem].size,
                 nullptr,
                 1.0f / game.editorsView.cam.zoom
             );
@@ -135,8 +135,8 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     
     if(!twHandled) {
         vector<size_t> clickedItems;
-        for(size_t i = 0; i < items.size(); i++) {
-            Item* itemPtr = &items[i];
+        for(size_t i = 0; i < hardcodedItems.size(); i++) {
+            GuiItemDef* itemPtr = &hardcodedItems[i];
             if(
                 isPointInRectangle(
                     game.editorsView.mouseCursorWorldPos,
@@ -182,12 +182,12 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(curItem != INVALID && items[curItem].size.x != 0.0f) {
+    if(curItem != INVALID && hardcodedItems[curItem].size.x != 0.0f) {
         bool twHandled =
             curTransformationWidget.handleMouseMove(
                 snapPoint(game.editorsView.mouseCursorWorldPos),
-                &items[curItem].center,
-                &items[curItem].size,
+                &hardcodedItems[curItem].center,
+                &hardcodedItems[curItem].size,
                 nullptr,
                 1.0f / game.editorsView.cam.zoom,
                 false,

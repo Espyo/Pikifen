@@ -99,7 +99,102 @@ enum GUI_MANAGER_ANIM {
 };
 
 
+//Type of things to draw in a custom item.
+enum CUSTOM_GUI_ITEM_TYPE {
+
+    //A bitmap.
+    CUSTOM_GUI_ITEM_TYPE_BITMAP,
+    
+    //A 9-slice texture.
+    CUSTOM_GUI_ITEM_TYPE_9_SLICE,
+    
+    //Text.
+    CUSTOM_GUI_ITEM_TYPE_TEXT,
+    
+    //A non-filled rectangle.
+    CUSTOM_GUI_ITEM_TYPE_RECTANGLE,
+    
+    //A filled rectangle.
+    CUSTOM_GUI_ITEM_TYPE_FILLED_RECTANGLE,
+    
+    //A non-filled square.
+    CUSTOM_GUI_ITEM_TYPE_SQUARE,
+    
+    //A filled square.
+    CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE,
+    
+    //A non-filled ellipse.
+    CUSTOM_GUI_ITEM_TYPE_ELLIPSE,
+    
+    //A filled ellipse.
+    CUSTOM_GUI_ITEM_TYPE_FILLED_ELLIPSE,
+    
+    //A non-filled circle.
+    CUSTOM_GUI_ITEM_TYPE_CIRCLE,
+    
+    //A filled circle.
+    CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE,
+    
+};
+
+
 class GuiManager;
+
+
+/**
+ * @brief Definition of a GUI item. This has no data about the item's behavior,
+ * just data about what it is and where.
+ */
+struct GuiItemDef {
+
+    //--- Members ---
+    
+    //Its name in the file.
+    string name;
+    
+    //Center coordinates.
+    Point center;
+    
+    //Width and height.
+    Point size;
+    
+};
+
+
+
+/**
+* @brief Definition of a custom GUI item, added by the user, that is not a part
+* of the items the engine expects for the GUI.
+*/
+struct CustomGuiItemDef : public GuiItemDef {
+
+    //--- Members ---
+    
+    //Type.
+    CUSTOM_GUI_ITEM_TYPE type = CUSTOM_GUI_ITEM_TYPE_BITMAP;
+    
+    //Tint or shape color.
+    ALLEGRO_COLOR color = COLOR_WHITE;
+    
+    //Image to use, if any.
+    ALLEGRO_BITMAP* bitmap = nullptr;
+    
+    //Text to write, if any.
+    string text;
+    
+    //Font for the text, if any.
+    ALLEGRO_FONT* font = nullptr;
+    
+    //Text alignment.
+    unsigned char textAlignment = ALLEGRO_ALIGN_CENTER;
+    
+    //Shape thickness, if any.
+    float thickness = 1.0f;
+    
+    //Rectangle corner rounding, if any.
+    float rectangleRounding = 0.0f;
+    
+};
 
 
 /**
@@ -598,16 +693,17 @@ public:
     bool draw();
     bool tick(float deltaT);
     string getCurrentTooltip() const;
+    static bool getItemDefsFromDataFile(
+        DataNode* file,
+        vector<GuiItemDef>* outHardcodedItemDefs,
+        vector<CustomGuiItemDef>* outCustomItemDefs
+    );
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
     GuiItem* getFocusedItem() const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     bool hideItems();
-    bool readDataFile(
-        DataNode* node,
-        const string& coordsNodeName = "positions",
-        const string& customNodeName = "custom_items"
-    );
+    bool readDataFile(DataNode* node);
     bool registerCoords(
         const string& id,
         float cx, float cy, float w, float h
@@ -621,91 +717,9 @@ public:
     bool wasLastInputMouse() const;
     bool destroy();
     
+    
 private:
 
-    //--- Enums ---
-    
-    //Type of things to draw in a custom item.
-    enum CUSTOM_ITEM_TYPE {
-    
-        //A bitmap.
-        CUSTOM_ITEM_TYPE_BITMAP,
-        
-        //A 9-slice texture.
-        CUSTOM_ITEM_TYPE_9_SLICE,
-        
-        //Text.
-        CUSTOM_ITEM_TYPE_TEXT,
-        
-        //A non-filled rectangle.
-        CUSTOM_ITEM_TYPE_RECTANGLE,
-        
-        //A filled rectangle.
-        CUSTOM_ITEM_TYPE_FILLED_RECTANGLE,
-        
-        //A non-filled square.
-        CUSTOM_ITEM_TYPE_SQUARE,
-        
-        //A filled square.
-        CUSTOM_ITEM_TYPE_FILLED_SQUARE,
-        
-        //A non-filled ellipse.
-        CUSTOM_ITEM_TYPE_ELLIPSE,
-        
-        //A filled ellipse.
-        CUSTOM_ITEM_TYPE_FILLED_ELLIPSE,
-        
-        //A non-filled circle.
-        CUSTOM_ITEM_TYPE_CIRCLE,
-        
-        //A filled circle.
-        CUSTOM_ITEM_TYPE_FILLED_CIRCLE,
-        
-    };
-    
-    
-    //--- Structs ---
-    
-    /**
-     * @brief Represents a custom item, added by the user, that is not a part
-     * of the items the engine expects for the GUI.
-     */
-    struct CustomItem {
-    
-        //--- Members ---
-        
-        //Type.
-        CUSTOM_ITEM_TYPE type = CUSTOM_ITEM_TYPE_BITMAP;
-        
-        //Center ratio coordinates.
-        Point center;
-        
-        //Ratio dimensions.
-        Point size;
-        
-        //Tint or shape color.
-        ALLEGRO_COLOR color = COLOR_WHITE;
-        
-        //Image to use, if any.
-        ALLEGRO_BITMAP* bitmap = nullptr;
-        
-        //Text to write, if any.
-        string text;
-        
-        //Font for the text, if any.
-        ALLEGRO_FONT* font = nullptr;
-        
-        //Text alignment.
-        unsigned char textAlignment = ALLEGRO_ALIGN_CENTER;
-        
-        //Shape thickness, if any.
-        float thickness = 1.0f;
-        
-        //Rectangle corner rounding, if any.
-        float rectangleRounding = 0.0f;
-        
-    };
-    
     //--- Members ---
     
     //Which item is currently focused.
@@ -718,7 +732,7 @@ private:
     map<string, Point> registeredSizes;
     
     //Custom items.
-    vector<CustomItem> customItems;
+    vector<CustomGuiItemDef> customItemDefs;
     
     //Is the OK button pressed?
     bool okPressed = false;

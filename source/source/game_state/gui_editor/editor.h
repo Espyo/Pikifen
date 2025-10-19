@@ -12,6 +12,7 @@
 
 #include <string>
 
+#include "../../content/other/gui.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../editor.h"
 
@@ -47,29 +48,9 @@ public:
     void drawCanvas();
     string getOpenedContentPath() const;
     
+    
 private:
 
-    //--- Misc. declarations ---
-    
-    /**
-     * @brief Represents a GUI item.
-     */
-    struct Item {
-    
-        //--- Members ---
-        
-        //Its name in the file.
-        string name;
-        
-        //Center coordinates.
-        Point center;
-        
-        //Width and height.
-        Point size;
-        
-    };
-    
-    
     //--- Members ---
     
     //Currently selected item, or INVALID for none.
@@ -78,8 +59,11 @@ private:
     //Data node for the contents of the current GUI definition.
     DataNode fileNode;
     
-    //List of items for the current GUI definition.
-    vector<Item> items;
+    //List of hardcoded item definitions for the current GUI definition.
+    vector<GuiItemDef> hardcodedItems;
+    
+    //List of custom item definitions for the current GUI definition.
+    vector<CustomGuiItemDef> customItems;
     
     //Picker info for the picker in the "load" dialog.
     Picker loadDialogPicker;
