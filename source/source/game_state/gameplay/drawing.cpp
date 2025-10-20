@@ -1084,6 +1084,48 @@ void GameplayState::drawInGameText(Player* player) {
         }
     }
     
+    //Maker tool -- draw reaches.
+    if(game.makerTools.infoLock && game.makerTools.reaches) {
+        if(game.makerTools.infoLock->farReach != INVALID) {
+            MobType::Reach* farReach =
+                &game.makerTools.infoLock->type->reaches[
+                    game.makerTools.infoLock->farReach
+                ];
+            ALLEGRO_COLOR color = al_map_rgba(192, 64, 64, 192);
+            drawReach(
+                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->angle,
+                game.makerTools.infoLock->radius,
+                farReach->angle1, farReach->radius1, color
+            );
+            drawReach(
+                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->angle,
+                game.makerTools.infoLock->radius,
+                farReach->angle2, farReach->radius2, color
+            );
+        }
+        if(game.makerTools.infoLock->nearReach != INVALID) {
+            MobType::Reach* nearReach =
+                &game.makerTools.infoLock->type->reaches[
+                    game.makerTools.infoLock->nearReach
+                ];
+            ALLEGRO_COLOR color = al_map_rgba(64, 192, 64, 192);
+            drawReach(
+                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->angle,
+                game.makerTools.infoLock->radius,
+                nearReach->angle1, nearReach->radius1, color
+            );
+            drawReach(
+                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->angle,
+                game.makerTools.infoLock->radius,
+                nearReach->angle2, nearReach->radius2, color
+            );
+        }
+    }
+    
     //Player notification.
     player->notification.draw(player->view);
     
@@ -1487,6 +1529,46 @@ void GameplayState::drawPrecipitation() {
                 3, COLOR_WHITE
             );
         }
+    }
+}
+
+
+/**
+ * @brief Draws a mob's reach, for content debugging purposes.
+ *
+ * @param center Center point, i.e. position of the mob.
+ * @param angle Facing angle, i.e. the mob's angle.
+ * @param radius Center radius, i.e. the mob's radius.
+ * @param reachAngle Angle of the reach. Must be above 0 to be drawn.
+ * @param reachRadius Radius of the reach. Must be above 0 to be drawn.
+ * @param color Color to draw with.
+ */
+void GameplayState::drawReach(
+    const Point& center, float angle, float radius,
+    float reachAngle, float reachRadius,
+    const ALLEGRO_COLOR& color
+) {
+    const float THICKNESS = 3.0f;
+    
+    if(reachAngle <= 0.0f || reachRadius <= 0.0f) return;
+    
+    float angle1 = angle - reachAngle / 2.0f;
+    float angle2 = angle + reachAngle / 2.0f;
+    al_draw_arc(
+        center.x, center.y, radius + reachRadius, angle1, angle2 - angle1,
+        color, THICKNESS
+    );
+    if(reachAngle < TAU) {
+        Point p1 =
+            center + rotatePoint(Point(radius + reachRadius, 0.0f), angle1);
+        Point p2 =
+            center + rotatePoint(Point(radius + reachRadius, 0.0f), angle2);
+        al_draw_line(
+            center.x, center.y, p1.x, p1.y, color, THICKNESS
+        );
+        al_draw_line(
+            center.x, center.y, p2.x, p2.y, color, THICKNESS
+        );
     }
 }
 

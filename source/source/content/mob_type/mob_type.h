@@ -67,16 +67,16 @@ public:
         //Name of this reach.
         string name;
         
-        //Radius of possibility 1.
+        //Radius of possibility 1. -1 for none.
         float radius1 = -1.0f;
         
-        //Angle of possibility 1.
+        //Angle of possibility 1. -1 for none.
         float angle1 = -1.0f;
         
-        //Radius of possibility 2.
+        //Radius of possibility 2. -1 for none.
         float radius2 = -1.0f;
         
-        //Angle of possibility 2.
+        //Angle of possibility 2. -1 for none.
         float angle2 = -1.0f;
         
     };

@@ -502,16 +502,16 @@ void MobType::loadFromDataNode(
     DataNode* reachesNode = node->getChildByName("reaches");
     size_t nReaches = reachesNode->getNrOfChildren();
     for(size_t r = 0; r < nReaches; r++) {
-    
+        DataNode* reachNode = reachesNode->getChild(r);
         MobType::Reach newReach;
-        newReach.name = reachesNode->getChild(r)->name;
-        vector<string> rStrings = split(reachesNode->getChild(r)->value);
+        newReach.name = reachNode->name;
+        vector<string> rStrings = split(reachNode->value);
         
         if(rStrings.size() != 2 && rStrings.size() != 4) {
             game.errors.report(
                 "Reach \"" + newReach.name +
                 "\" isn't made up of 2 or 4 words!",
-                reachesNode->getChild(r)
+                reachNode
             );
             continue;
         }

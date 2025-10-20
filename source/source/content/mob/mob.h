@@ -208,10 +208,11 @@ public:
     //Starting coordinates; what the mob calls "home".
     Point home;
     
-    //Index of the reach to use for "X in reach" events.
+    //Index of the reach to use for "X in reach" events. INVALID for none.
     size_t farReach = INVALID;
     
     //Index or the reach to use for "focused mob out of reach" events.
+    //INVALID for none.
     size_t nearReach = INVALID;
     
     //How long it's been alive for.

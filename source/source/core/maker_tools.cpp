@@ -289,6 +289,12 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         usedHelpingTools = true;
         break;
         
+    } case PLAYER_ACTION_TYPE_MT_SHOW_REACHES: {
+
+        reaches = !reaches;
+        usedHelpingTools = true;
+        break;
+        
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
 
         Mob* mobToTeleport =
@@ -502,6 +508,7 @@ void MakerTools::resetForGameplay() {
     infoLock = nullptr;
     lastPikminType = nullptr;
     pathInfo = false;
+    reaches = false;
     
     usedHelpingTools = false;
     allowedInPlayNow = false;

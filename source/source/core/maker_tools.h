@@ -164,8 +164,11 @@ struct MakerTools {
     //Whether the second modifier input is held down.
     bool mod2 = false;
     
-    //Show path info?
+    //Show path info of the currently info-locked mob?
     bool pathInfo = false;
+    
+    //Show the reaches of the currently info-locked mob?
+    bool reaches = false;
     
     //How many times the player has pressed a maker tool button to confirm,
     //when tools are limited in play mode.

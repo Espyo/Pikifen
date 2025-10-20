@@ -15,12 +15,9 @@ Next tasks (roughly sorted most important first)
     --- 1.1.0 ---
     Swarming jingle
     GUI things
-        Allow makers to add custom GUI items, by having them simply be bitmaps or text
-            Make it so makers can choose whether the item is drawn before others (like a background image) or after
-            Make it so images can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
         Spatial navigation
             It should only loop around if it couldn't find anything else
-            Even for normal stuff it's janky. Maybe the pivot point should be at the edge of the widget that matches the pressed direction, instead of the center?
+                It's pretty difficult to reach the "Open folder" button of the pack menu because of this
             Logic to remember where it came from
             Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
         The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
@@ -788,7 +785,6 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
-        A mob's reach visualizer
         A modifier for the mouse cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?
@@ -890,9 +886,11 @@ Tasks for later on (I might never implement these)
                 a. Have the icon represent the current mode?
                 b. Have the icon represent the next mode?
                 c. Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
+    GUI
+        Make it so images in custom GUI items can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
+        GUI items could be told they are currently being activated, so that buttons can appear pressed in
+            This would involve activation changing from just holding the button to holding + releasing, which might interfere with buttons that have auto-repeat activation
     Blood (optional, of course)
-    GUI items could be told they are currently being activated, so that buttons can appear pressed in
-        This would involve activation changing from just holding the button to holding + releasing, which might interfere with buttons that have auto-repeat activation
     HUD element for a digital clock?
     Resolution, window size, and zoom
         Players should be able to resize the window on-the-fly (GitHub issue #2)

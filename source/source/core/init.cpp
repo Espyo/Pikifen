@@ -660,6 +660,13 @@ void initControls() {
         "mt_show_hitboxes", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
     );
     game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_SHOW_REACHES,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Show reaches",
+        "Toggle drawing the info'd mob's reaches.",
+        "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Teleport",
@@ -983,7 +990,7 @@ void initMisc() {
     game.wallOffsetEffectBuffer = al_create_bitmap(game.winW, game.winH);
     
     game.editorsView.boxMargin = GAMEPLAY::CAMERA_BOX_MARGIN;
-
+    
     game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
 }
 

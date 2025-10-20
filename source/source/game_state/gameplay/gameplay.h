@@ -492,6 +492,11 @@ private:
     void drawOnionMenu();
     void drawPauseMenu();
     void drawPrecipitation();
+    void drawReach(
+        const Point& center, float angle, float radius,
+        float reachAngle, float reachRadius,
+        const ALLEGRO_COLOR& color
+    );
     void drawThrowPreview(Player* player);
     void drawTreeShadows();
     void drawWorldComponents(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
