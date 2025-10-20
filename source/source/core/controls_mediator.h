@@ -249,6 +249,9 @@ enum PLAYER_ACTION_TYPE {
     //Show hitboxes.
     PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
     
+    //Show reaches.
+    PLAYER_ACTION_TYPE_MT_SHOW_REACHES,
+    
     //Teleport.
     PLAYER_ACTION_TYPE_MT_TELEPORT,
     

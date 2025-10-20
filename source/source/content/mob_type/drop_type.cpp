@@ -67,25 +67,28 @@ void DropType::loadCatProperties(DataNode* file) {
     dRS.set("status_to_give", statusNameStr, &statusNameNode);
     dRS.set("total_doses", totalDoses, &totalDosesNode);
     
-    if(consumerStr == "pikmin") {
-        consumer = DROP_CONSUMER_PIKMIN;
-    } else if(consumerStr == "leaders") {
-        consumer = DROP_CONSUMER_LEADERS;
-    } else {
-        game.errors.report(
-            "Unknown consumer \"" + consumerStr + "\"!", consumerNode
+    if(consumerNode) {
+        readEnumProp(
+            consumerStr,
+        (int*) &consumer, {
+            "pikmin",
+            "leaders"
+        },
+        "consumer",
+        consumerNode
         );
     }
     
-    if(effectStr == "maturate") {
-        effect = DROP_EFFECT_MATURATE;
-    } else if(effectStr == "increase_sprays") {
-        effect = DROP_EFFECT_INCREASE_SPRAYS;
-    } else if(effectStr == "give_status") {
-        effect = DROP_EFFECT_GIVE_STATUS;
-    } else {
-        game.errors.report(
-            "Unknown drop effect \"" + effectStr + "\"!", effectNode
+    if(effectNode) {
+        readEnumProp(
+            effectStr,
+        (int*) &effect, {
+            "maturate",
+            "increase_sprays",
+            "give_status",
+        },
+        "drop effect",
+        effectNode
         );
     }
     

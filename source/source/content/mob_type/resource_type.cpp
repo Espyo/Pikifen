@@ -68,31 +68,30 @@ void ResourceType::loadCatProperties(DataNode* file) {
     rRS.set("vanish_delay", vanishDelay);
     rRS.set("vanish_on_drop", vanishOnDrop);
     
-    if(carryingDestinationStr == "ship") {
-        carryingDestination = CARRY_DESTINATION_SHIP;
-    } else if(carryingDestinationStr == "linked_mob") {
-        carryingDestination = CARRY_DESTINATION_LINKED_MOB;
-    } else if(carryingDestinationStr == "linked_mob_matching_type") {
-        carryingDestination = CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE;
-    } else {
-        game.errors.report(
-            "Unknown carrying destination \"" +
-            carryingDestinationStr + "\"!", carryingDestinationNode
+    if(carryingDestinationNode) {
+        readEnumProp(
+            carryingDestinationStr,
+        (int*) &carryingDestination, {
+            "ship",
+            "linked_mob",
+            "linked_mob_matching_type"
+        },
+        "carrying destination",
+        carryingDestinationNode
         );
     }
     
-    if(deliveryResultStr == "damage_mob") {
-        deliveryResult = RESOURCE_DELIVERY_RESULT_DAMAGE_MOB;
-    } else if(deliveryResultStr == "increase_ingredients") {
-        deliveryResult = RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS;
-    } else if(deliveryResultStr == "add_points") {
-        deliveryResult = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
-    } else if(deliveryResultStr == "stay") {
-        deliveryResult = RESOURCE_DELIVERY_RESULT_STAY;
-    } else {
-        game.errors.report(
-            "Unknown delivery result \"" + deliveryResultStr + "\"!",
-            deliveryResultNode
+    if(deliveryResultNode) {
+        readEnumProp(
+            deliveryResultStr,
+        (int*) &deliveryResult, {
+            "damage_mob",
+            "increase_ingredients",
+            "add_points",
+            "stay"
+        },
+        "delivery result",
+        deliveryResultNode
         );
     }
     

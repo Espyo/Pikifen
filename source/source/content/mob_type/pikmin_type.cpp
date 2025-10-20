@@ -202,16 +202,15 @@ void PikminType::loadCatProperties(DataNode* file) {
     pRS.set("top_leaf", topLeafStr, &topLeafNode);
     
     if(attackMethodNode) {
-        if(attackMethodStr == "latch") {
-            attackMethod = PIKMIN_ATTACK_LATCH;
-        } else if(attackMethodStr == "impact") {
-            attackMethod = PIKMIN_ATTACK_IMPACT;
-        } else {
-            game.errors.report(
-                "Unknown Pikmin attack type \"" + attackMethodStr + "\"!",
-                attackMethodNode
-            );
-        }
+        readEnumProp(
+            attackMethodStr,
+        (int*) &attackMethod, {
+            "latch",
+            "impact"
+        },
+        "Pikmin attack type",
+        attackMethodNode
+        );
     }
     
     for(size_t s = 0; s < sounds.size(); s++) {

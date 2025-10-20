@@ -80,16 +80,15 @@ void BouncerType::loadCatProperties(DataNode* file) {
     }
     
     if(ridingPoseNode) {
-        if(ridingPoseStr == "stopped") {
-            ridingPose = BOUNCER_RIDING_POSE_STOPPED;
-        } else if(ridingPoseStr == "somersault") {
-            ridingPose = BOUNCER_RIDING_POSE_SOMERSAULT;
-        } else {
-            game.errors.report(
-                "Unknown type of riding pose \"" + ridingPoseStr + "\"!",
-                ridingPoseNode
-            );
-        }
+        readEnumProp(
+            ridingPoseStr,
+        (int*) &ridingPose, {
+            "stopped",
+            "somersault"
+        },
+        "type of riding pose",
+        ridingPoseNode
+        );
     }
     
 }

@@ -755,22 +755,19 @@ void MobType::loadFromDataNode(
             );
         }
         
-        if(typeStr == "text") {
-            newProp.type = AEMP_TYPE_TEXT;
-        } else if(typeStr == "int") {
-            newProp.type = AEMP_TYPE_INT;
-        } else if(typeStr == "float") {
-            newProp.type = AEMP_TYPE_FLOAT;
-        } else if(typeStr == "bool") {
-            newProp.type = AEMP_TYPE_BOOL;
-        } else if(typeStr == "list") {
-            newProp.type = AEMP_TYPE_LIST;
-        } else if(typeStr == "number_list") {
-            newProp.type = AEMP_TYPE_NR_LIST;
-        } else {
-            game.errors.report(
-                "Unknown area editor property type \"" + typeStr + "\"!",
-                typeNode
+        if(typeNode) {
+            readEnumProp(
+                typeStr,
+            (int*) &newProp.type, {
+                "text",
+                "int",
+                "float",
+                "bool",
+                "list",
+                "number_list"
+            },
+            "area editor property type",
+            typeNode
             );
         }
         

@@ -66,41 +66,34 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
     );
     
     if(contributionMethodNode) {
-        if(contributionMethodStr == "normal") {
-            contributionMethod = GROUP_TASK_CONTRIBUTION_NORMAL;
-        } else if(contributionMethodStr == "weight") {
-            contributionMethod = GROUP_TASK_CONTRIBUTION_WEIGHT;
-        } else if(contributionMethodStr == "carry_strength") {
-            contributionMethod = GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH;
-        } else if(contributionMethodStr == "push_strength") {
-            contributionMethod = GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH;
-        } else {
-            game.errors.report(
-                "Unknown contribution type \"" +
-                contributionMethodStr + "\"!", contributionMethodNode
-            );
-        }
+        readEnumProp(
+            contributionMethodStr,
+        (int*) &contributionMethod, {
+            "normal",
+            "weight",
+            "carry_strength",
+            "push_strength"
+        },
+        "contribution type",
+        contributionMethodNode
+        );
     }
     
     workerPikminAngle = degToRad(workerPikminAngle);
     
     if(workerPikminPoseNode) {
-        if(workerPikminPoseStr == "stopped") {
-            workerPikminPose = GROUP_TASK_PIKMIN_POSE_STOPPED;
-        } else if(workerPikminPoseStr == "arms_out") {
-            workerPikminPose = GROUP_TASK_PIKMIN_POSE_ARMS_OUT;
-        } else if(workerPikminPoseStr == "pushing") {
-            workerPikminPose = GROUP_TASK_PIKMIN_POSE_PUSHING;
-        } else if(workerPikminPoseStr == "carrying") {
-            workerPikminPose = GROUP_TASK_PIKMIN_POSE_CARRYING;
-        } else if(workerPikminPoseStr == "carrying_light") {
-            workerPikminPose = GROUP_TASK_PIKMIN_POSE_CARRYING_LIGHT;
-        } else {
-            game.errors.report(
-                "Unknown pose \"" + workerPikminPoseStr + "\"!",
-                workerPikminPoseNode
-            );
-        }
+        readEnumProp(
+            workerPikminPoseStr,
+        (int*) &workerPikminPose, {
+            "stopped",
+            "arms_out",
+            "pushing",
+            "carrying",
+            "carrying_light"
+        },
+        "pose",
+        workerPikminPoseNode
+        );
     }
     
     areaEditorProps.back().defValue = i2s(powerGoal);
