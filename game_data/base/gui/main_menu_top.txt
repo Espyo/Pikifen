@@ -54,14 +54,14 @@ icons_to_the_left{
 custom_items{
 	discord_bg{
 		coordinates=74.0000 91.0000 4.0000 5.0000
-		type=filled_rectangle
+		type=filled_square
 		color=128 128 128 128
 		draw_before_hardcoded=true
 		rectangle_rounding=4.0000
 	}
 	github_bg{
 		coordinates=80.0000 91.0000 4.0000 5.0000
-		type=filled_rectangle
+		type=filled_square
 		color=192 192 192 128
 		draw_before_hardcoded=true
 		rectangle_rounding=4.0000

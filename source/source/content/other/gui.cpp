@@ -668,7 +668,7 @@ void GuiManager::createCustomItems() {
             [] (const DrawInfo & draw, bool square) {
                 return
                     square ?
-                    Point(std::min(draw.size.x / 2.0f, draw.size.y / 2.0f)) :
+                    Point(std::min(draw.size.x, draw.size.y)) :
                     draw.size;
             };
             
