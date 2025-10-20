@@ -1446,7 +1446,7 @@ void MobActionRunners::moveToAbsolute(MobActionRunData& data) {
     float y = s2f(data.args[1]);
     float z = data.args.size() > 2 ? s2f(data.args[2]) : data.m->z;
     data.m->chase(
-        Point(x, y), z, 
+        Point(x, y), z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
     );
 }
@@ -1463,7 +1463,7 @@ void MobActionRunners::moveToRelative(MobActionRunData& data) {
     float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
     Point p = rotatePoint(Point(x, y), data.m->angle);
     data.m->chase(
-        data.m->pos + p, data.m->z + z, 
+        data.m->pos + p, data.m->z + z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
     );
 }
@@ -1484,8 +1484,8 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
             data.m->chase(
-                data.m->pos + offset, 
-                data.m->z, 
+                data.m->pos + offset,
+                data.m->z,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1496,8 +1496,9 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
     } case MOB_ACTION_MOVE_TYPE_FOCUS: {
         if(data.m->focusedMob) {
             data.m->chase(
-                &data.m->focusedMob->pos, 
-                &data.m->focusedMob->z, 
+                &data.m->focusedMob->pos,
+                &data.m->focusedMob->z,
+                Point(), 0.0f,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1508,8 +1509,8 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
     } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
         if(data.m->focusedMob) {
             data.m->chase(
-                data.m->focusedMob->pos, 
-                data.m->focusedMob->z, 
+                data.m->focusedMob->pos,
+                data.m->focusedMob->z,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1519,8 +1520,8 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
         
     } case MOB_ACTION_MOVE_TYPE_HOME: {
         data.m->chase(
-            data.m->home, 
-            data.m->z, 
+            data.m->home,
+            data.m->z,
             CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
         );
         break;
@@ -1542,8 +1543,8 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
         des = des / data.m->links.size();
         
         data.m->chase(
-            des, 
-            data.m->z, 
+            des,
+            data.m->z,
             CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
         );
         break;
