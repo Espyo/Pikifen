@@ -52,7 +52,7 @@ void GameplayState::doPlayerActionLieDown(Player* player, bool isDown) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
     
-    player->leaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
+    player->leaderPtr->fsm.runEvent(LEADER_EV_FALL_ASLEEP);
 }
 
 
@@ -750,10 +750,6 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
                 player, action.value,
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN
             );
-            break;
-            
-        } case PLAYER_ACTION_TYPE_LIE_DOWN: {
-            doPlayerActionLieDown(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_NEXT_TYPE:

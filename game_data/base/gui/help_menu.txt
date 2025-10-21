@@ -60,7 +60,6 @@ tidbits{
 		Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.;help/dismissing
 		Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.;help/sprays
 		Punch;When you have no Pikmin in your group, throw a punch with \k throw \k.;help/punching
-		Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.;help/lying_down
 		Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!;help/mouse_cursor
 		Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.;help/throwing_pikmin
 		Radar with a mouse;When playing with a mouse, click somewhere on the radar and drag to pan around. Use the mouse wheel to zoom in and out. Click on a single spot to start Go Here or to pick a leader.;help/radar

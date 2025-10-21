@@ -293,8 +293,8 @@ enum MOB_EV {
     //When the leader opens the inventory.
     LEADER_EV_INVENTORY,
     
-    //When the leader lies down.
-    LEADER_EV_LIE_DOWN,
+    //When the leader falls asleep.
+    LEADER_EV_FALL_ASLEEP,
     
     //When the leader has to go towards the Pikmin it intends to pluck.
     LEADER_EV_GO_PLUCK,

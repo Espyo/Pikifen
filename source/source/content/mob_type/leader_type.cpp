@@ -77,7 +77,7 @@ AnimConversionVector LeaderType::getAnimConversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_THROWN,       "thrown"));
     v.push_back(std::make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
     v.push_back(std::make_pair(LEADER_ANIM_PUNCHING,     "punching"));
-    v.push_back(std::make_pair(LEADER_ANIM_LYING,        "lying"));
+    v.push_back(std::make_pair(LEADER_ANIM_SLEEPING,     "sleeping"));
     v.push_back(std::make_pair(LEADER_ANIM_PAIN,         "pain"));
     v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_BACK, "knocked_back"));
     v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,     "spraying"));

@@ -659,6 +659,9 @@ struct SystemContentList {
     //Mouse cursor.
     ALLEGRO_BITMAP* bmpMouseCursor = nullptr;
     
+    //Napsack icon.
+    ALLEGRO_BITMAP* bmpNapsack = nullptr;
+    
     //Notification.
     ALLEGRO_BITMAP* bmpNotification = nullptr;
     
@@ -921,6 +924,9 @@ struct SystemContentNames {
     
     //Mouse cursor.
     string bmpMouseCursor = "gui/mouse_cursor";
+    
+    //Napsack icon.
+    string bmpNapsack = "gui/notification";
     
     //Notification.
     string bmpNotification = "gui/notification";

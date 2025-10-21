@@ -31,6 +31,7 @@ graphics {
     mission_fail = gui/mission_fail
     more = gui/more
     mouse_cursor = gui/mouse_cursor
+    napsack = gui/napsack
     notification = gui/notification
     pikmin_soul = effects/pikmin_soul
     player_input_icons = gui/player_input_icons

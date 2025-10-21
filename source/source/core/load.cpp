@@ -352,6 +352,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMore);
     game.sysContent.bmpMouseCursor =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMouseCursor);
+    game.sysContent.bmpNapsack =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpNapsack);
     game.sysContent.bmpNotification =
         game.content.bitmaps.list.get(game.sysContentNames.bmpNotification);
     game.sysContent.bmpOnionMenu1 =
@@ -577,6 +579,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMissionMob);
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
+    game.content.bitmaps.list.free(game.sysContent.bmpNapsack);
     game.content.bitmaps.list.free(game.sysContent.bmpNotification);
     game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu1);
     game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu10);

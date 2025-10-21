@@ -2047,6 +2047,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("mission_mob", bmpMissionMob);
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
+    graRS.set("napsack", bmpNapsack);
     graRS.set("notification", bmpNotification);
     graRS.set("onion_menu_1", bmpOnionMenu1);
     graRS.set("onion_menu_10", bmpOnionMenu10);

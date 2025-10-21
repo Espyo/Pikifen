@@ -73,6 +73,7 @@ Inventory::~Inventory() {
  * @return Whether it can be used.
  */
 bool Inventory::canUseItem(InventoryItem* iPtr) {
+    if(!player->leaderPtr) return false;
     if(!iPtr->onUse) return false;
     if(iPtr->onGetAmount) {
         if(iPtr->onGetAmount() == 0) return false;
@@ -196,7 +197,6 @@ void Inventory::populateInventory() {
     for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
         SprayType& sprayTypeRef = *game.config.misc.sprayOrder[s];
         InventoryItem item;
-        item.type = INVENTORY_ITEM_TYPE_SPRAY;
         item.icon = sprayTypeRef.bmpIcon;
         item.name = sprayTypeRef.name;
         item.onGetAmount =
@@ -205,8 +205,23 @@ void Inventory::populateInventory() {
         };
         item.onUse =
         [this, s] () {
+            if(!player->leaderPtr) return;
             player->leaderPtr->fsm.runEvent(
                 LEADER_EV_SPRAY, (void*) &s
+            );
+        };
+        items.push_back(item);
+    }
+    
+    //Sleeping.
+    {
+        InventoryItem item;
+        item.icon = game.sysContent.bmpNapsack;
+        item.name = "Napsack";
+        item.onUse =
+        [this] () {
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_FALL_ASLEEP
             );
         };
         items.push_back(item);

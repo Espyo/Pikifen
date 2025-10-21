@@ -158,9 +158,9 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::standStill);
             efc.changeState("in_inventory");
         }
-        efc.newEvent(LEADER_EV_LIE_DOWN); {
+        efc.newEvent(LEADER_EV_FALL_ASLEEP); {
             efc.run(LeaderFsm::fallAsleep);
-            efc.changeState("sleeping_waiting");
+            efc.changeState("sleeping");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(LeaderFsm::beAttacked);
@@ -1015,6 +1015,10 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(LEADER_EV_SPRAY); {
             efc.changeState("spraying");
         }
+        efc.newEvent(LEADER_EV_FALL_ASLEEP); {
+            efc.run(LeaderFsm::fallAsleep);
+            efc.changeState("sleeping");
+        }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(LeaderFsm::beAttacked);
         }
@@ -1032,27 +1036,14 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
-    efc.newState("sleeping_waiting", LEADER_STATE_SLEEPING_WAITING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryStopMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("sleeping_moving");
-        }
+    efc.newState("sleeping", LEADER_STATE_SLEEPING); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
             efc.changeState("waking_up");
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
             efc.run(LeaderFsm::becomeInactive);
-            efc.changeState("inactive_sleeping_waiting");
+            efc.changeState("inactive_sleeping");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(LeaderFsm::beAttacked);
@@ -1068,221 +1059,25 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::touchedSpray);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
-        }
-    }
-    
-    efc.newState("sleeping_moving", LEADER_STATE_SLEEPING_MOVING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.changeState("sleeping_waiting");
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
-            efc.changeState("sleeping_stuck");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
-            efc.run(GenMobFsm::carryReachDestination);
-        }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
-        }
-        efc.newEvent(LEADER_EV_CANCEL); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
-        }
-        efc.newEvent(LEADER_EV_INACTIVATED); {
-            efc.run(LeaderFsm::becomeInactive);
-            efc.changeState("inactive_sleeping_moving");
-        }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
-            efc.run(LeaderFsm::startWakingUp);
-        }
-        efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
-        }
-        efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
-        }
-        efc.newEvent(MOB_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
-        }
-        efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
-            efc.run(LeaderFsm::touchedSpray);
-        }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
-            efc.run(LeaderFsm::fallDownPit);
-        }
-    }
-    
-    efc.newState("sleeping_stuck", LEADER_STATE_SLEEPING_STUCK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBecomeStuck);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("sleeping_moving");
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.changeState("sleeping_waiting");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("sleeping_moving");
-        }
-        efc.newEvent(LEADER_EV_CANCEL); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
-        }
-        efc.newEvent(LEADER_EV_INACTIVATED); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::becomeInactive);
-            efc.changeState("inactive_sleeping_moving");
-        }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
-            efc.run(LeaderFsm::startWakingUp);
-        }
-        efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
-        }
-        efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
-        }
-        efc.newEvent(MOB_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
-        }
-        efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
-            efc.run(LeaderFsm::touchedSpray);
-        }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
-            efc.run(LeaderFsm::fallDownPit);
-        }
-    }
-    
-    efc.newState(
-        "inactive_sleeping_waiting", LEADER_STATE_INACTIVE_SLEEPING_WAITING
-    ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryStopMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("inactive_sleeping_moving");
-        }
-        efc.newEvent(LEADER_EV_CANCEL); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
-        }
-        efc.newEvent(LEADER_EV_ACTIVATED); {
-            efc.run(LeaderFsm::becomeActive);
-            efc.changeState("sleeping_waiting");
-        }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
-            efc.run(LeaderFsm::startWakingUp);
-        }
-        efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
-        }
-        efc.newEvent(MOB_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
-        }
-        efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
-            efc.run(LeaderFsm::touchedSpray);
-        }
-        efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(LeaderFsm::startWakingUp);
             efc.run(LeaderFsm::startWakingUp);
             efc.changeState("ko");
         }
     }
     
     efc.newState(
-        "inactive_sleeping_moving", LEADER_STATE_INACTIVE_SLEEPING_MOVING
+        "inactive_sleeping", LEADER_STATE_INACTIVE_SLEEPING
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.changeState("inactive_sleeping_waiting");
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
-            efc.changeState("inactive_sleeping_stuck");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
-            efc.run(GenMobFsm::carryReachDestination);
-        }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
-        }
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
             efc.changeState("inactive_waking_up");
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
             efc.run(LeaderFsm::becomeActive);
-            efc.changeState("sleeping_moving");
+            efc.changeState("sleeping");
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
-        }
-        efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
@@ -1293,72 +1088,9 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
             efc.run(LeaderFsm::touchedSpray);
         }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
-            efc.run(LeaderFsm::startWakingUp);
-            efc.run(LeaderFsm::fallDownPit);
-            efc.changeState("idling");
-        }
-    }
-    
-    efc.newState(
-        "inactive_sleeping_stuck", LEADER_STATE_INACTIVE_SLEEPING_STUCK
-    ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBecomeStuck);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("inactive_sleeping_moving");
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.changeState("inactive_sleeping_waiting");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("inactive_sleeping_moving");
-        }
-        efc.newEvent(LEADER_EV_CANCEL); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
-        }
-        efc.newEvent(LEADER_EV_ACTIVATED); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::becomeActive);
-            efc.changeState("sleeping_moving");
-        }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
-            efc.run(LeaderFsm::startWakingUp);
-        }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(LeaderFsm::startWakingUp);
             efc.changeState("ko");
-        }
-        efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
-            efc.run(LeaderFsm::touchedHazard);
-        }
-        efc.newEvent(MOB_EV_LEFT_HAZARD); {
-            efc.run(LeaderFsm::leftHazard);
-        }
-        efc.newEvent(MOB_EV_TOUCHED_SPRAY); {
-            efc.run(LeaderFsm::touchedSpray);
-        }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(LeaderFsm::startWakingUp);
-            efc.run(LeaderFsm::fallDownPit);
-            efc.changeState("idling");
         }
     }
     
@@ -1994,9 +1726,7 @@ void LeaderFsm::fallAsleep(Mob* m, void* info1, void* info2) {
     LeaderFsm::dismiss(m, nullptr, nullptr);
     m->stopChasing();
     
-    m->becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
-    
-    m->setAnimation(LEADER_ANIM_LYING);
+    m->setAnimation(LEADER_ANIM_SLEEPING);
 }
 
 
@@ -2143,7 +1873,7 @@ void LeaderFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
     
     m->setTimer(leaPtr->leaType->knockedDownDuration);
     
-    m->setAnimation(LEADER_ANIM_LYING);
+    m->setAnimation(LEADER_ANIM_SLEEPING);
 }
 
 
@@ -2921,9 +2651,6 @@ void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
-    m->becomeUncarriable();
-    delete m->deliveryInfo;
-    m->deliveryInfo = nullptr;
     m->setAnimation(LEADER_ANIM_GETTING_UP);
 }
 

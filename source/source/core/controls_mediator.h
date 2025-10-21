@@ -176,9 +176,6 @@ enum PLAYER_ACTION_TYPE {
     //Swap to previous standby type maturity.
     PLAYER_ACTION_TYPE_PREV_MATURITY,
     
-    //Lie down.
-    PLAYER_ACTION_TYPE_LIE_DOWN,
-    
     //Custom A.
     PLAYER_ACTION_TYPE_CUSTOM_A,
     

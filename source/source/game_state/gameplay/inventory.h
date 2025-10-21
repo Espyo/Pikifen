@@ -29,15 +29,6 @@ extern const size_t ROWS;
 struct Player;
 
 
-//Types of items in the inventory.
-enum INVENTORY_ITEM_TYPE {
-
-    //Spray.
-    INVENTORY_ITEM_TYPE_SPRAY,
-    
-};
-
-
 /**
  * @brief Represents an item in the inventory.
  *
@@ -45,9 +36,6 @@ enum INVENTORY_ITEM_TYPE {
 struct InventoryItem {
 
     //--- Members ---
-    
-    //Type.
-    INVENTORY_ITEM_TYPE type = INVENTORY_ITEM_TYPE_SPRAY;
     
     //Icon.
     ALLEGRO_BITMAP* icon = nullptr;

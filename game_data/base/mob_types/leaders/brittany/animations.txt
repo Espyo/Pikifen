@@ -263,7 +263,7 @@ animations{
 			}
 		}
 	}
-	lying{
+	sleeping{
 		loop_frame=2
 		frames{
 			half_lying{

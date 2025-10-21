@@ -494,13 +494,6 @@ void initControls() {
         "prev_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_LIE_DOWN,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Lie down",
-        "Lie down so Pikmin can carry you.",
-        "lie_down", "k_26", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",

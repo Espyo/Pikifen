@@ -114,28 +114,16 @@ enum LEADER_STATE {
     //In the inventory menu.
     LEADER_STATE_IN_INVENTORY,
     
-    //Sleeping, waiting to move.
-    LEADER_STATE_SLEEPING_WAITING,
+    //Sleeping.
+    LEADER_STATE_SLEEPING,
     
-    //Sleeping, moving.
-    LEADER_STATE_SLEEPING_MOVING,
+    //Sleeping, inactive.
+    LEADER_STATE_INACTIVE_SLEEPING,
     
-    //Sleeping, stuck.
-    LEADER_STATE_SLEEPING_STUCK,
-    
-    //Sleeping, waiting to move, inactive.
-    LEADER_STATE_INACTIVE_SLEEPING_WAITING,
-    
-    //Sleeping, moving, inactive.
-    LEADER_STATE_INACTIVE_SLEEPING_MOVING,
-    
-    //Sleeping, stuck, inactive.
-    LEADER_STATE_INACTIVE_SLEEPING_STUCK,
-    
-    //Getting up from lying down.
+    //Waking up from sleeping.
     LEADER_STATE_WAKING_UP,
     
-    //Getting up from lying down, inactive.
+    //Waking up from sleeping, inactive.
     LEADER_STATE_INACTIVE_WAKING_UP,
     
     //Held by another leader.
@@ -196,8 +184,8 @@ enum LEADER_ANIM {
     //Punching.
     LEADER_ANIM_PUNCHING,
     
-    //Lying down.
-    LEADER_ANIM_LYING,
+    //Sleeping.
+    LEADER_ANIM_SLEEPING,
     
     //In pain.
     LEADER_ANIM_PAIN,
