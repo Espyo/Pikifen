@@ -169,33 +169,6 @@ void GameplayState::doPlayerActionSwitchMaturity(
 
 
 /**
- * @brief Does the logic for the spray switch player actions.
- *
- * @param player The player responsible.
- * @param isDown Whether the input value makes for a "down" or an "up" input.
- * @param isNext Whether it's the action for the next spray or the previous.
- */
-void GameplayState::doPlayerActionSwitchSpray(
-    Player* player, bool isDown, bool isNext
-) {
-    if(!isDown) return;
-    if(!player->leaderPtr) return;
-    
-    if(game.content.sprayTypes.list.size() > 2) {
-        player->selectedSpray =
-            sumAndWrap(
-                (int) player->selectedSpray,
-                isNext ? +1 : -1,
-                (int) game.content.sprayTypes.list.size()
-            );
-        player->hud->spray1Amount->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );
-    }
-}
-
-
-/**
  * @brief Does the logic for the standby type switch player actions.
  *
  * @param player The player responsible.
@@ -429,61 +402,6 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
 
 
 /**
- * @brief Does the logic for the current spray usage player action.
- *
- * @param player The player responsible.
- * @param isDown Whether the input value makes for a "down" or an "up" input.
- */
-void GameplayState::doPlayerActionUseCurrentSpray(Player* player, bool isDown) {
-    if(!isDown) return;
-    if(!player->leaderPtr) return;
-    
-    if(game.content.sprayTypes.list.size() > 2) {
-        player->leaderPtr->fsm.runEvent(
-            LEADER_EV_SPRAY,
-            (void*) &player->selectedSpray
-        );
-    }
-}
-
-
-/**
- * @brief Does the logic for the spray usage player actions.
- *
- * @param player The player responsible.
- * @param isDown Whether the input value makes for a "down" or an "up" input.
- * @param second Whether it's the first or the second spray.
- */
-void GameplayState::doPlayerActionUseSpray(
-    Player* player, bool isDown, bool second
-) {
-    if(!isDown) return;
-    if(!player->leaderPtr) return;
-    
-    if(!second) {
-        if(
-            game.content.sprayTypes.list.size() == 1 ||
-            game.content.sprayTypes.list.size() == 2
-        ) {
-            size_t sprayIdx = 0;
-            player->leaderPtr->fsm.runEvent(
-                LEADER_EV_SPRAY, (void*) &sprayIdx
-            );
-        }
-        
-    } else {
-        if(game.content.sprayTypes.list.size() == 2) {
-            size_t sprayIdx = 1;
-            player->leaderPtr->fsm.runEvent(
-                LEADER_EV_SPRAY, (void*) &sprayIdx
-            );
-        }
-        
-    }
-}
-
-
-/**
  * @brief Does the logic for the whistle player action.
  *
  * @param player The player responsible.
@@ -626,26 +544,6 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             doPlayerActionInventory(
                 player, isDown
             );
-            break;
-            
-        } case PLAYER_ACTION_TYPE_USE_SPRAY_1:
-        case PLAYER_ACTION_TYPE_USE_SPRAY_2: {
-            doPlayerActionUseSpray(
-                player, isDown,
-                action.actionTypeId == PLAYER_ACTION_TYPE_USE_SPRAY_2
-            );
-            break;
-            
-        } case PLAYER_ACTION_TYPE_NEXT_SPRAY:
-        case PLAYER_ACTION_TYPE_PREV_SPRAY: {
-            doPlayerActionSwitchSpray(
-                player, isDown,
-                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_SPRAY
-            );
-            break;
-            
-        } case PLAYER_ACTION_TYPE_USE_SPRAY: {
-            doPlayerActionUseCurrentSpray(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_CHANGE_ZOOM: {

@@ -73,21 +73,6 @@ enum PLAYER_ACTION_TYPE {
     //Inventory.
     PLAYER_ACTION_TYPE_INVENTORY,
     
-    //Use spray #1.
-    PLAYER_ACTION_TYPE_USE_SPRAY_1,
-    
-    //Use spray #2.
-    PLAYER_ACTION_TYPE_USE_SPRAY_2,
-    
-    //Use currently selected spray.
-    PLAYER_ACTION_TYPE_USE_SPRAY,
-    
-    //Swap to next spray.
-    PLAYER_ACTION_TYPE_NEXT_SPRAY,
-    
-    //Swap to previous spray.
-    PLAYER_ACTION_TYPE_PREV_SPRAY,
-    
     //Pause.
     PLAYER_ACTION_TYPE_PAUSE,
     

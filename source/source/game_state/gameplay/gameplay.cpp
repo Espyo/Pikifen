@@ -372,26 +372,6 @@ void GameplayState::changeSprayCount(
             (signed int) team->sprayStats[typeIdx].nrSprays + amount,
             (signed int) 0
         );
-        
-    for(Player* player : team->players) {
-        GuiItem* sprayHudItem = nullptr;
-        if(game.content.sprayTypes.list.size() > 2) {
-            if(player->selectedSpray == typeIdx) {
-                sprayHudItem = player->hud->spray1Amount;
-            }
-        } else {
-            if(typeIdx == 0) {
-                sprayHudItem = player->hud->spray1Amount;
-            } else {
-                sprayHudItem = player->hud->spray2Amount;
-            }
-        }
-        if(sprayHudItem) {
-            sprayHudItem->startJuiceAnimation(
-                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-            );
-        }
-    }
 }
 
 

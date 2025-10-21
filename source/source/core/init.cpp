@@ -287,41 +287,6 @@ void initControls() {
         "inventory", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL
     );
     game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_USE_SPRAY_1,
-        PLAYER_ACTION_CAT_MAIN,
-        "Use spray 1",
-        "Use the spray in slot 1.",
-        "use_spray_1", "k_18", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_USE_SPRAY_2,
-        PLAYER_ACTION_CAT_MAIN,
-        "Use spray 2",
-        "Use the spray in slot 2.",
-        "use_spray_2", "k_6", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_USE_SPRAY,
-        PLAYER_ACTION_CAT_MAIN,
-        "Use spray",
-        "Use the currently selected spray.",
-        "use_spray", "k_18", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_NEXT_SPRAY,
-        PLAYER_ACTION_CAT_MAIN,
-        "Next spray",
-        "Change to the next spray.",
-        "next_spray", "k_5", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_PREV_SPRAY,
-        PLAYER_ACTION_CAT_MAIN,
-        "Prev. spray",
-        "Change to the previous spray.",
-        "prev_spray", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL
-    );
-    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PAUSE,
         PLAYER_ACTION_CAT_MAIN,
         "Pause",

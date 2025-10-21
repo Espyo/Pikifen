@@ -28,7 +28,6 @@ extern const float MEDAL_ICON_SCALE_NEXT;
 extern const float MEDAL_ICON_SCALE_TIME_MULT;
 extern const float SCORE_INDICATOR_SMOOTHNESS_MULT;
 extern const float SCORE_RULER_RATIO_RANGE;
-extern const float SPRAY_SWAP_JUICE_DURATION;
 extern const float STANDBY_SWAP_JUICE_DURATION;
 extern const float SUN_METER_SUN_SPIN_SPEED;
 extern const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
@@ -146,38 +145,17 @@ struct Hud {
     //Bubble manager for the standby type.
     HudBubbleManager<ALLEGRO_BITMAP*> standbyIconMgr;
     
-    //Bubble manager for the spray icons.
-    HudBubbleManager<ALLEGRO_BITMAP*> sprayIconMgr;
-    
     //Opacity of the standby HUD items.
     float standbyItemsOpacity = 0.0f;
     
     //Time left before the standby items start fading out.
     float standbyItemsFadeTimer = 0.0f;
     
-    //Opacity of the spray HUD items.
-    float sprayItemsOpacity = 0.0f;
-    
-    //Time left before the spray items start fading out.
-    float sprayItemsFadeTimer = 0.0f;
-    
     //Standby type in the previous frame.
     SubgroupType* prevStandbyType = nullptr;
     
     //Maturity icon in the previous frame.
     ALLEGRO_BITMAP* prevMaturityIcon = nullptr;
-    
-    //Current spray 1 count.
-    size_t spray1CountNr = 0;
-    
-    //Current spray 2 count.
-    size_t spray2CountNr = 0;
-    
-    //Spray 1 amount text. Cache for convenience.
-    GuiItem* spray1Amount = nullptr;
-    
-    //Spray 2 amount text. Cache for convenience.
-    GuiItem* spray2Amount = nullptr;
     
     //Current standby count.
     size_t standbyCountNr = 0;
@@ -216,6 +194,5 @@ private:
     
     void createMissionFailCondItems(bool primary);
     void drawStandbyIcon(BUBBLE_RELATION which);
-    void drawSprayIcon(BUBBLE_RELATION which);
     
 };

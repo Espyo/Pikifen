@@ -42,7 +42,7 @@ tidbits{
 		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!;help/pikmin_balance
 		Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!;help/saving_pikmin
 		Maturity;Pikmin with a leaf on their head walk and carry objects slowly. Bud Pikmin are a bit faster, and flower Pikmin are the fastest. To increase a Pikmin's maturity, let it stay underground for a while before plucking, or feed it nectar.;help/maturity
-		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;help/sprays
+		Sprays;Use the sprays in your inventory to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;help/sprays
 		Sleeping;Take a nap by using the Napsack item in your inventory. This will very slowly heal your leader, which can be helpful if you're far away from a ship that repairs spacesuits.;help/sleeping
 		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;help/paths
 		Stuck on a path;Are Pikmin stuck moving in a circle? The path is probably blocked and they are waiting for it to be cleared!;help/carrying
