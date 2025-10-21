@@ -258,6 +258,9 @@ public:
     //A whistled Pikmin that got knocked down loses this much in lie-down time.
     float knockedDownWhistleBonus = LEADER_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
     
+    //Status effect to apply when sleeping, if any.
+    StatusType* sleepingStatus = nullptr;
+    
     //Standby icon.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     

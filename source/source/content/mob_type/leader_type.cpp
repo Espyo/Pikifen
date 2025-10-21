@@ -96,10 +96,13 @@ AnimConversionVector LeaderType::getAnimConversions() const {
  */
 void LeaderType::loadCatProperties(DataNode* file) {
     ReaderSetter lRS(file);
+    string sleepingStatusStr;
+    DataNode* sleepingStatusNode;
     
     lRS.set("knocked_down_duration", knockedDownDuration);
     lRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
     lRS.set("max_throw_height", maxThrowHeight);
+    lRS.set("sleeping_status", sleepingStatusStr, &sleepingStatusNode);
     lRS.set("whistle_range", whistleRange);
     
     for(size_t s = 0; s < sounds.size(); s++) {
@@ -109,6 +112,18 @@ void LeaderType::loadCatProperties(DataNode* file) {
             soundDataIdxs[LEADER_SOUND_DISMISSING] = s;
         } else if(sounds[s].name == "name_call") {
             soundDataIdxs[LEADER_SOUND_NAME_CALL] = s;
+        }
+    }
+    
+    if(sleepingStatusNode) {
+        auto statusIt = game.content.statusTypes.list.find(sleepingStatusStr);
+        if(statusIt != game.content.statusTypes.list.end()) {
+            sleepingStatus = statusIt->second;
+        } else {
+            game.errors.report(
+                "Unknown status type \"" + sleepingStatusStr + "\"!",
+                sleepingStatusNode
+            );
         }
     }
 }

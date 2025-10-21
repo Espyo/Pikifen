@@ -1,0 +1,10 @@
+name = Leader sleeping
+description = A leader sleeping, and slowly healing back up.
+
+affects = leaders
+color = 230 130 160
+health_change_ratio = 0.005
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

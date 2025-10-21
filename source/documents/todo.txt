@@ -6,8 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Hold right, read a sign, release right, leader will keep walking right
     Some items aren't documented in the GUI manual page, and the packs menu and stats menu aren't even there
-    If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
 
@@ -50,12 +50,12 @@ Next tasks (roughly sorted most important first)
             Show how close you are to concocting a new spray
             [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
                 But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
-            [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
             Add shortcuts
                 When you use a shortcut, it should show the thing you used plus its current amount on-screen, for a moment
             A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
                 When you select, should it set it as the aforementioned "standby" item, use it, or do both?
             Document it in the GUI manual page
+            Update the help menu
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
@@ -546,8 +546,6 @@ Misc things (so I don't forget)
             When a leader approaches, when a Pikmin approaches, when carrying, etc.
         Game config parameters:
             Nectars: Work like in the engine, or like in the classics?
-        Figure out what to do with sleeping now that Go Here exists. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
-            Maybe make it a different feature, one that makes the leader play dead so enemies stop targeting them (thanks Kolabold)
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
@@ -608,7 +606,7 @@ Misc things (so I don't forget)
         invulnerability to certain hazards?
         A Survey Drone? [PIKMIN 4]
         Maybe the abilities to swarm and charge should be upgrades too?
-        Lying down?
+        Sleeping
         Whistle upgrades?
     Mob data
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
@@ -937,6 +935,7 @@ Tasks for later on (I might never implement these)
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
     Stuff I don't know how to tackle yet
         If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
+        If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway... Except the hazard/damage/status/replacement logic is a bit intertwined and it's not so simple. For now, makers can just make the damage multiplier be like 0.001 or something
     Possible cleanup
         Timers
             Have a timer manager, so I don't have to remember to do a .tick() to every single one

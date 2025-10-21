@@ -342,6 +342,7 @@ void Inventory::populateInventoryListGui() {
  */
 void Inventory::requestClose() {
     if(!player->leaderPtr) return;
+    if(!isOpen) return;
     player->leaderPtr->fsm.runEvent(LEADER_EV_CANCEL);
 }
 

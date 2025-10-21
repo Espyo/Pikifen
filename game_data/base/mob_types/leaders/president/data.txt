@@ -14,6 +14,7 @@ pushable = true
 pushes = false
 radius = 16
 rotation_speed = 360
+sleeping_status = leader_sleeping
 weight = 1
 
 sounds {

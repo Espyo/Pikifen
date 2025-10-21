@@ -287,12 +287,12 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Lying down stop notification.
     if(
         !notificationDone &&
-        player->leaderPtr->carryInfo
+        player->leaderPtr->fsm.curState->id == LEADER_STATE_SLEEPING
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
-            "Get up",
+            "Wake up",
             Point(
                 player->leaderPtr->pos.x,
                 player->leaderPtr->pos.y - player->leaderPtr->radius

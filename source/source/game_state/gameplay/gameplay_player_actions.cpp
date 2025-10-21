@@ -495,7 +495,7 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(isDown) {
         MobEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
         
-        if(cancelEv) {
+        if(cancelEv && !player->inventory->isOpen) {
             //Cancel auto-pluck, lying down, etc.
             cancelEv->run(player->leaderPtr);
         } else {

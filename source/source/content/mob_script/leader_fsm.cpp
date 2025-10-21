@@ -1723,10 +1723,15 @@ void LeaderFsm::enterIdle(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::fallAsleep(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
+    
     LeaderFsm::dismiss(m, nullptr, nullptr);
     m->stopChasing();
     
     m->setAnimation(LEADER_ANIM_SLEEPING);
+    if(leaPtr->leaType->sleepingStatus) {
+        m->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
+    }
 }
 
 
@@ -2651,7 +2656,16 @@ void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
     m->setAnimation(LEADER_ANIM_GETTING_UP);
+    
+    if(leaPtr->leaType->sleepingStatus) {
+        for(size_t s = 0; s < m->statuses.size(); s++) {
+            if(m->statuses[s].type == leaPtr->leaType->sleepingStatus) {
+                m->statuses[s].toDelete = true;
+            }
+        }
+    }
 }
 
 
