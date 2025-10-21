@@ -24,7 +24,6 @@ fog_color {
 }
 fog_near = 200
 fog_far = 1000
-//TODO: Add Snow!
 
 maker = Espyo
 version = 1.0.0

@@ -471,9 +471,7 @@ void GameplayState::endMission(bool cleared) {
     
     interlude.set(INTERLUDE_MISSION_END, false);
     deltaTMult = 0.5f;
-    for(Player& player : players) {
-        player.leaderMovement.reset(); //TODO replace with a better solution.
-    }
+    stopAllLeaders();
     
     //Zoom in on the reason, if possible.
     for(Player& player : players) {
@@ -1587,6 +1585,19 @@ void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
 
 
 /**
+ * @brief Stops all leaders in their tracks, as far as player controls
+ * are concerned.
+ */
+void GameplayState::stopAllLeaders() {
+    for(Player& player : players) {
+        player.leaderMovement.reset();
+        player.swarmMovement.reset();
+        player.leaderCursorMov.reset();
+    }
+}
+
+
+/**
  * @brief Unloads the "gameplay" state from memory.
  */
 void GameplayState::unload() {
@@ -1613,7 +1624,7 @@ void GameplayState::unload() {
         player.view.cam.setPos(Point());
         player.view.cam.setZoom(1.0f);
         
-        player.leaderMovement.reset(); //TODO replace with a better solution.
+        stopAllLeaders();
     }
     
     while(!mobs.all.empty()) {

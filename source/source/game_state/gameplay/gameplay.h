@@ -533,6 +533,7 @@ private:
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d
     );
     bool shouldIgnorePlayerAction(const Inpution::Action& action);
+    void stopAllLeaders();
     void unloadGameContent();
     void updateAreaActiveCells();
     void updateMobIsActiveFlag();
