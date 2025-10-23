@@ -98,18 +98,20 @@ bool Interface::checkHeuristicsPass(
  * @param limitY1 Top-left corner's Y coordinate.
  * @param limitX2 Bottom-right corner's X coordinate.
  * @param limitY2 Bottom-right corner's Y coordinate.
+ * @return Whether it had looped.
  */
-void Interface::checkLoopRelativeCoordinates(
+bool Interface::checkLoopRelativeCoordinates(
     DIRECTION direction, double* itemRelX,
     double limitX1, double limitY1, double limitX2, double limitY2
 ) {
-    if(*itemRelX >= 0.0f || !settings.loop) return;
+    if(*itemRelX >= 0.0f || !settings.loop) return false;
     
     if(direction == DIRECTION_DOWN || direction == DIRECTION_UP) {
         *itemRelX += limitY2 - limitY1;
     } else {
         *itemRelX += limitX2 - limitX1;
     }
+    return true;
 }
 
 
@@ -142,65 +144,52 @@ bool Interface::clearItems() {
  * @param focusY Y coordinate of the current focus.
  * @param focusW Width of the current focus.
  * @param focusH Height of the current focus.
- * @param convertFocusCoordinateSpace If true, the focus coordinates are
- * assumed to be in relation to the specified parent, and so they must be
- * converted to coordinates in relation to the limits.
  * @return Identifier of the newly-focused item.
  */
 void* Interface::doNavigation(
     DIRECTION direction, void* focusedItemId,
-    float focusX, float focusY, float focusW, float focusH,
-    bool convertFocusCoordinateSpace
+    float focusX, float focusY, float focusW, float focusH
 ) {
+    //Setup.
+    
 #ifdef SPAT_NAV_DEBUG
     lastNavInfo.clear();
 #endif
     
     flattenItems();
     
+    std::map<void*, ItemWithRelUnits> itemsWithRelUnits =
+        getItemsWithRelativeUnits(
+            direction, focusedItemId, focusX, focusY, focusW, focusH
+        );
+        
     double limitX1, limitY1, limitX2, limitY2;
     getLimits(&limitX1, &limitY1, &limitX2, &limitY2);
     
+    std::map<void*, ItemWithRelUnits> nonLoopedItems;
+    std::map<void*, ItemWithRelUnits> loopedItems;
+    loopItems(
+        itemsWithRelUnits, direction, limitX1, limitY1, limitX2, limitY2,
+        &nonLoopedItems, &loopedItems
+    );
+    
+    //Score them.
     double bestScore = FLT_MAX;
     void* bestItemId = nullptr;
+    bool checkLoopedItems = true;
+    getBestItem(nonLoopedItems, &bestScore, &bestItemId, false);
     
-    for(auto& i : items) {
-        if(i.first == focusedItemId) continue;
-        if(itemHasChildren(i.first)) continue;
-        
-        double itemRelX, itemRelY, itemRelW, itemRelH;
-        getItemRelativeUnits(
-            i.second, direction, focusX, focusY, focusW, focusH,
-            &itemRelX, &itemRelY, &itemRelW, &itemRelH
-        );
-        
-        if(settings.loop) {
-            checkLoopRelativeCoordinates(
-                direction, &itemRelX,
-                settings.limitX1, settings.limitY1, limitX2, limitY2
-            );
-        }
-        
-        if(!checkHeuristicsPass(itemRelX, itemRelY, itemRelW, itemRelH)) {
-            continue;
-        }
-        
-        if(itemRelX > 0.0f) {
-            //If this item is in front of the focused one,
-            //give it a score like normal.
-            double score = getItemScore(itemRelX, itemRelY, itemRelW, itemRelH);
-            if(score < bestScore) {
-                bestScore = score;
-                bestItemId = i.first;
-            }
-            
-#ifdef SPAT_NAV_DEBUG
-            lastNavInfo[i.first].score = score;
-            lastNavInfo[i.first].accepted = true;
-#endif
-        }
+    if(!heuristics.singleLoopPass) {
+        //If in two loop passes mode, only check the looped items if
+        //the non-looped items gave us nothing.
+        if(bestItemId != nullptr) checkLoopedItems = false;
     }
     
+    if(checkLoopedItems) {
+        getBestItem(loopedItems, &bestScore, &bestItemId, true);
+    }
+    
+    //Finished!
     return bestItemId;
 }
 
@@ -282,6 +271,50 @@ void Interface::flattenItemsInList(
     }
 }
 
+
+/**
+ * @brief Returns the best item in a list, by scoring them.
+ *
+ * @param list The list.
+ * @param bestScore Pointer to the best score so far.
+ * @param bestItemId Pointer to the best item's identifier so far.
+ */
+void Interface::getBestItem(
+    const std::map<void*, ItemWithRelUnits>& list,
+    double* bestScore, void** bestItemId, bool loopedItems
+) {
+    for(auto& i : list) {
+        if(
+            !checkHeuristicsPass(
+                i.second.relX, i.second.relY, i.second.relW, i.second.relH
+            )
+        ) {
+            //Doesn't pass some of the heuristics checks.
+            continue;
+        }
+        
+        if(i.second.relX <= 0.0f) {
+            //Wrong direction!
+            continue;
+        }
+        
+        double score =
+            getItemScore(
+                i.second.relX, i.second.relY, i.second.relW, i.second.relH
+            );
+        if(score < *bestScore) {
+            *bestScore = score;
+            *bestItemId = i.first;
+        }
+        
+#ifdef SPAT_NAV_DEBUG
+        lastNavInfo[i.first].score = score;
+        lastNavInfo[i.first].accepted = true;
+        lastNavInfo[i.first].looped = loopedItems;
+#endif
+        
+    }
+}
 
 /**
  * @brief Returns an item's children items, if any.
@@ -482,6 +515,48 @@ double Interface::getItemScore(
 
 
 /**
+ * @brief Returns the list of items, but with their units made relative to
+ * the focus.
+ *
+ * @param direction Navigation direction.
+ * @param focusedItemId Identifier of the currently-focused item.
+ * @param focusX X coordinate of the current focus.
+ * @param focusY Y coordinate of the current focus.
+ * @param focusW Width of the current focus.
+ * @param focusH Height of the current focus.
+ * @return The list.
+ */
+std::map<void*, Interface::ItemWithRelUnits>
+Interface::getItemsWithRelativeUnits(
+    DIRECTION direction, void* focusedItemId,
+    float focusX, float focusY, float focusW, float focusH
+) {
+    std::map<void*, Interface::ItemWithRelUnits> result;
+    
+    for(auto& i : items) {
+        if(i.first == focusedItemId) continue;
+        if(itemHasChildren(i.first)) continue;
+        
+        double itemRelX, itemRelY, itemRelW, itemRelH;
+        getItemRelativeUnits(
+            i.second, direction, focusX, focusY, focusW, focusH,
+            &itemRelX, &itemRelY, &itemRelW, &itemRelH
+        );
+        
+        result[i.first] = {
+            .item = i.second,
+            .relX = itemRelX,
+            .relY = itemRelY,
+            .relW = itemRelW,
+            .relH = itemRelH,
+        };
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Returns the limits of the given items.
  *
  * @param limitX1 The top-left corner's X coordinate is returned here.
@@ -519,6 +594,46 @@ bool Interface::itemHasChildren(void* id) const {
 
 
 /**
+ * @brief Loops any items that need looping, and splits all items
+ * between a list of items that got looped and those that didn't.
+ *
+ * @param itemsWithRelUnits List of items with their relative units already
+ * calculated.
+ * @param direction Navigation direction.
+ * @param limitX1 Top-left X coordinate of the limit they must abide.
+ * @param limitY1 Top-left Y coordinate of the limit they must abide.
+ * @param limitX2 Bottom-right X coordinate of the limit they must abide.
+ * @param limitY2 Bottom-right Y coordinate of the limit they must abide.
+ * @param outNonLoopedItems List of items which did not get looped.
+ * @param outLoopedItems List of items which did get looped.
+ */
+void Interface::loopItems(
+    const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,
+    DIRECTION direction,
+    double limitX1, double limitY1, double limitX2, double limitY2,
+    std::map<void*, Interface::ItemWithRelUnits>* outNonLoopedItems,
+    std::map<void*, Interface::ItemWithRelUnits>* outLoopedItems
+) {
+    for(const auto& i : itemsWithRelUnits) {
+        double relX = i.second.relX;
+        bool looped =
+            checkLoopRelativeCoordinates(
+                direction, &relX,
+                limitX1, limitY1, limitX2, limitY2
+            );
+            
+        if(looped) {
+            (*outLoopedItems)[i.first] = i.second;
+            (*outLoopedItems)[i.first].relX = relX;
+        } else {
+            (*outNonLoopedItems)[i.first] = i.second;
+            (*outNonLoopedItems)[i.first].relX = relX;
+        }
+    }
+}
+
+
+/**
  * @brief Navigates in a given direction.
  *
  * @param direction Navigation direction.
@@ -534,8 +649,7 @@ void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
             focusedItemId == nullptr ? 0.0f : items[focusedItemId]->x,
             focusedItemId == nullptr ? 0.0f : items[focusedItemId]->y,
             focusedItemId == nullptr ? 0.0f : items[focusedItemId]->w,
-            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->h,
-            false
+            focusedItemId == nullptr ? 0.0f : items[focusedItemId]->h
         );
 }
 
@@ -555,7 +669,7 @@ void* Interface::navigate(
 ) {
     return
         doNavigation(
-            direction, nullptr, focusX, focusY, focusW, focusH, false
+            direction, nullptr, focusX, focusY, focusW, focusH
         );
 }
 

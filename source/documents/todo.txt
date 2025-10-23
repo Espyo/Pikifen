@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Some items aren't documented in the GUI manual page, and the packs menu and stats menu aren't even there
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
 
@@ -14,11 +13,8 @@ Next tasks (roughly sorted most important first)
     Swarming jingle
     GUI things
         Spatial navigation
-            It should only loop around if it couldn't find anything else
-                It's pretty difficult to reach the "Open folder" button of the pack menu because of this
             Logic to remember where it came from
             Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
-        The ability to bind shortcut inputs -- stuff like the pause menu's page flipping with Q and E should be handled this way, so that the activation sound code isn't duplicated, and so that it can make use of other GUI niceties, like not letting an activation go through during a transition
     Controls improvements
         Controls manager
             Allow for button combinations

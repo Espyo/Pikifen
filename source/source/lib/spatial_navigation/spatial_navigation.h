@@ -110,6 +110,15 @@ public:
         //Distance calculation method.
         DIST_CALC_METHOD distCalcMethod = DIST_CALC_METHOD_TAXICAB;
         
+        //If false, do two passes: try once without looping anything,
+        //and only if that doesn't return anything do we try with the
+        //looped items. This is useful if you have, say, a few items in one
+        //corner and an item in the other corner. If you're in the first corner
+        //and when hitting a direction you hit a limit, you'll probably end up
+        //in the corner again, making it difficult to reach the lone item.
+        //If true, we try all items at once.
+        bool singleLoopPass = false;
+        
     } heuristics;
     
     
@@ -139,6 +148,9 @@ public:
         
         //Whether it got calculated or discarded.
         bool accepted = false;
+        
+        //Whether it looped around or not.
+        bool looped = false;
         
     };
     
@@ -211,6 +223,31 @@ protected:
     };
     
     
+    /**
+     * @brief An item with its units changed to be relative to the focus.
+     */
+    struct ItemWithRelUnits {
+    
+        //--- Members ---
+        
+        //The item.
+        Item* item = nullptr;
+        
+        //Relative X coordinate.
+        double relX = 0.0f;
+        
+        //Relative Y coordinate.
+        double relY = 0.0f;
+        
+        //Relative width.
+        double relW = 0.0f;
+        
+        //Relative height.
+        double relH = 0.0f;
+        
+    };
+    
+    
     //--- Members ---
     
     //All registered items.
@@ -228,19 +265,22 @@ protected:
     bool checkHeuristicsPass(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
     );
-    void checkLoopRelativeCoordinates(
+    bool checkLoopRelativeCoordinates(
         DIRECTION direction, double* itemRelX,
         double limitX1, double limitY1, double limitX2, double limitY2
     );
     void* doNavigation(
         DIRECTION direction, void* focusedItemId,
-        float focusX, float focusY, float focusW, float focusH,
-        bool focusAtDirectionStart
+        float focusX, float focusY, float focusW, float focusH
     );
     void flattenItems();
     void flattenItemsInList(
         std::vector<Item*> list,
         float limitX1, float limitY1, float limitX2, float limitY2
+    );
+    void getBestItem(
+        const std::map<void*, ItemWithRelUnits>& list,
+        double* bestScore, void** bestItemId, bool loopedItems
     );
     void getItemRelativeUnits(
         Item* iPtr, DIRECTION direction,
@@ -256,10 +296,21 @@ protected:
     double getItemScore(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
     );
+    std::map<void*, ItemWithRelUnits> getItemsWithRelativeUnits(
+        DIRECTION direction, void* focusedItemId,
+        float focusX, float focusY, float focusW, float focusH
+    );
     void getLimits(
         double* limitX1, double* limitY1, double* limitX2, double* limitY2
     ) const;
     bool itemHasChildren(void* id) const;
+    void loopItems(
+        const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,
+        DIRECTION direction,
+        double limitX1, double limitY1, double limitX2, double limitY2,
+        std::map<void*, Interface::ItemWithRelUnits>* outNonLoopedItems,
+        std::map<void*, Interface::ItemWithRelUnits>* outLoopedItems
+    );
     
 };
 

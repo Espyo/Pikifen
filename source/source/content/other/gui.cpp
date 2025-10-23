@@ -879,7 +879,7 @@ bool GuiManager::draw() {
             al_map_rgba(0, 255, 0, 192) :
             al_map_rgba(255, 0, 0, 192),
             i.second.itemX, i.second.itemY, ALLEGRO_ALIGN_CENTER,
-            f2s(i.second.score).c_str()
+            ((i.second.looped ? "L" : "") + f2s(i.second.score)).c_str()
         );
     }
 #endif
@@ -926,7 +926,7 @@ bool GuiManager::getItemDefsFromDataFile(
         rs.set("center", itemDef.center);
         rs.set("size", itemDef.size);
         rs.set("description", itemDef.description);
-
+        
         itemDef.name = itemNode->name;
         outHardcodedItemDefs->push_back(itemDef);
     }
@@ -1659,10 +1659,10 @@ bool GuiManager::writeItemDefsToDataFile(
     for(size_t i = 0; i < hardcodedItemDefs.size(); i++) {
         const HardcodedGuiItemDef* itemPtr = &hardcodedItemDefs[i];
         DataNode* itemNode = hardcodedNode->addNew(itemPtr->name);
-
+        
         string coordsStr = writeCoordinates(itemPtr->center, itemPtr->size);
         GetterWriter gw(itemNode);
-
+        
         gw.write("center", itemPtr->center);
         gw.write("size", itemPtr->size);
         gw.write("description", itemPtr->description);
