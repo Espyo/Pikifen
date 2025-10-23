@@ -273,6 +273,24 @@ DataNode* DataNode::getChildByName(
 
 
 /**
+ * @brief Returns the first child with this name on the list
+ * (direct children only). If it doesn't exist, creates it, adds it to the list,
+ * and then returns it.
+ *
+ * @param name The name the child must have.
+ * @return The node.
+ */
+DataNode* DataNode::getChildOrAddNew(const string& name) {
+    for(size_t c = 0; c < children.size(); c++) {
+        if(name == children[c]->name) {
+            return children[c];
+        }
+    }
+    return addNew(name);
+}
+
+
+/**
  * @brief Like an std::getline(), but for ALLEGRO_FILE*.
  *
  * @param file Allegro file handle.

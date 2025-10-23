@@ -1,8 +1,8 @@
-name=Statistics menu
-description=GUI for the lifetime statistics menu.
+name=Options menu -- inventory shortcuts
+description=GUI for the inventory shortcuts page of the options menu.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.0.1
 hardcoded_items{
 	back{
 		center=12.0000 5.0000
@@ -16,13 +16,13 @@ hardcoded_items{
 	}
 	list{
 		center=50.0000 51.0000
-		size=76.0000 82.0000
-		description=List of statistics.
+		size=88.0000 82.0000
+		description=List of inventory items and shortcuts.
 	}
 	list_scroll{
-		center=91.0000 51.0000
+		center=97.0000 51.0000
 		size=2.0000 82.0000
-		description=Scrollbar for the list of statistics.
+		description=Scrollbar for the list of inventory items and shortcuts.
 	}
 	tooltip{
 		center=50.0000 96.0000
@@ -36,7 +36,7 @@ custom_items{
 		size=50.0000 6.0000
 		type=text
 		color=255 255 255 128
-		text=STATISTICS
+		text=INVENTORY SHORTCUTS
 		font=area_name
 		text_alignment=1
 	}

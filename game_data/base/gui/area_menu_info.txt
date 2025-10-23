@@ -1,20 +1,73 @@
 name=Area menu -- info
-description=GUI for the area selection menu's area information table.
+description=GUI for the area selection menu's area information table, the stuff with basic information on an area.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	info_name=36.0000 6.0000 68.0000 8.0000
-	subtitle=36.0000 16.0000 68.0000 8.0000
-	thumbnail=85.0000 14.0000 26.0000 24.0000
-	description=50.0000 40.0000 96.0000 24.0000
-	record_label=50.0000 56.0000 96.0000 4.0000
-	record_info=50.0000 62.0000 36.0000 4.0000
-	record_stamp=20.0000 65.0000 20.0000 14.0000
-	record_medal=80.0000 65.0000 20.0000 14.0000
-	record_date=50.0000 66.0000 28.0000 4.0000
-	difficulty=50.0000 79.0000 96.0000 6.0000
-	tags=50.0000 87.0000 96.0000 6.0000
-	maker=28.0000 95.0000 52.0000 6.0000
-	version=76.0000 95.0000 44.0000 6.0000
+hardcoded_items{
+	info_name{
+		center=36.0000 6.0000
+		size=68.0000 8.0000
+		description=Area name (info page version)
+	}
+	subtitle{
+		center=36.0000 16.0000
+		size=68.0000 8.0000
+		description=Area subtitle.
+	}
+	thumbnail{
+		center=85.0000 14.0000
+		size=26.0000 24.0000
+		description=Area thumbnail image.
+	}
+	description{
+		center=50.0000 40.0000
+		size=96.0000 24.0000
+		description=Area description.
+	}
+	record_label{
+		center=50.0000 56.0000
+		size=96.0000 4.0000
+		description=Label for the mission record field.
+	}
+	record_info{
+		center=50.0000 62.0000
+		size=36.0000 4.0000
+		description=Mission record score.
+	}
+	record_stamp{
+		center=20.0000 65.0000
+		size=20.0000 14.0000
+		description=Mission record stamp.
+	}
+	record_medal{
+		center=80.0000 65.0000
+		size=20.0000 14.0000
+		description=Mission record medal.
+	}
+	record_date{
+		center=50.0000 66.0000
+		size=28.0000 4.0000
+		description=Mission record date.
+	}
+	difficulty{
+		center=50.0000 79.0000
+		size=96.0000 6.0000
+		description=Area difficulty rating.
+	}
+	tags{
+		center=50.0000 87.0000
+		size=96.0000 6.0000
+		description=List of area tags.
+	}
+	maker{
+		center=28.0000 95.0000
+		size=52.0000 6.0000
+		description=Name or nickname of the area's maker.
+	}
+	version{
+		center=76.0000 95.0000
+		size=44.0000 6.0000
+		description=Area version.
+	}
 }
+custom_items

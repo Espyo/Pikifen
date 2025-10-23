@@ -1,32 +1,55 @@
 name=Inventory
-description=GUI for the inventory window.
+description=GUI for the inventory pop-up that shows up when the player opens their inventory mid-game.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	list=50.0000 50.0000 32.0000 28.0000
-	list_scroll=50.0000 67.0000 32.0000 2.0000
-	name=57.0000 32.0000 18.0000 4.0000
-	close=40.0000 32.0000 12.0000 4.0000
-	close_input=34.0000 34.0000 4.0000 4.0000
+hardcoded_items{
+	list{
+		center=50.0000 50.0000
+		size=32.0000 28.0000
+		description=List of items.
+	}
+	list_scroll{
+		center=50.0000 67.0000
+		size=32.0000 2.0000
+		description=Scrollbar for the list of items.
+	}
+	name{
+		center=57.0000 32.0000
+		size=18.0000 4.0000
+		description=Name of the currently focused item.
+	}
+	close{
+		center=40.0000 32.0000
+		size=12.0000 4.0000
+		description=Button to close the inventory.
+	}
+	close_input{
+		center=34.0000 34.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
 }
 custom_items{
 	background_rectangle{
-		coordinates=50.0000 49.0000 36.0000 42.0000
+		center=50.0000 49.0000
+		size=36.0000 42.0000
 		type=filled_rectangle
 		color=24 64 60 200
 		draw_before_hardcoded=true
 		rectangle_rounding=20.0000
 	}
 	background_frame{
-		coordinates=50.0000 49.0000 36.0000 42.0000
+		center=50.0000 49.0000
+		size=36.0000 42.0000
 		type=9_slice
 		color=255 255 255
 		draw_before_hardcoded=true
 		bitmap=gui/frame_box
 	}
 	list_bg{
-		coordinates=50.0000 50.0000 32.0000 28.0000
+		center=50.0000 50.0000
+		size=32.0000 28.0000
 		type=filled_rectangle
 		color=24 64 60 200
 		draw_before_hardcoded=true

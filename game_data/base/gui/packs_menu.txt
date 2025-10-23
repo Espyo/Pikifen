@@ -3,28 +3,86 @@ description=GUI for the pack management menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	back=12.0000 5.0000 20.0000 6.0000
-	back_input=3.0000 7.0000 4.0000 4.0000
-	list=26.0000 47.0000 48.0000 74.0000
-	list_scroll=52.0000 47.0000 2.0000 74.0000
-	info_box=76.0000 47.0000 44.0000 74.0000
-	pack_name=67.5000 19.0000 25.0000 16.0000
-	pack_thumbnail=89.0000 19.0000 16.0000 16.0000
-	pack_description=76.0000 48.5000 42.0000 41.0000
-	pack_tags=76.0000 73.0000 42.0000 6.0000
-	pack_maker=65.0000 80.0000 20.0000 6.0000
-	pack_version=87.0000 80.0000 20.0000 6.0000
-	restart_warning=35.5000 88.5000 67.0000 5.0000
-	open_folder=84.0000 88.5000 28.0000 5.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	back{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Back button.
+	}
+	back_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	list{
+		center=26.0000 47.0000
+		size=48.0000 74.0000
+		description=List of packs.
+	}
+	list_scroll{
+		center=52.0000 47.0000
+		size=2.0000 74.0000
+		description=Scrollbar for the list of packs.
+	}
+	info_box{
+		center=76.0000 47.0000
+		size=44.0000 74.0000
+		description=Box surrounding the information about the focused pack.
+	}
+	pack_name{
+		center=67.5000 19.0000
+		size=25.0000 16.0000
+		description=Name of the focused pack.
+	}
+	pack_thumbnail{
+		center=89.0000 19.0000
+		size=16.0000 16.0000
+		description=Thumbnail image of the focused pack.
+	}
+	pack_description{
+		center=76.0000 48.5000
+		size=42.0000 41.0000
+		description=Description of the focused pack.
+	}
+	pack_tags{
+		center=76.0000 73.0000
+		size=42.0000 6.0000
+		description=Tags of the focused pack.
+	}
+	pack_maker{
+		center=65.0000 80.0000
+		size=20.0000 6.0000
+		description=Name or nickname of the focused pack's maker.
+	}
+	pack_version{
+		center=87.0000 80.0000
+		size=20.0000 6.0000
+		description=Version of the focused pack.
+	}
+	restart_warning{
+		center=35.5000 88.5000
+		size=67.0000 5.0000
+		description=Warning notifying the player they might need to restart to apply pack changes.
+	}
+	open_folder{
+		center=84.0000 88.5000
+		size=28.0000 5.0000
+		description=Link to open the pack folder.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
-custom_items {
-	header {
-		type = text
-		coordinates = 61.0000 5.0000 74.0000 6.0000
-		color = 255 255 255 128
-		text = PACKS
-		font = area_name
+custom_items{
+	header{
+		center=61.0000 5.0000
+		size=74.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=PACKS
+		font=area_name
+		text_alignment=1
 	}
 }

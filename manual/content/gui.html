@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="utf-8">
-  
+
   <title>Pikifen manual</title>
   <meta name="description" content="The Pikifen user manual">
-  
+
   <link rel="stylesheet" href="../data/style.css">
   <script src="../data/script.js"></script>
   <link rel="icon" href="../../game_data/base/graphics/gui/icon.png" />
@@ -14,30 +14,21 @@
 
 <body onload="setup('GUI', ['Making content'], ['making.html']);">
   <div id="page-content">
-    
+
     <p>All menus and HUDs (heads-up displays) in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different items, but some may allow for more in-depth customizations. Each menu or HUD has a GUI (graphical user interface), and each GUI definition is a piece of <a href="making.html#content">content</a>, so you should know how content works in the engine in general before starting. Each one has its own <a href="making.html#data-file">data file</a>, located in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/gui</code>. Some menus are consisted of multiple different parts, each with its own GUI definition.</p>
 
-    <p>To change the position and size of elements, you can just use the GUI editor, accessible from the main menu. To change other things, you will need to edit the data files by hand.</p>
-    
-    <p>This page explains how the editor works, as well as list all the different menus and HUDs that can be customized.</p>
-    
+    <p>All GUI definitions contain hardcoded items, and can contain custom items. Hardcoded GUI items are those that the engine needs for the menu to work properly; it expects these items to exist in order to change them, get feedback from them, control their appearance and behavior, etc. Custom GUI items on the other hand are completely optional and only serve to decorate the GUI. You can have as many as you want, as well as what they show inside, from images to text to shapes.</p>
+
+    <p>To change the position and size of hardcoded GUI items, or to control custom GUI items, you can just use the GUI editor accessible from the main menu. To change other things related to a GUI, you will need to edit the data files by hand.</p>
+
+    <p>This page explains how the editor works, as well as list all the different menus and HUDs that can be further customized.</p>
+
     <h2 id="editor">GUI editor</h2>
 
     <p>The GUI editor is a simple tool that allows you to change the position and size of each item in a menu/HUD. To learn more about how editors work in general, see <a href="editor.html">here</a>.</p>
 
-    <h3 id="opening">Opening a GUI definition</h3>
+    <p>Because each GUI looks and behaves in its own way, the editor can't tell you much about what each one is, so you'll have to navigate through each GUI definition using its internal name. These names are fairly intuitive, and if you're ever unsure about what a given GUI definition is for, open it up in the editor, head to the information panel, and check its description. It may even contain some important notes about that GUI's unique behaviors.</p>
 
-    <dl>
-      <dt><b>When you open the menu, you'll be asked what GUI to edit.</b></dt>
-      <dd>You can access the GUI editor from the main menu's "make" page. Once you do, you'll be shown a list of menus and HUDs whose GUIs you can edit.</dd>
-
-      <dt><b>The editor only knows each GUI definition's internal name, but these are usually obvious.</b></dt>
-      <dd>Because the editor is made to be simple and flexible, allowing the customization of any GUI that the engine has or will have, it doesn't actually know anything about specific menus, it just knows the names of the data files inside the GUI definitions folder. So this dialog will show you the text file names, i.e. the internal names, instead of the menu or HUD names. Still, these names are pretty obvious, and if you're ever in doubt, check the <a href="#definitions">GUI definitions section</a> of this page, since that lists what each menu's file is.</dd>
-
-      <dt><b>GUI definitions have hardcoded items, which the engine expects and controls, and custom items.</b></dt>
-      <dd>Hardcoded items are GUI items that the engine needs for the menu to work properly. The engine expects these items to exist in order to change them, get feedback from them, control their appearance and behavior, etc. Custom items on the other hand are completely optional and only serve to decorate the GUI. You can add, edit, and remove as many custom GUI items as you want, as well as what they show inside, from images to text to shapes.</dd>
-    </dl>
-    
     <h3 id="coordinates">Canvas and coordinates</h3>
 
     <dl>
@@ -58,13 +49,16 @@
 
     <dl>
       <dt><b>The panel on the right lists the items that exist.</b></dt>
-      <dd>When you're in the hardcoded items mode or the custom items mode, the right side of the editor has a panel that includes a list of all the items in the current GUI definition, as well as their internal names.</dd>
+      <dd>When you're in the hardcoded items mode or the custom items mode, the right side of the editor has a panel that includes a list of said items, as well as their internal names.</dd>
 
       <dt><b>In the list, checkboxes specify whether an item is visible.</b></dt>
       <dd>You can click on an item's checkbox in the list to make it visible or invisible. If it is invisible, it won't show up in the canvas nor in-game, though it'll still exist in the GUI definition.</dd>
 
       <dt><b>Click an item in the list to select it.</b></dt>
       <dd>When you click an item (not its checkbox), you will see some information about that item appear below the list in the panel. You will also see some handles on the canvas, surrounding that item. Those handles are explained later.</dd>
+
+      <dt><b>Place your mouse over a hardcoded item in the list to learn what it is.</b></dt>
+      <dd>Hardcoded items come with a handy description, so if you're ever unsure what an item is from its internal name alone, just use the tooltip provided.</dd>
 
       <dt><b>Edit the selected item's position or size in the widgets below the list.</b></dt>
       <dd>The numbers in the "center" and "size" widgets represent window percentages, as explained above. If instead you would like to specify where an item's top-left corner is, or bottom-right corner, there are some widgets to adjust things that way.</dd>
@@ -78,10 +72,10 @@
     <dl>
       <dt><b>Click an item's bubble in the canvas to select it.</b></dt>
       <dd>Instead of selecting an item through the panel's list, you can click on it in the canvas to select it. Doing so will also correctly select the corresponding item in the list.</dd>
-      
+
       <dt><b>Red items are hardcoded, green items are custom.</b></dt>
       <dd>You can only select hardcoded items in the hardcoded item mode of the editor, and the same applies to custom items and the custom item mode.</dd>
-      
+
       <dt><b>When items overlap, keep clicking to select different ones.</b></dt>
       <dd>If you click somewhere where two items overlap, the editor will select one of them. But if you click there again, it will select the other one. You can keep clicking to change which item is selected, making it a good way to find the exact item you need when you've got a lot of them in a tight space.</dd>
 
@@ -93,7 +87,7 @@
 
       <dt><b>Hold Shift to disable snapping.</b></dt>
       <dd>When you move the handles, they snap to the nearest grid point. This helps you keep things aligned. If you don't want that, you can hold down the Shift key to disable snapping. You can also disable snapping by using the button in the toolbar that controls the snapping mode.</dd>
-      
+
       <dt><b>Hold Ctrl to snap to horizontal or vertical axis.</b></dt>
       <dd>By holding Ctrl, you can move something just up or down, or just left or right.</dd>
     </dl>
@@ -104,8 +98,8 @@
       <dt><b>When you're done, save with the button in the toolbar.</b></dt>
       <dd>When you press the save button, the GUI definition gets saved to a file to your disk, and if you want, you can now quit the editor (with the button in the toolbar), go to where the relevant menu or HUD is, and check it out in action. Are things not quite what you expected? Here are some things to keep in mind:</dd>
 
-      <dt><b>The editor can only uses a hardcoded item's internal name and draw a vague shape representing it.</b></dt>
-      <dd>Because each GUI's hardcoded item can behave in its own way, and look however it pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor. Likewise, the editor doesn't know what each GUI is doing, it just knows what items exist (and what their positions and sizes are) because that information is in the data files. So you'll have to get used to handling the internal names of the hardcoded items instead of something more descriptive. Though again, if you're ever unsure what an item is, check the <a href="#definitions">GUI definitions section</a> of this document.</dd>
+      <dt><b>The editor only uses a hardcoded item's internal name and draw a vague shape representing it.</b></dt>
+      <dd>Because each GUI's hardcoded items can behave in their own way, and look however they pleases, it is impossible for the GUI editor to show them in the canvas. Something like an icon in a menu might be simple, but something like the Sun Meter is composed of many individual moving parts. So you're going to have to use your imagination when using the editor.</dd>
 
       <dt><b>An item's size only specifies its maximum size.</b></dt>
       <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI definition simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>
@@ -117,162 +111,33 @@
       <dd>While a GUI item can be partially visible from an edge of the game window if you want, they shouldn't be entirely off the window. Because GUI items can animate and move during transitions, an item that is placed out of bounds might come into view during these times, which can confuse the player. Plus, having these items off-window will still make the engine waste resources on processing them, even if they're practically useless in-game. Instead, untick its checkbox in the list of items, in the panel.</dd>
     </dl>
 
-    <h2 id="definitions">GUI definitions</h2>
+    <h2 id="more-customization">More customization</h2>
 
-    <p>Each of these sections refers to a menu/HUD, and explains what GUI definition controls it, the internal names of each item, and what properties can be changed in the GUI definition's data file. The <code>positions</code> block in a data file controls the position and size of each item in that menu/HUD, but as explained before, you're better off using the editor for these.</p>
+    <p>Besides hardcoded and custom GUI items, some GUIs can be further customized. To do so, open its data file, head to the relevant sections, and change what you need, using this section of the manual to guide you. The internal name specified in each of these lists is the <a href="making.html#content">internal name</a> of the GUI definition.</p>
 
-    <h3 id="area-menu-info">Area menu &ndash; info page</h3>
-
-    <p>The area menu's information page &ndash; the stuff with basic information on an area.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>area_menu_info</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>info_name</code>: Area name (info page version).</li>
-        <li><code>subtitle</code>: Area subtitle.</li>
-        <li><code>thumbnail</code>: Area thumbnail image.</li>
-        <li><code>description</code>: Area description.</li>
-        <li><code>difficulty</code>: Area difficulty rating.</li>
-        <li><code>tags</code>: List of area tags.</li>
-        <li><code>maker</code>: Name or nickname of the area's maker.</li>
-        <li><code>version</code>: Area version.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="area-menu-main">Area menu &ndash; main</h3>
-
-    <p>The menu in which players can choose what area to play. This only includes the main stuff, that's common to all area types and menu pages, like the list of areas and the menu buttons. The items that make up the list of areas are created on-the-fly, so they aren't included in the GUI definition.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>area_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>list</code>: List of areas.</li>
-        <li><code>list_scroll</code>: Scrollbar for the list.</li>
-        <li><code>view_toggle</code>: Button that toggles between the basic info and the mission specs view.</li>
-        <li><code>info_box</code>: Box containing the area's basic info.</li>
-        <li><code>specs_box</code>: Box containing the mission's specs.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-        <li><code>no_areas_text</code>: Text telling the player no areas were found.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="area-menu-specs">Area menu &ndash; specs page</h3>
-
-    <p>The area menu's specs page &ndash; the stuff with detailed mission information.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>area_menu_specs</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>specs_name</code>: Area name (specs page version).</li>
-        <li><code>goal_header</code>: Header text for the goal section.</li>
-        <li><code>goal</code>: Goal explanation.</li>
-        <li><code>fail_header</code>: Header text for the fail conditions section.</li>
-        <li><code>fail</code>: List of fail conditions.</li>
-        <li><code>fail_scroll</code>: Scrollbar for the fail condition list.</li>
-        <li><code>grading_header</code>: Header text for the grading section.</li>
-        <li><code>grading_list</code>: List of grading explanation bullet points.</li>
-        <li><code>grading_scroll</code>: Scrollbar for the grading explanation bullet point list.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="control-binds-menu">Control binds menu</h3>
-
-    <p>The menu where players choose their control binds.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>control_binds_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>header</code>: Header text.</li>
-        <li><code>list</code>: List of control binds.</li>
-        <li><code>list_scroll</code>: Scrollbar for the list.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
     <h3 id="gameplay">Gameplay</h3>
 
     <p>Actual gameplay. This is not a menu, but every HUD element can be customized in just the same way.</p>
-    
+
     <ul>
       <li><b>Internal name:</b> <code>gameplay</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>time</code>: Time of day, represented by the Sun Meter.</li>
-        <li><code>day_bubble</code>: The bubble for the current day number.</li>
-        <li><code>day_nr</code>: Current day number.</li>
-        <li><code>leader_1_icon</code>: Icon of the current leader.</li>
-        <li><code>leader_2_icon</code>: Icon of the next leader.</li>
-        <li><code>leader_3_icon</code>: Icon of the next next leader.</li>
-        <li><code>leader_1_health</code>: Health wheel of the current leader.</li>
-        <li><code>leader_2_health</code>: Health wheel of the next leader.</li>
-        <li><code>leader_3_health</code>: Health wheel of the next next leader.</li>
-        <li><code>leader_next_input</code>: Icon of the player input that changes to the next leader.</li>
-        <li><code>standby_icon</code>: Icon of the type of group member in standby. This represents the closest Pikmin or leader to the player's leader, and doesn't include the leaf/bud/flower.</li>
-        <li><code>standby_amount</code>: Number of group members of the standby type.</li>
-        <li><code>standby_bubble</code>: Bubble surrounding the number of group members of the standby type.</li>
-        <li><code>standby_maturity_icon</code>: Icon of the maturity of the Pikmin in standby. It will only appear if there's a Pikmin type in standby.</li>
-        <li><code>standby_next_icon</code>: Icon of the next standby type. It will only appear if there is a next type.</li>
-        <li><code>standby_prev_icon</code>: Same as above, but for the previous type.</li>
-        <li><code>standby_next_input</code>: Icon for the player input that switches to the next standby type.</li>
-        <li><code>standby_prev_input</code>: Same as above, but for the previous standby type.</li>
-        <li><code>group_amount</code>: Number of Pikmin on the leader's group.</li>
-        <li><code>group_bubble</code>: Bubble surrounding the number of Pikmin on the leader's group.</li>
-        <li><code>field_amount</code>: Number of Pikmin on the field.</li>
-        <li><code>field_bubble</code>: Bubble surrounding the number of Pikmin on the field.</li>
-        <li><code>total_amount</code>: Number of total Pikmin (field + Onions).</li>
-        <li><code>total_bubble</code>: Bubble surrounding the number of total Pikmin (field + Onions).</li>
-        <li><code>counters_x</code>: Multiplication sign ("&times;") that goes between the counter HUD items. In <i>Pikmin</i> and <i>Pikmin 2</i>, this is placed to the right of the standby icon.</li>
-        <li><code>counters_slash_1</code>: One of the slashes that go between the counter HUD items. There are three of them to be used at will, depending on how many counter numbers you want visible.</li>
-        <li><code>counters_slash_2</code>: See above.</li>
-        <li><code>counters_slash_3</code>: See above.</li>
-        <li><code>mission_goal_bubble</code>: Bubble that holds mission goal information.</li>
-        <li><code>mission_goal_cur_label</code>: Label text for the mission goal's current amount of items.</li>
-        <li><code>mission_goal_cur</code>: Current amount of items for the mission's goal.</li>
-        <li><code>mission_goal_req_label</code>: Label text for the mission goal's required amount of items.</li>
-        <li><code>mission_goal_req</code>: Required amount of items for the mission's goal.</li>
-        <li><code>mission_goal_slash</code>: Slash between the mission goal's current and required amounts of items.</li>
-        <li><code>mission_goal_name</code>: Text describing the mission goal, when amounts of items don't apply.</li>
-        <li><code>mission_score_bubble</code>: Bubble that holds mission score information.</li>
-        <li><code>mission_score_score_label</code>: Label text for the mission score's "Score:" text.</li>
-        <li><code>mission_score_points</code>: Current mission score points.</li>
-        <li><code>mission_score_points_label</code>: Label text for the mission score's "pts" text.</li>
-        <li><code>mission_score_ruler</code>: Ruler indicating the player's score and medals.</li>
-        <li><code>mission_fail_1_bubble</code>: Bubble that holds the primary mission fail condition information.</li>
-        <li><code>mission_fail_1_cur_label</code>: Label text for the mission primary fail condition's current amount of items.</li>
-        <li><code>mission_fail_1_cur</code>: Current amount of items for the mission's primary fail condition.</li>
-        <li><code>mission_fail_1_req_label</code>: Label text for the mission primary fail condition's required amount of items.</li>
-        <li><code>mission_fail_1_req</code>: Required amount of items for the mission's primary fail condition.</li>
-        <li><code>mission_fail_1_slash</code>: Slash between the mission primary fail condition's current and required amounts of items.</li>
-        <li><code>mission_fail_1_name</code>: Text describing the mission primary fail condition, when amounts of items don't apply.</li>
-        <li><code>mission_fail_2_bubble</code>: Same as <code>mission_fail_1_bubble</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_cur_label</code>: Same as <code>mission_fail_1_cur_label</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_cur</code>: Same as <code>mission_fail_1_cur</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_req_label</code>: Same as <code>mission_fail_1_req_label</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_req</code>: Same as <code>mission_fail_1_req</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_slash</code>: Same as <code>mission_fail_1_slash</code>, but for the secondary fail condition.</li>
-        <li><code>mission_fail_2_name</code>: Same as <code>mission_fail_1_name</code>, but for the secondary fail condition.</li>
-      </ul>
-      <li><b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the HUD items should use in the <code>bitmaps</code> block.</li>
-      <ul>
-        <li><code>bubble</code>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
-        <li><code>checkbox_check</code>: A checkbox with a checkmark in it. Used in menus.</li>
-        <li><code>checkbox_no_check</code>: A checkbox without a checkmark in it. Used in menus.</li>
-        <li><code>counter_bubble_field</code>: The bubble in which the Pikmin-on-field counter is contained.</li>
-        <li><code>counter_bubble_group</code>: Same as above, but the in-group counter.</li>
-        <li><code>counter_bubble_standby</code>: Same as above, but the counter of group members of the current standby type.</li>
-        <li><code>counter_bubble_total</code>: Same as above, but the Pikmin total counter.</li>
-        <li><code>day_bubble</code>: The bubble in which the day counter is contained.</li>
-        <li><code>distant_pikmin_marker</code>: The graphic that gets overlaid on top of the standby Pikmin's icon, to indicate that the closest Pikmin is too far away to grab.</li>
-        <li><code>hard_bubble</code>: A rough, hard bubble. Used on the Sun Meter, leader icons, etc.</li>
-        <li><code>no_pikmin_bubble</code>: Bubble to show when there are no Pikmin in the group.</li>
-        <li><code>sun</code>: Icon for the sun in the Sun Meter.</li>
-      </ul>
+      <li>
+        <b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the HUD items should use in the <code>bitmaps</code> block.
+        <ul>
+          <li><code>bubble</code>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
+          <li><code>checkbox_check</code>: A checkbox with a checkmark in it. Used in menus.</li>
+          <li><code>checkbox_no_check</code>: A checkbox without a checkmark in it. Used in menus.</li>
+          <li><code>counter_bubble_field</code>: The bubble in which the Pikmin-on-field counter is contained.</li>
+          <li><code>counter_bubble_group</code>: Same as above, but the in-group counter.</li>
+          <li><code>counter_bubble_standby</code>: Same as above, but the counter of group members of the current standby type.</li>
+          <li><code>counter_bubble_total</code>: Same as above, but the Pikmin total counter.</li>
+          <li><code>day_bubble</code>: The bubble in which the day counter is contained.</li>
+          <li><code>distant_pikmin_marker</code>: The graphic that gets overlaid on top of the standby Pikmin's icon, to indicate that the closest Pikmin is too far away to grab.</li>
+          <li><code>hard_bubble</code>: A rough, hard bubble. Used on the Sun Meter, leader icons, etc.</li>
+          <li><code>no_pikmin_bubble</code>: Bubble to show when there are no Pikmin in the group.</li>
+          <li><code>sun</code>: Icon for the sun in the Sun Meter.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="help-menu">Help menu</h3>
@@ -281,286 +146,89 @@
 
     <ul>
       <li><b>Internal name:</b> <code>help_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Button to return to the pause menu.</li>
-        <li><code>gameplay1</code>: Gameplay basics category button.</li>
-        <li><code>gameplay2</code>: Advanced gameplay category button.</li>
-        <li><code>controls</code>: Controls category button.</li>
-        <li><code>pikmin</code>: Pikmin category button.</li>
-        <li><code>objects</code>: Objects category button.</li>
-        <li><code>category</code>: Name of the currently selected category.</li>
-        <li><code>list</code>: List of tidbits in the current category.</li>
-        <li><code>list_scroll</code>: Scrollbar for the list.</li>
-        <li><code>tooltip</code>: Tooltip of the selected tidbit or menu item.</li>
-      </ul>
       <li><b>Tidbits:</b> Tidbits of information in the help menu are specified in the <code>tidbits</code> block. There are four blocks inside, each one named after the corresponding category, in all lowercase. Inside each of those blocks is the list of items, one item per line. Each line follows the format <code>Tidbit name;Tidbit information text;Tidbit image</code>. The information text can make use of <a href="misc_features.html#markup">markup</a>. The image has to be the <a href="making.html#content">internal name</a> of the bitmap in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
     </ul>
-    
+
     <h3 id="main-menu-make">Main menu &ndash; make page</h3>
 
     <p>The main menu's "make" page.</p>
-    
+
     <ul>
       <li><b>Internal name:</b> <code>main_menu_make</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>animation_editor</code>: Animation editor button.</li>
-        <li><code>area_editor</code>: Area editor button.</li>
-        <li><code>gui_editor</code>: GUI editor button.</li>
-        <li><code>back</code>: Return to the main menu button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
-      <ul>
-        <li><code>animation_editor</code>: Animation editor button.</li>
-        <li><code>area_editor</code>: Area editor button.</li>
-        <li><code>gui_editor</code>: GUI editor button.</li>
-      </ul>
+      <li>
+        <b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).
+        <ul>
+          <li><code>animation_editor</code>: Animation editor button.</li>
+          <li><code>area_editor</code>: Area editor button.</li>
+          <li><code>gui_editor</code>: GUI editor button.</li>
+        </ul>
+      </li>
     </ul>
-    
+
     <h3 id="main-menu-play">Main menu &ndash; play page</h3>
 
     <p>The main menu's "play" page.</p>
-    
+
     <ul>
       <li><b>Internal name:</b> <code>main_menu_play</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>simple</code>: Play a simple area button.</li>
-        <li><code>mission</code>: Play a mission button.</li>
-        <li><code>back</code>: Return to the main menu button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
-      <ul>
-        <li><code>simple_areas</code>: Simple areas button.</li>
-        <li><code>missions</code>: Missions button.</li>
-      </ul>
+      <li>
+        <b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).
+        <ul>
+          <li><code>simple_areas</code>: Simple areas button.</li>
+          <li><code>missions</code>: Missions button.</li>
+        </ul>
+      </li>
     </ul>
-    
+
     <h3 id="main-menu-top">Main menu &ndash; top page</h3>
 
     <p>The main menu's top-level page, entered when you start the game.</p>
-    
+
     <ul>
       <li><b>Internal name:</b> <code>main_menu_top</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>play</code>: Play button.</li>
-        <li><code>make</code>: Make button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>stats</code>: Statistics button.</li>
-        <li><code>discord</code>: Discord server invite button.</li>
-        <li><code>github</code>: GitHub page button.</li>
-        <li><code>exit</code>: Exit button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-      <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
-      <ul>
-        <li><code>min_window_limit</code>: Top-left coordinates of the logo's placement on the game window, in window width or height percentage.</li>
-        <li><code>max_window_limit</code>: Same as above, but for the bottom-right.</li>
-        <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in ratio per second. The ratio is of the window width or height, whichever is largest.</li>
-        <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
-        <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
-        <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
-        <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
-        <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
-        <li><code>pikmin_size</code>: Pikmin size, in window dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the window width nor 2% of the window height.</li>
-        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
-        <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
-      </ul>
-      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
-      <ul>
-        <li><code>play</code>: Play button.</li>
-        <li><code>make</code>: Make button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>statistics</code>: Statistics button.</li>
-        <li><code>quit</code>: Quit button.</li>
-      </ul>
+      <li>
+        <b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.
+        <ul>
+          <li><code>min_window_limit</code>: Top-left coordinates of the logo's placement on the game window, in window width or height percentage.</li>
+          <li><code>max_window_limit</code>: Same as above, but for the bottom-right.</li>
+          <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in ratio per second. The ratio is of the window width or height, whichever is largest.</li>
+          <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
+          <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
+          <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
+          <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
+          <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
+          <li><code>pikmin_size</code>: Pikmin size, in window dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the window width nor 2% of the window height.</li>
+          <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
+          <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
+        </ul>
+      </li>
+      <li>
+        <b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).
+        <ul>
+          <li><code>play</code>: Play button.</li>
+          <li><code>make</code>: Make button.</li>
+          <li><code>options</code>: Options button.</li>
+          <li><code>statistics</code>: Statistics button.</li>
+          <li><code>quit</code>: Quit button.</li>
+        </ul>
+      </li>
     </ul>
-    
-    <h3 id="main-menu">Main menu &ndash; tutorial page</h3>
 
-    <p>The main menu page that asks first-time players to try the tutorial area.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>main_menu_tutorial</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>question</code>: The question's text.</li>
-        <li><code>no</code>: No button.</li>
-        <li><code>no_input</code>: Icon of the player input that answers no.</li>
-        <li><code>yes</code>: Yes button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="onion-menu-main">Onion menu &ndash; main</h3>
-
-    <p>The menu accessed by having the player's leader interact with an Onion. These definitions will also change the look of ship Pikmin management menus. This definition has no data on how the individual Pikmin columns work; for that, see <a href="#onion-menu-pikmin-type">the Pikmin type definition</a>.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>onion_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>cancel</code>: Cancel button.</li>
-        <li><code>ok</code>: Ok button.</li>
-        <li><code>field</code>: Amount of Pikmin currently on the field.</li>
-        <li><code>select_all</code>: Checkbox that toggles the "select all" mode.</li>
-        <li><code>list</code>: List with all the Pikmin type columns.</li>
-        <li><code>list_scroll</code>: Horizontal scrollbar for the list.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="onion-menu-pikmin-type">Onion menu &ndash; Pikmin type</h3>
-
-    <p>Definition for the GUI items that go inside the <a href="#onion-menu-main">Onion menu</a>'s list. This includes the overarching "all" buttons, as well as a single definition for each GUI item you'll find in a Pikmin type column. Note that due to the way the Onion menu's layout is dynamically generated based on the Pikmin types the Onion has, the X coordinate of these items will be overridden by the game in real time, as well as the width of the "all" buttons.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>onion_menu_pikmin_type</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>onion_button</code>: Button for the Pikmin type column's Onion.</li>
-        <li><code>onion_amount</code>: Text for how many Pikmin are in the Pikmin type column's Onion.</li>
-        <li><code>group_button</code>: Button for the Pikmin type column's group.</li>
-        <li><code>group_amount</code>: Text for how many Pikmin are in the Pikmin type column's group.</li>
-        <li><code>onion_all_button</code>: Overarching "all types" Onion button.</li>
-        <li><code>group_all_button</code>: Overarching "all types" group button.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="options-menu-audio">Options menu &ndash; audio page</h3>
-
-    <p>The menu where players set audio-related options.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>options_menu_audio</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="options-menu-controls">Options menu &ndash; controls page</h3>
-
-    <p>The menu where players set controls-related options.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>options_menu_controls</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>control_binds</code>: Control binds menu button.</li>
-        <li><code>leader_cursor_mouse</code>: Checkbox for whether the leader cursor is controlled with the mouse.</li>
-        <li><code>leader_cursor_speed</code>: Leader cursor speed picker.</li>
-        <li><code>leader_cursor_speed_strike</code>: Strikethrough on top of the leader cursor speed picker, shown if the player chose mouse controls.</li>
-        <li><code>auto_throw</code>: Auto-throw mode picker.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="options-menu-graphics">Options menu &ndash; graphics page</h3>
-
-    <p>The menu where players set graphics-related options.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>options_menu_graphics</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>fullscreen</code>: Fullscreen checkbox.</li>
-        <li><code>resolution</code>: Resolution picker.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-        <li><code>restart_warning</code>: Warning that appears at the top, telling the player they must restart the game to apply the graphical changes.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="options-menu-misc">Options menu &ndash; misc. page</h3>
-
-    <p>The menu where players set some misc. options.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>options_menu_misc</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>pikmin_bump</code>: Idle Pikmin leader bump distance picker.</li>
-        <li><code>dismiss_all</code>: Dismissing dismisses all Pikmin checkbox.</li>
-        <li><code>leader_cursor_cam_weight</code>: Leader cursor camera weight picker.</li>
-        <li><code>show_hud_input_icons</code>: Show HUD controls checkbox.</li>
-        <li><code>leaving_confirmation</code>: Leaving confirmation mode picker.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
     <h3 id="options-menu-top">Options menu &ndash; top page</h3>
 
     <p>The top-level menu where players choose what type of options they want to tinker with.</p>
-    
+
     <ul>
       <li><b>Internal name:</b> <code>options_menu_top</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>back</code>: Back button.</li>
-        <li><code>controls</code>: Controls page button.</li>
-        <li><code>graphics</code>: Graphics page button.</li>
-        <li><code>audio</code>: Audio page button.</li>
-        <li><code>misc</code>: Misc. page button.</li>
-        <li><code>advanced</code>: Advanced options information bullet point.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-      <li><b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).</li>
-      <ul>
-        <li><code>controls</code>: Controls page button.</li>
-        <li><code>graphics</code>: Graphics page button.</li>
-        <li><code>audio</code>: Audio page button.</li>
-        <li><code>misc</code>: Misc. page button.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="pause-menu-confirmation">Pause menu &ndash; confirmation page</h3>
-
-    <p>The leaving confirmation page of the pause menu.</p>
-
-    <ul>
-      <li><b>Internal name:</b> <code>pause_menu_confirmation</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>cancel</code>: Cancel button.</li>
-        <li><code>confirm</code>: Confirm button.</li>
-        <li><code>explanation</code>: Explanation text.</li>
-        <li><code>options_reminder</code>: Reminder that the confirmation question can be changed in the options menu.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-
-    <h3 id="pause-menu-mission">Pause menu &ndash; mission page</h3>
-
-    <p>The mission page of the pause menu.</p>
-
-    <ul>
-      <li><b>Internal name:</b> <code>pause_menu_mission</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
-        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
-        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
-        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
-        <li><code>continue</code>: Continue button.</li>
-        <li><code>goal_header</code>: Header text saying "Goal".</li>
-        <li><code>goal</code>: Explanation of the mission goal.</li>
-        <li><code>goal_status</code>: The player's status compared to the goal.</li>
-        <li><code>fail_header</code>: Header text saying "Failure conditions".</li>
-        <li><code>fail_list</code>: List of fail conditions and stats.</li>
-        <li><code>fail_scroll</code>: Scrollbar for the fail condition list.</li>
-        <li><code>grading_header</code>: Header text saying "Grading".</li>
-        <li><code>grading_list</code>: List of bullet points about how grading works.</li>
-        <li><code>grading_scroll</code>: Scrollbar for the grading bullet points list.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
+      <li>
+        <b>Icons to the left:</b> Use this to indicate whether the icon on each button should be on the left side (<code>true</code>) or the right side (<code>false</code>).
+        <ul>
+          <li><code>controls</code>: Controls page button.</li>
+          <li><code>graphics</code>: Graphics page button.</li>
+          <li><code>audio</code>: Audio page button.</li>
+          <li><code>misc</code>: Misc. page button.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="pause-menu-radar">Pause menu &ndash; radar page</h3>
@@ -569,109 +237,23 @@
 
     <ul>
       <li><b>Internal name:</b> <code>pause_menu_radar</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
-        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
-        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
-        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
-        <li><code>continue</code>: Continue button.</li>
-        <li><code>radar</code>: The actual radar itself.</li>
-        <li><code>group_pikmin_label</code>: Label for the group Pikmin counter.</li>
-        <li><code>group_pikmin_number</code>: Group Pikmin counter.</li>
-        <li><code>idle_pikmin_label</code>: Label for the idle Pikmin counter.</li>
-        <li><code>idle_pikmin_number</code>: Idle Pikmin counter.</li>
-        <li><code>field_pikmin_label</code>: Label for the field Pikmin counter.</li>
-        <li><code>field_pikmin_number</code>: Field Pikmin counter.</li>
-        <li><code>cursor_info</code>: Information about whatever the radar cursor is on.</li>
-        <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-      <li><b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the radar icons should use in the <code>bitmaps</code> block.</li>
-      <ul>
-        <li><code>pikmin</code>: Icon representing a Pikmin.</li>
-        <li><code>treasure</code>: Icon representing a treasure.</li>
-        <li><code>enemy_alive</code>: Icon representing a living enemy.</li>
-        <li><code>enemy_dead</code>: Icon representing a dead enemy.</li>
-        <li><code>leader_bubble</code>: Bubble to place around a leader's icon.</li>
-        <li><code>leader_x</code>: X imposed on top of KO'd leader icons.</li>
-        <li><code>obstacle</code>: Icon representing a generic obstacle that blocks paths.</li>
-        <li><code>onion_skeleton</code>: Skeleton part of the icon that represents an Onion. This is the part of the icon that doesn't change color, i.e. the legs and other details.</li>
-        <li><code>onion_bulb</code>: Bulb part of the icon that represents an Onion. This is the part that changes color depending on the Pikmin it can manage.</li>
-        <li><code>ship</code>: Icon representing a ship.</li>
-      </ul>
+      <li>
+        <b>Bitmaps:</b> You can specify the internal name of the bitmaps some of the radar icons should use in the <code>bitmaps</code> block.
+        <ul>
+          <li><code>pikmin</code>: Icon representing a Pikmin.</li>
+          <li><code>treasure</code>: Icon representing a treasure.</li>
+          <li><code>enemy_alive</code>: Icon representing a living enemy.</li>
+          <li><code>enemy_dead</code>: Icon representing a dead enemy.</li>
+          <li><code>leader_bubble</code>: Bubble to place around a leader's icon.</li>
+          <li><code>leader_x</code>: X imposed on top of KO'd leader icons.</li>
+          <li><code>obstacle</code>: Icon representing a generic obstacle that blocks paths.</li>
+          <li><code>onion_skeleton</code>: Skeleton part of the icon that represents an Onion. This is the part of the icon that doesn't change color, i.e. the legs and other details.</li>
+          <li><code>onion_bulb</code>: Bulb part of the icon that represents an Onion. This is the part that changes color depending on the Pikmin it can manage.</li>
+          <li><code>ship</code>: Icon representing a ship.</li>
+        </ul>
+      </li>
     </ul>
 
-    <h3 id="pause-menu-status">Pause menu &ndash; status page</h3>
-
-    <p>The Pikmin status page of the pause menu.</p>
-
-    <ul>
-      <li><b>Internal name:</b> <code>pause_menu_status</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
-        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
-        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
-        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
-        <li><code>continue</code>: Continue button.</li>
-        <li><code>list_header</code>: Row for the header of the table, which details what each column is.</li>
-        <li><code>list</code>: The table proper.</li>
-        <li><code>list_scroll</code>: Scrollbar for the list.</li>
-        <li><code>totals</code>: Row containing the grand totals.</li>
-        <li><code>instructions</code>: Some basic instructions on how to use the radar.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
-    <h3 id="pause-menu-system">Pause menu -- system page</h3>
-
-    <p>The menu that shows when the player pauses the game. This is only the system page, not the mission page, confirmation page, etc.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>pause_menu_system</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>left_page</code>: Button to go to whatever page is to the left.</li>
-        <li><code>left_page_input</code>: Icon of the player input that changes to the left page.</li>
-        <li><code>right_page</code>: Button to go to whatever page is to the right.</li>
-        <li><code>right_page_input</code>: Icon of the player input that changes to the right page.</li>
-        <li><code>area_name</code>: Area name.</li>
-        <li><code>area_subtitle</code>: Area subtitle or mission goal, if any.</li>
-        <li><code>continue</code>: Continue button.</li>
-        <li><code>retry</code>: Restart exploration/retry mission button.</li>
-        <li><code>end</code>: End exploration/mission button.</li>
-        <li><code>help</code>: Help button.</li>
-        <li><code>options</code>: Options button.</li>
-        <li><code>stats</code>: Statistics button.</li>
-        <li><code>quit</code>: Quit button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-
-    <h3 id="results-menu">Results menu</h3>
-
-    <p>The menu shown when players end an exploration/mission and get some results.</p>
-    
-    <ul>
-      <li><b>Internal name:</b> <code>results_menu</code></li>
-      <li><b>Items:</b></li>
-      <ul>
-        <li><code>area_name</code>: Name of the area.</li>
-        <li><code>area_subtitle</code>: Area subtitle or mission goal.</li>
-        <li><code>goal_stamp</code>: A stamp indicating whether or not the player reached the mission goal.</li>
-        <li><code>end_reason</code>: Reason as to why the mission ended, if any.</li>
-        <li><code>medal</code>: Mission medal that the player got, if any.</li>
-        <li><code>medal_reason</code>: Reason for the medal. If applicable, includes the final score.</li>
-        <li><code>stats</code>: Box with several statistics.</li>
-        <li><code>stats_scroll</code>: Scrollbar for the stats box.</li>
-        <li><code>retry</code>: Retry button.</li>
-        <li><code>continue</code>: Keep playing button.</li>
-        <li><code>pick_area</code>: Pick an area button.</li>
-        <li><code>tooltip</code>: Tooltip of the focused menu item.</li>
-      </ul>
-    </ul>
-    
   </div>
 </body>
 </html>

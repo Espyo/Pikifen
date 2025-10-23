@@ -57,6 +57,7 @@
       <li><span class="cl-a">Added</span> an optional buildup mechanic to <a href="status.html">statuses</a>.</li>
       <li><span class="cl-a">Added</span> a quick play feature to all <a href="editor.html">editors</a>.</li>
       <li><span class="cl-a">Added</span> a way to create custom <a href="gui.html">GUI</a> items. Some of the existing hardcoded GUI items have also been made into custom items.</li>
+      <li><span class="cl-a">Added</span> descriptions to the hardcoded GUI items, visible in the item list in the <a href="gui.html">GUI editor</a>. The full lists have been removed from the manual page as a result.</li>
       <li><span class="cl-c">Changed</span> the <code>print</code> <a href="events_and_actions.html">script action</a> to show the latest and the past lines, instead of just the latest.</li>
     </ul>
 
@@ -70,6 +71,7 @@
       <li><span class="cl-c">Changed</span> the <code>glow</code> <a href="status.html">status effect type</a> property to <code>colorize</code>. Instead of a pseudo-additive color effect, it now changes the mob's pixel colors towards the target color, with the strength specified by the alpha component.</li>
       <li><span class="cl-c">Changed</span> some <a href="gui.html">GUI</code> items that used to be hardcoded to instead be custom items.</li>
       <li><span class="cl-c">Changed</span> the <a href="mob_leader.html">leader's</code> <code>lying</code> animation to <code>sleeping</code>.</li>
+      <li><span class="cl-c">Changed</span> the way hardcoded <a href="gui.html">GUI items</code> are stored in GUI definitions. Instead of one property per item in a <code>positions</code> block, each item is a sub-block inside of a <code>hardcoded_items</code> block.</li>
       <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, <code>show_counter_on_cursor</code>, and <code>advanced</code> &gt; <code>p*_mouse_moves_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, <code>show_leader_cursor_counter</code>, and <code>controls</code> &gt; <code>p*_mouse_moves_leader_cursor</code>.</li>
       <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, and <code>show_counter_on_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, and <code>show_leader_cursor_counter</code>.</li>
       <li><span class="cl-d">Deprecated</span> the <code>menu_selected</code>, <code>cursor</code>, and <code>cursor_counter</code> <a href="system_content_names.html">system content</a> properties. Please rename them to <code>menu_focused</code>, <code>leader_cursor</code>, and <code>leader_cursor_counter</code>.</li>

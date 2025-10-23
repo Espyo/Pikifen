@@ -3,17 +3,57 @@ description=GUI for the main menu's top-level menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	play=42.0000 58.0000 44.0000 12.0000
-	make=58.0000 72.0000 44.0000 12.0000
-	help=24.0000 83.0000 24.0000 6.0000
-	options=50.0000 83.0000 24.0000 6.0000
-	stats=76.0000 83.0000 24.0000 6.0000
-	discord=74.0000 91.0000 4.0000 5.0000
-	github=80.0000 91.0000 4.0000 5.0000
-	exit=91.0000 91.0000 14.0000 6.0000
-	exit_input=97.0000 93.0000 4.0000 4.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	play{
+		center=42.0000 58.0000
+		size=44.0000 12.0000
+		description=Play button.
+	}
+	make{
+		center=58.0000 72.0000
+		size=44.0000 12.0000
+		description=Make button.
+	}
+	help{
+		center=24.0000 83.0000
+		size=24.0000 6.0000
+		description=Help button.
+	}
+	options{
+		center=50.0000 83.0000
+		size=24.0000 6.0000
+		description=Options button.
+	}
+	stats{
+		center=76.0000 83.0000
+		size=24.0000 6.0000
+		description=Statistics button.
+	}
+	discord{
+		center=74.0000 91.0000
+		size=4.0000 5.0000
+		description=Discord server invite button.
+	}
+	github{
+		center=80.0000 91.0000
+		size=4.0000 5.0000
+		description=GitHub page button.
+	}
+	exit{
+		center=91.0000 91.0000
+		size=14.0000 6.0000
+		description=Exit button.
+	}
+	exit_input{
+		center=97.0000 93.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 logo{
 	min_window_limit=10 10
@@ -53,14 +93,16 @@ icons_to_the_left{
 }
 custom_items{
 	discord_bg{
-		coordinates=74.0000 91.0000 4.0000 5.0000
+		center=74.0000 91.0000
+		size=4.0000 5.0000
 		type=filled_square
 		color=128 128 128 128
 		draw_before_hardcoded=true
 		rectangle_rounding=4.0000
 	}
 	github_bg{
-		coordinates=80.0000 91.0000 4.0000 5.0000
+		center=80.0000 91.0000
+		size=4.0000 5.0000
 		type=filled_square
 		color=192 192 192 128
 		draw_before_hardcoded=true

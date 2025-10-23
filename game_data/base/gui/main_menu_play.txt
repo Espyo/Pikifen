@@ -3,14 +3,35 @@ description=GUI for the main menu's "play" sub-menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	simple=42.0000 60.0000 60.0000 12.5000
-	mission=44.0000 78.0000 60.0000 12.5000
-	back=9.0000 91.0000 14.0000 6.0000
-	back_input=3.0000 93.0000 4.0000 4.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	simple{
+		center=42.0000 60.0000
+		size=60.0000 12.5000
+		description=Play a simple area button.
+	}
+	mission{
+		center=44.0000 78.0000
+		size=60.0000 12.5000
+		description=Play a mission button.
+	}
+	back{
+		center=9.0000 91.0000
+		size=14.0000 6.0000
+		description=Return to the main menu button.
+	}
+	back_input{
+		center=3.0000 93.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 icons_to_the_left{
 	simple_areas=true
 	missions=true
 }
+custom_items

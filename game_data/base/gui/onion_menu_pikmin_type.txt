@@ -1,15 +1,48 @@
 name=Onion menu -- Pikmin type
-description=GUI definition for each Pikmin type in the Onion menu.
+description=GUI definition for each Pikmin type in the Onion menu. This includes the overarching "all" buttons, as well as a single definition for each GUI item you'll find in a Pikmin type column. Note that due to the way the Onion menu's layout is dynamically generated based on the Pikmin types the Onion has, the X coordinate of these items will be overridden by the game in real time, as well as the width of the "all" buttons.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	onion_button=11.2500 15.0000 12.5000 20.0000
-	onion_amount=11.2500 33.7500 12.5000 7.5000
-	group_button=11.2500 85.0000 12.5000 20.0000
-	group_amount=11.2500 66.2500 12.5000 7.5000
-	full_type=77.5000 50.0000 12.5000 90.0000
-	onion_all_button=40.0000 15.0000 12.5000 20.0000
-	group_all_button=40.0000 85.0000 12.5000 20.0000
-	full_type_all=57.5000 50.0000 12.5000 90.0000
+hardcoded_items{
+	onion_button{
+		center=11.2500 15.0000
+		size=12.5000 20.0000
+		description=Button for the Pikmin type column's Onion.
+	}
+	onion_amount{
+		center=11.2500 33.7500
+		size=12.5000 7.5000
+		description=Text for how many Pikmin are in the Pikmin type column's Onion.
+	}
+	group_button{
+		center=11.2500 85.0000
+		size=12.5000 20.0000
+		description=Button for the Pikmin type column's group.
+	}
+	group_amount{
+		center=11.2500 66.2500
+		size=12.5000 7.5000
+		description=Text for how many Pikmin are in the Pikmin type column's group.
+	}
+	full_type{
+		center=77.5000 50.0000
+		size=12.5000 90.0000
+		description=Item that encompasses the type's full GUI items, used when navigating without a mouse.
+	}
+	onion_all_button{
+		center=40.0000 15.0000
+		size=12.5000 20.0000
+		description=Overarching "all types" Onion button.
+	}
+	group_all_button{
+		center=40.0000 85.0000
+		size=12.5000 20.0000
+		description=Overarching "all types" group button.
+	}
+	full_type_all{
+		center=57.5000 50.0000
+		size=12.5000 90.0000
+		description=Overarching "all types" item. See "full_type".
+	}
 }
+custom_items

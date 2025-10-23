@@ -152,7 +152,7 @@ struct GuiItemDef {
 
     //--- Members ---
     
-    //Its name in the file.
+    //Its internal name.
     string name;
     
     //Center coordinates.
@@ -166,9 +166,23 @@ struct GuiItemDef {
 
 
 /**
-* @brief Definition of a custom GUI item, added by the user, that is not a part
-* of the items the engine expects for the GUI.
-*/
+ * @brief Definition of a hardcoded GUI item, an item that must exist in the GUI
+ * since the engine expects it.
+ */
+struct HardcodedGuiItemDef : public GuiItemDef {
+
+    //--- Members ---
+    
+    //Helpful description.
+    string description;
+    
+};
+
+
+/**
+ * @brief Definition of a custom GUI item, added by the user, that is not a part
+ * of the items the engine expects for the GUI.
+ */
 struct CustomGuiItemDef : public GuiItemDef {
 
     //--- Members ---
@@ -715,7 +729,7 @@ public:
     string getCurrentTooltip() const;
     static bool getItemDefsFromDataFile(
         DataNode* file,
-        vector<GuiItemDef>* outHardcodedItemDefs,
+        vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
         vector<CustomGuiItemDef>* outCustomItemDefs
     );
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
@@ -737,7 +751,7 @@ public:
     bool wasLastInputMouse() const;
     static bool writeItemDefsToDataFile(
         DataNode* file,
-        const vector<GuiItemDef>& hardcodedItemDefs,
+        const vector<HardcodedGuiItemDef>& hardcodedItemDefs,
         const vector<CustomGuiItemDef>& customItemDefs
     );
     bool destroy();

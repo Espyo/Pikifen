@@ -84,7 +84,7 @@ private:
     Content contentMd;
     
     //List of hardcoded item definitions for the current GUI definition.
-    vector<GuiItemDef> hardcodedItems;
+    vector<HardcodedGuiItemDef> hardcodedItems;
     
     //List of custom item definitions for the current GUI definition.
     vector<CustomGuiItemDef> customItems;

@@ -3,22 +3,61 @@ description=GUI for the controls page of the options menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	back=12.0000 5.0000 20.0000 6.0000
-	back_input=3.0000 7.0000 4.0000 4.0000
-	normal_binds=50.0000 25.0000 70.0000 10.0000
-	special_binds=50.0000 36.5000 58.0000 9.0000
-	leader_cursor_mouse=50.0000 52.5000 70.0000 10.0000
-	leader_cursor_speed=50.0000 65.0000 70.0000 10.0000
-	auto_throw=50.0000 77.5000 70.0000 10.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	back{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Back button.
+	}
+	back_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	normal_binds{
+		center=50.0000 22.0000
+		size=70.0000 10.0000
+		description=Normal control binds menu button.
+	}
+	special_binds{
+		center=50.0000 33.0000
+		size=58.0000 8.0000
+		description=Special control binds menu button.
+	}
+	shortcuts{
+		center=50.0000 43.0000
+		size=58.0000 8.0000
+		description=Inventory item shortcuts menu button.
+	}
+	leader_cursor_mouse{
+		center=50.0000 61.0000
+		size=70.0000 10.0000
+		description=Checkbox for whether the leader cursor is controlled with the mouse.
+	}
+	leader_cursor_speed{
+		center=50.0000 73.0000
+		size=70.0000 10.0000
+		description=Leader cursor speed picker.
+	}
+	auto_throw{
+		center=50.0000 85.0000
+		size=70.0000 10.0000
+		description=Auto-throw mode picker.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 10.0000 50.0000 6.0000
-		color = 255 255 255 128
-		text = CONTROLS OPTIONS
-		font = area_name
+custom_items{
+	header{
+		center=50.0000 10.0000
+		size=50.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=CONTROLS OPTIONS
+		font=area_name
+		text_alignment=1
 	}
 }

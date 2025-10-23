@@ -3,20 +3,72 @@ description=GUI for the help menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	back=12.0000 5.0000 20.0000 6.0000
-	back_input=3.0000 7.0000 4.0000 4.0000
-	gameplay1=22.0000 15.0000 36.0000 6.0000
-	gameplay2=22.0000 23.0000 36.0000 6.0000
-	controls=22.0000 31.0000 36.0000 6.0000
-	pikmin=22.0000 39.0000 36.0000 6.0000
-	objects=22.0000 47.0000 36.0000 6.0000
-	manual=22.0000 54.0000 36.0000 4.0000
-	category=71.0000 5.0000 54.0000 6.0000
-	list=69.0000 39.0000 50.0000 54.0000
-	list_scroll=96.0000 39.0000 2.0000 54.0000
-	image=16.0000 83.0000 28.0000 30.0000
-	tooltip=65.0000 83.0000 66.0000 30.0000
+hardcoded_items{
+	back{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to return to the pause menu.
+	}
+	back_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	gameplay1{
+		center=22.0000 15.0000
+		size=36.0000 6.0000
+		description=Gameplay basics category button.
+	}
+	gameplay2{
+		center=22.0000 23.0000
+		size=36.0000 6.0000
+		description=Advanced gameplay category button.
+	}
+	controls{
+		center=22.0000 31.0000
+		size=36.0000 6.0000
+		description=Controls category button.
+	}
+	pikmin{
+		center=22.0000 39.0000
+		size=36.0000 6.0000
+		description=Pikmin category button.
+	}
+	objects{
+		center=22.0000 47.0000
+		size=36.0000 6.0000
+		description=Objects category button.
+	}
+	manual{
+		center=22.0000 54.0000
+		size=36.0000 4.0000
+		description=Link to the manual.
+	}
+	category{
+		center=71.0000 5.0000
+		size=54.0000 6.0000
+		description=Name of the currently selected category.
+	}
+	list{
+		center=69.0000 39.0000
+		size=50.0000 54.0000
+		description=List of tidbits in the current category.
+	}
+	list_scroll{
+		center=96.0000 39.0000
+		size=2.0000 54.0000
+		description=Scrollbar for the list of tidbits.
+	}
+	image{
+		center=16.0000 83.0000
+		size=28.0000 30.0000
+		description=Image representing the current tidbit.
+	}
+	tooltip{
+		center=65.0000 83.0000
+		size=66.0000 30.0000
+		description=Tooltip of the selected tidbit or menu item.
+	}
 }
 tidbits{
 	gameplay_basics{
@@ -80,3 +132,4 @@ tidbits{
 		Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.;help/bamboo_gate
 	}
 }
+custom_items

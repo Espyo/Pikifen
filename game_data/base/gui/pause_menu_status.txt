@@ -3,33 +3,78 @@ description=GUI for the status sub-menu of the pause menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	left_page=12.0000 5.0000 20.0000 6.0000
-	left_page_input=3.0000 7.0000 4.0000 4.0000
-	right_page=88.0000 5.0000 20.0000 6.0000
-	right_page_input=97.0000 7.0000 4.0000 4.0000
-	continue=10.0000 16.0000 16.0000 4.0000
-	continue_input=3.0000 17.0000 4.0000 4.0000
-	list_header=50.0000 23.5000 88.0000 7.0000
-	list=50.0000 56.0000 88.0000 56.0000
-	list_scroll=97.0000 56.0000 2.0000 56.0000
-	totals=50.0000 89.0000 88.0000 8.0000
-	instructions=58.7500 16.0000 77.5000 4.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
-}
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 5.0000 52.0000 6.0000
-		color = 255 255 255 128
-		text = STATUS
-		font = area_name
+hardcoded_items{
+	left_page{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the left.
 	}
-	line {
-		type = filled_rectangle
-		coordinates = 50.0000 11.0000 96.0000 0.5000
-		color = 255 255 255 128
-		rectangle_rounding = 2
+	left_page_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the left page.
+	}
+	right_page{
+		center=88.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the right.
+	}
+	right_page_input{
+		center=97.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the right page.
+	}
+	continue{
+		center=10.0000 16.0000
+		size=16.0000 4.0000
+		description=Continue button.
+	}
+	continue_input{
+		center=3.0000 17.0000
+		size=4.0000 4.0000
+		description=Icon of the player input to unpause.
+	}
+	list_header{
+		center=50.0000 23.5000
+		size=88.0000 7.0000
+		description=Row for the header of the table, which details what each column is.
+	}
+	list{
+		center=50.0000 56.0000
+		size=88.0000 56.0000
+		description=The Pikmin status table proper.
+	}
+	list_scroll{
+		center=97.0000 56.0000
+		size=2.0000 56.0000
+		description=Scrollbar for the list.
+	}
+	totals{
+		center=50.0000 89.0000
+		size=88.0000 8.0000
+		description=Row containing the grand totals.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
 	}
 }
-
+custom_items{
+	header{
+		center=50.0000 5.0000
+		size=52.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=STATUS
+		font=area_name
+		text_alignment=1
+	}
+	line{
+		center=50.0000 11.0000
+		size=96.0000 0.5000
+		type=filled_rectangle
+		color=255 255 255 128
+		rectangle_rounding=2.0000
+	}
+}

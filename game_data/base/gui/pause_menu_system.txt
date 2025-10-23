@@ -3,35 +3,98 @@ description=GUI for the pause menu's system page.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	left_page=12.0000 5.0000 20.0000 6.0000
-	left_page_input=3.0000 7.0000 4.0000 4.0000
-	right_page=88.0000 5.0000 20.0000 6.0000
-	right_page_input=97.0000 7.0000 4.0000 4.0000
-	area_name=50.0000 20.0000 96.0000 8.0000
-	area_subtitle=50.0000 28.5000 88.0000 9.0000
-	continue=13.0000 88.0000 22.0000 8.0000
-	continue_input=3.0000 91.0000 4.0000 4.0000
-	retry=28.0000 44.0000 38.0000 12.0000
-	end=72.0000 44.0000 38.0000 12.0000
-	help=19.0000 65.0000 26.0000 10.0000
-	options=50.0000 65.0000 26.0000 10.0000
-	stats=81.0000 65.0000 26.0000 10.0000
-	quit=87.0000 88.0000 22.0000 8.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
-}
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 5.0000 52.0000 6.0000
-		color = 255 255 255 128
-		text = PAUSED
-		font = area_name
+hardcoded_items{
+	left_page{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the left.
 	}
-	line {
-		type = filled_rectangle
-		coordinates = 50.0000 11.0000 96.0000 0.5000
-		color = 255 255 255 128
-		rectangle_rounding = 2
+	left_page_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the left page.
+	}
+	right_page{
+		center=88.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the right.
+	}
+	right_page_input{
+		center=97.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the right page.
+	}
+	area_name{
+		center=50.0000 20.0000
+		size=96.0000 8.0000
+		description=Area name.
+	}
+	area_subtitle{
+		center=50.0000 28.5000
+		size=88.0000 9.0000
+		description=Area subtitle or mission goal, if any.
+	}
+	continue{
+		center=13.0000 88.0000
+		size=22.0000 8.0000
+		description=Continue button.
+	}
+	continue_input{
+		center=3.0000 91.0000
+		size=4.0000 4.0000
+		description=Icon of the player input to unpause.
+	}
+	retry{
+		center=28.0000 44.0000
+		size=38.0000 12.0000
+		description=Restart exploration/retry mission button.
+	}
+	end{
+		center=72.0000 44.0000
+		size=38.0000 12.0000
+		description=End exploration/mission button.
+	}
+	help{
+		center=19.0000 65.0000
+		size=26.0000 10.0000
+		description=Help button.
+	}
+	options{
+		center=50.0000 65.0000
+		size=26.0000 10.0000
+		description=Options button.
+	}
+	stats{
+		center=81.0000 65.0000
+		size=26.0000 10.0000
+		description=Statistics button.
+	}
+	quit{
+		center=87.0000 88.0000
+		size=22.0000 8.0000
+		description=Quit button.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
+}
+custom_items{
+	header{
+		center=50.0000 5.0000
+		size=52.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=PAUSED
+		font=area_name
+		text_alignment=1
+	}
+	line{
+		center=50.0000 11.0000
+		size=96.0000 0.5000
+		type=filled_rectangle
+		color=255 255 255 128
+		rectangle_rounding=2.0000
 	}
 }

@@ -102,6 +102,7 @@ public:
     DataNode* getChildByName(
         const string& name, size_t occurrenceNumber = 0
     );
+    DataNode* getChildOrAddNew(const string& name);
     size_t add(DataNode* newNode);
     DataNode* addNew(const string& name, const string& value = "");
     bool remove(DataNode* nodeToRemove);

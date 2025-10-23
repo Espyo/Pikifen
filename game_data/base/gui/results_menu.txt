@@ -3,32 +3,90 @@ description=GUI for the results menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	area_name=50.0000 7.0000 45.0000 10.0000
-	area_subtitle=50.0000 18.0000 40.0000 10.0000
-	goal_stamp=15.0000 15.0000 22.0000 22.0000
-	end_reason=15.0000 28.0000 26.0000 4.0000
-	medal=85.0000 15.0000 22.0000 22.0000
-	medal_reason=85.0000 28.0000 26.0000 4.0000
-	conclusion=50.0000 36.0000 96.0000 4.0000
-	stats=50.0000 63.0000 80.0000 38.0000
-	stats_scroll=93.0000 63.0000 2.0000 38.0000
-	retry=20.0000 88.0000 24.0000 8.0000
-	continue=50.0000 88.0000 24.0000 8.0000
-	pick_area=80.0000 88.0000 24.0000 8.0000
-	pick_area_input=91.0000 91.0000 4.0000 4.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	area_name{
+		center=50.0000 7.0000
+		size=45.0000 10.0000
+		description=Name of the area.
+	}
+	area_subtitle{
+		center=50.0000 18.0000
+		size=40.0000 10.0000
+		description=Area subtitle or mission goal.
+	}
+	goal_stamp{
+		center=15.0000 15.0000
+		size=22.0000 22.0000
+		description=A stamp indicating whether or not the player reached the mission goal.
+	}
+	end_reason{
+		center=15.0000 28.0000
+		size=26.0000 4.0000
+		description=Reason as to why the mission ended, if any.
+	}
+	medal{
+		center=85.0000 15.0000
+		size=22.0000 22.0000
+		description=Mission medal that the player got, if any.
+	}
+	medal_reason{
+		center=85.0000 28.0000
+		size=26.0000 4.0000
+		description=Reason for the medal. If applicable, includes the final score.
+	}
+	conclusion{
+		center=50.0000 36.0000
+		size=96.0000 4.0000
+		description=Conclusion about what happened and what happens now.
+	}
+	stats{
+		center=50.0000 63.0000
+		size=80.0000 38.0000
+		description=Box with several statistics.
+	}
+	stats_scroll{
+		center=93.0000 63.0000
+		size=2.0000 38.0000
+		description=Scrollbar for the statistics box.
+	}
+	retry{
+		center=20.0000 88.0000
+		size=24.0000 8.0000
+		description=Retry button.
+	}
+	continue{
+		center=50.0000 88.0000
+		size=24.0000 8.0000
+		description=Keep playing button.
+	}
+	pick_area{
+		center=80.0000 88.0000
+		size=24.0000 8.0000
+		description=Pick an area button.
+	}
+	pick_area_input{
+		center=91.0000 91.0000
+		size=4.0000 4.0000
+		description=Icon of the player input to unpause.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 custom_items{
 	stats_bg{
-		coordinates=50.0000 63.0000 80.0000 38.0000
+		center=50.0000 63.0000
+		size=80.0000 38.0000
 		type=filled_rectangle
 		color=117 0 0 40
 		draw_before_hardcoded=true
 		rectangle_rounding=16.0000
 	}
 	conclusion_label{
-		coordinates=50.0000 32.0000 36.0000 3.0000
+		center=50.0000 32.0000
+		size=36.0000 3.0000
 		type=text
 		color=255 255 255 192
 		text=Conclusion:
@@ -36,7 +94,8 @@ custom_items{
 		text_alignment=1
 	}
 	stats_label{
-		coordinates=50.0000 42.0000 36.0000 3.0000
+		center=50.0000 42.0000
+		size=36.0000 3.0000
 		type=text
 		color=255 255 255 192
 		text=Stats:

@@ -3,22 +3,56 @@ description=GUI for the audio page of the options menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	back=12.0000 5.0000 20.0000 6.0000
-	back_input=3.0000 7.0000 4.0000 4.0000
-	master_volume=50.0000 25.0000 70.0000 10.0000
-	gameplay_sound_volume=50.0000 37.5000 65.0000 10.0000
-	music_volume=50.0000 50.0000 65.0000 10.0000
-	ambiance_sound_volume=50.0000 62.5000 65.0000 10.0000
-	ui_sound_volume=50.0000 75.0000 65.0000 10.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	back{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Back button.
+	}
+	back_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	master_volume{
+		center=50.0000 25.0000
+		size=70.0000 10.0000
+		description=Master volume control.
+	}
+	gameplay_sound_volume{
+		center=50.0000 37.5000
+		size=65.0000 10.0000
+		description=Gameplay sound volume control.
+	}
+	music_volume{
+		center=50.0000 50.0000
+		size=65.0000 10.0000
+		description=Music volume control.
+	}
+	ambiance_sound_volume{
+		center=50.0000 62.5000
+		size=65.0000 10.0000
+		description=Ambiance sound volume control.
+	}
+	ui_sound_volume{
+		center=50.0000 75.0000
+		size=65.0000 10.0000
+		description=UI sound volume control.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 10.0000 50.0000 6.0000
-		color = 255 255 255 128
-		text = AUDIO OPTIONS
-		font = area_name
+custom_items{
+	header{
+		center=50.0000 10.0000
+		size=50.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=AUDIO OPTIONS
+		font=area_name
+		text_alignment=1
 	}
 }

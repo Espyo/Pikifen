@@ -1043,6 +1043,12 @@ void GuiEditor::processGuiPanelItems() {
             ) {
                 curItemIdx = i;
             }
+            if(!isCustom) {
+                HardcodedGuiItemDef* hardcodedPtr = (HardcodedGuiItemDef*) item;
+                setTooltip(
+                    wordWrap(hardcodedPtr->description, 50)
+                );
+            }
             
             if(mustFocusOnCurItem && selected) {
                 ImGui::SetScrollHereY(0.5f);

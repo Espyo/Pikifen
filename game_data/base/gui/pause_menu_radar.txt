@@ -3,23 +3,87 @@ description=GUI for the radar sub-menu of the pause menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	left_page=12.0000 5.0000 20.0000 6.0000
-	left_page_input=3.0000 7.0000 4.0000 4.0000
-	right_page=88.0000 5.0000 20.0000 6.0000
-	right_page_input=97.0000 7.0000 4.0000 4.0000
-	continue=10.0000 16.0000 16.0000 4.0000
-	continue_input=3.0000 17.0000 4.0000 4.0000
-	radar=37.5000 56.2500 70.0000 72.5000
-	group_pikmin_label=86.2500 47.5000 22.5000 5.0000
-	group_pikmin_number=86.2500 55.0000 22.5000 5.0000
-	idle_pikmin_label=86.2500 62.5000 22.5000 5.0000
-	idle_pikmin_number=86.2500 70.0000 22.5000 5.0000
-	field_pikmin_label=86.2500 77.5000 22.5000 5.0000
-	field_pikmin_number=86.2500 85.0000 22.5000 5.0000
-	cursor_info=86.2500 33.7500 22.5000 17.5000
-	instructions=58.7500 16.0000 77.5000 4.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	left_page{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the left.
+	}
+	left_page_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the left page.
+	}
+	right_page{
+		center=88.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the right.
+	}
+	right_page_input{
+		center=97.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the right page.
+	}
+	continue{
+		center=10.0000 16.0000
+		size=16.0000 4.0000
+		description=Continue button.
+	}
+	continue_input{
+		center=3.0000 17.0000
+		size=4.0000 4.0000
+		description=Icon of the player input to unpause.
+	}
+	radar{
+		center=37.5000 56.2500
+		size=70.0000 72.5000
+		description=The actual radar itself.
+	}
+	group_pikmin_label{
+		center=86.2500 47.5000
+		size=22.5000 5.0000
+		description=Label for the group Pikmin counter.
+	}
+	group_pikmin_number{
+		center=86.2500 55.0000
+		size=22.5000 5.0000
+		description=Group Pikmin counter.
+	}
+	idle_pikmin_label{
+		center=86.2500 62.5000
+		size=22.5000 5.0000
+		description=Label for the idle Pikmin counter.
+	}
+	idle_pikmin_number{
+		center=86.2500 70.0000
+		size=22.5000 5.0000
+		description=Idle Pikmin counter.
+	}
+	field_pikmin_label{
+		center=86.2500 77.5000
+		size=22.5000 5.0000
+		description=Label for the field Pikmin counter.
+	}
+	field_pikmin_number{
+		center=86.2500 85.0000
+		size=22.5000 5.0000
+		description=Field Pikmin counter.
+	}
+	cursor_info{
+		center=86.2500 33.7500
+		size=22.5000 17.5000
+		description=Information about whatever the radar cursor is on.
+	}
+	instructions{
+		center=58.7500 16.0000
+		size=77.5000 4.0000
+		description=Some basic instructions on how to control the radar.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 bitmaps{
 	cursor=radar/cursor
@@ -35,18 +99,21 @@ bitmaps{
 	ship=radar/ship
 	path=radar/path
 }
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 5.0000 52.0000 6.0000
-		color = 255 255 255 128
-		text = RADAR
-		font = area_name
+custom_items{
+	header{
+		center=50.0000 5.0000
+		size=52.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=RADAR
+		font=area_name
+		text_alignment=1
 	}
-	line {
-		type = filled_rectangle
-		coordinates = 50.0000 11.0000 96.0000 0.5000
-		color = 255 255 255 128
-		rectangle_rounding = 2
+	line{
+		center=50.0000 11.0000
+		size=96.0000 0.5000
+		type=filled_rectangle
+		color=255 255 255 128
+		rectangle_rounding=2.0000
 	}
 }

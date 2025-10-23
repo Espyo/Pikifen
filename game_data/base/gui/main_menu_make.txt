@@ -3,15 +3,47 @@ description=GUI for the main menu's "make" sub-menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	animation_editor=27.5000 63.0000 43.0000 12.0000
-	area_editor=72.5000 63.0000 43.0000 12.0000
-	gui_editor=69.0000 78.0000 34.0000 8.0000
-	particle_editor=31.0000 78.0000 34.0000 8.0000
-	back=9.0000 91.0000 14.0000 6.0000
-	back_input=3.0000 93.0000 4.0000 4.0000
-	more=91.0000 91.0000 14.0000 6.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
+hardcoded_items{
+	animation_editor{
+		center=27.5000 63.0000
+		size=43.0000 12.0000
+		description=Animation editor button.
+	}
+	area_editor{
+		center=72.5000 63.0000
+		size=43.0000 12.0000
+		description=Area editor button.
+	}
+	gui_editor{
+		center=69.0000 78.0000
+		size=34.0000 8.0000
+		description=GUI editor button.
+	}
+	particle_editor{
+		center=31.0000 78.0000
+		size=34.0000 8.0000
+		description=Particle editor button.
+	}
+	back{
+		center=9.0000 91.0000
+		size=14.0000 6.0000
+		description=Return to the main menu button.
+	}
+	back_input{
+		center=3.0000 93.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	more{
+		center=91.0000 91.0000
+		size=14.0000 6.0000
+		description=Link to the manual explaining how to edit more things.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 icons_to_the_left{
 	animation_editor=true
@@ -19,3 +51,4 @@ icons_to_the_left{
 	particle_editor=true
 	gui_editor=false
 }
+custom_items

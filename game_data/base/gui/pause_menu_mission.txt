@@ -3,36 +3,103 @@ description=GUI for the mission info sub-menu of the pause menu.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	left_page=12.0000 5.0000 20.0000 6.0000
-	left_page_input=3.0000 7.0000 4.0000 4.0000
-	right_page=88.0000 5.0000 20.0000 6.0000
-	right_page_input=97.0000 7.0000 4.0000 4.0000
-	continue=10.0000 16.0000 16.0000 4.0000
-	continue_input=3.0000 17.0000 4.0000 4.0000
-	goal_header=50.0000 16.0000 60.0000 4.0000
-	goal=50.0000 22.0000 96.0000 4.0000
-	goal_status=50.0000 26.0000 96.0000 4.0000
-	fail_header=50.0000 32.0000 96.0000 4.0000
-	fail_list=48.0000 48.0000 92.0000 24.0000
-	fail_scroll=97.0000 48.0000 2.0000 24.0000
-	grading_header=50.0000 64.0000 96.0000 4.0000
-	grading_list=48.0000 80.0000 92.0000 24.0000
-	grading_scroll=97.0000 80.0000 2.0000 24.0000
-	tooltip=50.0000 96.0000 96.0000 4.0000
-}
-custom_items {
-	header {
-		type = text
-		coordinates = 50.0000 5.0000 52.0000 6.0000
-		color = 255 255 255 128
-		text = MISSION
-		font = area_name
+hardcoded_items{
+	left_page{
+		center=12.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the left.
 	}
-	line {
-		type = filled_rectangle
-		coordinates = 50.0000 11.0000 96.0000 0.5000
-		color = 255 255 255 128
-		rectangle_rounding = 2
+	left_page_input{
+		center=3.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the left page.
+	}
+	right_page{
+		center=88.0000 5.0000
+		size=20.0000 6.0000
+		description=Button to go to whatever page is to the right.
+	}
+	right_page_input{
+		center=97.0000 7.0000
+		size=4.0000 4.0000
+		description=Icon of the player input that changes to the right page.
+	}
+	continue{
+		center=10.0000 16.0000
+		size=16.0000 4.0000
+		description=Continue button.
+	}
+	continue_input{
+		center=3.0000 17.0000
+		size=4.0000 4.0000
+		description=Icon of the player input to unpause.
+	}
+	goal_header{
+		center=50.0000 16.0000
+		size=60.0000 4.0000
+		description=Header text for the mission goal.
+	}
+	goal{
+		center=50.0000 22.0000
+		size=96.0000 4.0000
+		description=Explanation of the mission goal.
+	}
+	goal_status{
+		center=50.0000 26.0000
+		size=96.0000 4.0000
+		description=The player's status compared to the goal.
+	}
+	fail_header{
+		center=50.0000 32.0000
+		size=96.0000 4.0000
+		description=Header text for the mission's failure conditions.
+	}
+	fail_list{
+		center=48.0000 48.0000
+		size=92.0000 24.0000
+		description=List of failure conditions and statuses.
+	}
+	fail_scroll{
+		center=97.0000 48.0000
+		size=2.0000 24.0000
+		description=Scrollbar for the list of failure conditions.
+	}
+	grading_header{
+		center=50.0000 64.0000
+		size=96.0000 4.0000
+		description=Header text for the mission's grading information.
+	}
+	grading_list{
+		center=48.0000 80.0000
+		size=92.0000 24.0000
+		description=List of bullet points about how grading works.
+	}
+	grading_scroll{
+		center=97.0000 80.0000
+		size=2.0000 24.0000
+		description=Scrollbar for the list of grading bullet points.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
+}
+custom_items{
+	header{
+		center=50.0000 5.0000
+		size=52.0000 6.0000
+		type=text
+		color=255 255 255 128
+		text=MISSION
+		font=area_name
+		text_alignment=1
+	}
+	line{
+		center=50.0000 11.0000
+		size=96.0000 0.5000
+		type=filled_rectangle
+		color=255 255 255 128
+		rectangle_rounding=2.0000
 	}
 }

@@ -910,29 +910,23 @@ string GuiManager::getCurrentTooltip() const {
  */
 bool GuiManager::getItemDefsFromDataFile(
     DataNode* file,
-    vector<GuiItemDef>* outHardcodedItemDefs,
+    vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
     vector<CustomGuiItemDef>* outCustomItemDefs
 ) {
-    auto readCoords = [] (const string& str, Point * center, Point * size) {
-        vector<string> words = split(str);
-        if(words.size() < 4) return false;
-        center->x = s2f(words[0]);
-        center->y = s2f(words[1]);
-        size->x = s2f(words[2]);
-        size->y = s2f(words[3]);
-        return true;
-    };
-    
     //Read the hardcoded items.
-    DataNode* hardcodedDefsNode = file->getChildByName("positions");
+    DataNode* hardcodedDefsNode = file->getChildByName("hardcoded_items");
     size_t nItems = hardcodedDefsNode->getNrOfChildren();
     for(size_t i = 0; i < nItems; i++) {
-        GuiItemDef itemDef;
         DataNode* itemNode = hardcodedDefsNode->getChild(i);
+        HardcodedGuiItemDef itemDef;
+        
+        ReaderSetter rs(itemNode);
+        
+        rs.set("center", itemDef.center);
+        rs.set("size", itemDef.size);
+        rs.set("description", itemDef.description);
+
         itemDef.name = itemNode->name;
-        if(!readCoords(itemNode->value, &itemDef.center, &itemDef.size)) {
-            continue;
-        }
         outHardcodedItemDefs->push_back(itemDef);
     }
     
@@ -941,34 +935,32 @@ bool GuiManager::getItemDefsFromDataFile(
     size_t nCustomItems = customNode->getNrOfChildren();
     for(size_t i = 0; i < nCustomItems; i++) {
         DataNode* itemNode = customNode->getChild(i);
-        CustomGuiItemDef item;
+        CustomGuiItemDef itemDef;
         
         ReaderSetter rs(itemNode);
         
         string typeStr;
-        string coordsStr;
         string fontStr;
         DataNode* typeNode;
         DataNode* bitmapNode;
         DataNode* fontNode;
         
         rs.set("type", typeStr, &typeNode);
-        rs.set("coordinates", coordsStr);
-        rs.set("color", item.color);
-        rs.set("draw_before_hardcoded", item.drawBeforeHardcoded);
-        rs.set("bitmap", item.bitmapName, &bitmapNode);
-        rs.set("text", item.text);
+        rs.set("center", itemDef.center);
+        rs.set("size", itemDef.size);
+        rs.set("color", itemDef.color);
+        rs.set("draw_before_hardcoded", itemDef.drawBeforeHardcoded);
+        rs.set("bitmap", itemDef.bitmapName, &bitmapNode);
+        rs.set("text", itemDef.text);
         rs.set("font", fontStr, &fontNode);
-        rs.set("text_alignment", item.textAlignment);
-        rs.set("thickness", item.thickness);
-        rs.set("rectangle_rounding", item.rectangleRounding);
-        
-        if(!readCoords(coordsStr, &item.center, &item.size)) continue;
+        rs.set("text_alignment", itemDef.textAlignment);
+        rs.set("thickness", itemDef.thickness);
+        rs.set("rectangle_rounding", itemDef.rectangleRounding);
         
         if(typeNode) {
             readEnumProp(
                 typeStr,
-            (int*) &item.type, {
+            (int*) &itemDef.type, {
                 "bitmap",
                 "9_slice",
                 "text",
@@ -987,11 +979,11 @@ bool GuiManager::getItemDefsFromDataFile(
         }
         
         if(bitmapNode) {
-            item.bitmap =
-                game.content.bitmaps.list.get(item.bitmapName, bitmapNode);
+            itemDef.bitmap =
+                game.content.bitmaps.list.get(itemDef.bitmapName, bitmapNode);
         }
         
-        item.font = game.sysContent.fntStandard;
+        itemDef.font = game.sysContent.fntStandard;
         if(fontNode) {
             vector<ALLEGRO_FONT*> fontPtrs = {
                 game.sysContent.fntAreaName,
@@ -1011,16 +1003,16 @@ bool GuiManager::getItemDefsFromDataFile(
             };
             if(
                 readEnumProp(
-                    fontStr, (int*) &item.fontType,
+                    fontStr, (int*) &itemDef.fontType,
                     fontNames, "custom GUI item font", fontNode
                 )
             ) {
-                item.font = fontPtrs[item.fontType];
+                itemDef.font = fontPtrs[itemDef.fontType];
             }
         }
         
-        item.name = itemNode->name;
-        outCustomItemDefs->push_back(item);
+        itemDef.name = itemNode->name;
+        outCustomItemDefs->push_back(itemDef);
     }
     
     return true;
@@ -1427,7 +1419,7 @@ bool GuiManager::hideItems() {
  * @return Whether it succeeded.
  */
 bool GuiManager::readDataFile(DataNode* node) {
-    vector<GuiItemDef> hardcodedItemDefs;
+    vector<HardcodedGuiItemDef> hardcodedItemDefs;
     bool success =
         getItemDefsFromDataFile(node, &hardcodedItemDefs, &customItemDefs);
         
@@ -1661,7 +1653,7 @@ bool GuiManager::wasLastInputMouse() const {
  */
 bool GuiManager::writeItemDefsToDataFile(
     DataNode* file,
-    const vector<GuiItemDef>& hardcodedItemDefs,
+    const vector<HardcodedGuiItemDef>& hardcodedItemDefs,
     const vector<CustomGuiItemDef>& customItemDefs
 ) {
     const auto writeCoordinates =
@@ -1670,29 +1662,27 @@ bool GuiManager::writeItemDefsToDataFile(
     };
     
     //Hardcoded items.
-    DataNode* hardcodedNode = file->getChildByName("positions");
+    DataNode* hardcodedNode = file->getChildOrAddNew("hardcoded_items");
     hardcodedNode->clearChildren();
     for(size_t i = 0; i < hardcodedItemDefs.size(); i++) {
-        const GuiItemDef* itemPtr = &hardcodedItemDefs[i];
-        hardcodedNode->addNew(
-            itemPtr->name,
-            writeCoordinates(itemPtr->center, itemPtr->size)
-        );
+        const HardcodedGuiItemDef* itemPtr = &hardcodedItemDefs[i];
+        DataNode* itemNode = hardcodedNode->addNew(itemPtr->name);
+
+        string coordsStr = writeCoordinates(itemPtr->center, itemPtr->size);
+        GetterWriter gw(itemNode);
+
+        gw.write("center", itemPtr->center);
+        gw.write("size", itemPtr->size);
+        gw.write("description", itemPtr->description);
     }
     
     //Custom items.
-    DataNode* customNode;
-    if(file->getNrOfChildrenByName("custom_items")) {
-        customNode = file->getChildByName("custom_items");
-        customNode->clearChildren();
-    } else {
-        customNode = file->addNew("custom_items");
-    }
+    DataNode* customNode = file->getChildOrAddNew("custom_items");
+    customNode->clearChildren();
     for(size_t i = 0; i < customItemDefs.size(); i++) {
         const CustomGuiItemDef* itemPtr = &customItemDefs[i];
         DataNode* itemNode = customNode->addNew(itemPtr->name);
         
-        string coordsStr = writeCoordinates(itemPtr->center, itemPtr->size);
         vector<string> typeStrs {
             "bitmap",
             "9_slice",
@@ -1718,7 +1708,8 @@ bool GuiManager::writeItemDefsToDataFile(
         string fontStr = fontNames[(size_t) itemPtr->fontType];
         
         GetterWriter gw(itemNode);
-        gw.write("coordinates", coordsStr);
+        gw.write("center", itemPtr->center);
+        gw.write("size", itemPtr->size);
         gw.write("type", typeStr);
         gw.write("color", itemPtr->color);
         if(itemPtr->drawBeforeHardcoded) {

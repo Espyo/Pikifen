@@ -1,32 +1,82 @@
 name=Onion menu
-description=GUI for the Onion menu.
+description=GUI for the Onion menu. This also applies to Pikmin management menus in ships. This definition has no data on how the individual Pikmin columns work; for that, see "onion_menu_pikmin_type".
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0
-positions{
-	cancel=8.7500 16.2500 12.5000 12.5000
-	cancel_input=2.5000 22.5000 4.0000 4.0000
-	ok=8.7500 71.2500 12.5000 12.5000
-	ok_input=2.5000 77.5000 4.0000 4.0000
-	field=50.0000 87.0000 28.0000 4.0000
-	change_ten=5.0000 37.0000 5.0000 8.0000
-	change_ten_input=2.5000 41.0000 4.0000 4.0000
-	select_all=5.0000 50.0000 5.0000 8.0000
-	select_all_input=2.5000 54.0000 4.0000 4.0000
-	list=57.5000 43.7500 80.0000 67.5000
-	list_scroll=57.5000 81.2500 80.0000 2.5000
-	tooltip=50.0000 95.0000 95.0000 8.0000
+hardcoded_items{
+	cancel{
+		center=8.7500 16.2500
+		size=12.5000 12.5000
+		description=Cancel button.
+	}
+	cancel_input{
+		center=2.5000 22.5000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	ok{
+		center=8.7500 71.2500
+		size=12.5000 12.5000
+		description=Ok button.
+	}
+	ok_input{
+		center=2.5000 77.5000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the ok button.
+	}
+	field{
+		center=50.0000 87.0000
+		size=28.0000 4.0000
+		description=Amount of Pikmin currently on the field.
+	}
+	change_ten{
+		center=5.0000 37.0000
+		size=5.0000 8.0000
+		description=Button that toggles changing ten Pikmin at a time.
+	}
+	change_ten_input{
+		center=2.5000 41.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the "change ten" button.
+	}
+	select_all{
+		center=5.0000 50.0000
+		size=5.0000 8.0000
+		description=Button that toggles selecting all Pikmin types at once.
+	}
+	select_all_input{
+		center=2.5000 54.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the "select all" button.
+	}
+	list{
+		center=57.5000 43.7500
+		size=80.0000 67.5000
+		description=List with all the Pikmin type columns.
+	}
+	list_scroll{
+		center=57.5000 81.2500
+		size=80.0000 2.5000
+		description=Horizontal scrollbar for the list.
+	}
+	tooltip{
+		center=50.0000 95.0000
+		size=95.0000 8.0000
+		description=Tooltip of the focused menu item.
+	}
 }
 custom_items{
 	field_bg{
-		coordinates=50.0000 87.0000 30.0000 6.0000
+		center=50.0000 87.0000
+		size=30.0000 6.0000
 		type=filled_rectangle
 		color=188 230 230 128
 		draw_before_hardcoded=true
 		rectangle_rounding=10.0000
 	}
 	instructions{
-		coordinates=50.0000 5.0000 90.0000 4.0000
+		center=50.0000 5.0000
+		size=90.0000 4.0000
 		type=text
 		color=188 230 230
 		text=Call or store Pikmin
