@@ -748,6 +748,9 @@ void PauseMenu::createPageButtons(
         );
     };
     curGui->addItem(rightPageInput, "right_page_input");
+    
+    leftPageButtons[curGui] = leftPageButton;
+    rightPageButtons[curGui] = rightPageButton;
 }
 
 
@@ -1685,41 +1688,20 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
         case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
             if(action.value >= 0.5f) {
                 GuiManager* curGui = &gui;
-                PAUSE_MENU_PAGE curPage = PAUSE_MENU_PAGE_SYSTEM;
                 if(radarGui.responsive) {
                     curGui = &radarGui;
-                    curPage = PAUSE_MENU_PAGE_RADAR;
                 } else if(statusGui.responsive) {
                     curGui = &statusGui;
-                    curPage = PAUSE_MENU_PAGE_STATUS;
                 } else if(missionGui.responsive) {
                     curGui = &missionGui;
-                    curPage = PAUSE_MENU_PAGE_MISSION;
                 }
-                size_t curPageIdx =
-                    std::distance(
-                        pages.begin(),
-                        std::find(pages.begin(), pages.end(), curPage)
-                    );
-                size_t newPageIdx =
-                    sumAndWrap(
-                        (int) curPageIdx,
-                        action.actionTypeId ==
-                        PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
-                        -1 :
-                        1,
-                        (int) pages.size()
-                    );
-                switchPage(
-                    curGui,
-                    pages[newPageIdx],
-                    action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT
-                );
-                game.audio.createUiSoundSource(
-                    game.sysContent.sndMenuActivate, { .volume = 0.75f }
-                );
+                
+                map<GuiManager*, ButtonGuiItem*>* m =
+                    action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
+                    &leftPageButtons :
+                    &rightPageButtons;
+                (*m)[curGui]->activate(Point());
             }
-            
             break;
         }
         }
@@ -2430,7 +2412,6 @@ void PauseMenu::initStatusPage() {
     statusGui.registerCoords("list",             50,    56,   88,   56);
     statusGui.registerCoords("list_scroll",      97,    56,    2,   56);
     statusGui.registerCoords("totals",           50,    89,   88,    8);
-    statusGui.registerCoords("instructions",     58.75, 16,   77.5,  4);
     statusGui.registerCoords("tooltip",          50,    96,   96,    4);
     statusGui.readDataFile(guiFile);
     

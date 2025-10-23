@@ -314,6 +314,7 @@ GuiItem::GuiItem(bool focusable) :
  */
 bool GuiItem::activate(const Point& cursorPos) {
     if(!onActivate) return false;
+    if(!isResponsive()) return false;
     onActivate(cursorPos);
     
     ALLEGRO_SAMPLE* sample =
@@ -1222,11 +1223,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(
-            focusedItem &&
-            focusedItem->isResponsive() &&
-            focusedItem->onActivate
-        ) {
+        if(focusedItem) {
             focusedItem->activate(Point(ev.mouse.x, ev.mouse.y));
             autoRepeater.start();
         }
@@ -1284,12 +1281,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         break;
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
-        if(
-            isDown &&
-            focusedItem &&
-            focusedItem->onActivate &&
-            focusedItem->isResponsive()
-        ) {
+        if(focusedItem && isDown) {
             focusedItem->activate(Point(LARGE_FLOAT));
             autoRepeater.start();
         } else if(!isDown) {
@@ -1298,7 +1290,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         break;
         
     } case PLAYER_ACTION_TYPE_MENU_BACK: {
-        if(isDown && backItem && backItem->isResponsive()) {
+        if(backItem && isDown) {
             backItem->activate(Point(LARGE_FLOAT));
         }
         break;

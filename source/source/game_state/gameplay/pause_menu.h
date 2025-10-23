@@ -158,6 +158,12 @@ private:
     
     //Pikmin status list.
     ListGuiItem* pikminList = nullptr;
+
+    //Left page buttons for each GUI.
+    map<GuiManager*, ButtonGuiItem*> leftPageButtons;
+    
+    //Right page buttons for each GUI.
+    map<GuiManager*, ButtonGuiItem*> rightPageButtons;
     
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;

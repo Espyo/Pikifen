@@ -103,6 +103,9 @@ struct OnionMenu {
     //Which GUI items are in red right now, if any, and how much time left.
     map<GuiItem*, float> redItems;
     
+    //Ok button GUI item. Cache for convenience.
+    ButtonGuiItem* okButton = nullptr;
+    
     //List of GUI items for the Onion icons. Cache for convenience.
     vector<GuiItem*> onionIconItems;
     

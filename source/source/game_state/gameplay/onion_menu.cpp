@@ -100,7 +100,7 @@ OnionMenu::OnionMenu(
     guiAddBackInputIcon(&gui, "cancel_input");
     
     //Ok button.
-    ButtonGuiItem* okButton =
+    okButton =
         new ButtonGuiItem(
         "Ok", game.sysContent.fntStandard, al_map_rgb(96, 226, 80)
     );
@@ -797,27 +797,17 @@ void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_ONION_CHANGE_10: {
         if(action.value >= 0.5f) {
-            toggleChangeTen();
-            game.audio.createUiSoundSource(
-                game.sysContent.sndMenuActivate, { .volume = 0.75f }
-            );
+            changeTenButton->activate(Point());
         }
         break;
     } case PLAYER_ACTION_TYPE_ONION_SELECT_ALL: {
         if(action.value >= 0.5f) {
-            if(toggleSelectAll()) {
-                game.audio.createUiSoundSource(
-                    game.sysContent.sndMenuActivate, { .volume = 0.75f }
-                );
-            }
+            selectAllButton->activate(Point());
         }
         break;
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(action.value >= 0.5f) {
-            confirm();
-            game.audio.createUiSoundSource(
-                game.sysContent.sndMenuActivate, { .volume = 0.75f }
-            );
+            okButton->activate(Point());
         }
         break;
     }
