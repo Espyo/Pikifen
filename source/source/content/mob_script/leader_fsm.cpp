@@ -2605,6 +2605,8 @@ void LeaderFsm::startPluck(Mob* m, void* info1, void* info2) {
     leaPtr->pluckTarget->pluckReserved = false;
     leaPtr->pluckTarget = nullptr;
     leaPtr->setAnimation(LEADER_ANIM_PLUCKING);
+    LeaderFsm::setIsWalkingFalse(m, nullptr, nullptr);
+    
 }
 
 
@@ -2635,7 +2637,7 @@ void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
     
     switch(traPtr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
-        m->setAnimation(LEADER_ANIM_WALKING);
+        m->setAnimation(LEADER_ANIM_IDLING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
         m->setAnimation(LEADER_ANIM_CLIMBING);
