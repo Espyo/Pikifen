@@ -459,6 +459,34 @@ void initControls() {
         "prev_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
     );
     game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Inventory shortcut A",
+        "Use the inventory item set to shortcut A.",
+        "inventory_shortcut_a", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_B,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Inventory shortcut B",
+        "Use the inventory item set to shortcut B.",
+        "inventory_shortcut_b", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_C,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Inventory shortcut C",
+        "Use the inventory item set to shortcut C.",
+        "inventory_shortcut_c", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Inventory shortcut D",
+        "Use the inventory item set to shortcut D.",
+        "inventory_shortcut_d", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+    );
+    game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",

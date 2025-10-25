@@ -470,16 +470,16 @@ private:
     void doMenuLogic();
     void doPlayerActionDismiss(Player* player, bool isDown);
     void doPlayerActionInventory(Player* player, bool isDown);
+    void doPlayerActionInventoryShortcut(
+        Player* player, bool isDown, unsigned char shortcutIdx
+    );
     void doPlayerActionLieDown(Player* player, bool isDown);
     void doPlayerActionPause(Player* player, bool isDown, bool radar);
     void doPlayerActionSwitchLeader(Player* player, bool isDown, bool isNext);
     void doPlayerActionSwitchMaturity(Player* player, bool isDown, bool isNext);
-    void doPlayerActionSwitchSpray(Player* player, bool isDown, bool isNext);
     void doPlayerActionSwitchType(Player* player, bool isDown, bool isNext);
     bool doPlayerActionThrow(Player* player, bool isDown);
     void doPlayerActionToggleZoom(Player* player, bool isDown);
-    void doPlayerActionUseCurrentSpray(Player* player, bool isDown);
-    void doPlayerActionUseSpray(Player* player, bool isDown, bool second);
     void doPlayerActionWhistle(Player* player, bool isDown);
     void doPlayerActionZoom(Player* player, float inputValue, bool zoomIn);
     void drawBackground(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);

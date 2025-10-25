@@ -78,6 +78,7 @@ struct Inventory {
     void open();
     void requestClose();
     void tick(float deltaT);
+    bool useShortcut(const string& itemInternalName);
     
     private:
     

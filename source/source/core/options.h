@@ -302,6 +302,9 @@ struct Options {
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
         
+        //Inventory item shortcuts.
+        string inventoryShortcuts[MAX_PLAYERS][4];
+        
         //Leader cursor speed, in pixels per second. N/A when using the mouse.
         float leaderCursorSpeed = CONTROLS_D::LEADER_CURSOR_SPEED;
         

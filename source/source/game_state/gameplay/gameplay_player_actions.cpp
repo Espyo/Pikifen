@@ -43,6 +43,24 @@ void GameplayState::doPlayerActionInventory(Player* player, bool isDown) {
 
 
 /**
+ * @brief Does the logic for the inventory player action.
+ *
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param shortcutIdx Index of the shortcut
+ */
+void GameplayState::doPlayerActionInventoryShortcut(
+    Player* player, bool isDown, unsigned char shortcutIdx
+) {
+    if(!isDown) return;
+    if(game.options.controls.inventoryShortcuts[0][shortcutIdx].empty()) return;
+    player->inventory->useShortcut(
+        game.options.controls.inventoryShortcuts[0][shortcutIdx]
+    );
+}
+
+
+/**
  * @brief Does the logic for the lie down player action.
  *
  * @param player The player responsible.
@@ -543,6 +561,16 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         } case PLAYER_ACTION_TYPE_INVENTORY: {
             doPlayerActionInventory(
                 player, isDown
+            );
+            break;
+            
+        } case PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A:
+        case PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_B:
+        case PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_C:
+        case PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D: {
+            doPlayerActionInventoryShortcut(
+                player, isDown,
+                action.actionTypeId - PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A
             );
             break;
             

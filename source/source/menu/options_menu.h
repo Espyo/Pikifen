@@ -32,6 +32,9 @@ extern const string GRAPHICS_GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const float INPUT_CAPTURE_TIMEOUT_DURATION;
 extern const string MISC_GUI_FILE_NAME;
+extern const float SHORTCUT_BUTTON_HEIGHT;
+extern const float SHORTCUT_BUTTON_PADDING;
+extern const string SHORTCUTS_GUI_FILE_NAME;
 extern const string TOP_GUI_FILE_NAME;
 }
 
@@ -215,6 +218,9 @@ public:
     //GUI for the control binds options page.
     GuiManager bindsGui;
     
+    //GUI for the inventory shortcuts options page.
+    GuiManager shortcutsGui;
+    
     //GUI for the graphics options page.
     GuiManager graphicsGui;
     
@@ -322,6 +328,21 @@ private:
     //Whether we need to populate the binds.
     bool mustPopulateBinds = true;
     
+    //Inventory shortcut index that's currently being edited. -1 for none.
+    signed char curShortcutIdx = -1;
+    
+    //Each shortcut button, in order.
+    vector<ButtonGuiItem*> shortcutButtons;
+    
+    //Shortcut items list explanation text GUI item.
+    TextGuiItem* shortcutItemsListExplanation = nullptr;
+    
+    //Shortcut items list GUI item.
+    ListGuiItem* shortcutItemsListBox = nullptr;
+    
+    //Scrollbar for the shortcut items list GUI item.
+    ScrollGuiItem* shortcutItemsListScroll = nullptr;
+    
     
     //--- Function declarations ---
     
@@ -329,21 +350,31 @@ private:
         const PlayerActionType& actionType, bool addSectionHeader,
         GuiItem** itemToFocus
     );
+    void addShortcutItemItems(
+        const string& name, const string& internalName, GuiItem** itemToFocus,
+        const ALLEGRO_COLOR& textColor = COLOR_WHITE
+    );
+    void addShortcutItems(unsigned char index);
+    void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char index);
     void initGuiAudioPage();
     void initGuiControlsPage();
     void initGuiControlBindsPage();
     void initGuiGraphicsPage();
     void initGuiMiscPage();
+    void initGuiShortcutsPage();
     void initGuiTopPage();
     void triggerRestartWarning();
     void chooseInput(
         const PLAYER_ACTION_TYPE actionType, size_t bindIdx
     );
+    void chooseShortcut();
     void deleteBind(
         const PLAYER_ACTION_TYPE actionType, size_t bindIdx
     );
     void populateBinds();
+    void populateShortcutItems();
     void restoreDefaultBinds(const PLAYER_ACTION_TYPE actionType);
     void updateControlsPage();
+    void updateShortcutsPage();
     
 };

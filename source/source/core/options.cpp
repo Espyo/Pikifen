@@ -406,6 +406,14 @@ void Options::loadFromDataNode(DataNode* file) {
         cRS.set("leader_cursor_speed", controls.leaderCursorSpeed);
         
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+            for(unsigned char i = 0; i < 4; i++) {
+                cRS.set(
+                    "p" + i2s((p + 1)) +
+                    "_inventory_shortcut_" + string(1, 'a' + i),
+                    controls.inventoryShortcuts[p][i]
+                );
+            }
+            
             cRS.set(
                 "p" + i2s((p + 1)) + "_mouse_moves_leader_cursor",
                 controls.mouseMovesLeaderCursor[p]
@@ -646,6 +654,14 @@ void Options::saveToDataNode(DataNode* file) const {
         cGW.write("leader_cursor_speed", controls.leaderCursorSpeed);
         
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
+            for(unsigned char i = 0; i < 4; i++) {
+                cGW.write(
+                    "p" + i2s((p + 1)) +
+                    "_inventory_shortcut_" + string(1, 'a' + i),
+                    controls.inventoryShortcuts[p][i]
+                );
+            }
+            
             cGW.write(
                 "p" + i2s((p + 1)) + "_mouse_moves_leader_cursor",
                 controls.mouseMovesLeaderCursor[p]

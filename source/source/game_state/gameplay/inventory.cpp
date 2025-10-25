@@ -331,6 +331,23 @@ void Inventory::tick(float deltaT) {
 
 
 /**
+ * @brief Use an item via a shortcut.
+ *
+ * @param itemInternalName Internal name of the item to use.
+ * @return Whether it succeeded.
+ */
+bool Inventory::useShortcut(const string& itemInternalName) {
+    for(size_t i = 0; i < items.size(); i++) {
+        InventoryItemInstance* iiPtr = &items[i];
+        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        if(iPtr->iName == itemInternalName) {
+            return tryUseItem(i);
+        }
+    }
+    return false;
+}
+
+/**
  * @brief Tries to use an item.
  *
  * @param itemIdx Index of the item in the inventory.

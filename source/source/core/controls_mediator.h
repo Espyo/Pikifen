@@ -161,6 +161,18 @@ enum PLAYER_ACTION_TYPE {
     //Swap to previous standby type maturity.
     PLAYER_ACTION_TYPE_PREV_MATURITY,
     
+    //Inventory shortcut A.
+    PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A,
+    
+    //Inventory shortcut B.
+    PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_B,
+    
+    //Inventory shortcut C.
+    PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_C,
+    
+    //Inventory shortcut D.
+    PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D,
+    
     //Custom A.
     PLAYER_ACTION_TYPE_CUSTOM_A,
     

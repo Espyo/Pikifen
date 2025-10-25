@@ -51,6 +51,15 @@ const float INPUT_CAPTURE_TIMEOUT_DURATION = 5.0f;
 //Name of the misc menu GUI definition file.
 const string MISC_GUI_FILE_NAME = "options_menu_misc";
 
+//Height of each inventory shortcut button.
+const float SHORTCUT_BUTTON_HEIGHT = 0.07f;
+
+//Padding between each inventory shortcut button.
+const float SHORTCUT_BUTTON_PADDING = 0.01f;
+
+//Name of the GUI definition file.
+const string SHORTCUTS_GUI_FILE_NAME = "options_menu_shortcuts";
+
 //Name of the top-level menu GUI definition file.
 const string TOP_GUI_FILE_NAME = "options_menu_top";
 
@@ -413,6 +422,97 @@ void OptionsMenu::addBindEntryItems(
 
 
 /**
+ * @brief Adds the GUI items for an inventory shortcut entry in the
+ * shortcuts menu.
+ *
+ * @param name Display name of the item.
+ * @param internalName Internal name of the item.
+ * @param itemToFocus If this is the current shortcut's current item,
+ * then the button that is created gets set to this, so that it can be
+ * focused.
+ * @param textColor Color of the text of the button.
+ */
+void OptionsMenu::addShortcutItemItems(
+    const string& name, const string& internalName, GuiItem** itemToFocus,
+    const ALLEGRO_COLOR& textColor
+) {
+    float actionY =
+        shortcutItemsListBox->getChildrenSpan() +
+        OPTIONS_MENU::SHORTCUT_BUTTON_PADDING;
+        
+    float curY = actionY + OPTIONS_MENU::SHORTCUT_BUTTON_HEIGHT / 2.0f;
+    
+    //Item button.
+    ButtonGuiItem* shortcutButton =
+        new ButtonGuiItem(name, game.sysContent.fntStandard, textColor);
+    shortcutButton->ratioCenter =
+        Point(0.50f, curY);
+    shortcutButton->ratioSize =
+        Point(0.95f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+    shortcutButton->onActivate =
+    [this, internalName] (const Point&) {
+        if(curShortcutIdx == -1) return;
+        game.options.controls.inventoryShortcuts[0][curShortcutIdx] =
+            internalName;
+        shortcutButtons[curShortcutIdx]->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+        );
+        curShortcutIdx = -1;
+        updateShortcutsPage();
+    };
+    shortcutButton->onGetTooltip =
+    [] () { return "Set the shortcut to this."; };
+    shortcutItemsListBox->addChild(shortcutButton);
+    shortcutsGui.addItem(shortcutButton);
+    shortcutButton->startJuiceAnimation(
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+    );
+    
+    if(curShortcutIdx != -1) {
+        if(
+            game.options.controls.inventoryShortcuts[0][curShortcutIdx] ==
+            internalName
+        ) {
+            *itemToFocus = shortcutButton;
+        }
+    }
+}
+
+
+/**
+ * @brief Adds the label and button for a shortcut in the inventory
+ * item shortcuts menu.
+ *
+ * @param idx Index of the shortcut.
+ */
+void OptionsMenu::addShortcutItems(unsigned char index) {
+    string shortcutLetter = string(1, 'a' + index);
+    
+    //Label text.
+    GuiItem* text = new GuiItem();
+    text->onDraw =
+    [this, index] (const DrawInfo & draw) {
+        drawShortcutName(draw, index);
+    };
+    shortcutsGui.addItem(text, "shortcut_" + shortcutLetter + "_label");
+    
+    //Assignment button.
+    ButtonGuiItem* button = new ButtonGuiItem("", game.sysContent.fntStandard);
+    button->onActivate =
+    [this, index] (const Point&) {
+        curShortcutIdx = index;
+        updateShortcutsPage();
+    };
+    button->onGetTooltip =
+    [] () {
+        return "Choose what item to assign to this shortcut.";
+    };
+    shortcutsGui.addItem(button, "shortcut_" + shortcutLetter);
+    shortcutButtons.push_back(button);
+}
+
+
+/**
  * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
  * action type, then a new one gets added.
@@ -495,6 +595,34 @@ void OptionsMenu::draw() {
             TEXT_SETTING_FLAG_CANT_GROW
         );
     }
+}
+
+
+/**
+ * @brief Draws the text necessary for a shortcut, its name, and current input.
+ *
+ * @param draw Draw information.
+ * @param index Shortcut index.
+ */
+void OptionsMenu::drawShortcutName(const DrawInfo& draw, unsigned char index) {
+    string text =
+        "Shortcut " +
+        string(1, 'A' + index) +
+        " (\\k inventory_shortcut_" +
+        string(1, 'a' + index) +
+        " \\k)";
+        
+    int lineHeight = al_get_font_line_height(game.sysContent.fntSlim);
+    vector<StringToken> tokens = tokenizeString(text);
+    setStringTokenWidths(
+        tokens, game.sysContent.fntSlim, game.sysContent.fntSlim,
+        lineHeight, false
+    );
+    drawStringTokens(
+        tokens, game.sysContent.fntSlim, game.sysContent.fntSlim,
+        false, Point(draw.center.x, draw.center.y - lineHeight / 2.0f),
+        ALLEGRO_ALIGN_CENTER, Point(draw.size.x, lineHeight)
+    );
 }
 
 
@@ -822,6 +950,26 @@ void OptionsMenu::initGuiControlsPage() {
     specialBindsButton->onGetTooltip =
     [] () { return "Choose what buttons do what special features."; };
     controlsGui.addItem(specialBindsButton, "special_binds");
+    
+    //Inventory shortcuts button.
+    ButtonGuiItem* inventoryShortcutsButton =
+        new ButtonGuiItem(
+        "Inventory shortcuts...", game.sysContent.fntStandard
+    );
+    inventoryShortcutsButton->onActivate =
+    [this] (const Point&) {
+        transitionGuis(
+            controlsGui, shortcutsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    inventoryShortcutsButton->onGetTooltip =
+    [] () {
+        return
+            "Assign certain inventory items to shortcuts, "
+            "set in the control binds.";
+    };
+    controlsGui.addItem(inventoryShortcutsButton, "shortcuts");
     
     //Leader cursor mouse check.
     leaderCursorMouseCheck =
@@ -1177,6 +1325,80 @@ void OptionsMenu::initGuiMiscPage() {
 
 
 /**
+ * @brief Initializes the inventory shortcuts options menu GUI.
+ */
+void OptionsMenu::initGuiShortcutsPage() {
+    //Menu items.
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::SHORTCUTS_GUI_FILE_NAME];
+    shortcutsGui.registerCoords("back",             12,  5, 20,  6);
+    shortcutsGui.registerCoords("back_input",        3,  7,  4,  4);
+    shortcutsGui.registerCoords("shortcut_a_label", 26, 19, 44,  6);
+    shortcutsGui.registerCoords("shortcut_a",       26, 26, 44,  8);
+    shortcutsGui.registerCoords("shortcut_b_label", 26, 39, 44,  6);
+    shortcutsGui.registerCoords("shortcut_b",       26, 46, 44,  8);
+    shortcutsGui.registerCoords("shortcut_c_label", 26, 59, 44,  6);
+    shortcutsGui.registerCoords("shortcut_c",       26, 66, 44,  8);
+    shortcutsGui.registerCoords("shortcut_d_label", 26, 79, 44,  6);
+    shortcutsGui.registerCoords("shortcut_d",       26, 86, 44,  8);
+    shortcutsGui.registerCoords("list_explanation", 73, 12, 42,  4);
+    shortcutsGui.registerCoords("list",             73, 54, 42, 76);
+    shortcutsGui.registerCoords("list_scroll",      97, 54,  2, 76);
+    shortcutsGui.registerCoords("tooltip",          50, 96, 96,  4);
+    shortcutsGui.readDataFile(guiFile);
+    
+    //Back button.
+    shortcutsGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    shortcutsGui.backItem->onActivate =
+    [this] (const Point&) {
+        saveOptions();
+        transitionGuis(
+            shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    shortcutsGui.backItem->onGetTooltip =
+    [] () { return "Return to the previous menu."; };
+    shortcutsGui.addItem(shortcutsGui.backItem, "back");
+    
+    //Back input icon.
+    guiAddBackInputIcon(&shortcutsGui);
+    
+    //Shortcut items.
+    addShortcutItems(0);
+    addShortcutItems(1);
+    addShortcutItems(2);
+    addShortcutItems(3);
+    
+    //Items list explanation text.
+    shortcutItemsListExplanation =
+        new TextGuiItem("", game.sysContent.fntStandard);
+    shortcutsGui.addItem(shortcutItemsListExplanation, "list_explanation");
+    
+    //Items list box.
+    shortcutItemsListBox = new ListGuiItem();
+    shortcutsGui.addItem(shortcutItemsListBox, "list");
+    
+    //Items list scrollbar.
+    shortcutItemsListScroll = new ScrollGuiItem();
+    shortcutItemsListScroll->listItem = shortcutItemsListBox;
+    shortcutsGui.addItem(shortcutItemsListScroll, "list_scroll");
+    
+    //Tooltip text.
+    TooltipGuiItem* tooltipText =
+        new TooltipGuiItem(&shortcutsGui);
+    shortcutsGui.addItem(tooltipText, "tooltip");
+    
+    //Finishing touches.
+    updateShortcutsPage();
+    shortcutsGui.setFocusedItem(shortcutsGui.backItem, true);
+    shortcutsGui.responsive = false;
+    shortcutsGui.hideItems();
+}
+
+
+/**
  * @brief Initializes the top-level menu GUI.
  */
 void OptionsMenu::initGuiTopPage() {
@@ -1444,6 +1666,7 @@ void OptionsMenu::load() {
     initGuiTopPage();
     initGuiControlsPage();
     initGuiControlBindsPage();
+    initGuiShortcutsPage();
     initGuiGraphicsPage();
     initGuiAudioPage();
     initGuiMiscPage();
@@ -1452,6 +1675,7 @@ void OptionsMenu::load() {
     guis.push_back(&topGui);
     guis.push_back(&controlsGui);
     guis.push_back(&bindsGui);
+    guis.push_back(&shortcutsGui);
     guis.push_back(&graphicsGui);
     guis.push_back(&audioGui);
     guis.push_back(&miscGui);
@@ -1515,6 +1739,31 @@ void OptionsMenu::populateBinds() {
         }
         
         addBindEntryItems(actionType, addSectionHeader, &itemToFocus);
+    }
+    
+    if(itemToFocus) {
+        bindsGui.setFocusedItem(itemToFocus, true);
+        //Try to center it.
+        bindsListBox->onChildFocusedViaSN(itemToFocus);
+    }
+}
+
+
+/**
+ * @brief Populates the list of inventory shortcut items.
+ */
+void OptionsMenu::populateShortcutItems() {
+    shortcutItemsListBox->deleteAllChildren();
+    
+    GuiItem* itemToFocus = nullptr;
+    
+    addShortcutItemItems("(None)", "", &itemToFocus, al_map_rgb(255, 192, 192));
+    
+    for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
+        InventoryItem* iPtr = game.inventoryItems.getByIndex(i);
+        addShortcutItemItems(
+            iPtr->name, iPtr->iName, &itemToFocus
+        );
     }
     
     if(itemToFocus) {
@@ -1628,6 +1877,8 @@ void OptionsMenu::unload() {
     }
     
     Menu::unload();
+    
+    shortcutButtons.clear();
 }
 
 
@@ -1639,4 +1890,38 @@ void OptionsMenu::updateControlsPage() {
         !game.options.controls.mouseMovesLeaderCursor[0];
     leaderCursorSpeedPicker->focusable =
         !game.options.controls.mouseMovesLeaderCursor[0];
+}
+
+
+/**
+ * @brief Updates the inventory item shortcuts page.
+ */
+void OptionsMenu::updateShortcutsPage() {
+    //Update each button's text.
+    for(unsigned char s = 0; s < 4; s++) {
+        InventoryItem* iPtr =
+            game.inventoryItems.getByIName(
+                game.options.controls.inventoryShortcuts[0][s]
+            );
+        if(iPtr) {
+            shortcutButtons[s]->text = iPtr->name;
+        } else {
+            shortcutButtons[s]->text.clear();
+        }
+    }
+    
+    //Update the list of items.
+    bool shortcutListvisible = curShortcutIdx != -1;
+    shortcutItemsListExplanation->visible = shortcutListvisible;
+    shortcutItemsListBox->visible = shortcutListvisible;
+    shortcutItemsListBox->responsive = shortcutListvisible;
+    shortcutItemsListScroll->visible = shortcutListvisible;
+    shortcutItemsListScroll->responsive = shortcutListvisible;
+    
+    if(curShortcutIdx != -1) {
+        shortcutItemsListExplanation->text =
+            "Choose the item for shortcut " +
+            string(1, 'A' + curShortcutIdx) + ":";
+        populateShortcutItems();
+    }
 }

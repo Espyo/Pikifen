@@ -14,15 +14,60 @@ hardcoded_items{
 		size=4.0000 4.0000
 		description=Icon of the input bound to the back button.
 	}
+	shortcut_a_label{
+		center=26.0000 19.0000
+		size=44.0000 6.0000
+		description=Label for shortcut A's button.
+	}
+	shortcut_a{
+		center=26.0000 26.0000
+		size=44.0000 8.0000
+		description=Button for shortcut A.
+	}
+	shortcut_b_label{
+		center=26.0000 39.0000
+		size=44.0000 6.0000
+		description=Label for shortcut B's button.
+	}
+	shortcut_b{
+		center=26.0000 46.0000
+		size=44.0000 8.0000
+		description=Button for shortcut B.
+	}
+	shortcut_c_label{
+		center=26.0000 59.0000
+		size=44.0000 6.0000
+		description=Label for shortcut C's button.
+	}
+	shortcut_c{
+		center=26.0000 66.0000
+		size=44.0000 8.0000
+		description=Button for shortcut C.
+	}
+	shortcut_d_label{
+		center=26.0000 79.0000
+		size=44.0000 6.0000
+		description=Label for shortcut D's button.
+	}
+	shortcut_d{
+		center=26.0000 86.0000
+		size=44.0000 8.0000
+		description=Button for shortcut D.
+	}
+	list_explanation{
+		center=73.0000 12.0000
+		size=42.0000 4.0000
+		description=Explanation text for the list of items.
+	}
 	list{
-		center=50.0000 51.0000
-		size=88.0000 82.0000
-		description=List of inventory items and shortcuts.
+		center=73.0000 54.0000
+		size=42.0000 76.0000
+		description=List of inventory items.
 	}
 	list_scroll{
-		center=97.0000 51.0000
-		size=2.0000 82.0000
-		description=Scrollbar for the list of inventory items and shortcuts.
+		center=97.0000 54.0000
+		size=2.0000 76.0000
+		description=Scrollbar for the list of inventory items.
 	}
 	tooltip{
 		center=50.0000 96.0000
@@ -34,6 +79,7 @@ custom_items{
 	header{
 		center=50.0000 5.0000
 		size=50.0000 6.0000
+		description=Menu header.
 		type=text
 		color=255 255 255 128
 		text=INVENTORY SHORTCUTS
