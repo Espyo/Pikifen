@@ -39,6 +39,7 @@ custom_items{
 	header{
 		center=50.0000 8.0000
 		size=92.0000 8.0000
+		description=Menu header and main question.
 		type=text
 		color=255 255 255
 		text=Are you sure?

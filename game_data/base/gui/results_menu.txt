@@ -79,6 +79,7 @@ custom_items{
 	stats_bg{
 		center=50.0000 63.0000
 		size=80.0000 38.0000
+		description=Background for the statistics list.
 		type=filled_rectangle
 		color=117 0 0 40
 		draw_before_hardcoded=true
@@ -87,6 +88,7 @@ custom_items{
 	conclusion_label{
 		center=50.0000 32.0000
 		size=36.0000 3.0000
+		description=Label for the mission conclusion.
 		type=text
 		color=255 255 255 192
 		text=Conclusion:
@@ -96,6 +98,7 @@ custom_items{
 	stats_label{
 		center=50.0000 42.0000
 		size=36.0000 3.0000
+		description=Label for the statistics list.
 		type=text
 		color=255 255 255 192
 		text=Stats:

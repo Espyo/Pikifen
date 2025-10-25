@@ -59,6 +59,7 @@ custom_items{
 	header{
 		center=40.0000 5.0000
 		size=32.0000 6.0000
+		description=Menu header.
 		type=text
 		color=255 255 255 128
 		text=PICK AN AREA:

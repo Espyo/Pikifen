@@ -89,6 +89,7 @@ custom_items{
 	header{
 		center=50.0000 5.0000
 		size=52.0000 6.0000
+		description=Menu header.
 		type=text
 		color=255 255 255 128
 		text=MISSION
@@ -98,6 +99,7 @@ custom_items{
 	line{
 		center=50.0000 11.0000
 		size=96.0000 0.5000
+		description=Line separating the headers from the rest of the menu.
 		type=filled_rectangle
 		color=255 255 255 128
 		rectangle_rounding=2.0000

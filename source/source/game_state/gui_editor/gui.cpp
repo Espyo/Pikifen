@@ -697,6 +697,16 @@ void GuiEditor::processGuiPanelCustomItem() {
         "Whether other custom items that also have this checked will be drawn\n"
         "before or after this one depends on the order in the list above."
     );
+
+    //Description input.
+    if(ImGui::InputText("Description", &curItemPtr->description)) {
+        changesMgr.markAsChanged();
+    }
+    setTooltip(
+        "Optional description.\n"
+        "This shows up when your mouse is over the item\n"
+        "in the list of items above."
+    );
     
     if(
         curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_BITMAP ||
@@ -1043,11 +1053,8 @@ void GuiEditor::processGuiPanelItems() {
             ) {
                 curItemIdx = i;
             }
-            if(!isCustom) {
-                HardcodedGuiItemDef* hardcodedPtr = (HardcodedGuiItemDef*) item;
-                setTooltip(
-                    wordWrap(hardcodedPtr->description, 50)
-                );
+            if(!item->description.empty()) {
+                setTooltip(wordWrap(item->description, 50));
             }
             
             if(mustFocusOnCurItem && selected) {

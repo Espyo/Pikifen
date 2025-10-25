@@ -95,6 +95,7 @@ custom_items{
 	discord_bg{
 		center=74.0000 91.0000
 		size=4.0000 5.0000
+		description=Background for the Discord server invite button, so that the icon can be read better.
 		type=filled_square
 		color=128 128 128 128
 		draw_before_hardcoded=true
@@ -103,6 +104,7 @@ custom_items{
 	github_bg{
 		center=80.0000 91.0000
 		size=4.0000 5.0000
+		description=Background for the GitHub page button, so that the icon can be read better.
 		type=filled_square
 		color=192 192 192 128
 		draw_before_hardcoded=true

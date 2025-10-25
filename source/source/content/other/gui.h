@@ -160,6 +160,9 @@ struct GuiItemDef {
     
     //Width and height.
     Point size;
+
+    //Optional description. Shows up in the GUI editor.
+    string description;
     
 };
 
@@ -170,11 +173,6 @@ struct GuiItemDef {
  * since the engine expects it.
  */
 struct HardcodedGuiItemDef : public GuiItemDef {
-
-    //--- Members ---
-    
-    //Helpful description.
-    string description;
     
 };
 

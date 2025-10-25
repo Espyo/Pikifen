@@ -34,6 +34,7 @@ custom_items{
 	background_rectangle{
 		center=50.0000 49.0000
 		size=36.0000 42.0000
+		description=Rectangle background for the inventory.
 		type=filled_rectangle
 		color=24 64 60 200
 		draw_before_hardcoded=true
@@ -42,6 +43,7 @@ custom_items{
 	background_frame{
 		center=50.0000 49.0000
 		size=36.0000 42.0000
+		description=Frame behind the inventory.
 		type=9_slice
 		color=255 255 255
 		draw_before_hardcoded=true
@@ -50,6 +52,7 @@ custom_items{
 	list_bg{
 		center=50.0000 50.0000
 		size=32.0000 28.0000
+		description=Rectangle background for the list.
 		type=filled_rectangle
 		color=24 64 60 200
 		draw_before_hardcoded=true

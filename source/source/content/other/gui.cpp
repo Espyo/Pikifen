@@ -948,6 +948,7 @@ bool GuiManager::getItemDefsFromDataFile(
         
         rs.set("type", typeStr, &typeNode);
         rs.set("center", itemDef.center);
+        rs.set("description", itemDef.description);
         rs.set("size", itemDef.size);
         rs.set("color", itemDef.color);
         rs.set("draw_before_hardcoded", itemDef.drawBeforeHardcoded);
@@ -1702,6 +1703,7 @@ bool GuiManager::writeItemDefsToDataFile(
         GetterWriter gw(itemNode);
         gw.write("center", itemPtr->center);
         gw.write("size", itemPtr->size);
+        gw.write("description", itemPtr->description);
         gw.write("type", typeStr);
         gw.write("color", itemPtr->color);
         if(itemPtr->drawBeforeHardcoded) {

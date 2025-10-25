@@ -69,6 +69,7 @@ custom_items{
 	field_bg{
 		center=50.0000 87.0000
 		size=30.0000 6.0000
+		description=Background for the field amount.
 		type=filled_rectangle
 		color=188 230 230 128
 		draw_before_hardcoded=true
@@ -77,6 +78,7 @@ custom_items{
 	instructions{
 		center=50.0000 5.0000
 		size=90.0000 4.0000
+		description=Basic menu instructions.
 		type=text
 		color=188 230 230
 		text=Call or store Pikmin
