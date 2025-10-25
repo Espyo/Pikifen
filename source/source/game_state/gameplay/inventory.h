@@ -30,25 +30,14 @@ struct Player;
 
 
 /**
- * @brief Represents an item in the inventory.
- *
+ * @brief Represents an instance of an item in the inventory.
  */
-struct InventoryItem {
+struct InventoryItemInstance {
 
     //--- Members ---
     
-    //Icon.
-    ALLEGRO_BITMAP* icon = nullptr;
-    
-    //Name.
-    string name;
-    
-    //Callback for when we need its current amount. nullptr if it doesn't use
-    //amounts.
-    std::function<size_t(void)> onGetAmount = nullptr;
-    
-    //Callback for when we need to use the item.
-    std::function<void(void)> onUse = nullptr;
+    //Index of the item in the database of inventory items.
+    size_t dbIndex = INVALID;
     
     //GUI button.
     ButtonGuiItem* button = nullptr;
@@ -57,7 +46,7 @@ struct InventoryItem {
 
 
 /**
- * @brief Holds information about the in-game inventory GUI.
+ * @brief Holds information about the player's in-game inventory GUI.
  */
 struct Inventory {
 
@@ -70,7 +59,7 @@ struct Inventory {
     Player* player = nullptr;
     
     //List of items, in order.
-    vector<InventoryItem> items;
+    vector<InventoryItemInstance> items;
     
     //Inventory list GUI item.
     ListGuiItem* itemList = nullptr;
@@ -94,11 +83,10 @@ struct Inventory {
     
     //--- Function declarations ---
     
-    bool canUseItem(InventoryItem* iPtr);
+    bool canUseItem(InventoryItemInstance* iPtr);
     void initGui();
-    void populateInventory();
     void populateInventoryListGui();
-    void tryUseItem(size_t itemIdx);
+    bool tryUseItem(size_t itemIdx);
     void update();
     
 };

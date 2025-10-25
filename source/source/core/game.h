@@ -204,6 +204,9 @@ public:
     
     //Player actions in this frame.
     vector<Inpution::Action> playerActions;
+
+    //List of all possible inventory items.
+    InventoryItemDatabase inventoryItems;
     
     //Randomness manager.
     RngManager rng;

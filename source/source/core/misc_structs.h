@@ -339,6 +339,58 @@ struct MouseCursor {
 
 
 
+struct Player;
+
+
+/**
+ * @brief Represents a possible inventory item.
+ */
+struct InventoryItem {
+    //--- Members ---
+    
+    //Internal name.
+    string iName;
+    
+    //Icon.
+    ALLEGRO_BITMAP* icon = nullptr;
+    
+    //Proper name.
+    string name;
+    
+    //Callback for when we need its current amount. nullptr if it doesn't use
+    //amounts.
+    std::function<size_t(Player*)> onGetAmount = nullptr;
+    
+    //Callback for when we need to use the item.
+    std::function<void(Player*)> onUse = nullptr;
+};
+
+
+
+/**
+ * @brief Holds all of the possible inventory items; their names, icons,
+ * what they do when used, etc.
+ */
+struct InventoryItemDatabase {
+    //--- Function declarations ---
+    
+    void init();
+    void clear();
+    size_t getAmount() const;
+    InventoryItem* getByIndex(size_t index);
+    InventoryItem* getByIName(const string& iName);
+    
+    
+    private:
+    
+    //--- Members ---
+    
+    //All items.
+    vector<InventoryItem> items;
+};
+
+
+
 /**
  * @brief Manages random number generation.
  */
@@ -1637,7 +1689,7 @@ public:
      * @param node If not nullptr, blame this data node if the file
      * doesn't exist.
      * @param reportErrors Only issues errors if this is true.
-     * @return The asset
+     * @return The asset.
      */
     AssetT get(
         const string& name, DataNode* node = nullptr,
@@ -1656,6 +1708,23 @@ public:
             totalUses++;
             return list[name].ptr;
         }
+    }
+    
+    /**
+     * @brief Gets an existing asset, essentially increasing its uses by one.
+     *
+     * @param asset Asset to get.
+     * @return The asset, or default-constructed on error.
+     */
+    AssetT get(AssetT asset) {
+        for(auto& a : list) {
+            if(a.second.ptr == asset) {
+                a.second.uses++;
+                totalUses++;
+                return asset;
+            }
+        }
+        return {};
     }
     
     /**

@@ -912,6 +912,31 @@ void initEventThings(
 
 
 /**
+ * @brief Initializes the list of inventory items.
+ */
+void initInventoryItems() {
+    game.content.loadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_PARTICLE_GEN,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_SPRAY_TYPE,
+    },
+    CONTENT_LOAD_LEVEL_FULL
+    );
+    
+    game.inventoryItems.init();
+    
+    game.content.unloadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_SPRAY_TYPE,
+        CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_PARTICLE_GEN,
+    }
+    );
+}
+
+
+/**
  * @brief Initializes miscellaneous things and settings.
  */
 void initMisc() {

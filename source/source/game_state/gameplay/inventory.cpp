@@ -51,9 +51,14 @@ const size_t ROWS = 2;
 Inventory::Inventory(Player* player) :
     player(player) {
     
+    for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
+        InventoryItemInstance item;
+        item.dbIndex = i;
+        items.push_back(item);
+    }
+    
     gui.ignoreInputOnAnimation = false;
     initGui();
-    populateInventory();
     populateInventoryListGui();
     update();
 }
@@ -69,14 +74,16 @@ Inventory::~Inventory() {
 /**
  * @brief Returns whether or not a given item can be used.
  *
- * @param iPtr The item.
+ * @param iiPtr The item.
  * @return Whether it can be used.
  */
-bool Inventory::canUseItem(InventoryItem* iPtr) {
+bool Inventory::canUseItem(InventoryItemInstance* iiPtr) {
     if(!player->leaderPtr) return false;
+    
+    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
     if(!iPtr->onUse) return false;
     if(iPtr->onGetAmount) {
-        if(iPtr->onGetAmount() == 0) return false;
+        if(iPtr->onGetAmount(player) == 0) return false;
     }
     return true;
 }
@@ -190,46 +197,6 @@ void Inventory::open() {
 
 
 /**
- * @brief Populates the inventory with items.
- */
-void Inventory::populateInventory() {
-    //First, the sprays.
-    for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
-        SprayType& sprayTypeRef = *game.config.misc.sprayOrder[s];
-        InventoryItem item;
-        item.icon = sprayTypeRef.bmpIcon;
-        item.name = sprayTypeRef.name;
-        item.onGetAmount =
-        [this, s] () {
-            return player->team->sprayStats[s].nrSprays;
-        };
-        item.onUse =
-        [this, s] () {
-            if(!player->leaderPtr) return;
-            player->leaderPtr->fsm.runEvent(
-                LEADER_EV_SPRAY, (void*) &s
-            );
-        };
-        items.push_back(item);
-    }
-    
-    //Sleeping.
-    {
-        InventoryItem item;
-        item.icon = game.sysContent.bmpNapsack;
-        item.name = "Napsack";
-        item.onUse =
-        [this] () {
-            player->leaderPtr->fsm.runEvent(
-                LEADER_EV_FALL_ASLEEP
-            );
-        };
-        items.push_back(item);
-    }
-}
-
-
-/**
  * @brief Populates the inventory's list GUI item with items for each item.
  */
 void Inventory::populateInventoryListGui() {
@@ -260,7 +227,8 @@ void Inventory::populateInventoryListGui() {
     };
     
     for(size_t i = 0; i < items.size(); i++) {
-        InventoryItem* iPtr = &items[i];
+        InventoryItemInstance* iiPtr = &items[i];
+        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
         
         //Item button.
         ButtonGuiItem* button =
@@ -271,7 +239,7 @@ void Inventory::populateInventoryListGui() {
         button->ratioSize = Point(SLOT_WIDTH, SLOT_HEIGHT);
         button->forceSquare = true;
         button->onDraw =
-        [button, iPtr] (const DrawInfo & draw) {
+        [this, button, iPtr] (const DrawInfo & draw) {
             button->defDrawCode(draw);
             ALLEGRO_COLOR bmpTint = draw.tint;
             if(!button->responsive) {
@@ -285,7 +253,7 @@ void Inventory::populateInventoryListGui() {
             }
             if(iPtr->onGetAmount) {
                 drawText(
-                    "x" + i2s(iPtr->onGetAmount()),
+                    "x" + i2s(iPtr->onGetAmount(player)),
                     game.sysContent.fntCounter,
                     draw.center + draw.size / 2.0f,
                     Point(0.80f, 0.50f) * draw.size,
@@ -301,7 +269,7 @@ void Inventory::populateInventoryListGui() {
         itemList->addChild(button);
         gui.addItem(button);
         
-        iPtr->button = button;
+        iiPtr->button = button;
         
         nextSlot();
     }
@@ -366,9 +334,16 @@ void Inventory::tick(float deltaT) {
  * @brief Tries to use an item.
  *
  * @param itemIdx Index of the item in the inventory.
+ * @return Whether it was possible to use it.
  */
-void Inventory::tryUseItem(size_t itemIdx) {
-    if(canUseItem(&items[itemIdx])) items[itemIdx].onUse();
+bool Inventory::tryUseItem(size_t itemIdx) {
+    InventoryItemInstance* iiPtr = &items[itemIdx];
+    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+    if(canUseItem(iiPtr)) {
+        iPtr->onUse(player);
+        return true;
+    }
+    return false;
 }
 
 
@@ -377,7 +352,7 @@ void Inventory::tryUseItem(size_t itemIdx) {
  */
 void Inventory::update() {
     for(size_t i = 0; i < items.size(); i++) {
-        InventoryItem* iPtr = &items[i];
-        iPtr->button->responsive = canUseItem(iPtr);
+        InventoryItemInstance* iiPtr = &items[i];
+        iiPtr->button->responsive = canUseItem(iiPtr);
     }
 }

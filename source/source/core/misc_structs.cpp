@@ -802,6 +802,101 @@ void GetterWriter::write(
 
 
 /**
+ * @brief Clears the database.
+ */
+void InventoryItemDatabase::clear() {
+    for(size_t i = 0; i < items.size(); i++) {
+        if(items[i].icon) {
+            game.content.bitmaps.list.free(items[i].icon);
+        }
+    }
+    items.clear();
+}
+
+
+/**
+ * @brief Returns the amount of items.
+ *
+ * @return The amount.
+ */
+size_t InventoryItemDatabase::getAmount() const {
+    return items.size();
+}
+
+
+/**
+ * @brief Returns an item, given its index.
+ *
+ * @param index The index.
+ * @return The item, or nullptr if not found.
+ */
+InventoryItem* InventoryItemDatabase::getByIndex(size_t index) {
+    if(index >= items.size()) return nullptr;
+    return &items[index];
+}
+
+
+/**
+ * @brief Returns an item, given its internal name.
+ *
+ * @param iName The internal name.
+ * @return The item, or nullptr if not found.
+ */
+InventoryItem* InventoryItemDatabase::getByIName(const string& iName) {
+    for(size_t i = 0; i < items.size(); i++) {
+        if(items[i].iName == iName) return &items[i];
+    }
+    return nullptr;
+}
+
+
+/**
+ * @brief Initializes the database. You must ensure spray types are loaded
+ * into memory first.
+ */
+void InventoryItemDatabase::init() {
+    clear();
+    
+    //All sprays.
+    for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+        SprayType& sprayTypeRef = *game.config.misc.sprayOrder[s];
+        InventoryItem item;
+        item.iName = sprayTypeRef.manifest->internalName;
+        item.icon = game.content.bitmaps.list.get(sprayTypeRef.bmpIcon);
+        item.name = sprayTypeRef.name;
+        item.onGetAmount =
+        [this, s] (Player * player) {
+            return player->team->sprayStats[s].nrSprays;
+        };
+        item.onUse =
+        [this, s] (Player * player) {
+            if(!player->leaderPtr) return;
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_SPRAY, (void*) &s
+            );
+        };
+        items.push_back(item);
+    }
+    
+    //Sleeping.
+    {
+        InventoryItem item;
+        item.iName = "napsack";
+        item.icon = game.sysContent.bmpNapsack;
+        item.name = "Napsack";
+        item.onUse =
+        [this] (Player * player) {
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_FALL_ASLEEP
+            );
+        };
+        items.push_back(item);
+    }
+}
+
+
+
+/**
  * @brief Hides the OS mouse in the game window.
  */
 void MouseCursor::hideInOS() const {

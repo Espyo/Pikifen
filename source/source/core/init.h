@@ -21,6 +21,7 @@ void initDearImGuiColors();
 void initErrorBitmap();
 void initEssentials();
 void initEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
+void initInventoryItems();
 void initMisc();
 void initMiscDatabases();
 void initMobActions();
