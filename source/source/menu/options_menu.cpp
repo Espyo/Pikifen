@@ -1627,10 +1627,16 @@ void OptionsMenu::load() {
     for(int d = 0; d < nModes; d++) {
         ALLEGRO_DISPLAY_MODE dInfo;
         if(!al_get_display_mode(d, &dInfo)) continue;
-        if(dInfo.width < SMALLEST_WIN_WIDTH) continue;
-        if(dInfo.height < SMALLEST_WIN_HEIGHT) continue;
+        int displayWidth = dInfo.width;
+        int displayHeight = dInfo.height;
+        if(displayWidth < displayHeight) {
+            //The Steam Deck reports one of its resolutions vertically.
+            std::swap(displayWidth, displayHeight);
+        }
+        if(displayWidth < SMALLEST_WIN_WIDTH) continue;
+        if(displayHeight < SMALLEST_WIN_HEIGHT) continue;
         resolutionPresets.push_back(
-            std::make_pair(dInfo.width, dInfo.height)
+            std::make_pair(displayWidth, displayHeight)
         );
     }
     
