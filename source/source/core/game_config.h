@@ -51,6 +51,19 @@ extern const float SPEED_WEIGHT_MULT;
 }
 
 
+namespace GUI_COLORS_D {
+extern const ALLEGRO_COLOR BACK;
+extern const ALLEGRO_COLOR BAD;
+extern const ALLEGRO_COLOR FOCUSED_ITEM;
+extern const ALLEGRO_COLOR GOLD;
+extern const ALLEGRO_COLOR GOOD;
+extern const ALLEGRO_COLOR PAGE_CHANGE;
+extern const ALLEGRO_COLOR PAUSE_BG;
+extern const ALLEGRO_COLOR PAUSE_VIGNETTE;
+extern const ALLEGRO_COLOR SMALL_HEADER;
+}
+
+
 namespace LEADERS_D {
 extern const float GROUP_MEMBER_GRAB_RANGE;
 extern const float NEXT_PLUCK_RANGE;
@@ -171,6 +184,38 @@ struct GameConfig {
         string version;
         
     } general;
+    
+    //Some general GUI colors.
+    struct {
+    
+        //"Back" buttons.
+        ALLEGRO_COLOR back = GUI_COLORS_D::BACK;
+        
+        //Red for something bad.
+        ALLEGRO_COLOR bad = GUI_COLORS_D::BAD;
+        
+        //Focused GUI item.
+        ALLEGRO_COLOR focusedItem = GUI_COLORS_D::FOCUSED_ITEM;
+        
+        //Gold-like things.
+        ALLEGRO_COLOR gold = GUI_COLORS_D::GOLD;
+        
+        //Green for something good.
+        ALLEGRO_COLOR good = GUI_COLORS_D::GOOD;
+        
+        //Page change buttons.
+        ALLEGRO_COLOR pageChange = GUI_COLORS_D::PAGE_CHANGE;
+        
+        //Pause background.
+        ALLEGRO_COLOR pauseBg = GUI_COLORS_D::PAUSE_BG;
+        
+        //Pause vignette.
+        ALLEGRO_COLOR pauseVignette = GUI_COLORS_D::PAUSE_VIGNETTE;
+        
+        //Small headers.
+        ALLEGRO_COLOR smallHeader = GUI_COLORS_D::SMALL_HEADER;
+        
+    } guiColors;
     
     //Leader-related properties.
     struct {

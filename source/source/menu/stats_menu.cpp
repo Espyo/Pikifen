@@ -38,7 +38,9 @@ void StatsMenu::addHeader(const string& label) {
         (listBottomY == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
     TextGuiItem* labelText =
-        new TextGuiItem(label, game.sysContent.fntAreaName);
+        new TextGuiItem(
+        label, game.sysContent.fntAreaName, game.config.guiColors.smallHeader
+    );
     labelText->ratioCenter =
         Point(0.50f, statCenterY);
     labelText->ratioSize =
@@ -109,7 +111,9 @@ void StatsMenu::initGuiMain() {
     
     //Back button.
     gui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     gui.backItem->onActivate =
     [this] (const Point&) {
         saveStatistics();

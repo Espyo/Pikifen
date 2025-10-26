@@ -414,7 +414,7 @@ void PauseMenu::addPikminStatusLine(
     
     //Total Pikmin.
     TextGuiItem* totalTextItem =
-        new TextGuiItem(totalText, font, COLOR_GOLD);
+        new TextGuiItem(totalText, font, game.config.guiColors.gold);
     totalTextItem->focusable = canFocus;
     totalTextItem->ratioCenter =
         Point(
@@ -452,7 +452,9 @@ void PauseMenu::addPikminStatusLine(
     
     //New Pikmin.
     TextGuiItem* newTextItem =
-        new TextGuiItem(newText, font, al_map_rgb(210, 255, 210));
+        new TextGuiItem(
+        newText, font, game.config.guiColors.good
+    );
     newTextItem->focusable = canFocus;
     newTextItem->ratioCenter =
         Point(
@@ -474,7 +476,9 @@ void PauseMenu::addPikminStatusLine(
     
     //Lost Pikmin.
     TextGuiItem* lostTextItem =
-        new TextGuiItem(lostText, font, al_map_rgb(255, 210, 210));
+        new TextGuiItem(
+        lostText, font, game.config.guiColors.bad
+    );
     lostTextItem->focusable = canFocus;
     lostTextItem->ratioCenter =
         Point(
@@ -677,7 +681,8 @@ ButtonGuiItem* PauseMenu::createPageButton(
         left ?
         "< " + pageName :
         pageName + " >",
-        game.sysContent.fntStandard
+        game.sysContent.fntStandard,
+        game.config.guiColors.pageChange
     );
     newButton->onActivate =
     [this, curGui, targetPage, left] (const Point&) {
@@ -926,7 +931,7 @@ void PauseMenu::drawRadar(
         drawHighlightedRectRegion(
             game.curAreaData->mission.goalExitCenter,
             game.curAreaData->mission.goalExitSize,
-            changeAlpha(COLOR_GOLD, 192), game.timePassed
+            changeAlpha(game.config.guiColors.gold, 192), game.timePassed
         );
     }
     
@@ -1124,7 +1129,7 @@ void PauseMenu::drawRadar(
             drawBitmap(
                 game.sysContent.bmpMissionMob, mPtr->pos,
                 Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) / radarView.cam.zoom,
-                0.0f, multAlpha(COLOR_GOLD, alpha)
+                0.0f, multAlpha(game.config.guiColors.gold, alpha)
             );
         };
     }
@@ -1384,7 +1389,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
             
             string description =
                 cond->getPlayerDescription(&game.curAreaData->mission);
-            addBullet(list, description, al_map_rgb(255, 200, 200));
+            addBullet(list, description, game.config.guiColors.bad);
             
             float percentage = 0.0f;
             int cur =
@@ -1424,25 +1429,25 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
             list,
             "    Platinum: " +
             i2s(game.curAreaData->mission.platinumReq) + "+ points.",
-            al_map_rgb(255, 255, 200)
+            game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Gold: " +
             i2s(game.curAreaData->mission.goldReq) + "+ points.",
-            al_map_rgb(255, 255, 200)
+            game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Silver: " +
             i2s(game.curAreaData->mission.silverReq) + "+ points.",
-            al_map_rgb(255, 255, 200)
+            game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Bronze: " +
             i2s(game.curAreaData->mission.bronzeReq) + "+ points.",
-            al_map_rgb(255, 255, 200)
+            game.config.guiColors.gold
         );
         
         vector<string> scoreNotes;
@@ -1728,7 +1733,7 @@ void PauseMenu::initConfirmationPage() {
     //Cancel button.
     confirmationGui.backItem =
         new ButtonGuiItem(
-        "Cancel", game.sysContent.fntStandard
+        "Cancel", game.sysContent.fntStandard, game.config.guiColors.back
     );
     confirmationGui.backItem->onActivate =
     [this] (const Point&) {
@@ -1746,7 +1751,9 @@ void PauseMenu::initConfirmationPage() {
     
     //Confirm button.
     ButtonGuiItem* confirmButton =
-        new ButtonGuiItem("Confirm", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Confirm", game.sysContent.fntStandard, game.config.guiColors.bad
+    );
     confirmButton->onActivate =
     [this] (const Point&) {
         startLeavingGameplay();
@@ -1813,7 +1820,7 @@ void PauseMenu::initMainPauseMenu() {
     TextGuiItem* areaNameText =
         new TextGuiItem(
         game.curAreaData->name, game.sysContent.fntAreaName,
-        changeAlpha(COLOR_GOLD, 192)
+        changeAlpha(game.config.guiColors.gold, 192)
     );
     gui.addItem(areaNameText, "area_name");
     
@@ -1831,7 +1838,9 @@ void PauseMenu::initMainPauseMenu() {
     
     //Continue button.
     gui.backItem =
-        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Continue", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     gui.backItem->onActivate =
     [this] (const Point&) {
         startClosing(&gui);
@@ -1987,7 +1996,7 @@ void PauseMenu::initMainPauseMenu() {
         game.quickPlay.areaPath.empty() ?
         "Quit" :
         "Back to editor",
-        game.sysContent.fntStandard
+        game.sysContent.fntStandard, game.config.guiColors.bad
     );
     quitButton->onActivate =
     [this] (const Point&) {
@@ -2049,7 +2058,9 @@ void PauseMenu::initMissionPage() {
     
     //Continue button.
     missionGui.backItem =
-        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Continue", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     missionGui.backItem->onActivate =
     [this] (const Point&) {
         startClosing(&missionGui);
@@ -2063,7 +2074,10 @@ void PauseMenu::initMissionPage() {
     
     //Goal header text.
     TextGuiItem* goalHeaderText =
-        new TextGuiItem("Goal", game.sysContent.fntAreaName);
+        new TextGuiItem(
+        "Goal", game.sysContent.fntAreaName,
+        game.config.guiColors.smallHeader
+    );
     missionGui.addItem(goalHeaderText, "goal_header");
     
     //Goal explanation text.
@@ -2072,7 +2086,7 @@ void PauseMenu::initMissionPage() {
         game.missionGoals[game.curAreaData->mission.goal]->
         getPlayerDescription(&game.curAreaData->mission),
         game.sysContent.fntStandard,
-        al_map_rgb(255, 255, 200)
+        game.config.guiColors.gold
     );
     missionGui.addItem(goalText, "goal");
     
@@ -2086,7 +2100,10 @@ void PauseMenu::initMissionPage() {
     
     //Fail conditions header text.
     TextGuiItem* failHeaderText =
-        new TextGuiItem("Fail conditions", game.sysContent.fntAreaName);
+        new TextGuiItem(
+        "Fail conditions", game.sysContent.fntAreaName,
+        game.config.guiColors.smallHeader
+    );
     missionGui.addItem(failHeaderText, "fail_header");
     
     //Fail condition explanation list.
@@ -2101,7 +2118,10 @@ void PauseMenu::initMissionPage() {
     
     //Grading header text.
     TextGuiItem* gradingHeaderText =
-        new TextGuiItem("Grading", game.sysContent.fntAreaName);
+        new TextGuiItem(
+        "Grading", game.sysContent.fntAreaName,
+        game.config.guiColors.smallHeader
+    );
     missionGui.addItem(gradingHeaderText, "grading_header");
     
     //Grading explanation list.
@@ -2182,7 +2202,9 @@ void PauseMenu::initRadarPage() {
     
     //Continue button.
     radarGui.backItem =
-        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Continue", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     radarGui.backItem->onActivate =
     [this] (const Point&) {
         startClosing(&radarGui);
@@ -2347,7 +2369,7 @@ void PauseMenu::initRadarPage() {
             case PATH_RESULT_NORMAL_PATH:
             case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
                 cursorInfoText->text = "\\k menu_ok \\k Go here!";
-                cursorInfoText->color = COLOR_GOLD;
+                cursorInfoText->color = game.config.guiColors.gold;
                 break;
             } case PATH_RESULT_PATH_WITH_OBSTACLES: {
                 cursorInfoText->text = "Can't go here... Path blocked!";
@@ -2420,7 +2442,9 @@ void PauseMenu::initStatusPage() {
     
     //Continue button.
     statusGui.backItem =
-        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Continue", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     statusGui.backItem->onActivate =
     [this] (const Point&) {
         startClosing(&statusGui);

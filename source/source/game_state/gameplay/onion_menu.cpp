@@ -86,7 +86,7 @@ OnionMenu::OnionMenu(
     //Cancel button.
     gui.backItem =
         new ButtonGuiItem(
-        "Cancel", game.sysContent.fntStandard, al_map_rgb(226, 112, 112)
+        "Cancel", game.sysContent.fntStandard, game.config.guiColors.bad
     );
     gui.backItem->onActivate =
     [this] (const Point&) {
@@ -102,7 +102,7 @@ OnionMenu::OnionMenu(
     //Ok button.
     okButton =
         new ButtonGuiItem(
-        "Ok", game.sysContent.fntStandard, al_map_rgb(96, 226, 80)
+        "Ok", game.sysContent.fntStandard, game.config.guiColors.good
     );
     okButton->onActivate =
     [this] (const Point&) {

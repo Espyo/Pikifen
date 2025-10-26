@@ -370,7 +370,9 @@ void AreaMenu::initGuiInfoPage() {
     
         //Name text.
         infoNameText =
-            new TextGuiItem("", game.sysContent.fntAreaName, COLOR_GOLD);
+            new TextGuiItem(
+            "", game.sysContent.fntAreaName, game.config.guiColors.gold
+        );
         infoBox->addChild(infoNameText);
         gui.addItem(infoNameText, "info_name");
         
@@ -543,7 +545,7 @@ void AreaMenu::initGuiMain() {
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
-        "Back", game.sysContent.fntStandard
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
     [this] (const Point&) {
@@ -801,13 +803,18 @@ void AreaMenu::initGuiSpecsPage() {
     
         //Name text.
         specsNameText =
-            new TextGuiItem("", game.sysContent.fntAreaName, COLOR_GOLD);
+            new TextGuiItem(
+            "", game.sysContent.fntAreaName, game.config.guiColors.gold
+        );
         specsBox->addChild(specsNameText);
         gui.addItem(specsNameText, "specs_name");
         
         //Goal header text.
         TextGuiItem* goalHeaderText =
-            new TextGuiItem("Goal", game.sysContent.fntAreaName);
+            new TextGuiItem(
+            "Goal", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
         specsBox->addChild(goalHeaderText);
         gui.addItem(goalHeaderText, "goal_header");
         
@@ -819,7 +826,10 @@ void AreaMenu::initGuiSpecsPage() {
         
         //Fail conditions header text.
         TextGuiItem* failHeaderText =
-            new TextGuiItem("Fail conditions", game.sysContent.fntAreaName);
+            new TextGuiItem(
+            "Fail conditions", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
         specsBox->addChild(failHeaderText);
         gui.addItem(failHeaderText, "fail_header");
         
@@ -836,7 +846,10 @@ void AreaMenu::initGuiSpecsPage() {
         
         //Grading header text.
         TextGuiItem* gradingHeaderText =
-            new TextGuiItem("Grading", game.sysContent.fntAreaName);
+            new TextGuiItem(
+            "Grading", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
         specsBox->addChild(gradingHeaderText);
         gui.addItem(gradingHeaderText, "grading_header");
         

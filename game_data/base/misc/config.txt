@@ -24,6 +24,18 @@ general {
     game_version = 
 }
 
+gui_colors {
+    back = 255 210 186
+    bad = 226 112 112
+    focused_item = 87 200 208
+    gold = 255 242 0
+    good = 96 226 80
+    page_change = 188 230 230
+    pause_bg = 25 46 70 204
+    pause_vignette = 140 182 224 44
+    small_header = 188 230 230
+}
+
 leaders {
     group_member_grab_range = 128
     next_pluck_range = 200

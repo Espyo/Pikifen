@@ -216,7 +216,7 @@ void drawButton(
     
     ALLEGRO_COLOR boxTint =
         focused ?
-        tintColor(al_map_rgb(87, 200, 208), tint) :
+        tintColor(game.config.guiColors.focusedItem, tint) :
         tint;
         
     drawTexturedBox(
@@ -607,7 +607,8 @@ void drawLoadingScreen(
                 text, game.sysContent.fntAreaName,
                 Point(textW * 0.5f, textH * 0.5f),
                 Point(textW, textH),
-                COLOR_GOLD, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
+                game.config.guiColors.gold,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
         } al_set_target_backbuffer(game.display);
         
@@ -623,7 +624,7 @@ void drawLoadingScreen(
                 subtext, game.sysContent.fntAreaName,
                 Point(subtextW * 0.5f, subtextH * 0.5f),
                 Point(subtextW, subtextH),
-                al_map_rgb(224, 224, 224),
+                mapGray(224),
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
             
@@ -782,7 +783,7 @@ void drawLoadingScreen(
         drawText(
             "Loading...", game.sysContent.fntStandard,
             Point(game.winW - 8, game.winH - 8), textBox,
-            al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
+            mapGray(192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
         );
     }
     

@@ -110,7 +110,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     //Back button.
     gui.backItem =
         new ButtonGuiItem(
-        "Back", game.sysContent.fntStandard
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
     [this] (const Point&) {
@@ -125,7 +125,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Gameplay basics button.
     ButtonGuiItem* gameplay1Button =
-        new ButtonGuiItem("Gameplay basics", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Gameplay basics", game.sysContent.fntStandard,
+        game.config.guiColors.smallHeader
+    );
     gameplay1Button->onActivate =
     [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY1);
@@ -138,7 +141,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Gameplay advanced button.
     ButtonGuiItem* gameplay2Button =
-        new ButtonGuiItem("Advanced gameplay", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Advanced gameplay", game.sysContent.fntStandard,
+        game.config.guiColors.smallHeader
+    );
     gameplay2Button->onActivate =
     [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY2);
@@ -151,7 +157,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Controls button.
     ButtonGuiItem* controlsButton =
-        new ButtonGuiItem("Controls", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Controls", game.sysContent.fntStandard,
+        game.config.guiColors.smallHeader
+    );
     controlsButton->onActivate =
     [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_CONTROLS);
@@ -164,7 +173,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Pikmin button.
     ButtonGuiItem* pikminButton =
-        new ButtonGuiItem("Pikmin types", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Pikmin types", game.sysContent.fntStandard,
+        game.config.guiColors.smallHeader
+    );
     pikminButton->onActivate =
     [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_PIKMIN);
@@ -177,7 +189,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Objects button.
     ButtonGuiItem* objectsButton =
-        new ButtonGuiItem("Objects", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Objects", game.sysContent.fntStandard,
+        game.config.guiColors.smallHeader
+    );
     objectsButton->onActivate =
     [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_OBJECTS);
@@ -202,7 +217,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     gui.addItem(manualBullet, "manual");
     
     //Category text.
-    categoryText = new TextGuiItem("Help", game.sysContent.fntStandard);
+    categoryText =
+        new TextGuiItem(
+        "Help", game.sysContent.fntStandard, game.config.guiColors.smallHeader
+    );
     gui.addItem(categoryText, "category");
     
     //Tidbit list box.

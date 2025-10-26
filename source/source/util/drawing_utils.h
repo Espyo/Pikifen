@@ -30,9 +30,6 @@ constexpr ALLEGRO_COLOR COLOR_EMPTY = { 0.0f, 0.0f, 0.0f, 0.0f };
 //Fully-transparent color, in black.
 constexpr ALLEGRO_COLOR COLOR_EMPTY_WHITE = { 1.0f, 1.0f, 1.0f, 0.0f };
 
-//Golden-like color, usually for area names.
-constexpr ALLEGRO_COLOR COLOR_GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
-
 //Transparent white color, usually for menu headers.
 constexpr ALLEGRO_COLOR COLOR_TRANSPARENT_WHITE = { 1.0f, 1.0f, 1.0f, 0.5f };
 

@@ -63,7 +63,7 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
         addStat(
             "    x 0 points (mission fail) = ",
             "0",
-            COLOR_GOLD
+            game.config.guiColors.gold
         );
     } else {
         addStat(
@@ -71,7 +71,7 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
             amountStr(mult, "point") +
             " = ",
             i2s(cPtr->getScore(game.states.gameplay, mission)),
-            COLOR_GOLD
+            game.config.guiColors.gold
         );
     }
 }
@@ -361,7 +361,8 @@ void Results::load() {
     //Area name text.
     TextGuiItem* areaNameText =
         new TextGuiItem(
-        game.curAreaData->name, game.sysContent.fntAreaName, COLOR_GOLD
+        game.curAreaData->name, game.sysContent.fntAreaName,
+        game.config.guiColors.gold
     );
     gui.addItem(areaNameText, "area_name");
     textToAnimate.push_back(areaNameText);
@@ -656,7 +657,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         addStat(
             "Starting score: ",
             i2s(game.curAreaData->mission.startingPoints),
-            COLOR_GOLD
+            game.config.guiColors.gold
         );
     }
     
@@ -757,7 +758,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         addStat(
             "Final score:",
             i2s(finalMissionScore),
-            COLOR_GOLD
+            game.config.guiColors.gold
         );
         
         //Old record bullet:

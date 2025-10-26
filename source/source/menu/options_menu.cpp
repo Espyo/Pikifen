@@ -123,7 +123,10 @@ void OptionsMenu::addBindEntryItems(
         }
         }
         TextGuiItem* sectionText =
-            new TextGuiItem(sectionName, game.sysContent.fntAreaName);
+            new TextGuiItem(
+            sectionName, game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
         sectionText->ratioCenter =
             Point(
                 0.50f,
@@ -705,7 +708,9 @@ void OptionsMenu::initGuiAudioPage() {
     
     //Back button.
     audioGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     audioGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -842,7 +847,9 @@ void OptionsMenu::initGuiControlBindsPage() {
     
     //Back button.
     bindsGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     bindsGui.backItem->onActivate =
     [this] (const Point&) {
         saveOptions();
@@ -900,7 +907,9 @@ void OptionsMenu::initGuiControlsPage() {
     
     //Back button.
     controlsGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     controlsGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1062,7 +1071,9 @@ void OptionsMenu::initGuiGraphicsPage() {
     
     //Back button.
     graphicsGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     graphicsGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1182,7 +1193,9 @@ void OptionsMenu::initGuiMiscPage() {
     
     //Back button.
     miscGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     miscGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -1349,7 +1362,9 @@ void OptionsMenu::initGuiShortcutsPage() {
     
     //Back button.
     shortcutsGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     shortcutsGui.backItem->onActivate =
     [this] (const Point&) {
         saveOptions();
@@ -1433,7 +1448,9 @@ void OptionsMenu::initGuiTopPage() {
     
     //Back button.
     topGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     topGui.backItem->onActivate =
     [this] (const Point&) {
         saveOptions();

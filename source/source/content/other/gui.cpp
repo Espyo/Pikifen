@@ -275,7 +275,7 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
     
     ALLEGRO_COLOR boxTint =
         focused ?
-        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        tintColor(game.config.guiColors.focusedItem, draw.tint) :
         draw.tint;
         
     drawTexturedBox(
@@ -2075,7 +2075,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
         realArrowHighlight = arrowHighlight;
     }
     ALLEGRO_COLOR arrowHighlightColor =
-        tintColor(al_map_rgb(87, 200, 208), draw.tint);
+        tintColor(game.config.guiColors.focusedItem, draw.tint);
     ALLEGRO_COLOR arrowRegularColor = draw.tint;
     Point arrowHighlightScale = Point(1.4f);
     Point arrowRegularScale = Point(1.0f);
@@ -2130,7 +2130,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     
     ALLEGRO_COLOR boxTint =
         focused ?
-        tintColor(al_map_rgb(87, 200, 208), draw.tint) :
+        tintColor(game.config.guiColors.focusedItem, draw.tint) :
         draw.tint;
         
     drawTexturedBox(

@@ -458,7 +458,9 @@ void MainMenu::initGuiMainPage() {
     
     //Exit button.
     mainGui.backItem =
-        new ButtonGuiItem("Exit", game.sysContent.fntAreaName);
+        new ButtonGuiItem(
+        "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad
+    );
     mainGui.backItem->onDraw =
     [this, quitIconLeft] (const DrawInfo & draw) {
         drawMenuButtonIcon(
@@ -640,7 +642,9 @@ void MainMenu::initGuiMakePage() {
     
     //Back button.
     makeGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntAreaName);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntAreaName, game.config.guiColors.back
+    );
     makeGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(
@@ -776,7 +780,9 @@ void MainMenu::initGuiPlayPage() {
     
     //Back button.
     playGui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntAreaName);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntAreaName, game.config.guiColors.back
+    );
     playGui.backItem->onActivate =
     [this] (const Point&) {
         transitionGuis(

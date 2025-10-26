@@ -118,7 +118,9 @@ void PacksMenu::initGuiMain() {
     
     //Back button.
     gui.backItem =
-        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Back", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     gui.backItem->onActivate =
     [this] (const Point&) {
         game.options.packs.order = packOrder;
@@ -144,7 +146,7 @@ void PacksMenu::initGuiMain() {
     //Base pack's bullet.
     BulletGuiItem* baseBullet =
         new BulletGuiItem(
-        "Base", game.sysContent.fntStandard, COLOR_GOLD
+        "Base", game.sysContent.fntStandard, game.config.guiColors.gold
     );
     baseBullet->ratioCenter =
         Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
@@ -288,7 +290,8 @@ void PacksMenu::initGuiMain() {
     //Pack name text.
     packNameText =
         new TextGuiItem(
-        "", game.sysContent.fntAreaName, COLOR_GOLD, ALLEGRO_ALIGN_LEFT
+        "", game.sysContent.fntAreaName,
+        game.config.guiColors.gold, ALLEGRO_ALIGN_LEFT
     );
     gui.addItem(packNameText, "pack_name");
     

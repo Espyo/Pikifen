@@ -69,6 +69,38 @@ const float SPEED_WEIGHT_MULT = 0.0004f;
 }
 
 
+namespace GUI_COLORS_D {
+
+//Default value for the "back" button color.
+const ALLEGRO_COLOR BACK = { 1.0f, 0.82f, 0.72f, 1.0f };
+
+//Default value for the red bad color.
+const ALLEGRO_COLOR BAD = { 0.88f, 0.44f, 0.44f, 1.0f };
+
+//Default value for the focused GUI item color.
+const ALLEGRO_COLOR FOCUSED_ITEM = { 0.34f, 0.78f, 0.82f, 1.0f };
+
+//Default value for the gold-like color.
+const ALLEGRO_COLOR GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
+
+//Default value for the green good color.
+const ALLEGRO_COLOR GOOD = { 0.38f, 0.88f, 0.30f, 1.0f };
+
+//Default value for the page change buttons.
+const ALLEGRO_COLOR PAGE_CHANGE = { 0.74f, 0.90f, 0.90f, 1.0f };
+
+//Default value for the pause menu's background.
+const ALLEGRO_COLOR PAUSE_BG = { 0.10f, 0.18f, 0.27f, 0.80f };
+
+//Default value for the pause menu's vignette.
+const ALLEGRO_COLOR PAUSE_VIGNETTE = { 0.54f, 0.70f, 0.88f, 0.18f };
+
+//Default value for small headers.
+const ALLEGRO_COLOR SMALL_HEADER = { 0.74f, 0.90f, 0.90f, 1.0f };
+
+}
+
+
 namespace LEADERS_D {
 
 //Default value for the group member grab range.
@@ -174,10 +206,10 @@ void GameConfig::load(DataNode* file) {
     //Aesthetic general.
     {
         ReaderSetter aRS(file->getChildByName("aesthetic_general"));
-
+        
         //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
         aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
-
+        
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
         aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
         aRS.set(
@@ -215,6 +247,21 @@ void GameConfig::load(DataNode* file) {
         
         gRS.set("game_name", general.name);
         gRS.set("game_version", general.version);
+    }
+    
+    //GUI colors.
+    {
+        ReaderSetter cRS(file->getChildByName("gui_colors"));
+        
+        cRS.set("back", guiColors.back);
+        cRS.set("bad", guiColors.bad);
+        cRS.set("focused_item", guiColors.focusedItem);
+        cRS.set("gold", guiColors.gold);
+        cRS.set("good", guiColors.good);
+        cRS.set("page_change", guiColors.pageChange);
+        cRS.set("pause_bg", guiColors.pauseBg);
+        cRS.set("pause_vignette", guiColors.pauseVignette);
+        cRS.set("small_header", guiColors.smallHeader);
     }
     
     //Leaders.
@@ -269,10 +316,10 @@ void GameConfig::load(DataNode* file) {
     //Rules.
     {
         ReaderSetter rRS(file->getChildByName("rules"));
-
+        
         //DEPRECATED in 1.1.0 by "leader_cursor_max_dist".
         rRS.set("cursor_max_dist", rules.leaderCursorMaxDist);
-
+        
         rRS.set("can_throw_leaders", rules.canThrowLeaders);
         rRS.set("leader_cursor_max_dist", rules.leaderCursorMaxDist);
         rRS.set("max_pikmin_in_field", rules.maxPikminInField);

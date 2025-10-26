@@ -313,7 +313,8 @@ void GameplayState::drawBigMsg() {
                 string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c]),
                 game.sysContent.fntAreaName,
                 Point((game.winW / 2.0f) + xOffset, y),
-                Point(LARGE_FLOAT, game.winH * kiH.get(t)), COLOR_GOLD
+                Point(LARGE_FLOAT, game.winH * kiH.get(t)),
+                game.config.guiColors.gold
             );
         }
         break;
@@ -335,7 +336,7 @@ void GameplayState::drawBigMsg() {
             game.sysContent.fntAreaName,
             Point(game.winW / 2.0f, game.winH / 2.0f),
             Point(LARGE_FLOAT, game.winH * kiH.get(t)),
-            changeAlpha(COLOR_GOLD, 255 * kiA.get(t))
+            changeAlpha(game.config.guiColors.gold, 255 * kiA.get(t))
         );
         break;
         
@@ -363,7 +364,7 @@ void GameplayState::drawBigMsg() {
                 string(1, GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT[c]),
                 game.sysContent.fntAreaName,
                 Point((game.winW / 2.0f) + xOffset + x, game.winH / 2.0f),
-                Point(LARGE_FLOAT, game.winH * 0.08f), COLOR_GOLD
+                Point(LARGE_FLOAT, game.winH * 0.08f), game.config.guiColors.gold
             );
         }
         break;
@@ -406,7 +407,7 @@ void GameplayState::drawBigMsg() {
                 string(1, TEXT[c]), game.sysContent.fntAreaName,
                 Point((game.winW / 2.0f) + xOffset, y),
                 Point(LARGE_FLOAT, game.winH * kiH.get(t)),
-                changeAlpha(COLOR_GOLD, 255 * alpha)
+                changeAlpha(game.config.guiColors.gold, 255 * alpha)
             );
         }
         break;
@@ -1137,7 +1138,7 @@ void GameplayState::drawInGameText(Player* player) {
         drawHighlightedRectRegion(
             game.curAreaData->mission.goalExitCenter,
             game.curAreaData->mission.goalExitSize,
-            changeAlpha(COLOR_GOLD, 192), areaTimePassed
+            changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
         );
     }
 }
@@ -1333,7 +1334,10 @@ void GameplayState::drawLeaderCursor(
             player->leaderCursorWin +
             Point(extrasXOffset, extrasYOffset + standbyCountHeight),
             Point(LARGE_FLOAT, game.winH * 0.02f),
-            changeAlpha(COLOR_GOLD, player->leaderCursorMobPointsAlpha * 255),
+            changeAlpha(
+                game.config.guiColors.gold,
+                player->leaderCursorMobPointsAlpha * 255
+            ),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
     }
@@ -1488,7 +1492,7 @@ void GameplayState::drawOnionMenu() {
     } else {
         al_draw_filled_rectangle(
             0, 0, game.winW, game.winH,
-            al_map_rgba(24, 64, 60, 220 * onionMenu->bgAlphaMult)
+            multAlpha(game.config.guiColors.pauseBg, onionMenu->bgAlphaMult)
         );
         
     }
@@ -1505,7 +1509,7 @@ void GameplayState::drawOnionMenu() {
 void GameplayState::drawPauseMenu() {
     al_draw_filled_rectangle(
         0, 0, game.winW, game.winH,
-        al_map_rgba(24, 48, 70, 200 * pauseMenu->bgAlphaMult)
+        multAlpha(game.config.guiColors.pauseBg, pauseMenu->bgAlphaMult)
     );
     drawBitmap(
         game.sysContent.bmpVignette,
