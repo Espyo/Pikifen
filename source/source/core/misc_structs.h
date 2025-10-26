@@ -771,6 +771,9 @@ struct SystemContentList {
     //Dashed throw preview texture.
     ALLEGRO_BITMAP* bmpThrowPreviewDashed = nullptr;
     
+    //Vignette, used for menus.
+    ALLEGRO_BITMAP* bmpVignette = nullptr;
+    
     //Wave ring.
     ALLEGRO_BITMAP* bmpWaveRing = nullptr;
     
@@ -1039,6 +1042,9 @@ struct SystemContentNames {
     
     //Title screen background.
     string bmpTitleScreenBg = "gui/title_screen_bg";
+    
+    //Vignette, used for menus.
+    string bmpVignette = "gui/vignette";
     
     //Wave ring.
     string bmpWaveRing = "effects/wave_ring";

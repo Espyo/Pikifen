@@ -2163,6 +2163,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("throw_preview", bmpThrowPreview);
     graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
     graRS.set("title_screen_bg", bmpTitleScreenBg);
+    graRS.set("vignette", bmpVignette);
     graRS.set("wave_ring", bmpWaveRing);
     
     ReaderSetter fntRS(file->getChildByName("fonts"));

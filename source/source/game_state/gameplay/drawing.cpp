@@ -1505,7 +1505,12 @@ void GameplayState::drawOnionMenu() {
 void GameplayState::drawPauseMenu() {
     al_draw_filled_rectangle(
         0, 0, game.winW, game.winH,
-        al_map_rgba(24, 64, 60, 200 * pauseMenu->bgAlphaMult)
+        al_map_rgba(24, 48, 70, 200 * pauseMenu->bgAlphaMult)
+    );
+    drawBitmap(
+        game.sysContent.bmpVignette,
+        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH),
+        0.0f, al_map_rgba(140, 182, 224, 44 * pauseMenu->bgAlphaMult)
     );
     
     pauseMenu->draw();
