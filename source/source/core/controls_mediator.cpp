@@ -74,12 +74,13 @@ void ControlsMediator::addModifier(
  * @param valueType Type of value an action can have.
  * @param autoRepeat Auto-repeat threshold.
  * @param reinsertionTTL Time to live when reinserted into the queue.
+ * @param freezable If true, its value can be frozen between game states.
  */
 void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string& name, const string& description, const string& internalName,
     const string& defaultBindStr, Inpution::ACTION_VALUE_TYPE valueType,
-    float autoRepeat, float reinsertionTTL
+    float autoRepeat, float reinsertionTTL, bool freezable
 ) {
     PlayerActionType a;
     a.id = id;
@@ -91,6 +92,7 @@ void ControlsMediator::addPlayerActionType(
     a.valueType = valueType;
     a.autoRepeat = autoRepeat;
     a.reinsertionTTL = reinsertionTTL;
+    a.freezable = freezable;
     
     playerActionTypes.push_back(a);
     mgr.actionTypes[id] = a;

@@ -160,7 +160,7 @@ struct GuiItemDef {
     
     //Width and height.
     Point size;
-
+    
     //Optional description. Shows up in the GUI editor.
     string description;
     
@@ -173,7 +173,7 @@ struct GuiItemDef {
  * since the engine expects it.
  */
 struct HardcodedGuiItemDef : public GuiItemDef {
-    
+
 };
 
 
@@ -742,6 +742,7 @@ public:
     );
     bool removeItem(GuiItem* item);
     bool setFocusedItem(GuiItem* item, bool silent = false);
+    bool shouldHandleEvents();
     bool showItems();
     bool startAnimation(
         const GUI_MANAGER_ANIM type, float duration

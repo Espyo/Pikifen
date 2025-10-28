@@ -298,7 +298,13 @@ vector<Action> Manager::newFrame(float deltaT) {
             //Already added to the queue in handleCleanInput().
             continue;
         }
-        if(curGameState.actionTypeStatuses[a.first].value != a.second.value) {
+        float oldValue;
+        if(actionTypes[a.first].freezable) {
+            oldValue = curGameState.actionTypeStatuses[a.first].value;
+        } else {
+            oldValue = actionTypeGlobalStatuses[a.first].oldValue;
+        }
+        if(oldValue != a.second.value) {
             Action newAction;
             newAction.actionTypeId = a.first;
             newAction.value = a.second.value;
@@ -333,6 +339,9 @@ vector<Action> Manager::newFrame(float deltaT) {
     //Prepare things for the next frame.
     for(auto& a : actionTypeGlobalStatuses) {
         curGameState.actionTypeStatuses[a.first].value = a.second.value;
+    }
+    for(auto& a : actionTypeGlobalStatuses) {
+        a.second.oldValue = a.second.value;
     }
     actionQueue.clear();
     
@@ -478,6 +487,8 @@ bool Manager::releaseEverything() {
  * For menus, ideally you'd have some interval after the menu is closed in which
  * no actions are processed, so that the "menu close 1" input doesn't get
  * immediately consumed by normal gameplay.
+ * Only action types that have the freezable property set to true will
+ * be affected.
  *
  * @param name Name of the game state.
  * @return Whether it succeeded.

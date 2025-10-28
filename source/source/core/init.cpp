@@ -178,56 +178,64 @@ void initControls() {
         PLAYER_ACTION_CAT_MAIN,
         "Move right",
         "Move the leader right.",
-        "move_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "move_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_DOWN,
         PLAYER_ACTION_CAT_MAIN,
         "Move down",
         "Move the leader down.",
-        "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEFT,
         PLAYER_ACTION_CAT_MAIN,
         "Move left",
         "Move the leader left.",
-        "move_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "move_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_UP,
         PLAYER_ACTION_CAT_MAIN,
         "Move up",
         "Move the leader up.",
-        "move_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "move_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
         PLAYER_ACTION_CAT_MAIN,
         "Leader cursor right",
         "Move the leader's cursor right.",
-        "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
         PLAYER_ACTION_CAT_MAIN,
         "Leader cursor down",
         "Move the leader's cursor down.",
-        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
         PLAYER_ACTION_CAT_MAIN,
         "Leader cursor left",
         "Move the leader's cursor left.",
-        "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
         PLAYER_ACTION_CAT_MAIN,
         "Leader cursor up",
         "Move the leader's cursor up.",
-        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_THROW,
@@ -235,49 +243,55 @@ void initControls() {
         "Throw",
         "Throw a Pikmin at the leader's cursor.",
         "throw", "mb_1", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.2f
+        0.0f, 0.2f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_WHISTLE,
         PLAYER_ACTION_CAT_MAIN,
         "Whistle",
         "Whistle around the leader's cursor.",
-        "whistle", "mb_2", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "whistle", "mb_2", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Next Pikmin",
         "Change to the next Pikmin type in the group.",
-        "next_type", "mwd", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "next_type", "mwd", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_TYPE,
         PLAYER_ACTION_CAT_MAIN,
         "Prev. Pikmin",
         "Change to the previous Pikmin type in the group.",
-        "prev_type", "mwu", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "prev_type", "mwu", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_LEADER,
         PLAYER_ACTION_CAT_MAIN,
         "Next leader",
         "Change to the next leader.",
-        "next_leader", "k_215", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "next_leader", "k_215", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_CURSOR,
         PLAYER_ACTION_CAT_MAIN,
         "Swarm to cursor",
         "Swarm all Pikmin towards the leader's cursor.",
-        "swarm_cursor", "k_75", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "swarm_cursor", "k_75", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_DISMISS,
         PLAYER_ACTION_CAT_MAIN,
         "Dismiss",
         "Dismiss all Pikmin.",
-        "dismiss", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "dismiss", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_INVENTORY,
@@ -393,119 +407,136 @@ void initControls() {
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm right",
         "Swarm all Pikmin right.",
-        "swarm_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "swarm_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_DOWN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm down",
         "Swarm all Pikmin down.",
-        "swarm_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "swarm_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm left",
         "Swarm all Pikmin left.",
-        "swarm_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "swarm_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_GROUP_UP,
         PLAYER_ACTION_CAT_ADVANCED,
         "Swarm up",
         "Swarm all Pikmin up.",
-        "swarm_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "swarm_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_LEADER,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. leader",
         "Change to the previous leader.",
-        "prev_leader", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "prev_leader", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_CAT_ADVANCED,
         "Change zoom",
         "Change the current zoom level.",
-        "change_zoom", "k_3", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "change_zoom", "k_3", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_ZOOM_IN,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom in",
         "Change to a closer zoom level.",
-        "zoom_in", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "zoom_in", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_ZOOM_OUT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Zoom out",
         "Change to a farther zoom level.",
-        "zoom_out", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "zoom_out", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_NEXT_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Next maturity",
         "Change to a Pikmin of the next maturity.",
-        "next_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "next_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_PREV_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Prev. maturity",
         "Change to a Pikmin of the previous maturity.",
-        "prev_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "prev_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Inventory shortcut A",
         "Use the inventory item set to shortcut A.",
-        "inventory_shortcut_a", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "inventory_shortcut_a", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_B,
         PLAYER_ACTION_CAT_ADVANCED,
         "Inventory shortcut B",
         "Use the inventory item set to shortcut B.",
-        "inventory_shortcut_b", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "inventory_shortcut_b", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_C,
         PLAYER_ACTION_CAT_ADVANCED,
         "Inventory shortcut C",
         "Use the inventory item set to shortcut C.",
-        "inventory_shortcut_c", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "inventory_shortcut_c", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D,
         PLAYER_ACTION_CAT_ADVANCED,
         "Inventory shortcut D",
         "Use the inventory item set to shortcut D.",
-        "inventory_shortcut_d", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "inventory_shortcut_d", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_A,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",
         "Custom action A, if the current leader supports it.",
-        "custom_a", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "custom_a", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_B,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom B",
         "Custom action B, if the current leader supports it.",
-        "custom_b", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "custom_b", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_CUSTOM_C,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom C",
         "Custom action C, if the current leader supports it.",
-        "custom_c", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "custom_c", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, true
     );
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_RADAR,

@@ -353,7 +353,8 @@ struct ControlsMediator {
         const string& defaultBindStr,
         Inpution::ACTION_VALUE_TYPE valueType,
         float autoRepeat = 0.0f,
-        float reinsertionTTL = 0.0f
+        float reinsertionTTL = 0.0f,
+        bool freezable = false
     );
     const vector<PlayerActionType>& getAllPlayerActionTypes() const;
     vector<Inpution::Bind>& binds();

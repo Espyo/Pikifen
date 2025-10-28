@@ -782,7 +782,9 @@ void OnionMenu::growButtons() {
  * @param ev Event to handle.
  */
 void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    if(!closing) gui.handleAllegroEvent(ev);
+    if(!gui.shouldHandleEvents()) return;
+    if(closing) return;
+    gui.handleAllegroEvent(ev);
 }
 
 
@@ -792,7 +794,7 @@ void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @param action Data about the player action.
  */
 void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
-    if(!gui.responsive) return;
+    if(!gui.shouldHandleEvents()) return;
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_ONION_CHANGE_10: {

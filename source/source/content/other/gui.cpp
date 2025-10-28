@@ -1192,8 +1192,7 @@ GuiItem* GuiManager::getFocusedItem() const {
  * @return Whether it got handled.
  */
 bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    if(!responsive) return false;
-    if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
+    if(!shouldHandleEvents()) return false;
     
     bool handled = false;
     bool mouseMoved = false;
@@ -1257,15 +1256,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @return Whether the action was consumed.
  */
 bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
-    if(!responsive) {
-        return false;
-    }
-    if(
-        animTimer.getRatioLeft() > 0.0f &&
-        ignoreInputOnAnimation
-    ) {
-        return false;
-    }
+    if(!shouldHandleEvents()) return false;
     
     bool isDown = (action.value >= 0.5);
     bool buttonRecognized = true;
@@ -1518,6 +1509,18 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
         );
     }
     
+    return true;
+}
+
+
+/**
+ * @brief Whether it should be handling events right now.
+ *
+ * @return Whether it should.
+ */
+bool GuiManager::shouldHandleEvents() {
+    if(!responsive) return false;
+    if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
     return true;
 }
 

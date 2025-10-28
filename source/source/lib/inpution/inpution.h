@@ -210,6 +210,11 @@ struct ActionType {
     //0 means it cannot be reinserted.
     float reinsertionTTL = 0.0f;
     
+    //If true, this action's value in a given game state can remain "frozen".
+    //If false, the action will always update regardless of game state.
+    //See Manager::setGameState.
+    bool freezable = false;
+    
 };
 
 
@@ -334,6 +339,9 @@ struct Manager {
         //Current value [0 - 1].
         float value = 0.0f;
         
+        //Old value [0 - 1].
+        float oldValue = 0.0f;
+        
     };
     
     
@@ -342,7 +350,7 @@ struct Manager {
      */
     struct ActionTypeGameStateStatus {
     
-        //Current value.
+        //Current value. Can be frozen.
         float value = 0.0f;
         
         //How long it's been been active (!= 0) or inactive (== 0) for.
@@ -361,7 +369,7 @@ struct Manager {
     
         //--- Members ---
         
-        //Status of each action type in this game state.
+        //Status of each "freezable" action type in this game state.
         map<int, ActionTypeGameStateStatus> actionTypeStatuses;
         
     };
