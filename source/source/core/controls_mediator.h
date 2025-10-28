@@ -343,6 +343,7 @@ struct ControlsMediator {
     bool actionTypesShareInputSource(
         const vector<PLAYER_ACTION_TYPE> actionTypes
     );
+    void addModifier(int id, const Inpution::InputSource& source);
     void addPlayerActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,

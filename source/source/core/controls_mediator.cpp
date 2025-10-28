@@ -49,6 +49,19 @@ bool ControlsMediator::actionTypesShareInputSource(
 
 
 /**
+ * @brief Registers a new modifier, for any binds that want modifiers.
+ *
+ * @param id ID of the modifier.
+ * @param source Input source of the modifier.
+ */
+void ControlsMediator::addModifier(
+    int id, const Inpution::InputSource& source
+) {
+    mgr.modifiers[id] = source;
+}
+
+
+/**
  * @brief Adds a new player action to the list.
  *
  * @param id Its ID.

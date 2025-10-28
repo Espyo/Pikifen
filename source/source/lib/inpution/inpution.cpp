@@ -18,6 +18,32 @@ namespace Inpution {
 
 
 /**
+ * @brief Returns whether a bind's requirement modifiers are being met.
+ *
+ * @param bind Bind to use.
+ * @return Whether they are met.
+ */
+bool Manager::areBindRequirementsMet(const Bind& bind) const {
+    if(!bind.requireModifiers) return true;
+    
+    for(const auto& m : modifiers) {
+        bool modIsDown = getInputSourceValue(m.second) > 0.5f;
+        bool needsDown =
+            std::find(
+                bind.modifiers.begin(),
+                bind.modifiers.end(),
+                m.first
+            ) != bind.modifiers.end();
+        if(needsDown != modIsDown) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief When a game controller stick input is received, it should be checked
  * with the state of that entire stick to see if it needs to be normalized,
  * deadzones should be applied, etc.
@@ -78,16 +104,14 @@ float Manager::convertActionValue(int actionTypeId, float value) const {
  * @param input The input.
  * @return The action types.
  */
-vector<int> Manager::getActionTypesFromInput(
-    const Input& input
-) {
+vector<int> Manager::getActionTypesFromInput(const Input& input) {
     vector<int> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
         const Bind& bind = binds[b];
-        if(bind.inputSource == input.source) {
-            actionTypes.push_back(bind.actionTypeId);
-        }
+        if(!(bind.inputSource == input.source)) continue;
+        if(!areBindRequirementsMet(bind)) continue;
+        actionTypes.push_back(bind.actionTypeId);
     }
     
     return actionTypes;
@@ -98,7 +122,7 @@ vector<int> Manager::getActionTypesFromInput(
  * @brief Returns the current value of an input source.
  *
  * @param source The source.
- * @return The value, or 0.0f if not found.
+ * @return The value, or 0 if not found.
  */
 float Manager::getInputSourceValue(
     const Inpution::InputSource& source
@@ -119,10 +143,9 @@ float Manager::getValue(int actionTypeId) const {
     float highestValue = 0.0f;
     for(const auto& bind : binds) {
         if(bind.actionTypeId != actionTypeId) continue;
-        const auto sIt = inputSourceValues.find(bind.inputSource);
-        if(sIt == inputSourceValues.end()) continue;
-        float v = inputSourceValues.at(bind.inputSource);
-        highestValue = std::max(highestValue, v);
+        if(!areBindRequirementsMet(bind)) continue;
+        float value = getInputSourceValue(bind.inputSource);
+        highestValue = std::max(highestValue, value);
     }
     return convertActionValue(actionTypeId, highestValue);
 }

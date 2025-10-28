@@ -152,8 +152,15 @@ struct Bind {
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
-    //Input source bound.
+    //Main input source bound.
     InputSource inputSource;
+    
+    //If true, the modifiers have to be respected.
+    bool requireModifiers = false;
+    
+    //List of modifiers that need to be on for the bind to work.
+    //See Manager::modifiers;
+    vector<int> modifiers;
     
 };
 
@@ -284,6 +291,15 @@ struct Manager {
     //All registered control binds.
     vector<Bind> binds;
     
+    //Map of all modifiers, using their IDs as the key.
+    //Modifiers are like Shift, Ctrl, and Alt, though they can be anything.
+    //Binds that have modifier requirements will only work if those exact
+    //modifiers are pressed down, and others aren't.
+    //For example, a bind for a "save" action bound to Ctrl + S will only
+    //trigger if Ctrl is held before S, and won't work for Ctrl + Shift + S
+    //in case Shift is also registered as a modifier.
+    map<int, InputSource> modifiers;
+    
     //Are we ignoring actions right now?
     bool ignoringActions = false;
     
@@ -400,6 +416,8 @@ struct Manager {
     
     //--- Function declarations ---
     
+    bool areBindRequirementsMet(const Bind& bind) const;
+    bool bindsHaveSameRequirements(const Bind& bind1, const Bind& bind2) const;
     void cleanStick(const Input& input);
     float convertActionValue(int actionTypeId, float value) const;
     vector<int> getActionTypesFromInput(

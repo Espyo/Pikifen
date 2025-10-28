@@ -6,6 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Opening the Onion menu with a controller button isn't working, but is working with LMB
+        Maybe make it so each action type specifies whether it can "freeze", default off
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
 
@@ -17,9 +19,6 @@ Next tasks (roughly sorted most important first)
             Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
     Controls improvements
         Controls manager
-            Allow for button combinations
-                Basically, the bind struct has a chord vector variable, of the input type, and if this is not-none-typed, then these inputs are required before the main input is performed
-                If pressing an input generates both non-chord actions and chord actions, only do the chord actions
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick. Same with cancelling out of the inventory and pausing the game
@@ -49,7 +48,6 @@ Next tasks (roughly sorted most important first)
                 When you use a shortcut, it should show the thing you used plus its current amount on-screen, for a moment
             A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
                 When you select, should it set it as the aforementioned "standby" item, use it, or do both?
-            Document it in the GUI manual page
             Update the help menu
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
