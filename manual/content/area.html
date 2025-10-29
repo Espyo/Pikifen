@@ -463,6 +463,7 @@
     
     <ul>
       <li>Don't drag vertexes such that you would turn a sector inside out, nor that two lines would intersect.</li>
+      <li>If a sector is inside another, don't move it outside. And vice-versa.</li>
       <li>Areas are very complex in the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu in the area editor, and load the automatically-saved backup from there.</li>
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
@@ -475,6 +476,8 @@
     </figure>
     
     <h2 id="troubleshooting">Troubleshooting</h2>
+
+    <h3 id="troubleshooting-general">General</h3>
     
     <ul>
       <li>If the area editor crashes or something breaks the area, remember that backups are automatically created. Before the game overwrites the backup with something you don't want, consider going into the area editor's tools, and loading from the backup.</li>
@@ -487,6 +490,19 @@
       <img src="../images/area_tutorial/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
       <figcaption>Splitting a sector like this can cause it two divide into two sub-sectors.</figcaption>
     </figure>
+
+    <h3 id="troubleshooting-sectors">Broken sectors</h3>
+
+    <p>If one of your sectors is broken, don't panic. The editor tries to avoid awkward operations that might break a sector's geometry, but sometimes problems may arise anyway. Try the following, in order:</p>
+
+    <ol>
+      <li>Undo your latest operations. If you can go back to a non-broken state, you can try again, this time more cautiously.</li>
+      <li>Check the problem finder. The review panel contains a tool that finds problems, and its diagnostic might help you better understand what went wrong and how to fix it.</li>
+      <li>Delete the broken sector. Use one of the <a href="#other-basics">available methods</a> to get rid of the offending sector, then try again.</li>
+      <li>Close the editor without saving your changes. By going back to an older version that doesn't have the problem, you can try again, though you will lose unsaved progress.</li>
+      <li>Load an automatic backup. The tools panel lets you manage the automatic backup, if any exists. Like the previous point, you will lose unsaved progress.</li>
+      <li>Repair the sector manually. The tools panel contains a sector patching option. With it enabled, you can manually correct what edges make up what sectors. Once you've corrected them, the sectors should start working normally. Read that option's tooltip for more information.</li>
+    </ol>
 
     <h2 id="controls">Controls</h2>
 

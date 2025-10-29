@@ -546,6 +546,9 @@ private:
     //Result of the current drawing line.
     DRAWING_LINE_RESULT drawingLineResult = DRAWING_LINE_RESULT_OK;
     
+    //Enable the edge sector patching widgets.
+    bool enableEdgeSectorPatching = false;
+    
     //Currently highlighted edge, if any.
     Edge* highlightedEdge = nullptr;
     

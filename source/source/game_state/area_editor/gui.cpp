@@ -1768,6 +1768,73 @@ void AreaEditor::processGuiPanelEdge() {
         ImGui::TreePop();
     }
     
+    if(enableEdgeSectorPatching && selectedEdges.size() == 1) {
+    
+        //Sector patching node.
+        ImGui::Spacer();
+        if(saveableTreeNode("layout", "Sector patching")) {
+        
+            //Information text.
+            ImGui::TextWrapped(
+                "See: Main panel > Tools > Misc. > Enable edge sector patching."
+            );
+            
+            for(size_t s = 0; s < 2; s++) {
+                //Side textbox.
+                int sInt = (int) ePtr->sectorIdxs[s];
+                ImGui::SetNextItemWidth(80);
+                string label = s == 0 ? "A-side" : "B-side";
+                if(ImGui::DragInt(label.c_str(), &sInt)) {
+                    if(
+                        sInt >= 0 &&
+                        sInt <= (int) game.curAreaData->sectors.size()
+                    ) {
+                        registerChange("edge sector patch");
+                        Sector* oldSector = ePtr->sectors[s];
+                        size_t newSectorIdx = (size_t) sInt;
+                        Sector* newSector =
+                            game.curAreaData->sectors[newSectorIdx];
+                        size_t edgeIdx = game.curAreaData->findEdgeIdx(ePtr);
+                        ePtr->transferSector(
+                            oldSector, newSector,
+                            newSectorIdx, edgeIdx
+                        );
+                        updateAffectedSectors({oldSector, newSector});
+                    }
+                }
+                setTooltip(
+                    s == 0 ?
+                    "Index of the sector on the A-side." :
+                    "Index of the sector on the B-side.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Angle arrow widget.
+                float angle =
+                    getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
+                angle +=
+                    s == 0 ? -(TAU / 4.0f) : (TAU / 4.0f);
+                ImGui::SameLine();
+                angleVisualizer(angle);
+                
+            }
+            
+            //Swap sides button.
+            if(ImGui::Button("Swap sides")) {
+                registerChange("edge sector patch");
+                Sector* sector0 = ePtr->sectors[0];
+                Sector* sector1 = ePtr->sectors[1];
+                std::swap(ePtr->sectorIdxs[0], ePtr->sectorIdxs[1]);
+                game.curAreaData->fixEdgePointers(ePtr);
+                updateAffectedSectors({sector0, sector1});
+            }
+            setTooltip("Swap the two sides.");
+            
+            ImGui::TreePop();
+        }
+        
+    }
+    
     homogenizeSelectedEdges();
     updateAllEdgeOffsetCaches();
     
@@ -5609,6 +5676,21 @@ void AreaEditor::processGuiPanelTools() {
         );
         
         ImGui::Spacer();
+        
+        //Enable edge sector patching checkbox.
+        ImGui::Checkbox(
+            "Enable edge sector patching",
+            &enableEdgeSectorPatching
+        );
+        setTooltip(
+            "If checked, the edge tab of the layout panel will contain\n"
+            "widgets that let you correct what the sector on each side is.\n"
+            "Sectors are defined by their edges, so it's important that the\n"
+            "edges store the correct sector numbers. Use this feature in case\n"
+            "a sector becomes broken and you can't fix it otherwise.\n"
+            "See also: the Editor > Debug > Show sector indexes menu option."
+        );
+        
         
         ImGui::TreePop();
         

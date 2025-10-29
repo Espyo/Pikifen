@@ -1108,35 +1108,46 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                 (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
                 (ePtr->vertexes[0]->y + ePtr->vertexes[1]->y) / 2.0f
             );
-            float angle =
-                getAngle(v2p(ePtr->vertexes[1]), v2p(ePtr->vertexes[0]));
-            drawDebugText(
-                al_map_rgb(192, 255, 192),
-                Point(
-                    middle.x + cos(angle + TAU / 4) * 4,
-                    middle.y + sin(angle + TAU / 4) * 4
-                ),
+            float edgeAngle =
+                getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
+            float distFromEdge = 16.0f / game.editorsView.cam.zoom;
+            
+            Point pos1(
+                middle.x + cos(edgeAngle - TAU / 4) * distFromEdge,
+                middle.y + sin(edgeAngle - TAU / 4) * distFromEdge
+            );
+            Point pos2(
+                middle.x + cos(edgeAngle + TAU / 4) * distFromEdge,
+                middle.y + sin(edgeAngle + TAU / 4) * distFromEdge
+            );
+            ALLEGRO_COLOR color1 = al_map_rgb(216, 224, 128);
+            ALLEGRO_COLOR color2 = al_map_rgb(128, 224, 160);
+            string text1 =
+                "A" +
                 (
                     ePtr->sectorIdxs[0] == INVALID ?
                     "-" :
                     i2s(ePtr->sectorIdxs[0])
-                ),
-                1
-            );
-            
-            drawDebugText(
-                al_map_rgb(192, 255, 192),
-                Point(
-                    middle.x + cos(angle - TAU / 4) * 4,
-                    middle.y + sin(angle - TAU / 4) * 4
-                ),
+                );
+            string text2 =
+                "B" +
                 (
                     ePtr->sectorIdxs[1] == INVALID ?
                     "-" :
                     i2s(ePtr->sectorIdxs[1])
-                ),
-                2
+                );
+                
+            al_draw_line(
+                middle.x, middle.y, pos1.x, pos1.y, color1,
+                2.0f / game.editorsView.cam.zoom
             );
+            drawDebugText(color1, pos1, text1);
+            
+            al_draw_line(
+                middle.x, middle.y, pos2.x, pos2.y, color2,
+                2.0f / game.editorsView.cam.zoom
+            );
+            drawDebugText(color2, pos2, text2);
         }
         
         if(debugEdgeIdxs) {

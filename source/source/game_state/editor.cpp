@@ -102,6 +102,59 @@ Editor::Editor() :
 
 
 /**
+ * @brief Draws a Dear ImGui-like visualizer for an angle.
+ *
+ * @param angle Angle to show.
+ */
+void Editor::angleVisualizer(float angle) {
+    //Setup.
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImVec2 drawPos = ImGui::GetCursorScreenPos();
+    
+    //Position calculations.
+    const float drawSize = drawList->_Data->FontSize;
+    ImVec2 drawCenter(drawPos.x + drawSize / 2.0f, drawPos.y + drawSize / 2.0f);
+    
+    Point tipVertex(drawSize / 2.0f, 0.0f);
+    Point rightVertex(0.0f, drawSize * 0.30f);
+    Point leftVertex(0.0f, -drawSize * 0.30f);
+    Point lineVertex(-drawSize / 2.0f, 0.0f);
+    
+    tipVertex = rotatePoint(tipVertex, angle);
+    rightVertex = rotatePoint(rightVertex, angle);
+    leftVertex = rotatePoint(leftVertex, angle);
+    lineVertex = rotatePoint(lineVertex, angle);
+    
+    tipVertex.x += drawCenter.x;
+    tipVertex.y += drawCenter.y;
+    rightVertex.x += drawCenter.x;
+    rightVertex.y += drawCenter.y;
+    leftVertex.x += drawCenter.x;
+    leftVertex.y += drawCenter.y;
+    lineVertex.x += drawCenter.x;
+    lineVertex.y += drawCenter.y;
+    
+    //Draw the triangle.
+    drawList->AddTriangleFilled(
+        ImVec2(tipVertex.x, tipVertex.y),
+        ImVec2(rightVertex.x, rightVertex.y),
+        ImVec2(leftVertex.x, leftVertex.y),
+        ImGui::GetColorU32(ImGuiCol_Text)
+    );
+    
+    //Draw the line.
+    drawList->AddLine(
+        drawCenter,
+        ImVec2(lineVertex.x, lineVertex.y),
+        ImGui::GetColorU32(ImGuiCol_Text)
+    );
+    
+    //Add a dummy to symbolize the space the visualizer took up.
+    ImGui::Dummy(ImVec2(drawSize, drawSize));
+}
+
+
+/**
  * @brief Centers the camera so that these four points are in view.
  * A bit of padding is added, so that, for instance, the top-left
  * point isn't exactly on the top-left of the window,

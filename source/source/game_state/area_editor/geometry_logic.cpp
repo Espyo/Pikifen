@@ -1123,21 +1123,23 @@ void AreaEditor::findProblemsNonSimpleSector() {
         switch(game.curAreaData->problems.nonSimples.begin()->second) {
         case TRIANGULATION_ERROR_LONE_EDGES: {
             problemDescription =
-                "It contains lone edges. Try clearing them up.";
+                "It contains lone edges. Try clearing them up."
+                "Check the included manual if you can't find a way to fix it.";
             break;
         } case TRIANGULATION_ERROR_NOT_CLOSED: {
             problemDescription =
-                "It is not closed. Try closing it.";
+                "It is not closed. Try closing it."
+                "Check the included manual if you can't find a way to fix it.";
             break;
         } case TRIANGULATION_ERROR_NO_EARS: {
             problemDescription =
-                "There's been a triangulation error. Try undoing or "
-                "deleting the sector, and then rebuild it. Make sure there "
-                "are no gaps, and keep it simple.";
+                "There's been a triangulation error."
+                "Check the included manual if you can't find a way to fix it.";
             break;
         } case TRIANGULATION_ERROR_INVALID_ARGS: {
             problemDescription =
-                "An unknown error has occurred with the sector.";
+                "An unknown error has occurred with the sector."
+                "Check the included manual if you can't find a way to fix it.";
             break;
         } case TRIANGULATION_ERROR_NONE: {
             problemDescription.clear();

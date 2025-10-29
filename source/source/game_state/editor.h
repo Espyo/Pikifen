@@ -788,6 +788,7 @@ protected:
     void processGuiUnsavedChangesDialog();
     void panelTitle(const char* title);
     
+    void angleVisualizer(float angle);
     void keyframeVisualizer(
         KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
         size_t selKeyframeIdx

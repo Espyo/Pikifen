@@ -704,6 +704,7 @@ TRIANGULATION_ERROR getPolys(
         if(!inserted) {
             //Failed to insert... Clean up.
             delete newPoly;
+            break;
         }
         
         doingFirstPolygon = false;
