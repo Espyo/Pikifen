@@ -40,8 +40,8 @@ hardcoded_items{
 		description=Misc. page button.
 	}
 	advanced{
-		center=87.0000 86.0000
-		size=22.0000 8.0000
+		center=87.0000 87.0000
+		size=22.0000 6.0000
 		description=Advanced options information bullet point.
 	}
 	tooltip{

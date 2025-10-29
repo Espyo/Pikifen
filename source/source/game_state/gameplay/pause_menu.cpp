@@ -26,9 +26,6 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace PAUSE_MENU {
 
-//Name of the leaving confirmation page GUI definition file.
-const string CONFIRMATION_GUI_FILE_NAME = "pause_menu_confirmation";
-
 //Control lockout time after entering the menu.
 const float ENTRY_LOCKOUT_TIME = 0.15f;
 
@@ -96,7 +93,6 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     initRadarPage();
     initStatusPage();
     initMissionPage();
-    initConfirmationPage();
     
     //Initialize some radar things.
     bool foundValidSector = false;
@@ -172,7 +168,6 @@ PauseMenu::~PauseMenu() {
     radarGui.destroy();
     statusGui.destroy();
     missionGui.destroy();
-    confirmationGui.destroy();
     
     if(secondaryMenu) {
         secondaryMenu->unload();
@@ -567,6 +562,7 @@ void PauseMenu::calculateGoHerePath() {
  */
 void PauseMenu::confirmOrLeave() {
     bool doConfirmation = false;
+    string confirmationExplanation;
     switch(game.options.misc.leavingConfMode) {
     case LEAVING_CONF_MODE_NEVER: {
         doConfirmation = false;
@@ -586,12 +582,12 @@ void PauseMenu::confirmOrLeave() {
     if(doConfirmation) {
         switch(leaveTarget) {
         case GAMEPLAY_LEAVE_TARGET_RETRY: {
-            confirmationExplanationText->text =
+            confirmationExplanation =
                 "If you retry, you will LOSE all of your progress "
                 "and start over. Are you sure you want to retry?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_END: {
-            confirmationExplanationText->text =
+            confirmationExplanation =
                 "If you end now, you will stop playing and will go to the "
                 "results menu.";
             if(game.curAreaData->type == AREA_TYPE_MISSION) {
@@ -599,18 +595,18 @@ void PauseMenu::confirmOrLeave() {
                     game.curAreaData->mission.goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
-                    confirmationExplanationText->text +=
+                    confirmationExplanation +=
                         " The goal of this mission is to end through here, so "
                         "make sure you've done everything you need first.";
                 } else {
-                    confirmationExplanationText->text +=
+                    confirmationExplanation +=
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
                         game.curAreaData->mission.gradingMode ==
                         MISSION_GRADING_MODE_POINTS
                     ) {
-                        confirmationExplanationText->text +=
+                        confirmationExplanation +=
                             " Note that since you fail the mission, you may "
                             "lose out on some points. You should check the "
                             "pause menu's mission page for more information.";
@@ -618,21 +614,35 @@ void PauseMenu::confirmOrLeave() {
                     
                 }
             }
-            confirmationExplanationText->text +=
+            confirmationExplanation +=
                 " Are you sure you want to end?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
-            confirmationExplanationText->text =
+            confirmationExplanation =
                 "If you quit, you will LOSE all of your progress and instantly "
                 "stop playing. Are you sure you want to quit?";
             break;
         }
         }
         
-        transitionGuis(
-            gui, confirmationGui, GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        game.modal.reset();
+        game.modal.title = "Are you sure?";
+        game.modal.prompt =
+            confirmationExplanation + "\n\n"
+            "(You can customize this confirmation question in the "
+            "options menu.)";
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Confirm",
+            .tooltip = "Yes, I'm sure.",
+            .color = game.config.guiColors.bad,
+            .onActivate = [this] (const Point&) {
+                startLeavingGameplay();
+            }
+        }
         );
+        game.modal.updateItems();
+        game.modal.open();
         
     } else {
         startLeavingGameplay();
@@ -767,8 +777,8 @@ void PauseMenu::draw() {
     radarGui.draw();
     statusGui.draw();
     missionGui.draw();
-    confirmationGui.draw();
     if(secondaryMenu) secondaryMenu->draw();
+    game.modal.draw();
 }
 
 
@@ -1550,71 +1560,76 @@ string PauseMenu::getMissionGoalStatus() {
  * @param ev Event to handle.
  */
 void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    radarView.updateMouseCursor(game.mouseCursor.winPos);
+    if(!game.modal.isActive()) {
     
-    gui.handleAllegroEvent(ev);
-    radarGui.handleAllegroEvent(ev);
-    statusGui.handleAllegroEvent(ev);
-    missionGui.handleAllegroEvent(ev);
-    confirmationGui.handleAllegroEvent(ev);
-    if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
-    
-    //Handle some radar logic.
-    DrawInfo radarDraw;
-    radarGui.getItemDrawInfo(radarItem, &radarDraw);
-    bool mouseInRadar =
-        radarGui.responsive &&
-        isPointInRectangle(
-            game.mouseCursor.winPos,
-            radarDraw.center, radarDraw.size
-        );
+        radarView.updateMouseCursor(game.mouseCursor.winPos);
         
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-        if(mouseInRadar) {
-            radarMouseDown = true;
-            radarMouseDownPoint = game.mouseCursor.winPos;
-        }
+        gui.handleAllegroEvent(ev);
+        radarGui.handleAllegroEvent(ev);
+        statusGui.handleAllegroEvent(ev);
+        missionGui.handleAllegroEvent(ev);
+        if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
         
-    } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        if(mouseInRadar && !radarMouseDragging) {
-            //Clicked somewhere.
-            radarConfirm();
-        }
-        
-        radarMouseDown = false;
-        radarMouseDragging = false;
-        
-    } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-        if(
-            radarMouseDown &&
-            (
-                fabs(game.mouseCursor.winPos.x - radarMouseDownPoint.x) >
-                4.0f ||
-                fabs(game.mouseCursor.winPos.y - radarMouseDownPoint.y) >
-                4.0f
-            )
-        ) {
-            //Consider the mouse down as part of a mouse drag, not a click.
-            radarMouseDragging = true;
-        }
-        
-        if(
-            radarMouseDragging &&
-            (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)
-        ) {
-            //Pan the radar around.
-            panRadar(Point(-ev.mouse.dx, -ev.mouse.dy));
-            
-        } else if(
-            mouseInRadar && ev.mouse.dz != 0.0f
-        ) {
-            //Zoom in or out, using the radar/mouse cursor as the anchor.
-            zoomRadarWithMouse(
-                ev.mouse.dz * 0.1f, radarDraw.center, radarDraw.size
+        //Handle some radar logic.
+        DrawInfo radarDraw;
+        radarGui.getItemDrawInfo(radarItem, &radarDraw);
+        bool mouseInRadar =
+            radarGui.responsive &&
+            isPointInRectangle(
+                game.mouseCursor.winPos,
+                radarDraw.center, radarDraw.size
             );
             
+        if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+            if(mouseInRadar) {
+                radarMouseDown = true;
+                radarMouseDownPoint = game.mouseCursor.winPos;
+            }
+            
+        } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+            if(mouseInRadar && !radarMouseDragging) {
+                //Clicked somewhere.
+                radarConfirm();
+            }
+            
+            radarMouseDown = false;
+            radarMouseDragging = false;
+            
+        } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+            if(
+                radarMouseDown &&
+                (
+                    fabs(game.mouseCursor.winPos.x - radarMouseDownPoint.x) >
+                    4.0f ||
+                    fabs(game.mouseCursor.winPos.y - radarMouseDownPoint.y) >
+                    4.0f
+                )
+            ) {
+                //Consider the mouse down as part of a mouse drag, not a click.
+                radarMouseDragging = true;
+            }
+            
+            if(
+                radarMouseDragging &&
+                (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)
+            ) {
+                //Pan the radar around.
+                panRadar(Point(-ev.mouse.dx, -ev.mouse.dy));
+                
+            } else if(
+                mouseInRadar && ev.mouse.dz != 0.0f
+            ) {
+                //Zoom in or out, using the radar/mouse cursor as the anchor.
+                zoomRadarWithMouse(
+                    ev.mouse.dz * 0.1f, radarDraw.center, radarDraw.size
+                );
+                
+            }
         }
+        
     }
+    
+    game.modal.handleAllegroEvent(ev);
 }
 
 
@@ -1632,161 +1647,92 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
     }
     if(closing) return;
     
-    bool handledByRadar = false;
+    if(!game.modal.isActive()) {
     
-    if(radarGui.responsive) {
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_RADAR: {
-            if(action.value >= 0.5f) {
-                game.audio.createUiSoundSource(
-                    game.sysContent.sndMenuBack, { .volume = 0.75f }
-                );
-                startClosing(&radarGui);
-                handledByRadar = true;
-            }
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_RIGHT: {
-            radarPan.right = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
-            radarPan.down = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_LEFT: {
-            radarPan.left = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_UP: {
-            radarPan.up = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {
-            radarZoom.up = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT: {
-            radarZoom.down = action.value;
-            handledByRadar = true;
-            break;
-        } case PLAYER_ACTION_TYPE_MENU_OK: {
-            radarConfirm();
-            handledByRadar = true;
-            break;
-        }
-        }
-    }
-    
-    if(!handledByRadar) {
-        //Only let the GUIs handle it if the radar didn't need it, otherwise
-        //we could see the GUI item focus move around or such because
-        //radar and menus actions share binds.
-        gui.handlePlayerAction(action);
-        radarGui.handlePlayerAction(action);
-        statusGui.handlePlayerAction(action);
-        missionGui.handlePlayerAction(action);
-        confirmationGui.handlePlayerAction(action);
-        if(secondaryMenu) secondaryMenu->handlePlayerAction(action);
+        bool handledByRadar = false;
         
-        switch(action.actionTypeId) {
-        case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
-        case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
-            if(action.value >= 0.5f) {
-                GuiManager* curGui = &gui;
-                if(radarGui.responsive) {
-                    curGui = &radarGui;
-                } else if(statusGui.responsive) {
-                    curGui = &statusGui;
-                } else if(missionGui.responsive) {
-                    curGui = &missionGui;
+        if(radarGui.responsive) {
+            switch(action.actionTypeId) {
+            case PLAYER_ACTION_TYPE_RADAR: {
+                if(action.value >= 0.5f) {
+                    game.audio.createUiSoundSource(
+                        game.sysContent.sndMenuBack, { .volume = 0.75f }
+                    );
+                    startClosing(&radarGui);
+                    handledByRadar = true;
                 }
-                
-                map<GuiManager*, ButtonGuiItem*>* m =
-                    action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
-                    &leftPageButtons :
-                    &rightPageButtons;
-                (*m)[curGui]->activate(Point());
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_RIGHT: {
+                radarPan.right = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
+                radarPan.down = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_LEFT: {
+                radarPan.left = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_UP: {
+                radarPan.up = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {
+                radarZoom.up = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT: {
+                radarZoom.down = action.value;
+                handledByRadar = true;
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_OK: {
+                radarConfirm();
+                handledByRadar = true;
+                break;
             }
-            break;
+            }
         }
-        }
-    }
-}
-
-
-/**
- * @brief Initializes the leaving confirmation page.
- */
-void PauseMenu::initConfirmationPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
         
-    //Menu items.
-    confirmationGui.registerCoords("cancel",           19, 83, 30, 10);
-    confirmationGui.registerCoords("cancel_input",      5, 87,  4,  4);
-    confirmationGui.registerCoords("confirm",          81, 83, 30, 10);
-    confirmationGui.registerCoords("explanation",      50, 40, 84, 20);
-    confirmationGui.registerCoords("options_reminder", 50, 69, 92, 10);
-    confirmationGui.registerCoords("tooltip",          50, 96, 96,  4);
-    confirmationGui.readDataFile(guiFile);
+        if(!handledByRadar) {
+            //Only let the GUIs handle it if the radar didn't need it, otherwise
+            //we could see the GUI item focus move around or such because
+            //radar and menus actions share binds.
+            gui.handlePlayerAction(action);
+            radarGui.handlePlayerAction(action);
+            statusGui.handlePlayerAction(action);
+            missionGui.handlePlayerAction(action);
+            if(secondaryMenu) secondaryMenu->handlePlayerAction(action);
+            
+            switch(action.actionTypeId) {
+            case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
+            case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
+                if(action.value >= 0.5f) {
+                    GuiManager* curGui = &gui;
+                    if(radarGui.responsive) {
+                        curGui = &radarGui;
+                    } else if(statusGui.responsive) {
+                        curGui = &statusGui;
+                    } else if(missionGui.responsive) {
+                        curGui = &missionGui;
+                    }
+                    
+                    map<GuiManager*, ButtonGuiItem*>* m =
+                        action.actionTypeId ==
+                        PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
+                        &leftPageButtons :
+                        &rightPageButtons;
+                    (*m)[curGui]->activate(Point());
+                }
+                break;
+            }
+            }
+        }
+        
+    }
     
-    //Cancel button.
-    confirmationGui.backItem =
-        new ButtonGuiItem(
-        "Cancel", game.sysContent.fntStandard, game.config.guiColors.back
-    );
-    confirmationGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            confirmationGui, gui, GUI_MANAGER_ANIM_CENTER_TO_UP,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
-    };
-    confirmationGui.backItem->onGetTooltip =
-    [] () { return "Return to the pause menu."; };
-    confirmationGui.addItem(confirmationGui.backItem, "cancel");
+    game.modal.handlePlayerAction(action);
     
-    //Cancel input icon.
-    guiAddBackInputIcon(&confirmationGui, "cancel_input");
-    
-    //Confirm button.
-    ButtonGuiItem* confirmButton =
-        new ButtonGuiItem(
-        "Confirm", game.sysContent.fntStandard, game.config.guiColors.bad
-    );
-    confirmButton->onActivate =
-    [this] (const Point&) {
-        startLeavingGameplay();
-    };
-    confirmButton->onGetTooltip =
-    [] () {
-        return "Yes, I'm sure.";
-    };
-    confirmationGui.addItem(confirmButton, "confirm");
-    
-    //Explanation text.
-    confirmationExplanationText =
-        new TextGuiItem("", game.sysContent.fntStandard);
-    confirmationExplanationText->lineWrap = true;
-    confirmationGui.addItem(confirmationExplanationText, "explanation");
-    
-    //Options reminder text.
-    TextGuiItem* optionsReminderText =
-        new TextGuiItem(
-        "You can disable this confirmation question in the options menu.",
-        game.sysContent.fntStandard
-    );
-    confirmationGui.addItem(optionsReminderText, "options_reminder");
-    
-    //Tooltip text.
-    TooltipGuiItem* tooltipText =
-        new TooltipGuiItem(&confirmationGui);
-    confirmationGui.addItem(tooltipText, "tooltip");
-    
-    //Finishing touches.
-    confirmationGui.setFocusedItem(confirmationGui.backItem, true);
-    confirmationGui.responsive = false;
-    confirmationGui.hideItems();
 }
 
 
@@ -2708,7 +2654,6 @@ void PauseMenu::tick(float deltaT) {
     radarGui.tick(deltaT);
     statusGui.tick(deltaT);
     missionGui.tick(deltaT);
-    confirmationGui.tick(deltaT);
     
     if(secondaryMenu) {
         if(secondaryMenu->loaded) {
@@ -2719,6 +2664,8 @@ void PauseMenu::tick(float deltaT) {
             secondaryMenu = nullptr;
         }
     }
+    
+    game.modal.tick(deltaT);
     
     //Tick the background.
     const float bgAlphaMultSpeed =

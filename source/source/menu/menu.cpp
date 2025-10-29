@@ -11,6 +11,7 @@
 #include "menu.h"
 
 #include "../game_state/gameplay/gameplay.h"
+#include "../core/game.h"
 
 
 /**
@@ -24,6 +25,8 @@ void Menu::draw() {
             guis[g]->draw();
         }
     }
+    
+    game.modal.draw();
 }
 
 
@@ -45,11 +48,15 @@ void Menu::enter() {
 void Menu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!loaded || !active) return;
     
-    for(size_t g = 0; g < guis.size(); g++) {
-        if(guis[g]) {
-            guis[g]->handleAllegroEvent(ev);
+    if(!game.modal.isActive()) {
+        for(size_t g = 0; g < guis.size(); g++) {
+            if(guis[g]) {
+                guis[g]->handleAllegroEvent(ev);
+            }
         }
     }
+    
+    game.modal.handleAllegroEvent(ev);
 }
 
 
@@ -63,11 +70,16 @@ bool Menu::handlePlayerAction(const Inpution::Action& action) {
     if(!loaded || !active) return false;
     
     bool handled = false;
-    for(size_t g = 0; g < guis.size(); g++) {
-        if(guis[g]) {
-            handled |= guis[g]->handlePlayerAction(action);
+    
+    if(!game.modal.isActive()) {
+        for(size_t g = 0; g < guis.size(); g++) {
+            if(guis[g]) {
+                handled |= guis[g]->handlePlayerAction(action);
+            }
         }
     }
+    
+    handled |= game.modal.handlePlayerAction(action);
     
     return handled;
 }
@@ -108,6 +120,9 @@ void Menu::tick(float deltaT) {
             guis[g]->tick(deltaT);
         }
     }
+    
+    //Tick the modal.
+    game.modal.tick(deltaT);
     
     //Tick the unload timer.
     if(unloadTimer != LARGE_FLOAT) {

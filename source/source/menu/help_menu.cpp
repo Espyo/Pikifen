@@ -99,7 +99,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     gui.registerCoords("controls",    22, 31, 36,  6);
     gui.registerCoords("pikmin",      22, 39, 36,  6);
     gui.registerCoords("objects",     22, 47, 36,  6);
-    gui.registerCoords("manual",      22, 54, 36,  4);
+    gui.registerCoords("manual",      22, 54, 28,  4);
     gui.registerCoords("category",    71,  5, 54,  6);
     gui.registerCoords("list",        69, 39, 50, 54);
     gui.registerCoords("list_scroll", 96, 39,  2, 54);
@@ -203,18 +203,34 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     };
     gui.addItem(objectsButton, "objects");
     
-    //Manual text.
-    BulletGuiItem* manualBullet =
-        new BulletGuiItem("More help...", game.sysContent.fntStandard);
-    manualBullet->onActivate =
+    //More help button.
+    ButtonGuiItem* manualButton =
+        new ButtonGuiItem("More help...", game.sysContent.fntStandard);
+    manualButton->onActivate =
     [] (const Point&) {
-        openManual("home.html");
+        game.modal.reset();
+        game.modal.title = "More help";
+        game.modal.prompt =
+            "If you need more help on any subject, the included manual "
+            "explains more aspects about gameplay, content making, and "
+            "the general workings of Pikifen.";
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Open manual",
+            .tooltip = "Open the manual in the home page.",
+            .onActivate = [] (const Point&) {
+                openManual("home.html");
+            }
+        }
+        );
+        game.modal.updateItems();
+        game.modal.open();
     };
-    manualBullet->onGetTooltip = [] () {
+    manualButton->onGetTooltip = [] () {
         return
-            "Click to open the manual (in the game's folder) for more help.";
+            "Information on how to get more help.";
     };
-    gui.addItem(manualBullet, "manual");
+    gui.addItem(manualButton, "manual");
     
     //Category text.
     categoryText =

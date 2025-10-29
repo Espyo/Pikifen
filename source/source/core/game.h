@@ -29,6 +29,7 @@
 #include "audio.h"
 #include "game_config.h"
 #include "misc_structs.h"
+#include "modal_gui.h"
 #include "options.h"
 #include "shaders.h"
 
@@ -184,6 +185,9 @@ public:
     //List of mob categories.
     CategoryManager mobCategories;
     
+    //Current modal dialog, if any.
+    ModalGuiManager modal;
+    
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
@@ -204,7 +208,7 @@ public:
     
     //Player actions in this frame.
     vector<Inpution::Action> playerActions;
-
+    
     //List of all possible inventory items.
     InventoryItemDatabase inventoryItems;
     

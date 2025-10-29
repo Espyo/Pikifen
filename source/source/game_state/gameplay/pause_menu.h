@@ -26,7 +26,6 @@ class PikminType;
 
 
 namespace PAUSE_MENU {
-extern const string CONFIRMATION_GUI_FILE_PATH;
 extern const float ENTRY_LOCKOUT_TIME;
 extern const float GO_HERE_CALC_INTERVAL;
 extern const string GUI_FILE_PATH;
@@ -118,9 +117,6 @@ struct PauseMenu {
     //GUI manager for the mission page.
     GuiManager missionGui;
     
-    //GUI manager for the leaving confirmation page.
-    GuiManager confirmationGui;
-    
     //Multiply the background alpha by this much.
     float bgAlphaMult = 0.0f;
     
@@ -149,9 +145,6 @@ private:
     
     //Is it currently closing?
     bool closing = false;
-    
-    //Confirmation page explanation text.
-    TextGuiItem* confirmationExplanationText = nullptr;
     
     //Radar GUI item.
     GuiItem* radarItem = nullptr;
@@ -291,7 +284,6 @@ private:
     void fillMissionFailList(ListGuiItem* list);
     void fillMissionGradingList(ListGuiItem* list);
     string getMissionGoalStatus();
-    void initConfirmationPage();
     void initRadarPage();
     void initMainPauseMenu();
     void initMissionPage();

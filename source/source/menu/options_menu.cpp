@@ -15,6 +15,7 @@
 #include "../core/game.h"
 #include "../core/load.h"
 #include "../core/misc_functions.h"
+#include "../util/os_utils.h"
 #include "../util/string_utils.h"
 #include "menu.h"
 
@@ -1442,7 +1443,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.registerCoords("audio",      50, 49, 65, 10);
     topGui.registerCoords("packs",      50, 61, 65, 10);
     topGui.registerCoords("misc",       50, 73, 60, 10);
-    topGui.registerCoords("advanced",   87, 86, 22,  8);
+    topGui.registerCoords("advanced",   87, 87, 22,  6);
     topGui.registerCoords("tooltip",    50, 96, 96,  4);
     topGui.readDataFile(guiFile);
     
@@ -1608,20 +1609,46 @@ void OptionsMenu::initGuiTopPage() {
     [] () { return "Change some miscellaneous gameplay and game options."; };
     topGui.addItem(miscButton, "misc");
     
-    //Advanced bullet point.
-    BulletGuiItem* advancedBullet =
-        new BulletGuiItem("Advanced...", game.sysContent.fntStandard);
-    advancedBullet->onActivate =
+    //Advanced button.
+    ButtonGuiItem* advancedButton =
+        new ButtonGuiItem("Advanced...", game.sysContent.fntStandard);
+    advancedButton->onActivate =
     [] (const Point&) {
-        openManual("options.html");
+        game.modal.reset();
+        game.modal.title = "Advanced options";
+        game.modal.prompt =
+            "There are more options than the ones available in the options "
+            "menu. You can also give some of the existing options entirely "
+            "custom values, like a custom window resolution. To access all "
+            "options, edit the options text file by hand. The way the file "
+            "works is described in the manual.";
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Open manual",
+            .tooltip = "Open the manual in the options page.",
+            .onActivate = [] (const Point&) {
+                openManual("options.html");
+            }
+        }
+        );
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Open options file",
+            .tooltip = "Open the file with all the options.",
+            .onActivate = [] (const Point&) {
+                openFileExplorer(FILE_PATHS_FROM_ROOT::OPTIONS);
+            }
+        }
+        );
+        game.modal.updateItems();
+        game.modal.open();
     };
-    advancedBullet->onGetTooltip =
+    advancedButton->onGetTooltip =
     [] () {
         return
-            "Click to open the manual (in the game's folder) for info "
-            "on advanced options.";
+            "Information on how advanced option management works.";
     };
-    topGui.addItem(advancedBullet, "advanced");
+    topGui.addItem(advancedButton, "advanced");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

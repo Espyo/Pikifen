@@ -1,0 +1,33 @@
+name=Modal dialog
+description=GUI for any sort of modal dialog that shows up to ask the player something.
+maker=Espyo
+version=1.0.0
+engine_version=1.0.0
+hardcoded_items{
+	title{
+		center=50.0000 9.0000
+		size=92.0000 10.0000
+		description=The modal dialog's title text.
+	}
+	prompt{
+		center=50.0000 50.0000
+		size=92.0000 32.0000
+		description=Whatever the modal dialog needs to tell the player.
+	}
+	button_area{
+		center=50.0000 83.0000
+		size=92.0000 10.0000
+		description=Area where the buttons go. Their horizontal position and width is dynamically adjusted based on how many there are.
+	}
+	back_input{
+		center=5.0000 87.0000
+		size=4.0000 4.0000
+		description=Icon of the input bound to the back button.
+	}
+	tooltip{
+		center=50.0000 96.0000
+		size=96.0000 4.0000
+		description=Tooltip of the focused menu item.
+	}
+}
+custom_items

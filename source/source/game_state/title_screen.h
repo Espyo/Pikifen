@@ -25,7 +25,6 @@ extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
 extern const string PLAY_GUI_FILE_NAME;
-extern const string TUTORIAL_GUI_FILE_NAME;
 }
 
 
@@ -65,9 +64,6 @@ public:
     //GUI for the make page.
     GuiManager makeGui;
     
-    //GUI for the tutorial question page.
-    GuiManager tutorialGui;
-    
     
     //--- Function declarations ---
     
@@ -81,7 +77,6 @@ private:
     void initGuiMainPage();
     void initGuiMakePage();
     void initGuiPlayPage();
-    void initGuiTutorialPage();
     
 };
 

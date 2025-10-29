@@ -38,9 +38,6 @@ const string MAKE_GUI_FILE_NAME = "main_menu_make";
 //Name of the play page GUI definition file.
 const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
-//Name of the tutorial question page GUI definition file.
-const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
-
 }
 
 
@@ -51,7 +48,6 @@ void MainMenu::load() {
     initGuiMainPage();
     initGuiPlayPage();
     initGuiMakePage();
-    initGuiTutorialPage();
     
     switch(pageToLoad) {
     case MAIN_MENU_PAGE_MAIN: {
@@ -73,7 +69,6 @@ void MainMenu::load() {
     guis.push_back(&mainGui);
     guis.push_back(&playGui);
     guis.push_back(&makeGui);
-    guis.push_back(&tutorialGui);
     
     Menu::load();
 }
@@ -272,12 +267,55 @@ void MainMenu::initGuiMainPage() {
     };
     playButton->onActivate =
     [this] (const Point&) {
-        transitionGuis(
-            mainGui,
-            game.statistics.areaEntries == 0 ? tutorialGui : playGui,
-            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
+        if(game.statistics.areaEntries == 0) {
+            game.modal.reset();
+            game.modal.title = "Tutorial";
+            game.modal.prompt =
+                "If you're new to Pikifen, it is recommended to play the "
+                "\"Tutorial Meadow\" mission first.\n\n"
+                "Do you want to play there now?";
+            game.modal.extraButtons.push_back(
+            ModalGuiManager::Button {
+                .text = "No",
+                .tooltip = "Go to the standard area selection menu.",
+                .onActivate = [this] (const Point&) {
+                    transitionGuis(
+                        mainGui, playGui,
+                        GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                        MAIN_MENU::HUD_MOVE_TIME
+                    );
+                }
+            }
+            );
+            game.modal.extraButtons.push_back(
+            ModalGuiManager::Button {
+                .text = "Yes",
+                .tooltip = "Play Tutorial Meadow now.",
+                .onActivate = [] (const Point&) {
+                    game.states.gameplay->pathOfAreaToLoad =
+                    game.content.areas.manifestToPath(
+                        ContentManifest(
+                            FOLDER_NAMES::TUTORIAL_AREA, "",
+                            FOLDER_NAMES::BASE_PACK
+                        ), AREA_TYPE_MISSION
+                    );
+                    game.fadeMgr.startFade(false, [] () {
+                        game.changeState(game.states.gameplay);
+                    });
+                }
+            }
+            );
+            game.modal.updateItems();
+            game.modal.open();
+            
+        } else {
+            transitionGuis(
+                mainGui, playGui,
+                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+            
+        }
     };
     playButton->onGetTooltip =
     [] () { return "Choose an area to play in."; };
@@ -661,20 +699,45 @@ void MainMenu::initGuiMakePage() {
     //Back input icon.
     guiAddBackInputIcon(&makeGui);
     
-    //More bullet point.
-    BulletGuiItem* moreBullet =
-        new BulletGuiItem("More...", game.sysContent.fntStandard);
-    moreBullet->onActivate =
+    //More button.
+    ButtonGuiItem* moreButton =
+        new ButtonGuiItem("Other...", game.sysContent.fntStandard);
+    moreButton->onActivate =
     [] (const Point&) {
-        openManual("making.html");
+        game.modal.reset();
+        game.modal.title = "Content making";
+        game.modal.prompt =
+            "You can edit most of the game's content freely. Some of it is "
+            "best done using the editors in the menu, but for other things "
+            "you will have to edit files by hand. The way different types of "
+            "content work vary, and are better explained in the manual.";
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Open manual",
+            .tooltip = "Open the manual in the content making page.",
+            .onActivate = [] (const Point&) {
+                openManual("making.html");
+            }
+        }
+        );
+        game.modal.extraButtons.push_back(
+        ModalGuiManager::Button {
+            .text = "Open game folder",
+            .tooltip = "Open the folder with the game's content.",
+            .onActivate = [] (const Point&) {
+                openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
+            }
+        }
+        );
+        game.modal.updateItems();
+        game.modal.open();
     };
-    moreBullet->onGetTooltip =
+    moreButton->onGetTooltip =
     [] () {
         return
-            "Click to open the manual (in the game's folder) for "
-            "more info on content making.";
+            "Information on how to make other content.";
     };
-    makeGui.addItem(moreBullet, "more");
+    makeGui.addItem(moreButton, "more");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
@@ -808,86 +871,6 @@ void MainMenu::initGuiPlayPage() {
     playGui.setFocusedItem(simpleButton, true);
     playGui.responsive = false;
     playGui.hideItems();
-}
-
-
-/**
- * @brief Loads the GUI elements for the main menu's tutorial question page.
- */
-void MainMenu::initGuiTutorialPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
-        
-    //Menu items.
-    tutorialGui.registerCoords("question", 50,     60, 60,  12.5);
-    tutorialGui.registerCoords("no",       26, 80.875, 40, 10.25);
-    tutorialGui.registerCoords("no_input",  7,     85,  4,     4);
-    tutorialGui.registerCoords("yes",      74,     81, 40,    10);
-    tutorialGui.registerCoords("tooltip",  50,     96, 96,     4);
-    tutorialGui.readDataFile(guiFile);
-    
-    //Question text.
-    TextGuiItem* questionText =
-        new TextGuiItem(
-        "If you're new to Pikifen, it is recommended to play the "
-        "\"Tutorial Meadow\" mission first.\n\n"
-        "Do you want to play there now?",
-        game.sysContent.fntStandard
-    );
-    questionText->lineWrap = true;
-    tutorialGui.addItem(questionText, "question");
-    
-    //No button.
-    tutorialGui.backItem =
-        new ButtonGuiItem("No", game.sysContent.fntStandard);
-    tutorialGui.backItem->onActivate =
-    [this] (const Point&) {
-        transitionGuis(
-            tutorialGui, playGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
-    };
-    tutorialGui.backItem->onGetTooltip =
-    [] () {
-        return
-            "Go to the standard area selection menu.";
-    };
-    tutorialGui.addItem(tutorialGui.backItem, "no");
-    
-    //No input icon.
-    guiAddBackInputIcon(&tutorialGui, "no_input");
-    
-    //Yes button.
-    ButtonGuiItem* yesButton =
-        new ButtonGuiItem("Yes", game.sysContent.fntStandard);
-    yesButton->onActivate =
-    [] (const Point&) {
-        game.states.gameplay->pathOfAreaToLoad =
-            game.content.areas.manifestToPath(
-                ContentManifest(
-                    FOLDER_NAMES::TUTORIAL_AREA, "", FOLDER_NAMES::BASE_PACK
-                ), AREA_TYPE_MISSION
-            );
-        game.fadeMgr.startFade(false, [] () {
-            game.changeState(game.states.gameplay);
-        });
-    };
-    yesButton->onGetTooltip =
-    [] () {
-        return
-            "Play Tutorial Meadow now.";
-    };
-    tutorialGui.addItem(yesButton, "yes");
-    
-    //Tooltip text.
-    TooltipGuiItem* tooltipText =
-        new TooltipGuiItem(&tutorialGui);
-    tutorialGui.addItem(tooltipText, "tooltip");
-    
-    //Finishing touches.
-    tutorialGui.setFocusedItem(yesButton, true);
-    tutorialGui.responsive = false;
-    tutorialGui.hideItems();
 }
 
 

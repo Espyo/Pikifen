@@ -756,7 +756,7 @@ public:
     bool destroy();
     
     
-private:
+protected:
 
     //--- Members ---
     
