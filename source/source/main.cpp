@@ -20,8 +20,6 @@
  * @return 0 if everything went well, or an error number otherwise.
  */
 int main(int argc, char** argv) {
-    game = Game();
-    
     int gameStartResult = game.start();
     if(gameStartResult != 0) {
         return gameStartResult;

@@ -1513,8 +1513,8 @@ void GameplayState::drawPauseMenu() {
     );
     drawBitmap(
         game.sysContent.bmpVignette,
-        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH),
-        0.0f, al_map_rgba(140, 182, 224, 44 * pauseMenu->bgAlphaMult)
+        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
+        multAlpha(game.config.guiColors.pauseVignette, pauseMenu->bgAlphaMult)
     );
     
     pauseMenu->draw();
