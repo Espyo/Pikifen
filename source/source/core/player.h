@@ -77,7 +77,7 @@ struct Player {
     
     //The HUD.
     Hud* hud = nullptr;
-
+    
     //Inventory.
     Inventory* inventory = nullptr;
     
@@ -110,6 +110,13 @@ struct Player {
     
     //Alpha of the enemy or treasure points to show next to the leader cursor.
     float leaderCursorMobPointsAlpha = 0.0f;
+    
+    //Index of the shortcut when showing a shortcut's usage on-screen.
+    //INVALID for none.
+    size_t inventoryShortcutDisplayIdx = INVALID;
+    
+    //Animation timer when showing a shortcut's usage on-screen.
+    float inventoryShortcutDisplayTimer = 0.0f;
     
     //Current notification, if any.
     Notification notification;

@@ -57,6 +57,9 @@ void GameplayState::doPlayerActionInventoryShortcut(
     player->inventory->useShortcut(
         game.options.controls.inventoryShortcuts[0][shortcutIdx]
     );
+    player->inventoryShortcutDisplayIdx = shortcutIdx;
+    player->inventoryShortcutDisplayTimer =
+        DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;
 }
 
 

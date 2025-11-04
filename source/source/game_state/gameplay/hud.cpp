@@ -141,6 +141,7 @@ Hud::Hud() :
     gui.registerCoords("mission_fail_2_req",         90.5, 18.5, 13,  5);
     gui.registerCoords("mission_fail_2_slash",         82, 18.5,  4,  5);
     gui.registerCoords("mission_fail_2_name",          82,   20, 30,  8);
+    gui.registerCoords("inventory_shortcut_usage",     50,   37, 12, 10);
     gui.readDataFile(hudFileNode);
     
     //Leader health and icons.
@@ -1226,6 +1227,50 @@ Hud::Hud() :
     ) {
         createMissionFailCondItems(false);
     }
+    
+    
+    //Inventory shortcut usage display.
+    GuiItem* inventoryShortcutUsage = new GuiItem();
+    inventoryShortcutUsage->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(player->inventoryShortcutDisplayIdx != INVALID) {
+            const string& itemIName =
+                game.options.controls.inventoryShortcuts[player->playerNr]
+                [player->inventoryShortcutDisplayIdx];
+            KeyframeInterpolator<float> alphaKI;
+            alphaKI.add(1.0f, 0.0f);
+            alphaKI.add(0.9f, 1.0f);
+            alphaKI.add(0.5f, 1.0f);
+            alphaKI.add(0.0f, 0.0f);
+            KeyframeInterpolator<float> yOffsetKI;
+            yOffsetKI.add(1.0f, 15.0f);
+            yOffsetKI.add(0.9f, 0.0f, EASE_METHOD_IN);
+            float timeRatio =
+                player->inventoryShortcutDisplayTimer /
+                DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;
+            float alphaMult = alphaKI.get(timeRatio);
+            InventoryItem* iPtr =
+                game.inventoryItems.getByIName(itemIName);
+            Point offset(0.0f, yOffsetKI.get(timeRatio));
+            
+            drawBitmapInBox(
+                iPtr->icon, draw.center + offset, draw.size, true, 0.0f,
+                multAlpha(draw.tint, alphaMult)
+            );
+            if(iPtr->onGetAmount) {
+                drawText(
+                    "x" + i2s(iPtr->onGetAmount(player)),
+                    game.sysContent.fntCounter,
+                    draw.center + offset + draw.size / 2.0f,
+                    Point(0.80f, 0.50f) * draw.size,
+                    multAlpha(draw.tint, alphaMult),
+                    ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
+                );
+            }
+        }
+    };
+    inventoryShortcutUsage->forceSquare = true;
+    gui.addItem(inventoryShortcutUsage, "inventory_shortcut_usage");
     
     
     DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");

@@ -44,9 +44,6 @@ Next tasks (roughly sorted most important first)
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
         An inventory system
-            Add shortcuts
-                When you use a shortcut, it should show the thing you used plus its current amount on-screen, for a moment
-                Some way to represent what item is bound to what shortcut within the inventory menu
             A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
                 When you select, should it set it as the aforementioned "standby" item, use it, or do both?
             Update the help menu
@@ -511,6 +508,7 @@ Misc things (so I don't forget)
         Cursor trail improvements
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
             If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
+        There should be some way to represent what item is bound to what shortcut within the inventory menu
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow

@@ -61,6 +61,9 @@ const float CAM_SHAKE_MAX_OFFSET = 30.0f;
 //Default health wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 
+//How long to display the most recently used inventory shortcut for.
+const float INVENTORY_SHORTCUT_DISPLAY_DURATION = 1.5f;
+
 //Alpha change speed for the enemy/treasure point value near the leader cursor,
 //in amount per second.
 const float LEADER_CURSOR_PTS_ALPHA_SPEED = 3.0f;

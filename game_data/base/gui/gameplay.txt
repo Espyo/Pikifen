@@ -274,6 +274,11 @@ hardcoded_items{
 		size=30.0000 8.0000
 		description=Same as "mission_fail_1_name", but for the secondary fail condition.
 	}
+	inventory_shortcut_usage{
+		center=50.0000 37.0000
+		size=12.0000 10.0000
+		description=Icon of the inventory item that the player has just used via a shortcut, if any.
+	}
 }
 bitmaps{
 	bubble=effects/bubble

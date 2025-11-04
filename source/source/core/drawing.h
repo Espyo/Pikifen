@@ -32,6 +32,7 @@ namespace DRAWING {
 extern const float CAM_SHAKE_DROPOFF_DIST;
 extern const float CAM_SHAKE_MAX_OFFSET;
 extern const float DEF_HEALTH_WHEEL_RADIUS;
+extern const float INVENTORY_SHORTCUT_DISPLAY_DURATION;
 extern const float LEADER_CURSOR_PTS_ALPHA_SPEED;
 extern const float LIQUID_WOBBLE_DELTA_X;
 extern const float LIQUID_WOBBLE_TIME_SCALE;
