@@ -141,9 +141,10 @@ void Inventory::initGui() {
         
     gui.registerCoords("list",        50, 50, 32, 28);
     gui.registerCoords("list_scroll", 50, 67, 32,  2);
-    gui.registerCoords("name",        57, 32, 18,  4);
-    gui.registerCoords("close",       40, 32, 12,  4);
+    gui.registerCoords("info",        57, 31, 18,  6);
+    gui.registerCoords("close",       40, 31, 12,  6);
     gui.registerCoords("close_input", 34, 34,  4,  4);
+    gui.registerCoords("extra_info",  57, 32, 18,  4);
     gui.readDataFile(guiFile);
     
     //Item list box.
@@ -157,14 +158,40 @@ void Inventory::initGui() {
     listScroll->listItem = itemList;
     gui.addItem(listScroll, "list_scroll");
     
-    //Item name text.
-    TooltipGuiItem* itemNameText =
-        new TooltipGuiItem(&gui);
-    gui.addItem(itemNameText, "name");
+    //Item info text.
+    itemInfoItem = new GuiItem();
+    itemInfoItem->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(focusedItemIdx == INVALID) return;
+        InventoryItemInstance* iiPtr = &items[focusedItemIdx];
+        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        string progressText;
+        if(iPtr->onGetExtraInfo) {
+            progressText = iPtr->onGetExtraInfo(player);
+        }
+        drawText(
+            iPtr->name, game.sysContent.fntStandard,
+            progressText.empty() ?
+            draw.center :
+            Point(draw.center.x, draw.center.y - draw.size.y / 4.0f),
+            Point(draw.size.x, draw.size.y * 0.50f),
+            game.config.guiColors.smallHeader
+        );
+        if(!progressText.empty()) {
+            drawText(
+                progressText, game.sysContent.fntStandard,
+                Point(draw.center.x, draw.center.y + draw.size.y / 4.0f),
+                Point(draw.size.x, draw.size.y * 0.40f)
+            );
+        }
+    };
+    gui.addItem(itemInfoItem, "info");
     
     //Close button.
     gui.backItem =
-        new ButtonGuiItem("Close", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+        "Close", game.sysContent.fntStandard, game.config.guiColors.back
+    );
     gui.backItem->onActivate =
     [this] (const Point&) {
         requestClose();
@@ -177,6 +204,10 @@ void Inventory::initGui() {
     guiAddBackInputIcon(&gui, "close_input");
     
     //Finishing touches.
+    gui.onFocusChanged =
+    [this] () {
+        focusedItemIdx = INVALID;
+    };
     gui.responsive = false;
     gui.hideItems();
 }
@@ -266,6 +297,7 @@ void Inventory::populateInventoryListGui() {
             tryUseItem(i);
         };
         button->onGetTooltip = [iPtr] () { return iPtr->name; };
+        button->onFocused = [this, i] () { focusedItemIdx = i; };
         itemList->addChild(button);
         gui.addItem(button);
         

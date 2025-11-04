@@ -875,6 +875,16 @@ void InventoryItemDatabase::init() {
                 LEADER_EV_SPRAY, (void*) &s
             );
         };
+        item.onGetExtraInfo =
+        [this, s] (Player * player) -> string {
+            size_t ingredientsNeeded =
+            game.config.misc.sprayOrder[s]->ingredientsNeeded;
+            if(ingredientsNeeded == 0) return "";
+            return
+            game.config.misc.sprayOrder[s]->ingredientName + ": " +
+            i2s(player->team->sprayStats[s].nrIngredients) + "/" +
+            i2s(ingredientsNeeded);
+        };
         items.push_back(item);
     }
     

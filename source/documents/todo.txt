@@ -2,12 +2,15 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Add a menu option to each editor that allows you to edit the file externally with a text editor
+    Make the analog-to-digital threshold customizable, as well as other magic numbers if any
+    Spatial navigation loop options per axis
+        Each GUI definition should say whether it allows looping in either direction
     
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Opening the Onion menu with a controller button isn't working, but is working with LMB
-        Maybe make it so each action type specifies whether it can "freeze", default off
+    Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     Smaller enemies go for Winged Pikmin in vain
 
@@ -41,11 +44,9 @@ Next tasks (roughly sorted most important first)
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
         An inventory system
-            Show how close you are to concocting a new spray
-            [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
-                But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
             Add shortcuts
                 When you use a shortcut, it should show the thing you used plus its current amount on-screen, for a moment
+                Some way to represent what item is bound to what shortcut within the inventory menu
             A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
                 When you select, should it set it as the aforementioned "standby" item, use it, or do both?
             Update the help menu
@@ -446,6 +447,7 @@ Next tasks (roughly sorted most important first)
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
                 Probably too much info shown at once
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
+            Show actions written in plain English? Like a "turn_to_target focused_mob" -> "Turn towards the focused mob."
         Loose content editor
             Basically just a frontend for editing hazards, liquids, misc. configs, mob types, spike damage types, sprays, and statuses
     

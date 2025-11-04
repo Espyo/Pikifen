@@ -363,6 +363,9 @@ struct InventoryItem {
     
     //Callback for when we need to use the item.
     std::function<void(Player*)> onUse = nullptr;
+    
+    //Callback for when we need to get some text representing extra information.
+    std::function<string(Player*)> onGetExtraInfo = nullptr;
 };
 
 

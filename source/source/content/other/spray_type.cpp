@@ -44,6 +44,7 @@ void SprayType::loadFromDataNode(
     sRS.set("distance_range", distanceRange);
     sRS.set("angle_range", angleRange);
     sRS.set("color", mainColor);
+    sRS.set("ingredient_name", ingredientName);
     sRS.set("ingredients_needed", ingredientsNeeded);
     sRS.set("buries_pikmin", buriesPikmin);
     

@@ -64,6 +64,12 @@ struct Inventory {
     //Inventory list GUI item.
     ListGuiItem* itemList = nullptr;
     
+    //Item information GUI item.
+    GuiItem* itemInfoItem = nullptr;
+    
+    //Index of the currently focused item. INVALID for none.
+    size_t focusedItemIdx = INVALID;
+    
     //Is it currently open?
     bool isOpen = false;
     

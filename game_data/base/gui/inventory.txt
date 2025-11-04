@@ -14,14 +14,14 @@ hardcoded_items{
 		size=32.0000 2.0000
 		description=Scrollbar for the list of items.
 	}
-	name{
-		center=57.0000 32.0000
-		size=18.0000 4.0000
-		description=Name of the currently focused item.
+	info{
+		center=57.0000 31.0000
+		size=18.0000 6.0000
+		description=Name of the currently focused item, along with spray ingredient progress if applicable.
 	}
 	close{
-		center=40.0000 32.0000
-		size=12.0000 4.0000
+		center=40.0000 31.0000
+		size=12.0000 6.0000
 		description=Button to close the inventory.
 	}
 	close_input{
@@ -31,9 +31,18 @@ hardcoded_items{
 	}
 }
 custom_items{
+	background_vignette{
+		center=50.0000 50.0000
+		size=100.0000 100.0000
+		description=A vignette around the entire screen.
+		type=bitmap
+		color=0 0 64 64
+		draw_before_hardcoded=true
+		bitmap=gui/vignette
+	}
 	background_rectangle{
-		center=50.0000 49.0000
-		size=36.0000 42.0000
+		center=50.0000 48.0000
+		size=36.0000 44.0000
 		description=Rectangle background for the inventory.
 		type=filled_rectangle
 		color=24 64 60 200
@@ -41,8 +50,8 @@ custom_items{
 		rectangle_rounding=20.0000
 	}
 	background_frame{
-		center=50.0000 49.0000
-		size=36.0000 42.0000
+		center=50.0000 48.0000
+		size=36.0000 44.0000
 		description=Frame behind the inventory.
 		type=9_slice
 		color=255 255 255

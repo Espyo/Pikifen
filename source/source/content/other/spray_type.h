@@ -60,6 +60,9 @@ public:
     //Bitmap representing this spray type.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     
+    //Name of the ingredients, in plural. Shown in the inventory.
+    string ingredientName = "Berries";
+    
     //How many ingredients are needed in order to concoct a new spray.
     //0 means there are no ingredients for this spray type.
     size_t ingredientsNeeded = 10;
