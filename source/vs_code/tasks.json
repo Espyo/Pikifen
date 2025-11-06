@@ -118,8 +118,7 @@
 				"$gcc"
 			],
 			"group": {
-				"kind": "build",
-				"isDefault": true
+				"kind": "build"
 			},
 			"presentation": {
 				"reveal": "always",

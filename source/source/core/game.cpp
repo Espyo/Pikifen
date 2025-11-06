@@ -605,6 +605,9 @@ void Game::shutdown() {
         curState->unload();
     }
     
+    modal.destroy();
+    inventoryItems.clear();
+    
     content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
