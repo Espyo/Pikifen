@@ -28,12 +28,15 @@
  * @param singularText Text to write if the amount is singular.
  * @param pluralText Text to write if the amount is plural.
  * If empty, it'll use the singular text plus an 's'.
+ * @param justWord If true, type just the word, not the number.
  * @return The string.
  */
 string amountStr(
-    int amount, const string& singularText, const string& pluralText
+    int amount, const string& singularText, const string& pluralText,
+    bool justWord
 ) {
-    string result = i2s(amount) + " ";
+    string result;
+    if(!justWord) result = i2s(amount) + " ";
     if(amount == 1) {
         result += singularText;
     } else if(pluralText.empty()) {

@@ -2191,6 +2191,8 @@ void AnimationEditor::processGuiPanelSprite() {
         if(ImGui::Button("Bitmap", modeButtonsSize)) {
             preSpriteBmpCamPos = game.editorsView.cam.targetPos;
             preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
+            matchingSpriteBmpPos = curSprite->bmpPos;
+            matchingSpriteBmpSize = curSprite->bmpSize;
             centerCameraOnSpriteBitmap(true);
             changeState(EDITOR_STATE_SPRITE_BITMAP);
         }
@@ -2387,6 +2389,19 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
         }
         
     }
+    
+    //Apply changes to all matching sprites button.
+    ImGui::Spacer();
+    if(ImGui::Button("Apply changes to all matching sprites")) {
+        applyChangesToAllMatchingSprites(
+            matchingSpriteBmpPos, matchingSpriteBmpSize,
+            curSprite->bmpPos, curSprite->bmpSize
+        );
+    }
+    setTooltip(
+        "Grabs all sprites that match the bitmap properties this\n"
+        "sprite had, and applies your changes to all of them."
+    );
     
     ImGui::EndChild();
 }

@@ -113,6 +113,38 @@ AnimationEditor::AnimationEditor() :
 
 
 /**
+ * @brief Goes through all sprites that match the given old bitmap properties,
+ * and gives them the new properties.
+ */
+void AnimationEditor::applyChangesToAllMatchingSprites(
+    const Point& oldPos, const Point& oldSize,
+    const Point& newPos, const Point& newSize
+) {
+    if(oldPos == newPos && oldSize == newSize) {
+        setStatus("No changes to make.");
+        return;
+    }
+    
+    size_t spritesAffected = 0;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        Sprite* sPtr = db.sprites[s];
+        if(sPtr->bmpPos == oldPos && sPtr->bmpSize == oldSize) {
+            sPtr->bmpPos = newPos;
+            sPtr->bmpSize = newSize;
+            sPtr->setBitmap(sPtr->bmpName, sPtr->bmpPos, sPtr->bmpSize);
+            changesMgr.markAsChanged();
+            spritesAffected++;
+        }
+    }
+    
+    setStatus(
+        "Changed " + i2s(spritesAffected) + " other " +
+        amountStr(spritesAffected, "sprite", "", true) + "."
+    );
+}
+
+
+/**
  * @brief Centers the camera on the sprite's parent bitmap, so the user
  * can choose what part of the bitmap they want to use for the sprite.
  *

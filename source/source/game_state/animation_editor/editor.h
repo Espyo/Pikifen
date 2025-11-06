@@ -183,6 +183,14 @@ private:
     //Before entering the sprite bitmap state, this was the camera zoom.
     float preSpriteBmpCamZoom = 1.0f;
     
+    //When entering the sprite bitmap state, this was the bitmap position
+    //of the current sprite.
+    Point matchingSpriteBmpPos;
+    
+    //When entering the sprite bitmap state, this was the bitmap size
+    //of the current sprite.
+    Point matchingSpriteBmpSize;
+    
     //Is side view on?
     bool sideView = false;
     
@@ -245,6 +253,10 @@ private:
     
     //--- Function declarations ---
     
+    void applyChangesToAllMatchingSprites(
+        const Point& oldPos, const Point& oldSize,
+        const Point& newPos, const Point& newSize
+    );
     void centerCameraOnSpriteBitmap(bool instant);
     void changeState(const EDITOR_STATE newState);
     void closeLoadDialog();

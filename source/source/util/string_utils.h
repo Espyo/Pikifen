@@ -41,7 +41,7 @@ enum TIME_TO_STR_FLAG {
 
 string amountStr(
     int amount, const string& singularText,
-    const string& pluralText = ""
+    const string& pluralText = "", bool justWord = false
 );
 string b2s(bool b);
 void duplicateString(const string& origStr, string& newStr);
