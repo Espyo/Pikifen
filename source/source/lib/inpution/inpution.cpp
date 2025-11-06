@@ -27,16 +27,16 @@ bool Manager::areBindRequirementsMet(const Bind& bind) const {
     if(!bind.requireModifiers) return true;
     
     for(const auto& m : modifiers) {
-        bool modIsDown = getInputSourceValue(m.second) > 0.5f;
+        bool modIsDown =
+            getInputSourceValue(m.second) >= options.digitalThreshold;
         bool needsDown =
             std::find(
                 bind.modifiers.begin(),
                 bind.modifiers.end(),
                 m.first
             ) != bind.modifiers.end();
-        if(needsDown != modIsDown) {
-            return false;
-        }
+
+        if(needsDown != modIsDown) return false;
     }
     
     return true;
@@ -88,7 +88,7 @@ float Manager::convertActionValue(int actionTypeId, float value) const {
             return value;
             break;
         } case ACTION_VALUE_TYPE_DIGITAL: {
-            return value >= 0.5f ? 1.0f : 0.0f;
+            return value >= options.digitalThreshold ? 1.0f : 0.0f;
             break;
         }
         }

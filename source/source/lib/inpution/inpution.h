@@ -251,6 +251,11 @@ struct Action {
 struct ManagerOptions {
 
     //--- Members ---
+
+    //Threshold for converting analog values to digital.
+    //If the value is equal to or higher than this, it will convert to 1.
+    //Otherwise to 0.
+    float digitalThreshold = 0.5f;
     
     //Minimum deadzone for sticks. 0 for none.
     float stickMinDeadzone = 0.0f;
