@@ -1136,6 +1136,7 @@ private:
     void newMobCmd(float inputValue);
     void newPathCmd(float inputValue);
     void newTreeShadowCmd(float inputValue);
+    void openExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);
     void pasteTextureCmd(float inputValue);
     void quickPlayCmd(float inputValue);

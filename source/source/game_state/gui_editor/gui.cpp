@@ -323,6 +323,16 @@ void GuiEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current GUI definition from your disk."
             );
+
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the file with the GUI definition's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
             
             //Separator item.
             ImGui::Separator();

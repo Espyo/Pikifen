@@ -473,6 +473,16 @@ void AreaEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current area from your disk."
             );
+
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the folder with the area's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
             
             //Quick play item.
             if(ImGui::MenuItem("Quick play", "Ctrl+P")) {

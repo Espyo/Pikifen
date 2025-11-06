@@ -14,6 +14,7 @@
 #include "../../core/load.h"
 #include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/os_utils.h"
 #include "../../util/string_utils.h"
 
 
@@ -543,6 +544,22 @@ void ParticleEditor::loadPartGenFile(
     setStatus(
         "Loaded generator \"" + manifest.internalName + "\" successfully."
     );
+}
+
+
+/**
+ * @brief Code to run for the open externally command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::openExternallyCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus("The generator doesn't exist on disk yet!", true);
+        return;
+    }
+    openFileExplorer(manifest.path);
 }
 
 

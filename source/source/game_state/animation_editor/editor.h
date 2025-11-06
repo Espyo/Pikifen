@@ -332,6 +332,7 @@ private:
     void leaderSilhouetteToggleCmd(float inputValue);
     void loadCmd(float inputValue);
     void mobRadiusToggleCmd(float inputValue);
+    void openExternallyCmd(float inputValue);
     void playPauseAnimCmd(float inputValue);
     void quickPlayCmd(float inputValue);
     void quitCmd(float inputValue);

@@ -162,6 +162,7 @@ private:
     void gridToggleCmd(float inputValue);
     void deletePartGenCmd(float inputValue);
     void loadCmd(float inputValue);
+    void openExternallyCmd(float inputValue);
     void quickPlayCmd(float inputValue);
     void quitCmd(float inputValue);
     void reloadCmd(float inputValue);

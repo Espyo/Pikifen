@@ -165,6 +165,7 @@ private:
     void reloadGuiDefs();
     void renameItem(GuiItemDef* item, const string& newName);
     void setToDefaults(GuiItemDef* item);
+    void openExternallyCmd(float inputValue);
     void quickPlayCmd(float inputValue);
     void saveCmd(float inputValue);
     void snapModeCmd(float inputValue);

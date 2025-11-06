@@ -18,6 +18,7 @@
 #include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/general_utils.h"
+#include "../../util/os_utils.h"
 #include "../../util/string_utils.h"
 
 
@@ -769,6 +770,22 @@ void AnimationEditor::mobRadiusToggleCmd(float inputValue) {
     mobRadiusVisible = !mobRadiusVisible;
     string stateStr = (mobRadiusVisible ? "Enabled" : "Disabled");
     setStatus(stateStr + " object radius visibility.");
+}
+
+
+/**
+ * @brief Code to run for the open externally command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::openExternallyCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus("The database doesn't exist on disk yet!", true);
+        return;
+    }
+    openFileExplorer(manifest.path);
 }
 
 

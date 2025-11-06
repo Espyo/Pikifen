@@ -19,6 +19,7 @@
 #include "../../util/allegro_utils.h"
 #include "../../util/container_utils.h"
 #include "../../util/general_utils.h"
+#include "../../util/os_utils.h"
 #include "../../util/string_utils.h"
 
 
@@ -2411,6 +2412,22 @@ void AreaEditor::newTreeShadowCmd(float inputValue) {
     clearSelection();
     setStatus("Use the canvas to place a new tree shadow.");
     subState = EDITOR_SUB_STATE_NEW_SHADOW;
+}
+
+
+/**
+ * @brief Code to run for the open externally command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::openExternallyCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus("The area doesn't exist on disk yet!", true);
+        return;
+    }
+    openFileExplorer(manifest.path);
 }
 
 
