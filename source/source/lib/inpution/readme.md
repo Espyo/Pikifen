@@ -38,34 +38,34 @@ int main() {
     myGame.setup();
     
     // 1. Teach Inpution what action types exist.
-    inpution.actionTypes[PLAYER_ACTION_MOVE_LEFT] = {
+    inpution.actionTypes[MyGame::PLAYER_ACTION_MOVE_LEFT] = {
         .id = PLAYER_ACTION_MOVE_LEFT,
     };
-    inpution.actionTypes[PLAYER_ACTION_MOVE_RIGHT] = {
+    inpution.actionTypes[MyGame::PLAYER_ACTION_MOVE_RIGHT] = {
         .id = PLAYER_ACTION_MOVE_RIGHT,
     };
-    inpution.actionTypes[PLAYER_ACTION_JUMP] = {
+    inpution.actionTypes[MyGame::PLAYER_ACTION_JUMP] = {
         .id = PLAYER_ACTION_JUMP,
-        .valueType = Inpution::ACTION_VALUE_TYPE_BOOLEAN,
+        .valueType = Inpution::ACTION_VALUE_TYPE_DIGITAL,
     };
 
     // 2. Teach Inpution what control binds the player has.
     inpution.binds.push_back({
-        .actionTypeId = PLAYER_ACTION_MOVE_LEFT,
+        .actionTypeId = MyGame::PLAYER_ACTION_MOVE_LEFT,
         .inputSource = {
             .type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG,
             .stickNr = MyGame::LEFT_STICK
         }
     });
     inpution.binds.push_back({
-        .actionTypeId = PLAYER_ACTION_MOVE_RIGHT,
+        .actionTypeId = MyGame::PLAYER_ACTION_MOVE_RIGHT,
         .inputSource = {
             .type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS,
             .stickNr = MyGame::LEFT_STICK
         }
     });
     inpution.binds.push_back({
-        .actionTypeId = PLAYER_ACTION_JUMP,
+        .actionTypeId = MyGame::PLAYER_ACTION_JUMP,
         .inputSource = {
             .type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON,
             .buttonNr = MyGame::A_BUTTON
@@ -109,13 +109,13 @@ int main() {
             std::vector<Inpution::Action> actions = inpution.newFrame(myGame.deltaT);
             for(const auto& a : actions) {
                 switch(a.actionTypeId) {
-                case PLAYER_ACTION_MOVE_LEFT:
+                case MyGame::PLAYER_ACTION_MOVE_LEFT:
                     character.horizontalSpeed = a.value * 100;
                     break;
-                case PLAYER_ACTION_MOVE_RIGHT:
+                case MyGame::PLAYER_ACTION_MOVE_RIGHT:
                     character.horizontalSpeed = -a.value * 100;
                     break;
-                case PLAYER_ACTION_JUMP:
+                case MyGame::PLAYER_ACTION_JUMP:
                     character.verticalSpeed = 100;
                     break;
                 }
@@ -130,7 +130,7 @@ int main() {
 ## Features
 
 * Many settings:
-  * Analog (range [0 - 1]) and digital (just 0 or 1) input values, and conversions between them (see `ActionType::valueType`).
+  * Analog (range [0 - 1]), digital (just 0 or 1), and "down-only" (just 1) input values, and conversions between them (see `ActionType::valueType`).
   * Auto-repeated action events as long as the input is held (see `ActionType::autoRepeat`).
   * Actions can be generated directly from input events, or from the total combined internal hardware state (see `ActionType::directEvents`).
   * Reinserting actions into the queue for a buffer effect (see `ActionType::reinsertionTTL`).
@@ -139,7 +139,7 @@ int main() {
 * Varied support:
   * Support for multiple controllers at once.
   * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
-  * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins).
+  * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins, typed characters).
   * Support for binds with modifiers (e.g. pressing Ctrl before pressing S) (see `Manager::modifiers`).
 * Specific features:
   * Game states logic (see `Manager::setGameState()`).
@@ -151,13 +151,13 @@ int main() {
 ## Key terms
 
 * **Action**:
-  * An abstract representation of a specific action in the game that the player performed. The exact real-life movement the player made for this is not relevant.
+  * An abstract representation of a specific action in the game that the player performed. The exact real-life movement the player made for this is not relevant. This is essentially an event.
   * e.g. Move aiming reticle right, with a strength of 0.75.
 * **Action type**:
   * A type of action the player can perform in the game.
   * e.g. Crouch (and un-crouch).
 * **Bind**:
-  * Information about a bind between an action type and an input source.
+  * Information about a bind between an action type and an input source. Typically the player can customize these in the options menu.
   * e.g. The bind between the A button on the controller and the jump action.
 * **Input**:
   * A specific movement made by a human being, on a specific source, on a specific hardware device.

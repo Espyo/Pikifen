@@ -2,17 +2,12 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Add a menu option to each editor that allows you to edit the file externally with a text editor
-    Make the analog-to-digital threshold customizable, as well as other magic numbers if any
-    Spatial navigation loop options per axis
-        Each GUI definition should say whether it allows looping in either direction
     
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
-    Smaller enemies go for Winged Pikmin in vain
 
     --- 1.1.0 ---
     Swarming jingle
@@ -459,6 +454,7 @@ Small tasks (for when I'm feeling lazy)
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
+        Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
     
     
 Misc things (so I don't forget)
@@ -535,6 +531,7 @@ Misc things (so I don't forget)
         Water depth (thanks ThyCheshireCat)
             Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
         Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
+        Smaller enemies try to chase Winged Pikmin in vain since they'll never reach them. Should they ignore them? How do the canon games do it?
         Objects falling from the sky
             When a leader approaches, when a Pikmin approaches, when carrying, etc.
         Game config parameters:
@@ -718,7 +715,7 @@ Misc things (so I don't forget)
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
     Base content to add
         Enemies
-            Add Helodity's Plasm Wraith
+            x Add Helodity's Plasm Wraith
             Burrowing Snagret
             Bulbears
             Scuttlebug?

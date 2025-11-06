@@ -35,7 +35,7 @@ bool Manager::areBindRequirementsMet(const Bind& bind) const {
                 bind.modifiers.end(),
                 m.first
             ) != bind.modifiers.end();
-
+            
         if(needsDown != modIsDown) return false;
     }
     
@@ -89,6 +89,9 @@ float Manager::convertActionValue(int actionTypeId, float value) const {
             break;
         } case ACTION_VALUE_TYPE_DIGITAL: {
             return value >= options.digitalThreshold ? 1.0f : 0.0f;
+            break;
+        } case ACTION_VALUE_TYPE_1_ONLY: {
+            return 1.0f;
             break;
         }
         }
@@ -175,19 +178,22 @@ void Manager::handleCleanInput(
     vector<int> actionTypesIds = getActionTypesFromInput(input);
     
     for(size_t a = 0; a < actionTypesIds.size(); a++) {
-        if(
-            !actionTypes[actionTypesIds[a]].directEvents &&
-            !forceDirectEvent
-        ) {
-            continue;
+        const ActionType& actionType = actionTypes[actionTypesIds[a]];
+        bool mustAddDirectly =
+            forceDirectEvent ||
+            actionType.directEvents ||
+            actionType.valueType == ACTION_VALUE_TYPE_1_ONLY;
+            
+        if(mustAddDirectly) {
+            //Add it to the action queue directly.
+            Action newAction;
+            newAction.actionTypeId = actionTypesIds[a];
+            newAction.value =
+                convertActionValue(actionTypesIds[a], input.value);
+            newAction.reinsertionLifetime =
+                actionTypes[actionTypesIds[a]].reinsertionTTL;
+            actionQueue.push_back(newAction);
         }
-        //Add it to the action queue directly.
-        Action newAction;
-        newAction.actionTypeId = actionTypesIds[a];
-        newAction.value = convertActionValue(actionTypesIds[a], input.value);
-        newAction.reinsertionLifetime =
-            actionTypes[actionTypesIds[a]].reinsertionTTL;
-        actionQueue.push_back(newAction);
     }
 }
 
@@ -267,6 +273,13 @@ bool Manager::handleInput(const Input& input) {
             singleInput.value = 1.0f;
             handleCleanInput(singleInput, true);
         }
+        
+    } else if(
+        input.source.type == INPUT_SOURCE_TYPE_KEYBOARD_CHAR
+    ) {
+        //Written characters are stateless. For instance, the user can insert
+        //the a-with-a-tilde character, but can't "release" that character.
+        handleCleanInput(input, true);
         
     } else {
         //Regular input.

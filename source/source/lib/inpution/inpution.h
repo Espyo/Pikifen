@@ -33,6 +33,9 @@ enum INPUT_SOURCE_TYPE {
     //Keyboard key.
     INPUT_SOURCE_TYPE_KEYBOARD_KEY,
     
+    //Written character via keyboard.
+    INPUT_SOURCE_TYPE_KEYBOARD_CHAR,
+    
     //Mouse button.
     INPUT_SOURCE_TYPE_MOUSE_BUTTON,
     
@@ -79,10 +82,16 @@ enum ACTION_FLAG {
 enum ACTION_VALUE_TYPE {
 
     //A float in the range [0 - 1].
+    //e.g. Forward movement amount.
     ACTION_VALUE_TYPE_ANALOG,
     
     //Either 0 or 1 (basically up or down).
+    //e.g. jump button pressed or released.
     ACTION_VALUE_TYPE_DIGITAL,
+    
+    //Just 1.
+    //e.g. Save command in the editor.
+    ACTION_VALUE_TYPE_1_ONLY,
     
 };
 
@@ -132,7 +141,7 @@ struct Input {
     //Hardware source.
     InputSource source;
     
-    //Value associated, if applicable.
+    //Value associated, if applicable, [0 - 1].
     float value = 0.0f;
     
 };
@@ -156,10 +165,11 @@ struct Bind {
     InputSource inputSource;
     
     //If true, the modifiers have to be respected.
+    //See Manager::modifiers.
     bool requireModifiers = false;
     
     //List of modifiers that need to be on for the bind to work.
-    //See Manager::modifiers;
+    //See Manager::modifiers.
     vector<int> modifiers;
     
 };
@@ -233,7 +243,7 @@ struct Action {
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
     
-    //Value associated. [0 - 1].
+    //Value associated, if applicable, [0 - 1].
     float value = 0.0f;
     
     //Flags. Use ACTION_FLAG.
@@ -251,7 +261,7 @@ struct Action {
 struct ManagerOptions {
 
     //--- Members ---
-
+    
     //Threshold for converting analog values to digital.
     //If the value is equal to or higher than this, it will convert to 1.
     //Otherwise to 0.
