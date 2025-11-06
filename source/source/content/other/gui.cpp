@@ -1365,7 +1365,9 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     sNInterface.settings.limitY1 = 0.0f;
     sNInterface.settings.limitX2 = game.winW;
     sNInterface.settings.limitY2 = game.winH;
-    sNInterface.settings.loop =
+    sNInterface.settings.loopX =
+        !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
+    sNInterface.settings.loopY =
         !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
     GuiItem* newFocusablePtr =
         (GuiItem*) sNInterface.navigate(direction, (void*) focusedItem);

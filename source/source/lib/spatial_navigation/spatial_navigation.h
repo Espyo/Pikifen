@@ -20,7 +20,7 @@
 namespace SpatNav {
 
 //Full circle, in radians.
-constexpr float TAU = (float) M_PI * 2.0f;
+constexpr const float TAU = (float) M_PI * 2.0f;
 
 
 //Cardinal directions.
@@ -84,8 +84,11 @@ public:
         //Bottom-right corner's Y coordinate.
         float limitY2 = 0.0f;
         
-        //Whether it loops around when it reaches a limit.
-        bool loop = true;
+        //Whether it loops around when it reaches a horizontal limit.
+        bool loopX = true;
+        
+        //Whether it loops around when it reaches a vertical limit.
+        bool loopY = true;
         
     } settings;
     
@@ -267,7 +270,8 @@ protected:
     );
     bool checkLoopRelativeCoordinates(
         DIRECTION direction, double* itemRelX,
-        double limitX1, double limitY1, double limitX2, double limitY2
+        double limitX1, double limitY1, double limitX2, double limitY2,
+        bool loopEvenIfInFront
     );
     void* doNavigation(
         DIRECTION direction, void* focusedItemId,
@@ -297,7 +301,7 @@ protected:
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
     );
     std::map<void*, ItemWithRelUnits> getItemsWithRelativeUnits(
-        DIRECTION direction, void* focusedItemId,
+        DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH
     );
     void getLimits(
@@ -306,7 +310,7 @@ protected:
     bool itemHasChildren(void* id) const;
     void loopItems(
         const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,
-        DIRECTION direction,
+        DIRECTION direction, void* focusedItemId,
         double limitX1, double limitY1, double limitX2, double limitY2,
         std::map<void*, Interface::ItemWithRelUnits>* outNonLoopedItems,
         std::map<void*, Interface::ItemWithRelUnits>* outLoopedItems
