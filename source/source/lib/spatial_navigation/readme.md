@@ -47,6 +47,7 @@ void myProgram::doSpatialNavigation(SpatNav::DIRECTION direction) {
 * Basic debugging logic.
 * Fairly light, and fairly simple.
 * Very agnostic, and with no external dependencies.
+* Unit tests.
 
 ## Research
 

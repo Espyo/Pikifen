@@ -23,6 +23,26 @@
                 }
             ],
             "preLaunchTask": "Build Pikifen - Debug"
+        },
+        {
+            "name": "Debug SpatNav's unit tests with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/source/source/lib/spatial_navigation/tests/spat_nav_tests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable GDB pretty-printing.",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build SpatNav's unit tests - Debug"
         }
     ]
 }

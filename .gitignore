@@ -14,6 +14,7 @@ allegro.log
 *.aps
 game_data/test/*
 user_data/*
+spat_nav_tests
 /pikifen
 /pikifen_shortcut
 /pikifen*.exe

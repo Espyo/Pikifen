@@ -103,6 +103,29 @@
 				"$gcc"
 			],
 			"detail": "Use make to clean the project, and then to compile in a debug build."
-		}
+		},
+		{
+			"type": "shell",
+			"label": "Build SpatNav's unit tests - Debug",
+			"command": "make",
+			"args": [
+				"debug",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/source/source/lib/spatial_navigation/tests"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"echo": true
+			},
+			"detail": "Use make to compile the spatial navigation library's unit tests."
+		},
 	]
 }
