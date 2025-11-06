@@ -384,7 +384,7 @@ void AnimationEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current animation database from your disk."
             );
-
+            
             //Open externally item.
             if(ImGui::MenuItem("Open externally")) {
                 openExternallyCmd(1.0f);
@@ -2125,7 +2125,7 @@ void AnimationEditor::processGuiPanelSprite() {
                 "Resize the current sprite."
             );
             
-            //Uses in animations selectable.
+            //Uses in animations menu.
             if(ImGui::BeginMenu("Uses in animations")) {
             
                 map<string, vector<size_t> > entries;
@@ -2527,6 +2527,110 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             );
         }
         
+    }
+    
+    //Misc. hitbox tools button.
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "hitboxMiscButton", editorIcons[EDITOR_ICON_TOOLS],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        ImGui::OpenPopup("hitboxMisc");
+    }
+    setTooltip("Miscellaneous hitbox tools.");
+    
+    //Hitbox misc. popup.
+    if(ImGui::BeginPopup("hitboxMisc")) {
+        if(escapeWasPressed) {
+            ImGui::CloseCurrentPopup();
+        }
+        
+        //Flip menu.
+        if(ImGui::BeginMenu("Flip")) {
+        
+            //Vertically selectable.
+            if(ImGui::Selectable("Vertically")) {
+                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+                    flipHitbox(&curSprite->hitboxes[h], false);
+                }
+                changesMgr.markAsChanged();
+                setStatus("Flipped all hitboxes vertically.");
+            }
+            setTooltip(
+                "Flip all hitboxes vertically along the origin."
+            );
+            
+            //Horizontally selectable.
+            if(ImGui::Selectable("Horizontally")) {
+                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+                    flipHitbox(&curSprite->hitboxes[h], true);
+                }
+                changesMgr.markAsChanged();
+                setStatus("Flipped all hitboxes horizontally.");
+            }
+            setTooltip(
+                "Flip all hitboxes horizontally along the origin."
+            );
+            
+            ImGui::EndMenu();
+        }
+        
+        //Make symmetrical menu.
+        if(ImGui::BeginMenu("Make symmetrical")) {
+        
+            //Vertically, based on top selectable.
+            if(ImGui::Selectable("Vertically, based on top")) {
+                makeHitboxesSymmetrical(false, true);
+            }
+            setTooltip(
+                "Arrange the bottom half so they match the top half.\n"
+                "See the previous menu for more information."
+            );
+            
+            //Vertically, based on bottom selectable.
+            if(ImGui::Selectable("Vertically, based on bottom")) {
+                makeHitboxesSymmetrical(false, false);
+            }
+            setTooltip(
+                "Arrange the top half so they match the bottom half.\n"
+                "See the previous menu for more information."
+            );
+            
+            //Horizontally, based on left selectable.
+            if(ImGui::Selectable("Horizontally, based on left")) {
+                makeHitboxesSymmetrical(true, true);
+            }
+            setTooltip(
+                "Arrange the right half so they match the left half.\n"
+                "See the previous menu for more information."
+            );
+            
+            //Horizontally, based on right selectable.
+            if(ImGui::Selectable("Horizontally, based on right")) {
+                makeHitboxesSymmetrical(true, false);
+            }
+            setTooltip(
+                "Arrange the left half so they match the right half.\n"
+                "See the previous menu for more information."
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        setTooltip(
+            "Arrange half of the hitboxes, making them match the other half,\n"
+            "so that all of them become symmetrical.\n"
+            "This uses either the vertical or horizontal line at the origin,\n"
+            "and hitboxes at the dead middle won't be affected.\n"
+            "Make sure the hitboxes you want to arrange are already close to\n"
+            "the positions they're meant to be in in order for this to work.\n"
+            "This also gives all of the arranged hitboxes the matchin radius,\n"
+            "knockback angle, height, etc."
+        );
+        
+        ImGui::EndPopup();
     }
     
     //Side view checkbox.

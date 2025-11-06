@@ -375,6 +375,28 @@ void AnimationEditor::drawCanvasDearImGuiCallback(
 
 
 /**
+ * @brief Flips a hitbox along the origin.
+ *
+ * @param hitbox Hitbox to flip.
+ * @param horizontal Whether it's a horizontal flip or a vertical one.
+ */
+void AnimationEditor::flipHitbox(Hitbox* hitbox, bool horizontal) {
+    Point knockbackCoords =
+        angleToCoordinates(hitbox->knockbackAngle, 1.0f);
+        
+    if(horizontal) {
+        hitbox->pos.x = -hitbox->pos.x;
+        knockbackCoords.x = -knockbackCoords.x;
+    } else {
+        hitbox->pos.y = -hitbox->pos.y;
+        knockbackCoords.y = -knockbackCoords.y;
+    }
+    
+    hitbox->knockbackAngle = getAngle(knockbackCoords);
+}
+
+
+/**
  * @brief Returns the time in the animation in which the mouse cursor is
  * currently located, if the mouse cursor is within the timeline.
  *
@@ -424,6 +446,40 @@ string AnimationEditor::getFileTooltip(const string& path) const {
             "File path: " + path + "\n"
             "Pack: " + game.content.packs.list[tempManif.pack].name;
     }
+}
+
+
+/**
+ * @brief Scans all other hitboxes and finds the one whose coordinates are
+ * the closest to the pivot, but mirrored in the specified direction.
+ *
+ * @param pivotPtr The hitbox to compare against.
+ * @param horizontal Whether it's horizontal or vertical.
+ * @return The matching hitbox, or nullptr if none is found.
+ */
+Hitbox* AnimationEditor::getMatchingSymmetricalHitbox(
+    Hitbox* pivotPtr, bool horizontal
+) {
+    Point mirrorPos = pivotPtr->pos;
+    if(horizontal) {
+        mirrorPos.x = -mirrorPos.x;
+    } else {
+        mirrorPos.y = -mirrorPos.y;
+    }
+    
+    Distance bestDist;
+    Hitbox* bestHitbox = nullptr;
+    for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+        Hitbox* hPtr = &curSprite->hitboxes[h];
+        if(hPtr == pivotPtr) continue;
+        Distance dist(hPtr->pos, mirrorPos);
+        if(!bestHitbox || dist < bestDist) {
+            bestHitbox = hPtr;
+            bestDist = dist;
+        }
+    }
+    
+    return bestHitbox;
 }
 
 
@@ -597,6 +653,35 @@ bool AnimationEditor::isCursorInTimeline() {
 
 
 /**
+ * @brief Returns whether a hitbox is located on a specific side of the origin.
+ *
+ * @param hPtr Hitbox to check.
+ * @param horizontal Whether the check is horizontal or vertical.
+ * @param topLeft Whether we're checking if the hitbox is on the top/left,
+ * or the bottom/right.
+ * @return Whether it's on that side.
+ */
+bool AnimationEditor::isHitboxOnSide(
+    Hitbox* hPtr, bool horizontal, bool topLeft
+) const {
+    if(horizontal) {
+        if(topLeft && hPtr->pos.x < 0.0f) {
+            return true;
+        } else if(!topLeft && hPtr->pos.x > 0.0f) {
+            return true;
+        }
+    } else {
+        if(topLeft && hPtr->pos.y < 0.0f) {
+            return true;
+        } else if(!topLeft && hPtr->pos.y > 0.0f) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Code to run for the leader silhouette toggle command.
  *
  * @param inputValue Value of the player input for the command.
@@ -755,6 +840,55 @@ void AnimationEditor::loadCmd(float inputValue) {
         "loading a database", "load",
         std::bind(&AnimationEditor::openLoadDialog, this),
         std::bind(&AnimationEditor::saveAnimDb, this)
+    );
+}
+
+
+/**
+ * @brief Arrange half of the hitboxes, making them match the other half,
+ * so that all of them become symmetrical.
+ *
+ * @param horizontal Whether it's horizontal or vertical.
+ * @param topLeft Whether it's based on the top/left, or the bottom/right.
+ */
+void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
+    if(curSprite->hitboxes.size() <= 1) {
+        setStatus("There aren't enough hitboxes to arrange!", true);
+        return;
+    }
+    
+    size_t nHitboxesArranged = 0;
+    
+    for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+        Hitbox* hPtr = &curSprite->hitboxes[h];
+        
+        if(!isHitboxOnSide(hPtr, horizontal, topLeft)) continue;
+        Hitbox* matchPtr = getMatchingSymmetricalHitbox(hPtr, horizontal);
+        
+        if(!matchPtr) continue;
+        if(isHitboxOnSide(matchPtr, horizontal, topLeft)) continue;
+        
+        matchPtr->canPikminLatch = hPtr->canPikminLatch;
+        matchPtr->hazard = hPtr->hazard;
+        matchPtr->height = hPtr->height;
+        matchPtr->knockback = hPtr->knockback;
+        matchPtr->knockbackAngle = hPtr->knockbackAngle;
+        matchPtr->knockbackOutward = hPtr->knockbackOutward;
+        matchPtr->pos = hPtr->pos;
+        matchPtr->radius = hPtr->radius;
+        matchPtr->type = hPtr->type;
+        matchPtr->value = hPtr->value;
+        matchPtr->witherChance = hPtr->witherChance;
+        matchPtr->z = hPtr->z;
+        
+        flipHitbox(matchPtr, horizontal);
+        
+        nHitboxesArranged++;
+    }
+    
+    changesMgr.markAsChanged();
+    setStatus(
+        "Arranged " + amountStr(nHitboxesArranged, "hitbox", "hitboxes") + "."
     );
 }
 

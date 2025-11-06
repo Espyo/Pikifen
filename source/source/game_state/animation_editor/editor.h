@@ -263,8 +263,10 @@ private:
     void closeOptionsDialog();
     void createAnimDb(const string& path);
     void deleteCurrentAnimDb();
+    void flipHitbox(Hitbox* hitbox, bool horizontal);
     float getCursorTimelineTime();
     string getFileTooltip(const string& path) const;
+    Hitbox* getMatchingSymmetricalHitbox(Hitbox* pivotPtr, bool horizontal);
     void handleLmbDragInTimeline();
     void importAnimationData(const string& name);
     void importSpriteBmpData(const string& name);
@@ -272,9 +274,13 @@ private:
     void importSpriteTopData(const string& name);
     void importSpriteTransformationData(const string& name);
     bool isCursorInTimeline();
+    bool isHitboxOnSide(
+        Hitbox* hPtr, bool horizontal, bool topLeft
+    ) const;
     void loadAnimDbFile(
         const string& path, bool shouldUpdateHistory
     );
+    void makeHitboxesSymmetrical(bool horizontal, bool topLeft);
     void pickAnimDbFile(
         const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
