@@ -54,123 +54,151 @@ struct SpatNavTestInterface {
     std::vector<SpatNavTestItem> items;
 
     //Total width.
-    float width;
+    float width = 0.0f;
 
     //Total height.
-    float height;
+    float height = 0.0f;
+
+    //List of existing parents and what their item numbers are.
+    std::vector<size_t> parentNrs;
+
+    //Children items definitions, for each parent in order.
+    std::vector<SpatNavTestInterface*> children;
 
 
-    //--- Function definitions ---
+    //--- Function declarations ---
 
-    /**
-     * @brief Constructs a new test interface object.
-     */
-    SpatNavTestInterface() { }
+    SpatNavTestInterface();
+    SpatNavTestInterface(
+        const std::string& s,
+        std::vector<SpatNavTestInterface*> children = {}
+    );
+    void fromString(const std::string& s);
 
-    /**
-     * @brief Constructs a new test interface object, and reads its data
-     * from a string with ASCII art representing it.
-     * 
-     * @param s The string.
-     */
-    SpatNavTestInterface(const std::string& s) {
-        fromString(s);
-    }
+};
 
-    /**
-     * @brief Reads data from a string with ASCII art representing an interface.
-     * 
-     * @param s The string.
-     */
-    void fromString(const std::string& s) {
-        bool inItem = false;
-        size_t itemStartX = 0;
-        size_t caretX = 0;
-        size_t caretY = 0;
 
-        const auto finishItem =
-        [this, &inItem, &itemStartX, &caretX, &caretY] () {
-            if(!inItem) return;
-            //Finish a new item.
-            bool updated = false;
-            for(size_t i = 0; i < items.size(); i++) {
-                if(
-                    items[i].startX == itemStartX &&
-                    items[i].endX == caretX &&
-                    items[i].endY == caretY
-                ) {
-                    //Update the one from the previous line(s).
-                    items[i].endY = caretY + 1.0f;
-                    updated = true;
-                    break;
-                }
+/**
+ * @brief Constructs a new test interface object.
+ */
+SpatNavTestInterface::SpatNavTestInterface() { }
+
+
+/**
+ * @brief Constructs a new test interface object, and reads its data
+ * from a string with ASCII art representing it.
+ * 
+ * @param s The string.
+ * @param children If the interface contains parent items, specify their
+ * children here. Each entry in the vector corresponds to one parent.
+ */
+SpatNavTestInterface::SpatNavTestInterface(
+    const std::string& s,
+    std::vector<SpatNavTestInterface*> children
+) {
+    fromString(s);
+    this->children = children;
+}
+
+
+/**
+ * @brief Reads data from a string with ASCII art representing an interface.
+ * 
+ * @param s The string.
+ */
+void SpatNavTestInterface::fromString(const std::string& s) {
+    bool inItem = false;
+    bool itemIsParent = false;
+    size_t itemStartX = 0;
+    size_t caretX = 0;
+    size_t caretY = 0;
+
+    const auto finishItem =
+    [this, &inItem, &itemIsParent, &itemStartX, &caretX, &caretY] () {
+        if(!inItem) return;
+        //Finish a new item.
+        bool updated = false;
+        for(size_t i = 0; i < items.size(); i++) {
+            if(
+                items[i].startX == itemStartX &&
+                items[i].endX == caretX &&
+                items[i].endY == caretY
+            ) {
+                //Update the one from the previous line(s).
+                items[i].endY = caretY + 1.0f;
+                updated = true;
+                break;
             }
-            if(!updated) {
-                //Save a new one.
-                items.push_back(
-                    SpatNavTestItem {
-                        .startX = (float) itemStartX,
-                        .endX = (float) caretX,
-                        .startY = (float) caretY,
-                        .endY = (float) caretY + 1.0f,
-                    }
-                );
-            }
-            inItem = false;
-        };
-
-        const auto finishLine =
-        [this, &caretX, &caretY] () {
-            width = std::max(width, (float) caretX);
-            caretX = 0;
-            caretY++;
-        };
-
-        for(size_t c = 0; c < s.size(); c++) {
-            bool isItem = s[c] == '#';
-            bool isLineBreak = s[c] == '\n';
-
-            if(isItem) {
-                if(!inItem) {
-                    //Start a new item.
-                    itemStartX = caretX;
-                    inItem = true;
+        }
+        if(!updated) {
+            //Save a new one.
+            items.push_back(
+                SpatNavTestItem {
+                    .startX = (float) itemStartX,
+                    .endX = (float) caretX,
+                    .startY = (float) caretY,
+                    .endY = (float) caretY + 1.0f,
                 }
-            } else {
-                if(inItem) {
-                    finishItem();
-                }
-            }
+            );
+        }
+        if(itemIsParent) {
+            parentNrs.push_back(items.size());
+        }
+        inItem = false;
+        itemIsParent = false;
+    };
 
-            if(isLineBreak) {
-                finishLine();
-            } else {
-                caretX++;
+    const auto finishLine =
+    [this, &caretX, &caretY] () {
+        width = std::max(width, (float) caretX);
+        caretX = 0;
+        caretY++;
+    };
+
+    for(size_t c = 0; c < s.size(); c++) {
+        bool isItem = s[c] == '#' || s[c] == 'P';
+        bool isLineBreak = s[c] == '\n';
+
+        if(isItem) {
+            if(!inItem) {
+                //Start a new item.
+                itemStartX = caretX;
+                inItem = true;
+                itemIsParent = (s[c] == 'P');
+            }
+        } else {
+            if(inItem) {
+                finishItem();
             }
         }
 
-        finishItem();
-        finishLine();
-        height = caretY;
+        if(isLineBreak) {
+            finishLine();
+        } else {
+            caretX++;
+        }
     }
 
-};
+    finishItem();
+    finishLine();
+    height = caretY;
+}
 
 
 /**
  * @brief Performs a generic test. Aborts if it fails.
  * 
  * @param testDescription Description of the test is doing.
- * @param intendedNr Intended number to compare.
+ * @param expectedNr Expected number to compare.
  * @param actualNr Actual number.
  * @param extraInfo Extra information to display if the test fails.
  */
 void test(
     const std::string& testDescription,
-    size_t intendedNr, size_t actualNr,
+    size_t expectedNr, size_t actualNr,
     const std::string& extraInfo = ""
 ) {
-    if(actualNr != intendedNr) {
+    if(actualNr != expectedNr) {
         printf(
             "%sTest #%u failed!%s\n",
             COLOR_RED, (unsigned int) nTestsExecuted + 1, COLOR_RESET
@@ -181,7 +209,7 @@ void test(
         );
         printf(
             "  Expected %s%u%s, got %s%u%s.\n",
-            COLOR_BOLD, (unsigned int) intendedNr, COLOR_RESET,
+            COLOR_BOLD, (unsigned int) expectedNr, COLOR_RESET,
             COLOR_BOLD, (unsigned int) actualNr, COLOR_RESET
         );
         if(!extraInfo.empty()) {
@@ -201,7 +229,7 @@ void test(
  * @param interface Interface to run the test on.
  * @param direction Direction of navigation.
  * @param focusedItemNr Number of the currently focused item (starts at 1).
- * @param intendedItemNr Index of the item it should land on (starts at 1).
+ * @param expectedItemNr Index of the item it should land on (starts at 1).
  * @param heuristics Heuristics to use, if different from the default.
  * @param settings Settings to use, if different from the default.
  * If the limits aren't properly set (i.e. the defaults), they will be
@@ -210,7 +238,7 @@ void test(
 void testNav(
     const std::string& testDescription,
     SpatNavTestInterface& interface, SpatNav::DIRECTION direction,
-    size_t focusedItemNr, size_t intendedItemNr,
+    size_t focusedItemNr, size_t expectedItemNr,
     const SpatNav::Interface::Heuristics& heuristics = {},
     const SpatNav::Interface::Settings& settings = {}
 ) {
@@ -219,26 +247,44 @@ void testNav(
     spatNavManager.settings = settings;
 
     if(settings.limitX2 == 0.0f) {
-        spatNavManager.settings.limitX1 = 0.0f;
-        spatNavManager.settings.limitX2 = interface.width;
-        spatNavManager.settings.limitY1 = 0.0f;
-        spatNavManager.settings.limitY2 = interface.height;
+        spatNavManager.settings.limitX1 = -0.001f;
+        spatNavManager.settings.limitX2 = interface.width + 0.001f;
+        spatNavManager.settings.limitY1 = -0.001f;
+        spatNavManager.settings.limitY2 = interface.height + 0.001f;
     }
 
+    size_t itemNr = 1;
     for(size_t i = 0; i < interface.items.size(); i++) {
         spatNavManager.addItem(
-            (void*) (i + 1),
+            (void*) (itemNr),
             (interface.items[i].startX + interface.items[i].endX) / 2.0f,
             (interface.items[i].startY + interface.items[i].endY) / 2.0f,
             interface.items[i].endX - interface.items[i].startX,
             interface.items[i].endY - interface.items[i].startY
         );
+        itemNr++;
+    }
+    for(size_t ci = 0; ci < interface.children.size(); ci++) {
+        SpatNavTestInterface* childIf = interface.children[ci];
+        for(size_t i = 0; i < childIf->items.size(); i++) {
+            spatNavManager.addItem(
+                (void*) (itemNr),
+                (childIf->items[i].startX + childIf->items[i].endX) / 2.0f,
+                (childIf->items[i].startY + childIf->items[i].endY) / 2.0f,
+                childIf->items[i].endX - childIf->items[i].startX,
+                childIf->items[i].endY - childIf->items[i].startY
+            );
+            spatNavManager.setParentItem(
+                (void*) itemNr, (void*) interface.parentNrs[ci]
+            );
+            itemNr++;
+        }
     }
 
     size_t targetItemNr =
         (size_t) spatNavManager.navigate(direction, (void*) focusedItemNr);
     
-    test(testDescription, intendedItemNr, targetItemNr);
+    test(testDescription, expectedItemNr, targetItemNr);
 }
 
 
@@ -256,19 +302,27 @@ using SpatNav::DIRECTION_UP;
  * @return 0.
  */
 int main(int argc, char** argv) {
-    //Startup.
+    //--- Startup ---
     printf(
         "%s====== SPATIAL NAVIGATION UNIT TESTS ======%s\n",
         COLOR_BOLD, COLOR_RESET
     );
     printf("Testing...\n");
 
-    //Setup some scenarios.
+    //--- Setup some scenarios ---
     SpatNavTestInterface
         ifBasic2By2(
             "# #\n"
             "   \n"
             "# #"
+        );
+    SpatNavTestInterface
+        ifBasic2By2WithSpace(
+            "     \n"
+            " # # \n"
+            "     \n"
+            " # # \n"
+            "     "
         );
     SpatNavTestInterface
         ifBasic3By3(
@@ -280,20 +334,81 @@ int main(int argc, char** argv) {
         );
     SpatNavTestInterface
         ifListVertical5(
+            "#\n"
+            " \n"
+            "#\n"
+            " \n"
+            "#\n"
+            " \n"
+            "#\n"
+            " \n"
+            "#\n"
+        );
+    SpatNavTestInterface
+        ifDistances(
+            "  #\n"
+            "#  \n"
+            "   \n"
+            "  #"
+        );
+    SpatNavTestInterface
+        ifDistances2(
+            "  #\n"
+            "   \n"
+            "#  \n"
+            "   \n"
+            "  #"
+        );
+    SpatNavTestInterface
+        ifLoopPass(
+            "# #  \n"
             "     \n"
-            "  #  \n"
             "     \n"
-            "  #  \n"
             "     \n"
-            "  #  \n"
-            "     \n"
-            "  #  \n"
-            "     \n"
-            "  #  \n"
-            "     "
+            "    #"
+        );
+    SpatNavTestInterface
+        ifBasicParentChild1(
+            " \n"
+            " \n"
+            "#\n"
+            " \n"
+            "#\n"
+        );
+    SpatNavTestInterface
+        ifBasicParentTop(
+            "#\n"
+            " \n"
+            "P\n"
+            "P\n"
+            "P\n",
+            { &ifBasicParentChild1 }
+        );
+    SpatNavTestInterface
+        ifListParentChild1(
+            "#\n"
+            " \n"
+            "#\n"
+            " \n"
+            "#\n"
+        );
+    SpatNavTestInterface
+        ifListParentTop(
+            "#\n"
+            " \n"
+            "P\n"
+            "P\n"
+            "P\n",
+            { &ifListParentChild1 }
+        );
+    SpatNavTestInterface
+        ifEmpty;
+    SpatNavTestInterface
+        ifJust1(
+            "#"
         );
     
-    //Do the tests.
+    //--- Do the tests ---
 
     //Basic navigation.
     testNav(
@@ -329,10 +444,98 @@ int main(int argc, char** argv) {
         ifBasic3By3, DIRECTION_UP, 7, 4
     );
 
-    //TODO distance calculation methods
-    //TODO looping enabled/disabled
-    //TODO all heuristics
-    //TODO parent items
+    //Looping tests.
+    testNav(
+        "Test that basic looping to the right works.",
+        ifBasic3By3, DIRECTION_RIGHT, 3, 1
+    );
+    testNav(
+        "Test that basic looping to the left works.",
+        ifBasic3By3, DIRECTION_LEFT, 1, 3
+    );
+    testNav(
+        "Test that basic looping down works.",
+        ifBasic3By3, DIRECTION_DOWN, 7, 1
+    );
+    testNav(
+        "Test that basic looping up works.",
+        ifBasic3By3, DIRECTION_UP, 1, 7
+    );
+    testNav(
+        "Test that looping to the right won't be done if disabled.",
+        ifBasic3By3, DIRECTION_RIGHT, 3, 0, {},
+        { .loopX = false, .loopY = false }
+    );
+    testNav(
+        "Test that looping to the left won't be done if disabled.",
+        ifBasic3By3, DIRECTION_LEFT, 1, 0, {},
+        { .loopX = false, .loopY = false }
+    );
+    testNav(
+        "Test that looping down won't be done if disabled.",
+        ifBasic3By3, DIRECTION_DOWN, 7, 0, {},
+        { .loopX = false, .loopY = false }
+    );
+    testNav(
+        "Test that looping up won't be done if disabled.",
+        ifBasic3By3, DIRECTION_UP, 1, 0, {},
+        { .loopX = false, .loopY = false }
+    );
+
+    //Distance calculation methods.
+    testNav(
+        "Test that Euclidean distance checks pick the best option.",
+        ifDistances, DIRECTION_UP, 3, 2,
+        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_EUCLIDEAN }
+    );
+    testNav(
+        "Test that taxicab distance checks pick the best option.",
+        ifDistances, DIRECTION_UP, 3, 1,
+        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_TAXICAB }
+    );
+    testNav(
+        "Test that taxicab 2 distance checks pick the best option.",
+        ifDistances2, DIRECTION_UP, 3, 1,
+        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_TAXICAB_2 }
+    );
+
+    //Single loop pass.
+    testNav(
+        "Test that the correct item is picked with single-loop pass on.",
+        ifLoopPass, DIRECTION_RIGHT, 2, 1,
+        { .singleLoopPass = true }
+    );
+    testNav(
+        "Test that the correct item is picked with single-loop pass off.",
+        ifLoopPass, DIRECTION_RIGHT, 2, 3,
+        { .singleLoopPass = false }
+    );
+
+    //Parents.
+    testNav(
+        "Test that simple navigation with children works, 1.",
+        ifBasicParentTop, DIRECTION_DOWN, 1, 3
+    );
+    testNav(
+        "Test that simple navigation with children works, 2.",
+        ifBasicParentTop, DIRECTION_DOWN, 3, 4
+    );
+    testNav(
+        "Test that simple navigation with children works, 3.",
+        ifBasicParentTop, DIRECTION_DOWN, 4, 1
+    );
+    testNav(
+        "Test that simple navigation with overflowing children works, 1.",
+        ifListParentTop, DIRECTION_DOWN, 1, 3
+    );
+    testNav(
+        "Test that simple navigation with overflowing children works, 2.",
+        ifListParentTop, DIRECTION_DOWN, 4, 5
+    );
+    testNav(
+        "Test that simple navigation with overflowing children works, 3.",
+        ifListParentTop, DIRECTION_DOWN, 5, 1
+    );
 
     //Misc.
     testNav(
@@ -340,10 +543,24 @@ int main(int argc, char** argv) {
         "with looping, doesn't select an item above or below.",
         ifListVertical5, DIRECTION_RIGHT, 3, 0
     );
+    testNav(
+        "Test that an empty interface returns nullptr.",
+        ifEmpty, DIRECTION_RIGHT, 1, 0
+    );
+    testNav(
+        "Test that an interface with one item returns nullptr.",
+        ifJust1, DIRECTION_RIGHT, 1, 0
+    );
+    testNav(
+        "Test that an interface with no valid starting item returns nullptr.",
+        ifBasic2By2WithSpace, DIRECTION_RIGHT, 0, 1
+    );
 
-    //Finish.
+    //--- Finish ---
     printf(
         "%sAll %u tests succeeded!%s\n",
         COLOR_GREEN, (unsigned int) nTestsExecuted, COLOR_RESET
     );
+
+    return 0;
 }

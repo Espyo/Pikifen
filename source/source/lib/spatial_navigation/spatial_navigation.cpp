@@ -62,7 +62,7 @@ bool Interface::addItem(void* id, float x, float y, float w, float h) {
  */
 bool Interface::checkHeuristicsPass(
     double itemRelX, double itemRelY, double itemRelW, double itemRelH
-) {
+) const {
     if(
         heuristics.minBlindspotAngle >= 0.0f ||
         heuristics.maxBlindspotAngle >= 0.0f
@@ -171,8 +171,11 @@ void* Interface::doNavigation(
             direction, focusX, focusY, focusW, focusH
         );
         
-    double limitX1, limitY1, limitX2, limitY2;
-    getLimits(&limitX1, &limitY1, &limitX2, &limitY2);
+    double limitX1 = settings.limitX1;
+    double limitY1 = settings.limitY1;
+    double limitX2 = settings.limitX2;
+    double limitY2 = settings.limitY2;
+    getItemLimitsFlattened(&limitX1, &limitY1, &limitX2, &limitY2);
     
     std::map<void*, ItemWithRelUnits> nonLoopedItems;
     std::map<void*, ItemWithRelUnits> loopedItems;
@@ -215,18 +218,14 @@ void* Interface::doNavigation(
  * This only affects children items that are completely outside, not partially.
  */
 void Interface::flattenItems() {
-    if(
-        settings.limitX1 == settings.limitX2 ||
-        settings.limitY1 == settings.limitY2
-    ) {
-        //Malformed limits.
-        for(auto& i : items) {
-            i.second->flatX = i.second->x;
-            i.second->flatY = i.second->y;
-            i.second->flatW = i.second->w;
-            i.second->flatH = i.second->h;
-        }
-        return;
+    double limitX1 = settings.limitX1;
+    double limitY1 = settings.limitY1;
+    double limitX2 = settings.limitX2;
+    double limitY2 = settings.limitY2;
+
+    if(limitX1 == limitX2 || limitY1 == limitY2) {
+        //No specified limits.
+        getItemLimitsNonFlattened(&limitX1, &limitY1, &limitX2, &limitY2);
     }
     
     //Start with the top-level items.
@@ -235,10 +234,7 @@ void Interface::flattenItems() {
         if(getItemParent(i.first)) continue;
         list.push_back(i.second);
     }
-    flattenItemsInList(
-        list,
-        settings.limitX1, settings.limitY1, settings.limitX2, settings.limitY2
-    );
+    flattenItemsInList(list, limitX1, limitY1, limitX2, limitY2);
 }
 
 
@@ -313,7 +309,7 @@ void Interface::flattenItemsInList(
 void Interface::getBestItem(
     const std::map<void*, ItemWithRelUnits>& list,
     double* bestScore, void** bestItemId, bool loopedItems
-) {
+) const {
     for(auto& i : list) {
         if(
             !checkHeuristicsPass(
@@ -353,12 +349,12 @@ void Interface::getBestItem(
  * @param id Identifier of the item whose children to check.
  * @return The children, or an empty vector if none.
  */
-std::vector<Interface::Item*> Interface::getItemChildren(void* id) {
+std::vector<Interface::Item*> Interface::getItemChildren(void* id) const {
     std::vector<Item*> result;
     const auto& it = children.find(id);
     if(it != children.end()) {
         for(size_t c = 0; c < it->second.size(); c++) {
-            result.push_back(items[it->second[c]]);
+            result.push_back(items.at(it->second[c]));
         }
     }
     return result;
@@ -380,7 +376,7 @@ std::vector<Interface::Item*> Interface::getItemChildren(void* id) {
 void Interface::getItemDiffs(
     float focusX, float focusY, float focusW, float focusH,
     Item* iPtr, DIRECTION direction, double* outDiffX, double* outDiffY
-) {
+) const {
     double focusX1 = focusX - focusW / 2.0f;
     double focusY1 = focusY - focusH / 2.0f;
     double focusX2 = focusX + focusW / 2.0f;
@@ -430,6 +426,50 @@ void Interface::getItemDiffs(
 
 
 /**
+ * @brief Returns the limits of all items, using their already-flattened
+ * coordinates.
+ *
+ * @param limitX1 The top-left corner's X coordinate is returned here.
+ * @param limitY1 The top-left corner's Y coordinate is returned here.
+ * @param limitX2 The bottom-right corner's X coordinate is returned here.
+ * @param limitY2 The bottom-right corner's Y coordinate is returned here.
+ */
+void Interface::getItemLimitsFlattened(
+    double* limitX1, double* limitY1, double* limitX2, double* limitY2
+) const {
+    for(const auto& i : items) {
+        Item* iPtr = i.second;
+        *limitX1 = std::min(*limitX1, iPtr->flatX - iPtr->flatW / 2.0f);
+        *limitY1 = std::min(*limitY1, iPtr->flatY - iPtr->flatH / 2.0f);
+        *limitX2 = std::max(*limitX2, iPtr->flatX + iPtr->flatW / 2.0f);
+        *limitY2 = std::max(*limitY2, iPtr->flatY + iPtr->flatH / 2.0f);
+    }
+}
+
+
+/**
+ * @brief Returns the limits of all items, using their normal,
+ * non-flattened coordinates.
+ *
+ * @param limitX1 The top-left corner's X coordinate is returned here.
+ * @param limitY1 The top-left corner's Y coordinate is returned here.
+ * @param limitX2 The bottom-right corner's X coordinate is returned here.
+ * @param limitY2 The bottom-right corner's Y coordinate is returned here.
+ */
+void Interface::getItemLimitsNonFlattened(
+    double* limitX1, double* limitY1, double* limitX2, double* limitY2
+) const {
+    for(const auto& i : items) {
+        Item* iPtr = i.second;
+        *limitX1 = std::min(*limitX1, (double) (iPtr->x - iPtr->w / 2.0f));
+        *limitY1 = std::min(*limitY1, (double) (iPtr->y - iPtr->h / 2.0f));
+        *limitX2 = std::max(*limitX2, (double) (iPtr->x + iPtr->w / 2.0f));
+        *limitY2 = std::max(*limitY2, (double) (iPtr->y + iPtr->h / 2.0f));
+    }
+}
+
+
+/**
  * @brief Converts the standard coordinates of an item to ones relative
  * to the current focus coordinates, and rotated so they're to its right.
  *
@@ -448,7 +488,7 @@ void Interface::getItemRelativeUnits(
     Item* iPtr, DIRECTION direction,
     float focusX, float focusY, float focusW, float focusH,
     double* outRelX, double* outRelY, double* outRelW, double* outRelH
-) {
+) const {
     double resultX = 0.0f;
     double resultY = 0.0f;
     double resultW = 0.0f;
@@ -513,10 +553,10 @@ void Interface::getItemRelativeUnits(
  * @param id Identifier of the item whose parent to check.
  * @return The parent, or nullptr if none.
  */
-Interface::Item* Interface::getItemParent(void* id) {
+Interface::Item* Interface::getItemParent(void* id) const {
     const auto& it = parents.find(id);
     if(it == parents.end()) return nullptr;
-    return items[it->second];
+    return items.at(it->second);
 }
 
 
@@ -531,7 +571,7 @@ Interface::Item* Interface::getItemParent(void* id) {
  */
 double Interface::getItemScore(
     double itemRelX, double itemRelY, double itemRelW, double itemRelH
-) {
+) const {
     switch(heuristics.distCalcMethod) {
     case DIST_CALC_METHOD_EUCLIDEAN: {
         return itemRelX * itemRelX + itemRelY * itemRelY;
@@ -564,7 +604,7 @@ std::map<void*, Interface::ItemWithRelUnits>
 Interface::getItemsWithRelativeUnits(
     DIRECTION direction,
     float focusX, float focusY, float focusW, float focusH
-) {
+) const {
     std::map<void*, Interface::ItemWithRelUnits> result;
     
     for(auto& i : items) {
@@ -586,32 +626,6 @@ Interface::getItemsWithRelativeUnits(
     }
     
     return result;
-}
-
-
-/**
- * @brief Returns the limits of the given items.
- *
- * @param limitX1 The top-left corner's X coordinate is returned here.
- * @param limitY1 The top-left corner's Y coordinate is returned here.
- * @param limitX2 The bottom-right corner's X coordinate is returned here.
- * @param limitY2 The bottom-right corner's Y coordinate is returned here.
- */
-void Interface::getLimits(
-    double* limitX1, double* limitY1, double* limitX2, double* limitY2
-) const {
-    *limitX1 = settings.limitX1;
-    *limitY1 = settings.limitY1;
-    *limitX2 = settings.limitX2;
-    *limitY2 = settings.limitY2;
-    
-    for(const auto& i : items) {
-        Item* iPtr = i.second;
-        *limitX1 = std::min(*limitX1, iPtr->flatX - iPtr->flatW / 2.0f);
-        *limitY1 = std::min(*limitY1, iPtr->flatY - iPtr->flatH / 2.0f);
-        *limitX2 = std::max(*limitX2, iPtr->flatX + iPtr->flatW / 2.0f);
-        *limitY2 = std::max(*limitY2, iPtr->flatY + iPtr->flatH / 2.0f);
-    }
 }
 
 

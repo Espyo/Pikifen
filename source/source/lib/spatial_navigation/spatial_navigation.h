@@ -73,15 +73,17 @@ public:
         //--- Members ---
         
         //Top-left corner's X coordinate.
+        //If not specified, i.e. left at the default values, the limits will
+        //be automatically calculated based on the existing items.
         float limitX1 = 0.0f;
         
-        //Top-left corner's Y coordinate.
+        //Same as limitX1, but for the top-left corner's Y coordinate.
         float limitY1 = 0.0f;
         
-        //Bottom-right corner's X coordinate.
+        //Same as limitX1, but for the bottom-right corner's X coordinate.
         float limitX2 = 0.0f;
         
-        //Bottom-right corner's Y coordinate.
+        //Same as limitX1, but for the bottom-right corner's Y coordinate.
         float limitY2 = 0.0f;
         
         //Whether it loops around when it reaches a horizontal limit.
@@ -190,7 +192,7 @@ protected:
      * @brief Represents an item in the interface. It can be inside of a parent
      * item.
      */
-    class Item {
+    struct Item {
     
     public:
     
@@ -267,7 +269,7 @@ protected:
     
     bool checkHeuristicsPass(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
-    );
+    ) const;
     bool checkLoopRelativeCoordinates(
         DIRECTION direction, double* itemRelX,
         double limitX1, double limitY1, double limitX2, double limitY2,
@@ -285,26 +287,29 @@ protected:
     void getBestItem(
         const std::map<void*, ItemWithRelUnits>& list,
         double* bestScore, void** bestItemId, bool loopedItems
-    );
+    ) const;
     void getItemRelativeUnits(
         Item* iPtr, DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH,
         double* outRelX, double* outRelY, double* outRelW, double* outRelH
-    );
-    std::vector<Item*> getItemChildren(void* id);
+    ) const;
+    std::vector<Item*> getItemChildren(void* id) const;
     void getItemDiffs(
         float focusX, float focusY, float focusW, float focusH,
         Item* iPtr, DIRECTION direction, double* outDiffX, double* outDiffY
-    );
-    Item* getItemParent(void* id);
+    ) const;
+    Item* getItemParent(void* id) const;
     double getItemScore(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
-    );
+    ) const;
     std::map<void*, ItemWithRelUnits> getItemsWithRelativeUnits(
         DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH
-    );
-    void getLimits(
+    ) const;
+    void getItemLimitsFlattened(
+        double* limitX1, double* limitY1, double* limitX2, double* limitY2
+    ) const;
+    void getItemLimitsNonFlattened(
         double* limitX1, double* limitY1, double* limitX2, double* limitY2
     ) const;
     bool itemHasChildren(void* id) const;
