@@ -863,7 +863,7 @@ bool GuiManager::draw() {
     }
     
 #ifdef EASY_SPAT_NAV_DEBUG
-    for(const auto& i : sNInterface.lastNavInfo) {
+    for(const auto& i : esnInterface.lastNavInfo) {
         al_draw_filled_circle(
             i.second.focusX, i.second.focusY, 3, al_map_rgb(0, 0, 255)
         );
@@ -1319,8 +1319,8 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         }
     }
     
-    //Fill in the data for the spatial navigation algorithm.
-    sNInterface.clearItems();
+    //Fill in the data for Easy Spatial Navigation.
+    esnInterface.reset(false);
     bool hasItems = false;
     EasySpatNav::DIRECTION direction = EasySpatNav::DIRECTION_RIGHT;
     switch(action.actionTypeId) {
@@ -1347,9 +1347,9 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         Point center = iPtr->getReferenceCenter();
         Point size = iPtr->getReferenceSize();
         
-        sNInterface.addItem((void*) iPtr, center.x, center.y, size.x, size.y);
+        esnInterface.addItem((void*) iPtr, center.x, center.y, size.x, size.y);
         if(iPtr->parent) {
-            sNInterface.setParentItem((void*) iPtr, (void*) iPtr->parent);
+            esnInterface.setParentItem((void*) iPtr, (void*) iPtr->parent);
         }
         
         hasItems = true;
@@ -1361,16 +1361,16 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     
     //Navigate.
-    sNInterface.settings.limitX1 = 0.0f;
-    sNInterface.settings.limitY1 = 0.0f;
-    sNInterface.settings.limitX2 = game.winW;
-    sNInterface.settings.limitY2 = game.winH;
-    sNInterface.settings.loopX =
+    esnInterface.settings.limitX1 = 0.0f;
+    esnInterface.settings.limitY1 = 0.0f;
+    esnInterface.settings.limitX2 = game.winW;
+    esnInterface.settings.limitY2 = game.winH;
+    esnInterface.settings.loopX =
         !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
-    sNInterface.settings.loopY =
+    esnInterface.settings.loopY =
         !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
     GuiItem* newFocusablePtr =
-        (GuiItem*) sNInterface.navigate(direction, (void*) focusedItem);
+        (GuiItem*) esnInterface.navigate(direction, (void*) focusedItem);
         
     //Set it!
     if(newFocusablePtr) {

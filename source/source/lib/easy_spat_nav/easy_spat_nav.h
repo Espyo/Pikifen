@@ -114,6 +114,16 @@ public:
         //in the corner again, making it difficult to reach the lone item.
         //If true, we try all items at once.
         bool singleLoopPass = false;
+
+        //Every time the user navigates to an item in the same direction as
+        //the previous navigation, it gets added to the history.
+        //When navigating, if there are multiple items with a similar score,
+        //within this threshold, it can be hard to decide which one the user
+        //wants, so prefer the last one in the history, if applicable.
+        //If the threshold is < 0, the best item is decided solely by the item
+        //order (first added to the interface wins), and the history is
+        //never saved.
+        float historyScoreThreshold = 1.0f;
         
     } heuristics;
     
@@ -161,12 +171,12 @@ public:
     ~Interface();
     bool addItem(void* id, float x, float y, float w, float h);
     bool setParentItem(void* childId, void* parentId);
-    bool clearItems();
     void* navigate(DIRECTION direction, void* focusedItemId);
     void* navigate(
         DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH
     );
+    bool reset(bool resetHistory = true);
     
     
 protected:
@@ -254,6 +264,12 @@ protected:
     
     //Children associations.
     std::map<void*, std::vector<void*> > children;
+
+    //Navigation history in the last navigated direction.
+    std::vector<void*> history;
+
+    //Direction used for the navigation history.
+    DIRECTION historyDirection = DIRECTION_RIGHT;
     
     
     //--- Function declarations ---
@@ -272,9 +288,15 @@ protected:
         std::vector<Item*> list,
         float limitX1, float limitY1, float limitX2, float limitY2
     );
-    void getBestItem(
+    void* getBestItemInList(
+      const std::vector<double>& bestScores,
+      const std::vector<void*> bestItemIds,
+      DIRECTION direction, bool* usedHistory
+    ) const;
+    void getBestItems(
         const std::map<void*, ItemWithRelUnits>& list,
-        double* bestScore, void** bestItemId, bool loopedItems
+        std::vector<double>* bestScores, std::vector<void*>* bestItemIds,
+        bool loopedItems
     ) const;
     void getItemRelativeUnits(
         Item* iPtr, DIRECTION direction,
@@ -300,6 +322,7 @@ protected:
     void getItemLimitsNonFlattened(
         double* limitX1, double* limitY1, double* limitX2, double* limitY2
     ) const;
+    bool isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const;
     bool itemHasChildren(void* id) const;
     void loopItems(
         const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,

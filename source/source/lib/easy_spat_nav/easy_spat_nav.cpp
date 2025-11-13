@@ -21,7 +21,7 @@ namespace EasySpatNav {
  * @brief Destroys the interface object.
  */
 Interface::~Interface() {
-    clearItems();
+    reset();
 }
 
 
@@ -88,26 +88,6 @@ bool Interface::checkLoopRelativeCoordinates(
 
 
 /**
- * @brief Deletes and clears all items.
- *
- * @return Whether it succeeded.
- */
-bool Interface::clearItems() {
-    if(items.empty()) return false;
-    
-    for(auto i : items) {
-        delete i.second;
-    }
-    items.clear();
-    
-    parents.clear();
-    children.clear();
-    
-    return true;
-}
-
-
-/**
  * @brief Navigates in a given direction.
  *
  * @param direction Navigation direction.
@@ -141,6 +121,7 @@ void* Interface::doNavigation(
     double limitY2 = settings.limitY2;
     getItemLimitsFlattened(&limitX1, &limitY1, &limitX2, &limitY2);
     
+    //Loop any items that need looping.
     std::map<void*, ItemWithRelUnits> nonLoopedItems;
     std::map<void*, ItemWithRelUnits> loopedItems;
     loopItems(
@@ -150,29 +131,49 @@ void* Interface::doNavigation(
     );
     
     //Score them.
-    double bestScore = FLT_MAX;
-    void* bestItemId = nullptr;
+    std::vector<double> bestScores;
+    std::vector<void*> bestItemIds;
     bool checkLoopedItems = true;
-    getBestItem(nonLoopedItems, &bestScore, &bestItemId, false);
+    getBestItems(nonLoopedItems, &bestScores, &bestItemIds, false);
     
     if(!heuristics.singleLoopPass) {
         //If in two loop passes mode, only check the looped items if
         //the non-looped items gave us nothing.
-        if(bestItemId != nullptr) checkLoopedItems = false;
+        if(!bestItemIds.empty()) checkLoopedItems = false;
     }
     
     if(checkLoopedItems) {
-        getBestItem(loopedItems, &bestScore, &bestItemId, true);
+        getBestItems(loopedItems, &bestScores, &bestItemIds, true);
+    }
+
+    //Break any ties.
+    bool updateHistory = true;
+    bool usedHistory = false;
+    void* bestItemId =
+        getBestItemInList(bestScores, bestItemIds, direction, &usedHistory);
+    if(usedHistory) {
+        history.pop_back();
+        updateHistory = false;
     }
 
     if(bestItemId == focusedItemId) {
         //This can only happen if after looping the best item was the initial
         //one. Trying to focus on a different item would result in a nonsense
         //focus, so consider it as no target instead.
-        return nullptr;
+        bestItemId = nullptr;
     }
     
     //Finished!
+    if(updateHistory && heuristics.historyScoreThreshold >= 0.0f) {
+        if(direction != historyDirection || focusedItemId == nullptr) {
+            history.clear();
+        }
+        if(focusedItemId != nullptr) {
+            history.push_back(focusedItemId);
+            historyDirection = direction;
+        }
+    }
+    
     return bestItemId;
 }
 
@@ -263,16 +264,75 @@ void Interface::flattenItemsInList(
 
 
 /**
+ * @brief Returns which item is the best one in the given list, using
+ * heuristics or in the case of ties, the item order.
+ * 
+ * @param bestScores Vector of each best item's score.
+ * @param bestItemIds Vector of each best item's identifier.
+ * @param direction Direction of navigation.
+ * @param usedHistory Whether or not the history was used is returned here.
+ * @return The best item's identifier, or nullptr if none.
+ */
+void* Interface::getBestItemInList(
+    const std::vector<double>& bestScores, const std::vector<void*> bestItemIds,
+    DIRECTION direction, bool* usedHistory
+) const {
+    *usedHistory = false;
+    if(bestItemIds.empty()) return nullptr;
+    if(bestItemIds.size() == 1) return bestItemIds[0];
+
+    //We got multiple good items to navigate to. Figure out the best one.
+    void* bestItemId = nullptr;
+    if(
+        heuristics.historyScoreThreshold >= 0.0f &&
+        !history.empty() &&
+        isOppositeDirection(direction, historyDirection)
+    ) {
+        //Using the history, figure out where the user came from,
+        //and prefer that item, if possible.
+        auto it =
+            std::find(
+                bestItemIds.begin(), bestItemIds.end(),
+                history.back()
+            );
+        if(it != bestItemIds.end()) {
+            //Ok, go back in the user's history!
+            bestItemId = *it;
+            *usedHistory = true;
+        }
+    }
+
+    if(bestItemId == nullptr) {
+        //Pick the one with the absolute best score.
+        //Tie-breakers are resolved by the item order
+        //(first added to the interface wins).
+        double bestScore = FLT_MAX;
+        for(size_t i = 0; i < bestItemIds.size(); i++) {
+            if(bestScores[i] < bestScore) {
+                bestScore = bestScores[i];
+                bestItemId = bestItemIds[i];
+            }
+        }
+    }
+
+    return bestItemId;
+}
+
+
+/**
  * @brief Returns the best item in a list, by scoring them.
  * Returns nullptr if no good item is found.
  *
  * @param list The list.
- * @param bestScore Pointer to the best score so far.
- * @param bestItemId Pointer to the best item's identifier so far.
+ * @param bestScores Pointer to the vector of each best item's score so far.
+ * @param bestItemIds Pointer to the vector of each best item's identifier
+ * so far.
+ * @param loopedItems Whether the list provided is of items that got looped.
  */
-void Interface::getBestItem(
+void Interface::getBestItems(
     const std::map<void*, ItemWithRelUnits>& list,
-    double* bestScore, void** bestItemId, bool loopedItems
+    std::vector<double>* bestScores, std::vector<void*>* bestItemIds,
+    bool loopedItems
 ) const {
     for(auto& i : list) {
         if(i.second.relX <= 0.0f) {
@@ -280,23 +340,50 @@ void Interface::getBestItem(
             continue;
         }
         
-        double score =
+        double itemScore =
             getItemScore(
                 i.second.relX, i.second.relY, i.second.relW, i.second.relH
             );
-        if(score < *bestScore) {
-            *bestScore = score;
-            *bestItemId = i.first;
+        double bestScore = FLT_MAX;
+        if(!bestScores->empty()) {
+            bestScore =
+                *(std::max_element(bestScores->begin(), bestScores->end()));
+        }
+        if(
+            itemScore <=
+            bestScore + std::max(heuristics.historyScoreThreshold, 0.0f)
+        ) {
+            bestScores->push_back(itemScore);
+            bestItemIds->push_back(i.first);
         }
         
 #ifdef EASY_SPAT_NAV_DEBUG
-        lastNavInfo[i.first].score = score;
+        lastNavInfo[i.first].score = itemScore;
         lastNavInfo[i.first].accepted = true;
         lastNavInfo[i.first].looped = loopedItems;
 #endif
         
     }
+
+    //Delete any items whose score is below the threshold.
+    double bestScore = FLT_MAX;
+    if(!bestScores->empty()) {
+        bestScore =
+            *(std::max_element(bestScores->begin(), bestScores->end()));
+    }
+    for(size_t i = 0; i < bestItemIds->size();) {
+        if(
+            (*bestScores)[i] >
+            bestScore + std::max(heuristics.historyScoreThreshold, 0.0f)
+        ) {
+            bestItemIds->erase(bestItemIds->begin() + i);
+            bestScores->erase(bestScores->begin() + i);
+        } else {
+            i++;
+        }
+    }
 }
+
 
 /**
  * @brief Returns an item's children items, if any.
@@ -596,6 +683,22 @@ bool Interface::itemHasChildren(void* id) const {
 
 
 /**
+ * @brief Returns whether two directions are opposites.
+ * 
+ * @param dir1 First direction.
+ * @param dir2 Second direction.
+ * @return Whether they are opposites.
+ */
+bool Interface::isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const {
+    if(dir1 == DIRECTION_RIGHT && dir2 == DIRECTION_LEFT) return true;
+    if(dir1 == DIRECTION_DOWN && dir2 == DIRECTION_UP) return true;
+    if(dir1 == DIRECTION_LEFT && dir2 == DIRECTION_RIGHT) return true;
+    if(dir1 == DIRECTION_UP && dir2 == DIRECTION_DOWN) return true;
+    return false;
+}
+
+
+/**
  * @brief Loops any items that need looping, and splits all items
  * between a list of items that got looped and those that didn't.
  *
@@ -675,6 +778,30 @@ void* Interface::navigate(
         doNavigation(
             direction, nullptr, focusX, focusY, focusW, focusH
         );
+}
+
+
+/**
+ * @brief Deletes and clears all items, and resets some other states.
+ *
+ * @param resetHistory Whether the navigation history gets reset too.
+ * @return Whether it succeeded.
+ */
+bool Interface::reset(bool resetHistory) {
+    for(auto i : items) {
+        delete i.second;
+    }
+    items.clear();
+    
+    parents.clear();
+    children.clear();
+
+    if(resetHistory) {
+        history.clear();
+        historyDirection = DIRECTION_RIGHT;
+    }
+    
+    return true;
 }
 
 

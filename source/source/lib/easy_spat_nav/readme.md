@@ -18,7 +18,7 @@ This is a source-only C++ library that implements a spatial navigation algorithm
   * ↤ Then, the library...
     * Returns what the next GUI item to focus should be.
 
-Spatial navigation is surprisingly tricky. Guessing which GUI item the user wanted to focus is difficult, and depends on the program, the GUI, and more.  There are also a few things that take work to implement, like the ability to loop around once the edge of the GUI is reached, or how to handle GUI items with more items inside. This library aims to ease those burdens.
+Spatial navigation is surprisingly tricky. Guessing which GUI item the user wanted to focus is difficult, and depends on the program, the GUI, and more.  There are also a few things that take work to implement, like the ability to loop around once the edge of the GUI is reached, how to handle GUI items with more items inside, or tie-breaking. This library aims to ease those burdens.
 
 
 ## Quick example
@@ -46,6 +46,7 @@ void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
 
 * Support for looping around the edges of the GUI (see `Interface::settings`).
 * Support for parent items that have children items that can overflow inside (see `Interface::setParentItem`).
+* Support for tie-breaking, including respecting the user's navigation history (see `Interface::heuristics::historyScoreThreshold`).
 * Customizable heuristics (see `Interface::heuristics`).
 * Basic debugging logic (see `EASY_SPAT_NAV_DEBUG`).
 * Fairly light, and fairly simple.

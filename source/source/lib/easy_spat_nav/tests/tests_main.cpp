@@ -22,6 +22,9 @@ constexpr const char* COLOR_YELLOW = "\033[33m";
 //Number of tests executed so far.
 size_t nTestsExecuted = 0;
 
+//Global manager.
+EasySpatNav::Interface spatNavManager;
+
 
 /**
  * @brief Represents a test interface item.
@@ -270,15 +273,17 @@ void test(
  * @param settings Settings to use, if different from the default.
  * If the limits aren't properly set (i.e. the defaults), they will be
  * correctly set to the limits of the test interface.
+ * @param resetHistory Whether the navigation history should be reset.
  */
 void testNav(
     const std::string& testDescription,
     SpatNavTestInterface& interface, EasySpatNav::DIRECTION direction,
     size_t focusedItemNr, size_t expectedItemNr,
     const EasySpatNav::Interface::Heuristics& heuristics = {},
-    const EasySpatNav::Interface::Settings& settings = {}
+    const EasySpatNav::Interface::Settings& settings = {},
+    bool resetHistory = true
 ) {
-    EasySpatNav::Interface spatNavManager;
+    spatNavManager.reset(resetHistory);
     spatNavManager.heuristics = heuristics;
     spatNavManager.settings = settings;
 
@@ -420,6 +425,18 @@ int main(int argc, char** argv) {
         ifLargeOverflowTop(
             "# PPP #  ",
             { &ifLargeOverflowChild1 }
+        );
+    SpatNavTestInterface
+        ifTie1(
+            "#   #\n"
+            "     \n"
+            "  #  "
+        );
+    SpatNavTestInterface
+        ifTie2(
+            "  #  \n"
+            "     \n"
+            "#   #"
         );
     SpatNavTestInterface
         ifEmpty;
@@ -567,6 +584,38 @@ int main(int argc, char** argv) {
     testNav(
         "Test that navigation to a child inside two parents works.",
         ifDoubleParentTop, DIRECTION_RIGHT, 1, 4
+    );
+
+    //Tie-breakers.
+    testNav(
+        "Test that the history is followed in a tie-breaker scenario, "
+        "setup 1.",
+        ifTie1, DIRECTION_DOWN, 1, 3
+    );
+    testNav(
+        "Test that the history is followed in a tie-breaker scenario, "
+        "navigation 1.",
+        ifTie1, DIRECTION_UP, 3, 1, {}, {}, false
+    );
+    testNav(
+        "Test that the history is followed in a tie-breaker scenario, "
+        "setup 2.",
+        ifTie1, DIRECTION_DOWN, 2, 3
+    );
+    testNav(
+        "Test that the history is followed in a tie-breaker scenario, "
+        "navigation 2.",
+        ifTie1, DIRECTION_UP, 3, 2, {}, {}, false
+    );
+    testNav(
+        "Test that in a tie-breaker scenario with history disabled, "
+        "the first added item wins, 1.",
+        ifTie1, DIRECTION_UP, 3, 1, { .historyScoreThreshold = -1.0f }, {}
+    );
+    testNav(
+        "Test that in a tie-breaker scenario with history disabled, "
+        "the first added item wins, 2.",
+        ifTie2, DIRECTION_DOWN, 1, 2, { .historyScoreThreshold = -1.0f }, {}
     );
 
     //Misc.

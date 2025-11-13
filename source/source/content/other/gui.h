@@ -796,8 +796,8 @@ protected:
     //Are the items currently visible?
     bool visible = true;
     
-    //Spatial navigation algorithm interface.
-    EasySpatNav::Interface sNInterface;
+    //Easy Spatial Navigation interface.
+    EasySpatNav::Interface esnInterface;
     
     //Focus cursor.
     struct FocusCursor {
