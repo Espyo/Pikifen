@@ -491,7 +491,7 @@ size_t fixStates(
                         stateIdx = INVALID;
                         game.errors.report(
                             "State \"" + state->name +
-                            "\" of the mob category \"" + mt->category->name +
+                            "\" of the mob type \"" + mt->name +
                             "\" has an action to switch to an "
                             "unknown state: \"" + stateName + "\"!",
                             nullptr

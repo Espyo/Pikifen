@@ -375,7 +375,7 @@ public:
     
     explicit GuiItem(bool focusable = false);
     virtual ~GuiItem() = default;
-    bool activate(const Point& cursorPos);
+    bool activate(const Point& cursorPos = Point());
     bool addChild(GuiItem* item);
     bool deleteAllChildren();
     float getChildrenSpan(bool horizontal = false) const;

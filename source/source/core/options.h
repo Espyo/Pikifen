@@ -111,6 +111,7 @@ extern const AreaEditor::VIEW_MODE VIEW_MODE;
 
 namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
+extern const bool FAST_INVENTORY;
 extern const float LEADER_CURSOR_SPEED;
 extern const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS];
 extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
@@ -301,6 +302,9 @@ struct Options {
     
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
+
+        //Fast inventory mode.
+        bool fastInventory = CONTROLS_D::FAST_INVENTORY;
         
         //Inventory item shortcuts.
         string inventoryShortcuts[MAX_PLAYERS][4];

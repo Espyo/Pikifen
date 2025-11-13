@@ -1722,7 +1722,7 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
                         PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
                         &leftPageButtons :
                         &rightPageButtons;
-                    (*m)[curGui]->activate(Point());
+                    (*m)[curGui]->activate();
                 }
                 break;
             }

@@ -799,17 +799,17 @@ void OnionMenu::handlePlayerAction(const Inpution::Action& action) {
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_ONION_CHANGE_10: {
         if(action.value >= 0.5f) {
-            changeTenButton->activate(Point());
+            changeTenButton->activate();
         }
         break;
     } case PLAYER_ACTION_TYPE_ONION_SELECT_ALL: {
         if(action.value >= 0.5f) {
-            selectAllButton->activate(Point());
+            selectAllButton->activate();
         }
         break;
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(action.value >= 0.5f) {
-            okButton->activate(Point());
+            okButton->activate();
         }
         break;
     }

@@ -30,19 +30,24 @@ hardcoded_items{
 		description=Inventory item shortcuts menu button.
 	}
 	leader_cursor_mouse{
-		center=50.0000 61.0000
-		size=70.0000 10.0000
+		center=50.0000 56.0000
+		size=70.0000 8.0000
 		description=Checkbox for whether the leader cursor is controlled with the mouse.
 	}
 	leader_cursor_speed{
-		center=50.0000 73.0000
-		size=70.0000 10.0000
+		center=50.0000 66.0000
+		size=70.0000 8.0000
 		description=Leader cursor speed picker.
 	}
 	auto_throw{
-		center=50.0000 85.0000
-		size=70.0000 10.0000
+		center=50.0000 76.0000
+		size=70.0000 8.0000
 		description=Auto-throw mode picker.
+	}
+	fast_inventory{
+		center=50.0000 86.0000
+		size=70.0000 8.0000
+		description=Fast inventory mode checkbox.
 	}
 	tooltip{
 		center=50.0000 96.0000

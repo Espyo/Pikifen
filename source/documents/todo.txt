@@ -6,15 +6,14 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Having a Pikmin follow a Snagret as a leader causes a crash
+    If two keyframes have the same value, the visualizer in the editor will show a broken line
     Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
 
     --- 1.1.0 ---
+    Dismiss sound should be a higher pitch when you press again to dismiss all
     Swarming jingle
-    GUI things
-        Spatial navigation
-            Logic to remember where it came from
-            Logic to check that, if you could get to this item from the current item more effectively (lesser score) with a different direction, then skip it
     Controls improvements
         Controls manager
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
@@ -39,8 +38,6 @@ Next tasks (roughly sorted most important first)
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
         An inventory system
-            A menu speed option: "slow" means you press the button to open it, then press the confirm button to select (and the back button to cancel). "Fast" means you hold the button to keep it open, let go to select.
-                When you select, should it set it as the aforementioned "standby" item, use it, or do both?
             Update the help menu
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
@@ -57,11 +54,13 @@ Next tasks (roughly sorted most important first)
             Logic to freeze all enemies in the water
             Logic to call the Pikmin out and thawing
         Ice hazard for Pikmin attacks, and ice hazard for enemy attacks
+        Ice gates
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
         Glowmob?
+    Puffstool and mushroom Pikmin
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     [NEEDS BRAINSTORMING] Re-think how missions work
@@ -74,7 +73,7 @@ Next tasks (roughly sorted most important first)
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
         Maximum Pikmin in field
-        If Onions work automatically, by ejecting Pikmin whenever the amount on field is not at max (a la Bingo Battle)
+        If Onions work automatically, by ejecting Pikmin whenever the amount on field is no longer at max (a la Bingo Battle)
         If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
         If Onions should pop new seeds when an extinction happen or if they should let the extinction happen
     Floors-over-floors; mostly for bridges
@@ -509,23 +508,25 @@ Misc things (so I don't forget)
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     Mechanics
-        Lock-on
-            Auto [PIKMIN 4]
-                Makes the leader cursor snap to the nearest object (or hitbox?) in-game
-                The mouse cursor, i.e. the spinning flower, should always show where the OS mouse cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
-                An option to set the radius in which auto lock-on applies
-                An option to toggle this on or off
-            Manual [PIKMIN 3][PIKMIN 4]
+        Cursor
+            The mouse cursor, i.e. the spinning flower, should always show where the OS mouse cursor is, 100% of the time.
+            Cursor snap [PIKMIN 4]
+                Off: normal behavior
+                On: if the cursor is close to an object (or hitbox?), it automatically moves there. If that thing moves far enough away, the cursor unsnaps. There should be some indicator of the cursor's "real, under-the-hood" position and the cursor's "snapped, final" position; the line connecting to the leader should go to the snap position
+                Options to set the radius
+            Lock-on [PIKMIN 3] [PIKMIN 4]
                 A button that locks the leader cursor in place
                 If on the floor, it just locks the leader cursor there
-                If on an enemy, it locks to that position (hitbox + offset) of the enemy, like its back
+                If on an enemy, it locks to that position (hitbox + offset) of the enemy, like its back, and follows it
                 While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their peripheral
                 An option in the options for it to either lock with holding the button, or toggling
-            Throwing or charging (or dismissing) Pikmin onto a locked-on target should make them work exclusively on that
+                Throwing or charging (or dismissing) Pikmin onto a locked-on target should make them work exclusively on that
+            Throw locking? [PIKMIN 4]
+                When you're throwing Pikmin at something, the game momentarily stops you from throwing more if you already threw the required amount
         Charge
-            Allow the player to pick between full-squad charging or standby type charging
-            Allow the player to pick between placing only the minimum amount of Pikmin necessary onto the task (P4) or maximum (P3)
-                Hitting charge again should use the maximum
+            Allow the player to pick between full-squad charging or standby type charging; hitting the button again within a time limit charges the full squad however
+                Make the second charge sound higher pitched to indicate this
+            Allow the player to pick between placing only the minimum amount of Pikmin necessary onto the task (P4) or maximum (P3); hitting charge again should use the maximum
         Half-whistle
             Options for whether whistling workers brings them to you right away, brings the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
         Water depth (thanks ThyCheshireCat)
@@ -839,6 +840,7 @@ Tasks for later on (I might never implement these)
         When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is. Maybe only for story mode, and only the first time you do it?
         Survey drone? It'd just be a way for the player to view the area with free-cam (same as if there are no players)
             The ability to place beacons?
+            Buttons to disable the HUD and other niceties for players wanting to use it just to take photos
     Petrified enemies should break open when defeated
         Maybe define loot tables somewhere, like "standard", "boss", "weakling", etc. Enemy types use the "standard" one by default (which one is the default should be specified somewhere), but can choose a different one
             Maybe individual enemy instances in an area can also specify their own loot table?

@@ -1274,7 +1274,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(focusedItem && isDown) {
-            focusedItem->activate(Point(LARGE_FLOAT));
+            focusedItem->activate();
             autoRepeater.start();
         } else if(!isDown) {
             autoRepeater.stop();
@@ -1283,7 +1283,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
     } case PLAYER_ACTION_TYPE_MENU_BACK: {
         if(backItem && isDown) {
-            backItem->activate(Point(LARGE_FLOAT));
+            backItem->activate();
         }
         break;
         
@@ -1593,7 +1593,7 @@ bool GuiManager::tick(float deltaT) {
         focusedItem->canAutoRepeat && focusedItem->onActivate
     ) {
         for(size_t r = 0; r < autoRepeatTriggers; r++) {
-            focusedItem->activate(Point(LARGE_FLOAT));
+            focusedItem->activate();
         }
     }
     

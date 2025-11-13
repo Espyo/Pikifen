@@ -903,6 +903,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.registerCoords("leader_cursor_mouse", 50, 52.5, 70, 10);
     controlsGui.registerCoords("leader_cursor_speed", 50,   65, 70, 10);
     controlsGui.registerCoords("auto_throw",          50, 77.5, 70, 10);
+    controlsGui.registerCoords("fast_inventory",      50, 77.5, 70, 10);
     controlsGui.registerCoords("tooltip",             50,   96, 96,  4);
     controlsGui.readDataFile(guiFile);
     
@@ -1040,6 +1041,20 @@ void OptionsMenu::initGuiControlsPage() {
     };
     autoThrowPicker->init();
     controlsGui.addItem(autoThrowPicker, "auto_throw");
+    
+    //Inventory mode.
+    fastInventoryCheck =
+        new CheckGuiItem(
+            &game.options.controls.fastInventory, "Fast inventory",
+            game.sysContent.fntStandard
+        );
+    fastInventoryCheck->onGetTooltip =
+    [] () {
+        return
+            "Makes the inventory open as long as the button is held. "
+            "Releasing uses the focused item.";
+    };
+    controlsGui.addItem(fastInventoryCheck, "fast_inventory");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

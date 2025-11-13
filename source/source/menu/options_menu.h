@@ -271,6 +271,9 @@ private:
     
     //Leader cursor camera weight picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
+
+    //Fast inventory picker check item.
+    CheckGuiItem* fastInventoryCheck = nullptr;
     
     //Leaving confirmation picker item.
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*

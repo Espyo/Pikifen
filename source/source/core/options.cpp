@@ -138,6 +138,9 @@ namespace CONTROLS_D {
 //Default value for the auto-throw mode.
 const AUTO_THROW_MODE AUTO_THROW = AUTO_THROW_MODE_OFF;
 
+//Default value for the fast inventory mode.
+const bool FAST_INVENTORY = false;
+
 //Default value for the leader cursor speed.
 const float LEADER_CURSOR_SPEED = 500.0f;
 
@@ -403,6 +406,7 @@ void Options::loadFromDataNode(DataNode* file) {
         cRS.set("cursor_speed", controls.leaderCursorSpeed);
         
         cRS.set("auto_throw_mode", autoThrowModeChar);
+        cRS.set("fast_inventory", controls.fastInventory);
         cRS.set("leader_cursor_speed", controls.leaderCursorSpeed);
         
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
@@ -651,6 +655,7 @@ void Options::saveToDataNode(DataNode* file) const {
         GetterWriter cGW(file->addNew("controls"));
         
         cGW.write("auto_throw_mode", controls.autoThrowMode);
+        cGW.write("fast_inventory", controls.fastInventory);
         cGW.write("leader_cursor_speed", controls.leaderCursorSpeed);
         
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {

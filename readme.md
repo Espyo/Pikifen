@@ -95,7 +95,7 @@ Depending on the area you select, you can either explore around freely without a
 
 * Auditory features: [Multiple Volume Controls](https://accessiblegames.com/accessibility-tags/multiple-volume-controls/)
 * Input features: [Full Input Remapping](https://accessiblegames.com/accessibility-tags/full-remapping/), [Playable with Buttons Only](https://accessiblegames.com/accessibility-tags/buttons-only-option/), [Playable with Keyboard Only](https://accessiblegames.com/accessibility-tags/keyboard-only-option/), [Playable with Mouse Only](https://accessiblegames.com/accessibility-tags/mouse-only-option/), [Playable without Button Holds](https://accessiblegames.com/accessibility-tags/playable-without-button-holds/), [Stick Inversion](https://accessiblegames.com/accessibility-tags/stick-inversion/)
-* Visual features: [Camera Confort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
+* Visual features: [Camera Comfort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
 
 ## Get the latest version
 

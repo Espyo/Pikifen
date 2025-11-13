@@ -128,6 +128,19 @@ bool Inventory::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @return Whether it got handled.
  */
 bool Inventory::handlePlayerAction(const Inpution::Action& action) {
+    if(
+        action.actionTypeId == PLAYER_ACTION_TYPE_INVENTORY &&
+        action.value < 0.5f &&
+        game.options.controls.fastInventory
+    ) {
+        GuiItem* focusedItem = gui.getFocusedItem();
+        if(focusedItem) {
+            focusedItem->activate();
+        } else {
+            close();
+        }
+        return true;
+    }
     return gui.handlePlayerAction(action);
 }
 
