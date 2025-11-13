@@ -98,16 +98,6 @@ public:
     //Heuristics for how it decides on items.
     struct Heuristics {
     
-        //If not zero, if the item's relative angle with the current focus
-        //position is within this reach, the item gets ignored. This is
-        //useful to stop a horizontal list of items with no vertical variance
-        //from picking another item when the navigation direction is up,
-        //for instance. [0 - TAU/4]
-        float minBlindspotAngle = (float) (TAU * 0.24f);
-        
-        //See minBlindspotAngle.
-        float maxBlindspotAngle = (float) (TAU * 0.25f);
-        
         //If true, only use the center coordinates of items when comparing them.
         //If false, use the closest point along the limits, which takes the
         //item's width and height into account.
@@ -268,9 +258,6 @@ protected:
     
     //--- Function declarations ---
     
-    bool checkHeuristicsPass(
-        double itemRelX, double itemRelY, double itemRelW, double itemRelH
-    ) const;
     bool checkLoopRelativeCoordinates(
         DIRECTION direction, double* itemRelX,
         double limitX1, double limitY1, double limitX2, double limitY2,

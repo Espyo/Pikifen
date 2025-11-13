@@ -52,42 +52,6 @@ bool Interface::addItem(void* id, float x, float y, float w, float h) {
 
 
 /**
- * @brief Checks if this item passes the heuristics tests.
- *
- * @param itemRelX X coordinate of its center, relative to the focus.
- * @param itemRelY Y coordinate of its center, relative to the focus.
- * @param itemRelW Width, relative to the focus.
- * @param itemRelH Height, relative to the focus.
- * @return Whether it passed.
- */
-bool Interface::checkHeuristicsPass(
-    double itemRelX, double itemRelY, double itemRelW, double itemRelH
-) const {
-    if(
-        heuristics.minBlindspotAngle >= 0.0f ||
-        heuristics.maxBlindspotAngle >= 0.0f
-    ) {
-        //Check if it's between the blind spot angles.
-        //We get the same result whether the Y is positive or negative,
-        //so let's simplify things and make it positive.
-        float itemRelAngle = (float) atan2((float) fabs(itemRelY), itemRelX);
-        
-        if(
-            itemRelAngle >= heuristics.minBlindspotAngle &&
-            itemRelAngle <= heuristics.maxBlindspotAngle
-        ) {
-            //If so, never let this item be chosen, no matter what. This is
-            //useful to stop a list of items with no vertical variance from
-            //picking another item when the direction is up, for instance.
-            return false;
-        }
-    }
-    
-    return true;
-}
-
-
-/**
  * @brief Checks if an item that's behind the focus needs to be placed
  * in front of the focus. This behavior is what allows looping from the edges
  * of the interface.
@@ -311,15 +275,6 @@ void Interface::getBestItem(
     double* bestScore, void** bestItemId, bool loopedItems
 ) const {
     for(auto& i : list) {
-        if(
-            !checkHeuristicsPass(
-                i.second.relX, i.second.relY, i.second.relW, i.second.relH
-            )
-        ) {
-            //Doesn't pass some of the heuristics checks.
-            continue;
-        }
-        
         if(i.second.relX <= 0.0f) {
             //Wrong direction!
             continue;
