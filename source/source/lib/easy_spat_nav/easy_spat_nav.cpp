@@ -2,7 +2,7 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Source code for the spatial navigation library.
+ * Source code for the Easy Spatial Navigation library.
  * Please read the included readme file.
  */
 
@@ -11,10 +11,10 @@
 #include <float.h>
 #include <limits.h>
 
-#include "spatial_navigation.h"
+#include "easy_spat_nav.h"
 
 
-namespace SpatNav {
+namespace EasySpatNav {
 
 
 /**
@@ -124,7 +124,7 @@ void* Interface::doNavigation(
 ) {
     //Setup.
     
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
     lastNavInfo.clear();
 #endif
     
@@ -289,7 +289,7 @@ void Interface::getBestItem(
             *bestItemId = i.first;
         }
         
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
         lastNavInfo[i.first].score = score;
         lastNavInfo[i.first].accepted = true;
         lastNavInfo[i.first].looped = loopedItems;
@@ -371,7 +371,7 @@ void Interface::getItemDiffs(
     *outDiffX = itemX - workingX;
     *outDiffY = itemY - workingY;
     
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
     lastNavInfo[iPtr->id].focusX = workingX;
     lastNavInfo[iPtr->id].focusY = workingY;
     lastNavInfo[iPtr->id].itemX = itemX;
@@ -453,7 +453,7 @@ void Interface::getItemRelativeUnits(
     if(heuristics.centerOnly) {
         diffX = iPtr->flatX - focusX;
         diffY = iPtr->flatY - focusY;
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
         lastNavInfo[iPtr->id].focusX = focusX;
         lastNavInfo[iPtr->id].focusY = focusY;
         lastNavInfo[iPtr->id].itemX = iPtr->flatX;

@@ -2,14 +2,14 @@
  * Copyright (c) Andre 'Espyo' Silva 2025.
  *
  * === FILE DESCRIPTION ===
- * Unit tests for the spatial navigation library.
+ * Unit tests for the Easy Spatial Navigation library.
  * Please read the included readme file.
  */
 
 #include <vector>
 #include <string>
 
-#include "../spatial_navigation.h"
+#include "../easy_spat_nav.h"
 
 
 constexpr const char* COLOR_BOLD = "\033[1m";
@@ -186,7 +186,7 @@ void SpatNavTestInterface::fromString(const std::string& s) {
 
 
 /**
- * @brief Recursively adds children interfaces to the SpatNav manager.
+ * @brief Recursively adds children interfaces to the EasySpatNav manager.
  * 
  * @param manager The manager.
  * @param interface Interface whose children to add.
@@ -194,7 +194,7 @@ void SpatNavTestInterface::fromString(const std::string& s) {
  * @param interfaceFirstItemNr Item number of the first item in the interface.
  */
 void addChildren(
-    SpatNav::Interface& manager, SpatNavTestInterface* interface,
+    EasySpatNav::Interface& manager, SpatNavTestInterface* interface,
     size_t& itemNr, size_t interfaceFirstItemNr
 ) {
     for(size_t ci = 0; ci < interface->children.size(); ci++) {
@@ -273,12 +273,12 @@ void test(
  */
 void testNav(
     const std::string& testDescription,
-    SpatNavTestInterface& interface, SpatNav::DIRECTION direction,
+    SpatNavTestInterface& interface, EasySpatNav::DIRECTION direction,
     size_t focusedItemNr, size_t expectedItemNr,
-    const SpatNav::Interface::Heuristics& heuristics = {},
-    const SpatNav::Interface::Settings& settings = {}
+    const EasySpatNav::Interface::Heuristics& heuristics = {},
+    const EasySpatNav::Interface::Settings& settings = {}
 ) {
-    SpatNav::Interface spatNavManager;
+    EasySpatNav::Interface spatNavManager;
     spatNavManager.heuristics = heuristics;
     spatNavManager.settings = settings;
 
@@ -309,10 +309,10 @@ void testNav(
 }
 
 
-using SpatNav::DIRECTION_RIGHT;
-using SpatNav::DIRECTION_DOWN;
-using SpatNav::DIRECTION_LEFT;
-using SpatNav::DIRECTION_UP;
+using EasySpatNav::DIRECTION_RIGHT;
+using EasySpatNav::DIRECTION_DOWN;
+using EasySpatNav::DIRECTION_LEFT;
+using EasySpatNav::DIRECTION_UP;
 
 
 /**
@@ -506,17 +506,17 @@ int main(int argc, char** argv) {
     testNav(
         "Test that Euclidean distance checks pick the best option.",
         ifDistances, DIRECTION_UP, 3, 2,
-        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_EUCLIDEAN }
+        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_EUCLIDEAN }
     );
     testNav(
         "Test that taxicab distance checks pick the best option.",
         ifDistances, DIRECTION_UP, 3, 1,
-        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_TAXICAB }
+        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB }
     );
     testNav(
         "Test that taxicab 2 distance checks pick the best option.",
         ifDistances2, DIRECTION_UP, 3, 1,
-        { .distCalcMethod = SpatNav::DIST_CALC_METHOD_TAXICAB_2 }
+        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB_2 }
     );
 
     //Single loop pass.

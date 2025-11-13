@@ -106,13 +106,13 @@
 		},
 		{
 			"type": "shell",
-			"label": "Build SpatNav's unit tests - Debug",
+			"label": "Build EasySpatNav's unit tests - Debug",
 			"command": "make",
 			"args": [
 				"debug",
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/source/source/lib/spatial_navigation/tests"
+				"cwd": "${workspaceFolder}/source/source/lib/easy_spat_nav/tests"
 			},
 			"problemMatcher": [
 				"$gcc"
@@ -124,7 +124,7 @@
 				"reveal": "always",
 				"echo": true
 			},
-			"detail": "Use make to compile the spatial navigation library's unit tests."
+			"detail": "Use make to compile the Easy Spatial Navigation library's unit tests."
 		},
 	]
 }

@@ -862,7 +862,7 @@ bool GuiManager::draw() {
         );
     }
     
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
     for(const auto& i : sNInterface.lastNavInfo) {
         al_draw_filled_circle(
             i.second.focusX, i.second.focusY, 3, al_map_rgb(0, 0, 255)
@@ -1322,16 +1322,16 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     //Fill in the data for the spatial navigation algorithm.
     sNInterface.clearItems();
     bool hasItems = false;
-    SpatNav::DIRECTION direction = SpatNav::DIRECTION_RIGHT;
+    EasySpatNav::DIRECTION direction = EasySpatNav::DIRECTION_RIGHT;
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MENU_UP: {
-        direction = SpatNav::DIRECTION_UP;
+        direction = EasySpatNav::DIRECTION_UP;
         break;
     } case PLAYER_ACTION_TYPE_MENU_LEFT: {
-        direction = SpatNav::DIRECTION_LEFT;
+        direction = EasySpatNav::DIRECTION_LEFT;
         break;
     } case PLAYER_ACTION_TYPE_MENU_DOWN: {
-        direction = SpatNav::DIRECTION_DOWN;
+        direction = EasySpatNav::DIRECTION_DOWN;
         break;
     }
     }

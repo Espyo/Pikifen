@@ -1,8 +1,8 @@
-# Makefile for the spatial navigation library's test framework. This should be run in the tests folder.
+# Makefile for the Easy Spatial Navigation library's test framework. This should be run in the tests folder.
 
 
 # Basics.
-PROG         := spat_nav_tests
+PROG         := easy_spat_nav_tests
 CXX          := g++
 SRCS         := $(shell find .. -name '*.cpp')
 OBJS         := $(SRCS:.cpp=.o)

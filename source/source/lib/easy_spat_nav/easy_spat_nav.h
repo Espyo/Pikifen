@@ -2,7 +2,7 @@
  * Copyright (c) Andre 'Espyo' Silva 2025.
  *
  * === FILE DESCRIPTION ===
- * Header for the spatial navigation library.
+ * Header for the Easy Spatial Navigation library.
  * Please read the included readme file.
  */
 
@@ -14,10 +14,10 @@
 #include <vector>
 
 
-//#define SPAT_NAV_DEBUG
+//#define EASY_SPAT_NAV_DEBUG
 
 
-namespace SpatNav {
+namespace EasySpatNav {
 
 //Full circle, in radians.
 constexpr const float TAU = (float) M_PI * 2.0f;
@@ -118,7 +118,7 @@ public:
     } heuristics;
     
     
-#ifdef SPAT_NAV_DEBUG
+#ifdef EASY_SPAT_NAV_DEBUG
     
     /**
      * @brief Represents an item when it was checked for the latest navigation.

@@ -25,10 +25,10 @@
             "preLaunchTask": "Build Pikifen - Debug"
         },
         {
-            "name": "Debug SpatNav's unit tests with GDB",
+            "name": "Debug EasySpatNav's unit tests with GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/source/source/lib/spatial_navigation/tests/spat_nav_tests",
+            "program": "${workspaceFolder}/source/source/lib/easy_spat_nav/tests/easy_spat_nav_tests",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -42,7 +42,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Build SpatNav's unit tests - Debug"
+            "preLaunchTask": "Build EasySpatNav's unit tests - Debug"
         }
     ]
 }

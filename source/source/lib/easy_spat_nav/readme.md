@@ -1,6 +1,6 @@
-# Spatial Navigation
+# Easy Spatial Navigation
 
-Espyo's GUI spatial navigation algorithm.
+Espyo's Easy Spatial Navigation algorithm for GUIs.
 
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
@@ -24,29 +24,30 @@ Spatial navigation is surprisingly tricky. Guessing which GUI item the user want
 ## Quick example
 
 ```cpp
-#include "spatial_navigation.h"
+#include "easy_spat_nav.h"
 #include "my_program_stuff.h"
 
 // (...)
 
-void myProgram::doSpatialNavigation(SpatNav::DIRECTION direction) {
-    SpatNav::Interface spatNavManager;
+void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
+    EasySpatNav::Interface esnInterface;
 
     for(const auto& item : myProgram.currentGUI.items) {
         if(!item.canBeFocused()) continue;
-        spatNavManager.addItem((void*) item, item.center.x, item.center.y, item.size.x, item.size.y);
+        esnInterface.addItem((void*) item, item.center.x, item.center.y, item.size.x, item.size.y);
     }
 
-    GuiItem* targetItemPtr = (MyProgram::GuiItem*) spatNavManager.navigate(direction, (void*) myProgram.currentGui.focusedItem);
+    MyProgram::GuiItem* targetItemPtr =
+        (MyProgram::GuiItem*) esnInterface.navigate(direction, (void*) myProgram.currentGui.focusedItem);
 }
 ```
 
 ## Features
 
-* Support for looping around the edges of the GUI (see `Manager::settings`).
-* Support for parent items that have children items that can overflow inside (see `Manager::setParentItem`).
-* Customizable heuristics (see `Manager::heuristics`).
-* Basic debugging logic (see `SPAT_NAV_DEBUG`).
+* Support for looping around the edges of the GUI (see `Interface::settings`).
+* Support for parent items that have children items that can overflow inside (see `Interface::setParentItem`).
+* Customizable heuristics (see `Interface::heuristics`).
+* Basic debugging logic (see `EASY_SPAT_NAV_DEBUG`).
 * Fairly light, and fairly simple.
 * Very agnostic, and with no external dependencies.
 * Simple unit test coverage for the library itself.
@@ -67,9 +68,9 @@ void myProgram::doSpatialNavigation(SpatNav::DIRECTION direction) {
 * When looping through an edge of the GUI, it's skipping over an item.
   * Make sure there's at least a small gap between the items and the edges of the GUI. If it doesn't, you can manually grow the limits by 0.01 without any real drawback.
 * The algorithm is picking the wrong item and I can't understand why.
-  * Try defining `SPAT_NAV_DEBUG` (or uncomment its line near the top of the header file). Then on every frame draw onto the window the contents provided by `Manager::lastNavInfo` in whatever way you want. This should help you understand what the algorithm is doing and what you can customize to make it do what you want.
+  * Try defining `EASY_SPAT_NAV_DEBUG` (or uncomment its line near the top of the header file). Then on every frame draw onto the window the contents provided by `Interface::lastNavInfo` in whatever way you want. This should help you understand what the algorithm is doing and what you can customize to make it do what you want.
 * There's an item a bit out of the way, but I can't seem to reach it.
-  * Try `Manager::heuristics::singleLoopPass`.
+  * Try `Interface::heuristics::singleLoopPass`.
 
 
 ## Inner workings notes
