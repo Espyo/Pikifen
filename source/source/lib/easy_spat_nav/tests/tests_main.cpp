@@ -6,8 +6,8 @@
  * Please read the included readme file.
  */
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "../easy_spat_nav.h"
 
@@ -205,15 +205,16 @@ void addChildren(
         size_t childInterfaceFirstItemNr = itemNr;
         for(size_t i = 0; i < childIf->items.size(); i++) {
             manager.addItem(
-                (void*) (itemNr),
+                (EasySpatNav::ItemId) (itemNr),
                 (childIf->items[i].startX + childIf->items[i].endX) / 2.0f,
                 (childIf->items[i].startY + childIf->items[i].endY) / 2.0f,
                 childIf->items[i].endX - childIf->items[i].startX,
                 childIf->items[i].endY - childIf->items[i].startY
             );
             manager.setParentItem(
-                (void*) itemNr,
-                (void*) (interfaceFirstItemNr + interface->parentNrs[ci] - 1)
+                (EasySpatNav::ItemId) itemNr,
+                (EasySpatNav::ItemId)
+                (interfaceFirstItemNr + interface->parentNrs[ci] - 1)
             );
             itemNr++;
         }
@@ -297,7 +298,7 @@ void testNav(
     size_t itemNr = 1;
     for(size_t i = 0; i < interface.items.size(); i++) {
         spatNavManager.addItem(
-            (void*) (itemNr),
+            (EasySpatNav::ItemId) (itemNr),
             (interface.items[i].startX + interface.items[i].endX) / 2.0f,
             (interface.items[i].startY + interface.items[i].endY) / 2.0f,
             interface.items[i].endX - interface.items[i].startX,
@@ -308,7 +309,9 @@ void testNav(
     addChildren(spatNavManager, &interface, itemNr, 1);
 
     size_t targetItemNr =
-        (size_t) spatNavManager.navigate(direction, (void*) focusedItemNr);
+        (size_t) spatNavManager.navigate(
+            direction, (EasySpatNav::ItemId) focusedItemNr
+        );
     
     test(testDescription, expectedItemNr, targetItemNr);
 }

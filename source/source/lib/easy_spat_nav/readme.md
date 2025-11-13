@@ -34,11 +34,11 @@ void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
 
     for(const auto& item : myProgram.currentGUI.items) {
         if(!item.canBeFocused()) continue;
-        esnInterface.addItem((void*) item, item.center.x, item.center.y, item.size.x, item.size.y);
+        esnInterface.addItem((EasySpatNav::ItemId) item, item.center.x, item.center.y, item.size.x, item.size.y);
     }
 
     MyProgram::GuiItem* targetItemPtr =
-        (MyProgram::GuiItem*) esnInterface.navigate(direction, (void*) myProgram.currentGui.focusedItem);
+        (MyProgram::GuiItem*) esnInterface.navigate(direction, (EasySpatNav::ItemId) myProgram.currentGui.focusedItem);
 }
 ```
 

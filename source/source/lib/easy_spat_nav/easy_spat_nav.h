@@ -19,6 +19,9 @@
 
 namespace EasySpatNav {
 
+//Identifier for a GUI item.
+typedef void* ItemId;
+
 //Full circle, in radians.
 constexpr const float TAU = (float) M_PI * 2.0f;
 
@@ -161,7 +164,7 @@ public:
     };
     
     //Information about how each item fared in the latest navigation.
-    std::map<void*, DebugItem> lastNavInfo;
+    std::map<ItemId, DebugItem> lastNavInfo;
     
 #endif
     
@@ -169,10 +172,10 @@ public:
     //--- Function declarations ---
     
     ~Interface();
-    bool addItem(void* id, float x, float y, float w, float h);
-    bool setParentItem(void* childId, void* parentId);
-    void* navigate(DIRECTION direction, void* focusedItemId);
-    void* navigate(
+    bool addItem(ItemId id, float x, float y, float w, float h);
+    bool setParentItem(ItemId childId, ItemId parentId);
+    ItemId navigate(DIRECTION direction, ItemId focusedItemId);
+    ItemId navigate(
         DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH
     );
@@ -200,7 +203,7 @@ protected:
         //--- Members ---
         
         //Identifier.
-        void* id = nullptr;
+        ItemId id = nullptr;
         
         //Base X coordinate of its center.
         float x = 0.0f;
@@ -257,16 +260,16 @@ protected:
     //--- Members ---
     
     //All registered items.
-    std::map<void*, Item*> items;
+    std::map<ItemId, Item*> items;
     
     //Parent associations.
-    std::map<void*, void*> parents;
+    std::map<ItemId, ItemId> parents;
     
     //Children associations.
-    std::map<void*, std::vector<void*> > children;
+    std::map<ItemId, std::vector<ItemId> > children;
 
     //Navigation history in the last navigated direction.
-    std::vector<void*> history;
+    std::vector<ItemId> history;
 
     //Direction used for the navigation history.
     DIRECTION historyDirection = DIRECTION_RIGHT;
@@ -279,8 +282,8 @@ protected:
         double limitX1, double limitY1, double limitX2, double limitY2,
         bool loopEvenIfInFront
     );
-    void* doNavigation(
-        DIRECTION direction, void* focusedItemId,
+    ItemId doNavigation(
+        DIRECTION direction, ItemId focusedItemId,
         float focusX, float focusY, float focusW, float focusH
     );
     void flattenItems();
@@ -288,14 +291,14 @@ protected:
         std::vector<Item*> list,
         float limitX1, float limitY1, float limitX2, float limitY2
     );
-    void* getBestItemInList(
+    ItemId getBestItem(
       const std::vector<double>& bestScores,
-      const std::vector<void*> bestItemIds,
+      const std::vector<ItemId> bestItemIds,
       DIRECTION direction, bool* usedHistory
     ) const;
     void getBestItems(
-        const std::map<void*, ItemWithRelUnits>& list,
-        std::vector<double>* bestScores, std::vector<void*>* bestItemIds,
+        const std::map<ItemId, ItemWithRelUnits>& list,
+        std::vector<double>* bestScores, std::vector<ItemId>* bestItemIds,
         bool loopedItems
     ) const;
     void getItemRelativeUnits(
@@ -303,16 +306,16 @@ protected:
         float focusX, float focusY, float focusW, float focusH,
         double* outRelX, double* outRelY, double* outRelW, double* outRelH
     ) const;
-    std::vector<Item*> getItemChildren(void* id) const;
+    std::vector<Item*> getItemChildren(ItemId id) const;
     void getItemDiffs(
         float focusX, float focusY, float focusW, float focusH,
         Item* iPtr, DIRECTION direction, double* outDiffX, double* outDiffY
     ) const;
-    Item* getItemParent(void* id) const;
+    Item* getItemParent(ItemId id) const;
     double getItemScore(
         double itemRelX, double itemRelY, double itemRelW, double itemRelH
     ) const;
-    std::map<void*, ItemWithRelUnits> getItemsWithRelativeUnits(
+    std::map<ItemId, ItemWithRelUnits> getItemsWithRelativeUnits(
         DIRECTION direction,
         float focusX, float focusY, float focusW, float focusH
     ) const;
@@ -323,15 +326,16 @@ protected:
         double* limitX1, double* limitY1, double* limitX2, double* limitY2
     ) const;
     bool isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const;
-    bool itemHasChildren(void* id) const;
+    bool itemHasChildren(ItemId id) const;
     void loopItems(
-        const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,
-        DIRECTION direction, void* focusedItemId,
+        const std::map<ItemId, Interface::ItemWithRelUnits>& itemsWithRelUnits,
+        DIRECTION direction, ItemId focusedItemId,
         double limitX1, double limitY1, double limitX2, double limitY2,
-        std::map<void*, Interface::ItemWithRelUnits>* outNonLoopedItems,
-        std::map<void*, Interface::ItemWithRelUnits>* outLoopedItems
+        std::map<ItemId, Interface::ItemWithRelUnits>* outNonLoopedItems,
+        std::map<ItemId, Interface::ItemWithRelUnits>* outLoopedItems
     );
     
 };
+
 
 }

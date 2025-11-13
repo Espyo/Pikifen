@@ -1347,9 +1347,13 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         Point center = iPtr->getReferenceCenter();
         Point size = iPtr->getReferenceSize();
         
-        esnInterface.addItem((void*) iPtr, center.x, center.y, size.x, size.y);
+        esnInterface.addItem(
+            (EasySpatNav::ItemId) iPtr, center.x, center.y, size.x, size.y
+        );
         if(iPtr->parent) {
-            esnInterface.setParentItem((void*) iPtr, (void*) iPtr->parent);
+            esnInterface.setParentItem(
+                (EasySpatNav::ItemId) iPtr, (EasySpatNav::ItemId) iPtr->parent
+            );
         }
         
         hasItems = true;
@@ -1370,7 +1374,9 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     esnInterface.settings.loopY =
         !hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT);
     GuiItem* newFocusablePtr =
-        (GuiItem*) esnInterface.navigate(direction, (void*) focusedItem);
+        (GuiItem*) esnInterface.navigate(
+            direction, (EasySpatNav::ItemId) focusedItem
+        );
         
     //Set it!
     if(newFocusablePtr) {

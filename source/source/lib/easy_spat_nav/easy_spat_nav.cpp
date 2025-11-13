@@ -37,7 +37,7 @@ Interface::~Interface() {
  * @param h Height.
  * @return Whether it succeeded.
  */
-bool Interface::addItem(void* id, float x, float y, float w, float h) {
+bool Interface::addItem(ItemId id, float x, float y, float w, float h) {
     if(items.find(id) != items.end()) return false;
     
     Item* newItem = new Item();
@@ -98,8 +98,8 @@ bool Interface::checkLoopRelativeCoordinates(
  * @param focusH Height of the current focus.
  * @return Identifier of the newly-focused item.
  */
-void* Interface::doNavigation(
-    DIRECTION direction, void* focusedItemId,
+ItemId Interface::doNavigation(
+    DIRECTION direction, ItemId focusedItemId,
     float focusX, float focusY, float focusW, float focusH
 ) {
     //Setup.
@@ -110,7 +110,7 @@ void* Interface::doNavigation(
     
     flattenItems();
     
-    std::map<void*, ItemWithRelUnits> itemsWithRelUnits =
+    std::map<ItemId, ItemWithRelUnits> itemsWithRelUnits =
         getItemsWithRelativeUnits(
             direction, focusX, focusY, focusW, focusH
         );
@@ -122,8 +122,8 @@ void* Interface::doNavigation(
     getItemLimitsFlattened(&limitX1, &limitY1, &limitX2, &limitY2);
     
     //Loop any items that need looping.
-    std::map<void*, ItemWithRelUnits> nonLoopedItems;
-    std::map<void*, ItemWithRelUnits> loopedItems;
+    std::map<ItemId, ItemWithRelUnits> nonLoopedItems;
+    std::map<ItemId, ItemWithRelUnits> loopedItems;
     loopItems(
         itemsWithRelUnits, direction, focusedItemId,
         limitX1, limitY1, limitX2, limitY2,
@@ -132,7 +132,7 @@ void* Interface::doNavigation(
     
     //Score them.
     std::vector<double> bestScores;
-    std::vector<void*> bestItemIds;
+    std::vector<ItemId> bestItemIds;
     bool checkLoopedItems = true;
     getBestItems(nonLoopedItems, &bestScores, &bestItemIds, false);
     
@@ -149,8 +149,8 @@ void* Interface::doNavigation(
     //Break any ties.
     bool updateHistory = true;
     bool usedHistory = false;
-    void* bestItemId =
-        getBestItemInList(bestScores, bestItemIds, direction, &usedHistory);
+    ItemId bestItemId =
+        getBestItem(bestScores, bestItemIds, direction, &usedHistory);
     if(usedHistory) {
         history.pop_back();
         updateHistory = false;
@@ -273,8 +273,9 @@ void Interface::flattenItemsInList(
  * @param usedHistory Whether or not the history was used is returned here.
  * @return The best item's identifier, or nullptr if none.
  */
-void* Interface::getBestItemInList(
-    const std::vector<double>& bestScores, const std::vector<void*> bestItemIds,
+ItemId Interface::getBestItem(
+    const std::vector<double>& bestScores,
+    const std::vector<ItemId> bestItemIds,
     DIRECTION direction, bool* usedHistory
 ) const {
     *usedHistory = false;
@@ -282,7 +283,7 @@ void* Interface::getBestItemInList(
     if(bestItemIds.size() == 1) return bestItemIds[0];
 
     //We got multiple good items to navigate to. Figure out the best one.
-    void* bestItemId = nullptr;
+    ItemId bestItemId = nullptr;
     if(
         heuristics.historyScoreThreshold >= 0.0f &&
         !history.empty() &&
@@ -330,8 +331,8 @@ void* Interface::getBestItemInList(
  * @param loopedItems Whether the list provided is of items that got looped.
  */
 void Interface::getBestItems(
-    const std::map<void*, ItemWithRelUnits>& list,
-    std::vector<double>* bestScores, std::vector<void*>* bestItemIds,
+    const std::map<ItemId, ItemWithRelUnits>& list,
+    std::vector<double>* bestScores, std::vector<ItemId>* bestItemIds,
     bool loopedItems
 ) const {
     for(auto& i : list) {
@@ -391,7 +392,7 @@ void Interface::getBestItems(
  * @param id Identifier of the item whose children to check.
  * @return The children, or an empty vector if none.
  */
-std::vector<Interface::Item*> Interface::getItemChildren(void* id) const {
+std::vector<Interface::Item*> Interface::getItemChildren(ItemId id) const {
     std::vector<Item*> result;
     const auto& it = children.find(id);
     if(it != children.end()) {
@@ -512,6 +513,19 @@ void Interface::getItemLimitsNonFlattened(
 
 
 /**
+ * @brief Returns an item's parent item, if any.
+ *
+ * @param id Identifier of the item whose parent to check.
+ * @return The parent, or nullptr if none.
+ */
+Interface::Item* Interface::getItemParent(ItemId id) const {
+    const auto& it = parents.find(id);
+    if(it == parents.end()) return nullptr;
+    return items.at(it->second);
+}
+
+
+/**
  * @brief Converts the standard coordinates of an item to ones relative
  * to the current focus coordinates, and rotated so they're to its right.
  *
@@ -590,19 +604,6 @@ void Interface::getItemRelativeUnits(
 
 
 /**
- * @brief Returns an item's parent item, if any.
- *
- * @param id Identifier of the item whose parent to check.
- * @return The parent, or nullptr if none.
- */
-Interface::Item* Interface::getItemParent(void* id) const {
-    const auto& it = parents.find(id);
-    if(it == parents.end()) return nullptr;
-    return items.at(it->second);
-}
-
-
-/**
  * @brief Returns an item's score. Lower is better.
  *
  * @param itemRelX X coordinate of its center, relative to the focus.
@@ -642,12 +643,12 @@ double Interface::getItemScore(
  * @param focusH Height of the current focus.
  * @return The list.
  */
-std::map<void*, Interface::ItemWithRelUnits>
+std::map<ItemId, Interface::ItemWithRelUnits>
 Interface::getItemsWithRelativeUnits(
     DIRECTION direction,
     float focusX, float focusY, float focusW, float focusH
 ) const {
-    std::map<void*, Interface::ItemWithRelUnits> result;
+    std::map<ItemId, Interface::ItemWithRelUnits> result;
     
     for(auto& i : items) {
         if(itemHasChildren(i.first)) continue;
@@ -672,17 +673,6 @@ Interface::getItemsWithRelativeUnits(
 
 
 /**
- * @brief Returns whether an item has children.
- *
- * @param id Identifier of the item to check.
- * @return Whether it has children.
- */
-bool Interface::itemHasChildren(void* id) const {
-    return children.find(id) != children.end();
-}
-
-
-/**
  * @brief Returns whether two directions are opposites.
  * 
  * @param dir1 First direction.
@@ -695,6 +685,17 @@ bool Interface::isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const {
     if(dir1 == DIRECTION_LEFT && dir2 == DIRECTION_RIGHT) return true;
     if(dir1 == DIRECTION_UP && dir2 == DIRECTION_DOWN) return true;
     return false;
+}
+
+
+/**
+ * @brief Returns whether an item has children.
+ *
+ * @param id Identifier of the item to check.
+ * @return Whether it has children.
+ */
+bool Interface::itemHasChildren(ItemId id) const {
+    return children.find(id) != children.end();
 }
 
 
@@ -714,11 +715,11 @@ bool Interface::isOppositeDirection(DIRECTION dir1, DIRECTION dir2) const {
  * @param outLoopedItems List of items which did get looped.
  */
 void Interface::loopItems(
-    const std::map<void*, Interface::ItemWithRelUnits>& itemsWithRelUnits,
-    DIRECTION direction, void* focusedItemId,
+    const std::map<ItemId, Interface::ItemWithRelUnits>& itemsWithRelUnits,
+    DIRECTION direction, ItemId focusedItemId,
     double limitX1, double limitY1, double limitX2, double limitY2,
-    std::map<void*, Interface::ItemWithRelUnits>* outNonLoopedItems,
-    std::map<void*, Interface::ItemWithRelUnits>* outLoopedItems
+    std::map<ItemId, Interface::ItemWithRelUnits>* outNonLoopedItems,
+    std::map<ItemId, Interface::ItemWithRelUnits>* outLoopedItems
 ) {
     for(const auto& i : itemsWithRelUnits) {
         double relX = i.second.relX;
@@ -747,7 +748,7 @@ void Interface::loopItems(
  * @param focusedItemId Identifier of the currently-focused item.
  * @return Identifier of the newly-focused item.
  */
-void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
+ItemId Interface::navigate(DIRECTION direction, ItemId focusedItemId) {
     if(items.find(focusedItemId) == items.end()) focusedItemId = nullptr;
     
     return
@@ -771,7 +772,7 @@ void* Interface::navigate(DIRECTION direction, void* focusedItemId) {
  * @param focusH Height of the current focus.
  * @return Identifier of the newly-focused item.
  */
-void* Interface::navigate(
+ItemId Interface::navigate(
     DIRECTION direction, float focusX, float focusY, float focusW, float focusH
 ) {
     return
@@ -812,10 +813,11 @@ bool Interface::reset(bool resetHistory) {
  * @param parentId Identifier of the parent item.
  * @return Whether it succeeded.
  */
-bool Interface::setParentItem(void* childId, void* parentId) {
+bool Interface::setParentItem(ItemId childId, ItemId parentId) {
     parents[childId] = parentId;
     children[parentId].push_back(childId);
     return true;
 }
+
 
 }
