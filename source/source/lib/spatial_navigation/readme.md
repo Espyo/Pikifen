@@ -11,7 +11,7 @@ Espyo's GUI spatial navigation algorithm.
 
 This is a source-only C++ library that implements a spatial navigation algorithm for graphical user interfaces. The way it works is pretty simple:
 
-* Every time the user performs a spatial navigation input...
+* Every time the user performs a spatial navigation input (e.g. pressing the right arrow key)...
   * ⇥ The program informs the library...
     * What GUI items exist, and where, in an abstract way.
     * Any algorithm customizations.
@@ -59,6 +59,7 @@ void myProgram::doSpatialNavigation(SpatNav::DIRECTION direction) {
   * Note that parent items are never eligible for being focused.
   * For children items, specify their position in normal GUI coordinates, even if they overflow past the parent's borders.
 * If you don't provide a valid starting point for navigation, it will use 0,0 for the focus position and size. Your users will probably prefer if you pick the first available widget, or the one closest to the mouse cursor.
+* The starting point doesn't care about children overflow. In other words, if the currently focused item is a child item that is overflowing from the parent, you should probably change the parent's offset so that that child is in-view and not overflowing. Otherwise the algorithm will start navigating from weird places.
 
 
 ## Troubleshooting

@@ -74,7 +74,8 @@ public:
         
         //Top-left corner's X coordinate.
         //If not specified, i.e. left at the default values, the limits will
-        //be automatically calculated based on the existing items.
+        //be automatically calculated based on the existing items, with no
+        //padding.
         float limitX1 = 0.0f;
         
         //Same as limitX1, but for the top-left corner's Y coordinate.

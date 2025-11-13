@@ -59,7 +59,7 @@ struct SpatNavTestInterface {
     //Total height.
     float height = 0.0f;
 
-    //List of existing parents and what their item numbers are.
+    //List of existing parents and what their relative item numbers are.
     std::vector<size_t> parentNrs;
 
     //Children items definitions, for each parent in order.
@@ -186,6 +186,42 @@ void SpatNavTestInterface::fromString(const std::string& s) {
 
 
 /**
+ * @brief Recursively adds children interfaces to the SpatNav manager.
+ * 
+ * @param manager The manager.
+ * @param interface Interface whose children to add.
+ * @param itemNr Current item number.
+ * @param interfaceFirstItemNr Item number of the first item in the interface.
+ */
+void addChildren(
+    SpatNav::Interface& manager, SpatNavTestInterface* interface,
+    size_t& itemNr, size_t interfaceFirstItemNr
+) {
+    for(size_t ci = 0; ci < interface->children.size(); ci++) {
+        SpatNavTestInterface* childIf = interface->children[ci];
+        size_t childInterfaceFirstItemNr = itemNr;
+        for(size_t i = 0; i < childIf->items.size(); i++) {
+            manager.addItem(
+                (void*) (itemNr),
+                (childIf->items[i].startX + childIf->items[i].endX) / 2.0f,
+                (childIf->items[i].startY + childIf->items[i].endY) / 2.0f,
+                childIf->items[i].endX - childIf->items[i].startX,
+                childIf->items[i].endY - childIf->items[i].startY
+            );
+            manager.setParentItem(
+                (void*) itemNr,
+                (void*) (interfaceFirstItemNr + interface->parentNrs[ci] - 1)
+            );
+            itemNr++;
+        }
+        addChildren(
+            manager, interface->children[ci], itemNr, childInterfaceFirstItemNr
+        );
+    }
+}
+
+
+/**
  * @brief Performs a generic test. Aborts if it fails.
  * 
  * @param testDescription Description of the test is doing.
@@ -264,22 +300,7 @@ void testNav(
         );
         itemNr++;
     }
-    for(size_t ci = 0; ci < interface.children.size(); ci++) {
-        SpatNavTestInterface* childIf = interface.children[ci];
-        for(size_t i = 0; i < childIf->items.size(); i++) {
-            spatNavManager.addItem(
-                (void*) (itemNr),
-                (childIf->items[i].startX + childIf->items[i].endX) / 2.0f,
-                (childIf->items[i].startY + childIf->items[i].endY) / 2.0f,
-                childIf->items[i].endX - childIf->items[i].startX,
-                childIf->items[i].endY - childIf->items[i].startY
-            );
-            spatNavManager.setParentItem(
-                (void*) itemNr, (void*) interface.parentNrs[ci]
-            );
-            itemNr++;
-        }
-    }
+    addChildren(spatNavManager, &interface, itemNr, 1);
 
     size_t targetItemNr =
         (size_t) spatNavManager.navigate(direction, (void*) focusedItemNr);
@@ -333,16 +354,8 @@ int main(int argc, char** argv) {
             "# # #"
         );
     SpatNavTestInterface
-        ifListVertical5(
-            "#\n"
-            " \n"
-            "#\n"
-            " \n"
-            "#\n"
-            " \n"
-            "#\n"
-            " \n"
-            "#\n"
+        ifList(
+            "# # # # #"
         );
     SpatNavTestInterface
         ifDistances(
@@ -369,37 +382,44 @@ int main(int argc, char** argv) {
         );
     SpatNavTestInterface
         ifBasicParentChild1(
-            " \n"
-            " \n"
-            "#\n"
-            " \n"
-            "#\n"
+            "  # #"
         );
     SpatNavTestInterface
         ifBasicParentTop(
-            "#\n"
-            " \n"
-            "P\n"
-            "P\n"
-            "P\n",
+            "# PPP",
             { &ifBasicParentChild1 }
         );
     SpatNavTestInterface
         ifListParentChild1(
-            "#\n"
-            " \n"
-            "#\n"
-            " \n"
-            "#\n"
+            "# # #"
         );
     SpatNavTestInterface
         ifListParentTop(
-            "#\n"
-            " \n"
-            "P\n"
-            "P\n"
-            "P\n",
+            "# PPP",
             { &ifListParentChild1 }
+        );
+    SpatNavTestInterface
+        ifDoubleParentChild1Child1(
+            "     #   "
+        );
+    SpatNavTestInterface
+        ifDoubleParentChild1(
+            "    PPP  ",
+            { &ifDoubleParentChild1Child1 }
+        );
+    SpatNavTestInterface
+        ifDoubleParentTop(
+            "# PPPPPPP",
+            { &ifDoubleParentChild1 }
+        );
+    SpatNavTestInterface
+        ifLargeOverflowChild1(
+            "        #"
+        );
+    SpatNavTestInterface
+        ifLargeOverflowTop(
+            "# PPP #  ",
+            { &ifLargeOverflowChild1 }
         );
     SpatNavTestInterface
         ifEmpty;
@@ -514,34 +534,46 @@ int main(int argc, char** argv) {
     //Parents.
     testNav(
         "Test that simple navigation with children works, 1.",
-        ifBasicParentTop, DIRECTION_DOWN, 1, 3
+        ifBasicParentTop, DIRECTION_RIGHT, 1, 3
     );
     testNav(
         "Test that simple navigation with children works, 2.",
-        ifBasicParentTop, DIRECTION_DOWN, 3, 4
+        ifBasicParentTop, DIRECTION_RIGHT, 3, 4
     );
     testNav(
         "Test that simple navigation with children works, 3.",
-        ifBasicParentTop, DIRECTION_DOWN, 4, 1
+        ifBasicParentTop, DIRECTION_RIGHT, 4, 1
     );
     testNav(
         "Test that simple navigation with overflowing children works, 1.",
-        ifListParentTop, DIRECTION_DOWN, 1, 3
+        ifListParentTop, DIRECTION_RIGHT, 1, 3
     );
     testNav(
         "Test that simple navigation with overflowing children works, 2.",
-        ifListParentTop, DIRECTION_DOWN, 4, 5
+        ifListParentTop, DIRECTION_RIGHT, 4, 5
     );
     testNav(
         "Test that simple navigation with overflowing children works, 3.",
-        ifListParentTop, DIRECTION_DOWN, 5, 1
+        ifListParentTop, DIRECTION_RIGHT, 5, 1
+    );
+    testNav(
+        "Test that navigation with largely overflowing children works, 1.",
+        ifLargeOverflowTop, DIRECTION_RIGHT, 1, 4
+    );
+    testNav(
+        "Test that navigation with largely overflowing children works, 2.",
+        ifLargeOverflowTop, DIRECTION_RIGHT, 4, 1
+    ); //Focus being overflowed is not supported.
+    testNav(
+        "Test that navigation to a child inside two parents works.",
+        ifDoubleParentTop, DIRECTION_RIGHT, 1, 4
     );
 
     //Misc.
     testNav(
-        "Test that navigating horizontally on a vertical list, "
-        "with looping, doesn't select an item above or below.",
-        ifListVertical5, DIRECTION_RIGHT, 3, 0
+        "Test that navigating vertically on a horizontal list, "
+        "with looping, doesn't select an item to the left or right.",
+        ifList, DIRECTION_DOWN, 3, 0
     );
     testNav(
         "Test that an empty interface returns nullptr.",
