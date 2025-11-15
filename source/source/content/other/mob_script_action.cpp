@@ -2372,37 +2372,57 @@ bool assertActions(
     const vector<MobActionCall*>& actions, const DataNode* dn
 ) {
     //Check if the "if"-related actions are okay.
-    int ifLevel = 0;
+    int depth = 0;
+    vector<bool> seenElseAction;
     for(size_t a = 0; a < actions.size(); a++) {
         switch(actions[a]->action->type) {
         case MOB_ACTION_IF: {
-            ifLevel++;
+            depth++;
+            seenElseAction.push_back(false);
             break;
         } case MOB_ACTION_ELSE: {
-            if(ifLevel == 0) {
+            if(depth == 0) {
                 game.errors.report(
                     "Found an \"else\" action without a matching "
                     "\"if\" action!", dn
                 );
                 return false;
             }
+            seenElseAction.back() = true;
+            break;
+        } case MOB_ACTION_ELSE_IF: {
+            if(depth == 0) {
+                game.errors.report(
+                    "Found an \"else_if\" action without a matching "
+                    "\"if\" action!", dn
+                );
+                return false;
+            }
+            if(seenElseAction.back()) {
+                game.errors.report(
+                    "Found an \"else_if\" action after an \"else\" action!",
+                    dn
+                );
+                return false;
+            }
             break;
         } case MOB_ACTION_END_IF: {
-            if(ifLevel == 0) {
+            if(depth == 0) {
                 game.errors.report(
                     "Found an \"end_if\" action without a matching "
                     "\"if\" action!", dn
                 );
                 return false;
             }
-            ifLevel--;
+            depth--;
+            seenElseAction.pop_back();
             break;
         } default: {
             break;
         }
         }
     }
-    if(ifLevel > 0) {
+    if(depth > 0) {
         game.errors.report(
             "Some \"if\" actions don't have a matching \"end_if\" action!",
             dn
@@ -2445,6 +2465,9 @@ bool assertActions(
             passedSetState = true;
             break;
         } case MOB_ACTION_ELSE: {
+            passedSetState = false;
+            break;
+        } case MOB_ACTION_ELSE_IF: {
             passedSetState = false;
             break;
         } case MOB_ACTION_END_IF: {

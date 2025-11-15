@@ -39,6 +39,9 @@ enum MOB_ACTION {
     //Conditional "else" marker.
     MOB_ACTION_ELSE,
     
+    //Conditional "else if" marker.
+    MOB_ACTION_ELSE_IF,
+    
     //Conditional "end if" marker.
     MOB_ACTION_END_IF,
     

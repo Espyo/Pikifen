@@ -46,12 +46,10 @@ script {
             get_mob_info p self group_task_power
             if $p <= 3
                 set_timer 1.5
+            else_if $p = 4
+                set_timer 1.25
             else
-                if $p = 4
-                    set_timer 1.25
-                else
-                    set_timer 1
-                end_if
+                set_timer 1
             end_if
         }
         on_timer {
@@ -60,12 +58,10 @@ script {
             get_mob_info p self group_task_power
             if $p <= 3
                 set_timer 1.5
+            else_if $p = 4
+                set_timer 1.25
             else
-                if $p = 4
-                    set_timer 1.25
-                else
-                    set_timer 1
-                end_if
+                set_timer 1
             end_if
         }
         on_receive_message {

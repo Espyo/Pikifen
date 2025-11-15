@@ -199,6 +199,10 @@
         <th><code>else</code></th>
         <td>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run the actions after this <code>else</code>, until it reaches the matching <code>end_if</code>.</td>
       </tr>
+      <tr id="else-if">
+        <th><code>else_if</code></th>
+        <td>Same as if you had an <code><a href="#else">else</a></code> action followed by an <code><a href="#if">if</a></code> action, except it doesn't enter a new level of depth. In order words, you only have one <code><a href="#end-if">end_if</a></code> for this sequence. So something like: <code>if ... else_if ... else_if ... else_if ... else ... end_if</code>. If you have an <code>else</code> in the sequence, it must come after any <code>else_if</code>.</td>
+      </tr>
       <tr id="end-if">
         <th><code>end_if</code></th>
         <td>Closes a condition sequence started by an <code><a href="#if">if</a></code> action.</td>

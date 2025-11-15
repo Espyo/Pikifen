@@ -62,6 +62,7 @@ void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
   * For children items, specify their position in normal GUI coordinates, even if they overflow past the parent's borders.
 * If you don't provide a valid starting point for navigation, it will use 0,0 for the focus position and size. Your users will probably prefer if you pick the first available widget, or the one closest to the mouse cursor.
 * The starting point doesn't care about children overflow. In other words, if the currently focused item is a child item that is overflowing from the parent, you should probably change the parent's offset so that that child is in-view and not overflowing. Otherwise the algorithm will start navigating from weird places.
+* For more information on how a part of the library works, read its comments in the header file, or check how the unit tests file does it.
 
 
 ## Troubleshooting

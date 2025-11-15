@@ -216,76 +216,134 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
         }
     }
     
+    enum FLOW_CODE {
+        FLOW_CODE_NONE,
+        FLOW_CODE_CONDITION,
+        FLOW_CODE_CONDITION_OTHER_BRANCH,
+        FLOW_CODE_JUMP,
+        FLOW_CODE_DO_NOTHING,
+    };
+    
+    FLOW_CODE flowCodeToRun = FLOW_CODE_NONE;
+    bool processElseIfCondition = false;
+    
     for(size_t a = 0; a < actions.size(); a++) {
     
         switch(actions[a]->action->type) {
         case MOB_ACTION_IF: {
-            //If statement. Look out for its return value, and
+            flowCodeToRun = FLOW_CODE_CONDITION;
+            break;
+        } case MOB_ACTION_ELSE_IF: {
+            if(processElseIfCondition) {
+                flowCodeToRun = FLOW_CODE_CONDITION;
+                processElseIfCondition = false;
+            } else {
+                flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
+            }
+            break;
+        } case MOB_ACTION_ELSE: {
+            flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
+            break;
+        } case MOB_ACTION_GOTO: {
+            flowCodeToRun = FLOW_CODE_JUMP;
+            break;
+        } case MOB_ACTION_END_IF:
+        case MOB_ACTION_LABEL: {
+            flowCodeToRun = FLOW_CODE_DO_NOTHING;
+            break;
+        } default: {
+            flowCodeToRun = FLOW_CODE_NONE;
+            break;
+        }
+        }
+        
+        switch(flowCodeToRun) {
+        case FLOW_CODE_CONDITION: {
+            //Condition statement. Look out for its return value, and
             //change the flow accordingly.
+            bool conditionValue = actions[a]->run(m, customData1, customData2);
             
-            if(!actions[a]->run(m, customData1, customData2)) {
-                //If it returned true, execution continues as normal, but
-                //if it returned false, skip to the "else" or "end if" actions.
-                size_t nextA = a + 1;
+            if(conditionValue) {
+                //Returned true. Execution continues as normal.
+            } else {
+                //Returned false. Skip to the "else", "else if",
+                //or "end if" actions.
+                size_t nextActionIdx = actions.size();
                 size_t depth = 0;
-                for(; nextA < actions.size(); nextA++) {
-                    if(
-                        actions[nextA]->action->type == MOB_ACTION_IF
-                    ) {
+                
+                for(size_t a2 = a + 1; a2 < actions.size(); a2++) {
+                    MOB_ACTION a2Type = actions[a2]->action->type;
+                    if(a2Type == MOB_ACTION_IF) {
                         depth++;
-                    } else if(
-                        actions[nextA]->action->type == MOB_ACTION_ELSE
-                    ) {
-                        if(depth == 0) break;
-                    } else if(
-                        actions[nextA]->action->type == MOB_ACTION_END_IF
-                    ) {
-                        if(depth == 0) break;
-                        else depth--;
+                    } else if(a2Type == MOB_ACTION_ELSE) {
+                        if(depth == 0) {
+                            nextActionIdx = a2 + 1;
+                            break;
+                        }
+                    } else if(a2Type == MOB_ACTION_ELSE_IF) {
+                        if(depth == 0) {
+                            processElseIfCondition = true;
+                            nextActionIdx = a2;
+                            break;
+                        }
+                    } else if(a2Type == MOB_ACTION_END_IF) {
+                        if(depth == 0) {
+                            nextActionIdx = a2 + 1;
+                            break;
+                        } else {
+                            depth--;
+                        }
                     }
                 }
-                a = nextA;
+                a = nextActionIdx - 1;
                 
             }
             
             break;
             
-        } case MOB_ACTION_ELSE: {
-            //If we actually managed to read an "else", that means we were
-            //running through the normal execution of a "then" section.
-            //Jump to the "end if".
-            size_t nextA = a + 1;
+        } case FLOW_CODE_CONDITION_OTHER_BRANCH: {
+            //If we actually managed to read an "else" or "else if",
+            //that means we were running through the normal execution of some
+            //"then" section. Jump to the "end if".
+            size_t nextActionIdx = actions.size();
             size_t depth = 0;
-            for(; nextA < actions.size(); nextA++) {
-                if(actions[nextA]->action->type == MOB_ACTION_IF) {
+            
+            for(size_t a2 = a + 1; a2 < actions.size(); a2++) {
+                MOB_ACTION a2Type = actions[a2]->action->type;
+                if(a2Type == MOB_ACTION_IF) {
                     depth++;
-                } else if(actions[nextA]->action->type == MOB_ACTION_END_IF) {
-                    if(depth == 0) break;
-                    else depth--;
+                } else if(a2Type == MOB_ACTION_END_IF) {
+                    if(depth == 0) {
+                        nextActionIdx = a2 + 1;
+                        break;
+                    } else {
+                        depth--;
+                    }
                 }
             }
-            a = nextA;
-            
+            a = nextActionIdx - 1;
             break;
             
-        } case MOB_ACTION_GOTO: {
+        } case FLOW_CODE_JUMP: {
             //Find the label that matches.
+            size_t nextActionIdx = actions.size();
             for(size_t a2 = 0; a2 < actions.size(); a2++) {
-                if(actions[a2]->action->type == MOB_ACTION_LABEL) {
+                MOB_ACTION a2Type = actions[a2]->action->type;
+                if(a2Type == MOB_ACTION_LABEL) {
                     if(actions[a]->args[0] == actions[a2]->args[0]) {
-                        a = a2;
+                        nextActionIdx = a2 + 1;
                         break;
                     }
                 }
             }
+            a = nextActionIdx - 1;
             break;
             
-        } case MOB_ACTION_END_IF:
-        case MOB_ACTION_LABEL: {
+        } case FLOW_CODE_DO_NOTHING: {
             //Nothing to do.
             break;
             
-        } default: {
+        } case FLOW_CODE_NONE: {
             //Normal action.
             actions[a]->run(m, customData1, customData2);
             //If the state got changed, jump out.

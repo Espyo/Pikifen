@@ -82,22 +82,14 @@ script {
             
             if $cur_color = red
                 set_var cur_color yellow
-            else
-                if $cur_color = yellow
-                    set_var cur_color blue
-                else
-                    if $cur_color = blue
-                        set_var cur_color rock
-                    else
-                        if $cur_color = rock
-                            set_var cur_color winged
-                        else
-                            if $cur_color = winged
-                                set_var cur_color red
-                            end_if
-                        end_if
-                    end_if
-                end_if
+            else_if $cur_color = yellow
+                set_var cur_color blue
+            else_if $cur_color = blue
+                set_var cur_color rock
+            else_if $cur_color = rock
+                set_var cur_color winged
+            else_if $cur_color = winged
+                set_var cur_color red
             end_if
             
             if $cur_color = red

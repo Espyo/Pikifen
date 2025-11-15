@@ -16,10 +16,8 @@ script{
         on_receive_message {
             if $msg = interact
                 set_state flipping_on
-            else
-                if $msg > 0
-                    set_state flipping_on
-                end_if
+            else_if $msg > 0
+                set_state flipping_on
             end_if
         }
         on_pikmin_land {
@@ -45,10 +43,8 @@ script{
         on_receive_message {
             if $msg = interact
                 set_state flipping_off
-            else
-                if $msg > 0
-                    set_state flipping_off
-                end_if
+            else_if $msg > 0
+                set_state flipping_off
             end_if
         }
         on_pikmin_land {

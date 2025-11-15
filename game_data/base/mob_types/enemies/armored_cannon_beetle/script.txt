@@ -23,10 +23,8 @@ script {
             get_random_int idle_action 0 1
             if $idle_action = 0
                 set_state bored
-            else
-                if $idle_action = 1
-                    set_state exploring
-                end_if
+            else_if $idle_action = 1
+                set_state exploring
             end_if
             
             get_random_float t 1.5 2.5

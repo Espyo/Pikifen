@@ -11,10 +11,8 @@ script{
             get_event_info msg message
             if $msg = interact
                 set_state down
-            else
-                if $msg > 0
-                    set_state down
-                end_if
+            else_if $msg > 0
+                set_state down
             end_if
         }
         on_pikmin_land {

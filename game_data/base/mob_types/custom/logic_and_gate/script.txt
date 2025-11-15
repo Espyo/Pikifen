@@ -26,12 +26,10 @@ script {
 
             if $i1 = 0
                 send_message_to_links 0
+            else_if $i2 = 0
+                send_message_to_links 0
             else
-                if $i2 = 0
-                    send_message_to_links 0
-                else
-                    send_message_to_links 1
-                end_if
+                send_message_to_links 1
             end_if
         }
     }

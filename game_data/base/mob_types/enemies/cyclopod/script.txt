@@ -157,12 +157,10 @@ script {
                 if $underwater = true
                     play_sound slosh
                 end_if
+            else_if $underwater = true
+                start_particles bubble_placement_small
             else
-                if $underwater = true
-                    start_particles bubble_placement_small
-                else
-                    start_particles dust_explosion_small
-                end_if
+                start_particles dust_explosion_small
             end_if
         }
     }
@@ -204,12 +202,10 @@ script {
                 if $underwater = true
                     play_sound slosh
                 end_if
+            else_if $underwater = true
+                start_particles bubble_placement_small
             else
-                if $underwater = true
-                    start_particles bubble_placement_small
-                else
-                    start_particles dust_explosion_small
-                end_if
+                start_particles dust_explosion_small
             end_if
         }
         on_reach_destination {

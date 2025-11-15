@@ -1196,6 +1196,16 @@ void initMobActions() {
         nullptr
     );
     
+    regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("value", MOB_ACTION_PARAM_STRING, false, true);
+    regAction(
+        MOB_ACTION_ELSE_IF,
+        "else_if",
+        MobActionRunners::ifFunction,
+        MobActionLoaders::ifFunction
+    );
+    
     regAction(
         MOB_ACTION_END_IF,
         "end_if",

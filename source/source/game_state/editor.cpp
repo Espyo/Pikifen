@@ -1319,7 +1319,7 @@ void Editor::keyframeVisualizer(
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
     
-    //The built in plot widget doesn't allow for dynamic spacing,
+    //The built-in plot widget doesn't allow for dynamic spacing,
     //so we need to make our own.
     
     //Setup.

@@ -576,7 +576,6 @@ Misc things (so I don't forget)
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Global script variables
-        An else_if action
         An action that returns to the previous state. Useful for creating utility states that mimic functions
         More ideas of actions from Game Builder Garage's Nodon
         New events
