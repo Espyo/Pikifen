@@ -7,8 +7,7 @@ script {
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_idling
-            end_if
-            if $t < 0.66
+            else_if $t < 0.66
                 set_state stage_2_idling
             end_if
             set_state stage_1_idling
@@ -23,8 +22,7 @@ script {
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
-            end_if
-            if $t < 0.66
+            else_if $t < 0.66
                 set_state stage_2_shaking
             end_if
             set_state stage_1_shaking
@@ -42,8 +40,7 @@ script {
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_shaking
-            end_if
-            if $t < 0.66
+            else_if $t < 0.66
                 set_state stage_2_shaking
             end_if
         }

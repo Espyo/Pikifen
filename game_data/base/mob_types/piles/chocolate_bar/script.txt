@@ -5,8 +5,7 @@ script {
             if $m = dropped_resource
                 play_sound snap
                 start_particles pile_sparkles_large 0 0 20
-            end_if
-            if $m = grown_resource
+            else_if $m = grown_resource
                 start_particles pile_sparkles_large 0 0 20
             end_if
         }

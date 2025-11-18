@@ -96,23 +96,19 @@ script {
                 if $red != true
                     goto try_next
                 end_if
-            end_if
-            if $cur_color = yellow
+            else_if $cur_color = yellow
                 if $yellow != true
                     goto try_next
                 end_if
-            end_if
-            if $cur_color = blue
+            else_if $cur_color = blue
                 if $blue != true
                     goto try_next
                 end_if
-            end_if
-            if $cur_color = rock
+            else_if $cur_color = rock
                 if $rock != true
                     goto try_next
                 end_if
-            end_if
-            if $cur_color = winged
+            else_if $cur_color = winged
                 if $winged != true
                     goto try_next
                 end_if
@@ -125,21 +121,13 @@ script {
         on_enter {
             if $cur_color = red
                 set_animation idling_red no_restart
-            end_if
-            
-            if $cur_color = yellow
+            else_if $cur_color = yellow
                 set_animation idling_yellow no_restart
-            end_if
-            
-            if $cur_color = blue
+            else_if $cur_color = blue
                 set_animation idling_blue no_restart
-            end_if
-            
-            if $cur_color = rock
+            else_if $cur_color = rock
                 set_animation idling_rock no_restart
-            end_if
-            
-            if $cur_color = winged
+            else_if $cur_color = winged
                 set_animation idling_winged no_restart
             end_if
         }
@@ -158,17 +146,13 @@ script {
             start_dying
             if $cur_color = red
                 spawn red
-            end_if
-            if $cur_color = yellow
+            else_if $cur_color = yellow
                 spawn yellow
-            end_if
-            if $cur_color = blue
+            else_if $cur_color = blue
                 spawn blue
-            end_if
-            if $cur_color = rock
+            else_if $cur_color = rock
                 spawn rock
-            end_if
-            if $cur_color = winged
+            else_if $cur_color = winged
                 spawn winged
             end_if
         }

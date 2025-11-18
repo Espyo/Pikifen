@@ -11,8 +11,7 @@ script {
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_idling
-            end_if
-            if $t < 0.66
+            else_if $t < 0.66
                 set_state stage_2_idling
             end_if
             set_state stage_1_idling
@@ -26,8 +25,7 @@ script {
             get_mob_info t self health_ratio
             if $t < 0.33
                 set_state stage_3_idling
-            end_if
-            if $t < 0.66
+            else_if $t < 0.66
                 set_state stage_2_idling
             end_if
         }
@@ -68,34 +66,23 @@ script {
                 get_random_float c 1 100
                 if $c < 55
                     set_var contents nectar
-                    goto spawn
-                end_if
-                if $c < 90
+                else_if $c < 90
                     set_var contents nectar_2
-                    goto spawn
-                end_if
-                if $c < 95
+                else_if $c < 95
                     set_var contents spicy_drop
-                    goto spawn
                 else
                     set_var contents bitter_drop
-                    goto spawn
                 end_if
             end_if
-            
-            label spawn
             
             if $contents = nectar
                 spawn nectar
-            end_if
-            if $contents = nectar_2
+            else_if $contents = nectar_2
                 spawn nectar
                 spawn nectar
-            end_if
-            if $contents = spicy_drop
+            else_if $contents = spicy_drop
                 spawn spicy_drop
-            end_if
-            if $contents = bitter_drop
+            else_if $contents = bitter_drop
                 spawn bitter_drop
             end_if
         }

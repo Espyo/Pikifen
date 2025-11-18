@@ -83,12 +83,10 @@ script {
                 if $decision = 1
                     arachnorb_plan_logic forward
                     set_state move_fr
-                end_if
-                if $decision = 2
+                else_if $decision = 2
                     arachnorb_plan_logic cw_turn
                     set_state move_fr
-                end_if
-                if $decision = 3
+                else_if $decision = 3
                     arachnorb_plan_logic ccw_turn
                     set_state move_fr
                 end_if

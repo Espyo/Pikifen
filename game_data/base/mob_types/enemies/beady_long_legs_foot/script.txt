@@ -48,20 +48,17 @@ script {
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
-            end_if
-            if $id = fl
+            else_if $id = fl
                 if $msg = move_fl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
-            end_if
-            if $id = br
+            else_if $id = br
                 if $msg = move_br
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
-            end_if
-            if $id = bl
+            else_if $id = bl
                 if $msg = move_bl
                     move_to_target arachnorb_foot_logic
                     set_state rising
