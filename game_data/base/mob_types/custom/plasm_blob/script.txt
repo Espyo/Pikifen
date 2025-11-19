@@ -1,0 +1,135 @@
+first_state = landing
+death_state = destroying
+
+init {
+	set_var value 500
+	set_var play_particles true
+	set_var time_alive 0
+	set_timer 0.1
+}
+
+global {
+	on_timer {
+		if $misc_timer > -1
+			if $misc_timer > 0
+				calculate misc_timer $misc_timer - 0.1
+			end_if
+			if $misc_timer <= 0
+				set_var misc_timer 0
+			end_if
+		end_if
+		calculate time_alive $time_alive + 0.1
+		set_timer 0.1
+	}
+	on_receive_message {
+		get_event_info temp message
+		if $temp = plasm_wraith_death
+			set_state destroying
+		end_if
+	}
+}
+
+script {
+    landing {
+        on_enter {
+			if $value >= 500
+				set_radius 32
+            	set_animation idling_l
+			else_if $value >= 200
+				set_radius 22
+				set_animation idling_m
+			else
+				set_radius 16
+				set_animation idling_s
+			end_if
+			get_random_float angle 0 360
+			turn_to_relative $angle
+        }
+		on_land {
+            stop
+			set_state idling
+		}
+    }
+
+    idling {
+        on_enter {
+			set_tangible false
+			set_var misc_timer 1
+        }
+		on_land {
+			stop
+			set_tangible true
+		}
+		on_timer {
+			if $misc_timer = 0
+				set_var misc_timer -1
+				set_tangible true
+			end_if
+		}
+		on_pikmin_land {
+			add_health -100
+		}
+		on_receive_message {
+			if $temp = plasm_absorb_start
+				if $time_alive > 8
+					set_var temp true
+				end_if
+				if $to_absorb = true
+					set_var temp true
+				end_if
+				if $temp = true
+					focus trigger
+					set_state absorbing
+				end_if
+			end_if
+		}
+    }
+	
+	absorbing {
+		on_enter {
+			set_gravity -0.3
+			set_var misc_timer 1
+			set_var rising true
+			move_to_target focused_mob
+		}
+		on_timer {
+			if $misc_timer = 0
+				set_var misc_timer 0
+				if $rising = true
+					set_gravity 0
+					stop_vertically
+					set_var rising false
+					set_timer 5
+				else 
+					//In case the blob's left the range of the Wraith, limit how long it can fly.
+					set_gravity 1
+					set_state idling
+				end_if
+			end_if
+		}
+		
+		on_reach_destination {
+			send_message_to_focus $value
+			set_state destroying
+		}
+		
+		on_receive_message {
+			if $temp = plasm_absorb_end
+				set_gravity 1
+				set_state idling
+			end_if
+		}
+	}
+	
+    destroying {
+        on_enter {
+			set_animation destroyed
+			if $play_particles != false
+				start_particles plasm_explosion 0 0 100
+			end_if
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}

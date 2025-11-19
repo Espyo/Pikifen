@@ -1,0 +1,484 @@
+first_state = exploring
+death_state = dying
+states_ignoring_death = dying
+
+init {
+	//Whether it's ignoring prey to return home.
+    set_var ignoring false
+	//Last recorded health value.
+	get_mob_info last_health self health
+	//Timer for how long to idle for, or how long to wait till the next idling state.
+	set_var idle_timer 0
+	//Timer for how long to absorb for, or how long to wait till the next absorption.
+	set_var absorb_timer 25
+	//Number of cores currently alive.
+	set_var alive_cores 0
+}
+
+global {
+	on_timer {
+		//We need to keep track of a bunch of timed events at once, so here's a workaround for multiple timers. We lose a bit of precision, but it shouldn't be noticeable.
+		//We'll use values at or below -1 to indicate that the timer is not running. It's much lower than 0 to avoid accidental disabling.
+		if $idle_timer > -1
+			if $idle_timer > 0
+				calculate idle_timer $idle_timer - 0.1
+			end_if
+		end_if
+		if $absorb_timer > -1
+			if $absorb_timer > 0
+				calculate absorb_timer $absorb_timer - 0.1
+			end_if
+		end_if
+
+		get_mob_info cur_health self health
+		calculate last_health $last_health + $health_diff
+		calculate health_diff $last_health - $cur_health
+		set_var last_health $cur_health
+
+		if $health_diff >= 2500
+			spawn blob_l
+			calculate health_diff $health_diff - 500
+		end_if
+
+		set_timer 0.1
+	}
+	on_receive_message {
+		get_event_info temp message
+		if $temp = plasm_break
+			calculate alive_cores $alive_cores - 1
+		end_if
+	}
+}
+
+script {
+	idling {
+		on_enter {
+            stop
+            set_animation idling
+            get_random_float idle_timer 1.5 3.5
+            set_timer 0.1
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state chasing
+        }
+        on_tick {
+			if $idle_timer <= 0
+				set_var idle_timer -1
+				set_state exploring
+			end_if
+			if $absorb_timer <= 0
+				set_var absorb_timer -1
+				set_state absorbing
+			end_if
+        }
+		on_itch {
+			set_state shaking
+        }
+	}
+
+    exploring {
+        on_enter {
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
+            move_to_relative $x $y
+            set_animation walking
+            get_random_float idle_timer 1.5 2.5
+            set_timer 0.1
+            set_near_reach search
+        }
+        on_opponent_in_reach {
+			if $ignoring = false
+				focus trigger
+				set_state chasing
+			end_if
+        }
+        on_reach_destination {
+           set_state idling
+        }
+        on_tick {
+			if $idle_timer <= 0
+				set_var idle_timer -1
+				set_state idling
+			end_if
+			if $absorb_timer <= 0
+				set_var absorb_timer -1
+				set_state absorbing
+			end_if
+        }
+		on_leave {
+			set_var ignoring false
+		}
+        on_far_from_home {
+            set_state returning
+        }
+		on_itch {
+			set_state shaking
+        }
+    }
+    
+    chasing {
+        on_enter {
+			get_mob_info ratio self health_ratio
+			if $ratio < 0.25
+				if $alive_cores < 3
+					set_state summoning
+				end_if
+			else_if $ratio < 0.75
+				if $alive_cores < 1
+					set_state summoning
+				end_if
+			end_if
+			
+            set_animation walking
+            move_to_target focused_mob
+            set_near_reach attack
+            set_far_reach chase
+			set_timer 0.1
+        }
+		on_tick {
+			//Cannot begin idling from here.
+			if $absorb_timer <= 0
+				set_var absorb_timer -1
+				set_state absorbing
+			end_if
+        }
+        on_opponent_in_reach {
+			get_mob_info ratio self health_ratio
+			if $ratio < 0.5
+				get_random_int temp 0 10
+				if $temp < 4
+					set_state flying_up
+				else
+					set_state attacking
+				end_if
+			end_if
+            set_state attacking
+        }
+        on_focus_off_reach {
+            set_state exploring
+        }
+        on_far_from_home {
+            set_var ignoring true
+            set_state returning
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    attacking {
+        on_enter {
+			stop
+            set_animation attacking
+            start_chomping 4 arm_l arm_r
+			set_timer 0.1
+        }
+        on_animation_end {
+			stop_chomping
+            get_mob_info temp self chomped_pikmin
+            if $temp > 0
+                set_state eating
+            else
+                set_state attack_stop
+            end_if
+        }
+    }
+
+	attack_stop {
+		on_enter {
+            set_animation attack_stop
+		}
+        on_animation_end {
+            set_var ignoring true
+			set_state exploring
+        }
+	}
+    
+    eating {
+        on_enter {
+            set_animation eating
+        }
+        on_frame_signal {
+            swallow_all
+		}
+        on_animation_end {
+            set_var ignoring true
+			set_state exploring
+        }
+    }
+    
+    flying_up {
+        on_enter {
+            stop
+            set_animation flying_up
+			set_gravity -0.3
+        }
+        on_animation_end {
+			set_state flying
+        }
+    }
+
+	flying {
+		on_enter {
+			set_gravity 0
+            stop
+            stop_vertically
+			get_mob_info temp self latched_pikmin_weight
+            if $temp > 15
+                set_state flying_crashing
+            end_if
+			set_animation flying
+		}
+        on_animation_end {
+			set_state flying_attacking
+        }
+	}
+
+	flying_attacking {
+		on_enter {
+			get_mob_info temp self latched_pikmin_weight
+            if $temp > 15
+                set_state flying_crashing
+            end_if
+			set_animation flying_attacking
+            start_chomping 4 arm_l arm_r
+		}
+        on_animation_end {
+			stop_chomping
+            get_mob_info temp self chomped_pikmin
+            if $temp > 0
+                set_state flying_eating
+            else
+                set_state flying_attack_stop
+            end_if
+        }
+	}
+
+	flying_attack_stop {
+		on_enter {
+            set_animation flying_attack_stop
+		}
+        on_animation_end {
+            set_var ignoring true
+			set_state flying_down
+        }
+	}
+    
+    flying_eating {
+        on_enter {
+            set_animation flying_eating
+        }
+        on_frame_signal {
+            swallow_all
+		}
+        on_animation_end {
+            set_var ignoring true
+			set_state flying_down
+        }
+    }
+
+	flying_down {
+		on_enter {
+			set_gravity 0.3
+			get_mob_info temp self latched_pikmin_weight
+            if $temp > 15
+                set_state flying_crashing
+            end_if
+			set_animation flying_down
+		}
+		on_animation_end {
+			set_gravity 1
+			set_state exploring
+		}
+	}
+
+	flying_crashing {
+		on_enter {
+			set_gravity 0.3
+			set_animation flying_crashing
+		}
+		on_frame_signal {
+			set_gravity 1
+
+		}
+		on_animation_end {
+			set_state exploring
+		}
+	}
+	
+    shaking {
+        on_enter {
+            stop
+            set_animation shaking
+        }
+		on_frame_signal {
+			//Start spawning blobs.
+			get_event_info temp frame_signal
+			if $temp = 0
+				set_var spawning true
+			end_if
+			
+			//Stop spawning blobs.
+			if $temp = 1
+				set_var spawning false
+			end_if
+		}
+
+		on_timer {
+			if $spawning = true
+				//Spawn more dense blobs if the health has dropped by a large amount to prevent possible lag.
+				if $health_diff >= 100
+					if $health_diff >= 2500
+						if $health_diff >= 5000
+							spawn blob_l
+							calculate health_diff $health_diff - 500
+						else
+							spawn blob_m
+							calculate health_diff $health_diff - 200
+						end_if
+					else
+						spawn blob_s
+						calculate health_diff $health_diff - 100
+					end_if
+				end_if
+			end_if
+		}
+        on_animation_end {
+            set_state exploring
+        }
+    }
+    
+	absorbing {
+		on_enter {
+			stop
+			set_animation absorbing
+			set_var absorb_timer 3
+			play_sound inhaling sound_id
+		}
+		on_tick {
+			send_message_to_nearby 2000 plasm_absorb_start
+			if $absorb_timer <= 0
+				set_state absorbing_end
+			end_if
+        }
+		on_receive_message {
+			get_mob_info sender trigger mob_type
+            get_event_info temp message
+			if $sender = plasm_blob
+				calculate last_health $last_health + $temp
+				add_health $temp	
+                //Extend the absorb timer.
+                set_var absorb_timer 1
+			end_if
+		}
+		on_leave {
+			get_random_float absorb_timer 20 30
+			send_message_to_links plasm_absorb_end
+			stop_sound $sound_id
+		}
+	}
+	
+	absorbing_end {
+		on_enter {
+			set_animation absorbing_end
+			send_message_to_nearby 2000 plasm_absorb_end
+		}
+		on_animation_end {
+            set_state exploring
+        }
+	}
+	
+	summoning {
+		on_enter {
+			get_mob_info ratio self health_ratio		
+			
+			if $ratio < 0.25
+				set_var elementals_to_spawn 3
+			else_if $ratio < 0.75
+				set_var elementals_to_spawn 1
+			end_if
+			set_var spawn_dir 1
+			calculate elementals_to_spawn $elementals_to_spawn - $alive_cores
+			
+			//Just abort if we can't actually spawn anything.
+			if $elementals_to_spawn < 1
+				set_state exploring
+			end_if
+			
+			stop
+			set_animation spitting_start 
+        }	
+		
+		on_animation_end {
+			if $elementals_to_spawn < 1
+				set_state exploring	
+			else_if $spawn_dir = 3
+				set_animation spitting_r
+			else_if $spawn_dir = 2
+				set_animation spitting_l
+				set_var spawn_dir 3
+			else_if $spawn_dir = 1
+				set_animation spitting_f
+				set_var spawn_dir 2
+			end_if
+		}
+		
+		on_frame_signal {
+			get_event_info temp frame_signal
+			if $temp = 0 
+				spawn core_f
+				calculate alive_cores $alive_cores + 1
+				calculate elementals_to_spawn $elementals_to_spawn - 1
+			else_if $temp = 1 
+				spawn core_l
+				calculate alive_cores $alive_cores + 1
+				calculate elementals_to_spawn $elementals_to_spawn - 1
+			else_if $temp = 2 
+				spawn core_r
+				calculate alive_cores $alive_cores + 1
+				calculate elementals_to_spawn $elementals_to_spawn - 1
+			end_if
+		}
+	}
+	
+    returning {
+        on_enter {
+            move_to_target home
+            set_animation walking
+            set_var idle_timer 2
+            set_near_reach search
+        }
+        on_leave {
+            set_var idle_timer -1
+        }
+        on_tick {
+			if $absorb_timer <= 0
+				set_var ignoring false
+			end_if
+        }
+        on_reach_destination {
+            set_state exploring
+        }
+        on_opponent_in_reach {
+            if $ignoring = false
+                focus trigger
+                set_state chasing
+            end_if
+        }
+    }
+    
+    dying {
+        on_enter {
+            start_dying
+            set_animation dying
+			start_particles plasm_death 0 0 300
+        }
+        on_animation_end {
+            finish_dying
+			send_message_to_links plasm_break
+			send_message_to_nearby 200000 plasm_wraith_death
+			delete
+        }
+    } 
+}

@@ -1,0 +1,228 @@
+name=Fire Plasm animations
+description=Animations for the Plasm Wraith's Fire Plasm.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.1
+animations{
+	destroyed{
+		frames{
+			spawning_4{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_1{
+				duration=0.0600
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_1{
+				duration=0.4500
+			}
+			idling_1{
+				duration=0.4500
+				sound=fire
+			}
+		}
+	}
+	spawning{
+		loop_frame=4
+		frames{
+			spawning_1{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.1500
+				interpolate=true
+				signal=0
+			}
+			spawning_4{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_1{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_1{
+		file=enemies/fire_plasm
+		file_pos=0.0000 0.0000
+		file_size=240.0000 240.0000
+		hitboxes{
+			fire1{
+				coords=-25.6841 -24.9265 0.0000
+				height=30.0000
+				radius=80.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			fire2{
+				coords=31.1294 34.4013 0.0000
+				height=30.0000
+				radius=80.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			hold{
+				coords=0.0000 0.0000 20.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_1{
+		file=enemies/fire_plasm
+		file_pos=0.0000 0.0000
+		file_size=240.0000 240.0000
+		scale=0.2000 0.2000
+		tint=234 233 0
+		hitboxes{
+			fire1{
+				coords=-5.4410 -5.5315 0.0000
+				height=30.0000
+				radius=16.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			fire2{
+				coords=6.3355 7.2755 0.0000
+				height=30.0000
+				radius=16.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			hold{
+				coords=0.0000 0.0000 20.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_2{
+		file=enemies/fire_plasm
+		file_pos=0.0000 0.0000
+		file_size=240.0000 240.0000
+		scale=0.4000 0.4000
+		tint=234 233 0
+		hitboxes{
+			fire1{
+				coords=-11.3293 -13.1862 0.0000
+				height=30.0000
+				radius=32.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			fire2{
+				coords=12.3710 14.3414 0.0000
+				height=30.0000
+				radius=32.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			hold{
+				coords=0.0000 0.0000 20.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_3{
+		file=enemies/fire_plasm
+		file_pos=0.0000 0.0000
+		file_size=240.0000 240.0000
+		scale=0.6000 0.6000
+		tint=236 235 89
+		hitboxes{
+			fire1{
+				coords=-15.9183 -20.0678 0.0000
+				height=30.0000
+				radius=48.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			fire2{
+				coords=17.2381 20.8167 0.0000
+				height=30.0000
+				radius=48.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			hold{
+				coords=0.0000 0.0000 20.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_4{
+		file=enemies/fire_plasm
+		file_pos=0.0000 0.0000
+		file_size=240.0000 240.0000
+		scale=0.8000 0.8000
+		tint=239 238 170
+		hitboxes{
+			fire1{
+				coords=-18.8775 -23.4644 0.0000
+				height=30.0000
+				radius=64.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			fire2{
+				coords=21.7896 27.1848 0.0000
+				height=30.0000
+				radius=64.0000
+				type=1
+				value=0.0000
+				hazard=fire
+			}
+			hold{
+				coords=0.0000 0.0000 20.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	fire1
+	fire2
+	hold
+}

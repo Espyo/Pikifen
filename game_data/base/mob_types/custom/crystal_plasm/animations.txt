@@ -1,0 +1,475 @@
+name=Crystal Plasm animations
+description=Animations for the Plasm Wraith's Crystal Plasm.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.1
+animations{
+	destroyed{
+		frames{
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+			spawning_03{
+				duration=0.1000
+				interpolate=true
+			}
+			spawning_02{
+				duration=0.1000
+				interpolate=true
+			}
+			spawning_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=1.0000
+			}
+		}
+	}
+	spawning{
+		loop_frame=3
+		frames{
+			spawning_01{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_02{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_03{
+				duration=0.1500
+				interpolate=true
+				signal=0
+			}
+			idling{
+				duration=0.1500
+				interpolate=true
+			}
+		}
+	}
+	stepping{
+		frames{
+			stepping_01{
+				duration=0.1000
+			}
+			stepping_02{
+				duration=0.1000
+			}
+			stepping_03{
+				duration=0.1000
+			}
+			stepping_04{
+				duration=0.1000
+			}
+			stepping_05{
+				duration=0.1000
+			}
+			stepping_06{
+				duration=0.1000
+			}
+			idling_crush{
+				duration=0.1000
+				sound=slam
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_crush{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=50.0000
+				radius=99.0000
+				type=1
+				value=1.0000
+				hazard=crush
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	spawning_01{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		scale=0.2000 0.2000
+		tint=235 185 0
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=18.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=36.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	spawning_02{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		scale=0.4000 0.4000
+		tint=235 185 0
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=36.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=72.0000
+				radius=36.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	spawning_03{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		scale=0.6000 0.6000
+		tint=237 201 70
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=54.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=0
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=108.0000
+				radius=54.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	spawning_04{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 0.0000
+		file_size=185.0000 185.0000
+		scale=0.8000 0.8000
+		tint=241 225 166
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=72.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=0
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_01{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 186.0000
+		file_size=205.0000 194.0000
+		scale=-1.0000 -1.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_02{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 381.0000
+		file_size=215.0000 201.0000
+		scale=-1.0000 1.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_03{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 583.0000
+		file_size=224.0000 209.0000
+		scale=-1.0000 1.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_04{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 793.0000
+		file_size=258.0000 216.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_05{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 583.0000
+		file_size=224.0000 209.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=50.0000
+				radius=99.0000
+				type=1
+				value=1.0000
+				hazard=crush
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_06{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 381.0000
+		file_size=215.0000 201.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=50.0000
+				radius=99.0000
+				type=1
+				value=1.0000
+				hazard=crush
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stepping_07{
+		file=enemies/crystal_plasm
+		file_pos=0.0000 186.0000
+		file_size=205.0000 194.0000
+		hitboxes{
+			crush{
+				coords=0.0000 0.0000 0.0000
+				height=50.0000
+				radius=99.0000
+				type=1
+				value=1.0000
+				hazard=crush
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 90.0000
+				height=1.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+			}
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=180.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	crush
+	hold
+	crystal
+}

@@ -1,0 +1,167 @@
+name=Plasm Blob animations
+description=Animations for the Plasm Wraith's Plasm Blob.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.1
+animations{
+	destroyed{
+		frames{
+			idling_s_01{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_l_01{
+				duration=0.2000
+				interpolate=true
+			}
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling_l{
+		frames{
+			idling_l_01{
+				duration=0.5000
+				interpolate=true
+			}
+			idling_l_02{
+				duration=0.5000
+				interpolate=true
+			}
+		}
+	}
+	idling_m{
+		frames{
+			idling_m_01{
+				duration=0.5000
+				interpolate=true
+			}
+			idling_m_02{
+				duration=0.5000
+				interpolate=true
+			}
+		}
+	}
+	idling_s{
+		frames{
+			idling_s_01{
+				duration=0.5000
+				interpolate=true
+			}
+			idling_s_02{
+				duration=0.5000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=0.0100 0.0100
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=1.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_l_01{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -0.0000
+				height=20.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_l_02{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_m_01{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=0.7000 0.7000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -0.0000
+				height=20.0000
+				radius=22.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_m_02{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=0.7500 0.7500
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -0.0000
+				height=20.0000
+				radius=22.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_s_01{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -0.0000
+				height=20.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_s_02{
+		file=enemies/plasm_blob
+		file_pos=0.0000 0.0000
+		file_size=51.0000 62.0000
+		scale=0.5500 0.5500
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 -0.0000
+				height=20.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+}

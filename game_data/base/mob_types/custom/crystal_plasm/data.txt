@@ -1,0 +1,42 @@
+name = Crystal Plasm
+description = A blob of plasm from the Plasm Wraith that took the form of a crystal cube.
+
+appears_in_area_editor = false
+show_health = true
+height = 180
+max_health = 350
+pushable = false
+pushes = true
+radius = 90
+rectangular_dimensions = 180 180
+move_speed = 270
+acceleration = 4000
+rotation_speed = 100
+
+target_type = strong_plain_obstacle
+team = obstacle
+
+sounds {
+	slam {
+        sound = misc/stomp_big
+        volume = 40
+        speed = 90
+        speed_deviation = 15
+    }
+    hit {
+        sound = nature/crystal_hit
+        speed = 110
+        volume = 20
+        speed_deviation = 8
+    }
+}
+
+default_vulnerability = 0
+vulnerabilities {
+    rock = 100
+	explosion = 100
+}
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

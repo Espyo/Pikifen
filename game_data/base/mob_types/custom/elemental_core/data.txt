@@ -1,0 +1,73 @@
+name = Elemental Core
+description = The center of an Elemental Plasm from the Plasm Wraith.
+
+height = 48
+max_health = 200
+pushable = false
+pushes = false
+radius = 24
+move_speed = 800
+acceleration = 600
+rotation_speed = 20
+
+target_type = pikmin_obstacle
+team = obstacle
+
+spawns {
+	crystal {
+        object = crystal_plasm
+        coordinates = 0 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+    }
+    electric {
+        object = electric_plasm
+        coordinates = 0 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+    }
+    water {
+        object = water_plasm
+        coordinates = 0 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+    }
+	fire {
+        object = fire_plasm
+        coordinates = 0 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+    }
+    //Health given on no damage is 10x value.
+	blob {
+        object = plasm_blob
+        coordinates = 0 0 0
+        angle = 0
+        momentum = 120
+        vars = value = 30
+    }
+	blob_to_absorb {
+        object = plasm_blob
+        coordinates = 0 0 0
+        angle = 0
+        momentum = 120
+        vars = value = 30; to_absorb = true
+    }
+}
+
+area_editor_properties {
+    type {
+        var = type
+        type = number_list
+        list = Random; Crystal; Electric; Water; Fire
+        tooltip = What kind of elemental hazard will this core create?
+    }
+}
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

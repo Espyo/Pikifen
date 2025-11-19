@@ -1,0 +1,188 @@
+name=Water Plasm animations
+description=Animations for the Plasm Wraith's Water Plasm.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.1
+animations{
+	destroyed{
+		frames{
+			spawning_4{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.0600
+				interpolate=true
+			}
+			spawning_1{
+				duration=0.0600
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_1{
+				duration=0.4500
+			}
+			idling_1{
+				duration=0.4500
+				sound=water
+			}
+		}
+	}
+	spawning{
+		loop_frame=4
+		frames{
+			spawning_1{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.1500
+				interpolate=true
+				signal=0
+			}
+			spawning_4{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_1{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_1{
+		file=enemies/water_plasm
+		file_pos=0.0000 0.0000
+		file_size=220.0000 220.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 -0.0000
+				height=220.0000
+				radius=132.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_1{
+		file=enemies/water_plasm
+		file_pos=0.0000 0.0000
+		file_size=220.0000 220.0000
+		scale=0.1200 0.1200
+		tint=255 212 0
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=30.0000
+				radius=13.2000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_2{
+		file=enemies/water_plasm
+		file_pos=0.0000 0.0000
+		file_size=220.0000 220.0000
+		scale=0.3600 0.3600
+		tint=233 176 0
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 -0.0000
+				height=100.0000
+				radius=39.6000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_3{
+		file=enemies/water_plasm
+		file_pos=0.0000 0.0000
+		file_size=220.0000 220.0000
+		scale=0.6000 0.6000
+		tint=233 198 95
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=66.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_4{
+		file=enemies/water_plasm
+		file_pos=0.0000 0.0000
+		file_size=220.0000 220.0000
+		scale=0.8400 0.8400
+		tint=233 212 145
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 -0.0000
+				height=180.0000
+				radius=92.4000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	water
+	hold
+}

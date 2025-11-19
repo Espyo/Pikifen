@@ -1,0 +1,115 @@
+name=Elemental Core animations
+description=Animations for the Plasm Wraith's Elemental Core.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.0
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=2.0000
+				interpolate=true
+			}
+			idling_2{
+				duration=0.0100
+			}
+		}
+	}
+	intangible{
+		frames{
+			intangible{
+				duration=2.0000
+				interpolate=true
+			}
+			intangible_2{
+				duration=0.0100
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=enemies/elemental_core
+		file_pos=8.0000 8.0000
+		file_size=1.0000 1.0000
+		hitboxes{
+			core{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=enemies/elemental_core
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+		hitboxes{
+			core{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	idling_2{
+		file=enemies/elemental_core
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+		angle=3.1416
+		hitboxes{
+			core{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	intangible{
+		file=enemies/elemental_core
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+		hitboxes{
+			core{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	intangible_2{
+		file=enemies/elemental_core
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+		angle=3.1416
+		hitboxes{
+			core{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	core
+}

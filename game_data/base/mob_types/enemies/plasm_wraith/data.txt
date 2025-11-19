@@ -1,0 +1,128 @@
+name = Plasm Wraith
+description = A mysterious being made of golden plasm. It can shed some of it to create elemental obstacles.
+
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
+custom_category_name = Enemy, large and aggressive
+drops_corpse = true
+height = 256
+max_carriers = 3
+max_health = 32000
+itch_damage = 2000
+itch_time = 15
+move_speed = 70
+pikmin_seeds = 2
+pushable = true
+pushes = true
+radius = 40
+terrain_radius = 80
+rotation_speed = 200
+target_type = enemy
+territory_radius = 600
+weight = 2
+reaches {
+    search = 300 360
+    attack = 40 40
+    chase = 400 360
+}
+
+sounds {
+    inhaling {
+        sound = creature_vocals/inhaling
+        loop = true
+        speed = 80
+        volume = 35
+    }
+    coil {
+        sound = effects/stretch
+        speed = 70
+        volume = 50
+    }
+    step {
+        sound = nature/wet_splat
+        volume = 40
+        speed = 80
+        speed_deviation = 5
+    }
+    stab {
+        sound = effects/swish
+        volume = 50
+        speed = 60
+        speed_deviation = 5
+        stack_mode = normal
+        stack_min_pos = 0.02
+    }
+    shaking {
+        sound = creature_misc/shaking_leather
+        volume = 50
+        speed = 60
+        speed_deviation = 5
+    }
+    exhaling {
+        sound = creature_vocals/spit
+        speed = 80
+        volume = 30
+    }
+    swallow {
+        sound = creature_misc/swallow
+        volume = 40
+        speed = 110
+        speed_deviation = 20
+    }
+}
+
+spawns {
+	blob_l {
+        object = plasm_blob
+        coordinates = 0 0 0
+        angle = 0
+		momentum = 200
+		vars = value = 500
+    }
+	blob_m {
+        object = plasm_blob
+        coordinates = 0 0 0
+        angle = 0
+		momentum = 200
+		vars = value = 200
+    }
+	blob_s {
+        object = plasm_blob
+        coordinates = 0 0 0
+        angle = 0
+		momentum = 200
+		vars = value = 100
+    }
+	core_f {
+        object = elemental_core
+        coordinates = 20 0 1200
+        angle = 0
+		relative = true
+		link_spawn_to_object = true
+		link_object_to_spawn = true
+    }
+	core_l {
+        object = elemental_core
+        coordinates = 0 -20 1200
+        angle = -90
+		relative = true
+		link_spawn_to_object = true
+		link_object_to_spawn = true
+    }
+	core_r {
+        object = elemental_core
+        coordinates = 0 20 1200
+        angle = 90
+		relative = true
+		link_spawn_to_object = true
+		link_object_to_spawn = true
+    }
+}
+
+status_vulnerabilities {
+    white_pikmin_poison = 0
+}
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

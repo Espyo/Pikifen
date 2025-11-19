@@ -1830,6 +1830,10 @@ vertexes{
 	v=-736.0000 2544.0000
 	v=-736.0000 2512.0000
 	v=-752.0000 2528.0000
+	v=-2656.0000 -2144.0000
+	v=-2656.0000 -1472.0000
+	v=-3328.0000 -1472.0000
+	v=-3328.0000 -2144.0000
 }
 edges{
 	e{
@@ -10127,6 +10131,22 @@ edges{
 		s=453 330
 		v=1829 1830
 	}
+	e{
+		s=1 454
+		v=1834 1831
+	}
+	e{
+		s=1 454
+		v=1831 1832
+	}
+	e{
+		s=1 454
+		v=1832 1833
+	}
+	e{
+		s=1 454
+		v=1833 1834
+	}
 }
 sectors{
 	s{
@@ -12656,6 +12676,11 @@ sectors{
 		texture_scale=0.7500 0.7500
 		texture_tint=136 136 136
 	}
+	s{
+		z=-100.0000
+		texture=textures/grass_light
+		texture_scale=0.7500 0.7500
+	}
 }
 mobs{
 	leader{
@@ -12893,7 +12918,7 @@ mobs{
 	}
 	enemy{
 		type=puffy_blowhog
-		p=-576.0000 -1792.0000
+		p=-576.0000 -1824.0000
 	}
 	enemy{
 		type=skutterchuck
@@ -12988,7 +13013,7 @@ mobs{
 	}
 	enemy{
 		type=armored_cannon_beetle
-		p=-1440.0000 -1792.0000
+		p=-1440.0000 -1824.0000
 	}
 	bouncer{
 		type=geyser
@@ -13006,7 +13031,7 @@ mobs{
 	}
 	enemy{
 		type=beady_long_legs
-		p=-2240.0000 -1792.0000
+		p=-2240.0000 -1824.0000
 		boss=true
 	}
 	bouncer{
@@ -14889,6 +14914,20 @@ mobs{
 		type=bridge_base_ceramic_red
 		p=768.0000 -640.0000
 		vars=chunks=5
+	}
+	bouncer{
+		type=geyser
+		p=-2688.0000 -1504.0000
+		links=485
+	}
+	custom{
+		type=dummy
+		p=-2624.0000 -1504.0000
+	}
+	enemy{
+		type=plasm_wraith
+		p=-2976.0000 -1824.0000
+		boss=true
 	}
 }
 path_stops{

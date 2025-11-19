@@ -1,0 +1,110 @@
+first_state = starting
+death_state = destroying
+
+init {
+	set_timer 0.1
+}
+
+global {
+	on_timer {
+		if $misc_timer > -1
+			if $misc_timer > 0
+				calculate misc_timer $misc_timer - 0.1
+			end_if
+			if $misc_timer <= 0
+				set_var misc_timer 0
+			end_if
+		end_if
+		calculate time_alive $time_alive + 0.1
+		set_timer 0.1
+	}
+	on_receive_message {
+		get_event_info temp message
+		if $temp = plasm_wraith_death
+			set_state destroying
+		end_if
+	}
+}
+
+script {
+    starting {
+        on_enter {
+			move_to_relative 300 0
+            set_animation idling random_time
+			set_var misc_timer 3
+        }
+		on_land {
+			stop
+			set_state spawning
+		}
+		on_timer {
+			if $misc_timer = 0
+				set_var misc_timer -1
+				stop
+				set_state spawning
+			end_if
+		}
+    }
+	spawning {
+		on_enter {
+			set_var misc_timer 3
+		}
+		on_timer {
+			if $misc_timer = 0
+				set_var misc_timer -1			
+				if $type = 0
+					get_random_int type 1 4
+				end_if
+				if $type = 1
+					spawn fire
+				else_if $type = 2
+					spawn electric
+				else_if $type = 3
+					spawn water
+				else_if $type = 4
+					set_animation intangible
+					spawn crystal
+				end_if
+				set_state idling
+			end_if
+		}
+	}
+	idling {
+		on_receive_message {
+			if $temp = plasm_break
+				set_state destroying
+			else_if $temp = plasm_absorb_start
+				if $time_alive > 10
+					set_var to_absorb true
+					set_state destroying
+				end_if
+			end_if
+		}
+	}
+	
+    destroying {
+        on_enter {
+			set_animation destroyed
+			send_message_to_links plasm_break
+			start_particles plasm_explosion 0 0 500
+			if $to_die = true
+				set_var to_spawn 0
+			else
+				set_var to_spawn 10
+			end_if
+			label A
+			if $to_absorb = true
+				spawn blob_to_absorb
+			else
+				spawn blob
+			end_if
+			if $to_spawn > 0
+				calculate to_spawn $to_spawn - 1
+				goto A
+			end_if
+        }
+		on_animation_end {
+			delete
+		}
+    }
+}

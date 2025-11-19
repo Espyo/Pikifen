@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If you mash throwing Pikmin, sometimes you get stuck holding one
     Having a Pikmin follow a Snagret as a leader causes a crash
     If two keyframes have the same value, the visualizer in the editor will show a broken line
     Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
@@ -60,6 +61,7 @@ Next tasks (roughly sorted most important first)
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
         Glowmob?
+    Rookie Rescue Officer
     Puffstool and mushroom Pikmin
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
@@ -715,7 +717,6 @@ Misc things (so I don't forget)
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
     Base content to add
         Enemies
-            x Add Helodity's Plasm Wraith
             Burrowing Snagret
             Bulbears
             Scuttlebug?

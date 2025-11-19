@@ -1,0 +1,278 @@
+name=Electric Plasm animations
+description=Animations for the Plasm Wraith's Electric Plasm.
+maker=Helodity
+version=1.0.0
+engine_version=1.0.1
+animations{
+	destroyed{
+		frames{
+			spawning_4{
+				duration=0.0500
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.0500
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.0500
+				interpolate=true
+			}
+			spawning_1{
+				duration=0.0500
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_1{
+				duration=0.5000
+			}
+			idling_2{
+				duration=0.1000
+				sound=electric
+			}
+			idling_3{
+				duration=0.1000
+			}
+			idling_4{
+				duration=0.1000
+			}
+		}
+	}
+	spawning{
+		loop_frame=4
+		frames{
+			spawning_1{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_2{
+				duration=0.1500
+				interpolate=true
+			}
+			spawning_3{
+				duration=0.1500
+				interpolate=true
+				signal=0
+			}
+			spawning_4{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_1{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_1{
+		file=enemies/electric_plasm
+		file_pos=0.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 -0.0000
+				height=300.0000
+				radius=180.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_2{
+		file=enemies/electric_plasm
+		file_pos=301.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 -0.0000
+				height=300.0000
+				radius=180.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_3{
+		file=enemies/electric_plasm
+		file_pos=602.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 -0.0000
+				height=300.0000
+				radius=180.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_4{
+		file=enemies/electric_plasm
+		file_pos=903.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 -0.0000
+				height=300.0000
+				radius=180.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_1{
+		file=enemies/electric_plasm
+		file_pos=0.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=0.2500 0.2500
+		tint=255 171 0
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 0.0000
+				height=60.0000
+				radius=36.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_2{
+		file=enemies/electric_plasm
+		file_pos=0.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=0.5000 0.5000
+		tint=255 171 0
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 0.0000
+				height=120.0000
+				radius=72.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_3{
+		file=enemies/electric_plasm
+		file_pos=0.0000 0.0000
+		file_size=300.0000 300.0000
+		scale=0.7500 0.7500
+		tint=254 193 69
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=110.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spawning_4{
+		file=enemies/electric_plasm
+		file_pos=0.0000 0.0000
+		file_size=300.0000 300.0000
+		tint=255 224 163
+		hitboxes{
+			stun{
+				coords=0.0000 0.0000 0.0000
+				height=210.0000
+				radius=145.0000
+				type=1
+				value=1.0000
+				hazard=electricity_stunning
+				knockback_outward=true
+				knockback=1.0000
+			}
+			hold{
+				coords=0.0000 0.0000 100.0000
+				height=1.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	stun
+	hold
+}

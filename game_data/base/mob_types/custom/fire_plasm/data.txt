@@ -1,0 +1,31 @@
+name = Fire Plasm
+description = A blob of plasm from the Plasm Wraith that took the form of a fire stretch.
+
+appears_in_area_editor = false
+show_health = true
+height = 20
+max_health = 500
+pushable = false
+pushes = false
+radius = 144
+move_speed = 270
+acceleration = 4000
+rotation_speed = 100
+casts_shadow = false
+
+can_hurt = player; fragile;
+
+sounds {
+    fire {
+        sound = misc/flamethrower
+        volume = 30
+        speed = 120
+        speed_deviation = 5
+    }
+}
+
+default_vulnerability = 0
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0

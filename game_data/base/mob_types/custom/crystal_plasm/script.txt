@@ -1,0 +1,96 @@
+first_state = spawning
+death_state = destroying
+
+global {
+	on_damage {
+		play_sound hit
+	}
+
+}
+
+script {
+	spawning {
+		on_enter {
+			set_timer 1
+			set_height 20
+			set_animation spawning
+		}
+		on_frame_signal {
+			set_height 180
+		}
+		on_timer {
+			focus link
+			hold_focused_mob hold
+			set_state idling
+		}
+		on_receive_message {
+			get_event_info temp message
+			if $temp = plasm_break
+				set_state destroying
+			end_if
+		}
+	}
+
+	idling {
+		on_enter {
+			set_animation idling
+			set_timer 2
+		}
+		on_timer {
+			set_state turning
+		}
+		on_receive_message {
+			get_event_info temp message
+			if $temp = plasm_break
+				set_state destroying
+			end_if
+		}
+	}
+
+	turning {
+		on_enter {
+			get_random_int direction -1 1
+			calculate angle $direction * 90
+			turn_to_relative $angle
+			set_timer 2
+		}
+		on_timer {
+			set_state moving
+		}
+		on_receive_message {
+			get_event_info temp message
+			if $temp = plasm_break
+				set_state destroying
+			end_if
+		}
+	}
+
+	moving {
+		on_enter {
+			set_animation stepping
+			move_to_relative 1000 0
+		}
+		on_animation_end {
+			start_particles dust_explosion_large 0 0 100
+			stop
+			set_state idling
+		}
+		on_receive_message {
+			get_event_info temp message
+			if $temp = plasm_break
+				set_state destroying
+			end_if
+		}
+	}
+	
+	destroying {
+        on_enter {
+			set_animation destroyed
+			send_message_to_links plasm_break
+			start_particles crystal_explosion_large 0 0 100
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}

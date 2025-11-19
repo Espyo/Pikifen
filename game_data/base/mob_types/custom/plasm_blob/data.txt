@@ -1,0 +1,24 @@
+name = Plasm Blob
+description = A blob of plasm, shed by the Plasm Wraith.
+
+appears_in_area_editor = false
+show_health = false
+height = 10
+max_health = 250
+pushable = false
+pushes = false
+radius = 32
+move_speed = 3000
+acceleration = 500
+rotation_speed = 7000
+can_free_move = true
+target_type = weak_plain_obstacle
+team = enemy
+
+vulnerabilities {
+    rock = 300
+}
+
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
