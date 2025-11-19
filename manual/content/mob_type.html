@@ -185,7 +185,7 @@
       </tr>
       <tr>
         <td>default_vulnerability</td>
-        <td>For every source of damage not specified in the <a href="#vulnerabilities">vulnerabilities</a>, the damage the object receives is multiplied by this amount.</td>
+        <td>For every source of damage not specified in the <a href="#vulnerabilities">vulnerabilities</a>, the damage the object receives is specified by this percentage.</td>
         <td>Number</td>
         <td>1</td>
       </tr>
@@ -298,6 +298,12 @@
         <td>If true, the object's sprite will squash and stretch every time the object gets damaged. This is true by default for enemy types.</td>
         <td>Boolean</td>
         <td>false</td>
+      </tr>
+      <tr>
+        <td>vertical_speed_multiplier</td>
+        <td>If the object can fly, it moves vertically at the same speed as its walk speed. Use this to increase or decrease the vertical speed.</td>
+        <td>Number</td>
+        <td>1</td>
       </tr>
       <tr>
         <td>walkable</td>

@@ -378,6 +378,19 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
             autoStartOption.clear();
         }
         saveMakerTools();
+        if(autoStartState.empty()) {
+            game.console.write("Reset Pikifen's auto-start.");
+        } else {
+            string msg =
+                "Set Pikifen to auto-start in the \"" + autoStartState +
+                "\" state";
+            if(autoStartOption.empty()) {
+                msg += ".";
+            } else {
+                msg += ", option \"" + autoStartOption + "\".";
+            }
+            game.console.write(msg);
+        }
         
         usedHelpingTools = true;
         break;

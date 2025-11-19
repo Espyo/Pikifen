@@ -740,7 +740,10 @@ void Mob::tickVerticalMovementPhysics(
         float diffZ = fabs(targetZ - z);
         
         speedZ =
-            std::min((float) (diffZ / deltaT), chaseInfo.curSpeed);
+            std::min(
+                (float) (diffZ / deltaT),
+                chaseInfo.curSpeed * chaseInfo.verticalSpeedMult
+            );
         if(targetZ < z) {
             speedZ = -speedZ;
         }

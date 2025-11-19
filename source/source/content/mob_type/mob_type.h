@@ -310,6 +310,9 @@ public:
     //Rotates these many radians per second.
     float rotationSpeed = MOB_TYPE::DEF_ROTATION_SPEED;
     
+    //Multiply the vertical speed by this.
+    float verticalSpeedMult = 1.0f;
+    
     //True if it can move in any direction, as opposed to just forward.
     bool canFreeMove = false;
     

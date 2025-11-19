@@ -1594,7 +1594,7 @@ void MobActionRunners::print(MobActionRunData& data) {
         
     string scriptText = vectorTailToString(data.args, 0);
     game.states.gameplay->printActionLogLines.push_back(
-        "[@" + timestamp + "s " + data.m->type->name + " said]: " + scriptText
+        "[@" + timestamp + "s " + data.m->type->name + " said:] " + scriptText
     );
     if(game.states.gameplay->printActionLogLines.size() > 10) {
         game.states.gameplay->printActionLogLines.erase(

@@ -173,6 +173,9 @@ struct ChaseInfo {
     //Maximum speed.
     float maxSpeed = -1.0f;
     
+    //Multiply the vertical speed by this much, if it can fly.
+    float verticalSpeedMult = 1.0f;
+    
 };
 
 

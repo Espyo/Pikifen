@@ -25,6 +25,7 @@ sprout_evolution_time_3 = 180
 top_bud = pikmin/purple_bud_top
 top_flower = pikmin/purple_flower_top
 top_leaf = pikmin/leaf_top
+vertical_speed_multiplier = 4.0f
 
 sounds {
     attack {

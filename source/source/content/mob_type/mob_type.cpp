@@ -286,6 +286,7 @@ void MobType::loadFromDataNode(
     tRS.set("terrain_radius", terrainRadius);
     tRS.set("territory_radius", territoryRadius);
     tRS.set("use_damage_squash_and_stretch", useDamageSquashAndStretch);
+    tRS.set("vertical_speed_multiplier", verticalSpeedMult);
     tRS.set("walkable", walkable);
     tRS.set("weight", weight);
     

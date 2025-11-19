@@ -1218,7 +1218,8 @@ void Mob::chase(
         (speed == LARGE_FLOAT ? getBaseSpeed() : speed);
     chaseInfo.acceleration =
         (acceleration == LARGE_FLOAT ? type->acceleration : acceleration);
-        
+    chaseInfo.verticalSpeedMult = type->verticalSpeedMult;
+    
     chaseInfo.state = CHASE_STATE_CHASING;
 }
 
