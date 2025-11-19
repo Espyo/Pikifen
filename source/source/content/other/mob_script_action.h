@@ -162,6 +162,9 @@ enum MOB_ACTION {
     //Set whether it is flying.
     MOB_ACTION_SET_FLYING,
     
+    //Set a script variable's value of the focused mob.
+    MOB_ACTION_SET_FOCUS_VAR,
+    
     //Set its gravity.
     MOB_ACTION_SET_GRAVITY,
     
@@ -722,6 +725,7 @@ void setAnimation(MobActionRunData& data);
 void setCanBlockPaths(MobActionRunData& data);
 void setFarReach(MobActionRunData& data);
 void setFlying(MobActionRunData& data);
+void setFocusVar(MobActionRunData& data);
 void setGravity(MobActionRunData& data);
 void setHealth(MobActionRunData& data);
 void setHeight(MobActionRunData& data);

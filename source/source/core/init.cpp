@@ -1555,6 +1555,15 @@ void initMobActions() {
         nullptr
     );
     
+    regParam("focused mob's destination var name", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("value", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
+        MOB_ACTION_SET_FOCUS_VAR,
+        "set_focus_var",
+        MobActionRunners::setFocusVar,
+        nullptr
+    );
+    
     regParam("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_GRAVITY,

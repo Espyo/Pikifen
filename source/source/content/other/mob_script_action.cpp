@@ -1780,6 +1780,17 @@ void MobActionRunners::setFlying(MobActionRunData& data) {
 
 
 /**
+ * @brief Code for the focused mob var setting mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::setFocusVar(MobActionRunData& data) {
+    if(!data.m->focusedMob) return;
+    data.m->focusedMob->vars[data.args[0]] = data.args[1];
+}
+
+
+/**
  * @brief Code for the gravity setting mob script action.
  *
  * @param data Data about the action call.
