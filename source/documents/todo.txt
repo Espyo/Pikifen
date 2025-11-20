@@ -9,9 +9,9 @@ Next tasks (roughly sorted most important first)
     If you mash throwing Pikmin, sometimes you get stuck holding one
     Having a Pikmin follow a Snagret as a leader causes a crash
     If two keyframes have the same value, the visualizer in the editor will show a broken line
-    Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
+    If you have the options menu open in the pause menu you can still press the page flip buttons
 
     --- 1.1.0 ---
     Dismiss sound should be a higher pitch when you press again to dismiss all

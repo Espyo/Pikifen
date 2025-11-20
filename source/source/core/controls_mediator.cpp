@@ -152,16 +152,29 @@ Inpution::Input ControlsMediator::allegroEventToInput(
         break;
         
     } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
-        if(ev.joystick.pos >= 0.0f) {
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
-            input.value = ev.joystick.pos;
+        int nAxes =
+            al_get_joystick_num_axes(ev.joystick.id, ev.joystick.stick);
+        if(nAxes == 2) {
+            if(ev.joystick.pos >= 0.0f) {
+                //It's likely a real stick.
+                input.source.type =
+                    Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+                input.value = ev.joystick.pos;
+            } else {
+                input.source.type =
+                    Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+                input.value = -ev.joystick.pos;
+            }
+            input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
+            input.source.stickNr = ev.joystick.stick;
+            input.source.axisNr = ev.joystick.axis;
         } else {
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
-            input.value = -ev.joystick.pos;
+            //It's likely an analog button.
+            input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+            input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
+            input.source.stickNr = ev.joystick.stick;
+            input.value = (ev.joystick.pos + 1.0f) / 2.0f;
         }
-        input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
-        input.source.stickNr = ev.joystick.stick;
-        input.source.axisNr = ev.joystick.axis;
         break;
     }
     }
@@ -221,7 +234,7 @@ Inpution::Bind ControlsMediator::findBind(
 /**
  * @brief Finds all registered control binds for player 1 that match
  * the requested action. Returns an empty list if none is found.
- * 
+ *
  * @param actionTypeId ID of the action type.
  * @return The list.
  */
@@ -241,7 +254,7 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
 /**
  * @brief Finds all registered control binds for player 1 that match
  * the requested action. Returns an empty list if none is found.
- * 
+ *
  * @param actionTypeName Name of the action type.
  * @return The list.
  */
@@ -271,7 +284,7 @@ const vector<PlayerActionType>
 /**
  * @brief Returns a player action type's ID given its internal name.
  * For this, it checks the list of registered player action types.
- * 
+ *
  * @param iName The internal name.
  * @return The ID, or PLAYER_ACTION_TYPE_NONE if not found.
  */
