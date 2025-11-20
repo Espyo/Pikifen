@@ -220,6 +220,29 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Mouse cursor movement.
         mouseCursor.updatePos(ev);
         mouseCursor.movedThisFrame = true;
+        lastHardwareInputWasController = false;
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_KEY_DOWN ||
+        ev.type == ALLEGRO_EVENT_KEY_UP ||
+        ev.type == ALLEGRO_EVENT_KEY_CHAR
+    ) {
+        //Keyboard input.
+        lastHardwareInputWasController = false;
+        
+    } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+        //Game controller input.
+        if(fabs(ev.joystick.pos) > 0.5f) {
+            //Easy deadzone simulation.
+            lastHardwareInputWasController = true;
+        }
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN ||
+        ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP
+    ) {
+        //Game controller input.
+        lastHardwareInputWasController = true;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY) {
         //Mouse cursor left window.
@@ -262,7 +285,9 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
  */
 bool Game::globalHandleSystemPlayerAction(const Inpution::Action& action) {
     bool isSystemAction =
-        controls.getPlayerActionType(action.actionTypeId).category ==
+        controls.getActionTypeById(
+            (PLAYER_ACTION_TYPE) action.actionTypeId
+        ).category ==
         PLAYER_ACTION_CAT_SYSTEM;
     if(!isSystemAction) return false;
     if(action.value < 0.5f) return false;

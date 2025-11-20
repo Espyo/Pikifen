@@ -5,6 +5,10 @@ Espyo's Easy Spatial Navigation algorithm for GUIs.
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
 > * [Features](#features)
+> * [Important information](#important-information)
+> * [Troubleshooting](#troubleshooting)
+> * [Inner workings notes](#inner-workings-notes)
+> * [Research](#research)
 
 
 ## Overview

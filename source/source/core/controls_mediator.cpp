@@ -76,7 +76,7 @@ void ControlsMediator::addModifier(
  * @param reinsertionTTL Time to live when reinserted into the queue.
  * @param freezable If true, its value can be frozen between game states.
  */
-void ControlsMediator::addPlayerActionType(
+void ControlsMediator::addActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string& name, const string& description, const string& internalName,
     const string& defaultBindStr, Inpution::ACTION_VALUE_TYPE valueType,
@@ -181,7 +181,7 @@ vector<Inpution::Bind>& ControlsMediator::binds() {
 
 
 /**
- * @brief Finds a registered control bind for player 1 that matches
+ * @brief Finds the first registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  *
  * @param actionTypeId ID of the action type.
@@ -200,21 +200,60 @@ Inpution::Bind ControlsMediator::findBind(
 
 
 /**
- * @brief Finds a registered control bind for player 1 that matches
+ * @brief Finds the first registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  *
- * @param actionName Name of the action.
+ * @param actionTypeName Name of the action type.
  * @return The bind.
  */
 Inpution::Bind ControlsMediator::findBind(
-    const string& actionName
+    const string& actionTypeName
 ) const {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].internalName == actionName) {
+        if(playerActionTypes[b].internalName == actionTypeName) {
             return findBind(playerActionTypes[b].id);
         }
     }
     return Inpution::Bind();
+}
+
+
+/**
+ * @brief Finds all registered control binds for player 1 that match
+ * the requested action. Returns an empty list if none is found.
+ * 
+ * @param actionTypeId ID of the action type.
+ * @return The list.
+ */
+vector<Inpution::Bind> ControlsMediator::findBinds(
+    const PLAYER_ACTION_TYPE actionTypeId
+) const {
+    vector<Inpution::Bind> result;
+    for(size_t b = 0; b < mgr.binds.size(); b++) {
+        if(mgr.binds[b].actionTypeId == actionTypeId) {
+            result.push_back(mgr.binds[b]);
+        }
+    }
+    return result;
+}
+
+
+/**
+ * @brief Finds all registered control binds for player 1 that match
+ * the requested action. Returns an empty list if none is found.
+ * 
+ * @param actionTypeName Name of the action type.
+ * @return The list.
+ */
+vector<Inpution::Bind> ControlsMediator::findBinds(
+    const string& actionTypeName
+) const {
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].internalName == actionTypeName) {
+            return findBinds(playerActionTypes[b].id);
+        }
+    }
+    return vector<Inpution::Bind>();
 }
 
 
@@ -224,58 +263,45 @@ Inpution::Bind ControlsMediator::findBind(
  * @return The types.
  */
 const vector<PlayerActionType>
-& ControlsMediator::getAllPlayerActionTypes() const {
+& ControlsMediator::getAllActionTypes() const {
     return playerActionTypes;
 }
 
 
 /**
- * @brief Returns the current value of an input source.
- *
- * @param source The source.
- * @return The value, or 0.0f if not found.
+ * @brief Returns a player action type's ID given its internal name.
+ * For this, it checks the list of registered player action types.
+ * 
+ * @param iName The internal name.
+ * @return The ID, or PLAYER_ACTION_TYPE_NONE if not found.
  */
-float ControlsMediator::getInputSourceValue(
-    const Inpution::InputSource& source
+PLAYER_ACTION_TYPE ControlsMediator::getActionTypeByIName(
+    const string& iName
 ) const {
-    return mgr.getInputSourceValue(source);
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].internalName == iName) {
+            return playerActionTypes[b].id;
+        }
+    }
+    return PLAYER_ACTION_TYPE_NONE;
 }
 
 
 /**
  * @brief Returns a registered type, given its ID.
  *
- * @param actionId ID of the player action.
+ * @param id ID of the player action.
  * @return The type, or an empty type on failure.
  */
-PlayerActionType ControlsMediator::getPlayerActionType(
-    int actionId
+PlayerActionType ControlsMediator::getActionTypeById(
+    PLAYER_ACTION_TYPE id
 ) const {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].id == actionId) {
+        if(playerActionTypes[b].id == id) {
             return playerActionTypes[b];
         }
     }
     return PlayerActionType();
-}
-
-
-/**
- * @brief Returns the internal name from an input ID,
- * used in the on_input_received event.
- *
- * @param actionId ID of the player action.
- * @return The name, or an empty string on failure.
- */
-string ControlsMediator::getPlayerActionTypeInternalName(
-    int actionId
-) {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].id == actionId) {
-            return playerActionTypes[b].internalName;
-        }
-    }
-    return "";
 }
 
 
@@ -285,10 +311,23 @@ string ControlsMediator::getPlayerActionTypeInternalName(
  * @param playerActionTypeId Action type to use.
  * @return The value.
  */
-float ControlsMediator::getPlayerActionTypeValue(
+float ControlsMediator::getValueOfActionType(
     PLAYER_ACTION_TYPE playerActionTypeId
-) {
+) const {
     return mgr.getValue((int) playerActionTypeId);
+}
+
+
+/**
+ * @brief Returns the current value of an input source.
+ *
+ * @param source The source.
+ * @return The value, or 0.0f if not found.
+ */
+float ControlsMediator::getValueOfInputSource(
+    const Inpution::InputSource& source
+) const {
+    return mgr.getInputSourceValue(source);
 }
 
 
@@ -361,7 +400,7 @@ void ControlsMediator::loadBindsFromDataNode(
     DataNode* node, unsigned char playerNr
 ) {
     const vector<PlayerActionType>& playerActionTypes =
-        getAllPlayerActionTypes();
+        getAllActionTypes();
         
     for(size_t a = 0; a < playerActionTypes.size(); a++) {
         string actionTypeName = playerActionTypes[a].internalName;
@@ -426,7 +465,7 @@ void ControlsMediator::saveBindsToDataNode(
 ) {
     map<string, string> bindStrs;
     const vector<PlayerActionType>& playerActionTypes =
-        getAllPlayerActionTypes();
+        getAllActionTypes();
     const vector<Inpution::Bind>& allBinds = binds();
     
     //Fill the defaults, which are all empty strings.
@@ -440,7 +479,7 @@ void ControlsMediator::saveBindsToDataNode(
     for(size_t b = 0; b < allBinds.size(); b++) {
         if(allBinds[b].playerNr != playerNr) continue;
         PlayerActionType actionType =
-            getPlayerActionType(allBinds[b].actionTypeId);
+            getActionTypeById((PLAYER_ACTION_TYPE) allBinds[b].actionTypeId);
         bindStrs[actionType.internalName] +=
             inputSourceToStr(allBinds[b].inputSource) + ";";
     }

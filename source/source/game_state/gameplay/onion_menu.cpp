@@ -117,12 +117,9 @@ OnionMenu::OnionMenu(
     okInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_MENU_OK).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_OK, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     gui.addItem(okInput, "ok_input");
@@ -202,12 +199,9 @@ OnionMenu::OnionMenu(
     changeTenInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_ONION_CHANGE_10).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_ONION_CHANGE_10, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     gui.addItem(changeTenInput, "change_ten_input");
@@ -255,12 +249,9 @@ OnionMenu::OnionMenu(
     selectAllInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_ONION_SELECT_ALL).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_ONION_SELECT_ALL, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     selectAllInput->visible = types.size() > 1;

@@ -210,9 +210,14 @@ void drawMenuButtonIcon(
     bool leftSide, const ALLEGRO_COLOR& tint
 );
 void drawMouseCursor(const ALLEGRO_COLOR& color);
-void drawPlayerInputSourceIcon(
-    const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
-    bool condensed, const Point& where, const Point& maxSize,
+void drawPlayerActionInputSourceIcon(
+    PLAYER_ACTION_TYPE actionTypeId, const Point& where, const Point& maxSize,
+    bool condensed = true, const ALLEGRO_FONT* font = nullptr,
+    const ALLEGRO_COLOR& tint = COLOR_WHITE, bool skipIfNone = true
+);
+void drawInputSourceIcon(
+    const Inpution::InputSource& s, const Point& where, const Point& maxSize,
+    bool condensed = true, const ALLEGRO_FONT* font = nullptr,
     const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawSectorTexture(

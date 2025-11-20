@@ -257,12 +257,9 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_LEADER).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_NEXT_LEADER, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     gui.addItem(leaderNextInput, "leader_next_input");
@@ -435,12 +432,9 @@ Hud::Hud() :
         ) {
             return;
         }
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_TYPE).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size,
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim,
             tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
         );
     };
@@ -478,12 +472,9 @@ Hud::Hud() :
         ) {
             return;
         }
-        const Inpution::InputSource s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_PREV_TYPE).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size,
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
+            true, game.sysContent.fntSlim,
             tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
         );
     };

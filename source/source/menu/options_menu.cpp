@@ -212,9 +212,9 @@ void OptionsMenu::addBindEntryItems(
             bindButton->onDraw =
                 [this, b, aBinds, bindButton]
             (const DrawInfo & draw) {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim, aBinds[b].inputSource, false,
-                    draw.center, draw.size * 0.8f, draw.tint
+                drawInputSourceIcon(
+                    aBinds[b].inputSource, draw.center, draw.size * 0.8f,
+                    false, game.sysContent.fntSlim, draw.tint
                 );
                 
                 drawButton(
@@ -391,9 +391,9 @@ void OptionsMenu::addBindEntryItems(
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             defaultIcon->onDraw =
             [defInputSource] (const DrawInfo & draw) {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim, defInputSource,
-                    false, draw.center, draw.size, draw.tint
+                drawInputSourceIcon(
+                    defInputSource, draw.center, draw.size,
+                    false, game.sysContent.fntSlim, draw.tint
                 );
             };
             bindsListBox->addChild(defaultIcon);
@@ -589,7 +589,7 @@ void OptionsMenu::draw() {
         
         drawTextLines(
             "Please perform the new input for \n" +
-            game.controls.getPlayerActionType(curActionType).name + "\n"
+            game.controls.getActionTypeById(curActionType).name + "\n"
             "\n"
             "(Or wait " + i2s(capturingInputTimeout + 1) + "s to cancel...)",
             game.sysContent.fntStandard,
@@ -1776,7 +1776,7 @@ void OptionsMenu::populateBinds() {
     PLAYER_ACTION_CAT lastCat = PLAYER_ACTION_CAT_NONE;
     GuiItem* itemToFocus = nullptr;
     const vector<PlayerActionType>& allPlayerActionTypes =
-        game.controls.getAllPlayerActionTypes();
+        game.controls.getAllActionTypes();
     vector<Inpution::Bind>& allBinds = game.controls.binds();
     
     bindsPerActionType.clear();
@@ -1848,7 +1848,7 @@ void OptionsMenu::restoreDefaultBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) {
     const PlayerActionType& actionType =
-        game.controls.getPlayerActionType(actionTypeId);
+        game.controls.getActionTypeById(actionTypeId);
     vector<Inpution::Bind>& allBinds =
         game.controls.binds();
         

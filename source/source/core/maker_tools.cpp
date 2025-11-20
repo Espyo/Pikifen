@@ -106,7 +106,9 @@ unsigned char MakerTools::getMakerToolSettingIdx() const {
  */
 bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     bool isGameplayToolAction =
-        game.controls.getPlayerActionType(action.actionTypeId).category ==
+        game.controls.getActionTypeById(
+            (PLAYER_ACTION_TYPE) action.actionTypeId
+        ).category ==
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS;
     if(!isGameplayToolAction) return false;
     if(!checkMakerToolsAllowed(action.value)) return true;
@@ -342,7 +344,9 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
  */
 bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
     bool isGeneralToolAction =
-        game.controls.getPlayerActionType(action.actionTypeId).category ==
+        game.controls.getActionTypeById(
+            (PLAYER_ACTION_TYPE) action.actionTypeId
+        ).category ==
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS;
     if(!isGeneralToolAction) return false;
     if(!checkMakerToolsAllowed(action.value)) return true;

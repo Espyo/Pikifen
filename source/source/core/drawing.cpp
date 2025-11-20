@@ -1011,24 +1011,83 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
 
 
 /**
- * @brief Draws an icon representing some control bind.
+ * @brief Draws an icon representing some control player action's input source.
+ * This tries to find the best bind for the job.
  *
- * @param font Font to use for the name, if necessary.
- * @param s Info on the player input source.
- * If invalid, a "NONE" icon will be used.
+ * @param actionTypeId The player action. If it has no binds, a "NONE" icon will
+ * be used.
+ * @param where Center of the place to draw at.
+ * @param maxSize Max width or height. Used to compress it if needed.
+ * 0 = unlimited.
  * @param condensed If true, only the icon's fundamental information is
  * presented. If false, disambiguation information is included too.
  * For instance, keyboard keys that come in pairs specify whether they are
  * the left or right key, controller inputs specify what controller number
  * it is, etc.
+ * @param font Font to use for the name, if necessary. If nullptr and a font
+ * is needed, the default one will be used.
+ * @param tint Color to tint the icon with.
+ * @param skipIfNone Skips drawing if there are no binds for that action.
+ */
+void drawPlayerActionInputSourceIcon(
+    PLAYER_ACTION_TYPE actionTypeId, const Point& where, const Point& maxSize,
+    bool condensed, const ALLEGRO_FONT* font, const ALLEGRO_COLOR& tint,
+    bool skipIfNone
+) {
+    vector<Inpution::Bind> binds =
+        game.controls.findBinds(actionTypeId);
+        
+    //If it's empty, either skip drawing or draw a "NONE" icon.
+    if(binds.empty()) {
+        if(skipIfNone) return;
+        drawInputSourceIcon(
+        { .type = Inpution::INPUT_SOURCE_TYPE_NONE }, where, maxSize,
+        condensed, font, tint
+        );
+        return;
+    }
+    
+    //Find the best icon to use, based on the last hardware input.
+    size_t bindIdx = 0;
+    for(size_t b = 0; b < binds.size(); b++) {
+        Inpution::INPUT_SOURCE_TYPE bindSourceType = binds[b].inputSource.type;
+        bool bindIsController =
+            bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ||
+            bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
+            bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+        if(game.lastHardwareInputWasController != bindIsController) continue;
+        bindIdx = b;
+        break;
+    }
+    
+    //Draw it.
+    drawInputSourceIcon(
+        binds[bindIdx].inputSource, where, maxSize,
+        condensed, font, tint
+    );
+}
+
+
+/**
+ * @brief Draws an icon representing an input source.
+ *
+ * @param source Info on the player input source.
+ * If invalid, a "NONE" icon will be used.
  * @param where Center of the place to draw at.
  * @param maxSize Max width or height. Used to compress it if needed.
  * 0 = unlimited.
+ * @param condensed If true, only the icon's fundamental information is
+ * presented. If false, disambiguation information is included too.
+ * For instance, keyboard keys that come in pairs specify whether they are
+ * the left or right key, controller inputs specify what controller number
+ * it is, etc.
+ * @param font Font to use for the name, if necessary. If nullptr and a font
+ * is needed, the default one will be used.
  * @param tint Color to tint the icon with.
  */
-void drawPlayerInputSourceIcon(
-    const ALLEGRO_FONT* const font, const Inpution::InputSource& s,
-    bool condensed, const Point& where, const Point& maxSize,
+void drawInputSourceIcon(
+    const Inpution::InputSource& source, const Point& where,
+    const Point& maxSize, bool condensed, const ALLEGRO_FONT* font,
     const ALLEGRO_COLOR& tint
 ) {
     if(tint.a == 0) return;
@@ -1046,7 +1105,7 @@ void drawPlayerInputSourceIcon(
     PLAYER_INPUT_ICON_SPRITE bitmapSprite;
     string text;
     getPlayerInputIconInfo(
-        s, condensed,
+        source, condensed,
         &shape, &bitmapSprite, &text
     );
     
@@ -1065,6 +1124,8 @@ void drawPlayerInputSourceIcon(
         al_destroy_bitmap(bmp);
         return;
     }
+    
+    if(!font) font = game.sysContent.fntSlim;
     
     //The size of the rectangle will depend on the text within.
     int textOx;
@@ -1336,16 +1397,16 @@ void drawStringTokens(
             break;
         }
         case STRING_TOKEN_BIND_INPUT: {
-            drawPlayerInputSourceIcon(
-                inputFont,
-                game.controls.findBind(tokens[t].content).inputSource,
-                inputCondensed,
+            drawPlayerActionInputSourceIcon(
+                game.controls.getActionTypeByIName(
+                    tokens[t].content
+                ),
                 Point(
                     caret + tokenFinalWidth / 2.0f,
                     where.y + maxSize.y / 2.0f
                 ),
                 Point(tokenFinalWidth * scale.x, maxSize.y * scale.y),
-                tint
+                inputCondensed, inputFont, tint, false
             );
             break;
         }

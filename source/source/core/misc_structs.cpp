@@ -1002,12 +1002,11 @@ void Notification::draw(const Viewport& view) const {
         mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(inputSource.type != Inpution::INPUT_SOURCE_TYPE_NONE) {
+    if(actionType != PLAYER_ACTION_TYPE_NONE) {
         textBoxX1 +=
             DRAWING::NOTIFICATION_INPUT_SIZE + DRAWING::NOTIFICATION_PADDING;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, inputSource,
-            true,
+        drawPlayerActionInputSourceIcon(
+            actionType,
             Point(
                 -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING +
                 DRAWING::NOTIFICATION_INPUT_SIZE * 0.5,
@@ -1017,7 +1016,7 @@ void Notification::draw(const Viewport& view) const {
                 DRAWING::NOTIFICATION_INPUT_SIZE,
                 DRAWING::NOTIFICATION_INPUT_SIZE
             ),
-            mapAlpha(visibility * 255)
+            true, game.sysContent.fntSlim, mapAlpha(visibility * 255)
         );
     }
     
@@ -1055,7 +1054,7 @@ float Notification::getVisibility() const {
  */
 void Notification::reset() {
     enabled = true;
-    inputSource.type = Inpution::INPUT_SOURCE_TYPE_NONE;
+    actionType = PLAYER_ACTION_TYPE_NONE;
     text.clear();
     pos = Point();
     visibility = 0.0f;
@@ -1065,14 +1064,14 @@ void Notification::reset() {
 /**
  * @brief Sets the contents to show.
  *
- * @param inputSource Player input source icon to show.
+ * @param actionType Player action input source icon to show.
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
 void Notification::setContents(
-    const Inpution::InputSource& inputSource, const string& text, const Point& pos
+    PLAYER_ACTION_TYPE actionType, const string& text, const Point& pos
 ) {
-    this->inputSource = inputSource;
+    this->actionType = actionType;
     this->text = text;
     this->pos = pos;
 }

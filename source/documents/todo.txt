@@ -11,6 +11,7 @@ Next tasks (roughly sorted most important first)
     If two keyframes have the same value, the visualizer in the editor will show a broken line
     Binding the zoom button to the Deck's right trigger STILL causes a bunch of actions when pressed
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
+    If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
 
     --- 1.1.0 ---
     Dismiss sound should be a higher pitch when you press again to dismiss all
@@ -41,7 +42,6 @@ Next tasks (roughly sorted most important first)
         An inventory system
             Update the help menu
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
-        If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Test it on the Steam Deck
@@ -55,6 +55,7 @@ Next tasks (roughly sorted most important first)
             Logic to freeze all enemies in the water
             Logic to call the Pikmin out and thawing
         Ice hazard for Pikmin attacks, and ice hazard for enemy attacks
+        The ability to be on the water's surface without harm, while not being allowed to carry on water, or be grabbed by a leader on water
         Ice gates
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
@@ -577,14 +578,35 @@ Misc things (so I don't forget)
         Some way to read a different mob's "focus mob memory"?
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
-        Global script variables
-        An action that returns to the previous state. Useful for creating utility states that mimic functions
-        More ideas of actions from Game Builder Garage's Nodon
+        Global script variables that apply to the whole area
+        Add region trigger mobs, that output power based on how many mobs are inside the given region
+        Typical programming things
+            An action that returns to the previous state. Useful for creating utility states that mimic functions
+            For loop
+            While loop
+            Functions you'd find in a math library
+                Interpolation
+                Sin, cosine
+                Bitmask set, unset, test?
+                Angle difference
+                Degrees to radians and vice-versa
+                Min and max
+                Power
+                Square root
+            Array manipulation
+            String splitting, joining, getting the size of, etc.
+        Add some infinite loop protection logic
+            I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
+        Mobs could reference other mobs via their ID numbers (Mob::id)
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
         New actions
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
+            Setting the camera position and zoom
+            Music control
+            Inventory control
+            Display something on the HUD
     Upgrades
         All of these can be toggled on or off in a mission, and can be unlocked in Story Mode
             In the mission select menu, probably show this as icons, and only for the collected ones, so it's not a wall of text

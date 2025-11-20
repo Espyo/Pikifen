@@ -1,9 +1,6 @@
 first_state = spawning
 death_state = destroying
 
-init {
-}
-
 script {
 	spawning {
 		on_enter {

@@ -1273,7 +1273,7 @@ struct Notification {
     float getVisibility() const;
     void reset();
     void setContents(
-        const Inpution::InputSource& inputSource,
+        PLAYER_ACTION_TYPE actionType,
         const string& text, const Point& pos
     );
     void setEnabled(bool enabled);
@@ -1286,8 +1286,8 @@ struct Notification {
     //Is it meant to exist?
     bool enabled = true;
     
-    //What player input source icon to show.
-    Inpution::InputSource inputSource;
+    //What player action input source icon to show.
+    PLAYER_ACTION_TYPE actionType;
     
     //What text to write.
     string text;

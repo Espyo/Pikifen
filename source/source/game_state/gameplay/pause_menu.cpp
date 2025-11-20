@@ -735,12 +735,9 @@ void PauseMenu::createPageButtons(
     leftPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     curGui->addItem(leftPageInput, "left_page_input");
@@ -755,12 +752,9 @@ void PauseMenu::createPageButtons(
     rightPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     curGui->addItem(rightPageInput, "right_page_input");

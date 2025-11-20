@@ -823,12 +823,9 @@ void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
     backInput->onDraw =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const Inpution::InputSource& s =
-            game.controls.findBind(PLAYER_ACTION_TYPE_MENU_BACK).
-            inputSource;
-        if(s.type == Inpution::INPUT_SOURCE_TYPE_NONE) return;
-        drawPlayerInputSourceIcon(
-            game.sysContent.fntSlim, s, true, draw.center, draw.size, draw.tint
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_BACK, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
         );
     };
     gui->addItem(backInput, itemName);

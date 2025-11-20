@@ -159,6 +159,10 @@ public:
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controllerNumbers;
+
+    //True if the last hardware input made from a game controller.
+    //False if it was a keyboard, mouse, or other source.
+    bool lastHardwareInputWasController = false;
     
     //Auto-repeater settings for leader auto-throws.
     AutoRepeaterSettings autoThrowSettings{

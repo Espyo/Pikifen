@@ -535,11 +535,11 @@ void GameplayState::drawDebugTools(Player* player) {
     
     Point cleanStickCoords;
     cleanStickCoords.x =
-        game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_RIGHT) -
-        game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_LEFT);
+        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_RIGHT) -
+        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_LEFT);
     cleanStickCoords.y =
-        game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_DOWN) -
-        game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_UP);
+        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN) -
+        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
     float cleanStickAngle;
     float cleanStickMag;
     coordinatesToAngle(
@@ -734,10 +734,8 @@ void GameplayState::drawGameplayMessageBox() {
             msgBox->totalTokenAnimTime *
             GAMEPLAY_MSG_BOX::BUTTON_OFFSET_TIME_MULT
         ) * GAMEPLAY_MSG_BOX::BUTTON_OFFSET_MULT;
-    drawPlayerInputSourceIcon(
-        game.sysContent.fntSlim,
-        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
-        true,
+    drawPlayerActionInputSourceIcon(
+        PLAYER_ACTION_TYPE_THROW,
         Point(
             game.winW -
             (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
@@ -746,6 +744,7 @@ void GameplayState::drawGameplayMessageBox() {
             offset + advanceButtonYOffset
         ),
         Point(32.0f),
+        true, game.sysContent.fntSlim,
         mapAlpha(msgBox->advanceButtonAlpha * 255)
     );
     
@@ -839,15 +838,16 @@ void GameplayState::drawGameplayMessageBox() {
                 break;
             }
             case STRING_TOKEN_BIND_INPUT: {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim,
-                    game.controls.findBind(curToken.content).inputSource,
-                    true,
+                drawPlayerActionInputSourceIcon(
+                    game.controls.getActionTypeByIName(
+                        curToken.content
+                    ),
                     Point(
                         x + tokenFinalWidth / 2.0f,
                         y + lineHeight / 2.0f
                     ),
-                    Point(tokenFinalWidth, lineHeight)
+                    Point(tokenFinalWidth, lineHeight),
+                    true, game.sysContent.fntSlim, COLOR_WHITE, false                    
                 );
                 break;
             }

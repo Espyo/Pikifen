@@ -5,7 +5,9 @@ _From input to action._
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
 > * [Features](#features)
+> * [What it doesn't do](#what-it-doesnt-do)
 > * [Key terms](#key-terms)
+
 
 ## Overview
 
@@ -20,6 +22,7 @@ _From input to action._
   * _Every frame_: Informs the game of what actions have happened.
 
 On top of simply giving the game a list of actions, it also simplifies a lot of fluff and nuance in the input processing side of things. See [Features](#features).
+
 
 ## Quick example
 
@@ -127,6 +130,7 @@ int main() {
 }
 ```
 
+
 ## Features
 
 * Many settings:
@@ -147,6 +151,13 @@ int main() {
 * About the library:
   * Fairly light, and fairly simple.
   * Very agnostic, and with no external dependencies.
+
+
+## What it doesn't do
+
+* It does not obtain hardware information. It's not a hardware driver, it doesn't recognize keyboard, mouse, or controller hardware input events, it doesn't recognize controller or controller button names. Your program is the one that must obtain this information and feed it to Inpution.
+* It does not abstract mouse movement. If, for instance, you want camera control to be done via mouse movement and an analog stick, you can abstract the analog stick logic with Inpution, but you will have to add the mouse movement logic yourself.
+
 
 ## Key terms
 

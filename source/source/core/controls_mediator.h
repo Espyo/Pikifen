@@ -340,11 +340,8 @@ struct ControlsMediator {
     
     //--- Function declarations ---
     
-    bool actionTypesShareInputSource(
-        const vector<PLAYER_ACTION_TYPE> actionTypes
-    );
     void addModifier(int id, const Inpution::InputSource& source);
-    void addPlayerActionType(
+    void addActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,
         const string& name,
@@ -356,29 +353,36 @@ struct ControlsMediator {
         float reinsertionTTL = 0.0f,
         bool freezable = false
     );
-    const vector<PlayerActionType>& getAllPlayerActionTypes() const;
+    void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
+    void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
+
     vector<Inpution::Bind>& binds();
-    string inputSourceToStr(const Inpution::InputSource& s) const;
     Inpution::Bind findBind(
         const PLAYER_ACTION_TYPE actionTypeId
     ) const;
     Inpution::Bind findBind(
         const string& actionTypeName
     ) const;
-    float getInputSourceValue(const Inpution::InputSource& source) const;
-    PlayerActionType getPlayerActionType(int actionId) const;
-    string getPlayerActionTypeInternalName(int actionId);
-    float getPlayerActionTypeValue(
-        PLAYER_ACTION_TYPE playerActionTypeId
-    );
-    void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
+    vector<Inpution::Bind> findBinds(
+        const PLAYER_ACTION_TYPE actionTypeId
+    ) const;
+    vector<Inpution::Bind> findBinds(
+        const string& actionTypeName
+    ) const;
+    const vector<PlayerActionType>& getAllActionTypes() const;
+    PlayerActionType getActionTypeById(PLAYER_ACTION_TYPE id) const;
+    PLAYER_ACTION_TYPE getActionTypeByIName(const string& iName) const;
+    float getValueOfInputSource(const Inpution::InputSource& source) const;
+    float getValueOfActionType(PLAYER_ACTION_TYPE id) const;
+    
+    string inputSourceToStr(const Inpution::InputSource& s) const;
     Inpution::InputSource strToInputSource(const string& s) const;
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
+
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     vector<Inpution::Action> newFrame(float deltaT);
     void reinsertAction(const Inpution::Action& action);
     void releaseAll();
-    void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
     void setGameState(CONTROLS_GAME_STATE state);
     void setOptions(const Inpution::ManagerOptions& options);
     void startIgnoringActions();
@@ -387,6 +391,10 @@ struct ControlsMediator {
     );
     void stopIgnoringActions();
     
+    bool actionTypesShareInputSource(
+        const vector<PLAYER_ACTION_TYPE> actionTypes
+    );
+
     private:
     
     //--- Members ---

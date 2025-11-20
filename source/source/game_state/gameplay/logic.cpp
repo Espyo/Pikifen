@@ -298,7 +298,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
-            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+            PLAYER_ACTION_TYPE_WHISTLE,
             "Wake up",
             Point(
                 player->leaderPtr->pos.x,
@@ -315,7 +315,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
-            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+            PLAYER_ACTION_TYPE_WHISTLE,
             "Get up",
             Point(
                 player->leaderPtr->pos.x,
@@ -332,7 +332,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
-            game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
+            PLAYER_ACTION_TYPE_THROW,
             "Stop throwing",
             Point(
                 player->leaderPtr->pos.x,
@@ -349,7 +349,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
-            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+            PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
                 player->leaderPtr->pos.x,
@@ -366,7 +366,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         player->notification.setEnabled(true);
         player->notification.setContents(
-            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+            PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
                 player->leaderPtr->pos.x,
@@ -399,10 +399,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 closestD = d;
                 player->notification.setEnabled(true);
                 player->notification.setContents(
-                    game.controls.findBind(
-                        PLAYER_ACTION_TYPE_THROW
-                    ).inputSource,
-                    "Repair suit",
+                    PLAYER_ACTION_TYPE_THROW, "Repair suit",
                     Point(
                         player->closeToShipToHeal->pos.x,
                         player->closeToShipToHeal->pos.y -
@@ -431,8 +428,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     closestD = d;
                     player->notification.setEnabled(true);
                     player->notification.setContents(
-                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
-                        inputSource,
+                        PLAYER_ACTION_TYPE_THROW,
                         player->closeToInteractableToUse->intType->promptText,
                         Point(
                             player->closeToInteractableToUse->pos.x,
@@ -455,9 +451,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->closeToPikminToPluck = p;
                 player->notification.setEnabled(true);
                 player->notification.setContents(
-                    game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
-                    inputSource,
-                    "Pluck",
+                    PLAYER_ACTION_TYPE_THROW, "Pluck",
                     Point(
                         p->pos.x,
                         p->pos.y -
@@ -481,9 +475,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     closestD = d;
                     player->notification.setEnabled(true);
                     player->notification.setContents(
-                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
-                        inputSource,
-                        "Check",
+                        PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
                             player->closeToNestToOpen->mPtr->pos.x,
                             player->closeToNestToOpen->mPtr->pos.y -
@@ -506,9 +498,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     closestD = d;
                     player->notification.setEnabled(true);
                     player->notification.setContents(
-                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
-                        inputSource,
-                        "Check",
+                        PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
                             player->closeToNestToOpen->mPtr->pos.x,
                             player->closeToNestToOpen->mPtr->pos.y -
