@@ -21,6 +21,9 @@ enum MOB_ACTION {
     //Unknown.
     MOB_ACTION_UNKNOWN,
     
+    //Get the absolute value of a float number.
+    MOB_ACTION_ABSOLUTE_NUMBER,
+    
     //Add health.
     MOB_ACTION_ADD_HEALTH,
     
@@ -29,6 +32,9 @@ enum MOB_ACTION {
     
     //Perform a numeric calculation.
     MOB_ACTION_CALCULATE,
+    
+    //Ceil a float number.
+    MOB_ACTION_CEIL_NUMBER,
     
     //Delete mob.
     MOB_ACTION_DELETE,
@@ -47,6 +53,9 @@ enum MOB_ACTION {
     
     //Finish the death procedure.
     MOB_ACTION_FINISH_DYING,
+    
+    //Floor a float number.
+    MOB_ACTION_FLOOR_NUMBER,
     
     //Focus on another mob.
     MOB_ACTION_FOCUS,
@@ -137,6 +146,9 @@ enum MOB_ACTION {
     
     //Remove a status effect.
     MOB_ACTION_REMOVE_STATUS,
+    
+    //Round a float number.
+    MOB_ACTION_ROUND_NUMBER,
     
     //Save focused mob into focused mobs memory.
     MOB_ACTION_SAVE_FOCUS_MEMORY,
@@ -682,12 +694,15 @@ struct MobActionCall {
 
 
 namespace MobActionRunners {
+void absoluteNumber(MobActionRunData& data);
 void addHealth(MobActionRunData& data);
 void arachnorbPlanLogic(MobActionRunData& data);
 void calculate(MobActionRunData& data);
+void ceilNumber(MobActionRunData& data);
 void deleteFunction(MobActionRunData& data);
 void drainLiquid(MobActionRunData& data);
 void finishDying(MobActionRunData& data);
+void floorNumber(MobActionRunData& data);
 void focus(MobActionRunData& data);
 void followPathRandomly(MobActionRunData& data);
 void followPathToAbsolute(MobActionRunData& data);
@@ -702,7 +717,6 @@ void getMobInfo(MobActionRunData& data);
 void getFocusVar(MobActionRunData& data);
 void getRandomFloat(MobActionRunData& data);
 void getRandomInt(MobActionRunData& data);
-void gotoFunction(MobActionRunData& data);
 void holdFocus(MobActionRunData& data);
 void ifFunction(MobActionRunData& data);
 void linkWithFocus(MobActionRunData& data);
@@ -717,6 +731,7 @@ void receiveStatus(MobActionRunData& data);
 void release(MobActionRunData& data);
 void releaseStoredMobs(MobActionRunData& data);
 void removeStatus(MobActionRunData& data);
+void roundNumber(MobActionRunData& data);
 void saveFocusMemory(MobActionRunData& data);
 void sendMessageToFocus(MobActionRunData& data);
 void sendMessageToLinks(MobActionRunData& data);

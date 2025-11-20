@@ -782,6 +782,16 @@ MobActionRunData::MobActionRunData(Mob* m, MobActionCall* call) :
 
 
 /**
+ * @brief Code for the absolute number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::absoluteNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s(fabs(s2f(data.args[1])));
+}
+
+
+/**
  * @brief Code for the health addition mob script action.
  *
  * @param data Data about the action call.
@@ -852,6 +862,16 @@ void MobActionRunners::calculate(MobActionRunData& data) {
 
 
 /**
+ * @brief Code for the ceil number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::ceilNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s(ceil(s2f(data.args[1])));
+}
+
+
+/**
  * @brief Code for the deletion mob script action.
  *
  * @param data Data about the action call.
@@ -894,6 +914,16 @@ void MobActionRunners::drainLiquid(MobActionRunData& data) {
  */
 void MobActionRunners::finishDying(MobActionRunData& data) {
     data.m->finishDying();
+}
+
+
+/**
+ * @brief Code for the floor number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::floorNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s(floor(s2f(data.args[1])));
 }
 
 
@@ -1656,6 +1686,16 @@ void MobActionRunners::removeStatus(MobActionRunData& data) {
             data.m->statuses[s].toDelete = true;
         }
     }
+}
+
+
+/**
+ * @brief Code for the round number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::roundNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s(round(s2f(data.args[1])));
 }
 
 

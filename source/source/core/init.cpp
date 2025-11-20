@@ -1141,6 +1141,7 @@ void initMobActions() {
     vector<MobActionParam> params;
     MobAction* a;
     
+    //Unknown.
     regAction(
         MOB_ACTION_UNKNOWN,
         "unknown",
@@ -1148,6 +1149,17 @@ void initMobActions() {
         nullptr
     );
     
+    //Absolute number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_ABSOLUTE_NUMBER,
+        "absolute_number",
+        MobActionRunners::absoluteNumber,
+        nullptr
+    );
+    
+    //Add health.
     regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_ADD_HEALTH,
@@ -1156,6 +1168,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Arachnorb plan logic.
     regParam("goal", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
@@ -1164,6 +1177,7 @@ void initMobActions() {
         MobActionLoaders::arachnorbPlanLogic
     );
     
+    //Calculate.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("operand", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
@@ -1175,6 +1189,17 @@ void initMobActions() {
         MobActionLoaders::calculate
     );
     
+    //Ceil number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_CEIL_NUMBER,
+        "ceil_number",
+        MobActionRunners::ceilNumber,
+        nullptr
+    );
+    
+    //Delete.
     regAction(
         MOB_ACTION_DELETE,
         "delete",
@@ -1182,6 +1207,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Drain liquid.
     regAction(
         MOB_ACTION_DRAIN_LIQUID,
         "drain_liquid",
@@ -1189,6 +1215,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Else.
     regAction(
         MOB_ACTION_ELSE,
         "else",
@@ -1196,6 +1223,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Else if.
     regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
     regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("value", MOB_ACTION_PARAM_STRING, false, true);
@@ -1206,6 +1234,7 @@ void initMobActions() {
         MobActionLoaders::ifFunction
     );
     
+    //End if.
     regAction(
         MOB_ACTION_END_IF,
         "end_if",
@@ -1213,6 +1242,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Finish dying.
     regAction(
         MOB_ACTION_FINISH_DYING,
         "finish_dying",
@@ -1220,6 +1250,17 @@ void initMobActions() {
         nullptr
     );
     
+    //Floor number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_FLOOR_NUMBER,
+        "floor_number",
+        MobActionRunners::floorNumber,
+        nullptr
+    );
+    
+    //Focus.
     regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_FOCUS,
@@ -1228,6 +1269,7 @@ void initMobActions() {
         MobActionLoaders::focus
     );
     
+    //Follow path randomly.
     regParam("label", MOB_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_FOLLOW_PATH_RANDOMLY,
@@ -1236,6 +1278,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Follow path to absolute.
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("label", MOB_ACTION_PARAM_STRING, false, true);
@@ -1246,6 +1289,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get angle.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1258,6 +1302,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get area info.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("info", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
@@ -1267,6 +1312,7 @@ void initMobActions() {
         MobActionLoaders::getAreaInfo
     );
     
+    //Get chomped.
     regAction(
         MOB_ACTION_GET_CHOMPED,
         "get_chomped",
@@ -1274,6 +1320,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get coordinates from angle.
     regParam("x destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("y destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("angle", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1285,6 +1332,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get distance.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1297,6 +1345,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get event info.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("info", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
@@ -1306,6 +1355,7 @@ void initMobActions() {
         MobActionLoaders::getEventInfo
     );
     
+    //Get floor Z.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1316,6 +1366,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get focus var.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
@@ -1325,6 +1376,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get mob info.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("target", MOB_ACTION_PARAM_STRING, true, false);
     regParam("info", MOB_ACTION_PARAM_STRING, true, false);
@@ -1335,6 +1387,7 @@ void initMobActions() {
         MobActionLoaders::getMobInfo
     );
     
+    //Get random float.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1345,6 +1398,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Get random int.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("minimum value", MOB_ACTION_PARAM_INT, false, false);
     regParam("maximum value", MOB_ACTION_PARAM_INT, false, false);
@@ -1355,6 +1409,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Goto.
     regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GOTO,
@@ -1363,6 +1418,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Hold focused mob.
     regParam("body part name", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("hold above", MOB_ACTION_PARAM_BOOL, false, true);
     regAction(
@@ -1372,6 +1428,7 @@ void initMobActions() {
         MobActionLoaders::holdFocus
     );
     
+    //If.
     regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
     regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("value", MOB_ACTION_PARAM_STRING, false, true);
@@ -1382,6 +1439,7 @@ void initMobActions() {
         MobActionLoaders::ifFunction
     );
     
+    //Label.
     regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_LABEL,
@@ -1390,6 +1448,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Link with focused mob.
     regAction(
         MOB_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
@@ -1397,6 +1456,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Load focused mob memory.
     regParam("slot", MOB_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_LOAD_FOCUS_MEMORY,
@@ -1405,6 +1465,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Move to absolute.
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
@@ -1415,6 +1476,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Move to relative.
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
@@ -1425,6 +1487,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Move to target.
     regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_MOVE_TO_TARGET,
@@ -1433,6 +1496,7 @@ void initMobActions() {
         MobActionLoaders::moveToTarget
     );
     
+    //Order release.
     regAction(
         MOB_ACTION_ORDER_RELEASE,
         "order_release",
@@ -1440,6 +1504,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Play sound.
     regParam("sound data", MOB_ACTION_PARAM_ENUM, true, false);
     regParam(
         "sound ID destination var name", MOB_ACTION_PARAM_STRING, true, true
@@ -1451,6 +1516,7 @@ void initMobActions() {
         MobActionLoaders::playSound
     );
     
+    //Print.
     regParam("text", MOB_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_PRINT,
@@ -1459,6 +1525,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Receive status.
     regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_RECEIVE_STATUS,
@@ -1467,6 +1534,7 @@ void initMobActions() {
         MobActionLoaders::receiveStatus
     );
     
+    //Release.
     regAction(
         MOB_ACTION_RELEASE,
         "release",
@@ -1474,6 +1542,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Release stored mobs.
     regAction(
         MOB_ACTION_RELEASE_STORED_MOBS,
         "release_stored_mobs",
@@ -1481,6 +1550,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Remove status.
     regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_REMOVE_STATUS,
@@ -1489,6 +1559,17 @@ void initMobActions() {
         MobActionLoaders::removeStatus
     );
     
+    //Round number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_ROUND_NUMBER,
+        "round_number",
+        MobActionRunners::roundNumber,
+        nullptr
+    );
+    
+    //Save focused mob memory.
     regParam("slot", MOB_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_SAVE_FOCUS_MEMORY,
@@ -1497,6 +1578,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Send message to focus.
     regParam("message", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
@@ -1505,6 +1587,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Send message to links.
     regParam("message", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
@@ -1513,6 +1596,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Send message to nearby.
     regParam("distance", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("message", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
@@ -1522,6 +1606,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set animation.
     regParam("animation name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
     regAction(
@@ -1531,6 +1616,7 @@ void initMobActions() {
         MobActionLoaders::setAnimation
     );
     
+    //Set can block paths.
     regParam("blocks", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_CAN_BLOCK_PATHS,
@@ -1539,6 +1625,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set far reach.
     regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_FAR_REACH,
@@ -1547,6 +1634,7 @@ void initMobActions() {
         MobActionLoaders::setFarReach
     );
     
+    //Set flying.
     regParam("flying", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_FLYING,
@@ -1555,6 +1643,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set focus var.
     regParam("focused mob's destination var name", MOB_ACTION_PARAM_STRING, false, false);
     regParam("value", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
@@ -1564,6 +1653,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set gravity.
     regParam("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_GRAVITY,
@@ -1572,6 +1662,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set health.
     regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_HEALTH,
@@ -1580,6 +1671,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set height.
     regParam("height", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_HEIGHT,
@@ -1588,6 +1680,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set hiding.
     regParam("hiding", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_HIDING,
@@ -1596,6 +1689,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set huntable.
     regParam("huntable", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_HUNTABLE,
@@ -1604,6 +1698,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set holdable.
     regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
     regAction(
         MOB_ACTION_SET_HOLDABLE,
@@ -1612,6 +1707,7 @@ void initMobActions() {
         MobActionLoaders::setHoldable
     );
     
+    //Set limb animation.
     regParam("animation name", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SET_LIMB_ANIMATION,
@@ -1620,6 +1716,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set near reach.
     regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_NEAR_REACH,
@@ -1628,6 +1725,7 @@ void initMobActions() {
         MobActionLoaders::setNearReach
     );
     
+    //Set radius.
     regParam("radius", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_RADIUS,
@@ -1636,6 +1734,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set sector scroll.
     regParam("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
@@ -1645,6 +1744,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set shadow visibility.
     regParam("visible", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_SHADOW_VISIBILITY,
@@ -1653,6 +1753,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set state.
     regParam("state name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_SET_STATE,
@@ -1661,6 +1762,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set tangible.
     regParam("tangible", MOB_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_TANGIBLE,
@@ -1669,6 +1771,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set team.
     regParam("team name", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_TEAM,
@@ -1677,6 +1780,7 @@ void initMobActions() {
         MobActionLoaders::setTeam
     );
     
+    //Set timer.
     regParam("time", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_TIMER,
@@ -1685,6 +1789,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Set var.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     regParam("value", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
@@ -1694,6 +1799,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Shake camera.
     regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SHAKE_CAMERA,
@@ -1702,6 +1808,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Show message from var.
     regParam("var name", MOB_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
@@ -1710,6 +1817,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Spawn.
     regParam("spawn data", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SPAWN,
@@ -1718,6 +1826,7 @@ void initMobActions() {
         MobActionLoaders::spawn
     );
     
+    //Stabilize Z.
     regParam("reference", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("offset", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
@@ -1727,6 +1836,7 @@ void initMobActions() {
         MobActionLoaders::stabilizeZ
     );
     
+    //Start chomping.
     regParam("victim max", MOB_ACTION_PARAM_INT, false, false);
     regParam("body part", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("more body parts", MOB_ACTION_PARAM_ENUM, true, true);
@@ -1737,6 +1847,7 @@ void initMobActions() {
         MobActionLoaders::startChomping
     );
     
+    //Start dying.
     regAction(
         MOB_ACTION_START_DYING,
         "start_dying",
@@ -1744,6 +1855,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Start height effect.
     regAction(
         MOB_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
@@ -1751,6 +1863,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Start particles.
     regParam("generator name", MOB_ACTION_PARAM_ENUM, true, false);
     regParam("offset coordinates", MOB_ACTION_PARAM_FLOAT, false, true);
     regAction(
@@ -1760,6 +1873,7 @@ void initMobActions() {
         MobActionLoaders::startParticles
     );
     
+    //Stop.
     regAction(
         MOB_ACTION_STOP,
         "stop",
@@ -1767,6 +1881,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Stop chomping.
     regAction(
         MOB_ACTION_STOP_CHOMPING,
         "stop_chomping",
@@ -1774,6 +1889,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Stop height effect.
     regAction(
         MOB_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
@@ -1781,6 +1897,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Stop particles.
     regAction(
         MOB_ACTION_STOP_PARTICLES,
         "stop_particles",
@@ -1788,6 +1905,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Stop sound.
     regParam("sound ID", MOB_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_STOP_SOUND,
@@ -1796,6 +1914,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Stop vertically.
     regAction(
         MOB_ACTION_STOP_VERTICALLY,
         "stop_vertically",
@@ -1803,6 +1922,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Store focus inside.
     regAction(
         MOB_ACTION_STORE_FOCUS_INSIDE,
         "store_focus_inside",
@@ -1810,6 +1930,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Swallow.
     regParam("amount", MOB_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_SWALLOW,
@@ -1818,6 +1939,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Swallow all.
     regAction(
         MOB_ACTION_SWALLOW_ALL,
         "swallow_all",
@@ -1825,6 +1947,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Teleport to absolute.
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1835,6 +1958,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Teleport to relative.
     regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1845,6 +1969,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Throw focused mob.
     regParam("x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("z coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -1856,6 +1981,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Turn to absolute.
     regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
     regAction(
@@ -1865,6 +1991,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Turn to relative.
     regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
     regAction(
@@ -1874,6 +2001,7 @@ void initMobActions() {
         nullptr
     );
     
+    //Turn to target.
     regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_TURN_TO_TARGET,
