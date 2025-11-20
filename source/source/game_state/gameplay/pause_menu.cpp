@@ -641,6 +641,7 @@ void PauseMenu::confirmOrLeave() {
             }
         }
         );
+        game.modal.defaultFocusButtonIdx = 1;
         game.modal.updateItems();
         game.modal.open();
         

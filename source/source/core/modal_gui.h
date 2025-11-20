@@ -78,6 +78,10 @@ public:
     
     //List of extra buttons.
     vector<Button> extraButtons;
+
+    //Default focused button. Indexed from all of the buttons.
+    //0 for the back button.
+    size_t defaultFocusButtonIdx = 0;
     
     
     //--- Function declarations ---

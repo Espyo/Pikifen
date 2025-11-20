@@ -110,6 +110,9 @@ void ModalGuiManager::reset() {
     back = "Back";
     backTooltip = "Cancel.";
     extraButtons.clear();
+    defaultFocusButtonIdx = 0;
+    setFocusedItem(nullptr);
+    focusCursor.alpha = 0.0f;
 }
 
 
@@ -205,5 +208,5 @@ void ModalGuiManager::updateItems() {
     }
     
     //Finishing touches.
-    setFocusedItem(backItem);
+    setFocusedItem(buttonItems[defaultFocusButtonIdx], true);
 }

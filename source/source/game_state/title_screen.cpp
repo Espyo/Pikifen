@@ -305,6 +305,7 @@ void MainMenu::initGuiMainPage() {
                 }
             }
             );
+            game.modal.defaultFocusButtonIdx = 1;
             game.modal.updateItems();
             game.modal.open();
             
