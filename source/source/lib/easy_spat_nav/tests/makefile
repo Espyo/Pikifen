@@ -7,7 +7,7 @@ CXX          := g++
 SRCS         := $(shell find .. -name '*.cpp')
 OBJS         := $(SRCS:.cpp=.o)
 DEPS         := $(OBJS:.o=.d)
-CXXFLAGS     := -std=c++17 -D_GLIBCXX_USE_CXX11_ABI=0 -MMD
+CXXFLAGS     := -std=c++17 -D_GLIBCXX_USE_CXX11_ABI=0 -MMD -DEASY_SPAT_NAV_UNIT_TESTS
 DEBUGFLAGS   := -g -ggdb -Wall -Wno-unknown-pragmas -O0
 RELEASEFLAGS := -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -O2
 

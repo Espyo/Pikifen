@@ -5,7 +5,6 @@
 PROG         := pikifen
 CXX          := g++
 SRCS         := $(shell find source/source -name '*.cpp')
-SRCS         := $(filter-out %tests_main.cpp, $(SRCS))
 OBJS         := $(SRCS:.cpp=.o)
 DEPS         := $(OBJS:.o=.d)
 ALLEGRO_PKGS := allegro-5 allegro_main-5 allegro_acodec-5 allegro_audio-5 allegro_color-5 allegro_dialog-5 allegro_font-5 allegro_image-5 allegro_primitives-5 allegro_ttf-5

@@ -6,6 +6,8 @@
  * Please read the included readme file.
  */
 
+#ifdef EASY_SPAT_NAV_UNIT_TESTS
+
 #include <string>
 #include <vector>
 
@@ -648,3 +650,5 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+#endif //ifdef EASY_SPAT_NAV_UNIT_TESTS
