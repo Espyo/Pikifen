@@ -299,6 +299,64 @@ Point getBitmapDimensions(ALLEGRO_BITMAP* bmp) {
 
 
 /**
+ * @brief Returns a name for the specified Allegro joystick button,
+ * given the joystick's name.
+ * If it's any of the types of game controller it recognizes, it shows
+ * a proper name for them. Otherwise it returns the button's number.
+ *
+ * @param buttonNr Button number.
+ * @param controllerName Controller name.
+ * @return The name, or an empty string on error.
+ */
+string getButtonName(int buttonNr, const string& controllerName) {
+    const vector<string> NO_NAMES;
+    const vector<string> SWITCH_PRO_NAMES {
+        "B",
+        "A",
+        "X",
+        "Y",
+        "Capture",
+        "L",
+        "R",
+        "ZL",
+        "ZR",
+        "-",
+        "+",
+        "Home",
+        "L stick",
+        "R stick",
+    };
+    const vector<string> XBOX_360_NAMES {
+        "A",
+        "B",
+        "X",
+        "Y",
+        "LB",
+        "RB",
+        "Back",
+        "Start",
+        "L stick"
+        "R stick",
+        "LT",
+        "RT",
+        "Guide",
+    };
+    
+    const vector<string>* namesToUse = &NO_NAMES;
+    if(strStartsWith(controllerName, "Nintendo Switch Pro Controller")) {
+        //Nintendo Switch Pro Controller.
+        namesToUse = &SWITCH_PRO_NAMES;
+    } else if(strStartsWith(controllerName, "Microsoft X-Box 360")) {
+        //X-Box 360 and Steam Deck.
+        namesToUse = &XBOX_360_NAMES;
+    }
+    
+    if((size_t) buttonNr >= namesToUse->size()) return i2s(buttonNr + 1);
+    return namesToUse->at(buttonNr);
+}
+
+
+/**
  * @brief Returns a name for the specified Allegro keyboard keycode.
  *
  * This basically makes use of al_keycode_to_name, but with some special cases
@@ -432,6 +490,45 @@ string getKeyName(int keycode, bool condensed) {
         if(name[c] == '_') name[c] = ' ';
     }
     return name;
+}
+
+
+/**
+ * @brief Returns a name for the specified Allegro joystick stick,
+ * given the joystick's name.
+ * If it's any of the types of game controller it recognizes, it shows
+ * a proper name for them. Otherwise it returns the stick's number.
+ *
+ * @param stickNr Stick number.
+ * @param controllerName Controller name.
+ * @return The name, or an empty string on error.
+ */
+string getStickName(int stickNr, const string& controllerName) {
+    const vector<string> NO_NAMES;
+    const vector<string> SWITCH_PRO_NAMES {
+        "L stick",
+        "R stick",
+        "D-pad",
+    };
+    const vector<string> XBOX_360_NAMES {
+        "L stick",
+        "R stick",
+        "LT",
+        "RT",
+        "D-pad",
+    };
+    
+    const vector<string>* namesToUse = &NO_NAMES;
+    if(strStartsWith(controllerName, "Nintendo Switch Pro Controller")) {
+        //Nintendo Switch Pro Controller.
+        namesToUse = &SWITCH_PRO_NAMES;
+    } else if(strStartsWith(controllerName, "Microsoft X-Box 360")) {
+        //X-Box 360 and Steam Deck.
+        namesToUse = &XBOX_360_NAMES;
+    }
+    
+    if((size_t) stickNr >= namesToUse->size()) return i2s(stickNr + 1);
+    return namesToUse->at(stickNr);
 }
 
 

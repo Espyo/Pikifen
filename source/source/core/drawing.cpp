@@ -1544,10 +1544,17 @@ void getPlayerInputIconInfo(
     } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG:
     case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
+        string stickName =
+            getStickName(
+                s.stickNr,
+                (size_t) s.deviceNr >= game.controllerNames.size() ?
+                "" :
+                game.controllerNames[s.deviceNr]
+            );
         if(!condensed) {
             *text =
                 "Pad " + i2s(s.deviceNr + 1) +
-                " stick " + i2s(s.stickNr + 1);
+                " stick " + stickName;
             if(
                 s.axisNr == 0 &&
                 s.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
@@ -1579,18 +1586,25 @@ void getPlayerInputIconInfo(
             }
             
         } else {
-            *text = "Stick " + i2s(s.stickNr);
+            *text = "Stick " + stickName;
         }
         break;
         
     } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
+        string buttonName =
+            getButtonName(
+                s.buttonNr,
+                (size_t) s.deviceNr >= game.controllerNames.size() ?
+                "" :
+                game.controllerNames[s.deviceNr]
+            );
         if(!condensed) {
             *text =
                 "Pad " + i2s(s.deviceNr + 1) +
-                " button " + i2s(s.buttonNr + 1);
+                " button " + buttonName;
         } else {
-            *text = i2s(s.buttonNr + 1);
+            *text = buttonName;
         }
         break;
         

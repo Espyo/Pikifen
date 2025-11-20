@@ -159,7 +159,10 @@ public:
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controllerNumbers;
-
+    
+    //Name of each controller, in order.
+    vector<string> controllerNames;
+    
     //True if the last hardware input made from a game controller.
     //False if it was a keyboard, mouse, or other source.
     bool lastHardwareInputWasController = false;

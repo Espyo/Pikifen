@@ -466,7 +466,9 @@ void loadOptions() {
     game.controllerNumbers.clear();
     int nJoysticks = al_get_num_joysticks();
     for(int j = 0; j < nJoysticks; j++) {
-        game.controllerNumbers[al_get_joystick(j)] = j;
+        ALLEGRO_JOYSTICK* joystickPtr = al_get_joystick(j);
+        game.controllerNumbers[joystickPtr] = j;
+        game.controllerNames.push_back(al_get_joystick_name(joystickPtr));
     }
     
     //Read the main options.

@@ -564,7 +564,16 @@ void Game::processSystemInfo() {
     string areaMakerStr = "-";
     string gameVersionStr =
         config.general.version.empty() ? "-" : config.general.version;
-        
+    uint32_t allegroVersion = al_get_allegro_version();
+    int allegroMajor = allegroVersion >> 24;
+    int allegroMinor = (allegroVersion >> 16) & 255;
+    int allegroRevision = (allegroVersion >> 8) & 255;
+    int allegroRelease = allegroVersion & 255;
+    string allegroVersionStr =
+        i2s(allegroMajor) + "." + i2s(allegroMinor) + "." +
+        i2s(allegroRevision) + "." + i2s(allegroRelease);
+    string dearImGuiVersionStr(ImGui::GetVersion());
+    
     if(states.gameplay->loaded) {
         nMobsStr =
             resizeString(i2s(states.gameplay->mobs.all.size()), 7);
@@ -598,7 +607,10 @@ void Game::processSystemInfo() {
         "Resolution: " + resolutionStr +
         "\n"
         "Pikifen version " + getEngineVersionString() +
-        ", game version " + gameVersionStr,
+        ", game version " + gameVersionStr +
+        "\n"
+        "Allegro version " + allegroVersionStr +
+        ", Dear ImGui version " + dearImGuiVersionStr,
         1.0f, 1.0f
     );
 }
