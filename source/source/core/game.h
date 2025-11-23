@@ -28,6 +28,7 @@
 #include "../lib/inpution/inpution.h"
 #include "audio.h"
 #include "game_config.h"
+#include "hardware_mediator.h"
 #include "misc_structs.h"
 #include "modal_gui.h"
 #include "options.h"
@@ -108,6 +109,9 @@ public:
     
     //Player controls mediator.
     ControlsMediator controls;
+
+    //Hardware mediator.
+    HardwareMediator hardware;
     
     //Console.
     Console console;
@@ -156,16 +160,6 @@ public:
     
     //Set to false to stop program execution next frame.
     bool isGameRunning = true;
-    
-    //What Allegro joystick maps to what number.
-    map<ALLEGRO_JOYSTICK*, int> controllerNumbers;
-    
-    //Name of each controller, in order.
-    vector<string> controllerNames;
-    
-    //True if the last hardware input made from a game controller.
-    //False if it was a keyboard, mouse, or other source.
-    bool lastHardwareInputWasController = false;
     
     //Auto-repeater settings for leader auto-throws.
     AutoRepeaterSettings autoThrowSettings{

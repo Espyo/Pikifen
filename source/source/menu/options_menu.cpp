@@ -885,7 +885,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.setFocusedItem(bindsGui.backItem, true);
     bindsGui.responsive = false;
     bindsGui.hideItems();
-    al_reconfigure_joysticks();
+    game.hardware.updateControllers();
 }
 
 
@@ -1045,9 +1045,9 @@ void OptionsMenu::initGuiControlsPage() {
     //Inventory mode.
     fastInventoryCheck =
         new CheckGuiItem(
-            &game.options.controls.fastInventory, "Fast inventory",
-            game.sysContent.fntStandard
-        );
+        &game.options.controls.fastInventory, "Fast inventory",
+        game.sysContent.fntStandard
+    );
     fastInventoryCheck->onGetTooltip =
     [] () {
         return

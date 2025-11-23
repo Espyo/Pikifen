@@ -220,29 +220,6 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Mouse cursor movement.
         mouseCursor.updatePos(ev);
         mouseCursor.movedThisFrame = true;
-        lastHardwareInputWasController = false;
-        
-    } else if(
-        ev.type == ALLEGRO_EVENT_KEY_DOWN ||
-        ev.type == ALLEGRO_EVENT_KEY_UP ||
-        ev.type == ALLEGRO_EVENT_KEY_CHAR
-    ) {
-        //Keyboard input.
-        lastHardwareInputWasController = false;
-        
-    } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
-        //Game controller input.
-        if(fabs(ev.joystick.pos) > 0.5f) {
-            //Easy deadzone simulation.
-            lastHardwareInputWasController = true;
-        }
-        
-    } else if(
-        ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN ||
-        ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP
-    ) {
-        //Game controller input.
-        lastHardwareInputWasController = true;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY) {
         //Mouse cursor left window.
@@ -271,6 +248,9 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         al_resize_display(display, winW, winH);
         
     }
+    
+    //Hardware mediator.
+    hardware.handleAllegroEvent(ev);
     
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);

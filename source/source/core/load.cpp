@@ -463,13 +463,7 @@ void loadOptions() {
     if(!file.fileWasOpened) return;
     
     //Init game controllers.
-    game.controllerNumbers.clear();
-    int nJoysticks = al_get_num_joysticks();
-    for(int j = 0; j < nJoysticks; j++) {
-        ALLEGRO_JOYSTICK* joystickPtr = al_get_joystick(j);
-        game.controllerNumbers[joystickPtr] = j;
-        game.controllerNames.push_back(al_get_joystick_name(joystickPtr));
-    }
+    game.hardware.updateControllers();
     
     //Read the main options.
     game.options.loadFromDataNode(&file);

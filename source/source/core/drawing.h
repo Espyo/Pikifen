@@ -101,79 +101,6 @@ enum MENU_ICON {
 };
 
 
-//Possible shapes for a player input icon.
-enum PLAYER_INPUT_ICON_SHAPE {
-
-    //Doesn't really have a shape, but instead draws a bitmap.
-    PLAYER_INPUT_ICON_SHAPE_BITMAP,
-    
-    //Rectangle shape, representing keyboard keys.
-    PLAYER_INPUT_ICON_SHAPE_RECTANGLE,
-    
-    //Circle/ellipse shape, representing buttons.
-    PLAYER_INPUT_ICON_SHAPE_ROUNDED,
-    
-};
-
-
-//Player input icon spritesheet sprites.
-//The order matches what's in the spritesheet.
-enum PLAYER_INPUT_ICON_SPRITE {
-
-    //Left mouse button.
-    PLAYER_INPUT_ICON_SPRITE_LMB,
-    
-    //Right mouse button.
-    PLAYER_INPUT_ICON_SPRITE_RMB,
-    
-    //Middle mouse button.
-    PLAYER_INPUT_ICON_SPRITE_MMB,
-    
-    //Mouse wheel up.
-    PLAYER_INPUT_ICON_SPRITE_MWU,
-    
-    //Mouse wheel down.
-    PLAYER_INPUT_ICON_SPRITE_MWD,
-    
-    //Right key.
-    PLAYER_INPUT_ICON_SPRITE_RIGHT,
-    
-    //Down key.
-    PLAYER_INPUT_ICON_SPRITE_DOWN,
-    
-    //Left key.
-    PLAYER_INPUT_ICON_SPRITE_LEFT,
-    
-    //Up key.
-    PLAYER_INPUT_ICON_SPRITE_UP,
-    
-    //Backspace key.
-    PLAYER_INPUT_ICON_SPRITE_BACKSPACE,
-    
-    //Shift key.
-    PLAYER_INPUT_ICON_SPRITE_SHIFT,
-    
-    //Tab key.
-    PLAYER_INPUT_ICON_SPRITE_TAB,
-    
-    //Enter key.
-    PLAYER_INPUT_ICON_SPRITE_ENTER,
-    
-    //Game controller stick right.
-    PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
-    
-    //Game controller stick down.
-    PLAYER_INPUT_ICON_SPRITE_STICK_DOWN,
-    
-    //Game controller stick left.
-    PLAYER_INPUT_ICON_SPRITE_STICK_LEFT,
-    
-    //Game controller stick up.
-    PLAYER_INPUT_ICON_SPRITE_STICK_UP,
-    
-};
-
-
 void drawBackgroundLogos(
     float timeSpent, size_t rows, size_t cols,
     const Point& logoSize, const ALLEGRO_COLOR& tint,
@@ -237,17 +164,12 @@ void drawStringTokens(
     const Point& where, int flags, const Point& maxSize,
     const Point& scale = Point(1.0f), const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
-void getPlayerInputIconInfo(
-    const Inpution::InputSource& s, bool condensed,
-    PLAYER_INPUT_ICON_SHAPE* shape,
-    PLAYER_INPUT_ICON_SPRITE* bitmapSprite,
-    string* text
-);
-float getPlayerInputIconWidth(
-    const ALLEGRO_FONT* font, const Inpution::InputSource& s, bool condensed,
-    float maxBitmapHeight = 0
-);
 void drawHighlightedRectRegion(
     const Point& center, const Point& size, const ALLEGRO_COLOR& color,
     float timeSpent
+);
+
+float getInputSourceIconWidth(
+    const Inpution::InputSource& s, const ALLEGRO_FONT* font,
+    bool condensed, float maxBitmapHeight = 0
 );

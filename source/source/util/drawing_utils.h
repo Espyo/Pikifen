@@ -53,7 +53,7 @@ enum TEXT_SETTING_FLAG {
     TEXT_SETTING_FLAG_CAN_CHANGE_RATIO = 1 << 4,
     
     //Compensate for the Y offset given by the font, by removing it.
-    TEXT_SETTING_COMPENSATE_Y_OFFSET = 1 << 5,
+    TEXT_SETTING_FLAG_COMPENSATE_YO = 1 << 5,
     
     //Utility flag -- The text can never be grown in any way.
     TEXT_SETTING_FLAG_CANT_GROW =

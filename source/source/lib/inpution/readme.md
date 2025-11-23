@@ -5,8 +5,9 @@ _From input to action._
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
 > * [Features](#features)
-> * [What it doesn't do](#what-it-doesnt-do)
-> * [Key terms](#key-terms)
+>   * [What it doesn't do](#what-it-doesnt-do)
+> * [Other usage information](#other-usage-information)
+> * [Inner workings notes](#inner-workings-notes)
 
 
 ## Overview
@@ -153,13 +154,18 @@ int main() {
   * Very agnostic, and with no external dependencies.
 
 
-## What it doesn't do
+### What it doesn't do
 
 * It does not obtain hardware information. It's not a hardware driver, it doesn't recognize keyboard, mouse, or controller hardware input events, it doesn't recognize controller or controller button names. Your program is the one that must obtain this information and feed it to Inpution.
+* It does not understand game controller anatomy. That is, it doesn't know if a button is really a button or a trigger, it doesn't know if a stick is an analog stick or a D-pad, etc. It also doesn't understand stick axes, but it does assume them; see [Inner workings notes](#inner-workings-notes).
 * It does not abstract mouse movement. If, for instance, you want camera control to be done via mouse movement and an analog stick, you can abstract the analog stick logic with Inpution, but you will have to add the mouse movement logic yourself.
 
 
-## Key terms
+## Other usage information
+
+* Inpution reports all player actions that happened. For instance, it could report the "jump" action and the "menu confirm" action when the player presses A. It is up to you to figure out your game state and accept or ignore certain actions.
+
+Here are some important key terms:
 
 * **Action**:
   * An abstract representation of a specific action in the game that the player performed. The exact real-life movement the player made for this is not relevant. This is essentially an event.
@@ -176,3 +182,8 @@ int main() {
 * **Input source**:
   * A specific button, key, analog stick, etc. on a specific device.
   * e.g. The left bumper button on the second controller.
+
+
+## Inner workings notes
+
+* Analog sticks can have any number of axes, and each axis could mean something different, so Inpution makes no attempt to understand them. However, for the sake of usability, it treats axis 0 of an analog stick as the horizontal axis and axis 1 as the vertical axis. And it treats 0,0 as the analog stick's neutral position, axis 0 negative and positive as left and right respectively, and axis 1 negative and positive as up and down respectively. This seems to be what almost all game controllers use in the real world.

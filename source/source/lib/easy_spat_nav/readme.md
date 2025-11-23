@@ -58,7 +58,7 @@ void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
 * Simple unit test coverage for the library itself.
 
 
-## Important information
+## Other usage information
 
 * For simplicity's sake, each item is identified with a `void *`. In your application you probably identify your widgets with an index number or a pointer, so just cast that to a `void *` freely. `nullptr` (zero) is reserved for "none", however.
 * To work with parent and children items:

@@ -71,9 +71,6 @@ ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a);
 ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l);
 FS_DELETE_RESULT deleteFile(const string& filePath);
 Point getBitmapDimensions(ALLEGRO_BITMAP* bmp);
-string getButtonName(int buttonNr, const string& controllerName);
-string getKeyName(int keycode, bool condensed);
-string getStickName(int stickNr, const string& controllerName);
 void getShiftCtrlAltState(
     bool* outShiftState, bool* outCtrlState, bool* outAltState
 );

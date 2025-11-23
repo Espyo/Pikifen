@@ -1357,9 +1357,9 @@ void setStringTokenWidths(
         } case STRING_TOKEN_BIND_INPUT: {
             tokens[t].content = trimSpaces(tokens[t].content);
             tokens[t].width =
-                getPlayerInputIconWidth(
-                    controlFont,
+                getInputSourceIconWidth(
                     game.controls.findBind(tokens[t].content).inputSource,
+                    controlFont,
                     controlCondensed,
                     maxControlBitmapHeight
                 );

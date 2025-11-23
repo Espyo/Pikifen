@@ -146,7 +146,8 @@ Inpution::Input ControlsMediator::allegroEventToInput(
     } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
         input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
-        input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
+        input.source.deviceNr =
+            game.hardware.getControllerNr(ev.joystick.id);
         input.source.buttonNr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
@@ -165,13 +166,15 @@ Inpution::Input ControlsMediator::allegroEventToInput(
                     Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
                 input.value = -ev.joystick.pos;
             }
-            input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
+            input.source.deviceNr =
+                game.hardware.getControllerNr(ev.joystick.id);
             input.source.stickNr = ev.joystick.stick;
             input.source.axisNr = ev.joystick.axis;
         } else {
             //It's likely an analog button.
             input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
-            input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
+            input.source.deviceNr =
+                game.hardware.getControllerNr(ev.joystick.id);
             input.source.stickNr = ev.joystick.stick;
             input.value = (ev.joystick.pos + 1.0f) / 2.0f;
         }

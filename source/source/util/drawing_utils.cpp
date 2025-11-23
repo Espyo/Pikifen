@@ -334,7 +334,7 @@ void drawText(
     getTextDrawingTransforms(
         where,
         textFinalScale * furtherScale,
-        hasFlag(settings, TEXT_SETTING_COMPENSATE_Y_OFFSET) ?
+        hasFlag(settings, TEXT_SETTING_FLAG_COMPENSATE_YO) ?
         textOrigOy :
         0.0f,
         vAlignOffset * furtherScale.y,
