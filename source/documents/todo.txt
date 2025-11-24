@@ -41,7 +41,6 @@ Next tasks (roughly sorted most important first)
                     Write the controller's names, given by Allegro
         An inventory system
             Update the help menu
-        If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Test it on the Steam Deck
 

@@ -86,15 +86,6 @@ const float LOADING_SCREEN_TEXT_HEIGHT = 0.10f;
 //Loading screen text width, in window ratio.
 const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
 
-//Notification opacity.
-const unsigned char NOTIFICATION_ALPHA = 160;
-
-//Size of a control bind icon in a notification.
-const float NOTIFICATION_INPUT_SIZE = 24.0f;
-
-//Padding between a notification's text and its limit.
-const float NOTIFICATION_PADDING = 8.0f;
-
 }
 
 

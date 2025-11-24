@@ -847,7 +847,7 @@ void GameplayState::drawGameplayMessageBox() {
                         y + lineHeight / 2.0f
                     ),
                     Point(tokenFinalWidth, lineHeight),
-                    true, game.sysContent.fntSlim, COLOR_WHITE, false                    
+                    true, game.sysContent.fntSlim, COLOR_WHITE, false
                 );
                 break;
             }
@@ -1127,8 +1127,8 @@ void GameplayState::drawInGameText(Player* player) {
         }
     }
     
-    //Player notification.
-    player->notification.draw(player->view);
+    //Leader prompt.
+    player->leaderPrompt.draw(player->view);
     
     //Mission exit region.
     if(

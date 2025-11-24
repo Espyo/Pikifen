@@ -109,7 +109,7 @@ public:
     
     //Player controls mediator.
     ControlsMediator controls;
-
+    
     //Hardware mediator.
     HardwareMediator hardware;
     
@@ -145,6 +145,9 @@ public:
     
     //Manager for all full-window fade-ins and fade-outs.
     FadeManager fadeMgr = FadeManager(GAME::FADE_DURATION);
+    
+    //Manager for the system notifications.
+    SystemNotificationManager systemNotifications;
     
     //Duration of the last few frames.
     vector<double> framerateHistory;

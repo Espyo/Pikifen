@@ -21,6 +21,7 @@ graphics {
     idle_glow = effects/idle_glow
     key_box = gui/key_box
     leader_cursor = gui/leader_cursor
+    leader_prompt = gui/leader_prompt
     leader_silhouette_side = gui/leader_silhouette_side
     leader_silhouette_top = gui/leader_silhouette_top
     low_health_ring = gui/low_health_ring
@@ -36,7 +37,6 @@ graphics {
     more = gui/more
     mouse_cursor = gui/mouse_cursor
     napsack = gui/napsack
-    notification = gui/notification
     pikmin_soul = effects/pikmin_soul
     player_input_icons = gui/player_input_icons
     random = gui/random

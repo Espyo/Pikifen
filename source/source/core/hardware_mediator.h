@@ -192,7 +192,7 @@ struct HardwareMediator {
         string* outExtra
     ) const;
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    void updateControllers();
+    void updateControllers(bool silent = false);
     
     
     private:

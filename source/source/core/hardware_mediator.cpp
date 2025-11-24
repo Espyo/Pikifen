@@ -546,7 +546,7 @@ void HardwareMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ev.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION
     ) {
         //Game controller was connected or disconnected.
-        al_reconfigure_joysticks();
+        updateControllers();
         
     }
 }
@@ -555,10 +555,14 @@ void HardwareMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 /**
  * @brief Polls Allegro for the connected game controllers and updates their
  * information.
+ *
+ * @param silent If true, no system notifications will appear for
+ * connected or disconnected controllers.
  */
-void HardwareMediator::updateControllers() {
-    al_reconfigure_joysticks();
+void HardwareMediator::updateControllers(bool silent) {
+    int oldNControllers = controllers.size();
     controllers.clear();
+    al_reconfigure_joysticks();
     
     int nControllers = al_get_num_joysticks();
     for(int j = 0; j < nControllers; j++) {
@@ -578,5 +582,19 @@ void HardwareMediator::updateControllers() {
             .brand = brand
         }
         );
+    }
+    
+    if(!silent) {
+        if(oldNControllers < nControllers) {
+            game.systemNotifications.add(
+                "Controller connected.", false, false
+            );
+        } else if(oldNControllers > nControllers) {
+            game.systemNotifications.add(
+                "Controller disconnected!", true, false
+            );
+            game.states.gameplay->tryPause();
+            game.controls.releaseAll();
+        }
     }
 }

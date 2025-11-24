@@ -1384,6 +1384,7 @@ void OptionsMenu::initGuiShortcutsPage() {
     shortcutsGui.backItem->onActivate =
     [this] (const Point&) {
         saveOptions();
+        game.systemNotifications.add("Options saved.", false, false);
         transitionGuis(
             shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1470,6 +1471,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.backItem->onActivate =
     [this] (const Point&) {
         saveOptions();
+        game.systemNotifications.add("Options saved.", false, false);
         leave();
     };
     topGui.backItem->onGetTooltip =

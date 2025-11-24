@@ -202,6 +202,9 @@ void Game::globalDrawing() {
     if(!debug.showDearImGuiDemo) {
         fadeMgr.draw();
     }
+    
+    //System notifications.
+    systemNotifications.draw();
 }
 
 
@@ -341,7 +344,9 @@ void Game::globalLogicPre() {
     //Console.
     console.tick(deltaT);
     
+    //System things.
     processSystemInfo();
+    systemNotifications.tick(deltaT);
     
     //Dear ImGui.
     ImGui_ImplAllegro5_NewFrame();

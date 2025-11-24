@@ -40,9 +40,6 @@ extern const int LOADING_SCREEN_PADDING;
 extern const float LOADING_SCREEN_SUBTEXT_SCALE;
 extern const float LOADING_SCREEN_TEXT_HEIGHT;
 extern const float LOADING_SCREEN_TEXT_WIDTH;
-extern const unsigned char NOTIFICATION_ALPHA;
-extern const float NOTIFICATION_INPUT_SIZE;
-extern const float NOTIFICATION_PADDING;
 }
 
 

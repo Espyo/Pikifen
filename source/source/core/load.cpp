@@ -306,8 +306,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxCheck);
     game.sysContent.bmpCheckboxNoCheck =
         game.content.bitmaps.list.get(game.sysContentNames.bmpCheckboxNoCheck);
-    game.sysContent.bmpLeaderCursor =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderCursor);
     game.sysContent.bmpDifficulty =
         game.content.bitmaps.list.get(game.sysContentNames.bmpDifficulty);
     game.sysContent.bmpDiscordIcon =
@@ -326,6 +324,10 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpIdleGlow);
     game.sysContent.bmpKeyBox =
         game.content.bitmaps.list.get(game.sysContentNames.bmpKeyBox);
+    game.sysContent.bmpLeaderCursor =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderCursor);
+    game.sysContent.bmpLeaderPrompt =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderPrompt);
     game.sysContent.bmpLeaderSilhouetteSide =
         game.content.bitmaps.list.get(
             game.sysContentNames.bmpLeaderSilhouetteSide
@@ -362,8 +364,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMouseCursor);
     game.sysContent.bmpNapsack =
         game.content.bitmaps.list.get(game.sysContentNames.bmpNapsack);
-    game.sysContent.bmpNotification =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpNotification);
     game.sysContent.bmpOnionMenu1 =
         game.content.bitmaps.list.get(game.sysContentNames.bmpOnionMenu1);
     game.sysContent.bmpOnionMenu10 =
@@ -471,7 +471,7 @@ void loadOptions() {
     if(!file.fileWasOpened) return;
     
     //Init game controllers.
-    game.hardware.updateControllers();
+    game.hardware.updateControllers(true);
     
     //Read the main options.
     game.options.loadFromDataNode(&file);
@@ -563,7 +563,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpButtonBox);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxCheck);
     game.content.bitmaps.list.free(game.sysContent.bmpCheckboxNoCheck);
-    game.content.bitmaps.list.free(game.sysContent.bmpLeaderCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpDifficulty);
     game.content.bitmaps.list.free(game.sysContent.bmpDiscordIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
@@ -574,6 +573,8 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpIdleGlow);
     game.content.bitmaps.list.free(game.sysContent.bmpKeyBox);
+    game.content.bitmaps.list.free(game.sysContent.bmpLeaderCursor);
+    game.content.bitmaps.list.free(game.sysContent.bmpLeaderPrompt);
     game.content.bitmaps.list.free(game.sysContent.bmpLeaderSilhouetteSide);
     game.content.bitmaps.list.free(game.sysContent.bmpLeaderSilhouetteTop);
     game.content.bitmaps.list.free(game.sysContent.bmpLowHealthRing);
@@ -590,7 +591,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
     game.content.bitmaps.list.free(game.sysContent.bmpNapsack);
-    game.content.bitmaps.list.free(game.sysContent.bmpNotification);
     game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu1);
     game.content.bitmaps.list.free(game.sysContent.bmpOnionMenu10);
     game.content.bitmaps.list.free(game.sysContent.bmpOnionMenuAll);

@@ -64,8 +64,20 @@ extern const float HIDE_UP_SPEED;
 }
 
 
-namespace NOTIFICATION {
+namespace LEADER_PROMPT {
+extern const unsigned char ALPHA;
 extern const float FADE_SPEED;
+extern const float INPUT_SIZE;
+extern const float PADDING;
+}
+
+
+namespace SYSTEM_NOTIFICATION {
+extern const float DURATION_NORMAL;
+extern const float DURATION_IMPORTANT;
+extern const float DURATION_TRANSITION;
+extern const float HEIGHT;
+extern const float WIDTH;
 }
 
 
@@ -681,6 +693,9 @@ struct SystemContentList {
     //Leader cursor.
     ALLEGRO_BITMAP* bmpLeaderCursor = nullptr;
     
+    //Leader prompt.
+    ALLEGRO_BITMAP* bmpLeaderPrompt = nullptr;
+    
     //Leader silhouette from the side.
     ALLEGRO_BITMAP* bmpLeaderSilhouetteSide = nullptr;
     
@@ -728,9 +743,6 @@ struct SystemContentList {
     
     //Napsack icon.
     ALLEGRO_BITMAP* bmpNapsack = nullptr;
-    
-    //Notification.
-    ALLEGRO_BITMAP* bmpNotification = nullptr;
     
     //Onion menu change 1 icon.
     ALLEGRO_BITMAP* bmpOnionMenu1 = nullptr;
@@ -962,6 +974,9 @@ struct SystemContentNames {
     //Leader cursor.
     string bmpLeaderCursor = "gui/leader_cursor";
     
+    //Leader prompt.
+    string bmpLeaderPrompt = "gui/leader_prompt";
+    
     //Leader silhouette from the side.
     string bmpLeaderSilhouetteSide = "gui/leader_silhouette_side";
     
@@ -1008,10 +1023,7 @@ struct SystemContentNames {
     string bmpMouseCursor = "gui/mouse_cursor";
     
     //Napsack icon.
-    string bmpNapsack = "gui/notification";
-    
-    //Notification.
-    string bmpNotification = "gui/notification";
+    string bmpNapsack = "gui/napsack";
     
     //Onion menu change 1 icon.
     string bmpOnionMenu1 = "gui/onion_menu_1";
@@ -1283,11 +1295,71 @@ struct FadeManager {
 
 
 /**
- * @brief Info about the currently visible notification during gameplay.
- * This is stuff like a note above the leader telling the player
- * what button to press to do something, like plucking.
+ * @brief Manages system notifications, drawing them, queuing them, etc.
  */
-struct Notification {
+struct SystemNotificationManager {
+
+    //--- Function declarations ---
+    
+    bool add(const string& text, bool important = false, bool canRepeat = true);
+    void draw() const;
+    void tick(float deltaT);
+    
+    
+    private:
+    
+    //--- Misc. declarations ---
+    
+    //Current notification's state.
+    enum NOTIF_STATE {
+    
+        //Showing.
+        NOTIF_STATE_SHOWING,
+        
+        //Staying in place.
+        NOTIF_STATE_STAYING,
+        
+        //Hiding.
+        NOTIF_STATE_HIDING,
+        
+    };
+    
+    //Represents a notification.
+    struct Notification {
+    
+        //--- Members ---
+        
+        //Text.
+        string text;
+        
+        //Whether it's important or informative.
+        bool important = false;
+        
+    };
+    
+    
+    //--- Members ---
+    
+    //Current notification's state.
+    NOTIF_STATE curNotifState = NOTIF_STATE_SHOWING;
+    
+    //How long the current notification has been in this state for,
+    //in timer ratio.
+    float curNotifTimer = 0.0f;
+    
+    //Queue of notifications.
+    vector<Notification> notifications;
+    
+};
+
+
+
+/**
+ * @brief Info about the currently visible prompt that appears above a
+ * leader, telling the player what button to press to do something,
+ * like plucking.
+ */
+struct LeaderPrompt {
 
     public:
     

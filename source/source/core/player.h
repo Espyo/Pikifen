@@ -118,8 +118,8 @@ struct Player {
     //Animation timer when showing a shortcut's usage on-screen.
     float inventoryShortcutDisplayTimer = 0.0f;
     
-    //Current notification, if any.
-    Notification notification;
+    //Current leader prompt, if any.
+    LeaderPrompt leaderPrompt;
     
     //Index of the selected spray.
     size_t selectedSpray = 0;

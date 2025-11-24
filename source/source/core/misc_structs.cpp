@@ -86,10 +86,39 @@ const float HIDE_UP_SPEED = 3.0f;
 }
 
 
-namespace NOTIFICATION {
+namespace LEADER_PROMPT {
+
+//Leader prompt opacity.
+const unsigned char ALPHA = 160;
 
 //How quickly it fades, in alpha per second.
 const float FADE_SPEED = 4.0f;
+
+//Size of a control bind icon in a leader prompt.
+const float INPUT_SIZE = 24.0f;
+
+//Padding between a leader prompt's text and its limit.
+const float PADDING = 8.0f;
+
+}
+
+
+namespace SYSTEM_NOTIFICATION {
+
+//How long a normal (non-important) notification lasts for, sans transitions.
+const float DURATION_NORMAL = 2.0f;
+
+//How long an important notification lasts for, sans transitions.
+const float DURATION_IMPORTANT = 4.0f;
+
+//How long to transition a notification for.
+const float DURATION_TRANSITION = 0.3f;
+
+//Height, in screen height ratio.
+const float HEIGHT = 0.08f;
+
+//Width, in screen width ratio.
+const float WIDTH = 0.25f;
 
 }
 
@@ -964,11 +993,11 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Draws the notification.
+ * @brief Draws the prompt.
  *
  * @param view Viewport to draw to.
  */
-void Notification::draw(const Viewport& view) const {
+void LeaderPrompt::draw(const Viewport& view) const {
     if(visibility == 0.0f) return;
     
     float scale = ease(EASE_METHOD_OUT, visibility);
@@ -986,35 +1015,35 @@ void Notification::draw(const Viewport& view) const {
     al_compose_transform(&tra, &oldTra);
     al_use_transform(&tra);
     
-    int bmpW = al_get_bitmap_width(game.sysContent.bmpNotification);
-    int bmpH = al_get_bitmap_height(game.sysContent.bmpNotification);
+    int bmpW = al_get_bitmap_width(game.sysContent.bmpLeaderPrompt);
+    int bmpH = al_get_bitmap_height(game.sysContent.bmpLeaderPrompt);
     
-    float textBoxX1 = -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING;
-    float textBoxX2 = bmpW * 0.5 - DRAWING::NOTIFICATION_PADDING;
-    float textBoxY1 = -bmpH - DRAWING::NOTIFICATION_PADDING;
-    float textBoxY2 = DRAWING::NOTIFICATION_PADDING;
+    float textBoxX1 = -bmpW * 0.5 + LEADER_PROMPT::PADDING;
+    float textBoxX2 = bmpW * 0.5 - LEADER_PROMPT::PADDING;
+    float textBoxY1 = -bmpH - LEADER_PROMPT::PADDING;
+    float textBoxY2 = LEADER_PROMPT::PADDING;
     
     drawBitmap(
-        game.sysContent.bmpNotification,
+        game.sysContent.bmpLeaderPrompt,
         Point(0, -bmpH * 0.5),
         Point(bmpW, bmpH),
         0,
-        mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
+        mapAlpha(LEADER_PROMPT::ALPHA * visibility)
     );
     
     if(actionType != PLAYER_ACTION_TYPE_NONE) {
         textBoxX1 +=
-            DRAWING::NOTIFICATION_INPUT_SIZE + DRAWING::NOTIFICATION_PADDING;
+            LEADER_PROMPT::INPUT_SIZE + LEADER_PROMPT::PADDING;
         drawPlayerActionInputSourceIcon(
             actionType,
             Point(
-                -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING +
-                DRAWING::NOTIFICATION_INPUT_SIZE * 0.5,
+                -bmpW * 0.5 + LEADER_PROMPT::PADDING +
+                LEADER_PROMPT::INPUT_SIZE * 0.5,
                 -bmpH * 0.5
             ),
             Point(
-                DRAWING::NOTIFICATION_INPUT_SIZE,
-                DRAWING::NOTIFICATION_INPUT_SIZE
+                LEADER_PROMPT::INPUT_SIZE,
+                LEADER_PROMPT::INPUT_SIZE
             ),
             true, game.sysContent.fntSlim, mapAlpha(visibility * 255)
         );
@@ -1030,7 +1059,7 @@ void Notification::draw(const Viewport& view) const {
             textBoxX2 - textBoxX1,
             textBoxY2 - textBoxY1
         ),
-        mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility),
+        mapAlpha(LEADER_PROMPT::ALPHA * visibility),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, TEXT_SETTING_FLAG_CANT_GROW
     );
     
@@ -1039,12 +1068,12 @@ void Notification::draw(const Viewport& view) const {
 
 
 /**
- * @brief Returns how "present" the notification is.
+ * @brief Returns how "present" the leader prompt is.
  * 0 means hidden, 1 is fully visible. Mid values are transition.
  *
  * @return The visibility.
  */
-float Notification::getVisibility() const {
+float LeaderPrompt::getVisibility() const {
     return visibility;
 }
 
@@ -1052,7 +1081,7 @@ float Notification::getVisibility() const {
 /**
  * @brief Resets the whole thing.
  */
-void Notification::reset() {
+void LeaderPrompt::reset() {
     enabled = true;
     actionType = PLAYER_ACTION_TYPE_NONE;
     text.clear();
@@ -1068,7 +1097,7 @@ void Notification::reset() {
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
-void Notification::setContents(
+void LeaderPrompt::setContents(
     PLAYER_ACTION_TYPE actionType, const string& text, const Point& pos
 ) {
     this->actionType = actionType;
@@ -1078,11 +1107,11 @@ void Notification::setContents(
 
 
 /**
- * @brief Sets whether the notification is meant to show or not.
+ * @brief Sets whether the leader prompt is meant to show or not.
  *
  * @param enabled Whether it's enabled or not.
  */
-void Notification::setEnabled(bool enabled) {
+void LeaderPrompt::setEnabled(bool enabled) {
     this->enabled = enabled;
 }
 
@@ -1092,11 +1121,11 @@ void Notification::setEnabled(bool enabled) {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void Notification::tick(float deltaT) {
+void LeaderPrompt::tick(float deltaT) {
     if(enabled) {
-        visibility += NOTIFICATION::FADE_SPEED * deltaT;
+        visibility += LEADER_PROMPT::FADE_SPEED * deltaT;
     } else {
-        visibility -= NOTIFICATION::FADE_SPEED * deltaT;
+        visibility -= LEADER_PROMPT::FADE_SPEED * deltaT;
     }
     visibility = std::clamp(visibility, 0.0f, 1.0f);
 }
@@ -2140,6 +2169,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("idle_glow", bmpIdleGlow);
     graRS.set("key_box", bmpKeyBox);
     graRS.set("leader_cursor", bmpLeaderCursor);
+    graRS.set("leader_prompt", bmpLeaderPrompt);
     graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
     graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
     graRS.set("low_health_ring", bmpLowHealthRing);
@@ -2156,7 +2186,6 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
     graRS.set("napsack", bmpNapsack);
-    graRS.set("notification", bmpNotification);
     graRS.set("onion_menu_1", bmpOnionMenu1);
     graRS.set("onion_menu_10", bmpOnionMenu10);
     graRS.set("onion_menu_all", bmpOnionMenuAll);
@@ -2248,6 +2277,127 @@ void SystemContentNames::load(DataNode* file) {
     parRS.set("throw_trail", parThrowTrail);
     parRS.set("treasure", parTreasure);
     parRS.set("wave_ring", parWaveRing);
+}
+
+
+/**
+ * @brief Adds a new notification to the queue.
+ *
+ * @param text Text contents.
+ * @param important If true, this notification stays on for longer and
+ * calls a bit more attention.
+ * @param canRepeat If there is already a notification with this text in
+ * the queue, or being shown, then whether or not this one gets added
+ * depends on this argument.
+ * @return Whether it got added.
+ */
+bool SystemNotificationManager::add(
+    const string& text, bool important, bool canRepeat
+) {
+    if(text.empty()) return false;
+    
+    if(!canRepeat) {
+        for(size_t n = 0; n < notifications.size(); n++) {
+            if(notifications[n].text == text) return false;
+        }
+    }
+    
+    notifications.push_back(
+        Notification{ .text = text, .important = important}
+    );
+    return true;
+}
+
+
+/**
+ * @brief Draws the current notification on the screen, if any.
+ */
+void SystemNotificationManager::draw() const {
+    if(notifications.empty()) return;
+    
+    float visibility = 1.0f;
+    if(curNotifState == NOTIF_STATE_SHOWING) {
+        visibility = curNotifTimer;
+    } else if(curNotifState == NOTIF_STATE_HIDING) {
+        visibility = 1.0f - curNotifTimer;
+    }
+    visibility = ease(EASE_METHOD_OUT, visibility);
+    
+    Point size(
+        game.winW * SYSTEM_NOTIFICATION::WIDTH,
+        game.winH * SYSTEM_NOTIFICATION::HEIGHT
+    );
+    Point hiddenPos(
+        game.winW - size.x / 2.0f,
+        -size.y / 2.0f
+    );
+    Point shownPos(
+        game.winW - size.x / 2.0f,
+        size.y / 2.0f
+    );
+    Point pos =
+        interpolatePoint(
+            visibility, 0.0f, 1.0f, hiddenPos, shownPos
+        );
+    ALLEGRO_COLOR textBaseColor =
+        notifications.front().important ?
+        game.config.guiColors.gold : COLOR_WHITE;
+        
+    drawFilledRoundedRectangle(
+        pos, size, 16.0f,
+        multAlpha(game.config.guiColors.pauseBg, visibility)
+    );
+    drawTexturedBox(
+        pos, size, game.sysContent.bmpFrameBox,
+        mapAlpha(visibility * 255)
+    );
+    drawText(
+        notifications.front().text,
+        game.sysContent.fntStandard,
+        pos, size * 0.90f, multAlpha(textBaseColor, visibility),
+        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW
+    );
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void SystemNotificationManager::tick(float deltaT) {
+    if(notifications.empty()) return;
+    
+    switch(curNotifState) {
+    case NOTIF_STATE_SHOWING: {
+        curNotifTimer += (deltaT / SYSTEM_NOTIFICATION::DURATION_TRANSITION);
+        if(curNotifTimer >= 1.0f) {
+            curNotifState = NOTIF_STATE_STAYING;
+            curNotifTimer = 0.0f;
+        }
+        break;
+    } case NOTIF_STATE_STAYING: {
+        float timerToUse =
+            notifications.front().important ?
+            SYSTEM_NOTIFICATION::DURATION_IMPORTANT :
+            SYSTEM_NOTIFICATION::DURATION_NORMAL;
+        curNotifTimer += (deltaT / timerToUse);
+        if(curNotifTimer >= 1.0f) {
+            curNotifState = NOTIF_STATE_HIDING;
+            curNotifTimer = 0.0f;
+        }
+        break;
+    } case NOTIF_STATE_HIDING: {
+        curNotifTimer += (deltaT / SYSTEM_NOTIFICATION::DURATION_TRANSITION);
+        if(curNotifTimer >= 1.0f) {
+            curNotifState = NOTIF_STATE_SHOWING;
+            curNotifTimer = 0.0f;
+            notifications.erase(notifications.begin());
+        }
+        break;
+    }
+    }
 }
 
 

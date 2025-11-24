@@ -286,18 +286,18 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             groupCenter * groupWeight;
     }
     
-    //Check what to show on the notification, if anything.
-    player->notification.setEnabled(false);
+    //Check what to show on the leader prompt, if anything.
+    player->leaderPrompt.setEnabled(false);
     
-    bool notificationDone = false;
+    bool leaderPromptDone = false;
     
-    //Lying down stop notification.
+    //Lying down stop prompt.
     if(
-        !notificationDone &&
+        !leaderPromptDone &&
         player->leaderPtr->fsm.curState->id == LEADER_STATE_SLEEPING
     ) {
-        player->notification.setEnabled(true);
-        player->notification.setContents(
+        player->leaderPrompt.setEnabled(true);
+        player->leaderPrompt.setContents(
             PLAYER_ACTION_TYPE_WHISTLE,
             "Wake up",
             Point(
@@ -305,16 +305,16 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
-        notificationDone = true;
+        leaderPromptDone = true;
     }
     
-    //Get up notification.
+    //Get up prompt.
     if(
-        !notificationDone &&
+        !leaderPromptDone &&
         player->leaderPtr->fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
     ) {
-        player->notification.setEnabled(true);
-        player->notification.setContents(
+        player->leaderPrompt.setEnabled(true);
+        player->leaderPrompt.setContents(
             PLAYER_ACTION_TYPE_WHISTLE,
             "Get up",
             Point(
@@ -322,16 +322,16 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
-        notificationDone = true;
+        leaderPromptDone = true;
     }
-    //Auto-throw stop notification.
+    //Auto-throw stop prompt.
     if(
-        !notificationDone &&
+        !leaderPromptDone &&
         player->leaderPtr->autoThrowRepeater.time != LARGE_FLOAT &&
         game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE
     ) {
-        player->notification.setEnabled(true);
-        player->notification.setContents(
+        player->leaderPrompt.setEnabled(true);
+        player->leaderPrompt.setContents(
             PLAYER_ACTION_TYPE_THROW,
             "Stop throwing",
             Point(
@@ -339,16 +339,16 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
-        notificationDone = true;
+        leaderPromptDone = true;
     }
     
-    //Pluck stop notification.
+    //Pluck stop prompt.
     if(
-        !notificationDone &&
+        !leaderPromptDone &&
         player->leaderPtr->autoPlucking
     ) {
-        player->notification.setEnabled(true);
-        player->notification.setContents(
+        player->leaderPrompt.setEnabled(true);
+        player->leaderPrompt.setContents(
             PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
@@ -356,16 +356,16 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
-        notificationDone = true;
+        leaderPromptDone = true;
     }
     
-    //Go Here stop notification.
+    //Go Here stop prompt.
     if(
-        !notificationDone &&
+        !leaderPromptDone &&
         player->leaderPtr->midGoHere
     ) {
-        player->notification.setEnabled(true);
-        player->notification.setContents(
+        player->leaderPrompt.setEnabled(true);
+        player->leaderPrompt.setContents(
             PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
@@ -373,14 +373,14 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
-        notificationDone = true;
+        leaderPromptDone = true;
     }
     
     if(!player->leaderPtr->autoPlucking) {
         Distance closestD;
         Distance d;
         
-        //Ship healing notification.
+        //Ship healing prompt.
         player->closeToShipToHeal = nullptr;
         for(size_t s = 0; s < mobs.ships.size(); s++) {
             Ship* sPtr = mobs.ships[s];
@@ -397,8 +397,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             if(d < closestD || !player->closeToShipToHeal) {
                 player->closeToShipToHeal = sPtr;
                 closestD = d;
-                player->notification.setEnabled(true);
-                player->notification.setContents(
+                player->leaderPrompt.setEnabled(true);
+                player->leaderPrompt.setContents(
                     PLAYER_ACTION_TYPE_THROW, "Repair suit",
                     Point(
                         player->closeToShipToHeal->pos.x,
@@ -406,15 +406,15 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                         player->closeToShipToHeal->radius
                     )
                 );
-                notificationDone = true;
+                leaderPromptDone = true;
             }
         }
         
-        //Interactable mob notification.
+        //Interactable mob prompt.
         closestD = 0;
         d = 0;
         player->closeToInteractableToUse = nullptr;
-        if(!notificationDone) {
+        if(!leaderPromptDone) {
             for(size_t i = 0; i < mobs.interactables.size(); i++) {
                 d =
                     Distance(
@@ -426,8 +426,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 if(d < closestD || !player->closeToInteractableToUse) {
                     player->closeToInteractableToUse = mobs.interactables[i];
                     closestD = d;
-                    player->notification.setEnabled(true);
-                    player->notification.setContents(
+                    player->leaderPrompt.setEnabled(true);
+                    player->leaderPrompt.setContents(
                         PLAYER_ACTION_TYPE_THROW,
                         player->closeToInteractableToUse->intType->promptText,
                         Point(
@@ -436,21 +436,21 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                             player->closeToInteractableToUse->radius
                         )
                     );
-                    notificationDone = true;
+                    leaderPromptDone = true;
                 }
             }
         }
         
-        //Pikmin pluck notification.
+        //Pikmin pluck prompt.
         closestD = 0;
         d = 0;
         player->closeToPikminToPluck = nullptr;
-        if(!notificationDone) {
+        if(!leaderPromptDone) {
             Pikmin* p = getClosestSprout(player->leaderPtr->pos, &d, false);
             if(p && d <= game.config.leaders.pluckRange) {
                 player->closeToPikminToPluck = p;
-                player->notification.setEnabled(true);
-                player->notification.setContents(
+                player->leaderPrompt.setEnabled(true);
+                player->leaderPrompt.setContents(
                     PLAYER_ACTION_TYPE_THROW, "Pluck",
                     Point(
                         p->pos.x,
@@ -458,23 +458,23 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                         p->radius
                     )
                 );
-                notificationDone = true;
+                leaderPromptDone = true;
             }
         }
         
-        //Nest open notification.
+        //Nest open prompt.
         closestD = 0;
         d = 0;
         player->closeToNestToOpen = nullptr;
-        if(!notificationDone) {
+        if(!leaderPromptDone) {
             for(size_t o = 0; o < mobs.onions.size(); o++) {
                 d = Distance(player->leaderPtr->pos, mobs.onions[o]->pos);
                 if(d > game.config.leaders.onionOpenRange) continue;
                 if(d < closestD || !player->closeToNestToOpen) {
                     player->closeToNestToOpen = mobs.onions[o]->nest;
                     closestD = d;
-                    player->notification.setEnabled(true);
-                    player->notification.setContents(
+                    player->leaderPrompt.setEnabled(true);
+                    player->leaderPrompt.setContents(
                         PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
                             player->closeToNestToOpen->mPtr->pos.x,
@@ -482,7 +482,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                             player->closeToNestToOpen->mPtr->radius
                         )
                     );
-                    notificationDone = true;
+                    leaderPromptDone = true;
                 }
             }
             for(size_t s = 0; s < mobs.ships.size(); s++) {
@@ -496,8 +496,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 if(d < closestD || !player->closeToNestToOpen) {
                     player->closeToNestToOpen = mobs.ships[s]->nest;
                     closestD = d;
-                    player->notification.setEnabled(true);
-                    player->notification.setContents(
+                    player->leaderPrompt.setEnabled(true);
+                    player->leaderPrompt.setContents(
                         PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
                             player->closeToNestToOpen->mPtr->pos.x,
@@ -505,13 +505,13 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                             player->closeToNestToOpen->mPtr->radius
                         )
                     );
-                    notificationDone = true;
+                    leaderPromptDone = true;
                 }
             }
         }
     }
     
-    player->notification.tick(deltaT);
+    player->leaderPrompt.tick(deltaT);
     
     /***************************
     *                    .-.   *

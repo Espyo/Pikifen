@@ -570,7 +570,7 @@ void GameplayState::enter() {
     for(Player& player : players) {
         player.hud->gui.hideItems();
         player.inventory->close();
-        player.notification.reset();
+        player.leaderPrompt.reset();
         if(game.mouseCursor.onWindow) {
             player.leaderCursorWorld = player.view.mouseCursorWorldPos;
             player.leaderCursorWin = game.mouseCursor.winPos;
@@ -1574,6 +1574,18 @@ void GameplayState::stopAllLeaders() {
         player.swarmMovement.reset();
         player.leaderCursorMov.reset();
     }
+}
+
+
+/**
+ * @brief Tries to pause the game.
+ */
+void GameplayState::tryPause() {
+    if(!loaded) return;
+    if(pauseMenu) return;
+    if(paused) return;
+    if(players.empty()) return;
+    doPlayerActionPause(&players[0], true, false);
 }
 
 

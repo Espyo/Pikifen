@@ -330,7 +330,7 @@ void Editor::drawOpErrorCursor() {
     if(errorFlashTimeRatio <= 0.0f) return;
     Point pos = opErrorPos;
     drawBitmap(
-        game.sysContent.bmpNotification,
+        game.sysContent.bmpLeaderPrompt,
         Point(
             pos.x,
             pos.y - EDITOR::OP_ERROR_CURSOR_SIZE
