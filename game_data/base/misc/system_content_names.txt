@@ -1,4 +1,8 @@
 graphics {
+    arrow_down = gui/arrow_down
+    arrow_left = gui/arrow_left
+    arrow_right = gui/arrow_right
+    arrow_up = gui/arrow_up
     bright_circle = effects/bright_circle
     bright_ring = effects/bright_ring
     bubble_box = gui/bubble_box

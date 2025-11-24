@@ -618,6 +618,18 @@ struct SystemContentList {
     
     //Graphics.
     
+    //Down arrow.
+    ALLEGRO_BITMAP* bmpArrowDown = nullptr;
+    
+    //Left arrow.
+    ALLEGRO_BITMAP* bmpArrowLeft = nullptr;
+    
+    //Right arrow.
+    ALLEGRO_BITMAP* bmpArrowRight = nullptr;
+    
+    //Up arrow.
+    ALLEGRO_BITMAP* bmpArrowUp = nullptr;
+    
     //Bright circle.
     ALLEGRO_BITMAP* bmpBrightCircle = nullptr;
     
@@ -883,6 +895,18 @@ struct SystemContentNames {
     //--- Members ---
     
     //Graphics.
+    
+    //Down arrow.
+    string bmpArrowDown = "gui/arrow_down";
+    
+    //Left arrow.
+    string bmpArrowLeft = "gui/arrow_left";
+    
+    //Right arrow.
+    string bmpArrowRight = "gui/arrow_right";
+    
+    //Up arrow.
+    string bmpArrowUp = "gui/arrow_up";
     
     //Bright circle.
     string bmpBrightCircle = "effects/bright_circle";

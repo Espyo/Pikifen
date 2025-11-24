@@ -286,6 +286,14 @@ void loadMiscGraphics() {
     //Graphics.
     game.sysContent.bmpMenuIcons =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
+    game.sysContent.bmpArrowDown =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpArrowDown);
+    game.sysContent.bmpArrowLeft =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpArrowLeft);
+    game.sysContent.bmpArrowRight =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpArrowRight);
+    game.sysContent.bmpArrowUp =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpArrowUp);
     game.sysContent.bmpBrightCircle =
         game.content.bitmaps.list.get(game.sysContentNames.bmpBrightCircle);
     game.sysContent.bmpBrightRing =
@@ -545,6 +553,10 @@ void loadStatistics() {
  */
 void unloadMiscResources() {
     //Graphics.
+    game.content.bitmaps.list.free(game.sysContent.bmpArrowDown);
+    game.content.bitmaps.list.free(game.sysContent.bmpArrowLeft);
+    game.content.bitmaps.list.free(game.sysContent.bmpArrowRight);
+    game.content.bitmaps.list.free(game.sysContent.bmpArrowUp);
     game.content.bitmaps.list.free(game.sysContent.bmpBrightCircle);
     game.content.bitmaps.list.free(game.sysContent.bmpBrightRing);
     game.content.bitmaps.list.free(game.sysContent.bmpBubbleBox);

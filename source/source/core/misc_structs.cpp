@@ -2118,6 +2118,10 @@ void SystemContentNames::load(DataNode* file) {
     //DEPRECATED in 1.1.0 by "leader_cursor".
     graRS.set("cursor", bmpLeaderCursor);
     
+    graRS.set("arrow_down", bmpArrowDown);
+    graRS.set("arrow_left", bmpArrowLeft);
+    graRS.set("arrow_right", bmpArrowRight);
+    graRS.set("arrow_up", bmpArrowUp);
     graRS.set("bright_circle", bmpBrightCircle);
     graRS.set("bright_ring", bmpBrightRing);
     graRS.set("bubble_box", bmpBubbleBox);
