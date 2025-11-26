@@ -1043,9 +1043,11 @@ void drawPlayerActionInputSourceIcon(
     for(size_t b = 0; b < binds.size(); b++) {
         Inpution::INPUT_SOURCE_TYPE bindSourceType = binds[b].inputSource.type;
         bool bindIsController =
+            bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON ||
             bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ||
             bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
-            bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+            bindSourceType ==
+            Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON;
         if(game.hardware.lastInputWasController != bindIsController) continue;
         bindIdx = b;
         break;

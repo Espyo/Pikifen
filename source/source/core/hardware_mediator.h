@@ -24,6 +24,7 @@
 
 
 using std::map;
+using std::pair;
 using std::size_t;
 using std::string;
 using std::vector;
@@ -192,6 +193,9 @@ struct HardwareMediator {
         string* outExtra
     ) const;
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    Inpution::InputSource sanitizeStick(
+        const Inpution::InputSource& source
+    ) const;
     void updateControllers(bool silent = false);
     
     
@@ -211,16 +215,45 @@ struct HardwareMediator {
         
     };
     
-    struct InputSource {
+    struct InputSourceMapEntry {
+    
+        //--- Members ---
+        
+        //Whether it's an analog stick or an analog button.
+        bool isButton = false;
+        
+        //Stick number.
+        int stickNr = 0;
+        
+        //Axis number.
+        int axisNr = 0;
+        
+        
+        //--- Function definitions ---
+        bool operator<(const InputSourceMapEntry& e2) const {
+            if(isButton != e2.isButton) {
+                return (int) isButton < (int) e2.isButton;
+            }
+            
+            if(stickNr != e2.stickNr) {
+                return stickNr < e2.stickNr;
+            }
+            
+            return axisNr < e2.axisNr;
+        }
+        
+    };
+    
+    struct InputSourceIcon {
     
         //--- Members ---
         
         //Its name.
         string name;
         
-        //Icon index in the bitmap, or INVALID for none.
+        //Icon bitmap index in the spritesheet, or INVALID for none.
         //For a stick, this is the first of the four directional icons.
-        size_t iconIdx = INVALID;
+        size_t spriteIdx = INVALID;
         
     };
     
@@ -228,19 +261,22 @@ struct HardwareMediator {
     
         //--- Members ---
         
-        //Buttons.
-        map<int, InputSource> buttons;
+        //Maps absurd sticks and axes to more logical ones.
+        map<InputSourceMapEntry, InputSourceMapEntry> absurdityMap;
         
-        //Sticks.
-        map<int, InputSource> sticks;
+        //Icon info of each buttons.
+        map<int, InputSourceIcon> buttonIcons;
+        
+        //Icon info of each stick.
+        map<int, InputSourceIcon> stickIcons;
         
     };
     
     
     //--- Constants ---
     
-    //Database of specific ways to do some input icons.
-    static const map<DEVICE_BRAND, DeviceBrand> deviceBrandIconDb;
+    //Database of known brands.
+    static const map<DEVICE_BRAND, DeviceBrand> deviceBrandDb;
     
     
     //--- Members ---
@@ -251,11 +287,11 @@ struct HardwareMediator {
     
     //--- Function declarations ---
     
-    const HardwareMediator::InputSource* getIconDbEntry(
+    const HardwareMediator::InputSourceIcon* getIconDbEntry(
         const Inpution::InputSource& s
     ) const;
     void getIconInfoFromDbEntry(
-        const HardwareMediator::InputSource* dbEntry,
+        const HardwareMediator::InputSourceIcon* dbEntry,
         const Inpution::InputSource& source,
         PLAYER_INPUT_ICON_SHAPE* outShape, string* outText,
         PLAYER_INPUT_ICON_SPRITE* outBitmapSprite

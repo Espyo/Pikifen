@@ -17,13 +17,16 @@
 #include "../util/string_utils.h"
 
 
+using std::make_pair;
+
+
 const map<DEVICE_BRAND, HardwareMediator::DeviceBrand>
-HardwareMediator::deviceBrandIconDb {
+HardwareMediator::deviceBrandDb {
     //Keyboard.
     {
         DEVICE_BRAND_KEYBOARD_ANY,
         {
-            .buttons {
+            .buttonIcons {
                 { ALLEGRO_KEY_ESCAPE, { "Esc" } },
                 { ALLEGRO_KEY_INSERT, { "Ins" } },
                 { ALLEGRO_KEY_DELETE, { "Del" } },
@@ -95,12 +98,12 @@ HardwareMediator::deviceBrandIconDb {
     {
         DEVICE_BRAND_MOUSE_ANY,
         {
-            .buttons {
+            .buttonIcons {
                 { 1, { "LMB", PLAYER_INPUT_ICON_SPRITE_LMB } },
                 { 2, { "RMB", PLAYER_INPUT_ICON_SPRITE_RMB } },
                 { 3, { "MMB", PLAYER_INPUT_ICON_SPRITE_MMB } },
             },
-            .sticks {
+            .stickIcons {
                 { 0, { "MWU", PLAYER_INPUT_ICON_SPRITE_MWU } },
                 { 1, { "MWD", PLAYER_INPUT_ICON_SPRITE_MWD } },
             }
@@ -110,7 +113,7 @@ HardwareMediator::deviceBrandIconDb {
     {
         DEVICE_BRAND_CONTROLLER_SWITCH_PRO,
         {
-            .buttons {
+            .buttonIcons {
                 { 0, { "B" } },
                 { 1, { "A" } },
                 { 2, { "X" } },
@@ -126,7 +129,7 @@ HardwareMediator::deviceBrandIconDb {
                 { 12, { "L Stick", PLAYER_INPUT_ICON_SPRITE_L_STICK_CLICK } },
                 { 13, { "R Stick", PLAYER_INPUT_ICON_SPRITE_R_STICK_CLICK } },
             },
-            .sticks {
+            .stickIcons {
                 { 0, { "L Stick", PLAYER_INPUT_ICON_SPRITE_L_STICK_RIGHT } },
                 { 1, { "R Stick", PLAYER_INPUT_ICON_SPRITE_R_STICK_RIGHT } },
                 { 2, { "D-pad", PLAYER_INPUT_ICON_SPRITE_D_PAD_RIGHT } },
@@ -137,7 +140,13 @@ HardwareMediator::deviceBrandIconDb {
     {
         DEVICE_BRAND_CONTROLLER_XBOX_360,
         {
-            .buttons {
+            .absurdityMap {
+                { { false, 1, 1 }, { false, 1, 0 } }, //R stick horizontal.
+                { { false, 2, 0 }, { false, 1, 1 } }, //R stick vertical.
+                { { false, 1, 0 }, { true, 4, 0 } }, //LT.
+                { { false, 2, 1 }, { true, 5, 0 } }, //RT.
+            },
+            .buttonIcons {
                 { 0, { "A" } },
                 { 1, { "B" } },
                 { 2, { "X" } },
@@ -149,9 +158,12 @@ HardwareMediator::deviceBrandIconDb {
                 { 9, { "L Stick", PLAYER_INPUT_ICON_SPRITE_L_STICK_CLICK } },
                 { 10, { "R Stick", PLAYER_INPUT_ICON_SPRITE_R_STICK_CLICK } },
             },
-            .sticks {
+            .stickIcons {
                 { 0, { "L Stick", PLAYER_INPUT_ICON_SPRITE_L_STICK_RIGHT }},
+                { 1, { "L Stick", PLAYER_INPUT_ICON_SPRITE_R_STICK_RIGHT }},
                 { 3, { "D-pad", PLAYER_INPUT_ICON_SPRITE_D_PAD_RIGHT }},
+                { 4, { "LT" }},
+                { 5, { "RT" }},
             }
         }
     }
@@ -182,11 +194,11 @@ size_t HardwareMediator::getControllerNr(ALLEGRO_JOYSTICK* aJoyPtr) {
  * @param source Info on the input source.
  * @return The database entry, or nullptr if not found.
  */
-const HardwareMediator::InputSource*
+const HardwareMediator::InputSourceIcon*
 HardwareMediator::getIconDbEntry(
     const Inpution::InputSource& source
 ) const {
-    const map<int, InputSource>* dbMap = nullptr;
+    const map<int, InputSourceIcon>* dbMap = nullptr;
     int dbMapKey = INVALID;
     
     const auto getControllerBrand =
@@ -195,7 +207,7 @@ HardwareMediator::getIconDbEntry(
         if((size_t) source.deviceNr < controllers.size()) {
             brand = controllers[source.deviceNr].brand;
         }
-        if(deviceBrandIconDb.find(brand) != deviceBrandIconDb.end()) {
+        if(deviceBrandDb.find(brand) != deviceBrandDb.end()) {
             *result = brand;
             return true;
         }
@@ -203,19 +215,19 @@ HardwareMediator::getIconDbEntry(
     };
     
     if(source.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
-        dbMap = &deviceBrandIconDb.at(DEVICE_BRAND_MOUSE_ANY).buttons;
+        dbMap = &deviceBrandDb.at(DEVICE_BRAND_MOUSE_ANY).buttonIcons;
         dbMapKey = source.buttonNr;
         
     } else if(source.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP) {
-        dbMap = &deviceBrandIconDb.at(DEVICE_BRAND_MOUSE_ANY).sticks;
+        dbMap = &deviceBrandDb.at(DEVICE_BRAND_MOUSE_ANY).stickIcons;
         dbMapKey = 0;
         
     } else if(source.type == Inpution::INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN) {
-        dbMap = &deviceBrandIconDb.at(DEVICE_BRAND_MOUSE_ANY).sticks;
+        dbMap = &deviceBrandDb.at(DEVICE_BRAND_MOUSE_ANY).stickIcons;
         dbMapKey = 1;
         
     } else if(source.type == Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
-        dbMap = &deviceBrandIconDb.at(DEVICE_BRAND_KEYBOARD_ANY).buttons;
+        dbMap = &deviceBrandDb.at(DEVICE_BRAND_KEYBOARD_ANY).buttonIcons;
         dbMapKey = source.buttonNr;
         
     } else if(
@@ -223,17 +235,18 @@ HardwareMediator::getIconDbEntry(
     ) {
         DEVICE_BRAND controllerBrand;
         if(getControllerBrand(&controllerBrand)) {
-            dbMap = &deviceBrandIconDb.at(controllerBrand).buttons;
+            dbMap = &deviceBrandDb.at(controllerBrand).buttonIcons;
         }
         dbMapKey = source.buttonNr;
         
     } else if(
         source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ||
-        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
+        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
+        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
     ) {
         DEVICE_BRAND controllerBrand;
         if(getControllerBrand(&controllerBrand)) {
-            dbMap = &deviceBrandIconDb.at(controllerBrand).sticks;
+            dbMap = &deviceBrandDb.at(controllerBrand).stickIcons;
         }
         dbMapKey = source.stickNr;
         
@@ -260,7 +273,7 @@ HardwareMediator::getIconDbEntry(
  * input icon spritesheet, the index of the sprite is returned here.
  */
 void HardwareMediator::getIconInfoFromDbEntry(
-    const HardwareMediator::InputSource* dbEntry,
+    const HardwareMediator::InputSourceIcon* dbEntry,
     const Inpution::InputSource& source,
     PLAYER_INPUT_ICON_SHAPE* outShape, string* outText,
     PLAYER_INPUT_ICON_SPRITE* outBitmapSprite
@@ -280,16 +293,16 @@ void HardwareMediator::getIconInfoFromDbEntry(
         
     *outText = dbEntry->name;
     
-    if(dbEntry->iconIdx != INVALID) {
+    if(dbEntry->spriteIdx != INVALID) {
         //Has icon.
-        size_t iconIdxToUse = dbEntry->iconIdx;
+        size_t iconIdxToUse = dbEntry->spriteIdx;
         
         if(isStickDown) {
-            iconIdxToUse = dbEntry->iconIdx + 1;
+            iconIdxToUse = dbEntry->spriteIdx + 1;
         } else if(isStickLeft) {
-            iconIdxToUse = dbEntry->iconIdx + 2;
+            iconIdxToUse = dbEntry->spriteIdx + 2;
         } else if(isStickUp) {
-            iconIdxToUse = dbEntry->iconIdx + 3;
+            iconIdxToUse = dbEntry->spriteIdx + 3;
         }
         
         *outShape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
@@ -397,6 +410,14 @@ void HardwareMediator::getIconInfoFromScratch(
                 i2s(source.axisNr + 1) + "+";
         }
         
+    } else if(
+        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
+    ) {
+        *outText = (condensed ? "T" : "Trigger ") + i2s(source.stickNr + 1);
+        *outText +=
+            (condensed ? " A" : " axis ") +
+            i2s(source.axisNr + 1);
+            
     }
 }
 
@@ -441,7 +462,8 @@ void HardwareMediator::getIconInfoMisc(
     } else if(
         source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ||
         source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
-        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON
+        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON ||
+        source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
     ) {
         if(!condensed) *outExtra = "Pad " + i2s(source.deviceNr + 1);
         
@@ -488,7 +510,7 @@ void HardwareMediator::getInputSourceIconInfo(
     );
     
     //Get database information, if it's in there.
-    const InputSource* dbEntry = getIconDbEntry(source);
+    const InputSourceIcon* dbEntry = getIconDbEntry(source);
     
     if(dbEntry) {
         //Use the data from the database.
@@ -549,6 +571,47 @@ void HardwareMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         updateControllers();
         
     }
+}
+
+
+/**
+ * @brief Given an input source, it sanitizes it if necessary, by checking
+ * the device brand database and converting absurd button, stick, and
+ * axis numbers.
+ *
+ * @param source Source to sanitize.
+ * @return The sanitized source, or the same source if nothing needed changing.
+ */
+Inpution::InputSource HardwareMediator::sanitizeStick(
+    const Inpution::InputSource& source
+) const {
+    if((size_t) source.deviceNr > controllers.size()) {
+        return source;
+    }
+    
+    DEVICE_BRAND brand = controllers[source.deviceNr].brand;
+    const auto dbEntryIt = deviceBrandDb.find(brand);
+    if(dbEntryIt == deviceBrandDb.end()) return source;
+    
+    const DeviceBrand* dbEntry = &dbEntryIt->second;
+    InputSourceMapEntry old {
+        .isButton =
+        source.type ==
+        Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
+        .stickNr = source.stickNr,
+        .axisNr = source.axisNr,
+    };
+    const auto stickMapEntryIt = dbEntry->absurdityMap.find(old);
+    if(stickMapEntryIt == dbEntry->absurdityMap.end()) return source;
+    
+    Inpution::InputSource result = source;
+    result.type =
+        stickMapEntryIt->second.isButton ?
+        Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON :
+        source.type;
+    result.stickNr = stickMapEntryIt->second.stickNr;
+    result.axisNr = stickMapEntryIt->second.axisNr;
+    return result;
 }
 
 

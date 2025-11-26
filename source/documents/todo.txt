@@ -12,6 +12,7 @@ Next tasks (roughly sorted most important first)
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
     If you have the options menu open in the pause menu you can still press the page flip buttons
+    Hold inventory, focus on cancel, press A, the inventory will cancel and the leader will punch
 
     --- 1.1.0 ---
     Dismiss sound should be a higher pitch when you press again to dismiss all
@@ -55,6 +56,7 @@ Next tasks (roughly sorted most important first)
         Ice hazard for Pikmin attacks, and ice hazard for enemy attacks
         The ability to be on the water's surface without harm, while not being allowed to carry on water, or be grabbed by a leader on water
         Ice gates
+        Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood

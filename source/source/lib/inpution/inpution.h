@@ -60,6 +60,10 @@ enum INPUT_SOURCE_TYPE {
     //Game controller stick/D-pad axis tilted in a negative position.
     INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG,
     
+    //Game controller analog button.
+    //Input value ranges from -1 to 1 before Inpution normalizes it.
+    INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
+    
     //Some unknown type.
     INPUT_SOURCE_TYPE_UNKNOWN,
     
@@ -115,10 +119,10 @@ struct InputSource {
     //Game controller button, keyboard key, mouse button, etc. 0 if N/A.
     int buttonNr = 0;
     
-    //Game controller stick. 0 if N/A.
+    //Game controller stick. Also used for analog buttons. 0 if N/A.
     int stickNr = 0;
     
-    //Game controller stick axis. 0 if N/A.
+    //Game controller stick axis. Also used for analog buttons. 0 if N/A.
     int axisNr = 0;
     
     

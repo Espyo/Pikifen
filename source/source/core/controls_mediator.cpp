@@ -153,11 +153,21 @@ Inpution::Input ControlsMediator::allegroEventToInput(
         break;
         
     } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
-        int nAxes =
-            al_get_joystick_num_axes(ev.joystick.id, ev.joystick.stick);
-        if(nAxes == 2) {
+        //Figure out what type of analog this is.
+        input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        input.source.deviceNr =
+            game.hardware.getControllerNr(ev.joystick.id);
+        input.source.stickNr = ev.joystick.stick;
+        input.source.axisNr = ev.joystick.axis;
+        input.source = game.hardware.sanitizeStick(input.source);
+        
+        if(
+            input.source.type ==
+            Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
+        ) {
+            input.value = ev.joystick.pos;
+        } else {
             if(ev.joystick.pos >= 0.0f) {
-                //It's likely a real stick.
                 input.source.type =
                     Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
                 input.value = ev.joystick.pos;
@@ -166,17 +176,6 @@ Inpution::Input ControlsMediator::allegroEventToInput(
                     Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
                 input.value = -ev.joystick.pos;
             }
-            input.source.deviceNr =
-                game.hardware.getControllerNr(ev.joystick.id);
-            input.source.stickNr = ev.joystick.stick;
-            input.source.axisNr = ev.joystick.axis;
-        } else {
-            //It's likely an analog button.
-            input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
-            input.source.deviceNr =
-                game.hardware.getControllerNr(ev.joystick.id);
-            input.source.stickNr = ev.joystick.stick;
-            input.value = (ev.joystick.pos + 1.0f) / 2.0f;
         }
         break;
     }
@@ -397,6 +396,10 @@ string ControlsMediator::inputSourceToStr(
     } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG: {
         return
             "jan_" + i2s(s.deviceNr) +
+            "_" + i2s(s.stickNr) + "_" + i2s(s.axisNr);
+    } case Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON: {
+        return
+            "jab_" + i2s(s.deviceNr) +
             "_" + i2s(s.stickNr) + "_" + i2s(s.axisNr);
     } default: {
         return "";
@@ -638,6 +641,13 @@ Inpution::InputSource ControlsMediator::strToInputSource(
     } else if(parts[0] == "jan" && nParts >= 4) {
         //Controller stick axis, negative.
         inputSource.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+        inputSource.deviceNr = s2i(parts[1]);
+        inputSource.stickNr = s2i(parts[2]);
+        inputSource.axisNr = s2i(parts[3]);
+        
+    } else if(parts[0] == "jab" && nParts >= 4) {
+        //Controller stick analog button.
+        inputSource.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON;
         inputSource.deviceNr = s2i(parts[1]);
         inputSource.stickNr = s2i(parts[2]);
         inputSource.axisNr = s2i(parts[3]);

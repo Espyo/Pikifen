@@ -146,6 +146,7 @@ int main() {
   * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
   * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins, typed characters).
   * Support for binds with modifiers (e.g. pressing Ctrl before pressing S) (see `Manager::modifiers`).
+  * Support for analog buttons (e.g. X-Box 360 triggers), so long as you can identify when a "stick" is actually an analog button.
 * Specific features:
   * Game states logic (see `Manager::setGameState()`).
   * Temporarily ignoring given input sources (see `Manager::startIgnoringInputSource()`).
