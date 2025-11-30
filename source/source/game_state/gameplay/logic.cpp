@@ -236,11 +236,17 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     player->leaderMovement.getInfo(
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
     );
-    if(leaderMoveMagnitude < 0.75) {
+    if(leaderMoveMagnitude < GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD) {
         player->leaderPtr->fsm.runEvent(
             LEADER_EV_MOVE_END, (void*) &player->leaderMovement
         );
     } else {
+        player->leaderSpeedMult =
+            interpolateNumber(
+                leaderMoveMagnitude,
+                GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD, 1.0f,
+                GAMEPLAY::LEADER_MOVEMENT_MIN_SPEED_MULT, 1.0f
+            );
         player->leaderPtr->fsm.runEvent(
             LEADER_EV_MOVE_START, (void*) &player->leaderMovement
         );

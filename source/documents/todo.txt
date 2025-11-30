@@ -12,38 +12,23 @@ Next tasks (roughly sorted most important first)
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
     If you have the options menu open in the pause menu you can still press the page flip buttons
-    Hold inventory, focus on cancel, press A, the inventory will cancel and the leader will punch
 
     --- 1.1.0 ---
-    Dismiss sound should be a higher pitch when you press again to dismiss all
+    Find a way to mark the current in-dev version as the next number, but in-dev, so that the engine_version property of content made by the engine gets updated correctly
+    Make the second, third, etc. input buttons in an action, in the binds menu, be smaller
+    Add the analog button deadzone logic to the analog cleaner lib
+    Update the help menu with the inventory system info
     Swarming jingle
+    If the player leaves the binds menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
+    When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
     Controls improvements
         Controls manager
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
             Handle controller hot-swapping in some way
             Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick. Same with cancelling out of the inventory and pausing the game
                 I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
-        Menus
-            Options menu
-                Links to the control binds menu and the player setup menu
-            Control binds menu
-                The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
-                    Each one should be saved to a folder, that way players can share the data file of a scheme they've created
-                When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
-                A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
-                It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
-                    Confirm that these work both on Linux and on Windows
-                If the player assigns an input that is already assigned to something else, it should give a warning
-                If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
-                When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
-            Player setup menu
-                For each player, it shows their name (which can be changed by the player), what control scheme they're using, and what controllers, if any, they are using
-                If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
-                    Write the controller's names, given by Allegro
-        An inventory system
-            Update the help menu
-        Current leader should move slower if the analog stick is not held all the way
         Test it on the Steam Deck
+    Try it in 4K and fix obvious issues
 
     --- 1.2.0 ---
     Ice Pikmin
@@ -109,9 +94,29 @@ Next tasks (roughly sorted most important first)
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
-        Split the pause menu into two menus
-            The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
-            The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
+        Menus
+            Options menu
+                Links to the control binds menu and the player setup menu
+            Control binds menu
+                The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                    Each one should be saved to the same folder as different files. That way players can share the data file of a scheme they've created
+                When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
+                A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
+                It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
+                    Confirm that these work both on Linux and on Windows
+            Player setup menu
+                The menu should be split into four columns, each one for a player
+                Each column should show their name (which can be changed by the player; defaults to Player 1, Player 2, etc.), what control scheme they're using (and a button to change it), and what controllers, if any, they are using
+                If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
+                    Write the controller's names, given by Allegro
+                Each column has buttons to toggle that player on or off
+                Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
+                Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area
+            Pause menu
+                The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
+                The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
+            Area selection
+                Add a button that takes you to the player setup menu
         HUD changes
             Split-screen logic: vertical split (better because you can increase the window size and better fit modern monitors, and also because physically chances are one player's sitting to the left of the other, and the other on the right), and four-way split
                 In the case of three players, the first two are on the top half, the third is centered on the bottom half
@@ -145,13 +150,6 @@ Next tasks (roughly sorted most important first)
             Conversion: Picks three Pikmin at random from the opposing team(s) and converts them to your team. If a team would end up with 0 Pikmin this way, then one of the randomly chosen Pikmin is instead unharmed
             Teleportation items: Bring opponent to you, teleport to opponent, swap places with opponent, teleport opponent somewhere random
             The next item to use should go in a slot in the inventory
-        Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
-            The menu should be split into four columns, each one for a player
-            Each column has buttons to toggle that player on or off
-            Each column should also let players choose a name, if they want (it defaults to Player 1, Player 2, etc.)
-            Each column should also let players pick which control scheme they want to use
-            Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
-            Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area
         Victory rules
             KO
                 When a team loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
@@ -918,6 +916,7 @@ Tasks for later on (I might never implement these)
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
             Particles floating in the wind
             A background detail: those little floaty white things you see in forests
+            Ceiling water droplets
         God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
         Shadows of leaves should shift along the day, and become less opaque at the start and end
         Clovers, Margarets, etc. rustling should also maybe move north and south a bit, so that it's a bit of a circular motion (ellipse, really)

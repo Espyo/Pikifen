@@ -90,6 +90,12 @@ extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
 //When a leader lands, scale the particles by the fall distance and this factor.
 extern const float LEADER_LAND_PART_SIZE_MULT = 0.1f;
 
+//How far an analog stick must be held before a leader starts moving.
+extern const float LEADER_MOVEMENT_MAGNITUDE_THRESHOLD = 0.75f;
+
+//Multiply a leader's speed by this, when the analog stick is at the threshold.
+extern const float LEADER_MOVEMENT_MIN_SPEED_MULT = 0.50f;
+
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 

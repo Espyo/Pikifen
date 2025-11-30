@@ -315,7 +315,12 @@ void Leader::dismissDetails() {
     MobType::Sound* sound =
         &type->sounds[leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]];
     SoundSourceConfig soundConfig = sound->config;
-    soundConfig.speed = group->members.empty() ? 0.9f : 1.0f;
+    soundConfig.speed =
+        group->members.empty() ?
+        0.9f :
+        tidySingleDismissTime > 0.0f ?
+        1.03f :
+        1.0f;
     game.audio.createMobSoundSource(sound->sample, this, false, soundConfig);
     
     //Particles.

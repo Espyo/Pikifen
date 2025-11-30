@@ -2116,7 +2116,11 @@ void LeaderFsm::move(Mob* m, void* info1, void* info2) {
     );
     finalCoords *= leaPtr->type->moveSpeed;
     finalCoords += leaPtr->pos;
-    leaPtr->chase(finalCoords, leaPtr->z, CHASE_FLAG_ANY_ANGLE);
+    leaPtr->chase(
+        finalCoords, leaPtr->z, CHASE_FLAG_ANY_ANGLE,
+        PATHS::DEF_CHASE_TARGET_DISTANCE,
+        leaPtr->getBaseSpeed() * leaPtr->player->leaderSpeedMult
+    );
 }
 
 

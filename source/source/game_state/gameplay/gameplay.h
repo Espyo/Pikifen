@@ -50,6 +50,8 @@ extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;
 extern const float LEADER_LAND_PART_MAX_SIZE;
 extern const float LEADER_LAND_PART_SIZE_MULT;
+extern const float LEADER_MOVEMENT_MAGNITUDE_THRESHOLD;
+extern const float LEADER_MOVEMENT_MIN_SPEED_MULT;
 extern const float MENU_ENTRY_HUD_MOVE_TIME;
 extern const float MENU_EXIT_HUD_MOVE_TIME;
 extern const unsigned char PREVIEW_OPACITY;
