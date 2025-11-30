@@ -165,8 +165,10 @@ int main() {
 ## Other usage information
 
 * Inpution reports all player actions that happened. For instance, it could report the "jump" action and the "menu confirm" action when the player presses A. It is up to you to figure out your game state and accept or ignore certain actions.
+* For more information on how a part of the library works, read its comments in the header file.
 
-Here are some important key terms:
+
+### Key terms
 
 * **Action**:
   * An abstract representation of a specific action in the game that the player performed. The exact real-life movement the player made for this is not relevant. This is essentially an event.
@@ -179,10 +181,20 @@ Here are some important key terms:
   * e.g. The bind between the A button on the controller and the jump action.
 * **Input**:
   * A specific movement made by a human being, on a specific source, on a specific hardware device.
-  * Tilting the right analog stick upwards by 50%.
+  * e.g. Tilting the right analog stick upwards by 50%.
 * **Input source**:
   * A specific button, key, analog stick, etc. on a specific device.
   * e.g. The left bumper button on the second controller.
+
+
+### FAQ and troubleshooting
+
+* The player is pressing B to cancel out of the pause menu and then immediately does an attack, which is also bound to B. How can I make the game unpause only?
+  * When you receive the "unpause" action, call `Manager::startIgnoringInputSource()` with the B button, or `Manager::startIgnoringActionInputSources()` with the "unpause" action. In addition, make use of `Manager::setGameState()` to change from a "pause menu" to a "normal gameplay" state. With this in place, the "unpause" action will be processed, the input will be ignored until it's released, the game will leave the pause menu state to enter normal gameplay, and the "attack" action won't be processed. If you don't call `Manager::setGameState()` you'll probably still have the "attack" action in the action queue for this frame.
+* How can I detect whether something is an analog stick or an analog button?
+  * You have a few ways. Whatever library you're using to get input from might be able to give you more information about a stick; if it reports it only has one axis then it may be an analog button. In addition, you can check the controller's name and/or GUID and cross-reference a list of known brands, like the [SDL Game Controller DB](https://github.com/mdqinc/SDL_GameControllerDB).
+* The player Alt+Tab'd and now some inputs are stuck. What can I do?
+  * Whatever engine you're using probably has ways to detect the window is out of focus. When that happens, call `Manager::releaseEverything()`.
 
 
 ## Inner workings notes

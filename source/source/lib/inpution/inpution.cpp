@@ -123,6 +123,7 @@ vector<int> Manager::getActionTypesFromInput(const Input& input) {
 
 /**
  * @brief Returns the current value of an input source.
+ * Ignored input sources return 0.
  *
  * @param source The source.
  * @return The value, or 0 if not found.
@@ -132,7 +133,13 @@ float Manager::getInputSourceValue(
 ) const {
     const auto it = inputSourceValues.find(source);
     if(it == inputSourceValues.end()) return 0.0f;
-    return inputSourceValues.at(source);
+    for(size_t i = 0; i < ignoredInputSources.size(); i++) {
+        if(ignoredInputSources[i].source == source) {
+            //It's currently ignored.
+            return 0.0f;
+        }
+    }
+    return it->second;
 }
 
 
@@ -165,13 +172,13 @@ float Manager::getValue(int actionTypeId) const {
 void Manager::handleCleanInput(
     const Input& input, bool forceDirectEvent
 ) {
-    if(processInputIgnoring(input)) {
-        //We have to ignore this one.
-        return;
-    }
-    
     if(!forceDirectEvent) {
         inputSourceValues[input.source] = input.value;
+        
+        if(processInputIgnoring(input)) {
+            //We have to ignore this one.
+            return;
+        }
     }
     
     //Find what game action types are bound to this input.
@@ -190,6 +197,7 @@ void Manager::handleCleanInput(
             newAction.actionTypeId = actionTypesIds[a];
             newAction.value =
                 convertActionValue(actionTypesIds[a], input.value);
+            newAction.flags |= ACTION_FLAG_DIRECT;
             newAction.reinsertionLifetime =
                 actionTypes[actionTypesIds[a]].reinsertionTTL;
             actionQueue.push_back(newAction);
@@ -352,7 +360,7 @@ vector<Action> Manager::newFrame(float deltaT) {
     }
     
     //Clear any ignore rules that were meant to apply now only, but their
-    //input isn't > 0, so they no longer valid.
+    //input isn't > 0, so they are no longer valid.
     for(size_t i = 0; i < ignoredInputSources.size();) {
         if(
             ignoredInputSources[i].nowOnly &&
@@ -366,10 +374,11 @@ vector<Action> Manager::newFrame(float deltaT) {
     
     //Prepare things for the next frame.
     for(auto& a : actionTypeGlobalStatuses) {
-        curGameState.actionTypeStatuses[a.first].value = a.second.value;
-    }
-    for(auto& a : actionTypeGlobalStatuses) {
-        a.second.oldValue = a.second.value;
+        if(actionTypes[a.first].freezable) {
+            curGameState.actionTypeStatuses[a.first].value = a.second.value;
+        } else {
+            a.second.oldValue = a.second.value;
+        }
     }
     actionQueue.clear();
     
@@ -437,9 +446,9 @@ bool Manager::processInputIgnoring(const Input& input) {
                 return true;
             } else {
                 //Remove it from the list since it's finally at 0,
-                //but still ignore it this time.
+                //and let the 0 go through.
                 ignoredInputSources.erase(ignoredInputSources.begin() + i);
-                return true;
+                return false;
             }
         }
     }
@@ -528,13 +537,44 @@ bool Manager::setGameState(const string& name) {
 
 
 /**
+ * @brief Same as Manager::startIgnoringInputSource(), but applies to
+ * all input sources of a given action.
+ *
+ * @param actionType Action type whose input sources to ignore.
+ * @param nowOnly If true, only apply to inputs that are currently already
+ * held down (> 0) this frame.
+ * If false, keep the ignore rule up to the next time it's pressed down.
+ * @return Whether it succeeded.
+ */
+bool Manager::startIgnoringActionInputSources(
+    int actionType, bool nowOnly
+) {
+    bool result = false;
+    for(size_t b = 0; b < binds.size(); b++) {
+        Bind* bPtr = &binds[b];
+        if(bPtr->actionTypeId != actionType) continue;
+        result |= startIgnoringInputSource(bPtr->inputSource, nowOnly);
+    }
+    return result;
+}
+
+
+/**
  * @brief Ignores an input source from now on until the player performs the
  * input with value 0, at which point it becomes unignored.
+ *
+ * This is useful, for instance, when you want to detect the player's input
+ * in the options menu's control binds screen, so you can assign the bind
+ * but not have Inpution immediately right afterwards perform the action.
+ * Also useful if you, for instance, have "unpause" and "attack" bound to the
+ * same input, the player unpauses and immediately attacks.
+ *
+ * See also Manager::startIgnoringActionInputSources().
  *
  * @param inputSource Input source to ignore.
  * @param nowOnly If true, only apply to inputs that are currently already
  * held down (> 0) this frame.
- * If false, leave the ignore rule until the next time it's pressed down.
+ * If false, keep the ignore rule up to the next time it's pressed down.
  * @return Whether it succeeded.
  */
 bool Manager::startIgnoringInputSource(

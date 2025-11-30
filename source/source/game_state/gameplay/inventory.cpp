@@ -101,12 +101,7 @@ void Inventory::close() {
     );
     isOpen = false;
     
-    //Ignore the mouse click used to press any of the inventory GUI items,
-    //if any.
-    Inpution::InputSource lmb;
-    lmb.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON;
-    lmb.buttonNr = 1;
-    game.controls.startIgnoringInputSource(lmb, true);
+    game.controls.ignoreMenuCloseActions();
 }
 
 
@@ -137,7 +132,7 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
         if(focusedItem) {
             focusedItem->activate();
         } else {
-            close();
+            requestClose();
         }
         return true;
     }
@@ -228,7 +223,6 @@ void Inventory::initGui() {
 
 /**
  * @brief Opens the inventory.
- *
  */
 void Inventory::open() {
     if(isOpen) return;

@@ -380,11 +380,15 @@ struct ControlsMediator {
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
 
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void ignoreMenuCloseActions();
     vector<Inpution::Action> newFrame(float deltaT);
     void reinsertAction(const Inpution::Action& action);
     void releaseAll();
     void setGameState(CONTROLS_GAME_STATE state);
     void setOptions(const Inpution::ManagerOptions& options);
+    void startIgnoringActionInputSources(
+        PLAYER_ACTION_TYPE actionType, bool nowOnly
+    );
     void startIgnoringActions();
     void startIgnoringInputSource(
         const Inpution::InputSource& inputSource, bool nowOnly

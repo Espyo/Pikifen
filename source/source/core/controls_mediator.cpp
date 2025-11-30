@@ -365,6 +365,30 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 
 
 /**
+ * @brief Ignores actions that can close menus. This stops them from bleeding
+ * from the closed menu into gameplay.
+ */
+void ControlsMediator::ignoreMenuCloseActions() {
+    //Ignore the actions that directly close menus, if any.
+    game.controls.startIgnoringActionInputSources(
+        PLAYER_ACTION_TYPE_PAUSE, true
+    );
+    game.controls.startIgnoringActionInputSources(
+        PLAYER_ACTION_TYPE_MENU_OK, true
+    );
+    game.controls.startIgnoringActionInputSources(
+        PLAYER_ACTION_TYPE_MENU_BACK, true
+    );
+    
+    //Ignore the mouse click used to close a menu, if any.
+    Inpution::InputSource lmb;
+    lmb.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON;
+    lmb.buttonNr = 1;
+    game.controls.startIgnoringInputSource(lmb, true);
+}
+
+
+/**
  * @brief Creates a string that represents an input.
  * Ignores the player number.
  *
@@ -545,6 +569,21 @@ void ControlsMediator::setOptions(const Inpution::ManagerOptions& options) {
 
 
 /**
+ * @brief Ignores input sources of a given action from now on until the player
+ * performs the input with value 0, at which point it becomes unignored.
+ *
+ * @param actionType Action type whose input sources to ignore.
+ * @param nowOnly If true, only apply to inputs that are currently held down.
+ * If false, keep the ignore rule up to the next time it's pressed down.
+ */
+void ControlsMediator::startIgnoringActionInputSources(
+    PLAYER_ACTION_TYPE actionType, bool nowOnly
+) {
+    mgr.startIgnoringActionInputSources(actionType, nowOnly);
+}
+
+
+/**
  * @brief Ignore player actions from here on.
  */
 void ControlsMediator::startIgnoringActions() {
@@ -558,7 +597,7 @@ void ControlsMediator::startIgnoringActions() {
  *
  * @param inputSource Input source to ignore.
  * @param nowOnly If true, only apply to inputs that are currently held down.
- * If false, leave the ignoring until the next time it's pressed down.
+ * If false, keep the ignore rule up the next time it's pressed down.
  */
 void ControlsMediator::startIgnoringInputSource(
     const Inpution::InputSource& inputSource, bool nowOnly

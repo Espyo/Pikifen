@@ -92,6 +92,7 @@ void GameplayState::doPlayerActionPause(
     pauseMenu = new PauseMenu(radar);
     paused = true;
     game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
+    game.controls.ignoreMenuCloseActions();
     game.audio.handleWorldPause();
     player->hud->gui.startAnimation(
         GUI_MANAGER_ANIM_IN_TO_OUT,
@@ -320,6 +321,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             player->inventory->requestClose();
             paused = true;
             game.controls.setGameState(CONTROLS_GAME_STATE_MENUS);
+            game.controls.ignoreMenuCloseActions();
             game.audio.handleWorldPause();
             
             done = true;

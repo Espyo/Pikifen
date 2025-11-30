@@ -61,7 +61,7 @@ enum INPUT_SOURCE_TYPE {
     INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG,
     
     //Game controller analog button.
-    //Input value ranges from -1 to 1 before Inpution normalizes it.
+    //Input value ranges [-1 - 1] before Inpution normalizes it.
     INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON,
     
     //Some unknown type.
@@ -73,11 +73,16 @@ enum INPUT_SOURCE_TYPE {
 //Possible flags for emitted actions.
 enum ACTION_FLAG {
 
-    //This action was issued as an auto-repeat.
-    ACTION_FLAG_REPEAT = 1 << 0,
+    //This action was inserted into the queue directly, when the hardware event
+    //was received, as opposed to the hardware being updated internally and
+    //then the action being inserted in Manager::newFrame as needed.
+    ACTION_FLAG_DIRECT = 1 << 0,
     
-    //This action was reinserted into the queue.
-    ACTION_FLAG_REINSERTED = 1 << 1,
+    //This action was issued as an auto-repeat.
+    ACTION_FLAG_REPEAT = 1 << 1,
+    
+    //This action was manually reinserted into the queue.
+    ACTION_FLAG_REINSERTED = 1 << 2,
     
 };
 
@@ -340,6 +345,9 @@ struct Manager {
     bool reinsertAction(const Action& action);
     bool releaseEverything();
     bool setGameState(const string& name = "");
+    bool startIgnoringActionInputSources(
+        int actionType, bool nowOnly
+    );
     bool startIgnoringInputSource(const InputSource& inputSource, bool nowOnly);
     
     
@@ -425,7 +433,8 @@ struct Manager {
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > cleanSticks;
     
-    //Values of each input source.
+    //Values of each input source. This basically reflects the current
+    //hardware state.
     map<InputSource, float> inputSourceValues;
     
     //Input sources currently being ignored.
