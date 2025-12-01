@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from find_problems.common import *
@@ -11,11 +12,18 @@ from find_problems.find_misc import *
 #  changes numbers in the source code to match.
 def change_version_numbers():
     new = input('What is the new version (X.Y.Z)? ')
+    in_dev_or_release = input('Are you starting an In-dev version or finishing a Release? [i/r] ')
     new_parts = new.split('.')
+    date_parts = [ str(datetime.date.today().day), str(datetime.date.today().month), str(datetime.date.today().year) ]
     source_dir_to_use = get_source_dir_to_use()
     system_call('sed -i "s/VERSION_MAJOR = .*;/VERSION_MAJOR = ' + new_parts[0] + ';/g" ' + source_dir_to_use + '/core/const.h')
     system_call('sed -i "s/VERSION_MINOR = .*;/VERSION_MINOR = ' + new_parts[1] + ';/g" ' + source_dir_to_use + '/core/const.h')
     system_call('sed -i "s/VERSION_REV   = .*;/VERSION_REV   = ' + new_parts[2] + ';/g" ' + source_dir_to_use + '/core/const.h')
+    system_call('sed -i "s/VERSION_IN_DEV = .*;/VERSION_IN_DEV = ' + ('true' if in_dev_or_release == 'i' else 'false') + ';/g" ' + source_dir_to_use + '/core/const.h')
+    if in_dev_or_release == 'r':
+        system_call('sed -i "s/VERSION_DAY   = .*;/VERSION_DAY   = ' + date_parts[0] + ';/g" ' + source_dir_to_use + '/core/const.h')
+        system_call('sed -i "s/VERSION_MONTH = .*;/VERSION_MONTH = ' + date_parts[1] + ';/g" ' + source_dir_to_use + '/core/const.h')
+        system_call('sed -i "s/VERSION_YEAR  = .*;/VERSION_YEAR  = ' + date_parts[2] + ';/g" ' + source_dir_to_use + '/core/const.h')
     
     rc_files = [source_dir_to_use + '/pikifen.rc', source_dir_to_use + '/../visual_studio_2022/resource.rc']
     for fn in rc_files:

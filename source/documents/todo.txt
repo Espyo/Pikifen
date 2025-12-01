@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
 
     --- 1.1.0 ---
-    Find a way to mark the current in-dev version as the next number, but in-dev, so that the engine_version property of content made by the engine gets updated correctly
     Add the analog button deadzone logic to the analog cleaner lib
     Update the help menu with the inventory system info
     Swarming jingle

@@ -393,7 +393,7 @@ void ErrorManager::logToFile(const string& s) {
         if(!prevErrorLog.empty()) {
             header += "\n\n";
         }
-        header += "Pikifen version " + getEngineVersionString();
+        header += "Pikifen version " + getEngineVersionString(true, true);
         if(!game.config.general.version.empty()) {
             header +=
                 ", " + game.config.general.name +
@@ -1297,7 +1297,7 @@ void PerformanceMonitor::saveLog() {
     string s =
         "\n" +
         getCurrentTime(false) +
-        "; Pikifen version " + getEngineVersionString();
+        "; Pikifen version " + getEngineVersionString(true, true);
     if(!game.config.general.version.empty()) {
         s += ", game version " + game.config.general.version;
     }

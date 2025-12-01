@@ -610,7 +610,7 @@ void Game::processSystemInfo() {
         "\n"
         "Resolution: " + resolutionStr +
         "\n"
-        "Pikifen version " + getEngineVersionString() +
+        "Pikifen version " + getEngineVersionString(true, true) +
         ", game version " + gameVersionStr +
         "\n"
         "Allegro version " + allegroVersionStr +

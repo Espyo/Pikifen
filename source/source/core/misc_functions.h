@@ -138,7 +138,9 @@ unsigned char getThrowPreviewVertexes(
     bool varyThickness
 );
 map<string, string> getVarMap(const string& varsString);
-string getEngineVersionString();
+string getEngineVersionString(
+    bool includeInDev = false, bool includeDate = false
+);
 ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);
 float getWallShadowLength(Edge* ePtr);
 vector<std::pair<int, string> > getWeatherTable(DataNode* node);

@@ -27,9 +27,29 @@ using std::string;
 
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resource (.rc) file.
+
+//Version, major number.
 constexpr unsigned char VERSION_MAJOR = 1;
-constexpr unsigned char VERSION_MINOR = 0;
-constexpr unsigned char VERSION_REV   = 1;
+
+//Version, minor number.
+constexpr unsigned char VERSION_MINOR = 1;
+
+//Version, revision number.
+constexpr unsigned char VERSION_REV   = 0;
+
+//Whether the given version number refers to the next version, currently
+//in development. If false, it refers to a released version.
+constexpr bool VERSION_IN_DEV = true;
+
+//Non-in-development version's release day.
+constexpr unsigned char VERSION_DAY   = 23;
+
+//Non-in-development version's release month.
+constexpr unsigned char VERSION_MONTH = 8;
+
+//Non-in-development version's release year.
+constexpr unsigned int  VERSION_YEAR  = 2025;
+
 
 //The following constants need to be in this file because C++ sucks.
 //Too many files need these constants, and because of the one-definition rule,

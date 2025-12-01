@@ -486,8 +486,9 @@ Procedure for every version release
         Send it to beta testers so they can check for stuff that's immediately wrong
         After they're done, tell them to confirm that error_log.txt reported nothing
     Final preparations
-        Change version number in the code
-            Use the helper tool, or edit const.h and pikifen.rc
+        Change version information in the code
+            In-development is false, apply the correct release date
+            Use the helper tool, or edit const.h and the *.rc files
         Update all area version numbers and engine version numbers
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
@@ -511,6 +512,9 @@ Procedure for every version release
         Tag the commit (format "X.X.X") and push it
         Release the new version on GitHub
     Starting the next
+        Change version information in the code for the planned new version
+            In-development is true, leave the old release date
+            Use the helper tool, or edit const.h and the *.rc files
         Add to the todo for the start of the next version:
             Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
             Pass all code files through AStyle

@@ -123,7 +123,7 @@ void TitleScreen::doDrawing() {
         versionText += ", powered by ";
     }
     versionText +=
-        "Pikifen " + getEngineVersionString();
+        "Pikifen " + getEngineVersionString(true);
     drawText(
         versionText, game.sysContent.fntSlim,
         Point(game.winW - 8, 8),

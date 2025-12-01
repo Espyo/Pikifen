@@ -426,13 +426,30 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
 /**
  * @brief Returns the engine's version as a string.
  *
+ * @param includeInDev Whether to include a note at the end saying it's an
+ * in-dev version, if it is one.
+ * @param includeDate Whether to include a note with the non-development
+ * version's release date.
  * @return The string.
  */
-string getEngineVersionString() {
-    return
+string getEngineVersionString(bool includeInDev, bool includeDate) {
+    string result =
         i2s(VERSION_MAJOR) + "." +
         i2s(VERSION_MINOR) + "." +
         i2s(VERSION_REV);
+    if(VERSION_IN_DEV) {
+        if(includeInDev) {
+            result += " (in-dev)";
+        }
+    } else {
+        if(includeDate) {
+            result +=
+                " (" + i2s(VERSION_YEAR) + "/" +
+                i2s(VERSION_MONTH) + "/" +
+                i2s(VERSION_DAY) + ")";
+        }
+    }
+    return result;
 }
 
 
