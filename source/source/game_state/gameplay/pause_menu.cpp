@@ -1712,12 +1712,14 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
                         curGui = &missionGui;
                     }
                     
-                    map<GuiManager*, ButtonGuiItem*>* m =
-                        action.actionTypeId ==
-                        PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
-                        &leftPageButtons :
-                        &rightPageButtons;
-                    (*m)[curGui]->activate();
+                    if(curGui->responsive) {
+                        map<GuiManager*, ButtonGuiItem*>* m =
+                            action.actionTypeId ==
+                            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
+                            &leftPageButtons :
+                            &rightPageButtons;
+                        (*m)[curGui]->activate();
+                    }
                 }
                 break;
             }

@@ -6,15 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Having a Pikmin follow a Snagret as a leader causes a crash
-    If two keyframes have the same value, the visualizer in the editor will show a broken line
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
-    If you have the options menu open in the pause menu you can still press the page flip buttons
 
     --- 1.1.0 ---
     Find a way to mark the current in-dev version as the next number, but in-dev, so that the engine_version property of content made by the engine gets updated correctly
-    Make the second, third, etc. input buttons in an action, in the binds menu, be smaller
     Add the analog button deadzone logic to the analog cleaner lib
     Update the help menu with the inventory system info
     Swarming jingle

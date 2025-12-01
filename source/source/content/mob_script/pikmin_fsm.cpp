@@ -2811,20 +2811,21 @@ void PikminFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
             //then the new Pikmin should be in the group of that top leader.
             leaPtr = leaPtr->followingGroup;
         }
-        leaPtr->addToGroup(pikPtr);
-        pikPtr->fsm.setState(
-            pikPtr->holding.empty() ?
-            PIKMIN_STATE_IN_GROUP_CHASING :
-            PIKMIN_STATE_IN_GROUP_CHASING_H,
-            info1, info2);
-    } else {
-        pikPtr->fsm.setState(
-            pikPtr->holding.empty() ?
-            PIKMIN_STATE_IDLING :
-            PIKMIN_STATE_IDLING_H,
-            info1, info2
-        );
+        if(leaPtr->addToGroup(pikPtr)) {
+            pikPtr->fsm.setState(
+                pikPtr->holding.empty() ?
+                PIKMIN_STATE_IN_GROUP_CHASING :
+                PIKMIN_STATE_IN_GROUP_CHASING_H,
+                info1, info2);
+            return;
+        }
     }
+    pikPtr->fsm.setState(
+        pikPtr->holding.empty() ?
+        PIKMIN_STATE_IDLING :
+        PIKMIN_STATE_IDLING_H,
+        info1, info2
+    );
 }
 
 
@@ -4731,7 +4732,7 @@ void PikminFsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
     if(pikPtr->pikType->canFly) {
         targetZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
     }
-
+    
     m->chase(targetPos, targetZ);
     
 }

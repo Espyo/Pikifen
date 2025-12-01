@@ -227,7 +227,10 @@ void OptionsMenu::addBindEntryItems(
             bindButton->ratioCenter =
                 Point(0.63f, curY);
             bindButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(
+                    b == 0 ? 0.34f : 0.32f,
+                    OPTIONS_MENU::BIND_BUTTON_HEIGHT
+                );
             bindButton->onGetTooltip =
             [] () { return "Change the input for this action."; };
             bindsListBox->addChild(bindButton);
@@ -319,7 +322,7 @@ void OptionsMenu::addBindEntryItems(
             addButton->ratioCenter =
                 Point(0.63f, curY);
             addButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             addButton->onActivate =
             [this, actionType, aBinds] (const Point&) {
                 chooseInput(actionType.id, aBinds.size());
@@ -348,7 +351,7 @@ void OptionsMenu::addBindEntryItems(
             restoreButton->ratioCenter =
                 Point(0.63f, curY);
             restoreButton->ratioSize =
-                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restoreButton->onActivate =
             [this, actionType] (const Point&) {
                 restoreDefaultBinds(actionType.id);

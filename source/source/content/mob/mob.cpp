@@ -223,11 +223,12 @@ Mob::~Mob() {
  * @brief Adds a mob to this mob's group.
  *
  * @param newMember The new member to add.
+ * @return Whether it succeeded.
  */
-void Mob::addToGroup(Mob* newMember) {
+bool Mob::addToGroup(Mob* newMember) {
     //If it's already following, never mind.
-    if(newMember->followingGroup == this) return;
-    if(!group) return;
+    if(newMember->followingGroup == this) return false;
+    if(!group) return false;
     
     newMember->followingGroup = this;
     group->members.push_back(newMember);
@@ -251,6 +252,8 @@ void Mob::addToGroup(Mob* newMember) {
         group->anchor = pos;
         group->anchorAngle = TAU / 2.0f;
     }
+    
+    return true;
 }
 
 

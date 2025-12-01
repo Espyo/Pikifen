@@ -1363,7 +1363,7 @@ void Editor::keyframeVisualizer(
                 firstKf.second, minValue, maxValue, size.y, 1
             )
         ),
-        ImGui::GetColorU32(ImGuiCol_PlotLines)
+        ImGui::GetColorU32(ImGuiCol_PlotLines), 2
     );
     
     //Draw the chart lines between the keyframes.
@@ -1386,7 +1386,7 @@ void Editor::keyframeVisualizer(
                     f2, minValue, maxValue, size.y, 1
                 )
             ),
-            ImGui::GetColorU32(ImGuiCol_PlotLines)
+            ImGui::GetColorU32(ImGuiCol_PlotLines), 2
         );
     }
     
@@ -1405,7 +1405,7 @@ void Editor::keyframeVisualizer(
                 lastKf.second, minValue, maxValue, size.y, 1
             )
         ),
-        ImGui::GetColorU32(ImGuiCol_PlotLines)
+        ImGui::GetColorU32(ImGuiCol_PlotLines), 2
     );
     
     //Draw the bars indicating the position of each keyframe.

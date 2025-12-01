@@ -379,7 +379,7 @@ public:
     void applyAttackDamage(
         Mob* attacker, Hitbox* attackH, Hitbox* victimH, float damage
     );
-    void addToGroup(Mob* newMember);
+    bool addToGroup(Mob* newMember);
     void applyKnockback(float knockback, float knockbackAngle);
     bool calculateAttackBasics(
         Mob* victim, Hitbox* attackH, const Hitbox* victimH,
