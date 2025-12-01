@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Add the analog button deadzone logic to the analog cleaner lib
-    Update the help menu with the inventory system info
     Swarming jingle
     If the player leaves the binds menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
     When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
