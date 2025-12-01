@@ -522,9 +522,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
             break;
             
         } case PLAYER_ACTION_TYPE_THROW: {
-            if(!doPlayerActionThrow(player, isDown)) {
-                game.controls.reinsertAction(action);
-            }
+            doPlayerActionThrow(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_WHISTLE: {

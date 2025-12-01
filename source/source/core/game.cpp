@@ -9,6 +9,7 @@
  */
 
 #include <algorithm>
+#include <iostream>
 
 #include <allegro5/allegro_native_dialog.h>
 
@@ -319,6 +320,24 @@ void Game::globalLogicPost() {
  * logic.
  */
 void Game::globalLogicPre() {
+    if(debug.printActions && !playerActions.empty()) {
+        std::cout << "Actions: ";
+        for(size_t a = 0; a < playerActions.size(); a++) {
+            string actionName =
+                controls.getActionTypeById(
+                    (PLAYER_ACTION_TYPE) playerActions[a].actionTypeId
+                ).name;
+            std::cout << resizeString(actionName, 15);
+            std::cout << " ";
+            std::cout << resizeString(f2s(playerActions[a].value), 3);
+            std::cout << " F" << (unsigned int) playerActions[a].flags;
+            if(a < playerActions.size() - 1) {
+                std::cout << " | ";
+            }
+        }
+        std::cout << std::endl;
+    }
+    
     //Player action handling.
     for(size_t a = 0; a < playerActions.size();) {
         if(makerTools.handleGeneralPlayerAction(playerActions[a])) {

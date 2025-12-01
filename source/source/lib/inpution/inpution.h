@@ -191,9 +191,6 @@ struct ActionType {
 
     //--- Members ---
     
-    //Action type ID.
-    int id = 0;
-    
     //Type of value it can take. If digital but the input source is analog,
     //the value is rounded to 0 or 1 (i.e. depends on whether it's more than
     //or less than pressed halfway in).
@@ -356,10 +353,9 @@ struct Manager {
     //--- Structs ---
     
     /**
-     * @brief Information about an action type's current status in a global way,
-     * i.e. not in a specific game state.
+     * @brief Information about an action type's current status.
      */
-    struct ActionTypeGlobalStatus {
+    struct ActionTypeStatus {
     
         //--- Members ---
         
@@ -369,22 +365,11 @@ struct Manager {
         //Old value [0 - 1].
         float oldValue = 0.0f;
         
-    };
-    
-    
-    /**
-     * @brief Represents an action type's status in a given game state.
-     */
-    struct ActionTypeGameStateStatus {
-    
-        //Current value. Can be frozen.
-        float value = 0.0f;
-        
         //How long it's been been active (!= 0) or inactive (== 0) for.
-        float activationStateDuration = 0.0f;
+        float activationTimer = 0.0f;
         
         //How long until the next auto-repeat activation.
-        float nextAutoRepeatActivation = 0.0f;
+        float nextAutoRepeatTimer = 0.0f;
         
     };
     
@@ -396,8 +381,8 @@ struct Manager {
     
         //--- Members ---
         
-        //Status of each "freezable" action type in this game state.
-        map<int, ActionTypeGameStateStatus> actionTypeStatuses;
+        //Status of each action type in this game state.
+        map<int, ActionTypeStatus> actionTypeStatuses;
         
     };
     
@@ -421,9 +406,6 @@ struct Manager {
     
     //--- Members ---
     
-    //Global status of each action type.
-    map<int, ActionTypeGlobalStatus> actionTypeGlobalStatuses;
-    
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
     
@@ -443,8 +425,11 @@ struct Manager {
     //Name of the current game state, or empty if none specified.
     string curGameStateName;
     
-    //Game states.
+    //Game states. Used for freezable action types.
     map<string, GameState> gameStates;
+    
+    //Global "game state". Used for non-freezable action types.
+    GameState globalState;
     
     //Last known time delta.
     float lastDeltaT = 0.0f;
@@ -453,7 +438,6 @@ struct Manager {
     //--- Function declarations ---
     
     bool areBindRequirementsMet(const Bind& bind) const;
-    bool bindsHaveSameRequirements(const Bind& bind1, const Bind& bind2) const;
     void cleanStick(const Input& input);
     float convertActionValue(int actionTypeId, float value) const;
     vector<int> getActionTypesFromInput(
@@ -461,11 +445,12 @@ struct Manager {
     );
     void handleCleanInput(const Input& input, bool forceDirectEvent);
     void processAutoRepeats(
-        std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
+        ActionTypeStatus& status, int actionTypeId,
+        const ActionType& actionType, float deltaT
     );
     bool processInputIgnoring(const Input& input);
-    void processStateTimers(
-        std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
+    void processTimers(
+        ActionTypeStatus& status, const ActionType& actionType, float deltaT
     );
 };
 

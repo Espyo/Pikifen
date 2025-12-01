@@ -7,6 +7,8 @@ _From input to action._
 > * [Features](#features)
 >   * [What it doesn't do](#what-it-doesnt-do)
 > * [Other usage information](#other-usage-information)
+>   * [Key terms](#key-terms)
+>   * [FAQ and troubleshooting](#faq-and-troubleshooting)
 > * [Inner workings notes](#inner-workings-notes)
 
 
@@ -22,7 +24,7 @@ _From input to action._
 * ↤ Then, Inpution...
   * _Every frame_: Informs the game of what actions have happened.
 
-On top of simply giving the game a list of actions, it also simplifies a lot of fluff and nuance in the input processing side of things. See [Features](#features).
+On top of simply giving the game a list of actions, it also simplifies a lot of fluff and nuance in the input processing side of things. See [Features](#features) and [Troubleshooting](#faq-and-troubleshooting) for a general idea of the sorts of gotchas and troubles the library can help you with.
 
 
 ## Quick example

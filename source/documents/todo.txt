@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you mash throwing Pikmin, sometimes you get stuck holding one
     Having a Pikmin follow a Snagret as a leader causes a crash
     If two keyframes have the same value, the visualizer in the editor will show a broken line
     It's impossible to go on the inner triangle on DEV Lab at 1465, 370
@@ -49,6 +48,7 @@ Next tasks (roughly sorted most important first)
         Glowmob?
     Rookie Rescue Officer
     Puffstool and mushroom Pikmin
+        The ability for statuses to change the team to the team of the one that gave the status
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     [NEEDS BRAINSTORMING] Re-think how missions work
@@ -934,6 +934,9 @@ Tasks for later on (I might never implement these)
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
     Story mode
         A way to choose what landing site of the area you want to start the day in [PIKMIN 4]
+    Some sort of expo mode?
+        The game's logo should always be present on-screen in the corner
+        Show a quick list of controls on-screen when you stop moving
     Discord rich presence
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/

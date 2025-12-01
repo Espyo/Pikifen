@@ -299,6 +299,9 @@ public:
     
         //--- Members ---
         
+        //Print each frame's player actions to the terminal.
+        bool printActions = false;
+        
         //Show and operate on a Dear ImGui demo window.
         bool showDearImGuiDemo = false;
         

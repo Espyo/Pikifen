@@ -325,33 +325,40 @@ vector<Action> Manager::newFrame(float deltaT) {
     lastDeltaT = deltaT;
     auto& curGameState = gameStates[curGameStateName];
     
+    //Get the current value of each action type.
     for(auto& a : actionTypes) {
-        actionTypeGlobalStatuses[a.first].value = getValue(a.first);
+        GameState& state = a.second.freezable ? curGameState : globalState;
+        state.actionTypeStatuses[a.first].value = getValue(a.first);
     }
     
-    for(auto& a : actionTypeGlobalStatuses) {
+    //Add actions to the queue as needed.
+    for(auto& a : actionTypes) {
         if(actionTypes[a.first].directEvents) {
             //Already added to the queue in handleCleanInput().
             continue;
         }
-        float oldValue;
-        if(actionTypes[a.first].freezable) {
-            oldValue = curGameState.actionTypeStatuses[a.first].value;
-        } else {
-            oldValue = actionTypeGlobalStatuses[a.first].oldValue;
-        }
-        if(oldValue != a.second.value) {
+        GameState& state = a.second.freezable ? curGameState : globalState;
+        if(
+            state.actionTypeStatuses[a.first].oldValue !=
+            state.actionTypeStatuses[a.first].value
+        ) {
             Action newAction;
             newAction.actionTypeId = a.first;
-            newAction.value = a.second.value;
+            newAction.value = state.actionTypeStatuses[a.first].value;
             newAction.reinsertionLifetime = actionTypes[a.first].reinsertionTTL;
             actionQueue.push_back(newAction);
         }
     }
     
-    for(auto& a : curGameState.actionTypeStatuses) {
-        processStateTimers(a, deltaT);
-        processAutoRepeats(a, deltaT);
+    //Process timers and auto-repeats.
+    for(auto& a : actionTypes) {
+        GameState& state = a.second.freezable ? curGameState : globalState;
+        processTimers(
+            state.actionTypeStatuses[a.first], a.second, deltaT
+        );
+        processAutoRepeats(
+            state.actionTypeStatuses[a.first], a.first, a.second, deltaT
+        );
     }
     
     vector<Action> result;
@@ -373,15 +380,14 @@ vector<Action> Manager::newFrame(float deltaT) {
     }
     
     //Prepare things for the next frame.
-    for(auto& a : actionTypeGlobalStatuses) {
-        if(actionTypes[a.first].freezable) {
-            curGameState.actionTypeStatuses[a.first].value = a.second.value;
-        } else {
-            a.second.oldValue = a.second.value;
-        }
+    for(auto& a : actionTypes) {
+        GameState& state = a.second.freezable ? curGameState : globalState;
+        state.actionTypeStatuses[a.first].oldValue =
+            state.actionTypeStatuses[a.first].value;
     }
     actionQueue.clear();
     
+    //Return the final list of actions.
     return result;
 }
 
@@ -389,44 +395,48 @@ vector<Action> Manager::newFrame(float deltaT) {
 /**
  * @brief Processes logic for auto-repeating actions.
  *
- * @param it Iterator of the map of action type statuses.
+ * @param status Status object of the action type.
+ * @param actionTypeId ID of the action type.
+ * @param actionType Data about the action type.
  * @param deltaT How much time has passed since the last frame.
  */
 void Manager::processAutoRepeats(
-    std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
+    ActionTypeStatus& status, int actionTypeId,
+    const ActionType& actionType, float deltaT
 ) {
-    float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
+    float actionTypeAutoRepeat = actionType.autoRepeat;
     if(actionTypeAutoRepeat == 0.0f) return;
+    
     float autoRepeatFactor =
-        (it.second.value - actionTypeAutoRepeat) /
+        (status.value - actionTypeAutoRepeat) /
         (1.0f - actionTypeAutoRepeat);
     if(autoRepeatFactor <= 0.0f) return;
-    if(it.second.value == 0.0f) return;
-    if(it.second.activationStateDuration == 0.0f) return;
-    float oldDuration = it.second.activationStateDuration - deltaT;
-    if(oldDuration >= it.second.nextAutoRepeatActivation) return;
+    if(status.value == 0.0f) return;
+    if(status.activationTimer == 0.0f) return;
+    float oldDuration = status.activationTimer - deltaT;
+    if(oldDuration >= status.nextAutoRepeatTimer) return;
     
     while(
-        it.second.activationStateDuration >= it.second.nextAutoRepeatActivation
+        status.activationTimer >= status.nextAutoRepeatTimer
     ) {
         //Auto-repeat!
         Action newAction;
-        newAction.actionTypeId = it.first;
-        newAction.value = it.second.value;
+        newAction.actionTypeId = actionTypeId;
+        newAction.value = status.value;
         newAction.flags |= ACTION_FLAG_REPEAT;
-        newAction.reinsertionLifetime = actionTypes[it.first].reinsertionTTL;
+        newAction.reinsertionLifetime = actionType.reinsertionTTL;
         actionQueue.push_back(newAction);
         
         //Set the next activation.
         float currentFrequency =
             options.autoRepeatMaxInterval +
-            (it.second.activationStateDuration / options.autoRepeatRampTime) *
+            (status.activationTimer / options.autoRepeatRampTime) *
             (options.autoRepeatMinInterval - options.autoRepeatMaxInterval);
         currentFrequency =
             std::max(options.autoRepeatMinInterval, currentFrequency);
         currentFrequency =
             std::min(currentFrequency, options.autoRepeatMaxInterval);
-        it.second.nextAutoRepeatActivation += currentFrequency;
+        status.nextAutoRepeatTimer += currentFrequency;
     }
 }
 
@@ -458,23 +468,24 @@ bool Manager::processInputIgnoring(const Input& input) {
 
 
 /**
- * @brief Processes the timers for action type states in a frame.
+ * @brief Processes the timers for action types in a frame.
  *
- * @param it Iterator of the map of action type statuses.
+ * @param status Status object of the action type.
+ * @param actionType Data about the action type.
  * @param deltaT How much time has passed since the last frame.
  */
-void Manager::processStateTimers(
-    std::pair<const int, ActionTypeGameStateStatus>& it, float deltaT
+void Manager::processTimers(
+    ActionTypeStatus& status, const ActionType& actionType, float deltaT
 ) {
-    bool isActive = actionTypeGlobalStatuses[it.first].value != 0.0f;
-    bool wasActive = it.second.value != 0.0f;
+    bool isActive = status.value != 0.0f;
+    bool wasActive = status.oldValue != 0.0f;
     if(isActive != wasActive) {
-        //State changed. Reset the timer.
-        it.second.activationStateDuration = 0.0f;
-        it.second.nextAutoRepeatActivation = options.autoRepeatMaxInterval;
+        //Activation changed. Reset the timer.
+        status.activationTimer = 0.0f;
+        status.nextAutoRepeatTimer = options.autoRepeatMaxInterval;
     } else {
-        //Same state, increase the timer.
-        it.second.activationStateDuration += deltaT;
+        //Same activation, increase the timer.
+        status.activationTimer += deltaT;
     }
 }
 
