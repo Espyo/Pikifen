@@ -404,6 +404,8 @@ void loadMiscGraphics() {
         );
     game.sysContent.bmpVignette =
         game.content.bitmaps.list.get(game.sysContentNames.bmpVignette);
+    game.sysContent.bmpWarning =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpWarning);
     game.sysContent.bmpWaveRing =
         game.content.bitmaps.list.get(game.sysContentNames.bmpWaveRing);
 }
@@ -614,6 +616,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpThrowPreview);
     game.content.bitmaps.list.free(game.sysContent.bmpThrowPreviewDashed);
     game.content.bitmaps.list.free(game.sysContent.bmpVignette);
+    game.content.bitmaps.list.free(game.sysContent.bmpWarning);
     game.content.bitmaps.list.free(game.sysContent.bmpWaveRing);
     
     //Fonts.

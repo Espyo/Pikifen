@@ -24,6 +24,11 @@ hardcoded_items{
 		size=2.0000 82.0000
 		description=Scrollbar for the list of control binds.
 	}
+	warning{
+		center=95.0000 5.0000
+		size=6.0000 6.0000
+		description=Button for when there are warnings with the binds.
+	}
 	tooltip{
 		center=50.0000 96.0000
 		size=96.0000 4.0000

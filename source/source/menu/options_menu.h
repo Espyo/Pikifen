@@ -345,6 +345,12 @@ private:
     
     //Scrollbar for the shortcut items list GUI item.
     ScrollGuiItem* shortcutItemsListScroll = nullptr;
+
+    //Warning button.
+    ButtonGuiItem* bindsWarningButton = nullptr;
+
+    //List of actions that are recommended to have at least one bind, but don't.
+    vector<PLAYER_ACTION_TYPE> unboundRecommendedActions;
     
     
     //--- Function declarations ---
@@ -353,6 +359,7 @@ private:
         const PlayerActionType& actionType, bool addSectionHeader,
         GuiItem** itemToFocus
     );
+    void addOrUpdateBindFromInput(const Inpution::Input& input);
     void addShortcutItemItems(
         const string& name, const string& internalName, GuiItem** itemToFocus,
         const ALLEGRO_COLOR& textColor = COLOR_WHITE
@@ -377,6 +384,7 @@ private:
     void populateBinds();
     void populateShortcutItems();
     void restoreDefaultBinds(const PLAYER_ACTION_TYPE actionType);
+    void updateBindWarnings();
     void updateControlsPage();
     void updateShortcutsPage();
     

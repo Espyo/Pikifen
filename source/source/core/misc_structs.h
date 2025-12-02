@@ -801,6 +801,9 @@ struct SystemContentList {
     //Vignette, used for menus.
     ALLEGRO_BITMAP* bmpVignette = nullptr;
     
+    //Warning.
+    ALLEGRO_BITMAP* bmpWarning = nullptr;
+    
     //Wave ring.
     ALLEGRO_BITMAP* bmpWaveRing = nullptr;
     
@@ -1084,6 +1087,9 @@ struct SystemContentNames {
     
     //Vignette, used for menus.
     string bmpVignette = "gui/vignette";
+    
+    //Warning.
+    string bmpWarning = "gui/warning";
     
     //Wave ring.
     string bmpWaveRing = "effects/wave_ring";

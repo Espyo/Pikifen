@@ -52,6 +52,7 @@ graphics {
     throw_preview = gui/throw_preview
     throw_preview_dashed = gui/throw_preview_dashed
     title_screen_bg = gui/title_screen_bg
+    warning = gui/warning
     wave_ring = effects/wave_ring
 }
 

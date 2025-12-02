@@ -327,6 +327,9 @@ struct PlayerActionType : public Inpution::ActionType {
     
     //String representing of this action type's default control bind.
     string defaultBindStr;
+
+    //If true, it's recommended the player has at least one input bound.
+    bool recommended = true;
     
 };
 
@@ -351,7 +354,8 @@ struct ControlsMediator {
         Inpution::ACTION_VALUE_TYPE valueType,
         float autoRepeat = 0.0f,
         float reinsertionTTL = 0.0f,
-        bool freezable = false
+        bool freezable = false,
+        bool recommended = true
     );
     void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);

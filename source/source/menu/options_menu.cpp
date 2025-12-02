@@ -429,6 +429,26 @@ void OptionsMenu::addBindEntryItems(
 
 
 /**
+ * @brief Adds a new bind from a captured input.
+ *
+ * @param input The input.
+ */
+void OptionsMenu::addOrUpdateBindFromInput(const Inpution::Input& input) {
+    //Update an existing bind, or add a new one.
+    vector<Inpution::Bind>& allBinds = game.controls.binds();
+    if(curBindIdx >= allBinds.size()) {
+        Inpution::Bind newBind;
+        newBind.actionTypeId = curActionType;
+        newBind.playerNr = 0;
+        newBind.inputSource = input.source;
+        allBinds.push_back(newBind);
+    } else {
+        game.controls.binds()[curBindIdx].inputSource = input.source;
+    }
+}
+
+
+/**
  * @brief Adds the GUI items for an inventory shortcut entry in the
  * shortcuts menu.
  *
@@ -649,16 +669,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Actively capturing.
         Inpution::Input input = game.controls.allegroEventToInput(ev);
         if(input.value >= 0.5f) {
-            vector<Inpution::Bind>& allBinds = game.controls.binds();
-            if(curBindIdx >= allBinds.size()) {
-                Inpution::Bind newBind;
-                newBind.actionTypeId = curActionType;
-                newBind.playerNr = 0;
-                newBind.inputSource = input.source;
-                allBinds.push_back(newBind);
-            } else {
-                game.controls.binds()[curBindIdx].inputSource = input.source;
-            }
+            addOrUpdateBindFromInput(input);
             capturingInput = 2;
             game.controls.stopIgnoringActions();
             game.controls.startIgnoringInputSource(input.source, true);
@@ -846,6 +857,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.registerCoords("back_input",   3,  7,  4,  4);
     bindsGui.registerCoords("list",        50, 51, 88, 82);
     bindsGui.registerCoords("list_scroll", 97, 51,  2, 82);
+    bindsGui.registerCoords("warning",     95,  5,  6,  6);
     bindsGui.registerCoords("tooltip",     50, 96, 96,  4);
     bindsGui.readDataFile(guiFile);
     
@@ -878,6 +890,46 @@ void OptionsMenu::initGuiControlBindsPage() {
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = bindsListBox;
     bindsGui.addItem(listScroll, "list_scroll");
+    
+    //Controls warning button.
+    bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard);
+    bindsWarningButton->forceSquare = true;
+    bindsWarningButton->onDraw =
+    [this] (const DrawInfo & draw) {
+        bindsWarningButton->defDrawCode(draw);
+        drawBitmapInBox(
+            game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
+            true, 0.0f, draw.tint
+        );
+    };
+    bindsWarningButton->onActivate =
+    [this] (const Point&) {
+        game.modal.reset();
+        game.modal.title = "Unbound actions";
+        game.modal.prompt =
+            "You have no input bound to these actions, but you really should!"
+            "\n \n";
+        for(
+            size_t a = 0;
+            a < std::min(unboundRecommendedActions.size(), (size_t) 8);
+            a++
+        ) {
+            if(a > 0) game.modal.prompt += "\n";
+            game.modal.prompt +=
+                "- " +
+                game.controls.getActionTypeById(
+                    unboundRecommendedActions[a]
+                ).name;
+        }
+        if(unboundRecommendedActions.size() >= 9) {
+            game.modal.prompt += "\n- (And more...)";
+        }
+        game.modal.updateItems();
+        game.modal.open();
+    };
+    bindsWarningButton->onGetTooltip =
+    [] () { return "You have some warnings! Press here to see them."; };
+    bindsGui.addItem(bindsWarningButton, "warning");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
@@ -1816,6 +1868,8 @@ void OptionsMenu::populateBinds() {
         //Try to center it.
         bindsListBox->onChildFocusedViaSN(itemToFocus);
     }
+    
+    updateBindWarnings();
 }
 
 
@@ -1949,6 +2003,36 @@ void OptionsMenu::unload() {
     Menu::unload();
     
     shortcutButtons.clear();
+}
+
+
+/**
+ * @brief Updates the list of control binds warnings, and updates the visibility
+ * of the warning button accordingly.
+ */
+void OptionsMenu::updateBindWarnings() {
+    unboundRecommendedActions.clear();
+    
+    const vector<PlayerActionType> actionTypes =
+        game.controls.getAllActionTypes();
+    const vector<Inpution::Bind> binds =
+        game.controls.binds();
+    for(size_t a = 0; a < actionTypes.size(); a++) {
+        const PlayerActionType& actionType = actionTypes[a];
+        if(!actionType.recommended) continue;
+        const auto it =
+            std::find_if(
+                binds.begin(), binds.end(),
+        [actionType] (const Inpution::Bind & b) {
+            return b.actionTypeId == actionType.id;
+        }
+            );
+        if(it != binds.end()) continue;
+        unboundRecommendedActions.push_back(actionType.id);
+    }
+    
+    bindsWarningButton->responsive = !unboundRecommendedActions.empty();
+    bindsWarningButton->visible = !unboundRecommendedActions.empty();
 }
 
 

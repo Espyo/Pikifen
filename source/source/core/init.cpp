@@ -169,7 +169,8 @@ void initControls() {
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_NONE,
         PLAYER_ACTION_CAT_NONE,
-        "---", "", "", "", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "---", "", "", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     
     //Main.
@@ -179,7 +180,7 @@ void initControls() {
         "Move right",
         "Move the leader right.",
         "move_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_DOWN,
@@ -187,7 +188,7 @@ void initControls() {
         "Move down",
         "Move the leader down.",
         "move_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_LEFT,
@@ -195,7 +196,7 @@ void initControls() {
         "Move left",
         "Move the leader left.",
         "move_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_UP,
@@ -203,7 +204,7 @@ void initControls() {
         "Move up",
         "Move the leader up.",
         "move_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_RIGHT,
@@ -211,7 +212,7 @@ void initControls() {
         "Leader cursor right",
         "Move the leader's cursor right.",
         "cursor_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_DOWN,
@@ -219,7 +220,7 @@ void initControls() {
         "Leader cursor down",
         "Move the leader's cursor down.",
         "cursor_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_LEFT,
@@ -227,7 +228,7 @@ void initControls() {
         "Leader cursor left",
         "Move the leader's cursor left.",
         "cursor_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_LEADER_CURSOR_UP,
@@ -235,7 +236,7 @@ void initControls() {
         "Leader cursor up",
         "Move the leader's cursor up.",
         "cursor_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_THROW,
@@ -243,7 +244,7 @@ void initControls() {
         "Throw",
         "Throw a Pikmin at the leader's cursor.",
         "throw", "mb_1", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.2f, true
+        0.0f, 0.2f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_WHISTLE,
@@ -251,7 +252,7 @@ void initControls() {
         "Whistle",
         "Whistle around the leader's cursor.",
         "whistle", "mb_2", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_NEXT_TYPE,
@@ -259,7 +260,7 @@ void initControls() {
         "Next Pikmin",
         "Change to the next Pikmin type in the group.",
         "next_type", "mwd", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_PREV_TYPE,
@@ -267,7 +268,7 @@ void initControls() {
         "Prev. Pikmin",
         "Change to the previous Pikmin type in the group.",
         "prev_type", "mwu", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_NEXT_LEADER,
@@ -275,7 +276,7 @@ void initControls() {
         "Next leader",
         "Change to the next leader.",
         "next_leader", "k_215", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_GROUP_CURSOR,
@@ -283,7 +284,7 @@ void initControls() {
         "Swarm to cursor",
         "Swarm all Pikmin towards the leader's cursor.",
         "swarm_cursor", "k_75", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_DISMISS,
@@ -291,21 +292,23 @@ void initControls() {
         "Dismiss",
         "Dismiss all Pikmin.",
         "dismiss", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_INVENTORY,
         PLAYER_ACTION_CAT_MAIN,
         "Open inventory",
         "Open the item and special move inventory.",
-        "inventory", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "inventory", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_PAUSE,
         PLAYER_ACTION_CAT_MAIN,
         "Pause",
         "Pause the game.",
-        "pause", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "pause", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, true
     );
     
     //Menus.
@@ -314,91 +317,104 @@ void initControls() {
         PLAYER_ACTION_CAT_MENUS,
         "Menu right",
         "Navigate right in a menu.",
-        "menu_right", "k_83", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_right", "k_83", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Menu down",
         "Navigate down in a menu.",
-        "menu_down", "k_85", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_down", "k_85", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Menu left",
         "Navigate left in a menu.",
-        "menu_left", "k_82", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_left", "k_82", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
         "Navigate up in a menu.",
-        "menu_up", "k_84", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_up", "k_84", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_OK,
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
-        "menu_ok", "k_67", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f, 0.4f
+        "menu_ok", "k_67", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.4f, false, true
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_RIGHT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan right",
         "Pan the radar to the right.",
-        "menu_radar_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_right", "k_4", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan down",
         "Pan the radar downward.",
-        "menu_radar_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_down", "k_19", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan left",
         "Pan the radar to the left.",
-        "menu_radar_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_left", "k_1", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Radar pan up",
         "Pan the radar upward.",
-        "menu_radar_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_up", "k_23", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_ZOOM_IN,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom in",
         "Zoom the radar in.",
-        "menu_radar_zoom_in", "k_18", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_zoom_in", "k_18", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT,
         PLAYER_ACTION_CAT_MENUS,
         "Radar zoom out",
         "Zoom the radar out.",
-        "menu_radar_zoom_out", "k_6", Inpution::ACTION_VALUE_TYPE_ANALOG
+        "menu_radar_zoom_out", "k_6", Inpution::ACTION_VALUE_TYPE_ANALOG,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_ONION_CHANGE_10,
         PLAYER_ACTION_CAT_MENUS,
         "Onion menu change 10",
         "Toggle the \"change 10\" mode in the Onion menu.",
-        "menu_onion_change_10", "k_215", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "menu_onion_change_10", "k_215", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_ONION_SELECT_ALL,
         PLAYER_ACTION_CAT_MENUS,
         "Onion menu select all",
         "Toggle the \"select all\" mode in the Onion menu.",
-        "menu_onion_select_all", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "menu_onion_select_all", "k_217", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     
     //Advanced.
@@ -408,7 +424,7 @@ void initControls() {
         "Swarm right",
         "Swarm all Pikmin right.",
         "swarm_right", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_GROUP_DOWN,
@@ -416,7 +432,7 @@ void initControls() {
         "Swarm down",
         "Swarm all Pikmin down.",
         "swarm_down", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_GROUP_LEFT,
@@ -424,7 +440,7 @@ void initControls() {
         "Swarm left",
         "Swarm all Pikmin left.",
         "swarm_left", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_GROUP_UP,
@@ -432,7 +448,7 @@ void initControls() {
         "Swarm up",
         "Swarm all Pikmin up.",
         "swarm_up", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_PREV_LEADER,
@@ -440,7 +456,7 @@ void initControls() {
         "Prev. leader",
         "Change to the previous leader.",
         "prev_leader", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
@@ -448,7 +464,7 @@ void initControls() {
         "Change zoom",
         "Change the current zoom level.",
         "change_zoom", "k_3", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_ZOOM_IN,
@@ -456,7 +472,7 @@ void initControls() {
         "Zoom in",
         "Change to a closer zoom level.",
         "zoom_in", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_ZOOM_OUT,
@@ -464,7 +480,7 @@ void initControls() {
         "Zoom out",
         "Change to a farther zoom level.",
         "zoom_out", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_NEXT_MATURITY,
@@ -472,7 +488,7 @@ void initControls() {
         "Next maturity",
         "Change to a Pikmin of the next maturity.",
         "next_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_PREV_MATURITY,
@@ -480,7 +496,7 @@ void initControls() {
         "Prev. maturity",
         "Change to a Pikmin of the previous maturity.",
         "prev_maturity", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_A,
@@ -488,7 +504,7 @@ void initControls() {
         "Inventory shortcut A",
         "Use the inventory item set to shortcut A.",
         "inventory_shortcut_a", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_B,
@@ -496,7 +512,7 @@ void initControls() {
         "Inventory shortcut B",
         "Use the inventory item set to shortcut B.",
         "inventory_shortcut_b", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_C,
@@ -504,7 +520,7 @@ void initControls() {
         "Inventory shortcut C",
         "Use the inventory item set to shortcut C.",
         "inventory_shortcut_c", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_INVENTORY_SHORTCUT_D,
@@ -512,7 +528,7 @@ void initControls() {
         "Inventory shortcut D",
         "Use the inventory item set to shortcut D.",
         "inventory_shortcut_d", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_CUSTOM_A,
@@ -520,7 +536,7 @@ void initControls() {
         "Custom A",
         "Custom action A, if the current leader supports it.",
         "custom_a", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_CUSTOM_B,
@@ -528,7 +544,7 @@ void initControls() {
         "Custom B",
         "Custom action B, if the current leader supports it.",
         "custom_b", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_CUSTOM_C,
@@ -536,35 +552,39 @@ void initControls() {
         "Custom C",
         "Custom action C, if the current leader supports it.",
         "custom_c", "", Inpution::ACTION_VALUE_TYPE_ANALOG,
-        0.0f, 0.0f, true
+        0.0f, 0.0f, true, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_RADAR,
         PLAYER_ACTION_CAT_ADVANCED,
         "Radar",
         "Open or close the radar.",
-        "radar", "k_64", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "radar", "k_64", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_BACK,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
-        "menu_back", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f, 0.4f
+        "menu_back", "k_59", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.4f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - left page",
         "Go to the page to the left in a menu.",
-        "menu_page_left", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_page_left", "k_17", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - right page",
         "Go to the page to the right in a menu.",
-        "menu_page_right", "k_5", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "menu_page_right", "k_5", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     
     //General maker tool things.
@@ -573,28 +593,32 @@ void initControls() {
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Auto-start",
         "Make the game auto-start on the current state (and content).",
-        "mt_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Set song pos near loop",
         "Set the current song's position to be near the loop point.",
-        "mt_set_song_pos_near_loop", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_set_song_pos_near_loop", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_MOD_1,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 1",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_1", "k_216", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_mod_1", "k_216", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_MOD_2,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Modifier 2",
         "Holding this input modifies the behavior of some tools.",
-        "mt_mod_2", "k_218", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_mod_2", "k_218", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     
     //Gameplay maker tools.
@@ -603,14 +627,16 @@ void initControls() {
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Area image",
         "Save an image of the current area.",
-        "mt_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Change speed",
         "Change the gameplay speed.",
-        "mt_change_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_change_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
@@ -618,77 +644,88 @@ void initControls() {
         "Frame advance",
         "Pause gameplay and advance by one frame each time. "
         "Use \"modifier 1\" to unpause.",
-        "mt_frame_advance", "", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "mt_frame_advance", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
         "Toggle info about the geometry under the mouse cursor.",
-        "mt_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_HUD,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "HUD",
         "Toggle the HUD.",
-        "mt_hud", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_hud", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_HURT_MOB,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Hurt mob",
         "Hurt the mob under the mouse cursor.",
-        "mt_hurt_mob", "k_30", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "mt_hurt_mob", "k_30", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_MOB_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Mob info",
         "Toggle info about the mob under the mouse cursor.",
-        "mt_mob_info", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "mt_mob_info", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "New Pikmin",
         "Create a new Pikmin under the mouse cursor.",
-        "mt_new_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "mt_new_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_PATH_INFO,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Path info",
         "Toggle info about paths the info'd mob is taking.",
-        "mt_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show collision",
         "Toggle drawing each mob's collision.",
-        "mt_show_collision", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_show_collision", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show hitboxes",
         "Toggle drawing each mob's hitboxes.",
-        "mt_show_hitboxes", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_show_hitboxes", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_REACHES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show reaches",
         "Toggle drawing the info'd mob's reaches.",
-        "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Teleport",
         "Teleport the leader to the mouse cursor.",
-        "mt_teleport", "k_29", Inpution::ACTION_VALUE_TYPE_DIGITAL, 0.5f
+        "mt_teleport", "k_29", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     
     //System.
@@ -697,14 +734,16 @@ void initControls() {
         PLAYER_ACTION_CAT_SYSTEM,
         "System info",
         "Toggle showing system and performance information.",
-        "system_info", "k_47", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "system_info", "k_47", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addActionType(
         PLAYER_ACTION_TYPE_SCREENSHOT,
         PLAYER_ACTION_CAT_SYSTEM,
         "Take a screenshot",
         "Take a screenshot and save it in the user data folder.",
-        "screenshot", "k_58", Inpution::ACTION_VALUE_TYPE_DIGITAL
+        "screenshot", "k_58", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     
     
