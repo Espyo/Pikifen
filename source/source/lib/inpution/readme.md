@@ -160,8 +160,8 @@ int main() {
 ### What it doesn't do
 
 * It does not obtain hardware information. It's not a hardware driver, it doesn't recognize keyboard, mouse, or controller hardware input events, it doesn't recognize controller or controller button names. Your program is the one that must obtain this information and feed it to Inpution.
-* It does not understand game controller anatomy. That is, it doesn't know if a button is really a button or a trigger, it doesn't know if a stick is an analog stick or a D-pad, etc. It also doesn't understand stick axes, but it does assume them; see [Inner workings notes](#inner-workings-notes).
-* It does not abstract mouse movement. If, for instance, you want camera control to be done via mouse movement and an analog stick, you can abstract the analog stick logic with Inpution, but you will have to add the mouse movement logic yourself.
+* It does not understand game controller anatomy. That is, it doesn't know if a button is really a button or an analog trigger, it doesn't know if a stick is an analog stick or a D-pad, etc. It also doesn't understand stick axes, but it does assume them; see [Inner workings notes](#inner-workings-notes).
+* It does not abstract mouse movement. If, for instance, you want camera control to be done via mouse movement and an analog stick, you can abstract the analog stick logic with Inpution, but you will have to add the mouse movement logic yourself separately.
 
 
 ## Other usage information

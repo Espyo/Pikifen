@@ -486,6 +486,10 @@ void loadOptions() {
         game.options.advanced.joystickMinDeadzone;
     controlsMgrOptions.stickMaxDeadzone =
         game.options.advanced.joystickMaxDeadzone;
+    controlsMgrOptions.analogButtonMinDeadzone =
+        game.options.advanced.joystickMinDeadzone;
+    controlsMgrOptions.analogButtonMaxDeadzone =
+        game.options.advanced.joystickMaxDeadzone;
     game.controls.setOptions(controlsMgrOptions);
 }
 

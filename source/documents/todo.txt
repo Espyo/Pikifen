@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
 
     --- 1.1.0 ---
-    Add the analog button deadzone logic to the analog cleaner lib
     Swarming jingle
     If the player leaves the binds menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
     When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
@@ -43,6 +42,7 @@ Next tasks (roughly sorted most important first)
     Rookie Rescue Officer
     Puffstool and mushroom Pikmin
         The ability for statuses to change the team to the team of the one that gave the status
+        The ability for statuses to change the graphic for a Pikmin's top
     Mob rotation should have acceleration too
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     [NEEDS BRAINSTORMING] Re-think how missions work
@@ -931,6 +931,7 @@ Tasks for later on (I might never implement these)
     Some sort of expo mode?
         The game's logo should always be present on-screen in the corner
         Show a quick list of controls on-screen when you stop moving
+        Don't save statistics, options, or mission records
     Discord rich presence
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/

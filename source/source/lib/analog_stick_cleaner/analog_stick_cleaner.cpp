@@ -45,6 +45,29 @@ void AnalogStickCleaner::clean(
 
 
 /**
+ * @brief Cleans an analog button's input according to the settings.
+ *
+ * @param pressure Analog button pressure amount [0 - 1].
+ * @param settings Settings to use.
+ * @param previousFramePressure Pressure value given by the cleaner in the
+ * previous frame. This is only necessary if low-pass filtering is enabled
+ * in the settings.
+ */
+void AnalogStickCleaner::cleanButton(
+    float* pressure, const Settings& settings, float previousFramePressure
+) {
+    //Sanitize the function arguments.
+    *pressure = std::clamp(*pressure, 0.0f, 1.0f);
+    
+    //Step 1: Low-pass filter.
+    processLowPassFilterButton(pressure, previousFramePressure, settings);
+    
+    //Step 2: Process deadzones.
+    processButtonDeadzones(pressure, settings);
+}
+
+
+/**
  * @brief Returns the deadzone size in the settings for the specified
  * snap direction. 0 is right, 1 is diagonal down-right, etc.
  * Due to the way this is used in the cleaning process, it also supports
@@ -183,50 +206,137 @@ void AnalogStickCleaner::processAngularDeadzones(
 
 
 /**
+ * @brief Process analog button deadzone cleaning logic.
+ *
+ * @param pressure Pressure value to clean.
+ * @param settings Settings to use.
+ */
+void AnalogStickCleaner::processButtonDeadzones(
+    float* pressure, const Settings& settings
+) {
+    //Check if we even have anything to do.
+    if(
+        settings.deadzones.button.released == 0.0f &&
+        settings.deadzones.button.pressed == 1.0f &&
+        !settings.deadzones.button.interpolate
+    ) {
+        return;
+    }
+    
+    //Sanitize the settings.
+    Settings sanitizedSettings = settings;
+    sanitizedSettings.deadzones.button.released =
+        std::clamp(sanitizedSettings.deadzones.button.released, 0.0f, 1.0f);
+    sanitizedSettings.deadzones.button.pressed =
+        std::clamp(sanitizedSettings.deadzones.button.pressed, 0.0f, 1.0f);
+        
+    //Do the clean up.
+    const float inputSpaceStart =
+        sanitizedSettings.deadzones.button.released;
+    const float inputSpaceEnd =
+        sanitizedSettings.deadzones.button.pressed;
+    const float outputSpaceStart =
+        0.0f;
+    const float outputSpaceEnd =
+        1.0f;
+        
+    if(sanitizedSettings.deadzones.button.interpolate) {
+        //Interpolate.
+        *pressure =
+            interpolateAndClamp(
+                *pressure,
+                inputSpaceStart, inputSpaceEnd,
+                outputSpaceStart, outputSpaceEnd
+            );
+            
+    } else {
+        //Hard cut-off.
+        if(*pressure < inputSpaceStart) {
+            *pressure = outputSpaceStart;
+        }
+        if(*pressure > inputSpaceEnd) {
+            *pressure = outputSpaceEnd;
+        }
+        
+    }
+}
+
+
+/**
  * @brief Process low-pass filtering cleaning logic.
  *
  * @param coords Coordinates to clean.
- * @param settings Settings to use.
  * @param previousFrameCoords Pointer to an array of the coordinates given by
  * the cleaner in the previous frame.
+ * @param settings Settings to use.
  */
 void AnalogStickCleaner::processLowPassFilter(
     float coords[2], float previousFrameCoords[2], const Settings& settings
 ) {
-    //Check if we even have anything to do.
-    if(settings.lowPassFilter.factor == 0.0f) return;
-    if(!previousFrameCoords) return;
-    
     //Sanitize the settings.
     Settings sanitizedSettings = settings;
     sanitizedSettings.lowPassFilter.factor =
         std::clamp(sanitizedSettings.lowPassFilter.factor, 0.0f, 1.0f);
         
+    //Check if we even have anything to do.
+    if(settings.lowPassFilter.factor == 0.0f) return;
+    if(!previousFrameCoords) return;
+    
     //Filter.
     float finalCoords[2];
-    if(sanitizedSettings.lowPassFilter.factor > 0.0f) {
-        finalCoords[0] =
-            (
-                coords[0] *
-                sanitizedSettings.lowPassFilter.factor
-            ) +
-            (
-                previousFrameCoords[0] *
-                (1.0f - sanitizedSettings.lowPassFilter.factor)
-            );
-        finalCoords[1] =
-            (
-                coords[1] *
-                sanitizedSettings.lowPassFilter.factor
-            ) +
-            (
-                previousFrameCoords[1] *
-                (1.0f - sanitizedSettings.lowPassFilter.factor)
-            );
-    }
+    finalCoords[0] =
+        (
+            coords[0] *
+            sanitizedSettings.lowPassFilter.factor
+        ) +
+        (
+            previousFrameCoords[0] *
+            (1.0f - sanitizedSettings.lowPassFilter.factor)
+        );
+    finalCoords[1] =
+        (
+            coords[1] *
+            sanitizedSettings.lowPassFilter.factor
+        ) +
+        (
+            previousFrameCoords[1] *
+            (1.0f - sanitizedSettings.lowPassFilter.factor)
+        );
     
     coords[0] = finalCoords[0];
     coords[1] = finalCoords[1];
+}
+
+
+/**
+ * @brief Process low-pass filtering cleaning logic for an analog button.
+ *
+ * @param pressure Pressure value to clean.
+ * @param previousFramePressure Pressure given by the cleaner in
+ * the previous frame.
+ * @param settings Settings to use.
+ */
+void AnalogStickCleaner::processLowPassFilterButton(
+    float* pressure, float previousFramePressure, const Settings& settings
+) {
+    //Sanitize the settings.
+    Settings sanitizedSettings = settings;
+    sanitizedSettings.lowPassFilter.factorButton =
+        std::clamp(sanitizedSettings.lowPassFilter.factorButton, 0.0f, 1.0f);
+        
+    //Check if we even have anything to do.
+    if(settings.lowPassFilter.factorButton == 0.0f) return;
+    
+    //Filter.
+    *pressure =
+        (
+            *pressure *
+            sanitizedSettings.lowPassFilter.factorButton
+        ) +
+        (
+            previousFramePressure *
+            (1.0f - sanitizedSettings.lowPassFilter.factor)
+        );
 }
 
 

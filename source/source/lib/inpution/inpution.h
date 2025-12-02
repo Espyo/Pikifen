@@ -273,11 +273,17 @@ struct ManagerOptions {
     //Otherwise to 0.
     float digitalThreshold = 0.5f;
     
-    //Minimum deadzone for sticks. 0 for none.
+    //Minimum deadzone for analog sticks. 0 for none.
     float stickMinDeadzone = 0.0f;
     
-    //Maximum deadzone for sticks. 1 for none.
+    //Maximum deadzone for analog sticks. 1 for none.
     float stickMaxDeadzone = 1.0f;
+    
+    //Minimum deadzone for analog buttons. 0 for none.
+    float analogButtonMinDeadzone = 0.0f;
+    
+    //Maximum deadzone for analog buttons. 1 for none.
+    float analogButtonMaxDeadzone = 1.0f;
     
     //Interval between auto-repeat activations, at the slowest speed.
     float autoRepeatMaxInterval = 0.3f;

@@ -8,7 +8,8 @@
  * can clean up the values and output new values that much better match
  * with what the player intends.
  *
- * The behavior of this process can be configured.
+ * The behavior of this process can be configured. It can also similarly clean
+ * analog button pressure values.
  *
  * Special thanks to:
  * https://www.gamedeveloper.com/business/doing-thumbstick-dead-zones-right
@@ -43,7 +44,7 @@ public:
         struct Deadzones {
         
             /**
-             * @brief Deadzones related to the radius of the analog stick, i.e.
+             * @brief Deadzones related to the radius of an analog stick, i.e.
              * how far away from the center it is.
              */
             struct Radial {
@@ -73,7 +74,7 @@ public:
             } radial;
             
             /**
-             * @brief Deadzones related to the angle of the analog stick.
+             * @brief Deadzones related to the angle of an analog stick.
              */
             struct Angular {
             
@@ -108,6 +109,33 @@ public:
                 bool interpolate = true;
                 
             } angular;
+        
+            /**
+             * @brief Deadzones related to analog buttons.
+             */
+            struct Button {
+            
+                //Released deadzone size, in pressure ratio [0 - 1].
+                //Something like 0.1 is recommended for most analog buttons.
+                //Use 0 for no released deadzone.
+                float released = 0.1f;
+                
+                //Pressed deadzone size, in pressure ratio [0 - 1].
+                //Like the released deadzone, except this is for when the
+                //button is pressed down.
+                //Something like 0.9 is recommended for most analog buttons.
+                //Use 1 for no pressed deadzone.
+                float pressed = 0.9f;
+                
+                //If true, the pressure amount is interpolated between the
+                //released deadzone and the pressed deadzone (if any).
+                //If false, no interpolation is done, meaning once the player
+                //leaves a deadzone the pressure value will jump to the
+                //given value.
+                //Using this setting is recommended.
+                bool interpolate = true;
+                
+            } button;
             
         } deadzones;
         
@@ -125,6 +153,10 @@ public:
             //frame's values. If you want this feature enabled, a value of 0.9
             //or so is recommended.
             float factor = 0.0f;
+
+            //Filter factor for buttons [0 - 1]. 0 to disable.
+            //Same as the analog stick low pass filter factor property.
+            float factorButton = 0.0f;
             
         } lowPassFilter;
         
@@ -136,6 +168,10 @@ public:
     static void clean(
         float coords[2], const Settings& settings = Settings(),
         float previousFrameCoords[2] = nullptr
+    );
+    static void cleanButton(
+        float* pressure, const Settings& settings = Settings(),
+        float previousFramePressure = 0.0f
     );
     
     
@@ -153,8 +189,14 @@ protected:
     static void processAngularDeadzones(
         float coords[2], const Settings& settings
     );
+    static void processButtonDeadzones(
+        float* pressure, const Settings& settings
+    );
     static void processLowPassFilter(
         float coords[2], float previousFrameCoords[2], const Settings& settings
+    );
+    static void processLowPassFilterButton(
+        float* pressure, float previousFramePressure, const Settings& settings
     );
     static void processRadialDeadzones(
         float coords[2], const Settings& settings

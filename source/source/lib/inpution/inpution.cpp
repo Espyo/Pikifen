@@ -270,14 +270,15 @@ bool Manager::handleInput(const Input& input) {
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
     ) {
         //Game controller analog buttons have a value ranging from -1 to 1.
-        //Let's normalize it.
-        //We also need deadzone logic, but a much simpler single-axis one.
+        //Let's normalize it and apply deadzone logic.
         Input cleanInput = input;
         cleanInput.value = (cleanInput.value + 1.0f) / 2.0f;
-        cleanInput.value =
-            (cleanInput.value - options.stickMinDeadzone) /
-            (options.stickMaxDeadzone - options.stickMinDeadzone);
-        cleanInput.value = std::clamp(cleanInput.value, 0.0f, 1.0f);
+        AnalogStickCleaner::Settings cleanupSettings;
+        cleanupSettings.deadzones.button.pressed =
+            options.analogButtonMinDeadzone;
+        cleanupSettings.deadzones.button.released =
+            options.analogButtonMaxDeadzone;
+        AnalogStickCleaner::cleanButton(&cleanInput.value, cleanupSettings);
         
         handleCleanInput(cleanInput, false);
         
