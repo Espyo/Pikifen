@@ -17,55 +17,24 @@
     
     <p>Got a question about the engine? You may find the answer here! If your question is a problem, please check the <a href="troubleshooting.html">troubleshooting page</a> instead.</p>
 
+    <h2 id="engine-development">Engine development</h2>
+
     <dl class="snug-ol">
       <dt><b>What is there left to do?</b></dt>
       <dd>It's hard to say, but you can find a rough roadmap <a href="history.html#roadmap">here</a>.</dd>
 
-      <dt><b>If the engine is just meant to be the game's logic, why does it come with so many enemies, graphics, etc.?</b></dt>
-      <dd>
-        <ol>
-          <li>Having some content to play with means people can try the engine and its features right out of the box, without having to download or create content.</li>
-          <li>The existing content serves as a basis for new content. If you're having trouble fading two sectors, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red Bulborb and recolor it. And so on.</li>
-        </ol>
-      </dd>
-
-      <dt><b>Why do some enemies act a bit differently from how they do in the canon games?</b></dt>
-      <dd>The engine's content isn't meant to mirror the canon content exactly. Some things may be different because of an engine limitation (since <i>Pikifen</i> isn't as complex as a Nintendo product). Sometimes they're changed in order to be more readable in a top-down format. Sometimes it's because I think it will make for a funner, fairer experience.</dd>
-
-      <dt><b>Why are the animations so clunky and the graphics so simple?</b></dt>
-      <dd>I'm not an artist! Since nobody else is doing the graphics, I did the best I could.</dd>
-
-      <dt><b>Why are the textures and HUD all shiny and realistic, but the objects are simplistic?</b></dt>
-      <dd>
-        <ol>
-          <li>It's the style choice I went with for the packed base content, but anybody can style the textures, HUD, and objects in any way they want.</li>
-          <li>In my opinion, Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty. The objects are simple, and based off of vector graphics, so that it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots in order to follow the base content's style.</li>
-        </ol>
-        An alternative style that could maybe work all around is pixel art for everything, but I never tried it.
-      </dd>
-
-      <dt><b>Why doesn't it use textures and sounds from the <i>Pikmin</i> games?</b></dt>
-      <dd>
-        <ol>
-          <li>The less copyrighted content it uses, the better. This being a fan project, there's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".</li>
-          <li>Should something happen to the engine, I can rebrand it, and release the assets as they are, since they are my creations.</li>
-          <li>If somebody wants to add a new asset, and they want it to fit in with the existing ones, it's easy if everything's custom-made. Otherwise, it may get complicated if players want to also add official assets.</li>
-        </ol>
-        <p>If someone really wants the official assets, they can replace them easily.</p>
-      </dd>
-
       <dt><b>Why 2D?</b></dt>
-      <dd>3D would be MUCH harder for me to develop, and for players to create content for. 2D is much simpler, and still allows for solid core gameplay.</dd>
+      <dd>3D would be <b>much</b> harder for me to develop, and for players to create content for. 2D is much simpler, and still allows for solid core gameplay.</dd>
 
       <dt><b>Will you ever add X?</b></dt>
-      <dd>Depends. I'm developing the engine logic, so if it's an area or enemy or something, it makes more sense to create it yourself. That said, if it's something that would be good to add to the base content, like an enemy that players could create recolors of, I may consider it. Other than that, if it's something like a gameplay feature, just ask me!</dd>
+      <dd>It depends. I'm mostly developing the engine logic, so if it's <a href="content.html">an area or enemy or something</a>, it makes more sense to create it yourself. That said, if it's something that would be good to add to the base content, like an enemy that players could create recolors of, I may consider it. Other than that, if it's something like a gameplay feature, just ask me!</dd>
 
       <dt><b>Why do some updates make previously created content incompatible for such small reasons?</b></dt>
       <dd>I believe that having things clear and consistent is the key towards making the engine enjoyable to use.</dd>
       <dd>Suppose I make a basic feature, and give it a descriptive name. Later on, I expand that feature, but keep the old name instead of using a new one that's more inclusive of the new features. If a new player shows up and tries to understand what that feature's purpose is, the name will be misleading, and it'll be harder for them to piece things together. In cases like this, I prefer to just rename the feature, and in the process, likely break whatever content was making use of the old name.</dd>
-      <dd>I don't like making content incompatible, but since the alternative is <a href="https://en.wikipedia.org/wiki/Technical_debt">technical debt</a>, I think it's a small price to pay for the sake of making everyone able to juice the most out of the engine.</dd>
+      <dd>I don't like making content incompatible, but since the alternative is <a href="https://en.wikipedia.org/wiki/Technical_debt">technical debt</a>, I think it's a small price to pay for the sake of keeping the engine clean and making everyone able to juice the most out of it.</dd>
 
-      <dt><b>Why are some features so customizable and others so strict?</b></dt>
+      <dt><b>Why are some features so customizable but others so strict?</b></dt>
       <dd>It's very hard to balance responsibility and power when creating a feature.</dd>
       <dd>If I give the content maker a lot of power in a feature, they are also more responsible for learning how it works in detail, and how to use it properly.</dd>
       <dd>If I make a feature too simple, it becomes more accessible for anyone to use, but it also doesn't allow for much flexibility and creativity.</dd>
@@ -79,9 +48,52 @@
           <li>Custom content created by players would need to be localized into other languages too, meaning those players would have to find translators for the supported languages.</li>
         </ol>
       </dd>
+    </dl>
+    
+    <h2 id="base-content">Base content</h2>
 
+    <dl class="snug-ol">
+      <dt><b>If the engine is just meant to be the game's logic, why does it come with so many enemies, graphics, etc.?</b></dt>
+      <dd>
+        <ol>
+          <li>Having some content to play with means people can try the engine and its features right out of the box, without having to download or create content.</li>
+          <li>The existing content serves as a basis for new content. If you're having trouble fading two sectors, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red Bulborb and recolor it. And so on.</li>
+        </ol>
+      </dd>
+
+      <dt><b>Why do some enemies act a bit differently from how they do in the canon games?</b></dt>
+      <dd>The base content isn't meant to mirror the canon content exactly. Some things may be different because of an engine limitation (since <i>Pikifen</i> isn't as complex as a Nintendo product). Sometimes they're changed in order to be more readable in a top-down format. Sometimes it's because I think it will make for a funner, fairer experience.</dd>
+
+      <dt><b>Why are the animations so clunky and the graphics so simple?</b></dt>
+      <dd>I'm not an artist! Since nobody else is doing the graphics, I'm doing the best I can.</dd>
+
+      <dt><b>Why are the textures and HUD all shiny and realistic, but the objects are simplistic?</b></dt>
+      <dd>
+        <ol>
+          <li>It's the style choice I went with for the base content, but anybody can style the textures, HUD, and objects in any way they want.</li>
+          <li>In my opinion, <i>Pikmin</i> games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty. The objects are simple, and based off of vector graphics, so that it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots in order to follow the base content's style.</li>
+        </ol>
+        An alternative style that could maybe work all around is pixel art for everything, but I never tried it.
+      </dd>
+
+      <dt><b>Why doesn't it use textures and sounds from the <i>Pikmin</i> games?</b></dt>
+      <dd>
+        <ol>
+          <li>The less copyrighted content it uses, the better. This being a fan project, there's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".</li>
+          <li>Should something happen to the engine, I can rebrand it, and release some of the assets as they are, since they are my creations.</li>
+          <li>If somebody wants to add a new asset, and they want it to fit in with the existing ones, it's easy if everything's custom-made. Otherwise, it may get complicated if players want to also add official assets.</li>
+        </ol>
+        <p>If someone really wants the official assets, they can replace them easily.</p>
+      </dd>
+    </dl>
+
+    <h2 id="specific">Specific points</h2>
+
+    <dl>
       <dt><b>Why can't Pikmin be limited to only picking path stops within their height?</b></dt>
       <dd>While yes, it would make life easier, since Pikmin wouldn't try to walk against the wall to go to path stops on a cliff above them, the truth is that because ramps exist, the engine can't know if a given path stop high above is reachable or not. At least not without it being too computationally costly.</dd>
+      <dt><b>Why can't mobs have more than one timer?</b></dt>
+      <dd>Each mob having one timer is easy &ndash; it's just one variable with the amount of time left. But keeping a list is harder, not just because of memory usage (the structures that hold lists have a lot of memory overhead), but also performance (adding to or removing from the list is a bit costly). Plus the engine sometimes wants to use timers, and there could be a name conflict with a user-script timer.</dd>
     </dl>
 
   </div>

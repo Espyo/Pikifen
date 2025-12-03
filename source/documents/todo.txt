@@ -11,8 +11,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Swarming jingle
-    If the player leaves the binds menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
-    When you set a leader move direction/group swarm direction/leader cursor direction, show a pop-up asking if you want to set all four automatically
     Controls improvements
         Controls manager
             Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
