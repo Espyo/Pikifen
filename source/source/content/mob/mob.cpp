@@ -2480,7 +2480,7 @@ void Mob::getSpriteBitmapEffects(
                         deliveryInfo->animTimeRatioLeft, 0.0, 0.4,
                         0.0f, 1.0f
                     );
-                newScale = ease(EASE_METHOD_OUT, newScale);
+                newScale = ease(newScale, EASE_METHOD_OUT);
                 
                 Point targetPos = focusedMob->pos;
                 
@@ -2496,7 +2496,7 @@ void Mob::getSpriteBitmapEffects(
                         deliveryInfo->animTimeRatioLeft, 0.0, 0.4,
                         1.0f, 0.0f
                     );
-                absorbRatio = ease(EASE_METHOD_IN, absorbRatio);
+                absorbRatio = ease(absorbRatio, EASE_METHOD_IN);
                 newOffset += endOffset * absorbRatio;
             }
             
@@ -2573,10 +2573,7 @@ void Mob::getSpriteBitmapEffects(
                     0.5f, 1.0f, 0.0f, 1.0f
                 );
             damageScaleY =
-                ease(
-                    EASE_METHOD_UP_AND_DOWN,
-                    damageScaleY
-                );
+                ease(damageScaleY, EASE_METHOD_UP_AND_DOWN);
             damageScaleY *= MOB::DAMAGE_SQUASH_AMOUNT;
         } else {
             damageScaleY =
@@ -2585,10 +2582,7 @@ void Mob::getSpriteBitmapEffects(
                     0.0f, 0.5f, 1.0f, 0.0f
                 );
             damageScaleY =
-                ease(
-                    EASE_METHOD_UP_AND_DOWN,
-                    damageScaleY
-                );
+                ease(damageScaleY, EASE_METHOD_UP_AND_DOWN);
             damageScaleY *= -MOB::DAMAGE_SQUASH_AMOUNT;
         }
         damageScaleY += 1.0f;

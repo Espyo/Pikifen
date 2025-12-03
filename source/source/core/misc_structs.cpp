@@ -1000,7 +1000,7 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
 void LeaderPrompt::draw(const Viewport& view) const {
     if(visibility == 0.0f) return;
     
-    float scale = ease(EASE_METHOD_OUT, visibility);
+    float scale = ease(visibility, EASE_METHOD_OUT);
     
     ALLEGRO_TRANSFORM tra, oldTra;
     al_identity_transform(&tra);
@@ -2322,7 +2322,7 @@ void SystemNotificationManager::draw() const {
     } else if(curNotifState == NOTIF_STATE_HIDING) {
         visibility = 1.0f - curNotifTimer;
     }
-    visibility = ease(EASE_METHOD_OUT, visibility);
+    visibility = ease(visibility, EASE_METHOD_OUT);
     
     Point size(
         game.winW * SYSTEM_NOTIFICATION::WIDTH,

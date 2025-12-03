@@ -180,7 +180,7 @@ struct KeyframeInterpolator {
                     t - keyframeTimes[k - 1];
                 float ratio =
                     relativeT / deltaT;
-                ratio = ease(keyframeEases[k], ratio);
+                ratio = ease(ratio, keyframeEases[k]);
                 return
                     interpolate(
                         keyframeValues[k - 1], keyframeValues[k], ratio
@@ -203,7 +203,7 @@ struct KeyframeInterpolator {
      */
     void add(
         float t, const InterT& value,
-        EASE_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
+        EASE_METHOD easeMethod = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         size_t newIdx = getInsertionIdx(t);
         
@@ -211,7 +211,7 @@ struct KeyframeInterpolator {
         
         keyframeTimes.insert(keyframeTimes.begin() + newIdx, t);
         keyframeValues.insert(keyframeValues.begin() + newIdx, value);
-        keyframeEases.insert(keyframeEases.begin() + newIdx, ease);
+        keyframeEases.insert(keyframeEases.begin() + newIdx, easeMethod);
     }
     
     
@@ -227,7 +227,7 @@ struct KeyframeInterpolator {
      */
     void addOrSet(
         float t, const InterT& value,
-        EASE_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
+        EASE_METHOD easeMethod = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         for(size_t k = 0; k < keyframeTimes.size(); ++k) {
             if(keyframeTimes[k] == t) {
@@ -237,7 +237,7 @@ struct KeyframeInterpolator {
             }
         }
         
-        add(t, value, ease, outIdx);
+        add(t, value, easeMethod, outIdx);
     }
     
     

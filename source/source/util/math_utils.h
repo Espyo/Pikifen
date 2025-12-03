@@ -72,7 +72,7 @@ enum EASE_METHOD {
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
-float ease(const EASE_METHOD method, float n);
+float ease(float n, EASE_METHOD method);
 uint32_t hashNr(uint32_t input);
 uint32_t hashNr2(uint32_t input1, uint32_t input2);
 float inchTowards(float start, float target, float maxStep);

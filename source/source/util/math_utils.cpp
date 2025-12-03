@@ -19,11 +19,11 @@
  * @brief Eases a number [0, 1] in accordance to a non-linear
  * interpolation method.
  *
- * @param method The method to use.
  * @param n The number to ease, in the range [0, 1].
+ * @param method The method to use.
  * @return The eased number.
  */
-float ease(const EASE_METHOD method, float n) {
+float ease(float n, EASE_METHOD method) {
     switch(method) {
     case EASE_METHOD_NONE: {
         return n;
@@ -251,7 +251,7 @@ float simpleNoise(uint32_t seed, float x) {
     float y1f = y1i / (float) UINT32_MAX;
     float y2f = y2i / (float) UINT32_MAX;
     float t = x - x1i;
-    t = ease(EASE_METHOD_IN_OUT, t);
+    t = ease(t, EASE_METHOD_IN_OUT);
     return interpolateNumber(t, 0.0f, 1.0f, y1f, y2f);
 }
 

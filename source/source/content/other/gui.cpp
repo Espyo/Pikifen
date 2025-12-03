@@ -395,49 +395,49 @@ float GuiItem::getJuiceValue() const {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN_ELASTIC) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN_ELASTIC) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN_ELASTIC) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_ICON: {
         float animRatio =
             1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
-            ease(EASE_METHOD_UP_AND_DOWN, animRatio) *
+            ease(animRatio, EASE_METHOD_UP_AND_DOWN) *
             GUI::JUICY_GROW_ICON_MULT;
     }
     default: {
@@ -858,7 +858,7 @@ bool GuiManager::draw() {
         drawTexturedBox(
             focusCursor.curPos, focusCursor.curSize + sizeAddition,
             game.sysContent.bmpFocusBox,
-            mapAlpha(255 * ease(EASE_METHOD_OUT, focusCursor.alpha))
+            mapAlpha(255 * ease(focusCursor.alpha, EASE_METHOD_OUT))
         );
     }
     
@@ -1050,12 +1050,12 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
             
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, startCenter.x, finalCenter.x
                 );
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, startCenter.y, finalCenter.y
                 );
             break;
@@ -1072,12 +1072,12 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
             
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_IN, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
                     0.0f, 1.0f, finalCenter.x, endCenter.x
                 );
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_IN, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
                     0.0f, 1.0f, finalCenter.y, endCenter.y
                 );
             break;
@@ -1085,7 +1085,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.y - game.winH, finalCenter.y
                 );
             break;
@@ -1093,7 +1093,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.y, finalCenter.y - game.winH
                 );
             break;
@@ -1101,7 +1101,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.y + game.winH, finalCenter.y
                 );
             break;
@@ -1109,7 +1109,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
             finalCenter.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.y, finalCenter.y + game.winH
                 );
             break;
@@ -1117,7 +1117,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.x - game.winW, finalCenter.x
                 );
             break;
@@ -1125,7 +1125,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.x, finalCenter.x - game.winW
                 );
             break;
@@ -1133,7 +1133,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.x + game.winW, finalCenter.x
                 );
             break;
@@ -1141,7 +1141,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
             finalCenter.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
                     0.0f, 1.0f, finalCenter.x, finalCenter.x + game.winW
                 );
             break;

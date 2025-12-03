@@ -114,7 +114,7 @@ void InWorldFraction::draw() {
         float timerRatio =
             1 - (transitionTimer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
         alphaMult = timerRatio;
-        sizeMult = ease(EASE_METHOD_OUT, timerRatio) * 0.5 + 0.5;
+        sizeMult = ease(timerRatio, EASE_METHOD_OUT) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
@@ -130,7 +130,7 @@ void InWorldFraction::draw() {
     if(growJuiceTimer > 0.0f) {
         float animRatio =
             1 - (growJuiceTimer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
-        animRatio = ease(EASE_METHOD_UP_AND_DOWN, animRatio);
+        animRatio = ease(animRatio, EASE_METHOD_UP_AND_DOWN);
         sizeMult += IN_WORLD_FRACTION::GROW_JUICE_AMOUNT * animRatio;
     }
     
@@ -146,7 +146,7 @@ void InWorldFraction::draw() {
         float animRatio =
             1.0f -
             (reqMetJuiceTimer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
-        animRatio = ease(EASE_METHOD_UP_AND_DOWN, animRatio);
+        animRatio = ease(animRatio, EASE_METHOD_UP_AND_DOWN);
         sizeMult += IN_WORLD_FRACTION::REQ_MET_GROW_JUICE_AMOUNT * animRatio;
     } else {
         finalColor = color;
@@ -292,7 +292,7 @@ void InWorldHealthWheel::draw() {
             1.0f -
             (transitionTimer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
         alphaMult = timerRatio;
-        sizeMult = ease(EASE_METHOD_OUT, timerRatio) * 0.5 + 0.5;
+        sizeMult = ease(timerRatio, EASE_METHOD_OUT) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {

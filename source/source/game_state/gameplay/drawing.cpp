@@ -689,7 +689,7 @@ void GameplayState::drawGameplayMessageBox() {
     int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
     float boxHeight = lineHeight * 4;
     float offset =
-        boxHeight * ease(EASE_METHOD_IN, transitionRatio);
+        boxHeight * ease(transitionRatio, EASE_METHOD_IN);
         
     //Draw a rectangle to darken gameplay.
     al_draw_filled_rectangle(
@@ -803,10 +803,10 @@ void GameplayState::drawGameplayMessageBox() {
                     thisTokenAnimTime / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
                 x +=
                     GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
-                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
+                    ease(ratio, EASE_METHOD_UP_AND_DOWN_ELASTIC);
                 y +=
                     GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
-                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
+                    ease(ratio, EASE_METHOD_UP_AND_DOWN_ELASTIC);
                 alpha = ratio * 255;
             }
             

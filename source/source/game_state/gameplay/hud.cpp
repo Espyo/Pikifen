@@ -1180,7 +1180,7 @@ Hud::Hud() :
                     Point(gotItX, draw.center.y + draw.size.y / 2.0f),
                     Point(
                         -1,
-                        draw.size.y * ease(EASE_METHOD_OUT_ELASTIC, juiceTime)
+                        draw.size.y * ease(juiceTime, EASE_METHOD_OUT_ELASTIC)
                     ),
                     TAU * 0.05f, draw.tint
                 );

@@ -202,7 +202,7 @@ struct HudBubbleManager {
                 (draw->center.y + matchPos.y) / 2.0f
             );
             float movRatio =
-                ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transitionAnimRatio);
+                ease(1.0f - transitionAnimRatio, EASE_METHOD_IN_OUT_BACK);
             float pivotDist =
                 Distance(draw->center, matchPivot).toFloat();
                 
@@ -212,7 +212,7 @@ struct HudBubbleManager {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
-                            ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
+                            ease(1.0f - transitionAnimRatio, EASE_METHOD_OUT),
                             0.0f, 1.0f,
                             draw->center, matchPos
                         );
@@ -230,7 +230,7 @@ struct HudBubbleManager {
                 }
                 draw->size =
                     interpolatePoint(
-                        ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
+                        ease(1.0f - transitionAnimRatio, EASE_METHOD_OUT),
                         0.0f, 1.0f,
                         draw->size, matchSize
                     );
@@ -241,7 +241,7 @@ struct HudBubbleManager {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
-                            ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
+                            ease(1.0f - transitionAnimRatio, EASE_METHOD_OUT),
                             0.0f, 1.0f,
                             matchPos, draw->center
                         );
@@ -259,7 +259,7 @@ struct HudBubbleManager {
                 }
                 draw->size =
                     interpolatePoint(
-                        ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
+                        ease(1.0f - transitionAnimRatio, EASE_METHOD_OUT),
                         0.0f, 1.0f,
                         matchSize, draw->size
                     );
@@ -272,12 +272,12 @@ struct HudBubbleManager {
             if(transitionAnimRatio > 0.5f) {
                 //First half of the animation. Fade out.
                 draw->size *=
-                    ease(EASE_METHOD_OUT, (transitionAnimRatio - 0.5f) * 2.0f);
+                    ease((transitionAnimRatio - 0.5f) * 2.0f, EASE_METHOD_OUT);
                     
             } else {
                 //Second half of the animation. Fade in.
                 draw->size *=
-                    ease(EASE_METHOD_OUT, 1 - transitionAnimRatio * 2.0f);
+                    ease(1 - transitionAnimRatio * 2.0f, EASE_METHOD_OUT);
                     
             }
         }

@@ -127,7 +127,7 @@ void Ship::drawMob() {
         
         float ringScale =
             interpolateNumber(
-                ease(EASE_METHOD_IN, ringAnimRatio),
+                ease(ringAnimRatio, EASE_METHOD_IN),
                 0.0f, 1.0f,
                 1.0f, 0.3f
             );
