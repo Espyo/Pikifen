@@ -44,7 +44,7 @@ extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
 extern const float CAMERA_BOX_MARGIN;
-extern const float CAMERA_SMOOTHNESS_MULT;
+extern const float CAMERA_SMOOTHNESS_FACTOR;
 extern const unsigned char COLLISION_OPACITY;
 extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;

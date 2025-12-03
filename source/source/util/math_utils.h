@@ -73,6 +73,10 @@ enum EASE_METHOD {
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float ease(float n, EASE_METHOD method);
+float expSmoothing(
+    float currentValue, float targetValue,
+    float smoothingFactor, float deltaT
+);
 uint32_t hashNr(uint32_t input);
 uint32_t hashNr2(uint32_t input1, uint32_t input2);
 float inchTowards(float start, float target, float maxStep);

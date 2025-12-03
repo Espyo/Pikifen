@@ -175,6 +175,10 @@ void coordinatesToAngle(
 );
 float degToRad(float rad);
 float dotProduct(const Point& v1, const Point& v2);
+float expSmoothingAngle(
+    float currentAngle, float targetAngle,
+    float smoothingFactor, float deltaT
+);
 float getAngle(const Point& focus);
 float getAngle(const Point& center, const Point& focus);
 float getAngleCwDiff(float a1, float a2);

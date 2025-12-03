@@ -72,8 +72,8 @@ const float BOSS_MUSIC_DISTANCE = 300.0f;
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
 
-//Dampen the camera's movements by this much.
-const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+//Smoothen the camera's movements by this factor.
+const float CAMERA_SMOOTHNESS_FACTOR = 4.5f;
 
 //Opacity of the collision bubbles in the maker tool.
 const unsigned char COLLISION_OPACITY = 192;

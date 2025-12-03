@@ -261,12 +261,18 @@ void Camera::setZoom(float newZoom) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Camera::tick(float deltaT) {
-    pos.x +=
-        (targetPos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
-    pos.y +=
-        (targetPos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
-    zoom +=
-        (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
+    pos.x =
+        expSmoothing(
+            pos.x, targetPos.x, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+        );
+    pos.y =
+        expSmoothing(
+            pos.y, targetPos.y, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+        );
+    zoom =
+        expSmoothing(
+            zoom, targetZoom, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+        );
 }
 
 

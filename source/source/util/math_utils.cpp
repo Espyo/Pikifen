@@ -112,6 +112,26 @@ float ease(float n, EASE_METHOD method) {
 
 
 /**
+ * @brief Performs exponential smoothing on a number, making it smoothly
+ * go towards a target number, slowing down as it approaches.
+ * 
+ * @param currentValue Current value to smoothen.
+ * @param targetValue The intended target value to transition towards.
+ * @param smoothingFactor How much to smoothen the transition [0 - 1].
+ * @param deltaT Time step amount.
+ * @return The smoothened value.
+ */
+float expSmoothing(
+    float currentValue, float targetValue,
+    float smoothingFactor, float deltaT
+) {
+    return
+        currentValue +
+        (targetValue - currentValue) * (smoothingFactor * deltaT);
+}
+
+
+/**
  * @brief Performs a deterministic weighted random pick,
  * and returns the index of the chosen item.
  *

@@ -961,9 +961,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
         if(goalReqAmount != 0.0f) {
             realGoalRatio = goalCurAmount / (float) goalReqAmount;
         }
-        goalIndicatorRatio +=
-            (realGoalRatio - goalIndicatorRatio) *
-            (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
+        goalIndicatorRatio =
+            expSmoothing(
+                goalIndicatorRatio, realGoalRatio,
+                HUD::GOAL_INDICATOR_SMOOTHNESS_FACTOR, deltaT
+            );
             
         if(game.curAreaData->mission.failHudPrimaryCond != INVALID) {
             float realFailRatio = 0.0f;
@@ -978,9 +980,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
             if(failReqAmount != 0.0f) {
                 realFailRatio = failCurAmount / (float) failReqAmount;
             }
-            fail1IndicatorRatio +=
-                (realFailRatio - fail1IndicatorRatio) *
-                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
+            fail1IndicatorRatio =
+                expSmoothing(
+                    fail1IndicatorRatio, realFailRatio,
+                    HUD::GOAL_INDICATOR_SMOOTHNESS_FACTOR, deltaT
+                );
         }
         
         if(game.curAreaData->mission.failHudSecondaryCond != INVALID) {
@@ -996,9 +1000,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
             if(failReqAmount != 0.0f) {
                 realFailRatio = failCurAmount / (float) failReqAmount;
             }
-            fail2IndicatorRatio +=
-                (realFailRatio - fail2IndicatorRatio) *
-                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
+            fail2IndicatorRatio =
+                expSmoothing(
+                    fail2IndicatorRatio, realFailRatio,
+                    HUD::GOAL_INDICATOR_SMOOTHNESS_FACTOR, deltaT
+                );
         }
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
@@ -1053,9 +1059,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 oldMissionScore = missionScore;
             }
             
-            scoreFlapper +=
-                (missionScore - scoreFlapper) *
-                (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * deltaT);
+            scoreFlapper =
+                expSmoothing(
+                    scoreFlapper, missionScore,
+                    HUD::SCORE_INDICATOR_SMOOTHNESS_FACTOR, deltaT
+                );
                 
             medalGotItJuiceTimer += deltaT;
             

@@ -64,8 +64,8 @@ const float FOCUS_CURSOR_FADE_GROW_OFFSET = 30.0f;
 //The focus cursor's is these many pixels larger than the item.
 const float FOCUS_CURSOR_SIZE_ADDER = 10.0f;
 
-//Dampen the focus cursor's position or size changes by this much.
-const float FOCUS_CURSOR_SMOOTHNESS_MULT = 15.0f;
+//Smoothen the focus cursor's position or size changes by this factor.
+const float FOCUS_CURSOR_SMOOTHNESS_FACTOR = 15.0f;
 
 //When an item does a juicy grow, this is the full effect duration.
 const float JUICY_GROW_DURATION = 0.3f;
@@ -1628,9 +1628,9 @@ bool GuiManager::tick(float deltaT) {
     Point posDelta = focusCursor.intendedPos - focusCursor.curPos;
     Point sizeDelta = focusCursor.intendedSize - focusCursor.curSize;
     focusCursor.curPos +=
-        posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
     focusCursor.curSize +=
-        sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_MULT * deltaT);
+        sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
         
     return true;
 }

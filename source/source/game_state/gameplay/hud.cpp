@@ -25,8 +25,8 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace HUD {
 
-//Dampen the mission goal indicator's movement by this much.
-const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
+//Smoothen the mission goal indicator's movement by this factor.
+const float GOAL_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "gameplay";
@@ -53,8 +53,8 @@ const float MEDAL_ICON_SCALE_NEXT = 1.5f;
 //Multiply time by this much to get the right scale animation speed.
 const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
 
-//Dampen the mission score indicator's movement by this much.
-const float SCORE_INDICATOR_SMOOTHNESS_MULT = 5.5f;
+//Smoothen the mission score indicator's movement by this factor.
+const float SCORE_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 
 //Ratio of the score gamut to show around the mission score ruler flapper.
 const float SCORE_RULER_RATIO_RANGE = 0.20f;

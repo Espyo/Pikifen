@@ -46,7 +46,7 @@ extern const float FOCUS_CURSOR_BOB_OFFSET;
 extern const float FOCUS_CURSOR_BOB_TIME_MULT;
 extern const float FOCUS_CURSOR_FADE_GROW_OFFSET;
 extern const float FOCUS_CURSOR_SIZE_ADDER;
-extern const float FOCUS_CURSOR_SMOOTHNESS_MULT;
+extern const float FOCUS_CURSOR_SMOOTHNESS_FACTOR;
 extern const float JUICY_GROW_DURATION;
 extern const float JUICY_GROW_ELASTIC_DURATION;
 extern const float JUICY_GROW_ICON_MULT;

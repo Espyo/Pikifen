@@ -949,6 +949,29 @@ float dotProduct(const Point& v1, const Point& v2) {
 
 
 /**
+ * @brief Performs an exponential smoothing on an angle, making it smoothly
+ * go towards a target angle, in whichever direction is shortest,
+ * slowing down as it approaches.
+ * 
+ * @param currentAngle Current angle to smoothen.
+ * @param targetAngle The intended target angle to transition towards.
+ * @param smoothingFactor How much to smoothen the transition [0 - 1].
+ * @param deltaT Time step amount.
+ * @return The smoothened angle.
+ */
+float expSmoothingAngle(
+    float currentAngle, float targetAngle,
+    float smoothingFactor, float deltaT
+) {
+    float angleDiff =
+        fmod(targetAngle - currentAngle + TAU + TAU / 2.0f, TAU) - TAU / 2.0f;
+    return
+        currentAngle +
+        angleDiff * (smoothingFactor * deltaT);
+}
+
+
+/**
  * @brief Returns the angle from the origin and the specified point.
  *
  * @param focus Point that the origin is focusing on.
