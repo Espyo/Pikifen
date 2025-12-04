@@ -38,8 +38,10 @@ void AnnexScreen::doDrawing() {
  */
 void AnnexScreen::doLogic() {
     if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.playerActions.size(); a++) {
-            if(curMenu) curMenu->handlePlayerAction(game.playerActions[a]);
+        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+            if(curMenu) {
+                curMenu->handlePlayerAction(game.controls.actionQueue[a]);
+            }
         }
     }
     

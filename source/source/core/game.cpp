@@ -320,18 +320,18 @@ void Game::globalLogicPost() {
  * logic.
  */
 void Game::globalLogicPre() {
-    if(debug.printActions && !playerActions.empty()) {
+    if(debug.printActions && !controls.actionQueue.empty()) {
         std::cout << "Actions: ";
-        for(size_t a = 0; a < playerActions.size(); a++) {
+        for(size_t a = 0; a < controls.actionQueue.size(); a++) {
             string actionName =
                 controls.getActionTypeById(
-                    (PLAYER_ACTION_TYPE) playerActions[a].actionTypeId
+                    (PLAYER_ACTION_TYPE) controls.actionQueue[a].actionTypeId
                 ).name;
             std::cout << resizeString(actionName, 15);
             std::cout << " ";
-            std::cout << resizeString(f2s(playerActions[a].value), 3);
-            std::cout << " F" << (unsigned int) playerActions[a].flags;
-            if(a < playerActions.size() - 1) {
+            std::cout << resizeString(f2s(controls.actionQueue[a].value), 3);
+            std::cout << " F" << (unsigned int) controls.actionQueue[a].flags;
+            if(a < controls.actionQueue.size() - 1) {
                 std::cout << " | ";
             }
         }
@@ -339,11 +339,11 @@ void Game::globalLogicPre() {
     }
     
     //Player action handling.
-    for(size_t a = 0; a < playerActions.size();) {
-        if(makerTools.handleGeneralPlayerAction(playerActions[a])) {
-            playerActions.erase(playerActions.begin() + a);
-        } else if(globalHandleSystemPlayerAction(playerActions[a])) {
-            playerActions.erase(playerActions.begin() + a);
+    for(size_t a = 0; a < controls.actionQueue.size();) {
+        if(makerTools.handleGeneralPlayerAction(controls.actionQueue[a])) {
+            controls.actionQueue.erase(controls.actionQueue.begin() + a);
+        } else if(globalHandleSystemPlayerAction(controls.actionQueue[a])) {
+            controls.actionQueue.erase(controls.actionQueue.begin() + a);
         } else {
             a++;
         }
@@ -421,7 +421,7 @@ void Game::mainLoop() {
                 timePassed += deltaT;
                 GameState* prevState = curState;
                 
-                playerActions = controls.newFrame(deltaT);
+                controls.newFrame(deltaT);
                 globalLogicPre();
                 curState->doLogic();
                 globalLogicPost();

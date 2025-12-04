@@ -210,9 +210,6 @@ public:
     //Performance monitor.
     PerformanceMonitor* perfMon = nullptr;
     
-    //Player actions in this frame.
-    vector<Inpution::Action> playerActions;
-    
     //List of all possible inventory items.
     InventoryItemDatabase inventoryItems;
     

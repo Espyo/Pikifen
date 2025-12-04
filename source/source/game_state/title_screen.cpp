@@ -175,10 +175,11 @@ void TitleScreen::doLogic() {
     }
     
     if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.playerActions.size(); a++) {
-            bool handled = mainMenu.handlePlayerAction(game.playerActions[a]);
+        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+            bool handled =
+                mainMenu.handlePlayerAction(game.controls.actionQueue[a]);
             if(!handled) {
-                game.controls.reinsertAction(game.playerActions[a]);
+                game.controls.reinsertAction(game.controls.actionQueue[a]);
             }
         }
     }

@@ -164,8 +164,8 @@ void Results::doDrawing() {
  */
 void Results::doLogic() {
     if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.playerActions.size(); a++) {
-            gui.handlePlayerAction(game.playerActions[a]);
+        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+            gui.handlePlayerAction(game.controls.actionQueue[a]);
         }
     }
     

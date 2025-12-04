@@ -26,6 +26,23 @@
 
 
 /**
+ * @brief Returns whether the action queue contains an action of the given
+ * action type.
+ *
+ * @param actionTypeId Action type to check.
+ * @return Whether it contains.
+ */
+bool ControlsMediator::actionQueueContains(
+    PLAYER_ACTION_TYPE actionTypeId
+) const {
+    for(size_t a = 0; a < actionQueue.size(); a++) {
+        if(actionQueue[a].actionTypeId == actionTypeId) return true;
+    }
+    return false;
+}
+
+
+/**
  * @brief Returns whether the given action types have any binds where any of
  * them end up sharing an input source with another one.
  *
@@ -470,14 +487,13 @@ void ControlsMediator::loadBindsFromDataNode(
 
 
 /**
- * @brief Returns the player actions that occurred during the last frame
- * of gameplay, and begins a new frame.
+ * @brief Stores the player actions that occurred during the last frame
+ * of gameplay in actionQueue, and begins a new frame.
  *
  * @param deltaT How much time has passed since the last frame.
- * @return The player actions.
  */
-vector<Inpution::Action> ControlsMediator::newFrame(float deltaT) {
-    return mgr.newFrame(deltaT);
+void ControlsMediator::newFrame(float deltaT) {
+    actionQueue = mgr.newFrame(deltaT);
 }
 
 

@@ -383,9 +383,10 @@ struct ControlsMediator {
     Inpution::InputSource strToInputSource(const string& s) const;
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
 
+    bool actionQueueContains(PLAYER_ACTION_TYPE actionTypeId) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void ignoreMenuCloseActions();
-    vector<Inpution::Action> newFrame(float deltaT);
+    void newFrame(float deltaT);
     void reinsertAction(const Inpution::Action& action);
     void releaseAll();
     void setGameState(CONTROLS_GAME_STATE state);
@@ -402,6 +403,13 @@ struct ControlsMediator {
     bool actionTypesShareInputSource(
         const vector<PLAYER_ACTION_TYPE> actionTypes
     );
+
+
+    //--- Members ---
+
+    //Player actions in this frame.
+    vector<Inpution::Action> actionQueue;
+
 
     private:
     

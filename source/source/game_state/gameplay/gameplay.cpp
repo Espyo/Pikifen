@@ -430,11 +430,17 @@ void GameplayState::doLogic() {
     }
     
     //Controls.
-    for(size_t a = 0; a < game.playerActions.size(); a++) {
-        handlePlayerAction(game.playerActions[a]);
-        if(onionMenu) onionMenu->handlePlayerAction(game.playerActions[a]);
-        if(pauseMenu) pauseMenu->handlePlayerAction(game.playerActions[a]);
-        game.makerTools.handleGameplayPlayerAction(game.playerActions[a]);
+    for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+        handlePlayerAction(game.controls.actionQueue[a]);
+        if(onionMenu) {
+            onionMenu->handlePlayerAction(game.controls.actionQueue[a]);
+        }
+        if(pauseMenu) {
+            pauseMenu->handlePlayerAction(game.controls.actionQueue[a]);
+        }
+        game.makerTools.handleGameplayPlayerAction(
+            game.controls.actionQueue[a]
+        );
     }
     
     //Game logic.

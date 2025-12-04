@@ -1685,6 +1685,42 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
                 radarConfirm();
                 handledByRadar = true;
                 break;
+            } case PLAYER_ACTION_TYPE_MENU_RIGHT: {
+                if(
+                  game.controls.actionQueueContains(
+                        PLAYER_ACTION_TYPE_RADAR_RIGHT
+                    )
+                ) {
+                    handledByRadar = true;
+                }
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_DOWN: {
+                if(
+                  game.controls.actionQueueContains(
+                        PLAYER_ACTION_TYPE_RADAR_DOWN
+                    )
+                ) {
+                    handledByRadar = true;
+                }
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_LEFT: {
+                if(
+                  game.controls.actionQueueContains(
+                        PLAYER_ACTION_TYPE_RADAR_LEFT
+                    )
+                ) {
+                    handledByRadar = true;
+                }
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_UP: {
+                if(
+                  game.controls.actionQueueContains(
+                        PLAYER_ACTION_TYPE_RADAR_UP
+                    )
+                ) {
+                    handledByRadar = true;
+                }
+                break;
             }
             }
         }
