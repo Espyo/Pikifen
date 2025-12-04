@@ -44,6 +44,9 @@ const size_t MAX_PARTICLES = 1000;
 //Default value for whether mipmaps are enabled.
 const bool MIPMAPS_ENABLED = true;
 
+//Default value for whether to enter pause menu when window focus is lost.
+const bool PAUSE_ON_FOCUS_LOST = true;
+
 //Default value for whether shader compatibility mode is enabled.
 const bool SHADER_COMPATIBILITY_MODE = false;
 
@@ -297,6 +300,7 @@ void Options::loadFromDataNode(DataNode* file) {
         aRS.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aRS.set("max_particles", advanced.maxParticles);
         aRS.set("mipmaps", advanced.mipmapsEnabled);
+        aRS.set("pause_on_focus_lost", advanced.pauseOnFocusLost);
         aRS.set("shader_compatibility_mode", advanced.shaderCompatMode);
         aRS.set("smooth_scaling", advanced.smoothScaling);
         aRS.set("window_position_hack", advanced.windowPosHack);
@@ -594,6 +598,7 @@ void Options::saveToDataNode(DataNode* file) const {
         aGW.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
         aGW.write("max_particles", advanced.maxParticles);
         aGW.write("mipmaps", advanced.mipmapsEnabled);
+        aGW.write("pause_on_focus_lost", advanced.pauseOnFocusLost);
         aGW.write("shader_compatibility_mode", advanced.shaderCompatMode);
         aGW.write("smooth_scaling", advanced.smoothScaling);
         aGW.write("window_position_hack", advanced.windowPosHack);

@@ -71,6 +71,7 @@ extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
 extern const size_t MAX_PARTICLES;
 extern const bool MIPMAPS_ENABLED;
+extern const bool PAUSE_ON_FOCUS_LOST;
 extern const bool SHADER_COMPATIBILITY_MODE;
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
@@ -198,6 +199,9 @@ struct Options {
         
         //Enables or disables mipmaps.
         bool mipmapsEnabled = ADVANCED_D::MIPMAPS_ENABLED;
+        
+        //Enter the pause menu when window focus is lost?
+        bool pauseOnFocusLost = ADVANCED_D::PAUSE_ON_FOCUS_LOST;
         
         //Shader compatibility mode, which simply disables failed shaders.
         bool shaderCompatMode = ADVANCED_D::SHADER_COMPATIBILITY_MODE;
