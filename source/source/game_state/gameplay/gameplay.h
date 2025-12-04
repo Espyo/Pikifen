@@ -32,6 +32,7 @@
 namespace GAMEPLAY {
 extern const float AREA_INTRO_HUD_MOVE_TIME;
 extern const float AREA_TITLE_FADE_DURATION;
+extern const float AREA_TITLE_FADE_DURATION_FAST;
 extern const float BIG_MSG_GO_DUR;
 extern const string BIG_MSG_GO_TEXT;
 extern const float BIG_MSG_MISSION_CLEAR_DUR;
@@ -199,7 +200,7 @@ public:
     float areaTimePassed = 0.0f;
     
     //Timer used to fade out the area's title when the area is entered.
-    Timer areaTitleFadeTimer = Timer(GAMEPLAY::AREA_TITLE_FADE_DURATION);
+    Timer areaTitleFadeTimer;
     
     //Leaders available to control.
     vector<Leader*> availableLeaders;

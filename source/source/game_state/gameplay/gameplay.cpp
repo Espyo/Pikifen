@@ -36,6 +36,9 @@ const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 1.0f;
 
+//How long it takes for the area name to fade away, in-game, with quick play.
+const float AREA_TITLE_FADE_DURATION_FAST = 0.3f;
+
 //How long the "Go!" big message lasts for.
 const float BIG_MSG_GO_DUR = 1.5f;
 
@@ -1098,10 +1101,14 @@ void GameplayState::load() {
     }
     players[0].team = &playerTeams[0];
     
+    areaTitleFadeTimer.start(
+        game.quickPlay.areaPath.empty() ?
+        GAMEPLAY::AREA_TITLE_FADE_DURATION :
+        GAMEPLAY::AREA_TITLE_FADE_DURATION_FAST
+    );
     areaTimePassed = 0.0f;
     gameplayTimePassed = 0.0f;
     game.makerTools.resetForGameplay();
-    areaTitleFadeTimer.start();
     
     afterHours = false;
     pikminBorn = 0;
@@ -1496,7 +1503,9 @@ void GameplayState::load() {
     if(game.perfMon) {
         game.perfMon->setAreaName(game.curAreaData->name);
         game.perfMon->leaveState();
-        game.console.write("The performance monitor maker tool is running.", 10);
+        game.console.write(
+            "The performance monitor maker tool is running.", 10
+        );
     }
     
     enter();
