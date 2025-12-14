@@ -727,9 +727,9 @@ void Leader::drawMob() {
         
         if(sparkS && sparkS->bitmap) {
             BitmapEffect sparkEff = eff;
-            Point size = getBitmapDimensions(curSPtr->bitmap) * eff.scale;
+            Point size = getBitmapDimensions(curSPtr->bitmap) * eff.tf.scale;
             Point sparkSize = getBitmapDimensions(sparkS->bitmap);
-            sparkEff.scale = size / sparkSize;
+            sparkEff.tf.scale = size / sparkSize;
             drawBitmapWithEffects(sparkS->bitmap, sparkEff);
         }
     }

@@ -1689,10 +1689,10 @@ void Mob::drawLimb() {
     float length = Distance(parentEnd, childEnd).toFloat();
     Point limbBmpSize = getBitmapDimensions(limbCurSPtr->bitmap);
     
-    eff.translation = (parentEnd + childEnd) / 2.0;
-    eff.scale.x = length / limbBmpSize.x;
-    eff.scale.y = parent->limbThickness / limbBmpSize.y;
-    eff.rotation = p2cAngle;
+    eff.tf.trans = (parentEnd + childEnd) / 2.0;
+    eff.tf.scale.x = length / limbBmpSize.x;
+    eff.tf.scale.y = parent->limbThickness / limbBmpSize.y;
+    eff.tf.rot = p2cAngle;
     
     drawBitmapWithEffects(limbCurSPtr->bitmap, eff);
 }
@@ -2275,10 +2275,10 @@ void Mob::getSpriteBitmapEffects(
             &effTrans, &effAngle, &effScale, &effTint
         );
         
-        info->translation += effTrans;
-        info->rotation += effAngle;
-        info->scale.x *= effScale.x;
-        info->scale.y *= effScale.y;
+        info->tf.trans += effTrans;
+        info->tf.rot += effAngle;
+        info->tf.scale.x *= effScale.x;
+        info->tf.scale.y *= effScale.y;
         info->tintColor.r *= effTint.r;
         info->tintColor.g *= effTint.g;
         info->tintColor.b *= effTint.b;
@@ -2324,7 +2324,7 @@ void Mob::getSpriteBitmapEffects(
             }
             
             if(t->shakingEffect != 0.0f) {
-                info->translation.x +=
+                info->tf.trans.x +=
                     sin(
                         game.states.gameplay->areaTimePassed *
                         MOB::STATUS_SHAKING_TIME_MULT
@@ -2425,7 +2425,7 @@ void Mob::getSpriteBitmapEffects(
                     (z - groundSector->z) /
                     (heightEffectPivot - groundSector->z);
             }
-            info->scale *= heightEffectScale;
+            info->tf.scale *= heightEffectScale;
         }
     }
     
@@ -2501,8 +2501,8 @@ void Mob::getSpriteBitmapEffects(
             }
             
             info->colorize = colorizerColor;
-            info->scale *= newScale;
-            info->translation += newOffset;
+            info->tf.trans += newOffset;
+            info->tf.scale *= newScale;
             break;
         }
         case DELIVERY_ANIM_TOSS: {
@@ -2550,8 +2550,8 @@ void Mob::getSpriteBitmapEffects(
                     );
             }
             
-            info->translation += newOffset;
-            info->scale *= newScale;
+            info->tf.trans += newOffset;
+            info->tf.scale *= newScale;
             break;
         }
         }
@@ -2586,8 +2586,8 @@ void Mob::getSpriteBitmapEffects(
             damageScaleY *= -MOB::DAMAGE_SQUASH_AMOUNT;
         }
         damageScaleY += 1.0f;
-        info->scale.y *= damageScaleY;
-        info->scale.x *= 1.0f / damageScaleY;
+        info->tf.scale.y *= damageScaleY;
+        info->tf.scale.x *= 1.0f / damageScaleY;
     }
     
     //Carry sway.
@@ -2606,11 +2606,11 @@ void Mob::getSpriteBitmapEffects(
                     game.states.gameplay->areaTimePassed *
                     MOB::CARRY_SWAY_TIME_MULT * 2.0f
                 );
-            info->translation.x -=
+            info->tf.trans.x -=
                 factor1 * MOB::CARRY_SWAY_X_TRANSLATION_AMOUNT;
-            info->translation.y -=
+            info->tf.trans.y -=
                 factor2 * MOB::CARRY_SWAY_Y_TRANSLATION_AMOUNT;
-            info->rotation -=
+            info->tf.rot -=
                 factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
     }

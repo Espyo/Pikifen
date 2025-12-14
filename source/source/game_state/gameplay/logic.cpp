@@ -768,7 +768,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             }
             
             if(sPtr->scroll.x != 0 || sPtr->scroll.y != 0) {
-                sPtr->textureInfo.translation += sPtr->scroll * deltaT;
+                sPtr->textureInfo.tf.trans += sPtr->scroll * deltaT;
             }
         }
         

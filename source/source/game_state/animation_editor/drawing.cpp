@@ -256,19 +256,20 @@ void AnimationEditor::drawCanvas() {
         }
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-            Point curSpriteSize = curSprite->scale * curSprite->bmpSize;
+            Point curSpriteSize =
+                curSprite->tf.scale * curSprite->bmpSize;
             curTransformationWidget.draw(
-                &curSprite->offset,
+                &curSprite->tf.trans,
                 &curSpriteSize,
-                &curSprite->angle,
+                &curSprite->tf.rot,
                 1.0f / game.editorsView.cam.zoom
             );
             
         } else if(state == EDITOR_STATE_TOP && s->topVisible) {
             curTransformationWidget.draw(
-                &s->topPos,
-                &s->topSize,
-                &s->topAngle,
+                &s->topPose.pos,
+                &s->topPose.size,
+                &s->topPose.angle,
                 1.0f / game.editorsView.cam.zoom
             );
             
@@ -380,12 +381,12 @@ void AnimationEditor::drawComparison() {
         }
         drawBitmap(
             comparisonSprite->bitmap,
-            comparisonSprite->offset,
+            comparisonSprite->tf.trans,
             Point(
-                comparisonSprite->bmpSize.x * comparisonSprite->scale.x,
-                comparisonSprite->bmpSize.y * comparisonSprite->scale.y
+                comparisonSprite->bmpSize.x * comparisonSprite->tf.scale.x,
+                comparisonSprite->bmpSize.y * comparisonSprite->tf.scale.y
             ),
-            comparisonSprite->angle, tint
+            comparisonSprite->tf.rot, tint
         );
     }
 }
@@ -468,7 +469,7 @@ void AnimationEditor::drawSideViewSprite(const Sprite* s) {
     ALLEGRO_COLOR color = COLOR_EMPTY;
     
     getTransformedRectangleBBox(
-        s->offset, s->bmpSize * s->scale, s->angle,
+        s->tf.trans, s->bmpSize * s->tf.scale, s->tf.rot,
         &min, &max
     );
     max.y = 0; //Bottom aligns with the floor.

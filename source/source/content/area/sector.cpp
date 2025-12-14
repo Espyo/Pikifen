@@ -87,9 +87,9 @@ void Sector::clone(Sector* destination) const {
     destination->hazard = hazard;
     destination->hazardFloor = hazardFloor;
     destination->brightness = brightness;
-    destination->textureInfo.scale = textureInfo.scale;
-    destination->textureInfo.translation = textureInfo.translation;
-    destination->textureInfo.rot = textureInfo.rot;
+    destination->textureInfo.tf.scale = textureInfo.tf.scale;
+    destination->textureInfo.tf.trans = textureInfo.tf.trans;
+    destination->textureInfo.tf.rot = textureInfo.tf.rot;
     destination->textureInfo.tint = textureInfo.tint;
     destination->fade = fade;
 }

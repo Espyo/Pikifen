@@ -444,15 +444,15 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
         
         sRS.set("file_pos", newSprite->bmpPos);
         sRS.set("file_size", newSprite->bmpSize);
-        sRS.set("offset", newSprite->offset);
-        sRS.set("scale", newSprite->scale);
-        sRS.set("angle", newSprite->angle);
+        sRS.set("offset", newSprite->tf.trans);
+        sRS.set("scale", newSprite->tf.scale);
+        sRS.set("angle", newSprite->tf.rot);
         sRS.set("tint", newSprite->tint);
         sRS.set("file", newSprite->bmpName, &bmpNameNode);
         sRS.set("top_visible", newSprite->topVisible);
-        sRS.set("top_pos", newSprite->topPos);
-        sRS.set("top_size", newSprite->topSize);
-        sRS.set("top_angle", newSprite->topAngle);
+        sRS.set("top_pos", newSprite->topPose.pos);
+        sRS.set("top_size", newSprite->topPose.size);
+        sRS.set("top_angle", newSprite->topPose.angle);
         
         //Hitboxes.
         DataNode* hitboxesNode = spriteNode->getChildByName("hitboxes");
@@ -617,14 +617,14 @@ void AnimationDatabase::saveToDataNode(
         sGW.write("file", spritePtr->bmpName);
         sGW.write("file_pos", spritePtr->bmpPos);
         sGW.write("file_size", spritePtr->bmpSize);
-        if(spritePtr->offset.x != 0.0 || spritePtr->offset.y != 0.0) {
-            sGW.write("offset", spritePtr->offset);
+        if(spritePtr->tf.trans.x != 0.0 || spritePtr->tf.trans.y != 0.0) {
+            sGW.write("offset", spritePtr->tf.trans);
         }
-        if(spritePtr->scale.x != 1.0 || spritePtr->scale.y != 1.0) {
-            sGW.write("scale", spritePtr->scale);
+        if(spritePtr->tf.scale.x != 1.0 || spritePtr->tf.scale.y != 1.0) {
+            sGW.write("scale", spritePtr->tf.scale);
         }
-        if(spritePtr->angle != 0.0) {
-            sGW.write("angle", spritePtr->angle);
+        if(spritePtr->tf.rot != 0.0) {
+            sGW.write("angle", spritePtr->tf.rot);
         }
         if(spritePtr->tint != COLOR_WHITE) {
             sGW.write("tint", spritePtr->tint);
@@ -632,9 +632,9 @@ void AnimationDatabase::saveToDataNode(
         
         if(saveTopData) {
             sGW.write("top_visible", spritePtr->topVisible);
-            sGW.write("top_pos", spritePtr->topPos);
-            sGW.write("top_size", spritePtr->topSize);
-            sGW.write("top_angle", spritePtr->topAngle);
+            sGW.write("top_pos", spritePtr->topPose.pos);
+            sGW.write("top_size", spritePtr->topPose.size);
+            sGW.write("top_angle", spritePtr->topPose.angle);
         }
         
         if(!spritePtr->hitboxes.empty()) {
@@ -1058,13 +1058,9 @@ Sprite::Sprite(const Sprite& s2) :
     bmpName(s2.bmpName),
     bmpPos(s2.bmpPos),
     bmpSize(s2.bmpSize),
-    offset(s2.offset),
-    scale(s2.scale),
-    angle(s2.angle),
+    tf(s2.tf),
     tint(s2.tint),
-    topPos(s2.topPos),
-    topSize(s2.topSize),
-    topAngle(s2.topAngle),
+    topPose(s2.topPose),
     topVisible(s2.topVisible),
     bitmap(nullptr),
     hitboxes(s2.hitboxes) {
@@ -1117,13 +1113,9 @@ Sprite& Sprite::operator=(const Sprite& s2) {
         parentBmp = nullptr;
         bmpPos = s2.bmpPos;
         bmpSize = s2.bmpSize;
-        offset = s2.offset;
-        scale = s2.scale;
-        angle = s2.angle;
+        tf = s2.tf;
         tint = s2.tint;
-        topPos = s2.topPos;
-        topSize = s2.topSize;
-        topAngle = s2.topAngle;
+        topPose = s2.topPose;
         topVisible = s2.topVisible;
         bitmap = nullptr;
         hitboxes = s2.hitboxes;
@@ -1233,18 +1225,18 @@ void getSpriteBasicEffects(
     if(outEffTrans) {
         outEffTrans->x =
             basePos.x +
-            baseAngleCosCache * curSpritePtr->offset.x -
-            baseAngleSinCache * curSpritePtr->offset.y;
+            baseAngleCosCache * curSpritePtr->tf.trans.x -
+            baseAngleSinCache * curSpritePtr->tf.trans.y;
         outEffTrans->y =
             basePos.y +
-            baseAngleSinCache * curSpritePtr->offset.x +
-            baseAngleCosCache * curSpritePtr->offset.y;
+            baseAngleSinCache * curSpritePtr->tf.trans.x +
+            baseAngleCosCache * curSpritePtr->tf.trans.y;
     }
     if(outEffAngle) {
-        *outEffAngle = baseAngle + curSpritePtr->angle;
+        *outEffAngle = baseAngle + curSpritePtr->tf.rot;
     }
     if(outEffScale) {
-        *outEffScale = curSpritePtr->scale;
+        *outEffScale = curSpritePtr->tf.scale;
     }
     if(outEffTint) {
         *outEffTint = curSpritePtr->tint;
@@ -1253,14 +1245,14 @@ void getSpriteBasicEffects(
     if(nextSpritePtr && interpolationFactor > 0.0f) {
         Point nextTrans(
             basePos.x +
-            baseAngleCosCache * nextSpritePtr->offset.x -
-            baseAngleSinCache * nextSpritePtr->offset.y,
+            baseAngleCosCache * nextSpritePtr->tf.trans.x -
+            baseAngleSinCache * nextSpritePtr->tf.trans.y,
             basePos.y +
-            baseAngleSinCache * nextSpritePtr->offset.x +
-            baseAngleCosCache * nextSpritePtr->offset.y
+            baseAngleSinCache * nextSpritePtr->tf.trans.x +
+            baseAngleCosCache * nextSpritePtr->tf.trans.y
         );
-        float nextAngle = baseAngle + nextSpritePtr->angle;
-        Point nextScale = nextSpritePtr->scale;
+        float nextAngle = baseAngle + nextSpritePtr->tf.rot;
+        Point nextScale = nextSpritePtr->tf.scale;
         ALLEGRO_COLOR nextTint = nextSpritePtr->tint;
         
         if(outEffTrans) {
@@ -1317,19 +1309,19 @@ void getSpriteBasicTopEffects(
     Point* outEffSize
 ) {
     if(outEffTrans) {
-        *outEffTrans = curSpritePtr->topPos;
+        *outEffTrans = curSpritePtr->topPose.pos;
     }
     if(outEffAngle) {
-        *outEffAngle = curSpritePtr->topAngle;
+        *outEffAngle = curSpritePtr->topPose.angle;
     }
     if(outEffSize) {
-        *outEffSize = curSpritePtr->topSize;
+        *outEffSize = curSpritePtr->topPose.size;
     }
     
     if(nextSpritePtr && interpolationFactor > 0.0f) {
-        Point nextTrans = nextSpritePtr->topPos;
-        float nextAngle = nextSpritePtr->topAngle;
-        Point nextSize = nextSpritePtr->topSize;
+        Point nextTrans = nextSpritePtr->topPose.pos;
+        float nextAngle = nextSpritePtr->topPose.angle;
+        Point nextSize = nextSpritePtr->topPose.size;
         
         if(outEffTrans) {
             *outEffTrans =

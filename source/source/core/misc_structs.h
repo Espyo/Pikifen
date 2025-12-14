@@ -1412,14 +1412,8 @@ struct BitmapEffect {
 
     //--- Members ---
     
-    //Offset horizontally and vertically by this much.
-    Point translation;
-    
-    //Rotate the bitmap by this angle, in radians.
-    float rotation = 0.0f;
-    
-    //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
-    Point scale = Point(1.0f);
+    //Transformation data.
+    Transform2d tf;
     
     //Tint the bitmap by this color. Also makes it transparent.
     ALLEGRO_COLOR tintColor = COLOR_WHITE;

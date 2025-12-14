@@ -1989,8 +1989,8 @@ void AreaEditor::goToProblem() {
 
         Point minCoords, maxCoords;
         getTransformedRectangleBBox(
-            problemShadowPtr->center, problemShadowPtr->size,
-            problemShadowPtr->angle, &minCoords, &maxCoords
+            problemShadowPtr->pose.pos, problemShadowPtr->pose.size,
+            problemShadowPtr->pose.angle, &minCoords, &maxCoords
         );
         
         changeState(EDITOR_STATE_DETAILS);

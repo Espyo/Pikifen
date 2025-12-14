@@ -154,17 +154,17 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        Point curSpriteSize = curSprite->scale * curSprite->bmpSize;
+        Point curSpriteSize = curSprite->tf.scale * curSprite->bmpSize;
         if(
             curTransformationWidget.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
-                &curSprite->offset,
+                &curSprite->tf.trans,
                 &curSpriteSize,
-                &curSprite->angle,
+                &curSprite->tf.rot,
                 1.0f / game.editorsView.cam.zoom
             )
         ) {
-            curSprite->scale = curSpriteSize / curSprite->bmpSize;
+            curSprite->tf.scale = curSpriteSize / curSprite->bmpSize;
         }
         break;
         
@@ -341,9 +341,9 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         if(curSprite && curSprite->topVisible) {
             curTransformationWidget.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
-                &curSprite->topPos,
-                &curSprite->topSize,
-                &curSprite->topAngle,
+                &curSprite->topPose.pos,
+                &curSprite->topPose.size,
+                &curSprite->topPose.angle,
                 1.0f / game.editorsView.cam.zoom
             );
         }
@@ -367,13 +367,13 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        Point curSpriteSize = curSprite->scale * curSprite->bmpSize;
+        Point curSpriteSize = curSprite->tf.scale * curSprite->bmpSize;
         if(
             curTransformationWidget.handleMouseMove(
                 game.editorsView.mouseCursorWorldPos,
-                &curSprite->offset,
+                &curSprite->tf.trans,
                 &curSpriteSize,
-                &curSprite->angle,
+                &curSprite->tf.rot,
                 1.0f / game.editorsView.cam.zoom,
                 curSpriteKeepAspectRatio,
                 curSpriteKeepArea,
@@ -381,7 +381,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 isAltPressed
             )
         ) {
-            curSprite->scale = curSpriteSize / curSprite->bmpSize;
+            curSprite->tf.scale = curSpriteSize / curSprite->bmpSize;
             changesMgr.markAsChanged();
         }
         break;
@@ -443,9 +443,9 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             if(
                 curTransformationWidget.handleMouseMove(
                     game.editorsView.mouseCursorWorldPos,
-                    &curSprite->topPos,
-                    &curSprite->topSize,
-                    &curSprite->topAngle,
+                    &curSprite->topPose.pos,
+                    &curSprite->topPose.size,
+                    &curSprite->topPose.angle,
                     1.0f / game.editorsView.cam.zoom,
                     topKeepAspectRatio,
                     false,

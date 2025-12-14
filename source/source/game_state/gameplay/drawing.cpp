@@ -1911,15 +1911,15 @@ void GameplayState::drawTreeShadows() {
         drawBitmap(
             sPtr->bitmap,
             Point(
-                sPtr->center.x + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                sPtr->pose.pos.x + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
                 cos(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * areaTimePassed) *
                 sPtr->sway.x,
-                sPtr->center.y + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                sPtr->pose.pos.y + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
                 sin(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * areaTimePassed) *
                 sPtr->sway.y
             ),
-            sPtr->size,
-            sPtr->angle, mapAlpha(alpha)
+            sPtr->pose.size,
+            sPtr->pose.angle, mapAlpha(alpha)
         );
     }
 }

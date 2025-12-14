@@ -331,10 +331,10 @@ void Area::clone(Area& other) {
         TreeShadow* tPtr = treeShadows[t];
         TreeShadow* otPtr = other.treeShadows[t];
         otPtr->alpha = tPtr->alpha;
-        otPtr->angle = tPtr->angle;
-        otPtr->center = tPtr->center;
+        otPtr->pose.pos = tPtr->pose.pos;
+        otPtr->pose.size = tPtr->pose.size;
+        otPtr->pose.angle = tPtr->pose.angle;
         otPtr->bmpName = tPtr->bmpName;
-        otPtr->size = tPtr->size;
         otPtr->sway = tPtr->sway;
         otPtr->bitmap =
             game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
@@ -968,10 +968,10 @@ void Area::loadGeometryFromDataNode(
         sRS.set("hazards_floor", newSector->hazardFloor);
         sRS.set("is_bottomless_pit", newSector->isBottomlessPit);
         sRS.set("tag", newSector->tag);
-        sRS.set("texture_rotate", newSector->textureInfo.rot);
-        sRS.set("texture_scale", newSector->textureInfo.scale);
+        sRS.set("texture_rotate", newSector->textureInfo.tf.rot);
+        sRS.set("texture_scale", newSector->textureInfo.tf.scale);
         sRS.set("texture_tint", newSector->textureInfo.tint);
-        sRS.set("texture_trans", newSector->textureInfo.translation);
+        sRS.set("texture_trans", newSector->textureInfo.tf.trans);
         sRS.set("texture", newSector->textureInfo.bmpName);
         sRS.set("type", typeStr);
         sRS.set("z", newSector->z);
@@ -1126,9 +1126,9 @@ void Area::loadGeometryFromDataNode(
         ReaderSetter sRS(shadowNode);
         TreeShadow* newShadow = new TreeShadow();
         
-        sRS.set("pos", newShadow->center);
-        sRS.set("size", newShadow->size);
-        sRS.set("angle", newShadow->angle);
+        sRS.set("pos", newShadow->pose.pos);
+        sRS.set("size", newShadow->pose.size);
+        sRS.set("angle", newShadow->pose.angle);
         sRS.set("alpha", newShadow->alpha);
         sRS.set("file", newShadow->bmpName);
         sRS.set("sway", newShadow->sway);
@@ -1673,20 +1673,20 @@ void Area::saveGeometryToDataNode(DataNode* node) {
             sGW.write("texture", sPtr->textureInfo.bmpName);
         }
         
-        if(sPtr->textureInfo.rot != 0) {
-            sGW.write("texture_rotate", sPtr->textureInfo.rot);
+        if(sPtr->textureInfo.tf.rot != 0) {
+            sGW.write("texture_rotate", sPtr->textureInfo.tf.rot);
         }
         if(
-            sPtr->textureInfo.scale.x != 1 ||
-            sPtr->textureInfo.scale.y != 1
+            sPtr->textureInfo.tf.scale.x != 1 ||
+            sPtr->textureInfo.tf.scale.y != 1
         ) {
-            sGW.write("texture_scale", sPtr->textureInfo.scale);
+            sGW.write("texture_scale", sPtr->textureInfo.tf.scale);
         }
         if(
-            sPtr->textureInfo.translation.x != 0 ||
-            sPtr->textureInfo.translation.y != 0
+            sPtr->textureInfo.tf.trans.x != 0 ||
+            sPtr->textureInfo.tf.trans.y != 0
         ) {
-            sGW.write("texture_trans", sPtr->textureInfo.translation);
+            sGW.write("texture_trans", sPtr->textureInfo.tf.trans);
         }
         if(
             sPtr->textureInfo.tint.r != 1.0 ||
@@ -1782,12 +1782,12 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* shadowNode = shadowsNode->addNew("shadow");
         GetterWriter sGW(shadowNode);
         
-        sGW.write("pos", sPtr->center);
-        sGW.write("size", sPtr->size);
+        sGW.write("pos", sPtr->pose.pos);
+        sGW.write("size", sPtr->pose.size);
         sGW.write("file", sPtr->bmpName);
         sGW.write("sway", sPtr->sway);
-        if(sPtr->angle != 0) {
-            sGW.write("angle", sPtr->angle);
+        if(sPtr->pose.angle != 0) {
+            sGW.write("angle", sPtr->pose.angle);
         }
         if(sPtr->alpha != 255) {
             sGW.write("alpha", sPtr->alpha);
@@ -2156,11 +2156,12 @@ TreeShadow::TreeShadow(
 ) :
     bmpName(bmpName),
     bitmap(nullptr),
-    center(center),
-    size(size),
-    angle(angle),
     alpha(alpha),
     sway(sway) {
+    
+    pose.pos = center;
+    pose.size = size;
+    pose.angle = angle;
     
 }
 

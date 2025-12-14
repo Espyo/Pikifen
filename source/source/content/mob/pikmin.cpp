@@ -167,11 +167,12 @@ void Pikmin::drawMob() {
         //at this point in the code, but honestly, either X scale or Y scale
         //will work. In the off-chance they are different, using an average
         //will be more than enough.
-        float avgScale = (topEff.scale.x + topEff.scale.y) / 2.0f;
+        float avgScale = (topEff.tf.scale.x + topEff.tf.scale.y) / 2.0f;
         Point topBmpSize = getBitmapDimensions(topBmp);
-        topEff.translation += pos + rotatePoint(topCoords, angle) * avgScale;
-        topEff.scale *= topSize / topBmpSize;
-        topEff.rotation += angle + topAngle;
+        topEff.tf.trans +=
+            pos + rotatePoint(topCoords, angle) * avgScale;
+        topEff.tf.scale *= topSize / topBmpSize;
+        topEff.tf.rot += angle + topAngle;
         
         drawBitmapWithEffects(topBmp, topEff);
     }
@@ -181,10 +182,10 @@ void Pikmin::drawMob() {
         BitmapEffect idleEff = pikSpriteEff;
         Point glowBmpSize =
             getBitmapDimensions(game.sysContent.bmpIdleGlow);
-        idleEff.translation = pos;
-        idleEff.scale =
+        idleEff.tf.trans = pos;
+        idleEff.tf.scale =
             (game.config.pikmin.standardRadius * 8) / glowBmpSize;
-        idleEff.rotation =
+        idleEff.tf.rot =
             game.states.gameplay->areaTimePassed *
             PIKMIN::IDLE_GLOW_SPIN_SPEED;
         idleEff.tintColor = type->mainColor;

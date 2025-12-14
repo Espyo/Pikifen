@@ -88,8 +88,8 @@ void Decoration::drawMob() {
     eff.tintColor.b *= individualTint.b;
     eff.tintColor.a *= individualTint.a;
     
-    eff.scale *= individualScale;
-    eff.rotation += individualRotation;
+    eff.tf.scale *= individualScale;
+    eff.tf.rot += individualRotation;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }

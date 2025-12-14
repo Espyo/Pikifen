@@ -608,9 +608,7 @@ void AnimationEditor::importSpriteHitboxData(const string& name) {
 void AnimationEditor::importSpriteTopData(const string& name) {
     Sprite* s = db.sprites[db.findSprite(name)];
     curSprite->topVisible = s->topVisible;
-    curSprite->topPos = s->topPos;
-    curSprite->topSize = s->topSize;
-    curSprite->topAngle = s->topAngle;
+    curSprite->topPose = s->topPose;
     
     changesMgr.markAsChanged();
 }
@@ -624,9 +622,7 @@ void AnimationEditor::importSpriteTopData(const string& name) {
  */
 void AnimationEditor::importSpriteTransformationData(const string& name) {
     Sprite* s = db.sprites[db.findSprite(name)];
-    curSprite->offset = s->offset;
-    curSprite->scale = s->scale;
-    curSprite->angle = s->angle;
+    curSprite->tf = s->tf;
     curSprite->tint = s->tint;
     
     changesMgr.markAsChanged();
@@ -1382,10 +1378,10 @@ void AnimationEditor::resizeSprite(Sprite* s, float mult) {
         return;
     }
     
-    s->scale *= mult;
-    s->offset *= mult;
-    s->topPos *= mult;
-    s->topSize *= mult;
+    s->tf.trans *= mult;
+    s->tf.scale *= mult;
+    s->topPose.pos *= mult;
+    s->topPose.size *= mult;
     
     for(size_t h = 0; h < s->hitboxes.size(); h++) {
         Hitbox* hPtr = &s->hitboxes[h];
@@ -1487,8 +1483,8 @@ void AnimationEditor::setAllSpriteScales(float scale) {
     
     for(size_t s = 0; s < db.sprites.size(); s++) {
         Sprite* sPtr = db.sprites[s];
-        sPtr->scale.x = scale;
-        sPtr->scale.y = scale;
+        sPtr->tf.scale.x = scale;
+        sPtr->tf.scale.y = scale;
     }
     
     changesMgr.markAsChanged();
@@ -1965,15 +1961,15 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
     
     Point cmin, cmax;
     getTransformedRectangleBBox(
-        sPtr->offset, sPtr->bmpSize * sPtr->scale,
-        sPtr->angle, &cmin, &cmax
+        sPtr->tf.trans, sPtr->bmpSize * sPtr->tf.scale,
+        sPtr->tf.rot, &cmin, &cmax
     );
     
     if(sPtr->topVisible) {
         Point topMin, topMax;
         getTransformedRectangleBBox(
-            sPtr->topPos, sPtr->topSize,
-            sPtr->topAngle,
+            sPtr->topPose.pos, sPtr->topPose.size,
+            sPtr->topPose.angle,
             &topMin, &topMax
         );
         updateMinCoords(cmin, topMin);

@@ -57,7 +57,7 @@ void Pellet::drawMob() {
     );
     
     Point bmpSize = getBitmapDimensions(curSPtr->bitmap);
-    eff.scale *= radius * 2.0f / bmpSize;
+    eff.tf.scale *= radius * 2.0f / bmpSize;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
     drawBitmapWithEffects(pelType->bmpNumber, eff);

@@ -55,7 +55,7 @@ void Drop::drawMob() {
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
-    eff.scale *= curScale;
+    eff.tf.scale *= curScale;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }

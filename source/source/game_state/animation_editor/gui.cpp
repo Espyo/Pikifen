@@ -2902,7 +2902,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
     
         //Top center value.
         if(
-            ImGui::DragFloat2("Center", (float*) &curSprite->topPos, 0.05f)
+            ImGui::DragFloat2("Center", (float*) &curSprite->topPose.pos, 0.05f)
         ) {
             changesMgr.markAsChanged();
         }
@@ -2914,7 +2914,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         //Top size value.
         if(
             processGuiSizeWidgets(
-                "Size", curSprite->topSize, 0.01f,
+                "Size", curSprite->topPose.size, 0.01f,
                 topKeepAspectRatio, false, ANIM_EDITOR::TOP_MIN_SIZE
             )
         ) {
@@ -2933,10 +2933,10 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         
         
         //Top angle value.
-        curSprite->topAngle = normalizeAngle(curSprite->topAngle);
+        curSprite->topPose.angle = normalizeAngle(curSprite->topPose.angle);
         if(
             ImGui::SliderAngleWithContext(
-                "Angle", &curSprite->topAngle, 0.0f, 360.0f, "%.2f"
+                "Angle", &curSprite->topPose.angle, 0.0f, 360.0f, "%.2f"
             )
         ) {
             changesMgr.markAsChanged();
@@ -3015,7 +3015,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     //Sprite offset value.
     ImGui::Spacer();
     if(
-        ImGui::DragFloat2("Offset", (float*) &curSprite->offset, 0.05f)
+        ImGui::DragFloat2("Offset", (float*) &curSprite->tf.trans, 0.05f)
     ) {
         changesMgr.markAsChanged();
     }
@@ -3027,7 +3027,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     //Sprite scale value.
     if(
         processGuiSizeWidgets(
-            "Scale", curSprite->scale,
+            "Scale", curSprite->tf.scale,
             0.005f, curSpriteKeepAspectRatio, curSpriteKeepArea,
             -FLT_MAX
         )
@@ -3044,7 +3044,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     if(
         ImGui::Button("Flip X")
     ) {
-        curSprite->scale.x *= -1.0f;
+        curSprite->tf.scale.x *= -1.0f;
         changesMgr.markAsChanged();
     }
     
@@ -3053,7 +3053,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     if(
         ImGui::Button("Flip Y")
     ) {
-        curSprite->scale.y *= -1.0f;
+        curSprite->tf.scale.y *= -1.0f;
         changesMgr.markAsChanged();
     }
     
@@ -3074,10 +3074,10 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     );
     
     //Sprite angle value.
-    curSprite->angle = normalizeAngle(curSprite->angle);
+    curSprite->tf.rot = normalizeAngle(curSprite->tf.rot);
     if(
         ImGui::SliderAngleWithContext(
-            "Angle", &curSprite->angle, 0.0f, 360.0f, "%.2f"
+            "Angle", &curSprite->tf.rot, 0.0f, 360.0f, "%.2f"
         )
     ) {
         changesMgr.markAsChanged();

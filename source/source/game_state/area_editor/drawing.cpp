@@ -1865,19 +1865,19 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                 //Draw a white rectangle to contrast the shadow better.
                 ALLEGRO_TRANSFORM tra, current;
                 al_identity_transform(&tra);
-                al_rotate_transform(&tra, sPtr->angle);
+                al_rotate_transform(&tra, sPtr->pose.angle);
                 al_translate_transform(
-                    &tra, sPtr->center.x, sPtr->center.y
+                    &tra, sPtr->pose.pos.x, sPtr->pose.pos.y
                 );
                 al_copy_transform(&current, al_get_current_transform());
                 al_compose_transform(&tra, &current);
                 al_use_transform(&tra);
                 
                 al_draw_filled_rectangle(
-                    -sPtr->size.x / 2.0,
-                    -sPtr->size.y / 2.0,
-                    sPtr->size.x / 2.0,
-                    sPtr->size.y / 2.0,
+                    -sPtr->pose.size.x / 2.0,
+                    -sPtr->pose.size.y / 2.0,
+                    sPtr->pose.size.x / 2.0,
+                    sPtr->pose.size.y / 2.0,
                     mapAlpha(96 * (sPtr->alpha / 255.0))
                 );
                 
@@ -1885,14 +1885,14 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
             }
             
             drawBitmap(
-                sPtr->bitmap, sPtr->center, sPtr->size,
-                sPtr->angle, mapAlpha(sPtr->alpha)
+                sPtr->bitmap, sPtr->pose.pos, sPtr->pose.size,
+                sPtr->pose.angle, mapAlpha(sPtr->alpha)
             );
             
             if(state == EDITOR_STATE_DETAILS) {
                 Point minCoords, maxCoords;
                 getTransformedRectangleBBox(
-                    sPtr->center, sPtr->size, sPtr->angle,
+                    sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
                     &minCoords, &maxCoords
                 );
                 
@@ -1907,9 +1907,9 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
         }
         if(selectedShadow) {
             curTransformationWidget.draw(
-                &selectedShadow->center,
-                &selectedShadow->size,
-                &selectedShadow->angle,
+                &selectedShadow->pose.pos,
+                &selectedShadow->pose.size,
+                &selectedShadow->pose.angle,
                 1.0f / game.editorsView.cam.zoom
             );
         }

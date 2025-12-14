@@ -547,9 +547,9 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
             twHandled =
                 curTransformationWidget.handleMouseDown(
                     game.editorsView.mouseCursorWorldPos,
-                    &selectedShadow->center,
-                    &selectedShadow->size,
-                    &selectedShadow->angle,
+                    &selectedShadow->pose.pos,
+                    &selectedShadow->pose.size,
+                    &selectedShadow->pose.angle,
                     1.0f / game.editorsView.cam.zoom
                 );
         }
@@ -565,7 +565,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
                 TreeShadow* sPtr = game.curAreaData->treeShadows[s];
                 Point minCoords, maxCoords;
                 getTransformedRectangleBBox(
-                    sPtr->center, sPtr->size, sPtr->angle,
+                    sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
                     &minCoords, &maxCoords
                 );
                 
@@ -664,9 +664,9 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
         moving = true;
         octeeDragStart = game.editorsView.mouseCursorWorldPos;
         Sector* sPtr = *selectedSectors.begin();
-        octeeOrigAngle = sPtr->textureInfo.rot;
-        octeeOrigOffset = sPtr->textureInfo.translation;
-        octeeOrigScale = sPtr->textureInfo.scale;
+        octeeOrigAngle = sPtr->textureInfo.tf.rot;
+        octeeOrigOffset = sPtr->textureInfo.tf.trans;
+        octeeOrigScale = sPtr->textureInfo.tf.scale;
         
         break;
         
@@ -1625,27 +1625,27 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     registerChange("sector texture offset change");
                     Point diff =
                         game.editorsView.mouseCursorWorldPos - octeeDragStart;
-                    diff = rotatePoint(diff, -sPtr->textureInfo.rot);
-                    diff = diff / sPtr->textureInfo.scale;
-                    sPtr->textureInfo.translation = octeeOrigOffset + diff;
+                    diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
+                    diff = diff / sPtr->textureInfo.tf.scale;
+                    sPtr->textureInfo.tf.trans = octeeOrigOffset + diff;
                     break;
                 } case OCTEE_MODE_SCALE: {
                     registerChange("sector texture scale change");
                     Point diff =
                         game.editorsView.mouseCursorWorldPos - octeeDragStart;
-                    diff = rotatePoint(diff, -sPtr->textureInfo.rot);
+                    diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
                     Point dragStartRot =
                         rotatePoint(
-                            octeeDragStart, -sPtr->textureInfo.rot
+                            octeeDragStart, -sPtr->textureInfo.tf.rot
                         );
                     diff = diff / dragStartRot * octeeOrigScale;
-                    sPtr->textureInfo.scale = octeeOrigScale + diff;
+                    sPtr->textureInfo.tf.scale = octeeOrigScale + diff;
                     break;
                 } case OCTEE_MODE_ANGLE: {
                     registerChange("sector texture angle change");
                     float dragStartA = getAngle(octeeDragStart);
                     float cursorA = getAngle(game.editorsView.mouseCursorWorldPos);
-                    sPtr->textureInfo.rot =
+                    sPtr->textureInfo.tf.rot =
                         octeeOrigAngle + (cursorA - dragStartA);
                     break;
                 }
@@ -1736,9 +1736,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 subState == EDITOR_SUB_STATE_NONE
             ) {
                 //Move tree shadow.
-                Point shadowCenter = selectedShadow->center;
-                Point shadowSize = selectedShadow->size;
-                float shadowAngle = selectedShadow->angle;
+                Point shadowCenter = selectedShadow->pose.pos;
+                Point shadowSize = selectedShadow->pose.size;
+                float shadowAngle = selectedShadow->pose.angle;
                 if(
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.editorsView.mouseCursorWorldPos),
@@ -1753,9 +1753,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     )
                 ) {
                     registerChange("tree shadow transformation");
-                    selectedShadow->center = shadowCenter;
-                    selectedShadow->size = shadowSize;
-                    selectedShadow->angle = shadowAngle;
+                    selectedShadow->pose.pos = shadowCenter;
+                    selectedShadow->pose.size = shadowSize;
+                    selectedShadow->pose.angle = shadowAngle;
                 }
             }
             

@@ -473,7 +473,7 @@ void AreaEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current area from your disk."
             );
-
+            
             //Open externally item.
             if(ImGui::MenuItem("Open externally")) {
                 openExternallyCmd(1.0f);
@@ -1539,12 +1539,12 @@ void AreaEditor::processGuiPanelDetails() {
                 setTooltip("Internal name:\n" + selectedShadow->bmpName);
                 
                 //Tree shadow center value.
-                Point shadowCenter = selectedShadow->center;
+                Point shadowCenter = selectedShadow->pose.pos;
                 if(
                     ImGui::DragFloat2("Center", (float*) &shadowCenter)
                 ) {
                     registerChange("tree shadow center change");
-                    selectedShadow->center = shadowCenter;
+                    selectedShadow->pose.pos = shadowCenter;
                 }
                 setTooltip(
                     "Center coordinates of the tree shadow.",
@@ -1552,7 +1552,7 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Tree shadow size value.
-                Point shadowSize = selectedShadow->size;
+                Point shadowSize = selectedShadow->pose.size;
                 if(
                     processGuiSizeWidgets(
                         "Size", shadowSize,
@@ -1561,7 +1561,7 @@ void AreaEditor::processGuiPanelDetails() {
                     )
                 ) {
                     registerChange("tree shadow size change");
-                    selectedShadow->size = shadowSize;
+                    selectedShadow->pose.size = shadowSize;
                 };
                 setTooltip(
                     "Width and height of the tree shadow.",
@@ -1578,14 +1578,15 @@ void AreaEditor::processGuiPanelDetails() {
                 setTooltip("Keep the aspect ratio when resizing the image.");
                 
                 //Tree shadow angle value.
-                float shadowAngle = normalizeAngle(selectedShadow->angle);
+                float shadowAngle =
+                    normalizeAngle(selectedShadow->pose.angle);
                 if(
                     ImGui::SliderAngleWithContext(
                         "Angle", &shadowAngle, 0, 360, "%.2f"
                     )
                 ) {
                     registerChange("tree shadow angle change");
-                    selectedShadow->angle = shadowAngle;
+                    selectedShadow->pose.angle = shadowAngle;
                 }
                 setTooltip(
                     "Angle of the tree shadow.",
@@ -5356,10 +5357,10 @@ void AreaEditor::processGuiPanelSector() {
         if(saveableTreeNode("layout", "Texture effects")) {
         
             //Sector texture offset value.
-            Point textureTranslation = sPtr->textureInfo.translation;
+            Point textureTranslation = sPtr->textureInfo.tf.trans;
             if(ImGui::DragFloat2("Offset", (float*) &textureTranslation)) {
                 registerChange("sector texture offset change");
-                sPtr->textureInfo.translation = textureTranslation;
+                sPtr->textureInfo.tf.trans = textureTranslation;
                 quickPreviewTimer.start();
             }
             setTooltip(
@@ -5369,10 +5370,10 @@ void AreaEditor::processGuiPanelSector() {
             );
             
             //Sector texture scale value.
-            Point textureScale = sPtr->textureInfo.scale;
+            Point textureScale = sPtr->textureInfo.tf.scale;
             if(ImGui::DragFloat2("Scale", (float*) &textureScale, 0.01)) {
                 registerChange("sector texture scale change");
-                sPtr->textureInfo.scale = textureScale;
+                sPtr->textureInfo.tf.scale = textureScale;
                 quickPreviewTimer.start();
             }
             setTooltip(
@@ -5384,14 +5385,14 @@ void AreaEditor::processGuiPanelSector() {
             );
             
             //Sector texture rotation value.
-            float textureRotation = normalizeAngle(sPtr->textureInfo.rot);
+            float textureRotation = normalizeAngle(sPtr->textureInfo.tf.rot);
             if(
                 ImGui::SliderAngleWithContext(
                     "Angle", &textureRotation, 0, 360, "%.2f"
                 )
             ) {
                 registerChange("sector texture angle change");
-                sPtr->textureInfo.rot = textureRotation;
+                sPtr->textureInfo.tf.rot = textureRotation;
                 quickPreviewTimer.start();
             }
             setTooltip(

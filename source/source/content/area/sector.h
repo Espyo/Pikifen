@@ -45,14 +45,8 @@ struct SectorTexture {
 
     //--- Members ---
     
-    //Texture scale.
-    Point scale = Point(1.0f);
-    
-    //Texture translation.
-    Point translation;
-    
-    //Texture rotation.
-    float rot = 0.0f;
+    //Transformation data.
+    Transform2d tf;
     
     //Texture bitmap.
     ALLEGRO_BITMAP* bitmap = nullptr;

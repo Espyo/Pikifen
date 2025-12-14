@@ -87,27 +87,14 @@ public:
     //Size of the sprite inside the parent bitmap.
     Point bmpSize;
     
-    //Offset. Move the sprite left/right/up/down to align with
-    //the previous frames and such.
-    Point offset;
-    
-    //Scale multiplier.
-    Point scale = Point(1.0f);
-    
-    //Angle to rotate the image by.
-    float angle = 0.0f;
+    //Transformation data.
+    Transform2d tf;
     
     //Tint the image with this color.
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
-    //X&Y of the Pikmin's top (left/bud/flower).
-    Point topPos;
-    
-    //W&H of the Pikmin's top.
-    Point topSize = Point(5.5, 10);
-    
-    //Angle of the Pikmin's top.
-    float topAngle = 0.0f;
+    //Positional data for the Pikmin top (left/bud/flower).
+    Pose2d topPose;
     
     //Does this sprite even have a visible Pikmin top?
     bool topVisible = true;

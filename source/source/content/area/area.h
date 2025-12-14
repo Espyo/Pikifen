@@ -149,14 +149,8 @@ struct TreeShadow {
     //Tree shadow texture.
     ALLEGRO_BITMAP* bitmap = nullptr;
     
-    //Center coordinates.
-    Point center;
-    
-    //Width and height.
-    Point size;
-    
-    //Angle.
-    float angle = 0.0f;
+    //Positional data.
+    Pose2d pose;
     
     //Opacity.
     unsigned char alpha = 255;

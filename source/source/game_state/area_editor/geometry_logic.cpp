@@ -2400,8 +2400,8 @@ void AreaEditor::resizeEverything(float mults[2]) {
     
     for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
         Sector* sPtr = game.curAreaData->sectors[s];
-        sPtr->textureInfo.scale.x *= mults[0];
-        sPtr->textureInfo.scale.y *= mults[1];
+        sPtr->textureInfo.tf.scale.x *= mults[0];
+        sPtr->textureInfo.tf.scale.y *= mults[1];
         triangulateSector(sPtr, nullptr, false);
         sPtr->calculateBoundingBox();
     }
@@ -2423,12 +2423,12 @@ void AreaEditor::resizeEverything(float mults[2]) {
     
     for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
         TreeShadow* sPtr = game.curAreaData->treeShadows[s];
-        sPtr->center.x *= mults[0];
-        sPtr->center.y *= mults[1];
-        sPtr->size.x   *= mults[0];
-        sPtr->size.y   *= mults[1];
-        sPtr->sway.x   *= mults[0];
-        sPtr->sway.y   *= mults[1];
+        sPtr->pose.pos.x *= mults[0];
+        sPtr->pose.pos.y *= mults[1];
+        sPtr->pose.size.x *= mults[0];
+        sPtr->pose.size.y *= mults[1];
+        sPtr->sway.x *= mults[0];
+        sPtr->sway.y *= mults[1];
     }
     
     game.curAreaData->mission.goalExitCenter.x *= mults[0];

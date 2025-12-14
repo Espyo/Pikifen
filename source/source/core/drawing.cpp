@@ -155,9 +155,9 @@ void drawBitmapWithEffects(
 
     Point bmpSize = getBitmapDimensions(bmp);
     float scaleX =
-        (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
+        (effects.tf.scale.x == LARGE_FLOAT) ? effects.tf.scale.y : effects.tf.scale.x;
     float scaleY =
-        (effects.scale.y == LARGE_FLOAT) ? effects.scale.x : effects.scale.y;
+        (effects.tf.scale.y == LARGE_FLOAT) ? effects.tf.scale.x : effects.tf.scale.y;
         
     if(effects.colorize.a > 0.0f) {
         al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER));
@@ -170,9 +170,9 @@ void drawBitmapWithEffects(
         bmp,
         effects.tintColor,
         bmpSize.x / 2, bmpSize.y / 2,
-        effects.translation.x, effects.translation.y,
+        effects.tf.trans.x, effects.tf.trans.y,
         scaleX, scaleY,
-        effects.rotation,
+        effects.tf.rot,
         0
     );
     
@@ -461,20 +461,20 @@ void drawLiquid(
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -textureInfoToUse->translation.x,
-            -textureInfoToUse->translation.y,
-            1.0f / textureInfoToUse->scale.x,
-            1.0f / textureInfoToUse->scale.y,
-            -textureInfoToUse->rot
+            -textureInfoToUse->tf.trans.x,
+            -textureInfoToUse->tf.trans.y,
+            1.0f / textureInfoToUse->tf.scale.x,
+            1.0f / textureInfoToUse->tf.scale.y,
+            -textureInfoToUse->tf.rot
         );
         
         float textureOffset[2] = {
-            textureInfoToUse->translation.x,
-            textureInfoToUse->translation.y
+            textureInfoToUse->tf.trans.x,
+            textureInfoToUse->tf.trans.y
         };
         float textureScale[2] = {
-            textureInfoToUse->scale.x,
-            textureInfoToUse->scale.y
+            textureInfoToUse->tf.scale.x,
+            textureInfoToUse->tf.scale.y
         };
         
         for(size_t v = 0; v < nVertexes; v++) {
@@ -545,7 +545,7 @@ void drawLiquid(
         };
         al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
         al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
-        al_set_shader_float("tex_rotation", textureInfoToUse->rot);
+        al_set_shader_float("tex_rotation", textureInfoToUse->tf.rot);
         al_set_shader_int_vector("bmp_size", 2, &bmp_size[0], 1);
         
         al_draw_prim(
@@ -1256,11 +1256,11 @@ void drawSectorTexture(
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -textureInfoToUse->translation.x,
-            -textureInfoToUse->translation.y,
-            1.0f / textureInfoToUse->scale.x,
-            1.0f / textureInfoToUse->scale.y,
-            -textureInfoToUse->rot
+            -textureInfoToUse->tf.trans.x,
+            -textureInfoToUse->tf.trans.y,
+            1.0f / textureInfoToUse->tf.scale.x,
+            1.0f / textureInfoToUse->tf.scale.y,
+            -textureInfoToUse->tf.rot
         );
         
         for(size_t v = 0; v < nVertexes; v++) {

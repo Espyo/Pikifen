@@ -73,7 +73,6 @@ struct Point {
     Point operator /=(float n);
     bool operator ==(const Point& p) const;
     bool operator !=(const Point& p) const;
-    
 };
 
 
@@ -123,6 +122,7 @@ struct Distance {
     void operator -=(const Distance& d2);
     float toFloat();
     
+    
     private:
     
     //--- Members ---
@@ -135,6 +135,52 @@ struct Distance {
     
     //Do we know the normal distance?
     bool hasNormalDistance = false;
+    
+};
+
+
+/**
+ * @brief Basic data about a 2D geometrical affine transformation:
+ * translation, scale, and rotation.
+ *
+ * Essentially the same as Pose2d, but separated for code clarity,
+ * based on needs.
+ */
+struct Transform2d {
+
+    //--- Members ---
+    
+    //Translation.
+    Point trans;
+    
+    //Scale.
+    Point scale = Point(1.0f);
+    
+    //Rotation.
+    float rot = 0.0f;
+    
+};
+
+
+/**
+ * @brief Basic data about an element's position, size, and orientation in 2D
+ * space.
+ *
+ * Essentially the same as Transform2d, but separated for code clarity,
+ * based on needs.
+ */
+struct Pose2d {
+
+    //--- Members ---
+    
+    //Position.
+    Point pos;
+    
+    //Size.
+    Point size;
+    
+    //Angle.
+    float angle = 0.0f;
     
 };
 
