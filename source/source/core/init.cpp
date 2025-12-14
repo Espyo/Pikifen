@@ -1218,9 +1218,9 @@ void initMobActions() {
     
     //Calculate.
     regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("left operand", MOB_ACTION_PARAM_FLOAT, false, false);
     regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("right operand", MOB_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_CALCULATE,
         "calculate",
@@ -1252,6 +1252,17 @@ void initMobActions() {
         "drain_liquid",
         MobActionRunners::drainLiquid,
         nullptr
+    );
+    
+    //Ease number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("method", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
+        MOB_ACTION_EASE_NUMBER,
+        "ease_number",
+        MobActionRunners::easeNumber,
+        MobActionLoaders::easeNumber
     );
     
     //Else.
@@ -1338,6 +1349,28 @@ void initMobActions() {
         MOB_ACTION_GET_ANGLE,
         "get_angle",
         MobActionRunners::getAngle,
+        nullptr
+    );
+    
+    //Get angle clockwise difference.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("angle 1", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("angle 2", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_GET_ANGLE_CW_DIFF,
+        "get_angle_clockwise_difference",
+        MobActionRunners::getAngleCwDiff,
+        nullptr
+    );
+    
+    //Get angle smallest difference.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("angle 1", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("angle 2", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
+        "get_angle_smallest_difference",
+        MobActionRunners::getAngleSmallestDiff,
         nullptr
     );
     
@@ -1476,6 +1509,20 @@ void initMobActions() {
         "if",
         MobActionRunners::ifFunction,
         MobActionLoaders::ifFunction
+    );
+    
+    //Interpolate number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("input number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("input start", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("input end", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("output start", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("output end", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_INTERPOLATE_NUMBER,
+        "interpolate_number",
+        MobActionRunners::interpolateNumber,
+        nullptr
     );
     
     //Label.
@@ -1853,6 +1900,16 @@ void initMobActions() {
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
         MobActionRunners::showMessageFromVar,
+        nullptr
+    );
+    
+    //Square root number.
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
+        MOB_ACTION_SQUARE_ROOT_NUMBER,
+        "square_root_number",
+        MobActionRunners::squareRootNumber,
         nullptr
     );
     

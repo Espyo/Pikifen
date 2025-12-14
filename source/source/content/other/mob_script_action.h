@@ -42,6 +42,9 @@ enum MOB_ACTION {
     //Drain liquid.
     MOB_ACTION_DRAIN_LIQUID,
     
+    //Ease a float number.
+    MOB_ACTION_EASE_NUMBER,
+    
     //Conditional "else" marker.
     MOB_ACTION_ELSE,
     
@@ -68,6 +71,12 @@ enum MOB_ACTION {
     
     //Get angle between two sets of coordinates.
     MOB_ACTION_GET_ANGLE,
+    
+    //Get the clockwise difference between two angles.
+    MOB_ACTION_GET_ANGLE_CW_DIFF,
+    
+    //Get the smallest difference between two angles.
+    MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
     
     //Get information about the area.
     MOB_ACTION_GET_AREA_INFO,
@@ -107,6 +116,9 @@ enum MOB_ACTION {
     
     //Conditional "if" condition.
     MOB_ACTION_IF,
+
+    //Interpolate a float number.
+    MOB_ACTION_INTERPOLATE_NUMBER,
     
     //Label for use with "goto".
     MOB_ACTION_LABEL,
@@ -233,6 +245,9 @@ enum MOB_ACTION {
     
     //Spawn something.
     MOB_ACTION_SPAWN,
+    
+    //Square root a number.
+    MOB_ACTION_SQUARE_ROOT_NUMBER,
     
     //Stabilize its Z coordinate.
     MOB_ACTION_STABILIZE_Z,
@@ -513,6 +528,9 @@ enum MOB_ACTION_CALCULATE_TYPE {
     //Get the modulo of a number with another.
     MOB_ACTION_CALCULATE_TYPE_MODULO,
     
+    //Raise one number to the power of another.
+    MOB_ACTION_CALCULATE_TYPE_POWER,
+    
 };
 
 
@@ -701,12 +719,15 @@ void calculate(MobActionRunData& data);
 void ceilNumber(MobActionRunData& data);
 void deleteFunction(MobActionRunData& data);
 void drainLiquid(MobActionRunData& data);
+void easeNumber(MobActionRunData& data);
 void finishDying(MobActionRunData& data);
 void floorNumber(MobActionRunData& data);
 void focus(MobActionRunData& data);
 void followPathRandomly(MobActionRunData& data);
 void followPathToAbsolute(MobActionRunData& data);
 void getAngle(MobActionRunData& data);
+void getAngleCwDiff(MobActionRunData& data);
+void getAngleSmallestDiff(MobActionRunData& data);
 void getChomped(MobActionRunData& data);
 void getCoordinatesFromAngle(MobActionRunData& data);
 void getDistance(MobActionRunData& data);
@@ -719,6 +740,7 @@ void getRandomFloat(MobActionRunData& data);
 void getRandomInt(MobActionRunData& data);
 void holdFocus(MobActionRunData& data);
 void ifFunction(MobActionRunData& data);
+void interpolateNumber(MobActionRunData& data);
 void linkWithFocus(MobActionRunData& data);
 void loadFocusMemory(MobActionRunData& data);
 void moveToAbsolute(MobActionRunData& data);
@@ -760,6 +782,7 @@ void setVar(MobActionRunData& data);
 void shakeCamera(MobActionRunData& data);
 void showMessageFromVar(MobActionRunData& data);
 void spawn(MobActionRunData& data);
+void squareRootNumber(MobActionRunData& data);
 void stabilizeZ(MobActionRunData& data);
 void startChomping(MobActionRunData& data);
 void startDying(MobActionRunData& data);
@@ -786,6 +809,7 @@ void turnToTarget(MobActionRunData& data);
 namespace MobActionLoaders {
 bool arachnorbPlanLogic(MobActionCall& call);
 bool calculate(MobActionCall& call);
+bool easeNumber(MobActionCall& call);
 bool focus(MobActionCall& call);
 bool getAreaInfo(MobActionCall& call);
 bool getEventInfo(MobActionCall& call);

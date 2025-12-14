@@ -252,6 +252,43 @@ bool MobActionLoaders::calculate(MobActionCall& call) {
         call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_DIVIDE);
     } else if(call.args[2] == "%") {
         call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_MODULO);
+    } else if(call.args[2] == "^") {
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_POWER);
+    } else {
+        reportEnumError(call, 2);
+        return false;
+    }
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the ease number mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool MobActionLoaders::easeNumber(MobActionCall& call) {
+    if(call.args[2] == "in") {
+        call.args[2] = i2s(EASE_METHOD_IN);
+    } else if(call.args[2] == "out") {
+        call.args[2] = i2s(EASE_METHOD_OUT);
+    } else if(call.args[2] == "in_out") {
+        call.args[2] = i2s(EASE_METHOD_IN_OUT);
+    } else if(call.args[2] == "in_back") {
+        call.args[2] = i2s(EASE_METHOD_IN_BACK);
+    } else if(call.args[2] == "out_back") {
+        call.args[2] = i2s(EASE_METHOD_OUT_BACK);
+    } else if(call.args[2] == "in_out_back") {
+        call.args[2] = i2s(EASE_METHOD_IN_OUT_BACK);
+    } else if(call.args[2] == "in_elastic") {
+        call.args[2] = i2s(EASE_METHOD_IN_ELASTIC);
+    } else if(call.args[2] == "out_elastic") {
+        call.args[2] = i2s(EASE_METHOD_OUT_ELASTIC);
+    } else if(call.args[2] == "up_and_down") {
+        call.args[2] = i2s(EASE_METHOD_UP_AND_DOWN);
+    } else if(call.args[2] == "up_and_down_elastic") {
+        call.args[2] = i2s(EASE_METHOD_UP_AND_DOWN_ELASTIC);
     } else {
         reportEnumError(call, 2);
         return false;
@@ -854,6 +891,10 @@ void MobActionRunners::calculate(MobActionRunData& data) {
         }
         break;
         
+    } case MOB_ACTION_CALCULATE_TYPE_POWER: {
+        result = pow(lhs, rhs);
+        break;
+        
     }
     }
     
@@ -908,6 +949,18 @@ void MobActionRunners::drainLiquid(MobActionRunData& data) {
 
 
 /**
+ * @brief Code for the ease number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::easeNumber(MobActionRunData& data) {
+    EASE_METHOD method =
+        (EASE_METHOD) s2i(data.args[2]);
+    data.m->vars[data.args[0]] = f2s(ease(s2f(data.args[1]), method));
+}
+
+
+/**
  * @brief Code for the death finish mob script action.
  *
  * @param data Data about the action call.
@@ -933,7 +986,6 @@ void MobActionRunners::floorNumber(MobActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::focus(MobActionRunData& data) {
-
     MOB_ACTION_MOB_TARGET_TYPE s =
         (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
@@ -1043,6 +1095,34 @@ void MobActionRunners::getAngle(MobActionRunData& data) {
     float angle = getAngle(Point(centerX, centerY), Point(focusX, focusY));
     angle = radToDeg(angle);
     data.m->vars[data.args[0]] = f2s(angle);
+}
+
+
+/**
+ * @brief Code for the angle closest difference obtaining mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::getAngleCwDiff(MobActionRunData& data) {
+    float angle1 = degToRad(s2f(data.args[1]));
+    float angle2 = degToRad(s2f(data.args[2]));
+    float diff = ::getAngleCwDiff(angle1, angle2);
+    diff = radToDeg(diff);
+    data.m->vars[data.args[0]] = f2s(diff);
+}
+
+
+/**
+ * @brief Code for the angle smallest difference obtaining mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::getAngleSmallestDiff(MobActionRunData& data) {
+    float angle1 = degToRad(s2f(data.args[1]));
+    float angle2 = degToRad(s2f(data.args[2]));
+    float diff = ::getAngleSmallestDiff(angle1, angle2);
+    diff = radToDeg(diff);
+    data.m->vars[data.args[0]] = f2s(diff);
 }
 
 
@@ -1431,6 +1511,22 @@ void MobActionRunners::ifFunction(MobActionRunData& data) {
         
     }
     }
+}
+
+
+/**
+ * @brief Code for the interpolate number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::interpolateNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] =
+        f2s(
+            ::interpolateNumber(
+                s2f(data.args[1]), s2f(data.args[2]), s2f(data.args[3]),
+                s2f(data.args[4]), s2f(data.args[5])
+            )
+        );
 }
 
 
@@ -2059,7 +2155,7 @@ void MobActionRunners::shakeCamera(MobActionRunData& data) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d = Distance(data.m->pos, pPtr->view.cam.pos).toFloat();
         float strengthMult =
-            interpolateNumber(
+            ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
             );
         pPtr->view.shaker.shake(s2f(data.args[0]) / 100.0f * strengthMult);
@@ -2074,6 +2170,16 @@ void MobActionRunners::shakeCamera(MobActionRunData& data) {
  */
 void MobActionRunners::showMessageFromVar(MobActionRunData& data) {
     startGameplayMessage(data.m->vars[data.args[0]], nullptr);
+}
+
+
+/**
+ * @brief Code for the square root number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::squareRootNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
 }
 
 

@@ -344,7 +344,7 @@
         <th><code>turn_to_absolute</code></th>
         <td><dl>
           <dt><code><b>turn_to_absolute</b> &lt;angle&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#absolute-angle">absolute angle</a>.</dd>
+          <dd>Turn towards the specified <a href="glossary.html#absolute-angle">absolute angle</a> (in degrees).</dd>
           <dt><code><b>turn_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
           <dd>Turn towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</dd>
         </dl></td>
@@ -610,7 +610,7 @@
           <dd>
             Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible keywords for &lt;information&gt; are:
             <ul>
-              <li><code><b>angle</b></code>: Current angle.</li>
+              <li><code><b>angle</b></code>: Current angle (in degrees).</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
               <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
               <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
@@ -640,42 +640,77 @@
         <th><code>absolute_number</code></th>
         <td><dl>
           <dt><code><b>absolute_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Absolute_value">absolute value</a> of the given number. In other words, it converts a negative number into its positive version.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Absolute_value">absolute value</a> of the given number. In other words, it converts a negative number into its positive version.</dd>
         </dl></td>
       </tr>
       <tr id="calculate">
         <th><code>calculate</code></th>
         <td><dl>
           <dt><code><b>calculate</b> &lt;destination_variable_name&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), or <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;destination_variable_name&gt; field shouldn't use it!</dd>
+          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>), or <code>^</code> (power). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;destination_variable_name&gt; field shouldn't use it!</dd>
         </dl></td>
       </tr>
       <tr id="ceil-number">
         <th><code>ceil_number</code></th>
         <td><dl>
           <dt><code><b>ceil_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up integer.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up integer.</dd>
+        </dl></td>
+      </tr>
+      <tr id="ease-number">
+        <th><code>ease_number</code></th>
+        <td><dl>
+          <dt><code><b>ease_number</b> &lt;destination_variable_name&gt; &lt;number&gt; &lt;method&gt;</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to the eased <a href="https://en.wikipedia.org/wiki/Interpolation_(computer_graphics)">interpolation</a> of the given number. In other words, it makes the number slow down as it approaches its destination, speed up, overshoot and then return, etc. As such, it's useful for animating things. The number should be between 0 (starting point) and 1 (ending point), and the output goes from 0 to 1 as well, though it can go over for effect. The available methods are:
+            <ul>
+              <li><code>in</code>: Eases as it goes in, then gradually goes out normally.</li>
+              <li><code>out</code>: Gradually goes in normally, then eased as it goes out.</li>
+              <li><code>in_out</code>: Eased as it goes in and also as it goes out.</li>
+              <li><code>in_back</code>: Goes backwards before going in.</li>
+              <li><code>out_back</code>: Overshoots at the end then finishes.</li>
+              <li><code>in_out_back</code>: Combines in back with out back.</li>
+              <li><code>in_elastic</code>: Springs backwards before going in.</li>
+              <li><code>out_elastic</code>: Near the end, it overshoots and then springs to normal.</li>
+              <li><code>up_and_down</code>: Goes up to 1, then back down to 0, in a sine-wave.</li>
+              <li><code>up_and_down_elastic</code>: Goes up to 1, then down to 0, and wobbles around 0 for a bit.</li>
+            </ul>
+          </dd>
         </dl></td>
       </tr>
       <tr id="floor-number">
         <th><code>floor_number</code></th>
         <td><dl>
           <dt><code><b>floor_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer.</dd>
         </dl></td>
       </tr>
       <tr id="get-angle">
         <th><code>get_angle</code></th>
         <td><dl>
           <dt><code><b>get_angle</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="glossary.html#angle">angle</a> between the two sets of coordinates.</dd>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="glossary.html#angle">angle</a> (in degrees) between the two sets of coordinates.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-angle-cw-diff">
+        <th><code>get_angle_clockwise_difference</code></th>
+        <td><dl>
+          <dt><code><b>get_angle_clockwise_difference</b> &lt;destination_variable_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the clockwise difference between &lt;angle_1&gt; and &lt;angle2_&gt;. In other words, how many degrees do we travel clockwise to get from the first angle to the second.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-angle-smallest-diff">
+        <th><code>get_angle_smallest_difference</code></th>
+        <td><dl>
+          <dt><code><b>get_angle_smallest_difference</b> &lt;destination_variable_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the smallest difference between &lt;angle_1&gt; and &lt;angle2_&gt;. In other words, how many degrees do we travel clockwise or counterclockwise to get from the first angle to the second, whichever number is smaller.</dd>
         </dl></td>
       </tr>
       <tr id="get-coordinates-from-angle">
         <th><code>get_coordinates_from_angle</code></th>
         <td><dl>
           <dt><code><b>get_coordinates_from_angle</b> &lt;x_destination_variable_name&gt; &lt;y_destination_variable_name&gt; &lt;angle&gt; &lt;distance&gt;</code></dt>
-          <dd>Sets the destination variables to the X and Y <a href="glossary.html#coordinates">coordinates</a> that represent the specified <a href="glossary.html#angle">angle</a> and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates.</dd>
+          <dd>Sets the destination variables to the X and Y <a href="glossary.html#coordinates">coordinates</a> that represent the specified <a href="glossary.html#angle">angle</a> (in degrees) and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates.</dd>
         </dl></td>
       </tr>
       <tr id="get-distance">
@@ -699,11 +734,25 @@
           <dd>Places a random <a href="glossary.html#integer">integer number</a> between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;.</dd>
         </dl></td>
       </tr>
+      <tr id="interpolate-number">
+        <th><code>interpolate_number</code></th>
+        <td><dl>
+          <dt><code><b>interpolate_number</b> &lt;destination_variable_name&gt; &lt;input_number&gt; &lt;input_start&gt; &lt;input_end&gt; &lt;output_start&gt; &lt;output_end&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> of the given values. In other words, it gets a number that's somewhere between the given values. When the &lt;input_number&gt; matches &lt;input_start&gt;, the result matches &lt;output_start&gt;. And when it matches &lt;input_end&gt;, the result matches &lt;output_end&gt;. In-between input values result in in-between output values.</dd>
+        </dl></td>
+      </tr>
       <tr id="round-number">
         <th><code>round_number</code></th>
         <td><dl>
           <dt><code><b>round_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
           <dd><a href="https://en.wikipedia.org/wiki/Rounding">Rounds</a> the given number. In other words, it rounds the number's decimal places up or down to an integer, depending on whichever integer is closest.</dd>
+        </dl></td>
+      </tr>
+      <tr id="square-root-number">
+        <th><code>square_root_number</code></th>
+        <td><dl>
+          <dt><code><b>square_root_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Square_root">square root</a> of the given number.</dd>
         </dl></td>
       </tr>
     </table>
