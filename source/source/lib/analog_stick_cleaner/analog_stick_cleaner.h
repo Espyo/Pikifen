@@ -15,8 +15,6 @@
  * https://www.gamedeveloper.com/business/doing-thumbstick-dead-zones-right
  * https://www.gamedeveloper.com/design/interpreting-analog-sticks-in-inversus
  *
- * Future ideas:
- *   Axis deadzones
  */
 
 #pragma once
@@ -109,7 +107,7 @@ public:
                 bool interpolate = true;
                 
             } angular;
-        
+            
             /**
              * @brief Deadzones related to analog buttons.
              */
@@ -153,12 +151,32 @@ public:
             //frame's values. If you want this feature enabled, a value of 0.9
             //or so is recommended.
             float factor = 0.0f;
-
+            
             //Filter factor for buttons [0 - 1]. 0 to disable.
             //Same as the analog stick low pass filter factor property.
             float factorButton = 0.0f;
             
         } lowPassFilter;
+        
+        /**
+         * @brief Other miscellaneous settings.
+         */
+        struct Misc {
+        
+            //Clamps the coordinates into a unit circle. This is useful to stop
+            //analog sticks with a wrong (e.g. square) plastic frame from
+            //specifying coordinates that are outside what a regular analog
+            //stick circular frame should allow, like for instance 0.9,0.9.
+            //Also useful if you're doing something funny like making use of
+            //D-pad coordinates or WASD coordinates to figure out the
+            //final coordinates you want to clean, though you should probably
+            //avoid that.
+            //This essentially stops a common problem where the player can
+            //move their character or their reticle faster than intended.
+            //Using this setting is recommended.
+            bool unitCircleClamp = true;
+            
+        } misc;
         
         Settings() {}
     };
@@ -182,6 +200,10 @@ protected:
     static float getSnapDirDeadzone(
         int snapDirIdx, const Settings& settings
     );
+    static float interpolate(
+        float input, float inputStart, float inputEnd,
+        float outputStart, float outputEnd
+    );
     static float interpolateAndClamp(
         float input, float inputStart, float inputEnd,
         float outputStart, float outputEnd
@@ -199,6 +221,9 @@ protected:
         float* pressure, float previousFramePressure, const Settings& settings
     );
     static void processRadialDeadzones(
+        float coords[2], const Settings& settings
+    );
+    static void processUnitCircle(
         float coords[2], const Settings& settings
     );
     static void toCartesian(float coords[2], float angle, float radius);

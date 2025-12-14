@@ -11,14 +11,9 @@ Next tasks (roughly sorted most important first)
 
     --- 1.1.0 ---
     Swarming jingle
-    Controls improvements
-        Controls manager
-            Implement sub-schemes, so a game can have a scheme for when you're driving, another for when you're on foot, etc.
-            Handle controller hot-swapping in some way
-            Panning the radar with an analog stick will also move the menu focus cursor, if there are binds for it to move with the analog stick. Same with cancelling out of the inventory and pausing the game
-                I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
-        Test it on the Steam Deck
+    Test it on the Steam Deck
     Try it in 4K and fix obvious issues
+    Replace all "engine_version=1.0.1" with "engine_version=1.1.0"
 
     --- 1.2.0 ---
     Ice Pikmin
@@ -267,7 +262,7 @@ Next tasks (roughly sorted most important first)
     Weather improvements
         Add a weather editor
         [NEEDS BRAINSTORMING] Maybe call it ambiance?
-        All parameters (wind, blackout, precipitation, etc.) should be configurable in a single minutes table
+        [NEEDS BRAINSTORMING] All parameters (wind, blackout, precipitation, etc.) should be configurable in a single minutes table
         Make it possible to have a weighted random distribution table for what other weather conditions it can change to as time goes by
             Example: 80% clear, 20% overcast, set to pick every hour. It could make it so it's clear at 3PM and 4PM, but starts getting overcast between 4 and 5, and uses the overcast weather at 5PM
         Wind
@@ -432,6 +427,9 @@ Next tasks (roughly sorted most important first)
                 Probably too much info shown at once
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
             Show actions written in plain English? Like a "turn_to_target focused_mob" -> "Turn towards the focused mob."
+            Revamp the scripting tutorial
+                Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
+                Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
         Loose content editor
             Basically just a frontend for editing hazards, liquids, misc. configs, mob types, spike damage types, sprays, and statuses
     
@@ -486,19 +484,16 @@ Misc things (so I don't forget)
             Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
-        Leaders should have their antenna light separated like Pikmin do
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
             The Pikmin flowers should render a small shadow under them too
         Healing at the ship should make a sound
-        When quick-testing from the area editor, make the loading screen text fade out quickly, so it's more snappy and so that the "GO!" text doesn't overlap it
         Cursor trail improvements
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
             If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
         There should be some way to represent what item is bound to what shortcut within the inventory menu
     New options
-        Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     Mechanics
         Cursor
@@ -575,14 +570,10 @@ Misc things (so I don't forget)
             For loop
             While loop
             Functions you'd find in a math library
-                Interpolation
-                Sin, cosine
+                Sin, cosine?
+                Degrees to radians and vice-versa?
                 Bitmask set, unset, test?
-                Angle difference
-                Degrees to radians and vice-versa
-                Min and max
-                Power
-                Square root
+                Min and max?
             Array manipulation
             String splitting, joining, getting the size of, etc.
         Add some infinite loop protection logic
@@ -770,7 +761,7 @@ Misc things (so I don't forget)
         The Yellow Wollyhop should throw Pikmin farther away when landing, so that the Pikmin don't land immediately in crushing distance of the next jump (thanks Gatling Groink)
         Onions should be shaded with hue shifting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
-    The ability for any object to fade when the leader/'s cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
+    The ability for any object to fade when the leader's cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
     Missions
         A goal where you reach X sprays of type Y
@@ -788,15 +779,10 @@ Misc things (so I don't forget)
         A modifier for the mouse cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?
-        If I need intervals, I can use the code on the "misc info" text file
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
-    Manual
-        Revamp the scripting tutorial
-            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
-            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     Story mode
         The ability for Onions to store but not produce Pikmin whose Onion hasn't been collected yet [PIKMIN 4]
         Some treasures should weigh as much as the current army, after a boss battle
@@ -894,14 +880,11 @@ Tasks for later on (I might never implement these)
     Blood (optional, of course)
     HUD element for a digital clock?
     Resolution, window size, and zoom
-        Players should be able to resize the window on-the-fly (GitHub issue #2)
-        Resizing the window should stretch the resolution instead of showing more of the world (GitHub issue #7)
         Possible camera implementation: The camera only has the normal zoom level, but holding the camera input down will make it go to a farther zoom level so you can peek ahead. There is no close zoom level (thanks Neo)
     Aesthetic details
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
-        Make the menu highlighters move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
         Particles
             Splash particles for going in water
@@ -917,7 +900,6 @@ Tasks for later on (I might never implement these)
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
-    When al_clear_keyboard_state is available, use that instead of game.controls.releaseAll()
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
@@ -938,6 +920,7 @@ Tasks for later on (I might never implement these)
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
         Either prepare for or disallow changing options mid-game
     If Allegro gets updated...
+        When al_clear_keyboard_state is available, use that instead of game.controls.releaseAll()
         Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead

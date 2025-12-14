@@ -33,14 +33,18 @@ void AnalogStickCleaner::clean(
     coords[0] = std::clamp(coords[0], -1.0f, 1.0f);
     coords[1] = std::clamp(coords[1], -1.0f, 1.0f);
     
-    //Step 1: Low-pass filter.
-    processLowPassFilter(coords, previousFrameCoords, settings);
+    //Step 1: Clamp to a unit circle.
+    processUnitCircle(coords, settings);
     
     //Step 2: Process radial deadzones.
     processRadialDeadzones(coords, settings);
     
     //Step 3: Process angular deadzones.
     processAngularDeadzones(coords, settings);
+
+    //Step 4: Low-pass filter.
+    processLowPassFilter(coords, previousFrameCoords, settings);
+    
 }
 
 
@@ -59,11 +63,12 @@ void AnalogStickCleaner::cleanButton(
     //Sanitize the function arguments.
     *pressure = std::clamp(*pressure, 0.0f, 1.0f);
     
-    //Step 1: Low-pass filter.
+    //Step 1: Process deadzones.
+    processButtonDeadzones(pressure, settings);
+
+    //Step 2: Low-pass filter.
     processLowPassFilterButton(pressure, previousFramePressure, settings);
     
-    //Step 2: Process deadzones.
-    processButtonDeadzones(pressure, settings);
 }
 
 
@@ -98,6 +103,33 @@ float AnalogStickCleaner::getSnapDirDeadzone(
 
 /**
  * @brief Returns the interpolation between two numbers, given a number in
+ * an interval. Input values can go outside the input range, which results
+ * in the output going outside the output range.
+ *
+ * @param input The input number.
+ * @param inputStart Start of the interval the input number falls on,
+ * inclusive. The closer to inputStart, the closer the output is
+ * to outputStart.
+ * @param inputEnd End of the interval the number falls on, inclusive.
+ * @param outputStart Number on the starting tip of the interpolation.
+ * @param outputEnd Number on the ending tip of the interpolation.
+ * @return The interpolated number.
+ */
+float AnalogStickCleaner::interpolate(
+    float input, float inputStart, float inputEnd,
+    float outputStart, float outputEnd
+) {
+    float inputDiff = std::max(0.001f, inputEnd - inputStart);
+    float result =
+        outputStart +
+        ((input - inputStart) / inputDiff) *
+        (outputEnd - outputStart);
+    return result;
+}
+
+
+/**
+ * @brief Returns the interpolation between two numbers, given a number in
  * an interval. Then, it clamps it to that interval.
  *
  * @param input The input number.
@@ -113,11 +145,8 @@ float AnalogStickCleaner::interpolateAndClamp(
     float input, float inputStart, float inputEnd,
     float outputStart, float outputEnd
 ) {
-    float inputDiff = std::max(0.001f, inputEnd - inputStart);
     float result =
-        outputStart +
-        ((input - inputStart) / inputDiff) *
-        (outputEnd - outputStart);
+        interpolate(input, inputStart, inputEnd, outputStart, outputEnd);
     result = std::clamp(result, outputStart, outputEnd);
     return result;
 }
@@ -184,7 +213,7 @@ void AnalogStickCleaner::processAngularDeadzones(
     if(sanitizedSettings.deadzones.angular.interpolate) {
         //Interpolate.
         angle =
-            interpolateAndClamp(
+            interpolate(
                 angle,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
@@ -243,7 +272,7 @@ void AnalogStickCleaner::processButtonDeadzones(
     if(sanitizedSettings.deadzones.button.interpolate) {
         //Interpolate.
         *pressure =
-            interpolateAndClamp(
+            interpolate(
                 *pressure,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
@@ -382,7 +411,7 @@ void AnalogStickCleaner::processRadialDeadzones(
     if(sanitizedSettings.deadzones.radial.interpolate) {
         //Interpolate.
         radius =
-            interpolateAndClamp(
+            interpolate(
                 radius,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
@@ -400,6 +429,30 @@ void AnalogStickCleaner::processRadialDeadzones(
     }
     
     //Finally, save the clean input.
+    toCartesian(coords, angle, radius);
+}
+
+
+/**
+ * @brief Process unit circle cleaning logic.
+ *
+ * @param coords Coordinates to clean.
+ * @param settings Settings to use.
+ */
+void AnalogStickCleaner::processUnitCircle(
+    float coords[2], const Settings& settings
+) {
+    //Check if we even have anything to do.
+    if(
+        !settings.misc.unitCircleClamp
+    ) {
+        return;
+    }
+    
+    //Do the cleanup.
+    float radius, angle;
+    toPolar(coords, angle, radius);
+    radius = std::clamp(radius, 0.0f, 1.0f);
     toCartesian(coords, angle, radius);
 }
 

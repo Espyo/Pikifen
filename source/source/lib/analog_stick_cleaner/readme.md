@@ -5,13 +5,14 @@
 > * [Features](#features)
 > * [Other usage information](#other-usage-information)
 > * [Research](#research)
+> * [Future plans](#future-plans)
 
 
 ## Overview
 
-This is a source-only C++ library that performs some [analog stick](https://en.wikipedia.org/wiki/Analog_stick) input value cleanup. Analog sticks are finicky input sources by nature, whether that's because a human's finger isn't very precise, because the stick's looseness allows for wobbling, or because the plastic shell of the game pad doesn't allow the stick to reach the values it should. As such, with deadzones, value interpolation, and a few more tricks, it's possible to output values much closer to what the player actually wants. It also supports cleaning up analog button input values.
+This is a source-only C++ library that performs some [analog stick](https://en.wikipedia.org/wiki/Analog_stick) input value cleanup. Analog sticks are finicky input sources by nature, whether that's because a human's finger isn't very precise, because the stick's looseness allows for wobbling, or because the plastic shell of the game pad doesn't allow the stick to reach the values it should. As such, with deadzones, value interpolation, and a few more tricks, it's possible to output values much closer to what the player actually wants. It also has simple support for cleaning up analog _button_ input values.
 
-The library is entirely stateless: you feed it the X and Y coordinates of an analog stick, along with some configuration settings, and it spits out a clean value, all in a single function.
+The library is entirely stateless and easy to use: you feed it the X and Y coordinates of an analog stick, along with some configuration settings, and it spits out the cleaned coordinate value, all in a single function.
 
 
 ## Quick example
@@ -50,6 +51,9 @@ while(myGame.running) {
 * Interpolation:
   * When using deadzones, for instance, a deadzone of 0.2, interpolation makes it so the value doesn't instantly jump from 0 to 0.2 once the player reaches the threshold.
   * See `AnalogStickCleaner::Settings::Deadzones::*::interpolate`.
+* Unit circle clamping:
+  * In some situations, the input values' radius may be more than 1, like on a joystick that's not well-calibrated or has a frame that's not circular. This feature clamps the value to [0 - 1]. Good for stopping something like a character or reticle moving faster than expected.
+  * See `AnalogStickCleaner::Settings::Misc::unitCircleClamp`.
 * Low-pass filtering:
   * Reduces finger jittering by smoothening the values, though it can make controls feel a bit less responsive. Good for when careful aiming is required.
   * See `AnalogStickCleaner::Settings::LowPassFilter`.
@@ -70,3 +74,8 @@ The library mostly implements the solutions encountered in these blog posts:
 * [Doing Thumbstick Dead Zones Right, by Josh Sutphin - Game Developer](https://www.gamedeveloper.com/business/doing-thumbstick-dead-zones-right)
 * [Interpreting Analog Sticks in INVERSUS, by Ryan Juckett - Game Developer](https://www.gamedeveloper.com/design/interpreting-analog-sticks-in-inversus)
   * [Interpreting Analog Sticks - Hypersect](https://blog.hypersect.com/interpreting-analog-sticks/) (Original article)
+
+
+## Future plans
+
+* Axis deadzones.

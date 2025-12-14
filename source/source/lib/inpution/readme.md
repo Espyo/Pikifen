@@ -10,6 +10,7 @@ _From input to action._
 >   * [Key terms](#key-terms)
 >   * [FAQ and troubleshooting](#faq-and-troubleshooting)
 > * [Inner workings notes](#inner-workings-notes)
+> * [Future plans](#future-plans)
 
 
 ## Overview
@@ -136,25 +137,53 @@ int main() {
 
 ## Features
 
-* Many settings:
-  * Analog (range [0 - 1]), digital (just 0 or 1), and "down-only" (just 1) input values, and conversions between them (see `ActionType::valueType`).
-  * Auto-repeated action events as long as the input is held (see `ActionType::autoRepeat`).
-  * Actions can be generated directly from input events, or from the total combined internal hardware state (see `ActionType::directEvents`).
-  * Reinserting actions into the queue for a buffer effect (see `ActionType::reinsertionTTL`).
-  * Multiple players (see `Action::playerNr`).
-  * Analog stick deadzone processing, with all sorts of interpolations (see `ManagerOptions`).
-* Varied support:
-  * Support for multiple controllers at once.
-  * Support for the input source triggering multiple actions, and for multiple input sources triggering the same action.
-  * Support for stateful input sources (buttons, keys, analog sticks, etc.) and stateless sources (mouse wheel spins, typed characters).
-  * Support for binds with modifiers (e.g. pressing Ctrl before pressing S) (see `Manager::modifiers`).
-  * Support for analog buttons (e.g. X-Box 360 triggers), so long as you can identify when a "stick" is actually an analog button.
-* Specific features:
-  * Game states logic (see `Manager::setGameState()`).
-  * Temporarily ignoring given input sources (see `Manager::startIgnoringInputSource()`).
-* About the library:
-  * Fairly light, and fairly simple.
-  * Very agnostic, and with no external dependencies.
+### Many settings
+* Different input value types.
+  * Actions can have an analog (range [0 - 1]), digital (just 0 or 1), or "down-only" (just 1) value type. Conversions between them happen automatically.
+  * e.g. A digital action can be triggered by an analog button, like shooting bound to an analog trigger.
+  * See `ActionType::valueType`.
+* Auto-repeats.
+  * If enabled, as long as the input is held, Inpution can repeatedly send multiple actions over time.
+  * e.g. The player holds up on the D-pad, and several "menu up" actions are triggered so they can navigate through menus quickly.
+  * See `ActionType::autoRepeat`.
+* Direct action events.
+  * If enabled, actions are generated directly from input events. Disabled by default, which instead uses the total combined internal hardware state at the end of a frame.
+  * e.g. Pressing A triggers a punch action. Pressing B (also punch) when A is held does nothing if the feature is disabled, but triggers a new action if enabled.
+  * See `ActionType::directEvents`.
+* Queue reinsertion.
+  * Reinserting actions into the queue for a buffer effect.
+  * e.g. The player pressed the A button to jump while in mid-air. The action goes back into the queue for some frames. If the player lands a couple of frames after this, the action is still in the queue and can now make the player jump.
+  * See `ActionType::reinsertionTTL`.
+* Multiple players.
+  * See `Action::playerNr`.
+* Analog stick deadzone processing.
+  * Comes with all sorts of interpolations.
+  * See `ManagerOptions`.
+
+### Varied support
+* Support for multiple controllers at once.
+* Support for free binds.
+  * An input source can trigger multiple actions, and multiple input sources can trigger the same action.
+* Support for stateful and stateless input sources.
+  * Stateful sources include buttons, keys, analog sticks, etc., meaning they are always in a given state till the player physically changes them. Stateless sources include mouse wheel spins, typed characters, etc., and a player's physical movement is one-and-done.
+* Support for binds with modifiers.
+  * e.g. pressing Ctrl before pressing S, in order to save in a menu.
+  * See `Manager::modifiers`.
+* Support for analog buttons.
+  * As long as you can identify an input source as an analog button, which are sometimes internally defined as analog sticks, then you can inform Inpution about it.
+  * e.g. The X-Box 360 triggers.
+
+### Specific features
+* Game states logic.
+  * e.g. If you have a state for the "Ready..." cutscene before the player has control, and have a state for normal gameplay, then holding right in the cutscene state lets the player walk right on frame 1 of the gameplay state.
+  * See `Manager::setGameState()`.
+* Temporarily ignoring given input sources.
+  * e.g. You just captured an input in the options menu to assign to a bind, and you don't want that input to immediately trigger its action.
+  * See `Manager::startIgnoringInputSource()`.
+
+### About the library
+* Fairly light, and fairly simple.
+* Very agnostic, and with no external dependencies.
 
 
 ### What it doesn't do
@@ -202,3 +231,8 @@ int main() {
 ## Inner workings notes
 
 * Analog sticks can have any number of axes, and each axis could mean something different, so Inpution makes no attempt to understand them. However, for the sake of usability, it treats axis 0 of an analog stick as the horizontal axis and axis 1 as the vertical axis. And it treats 0,0 as the analog stick's neutral position, axis 0 negative and positive as left and right respectively, and axis 1 negative and positive as up and down respectively. This seems to be what almost all game controllers use in the real world.
+
+
+## Future plans
+
+* Implement sub-schemes, so a game can have a scheme for when the player is driving, another for when they're on foot, etc.
