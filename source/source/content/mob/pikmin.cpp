@@ -143,11 +143,6 @@ void Pikmin::drawMob() {
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
-    bool isIdle =
-        fsm.curState->id == PIKMIN_STATE_IDLING ||
-        fsm.curState->id == PIKMIN_STATE_IDLING_H ||
-        fsm.curState->id == PIKMIN_STATE_SPROUT;
-        
     drawBitmapWithEffects(curSPtr->bitmap, pikSpriteEff);
     
     //Top.
@@ -178,7 +173,11 @@ void Pikmin::drawMob() {
     }
     
     //Idle glow.
-    if(isIdle) {
+    if(
+        fsm.curState->id == PIKMIN_STATE_IDLING ||
+        fsm.curState->id == PIKMIN_STATE_IDLING_H ||
+        fsm.curState->id == PIKMIN_STATE_SPROUT
+    ) {
         BitmapEffect idleEff = pikSpriteEff;
         Point glowBmpSize =
             getBitmapDimensions(game.sysContent.bmpIdleGlow);

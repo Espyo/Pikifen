@@ -197,10 +197,13 @@ private:
     //Is the add mode on in the sprite bitmap state?
     bool spriteBmpAddMode = false;
     
-    //Top bitmaps for the current Pikmin type.
+    //Top bitmaps for the current Pikmin type or antenna light.
     ALLEGRO_BITMAP* topBmp[N_MATURITIES] = { nullptr, nullptr, nullptr };
     
-    //Keep the aspect ratio when resizing the Pikmin top?
+    //Tint the Pikmin top or antenna light bitmaps with this color.
+    ALLEGRO_COLOR topTint = COLOR_WHITE;
+    
+    //Keep the aspect ratio when resizing the Pikmin top or leader light?
     bool topKeepAspectRatio = true;
     
     //Animation sounds being played.
@@ -297,6 +300,7 @@ private:
     void setupForNewAnimDbPre();
     void setAllSpriteScales(float scale);
     void setBestFrameSprite();
+    void setDefaultTopValues(Sprite* curSprite);
     void spriteBmpFloodFill(
         ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );

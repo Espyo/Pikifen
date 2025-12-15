@@ -63,6 +63,30 @@
         <td>1.2</td>
       </tr>
       <tr>
+        <td>light</td>
+        <td>Bitmap for the antenna light, if any. Every frame of animation for the leader specifies where the light goes, so every frame this bitmap gets placed accordingly. If left empty, no antenna light will be used.</td>
+        <td>Internal name</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>light_color</td>
+        <td>Color for the antenna light's bitmap. You probably want this to be bright, brighter than the <code>light_particle_color</code> property.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>light_particle_color</td>
+        <td>Color for the antenna light's particles. You probably want this to be a bit darker than the <code>light_color</code> property.</td>
+        <td>Color</td>
+        <td>0 0 0 0</td>
+      </tr>
+      <tr>
+        <td>light_particle_generator</td>
+        <td>Particle generator to use for the antenna light. Every frame, one particle from this generator gets emitted, tinted with <code>light_color</code>. If empty, no antenna light particles will be created.</td>
+        <td>Internal name</td>
+        <td></td>
+      </tr>
+      <tr>
         <td>max_throw_height</td>
         <td>When thrown, the leader reaches this height at the apex of the throw. For reference, you can find the values used by the base content Pikmin types and leaders <a href="area.html#tips">here</a>.</td>
         <td>Number</td>

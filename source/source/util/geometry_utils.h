@@ -264,6 +264,7 @@ void getTransformedRectangleBBox(
     Point* minCoords, Point* maxCoords
 );
 float getVerticalAlignOffset(V_ALIGN_MODE mode, float height);
+float inchTowardsAngle(float start, float target, float maxStep);
 float interpolateAngle(
     float input, float inputStart, float inputEnd,
     float& outputStart, float& outputEnd

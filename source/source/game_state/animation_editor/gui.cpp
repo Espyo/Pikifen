@@ -2246,6 +2246,19 @@ void AnimationEditor::processGuiPanelSprite() {
                 "Edit the Pikmin's top (maturity) for this sprite."
             );
             
+        } else if(
+            loadedMobType &&
+            loadedMobType->category->id == MOB_CATEGORY_LEADERS
+        ) {
+        
+            //Sprite leader light button.
+            if(ImGui::Button("Leader light", modeButtonsSize)) {
+                changeState(EDITOR_STATE_TOP);
+            }
+            setTooltip(
+                "Edit the leader's antenna light for this sprite."
+            );
+            
         }
         
     }
@@ -2844,6 +2857,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
  * @brief Processes the Dear ImGui sprite top control panel for this frame.
  */
 void AnimationEditor::processGuiPanelSpriteTop() {
+    bool isPikmin = loadedMobType->category->id == MOB_CATEGORY_PIKMIN;
+    
     ImGui::BeginChild("spriteTop");
     
     //Back button.
@@ -2866,7 +2881,9 @@ void AnimationEditor::processGuiPanelSpriteTop() {
             ImGui::OpenPopup("importSpriteTop");
         }
         setTooltip(
-            "Import the top data from another sprite."
+            "Import the " +
+            string(isPikmin ? "Pikmin top" : "leader light") +
+            " data from another sprite."
         );
         
         //Import sprite popup.
@@ -2883,7 +2900,9 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         ) {
             importSpriteTopData(pickedSprite);
             setStatus(
-                "Imported Pikmin top data from \"" + pickedSprite + "\"."
+                "Imported " +
+                string(isPikmin ? "Pikmin top" : "leader light") +
+                " data from \"" + pickedSprite + "\"."
             );
         }
         
@@ -2893,14 +2912,20 @@ void AnimationEditor::processGuiPanelSpriteTop() {
     ImGui::Spacer();
     if(ImGui::Checkbox("Visible", &curSprite->topVisible)) {
         changesMgr.markAsChanged();
+        if(curSprite->topVisible) {
+            setDefaultTopValues(curSprite);
+            curSprite->topVisible = true;
+        }
     }
     setTooltip(
-        "Is the top visible in this sprite?"
+        "Is the " +
+        string(isPikmin ? "Pikmin top" : "leader light") +
+        " visible in this sprite?"
     );
     
     if(curSprite->topVisible) {
     
-        //Top center value.
+        //Center value.
         if(
             ImGui::DragFloat2("Center", (float*) &curSprite->topPose.pos, 0.05f)
         ) {
@@ -2911,7 +2936,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
             "", WIDGET_EXPLANATION_DRAG
         );
         
-        //Top size value.
+        //Size value.
         if(
             processGuiSizeWidgets(
                 "Size", curSprite->topPose.size, 0.01f,
@@ -2929,7 +2954,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         ImGui::Indent();
         ImGui::Checkbox("Keep aspect ratio", &topKeepAspectRatio);
         ImGui::Unindent();
-        setTooltip("Keep the aspect ratio when resizing the top.");
+        setTooltip("Keep the aspect ratio when resizing.");
         
         
         //Top angle value.
@@ -2946,14 +2971,16 @@ void AnimationEditor::processGuiPanelSpriteTop() {
             "", WIDGET_EXPLANATION_SLIDER
         );
         
-        //Toggle maturity button.
-        ImGui::Spacer();
-        if(ImGui::Button("Toggle maturity")) {
-            curMaturity = sumAndWrap(curMaturity, 1, N_MATURITIES);
+        if(isPikmin) {
+            //Toggle maturity button.
+            ImGui::Spacer();
+            if(ImGui::Button("Toggle maturity")) {
+                curMaturity = sumAndWrap(curMaturity, 1, N_MATURITIES);
+            }
+            setTooltip(
+                "View a different maturity top."
+            );
         }
-        setTooltip(
-            "View a different maturity top."
-        );
         
     }
     

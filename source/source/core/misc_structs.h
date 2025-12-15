@@ -894,8 +894,6 @@ struct SystemContentList {
     //Switching standby Pikmin type.
     ALLEGRO_SAMPLE* sndSwitchPikmin = nullptr;
     
-    //Global animations.
-    
     //Leader damage spark.
     AnimationInstance anmSparks;
     

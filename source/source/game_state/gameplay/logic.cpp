@@ -622,6 +622,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         }
     }
     
+    //Move the leader with the mouse.
     if(
         readyForInput && isInputAllowed && interlude.get() == INTERLUDE_NONE &&
         game.options.controls.mouseMovesLeader[player->playerNr]

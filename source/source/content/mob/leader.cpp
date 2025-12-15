@@ -698,19 +698,17 @@ void Leader::dismissLogic() {
  * @brief Draw a leader mob.
  */
 void Leader::drawMob() {
-    Mob::drawMob();
-    
     Sprite* curSPtr;
     Sprite* nextSPtr;
     float interpolationFactor;
     getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
     if(!curSPtr) return;
     
-    BitmapEffect eff;
+    //The leader themself.
+    BitmapEffect mobEff;
     getSpriteBitmapEffects(
         curSPtr, nextSPtr, interpolationFactor,
-        &eff,
-        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        &mobEff,
         SPRITE_BMP_EFFECT_FLAG_STATUS |
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
@@ -718,7 +716,72 @@ void Leader::drawMob() {
         SPRITE_BMP_EFFECT_CARRY |
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
+    BitmapEffect leaSpriteEff = mobEff;
+    getSpriteBitmapEffects(
+        curSPtr, nextSPtr, interpolationFactor,
+        &leaSpriteEff,
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+    );
     
+    drawBitmapWithEffects(curSPtr->bitmap, leaSpriteEff);
+    
+    //Light.
+    if(curSPtr->topVisible && leaType->bmpLight) {
+        Point lightCoords;
+        float lightAngle;
+        Point lightSize;
+        BitmapEffect lightEff = mobEff;
+        getSpriteBasicTopEffects(
+            curSPtr, nextSPtr, interpolationFactor,
+            &lightCoords, &lightAngle, &lightSize
+        );
+        //To get the height effect to work, we'll need to scale the translation
+        //too, otherwise the light will detach from the leader visually as
+        //the leader falls into a pit. The "right" scale is a bit of a guess
+        //at this point in the code, but honestly, either X scale or Y scale
+        //will work. In the off-chance they are different, using an average
+        //will be more than enough.
+        float avgScale =
+            (lightEff.tf.scale.x + lightEff.tf.scale.y) / 2.0f;
+        Point topBmpSize = getBitmapDimensions(leaType->bmpLight);
+        lightEff.tf.trans +=
+            pos + rotatePoint(lightCoords, angle) * avgScale;
+        lightEff.tf.scale *= lightSize / topBmpSize;
+        lightEff.tf.rot += angle + lightAngle;
+        lightEff.tintColor = leaType->lightBmpTint;
+        
+        drawBitmapWithEffects(leaType->bmpLight, lightEff);
+        
+        //This is the best place to do the light particles, so do them here.
+        ParticleGenerator pg =
+            standardParticleGenSetup(
+                leaType->lightParticleGenIName, nullptr
+            );
+        pg.baseParticle.pos = lightEff.tf.trans;
+        pg.baseParticle.bmpAngle = lightEff.tf.rot;
+        pg.baseParticle.z = z + height + 1.0f;
+        adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
+            pg.baseParticle.color,
+        [ = ] (const ALLEGRO_COLOR & c) {
+            ALLEGRO_COLOR newColor = c;
+            newColor.r *= leaType->lightParticleTint.r;
+            newColor.g *= leaType->lightParticleTint.g;
+            newColor.b *= leaType->lightParticleTint.b;
+            newColor.a *= leaType->lightParticleTint.a;
+            return newColor;
+        }
+        );
+        adjustKeyframeInterpolatorValues<float>(
+            pg.baseParticle.size,
+        [ = ] (float s) {
+            return std::max(lightSize.x, lightSize.y);
+        }
+        );
+        pg.emit(game.states.gameplay->particles);
+    }
+    
+    //Invulnerability sparks.
     if(invulnPeriod.timeLeft > 0.0f) {
         Sprite* sparkS;
         game.sysContent.anmSparks.getSpriteData(
@@ -726,15 +789,15 @@ void Leader::drawMob() {
         );
         
         if(sparkS && sparkS->bitmap) {
-            BitmapEffect sparkEff = eff;
-            Point size = getBitmapDimensions(curSPtr->bitmap) * eff.tf.scale;
+            BitmapEffect sparkEff = leaSpriteEff;
+            Point size = getBitmapDimensions(curSPtr->bitmap) * mobEff.tf.scale;
             Point sparkSize = getBitmapDimensions(sparkS->bitmap);
             sparkEff.tf.scale = size / sparkSize;
             drawBitmapWithEffects(sparkS->bitmap, sparkEff);
         }
     }
     
-    drawStatusEffectBmp(this, eff);
+    drawStatusEffectBmp(this, mobEff);
 }
 
 

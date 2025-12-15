@@ -50,7 +50,7 @@ const size_t TIMELINE_LOOP_TRI_SIZE = 8;
 //Pad the left, right, and bottom of the timeline by this much.
 const size_t TIMELINE_PADDING = 6;
 
-//Minimum width or height a Pikmin top can have.
+//Minimum width or height a Pikmin top or leader light can have.
 const float TOP_MIN_SIZE = 1.0f;
 
 //Maximum zoom level possible in the editor.
@@ -601,7 +601,8 @@ void AnimationEditor::importSpriteHitboxData(const string& name) {
 
 
 /**
- * @brief Imports the sprite top data from a different sprite to the current.
+ * @brief Imports the sprite Pikmin top/leader light data from a different
+ * sprite to the current.
  *
  * @param name Name of the animation to import.
  */
@@ -1013,6 +1014,7 @@ void AnimationEditor::pickSprite(
                 loadedMobType ? loadedMobType->height : 128,
                 loadedMobType ? loadedMobType->radius : 32
             );
+            setDefaultTopValues(db.sprites.back());
             db.sortAlphabetically();
             changesMgr.markAsChanged();
             setStatus("Created sprite \"" + name + "\".");
@@ -1427,7 +1429,11 @@ bool AnimationEditor::saveAnimDb() {
     
     db.saveToDataNode(
         &fileNode,
-        loadedMobType && loadedMobType->category->id == MOB_CATEGORY_PIKMIN
+        loadedMobType &&
+        (
+            loadedMobType->category->id == MOB_CATEGORY_PIKMIN ||
+            loadedMobType->category->id == MOB_CATEGORY_LEADERS
+        )
     );
     
     if(!fileNode.saveFile(manifest.path)) {
@@ -1568,6 +1574,23 @@ void AnimationEditor::setBestFrameSprite() {
 
 
 /**
+ * @brief Sets the top-related values of a sprite to the default values,
+ * if applicable.
+ *
+ * @param curSprite The sprite.
+ */
+void AnimationEditor::setDefaultTopValues(Sprite* curSprite) {
+    if(!loadedMobType) return;
+    if(loadedMobType->category->id == MOB_CATEGORY_PIKMIN) {
+        curSprite->topVisible = true;
+        curSprite->topPose.size = Point(5.5f, 10.0f);
+    } else if(loadedMobType->category->id == MOB_CATEGORY_LEADERS) {
+        curSprite->topPose.size = Point(10.0f, 10.0f);
+    }
+}
+
+
+/**
  * @brief Sets up the editor for a new animation database,
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
@@ -1593,10 +1616,11 @@ void AnimationEditor::setupForNewAnimDbPost() {
         }
     }
     
-    //Top bitmaps.
+    //Pikmin top or leader light bitmaps.
     for(unsigned char t = 0; t < N_MATURITIES; t++) {
         if(topBmp[t]) topBmp[t] = nullptr;
     }
+    topTint = COLOR_WHITE;
     
     if(
         loadedMobType &&
@@ -1605,6 +1629,13 @@ void AnimationEditor::setupForNewAnimDbPost() {
         for(size_t m = 0; m < N_MATURITIES; m++) {
             topBmp[m] = ((PikminType*) loadedMobType)->bmpTop[m];
         }
+    } else if(
+        loadedMobType &&
+        loadedMobType->category->id == MOB_CATEGORY_LEADERS
+    ) {
+        topBmp[0] = ((LeaderType*) loadedMobType)->bmpLight;
+        topTint = ((LeaderType*) loadedMobType)->lightBmpTint;
+        curMaturity = 0;
     }
     
     if(loadedMobType && db.name == "animations") {

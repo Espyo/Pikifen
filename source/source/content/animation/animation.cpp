@@ -559,7 +559,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
  * @brief Saves the animation database data to a data node.
  *
  * @param node Data node to save to.
- * @param saveTopData Whether to save the Pikmin top's data.
+ * @param saveTopData Whether to save the Pikmin top or leader light's data.
  */
 void AnimationDatabase::saveToDataNode(
     DataNode* node, bool saveTopData
@@ -1288,19 +1288,19 @@ void getSpriteBasicEffects(
 
 
 /**
- * @brief Returns the final transformation data for a Pikmin top's "basic"
- * sprite effect. i.e. the translation, angle, scale, and tint.
+ * @brief Returns the final transformation data for a Pikmin top or leader
+ * light's "basic" sprite effect. i.e. the translation, angle, scale, and tint.
  * This makes use of interpolation between two frames if applicable.
  *
  * @param curSpritePtr The current sprite.
  * @param nextSpritePtr The next sprite, if any.
  * @param interpolationFactor Amount to interpolate the two sprites by, if any.
  * [0 - 1].
- * @param outEffTrans If not nullptr, the top's final translation is
+ * @param outEffTrans If not nullptr, the top/light's final translation is
  * returned here.
- * @param outEffAngle If not nullptr, the top's final rotation angle is
+ * @param outEffAngle If not nullptr, the top/light's final rotation angle is
  * returned here.
- * @param outEffSize If not nullptr, the top's final size is
+ * @param outEffSize If not nullptr, the top/light's final size is
  * returned here.
  */
 void getSpriteBasicTopEffects(

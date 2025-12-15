@@ -753,8 +753,12 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
     }
     
     if(
-        s->topVisible && loadedMobType
-        && loadedMobType->category->id == MOB_CATEGORY_PIKMIN
+        s->topVisible && loadedMobType &&
+        (
+            loadedMobType->category->id == MOB_CATEGORY_PIKMIN ||
+            loadedMobType->category->id == MOB_CATEGORY_LEADERS
+        ) &&
+        topBmp[curMaturity]
     ) {
         Point coords;
         float angle;
@@ -763,7 +767,7 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
             s, nextS, interpolationFactor,
             &coords, &angle, &size
         );
-        drawBitmap(topBmp[curMaturity], coords, size, angle);
+        drawBitmap(topBmp[curMaturity], coords, size, angle, topTint);
     }
     
     if(comparisonAbove) {

@@ -1420,6 +1420,27 @@ float getVerticalAlignOffset(V_ALIGN_MODE mode, float height) {
 
 
 /**
+ * @brief Given a starting angle, it increases or decreases it towards the
+ * target value, but the change will not be higher than the max step.
+ *
+ * @param start Starting value.
+ * @param target Target value.
+ * @param maxStep Maximum change in value allowed. This value must be positive,
+ * regardless of inch direction.
+ * @return The inched number.
+ */
+float inchTowardsAngle(float start, float target, float maxStep) {
+    float delta = normalizeAngle(target - start);
+    if(fabs(delta) <= maxStep) return target;
+    if(delta > 0) {
+        return normalizeAngle(start + maxStep);
+    } else {
+        return normalizeAngle(start - maxStep);
+    }
+}
+
+
+/**
  * @brief Returns the interpolation between two angles, given a number
  * in an interval.
  *

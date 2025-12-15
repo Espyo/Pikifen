@@ -97,10 +97,17 @@ AnimConversionVector LeaderType::getAnimConversions() const {
 void LeaderType::loadCatProperties(DataNode* file) {
     ReaderSetter lRS(file);
     string sleepingStatusStr;
+    string lightStr;
     DataNode* sleepingStatusNode;
+    DataNode* lightNode = nullptr;
+    DataNode* lightPGNode = nullptr;
     
     lRS.set("knocked_down_duration", knockedDownDuration);
     lRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
+    lRS.set("light", lightStr, &lightNode);
+    lRS.set("light_color", lightBmpTint);
+    lRS.set("light_particle_color", lightParticleTint);
+    lRS.set("light_particle_generator", lightParticleGenIName, &lightPGNode);
     lRS.set("max_throw_height", maxThrowHeight);
     lRS.set("sleeping_status", sleepingStatusStr, &sleepingStatusNode);
     lRS.set("whistle_range", whistleRange);
@@ -125,6 +132,23 @@ void LeaderType::loadCatProperties(DataNode* file) {
                 sleepingStatusNode
             );
         }
+    }
+    
+    if(lightPGNode) {
+        if(
+            game.content.particleGens.list.find(lightParticleGenIName) ==
+            game.content.particleGens.list.end()
+        ) {
+            game.errors.report(
+                "Unknown particle generator \"" + lightParticleGenIName + "\"!",
+                lightPGNode
+            );
+        }
+    }
+    
+    //Always load this since it's necessary for the animation editor.
+    if(lightNode) {
+        bmpLight = game.content.bitmaps.list.get(lightStr, lightNode);
     }
 }
 
@@ -151,4 +175,5 @@ void LeaderType::loadCatResources(DataNode* file) {
  */
 void LeaderType::unloadResources() {
     game.content.bitmaps.list.free(bmpIcon);
+    game.content.bitmaps.list.free(bmpLight);
 }

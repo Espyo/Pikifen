@@ -93,11 +93,11 @@ public:
     //Tint the image with this color.
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
-    //Positional data for the Pikmin top (left/bud/flower).
+    //Positional data for the Pikmin top (left/bud/flower) or leader light.
     Pose2d topPose;
     
-    //Does this sprite even have a visible Pikmin top?
-    bool topVisible = true;
+    //Does this sprite even have a visible Pikmin top or leader light?
+    bool topVisible = false;
     
     //The sprite's actual bitmap. This is a sub-bitmap of parentBmp.
     ALLEGRO_BITMAP* bitmap = nullptr;

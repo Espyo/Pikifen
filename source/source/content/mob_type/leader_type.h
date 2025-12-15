@@ -264,6 +264,18 @@ public:
     //Standby icon.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     
+    //Antenna light bitmap, if any.
+    ALLEGRO_BITMAP* bmpLight = nullptr;
+    
+    //Tint for the antenna light bitmap.
+    ALLEGRO_COLOR lightBmpTint;
+    
+    //Particle generator for the antenna light, if any.
+    string lightParticleGenIName;
+    
+    //Tint for the antenna light particles.
+    ALLEGRO_COLOR lightParticleTint = COLOR_EMPTY;
+    
     //Sound data index for each sound. Cache for performance.
     size_t soundDataIdxs[N_LEADER_SOUNDS];
     
