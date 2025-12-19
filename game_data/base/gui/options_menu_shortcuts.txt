@@ -2,7 +2,7 @@ name=Options menu -- inventory shortcuts
 description=GUI for the inventory shortcuts page of the options menu.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.1
+engine_version=1.1.0
 hardcoded_items{
 	back{
 		center=12.0000 5.0000

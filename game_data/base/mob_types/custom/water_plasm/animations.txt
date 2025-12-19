@@ -2,7 +2,7 @@ name=Water Plasm animations
 description=Animations for the Plasm Wraith's Water Plasm.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.1
+engine_version=1.1.0
 animations{
 	destroyed{
 		frames{

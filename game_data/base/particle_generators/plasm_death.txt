@@ -2,7 +2,7 @@ name=Plasm Wraith death
 description=An explosion of plasm, emitted by a destroyed Plasm Wraith.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.1
+engine_version=1.1.0
 emission{
 	number=1
 	number_deviation=0

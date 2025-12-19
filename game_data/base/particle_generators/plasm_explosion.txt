@@ -2,7 +2,7 @@ name=Plasm explosion
 description=An explosion of plasm, emitted by a destroyed Plasm Blob.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.1
+engine_version=1.1.0
 emission{
 	number=10
 	number_deviation=1

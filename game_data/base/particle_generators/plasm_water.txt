@@ -1,6 +1,6 @@
 name=Plasm water
 description=A continuous stream of bubbles, caused by Water Plasm.
-engine_version=1.0.1
+engine_version=1.1.0
 emission{
 	number=1
 	number_deviation=0

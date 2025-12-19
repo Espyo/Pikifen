@@ -2,7 +2,7 @@ name=Plasm Wraith animations
 description=Animations for the Plasm Wraith.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.1
+engine_version=1.1.0
 animations{
 	absorbing{
 		loop_frame=4
