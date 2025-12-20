@@ -43,6 +43,26 @@
                 }
             ],
             "preLaunchTask": "Build EasySpatNav's unit tests - Debug"
+        },
+        {
+            "name": "Debug Analog Stick Cleaner's unit tests with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/source/source/lib/analog_stick_cleaner/tests/analog_stick_cleaner_tests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable GDB pretty-printing.",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build Analog Stick Cleaner's unit tests - Debug"
         }
     ]
 }

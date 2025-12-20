@@ -423,23 +423,31 @@ void GameplayState::drawBigMsg() {
  * @param player Player that the view belongs to.
  */
 void GameplayState::drawDebugTools(Player* player) {
-    //Tests using Dear ImGui.
+    //Custom tests using Dear ImGui.
     /*
     ImGui::GetIO().MouseDrawCursor = true;
     //GUI logic goes here.
     */
     
-    //Raw analog stick viewer.
+    
+    //Analog stick cleanup viewer.
     /*
+    static float inputAnalogStick[2] = { 0.0f, 0.0f };
+    static float prevCleanAnalogStick[2] = { 0.0f, 0.0f };
+    ImGui::GetIO().MouseDrawCursor = true;
+    ImGui::SliderFloat2("Analog stick XY", inputAnalogStick, -1, 1);
+    
+    //Raw value graph.
     const float RAW_STICK_VIEWER_X = 8;
     const float RAW_STICK_VIEWER_Y = 8;
-    const float RAW_STICK_VIEWER_SIZE = 100;
+    const float RAW_STICK_VIEWER_SIZE = 200;
     
     Point rawStickCoords;
-    rawStickCoords.x = game.controls.mgr.rawSticks[0][0][0];
-    rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
-    float rawStickAngle;
-    float rawStickMag;
+    //rawStickCoords.x = game.controls.mgr.rawSticks[0][0][0];
+    //rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
+    rawStickCoords.x = inputAnalogStick[0];
+    rawStickCoords.y = inputAnalogStick[1];
+    float rawStickAngle, rawStickMag;
     coordinatesToAngle(
         rawStickCoords, &rawStickAngle, &rawStickMag
     );
@@ -525,21 +533,30 @@ void GameplayState::drawDebugTools(Player* player) {
             )
         ).c_str()
     );
-    */
     
-    //Clean analog stick viewer.
-    /*
-    const float CLEAN_STICK_VIEWER_X = 116;
+    
+    //Clean value graph.
+    const float CLEAN_STICK_VIEWER_X = 216;
     const float CLEAN_STICK_VIEWER_Y = 8;
-    const float CLEAN_STICK_VIEWER_SIZE = 100;
+    const float CLEAN_STICK_VIEWER_SIZE = 200;
+    
+    float oldCleanStick[2] =
+        { prevCleanAnalogStick[0], prevCleanAnalogStick[1] };
+    prevCleanAnalogStick[0] = inputAnalogStick[0];
+    prevCleanAnalogStick[1] = inputAnalogStick[1];
+    AnalogStickCleaner::clean(
+        prevCleanAnalogStick, {}, oldCleanStick
+    );
     
     Point cleanStickCoords;
-    cleanStickCoords.x =
-        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_RIGHT) -
-        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_LEFT);
-    cleanStickCoords.y =
-        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN) -
-        game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
+    cleanStickCoords.x = prevCleanAnalogStick[0];
+    cleanStickCoords.y = prevCleanAnalogStick[1];
+    //cleanStickCoords.x =
+    //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_RIGHT) -
+    //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_LEFT);
+    //cleanStickCoords.y =
+    //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN) -
+    //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
     float cleanStickAngle;
     float cleanStickMag;
     coordinatesToAngle(
@@ -630,6 +647,7 @@ void GameplayState::drawDebugTools(Player* player) {
         ).c_str()
     );
     */
+    
     
     //Group stuff.
     if(game.debug.showGroupInfo && player->leaderPtr) {

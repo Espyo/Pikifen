@@ -6,7 +6,9 @@
  * Please read the included readme file.
  */
 
+
 #ifdef EASY_SPAT_NAV_UNIT_TESTS
+
 
 #include <string>
 #include <vector>
@@ -33,19 +35,19 @@ EasySpatNav::Interface spatNavManager;
  */
 struct SpatNavTestItem {
     //--- Members ---
-
+    
     //Starting X coordinate.
     float startX = 0.0f;
-
+    
     //Ending X coordinate.
     float endX = 0.0f;
-
+    
     //Starting Y coordinate.
     float startY = 0.0f;
-
+    
     //Ending Y coordinate.
     float endY = 0.0f;
-
+    
 };
 
 
@@ -54,32 +56,32 @@ struct SpatNavTestItem {
  */
 struct SpatNavTestInterface {
     //--- Members ---
-
+    
     //List of items.
     std::vector<SpatNavTestItem> items;
-
+    
     //Total width.
     float width = 0.0f;
-
+    
     //Total height.
     float height = 0.0f;
-
+    
     //List of existing parents and what their relative item numbers are.
     std::vector<size_t> parentNrs;
-
+    
     //Children items definitions, for each parent in order.
     std::vector<SpatNavTestInterface*> children;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     SpatNavTestInterface();
     SpatNavTestInterface(
         const std::string& s,
         std::vector<SpatNavTestInterface*> children = {}
     );
     void fromString(const std::string& s);
-
+    
 };
 
 
@@ -92,7 +94,7 @@ SpatNavTestInterface::SpatNavTestInterface() { }
 /**
  * @brief Constructs a new test interface object, and reads its data
  * from a string with ASCII art representing it.
- * 
+ *
  * @param s The string.
  * @param children If the interface contains parent items, specify their
  * children here. Each entry in the vector corresponds to one parent.
@@ -108,7 +110,7 @@ SpatNavTestInterface::SpatNavTestInterface(
 
 /**
  * @brief Reads data from a string with ASCII art representing an interface.
- * 
+ *
  * @param s The string.
  */
 void SpatNavTestInterface::fromString(const std::string& s) {
@@ -117,7 +119,7 @@ void SpatNavTestInterface::fromString(const std::string& s) {
     size_t itemStartX = 0;
     size_t caretX = 0;
     size_t caretY = 0;
-
+    
     const auto finishItem =
     [this, &inItem, &itemIsParent, &itemStartX, &caretX, &caretY] () {
         if(!inItem) return;
@@ -138,12 +140,12 @@ void SpatNavTestInterface::fromString(const std::string& s) {
         if(!updated) {
             //Save a new one.
             items.push_back(
-                SpatNavTestItem {
-                    .startX = (float) itemStartX,
-                    .endX = (float) caretX,
-                    .startY = (float) caretY,
-                    .endY = (float) caretY + 1.0f,
-                }
+            SpatNavTestItem {
+                .startX = (float) itemStartX,
+                .endX = (float) caretX,
+                .startY = (float) caretY,
+                .endY = (float) caretY + 1.0f,
+            }
             );
         }
         if(itemIsParent) {
@@ -152,18 +154,18 @@ void SpatNavTestInterface::fromString(const std::string& s) {
         inItem = false;
         itemIsParent = false;
     };
-
+    
     const auto finishLine =
     [this, &caretX, &caretY] () {
         width = std::max(width, (float) caretX);
         caretX = 0;
         caretY++;
     };
-
+    
     for(size_t c = 0; c < s.size(); c++) {
         bool isItem = s[c] == '#' || s[c] == 'P';
         bool isLineBreak = s[c] == '\n';
-
+        
         if(isItem) {
             if(!inItem) {
                 //Start a new item.
@@ -176,14 +178,14 @@ void SpatNavTestInterface::fromString(const std::string& s) {
                 finishItem();
             }
         }
-
+        
         if(isLineBreak) {
             finishLine();
         } else {
             caretX++;
         }
     }
-
+    
     finishItem();
     finishLine();
     height = caretY;
@@ -192,7 +194,7 @@ void SpatNavTestInterface::fromString(const std::string& s) {
 
 /**
  * @brief Recursively adds children interfaces to the EasySpatNav manager.
- * 
+ *
  * @param manager The manager.
  * @param interface Interface whose children to add.
  * @param itemNr Current item number.
@@ -229,7 +231,7 @@ void addChildren(
 
 /**
  * @brief Performs a generic test. Aborts if it fails.
- * 
+ *
  * @param testDescription Description of the test is doing.
  * @param expectedNr Expected number to compare.
  * @param actualNr Actual number.
@@ -259,15 +261,15 @@ void test(
         }
         abort();
     }
-
+    
     nTestsExecuted++;
 }
 
 
 /**
  * @brief Performs a test, navigating from some item to some item.
- * 
- * @param testDescription Description of the test is doing.
+ *
+ * @param testDescription Description of what the test is doing.
  * @param interface Interface to run the test on.
  * @param direction Direction of navigation.
  * @param focusedItemNr Number of the currently focused item (starts at 1).
@@ -289,14 +291,14 @@ void testNav(
     spatNavManager.reset(resetHistory);
     spatNavManager.heuristics = heuristics;
     spatNavManager.settings = settings;
-
+    
     if(settings.limitX2 == 0.0f) {
         spatNavManager.settings.limitX1 = -0.001f;
         spatNavManager.settings.limitX2 = interface.width + 0.001f;
         spatNavManager.settings.limitY1 = -0.001f;
         spatNavManager.settings.limitY2 = interface.height + 0.001f;
     }
-
+    
     size_t itemNr = 1;
     for(size_t i = 0; i < interface.items.size(); i++) {
         spatNavManager.addItem(
@@ -309,12 +311,12 @@ void testNav(
         itemNr++;
     }
     addChildren(spatNavManager, &interface, itemNr, 1);
-
+    
     size_t targetItemNr =
         (size_t) spatNavManager.navigate(
             direction, (EasySpatNav::ItemId) focusedItemNr
         );
-    
+        
     test(testDescription, expectedItemNr, targetItemNr);
 }
 
@@ -327,7 +329,7 @@ using EasySpatNav::DIRECTION_UP;
 
 /**
  * @brief Main testing program.
- * 
+ *
  * @param argc Unused.
  * @param argv Unused.
  * @return 0.
@@ -339,119 +341,119 @@ int main(int argc, char** argv) {
         COLOR_BOLD, COLOR_RESET
     );
     printf("Testing...\n");
-
+    
     //--- Setup some scenarios ---
     SpatNavTestInterface
-        ifBasic2By2(
-            "# #\n"
-            "   \n"
-            "# #"
-        );
+    ifBasic2By2(
+        "# #\n"
+        "   \n"
+        "# #"
+    );
     SpatNavTestInterface
-        ifBasic2By2WithSpace(
-            "     \n"
-            " # # \n"
-            "     \n"
-            " # # \n"
-            "     "
-        );
+    ifBasic2By2WithSpace(
+        "     \n"
+        " # # \n"
+        "     \n"
+        " # # \n"
+        "     "
+    );
     SpatNavTestInterface
-        ifBasic3By3(
-            "# # #\n"
-            "     \n"
-            "# # #\n"
-            "     \n"
-            "# # #"
-        );
+    ifBasic3By3(
+        "# # #\n"
+        "     \n"
+        "# # #\n"
+        "     \n"
+        "# # #"
+    );
     SpatNavTestInterface
-        ifList(
-            "# # # # #"
-        );
+    ifList(
+        "# # # # #"
+    );
     SpatNavTestInterface
-        ifDistances(
-            "  #\n"
-            "#  \n"
-            "   \n"
-            "  #"
-        );
+    ifDistances(
+        "  #\n"
+        "#  \n"
+        "   \n"
+        "  #"
+    );
     SpatNavTestInterface
-        ifDistances2(
-            "  #\n"
-            "   \n"
-            "#  \n"
-            "   \n"
-            "  #"
-        );
+    ifDistances2(
+        "  #\n"
+        "   \n"
+        "#  \n"
+        "   \n"
+        "  #"
+    );
     SpatNavTestInterface
-        ifLoopPass(
-            "# #  \n"
-            "     \n"
-            "     \n"
-            "     \n"
-            "    #"
-        );
+    ifLoopPass(
+        "# #  \n"
+        "     \n"
+        "     \n"
+        "     \n"
+        "    #"
+    );
     SpatNavTestInterface
-        ifBasicParentChild1(
-            "  # #"
-        );
+    ifBasicParentChild1(
+        "  # #"
+    );
     SpatNavTestInterface
-        ifBasicParentTop(
-            "# PPP",
-            { &ifBasicParentChild1 }
-        );
+    ifBasicParentTop(
+        "# PPP",
+    { &ifBasicParentChild1 }
+    );
     SpatNavTestInterface
-        ifListParentChild1(
-            "# # #"
-        );
+    ifListParentChild1(
+        "# # #"
+    );
     SpatNavTestInterface
-        ifListParentTop(
-            "# PPP",
-            { &ifListParentChild1 }
-        );
+    ifListParentTop(
+        "# PPP",
+    { &ifListParentChild1 }
+    );
     SpatNavTestInterface
-        ifDoubleParentChild1Child1(
-            "     #   "
-        );
+    ifDoubleParentChild1Child1(
+        "     #   "
+    );
     SpatNavTestInterface
-        ifDoubleParentChild1(
-            "    PPP  ",
-            { &ifDoubleParentChild1Child1 }
-        );
+    ifDoubleParentChild1(
+        "    PPP  ",
+    { &ifDoubleParentChild1Child1 }
+    );
     SpatNavTestInterface
-        ifDoubleParentTop(
-            "# PPPPPPP",
-            { &ifDoubleParentChild1 }
-        );
+    ifDoubleParentTop(
+        "# PPPPPPP",
+    { &ifDoubleParentChild1 }
+    );
     SpatNavTestInterface
-        ifLargeOverflowChild1(
-            "        #"
-        );
+    ifLargeOverflowChild1(
+        "        #"
+    );
     SpatNavTestInterface
-        ifLargeOverflowTop(
-            "# PPP #  ",
-            { &ifLargeOverflowChild1 }
-        );
+    ifLargeOverflowTop(
+        "# PPP #  ",
+    { &ifLargeOverflowChild1 }
+    );
     SpatNavTestInterface
-        ifTie1(
-            "#   #\n"
-            "     \n"
-            "  #  "
-        );
+    ifTie1(
+        "#   #\n"
+        "     \n"
+        "  #  "
+    );
     SpatNavTestInterface
-        ifTie2(
-            "  #  \n"
-            "     \n"
-            "#   #"
-        );
+    ifTie2(
+        "  #  \n"
+        "     \n"
+        "#   #"
+    );
     SpatNavTestInterface
-        ifEmpty;
+    ifEmpty;
     SpatNavTestInterface
-        ifJust1(
-            "#"
-        );
+    ifJust1(
+        "#"
+    );
     
     //--- Do the tests ---
-
+    
     //Basic navigation.
     testNav(
         "Test that basic navigation to the right works.",
@@ -485,7 +487,7 @@ int main(int argc, char** argv) {
         "Test that navigation up works with another item beyond.",
         ifBasic3By3, DIRECTION_UP, 7, 4
     );
-
+    
     //Looping tests.
     testNav(
         "Test that basic looping to the right works.",
@@ -505,54 +507,54 @@ int main(int argc, char** argv) {
     );
     testNav(
         "Test that looping to the right won't be done if disabled.",
-        ifBasic3By3, DIRECTION_RIGHT, 3, 0, {},
-        { .loopX = false, .loopY = false }
+    ifBasic3By3, DIRECTION_RIGHT, 3, 0, {},
+    { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping to the left won't be done if disabled.",
-        ifBasic3By3, DIRECTION_LEFT, 1, 0, {},
-        { .loopX = false, .loopY = false }
+    ifBasic3By3, DIRECTION_LEFT, 1, 0, {},
+    { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping down won't be done if disabled.",
-        ifBasic3By3, DIRECTION_DOWN, 7, 0, {},
-        { .loopX = false, .loopY = false }
+    ifBasic3By3, DIRECTION_DOWN, 7, 0, {},
+    { .loopX = false, .loopY = false }
     );
     testNav(
         "Test that looping up won't be done if disabled.",
-        ifBasic3By3, DIRECTION_UP, 1, 0, {},
-        { .loopX = false, .loopY = false }
+    ifBasic3By3, DIRECTION_UP, 1, 0, {},
+    { .loopX = false, .loopY = false }
     );
-
+    
     //Distance calculation methods.
     testNav(
         "Test that Euclidean distance checks pick the best option.",
         ifDistances, DIRECTION_UP, 3, 2,
-        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_EUCLIDEAN }
+    { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_EUCLIDEAN }
     );
     testNav(
         "Test that taxicab distance checks pick the best option.",
         ifDistances, DIRECTION_UP, 3, 1,
-        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB }
+    { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB }
     );
     testNav(
         "Test that taxicab 2 distance checks pick the best option.",
         ifDistances2, DIRECTION_UP, 3, 1,
-        { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB_2 }
+    { .distCalcMethod = EasySpatNav::DIST_CALC_METHOD_TAXICAB_2 }
     );
-
+    
     //Single loop pass.
     testNav(
         "Test that the correct item is picked with single-loop pass on.",
         ifLoopPass, DIRECTION_RIGHT, 2, 1,
-        { .singleLoopPass = true }
+    { .singleLoopPass = true }
     );
     testNav(
         "Test that the correct item is picked with single-loop pass off.",
         ifLoopPass, DIRECTION_RIGHT, 2, 3,
-        { .singleLoopPass = false }
+    { .singleLoopPass = false }
     );
-
+    
     //Parents.
     testNav(
         "Test that simple navigation with children works, 1.",
@@ -590,7 +592,7 @@ int main(int argc, char** argv) {
         "Test that navigation to a child inside two parents works.",
         ifDoubleParentTop, DIRECTION_RIGHT, 1, 4
     );
-
+    
     //Tie-breakers.
     testNav(
         "Test that the history is followed in a tie-breaker scenario, "
@@ -622,7 +624,7 @@ int main(int argc, char** argv) {
         "the first added item wins, 2.",
         ifTie2, DIRECTION_DOWN, 1, 2, { .historyScoreThreshold = -1.0f }, {}
     );
-
+    
     //Misc.
     testNav(
         "Test that navigating vertically on a horizontal list, "
@@ -641,14 +643,15 @@ int main(int argc, char** argv) {
         "Test that an interface with no valid starting item returns nullptr.",
         ifBasic2By2WithSpace, DIRECTION_RIGHT, 0, 1
     );
-
+    
     //--- Finish ---
     printf(
         "%sAll %u tests succeeded!%s\n",
         COLOR_GREEN, (unsigned int) nTestsExecuted, COLOR_RESET
     );
-
+    
     return 0;
 }
+
 
 #endif //ifdef EASY_SPAT_NAV_UNIT_TESTS

@@ -10,10 +10,8 @@ Next tasks (roughly sorted most important first)
     If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
 
     --- 1.1.0 ---
-    Swarming jingle
     Test it on the Steam Deck
     Try it in 4K and fix obvious issues
-    Replace all "engine_version=1.0.1" with "engine_version=1.1.0"
 
     --- 1.2.0 ---
     Ice Pikmin
@@ -36,8 +34,9 @@ Next tasks (roughly sorted most important first)
     Puffstool and mushroom Pikmin
         The ability for statuses to change the team to the team of the one that gave the status
         The ability for statuses to change the graphic for a Pikmin's top
-    Mob rotation should have acceleration too
-    A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
+    Swarming jingle
+
+    --- 1.3.0 ---
     [NEEDS BRAINSTORMING] Re-think how missions work
         Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
         I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
@@ -51,6 +50,7 @@ Next tasks (roughly sorted most important first)
         If Onions work automatically, by ejecting Pikmin whenever the amount on field is no longer at max (a la Bingo Battle)
         If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
         If Onions should pop new seeds when an extinction happen or if they should let the extinction happen
+    Global script and script variables, which apply to the whole area
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
@@ -455,6 +455,7 @@ Misc things (so I don't forget)
         If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
             Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
         Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
+        Collision checks with walls don't happen while falling. On the structure at DEV Lab at 1465, 370, if you're on one of the higher sectors and try to fall into the upside-down V, you only collide with the upside-down V's walls (and hence, you only land on it) if you're holding a direction to move horizontally. Not holding anything makes you slip right through those walls and fall to the floor below
     Attack improvements
         Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
         A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
@@ -464,6 +465,7 @@ Misc things (so I don't forget)
     Aesthetic
         [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
+        [NEEDS BRAINSTORMING] Mob rotation should have acceleration too
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the leader cursor goes over them
         The sparkle particles on treasures need to be more obvious
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
@@ -523,10 +525,9 @@ Misc things (so I don't forget)
         Smaller enemies try to chase Winged Pikmin in vain since they'll never reach them. Should they ignore them? How do the canon games do it?
         Objects falling from the sky
             When a leader approaches, when a Pikmin approaches, when carrying, etc.
-        Game config parameters:
-            Nectars: Work like in the engine, or like in the classics?
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
-        A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
+        Hiding spots
+            A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
         Weird limitations
             If Pikmin are already carrying something elsewhere in the area, far away, the Pikmin told to carry something here will rarely play their sound, because the others are already doing it. Likewise, I think only a few geysers in DEV Lab actually play a sound. I can't make 0-volume sounds not play, otherwise stuff like geysers that are far away at spawn will never play sounds...
@@ -541,9 +542,9 @@ Misc things (so I don't forget)
             Onion spinning up to generate
             Un/Pausing
     Radar
-        Details
-            Sparkles on treasures
-            If a leader is off-camera (radar's camera), their icon should be on the edge of the radar in a smaller size
+        Sparkles on treasures
+        If a leader is off-camera (radar's camera), their icon should be on the edge of the radar in a smaller size
+        Almost every object should show up as an icon
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.
@@ -563,7 +564,6 @@ Misc things (so I don't forget)
         Some way to read a different mob's "focus mob memory"?
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
-        Global script variables that apply to the whole area
         Add region trigger mobs, that output power based on how many mobs are inside the given region
         Typical programming things
             An action that returns to the previous state. Useful for creating utility states that mimic functions
@@ -699,7 +699,7 @@ Misc things (so I don't forget)
     Small gameplay messages
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
-    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, cobwebs, etc. to the area's terrain without using sectors or objects
+    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
         Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The loading screen's elements could be controlled with a GUI definition
@@ -709,6 +709,7 @@ Misc things (so I don't forget)
         For leaders, rename active and inactive to controlled and not controlled
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
     Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar or Candypop Buds should automatically pick leaf Pikmin [PIKMIN 4]
+    A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
@@ -809,7 +810,6 @@ Tasks for later on (I might never implement these)
         Nighttime (what enemies can spawn at night, their changes, etc.)
             Change the HUD icon to a moon
         Random enemy spawning
-        Hiding
         A setting that lets leaders jump (thanks Remy)
         [NEEDS BRAINSTORMING] Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this? Should I?
         Warp point [PIKMIN 3][PIKMIN 4]

@@ -60,11 +60,15 @@ while(myGame.running) {
 * Analog button support:
   * Like analog sticks, the pressure value of analog buttons (or analog triggers) can make use of deadzones, interpolation, and low-pass filtering. Except instead of working in two dimensions, it works in one.
   * See `AnalogStickCleaner::Settings::Deadzones::Button` and `AnalogStickCleaner::Settings::LowPassFilter::factorButton`.
+* Library things:
+  * Basic debugging logic (see `ANALOG_STICK_CLEANER_DEBUG`).
+  * Simple unit test coverage for the library itself.
 
 
 ## Other usage information
 
-* For more information on how a part of the library works, read its comments in the header file.
+* You can define `ANALOG_STICK_CLEANER_DEBUG` (or uncomment its line near the top of the source file), to better understand how the input/output values work.
+* For more information on how a part of the library works, read its comments in the header file, or check how the unit tests file does it.
 
 
 ## Research
