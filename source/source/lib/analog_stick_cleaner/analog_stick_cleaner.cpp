@@ -213,7 +213,7 @@ void AnalogStickCleaner::processAngularDeadzones(
     if(sanitizedSettings.deadzones.angular.interpolate) {
         //Interpolate.
         angle =
-            interpolate(
+            interpolateAndClamp(
                 angle,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
@@ -272,7 +272,7 @@ void AnalogStickCleaner::processButtonDeadzones(
     if(sanitizedSettings.deadzones.button.interpolate) {
         //Interpolate.
         *pressure =
-            interpolate(
+            interpolateAndClamp(
                 *pressure,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
@@ -364,7 +364,7 @@ void AnalogStickCleaner::processLowPassFilterButton(
         ) +
         (
             previousFramePressure *
-            (1.0f - sanitizedSettings.lowPassFilter.factor)
+            (1.0f - sanitizedSettings.lowPassFilter.factorButton)
         );
 }
 
@@ -411,7 +411,7 @@ void AnalogStickCleaner::processRadialDeadzones(
     if(sanitizedSettings.deadzones.radial.interpolate) {
         //Interpolate.
         radius =
-            interpolate(
+            interpolateAndClamp(
                 radius,
                 inputSpaceStart, inputSpaceEnd,
                 outputSpaceStart, outputSpaceEnd
