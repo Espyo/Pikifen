@@ -1,13 +1,13 @@
-# Makefile for the Analog Stick Cleaner library's test framework. This should be run in the tests folder.
+# Makefile for the Easy Analog Cleaner library's test framework. This should be run in the tests folder.
 
 
 # Basics.
-PROG         := analog_stick_cleaner_tests
+PROG         := easy_analog_cleaner_tests
 CXX          := g++
 SRCS         := $(shell find .. -name '*.cpp')
 OBJS         := $(SRCS:.cpp=.o)
 DEPS         := $(OBJS:.o=.d)
-CXXFLAGS     := -std=c++17 -D_GLIBCXX_USE_CXX11_ABI=0 -MMD -DANALOG_STICK_CLEANER_UNIT_TESTS
+CXXFLAGS     := -std=c++17 -D_GLIBCXX_USE_CXX11_ABI=0 -MMD -DEASY_ANALOG_CLEANER_UNIT_TESTS
 DEBUGFLAGS   := -g -ggdb -Wall -Wno-unknown-pragmas -O0
 RELEASEFLAGS := -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -O2 -Wno-missing-field-initializers
 

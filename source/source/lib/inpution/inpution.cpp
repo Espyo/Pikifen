@@ -11,7 +11,7 @@
 
 #include "inpution.h"
 
-#include "../analog_stick_cleaner/analog_stick_cleaner.h"
+#include "../easy_analog_cleaner/easy_analog_cleaner.h"
 
 
 namespace Inpution {
@@ -62,10 +62,10 @@ void Manager::cleanStick(const Input& input) {
     coords[0] = rawSticks[input.source.deviceNr][input.source.stickNr][0];
     coords[1] = rawSticks[input.source.deviceNr][input.source.stickNr][1];
     
-    AnalogStickCleaner::Settings cleanupSettings;
+    EasyAnalogCleaner::Settings cleanupSettings;
     cleanupSettings.deadzones.radial.inner = options.stickMinDeadzone;
     cleanupSettings.deadzones.radial.outer = options.stickMaxDeadzone;
-    AnalogStickCleaner::clean(coords, cleanupSettings);
+    EasyAnalogCleaner::clean(coords, cleanupSettings);
     
     cleanSticks[input.source.deviceNr][input.source.stickNr][0] = coords[0];
     cleanSticks[input.source.deviceNr][input.source.stickNr][1] = coords[1];
@@ -273,12 +273,12 @@ bool Manager::handleInput(const Input& input) {
         //Let's normalize it and apply deadzone logic.
         Input cleanInput = input;
         cleanInput.value = (cleanInput.value + 1.0f) / 2.0f;
-        AnalogStickCleaner::Settings cleanupSettings;
+        EasyAnalogCleaner::Settings cleanupSettings;
         cleanupSettings.deadzones.button.pressed =
             options.analogButtonMinDeadzone;
         cleanupSettings.deadzones.button.unpressed =
             options.analogButtonMaxDeadzone;
-        AnalogStickCleaner::cleanButton(&cleanInput.value, cleanupSettings);
+        EasyAnalogCleaner::cleanButton(&cleanInput.value, cleanupSettings);
         
         handleCleanInput(cleanInput, false);
         

@@ -2,7 +2,7 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Analog Stick Cleaner class and related functions.
+ * Easy Analog Cleaner class and related functions.
  *
  * Please read the header file for more information.
  */
@@ -12,13 +12,13 @@
 #include <cmath>
 #include <iostream>
 
-#include "analog_stick_cleaner.h"
+#include "easy_analog_cleaner.h"
 
 
-//#define ANALOG_STICK_CLEANER_DEBUG
+//#define EASY_ANALOG_CLEANER
 
 
-const AnalogStickCleaner::Settings AnalogStickCleaner::SETTINGS_NO_CHANGES = {
+const EasyAnalogCleaner::Settings EasyAnalogCleaner::SETTINGS_NO_CHANGES = {
     .deadzones = {
         .radial = {
             .inner = 0.0f,
@@ -54,7 +54,7 @@ const AnalogStickCleaner::Settings AnalogStickCleaner::SETTINGS_NO_CHANGES = {
  * respectively, each [-1 - 1]. When the cleaning process ends, this array
  * will contain the cleaned up coordinates.
  */
-void AnalogStickCleaner::clean(float coords[2]) {
+void EasyAnalogCleaner::clean(float coords[2]) {
     clean(coords, Settings());
 }
 
@@ -70,7 +70,7 @@ void AnalogStickCleaner::clean(float coords[2]) {
  * the cleaner in the previous frame. This is only necessary if
  * low-pass filtering is enabled in the settings.
  */
-void AnalogStickCleaner::clean(
+void EasyAnalogCleaner::clean(
     float coords[2], const Settings& settings, float previousFrameCoords[2]
 ) {
     //Sanitize the function arguments.
@@ -101,7 +101,7 @@ void AnalogStickCleaner::clean(
  *
  * @param pressure Analog button pressure amount [0 - 1].
  */
-void AnalogStickCleaner::cleanButton(float* pressure) {
+void EasyAnalogCleaner::cleanButton(float* pressure) {
     cleanButton(pressure, Settings());
 }
 
@@ -115,7 +115,7 @@ void AnalogStickCleaner::cleanButton(float* pressure) {
  * previous frame. This is only necessary if low-pass filtering is enabled
  * in the settings.
  */
-void AnalogStickCleaner::cleanButton(
+void EasyAnalogCleaner::cleanButton(
     float* pressure, const Settings& settings, float previousFramePressure
 ) {
     //Sanitize the function arguments.
@@ -140,7 +140,7 @@ void AnalogStickCleaner::cleanButton(
  * @param settings Settings to use.
  * @return The deadzone size.
  */
-float AnalogStickCleaner::getSnapDirDeadzone(
+float EasyAnalogCleaner::getSnapDirDeadzone(
     int snapDirIdx, const Settings& settings
 ) {
     switch(snapDirIdx % 8) {
@@ -173,7 +173,7 @@ float AnalogStickCleaner::getSnapDirDeadzone(
  * @param outputEnd Number on the ending tip of the interpolation.
  * @return The interpolated number.
  */
-float AnalogStickCleaner::interpolate(
+float EasyAnalogCleaner::interpolate(
     float input, float inputStart, float inputEnd,
     float outputStart, float outputEnd
 ) {
@@ -199,7 +199,7 @@ float AnalogStickCleaner::interpolate(
  * @param outputEnd Number on the ending tip of the interpolation.
  * @return The interpolated number.
  */
-float AnalogStickCleaner::interpolateAndClamp(
+float EasyAnalogCleaner::interpolateAndClamp(
     float input, float inputStart, float inputEnd,
     float outputStart, float outputEnd
 ) {
@@ -216,7 +216,7 @@ float AnalogStickCleaner::interpolateAndClamp(
  * @param coords Coordinates to clean.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processAngularDeadzones(
+void EasyAnalogCleaner::processAngularDeadzones(
     float coords[2], const Settings& settings
 ) {
     //Check if we even have anything to do.
@@ -298,7 +298,7 @@ void AnalogStickCleaner::processAngularDeadzones(
  * @param pressure Pressure value to clean.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processButtonDeadzones(
+void EasyAnalogCleaner::processButtonDeadzones(
     float* pressure, const Settings& settings
 ) {
     //Check if we even have anything to do.
@@ -357,7 +357,7 @@ void AnalogStickCleaner::processButtonDeadzones(
  * the cleaner in the previous frame.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processLowPassFilter(
+void EasyAnalogCleaner::processLowPassFilter(
     float coords[2], float previousFrameCoords[2], const Settings& settings
 ) {
     //Sanitize the settings.
@@ -403,7 +403,7 @@ void AnalogStickCleaner::processLowPassFilter(
  * the previous frame.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processLowPassFilterButton(
+void EasyAnalogCleaner::processLowPassFilterButton(
     float* pressure, float previousFramePressure, const Settings& settings
 ) {
     //Sanitize the settings.
@@ -433,7 +433,7 @@ void AnalogStickCleaner::processLowPassFilterButton(
  * @param coords Coordinates to clean.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processRadialDeadzones(
+void EasyAnalogCleaner::processRadialDeadzones(
     float coords[2], const Settings& settings
 ) {
     //Check if we even have anything to do.
@@ -497,7 +497,7 @@ void AnalogStickCleaner::processRadialDeadzones(
  * @param coords Coordinates to clean.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::processUnitCircle(
+void EasyAnalogCleaner::processUnitCircle(
     float coords[2], const Settings& settings
 ) {
     //Check if we even have anything to do.
@@ -522,7 +522,7 @@ void AnalogStickCleaner::processUnitCircle(
  * @param angle Angle to use.
  * @param radius Radius to use.
  */
-void AnalogStickCleaner::toCartesian(
+void EasyAnalogCleaner::toCartesian(
     float coords[2], float angle, float radius
 ) {
     coords[0] = (float) cos(angle) * radius;
@@ -537,7 +537,7 @@ void AnalogStickCleaner::toCartesian(
  * @param angle Angle to save to.
  * @param radius Radius to save to.
  */
-void AnalogStickCleaner::toPolar(
+void EasyAnalogCleaner::toPolar(
     float coords[2], float& angle, float& radius
 ) {
     angle = (float) atan2(coords[1], coords[0]);
@@ -551,11 +551,11 @@ void AnalogStickCleaner::toPolar(
  * @param coords Coordinates to write about.
  * @param input Whether the values are the inputs or the outputs.
  */
-void AnalogStickCleaner::writeDebugStickValues(float coords[2], bool input) {
-#ifdef ANALOG_STICK_CLEANER_DEBUG
+void EasyAnalogCleaner::writeDebugStickValues(float coords[2], bool input) {
+#ifdef EASY_ANALOG_CLEANER
     float angle, radius;
     toPolar(coords, angle, radius);
-    if(input) std::cout << "--- Analog Stick Cleaner cleanup ---" << std::endl;
+    if(input) std::cout << "--- Easy Analog Cleaner cleanup ---" << std::endl;
     std::cout << (input ? "Input" : "Output") << " coordinates:" << std::endl;
     std::cout << "  X, Y:      " << coords[0] << ", " << coords[1] << std::endl;
     std::cout << "  Angle rad: " << angle << std::endl;

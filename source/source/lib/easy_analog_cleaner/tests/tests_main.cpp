@@ -2,12 +2,12 @@
  * Copyright (c) Andre 'Espyo' Silva 2025.
  *
  * === FILE DESCRIPTION ===
- * Unit tests for the Analog Stick Cleaner library.
+ * Unit tests for the Easy Analog Cleaner library.
  * Please read the included readme file.
  */
 
 
-#ifdef ANALOG_STICK_CLEANER_UNIT_TESTS
+#ifdef EASY_ANALOG_CLEANER_UNIT_TESTS
 
 
 #define _USE_MATH_DEFINES
@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include "../analog_stick_cleaner.h"
+#include "../easy_analog_cleaner.h"
 
 
 constexpr const char* COLOR_BOLD = "\033[1m";
@@ -152,7 +152,7 @@ void test(
 void testClean(
     const std::string& testDescription,
     float x, float y, float expectedX, float expectedY,
-    const AnalogStickCleaner::Settings settings = {},
+    const EasyAnalogCleaner::Settings settings = {},
     float prevX = 0.0f, float prevY = 0.0f
 ) {
     float input[2] = { x, y };
@@ -160,7 +160,7 @@ void testClean(
     float expectedArr[2] = { expectedX, expectedY };
     float prevCoords[2] = { prevX, prevY };
     
-    AnalogStickCleaner::clean(coords, settings, prevCoords);
+    EasyAnalogCleaner::clean(coords, settings, prevCoords);
     
     test(testDescription, expectedArr, coords, input, 2);
 }
@@ -184,13 +184,13 @@ void testClean(
 void testCleanButton(
     const std::string& testDescription,
     float pressure, float expectedPressure,
-    const AnalogStickCleaner::Settings settings = {},
+    const EasyAnalogCleaner::Settings settings = {},
     float prevPressure = 0.0f
 ) {
     float inputArr[1] = { pressure };
     float expectedArr[1] = { expectedPressure };
     
-    AnalogStickCleaner::cleanButton(&pressure, settings, prevPressure);
+    EasyAnalogCleaner::cleanButton(&pressure, settings, prevPressure);
     
     float actualArr[1] = { pressure };
     test(testDescription, expectedArr, actualArr, inputArr, 1);
@@ -207,7 +207,7 @@ void testCleanButton(
 int main(int argc, char** argv) {
     //--- Startup ---
     printf(
-        "%s====== ANALOG STICK CLEANER UNIT TESTS ======%s\n",
+        "%s====== EASY ANALOG CLEANER UNIT TESTS ======%s\n",
         COLOR_BOLD, COLOR_RESET
     );
     printf("Testing...\n");
@@ -559,14 +559,14 @@ int main(int argc, char** argv) {
         "\"no changes\" config,"
         "analog stick.",
         0.123f, 0.456f, 0.123f, 0.456f,
-        AnalogStickCleaner::SETTINGS_NO_CHANGES
+        EasyAnalogCleaner::SETTINGS_NO_CHANGES
     );
     testCleanButton(
         "Test that the analog button values are left alone with the "
         "\"no changes\" config,"
         "analog button.",
         0.123f, 0.123f,
-        AnalogStickCleaner::SETTINGS_NO_CHANGES
+        EasyAnalogCleaner::SETTINGS_NO_CHANGES
     );
     testClean(
         "Test that unit circle clamping alone works.",
@@ -589,4 +589,4 @@ int main(int argc, char** argv) {
 }
 
 
-#endif //ifdef ANALOG_STICK_CLEANER_UNIT_TESTS
+#endif //ifdef EASY_ANALOG_CLEANER_UNIT_TESTS

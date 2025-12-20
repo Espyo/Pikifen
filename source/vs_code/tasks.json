@@ -128,13 +128,13 @@
 		},
 		{
 			"type": "shell",
-			"label": "Build Analog Stick Cleaner's unit tests - Debug",
+			"label": "Build Easy Analog Cleaner's unit tests - Debug",
 			"command": "make",
 			"args": [
 				"debug",
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/source/source/lib/analog_stick_cleaner/tests"
+				"cwd": "${workspaceFolder}/source/source/lib/easy_analog_cleaner/tests"
 			},
 			"problemMatcher": [
 				"$gcc"
@@ -146,7 +146,7 @@
 				"reveal": "always",
 				"echo": true
 			},
-			"detail": "Use make to compile the Analog Stick Cleaner library's unit tests."
+			"detail": "Use make to compile the Easy Analog Cleaner library's unit tests."
 		},
 	]
 }

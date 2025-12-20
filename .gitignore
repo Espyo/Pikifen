@@ -15,7 +15,7 @@ allegro.log
 game_data/test/*
 user_data/*
 easy_spat_nav_tests
-analog_stick_cleaner_tests
+easy_analog_cleaner_tests
 /pikifen
 /pikifen_shortcut
 /pikifen*.exe

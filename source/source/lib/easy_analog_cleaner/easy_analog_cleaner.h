@@ -2,7 +2,7 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Header for the Analog Stick Cleaner class and related functions.
+ * Header for the Easy Analog Cleaner class and related functions.
  *
  * Given game controller analog stick position readings, this class
  * can clean up the values and output new values that much better match
@@ -23,7 +23,7 @@
 /**
  * @brief Static utility class that holds analog stick cleaning logic.
  */
-class AnalogStickCleaner {
+class EasyAnalogCleaner {
 
 public:
 
@@ -202,17 +202,17 @@ public:
             bool unitCircleClamp = true;
             
         } misc;
-
+        
         constexpr Settings() = default;
     };
-
-
+    
+    
     //--- Constants ---
-
+    
     //Settings for when you want no changes to be made to the values.
     static const Settings SETTINGS_NO_CHANGES;
     
-
+    
     //--- Function declarations ---
     
     static void clean(float coords[2]);

@@ -544,7 +544,7 @@ void GameplayState::drawDebugTools(Player* player) {
         { prevCleanAnalogStick[0], prevCleanAnalogStick[1] };
     prevCleanAnalogStick[0] = inputAnalogStick[0];
     prevCleanAnalogStick[1] = inputAnalogStick[1];
-    AnalogStickCleaner::clean(
+    EasyAnalogCleaner::clean(
         prevCleanAnalogStick, {}, oldCleanStick
     );
     
