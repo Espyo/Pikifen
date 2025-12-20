@@ -276,7 +276,7 @@ bool Manager::handleInput(const Input& input) {
         AnalogStickCleaner::Settings cleanupSettings;
         cleanupSettings.deadzones.button.pressed =
             options.analogButtonMinDeadzone;
-        cleanupSettings.deadzones.button.released =
+        cleanupSettings.deadzones.button.unpressed =
             options.analogButtonMaxDeadzone;
         AnalogStickCleaner::cleanButton(&cleanInput.value, cleanupSettings);
         

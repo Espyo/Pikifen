@@ -2,7 +2,7 @@
  * Copyright (c) Andre 'Espyo' Silva 2013.
  *
  * === FILE DESCRIPTION ===
- * Analog stick cleaner class and related functions.
+ * Analog Stick Cleaner class and related functions.
  *
  * Please read the header file for more information.
  */
@@ -10,16 +10,61 @@
 #define _USE_MATH_DEFINES
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 #include "analog_stick_cleaner.h"
+
+
+//#define ANALOG_STICK_CLEANER_DEBUG
+
+
+const AnalogStickCleaner::Settings AnalogStickCleaner::SETTINGS_NO_CHANGES = {
+    .deadzones = {
+        .radial = {
+            .inner = 0.0f,
+            .outer = 1.0f,
+            .interpolate = false
+        },
+        .angular = {
+            .horizontal = 0.0f,
+            .vertical = 0.0f,
+            .diagonal = 0.0f,
+            .interpolate = false
+        },
+        .button = {
+            .unpressed = 0.0f,
+            .pressed = 1.0f,
+            .interpolate = false
+        }
+    },
+    .lowPassFilter = {
+        .factor = 0.0f,
+        .factorButton = 0.0f,
+    },
+    .misc = {
+        .unitCircleClamp = false
+    }
+};
+
+
+/**
+ * @brief Cleans an analog stick's input using the default settings.
+ *
+ * @param coords Pointer to an array of size 2 with the X and Y coordinate
+ * respectively, each [-1 - 1]. When the cleaning process ends, this array
+ * will contain the cleaned up coordinates.
+ */
+void AnalogStickCleaner::clean(float coords[2]) {
+    clean(coords, Settings());
+}
 
 
 /**
  * @brief Cleans an analog stick's input according to the settings.
  *
  * @param coords Pointer to an array of size 2 with the X and Y coordinate
- * respectively. When the cleaning process ends, this array will contain
- * the cleaned up coordinates.
+ * respectively, each [-1 - 1]. When the cleaning process ends, this array
+ * will contain the cleaned up coordinates.
  * @param settings Settings to use.
  * @param previousFrameCoords Pointer to an array of the coordinates given by
  * the cleaner in the previous frame. This is only necessary if
@@ -33,6 +78,8 @@ void AnalogStickCleaner::clean(
     coords[0] = std::clamp(coords[0], -1.0f, 1.0f);
     coords[1] = std::clamp(coords[1], -1.0f, 1.0f);
     
+    writeDebugStickValues(coords, true);
+    
     //Step 1: Clamp to a unit circle.
     processUnitCircle(coords, settings);
     
@@ -41,10 +88,21 @@ void AnalogStickCleaner::clean(
     
     //Step 3: Process angular deadzones.
     processAngularDeadzones(coords, settings);
-
+    
     //Step 4: Low-pass filter.
     processLowPassFilter(coords, previousFrameCoords, settings);
     
+    writeDebugStickValues(coords, false);
+}
+
+
+/**
+ * @brief Cleans an analog button's input using the default settings.
+ *
+ * @param pressure Analog button pressure amount [0 - 1].
+ */
+void AnalogStickCleaner::cleanButton(float* pressure) {
+    cleanButton(pressure, Settings());
 }
 
 
@@ -65,7 +123,7 @@ void AnalogStickCleaner::cleanButton(
     
     //Step 1: Process deadzones.
     processButtonDeadzones(pressure, settings);
-
+    
     //Step 2: Low-pass filter.
     processLowPassFilterButton(pressure, previousFramePressure, settings);
     
@@ -245,7 +303,7 @@ void AnalogStickCleaner::processButtonDeadzones(
 ) {
     //Check if we even have anything to do.
     if(
-        settings.deadzones.button.released == 0.0f &&
+        settings.deadzones.button.unpressed == 0.0f &&
         settings.deadzones.button.pressed == 1.0f &&
         !settings.deadzones.button.interpolate
     ) {
@@ -254,14 +312,14 @@ void AnalogStickCleaner::processButtonDeadzones(
     
     //Sanitize the settings.
     Settings sanitizedSettings = settings;
-    sanitizedSettings.deadzones.button.released =
-        std::clamp(sanitizedSettings.deadzones.button.released, 0.0f, 1.0f);
+    sanitizedSettings.deadzones.button.unpressed =
+        std::clamp(sanitizedSettings.deadzones.button.unpressed, 0.0f, 1.0f);
     sanitizedSettings.deadzones.button.pressed =
         std::clamp(sanitizedSettings.deadzones.button.pressed, 0.0f, 1.0f);
         
     //Do the clean up.
     const float inputSpaceStart =
-        sanitizedSettings.deadzones.button.released;
+        sanitizedSettings.deadzones.button.unpressed;
     const float inputSpaceEnd =
         sanitizedSettings.deadzones.button.pressed;
     const float outputSpaceStart =
@@ -331,7 +389,7 @@ void AnalogStickCleaner::processLowPassFilter(
             previousFrameCoords[1] *
             (1.0f - sanitizedSettings.lowPassFilter.factor)
         );
-    
+        
     coords[0] = finalCoords[0];
     coords[1] = finalCoords[1];
 }
@@ -484,4 +542,25 @@ void AnalogStickCleaner::toPolar(
 ) {
     angle = (float) atan2(coords[1], coords[0]);
     radius = (float) sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
+}
+
+
+/**
+ * @brief Writes information about some coordinates to stdout.
+ *
+ * @param coords Coordinates to write about.
+ * @param input Whether the values are the inputs or the outputs.
+ */
+void AnalogStickCleaner::writeDebugStickValues(float coords[2], bool input) {
+#ifdef ANALOG_STICK_CLEANER_DEBUG
+    float angle, radius;
+    toPolar(coords, angle, radius);
+    if(input) std::cout << "--- Analog Stick Cleaner cleanup ---" << std::endl;
+    std::cout << (input ? "Input" : "Output") << " coordinates:" << std::endl;
+    std::cout << "  X, Y:      " << coords[0] << ", " << coords[1] << std::endl;
+    std::cout << "  Angle rad: " << angle << std::endl;
+    std::cout << "  Angle deg: " << angle * 180 / M_PI << std::endl;
+    std::cout << "  Radius:    " << radius << std::endl;
+    if(!input) std::cout << std::endl;
+#endif
 }
