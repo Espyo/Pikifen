@@ -717,7 +717,7 @@ void GuiManager::createCustomItems() {
                         draw, infoPtr->type ==
                         CUSTOM_GUI_ITEM_TYPE_SQUARE
                     );
-                drawRoundedRectangle(
+                drawRoundedRatioRectangle(
                     draw.center, finalSize, infoPtr->rectangleRounding,
                     tintColor(infoPtr->color, draw.tint),
                     infoPtr->thickness
@@ -731,7 +731,7 @@ void GuiManager::createCustomItems() {
                         draw, infoPtr->type ==
                         CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
                     );
-                drawFilledRoundedRectangle(
+                drawFilledRoundedRatioRectangle(
                     draw.center, finalSize, infoPtr->rectangleRounding,
                     tintColor(infoPtr->color, draw.tint)
                 );

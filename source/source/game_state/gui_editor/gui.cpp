@@ -323,7 +323,7 @@ void GuiEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current GUI definition from your disk."
             );
-
+            
             //Open externally item.
             if(ImGui::MenuItem("Open externally")) {
                 openExternallyCmd(1.0f);
@@ -707,7 +707,7 @@ void GuiEditor::processGuiPanelCustomItem() {
         "Whether other custom items that also have this checked will be drawn\n"
         "before or after this one depends on the order in the list above."
     );
-
+    
     //Description input.
     if(ImGui::InputText("Description", &curItemPtr->description)) {
         changesMgr.markAsChanged();
@@ -819,15 +819,20 @@ void GuiEditor::processGuiPanelCustomItem() {
             curItemPtr->type == CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
         ) {
             //Rounding value.
+            float rectRounding = curItemPtr->rectangleRounding * 100.0f;
             if(
                 ImGui::DragFloat(
-                    "Rounding", &curItemPtr->rectangleRounding, 0.05f
+                    "Rounding", &rectRounding,
+                    0.05f, 0.0f, 50.0f, "%.3f%%"
                 )
             ) {
+                curItemPtr->rectangleRounding = rectRounding / 100.0f;
                 changesMgr.markAsChanged();
             }
             setTooltip(
-                "Radius of the rounding of the corners.",
+                "Radius of the rounding of the corners.\n"
+                "This is a percentage of the width or height,\n"
+                "whichever's smallest.",
                 "", WIDGET_EXPLANATION_DRAG
             );
         }

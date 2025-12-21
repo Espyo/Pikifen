@@ -73,7 +73,7 @@ custom_items{
 		type=filled_rectangle
 		color=188 230 230 128
 		draw_before_hardcoded=true
-		rectangle_rounding=10.0000
+		rectangle_rounding=0.3000
 	}
 	instructions{
 		center=50.0000 5.0000

@@ -77,6 +77,6 @@ custom_items{
 		description=Line separating the headers from the rest of the menu.
 		type=filled_rectangle
 		color=255 255 255 128
-		rectangle_rounding=2.0000
+		rectangle_rounding=0.2000
 	}
 }

@@ -335,8 +335,8 @@ OnionMenu::OnionMenu(
             size_t realOnionAmount =
                 this->nestPtr->getAmountByType(tPtr->pikType);
                 
-            drawFilledRoundedRectangle(
-                draw.center, draw.size, game.winW * 0.01,
+            drawFilledRoundedRatioRectangle(
+                draw.center, draw.size, 0.30f,
                 tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
             );
             
@@ -427,8 +427,8 @@ OnionMenu::OnionMenu(
             size_t realGroupAmount =
                 this->leaderPtr->group->getAmountByType(tPtr->pikType);
                 
-            drawFilledRoundedRectangle(
-                draw.center, draw.size, game.winW * 0.01,
+            drawFilledRoundedRatioRectangle(
+                draw.center, draw.size, 0.30f,
                 tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
             );
             

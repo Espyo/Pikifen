@@ -746,8 +746,8 @@ Hud::Hud() :
                 draw.size.x * game.states.gameplay->goalIndicatorRatio + 1,
                 draw.size.y
             );
-            drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
+            drawFilledRoundedRatioRectangle(
+                draw.center, draw.size, 0.15f,
                 tintColor(al_map_rgba(86, 149, 50, 160), draw.tint)
             );
             setCombinedClippingRectangles(
@@ -758,8 +758,8 @@ Hud::Hud() :
                 draw.size.x * (1 - game.states.gameplay->goalIndicatorRatio),
                 draw.size.y
             );
-            drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
+            drawFilledRoundedRatioRectangle(
+                draw.center, draw.size, 0.15f,
                 tintColor(al_map_rgba(34, 102, 102, 80), draw.tint)
             );
             al_set_clipping_rectangle(cx, cy, cw, ch);
@@ -895,8 +895,8 @@ Hud::Hud() :
         GuiItem* missionScoreBubble = new GuiItem();
         missionScoreBubble->onDraw =
         [this] (const DrawInfo & draw) {
-            drawFilledRoundedRectangle(
-                draw.center, draw.size, 20.0f,
+            drawFilledRoundedRatioRectangle(
+                draw.center, draw.size, 0.15f,
                 tintColor(al_map_rgba(86, 149, 50, 160), draw.tint)
             );
             drawTexturedBox(
@@ -1348,8 +1348,8 @@ void Hud::createMissionFailCondItems(bool primary) {
             draw.size.x * ratio + 1,
             draw.size.y
         );
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 20.0f,
+        drawFilledRoundedRatioRectangle(
+            draw.center, draw.size, 0.15f,
             tintColor(al_map_rgba(149, 80, 50, 160), draw.tint)
         );
         setCombinedClippingRectangles(
@@ -1360,8 +1360,8 @@ void Hud::createMissionFailCondItems(bool primary) {
             draw.size.x * (1 - ratio),
             draw.size.y
         );
-        drawFilledRoundedRectangle(
-            draw.center, draw.size, 20.0f,
+        drawFilledRoundedRatioRectangle(
+            draw.center, draw.size, 0.15f,
             tintColor(al_map_rgba(149, 130, 50, 160), draw.tint)
         );
         al_set_clipping_rectangle(cx, cy, cw, ch);

@@ -69,8 +69,8 @@ const float TRANSITION_OUT_DURATION = 1.5f;
 
 namespace IN_WORLD_STATUS_BUILDUP {
 
-//Corner radius of each bar.
-const float CORNER_RADIUS = 4.0f;
+//Corner radius of each bar, in size ratio.
+const float CORNER_RADIUS = 0.20f;
 
 //Height of each bar.
 const float HEIGHT = 16.0f;
@@ -330,7 +330,7 @@ void InWorldHealthWheel::draw() {
         curYOffset +=
             IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
             
-        drawFilledRoundedRectangle(
+        drawFilledRoundedRatioRectangle(
             Point(m->pos.x, m->pos.y - curYOffset),
             buildupBarSize,
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
@@ -340,7 +340,7 @@ void InWorldHealthWheel::draw() {
         );
         
         float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * sPtr->buildup;
-        drawFilledRoundedRectangle(
+        drawFilledRoundedRatioRectangle(
             Point(
                 m->pos.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
                 filledWidth / 2.0f,

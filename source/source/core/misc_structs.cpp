@@ -2350,8 +2350,8 @@ void SystemNotificationManager::draw() const {
         notifications.front().important ?
         game.config.guiColors.gold : COLOR_WHITE;
         
-    drawFilledRoundedRectangle(
-        pos, size, 16.0f,
+    drawFilledRoundedRatioRectangle(
+        pos, size, 0.10f,
         multAlpha(game.config.guiColors.pauseBg, visibility)
     );
     drawTexturedBox(
