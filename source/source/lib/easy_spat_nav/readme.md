@@ -1,6 +1,6 @@
 # Easy Spatial Navigation
 
-Espyo's Easy Spatial Navigation algorithm for GUIs.
+_Easy Spatial Navigation algorithm for GUIs._
 
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
@@ -9,6 +9,7 @@ Espyo's Easy Spatial Navigation algorithm for GUIs.
 > * [Troubleshooting](#troubleshooting)
 > * [Inner workings notes](#inner-workings-notes)
 > * [Research](#research)
+> * [Misc.](#misc)
 
 
 ## Overview
@@ -22,7 +23,7 @@ This is a source-only C++ library that implements a spatial navigation algorithm
   * ↤ Then, the library...
     * Returns what the next GUI item to focus should be.
 
-Spatial navigation is surprisingly tricky. Guessing which GUI item the user wanted to focus is difficult, and depends on the program, the GUI, and more.  There are also a few things that take work to implement, like the ability to loop around once the edge of the GUI is reached, how to handle GUI items with more items inside, or tie-breaking. This library aims to ease those burdens.
+Spatial navigation is surprisingly tricky, especially with arbitrary layouts. Guessing which GUI item the user wanted to focus is difficult, and depends on the program, the GUI, and more. There are also a few things that take work to implement, like the ability to loop around once the edge of the GUI is reached, how to handle GUI items with more items inside, or tie-breaking. This library aims to ease those burdens.
 
 
 ## Quick example
@@ -96,3 +97,10 @@ void myProgram::doSpatialNavigation(EGSpatNav::DIRECTION direction) {
 * https://github.com/WICG/spatial-navigation
 * https://github.com/NoriginMedia/Norigin-Spatial-Navigation
 * https://gist.github.com/rygorous/6981057
+
+
+## Misc.
+
+* Project license: MIT license.
+* Project developer: Espyo.
+* Project keywords for searches: directional, keypad, keyboard, arrows, analog stick, D-pad, menu, HUD, GUI, UI, selection, focus, choosing, button, interface, layout.

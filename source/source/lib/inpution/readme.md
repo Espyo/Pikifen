@@ -11,6 +11,7 @@ _From input to action._
 >   * [FAQ and troubleshooting](#faq-and-troubleshooting)
 > * [Inner workings notes](#inner-workings-notes)
 > * [Future plans](#future-plans)
+> * [Misc.](#misc)
 
 
 ## Overview
@@ -236,3 +237,10 @@ int main() {
 ## Future plans
 
 * Implement sub-schemes, so a game can have a scheme for when the player is driving, another for when they're on foot, etc.
+
+
+## Misc.
+
+* Project license: MIT license.
+* Project developer: Espyo.
+* Project keywords for searches: abstraction, hardware, keyboard, mouse, controller, gamepad, button, analog stick, D-pad, action, event, control binds, mapping

@@ -1,11 +1,14 @@
 # Easy Analog Cleaner
 
+_Analog stick input value cleanup, made easy._
+
 > * [Overview](#overview)
 > * [Quick example](#quick-example)
 > * [Features](#features)
 > * [Other usage information](#other-usage-information)
 > * [Research](#research)
 > * [Future plans](#future-plans)
+> * [Misc.](#misc)
 
 
 ## Overview
@@ -67,6 +70,7 @@ while(myGame.running) {
 
 ## Other usage information
 
+* It's possible that whatever framework you're using sends you two events for analog stick: one axis at a time. If so, make sure to save the raw value of both somewhere, and whenever you receive _either_ event, clean up _both_ raw values together. The library won't work if you just try to clean one axis's value while leaving the other as zero!
 * You can define `EASY_ANALOG_CLEANER` (or uncomment its line near the top of the source file), to better understand how the input/output values work.
 * For more information on how a part of the library works, read its comments in the header file, or check how the unit tests file does it.
 
@@ -83,3 +87,10 @@ The library mostly implements the solutions encountered in these blog posts:
 ## Future plans
 
 * Axis deadzones.
+
+
+## Misc.
+
+* Project license: MIT license.
+* Project developer: Espyo.
+* Project keywords for searches: analog stick, analog button, joystick, axis, deadzone, interpolation, low-pass filter, wiggle, sensitivity, magnitude, circle, square, raw, clean

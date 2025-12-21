@@ -61,6 +61,7 @@ Made with ♡ by Espyo.
 
 The included manual (download _Pikifen_ and open `manual.html`) contains, amongst other things, tutorials, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
 
+
 ## Overview
 
 **_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin Maker_". It is a free open-source game with gameplay very similar to the [_Pikmin_ games](https://www.pikminwiki.com/Pikmin_series), in that leaders can whistle and throw Pikmin, Pikmin can carry objects, and so on.
@@ -72,6 +73,7 @@ Its most recent version is available for download with the [methods later in thi
 The game playable by the engine has a 2-dimensional look, and is seen from an orthographic top-down view, although it is still a 3-dimensional game, in that height and gravity exist. The mechanics attempt to mimic those found in the _Pikmin_ games, although not always to the same degree. They can be different because it's easier that way, it's better for the engine's flexibility, or because it's not possible to fully replicate what happens in the canon games.
     
 Depending on the area you select, you can either explore around freely without a care, or you must complete a mission, usually with some goal, fail conditions, and scoring criteria. More game modes and ways of playing will be added in the future. Since it is still in development, different features may be fully implemented, missing entirely, or working incorrectly.
+
 
 ## Notable features
 
@@ -88,6 +90,7 @@ Depending on the area you select, you can either explore around freely without a
 * Filled with quality-of-life features and details, both for gameplay and for content-making.
 * Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 100 MB when extracted.
 * Made almost entirely from scratch, as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
+* Made almost exclusively using free and open-source software.
 * Organized codebase with very few external dependencies.
 * The source "code" for some of the graphics and songs is also available.
 
@@ -96,6 +99,7 @@ Depending on the area you select, you can either explore around freely without a
 * Auditory features: [Multiple Volume Controls](https://accessiblegames.com/accessibility-tags/multiple-volume-controls/)
 * Input features: [Full Input Remapping](https://accessiblegames.com/accessibility-tags/full-remapping/), [Playable with Buttons Only](https://accessiblegames.com/accessibility-tags/buttons-only-option/), [Playable with Keyboard Only](https://accessiblegames.com/accessibility-tags/keyboard-only-option/), [Playable with Mouse Only](https://accessiblegames.com/accessibility-tags/mouse-only-option/), [Playable without Button Holds](https://accessiblegames.com/accessibility-tags/playable-without-button-holds/), [Stick Inversion](https://accessiblegames.com/accessibility-tags/stick-inversion/)
 * Visual features: [Camera Comfort](https://accessiblegames.com/accessibility-tags/camera-comfort/)
+
 
 ## Get the latest version
 
@@ -115,6 +119,7 @@ Alternatively, you can download the source code and compile it to get the most u
 In order to play on Linux or Mac, you can build it from the source code. A simple tutorial on how to compile the engine can be found in the included manual.
 Alternatively, you can run the [Windows executable](#windows) under Wine. It works fairly well, though if you run into issues, check the included manual's "Troubleshooting" page.
 
+
 ## Playing and making
 
 * To play, just double-click `pikifen.exe` (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
@@ -123,17 +128,21 @@ Alternatively, you can run the [Windows executable](#windows) under Wine. It wor
 * This project is still under construction, so expect some things to be incomplete!
 * For more detailed information, including tutorials, please check the included manual.
 
+
 ## What's left
 
 To know what still needs to be done in the project, please check the included manual's "History" page for a general overview, or the project's [todo file](https://github.com/Espyo/Pikifen/blob/master/source/documents/todo.txt) for details.
+
 
 ## Troubleshooting
 
 If you have any issue, please check the included manual's "Troubleshooting" and "FAQ" pages.
 
+
 ## Contributing
 
 Please see the [contributing file](https://github.com/Espyo/Pikifen/blob/master/contributing.md).
+
 
 ## Disclaimer
 
