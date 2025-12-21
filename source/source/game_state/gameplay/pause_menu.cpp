@@ -78,7 +78,6 @@ const string STATUS_GUI_FILE_NAME = "pause_menu_status";
  * false if it should be the system page.
  */
 PauseMenu::PauseMenu(bool startOnRadar) {
-
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
     pages.push_back(PAUSE_MENU_PAGE_STATUS);
@@ -1682,36 +1681,56 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
                 break;
             } case PLAYER_ACTION_TYPE_MENU_RIGHT: {
                 if(
-                  game.controls.actionQueueContains(
+                    game.controls.actionQueueContains(
                         PLAYER_ACTION_TYPE_RADAR_RIGHT
                     )
+                ) {
+                    handledByRadar = true;
+                } else if(
+                    hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) &&
+                    radarPan.right > 0.0f
                 ) {
                     handledByRadar = true;
                 }
                 break;
             } case PLAYER_ACTION_TYPE_MENU_DOWN: {
                 if(
-                  game.controls.actionQueueContains(
+                    game.controls.actionQueueContains(
                         PLAYER_ACTION_TYPE_RADAR_DOWN
                     )
+                ) {
+                    handledByRadar = true;
+                } else if(
+                    hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) &&
+                    radarPan.down > 0.0f
                 ) {
                     handledByRadar = true;
                 }
                 break;
             } case PLAYER_ACTION_TYPE_MENU_LEFT: {
                 if(
-                  game.controls.actionQueueContains(
+                    game.controls.actionQueueContains(
                         PLAYER_ACTION_TYPE_RADAR_LEFT
                     )
+                ) {
+                    handledByRadar = true;
+                } else if(
+                    hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) &&
+                    radarPan.left > 0.0f
                 ) {
                     handledByRadar = true;
                 }
                 break;
             } case PLAYER_ACTION_TYPE_MENU_UP: {
                 if(
-                  game.controls.actionQueueContains(
+                    game.controls.actionQueueContains(
                         PLAYER_ACTION_TYPE_RADAR_UP
                     )
+                ) {
+                    handledByRadar = true;
+                } else if(
+                    hasFlag(action.flags, Inpution::ACTION_FLAG_REPEAT) &&
+                    radarPan.up > 0.0f
                 ) {
                     handledByRadar = true;
                 }
