@@ -11,8 +11,6 @@
 
 #include "inpution.h"
 
-#include "../easy_analog_cleaner/easy_analog_cleaner.h"
-
 
 namespace Inpution {
 
@@ -40,35 +38,6 @@ bool Manager::areBindRequirementsMet(const Bind& bind) const {
     }
     
     return true;
-}
-
-
-/**
- * @brief When a game controller stick input is received, it should be checked
- * with the state of that entire stick to see if it needs to be normalized,
- * deadzones should be applied, etc.
- * The final cleaned stick positions can be found in the cleanSticks variable.
- *
- * @param input Input to clean.
- */
-void Manager::cleanStick(const Input& input) {
-    rawSticks[input.source.deviceNr]
-    [input.source.stickNr][input.source.axisNr] =
-        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
-        input.value :
-        -input.value;
-        
-    float coords[2];
-    coords[0] = rawSticks[input.source.deviceNr][input.source.stickNr][0];
-    coords[1] = rawSticks[input.source.deviceNr][input.source.stickNr][1];
-    
-    EasyAnalogCleaner::Settings cleanupSettings;
-    cleanupSettings.deadzones.radial.inner = options.stickMinDeadzone;
-    cleanupSettings.deadzones.radial.outer = options.stickMaxDeadzone;
-    EasyAnalogCleaner::clean(coords, cleanupSettings);
-    
-    cleanSticks[input.source.deviceNr][input.source.stickNr][0] = coords[0];
-    cleanSticks[input.source.deviceNr][input.source.stickNr][1] = coords[1];
 }
 
 
@@ -217,70 +186,29 @@ bool Manager::handleInput(const Input& input) {
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
     ) {
-        //Game controller stick inputs need to be cleaned up first,
-        //by implementing deadzone logic.
-        cleanStick(input);
-        
-        //We have to process both axes, so send two clean inputs.
-        //But we also need to process imaginary tilts in the opposite direction.
-        //If a player goes from walking left to walking right very quickly
-        //in one frame, the "walking left" action may never receive a zero
-        //value. So we should inject the zero manually with two more inputs.
-        Input xPosInput = input;
-        xPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
-        xPosInput.source.axisNr = 0;
-        xPosInput.value =
-            std::max(
-                0.0f,
-                cleanSticks[input.source.deviceNr][input.source.stickNr][0]
-            );
-        handleCleanInput(xPosInput, false);
-        
-        Input xNegInput = input;
-        xNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
-        xNegInput.source.axisNr = 0;
-        xNegInput.value =
-            std::max(
-                0.0f,
-                -cleanSticks[input.source.deviceNr][input.source.stickNr][0]
-            );
-        handleCleanInput(xNegInput, false);
-        
-        Input yPosInput = input;
-        yPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
-        yPosInput.source.axisNr = 1;
-        yPosInput.value =
-            std::max(
-                0.0f,
-                cleanSticks[input.source.deviceNr][input.source.stickNr][1]
-            );
-        handleCleanInput(yPosInput, false);
-        
-        Input yNegInput = input;
-        yNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
-        yNegInput.source.axisNr = 1;
-        yNegInput.value =
-            std::max(
-                0.0f,
-                -cleanSticks[input.source.deviceNr][input.source.stickNr][1]
-            );
-        handleCleanInput(yNegInput, false);
+        //We need to process imaginary tilts in the opposite direction.
+        //If a player goes from tilting left to tilting right very quickly
+        //in one frame, the "walking right" action will work fine but the
+        //"walking left" action may never receive a zero value.
+        //So we should inject the zero manually with an extra input.
+        handleCleanInput(input, false);
+        Input zeroInput = input;
+        zeroInput.source.type =
+            input.source.type ==
+            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
+            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG :
+            INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        zeroInput.value = 0.0f;
+        handleCleanInput(zeroInput, false);
         
     } else if(
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
     ) {
         //Game controller analog buttons have a value ranging from -1 to 1.
-        //Let's normalize it and apply deadzone logic.
-        Input cleanInput = input;
-        cleanInput.value = (cleanInput.value + 1.0f) / 2.0f;
-        EasyAnalogCleaner::Settings cleanupSettings;
-        cleanupSettings.deadzones.button.pressed =
-            options.analogButtonMinDeadzone;
-        cleanupSettings.deadzones.button.unpressed =
-            options.analogButtonMaxDeadzone;
-        EasyAnalogCleaner::cleanButton(&cleanInput.value, cleanupSettings);
-        
-        handleCleanInput(cleanInput, false);
+        //Let's normalize it.
+        Input normalizedInput = input;
+        normalizedInput.value = (input.value + 1.0f) / 2.0f;
+        handleCleanInput(normalizedInput, false);
         
     } else if(
         input.source.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP ||

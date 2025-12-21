@@ -17,6 +17,7 @@
 #include "controls_mediator.h"
 
 #include "../game_state/gameplay/gameplay.h"
+#include "../lib/easy_analog_cleaner/easy_analog_cleaner.h"
 #include "../util/general_utils.h"
 #include "../util/string_utils.h"
 #include "const.h"
@@ -375,12 +376,69 @@ float ControlsMediator::getValueOfInputSource(
 bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     Inpution::Input input = allegroEventToInput(ev);
     
-    if(input.source.type != Inpution::INPUT_SOURCE_TYPE_NONE) {
+    if(input.source.type == Inpution::INPUT_SOURCE_TYPE_NONE) {
+        //Nothing to do.
+        return false;
+        
+    } else if(
+        input.source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ||
+        input.source.type == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
+    ) {
+        //Analog stick. We need to clean it up, then send two inputs,
+        //one for each axis. We're assuming axis 0 is horizontal and 1 vertical.
+        auto& rawStick =
+            rawSticks[input.source.deviceNr][input.source.stickNr];
+        float stickCoords[2] = { rawStick[0], rawStick[1] };
+        
+        rawStick[input.source.axisNr] =
+            input.source.type ==
+            Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
+            input.value :
+            -input.value;
+            
+        EasyAnalogCleaner::Settings cleanupSettings;
+        cleanupSettings.deadzones.radial.inner =
+            game.options.advanced.joystickMinDeadzone;
+        cleanupSettings.deadzones.radial.outer =
+            game.options.advanced.joystickMaxDeadzone;
+        EasyAnalogCleaner::clean(stickCoords, cleanupSettings);
+        
+        for(size_t a = 0; a < 2; a++) {
+            Inpution::Input axisInput = input;
+            axisInput.source.type =
+                stickCoords[a] > 0.0f ?
+                Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS :
+                Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+            axisInput.source.axisNr = a;
+            axisInput.value = fabs(stickCoords[a]);
+            mgr.handleInput(axisInput);
+        }
+        
+        return true;
+        
+    } else if(
+        input.source.type ==
+        Inpution::INPUT_SOURCE_TYPE_CONTROLLER_ANALOG_BUTTON
+    ) {
+        //Analog button. We need to clean it up first.
+        EasyAnalogCleaner::Settings cleanupSettings;
+        cleanupSettings.deadzones.button.unpressed =
+            game.options.advanced.joystickMinDeadzone;
+        cleanupSettings.deadzones.button.pressed =
+            game.options.advanced.joystickMaxDeadzone;
+        EasyAnalogCleaner::cleanButton(&input.value, cleanupSettings);
+        mgr.handleInput(input);
+        
+        return true;
+        
+    } else {
+        //We've got the final input from allegroEventToInput(). Send it.
         mgr.handleInput(input);
         return true;
-    } else {
-        return false;
+        
     }
+    
+    return false;
 }
 
 

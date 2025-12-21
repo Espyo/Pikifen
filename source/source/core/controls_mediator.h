@@ -327,7 +327,7 @@ struct PlayerActionType : public Inpution::ActionType {
     
     //String representing of this action type's default control bind.
     string defaultBindStr;
-
+    
     //If true, it's recommended the player has at least one input bound.
     bool recommended = true;
     
@@ -359,7 +359,7 @@ struct ControlsMediator {
     );
     void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
-
+    
     vector<Inpution::Bind>& binds();
     Inpution::Bind findBind(
         const PLAYER_ACTION_TYPE actionTypeId
@@ -382,7 +382,7 @@ struct ControlsMediator {
     string inputSourceToStr(const Inpution::InputSource& s) const;
     Inpution::InputSource strToInputSource(const string& s) const;
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
-
+    
     bool actionQueueContains(PLAYER_ACTION_TYPE actionTypeId) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void ignoreMenuCloseActions();
@@ -403,20 +403,23 @@ struct ControlsMediator {
     bool actionTypesShareInputSource(
         const vector<PLAYER_ACTION_TYPE> actionTypes
     );
-
-
+    
+    
     //--- Members ---
-
+    
     //Player actions in this frame.
     vector<Inpution::Action> actionQueue;
-
-
+    
+    
     private:
     
     //--- Members ---
     
     //List of registered player action types.
     vector<PlayerActionType> playerActionTypes;
+    
+    //Raw state of each game controller stick.
+    map<int, map<int, map<int, float> > > rawSticks;
     
     //Inpution manager.
     Inpution::Manager mgr;

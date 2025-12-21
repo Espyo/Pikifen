@@ -482,17 +482,6 @@ void loadOptions() {
     game.winFullscreen = game.options.graphics.intendedWinFullscreen;
     game.winW = game.options.graphics.intendedWinW;
     game.winH = game.options.graphics.intendedWinH;
-    
-    Inpution::ManagerOptions controlsMgrOptions;
-    controlsMgrOptions.stickMinDeadzone =
-        game.options.advanced.joystickMinDeadzone;
-    controlsMgrOptions.stickMaxDeadzone =
-        game.options.advanced.joystickMaxDeadzone;
-    controlsMgrOptions.analogButtonMinDeadzone =
-        game.options.advanced.joystickMinDeadzone;
-    controlsMgrOptions.analogButtonMaxDeadzone =
-        game.options.advanced.joystickMaxDeadzone;
-    game.controls.setOptions(controlsMgrOptions);
 }
 
 

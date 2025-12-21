@@ -273,18 +273,6 @@ struct ManagerOptions {
     //Otherwise to 0.
     float digitalThreshold = 0.5f;
     
-    //Minimum deadzone for analog sticks. 0 for none.
-    float stickMinDeadzone = 0.0f;
-    
-    //Maximum deadzone for analog sticks. 1 for none.
-    float stickMaxDeadzone = 1.0f;
-    
-    //Minimum deadzone for analog buttons. 0 for none.
-    float analogButtonMinDeadzone = 0.0f;
-    
-    //Maximum deadzone for analog buttons. 1 for none.
-    float analogButtonMaxDeadzone = 1.0f;
-    
     //Interval between auto-repeat activations, at the slowest speed.
     float autoRepeatMaxInterval = 0.3f;
     
@@ -415,12 +403,6 @@ struct Manager {
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
     
-    //Raw state of each game controller stick.
-    map<int, map<int, map<int, float> > > rawSticks;
-    
-    //Clean state of each game controller stick.
-    map<int, map<int, map<int, float> > > cleanSticks;
-    
     //Values of each input source. This basically reflects the current
     //hardware state.
     map<InputSource, float> inputSourceValues;
@@ -444,7 +426,6 @@ struct Manager {
     //--- Function declarations ---
     
     bool areBindRequirementsMet(const Bind& bind) const;
-    void cleanStick(const Input& input);
     float convertActionValue(int actionTypeId, float value) const;
     vector<int> getActionTypesFromInput(
         const Input& input
