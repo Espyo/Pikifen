@@ -104,6 +104,10 @@ void drawFilledEquilateralTriangle(
     const Point& center, float radius, float angle,
     const ALLEGRO_COLOR& color
 );
+void drawFilledRoundedRatioRectangle(
+    const Point& center, const Point& size, float radiiRatio,
+    const ALLEGRO_COLOR& color
+);
 void drawFilledRoundedRectangle(
     const Point& center, const Point& size, float radii,
     const ALLEGRO_COLOR& color
@@ -115,6 +119,10 @@ void drawPrimRect(
 void drawRotatedRectangle(
     const Point& center, const Point& dimensions,
     float angle, const ALLEGRO_COLOR& color, float thickness
+);
+void drawRoundedRatioRectangle(
+    const Point& center, const Point& size, float radiiRatio,
+    const ALLEGRO_COLOR& color, float thickness
 );
 void drawRoundedRectangle(
     const Point& center, const Point& size, float radii,

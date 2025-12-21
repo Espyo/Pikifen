@@ -44,9 +44,6 @@ const float MISSION_MOB_MARKER_TIME_MULT = 3.0f;
 //Width and height of the mission mob marker.
 const float MISSION_MOB_MARKER_SIZE = 24.0f;
 
-//Default radar zoom level.
-const float RADAR_DEF_ZOOM = 0.4f;
-
 //Name of the radar page GUI definition file.
 const string RADAR_GUI_FILE_NAME = "pause_menu_radar";
 
@@ -1299,50 +1296,48 @@ void PauseMenu::drawRadar(
     al_use_transform(&oldTransform);
     al_set_clipping_rectangle(oldCrX, oldCrY, oldCrW, oldCrH);
     
+    float decoPadding = std::min(size.x * 0.02f, size.y * 0.02f);
+    
     //North indicator.
+    float northIndSize = std::min(size.x * 0.08f, size.y * 0.08f);
     Point northIndCenter(
-        center.x - size.x / 2.0f + 20.0f,
-        center.y - size.y / 2.0f + 20.0f
+        center.x - size.x / 2.0f + northIndSize / 2.0f + decoPadding,
+        center.y - size.y / 2.0f + northIndSize / 2.0f + decoPadding
     );
     al_draw_filled_circle(
         northIndCenter.x, northIndCenter.y,
-        12.0f, game.config.aestheticRadar.backgroundColor
+        northIndSize / 2.0f, game.config.aestheticRadar.backgroundColor
     );
     drawText(
         "N", game.sysContent.fntSlim,
-        Point(
-            northIndCenter.x,
-            northIndCenter.y + 1.0f
-        ),
-        Point(12.0f),
+        Point(northIndCenter.x, northIndCenter.y + 1.0f),
+        Point(northIndSize * 0.40f),
         game.config.aestheticRadar.highestColor
     );
     al_draw_filled_triangle(
         northIndCenter.x,
-        northIndCenter.y - 12.0f,
-        northIndCenter.x - 6.0f,
-        northIndCenter.y - 6.0f,
-        northIndCenter.x + 6.0f,
-        northIndCenter.y - 6.0f,
+        northIndCenter.y - northIndSize * 0.40f,
+        northIndCenter.x - northIndSize * 0.20f,
+        northIndCenter.y - northIndSize * 0.20f,
+        northIndCenter.x + northIndSize * 0.20f,
+        northIndCenter.y - northIndSize * 0.20f,
         game.config.aestheticRadar.highestColor
     );
     
     //Area name.
-    Point areaNameSize(
-        size.x * 0.40f,
-        20.0f
-    );
+    Point areaNameSize(size.x * 0.40f, size.y * 0.08f);
     Point areaNameCenter(
-        center.x + size.x / 2.0f - areaNameSize.x / 2.0f - 8.0f,
-        center.y - size.y / 2.0f + areaNameSize.y / 2.0f + 8.0f
+        center.x + size.x / 2.0f - areaNameSize.x / 2.0f - decoPadding,
+        center.y - size.y / 2.0f + areaNameSize.y / 2.0f + decoPadding
     );
-    drawFilledRoundedRectangle(
+    drawFilledRoundedRatioRectangle(
         areaNameCenter, areaNameSize,
-        12.0f, game.config.aestheticRadar.backgroundColor
+        0.4f, game.config.aestheticRadar.backgroundColor
     );
     drawText(
         game.curAreaData->name, game.sysContent.fntStandard,
-        areaNameCenter, areaNameSize, game.config.aestheticRadar.highestColor
+        areaNameCenter, areaNameSize * 0.60f,
+        game.config.aestheticRadar.highestColor
     );
     
     //Draw some scan lines.

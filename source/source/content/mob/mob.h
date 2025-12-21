@@ -147,7 +147,7 @@ public:
     
     //Highest value of the Z coordinate since the last time it was grounded.
     //FLT_MAX = not midair.
-    float highestMidairZ = 0.0f;
+    float highestMidairZ = FLT_MAX;
     
     //-Complex states-
     

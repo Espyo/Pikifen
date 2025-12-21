@@ -546,6 +546,7 @@ void GameplayState::enter() {
         player.view.updateTransformations();
         player.view.updateMouseCursor(game.mouseCursor.winPos);
         particles.viewports.push_back(&player.view);
+        player.radarZoom = zoomLevels[1] * 0.4f;
     }
     
     lastEnemyDefeatedPos = Point(LARGE_FLOAT);

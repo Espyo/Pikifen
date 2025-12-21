@@ -149,7 +149,7 @@ struct Player {
     Whistle whistle;
     
     //Zoom level to use on the radar.
-    float radarZoom = PAUSE_MENU::RADAR_DEF_ZOOM;
+    float radarZoom = 1.0f;
     
     //Points to an interactable close enough for the player to use, if any.
     Interactable* closeToInteractableToUse = nullptr;

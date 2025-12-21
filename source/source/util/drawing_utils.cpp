@@ -151,6 +151,29 @@ void drawFilledEquilateralTriangle(
 
 
 /**
+ * @brief Draws a filled rounded rectangle, with the rounding being specified
+ * as a ratio of the total size.
+ * This is basically Allegro's function, but safer and simpler.
+ *
+ * @param center Center.
+ * @param size Width and height.
+ * @param radiiRatio Radii ratio of the corners. This is a ratio of
+ * whichever one is smallest, the width or the height. The radii Will be
+ * smaller if the rectangle is too small.
+ * @param color Color the rectangle with this color.
+ */
+void drawFilledRoundedRatioRectangle(
+    const Point& center, const Point& size, float radiiRatio,
+    const ALLEGRO_COLOR& color
+) {
+    float radii = std::min(size.x * radiiRatio, size.y * radiiRatio);
+    drawFilledRoundedRectangle(
+        center, size, radii, color
+    );
+}
+
+
+/**
  * @brief Draws a filled rounded rectangle.
  * This is basically Allegro's function, but safer and simpler.
  *
@@ -250,6 +273,30 @@ void drawRotatedRectangle(
 
 
 /**
+ * @brief Draws a rounded rectangle, with the rounding being specified
+ * as a ratio of the total size.
+ * This is basically Allegro's function, but safer and simpler.
+ *
+ * @param center Center.
+ * @param size Width and height.
+ * @param radiiRatio Radii ratio of the corners. This is a ratio of
+ * whichever one is smallest, the width or the height. The radii Will be
+ * smaller if the rectangle is too small.
+ * @param color Color the rectangle's lines with this color.
+ * @param thickness Line thickness.
+ */
+void drawRoundedRatioRectangle(
+    const Point& center, const Point& size, float radiiRatio,
+    const ALLEGRO_COLOR& color, float thickness
+) {
+    float radii = std::min(size.x * radiiRatio, size.y * radiiRatio);
+    drawRoundedRectangle(
+        center, size, radii, color, thickness
+    );
+}
+
+
+/**
  * @brief Draws a rounded rectangle.
  * This is basically Allegro's function, but safer and simpler.
  *
@@ -257,7 +304,7 @@ void drawRotatedRectangle(
  * @param size Width and height.
  * @param radii Radii of the corners. Will be smaller if the rectangle is
  * too small.
- * @param color Color the diamond with this color.
+ * @param color Color the rectangle's lines with this color.
  * @param thickness Line thickness.
  */
 void drawRoundedRectangle(

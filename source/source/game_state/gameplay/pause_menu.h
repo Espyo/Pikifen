@@ -32,7 +32,6 @@ extern const string GUI_FILE_PATH;
 extern const string MISSION_GUI_FILE_PATH;
 extern const float MISSION_MOB_MARKER_TIME_MULT;
 extern const float MISSION_MOB_MARKER_SIZE;
-extern const float RADAR_DEF_ZOOM;
 extern const string RADAR_GUI_FILE_PATH;
 extern const float RADAR_MAX_ZOOM;
 extern const float RADAR_MIN_ZOOM;
@@ -151,7 +150,7 @@ private:
     
     //Pikmin status list.
     ListGuiItem* pikminList = nullptr;
-
+    
     //Left page buttons for each GUI.
     map<GuiManager*, ButtonGuiItem*> leftPageButtons;
     
