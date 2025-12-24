@@ -396,6 +396,18 @@ enum MOB_ACTION_MOB_TARGET_TYPE {
 //Get area info action info types.
 enum MOB_ACTION_GET_AREA_INFO_TYPE {
 
+    //Get current max x bound on the camera.
+    MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_X,
+
+    //Get current min x bound on the camera.
+    MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_X,
+
+    //Get current max y bound on the camera.
+    MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_Y,
+
+    //Get current min y bound on the camera.
+    MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_Y,
+
     //Get time of day, in minutes.
     MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES,
     

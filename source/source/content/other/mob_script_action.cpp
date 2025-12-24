@@ -315,7 +315,15 @@ bool MobActionLoaders::focus(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
-    if(call.args[1] == "day_minutes") {
+    if(call.args[1] == "camera_max_x") {
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_X);
+    } else if(call.args[1] == "camera_min_x") {
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_X);
+    } else if(call.args[1] == "camera_max_y") {
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_Y);
+    } else if(call.args[1] == "camera_min_y") {
+        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_Y);
+    } else if(call.args[1] == "day_minutes") {
         call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES);
     } else if(call.args[1] == "field_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN);
@@ -1138,7 +1146,35 @@ void MobActionRunners::getAreaInfo(MobActionRunData& data) {
         (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
         
     switch (t) {
-    case MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
+    case MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_X: {
+        *var = i2s(
+            game.states.gameplay->players[0].view.box[1].x
+            - game.states.gameplay->players[0].view.boxMargin.x
+        );
+        break;
+        
+    } case MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_X: {
+        *var = i2s(
+            game.states.gameplay->players[0].view.box[0].x
+            + game.states.gameplay->players[0].view.boxMargin.x
+        );
+        break;
+        
+    } case MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MAX_Y: {
+        *var = i2s(
+            game.states.gameplay->players[0].view.box[1].y
+            - game.states.gameplay->players[0].view.boxMargin.y
+        );
+        break;
+        
+    } case MOB_ACTION_GET_AREA_INFO_TYPE_CAMERA_MIN_Y: {
+        *var = i2s(
+            game.states.gameplay->players[0].view.box[0].y
+            + game.states.gameplay->players[0].view.boxMargin.y
+        );
+        break;
+        
+    } case MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
         *var = i2s(game.states.gameplay->dayMinutes);
         break;
         
