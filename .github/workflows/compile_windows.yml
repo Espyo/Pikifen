@@ -9,13 +9,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.1.7
+      uses: actions/checkout@v4
       
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
 
     - name: Setup Nuget
-      uses: nuget/setup-nuget@v2.0.0
+      uses: nuget/setup-nuget@v2
       
     - name: Restore Nuget packages
       run: nuget restore source\visual_studio_2022\pikifen.sln
@@ -23,13 +23,13 @@ jobs:
     - name: Build app for release
       run: msbuild source\visual_studio_2022\pikifen.vcxproj -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=x64
       
-    - name: Copy Files to build directory
+    - name: Copy files to build directory
       run: |
         new-item ${{ github.workspace }}\build -itemtype directory
         copy-item -Path ${{ github.workspace }}\source\visual_studio_2022\x64\Release\pikifen.exe -Destination ${{ github.workspace }}\build -PassThru
     
     - name: Publish artifact
-      uses: actions/upload-artifact@v4.3.4
+      uses: actions/upload-artifact@v4
       with:
         name: Pikifen
         path: ${{ github.workspace }}\build\

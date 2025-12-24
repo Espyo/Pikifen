@@ -106,6 +106,10 @@ How I fixed certain things
     Looks like Dear ImGui has some leak of sorts
         If I leave the animation editor or area editor on for a few hours, eventually my system starts to slow down; even the mouse cursor updates slowly, even outside Pikifen. Leaving to the title screen, or playing the game proper returns everything to normality, and entering an editor again brings everything to a crawl again. There is no increase in CPU or RAM usage, and once I had another game running which reported 60fps all throughout, so I have no idea why this is happening...
         It may have been fixed with Helodity's cursor leak
+    If compiling on Windows gives undefined errors about 'isfinite': is not a member of 'std' in xlocnum and stuff like that...
+        At the top of every file that includes <iostream>, add, before the #include:
+        #undef _CMATH_
+        Solution figured out by Helodity
 
 
 Why I do or don't do certain things

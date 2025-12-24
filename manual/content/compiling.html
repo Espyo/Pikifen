@@ -50,6 +50,13 @@
             </ul>
           </li>
           <li>
+            If you get errors like <code>'isfinite': is not a member of 'std'</code> in <code>xlocnum</code>:
+            <ul>
+              <li>Search the entire project for <code>#include &lt;iostream&gt;</code></li>
+              <li>Make sure there is an <code>#undef _CMATH_</code> in the file, before each instance.</li>
+            </ul>
+          </li>
+          <li>
             If you don't have the Windows 10 SDK:
             <ul>
               <li>Right-click the solution, Retarget solution, and choose whatever the most recent option is.</li>
