@@ -8,6 +8,8 @@
  * Global game-related functions.
  */
 
+#undef _CMATH_
+
 #include <algorithm>
 #include <iostream>
 

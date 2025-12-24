@@ -202,8 +202,6 @@ public:
             bool unitCircleClamp = true;
             
         } misc;
-        
-        constexpr Settings() = default;
     };
     
     

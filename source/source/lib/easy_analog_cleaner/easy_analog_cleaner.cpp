@@ -7,6 +7,8 @@
  * Please read the header file for more information.
  */
 
+#undef _CMATH_
+
 #define _USE_MATH_DEFINES
 #include <algorithm>
 #include <cmath>
