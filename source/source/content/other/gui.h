@@ -355,7 +355,8 @@ public:
     //What to do when a spatial navigation action is performed
     //when the item is focused. The return value is whether the logic
     //to change focused items should be skipped.
-    std::function<bool(size_t playerActionId)> onMenuSNAction = nullptr;
+    std::function<bool(PLAYER_ACTION_TYPE playerActionId)> onMenuSNAction =
+        nullptr;
     
     //What to do when it gets focused.
     std::function<void()> onFocused = nullptr;
@@ -565,7 +566,7 @@ public:
     
     void defActivateCode(const Point& cursorPos);
     void defDrawCode(const DrawInfo& draw);
-    bool defMenuSNCode(size_t playerActionId);
+    bool defMenuSNCode(PLAYER_ACTION_TYPE playerActionId);
     void defMouseOverCode(const Point& cursorPos);
     
     

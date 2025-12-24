@@ -187,8 +187,8 @@ struct OnionMenu {
     
     //--- Function declarations ---
     
-    bool doButtonSNLogic(int playerActionId, size_t typeIdx);
-    void doButtonLogic(bool toGroup, size_t typeIdx, bool fromDirection);
+    void doButtonLogic(bool toGroup, size_t typeIdx, bool fromSN);
+    bool doButtonSNLogic(PLAYER_ACTION_TYPE playerActionId, size_t typeIdx);
     string getTransferAmountStr();
     void makeGuiItemRed(GuiItem* item);
     void update();

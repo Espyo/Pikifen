@@ -309,7 +309,7 @@ OnionMenu::OnionMenu(
             doButtonLogic(false, t, false);
         };
         onionButton->onMenuSNAction =
-        [this, t] (size_t playerActionId) {
+        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
             return doButtonSNLogic(playerActionId, t);
         };
         onionButton->canAutoRepeat = true;
@@ -401,7 +401,7 @@ OnionMenu::OnionMenu(
             doButtonLogic(true, t, false);
         };
         groupButton->onMenuSNAction =
-        [this, t] (size_t playerActionId) {
+        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
             return doButtonSNLogic(playerActionId, t);
         };
         groupButton->canAutoRepeat = true;
@@ -459,7 +459,7 @@ OnionMenu::OnionMenu(
         //Full type item.
         GuiItem* fullTypeItem = new GuiItem();
         fullTypeItem->onMenuSNAction =
-        [this, t] (size_t playerActionId) {
+        [this, t] (PLAYER_ACTION_TYPE playerActionId) {
             return doButtonSNLogic(playerActionId, t);
         };
         fullTypeItem->focusableFromMouse = false;
@@ -493,7 +493,7 @@ OnionMenu::OnionMenu(
         doButtonLogic(false, 0, false);
     };
     onionAllButton->onMenuSNAction =
-    [this] (size_t playerActionId) {
+    [this] (PLAYER_ACTION_TYPE playerActionId) {
         return doButtonSNLogic(playerActionId, 0);
     };
     onionAllButton->canAutoRepeat = true;
@@ -525,7 +525,7 @@ OnionMenu::OnionMenu(
         doButtonLogic(true, 0, false);
     };
     groupAllButton->onMenuSNAction =
-    [this] (size_t playerActionId) {
+    [this] (PLAYER_ACTION_TYPE playerActionId) {
         return doButtonSNLogic(playerActionId, 0);
     };
     groupAllButton->canAutoRepeat = true;
@@ -542,7 +542,7 @@ OnionMenu::OnionMenu(
     //All types item.
     fullTypeAllItem = new GuiItem();
     fullTypeAllItem->onMenuSNAction =
-    [this] (size_t playerActionId) {
+    [this] (PLAYER_ACTION_TYPE playerActionId) {
         return doButtonSNLogic(playerActionId, 0);
     };
     fullTypeAllItem->focusableFromMouse = false;
@@ -659,26 +659,6 @@ void OnionMenu::confirm() {
 
 
 /**
- * @brief Does all of the logic for the player having chosen to store or
- * call a Pikmin via directional menu inputs.
- *
- * @param buttonId Player action.
- * @param typeIdx Index of the Onion's Pikmin type, if applicable.
- * @return Whether the action was consumed.
- */
-bool OnionMenu::doButtonSNLogic(int playerActionId, size_t typeIdx) {
-    if(playerActionId == PLAYER_ACTION_TYPE_MENU_UP) {
-        doButtonLogic(false, typeIdx, true);
-        return true;
-    } else if(playerActionId == PLAYER_ACTION_TYPE_MENU_DOWN) {
-        doButtonLogic(true, typeIdx, true);
-        return true;
-    }
-    return false;
-}
-
-
-/**
  * @brief Does all of the logic for either an Onion or a group button
  * having been pressed, no matter which way that happened.
  *
@@ -720,6 +700,28 @@ void OnionMenu::doButtonLogic(
             );
         }
     }
+}
+
+
+/**
+ * @brief Does all of the logic for the player having chosen to store or
+ * call a Pikmin via directional menu inputs.
+ *
+ * @param playerActionId Player action.
+ * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ * @return Whether the action was consumed.
+ */
+bool OnionMenu::doButtonSNLogic(
+    PLAYER_ACTION_TYPE playerActionId, size_t typeIdx
+) {
+    if(playerActionId == PLAYER_ACTION_TYPE_MENU_UP) {
+        doButtonLogic(false, typeIdx, true);
+        return true;
+    } else if(playerActionId == PLAYER_ACTION_TYPE_MENU_DOWN) {
+        doButtonLogic(true, typeIdx, true);
+        return true;
+    }
+    return false;
 }
 
 

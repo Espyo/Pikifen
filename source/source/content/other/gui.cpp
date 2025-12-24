@@ -1312,7 +1312,11 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         focusedItem && focusedItem->isResponsive() &&
         focusedItem->onMenuSNAction
     ) {
-        if(focusedItem->onMenuSNAction(action.actionTypeId)) {
+        if(
+            focusedItem->onMenuSNAction(
+                (PLAYER_ACTION_TYPE) action.actionTypeId
+            )
+        ) {
             //The function returning true means the following logic
             //about changing the current item focus needs to be skipped.
             return;
@@ -2026,7 +2030,7 @@ PickerGuiItem::PickerGuiItem(
     };
     
     onMenuSNAction =
-    [this] (size_t playerActionId) -> bool{
+    [this] (PLAYER_ACTION_TYPE playerActionId) -> bool{
         return this->defMenuSNCode(playerActionId);
     };
     
@@ -2155,7 +2159,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
  *
  * @param actionId ID of the player action.
  */
-bool PickerGuiItem::defMenuSNCode(size_t actionId) {
+bool PickerGuiItem::defMenuSNCode(PLAYER_ACTION_TYPE actionId) {
     if(actionId == PLAYER_ACTION_TYPE_MENU_RIGHT) {
         onNext();
         return true;
