@@ -23,6 +23,9 @@ using std::vector;
 
 namespace Inpution {
 
+//Identifier for an action type.
+typedef int ActionTypeId;
+
 
 //Possible types of hardware sources for inputs.
 enum INPUT_SOURCE_TYPE {
@@ -165,7 +168,7 @@ struct Bind {
     //--- Members ---
     
     //Action type ID.
-    int actionTypeId = 0;
+    ActionTypeId actionTypeId = 0;
     
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
@@ -179,7 +182,7 @@ struct Bind {
     
     //List of modifiers that need to be on for the bind to work.
     //See Manager::modifiers.
-    vector<int> modifiers;
+    vector<ActionTypeId> modifiers;
     
 };
 
@@ -244,7 +247,7 @@ struct Action {
     //--- Members ---
     
     //Action type ID.
-    int actionTypeId = 0;
+    ActionTypeId actionTypeId = 0;
     
     //Player number, starting at 1. 0 if N/A.
     int playerNr = 0;
@@ -306,7 +309,7 @@ struct Manager {
     //--- Members ---
     
     //Map of all registered action types, using their IDs as the key.
-    map<int, ActionType> actionTypes;
+    map<ActionTypeId, ActionType> actionTypes;
     
     //All registered control binds.
     vector<Bind> binds;
@@ -318,7 +321,7 @@ struct Manager {
     //For example, a bind for a "save" action bound to Ctrl + S will only
     //trigger if Ctrl is held before S, and won't work for Ctrl + Shift + S
     //in case Shift is also registered as a modifier.
-    map<int, InputSource> modifiers;
+    map<ActionTypeId, InputSource> modifiers;
     
     //Are we ignoring actions right now?
     bool ignoringActions = false;
@@ -330,14 +333,14 @@ struct Manager {
     //--- Function declarations ---
     
     float getInputSourceValue(const Inpution::InputSource& source) const;
-    float getValue(int actionTypeId) const;
+    float getValue(ActionTypeId actionTypeId) const;
     bool handleInput(const Input& input);
     vector<Action> newFrame(float deltaT);
     bool reinsertAction(const Action& action);
     bool releaseEverything();
     bool setGameState(const string& name = "");
     bool startIgnoringActionInputSources(
-        int actionType, bool nowOnly
+        ActionTypeId actionTypeId, bool nowOnly
     );
     bool startIgnoringInputSource(const InputSource& inputSource, bool nowOnly);
     
@@ -376,7 +379,7 @@ struct Manager {
         //--- Members ---
         
         //Status of each action type in this game state.
-        map<int, ActionTypeStatus> actionTypeStatuses;
+        map<ActionTypeId, ActionTypeStatus> actionTypeStatuses;
         
     };
     
@@ -426,13 +429,11 @@ struct Manager {
     //--- Function declarations ---
     
     bool areBindRequirementsMet(const Bind& bind) const;
-    float convertActionValue(int actionTypeId, float value) const;
-    vector<int> getActionTypesFromInput(
-        const Input& input
-    );
+    float convertActionValue(ActionTypeId actionTypeId, float value) const;
+    vector<ActionTypeId> getActionTypesFromInput(const Input& input);
     void handleCleanInput(const Input& input, bool forceDirectEvent);
     void processAutoRepeats(
-        ActionTypeStatus& status, int actionTypeId,
+        ActionTypeStatus& status, ActionTypeId actionTypeId,
         const ActionType& actionType, float deltaT
     );
     bool processInputIgnoring(const Input& input);

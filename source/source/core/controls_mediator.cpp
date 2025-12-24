@@ -73,7 +73,7 @@ bool ControlsMediator::actionTypesShareInputSource(
  * @param source Input source of the modifier.
  */
 void ControlsMediator::addModifier(
-    int id, const Inpution::InputSource& source
+    Inpution::ActionTypeId id, const Inpution::InputSource& source
 ) {
     mgr.modifiers[id] = source;
 }
@@ -350,7 +350,7 @@ PlayerActionType ControlsMediator::getActionTypeById(
 float ControlsMediator::getValueOfActionType(
     PLAYER_ACTION_TYPE playerActionTypeId
 ) const {
-    return mgr.getValue((int) playerActionTypeId);
+    return mgr.getValue((Inpution::ActionTypeId) playerActionTypeId);
 }
 
 

@@ -49,7 +49,9 @@ bool Manager::areBindRequirementsMet(const Bind& bind) const {
  * @param value Value to convert.
  * @return The converted value.
  */
-float Manager::convertActionValue(int actionTypeId, float value) const {
+float Manager::convertActionValue(
+    ActionTypeId actionTypeId, float value
+) const {
     auto it = actionTypes.find(actionTypeId);
     if(it != actionTypes.end()) {
         switch(it->second.valueType) {
@@ -76,8 +78,8 @@ float Manager::convertActionValue(int actionTypeId, float value) const {
  * @param input The input.
  * @return The action types.
  */
-vector<int> Manager::getActionTypesFromInput(const Input& input) {
-    vector<int> actionTypes;
+vector<ActionTypeId> Manager::getActionTypesFromInput(const Input& input) {
+    vector<ActionTypeId> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
         const Bind& bind = binds[b];
@@ -118,7 +120,7 @@ float Manager::getInputSourceValue(
  * @param actionTypeId ID of the action type.
  * @return The value, or 0 on failure.
  */
-float Manager::getValue(int actionTypeId) const {
+float Manager::getValue(ActionTypeId actionTypeId) const {
     float highestValue = 0.0f;
     for(const auto& bind : binds) {
         if(bind.actionTypeId != actionTypeId) continue;
@@ -151,7 +153,7 @@ void Manager::handleCleanInput(
     }
     
     //Find what game action types are bound to this input.
-    vector<int> actionTypesIds = getActionTypesFromInput(input);
+    vector<ActionTypeId> actionTypesIds = getActionTypesFromInput(input);
     
     for(size_t a = 0; a < actionTypesIds.size(); a++) {
         const ActionType& actionType = actionTypes[actionTypesIds[a]];
@@ -330,7 +332,7 @@ vector<Action> Manager::newFrame(float deltaT) {
  * @param deltaT How much time has passed since the last frame.
  */
 void Manager::processAutoRepeats(
-    ActionTypeStatus& status, int actionTypeId,
+    ActionTypeStatus& status, ActionTypeId actionTypeId,
     const ActionType& actionType, float deltaT
 ) {
     float actionTypeAutoRepeat = actionType.autoRepeat;
@@ -487,12 +489,12 @@ bool Manager::setGameState(const string& name) {
  * @return Whether it succeeded.
  */
 bool Manager::startIgnoringActionInputSources(
-    int actionType, bool nowOnly
+    ActionTypeId actionTypeId, bool nowOnly
 ) {
     bool result = false;
     for(size_t b = 0; b < binds.size(); b++) {
         Bind* bPtr = &binds[b];
-        if(bPtr->actionTypeId != actionType) continue;
+        if(bPtr->actionTypeId != actionTypeId) continue;
         result |= startIgnoringInputSource(bPtr->inputSource, nowOnly);
     }
     return result;
