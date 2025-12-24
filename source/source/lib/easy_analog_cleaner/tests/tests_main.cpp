@@ -55,7 +55,7 @@ void test(
     }
     
     if(!passed) {
-        /*printf(
+        printf(
             "%sTest #%u failed!%s\n",
             COLOR_RED, (unsigned int) nTestsExecuted + 1, COLOR_RESET
         );
@@ -70,7 +70,7 @@ void test(
         );
         if(!extraInfo.empty()) {
             printf("  %s\n", extraInfo.c_str());
-        }*/
+        }
         
         if(nAxes == 2) {
             const int DRAWING_W = 41;
@@ -119,9 +119,9 @@ void test(
                     } else if(inpCol == col && inpRow == row) {
                         ch = 'I';
                     }
-                    //printf("%c", ch);
+                    printf("%c", ch);
                 }
-                //printf("\n");
+                printf("\n");
             }
         }
         
@@ -206,11 +206,11 @@ void testCleanButton(
  */
 int main(int argc, char** argv) {
     //--- Startup ---
-    /*printf(
+    printf(
         "%s====== EASY ANALOG CLEANER UNIT TESTS ======%s\n",
         COLOR_BOLD, COLOR_RESET
     );
-    printf("Testing...\n");*/
+    printf("Testing...\n");
     
     //--- Do the tests ---
     
@@ -580,10 +580,10 @@ int main(int argc, char** argv) {
     );
     
     //--- Finish ---
-    /*printf(
+    printf(
         "%sAll %u tests succeeded!%s\n",
         COLOR_GREEN, (unsigned int) nTestsExecuted, COLOR_RESET
-    );*/
+    );
     
     return 0;
 }

@@ -555,12 +555,12 @@ void EasyAnalogCleaner::writeDebugStickValues(float coords[2], bool input) {
 #ifdef EASY_ANALOG_CLEANER
     float angle, radius;
     toPolar(coords, angle, radius);
-    /*if(input) std::cout << "--- Easy Analog Cleaner cleanup ---" << std::endl;
+    if(input) std::cout << "--- Easy Analog Cleaner cleanup ---" << std::endl;
     std::cout << (input ? "Input" : "Output") << " coordinates:" << std::endl;
     std::cout << "  X, Y:      " << coords[0] << ", " << coords[1] << std::endl;
     std::cout << "  Angle rad: " << angle << std::endl;
     std::cout << "  Angle deg: " << angle * 180 / M_PI << std::endl;
     std::cout << "  Radius:    " << radius << std::endl;
-    if(!input) std::cout << std::endl;*/
+    if(!input) std::cout << std::endl;
 #endif
 }

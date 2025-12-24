@@ -243,7 +243,7 @@ void test(
     const std::string& extraInfo = ""
 ) {
     if(actualNr != expectedNr) {
-        /*printf(
+        printf(
             "%sTest #%u failed!%s\n",
             COLOR_RED, (unsigned int) nTestsExecuted + 1, COLOR_RESET
         );
@@ -258,7 +258,7 @@ void test(
         );
         if(!extraInfo.empty()) {
             printf("  %s\n", extraInfo.c_str());
-        }*/
+        }
         abort();
     }
     
@@ -336,11 +336,11 @@ using EasySpatNav::DIRECTION_UP;
  */
 int main(int argc, char** argv) {
     //--- Startup ---
-    /*printf(
+    printf(
         "%s====== SPATIAL NAVIGATION UNIT TESTS ======%s\n",
         COLOR_BOLD, COLOR_RESET
     );
-    printf("Testing...\n");*/
+    printf("Testing...\n");
     
     //--- Setup some scenarios ---
     SpatNavTestInterface
@@ -645,10 +645,10 @@ int main(int argc, char** argv) {
     );
     
     //--- Finish ---
-    /*printf(
+    printf(
         "%sAll %u tests succeeded!%s\n",
         COLOR_GREEN, (unsigned int) nTestsExecuted, COLOR_RESET
-    );*/
+    );
     
     return 0;
 }
