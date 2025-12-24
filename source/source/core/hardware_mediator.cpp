@@ -623,7 +623,7 @@ Inpution::InputSource HardwareMediator::sanitizeStick(
  * connected or disconnected controllers.
  */
 void HardwareMediator::updateControllers(bool silent) {
-    int oldNControllers = controllers.size();
+    int oldNControllers = (int) controllers.size();
     controllers.clear();
     al_reconfigure_joysticks();
     

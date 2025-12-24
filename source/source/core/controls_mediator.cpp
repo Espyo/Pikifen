@@ -168,7 +168,7 @@ Inpution::Input ControlsMediator::allegroEventToInput(
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
         input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
         input.source.deviceNr =
-            game.hardware.getControllerNr(ev.joystick.id);
+            (int) game.hardware.getControllerNr(ev.joystick.id);
         input.source.buttonNr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
@@ -177,7 +177,7 @@ Inpution::Input ControlsMediator::allegroEventToInput(
         //Figure out what type of analog this is.
         input.source.type = Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
         input.source.deviceNr =
-            game.hardware.getControllerNr(ev.joystick.id);
+            (int) game.hardware.getControllerNr(ev.joystick.id);
         input.source.stickNr = ev.joystick.stick;
         input.source.axisNr = ev.joystick.axis;
         input.source = game.hardware.sanitizeStick(input.source);
@@ -409,7 +409,7 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
                 stickCoords[a] > 0.0f ?
                 Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS :
                 Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
-            axisInput.source.axisNr = a;
+            axisInput.source.axisNr = (int) a;
             axisInput.value = fabs(stickCoords[a]);
             mgr.handleInput(axisInput);
         }

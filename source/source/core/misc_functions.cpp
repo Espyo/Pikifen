@@ -1199,7 +1199,7 @@ bool readEnumProp(
 ) {
     for(size_t v = 0; v < possibleValues.size(); v++) {
         if(valueStr == possibleValues[v]) {
-            *outInt = v;
+            *outInt = (int) v;
             return true;
         }
     }
