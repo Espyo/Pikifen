@@ -323,7 +323,7 @@ void Game::globalLogicPost() {
  * logic.
  */
 void Game::globalLogicPre() {
-    if(debug.printActions && !controls.actionQueue.empty()) {
+    /*if(debug.printActions && !controls.actionQueue.empty()) {
         std::cout << "Actions: ";
         for(size_t a = 0; a < controls.actionQueue.size(); a++) {
             string actionName =
@@ -339,7 +339,7 @@ void Game::globalLogicPre() {
             }
         }
         std::cout << std::endl;
-    }
+    }*/
     
     //Player action handling.
     for(size_t a = 0; a < controls.actionQueue.size();) {

@@ -367,7 +367,7 @@ void ErrorManager::emitInGameplay(const string& s) {
  * @param s Full error description.
  */
 void ErrorManager::logToConsole(const string& s) {
-    std::cout << s << std::endl;
+    //std::cout << s << std::endl;
 }
 
 
