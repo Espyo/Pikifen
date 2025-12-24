@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the pellet finite state machine logic.
+ * Header for the pellet finite-state machine logic.
  */
 
 #pragma once
@@ -14,7 +14,7 @@
 
 
 /**
- * @brief Functions about the Onion's finite state machine and behavior.
+ * @brief Functions about the Onion's finite-state machine and behavior.
  */
 namespace PelletFsm {
 void createFsm(MobType* typ);

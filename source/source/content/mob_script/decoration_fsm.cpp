@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Decoration finite state machine logic.
+ * Decoration finite-state machine logic.
  */
 
 #include "decoration_fsm.h"
@@ -17,9 +17,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the decoration's logic.
+ * @brief Creates the finite-state machine for the decoration's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void DecorationFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Resource finite state machine logic.
+ * Resource finite-state machine logic.
  */
 
 #include "resource_fsm.h"
@@ -18,9 +18,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the resource's logic.
+ * @brief Creates the finite-state machine for the resource's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void ResourceFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

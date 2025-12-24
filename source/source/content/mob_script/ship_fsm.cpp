@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Ship finite state machine logic.
+ * Ship finite-state machine logic.
  */
 
 #include "ship_fsm.h"
@@ -19,9 +19,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the ship's logic.
+ * @brief Creates the finite-state machine for the ship's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void ShipFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

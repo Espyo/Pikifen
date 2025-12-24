@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Drop finite state machine logic.
+ * Drop finite-state machine logic.
  */
 
 #include "drop_fsm.h"
@@ -16,9 +16,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the drop's logic.
+ * @brief Creates the finite-state machine for the drop's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void DropFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -378,7 +378,7 @@ public:
 
 
 /**
- * @brief A mob's instance of a finite state machine. It contains information
+ * @brief A mob's instance of a finite-state machine. It contains information
  * about what state it is in, and so on, but does not contain the list
  * of states, events, and actions.
  */
@@ -426,7 +426,7 @@ public:
  * For mobs created by the game creator, the state machine is simpler,
  * and written in plain text using a data file. But for the engine and
  * some preset FSMs, like the Pikmin and leader logic, there's no good way
- * to create a finite state machine with something as simple as plain text
+ * to create a finite-state machine with something as simple as plain text
  * AND still give the events custom code to run.
  * The only way is to manually create a vector of states, for every
  * state, manually create the events, and for every event, manually

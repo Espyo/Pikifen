@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Bouncer finite state machine logic.
+ * Bouncer finite-state machine logic.
  */
 
 #include <algorithm>
@@ -20,9 +20,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the bouncer's logic.
+ * @brief Creates the finite-state machine for the bouncer's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void BouncerFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

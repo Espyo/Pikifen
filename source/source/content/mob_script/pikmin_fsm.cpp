@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pikmin finite state machine logic.
+ * Pikmin finite-state machine logic.
  */
 
 #include <algorithm>
@@ -27,9 +27,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the Pikmin's logic.
+ * @brief Creates the finite-state machine for the Pikmin's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void PikminFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

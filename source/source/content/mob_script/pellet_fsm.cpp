@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pellet finite state machine logic.
+ * Pellet finite-state machine logic.
  */
 
 #include "pellet_fsm.h"
@@ -18,9 +18,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the pellet's logic.
+ * @brief Creates the finite-state machine for the pellet's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void PelletFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -68,9 +68,9 @@ The included manual (download _Pikifen_ and open `manual.html`) contains, amongs
 
 The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (like physics, scripting, and so on) as well as reading said content to turn it all into something playable. That said, the project also comes with some base content, so you can experiment with its features right away.
 
-Its most recent version is available for download with the [methods later in this readme](#get-the-latest-version). The program can run on Windows, Linux, and Mac. Being a PC game, it is played using a keyboard, mouse, and/or a controller.
+Its most recent version is available for download with the [methods later in this readme](#get-the-latest-version). It can run on Windows, Linux, and Mac. Being a PC game, it is played using a keyboard, mouse, and/or a controller.
     
-The game playable by the engine has a 2-dimensional look, and is seen from an orthographic top-down view, although it is still a 3-dimensional game, in that height and gravity exist. The mechanics attempt to mimic those found in the _Pikmin_ games, although not always to the same degree. They can be different because it's easier that way, it's better for the engine's flexibility, or because it's not possible to fully replicate what happens in the canon games.
+The game playable by the engine has a 2-dimensional look, and is seen from an [orthographic](https://en.wikipedia.org/wiki/Orthographic_projection) top-down view, although it is still a 3-dimensional game, in that height and gravity exist. The mechanics attempt to mimic those found in the _Pikmin_ games, although not always to the same degree. They can be different because it's easier that way, it's better for the engine's flexibility, or because it's not possible to fully replicate what happens in the canon games.
     
 Depending on the area you select, you can either explore around freely without a care, or you must complete a mission, usually with some goal, fail conditions, and scoring criteria. More game modes and ways of playing will be added in the future. Since it is still in development, different features may be fully implemented, missing entirely, or working incorrectly.
 
@@ -79,10 +79,10 @@ Depending on the area you select, you can either explore around freely without a
 
 * Replicates most of the standard _Pikmin_ gameplay.
 * Replicates some of the more complex features, such as dynamic music or Go Here!
-* Unique features like weather conditions, complex missions, and more.
+* Unique features like weather conditions, elaborate missions, and more.
 * Content that can be edited via text files, or by just replacing the image and sound files.
 * Intuitive and deep editors, such as an area editor, animation editor, and more. (Made with [Dear ImGui](https://github.com/ocornut/imgui)!)
-* Scripting for custom objects using finite state machines.
+* Scripting for custom objects using [finite-state machines](https://en.wikipedia.org/wiki/Finite-state_machine) and a custom scripting language.
 * Tools to help with debugging custom content.
 * A comprehensive but easy-to-follow manual to help with making content.
 * A pack system, designed to make sharing custom content easy.
@@ -117,7 +117,7 @@ Alternatively, you can download the source code and compile it to get the most u
         
 ### Linux and Mac
 In order to play on Linux or Mac, you can build it from the source code. A simple tutorial on how to compile the engine can be found in the included manual.
-Alternatively, you can run the [Windows executable](#windows) under Wine. It works fairly well, though if you run into issues, check the included manual's "Troubleshooting" page.
+Alternatively, you can run the [Windows executable](#windows) under [Wine](https://en.wikipedia.org/wiki/Wine_(software)). It works fairly well, though if you run into issues, check the included manual's "Troubleshooting" page.
 
 
 ## Playing and making

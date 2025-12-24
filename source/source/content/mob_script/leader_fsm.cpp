@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Leader finite state machine logic.
+ * Leader finite-state machine logic.
  */
 
 #include <algorithm>
@@ -28,9 +28,9 @@ using std::unordered_set;
 
 
 /**
- * @brief Creates the finite state machine for the leader's logic.
+ * @brief Creates the finite-state machine for the leader's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void LeaderFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

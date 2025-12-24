@@ -132,6 +132,8 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                 "Could not save the area onto an image,"
                 " with the name \"" + fileName + "\"!"
             );
+        } else {
+            game.console.write("Saved area image \"" + fileName + "\".");
         }
         
         usedHelpingTools = true;

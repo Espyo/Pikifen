@@ -23,79 +23,147 @@
     
     <h2 id="1.1.0">1.1.0</h2>
     
-    <p><i>In development &ndash; the "I/O polish" update</i></p>
+    <p><i>In development &ndash; the "I/O Polish" update</i></p>
 
     <h3 id="1.1.0-gameplay">Gameplay changes</h3>
 
     <ul>
-      <li><span class="cl-a">Added</span> an inventory system to replace the old spray management system. It includes an inventory that can be opened or closed, as well as shortcuts that can be pressed to use certain items outside of the inventory.</li>
-      <li><span class="cl-a">Added</span> logic for the fraction numbers to always show up, as well as for the enemy/treasure points to display, if the leader's cursor is over an applicable object. (Thanks Tenacious)</li>
-      <li><span class="cl-a">Added</span> camera shake to some things, like bomb rock explosions or the Beady Long Legs falling. Its strength can be controlled in the <a href="options.html">options</a>.</li>
-      <li><span class="cl-a">Added</span> <a href="options.html">options</a> to allow the mouse cursor to move the leader, and to make the mouse cursor automatically hide when it hasn't been moved in a while.</li>
-      <li><span class="cl-a">Added</span> a shader compatibility mode <a href="options.html">option</a>. If you experience crashes with shaders, turning this on might stop the crashes at the cost of some graphical effects going missing altogether.</li>
-      <li><span class="cl-a">Added</span> the <code>pause_on_focus_lost</code> <a href="options.html">option</a>.</li>
-      <li><span class="cl-a">Added</span> a shaking effect to the leader's health wheel when said leader gets hurt.</li>
-      <li><span class="cl-a">Added</span> thrown, KO'd, climbing, and sliding animations to <a href="mob_leader.html">leaders</a>. The KO animation existed already, but is now completely new, with the leader falling stomach-down.</li>
-      <li><span class="cl-a">Added</span> indicators for mission exit regions and for mission-critical objects to the radar. The former also shows up in-game.</li>
-      <li><span class="cl-a">Added</span> a swirling effect to the background of the Onion menu. (Thanks Helodity)</li>
-      <li><span class="cl-a">Added</span> a new enemy: Plasm Wraith. (Thanks Helodity)</li>
-      <li><span class="cl-a">Added</span> system notifications. A small pop-up will appear when a controller is connected or disconnected, as well as when the options are saved.</li>
-      <li><span class="cl-a">Added</span> the ability for <a href="mob_leader.html">leaders</a> to have glowing antenna lights, with a trail of particles behind them.</li>
-      <li><span class="cl-c">Changed</span> the "lie down" action to instead be an item in the inventory, the Napsack. It now also no longer allows Pikmin to carry the leader, since that functionality is better done via Go Here!, and instead heals the leader slowly.</li>
-      <li><span class="cl-c">Changed</span> how the Onion menu works so it's easier to navigate without the mouse, and so that when there are too many Pikmin types, the list can be scrolled through smoothly instead of in concrete pages.</li>
-      <li><span class="cl-c">Changed</span> the way difficulty is shown for an area in the area menu to use more subjective and stylish flame icons, instead of overly-specific text.</li>
-      <li><span class="cl-c">Changed</span> the <a href="misc_features.html#system-info">system info</a>'s logic to work in menus and editors, not just the gameplay state. It now also shows more version information.</li>
-      <li><span class="cl-c">Changed</span> non-mouse menu navigation logic to be more intuitive.</li>
-      <li><span class="cl-c">Changed</span> gamepad logic to be less buggy and more intuitive.</li>
-      <li><span class="cl-f">Fixed</span> the leader cursor getting stuck as well as being sluggish, when controlling it outside of a mouse.</li>
+      <li>
+        Inventory:
+        <ul>
+          <li><span class="cl-a">Added</span> an inventory system to replace the old spray management system. It includes an inventory that can be opened or closed, as well as shortcuts that can be pressed to use certain items directly without the inventory menu. The inventory shows spray concoction progress, and can be controlled in the <a href="options.html">options</a> to work like a normal menu or a quick selector.</li>
+          <li><span class="cl-c">Changed</span> the "lie down" action to instead be an item in the inventory, the Napsack. It now also no longer allows Pikmin to carry the leader, since that functionality is better done via Go Here!, and instead heals the leader slowly.</li>
+        </ul>
+      </li>
+      <li>
+        Better controls:
+        <ul>
+          <li><span class="cl-a">Added</span> proper support for Nintendo Switch Pro Controllers and Microsoft X-Box 360 (and Steam Deck) controllers. Button icons will now show the proper name or image for recognized buttons and sticks.</li>
+          <li><span class="cl-c">Changed</span> gamepad logic to be less buggy and more intuitive.</li>
+          <li><span class="cl-c">Changed</span> non-mouse menu navigation logic to be more intuitive. Holding the input for a direction now also navigates continuously.</li>
+          <li><span class="cl-f">Fixed</span> the leader cursor getting stuck as well as being sluggish, when controlling it outside of a mouse.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="gui.html">GUI</a> improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> logic for the fraction numbers to always show up, as well as for the enemy/treasure points to display, if the leader's cursor is over an applicable object. (Thanks Tenacious)</li>
+          <li><span class="cl-a">Added</span> a shaking effect to the leader's health wheel when said leader gets hurt.</li>
+          <li><span class="cl-a">Added</span> indicators for mission exit regions and for mission-critical objects to the radar. The former also shows up in-game.</li>
+          <li><span class="cl-a">Added</span> a swirling effect to the background of the Onion menu. (Thanks Helodity)</li>
+          <li><span class="cl-c">Changed</span> how the Onion menu works so it's easier to navigate without the mouse, and so that when there are too many Pikmin types, the list can be scrolled through smoothly instead of in concrete pages.</li>
+          <li><span class="cl-c">Changed</span> the way difficulty is shown for an area in the area menu to use more subjective and stylish flame icons, instead of overly-specific text.</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="options.html">options</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> option to allow the mouse cursor to move the leader.</li>
+          <li><span class="cl-a">Added</span> option to make the mouse cursor automatically hide when it hasn't been moved in a while.</li>
+          <li><span class="cl-a">Added</span> option that pauses gameplay if the game window loses focus.</li>
+          <li><span class="cl-a">Added</span> option for a shader compatibility mode. If you experience crashes with shaders, turning this on might stop the crashes at the cost of some graphical effects going missing altogether.</li>
+        </ul>
+      </li>
+      <li>
+        System:
+        <ul>
+          <li><span class="cl-a">Added</span> system notifications. A small pop-up will appear when a controller is connected or disconnected, as well as when the options are saved.</li>
+          <li><span class="cl-c">Changed</span> the <a href="misc_features.html#system-info">system info</a> feature to work in menus and editors, not just the gameplay state. It now also shows more version information.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> a new enemy: Plasm Wraith. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> camera shake to some things, like bomb rock explosions or the Beady Long Legs falling. Its strength can be controlled in the <a href="options.html">options</a>.</li>
+          <li><span class="cl-a">Added</span> thrown, KO'd, climbing, and sliding animations to <a href="mob_leader.html">leaders</a>. The KO animation existed already, but is now completely new, with the leader falling stomach-down.</li>
+          <li><span class="cl-a">Added</span> the ability for <a href="mob_leader.html">leaders</a> to have glowing antenna lights, with a trail of particles behind them.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="1.1.0-making">Content-making changes</h3>
 
     <ul>
-      <li><span class="cl-a">Added</span> an <a href="options.html">option</a> that makes it so using a <a href="maker_toolkit.html">maker tool</a> in normal gameplay throws a warning, and a confirmation for if the player really wants to use it. This helps with accidental activations of maker tools during what should be normal gameplay.</li>
-      <li><span class="cl-a">Added</span> the "show reaches" <a href="maker_toolkit.html">maker tool</a>, which shows a mob's far and near reaches.</li>
-      <li><span class="cl-a">Added</span> the <code>shake_camera</code> <a href="events_and_actions.html">script action</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>else_if</code> <a href="events_and_actions.html">script action</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>absolute_number</code>, <code>ceil_number</code>, <code>ease_number</code>, <code>floor_number</code>, <code>get_angle_clockwise_difference</code>, <code>get_angle_smallest_difference</code>, <code>interpolate_number</code>, <code>round_number</code>, and <code>square_number</code> mathematics <a href="events_and_actions.html">script actions</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>^</code> (power) operator to the <code>calculate</code> <a href="events_and_actions.html">script action</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>set_focus_var</code> <a href="events_and_actions.html">script action</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>arrow_*</code>, <code>difficulty</code>, <code>mission_mob</code>, and <code>warning</code> <a href="system_content_names.html">system content</a> images.</li>
-      <li><span class="cl-a">Added</span> <a href="animation.html">animation editor</a> menus to quickly jump from a sprite to the animations that use it, and also from an animation's frame to the sprite it uses.</li>
-      <li><span class="cl-a">Added</span> an optional buildup mechanic to <a href="status.html">statuses</a>.</li>
-      <li><span class="cl-a">Added</span> a quick play feature to all <a href="editor.html">editors</a>.</li>
-      <li><span class="cl-a">Added</span> a way to create custom <a href="gui.html">GUI</a> items. Some of the existing hardcoded GUI items have also been made into custom items.</li>
-      <li><span class="cl-a">Added</span> descriptions to the hardcoded GUI items, visible in the item list in the <a href="gui.html">GUI editor</a>. The full lists have been removed from the manual page as a result.</li>
-      <li><span class="cl-a">Added</span> some GUI colors to the <a href="game_config.html">game configuration</a>.</li>
-      <li><span class="cl-a">Added</span> some edge sector patching tools to the <a href="area.html">area editor</a>. useful for when you have sectors broken beyond normal repair.</li>
-      <li><span class="cl-a">Added</span> a modal dialog <a href="gui.html">GUI definition</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>ingredient_name</code> property to <a href="spray.html">spray types</a>.</li>
-      <li><span class="cl-a">Added</span> an "Apply changes to all matching sprites" button to the <a href="animation.html">animation editor</a>'s sprite bitmap panel.</li>
-      <li><span class="cl-a">Added</span> an "Open externally" menu item to all <a href="editor.html">editors</a>, which opens the content's file/folder in your operative system.</li>
-      <li><span class="cl-a">Added</span> a tool to the <a href="animation.html">animation editor</a> that flips all hitboxes of a sprite vertically or horizontally.</li>
-      <li><span class="cl-a">Added</span> a tool to the <a href="animation.html">animation editor</a> that makes all hitboxes of a sprite vertically or horizontally symmetrical.</li>
-      <li><span class="cl-a">Added</span> the <code>vertical_speed_multiplier</code> property to <a href="mob_type.html">mob types</a>.</li>
-      <li><span class="cl-c">Changed</span> the <code>print</code> <a href="events_and_actions.html">script action</a> to show the latest and the past lines, instead of just the latest.</li>
+      <li>
+        <a href="gui.html">GUI</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> a way to create custom GUI items. Some of the existing hardcoded GUI items have also been made into custom items.</li>
+          <li><span class="cl-a">Added</span> descriptions to the hardcoded GUI items, visible in the item list in the GUI editor. The full lists have been removed from the manual page as a result.</li>
+          <li><span class="cl-a">Added</span> some GUI colors to the <a href="game_config.html">game configuration</a>.</li>
+          <li><span class="cl-a">Added</span> a modal dialog GUI definition.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="maker_toolkit.html">Maker tools</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> an <a href="options.html">option</a> that makes it so using a maker tool in normal gameplay throws a warning, and a confirmation for if the player really wants to use it. This helps with accidental activations of maker tools during what should be normal gameplay.</li>
+          <li><span class="cl-a">Added</span> the "show reaches" maker tool, which shows a mob's far and near reaches.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="events_and_actions.html">Script actions</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>else_if</code>, <code>set_focus_var</code>, and <code>shake_camera</code> actions.</li>
+          <li><span class="cl-a">Added</span> the <code>absolute_number</code>, <code>ceil_number</code>, <code>ease_number</code>, <code>floor_number</code>, <code>get_angle_clockwise_difference</code>, <code>get_angle_smallest_difference</code>, <code>interpolate_number</code>, <code>round_number</code>, and <code>square_number</code> mathematics <a href="events_and_actions.html">script actions</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>^</code> (power) operator to the <code>calculate</code> action.</li>
+          <li><span class="cl-c">Changed</span> the <code>print</code> action to show the latest and the past lines, instead of just the latest.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="editor.html">Editor</a> improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> a quick play feature to all editors.</li>
+          <li><span class="cl-a">Added</span> an "Open externally" menu item to all editors, which opens the content's file/folder in your operative system.</li>
+          <li><span class="cl-a">Added</span> <a href="animation.html">animation editor</a> menus to quickly jump from a sprite to the animations that use it, and also from an animation's frame to the sprite it uses.</li>
+          <li><span class="cl-a">Added</span> an "Apply changes to all matching sprites" button to the <a href="animation.html">animation editor</a>'s sprite bitmap panel.</li>
+          <li><span class="cl-a">Added</span> a tool to the <a href="animation.html">animation editor</a> that flips all hitboxes of a sprite vertically or horizontally.</li>
+          <li><span class="cl-a">Added</span> a tool to the <a href="animation.html">animation editor</a> that makes all hitboxes of a sprite vertically or horizontally symmetrical.</li>
+          <li><span class="cl-a">Added</span> some edge sector patching tools to the <a href="area.html">area editor</a>. Useful for when you have sectors broken beyond normal repair.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>arrow_*</code>, <code>difficulty</code>, <code>mission_mob</code>, and <code>warning</code> <a href="system_content_names.html">system content</a> images.</li>
+          <li><span class="cl-a">Added</span> a buildup mechanic to <a href="status.html">statuses</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>ingredient_name</code> property to <a href="spray.html">spray types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>vertical_speed_multiplier</code> property to <a href="mob_type.html">mob types</a>.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="1.1.0-compatibility">Compatibility changes</h3>
 
     <ul>
-      <li><span class="cl-c">Changed</span> the Onion menu <a href="gui.html">GUI definition</a>, in accordance to the new layout. The definitions got split into two.</li>
-      <li><span class="cl-c">Changed</span> the <code>menu_selected.ogg</code> sound to <code>menu_focus.ogg</code>.</li>
-      <li><span class="cl-c">Changed</span> the <code>cursor.png</code> and <code>cursor_counter.png</code> images to <code>leader_cursor.png</code>and <code>leader_cursor_counter.png</code>.</li>
-      <li><span class="cl-c">Changed</span> the <code>player_input_icons.png</code> image so direction-based icons follow a right-down-left-up pattern, so it's consistent across the project, and added a handful of icons.</li>
-      <li><span class="cl-c">Changed</span> the <code>notification.png</code> <a href="system_content_names.html">system content</a> image to <code>leader_prompt</code> so it's more accurate and doesn't get confused with the system notifications feature.</li>
-      <li><span class="cl-c">Changed</span> the <code>glow</code> <a href="status.html">status effect type</a> property to <code>colorize</code>. Instead of a pseudo-additive color effect, it now changes the mob's pixel colors towards the target color, with the strength specified by the alpha component.</li>
-      <li><span class="cl-c">Changed</span> some <a href="gui.html">GUI</code> items that used to be hardcoded to instead be custom items.</li>
-      <li><span class="cl-c">Changed</span> the <a href="mob_leader.html">leader's</code> <code>lying</code> animation to <code>sleeping</code>.</li>
-      <li><span class="cl-c">Changed</span> the way hardcoded <a href="gui.html">GUI items</code> are stored in GUI definitions. Instead of one property per item in a <code>positions</code> block, each item is a sub-block inside of a <code>hardcoded_items</code> block.</li>
-      <li><span class="cl-c">Changed</span> how some prompts work so that they use the modal dialog <a href="gui.html">GUI definition</code> instead of their own definitions. The main menu tutorial question and pause menu confirmation question GUI definitions were removed.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, <code>show_counter_on_cursor</code>, and <code>advanced</code> &gt; <code>p*_mouse_moves_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, <code>show_leader_cursor_counter</code>, and <code>controls</code> &gt; <code>p*_mouse_moves_leader_cursor</code>.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, and <code>show_counter_on_cursor</code> <a href="options.html">options</a>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, and <code>show_leader_cursor_counter</code>.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>menu_selected</code>, <code>cursor</code>, and <code>cursor_counter</code> <a href="system_content_names.html">system content</a> properties. Please rename them to <code>menu_focused</code>, <code>leader_cursor</code>, and <code>leader_cursor_counter</code>.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>cursor_spin_speed</code> and <code>cursor_max_dist</code> <a href="game_config.html">game configurations</a>. Please rename them to <code>mouse_cursor_spin_speed</code> and <code>leader_cursor_max_dist</code>.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code> and <code>show_counter_on_cursor</code> options <a href="gui.html">GUI items</a>. Please rename them to <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code> and <code>show_leader_cursor_counter</code>.</li>
+      <li>
+        <a href="gui.html">GUI</a>:
+        <ul>
+          <li><span class="cl-c">Changed</span> some GUI items that used to be hardcoded to instead be custom items.</li>
+          <li><span class="cl-c">Changed</span> the way hardcoded GUI items are stored in GUI definitions. Instead of one property per item in a <code>positions</code> block, each item is a sub-block inside of a <code>hardcoded_items</code> block.</li>
+          <li><span class="cl-c">Changed</span> the Onion menu GUI definition, in accordance to the new layout. The definitions got split into two.</li>
+          <li><span class="cl-c">Changed</span> how some prompts work so that they use the new modal dialog GUI definition instead of their own definitions. The main menu tutorial question and pause menu confirmation question GUI definitions were removed.</li>
+          <li><span class="cl-d">Deprecated</span> the <code>cursor_speed</code>,  <code>cursor_cam_weight</code> and <code>show_counter_on_cursor</code> options GUI items. Please rename them to <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code> and <code>show_leader_cursor_counter</code>.</li>
+        </ul>
+      </li>
+      <li>
+        Base content assets:
+        <ul>
+          <li><span class="cl-c">Changed</span> the <code>cursor.png</code>, <code>cursor_counter.png</code>, and <code>notification.png</code> images to <code>leader_cursor.png</code>, <code>leader_cursor_counter.png</code>, and <code>leader_prompt.png</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>menu_selected.ogg</code> sound to <code>menu_focus.ogg</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>player_input_icons.png</code> image so direction-based icons follow a right-down-left-up pattern, so it's consistent across the project, and added a handful of icons.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-c">Changed</span> the <a href="status.html">status effect type</a> property <code>glow</code> to <code>colorize</code>. Instead of a pseudo-additive color effect, it now changes the mob's pixel colors towards the target color, with the strength specified by the alpha component.</li>
+          <li><span class="cl-c">Changed</span> the <a href="mob_leader.html">leader</a> animation <code>lying</code> to <code>sleeping</code>.</li>
+          <li><span class="cl-d">Deprecated</span> the <a href="options.html">options</a> <code>cursor_speed</code>,  <code>cursor_cam_weight</code>, <code>show_counter_on_cursor</code>, and <code>advanced</code> &gt; <code>p*_mouse_moves_cursor</code>. Play 1.1.0 to automatically rename them to the new names <code>leader_cursor_speed</code>, <code>leader_cursor_cam_weight</code>, <code>show_leader_cursor_counter</code>, and <code>controls</code> &gt; <code>p*_mouse_moves_leader_cursor</code>.</li>
+          <li><span class="cl-d">Deprecated</span> the <a href="system_content_names.html">system content</a> properties <code>menu_selected</code>, <code>notification</code>, <code>cursor</code>, and <code>cursor_counter</code>. Please rename them to <code>menu_focused</code>, <code>leader_prompt</code>, <code>leader_cursor</code>, and <code>leader_cursor_counter</code>.</li>
+          <li><span class="cl-d">Deprecated</span> the <a href="game_config.html">game configurations</a> <code>cursor_spin_speed</code> and <code>cursor_max_dist</code>. Please rename them to <code>mouse_cursor_spin_speed</code> and <code>leader_cursor_max_dist</code>.</li>
+        </ul>
+      </li>
     </ul>
 
     <h2 id="1.0.1">1.0.1</h2>
@@ -122,7 +190,7 @@
     
     <h2 id="1.0.0">1.0.0</h2>
     
-    <p><i>August 15th, 2025 &ndash; the "gold version" update</i></p>
+    <p><i>August 15th, 2025 &ndash; the "Gold Version" update</i></p>
 
     <h3 id="1.0.0-gameplay">Gameplay changes</h3>
 

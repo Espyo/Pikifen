@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Bridge finite state machine logic.
+ * Bridge finite-state machine logic.
  */
 
 #include "bridge_fsm.h"
@@ -19,9 +19,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the bridge's logic.
+ * @brief Creates the finite-state machine for the bridge's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void BridgeFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pile finite state machine logic.
+ * Pile finite-state machine logic.
  */
 
 #include <algorithm>
@@ -25,9 +25,9 @@ using std::size_t;
 
 
 /**
- * @brief Creates the finite state machine for the pile's logic.
+ * @brief Creates the finite-state machine for the pile's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void PileFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -6,12 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    It's impossible to go on the inner triangle on DEV Lab at 1465, 370
-    If you go from holding a modifier to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
-
-    --- 1.1.0 ---
-    Test it on the Steam Deck
-    Try it in 4K and fix obvious issues
+    
 
     --- 1.2.0 ---
     Ice Pikmin
@@ -456,6 +451,7 @@ Misc things (so I don't forget)
             Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
         Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
         Collision checks with walls don't happen while falling. On the structure at DEV Lab at 1465, 370, if you're on one of the higher sectors and try to fall into the upside-down V, you only collide with the upside-down V's walls (and hence, you only land on it) if you're holding a direction to move horizontally. Not holding anything makes you slip right through those walls and fall to the floor below
+        If you go from holding a modifier (Alt) to not holding it, while dragging a handle of a transformation widget, it won't go back to how it should be and will instead consider that moment as the new norm
     Attack improvements
         Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
         A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
@@ -879,8 +875,9 @@ Tasks for later on (I might never implement these)
             This would involve activation changing from just holding the button to holding + releasing, which might interfere with buttons that have auto-repeat activation
     Blood (optional, of course)
     HUD element for a digital clock?
-    Resolution, window size, and zoom
-        Possible camera implementation: The camera only has the normal zoom level, but holding the camera input down will make it go to a farther zoom level so you can peek ahead. There is no close zoom level (thanks Neo)
+    Better resolution and quality
+        Upscale fonts and other things that are really crusty and low-res
+        Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
     Aesthetic details
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin

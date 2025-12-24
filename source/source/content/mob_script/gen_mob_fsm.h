@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the generic mob finite state machine logic.
+ * Header for the generic mob finite-state machine logic.
  */
 
 #pragma once
@@ -14,7 +14,7 @@
 
 
 /**
- * @brief Functions about the generic mob's finite state machine and behavior.
+ * @brief Functions about the generic mob's finite-state machine and behavior.
  */
 namespace GenMobFsm {
 void beAttacked(Mob* m, void* info1, void* info2);

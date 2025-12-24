@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Converter finite state machine logic.
+ * Converter finite-state machine logic.
  */
 
 #include "converter_fsm.h"
@@ -17,9 +17,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the converter's logic.
+ * @brief Creates the finite-state machine for the converter's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void ConverterFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Onion finite state machine logic.
+ * Onion finite-state machine logic.
  */
 
 #include "onion_fsm.h"
@@ -19,9 +19,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the Onion's logic.
+ * @brief Creates the finite-state machine for the Onion's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void OnionFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

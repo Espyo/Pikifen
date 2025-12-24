@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Generic mob finite state machine logic.
+ * Generic mob finite-state machine logic.
  */
 
 #include <algorithm>

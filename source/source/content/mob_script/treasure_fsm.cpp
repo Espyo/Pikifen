@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Treasure finite state machine logic.
+ * Treasure finite-state machine logic.
  */
 
 #include "treasure_fsm.h"
@@ -18,9 +18,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the treasure's logic.
+ * @brief Creates the finite-state machine for the treasure's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void TreasureFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;

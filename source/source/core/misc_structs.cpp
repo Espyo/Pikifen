@@ -2152,6 +2152,8 @@ void SystemContentNames::load(DataNode* file) {
     
     //DEPRECATED in 1.1.0 by "leader_cursor".
     graRS.set("cursor", bmpLeaderCursor);
+    //DEPRECATED in 1.1.0 by "leader_prompt".
+    graRS.set("notification", bmpLeaderPrompt);
     
     graRS.set("arrow_down", bmpArrowDown);
     graRS.set("arrow_left", bmpArrowLeft);

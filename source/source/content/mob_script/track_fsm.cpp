@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Track finite state machine logic.
+ * Track finite-state machine logic.
  */
 
 #include "track_fsm.h"
@@ -17,9 +17,9 @@
 
 
 /**
- * @brief Creates the finite state machine for the track's logic.
+ * @brief Creates the finite-state machine for the track's logic.
  *
- * @param typ Mob type to create the finite state machine for.
+ * @param typ Mob type to create the finite-state machine for.
  */
 void TrackFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
