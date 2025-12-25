@@ -1700,7 +1700,8 @@ void AreaEditor::getHoveredLayoutElement(
     if(*hoveredEdge) return;
     
     if(selectionFilter == SELECTION_FILTER_SECTORS) {
-        *hoveredSector = getSectorUnderPoint(game.editorsView.mouseCursorWorldPos);
+        *hoveredSector =
+            getSectorUnderPoint(game.editorsView.mouseCursorWorldPos);
     }
 }
 

@@ -16,6 +16,50 @@ namespace Inpution {
 
 
 /**
+ * @brief Returns whether two input sources are the same.
+ *
+ * @param s2 The other input source.
+ * @return Whether they are the same.
+ */
+bool InputSource::operator==(const InputSource& s2) const {
+    return
+        type == s2.type &&
+        deviceNr == s2.deviceNr &&
+        buttonNr == s2.buttonNr &&
+        stickNr == s2.stickNr &&
+        axisNr == s2.axisNr;
+}
+
+
+/**
+ * @brief Returns which input source should come first when sorting.
+ *
+ * @param s2 The other input source.
+ * @return Whether the current should come before s2.
+ */
+bool InputSource::operator<(const InputSource& s2) const {
+    if(type != s2.type) {
+        return type < s2.type;
+    }
+    
+    if(deviceNr != s2.deviceNr) {
+        return deviceNr < s2.deviceNr;
+    }
+    
+    if(buttonNr != s2.buttonNr) {
+        return buttonNr < s2.buttonNr;
+    }
+    
+    if(stickNr != s2.stickNr) {
+        return stickNr < s2.stickNr;
+    }
+    
+    return axisNr < s2.axisNr;
+    
+}
+
+
+/**
  * @brief Returns whether a bind's requirement modifiers are being met.
  *
  * @param bind Bind to use.
@@ -482,7 +526,7 @@ bool Manager::setGameState(const string& name) {
  * @brief Same as Manager::startIgnoringInputSource(), but applies to
  * all input sources of a given action.
  *
- * @param actionType Action type whose input sources to ignore.
+ * @param actionTypeId Action type whose input sources to ignore.
  * @param nowOnly If true, only apply to inputs that are currently already
  * held down (> 0) this frame.
  * If false, keep the ignore rule up to the next time it's pressed down.
@@ -530,50 +574,6 @@ bool Manager::startIgnoringInputSource(
     }
     ignoredInputSources.push_back({ .source = inputSource, .nowOnly = nowOnly});
     return true;
-}
-
-
-/**
- * @brief Returns whether two input sources are the same.
- *
- * @param s2 The other input source.
- * @return Whether they are the same.
- */
-bool InputSource::operator==(const InputSource& s2) const {
-    return
-        type == s2.type &&
-        deviceNr == s2.deviceNr &&
-        buttonNr == s2.buttonNr &&
-        stickNr == s2.stickNr &&
-        axisNr == s2.axisNr;
-}
-
-
-/**
- * @brief Returns which input source should come first when sorting.
- *
- * @param s2 The other input source.
- * @return Whether the current should come before s2.
- */
-bool InputSource::operator<(const InputSource& s2) const {
-    if(type != s2.type) {
-        return type < s2.type;
-    }
-    
-    if(deviceNr != s2.deviceNr) {
-        return deviceNr < s2.deviceNr;
-    }
-    
-    if(buttonNr != s2.buttonNr) {
-        return buttonNr < s2.buttonNr;
-    }
-    
-    if(stickNr != s2.stickNr) {
-        return stickNr < s2.stickNr;
-    }
-    
-    return axisNr < s2.axisNr;
-    
 }
 
 

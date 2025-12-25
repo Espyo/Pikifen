@@ -105,11 +105,11 @@ const float PADDING = 8.0f;
 
 namespace SYSTEM_NOTIFICATION {
 
-//How long a normal (non-important) notification lasts for, sans transitions.
-const float DURATION_NORMAL = 2.0f;
-
 //How long an important notification lasts for, sans transitions.
 const float DURATION_IMPORTANT = 4.0f;
+
+//How long a normal (non-important) notification lasts for, sans transitions.
+const float DURATION_NORMAL = 2.0f;
 
 //How long to transition a notification for.
 const float DURATION_TRANSITION = 0.3f;
@@ -860,18 +860,6 @@ size_t InventoryItemDatabase::getAmount() const {
 
 
 /**
- * @brief Returns an item, given its index.
- *
- * @param index The index.
- * @return The item, or nullptr if not found.
- */
-InventoryItem* InventoryItemDatabase::getByIndex(size_t index) {
-    if(index >= items.size()) return nullptr;
-    return &items[index];
-}
-
-
-/**
  * @brief Returns an item, given its internal name.
  *
  * @param iName The internal name.
@@ -882,6 +870,18 @@ InventoryItem* InventoryItemDatabase::getByIName(const string& iName) {
         if(items[i].iName == iName) return &items[i];
     }
     return nullptr;
+}
+
+
+/**
+ * @brief Returns an item, given its index.
+ *
+ * @param index The index.
+ * @return The item, or nullptr if not found.
+ */
+InventoryItem* InventoryItemDatabase::getByIndex(size_t index) {
+    if(index >= items.size()) return nullptr;
+    return &items[index];
 }
 
 
@@ -937,64 +937,6 @@ void InventoryItemDatabase::init() {
         };
         items.push_back(item);
     }
-}
-
-
-
-/**
- * @brief Hides the OS mouse in the game window.
- */
-void MouseCursor::hideInOS() const {
-    al_hide_mouse_cursor(game.display);
-}
-
-
-/**
- * @brief Initializes everything.
- */
-void MouseCursor::init() {
-    hideInOS();
-    reset();
-    
-    saveTimer.onEnd = [this] () {
-        saveTimer.start();
-        history.push_back(winPos);
-        if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
-            history.erase(history.begin());
-        }
-    };
-    saveTimer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
-}
-
-
-/**
- * @brief Resets the mouse cursor's state.
- */
-void MouseCursor::reset() {
-    ALLEGRO_MOUSE_STATE mouseState;
-    al_get_mouse_state(&mouseState);
-    winPos.x = al_get_mouse_state_axis(&mouseState, 0);
-    winPos.y = al_get_mouse_state_axis(&mouseState, 1);
-    history.clear();
-}
-
-
-/**
- * @brief Shows the OS mouse in the game window.
- */
-void MouseCursor::showInOS() const {
-    al_show_mouse_cursor(game.display);
-}
-
-
-/**
- * @brief Updates the coordinates from an Allegro mouse event.
- *
- * @param ev Event to handle.
- */
-void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
-    winPos.x = ev.mouse.x;
-    winPos.y = ev.mouse.y;
 }
 
 
@@ -1134,6 +1076,63 @@ void LeaderPrompt::tick(float deltaT) {
         visibility -= LEADER_PROMPT::FADE_SPEED * deltaT;
     }
     visibility = std::clamp(visibility, 0.0f, 1.0f);
+}
+
+
+/**
+ * @brief Hides the OS mouse in the game window.
+ */
+void MouseCursor::hideInOS() const {
+    al_hide_mouse_cursor(game.display);
+}
+
+
+/**
+ * @brief Initializes everything.
+ */
+void MouseCursor::init() {
+    hideInOS();
+    reset();
+    
+    saveTimer.onEnd = [this] () {
+        saveTimer.start();
+        history.push_back(winPos);
+        if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
+            history.erase(history.begin());
+        }
+    };
+    saveTimer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
+}
+
+
+/**
+ * @brief Resets the mouse cursor's state.
+ */
+void MouseCursor::reset() {
+    ALLEGRO_MOUSE_STATE mouseState;
+    al_get_mouse_state(&mouseState);
+    winPos.x = al_get_mouse_state_axis(&mouseState, 0);
+    winPos.y = al_get_mouse_state_axis(&mouseState, 1);
+    history.clear();
+}
+
+
+/**
+ * @brief Shows the OS mouse in the game window.
+ */
+void MouseCursor::showInOS() const {
+    al_show_mouse_cursor(game.display);
+}
+
+
+/**
+ * @brief Updates the coordinates from an Allegro mouse event.
+ *
+ * @param ev Event to handle.
+ */
+void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
+    winPos.x = ev.mouse.x;
+    winPos.y = ev.mouse.y;
 }
 
 
@@ -2546,7 +2545,8 @@ void Whistle::stopWhistling() {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  * @param center What its center is on this frame.
- * @param whistleRange How far the whistle can reach from the leader cursor center.
+ * @param whistleRange How far the whistle can reach from the
+ * leader cursor center.
  * @param leaderToCursorDist Distance between the leader and their cursor.
  */
 void Whistle::tick(

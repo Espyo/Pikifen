@@ -38,11 +38,11 @@ const string GUI_FILE_NAME = "pause_menu_system";
 //Name of the mission page GUI definition file.
 const string MISSION_GUI_FILE_NAME = "pause_menu_mission";
 
-//Multiply time by this much to animate the mission mob marker.
-const float MISSION_MOB_MARKER_TIME_MULT = 3.0f;
-
 //Width and height of the mission mob marker.
 const float MISSION_MOB_MARKER_SIZE = 24.0f;
+
+//Multiply time by this much to animate the mission mob marker.
+const float MISSION_MOB_MARKER_TIME_MULT = 3.0f;
 
 //Name of the radar page GUI definition file.
 const string RADAR_GUI_FILE_NAME = "pause_menu_radar";

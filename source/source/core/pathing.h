@@ -106,7 +106,7 @@ enum PATH_RESULT {
     
     //Area has no stops, so go directly to the end point.
     PATH_RESULT_DIRECT_NO_STOPS = 5,
-
+    
     //No accessible stops exist, so go directly to the end point.
     PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS = 6,
     

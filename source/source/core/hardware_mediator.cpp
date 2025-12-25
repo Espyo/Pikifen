@@ -13,8 +13,8 @@
 
 #include "hardware_mediator.h"
 
-#include "game.h"
 #include "../util/string_utils.h"
+#include "game.h"
 
 
 using std::make_pair;

@@ -137,7 +137,7 @@ public:
     
     //Timer for the animation of the health wheel's caution ring.
     float healthWheelCautionTimer = 0.0f;
-
+    
     //Health wheel shaker for when the leader takes damage.
     Shaker healthWheelShaker;
     

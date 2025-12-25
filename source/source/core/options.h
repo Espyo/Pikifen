@@ -114,8 +114,8 @@ namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
 extern const bool FAST_INVENTORY;
 extern const float LEADER_CURSOR_SPEED;
-extern const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS];
 extern const bool MOUSE_MOVES_LEADER[MAX_PLAYERS];
+extern const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS];
 }
 
 
@@ -152,8 +152,8 @@ extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const bool MAKER_TOOLS_IN_PLAY;
 extern const float PIKMIN_BUMP_DIST;
-extern const bool SHOW_LEADER_CURSOR_COUNTER;
 extern const bool SHOW_HUD_INPUT_ICONS;
+extern const bool SHOW_LEADER_CURSOR_COUNTER;
 }
 
 
@@ -306,7 +306,7 @@ struct Options {
     
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
-
+        
         //Fast inventory mode.
         bool fastInventory = CONTROLS_D::FAST_INVENTORY;
         
@@ -425,8 +425,9 @@ struct Options {
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
         //Show a standby type counter on the leader cursor?
-        bool showLeaderCursorCounter = OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
-        
+        bool showLeaderCursorCounter =
+            OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
+            
         //Show control bind icons on top of HUD elements?
         bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;
         

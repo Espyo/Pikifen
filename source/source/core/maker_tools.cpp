@@ -197,7 +197,9 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         unsigned char settingIdx = getMakerToolSettingIdx();
         Mob* m =
-            getClosestMobToMouseCursor(game.states.gameplay->players[0].view, true);
+            getClosestMobToMouseCursor(
+                game.states.gameplay->players[0].view, true
+            );
         if(m) {
             m->setHealth(
                 true, true,

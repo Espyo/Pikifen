@@ -37,6 +37,7 @@ extern const float TRANSITION_IN_DURATION;
 extern const float TRANSITION_OUT_DURATION;
 }
 
+
 namespace IN_WORLD_STATUS_BUILDUP {
 extern const float CORNER_RADIUS;
 extern const float HEIGHT;

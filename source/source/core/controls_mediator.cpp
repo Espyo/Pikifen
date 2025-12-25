@@ -67,19 +67,6 @@ bool ControlsMediator::actionTypesShareInputSource(
 
 
 /**
- * @brief Registers a new modifier, for any binds that want modifiers.
- *
- * @param id ID of the modifier.
- * @param source Input source of the modifier.
- */
-void ControlsMediator::addModifier(
-    Inpution::ActionTypeId id, const Inpution::InputSource& source
-) {
-    mgr.modifiers[id] = source;
-}
-
-
-/**
  * @brief Adds a new player action to the list.
  *
  * @param id Its ID.
@@ -117,6 +104,19 @@ void ControlsMediator::addActionType(
     
     playerActionTypes.push_back(a);
     mgr.actionTypes[id] = a;
+}
+
+
+/**
+ * @brief Registers a new modifier, for any binds that want modifiers.
+ *
+ * @param id ID of the modifier.
+ * @param source Input source of the modifier.
+ */
+void ControlsMediator::addModifier(
+    Inpution::ActionTypeId id, const Inpution::InputSource& source
+) {
+    mgr.modifiers[id] = source;
 }
 
 
@@ -294,13 +294,20 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
 
 
 /**
- * @brief Returns the current list of registered player action types.
+ * @brief Returns a registered type, given its ID.
  *
- * @return The types.
+ * @param id ID of the player action.
+ * @return The type, or an empty type on failure.
  */
-const vector<PlayerActionType>
-& ControlsMediator::getAllActionTypes() const {
-    return playerActionTypes;
+PlayerActionType ControlsMediator::getActionTypeById(
+    PLAYER_ACTION_TYPE id
+) const {
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].id == id) {
+            return playerActionTypes[b];
+        }
+    }
+    return PlayerActionType();
 }
 
 
@@ -324,20 +331,13 @@ PLAYER_ACTION_TYPE ControlsMediator::getActionTypeByIName(
 
 
 /**
- * @brief Returns a registered type, given its ID.
+ * @brief Returns the current list of registered player action types.
  *
- * @param id ID of the player action.
- * @return The type, or an empty type on failure.
+ * @return The types.
  */
-PlayerActionType ControlsMediator::getActionTypeById(
-    PLAYER_ACTION_TYPE id
-) const {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].id == id) {
-            return playerActionTypes[b];
-        }
-    }
-    return PlayerActionType();
+const vector<PlayerActionType>
+& ControlsMediator::getAllActionTypes() const {
+    return playerActionTypes;
 }
 
 

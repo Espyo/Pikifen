@@ -460,16 +460,35 @@ Procedure for every version release
             Particularly the update's version number, release day, and nickname
             Double-check that it's organized, or if it could be sorted differently
             In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count), move older versions to the older changelog document if needed
+    Final cleanup
+        Pass all code files through AStyle
+            for f in $(find . -type f | egrep '.+\.(cpp|h)'); do astyle --options=../documents/astyle.txt -n $f; done
+        Code cleanup
+            Confirm that no line goes over 80 characters
+                Use the helper tool, or run:
+                    grep -Enr --include="*.cpp" ^.\{81,\}$
+            Confirm that all function definitions are sorted alphabetically, and by namespace
+                Use the helper tool
+            Confirm that all includes are sorted alphabetically
+                Use the helper tool
+            Confirm that all functions have documentation, and that it has no missing/extra parameters
+                Use the helper tool
+            Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+                Use the helper tool
+        Fix up all changed images since the last release
+            Use the helper tool to get the list, or run:
+                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
+            Confirm that the most recent ground textures are a power of 2
+            PNGCrush the png files
+            This might help (make sure filelist.txt has LF linebreaks):
+                cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
     Release candidate
         Compile it for Windows
             Use GitHub Actions
             Or use Visual Studio
-                Add all added source files, and remove removed source files, if needed
-                    Use the helper tool to get a list, or run:
-                        git diff --name-status $(git describe --abbrev=0 --tags) | grep ^\[AD\].source/source
                 Confirm that the subsystem option in the release build's linker options is set to Windows
                 Compile it on Windows with a release x64 target build
-                Point down all changes that were necessary for this to compile
+        Point down all changes that were necessary for it to compile
         Create a zip file (see below)
         Send it to beta testers so they can check for stuff that's immediately wrong
         After they're done, tell them to confirm that error_log.txt reported nothing
@@ -478,13 +497,6 @@ Procedure for every version release
             In-development is false, apply the correct release date
             Use the helper tool, or edit const.h and the *.rc files
         Update all area version numbers and engine version numbers
-        Fix up all changed images since the last release
-            Use the helper tool to get the list, or run:
-                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
-            Confirm that the most recent ground textures are a power of 2
-            PNGCrush the png files
-            This might help (make sure filelist.txt has LF linebreaks):
-                cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
         Update the Allegro version number on the Compiling page of the manual, if it changed
         Check any changes made on Windows in order to compile, and port them over
     Final build
@@ -505,8 +517,6 @@ Procedure for every version release
             Use the helper tool, or edit const.h and the *.rc files
         Add to the todo for the start of the next version:
             Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
-            Pass all code files through AStyle
-                for f in $(find . -type f | egrep '.+\.(cpp|h)'); do astyle --options=../documents/astyle.txt -n $f; done
             If this is a big release:
                 Compile with -Wall and correct all problems
                 Use cppcheck on the code and correct the problems
@@ -519,18 +529,6 @@ Procedure for every version release
                 Use Infer and correct problems
                     infer run -o ~/Desktop/infer-out --report-block-list-files-containing "lib/imgui" -- make -f source/gnu_make/makefile debug
                 Confirm that there are no superfluous #includes (how?)
-            Code cleanup
-                Confirm that no line goes over 80 characters
-                    Use the helper tool, or run:
-                        grep -Enr --include="*.cpp" ^.\{81,\}$
-                Confirm that all function definitions are sorted alphabetically, and by namespace
-                    Use the helper tool
-                Confirm that all includes are sorted alphabetically
-                    Use the helper tool
-                Confirm that all functions have documentation, and that it has no missing/extra parameters
-                    Use the helper tool
-                Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
-                    Use the helper tool
             Fix up all changed SVG files
                 Use the helper tool to get the list, or run:
                     git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'

@@ -2174,22 +2174,22 @@ void MobActionRunners::showMessageFromVar(MobActionRunData& data) {
 
 
 /**
- * @brief Code for the square root number mob script action.
- *
- * @param data Data about the action call.
- */
-void MobActionRunners::squareRootNumber(MobActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
-}
-
-
-/**
  * @brief Code for the spawning mob script action.
  *
  * @param data Data about the action call.
  */
 void MobActionRunners::spawn(MobActionRunData& data) {
     data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
+}
+
+
+/**
+ * @brief Code for the square root number mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::squareRootNumber(MobActionRunData& data) {
+    data.m->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
 }
 
 

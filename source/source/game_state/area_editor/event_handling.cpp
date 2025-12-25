@@ -412,7 +412,9 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                 if(clickedEdge) {
                     registerChange("edge split");
                     Vertex* newVertex =
-                        splitEdge(clickedEdge, game.editorsView.mouseCursorWorldPos);
+                        splitEdge(
+                            clickedEdge, game.editorsView.mouseCursorWorldPos
+                        );
                     clearSelection();
                     selectedVertexes.insert(newVertex);
                     updateVertexSelection();
@@ -1063,7 +1065,9 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
 
         size_t clickedMobIdx;
         MobGen* clickedMob =
-            getMobUnderPoint(game.editorsView.mouseCursorWorldPos, &clickedMobIdx);
+            getMobUnderPoint(
+                game.editorsView.mouseCursorWorldPos, &clickedMobIdx
+            );
             
         if(
             clickedMobIdx != INVALID &&
@@ -1090,8 +1094,9 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
 
         //Start a new mob selection or select something.
         bool startNewSelection = true;
-        MobGen* clickedMob = getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
-        
+        MobGen* clickedMob =
+            getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
+            
         if(!isShiftPressed) {
             if(clickedMob) {
                 startNewSelection = false;
@@ -1644,7 +1649,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 } case OCTEE_MODE_ANGLE: {
                     registerChange("sector texture angle change");
                     float dragStartA = getAngle(octeeDragStart);
-                    float cursorA = getAngle(game.editorsView.mouseCursorWorldPos);
+                    float cursorA =
+                        getAngle(game.editorsView.mouseCursorWorldPos);
                     sPtr->textureInfo.tf.rot =
                         octeeOrigAngle + (cursorA - dragStartA);
                     break;

@@ -73,8 +73,8 @@ extern const float PADDING;
 
 
 namespace SYSTEM_NOTIFICATION {
-extern const float DURATION_NORMAL;
 extern const float DURATION_IMPORTANT;
+extern const float DURATION_NORMAL;
 extern const float DURATION_TRANSITION;
 extern const float HEIGHT;
 extern const float WIDTH;

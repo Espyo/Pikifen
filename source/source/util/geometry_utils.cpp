@@ -952,7 +952,7 @@ float dotProduct(const Point& v1, const Point& v2) {
  * @brief Performs an exponential smoothing on an angle, making it smoothly
  * go towards a target angle, in whichever direction is shortest,
  * slowing down as it approaches.
- * 
+ *
  * @param currentAngle Current angle to smoothen.
  * @param targetAngle The intended target angle to transition towards.
  * @param smoothingFactor How much to smoothen the transition [0 - 1].

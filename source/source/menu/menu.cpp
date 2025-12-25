@@ -10,8 +10,8 @@
 
 #include "menu.h"
 
-#include "../game_state/gameplay/gameplay.h"
 #include "../core/game.h"
+#include "../game_state/gameplay/gameplay.h"
 
 
 /**

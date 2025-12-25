@@ -326,7 +326,7 @@ void ParticleEditor::processGuiMenuBar() {
             setTooltip(
                 "Delete the current particle generator from your disk."
             );
-
+            
             //Open externally item.
             if(ImGui::MenuItem("Open externally")) {
                 openExternallyCmd(1.0f);
@@ -1744,8 +1744,12 @@ void ParticleEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            resizeString(f2s(game.editorsView.mouseCursorWorldPos.x), 7).c_str(),
-            resizeString(f2s(game.editorsView.mouseCursorWorldPos.y), 7).c_str()
+            resizeString(
+                f2s(game.editorsView.mouseCursorWorldPos.x), 7
+            ).c_str(),
+            resizeString(
+                f2s(game.editorsView.mouseCursorWorldPos.y), 7
+            ).c_str()
         );
     }
 }

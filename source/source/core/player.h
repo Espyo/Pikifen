@@ -19,6 +19,7 @@
 #include "../game_state/gameplay/pause_menu.h"
 #include "misc_structs.h"
 
+
 using std::string;
 using std::vector;
 
@@ -110,7 +111,7 @@ struct Player {
     
     //Alpha of the enemy or treasure points to show next to the leader cursor.
     float leaderCursorMobPointsAlpha = 0.0f;
-
+    
     //Multiply the leader's walking speed by this.
     float leaderSpeedMult = 1.0f;
     

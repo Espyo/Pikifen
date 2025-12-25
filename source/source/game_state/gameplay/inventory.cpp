@@ -34,11 +34,11 @@ const float FADE_DURATION = 0.2f;
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "inventory";
 
-//Padding between item slots, in GUI width ratio.
-const float SLOT_PADDING = 0.1f;
-
 //How many rows exist.
 const size_t ROWS = 2;
+
+//Padding between item slots, in GUI width ratio.
+const float SLOT_PADDING = 0.1f;
 
 }
 
@@ -370,23 +370,6 @@ void Inventory::tick(float deltaT) {
 
 
 /**
- * @brief Use an item via a shortcut.
- *
- * @param itemInternalName Internal name of the item to use.
- * @return Whether it succeeded.
- */
-bool Inventory::useShortcut(const string& itemInternalName) {
-    for(size_t i = 0; i < items.size(); i++) {
-        InventoryItemInstance* iiPtr = &items[i];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
-        if(iPtr->iName == itemInternalName) {
-            return tryUseItem(i);
-        }
-    }
-    return false;
-}
-
-/**
  * @brief Tries to use an item.
  *
  * @param itemIdx Index of the item in the inventory.
@@ -411,4 +394,22 @@ void Inventory::update() {
         InventoryItemInstance* iiPtr = &items[i];
         iiPtr->button->responsive = canUseItem(iiPtr);
     }
+}
+
+
+/**
+ * @brief Use an item via a shortcut.
+ *
+ * @param itemInternalName Internal name of the item to use.
+ * @return Whether it succeeded.
+ */
+bool Inventory::useShortcut(const string& itemInternalName) {
+    for(size_t i = 0; i < items.size(); i++) {
+        InventoryItemInstance* iiPtr = &items[i];
+        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        if(iPtr->iName == itemInternalName) {
+            return tryUseItem(i);
+        }
+    }
+    return false;
 }

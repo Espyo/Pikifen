@@ -51,7 +51,9 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             
         Distance maxDist =
             (player->swarmMagnitude > 0) ?
-            Distance(game.config.rules.leaderCursorMaxDist * player->swarmMagnitude) :
+            Distance(
+                game.config.rules.leaderCursorMaxDist * player->swarmMagnitude
+            ) :
             leaderToCursorDist;
             
         if(maxDist < player->leaderPtr->swarmArrows[a]) {

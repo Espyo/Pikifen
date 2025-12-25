@@ -39,13 +39,13 @@ constexpr unsigned char VERSION_REV   = 0;
 
 //Whether the given version number refers to the next version, currently
 //in development. If false, it refers to a released version.
-constexpr bool VERSION_IN_DEV = true;
+constexpr bool VERSION_IN_DEV = false;
 
 //Non-in-development version's release day.
-constexpr unsigned char VERSION_DAY   = 23;
+constexpr unsigned char VERSION_DAY   = 25;
 
 //Non-in-development version's release month.
-constexpr unsigned char VERSION_MONTH = 8;
+constexpr unsigned char VERSION_MONTH = 12;
 
 //Non-in-development version's release year.
 constexpr unsigned int  VERSION_YEAR  = 2025;

@@ -26,11 +26,11 @@ namespace ONION_MENU {
 //Name of the GUI definition file.
 const string GUI_FILE_NAME = "onion_menu";
 
-//How long to let text turn red for.
-const float RED_TEXT_DURATION = 1.0f;
-
 //Maximum number of Pikmin types visible without scrolling.
 const size_t NR_TYPES_VISIBLE = 5;
+
+//How long to let text turn red for.
+const float RED_TEXT_DURATION = 1.0f;
 
 //Name of the Pikmin type GUI definition file.
 const string TYPE_GUI_FILE_NAME = "onion_menu_pikmin_type";
@@ -664,9 +664,10 @@ void OnionMenu::confirm() {
  *
  * @param toGroup Whether the transfer is to the group or to the Onion.
  * @param typeIdx Index of the Onion's Pikmin type, if applicable.
+ * @param fromSN Whether it came from spatial navigation.
  */
 void OnionMenu::doButtonLogic(
-    bool toGroup, size_t typeIdx, bool fromDirection
+    bool toGroup, size_t typeIdx, bool fromSN
 ) {
     GuiItem* relevantItem = nullptr;
     if(toGroup) {
@@ -685,7 +686,7 @@ void OnionMenu::doButtonLogic(
     
     ONION_TRANSFER_RESULT result = transfer(toGroup, typeIdx);
     
-    if(!fromDirection) {
+    if(!fromSN) {
         if(result != ONION_TRANSFER_RESULT_OK) {
             relevantItem->playFailSound = true;
         }

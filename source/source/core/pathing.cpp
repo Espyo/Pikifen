@@ -822,7 +822,7 @@ PATH_RESULT getPath(
             closestToEnd = sPtr;
         }
     }
-
+    
     //No valid start or end point could be found, return a direct path.
     if(!closestToStart || !closestToEnd) {
         return PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS;

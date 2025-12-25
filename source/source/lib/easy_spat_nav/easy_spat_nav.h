@@ -117,7 +117,7 @@ public:
         //in the corner again, making it difficult to reach the lone item.
         //If true, we try all items at once.
         bool singleLoopPass = false;
-
+        
         //Every time the user navigates to an item in the same direction as
         //the previous navigation, it gets added to the history.
         //When navigating, if there are multiple items with a similar score,
@@ -198,8 +198,8 @@ protected:
      */
     struct Item {
     
-    public:
-    
+        public:
+        
         //--- Members ---
         
         //Identifier.
@@ -267,10 +267,10 @@ protected:
     
     //Children associations.
     std::map<ItemId, std::vector<ItemId> > children;
-
+    
     //Navigation history in the last navigated direction.
     std::vector<ItemId> history;
-
+    
     //Direction used for the navigation history.
     DIRECTION historyDirection = DIRECTION_RIGHT;
     
@@ -292,9 +292,9 @@ protected:
         float limitX1, float limitY1, float limitX2, float limitY2
     );
     ItemId getBestItem(
-      const std::vector<double>& bestScores,
-      const std::vector<ItemId> bestItemIds,
-      DIRECTION direction, bool* usedHistory
+        const std::vector<double>& bestScores,
+        const std::vector<ItemId> bestItemIds,
+        DIRECTION direction, bool* usedHistory
     ) const;
     void getBestItems(
         const std::map<ItemId, ItemWithRelUnits>& list,

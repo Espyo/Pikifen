@@ -1730,7 +1730,10 @@ void initMobActions() {
     );
     
     //Set focus var.
-    regParam("focused mob's destination var name", MOB_ACTION_PARAM_STRING, false, false);
+    regParam(
+        "focused mob's destination var name",
+        MOB_ACTION_PARAM_STRING, false, false
+    );
     regParam("value", MOB_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SET_FOCUS_VAR,

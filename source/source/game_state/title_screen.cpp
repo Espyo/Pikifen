@@ -42,182 +42,6 @@ const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
 
 /**
- * @brief Loads the main menu.
- */
-void MainMenu::load() {
-    initGuiMainPage();
-    initGuiPlayPage();
-    initGuiMakePage();
-    
-    switch(pageToLoad) {
-    case MAIN_MENU_PAGE_MAIN: {
-        mainGui.responsive = true;
-        mainGui.showItems();
-        break;
-    } case MAIN_MENU_PAGE_PLAY: {
-        playGui.responsive = true;
-        playGui.showItems();
-        break;
-    } case MAIN_MENU_PAGE_MAKE: {
-        makeGui.responsive = true;
-        makeGui.showItems();
-        break;
-    }
-    }
-    pageToLoad = MAIN_MENU_PAGE_MAIN;
-    
-    guis.push_back(&mainGui);
-    guis.push_back(&playGui);
-    guis.push_back(&makeGui);
-    
-    Menu::load();
-}
-
-
-/**
- * @brief Draws the title screen.
- */
-void TitleScreen::doDrawing() {
-    al_clear_to_color(COLOR_BLACK);
-    
-    if(game.debug.showDearImGuiDemo) return;
-    
-    drawBitmap(
-        bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
-        Point(game.winW, game.winH)
-    );
-    
-    //Draw the logo Pikmin.
-    Point pikSize = logoPikminSize;
-    pikSize.x *= game.winW / 100.0f;
-    pikSize.y *= game.winH / 100.0f;
-    
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
-        LogoPikmin* pik = &logoPikmin[p];
-        drawBitmapInBox(
-            game.sysContent.bmpShadow,
-            pik->pos + pikSize * 0.30f, pikSize * 1.2f,
-            true, 0.0f, COLOR_TRANSPARENT_WHITE
-        );
-    }
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
-        LogoPikmin* pik = &logoPikmin[p];
-        drawBitmapInBox(
-            pik->top, pik->pos, pikSize, true, pik->angle
-        );
-    }
-    
-    drawText(
-        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
-        game.sysContent.fntSlim,
-        Point(8.0f),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
-    );
-    string versionText;
-    if(!game.config.general.name.empty()) {
-        versionText = game.config.general.name;
-        if(!game.config.general.version.empty()) {
-            versionText += " " + game.config.general.version;
-        }
-        versionText += ", powered by ";
-    }
-    versionText +=
-        "Pikifen " + getEngineVersionString(true);
-    drawText(
-        versionText, game.sysContent.fntSlim,
-        Point(game.winW - 8, 8),
-        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
-        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
-    );
-    
-    mainMenu.draw();
-    
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
-}
-
-
-/**
- * @brief Ticks a frame's worth of logic.
- */
-void TitleScreen::doLogic() {
-    if(game.debug.showDearImGuiDemo) return;
-    
-    //Animate the logo Pikmin.
-    int largestWindowDim = std::max(game.winW, game.winH);
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
-        LogoPikmin* pik = &logoPikmin[p];
-        
-        if(!pik->reachedDestination) {
-            float a = getAngle(pik->pos, pik->destination);
-            float speed =
-                std::min(
-                    pik->speed * largestWindowDim * (float) game.deltaT,
-                    Distance(pik->pos, pik->destination).toFloat() *
-                    logoPikminSpeedSmoothness
-                );
-            pik->pos.x += cos(a) * speed;
-            pik->pos.y += sin(a) * speed;
-            if(
-                fabs(pik->pos.x - pik->destination.x) < 1.0 &&
-                fabs(pik->pos.y - pik->destination.y) < 1.0
-            ) {
-                pik->destination = pik->pos;
-                pik->reachedDestination = true;
-            }
-            
-        } else {
-            pik->swayVar += pik->swaySpeed * game.deltaT;
-            pik->pos.x =
-                pik->destination.x +
-                sin(pik->swayVar) * logoPikminSwayAmount;
-        }
-    }
-    
-    if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
-            bool handled =
-                mainMenu.handlePlayerAction(game.controls.actionQueue[a]);
-            if(!handled) {
-                game.controls.reinsertAction(game.controls.actionQueue[a]);
-            }
-        }
-    }
-    
-    mainMenu.tick(game.deltaT);
-    
-    //Fade manager needs to come last, because if
-    //the fade finishes and the state changes, and
-    //after that we still attempt to do stuff in
-    //this function, we're going to have a bad time.
-    game.fadeMgr.tick(game.deltaT);
-    
-}
-
-
-/**
- * @brief Returns the name of this state.
- *
- * @return The name.
- */
-string TitleScreen::getName() const {
-    return "title screen";
-}
-
-
-/**
- * @brief Handles Allegro events.
- *
- * @param ev Event to handle.
- */
-void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
-    if(game.fadeMgr.isFading()) return;
-    
-    mainMenu.handleAllegroEvent(ev);
-}
-
-
-/**
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void MainMenu::initGuiMainPage() {
@@ -873,6 +697,182 @@ void MainMenu::initGuiPlayPage() {
     playGui.setFocusedItem(simpleButton, true);
     playGui.responsive = false;
     playGui.hideItems();
+}
+
+
+/**
+ * @brief Loads the main menu.
+ */
+void MainMenu::load() {
+    initGuiMainPage();
+    initGuiPlayPage();
+    initGuiMakePage();
+    
+    switch(pageToLoad) {
+    case MAIN_MENU_PAGE_MAIN: {
+        mainGui.responsive = true;
+        mainGui.showItems();
+        break;
+    } case MAIN_MENU_PAGE_PLAY: {
+        playGui.responsive = true;
+        playGui.showItems();
+        break;
+    } case MAIN_MENU_PAGE_MAKE: {
+        makeGui.responsive = true;
+        makeGui.showItems();
+        break;
+    }
+    }
+    pageToLoad = MAIN_MENU_PAGE_MAIN;
+    
+    guis.push_back(&mainGui);
+    guis.push_back(&playGui);
+    guis.push_back(&makeGui);
+    
+    Menu::load();
+}
+
+
+/**
+ * @brief Draws the title screen.
+ */
+void TitleScreen::doDrawing() {
+    al_clear_to_color(COLOR_BLACK);
+    
+    if(game.debug.showDearImGuiDemo) return;
+    
+    drawBitmap(
+        bmpMenuBg, Point(game.winW * 0.5, game.winH * 0.5),
+        Point(game.winW, game.winH)
+    );
+    
+    //Draw the logo Pikmin.
+    Point pikSize = logoPikminSize;
+    pikSize.x *= game.winW / 100.0f;
+    pikSize.y *= game.winH / 100.0f;
+    
+    for(size_t p = 0; p < logoPikmin.size(); p++) {
+        LogoPikmin* pik = &logoPikmin[p];
+        drawBitmapInBox(
+            game.sysContent.bmpShadow,
+            pik->pos + pikSize * 0.30f, pikSize * 1.2f,
+            true, 0.0f, COLOR_TRANSPARENT_WHITE
+        );
+    }
+    for(size_t p = 0; p < logoPikmin.size(); p++) {
+        LogoPikmin* pik = &logoPikmin[p];
+        drawBitmapInBox(
+            pik->top, pik->pos, pikSize, true, pik->angle
+        );
+    }
+    
+    drawText(
+        "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
+        game.sysContent.fntSlim,
+        Point(8.0f),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
+    );
+    string versionText;
+    if(!game.config.general.name.empty()) {
+        versionText = game.config.general.name;
+        if(!game.config.general.version.empty()) {
+            versionText += " " + game.config.general.version;
+        }
+        versionText += ", powered by ";
+    }
+    versionText +=
+        "Pikifen " + getEngineVersionString(true);
+    drawText(
+        versionText, game.sysContent.fntSlim,
+        Point(game.winW - 8, 8),
+        Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
+        ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
+    );
+    
+    mainMenu.draw();
+    
+    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+}
+
+
+/**
+ * @brief Ticks a frame's worth of logic.
+ */
+void TitleScreen::doLogic() {
+    if(game.debug.showDearImGuiDemo) return;
+    
+    //Animate the logo Pikmin.
+    int largestWindowDim = std::max(game.winW, game.winH);
+    for(size_t p = 0; p < logoPikmin.size(); p++) {
+        LogoPikmin* pik = &logoPikmin[p];
+        
+        if(!pik->reachedDestination) {
+            float a = getAngle(pik->pos, pik->destination);
+            float speed =
+                std::min(
+                    pik->speed * largestWindowDim * (float) game.deltaT,
+                    Distance(pik->pos, pik->destination).toFloat() *
+                    logoPikminSpeedSmoothness
+                );
+            pik->pos.x += cos(a) * speed;
+            pik->pos.y += sin(a) * speed;
+            if(
+                fabs(pik->pos.x - pik->destination.x) < 1.0 &&
+                fabs(pik->pos.y - pik->destination.y) < 1.0
+            ) {
+                pik->destination = pik->pos;
+                pik->reachedDestination = true;
+            }
+            
+        } else {
+            pik->swayVar += pik->swaySpeed * game.deltaT;
+            pik->pos.x =
+                pik->destination.x +
+                sin(pik->swayVar) * logoPikminSwayAmount;
+        }
+    }
+    
+    if(!game.fadeMgr.isFading()) {
+        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+            bool handled =
+                mainMenu.handlePlayerAction(game.controls.actionQueue[a]);
+            if(!handled) {
+                game.controls.reinsertAction(game.controls.actionQueue[a]);
+            }
+        }
+    }
+    
+    mainMenu.tick(game.deltaT);
+    
+    //Fade manager needs to come last, because if
+    //the fade finishes and the state changes, and
+    //after that we still attempt to do stuff in
+    //this function, we're going to have a bad time.
+    game.fadeMgr.tick(game.deltaT);
+    
+}
+
+
+/**
+ * @brief Returns the name of this state.
+ *
+ * @return The name.
+ */
+string TitleScreen::getName() const {
+    return "title screen";
+}
+
+
+/**
+ * @brief Handles Allegro events.
+ *
+ * @param ev Event to handle.
+ */
+void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
+    if(game.fadeMgr.isFading()) return;
+    
+    mainMenu.handleAllegroEvent(ev);
 }
 
 

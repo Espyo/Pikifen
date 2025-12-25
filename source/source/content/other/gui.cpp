@@ -901,6 +901,16 @@ string GuiManager::getCurrentTooltip() const {
 
 
 /**
+ * @brief Returns which item is currently focused.
+ *
+ * @return The item, or nullptr for none.
+ */
+GuiItem* GuiManager::getFocusedItem() const {
+    return focusedItem;
+}
+
+
+/**
  * @brief Reads hardcoded and custom GUI item definitions from a data file
  * and returns them.
  *
@@ -1171,16 +1181,6 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     draw->size = finalSize;
     draw->tint = mapAlpha(finalAlpha);
     return true;
-}
-
-
-/**
- * @brief Returns which item is currently focused.
- *
- * @return The item, or nullptr for none.
- */
-GuiItem* GuiManager::getFocusedItem() const {
-    return focusedItem;
 }
 
 

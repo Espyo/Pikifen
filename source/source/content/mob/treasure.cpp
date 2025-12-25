@@ -48,7 +48,7 @@ Treasure::Treasure(const Point& pos, TreasureType* type, float angle) :
 /**
  * @brief Returns how many mission points this mob is currently worth, or
  * 0 if not applicable.
- * 
+ *
  * @param applicableInThisMission If not nullptr, whether the points are
  * applicable in this mission or not is returned here.
  * @return The point amount.

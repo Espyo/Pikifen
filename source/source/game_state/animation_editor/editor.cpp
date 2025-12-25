@@ -24,6 +24,7 @@
 
 using std::queue;
 
+
 namespace ANIM_EDITOR {
 
 //Threshold for the flood-fill algorithm when picking sprite bitmap parts.
@@ -116,6 +117,11 @@ AnimationEditor::AnimationEditor() :
 /**
  * @brief Goes through all sprites that match the given old bitmap properties,
  * and gives them the new properties.
+ *
+ * @param oldPos Old position property.
+ * @param oldSize Old size property.
+ * @param newPos New position property.
+ * @param newSize New size property.
  */
 void AnimationEditor::applyChangesToAllMatchingSprites(
     const Point& oldPos, const Point& oldSize,

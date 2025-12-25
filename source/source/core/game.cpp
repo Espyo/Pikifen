@@ -297,7 +297,8 @@ bool Game::globalHandleSystemPlayerAction(const Inpution::Action& action) {
 
 
 /**
- * @brief Performs some global logic to run every frame, after the state's logic.
+ * @brief Performs some global logic to run every frame,
+ * after the state's logic.
  */
 void Game::globalLogicPost() {
     if(mouseCursor.movedThisFrame) {

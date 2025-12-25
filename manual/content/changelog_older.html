@@ -17,6 +17,289 @@
     
     <p>Older entries of the <a href="changelog.html">changelog</a>.</p>
 
+    <h2 id="1.0.1">1.0.1</h2>
+    
+    <p><i>August 23rd, 2025</i></p>
+
+    <h3 id="1.0.1-gameplay">Gameplay changes</h3>
+
+    <ul>
+      <li><span class="cl-f">Fixed</span> some pathing problems in Playful Yard's southern part.</li>
+      <li><span class="cl-f">Fixed</span> the player being able to walk towards the southeastern treasure platform from the terrain north of it, in Olympian Ruins.</li>
+      <li><span class="cl-f">Fixed</span> leaders released from inside other mobs not being able to be used. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> buttons that open a folder or a webpage failing if the path had spaces in it. (Thanks Gulliblepikmin)</li>
+      <li><span class="cl-f">Fixed</span> a crash when dismissing leaders with leaders, with the "dismiss all" option disabled. (Thanks Helodity, davdii)</li>
+      <li><span class="cl-f">Fixed</span> a crash when an object starts a path on an area that has path stops, but none are accessible. (Thanks Helodity, Enderdude6)</li>
+      <li><span class="cl-f">Fixed</span> Pikmin birth and death numbers in the pause menu not resetting between areas. (Thanks Gatling Groink)</li>
+      <li><span class="cl-f">Fixed</span> Pikmin emitting "maturity down" particles when zapped or crushed.</li>
+      <li><span class="cl-f">Fixed</span> children objects incorrectly counting as enemies for missions (e.g. each of the Beady Long Legs's feet). (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> Pikmin reaching treasures and corpses if they're near them horizontally, but far away vertically. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> some screenshots in the help menu being outdated.</li>
+      <li><span class="cl-f">Fixed</span> looping sounds in animations continuing to play even after leaving, in the animation editor. (Thanks Neo)</li>
+      <li><span class="cl-f">Fixed</span> the OpenGL requirements being too high, now allowing the engine to run on weaker machines. (Thanks Helodity)</li>
+    </ul>
+    
+    <h2 id="1.0.0">1.0.0</h2>
+    
+    <p><i>August 15th, 2025 &ndash; the "Gold Version" update</i></p>
+
+    <h3 id="1.0.0-gameplay">Gameplay changes</h3>
+
+    <ul>
+      <li>
+        New audio:
+        <ul>
+          <li><span class="cl-a">Added</span> a handful of <a href="music.html">songs</a>. (Thanks Helodity, Rosey)</li>
+          <li><span class="cl-a">Added</span> many new sounds.</li>
+        </ul>
+      </li>
+      <li>
+        New content:
+        <ul>
+          <li><span class="cl-a">Added</span> new <a href="area.html">areas</a>: Emerald Grove, Olympian Ruins, and Turbulent Tundra.</li>
+          <li><span class="cl-a">Added</span> new <a href="mob_enemy.html">enemies</a>: Downy Snagret and Cyclopod.</li>
+          <li><span class="cl-a">Added</span> new <a href="mob_treasure.html">treasures</a>: Chocolate Square and Chocolate Bar (internally a <a href="mob_resource.html">resource</a> and <a href="mob_pile.html">pile</a> respectively), Nugget and Nugget Pile (ditto), Cupcake, Soda Cap, and Yarn Ball.</li>
+        </ul>
+      </li>
+      <li>
+        New animations:
+        <ul>
+          <li><span class="cl-a">Added</span> arms out, backflip, called, carrying light, carrying struggle, climbing, crushed, dying, flailing, knocked down dying, lounging, plucking thrown, pushing, shaking, sitting, sliding, and twirling animations to <a href="mob_pikmin.html">Pikmin</a>.</li>
+          <li><span class="cl-a">Added</span> called, looking around, sitting, stretching, and throwing animations to <a href="mob_leader.html">leaders</a>.</li>
+          <li><span class="cl-a">Added</span> Pikmin generation animations to <a href="mob_onion.html">Onions</a>.</li>
+        </ul>
+      </li>
+      <li>
+        Quality of life:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability to <a href="options.html">customize</a> the control binds for the system info and screenshots.</li>
+          <li><span class="cl-a">Added</span> an option for how close a leader must be to an idle Pikmin before it's bumped.</li>
+          <li><span class="cl-a">Added</span> an option that makes dismissing keep the current standby group, if there are multiple groups.</li>
+          <li><span class="cl-a">Added</span> buttons for the options menu and statistics menu within the pause menu.</li>
+          <li><span class="cl-a">Added</span> the ability to transfer 10 Pikmin at a time in the Onion menu.</li>
+          <li><span class="cl-c">Changed</span> the standby type counter on the leader cursor to be controlled by an option, disabled by default.</li>
+          <li><span class="cl-c">Changed</span> how carrying ties work in order to prioritize Pikmin types with a lower population and make the system more intuitive and predictable in general.</li>
+        </ul>
+      </li>
+      <li>
+        Balance:
+        <ul>
+          <li><span class="cl-c">Changed</span> the effects of <a href="status.html">statuses</a> like being on fire, poisoned, etc. Now, Pikmin lose one stage of maturity when they are afflicted.</li>
+          <li><span class="cl-c">Changed</span> some properties and behaviors of some enemies to make them easier to fight.</li>
+        </ul>
+      </li>
+      <li>
+        Aesthetics:
+        <ul>
+          <li><span class="cl-a">Added</span> more shadows to objects, including rectangular shadows. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> icons to some <a href="gui.html">menu</a> buttons.</li>
+          <li><span class="cl-c">Changed</span> the title screen Pikmin logo so that it represents all flower colors.</li>
+          <li><span class="cl-c">Changed</span> the appearance of water to be more dynamic (using shaders). (Thanks Helodity)</li>
+          <li><span class="cl-c">Changed</span> how window resolutions are handled. The same general amount of area pixels are shown regardless of resolution. i.e. at higher resolutions the player will see things sharper instead of seeing farther than normal.</li>
+          <li><span class="cl-c">Changed</span> the score ruler in mission HUDs to look better. There is also now a "1 minute left!" notification on missions that are 2 minutes or longer.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability for <a href="area.html">missions</a> to include the maker's score record.</li>
+          <li><span class="cl-a">Added</span> Discord and GitHub buttons to the <a href="gui.html">main menu</a>.</li>
+          <li><span class="cl-c">Changed</span> the way some things are calculated so the engine runs faster. The most extreme change is that objects that are off-camera and not close to a Pikmin/leader will not be processed.</li>
+          <li><span class="cl-c">Changed</span> how options are organized in the options file, so you will likely have to set them again.</li>
+          <li><span class="cl-c">Changed</span> the internal name of the enemy defeats statistic in the statistics file. Without external manipulation it will be impossible to port this value over, and it will be set to 0.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="1.0.0-making">Content-making changes</h3>
+
+    <ul>
+      <li>
+        Editors:
+        <ul>
+          <li><span class="cl-a">Added</span> the <a href="particle.html">particle editor</a>. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> a way to delete the current piece of content to all editors.</li>
+          <li><span class="cl-a">Added</span> proper names to each entry of an editor's history.</li>
+          <li><span class="cl-a">Added</span> a context menu (right-click) to most angle sliders, so you can pick East, South, West, North, quarter rotations, or 180 rotations quickly.</li>
+          <li><span class="cl-c">Changed</span> the style of all editors to be less basic and more green.</li>
+        </ul>
+      </li>
+      <li>
+        Content organization:
+        <ul>
+          <li><span class="cl-a">Added</span> generic properties to all pieces of content that have their data read from a <a href="making.html#data-file">data file</a>, such as the maker name, version, notes, etc.</li>
+          <li><span class="cl-a">Added</span> some sounds and songs to the <a href="system_content_names.html">system content names</a>.</li>
+          <li><span class="cl-a">Added</span> <code>hard_bubble</code> and <code>frame_box</code> to the <a href="system_content_names.html">system content names</a>.</li>
+          <li><span class="cl-a">Added</span> the game fonts to the <a href="system_content_names.html">system content names</a>.</li>
+          <li><span class="cl-a">Added</span> <a href="particle.html">particle generators</a> that used to be hardcoded to the system content.</li>
+        </ul>
+      </li>
+      <li>
+        Audio:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>tags</code> property to <a href="music.html">songs</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>loop</code> property to <a href="mob_type.html">object type</a> sound data.</li>
+        </ul>
+      </li>
+      <li>
+        Areas:
+        <ul>
+          <li><span class="cl-a">Added</span> a "show blocking sectors" mode to the review panel of the <a href="area.html">area editor</a>.</li>
+          <li><span class="cl-a">Added</span> support for multiple sectors when you hold H to quickly set a sector's height in the <a href="area.html">area editor</a>.</li>
+          <li><span class="cl-a">Added</span> the ability for individual <a href="mob_enemy.html">enemies</a> to be considered bosses. (Thanks Helodity)</li>
+        </ul>
+      </li>
+      <li>
+        Animations:
+        <ul>
+          <li><span class="cl-a">Added</span> a tint color property to <a href="animation.html">sprites</a>.</li>
+          <li><span class="cl-a">Added</span> the ability for frames of animation to interpolate their transformation data (sprite translation, sprite rotation, etc.) from one to the next.</li>
+          <li><span class="cl-a">Added</span> an option to set a custom background in the <a href="animation.html">animation editor</a>.</li>
+          <li><span class="cl-a">Added</span> a "keep area" checkbox to the sprite transformation panel in the <a href="animation.html">animation editor</a>. This is useful for "squash and stretch" effects.</li>
+          <li><span class="cl-a">Added</span> the ability to hold Shift while pressing the play/stop button in the <a href="animation.html">animation editor</a> in order to start from the beginning.</li>
+        </ul>
+      </li>
+      <li>
+        Scripts:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>stop_sound</code> <a href="script.html">object script action</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>on_swallowed</code> <a href="script.html">event</a>.</li>
+          <li><span class="cl-a">Added</span> a <code>global</code> block to <a href="script.html">scripts</a>. Events in this block will have their actions run regardless of the current state.</li>
+          <li><span class="cl-a">Added</span> an argument to the <code>play_sound</code> <a href="script.html">object script action</a> for the sound ID.</li>
+          <li><span class="cl-a">Added</span> an argument to the <code>set_animation</code> <a href="script.html">script action</a> that makes the animation speed depend on the object's speed.</li>
+        </ul>
+      </li>
+      <li>
+        Maker tools:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>frame_advance</code> and the <code>set_song_pos_near_loop</code> <a href="maker_toolkit.html">maker tools</a>.</li>
+          <li><span class="cl-a">Added</span> the ability to customize the control binds for <a href="maker_toolkit.html">maker tools</a>.</li>
+          <li><span class="cl-a">Added</span> some modifiers to the <a href="maker_toolkit.html">maker tools</a> to allow for more behaviors.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>idle_bump_delay</code> property and some radar color properties to the <a href="game_config.html">game configuration</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>knocked_down_duration</code> and <code>knocked_down_whistle_bonus</code> properties to <a href="mob_leader.html">leader types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>enemy_hit_rate_modifier_latched</code> and <code>enemy_hit_rate_modifier_standing</code> properties to <a href="mob_pikmin.html">Pikmin types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>carrying_light</code> option to the Pikmin pose property of <a href="mob_group_task.html">group task types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>inactive_logic</code> and <code>use_damage_squash_and_stretch</code> properties to <a href="mob_type.html">object types</a>.</li>
+          <li><span class="cl-a">Added</span> the <code>random_chance</code> property to <a href="mob_type.html">object type</a> sounds.</li>
+          <li><span class="cl-a">Added</span> the <code>enemy_dead</code>, <code>leader_x</code>, and <code>obstacle</code> icons to the <a href="gui.html">radar's GUI definition</a>.</li>
+          <li><span class="cl-a">Added</span> messages, <code>grown_resource</code> and <code>dropped_resource</code>, for when a <a href="mob_pile.html">pile</a> grows or drops a resource.</li>
+          <li><span class="cl-a">Added</span> knockback multiplication logic to <a href="mob_type.html#vulnerabilities">object type vulnerabilities</a>. (Thanks Rosey)</li>
+          <li><span class="cl-a">Added</span> the ability for enemies to revive after death. (Thanks Helodity)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="1.0.0-breaking">Breaking changes</h3>
+
+    <ul>
+      <li>
+        Content organization:
+        <ul>
+          <li><span class="cl-c">Changed</span> the names and paths of all files and folders to be in <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a>.</li>
+          <li><span class="cl-c">Changed</span> how content refers to each other. Instead of using the content's proper name, it uses the "<a href="making.html#content">internal name</a>", which is just the file's name without extension or the folder's name. For instance, the cardboard box's <code>spawns</code> block now refers to the flap object as <code>cardboard_box_flap</code> instead of <code>Cardboard box flap</code>.</li>
+          <li><span class="cl-c">Changed</span> the folders game content is loaded from to use <a href="content.html">packs</a>.</li>
+          <li><span class="cl-c">Changed</span> the way content refers to assets. Now, content can refer to any graphics in the <code>game_data/&lt;pack&gt;/graphics</code> folders or any sounds in the <code>game_data/&lt;pack&gt;/audio/sounds</code> folders, and if needed, can include the subfolder.</li>
+        </ul>
+      </li>
+      <li>
+        Animations:
+        <ul>
+          <li><span class="cl-c">Changed</span> the folder global animations are in. Instead of <code>Animations</code> (or <code>animations</code>), it's <code>global_animations</code>.</li>
+          <li><span class="cl-c">Changed</span> the amount of hazards that a <a href="animation.html">hitbox</a> can have to 1. The property was thus renamed from <code>hazards</code> to <code>hazard</code>.</li>
+        </ul>
+      </li>
+      <li>
+        Areas:
+        <ul>
+          <li><span class="cl-c">Changed</span> how mobs are saved inside of an area. Their block now specifies the internal name of the category, instead of the proper name. The type proper was also naturally changed to be the mob type's internal name.</li>
+          <li><span class="cl-c">Changed</span> how sector types are saved inside of an <a href="area.html">area</a>. Blocking sectors now use the internal name <code>blocking</code> instead of <code>Blocking</code>.</li>
+          <li><span class="cl-c">Changed</span> the "maker notes" property for areas from <code>notes</code> to <code>maker_notes</code>.</li>
+          <li><span class="cl-c">Changed</span> the names of area backup files so they match the names of normal area files. i.e. removed the <code>_backup</code> in their names.</li>
+          <li><span class="cl-c">Changed</span> the amount of hazards that a <a href="area.html">sector</a> can have to 1. The property was thus renamed from <code>hazards</code> to <code>hazard</code>.</li>
+          <li><span class="cl-c">Changed</span> the names and values of enemy-killing things regarding area missions to be about enemy defeating instead, for the sake of accuracy. i.e. <code>mission_fail_enemies_killed</code> to <code>mission_fail_enemies_defeated</code>.</li>
+        </ul>
+      </li>
+      <li>
+        Audio:
+        <ul>
+          <li><span class="cl-c">Changed</span> the song and track folders to be in the main <code>audio</code> folder instead of the <code>music</code> sub-folder.</li>
+          <li><span class="cl-c">Changed</span> the <code>title</code> property in songs to instead be <code>name</code>. Because of the overall internal name change, the internal name that used to be in the <code>name</code> property is now the file name, meaning <a href="system_content_names.html">boss and menu music</a> must be changed accordingly.</li>
+        </ul>
+      </li>
+      <li>
+        Scripts:
+        <ul>
+          <li><span class="cl-c">Changed</span> the <code>get_random_decimal</code> <a href="script.html">script action</a> to <code>get_random_float</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>focus</code> and <code>get_mob_info</code> <a href="script.html">actions</a> to support the same set of target object types.</li>
+        </ul>
+      </li>
+      <li>
+        Mob types:
+        <ul>
+          <li><span class="cl-a">Added</span> the <code>bounced_back</code> animation to <a href="mob_pikmin.html">Pikmin types</a>.</li>
+          <li><span class="cl-c">Changed</span> the folder mob types are in. Instead of <code>Types</code> (or <code>types</code>), it's <code>mob_types</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>decimal</code> type in an <a href="mob_type.html">object type</a>'s <code>area_editor_properties</code> block to <code>float</code>.</li>
+          <li><span class="cl-c">Changed</span> the names of the values of the <code>type</code> property for <a href="mob_type.html">object type</a> sounds.</li>
+          <li><span class="cl-c">Changed</span> the property <code>file</code> to <code>sound</code> for <a href="mob_type.html">object type</a> sounds.</li>
+          <li><span class="cl-c">Changed</span> the <code>knocked_down</code> <a href="mob_leader.html">leader animation</a> to <code>knocked_back</code>.</li>
+          <li><span class="cl-r">Removed</span> the <code>drops_corpse</code> <a href="mob_enemy.html">enemy</a> parameter. Now, enemies always drop a corpse when they finish dying. You can use the <code>delete</code> script action or avoid running <code>finish_dying</code> if you don't want a corpse.</li>
+          <li><span class="cl-r">Removed</span> the <code>is_boss</code> <a href="mob_enemy.html">enemy</a> parameter. Now, individual enemies in an area can be marked as being bosses.</li>
+        </ul>
+      </li>
+      <li>
+        GUIs:
+        <ul>
+          <li><span class="cl-c">Changed</span> the internal name of some menu-related GUI definitions for consistency: help menu, main menu's top page, all pause menus, and the control binds menu's GUI definitions.</li>
+          <li><span class="cl-c">Changed</span> the names of the control-binds and sound effect related <a href="gui.html">GUI items</a> in the options menu.</li>
+          <li><span class="cl-c">Changed</span> the <code>enemy</code> icon of the <a href="gui.html">radar</a> to <code>enemy_alive</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>files</code> block of the radar and HUD <a href="gui.html">GUIs</a> to <code>bitmaps</code>.</li>
+          <li><span class="cl-c">Changed</span> the name of the "screen" limit properties of the <a href="gui.html">title screen GUI's</a> logo block to read "window" instead.</li>
+        </ul>
+      </li>
+      <li>
+        Game configuration:
+        <ul>
+          <li><span class="cl-c">Changed</span> the organization and some names of the <a href="game_config.html">game configuration</a> properties.</li>
+          <li><span class="cl-c">Changed</span> the zoom-level properties of the <a href="game_config.html">game configuration</a> and <a href="options.html">options</a> to instead be about the "reach", and renamed to <code>zoom_*_reach</code> accordingly.</li>
+          <li><span class="cl-c">Changed</span> the idle Pikmin bump distance property of the <a href="game_config.html">game configuration</a> by moving it to the <a href="options.html">options</a> instead.</li>
+        </ul>
+      </li>
+      <li>
+        System content:
+        <ul>
+          <li><span class="cl-c">Changed</span> where <a href="system_content_names.html">system content</a> is loaded from. Instead of <code>system_asset_file_names.txt</code>, it's in <code>system_content_names.txt</code>. Animation names that used to be loaded from <code>System_animations.txt</code> are now also loaded from this new file.</li>
+          <li><span class="cl-c">Changed</span> the <a href="system_content_names.html">system content name</a> property for the title screen background from <code>main_menu</code> to <code>title_screen_bg</code>.</li>
+          <li><span class="cl-c">Changed</span> <code>enemy_spirit</code> and <code>pikmin_spirit</code> to use "soul" instead of "spirit".</li>
+        </ul>
+      </li>
+      <li>
+        Base content:
+        <ul>
+          <li><span class="cl-c">Changed</span> the location of graphics, sounds, and songs to be organized into sub-folders. Any use of any of these will need to be updated to point to the sub-folder and name (e.g. <code>red_bulborb</code> to <code>enemies/red_bulborb</code>).</li>
+          <li><span class="cl-c">Changed</span> the <code>bud_icon</code> and <code>flower_icon</code> bitmaps to <code>white_bud_icon</code> and <code>white_flower_icon</code>.</li>
+          <li><span class="cl-c">Changed</span> the <code>white_gate</code> bitmap to <code>bramble_gate_white</code>.</li>
+          <li><span class="cl-c">Changed</span> the name of the White Spectralid to White Spectralids, along with its files.</li>
+          <li><span class="cl-c">Changed</span> the internal name of some multi-word pieces of content to fit a <code>subject_adjective</code> naming scheme: electricity hazards, bridge-related objects, bramble gate-related objects, logic gate objects, Pellet Posy objects, pellet objects, Burgeoning Spiderwort objects, berry objects, crystal explosion particle generators, dust-related particle generators, gas-related particle generators, rock explosion particle generators, smoke-related particle generators, spark-related particle generators, speed-changing status effects, blackout weather conditions, and foggy weather conditions.</li>
+          <li><span class="cl-c">Changed</span> the <code>Stone_2.png</code> texture to a JPG (<code>stone_2.jpg</code>).</li>
+          <li><span class="cl-c">Changed</span> the internal name of Pikmin and enemy soul-related content to use "soul" instead of "spirit".</li>
+          <li><span class="cl-c">Changed</span> how ceramic red bridges work so they no longer spawn a "base" child object. Now it has to be spawned manually if wanted. Also, renamed the base's image file from <code>bridge_ceramic_red</code> to <code>bridge_base_ceramic_red</code>.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-c">Changed</span> how <a href="particle.html">particles</a> work entirely.</li>
+          <li><span class="cl-c">Changed</span> the properties of <a href="hazard.html">liquids</a>.</li>
+          <li><span class="cl-c">Changed</span> the <code>affects_*</code> properties of <a href="status.html">status effects</a> to be a single <code>affects</code> property.</li>
+        </ul>
+      </li>
+    </ul>
+    
     <h2 id="0.25.0">0.25.0</h2>
     
     <p><i>February 17th, 2024 &ndash; the "music & radar" update</i></p>

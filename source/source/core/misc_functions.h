@@ -90,7 +90,9 @@ bool doesEdgeHaveWallShadow(
 void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx, const Viewport& view
 );
-Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth = false);
+Mob* getClosestMobToMouseCursor(
+    const Viewport& view, bool mustHaveHealth = false
+);
 void getEdgeOffsetEdgeInfo(
     Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
     float edgeProcessAngle,

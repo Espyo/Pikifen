@@ -116,7 +116,7 @@ enum MOB_ACTION {
     
     //Conditional "if" condition.
     MOB_ACTION_IF,
-
+    
     //Interpolate a float number.
     MOB_ACTION_INTERPOLATE_NUMBER,
     

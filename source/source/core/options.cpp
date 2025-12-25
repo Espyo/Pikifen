@@ -147,11 +147,11 @@ const bool FAST_INVENTORY = false;
 //Default value for the leader cursor speed.
 const float LEADER_CURSOR_SPEED = 500.0f;
 
-//Default value for whether the mouse moves the leader cursor, for each player.
-const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS] = {true, false, false, false};
-
 //Default value for whether the mouse moves the leader, for each player.
 const bool MOUSE_MOVES_LEADER[MAX_PLAYERS] = {false, false, false, false};
+
+//Default value for whether the mouse moves the leader cursor, for each player.
+const bool MOUSE_MOVES_LEADER_CURSOR[MAX_PLAYERS] = {true, false, false, false};
 
 }
 
@@ -233,11 +233,12 @@ const bool MAKER_TOOLS_IN_PLAY = false;
 //Default value for the Pikmin bumping distance.
 const float PIKMIN_BUMP_DIST = 50.0f;
 
-//Default value for whether to show the standby type counter on the leader cursor.
-const bool SHOW_LEADER_CURSOR_COUNTER = false;
-
 //Default value for whether to show player input icons on the HUD.
 const bool SHOW_HUD_INPUT_ICONS = true;
+
+//Default value for whether to show the standby type
+//counter on the leader cursor.
+const bool SHOW_LEADER_CURSOR_COUNTER = false;
 
 }
 

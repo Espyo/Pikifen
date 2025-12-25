@@ -271,7 +271,7 @@ private:
     
     //Leader cursor camera weight picker item.
     OptionsMenuPickerGuiItem<float>* leaderCursorCamWeightPicker = nullptr;
-
+    
     //Fast inventory picker check item.
     CheckGuiItem* fastInventoryCheck = nullptr;
     
@@ -345,10 +345,10 @@ private:
     
     //Scrollbar for the shortcut items list GUI item.
     ScrollGuiItem* shortcutItemsListScroll = nullptr;
-
+    
     //Warning button.
     ButtonGuiItem* bindsWarningButton = nullptr;
-
+    
     //List of actions that are recommended to have at least one bind, but don't.
     vector<PLAYER_ACTION_TYPE> unboundRecommendedActions;
     

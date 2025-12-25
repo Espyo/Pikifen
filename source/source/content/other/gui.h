@@ -357,7 +357,7 @@ public:
     //to change focused items should be skipped.
     std::function<bool(PLAYER_ACTION_TYPE playerActionId)> onMenuSNAction =
         nullptr;
-    
+        
     //What to do when it gets focused.
     std::function<void()> onFocused = nullptr;
     

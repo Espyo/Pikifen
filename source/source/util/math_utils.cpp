@@ -114,7 +114,7 @@ float ease(float n, EASE_METHOD method) {
 /**
  * @brief Performs exponential smoothing on a number, making it smoothly
  * go towards a target number, slowing down as it approaches.
- * 
+ *
  * @param currentValue Current value to smoothen.
  * @param targetValue The intended target value to transition towards.
  * @param smoothingFactor How much to smoothen the transition [0 - 1].

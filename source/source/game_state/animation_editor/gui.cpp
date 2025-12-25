@@ -672,7 +672,8 @@ void AnimationEditor::processGuiOptionsDialog() {
             0.1f, 0, INT_MAX
         );
         setTooltip(
-            "Mouse cursor must move these many pixels to be considered a drag.\n"
+            "Mouse cursor must move these many pixels to "
+            "be considered a drag.\n"
             "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
@@ -3279,8 +3280,12 @@ void AnimationEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            resizeString(f2s(game.editorsView.mouseCursorWorldPos.x), 7).c_str(),
-            resizeString(f2s(game.editorsView.mouseCursorWorldPos.y), 7).c_str()
+            resizeString(
+                f2s(game.editorsView.mouseCursorWorldPos.x), 7
+            ).c_str(),
+            resizeString(
+                f2s(game.editorsView.mouseCursorWorldPos.y), 7
+            ).c_str()
         );
     }
     

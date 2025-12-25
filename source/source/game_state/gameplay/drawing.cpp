@@ -150,7 +150,9 @@ void GameplayState::doGameDrawing(
         }
         if(player.leaderPtr && game.makerTools.hud) {
             cursorColor =
-                changeColorLighting(cursorColor, player.leaderCursorHeightDiffLight);
+                changeColorLighting(
+                    cursorColor, player.leaderCursorHeightDiffLight
+                );
             drawLeaderCursor(&player, cursorColor);
         }
         
@@ -364,7 +366,8 @@ void GameplayState::drawBigMsg() {
                 string(1, GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT[c]),
                 game.sysContent.fntAreaName,
                 Point((game.winW / 2.0f) + xOffset + x, game.winH / 2.0f),
-                Point(LARGE_FLOAT, game.winH * 0.08f), game.config.guiColors.gold
+                Point(LARGE_FLOAT, game.winH * 0.08f),
+                game.config.guiColors.gold
             );
         }
         break;

@@ -145,7 +145,7 @@ ItemId Interface::doNavigation(
     if(checkLoopedItems) {
         getBestItems(loopedItems, &bestScores, &bestItemIds, true);
     }
-
+    
     //Break any ties.
     bool updateHistory = true;
     bool usedHistory = false;
@@ -155,7 +155,7 @@ ItemId Interface::doNavigation(
         history.pop_back();
         updateHistory = false;
     }
-
+    
     if(bestItemId == focusedItemId) {
         //This can only happen if after looping the best item was the initial
         //one. Trying to focus on a different item would result in a nonsense
@@ -187,7 +187,7 @@ void Interface::flattenItems() {
     double limitY1 = settings.limitY1;
     double limitX2 = settings.limitX2;
     double limitY2 = settings.limitY2;
-
+    
     if(limitX1 == limitX2 || limitY1 == limitY2) {
         //No specified limits.
         getItemLimitsNonFlattened(&limitX1, &limitY1, &limitX2, &limitY2);
@@ -266,7 +266,7 @@ void Interface::flattenItemsInList(
 /**
  * @brief Returns which item is the best one in the given list, using
  * heuristics or in the case of ties, the item order.
- * 
+ *
  * @param bestScores Vector of each best item's score.
  * @param bestItemIds Vector of each best item's identifier.
  * @param direction Direction of navigation.
@@ -281,7 +281,7 @@ ItemId Interface::getBestItem(
     *usedHistory = false;
     if(bestItemIds.empty()) return nullptr;
     if(bestItemIds.size() == 1) return bestItemIds[0];
-
+    
     //We got multiple good items to navigate to. Figure out the best one.
     ItemId bestItemId = nullptr;
     if(
@@ -302,7 +302,7 @@ ItemId Interface::getBestItem(
             *usedHistory = true;
         }
     }
-
+    
     if(bestItemId == nullptr) {
         //Pick the one with the absolute best score.
         //Tie-breakers are resolved by the item order
@@ -315,7 +315,7 @@ ItemId Interface::getBestItem(
             }
         }
     }
-
+    
     return bestItemId;
 }
 
@@ -365,7 +365,7 @@ void Interface::getBestItems(
 #endif
         
     }
-
+    
     //Delete any items whose score is below the threshold.
     double bestScore = FLT_MAX;
     if(!bestScores->empty()) {
@@ -674,7 +674,7 @@ Interface::getItemsWithRelativeUnits(
 
 /**
  * @brief Returns whether two directions are opposites.
- * 
+ *
  * @param dir1 First direction.
  * @param dir2 Second direction.
  * @return Whether they are opposites.
@@ -796,7 +796,7 @@ bool Interface::reset(bool resetHistory) {
     
     parents.clear();
     children.clear();
-
+    
     if(resetHistory) {
         history.clear();
         historyDirection = DIRECTION_RIGHT;

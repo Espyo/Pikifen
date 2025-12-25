@@ -323,7 +323,8 @@ void Editor::drawGrid(
 
 
 /**
- * @brief Draws a small red X on the mouse cursor, signifying an operation has failed.
+ * @brief Draws a small red X on the mouse cursor,
+ * signifying an operation has failed.
  */
 void Editor::drawOpErrorCursor() {
     float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
@@ -3291,7 +3292,8 @@ void Editor::zoomWithCursor(float newZoom) {
     game.editorsView.mouseCursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &game.editorsView.mouseCursorWorldPos.x, &game.editorsView.mouseCursorWorldPos.y
+        &game.editorsView.mouseCursorWorldPos.x,
+        &game.editorsView.mouseCursorWorldPos.y
     );
     
     //Readjust the transformation by shifting the camera
@@ -3310,7 +3312,8 @@ void Editor::zoomWithCursor(float newZoom) {
     game.editorsView.mouseCursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &game.editorsView.mouseCursorWorldPos.x, &game.editorsView.mouseCursorWorldPos.y
+        &game.editorsView.mouseCursorWorldPos.x,
+        &game.editorsView.mouseCursorWorldPos.y
     );
 }
 

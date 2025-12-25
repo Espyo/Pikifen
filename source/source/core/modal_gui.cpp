@@ -12,8 +12,8 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "game.h"
-#include "modal_gui.h"
 #include "misc_functions.h"
+#include "modal_gui.h"
 
 
 using DrawInfo = GuiItem::DrawInfo;
@@ -42,16 +42,6 @@ const string GUI_FILE_NAME = "modal";
 ModalGuiManager::ModalGuiManager() {
     reset();
     hideItems();
-}
-
-
-/**
- * @brief Returns whether the modal is currently active.
- *
- * @return Whether it is active.
- */
-bool ModalGuiManager::isActive() const {
-    return visible;
 }
 
 
@@ -88,6 +78,16 @@ void ModalGuiManager::draw() {
     );
     
     GuiManager::draw();
+}
+
+
+/**
+ * @brief Returns whether the modal is currently active.
+ *
+ * @return Whether it is active.
+ */
+bool ModalGuiManager::isActive() const {
+    return visible;
 }
 
 

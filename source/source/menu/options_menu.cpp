@@ -510,7 +510,7 @@ void OptionsMenu::addShortcutItemItems(
  * @brief Adds the label and button for a shortcut in the inventory
  * item shortcuts menu.
  *
- * @param idx Index of the shortcut.
+ * @param index Index of the shortcut.
  */
 void OptionsMenu::addShortcutItems(unsigned char index) {
     string shortcutLetter = string(1, 'a' + index);
@@ -1343,7 +1343,8 @@ void OptionsMenu::initGuiMiscPage() {
     [] () {
         return
             "Show a standby type counter on the leader's cursor? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
+            "Default: " +
+            b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
     };
     miscGui.addItem(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
     

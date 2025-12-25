@@ -155,9 +155,13 @@ void drawBitmapWithEffects(
 
     Point bmpSize = getBitmapDimensions(bmp);
     float scaleX =
-        (effects.tf.scale.x == LARGE_FLOAT) ? effects.tf.scale.y : effects.tf.scale.x;
+        (effects.tf.scale.x == LARGE_FLOAT) ?
+        effects.tf.scale.y :
+        effects.tf.scale.x;
     float scaleY =
-        (effects.tf.scale.y == LARGE_FLOAT) ? effects.tf.scale.x : effects.tf.scale.y;
+        (effects.tf.scale.y == LARGE_FLOAT) ?
+        effects.tf.scale.x :
+        effects.tf.scale.y;
         
     if(effects.colorize.a > 0.0f) {
         al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER));
@@ -298,6 +302,185 @@ void drawHealth(
             center.x, center.y, radius + 1, al_map_rgba(0, 0, 0, alpha * 255), 2
         );
     }
+}
+
+
+/**
+ * @brief Draws a rectangular region that is highlighted with an outline
+ * and some pulsating inward waves. Used for drawing either on the area
+ * or on the radar.
+ *
+ * @param center Center coordinates of the region.
+ * @param size Width and height of the region.
+ * @param color Color of the highlight.
+ * @param timeSpent Total time spent. Used for animating.
+ */
+void drawHighlightedRectRegion(
+    const Point& center, const Point& size, const ALLEGRO_COLOR& color,
+    float timeSpent
+) {
+    const float CORNER_RADIUS = 2.0f;
+    const float DURATION = 3.0f;
+    const size_t N_INNER_RECTS = 2;
+    const float SIZE_OFFSET = 30.0f;
+    const float THICKNESS = 4.0f;
+    
+    //Outer rectangle.
+    drawRoundedRectangle(center, size, CORNER_RADIUS, color, THICKNESS);
+    
+    //Inner rectangles.
+    for(size_t i = 0; i < N_INNER_RECTS; i++) {
+        float iTotalTime = timeSpent + (DURATION / (float) N_INNER_RECTS) * i;
+        float iAnimTime = fmod(iTotalTime, DURATION);
+        Point iSize =
+            interpolatePoint(
+                iAnimTime, 0.0f, DURATION, size, size - SIZE_OFFSET
+            );
+        float alpha =
+            interpolateNumber(
+                iAnimTime, 0.0f, DURATION, 1.0f, 0.0f
+            );
+            
+        drawRoundedRectangle(
+            center, iSize, CORNER_RADIUS, multAlpha(color, alpha), THICKNESS
+        );
+    }
+}
+
+
+/**
+ * @brief Draws an icon representing an input source.
+ *
+ * @param source Info on the player input source.
+ * If invalid, a "NONE" icon will be used.
+ * @param where Center of the place to draw at.
+ * @param maxSize Max width or height. Used to compress it if needed.
+ * 0 = unlimited.
+ * @param condensed If true, only the icon's fundamental information is
+ * presented. If false, disambiguation information is included too.
+ * For instance, keyboard keys that come in pairs specify whether they are
+ * the left or right key, controller inputs specify what controller number
+ * it is, etc.
+ * @param font Font to use for the name, if necessary. If nullptr and a font
+ * is needed, the default one will be used.
+ * @param tint Color to tint the icon with.
+ */
+void drawInputSourceIcon(
+    const Inpution::InputSource& source, const Point& where,
+    const Point& maxSize, bool condensed, const ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR& tint
+) {
+    if(tint.a == 0) return;
+    
+    //Final text color.
+    const ALLEGRO_COLOR finalTextColor = {
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.r * tint.r,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.g * tint.g,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.b * tint.b,
+        BIND_INPUT_ICON::BASE_TEXT_COLOR.a * tint.a,
+    };
+    
+    //Start by getting the icon's info for drawing.
+    Point iconPos = where;
+    Point iconSize = maxSize;
+    PLAYER_INPUT_ICON_SHAPE shape;
+    PLAYER_INPUT_ICON_SPRITE bitmapSprite;
+    string text;
+    string extra;
+    game.hardware.getInputSourceIconInfo(
+        source, condensed,
+        &shape, &text, &bitmapSprite, &extra
+    );
+    
+    //If there's extra text, draw that first and then scoot the icon.
+    if(!extra.empty()) {
+        drawText(
+            "(" + extra + ")", game.sysContent.fntSlim,
+            Point(where.x - maxSize.x / 4.0f, where.y),
+            Point(maxSize.x / 2.0f, maxSize.y), tint,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_COMPENSATE_YO
+        );
+        iconPos.x = where.x + maxSize.x / 4.0f;
+        iconSize.x /= 2.0f;
+    }
+    
+    //If it's a bitmap, just draw it and be done with it.
+    if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
+        //All icons are square, and in a row, so the spritesheet height works.
+        int iconBmpSize =
+            al_get_bitmap_height(game.sysContent.bmpPlayerInputIcons);
+        ALLEGRO_BITMAP* bmp =
+            al_create_sub_bitmap(
+                game.sysContent.bmpPlayerInputIcons,
+                (iconBmpSize + 1) * (int) bitmapSprite, 0,
+                iconBmpSize, iconBmpSize
+            );
+        drawBitmapInBox(bmp, iconPos, iconSize, true, 0.0f, tint);
+        al_destroy_bitmap(bmp);
+        return;
+    }
+    
+    if(!font) font = game.sysContent.fntSlim;
+    
+    //The size of the rectangle will depend on the text within.
+    int textOx;
+    int textOy;
+    int textW;
+    int textH;
+    int lineH;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &textOx, &textOy, &textW, &textH
+    );
+    lineH = al_get_font_line_height(font);
+    //Failsafe for really short text, like the Nintendo Switch -.
+    textH = std::max(textH, (int) (lineH * 0.5f));
+    
+    float totalWidth =
+        std::min(
+            (float) (textW + BIND_INPUT_ICON::PADDING * 2),
+            (iconSize.x == 0 ? FLT_MAX : iconSize.x)
+        );
+    float totalHeight =
+        std::min(
+            (float) (textH + BIND_INPUT_ICON::PADDING * 2),
+            (iconSize.y == 0 ? FLT_MAX : iconSize.y)
+        );
+    //Force it to always be a square or horizontal rectangle. Never vertical.
+    totalWidth = std::max(totalWidth, totalHeight);
+    
+    //Now, draw the rectangle, either sharp or rounded.
+    switch(shape) {
+    case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
+        drawTexturedBox(
+            iconPos, Point(totalWidth, totalHeight),
+            game.sysContent.bmpKeyBox, tint
+        );
+        break;
+    }
+    case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
+        drawTexturedBox(
+            iconPos, Point(totalWidth, totalHeight),
+            game.sysContent.bmpButtonBox, tint
+        );
+        break;
+    }
+    case PLAYER_INPUT_ICON_SHAPE_BITMAP: {
+        break;
+    }
+    }
+    
+    //And finally, the text inside.
+    drawText(
+        text, font, iconPos,
+        Point(
+            (iconSize.x == 0 ? 0 : iconSize.x - BIND_INPUT_ICON::PADDING),
+            (iconSize.y == 0 ? 0 : iconSize.y - BIND_INPUT_ICON::PADDING)
+        ),
+        finalTextColor, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_COMPENSATE_YO
+    );
 }
 
 
@@ -1062,142 +1245,6 @@ void drawPlayerActionInputSourceIcon(
 
 
 /**
- * @brief Draws an icon representing an input source.
- *
- * @param source Info on the player input source.
- * If invalid, a "NONE" icon will be used.
- * @param where Center of the place to draw at.
- * @param maxSize Max width or height. Used to compress it if needed.
- * 0 = unlimited.
- * @param condensed If true, only the icon's fundamental information is
- * presented. If false, disambiguation information is included too.
- * For instance, keyboard keys that come in pairs specify whether they are
- * the left or right key, controller inputs specify what controller number
- * it is, etc.
- * @param font Font to use for the name, if necessary. If nullptr and a font
- * is needed, the default one will be used.
- * @param tint Color to tint the icon with.
- */
-void drawInputSourceIcon(
-    const Inpution::InputSource& source, const Point& where,
-    const Point& maxSize, bool condensed, const ALLEGRO_FONT* font,
-    const ALLEGRO_COLOR& tint
-) {
-    if(tint.a == 0) return;
-    
-    //Final text color.
-    const ALLEGRO_COLOR finalTextColor = {
-        BIND_INPUT_ICON::BASE_TEXT_COLOR.r * tint.r,
-        BIND_INPUT_ICON::BASE_TEXT_COLOR.g * tint.g,
-        BIND_INPUT_ICON::BASE_TEXT_COLOR.b * tint.b,
-        BIND_INPUT_ICON::BASE_TEXT_COLOR.a * tint.a,
-    };
-    
-    //Start by getting the icon's info for drawing.
-    Point iconPos = where;
-    Point iconSize = maxSize;
-    PLAYER_INPUT_ICON_SHAPE shape;
-    PLAYER_INPUT_ICON_SPRITE bitmapSprite;
-    string text;
-    string extra;
-    game.hardware.getInputSourceIconInfo(
-        source, condensed,
-        &shape, &text, &bitmapSprite, &extra
-    );
-    
-    //If there's extra text, draw that first and then scoot the icon.
-    if(!extra.empty()) {
-        drawText(
-            "(" + extra + ")", game.sysContent.fntSlim,
-            Point(where.x - maxSize.x / 4.0f, where.y),
-            Point(maxSize.x / 2.0f, maxSize.y), tint,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-            TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_COMPENSATE_YO
-        );
-        iconPos.x = where.x + maxSize.x / 4.0f;
-        iconSize.x /= 2.0f;
-    }
-    
-    //If it's a bitmap, just draw it and be done with it.
-    if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
-        //All icons are square, and in a row, so the spritesheet height works.
-        int iconBmpSize =
-            al_get_bitmap_height(game.sysContent.bmpPlayerInputIcons);
-        ALLEGRO_BITMAP* bmp =
-            al_create_sub_bitmap(
-                game.sysContent.bmpPlayerInputIcons,
-                (iconBmpSize + 1) * (int) bitmapSprite, 0,
-                iconBmpSize, iconBmpSize
-            );
-        drawBitmapInBox(bmp, iconPos, iconSize, true, 0.0f, tint);
-        al_destroy_bitmap(bmp);
-        return;
-    }
-    
-    if(!font) font = game.sysContent.fntSlim;
-    
-    //The size of the rectangle will depend on the text within.
-    int textOx;
-    int textOy;
-    int textW;
-    int textH;
-    int lineH;
-    al_get_text_dimensions(
-        font, text.c_str(),
-        &textOx, &textOy, &textW, &textH
-    );
-    lineH = al_get_font_line_height(font);
-    //Failsafe for really short text, like the Nintendo Switch -.
-    textH = std::max(textH, (int) (lineH * 0.5f));
-    
-    float totalWidth =
-        std::min(
-            (float) (textW + BIND_INPUT_ICON::PADDING * 2),
-            (iconSize.x == 0 ? FLT_MAX : iconSize.x)
-        );
-    float totalHeight =
-        std::min(
-            (float) (textH + BIND_INPUT_ICON::PADDING * 2),
-            (iconSize.y == 0 ? FLT_MAX : iconSize.y)
-        );
-    //Force it to always be a square or horizontal rectangle. Never vertical.
-    totalWidth = std::max(totalWidth, totalHeight);
-    
-    //Now, draw the rectangle, either sharp or rounded.
-    switch(shape) {
-    case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
-        drawTexturedBox(
-            iconPos, Point(totalWidth, totalHeight),
-            game.sysContent.bmpKeyBox, tint
-        );
-        break;
-    }
-    case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
-        drawTexturedBox(
-            iconPos, Point(totalWidth, totalHeight),
-            game.sysContent.bmpButtonBox, tint
-        );
-        break;
-    }
-    case PLAYER_INPUT_ICON_SHAPE_BITMAP: {
-        break;
-    }
-    }
-    
-    //And finally, the text inside.
-    drawText(
-        text, font, iconPos,
-        Point(
-            (iconSize.x == 0 ? 0 : iconSize.x - BIND_INPUT_ICON::PADDING),
-            (iconSize.y == 0 ? 0 : iconSize.y - BIND_INPUT_ICON::PADDING)
-        ),
-        finalTextColor, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
-        TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_COMPENSATE_YO
-    );
-}
-
-
-/**
  * @brief Draws a sector, but only the texture (no wall shadows).
  *
  * @param sPtr Pointer to the sector.
@@ -1429,49 +1476,6 @@ void drawStringTokens(
         }
         }
         caret += tokenFinalWidth;
-    }
-}
-
-
-/**
- * @brief Draws a rectangular region that is highlighted with an outline
- * and some pulsating inward waves. Used for drawing either on the area
- * or on the radar.
- *
- * @param center Center coordinates of the region.
- * @param size Width and height of the region.
- * @param color Color of the highlight.
- * @param timeSpent Total time spent. Used for animating.
- */
-void drawHighlightedRectRegion(
-    const Point& center, const Point& size, const ALLEGRO_COLOR& color,
-    float timeSpent
-) {
-    const float CORNER_RADIUS = 2.0f;
-    const float DURATION = 3.0f;
-    const size_t N_INNER_RECTS = 2;
-    const float SIZE_OFFSET = 30.0f;
-    const float THICKNESS = 4.0f;
-    
-    //Outer rectangle.
-    drawRoundedRectangle(center, size, CORNER_RADIUS, color, THICKNESS);
-    
-    //Inner rectangles.
-    for(size_t i = 0; i < N_INNER_RECTS; i++) {
-        float iTotalTime = timeSpent + (DURATION / (float) N_INNER_RECTS) * i;
-        float iAnimTime = fmod(iTotalTime, DURATION);
-        Point iSize =
-            interpolatePoint(
-                iAnimTime, 0.0f, DURATION, size, size - SIZE_OFFSET
-            );
-        float alpha =
-            interpolateNumber(
-                iAnimTime, 0.0f, DURATION, 1.0f, 0.0f
-            );
-            
-        drawRoundedRectangle(
-            center, iSize, CORNER_RADIUS, multAlpha(color, alpha), THICKNESS
-        );
     }
 }
 
