@@ -25,7 +25,7 @@ using std::string;
 using std::vector;
 
 
-struct Liquid;
+struct LiquidType;
 class StatusType;
 
 
@@ -51,7 +51,7 @@ struct Hazard : public Content {
     bool blocksPaths = true;
     
     //If it's got an associated liquid, this points to it.
-    Liquid* associatedLiquid = nullptr;
+    LiquidType* associatedLiquid = nullptr;
     
     
     //--- Function declarations ---

@@ -797,7 +797,7 @@ void LiquidContentManager::loadLiquid(
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    Liquid* newL = new Liquid();
+    LiquidType* newL = new LiquidType();
     newL->manifest = manifest;
     newL->loadFromDataNode(&file, level);
     list[manifest->internalName] = newL;

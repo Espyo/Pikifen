@@ -272,8 +272,8 @@ public:
 
     //--- Members ---
     
-    //List of liquids.
-    map<string, Liquid*> list;
+    //List of liquid types.
+    map<string, LiquidType*> list;
     
     //Manifests.
     map<string, ContentManifest> manifests;

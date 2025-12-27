@@ -15,7 +15,6 @@ main_color = 126 50 134
 max_health = 100
 max_throw_height = 210
 move_speed = 90
-onion_starting_number = 0
 push_strength = 10
 pushable = true
 pushes = false

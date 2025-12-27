@@ -729,6 +729,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             s.second->overlayAnim.tick(deltaT);
         }
         
+        
         /*******************
         *             +--+ *
         *   Sectors   |  | *
@@ -738,37 +739,13 @@ void GameplayState::doGameplayLogic(float deltaT) {
             game.perfMon->startMeasurement("Logic -- Sector animation");
         }
         
+        for(size_t l = 0; l < liquids.size(); l++) {
+            Liquid* lPtr = liquids[l];
+            lPtr->tick(deltaT);
+        }
+        
         for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
             Sector* sPtr = game.curAreaData->sectors[s];
-            
-            if(sPtr->drainingLiquid) {
-            
-                sPtr->liquidDrainLeft -= deltaT;
-                
-                if(sPtr->liquidDrainLeft <= 0) {
-                
-                    if(sPtr->hazard && sPtr->hazard->associatedLiquid) {
-                        sPtr->hazard = nullptr;
-                        pathMgr.handleSectorHazardChange(sPtr);
-                    }
-                    
-                    sPtr->liquidDrainLeft = 0;
-                    sPtr->drainingLiquid = false;
-                    
-                    unordered_set<Vertex*> sectorVertexes;
-                    for(size_t e = 0; e < sPtr->edges.size(); e++) {
-                        sectorVertexes.insert(sPtr->edges[e]->vertexes[0]);
-                        sectorVertexes.insert(sPtr->edges[e]->vertexes[1]);
-                    }
-                    updateOffsetEffectCaches(
-                        game.liquidLimitEffectCaches,
-                        sectorVertexes,
-                        doesEdgeHaveLiquidLimit,
-                        getLiquidLimitLength,
-                        getLiquidLimitColor
-                    );
-                }
-            }
             
             if(sPtr->scroll.x != 0 || sPtr->scroll.y != 0) {
                 sPtr->textureInfo.tf.trans += sPtr->scroll * deltaT;

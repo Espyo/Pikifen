@@ -21,6 +21,54 @@
 
 
 using std::string;
+using std::vector;
+
+
+struct Hazard;
+class Mob;
+class Sector;
+class StatusType;
+
+
+namespace LIQUID {
+extern const float DRAIN_DURATION;
+}
+
+
+/**
+ * @brief Defines a body of water, or another liquid, within the area.
+ */
+struct Liquid {
+
+    //--- Members ---
+    
+    //Hazard that brought this liquid about.
+    Hazard* hazard = nullptr;
+    
+    //List of sectors that contain this liquid.
+    vector<Sector*> sectors;
+    
+    //Is it currently draining its liquid?
+    bool draining = false;
+    
+    //Time left to drain the liquid.
+    float drainTimeLeft = 0.0f;
+    
+    
+    //--- Function declarations ---
+    
+    Liquid(Hazard* hazard, const vector<Sector*>& sectors);
+    bool startDraining();
+    void tick(float deltaT);
+    
+    
+    private:
+    
+    //--- Function declarations ---
+    
+    void changeSectorsHazard(Hazard* hPtr);
+    
+};
 
 
 /**
@@ -33,7 +81,7 @@ using std::string;
  * A hazard can be associated with a liquid. It's the way the
  * engine has to know if a sector is to be shown as a liquid or not.
  */
-struct Liquid : public Content {
+struct LiquidType : public Content {
 
     //--- Members ---
     

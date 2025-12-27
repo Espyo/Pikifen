@@ -494,7 +494,7 @@ void drawInputSourceIcon(
  * @param time How much time has passed. Used to animate.
  */
 void drawLiquid(
-    Sector* sPtr, Liquid* lPtr, const Point& where, float scale,
+    Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
     float time
 ) {
     //Setup.
@@ -502,9 +502,9 @@ void drawLiquid(
     if(sPtr->isBottomlessPit) return;
     
     float liquidOpacityMult = 1.0f;
-    if(sPtr->drainingLiquid) {
+    if(sPtr->liquid && sPtr->liquid->draining) {
         liquidOpacityMult =
-            sPtr->liquidDrainLeft / GEOMETRY::LIQUID_DRAIN_DURATION;
+            sPtr->liquid->drainTimeLeft / LIQUID::DRAIN_DURATION;
     }
     float brightnessMult = sPtr->brightness / 255.0;
     float sectorScroll[2] = {

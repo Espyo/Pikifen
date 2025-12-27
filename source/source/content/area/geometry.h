@@ -36,7 +36,6 @@ extern const float AREA_CELL_SIZE;
 extern const float BLOCKMAP_BLOCK_SIZE;
 extern const unsigned char DEF_SECTOR_BRIGHTNESS;
 extern const float STEP_HEIGHT;
-extern const float LIQUID_DRAIN_DURATION;
 extern const float SHADOW_AUTO_LENGTH_MULT;
 extern const ALLEGRO_COLOR SHADOW_DEF_COLOR;
 extern const float SHADOW_MAX_AUTO_LENGTH;

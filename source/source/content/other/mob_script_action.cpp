@@ -930,21 +930,8 @@ void MobActionRunners::deleteFunction(MobActionRunData& data) {
 void MobActionRunners::drainLiquid(MobActionRunData& data) {
     Sector* sPtr = getSector(data.m->pos, nullptr, true);
     if(!sPtr) return;
-    
-    vector<Sector*> sectorsToDrain;
-    
-    sPtr->getNeighborSectorsConditionally(
-    [] (Sector * s) -> bool {
-        return s->hazard && s->hazard->associatedLiquid;
-    },
-    sectorsToDrain
-    );
-    
-    for(size_t s = 0; s < sectorsToDrain.size(); s++) {
-        sectorsToDrain[s]->drainingLiquid = true;
-        sectorsToDrain[s]->liquidDrainLeft =
-            GEOMETRY::LIQUID_DRAIN_DURATION;
-    }
+    if(!sPtr->liquid) return;
+    sPtr->liquid->startDraining();
 }
 
 

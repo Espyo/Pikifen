@@ -39,9 +39,6 @@ const float BLOCKMAP_BLOCK_SIZE = 128;
 //Default sector brightness.
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
 
-//Liquids drain for this long.
-const float LIQUID_DRAIN_DURATION = 2.0f;
-
 //Auto wall shadow lengths are the sector height difference multiplied by this.
 const float SHADOW_AUTO_LENGTH_MULT = 0.2f;
 

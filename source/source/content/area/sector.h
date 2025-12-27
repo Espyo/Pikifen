@@ -19,6 +19,7 @@
 #include "../../util/drawing_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../other/hazard.h"
+#include "../other/liquid.h"
 #include "edge.h"
 #include "geometry.h"
 
@@ -97,12 +98,9 @@ struct Sector {
     
     //Is only floor hazardous, or the air as well?
     bool hazardFloor = true;
-    
-    //Time left to drain the liquid in the sector.
-    float liquidDrainLeft = 0.0f;
-    
-    //Is it currently draining its liquid?
-    bool drainingLiquid = false;
+
+    //Liquid information, if any.
+    Liquid* liquid = nullptr;
     
     //Scrolling speed, if any.
     Point scroll;

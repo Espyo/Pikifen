@@ -122,7 +122,7 @@ void drawHealth(
     bool justChart = false
 );
 void drawLiquid(
-    Sector* sPtr, Liquid* lPtr, const Point& where, float scale,
+    Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
     float time
 );
 void drawLoadingScreen(

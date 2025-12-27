@@ -2173,10 +2173,12 @@ void GameplayState::drawWorldComponents(
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
             float liquidOpacityMult = 1.0f;
-            if(cPtr->sectorPtr->drainingLiquid) {
+            if(
+                cPtr->sectorPtr->liquid && cPtr->sectorPtr->liquid->draining
+            ) {
                 liquidOpacityMult =
-                    cPtr->sectorPtr->liquidDrainLeft /
-                    GEOMETRY::LIQUID_DRAIN_DURATION;
+                    cPtr->sectorPtr->liquid->drainTimeLeft /
+                    LIQUID::DRAIN_DURATION;
             }
             drawSectorEdgeOffsets(
                 cPtr->sectorPtr,

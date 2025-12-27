@@ -252,6 +252,9 @@ public:
     
     //Path manager.
     PathManager pathMgr;
+
+    //Liquids in the area.
+    vector<Liquid*> liquids;
     
     //Path of the folder of the area to be loaded.
     string pathOfAreaToLoad;
