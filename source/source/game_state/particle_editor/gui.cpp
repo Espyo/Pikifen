@@ -1044,7 +1044,8 @@ void ParticleEditor::processGuiPanelGenerator() {
                     changesMgr.markAsChanged();
                 }
                 setTooltip(
-                    "Evenly spread the particles throughout the emission\n"
+                    "When emitting multiple particles at once,\n"
+                    "evenly spread them throughout the emission\n"
                     "area, instead of placing them randomly."
                 );
                 

@@ -494,7 +494,7 @@ public:
     void arachnorbFootMoveLogic();
     
     void applyStatus(
-        StatusType* s, bool givenByParent, bool fromHazard
+        StatusType* s, bool givenByParent, bool fromHazard, bool overrideBuildup
     );
     void deleteOldStatusEffects();
     void removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
@@ -535,7 +535,7 @@ protected:
     //--- Function declarations ---
     
     bool applyStatusBuildup(
-        StatusType* s, bool givenByParent, bool fromHazard
+        StatusType* s, bool givenByParent, bool fromHazard, bool force
     );
     void applyStatusEffects(
         StatusType* s, bool givenByParent, bool fromHazard

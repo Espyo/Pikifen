@@ -321,9 +321,11 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param overrideBuildup If true, it's applied instantly, no matter how much
+ * buildup it would have to go through otherwise.
  */
 void Mob::applyStatus(
-    StatusType* s, bool givenByParent, bool fromHazard
+    StatusType* s, bool givenByParent, bool fromHazard, bool overrideBuildup
 ) {
     //Initial checks.
     if(!givenByParent && !canReceiveStatus(s)) {
@@ -334,7 +336,7 @@ void Mob::applyStatus(
     if(applyStatusParentLogic(s, givenByParent, fromHazard)) {
         return;
     }
-    if(!applyStatusBuildup(s, givenByParent, fromHazard)) {
+    if(!applyStatusBuildup(s, givenByParent, fromHazard, overrideBuildup)) {
         return;
     }
     
@@ -350,12 +352,13 @@ void Mob::applyStatus(
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param force If true, the buildup will be considered complete.
  * @return True if enough buildup was caused to apply the effect, or if no
  * buildup is required to apply the effect. False if buildup was applied and
  * nothing else happened.
  */
 bool Mob::applyStatusBuildup(
-    StatusType* statusType, bool givenByParent, bool fromHazard
+    StatusType* statusType, bool givenByParent, bool fromHazard, bool force
 ) {
     if(statusType->buildup == 0.0f) {
         //No buildup.
@@ -381,7 +384,8 @@ bool Mob::applyStatusBuildup(
     if(statusIt->buildup == 1.0f) return true;
     
     //Apply the buildup.
-    statusIt->buildup += statusType->buildup;
+    statusIt->buildup +=
+        force ? 1.0f : statusType->buildup;
     statusIt->buildupRemovalTimeLeft = statusType->buildupRemovalDuration;
     
     if(statusIt->buildup >= 1.0f) {
@@ -410,7 +414,7 @@ void Mob::applyStatusEffects(
         if(vulnIt->second.statusToApply) {
             //It must instead receive this status.
             applyStatus(
-                vulnIt->second.statusToApply, givenByParent, fromHazard
+                vulnIt->second.statusToApply, givenByParent, fromHazard, false
             );
             return;
         }
@@ -487,13 +491,13 @@ bool Mob::applyStatusParentLogic(
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* m2Ptr = game.states.gameplay->mobs.all[m];
         if(m2Ptr->parent && m2Ptr->parent->m == this) {
-            m2Ptr->applyStatus(s, true, fromHazard);
+            m2Ptr->applyStatus(s, true, fromHazard, false);
         }
     }
     
     //Relay it to the parent mob, if applicable.
     if(parent && parent->relayStatuses && !givenByParent) {
-        parent->m->applyStatus(s, false, fromHazard);
+        parent->m->applyStatus(s, false, fromHazard, false);
         if(!parent->handleStatuses) return true;
     }
     
@@ -1156,7 +1160,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     
     if(type->spikeDamage->statusToApply) {
         victim->applyStatus(
-            type->spikeDamage->statusToApply, false, false
+            type->spikeDamage->statusToApply, false, false, false
         );
     }
     
@@ -1177,7 +1181,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         v->second.statusToApply
     ) {
         victim->applyStatus(
-            v->second.statusToApply, false, false
+            v->second.statusToApply, false, false, false
         );
     }
 }
@@ -1520,7 +1524,7 @@ void Mob::deleteOldStatusEffects() {
     for(size_t s = 0; s < newStatusesToApply.size(); s++) {
         applyStatus(
             newStatusesToApply[s].first,
-            false, newStatusesToApply[s].second
+            false, newStatusesToApply[s].second, false
         );
     }
     

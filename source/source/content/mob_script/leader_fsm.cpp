@@ -1730,7 +1730,7 @@ void LeaderFsm::fallAsleep(Mob* m, void* info1, void* info2) {
     
     m->setAnimation(LEADER_ANIM_SLEEPING);
     if(leaPtr->leaType->sleepingStatus) {
-        m->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
+        m->applyStatus(leaPtr->leaType->sleepingStatus, false, false, false);
     }
 }
 
@@ -1794,7 +1794,7 @@ void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->applyStatus(droPtr->droType->statusToGive, false, false);
+        m->applyStatus(droPtr->droType->statusToGive, false, false, false);
         break;
     } default: {
         break;
@@ -2809,11 +2809,11 @@ void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            leaPtr->applyStatus(hazPtr->effects[e], false, true);
+            leaPtr->applyStatus(hazPtr->effects[e], false, true, false);
         }
     }
     if(vuln.statusToApply) {
-        leaPtr->applyStatus(vuln.statusToApply, false, true);
+        leaPtr->applyStatus(vuln.statusToApply, false, true, false);
     }
     
     if(hazPtr->associatedLiquid) {
@@ -2859,7 +2859,7 @@ void LeaderFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        l->applyStatus(s->effects[e], false, false);
+        l->applyStatus(s->effects[e], false, false, false);
     }
 }
 
