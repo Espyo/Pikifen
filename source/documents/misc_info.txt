@@ -459,9 +459,9 @@ Procedure for every version release
         Update the changelog
             Particularly the update's version number, release day, and nickname
             Double-check that it's organized, or if it could be sorted differently
-            In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count), move older versions to the older changelog document if needed
+            In order for the main changelog file to keep the most recent major/minor version (i.e. revisions are ignored for this count) plus the in-dev version, move older versions to the older changelog document if needed
     Final cleanup
-        Pass all code files through AStyle
+        Pass all code files through AStyle (works best on 3.2.1)
             for f in $(find . -type f | egrep '.+\.(cpp|h)'); do astyle --options=../documents/astyle.txt -n $f; done
         Code cleanup
             Confirm that no line goes over 80 characters
@@ -482,6 +482,18 @@ Procedure for every version release
             PNGCrush the png files
             This might help (make sure filelist.txt has LF linebreaks):
                 cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
+        Fix up all changed SVG files
+            Use the helper tool to get the list, or run:
+                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
+            Remove large reference images and screenshots
+            Use the cleanup document tool in Inkscape
+            Make sure they have a license
+                https://opensource.org/licenses/MIT
+            Make sure they have metadata
+                Title: <Object name> spritesheet
+                Author: André "Espyo" Silva
+                Keywords: Pikifen spritesheet
+                Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
     Release candidate
         Compile it for Windows
             Use GitHub Actions
@@ -529,18 +541,6 @@ Procedure for every version release
                 Use Infer and correct problems
                     infer run -o ~/Desktop/infer-out --report-block-list-files-containing "lib/imgui" -- make -f source/gnu_make/makefile debug
                 Confirm that there are no superfluous #includes (how?)
-            Fix up all changed SVG files
-                Use the helper tool to get the list, or run:
-                    git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
-                Remove large reference images and screenshots
-                Use the cleanup document tool in Inkscape
-                Make sure they have a license
-                    https://opensource.org/licenses/MIT
-                Make sure they have metadata
-                    Title: <Object name> spritesheet
-                    Author: André "Espyo" Silva
-                    Keywords: Pikifen spritesheet
-                    Description: Spritesheet for the <object name> in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
             
     
     When creating a zip
@@ -556,3 +556,4 @@ Procedure for every version release
         Zip the folder, not the content inside
         Name the zip file the same as the folder
         The file format is .zip, not .7z
+        After it's zipped, re-open the folder and give it a test-run, to see if it boots and the version number is correct

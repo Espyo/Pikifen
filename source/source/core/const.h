@@ -32,14 +32,14 @@ using std::string;
 constexpr unsigned char VERSION_MAJOR = 1;
 
 //Version, minor number.
-constexpr unsigned char VERSION_MINOR = 1;
+constexpr unsigned char VERSION_MINOR = 2;
 
 //Version, revision number.
-constexpr unsigned char VERSION_REV   = 1;
+constexpr unsigned char VERSION_REV   = 0;
 
 //Whether the given version number refers to the next version, currently
 //in development. If false, it refers to a released version.
-constexpr bool VERSION_IN_DEV = false;
+constexpr bool VERSION_IN_DEV = true;
 
 //Non-in-development version's release day.
 constexpr unsigned char VERSION_DAY   = 29;
