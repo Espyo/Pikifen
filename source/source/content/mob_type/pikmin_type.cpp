@@ -186,6 +186,7 @@ void PikminType::loadCatProperties(DataNode* file) {
     
     pRS.set("attack_method", attackMethodStr, &attackMethodNode);
     pRS.set("can_carry_tools", canCarryTools);
+    pRS.set("chills_liquids", chillsLiquids);
     pRS.set("can_fly", canFly);
     pRS.set("carry_strength", carryStrength);
     pRS.set("enemy_hit_rate_modifier_latched", enemyHitRateModifierLatched);

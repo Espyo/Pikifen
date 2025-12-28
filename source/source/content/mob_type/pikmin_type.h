@@ -381,6 +381,9 @@ public:
     
     //Whether it can carry tool-type objects or not.
     bool canCarryTools = true;
+
+    //Whether it chills any freezable liquids it is touching.
+    bool chillsLiquids = false;
     
     //Modifier for enemy hit rates when attacking this Pikmin, latched.
     //0 = normal. -1 = always misses. 1 = always hits.
