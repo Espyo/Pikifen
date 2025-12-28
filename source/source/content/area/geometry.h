@@ -155,6 +155,7 @@ vector<std::pair<Distance, Vertex*> > getMergeVertexes(
     const Point& p, const vector<Vertex*>& allVertexes,
     float mergeRadius
 );
+float getPolygonArea(Polygon* poly);
 TRIANGULATION_ERROR getPolys(
     Sector* sPtr, vector<Polygon>* outers, vector<vector<Polygon>>* inners
 );

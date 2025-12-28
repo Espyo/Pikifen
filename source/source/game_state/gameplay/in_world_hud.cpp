@@ -153,19 +153,29 @@ void InWorldFraction::draw() {
     }
     finalColor.a *= alphaMult;
     
+    Point pos = noMobPos;
     if(requirementNumber > 0) {
-        Point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
+        if(m) {
+            pos =
+                Point(
+                    m->pos.x,
+                    m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING
+                );
+        }
         drawFraction(
             pos,
             valueNumber, requirementNumber, finalColor, sizeMult
         );
     } else {
-        Point pos(
-            m->pos.x,
-            m->pos.y - m->radius -
-            al_get_font_line_height(game.sysContent.fntStandard) -
-            IN_WORLD_FRACTION::PADDING
-        );
+        if(m) {
+            pos =
+                Point(
+                    m->pos.x,
+                    m->pos.y - m->radius -
+                    al_get_font_line_height(game.sysContent.fntStandard) -
+                    IN_WORLD_FRACTION::PADDING
+                );
+        }
         drawText(
             i2s(valueNumber), game.sysContent.fntStandard, pos,
             Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * sizeMult),
@@ -185,6 +195,17 @@ void InWorldFraction::setColor(const ALLEGRO_COLOR& newColor) {
     
     color = newColor;
     growJuiceTimer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
+}
+
+
+/**
+ * @brief Sets the position for the fraction, in the case where there is no
+ * associated mob.
+ *
+ * @param pos Position to use.
+ */
+void InWorldFraction::setNoMobPos(const Point& pos) {
+    noMobPos = pos;
 }
 
 

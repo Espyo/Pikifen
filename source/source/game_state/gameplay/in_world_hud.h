@@ -110,9 +110,10 @@ public:
 
     //--- Function declarations ---
     
-    explicit InWorldFraction(Mob* m);
+    InWorldFraction(Mob* m = nullptr);
     void draw() override;
     void setColor(const ALLEGRO_COLOR& newColor);
+    void setNoMobPos(const Point& pos);
     void setRequirementNumber(float newReqNr);
     void setValueNumber(float newValueNr);
     void startFading() override;
@@ -136,6 +137,9 @@ private:
     
     //Requirement met flash juice timer. 0 means not animating.
     float reqMetJuiceTimer = 0.0f;
+    
+    //Position to place it at, in the case where there's no associated mob.
+    Point noMobPos;
     
 };
 

@@ -147,6 +147,10 @@ void drawInputSourceIcon(
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float opacity
 );
+void drawSectorIce(
+    Sector* sPtr, const Point& where, float scale, float opacity,
+    float thawEffectOpacity, float flashEffectOpacity
+);
 void drawSectorEdgeOffsets(
     Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity, const Viewport& view
 );

@@ -1352,6 +1352,24 @@ void saveStatistics() {
 
 
 /**
+ * @brief Saves a map of script variables onto a string.
+ * 
+ * @param varsMap Map to save.
+ * @return The string.
+ */
+string saveVarMap(const map<string, string>& varsMap) {
+    string finalString;
+    for(const auto& v : varsMap) {
+        finalString += v.first + "=" + v.second + ";";
+    }
+    if(finalString.back() == ';') {
+        finalString.pop_back();
+    }
+    return finalString;
+}
+
+
+/**
  * @brief Sets the width of all string tokens in a vector of tokens.
  *
  * @param tokens Vector of tokens to set the widths of.

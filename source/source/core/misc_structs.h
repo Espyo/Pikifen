@@ -675,6 +675,9 @@ struct SystemContentList {
     //9-slice texture for GUI frames.
     ALLEGRO_BITMAP* bmpFrameBox = nullptr;
     
+    //Texture used for frozen liquid sectors.
+    ALLEGRO_BITMAP* bmpFrozenLiquid = nullptr;
+    
     //GitHub icon.
     ALLEGRO_BITMAP* bmpGithubIcon = nullptr;
     
@@ -956,6 +959,9 @@ struct SystemContentNames {
     
     //9-slice texture for GUI frames.
     string bmpFrameBox = "gui/frame_box";
+    
+    //Texture used for frozen liquid sectors.
+    string bmpFrozenLiquid = "textures/ice";
     
     //GitHub icon.
     string bmpGithubIcon = "gui/github_icon";

@@ -25,6 +25,7 @@ using std::vector;
 
 
 struct Hazard;
+class InWorldFraction;
 class Mob;
 class Sector;
 class StatusType;
@@ -32,6 +33,12 @@ class StatusType;
 
 namespace LIQUID {
 extern const float DRAIN_DURATION;
+extern const float FREEZING_EFFECT_DURATION;
+extern const float FREEZING_OPACITY;
+extern const float FREEZING_POINT_AREA_MULT;
+extern const string FREEZING_POINT_SECTOR_VAR;
+extern const float THAW_DURATION;
+extern const float THAW_EFFECT_DURATION;
 }
 
 
@@ -48,16 +55,30 @@ struct Liquid {
     //List of sectors that contain this liquid.
     vector<Sector*> sectors;
     
+    //Time passed in the current state.
+    float stateTime = 0.0f;
+    
     //Is it currently draining its liquid?
     bool draining = false;
     
-    //Time left to drain the liquid.
-    float drainTimeLeft = 0.0f;
+    //How chilled it is.
+    size_t chillAmount = 0;
+    
+    //How chilled it needs to be to freeze. 0 to disable freezing.
+    size_t freezingPoint = 0;
+    
+    //Whether it is currently thawing from frozen, as it's no longer chilled.
+    bool thawing = false;
+    
+    //Data about the in-world chill fraction numbers, if any.
+    InWorldFraction* chillFraction = nullptr;
     
     
     //--- Function declarations ---
     
     Liquid(Hazard* hazard, const vector<Sector*>& sectors);
+    ~Liquid();
+    bool isFrozen(float* thawOpacity, float* flashOpacity) const;
     bool startDraining();
     void tick(float deltaT);
     
@@ -67,6 +88,9 @@ struct Liquid {
     //--- Function declarations ---
     
     void changeSectorsHazard(Hazard* hPtr);
+    Point getDefaultChillFractionPos() const;
+    vector<Mob*> getMobsOn() const;
+    void updateChill(size_t amount, Point* where, const vector<Mob*>& mobsOn);
     
 };
 
@@ -105,6 +129,10 @@ struct LiquidType : public Content {
     
     //How fast the water animates.
     float animSpeed = 1;
+    
+    //Whether it can be chilled and frozen.
+    bool canFreeze = false;
+    
     
     //--- Function declarations ---
     

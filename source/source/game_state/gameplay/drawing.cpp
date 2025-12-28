@@ -888,6 +888,14 @@ void GameplayState::drawGameplayMessageBox() {
  * @param player Player whose viewport to draw to.
  */
 void GameplayState::drawInGameText(Player* player) {
+    //Liquid things.
+    for(size_t l = 0; l < liquids.size(); l++) {
+        Liquid* lPtr = liquids[l];
+        if(lPtr->chillFraction) {
+            lPtr->chillFraction->draw();
+        }
+    }
+    
     //Mob things.
     size_t nMobs = mobs.all.size();
     for(size_t m = 0; m < nMobs; m++) {
@@ -2154,39 +2162,70 @@ void GameplayState::drawWorldComponents(
         WorldComponent* cPtr = &components[c];
         
         if(cPtr->sectorPtr) {
-        
-            bool hasLiquid = false;
-            if(
-                cPtr->sectorPtr->hazard &&
-                cPtr->sectorPtr->hazard->associatedLiquid
-            ) {
-                drawLiquid(
-                    cPtr->sectorPtr,
-                    cPtr->sectorPtr->hazard->associatedLiquid,
-                    Point(),
-                    1.0f,
-                    areaTimePassed
-                );
-                hasLiquid = true;
+            bool mustDrawGround = false;
+            bool mustDrawLiquid = false;
+            bool mustDrawIce = false;
+            
+            bool frozen = false;
+            float frozenFlashEffectOpacity = 0.0f;
+            float frozenThawEffectOpacity = 0.0f;
+            
+            if(cPtr->sectorPtr->liquid) {
+                frozen =
+                    cPtr->sectorPtr->liquid->isFrozen(
+                        &frozenThawEffectOpacity, &frozenFlashEffectOpacity
+                    );
             }
-            if(!hasLiquid) {
+            
+            if(!cPtr->sectorPtr->liquid) {
+                mustDrawGround = true;
+            } else if(!frozen) {
+                mustDrawLiquid = true;
+            } else {
+                mustDrawIce = true;
+                if(frozenThawEffectOpacity > 0.0f) {
+                    mustDrawLiquid = true;
+                } else {
+                    mustDrawGround = true;
+                }
+            }
+            
+            if(mustDrawGround) {
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
-            float liquidOpacityMult = 1.0f;
-            if(
-                cPtr->sectorPtr->liquid && cPtr->sectorPtr->liquid->draining
-            ) {
-                liquidOpacityMult =
-                    cPtr->sectorPtr->liquid->drainTimeLeft /
-                    LIQUID::DRAIN_DURATION;
+            if(mustDrawLiquid) {
+                float liquidOpacityMult = 1.0f;
+                if(
+                    cPtr->sectorPtr->liquid &&
+                    cPtr->sectorPtr->liquid->draining
+                ) {
+                    liquidOpacityMult =
+                        (
+                            LIQUID::DRAIN_DURATION -
+                            cPtr->sectorPtr->liquid->stateTime
+                        ) /
+                        LIQUID::DRAIN_DURATION;
+                }
+                drawLiquid(
+                    cPtr->sectorPtr,
+                    cPtr->sectorPtr->liquid->hazard->associatedLiquid,
+                    Point(), 1.0f, areaTimePassed
+                );
+                drawSectorEdgeOffsets(
+                    cPtr->sectorPtr,
+                    bmpOutput ?
+                    customLiquidLimitEffectBuffer :
+                    game.liquidLimitEffectBuffer,
+                    liquidOpacityMult, view
+                );
             }
-            drawSectorEdgeOffsets(
-                cPtr->sectorPtr,
-                bmpOutput ?
-                customLiquidLimitEffectBuffer :
-                game.liquidLimitEffectBuffer,
-                liquidOpacityMult, view
-            );
+            if(mustDrawIce) {
+                drawSectorIce(
+                    cPtr->sectorPtr, Point(), 1.0f, LIQUID::FREEZING_OPACITY,
+                    frozenThawEffectOpacity, frozenFlashEffectOpacity
+                );
+            }
+            
             drawSectorEdgeOffsets(
                 cPtr->sectorPtr,
                 bmpOutput ?

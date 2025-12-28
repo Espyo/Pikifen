@@ -83,7 +83,7 @@ void Sector::clone(Sector* destination) const {
     destination->type = type;
     destination->isBottomlessPit = isBottomlessPit;
     destination->z = z;
-    destination->tag = tag;
+    destination->vars = vars;
     destination->hazard = hazard;
     destination->hazardFloor = hazardFloor;
     destination->brightness = brightness;

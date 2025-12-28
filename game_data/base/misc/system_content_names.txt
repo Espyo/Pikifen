@@ -15,6 +15,7 @@ graphics {
     enemy_soul = effects/enemy_soul
     focus_box = gui/focus_box
     frame_box = gui/frame_box
+    frozen_liquid = textures/ice
     github_icon = gui/github_icon
     hard_bubble = gui/hard_bubble
     icon = gui/icon

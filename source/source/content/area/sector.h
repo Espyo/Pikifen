@@ -82,7 +82,7 @@ struct Sector {
     float z = 0.0f;
     
     //Extra information, if any.
-    string tag;
+    string vars;
     
     //Brightness.
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
@@ -104,6 +104,9 @@ struct Sector {
     
     //Scrolling speed, if any.
     Point scroll;
+
+    //Total surface area.
+    float surfaceArea = 0.0f;
     
     //Index number of the edges that make up this sector.
     vector<size_t> edgeIdxs;

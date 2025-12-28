@@ -1,13 +1,14 @@
 name = Water
 description = Everyday body of water.
 
-shine_min_threshold = 0.75
-shine_max_threshold = 0.95
-body_color = 0 0 16 96
-shine_color = 255 255 255 255
-radar_color = 32 64 180
-distortion_amount = 14 4
 animation_speed = 1
+body_color = 0 0 16 96
+can_freeze = true
+distortion_amount = 14 4
+radar_color = 32 64 180
+shine_color = 255 255 255 255
+shine_max_threshold = 0.95
+shine_min_threshold = 0.75
 
 maker = Espyo
 version = 1.0.0

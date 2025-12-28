@@ -316,6 +316,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpFocusBox);
     game.sysContent.bmpFrameBox =
         game.content.bitmaps.list.get(game.sysContentNames.bmpFrameBox);
+    game.sysContent.bmpFrozenLiquid =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpFrozenLiquid);
     game.sysContent.bmpGithubIcon =
         game.content.bitmaps.list.get(game.sysContentNames.bmpGithubIcon);
     game.sysContent.bmpHardBubble =
@@ -563,6 +565,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpEnemySoul);
     game.content.bitmaps.list.free(game.sysContent.bmpFocusBox);
     game.content.bitmaps.list.free(game.sysContent.bmpFrameBox);
+    game.content.bitmaps.list.free(game.sysContent.bmpFrozenLiquid);
     game.content.bitmaps.list.free(game.sysContent.bmpGithubIcon);
     game.content.bitmaps.list.free(game.sysContent.bmpHardBubble);
     game.content.bitmaps.list.free(game.sysContent.bmpIcon);

@@ -197,6 +197,7 @@ void saveMakerTools();
 void saveOptions();
 void saveScreenshot();
 void saveStatistics();
+string saveVarMap(const map<string, string>& varsMap);
 void setStringTokenWidths(
     vector<StringToken>& tokens,
     const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,

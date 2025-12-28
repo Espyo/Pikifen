@@ -967,13 +967,13 @@ void Area::loadGeometryFromDataNode(
         sRS.set("hazard", hazardStr, &hazardNode);
         sRS.set("hazards_floor", newSector->hazardFloor);
         sRS.set("is_bottomless_pit", newSector->isBottomlessPit);
-        sRS.set("tag", newSector->tag);
         sRS.set("texture_rotate", newSector->textureInfo.tf.rot);
         sRS.set("texture_scale", newSector->textureInfo.tf.scale);
         sRS.set("texture_tint", newSector->textureInfo.tint);
         sRS.set("texture_trans", newSector->textureInfo.tf.trans);
         sRS.set("texture", newSector->textureInfo.bmpName);
         sRS.set("type", typeStr);
+        sRS.set("vars", newSector->vars);
         sRS.set("z", newSector->z);
         
         size_t newType = game.sectorTypes.getIdx(typeStr);
@@ -1658,8 +1658,8 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(sPtr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sGW.write("brightness", sPtr->brightness);
         }
-        if(!sPtr->tag.empty()) {
-            sGW.write("tag", sPtr->tag);
+        if(!sPtr->vars.empty()) {
+            sGW.write("vars", sPtr->vars);
         }
         if(sPtr->fade) {
             sGW.write("fade", sPtr->fade);

@@ -642,6 +642,28 @@ vector<std::pair<Distance, Vertex*> > getMergeVertexes(
 
 
 /**
+ * @brief Returns the area of a simple polygon.
+ *
+ * @param poly Polygon to check.
+ * @return The area.
+ */
+float getPolygonArea(Polygon* poly) {
+    //https://stackoverflow.com/a/717367
+    double area = 0.0f;
+    for(size_t v = 1; v <= poly->vertexes.size(); ++v) {
+        size_t prevIdx = v - 1;
+        size_t curIdx = v % poly->vertexes.size();
+        size_t nextIdx = (v + 1) % poly->vertexes.size();
+        area +=
+            poly->vertexes[curIdx]->x *
+            (poly->vertexes[nextIdx]->y - poly->vertexes[prevIdx]->y);
+    }
+    area /= 2.0f;
+    return (float) fabs(area);
+}
+
+
+/**
  * @brief Returns the polygons of a sector.
  *
  * Polygons can include child polygons.
@@ -1208,6 +1230,7 @@ TRIANGULATION_ERROR triangulateSector(
     //Transforming the polygons into triangles.
     sPtr->triangles.clear();
     for(size_t p = 0; p < root.children.size(); p++) {
+        sPtr->surfaceArea += getPolygonArea(root.children[p]);
         TRIANGULATION_ERROR polyResult =
             triangulatePolygon(root.children[p], &sPtr->triangles);
         if(polyResult != TRIANGULATION_ERROR_NONE) {
