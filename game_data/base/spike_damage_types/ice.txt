@@ -1,0 +1,9 @@
+name = Ice
+description = Chill applied to an enemy that eats an Ice Pikmin. It gets them closer to being frozen.
+
+ingestion_only = true
+status_to_apply = frozen_enemy
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

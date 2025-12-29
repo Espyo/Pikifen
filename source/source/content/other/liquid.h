@@ -89,8 +89,8 @@ struct Liquid {
     //How chilled it needs to be to freeze. 0 to disable freezing.
     size_t freezingPoint = 0;
     
-    //Whether it is currently thawing from frozen, as it's no longer chilled.
-    bool thawing = false;
+    //Mobs that got caught when it froze.
+    vector<Mob*> freezeCaughtMobs;
     
     //Data about the in-world chill fraction numbers, if any.
     InWorldFraction* chillFraction = nullptr;
@@ -155,6 +155,10 @@ struct LiquidType : public Content {
     
     //Whether it can be chilled and frozen.
     bool canFreeze = false;
+    
+    //When it freezes, continuously applies this status to all mobs in
+    //the liquid. nullptr to not apply any status.
+    StatusType* freezeMobStatus = nullptr;
     
     
     //--- Function declarations ---

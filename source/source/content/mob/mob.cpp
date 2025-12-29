@@ -323,9 +323,12 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
  * @param fromHazard If true, this status effect was given from a hazard.
  * @param overrideBuildup If true, it's applied instantly, no matter how much
  * buildup it would have to go through otherwise.
+ * @param forceReapplyResetTime If true, forces the reapply rule to
+ * be reset time.
  */
 void Mob::applyStatus(
-    StatusType* s, bool givenByParent, bool fromHazard, bool overrideBuildup
+    StatusType* s, bool givenByParent, bool fromHazard,
+    bool overrideBuildup, bool forceReapplyResetTime
 ) {
     //Initial checks.
     if(!givenByParent && !canReceiveStatus(s)) {
@@ -341,7 +344,7 @@ void Mob::applyStatus(
     }
     
     //At this point the mob must really be given the status effect's effects.
-    applyStatusEffects(s, givenByParent, fromHazard);
+    applyStatusEffects(s, givenByParent, fromHazard, forceReapplyResetTime);
 }
 
 
@@ -404,9 +407,12 @@ bool Mob::applyStatusBuildup(
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param forceReapplyResetTime If true, forces the reapply rule to
+ * be reset time.
  */
 void Mob::applyStatusEffects(
-    StatusType* s, bool givenByParent, bool fromHazard
+    StatusType* s, bool givenByParent, bool fromHazard,
+    bool forceReapplyResetTime
 ) {
     //Get the vulnerabilities to this status.
     auto vulnIt = type->statusVulnerabilities.find(s);
@@ -414,7 +420,8 @@ void Mob::applyStatusEffects(
         if(vulnIt->second.statusToApply) {
             //It must instead receive this status.
             applyStatus(
-                vulnIt->second.statusToApply, givenByParent, fromHazard, false
+                vulnIt->second.statusToApply, givenByParent, fromHazard, false,
+                forceReapplyResetTime
             );
             return;
         }
@@ -424,8 +431,12 @@ void Mob::applyStatusEffects(
     for(size_t ms = 0; ms < statuses.size(); ms++) {
         if(statuses[ms].type == s) {
             //Already exists. What do we do with the time left?
+            STATUS_REAPPLY_RULE reapplyRule = s->reapplyRule;
+            if(forceReapplyResetTime) {
+                reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
+            }
             
-            switch(s->reapplyRule) {
+            switch(reapplyRule) {
             case STATUS_REAPPLY_RULE_KEEP_TIME: {
                 break;
             }

@@ -129,8 +129,8 @@ void AnnexScreen::load() {
         vector<CONTENT_TYPE> {
             CONTENT_TYPE_PARTICLE_GEN,
             CONTENT_TYPE_GLOBAL_ANIMATION,
-            CONTENT_TYPE_LIQUID,
             CONTENT_TYPE_STATUS_TYPE,
+            CONTENT_TYPE_LIQUID,
             CONTENT_TYPE_SPRAY_TYPE,
             CONTENT_TYPE_HAZARD,
             CONTENT_TYPE_WEATHER_CONDITION,
@@ -156,8 +156,8 @@ void AnnexScreen::load() {
                 CONTENT_TYPE_WEATHER_CONDITION,
                 CONTENT_TYPE_HAZARD,
                 CONTENT_TYPE_SPRAY_TYPE,
-                CONTENT_TYPE_STATUS_TYPE,
                 CONTENT_TYPE_LIQUID,
+                CONTENT_TYPE_STATUS_TYPE,
                 CONTENT_TYPE_GLOBAL_ANIMATION,
                 CONTENT_TYPE_PARTICLE_GEN,
             }

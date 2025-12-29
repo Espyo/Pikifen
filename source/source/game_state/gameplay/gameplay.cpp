@@ -1255,23 +1255,23 @@ void GameplayState::load() {
         game.curAreaData->pathStops[s]->sectorPtr =
             getSector(game.curAreaData->pathStops[s]->pos, nullptr, true);
     }
-
+    
     //Create liquids.
     for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
         Sector* sPtr = game.curAreaData->sectors[s];
         if(!sPtr->hazard) continue;
         if(!sPtr->hazard->associatedLiquid) continue;
         if(sPtr->liquid) continue;
-
+        
         vector<Sector*> liquidSectors;
-    
+        
         sPtr->getNeighborSectorsConditionally(
         [] (Sector * s) -> bool {
             return s->hazard && s->hazard->associatedLiquid;
         },
         liquidSectors
         );
-
+        
         liquids.push_back(new Liquid(sPtr->hazard, liquidSectors));
         for(size_t s = 0; s < liquidSectors.size(); s++) {
             sPtr->liquid = liquids.back();
@@ -1547,8 +1547,8 @@ void GameplayState::loadGameContent() {
         CONTENT_TYPE_GUI,
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_GLOBAL_ANIMATION,
-        CONTENT_TYPE_LIQUID,
         CONTENT_TYPE_STATUS_TYPE,
+        CONTENT_TYPE_LIQUID,
         CONTENT_TYPE_SPRAY_TYPE,
         CONTENT_TYPE_HAZARD,
         CONTENT_TYPE_WEATHER_CONDITION,
@@ -1675,7 +1675,7 @@ void GameplayState::unload() {
     missionRemainingMobIds.clear();
     pathMgr.clear();
     particles.clear();
-
+    
     for(size_t l = 0; l < liquids.size(); l++) {
         delete liquids[l];
     }
@@ -1727,8 +1727,8 @@ void GameplayState::unloadGameContent() {
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
         CONTENT_TYPE_HAZARD,
         CONTENT_TYPE_SPRAY_TYPE,
-        CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_LIQUID,
+        CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_GLOBAL_ANIMATION,
         CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_GUI,

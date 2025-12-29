@@ -1,0 +1,19 @@
+name = Frozen, thawed (enemy)
+description = Makes the affected object emit some particles from having broken through its freeze, and instantly ends right away.
+
+affects = enemies
+anim_speed_multiplier = 0
+auto_remove_time = 0.001
+color = 16 192 192
+colorize = 0 255 255 128
+disables_attack = true
+freezes_animation = true
+particle_generator = frozen_crack
+particle_offset = 0 0 1000
+reapply_rule = keep_time
+shaking_effect = 1.5
+speed_multiplier = 0
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

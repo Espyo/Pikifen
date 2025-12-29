@@ -1,0 +1,21 @@
+name = Frozen (enemy)
+description = Enemies that are frozen will just stay in place, unable to cause harm. They will quickly thaw out though.
+
+affects = enemies
+anim_speed_multiplier = 0
+auto_remove_time = 2.5
+buildup = 5
+buildup_removal_duration = 5
+color = 16 192 192
+colorize = 0 255 255 128
+disables_attack = true
+freezes_animation = true
+particle_generator = vapor
+particle_offset = 0 0 300
+reapply_rule = keep_time
+replacement_on_timeout = frozen_enemy_thawing
+speed_multiplier = 0
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

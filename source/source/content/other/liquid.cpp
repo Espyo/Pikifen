@@ -247,6 +247,7 @@ bool Liquid::startDraining() {
 void Liquid::tick(float deltaT) {
     stateTime += deltaT;
     
+    //Process timer-based states.
     switch(state) {
     case LIQUID_STATE_DRAINING: {
         if(stateTime >= LIQUID::DRAIN_DURATION) {
@@ -259,11 +260,35 @@ void Liquid::tick(float deltaT) {
         if(stateTime >= LIQUID::THAW_DURATION) {
             setState(LIQUID_STATE_NORMAL);
             changeSectorsHazard(hazard);
+            freezeCaughtMobs.clear();
         }
         break;
     } default: {
         break;
     }
+    }
+    
+    //Apply a status to any mobs that got caught.
+    for(size_t m = 0; m < freezeCaughtMobs.size(); m++) {
+        Mob* mPtr = freezeCaughtMobs[m];
+        
+        const auto it =
+            std::find(
+                game.states.gameplay->mobs.all.begin(),
+                game.states.gameplay->mobs.all.end(),
+                mPtr
+            );
+        if(it == game.states.gameplay->mobs.all.end()) {
+            freezeCaughtMobs.erase(freezeCaughtMobs.begin() + m);
+            m--;
+            continue;
+        }
+        
+        if(mPtr->health <= 0.0f) continue;
+        mPtr->applyStatus(
+            hazard->associatedLiquid->freezeMobStatus,
+            false, true, true, true
+        );
     }
     
     if(freezingPoint != 0) {
@@ -315,6 +340,9 @@ void Liquid::updateChill(
         if(newAmount >= freezingPoint) {
             setState(LIQUID_STATE_FROZEN);
             changeSectorsHazard(nullptr);
+            if(hazard->associatedLiquid->freezeMobStatus) {
+                freezeCaughtMobs = mobsOn;
+            }
         }
         break;
     } case LIQUID_STATE_GONE:
@@ -377,13 +405,28 @@ void LiquidType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     //Standard data.
     ReaderSetter lRS(node);
+    string freezeMobStatusStr;
+    DataNode* freezeMobStatusNode = nullptr;
     
     lRS.set("animation_speed", animSpeed);
     lRS.set("body_color", bodyColor);
     lRS.set("can_freeze", canFreeze);
+    lRS.set("freeze_mob_status", freezeMobStatusStr, &freezeMobStatusNode);
     lRS.set("distortion_amount", distortionAmount);
     lRS.set("radar_color", radarColor);
     lRS.set("shine_color", shineColor);
     lRS.set("shine_max_threshold", shineMaxThreshold);
     lRS.set("shine_min_threshold", shineMinThreshold);
+    
+    if(freezeMobStatusNode) {
+        auto s = game.content.statusTypes.list.find(freezeMobStatusStr);
+        if(s != game.content.statusTypes.list.end()) {
+            freezeMobStatus = s->second;
+        } else {
+            game.errors.report(
+                "Unknown status type \"" + freezeMobStatusStr + "\"!",
+                freezeMobStatusNode
+            );
+        }
+    }
 }
