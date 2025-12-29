@@ -157,6 +157,22 @@ size_t getRandomIdxWithWeights(
 
 
 /**
+ * @brief Rounds a number to the nearest multiple of a given number,
+ * above or below.
+ *
+ * @param n Number to round.
+ * @param multiple The multiple.
+ * @return The rounded number.
+ */
+float roundToNearestMultipleOf(float n, float multiple) {
+    float result = n / multiple;
+    result = round(result);
+    result = result * multiple;
+    return result;
+}
+
+
+/**
  * @brief Given an input, it returns a 32-bit unsigned integer hash of
  * that input.
  *

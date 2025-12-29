@@ -88,6 +88,7 @@ int32_t linearCongruentialGenerator(int32_t* state);
 size_t getRandomIdxWithWeights(
     const vector<float>& weights, float pointRandomFloat
 );
+float roundToNearestMultipleOf(float n, float multiple);
 float simpleNoise(uint32_t seed, float x);
 int sumAndWrap(int nr, int sum, int wrapLimit);
 float wrapFloat(float nr, float minimum, float maximum);

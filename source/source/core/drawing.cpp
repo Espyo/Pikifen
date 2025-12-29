@@ -492,21 +492,16 @@ void drawInputSourceIcon(
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
  * @param time How much time has passed. Used to animate.
+ * @param drainOpacity Opacity multiplier, used for draining. 1 if not draining.
  */
 void drawLiquid(
     Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
-    float time
+    float time, float drainOpacity
 ) {
     //Setup.
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
     
-    float liquidOpacityMult = 1.0f;
-    if(sPtr->liquid && sPtr->liquid->draining) {
-        liquidOpacityMult =
-            (LIQUID::DRAIN_DURATION - sPtr->liquid->stateTime) /
-            LIQUID::DRAIN_DURATION;
-    }
     float brightnessMult = sPtr->brightness / 255.0;
     float sectorScroll[2] = {
         sPtr->scroll.x,
@@ -592,7 +587,7 @@ void drawLiquid(
     ALLEGRO_SHADER* liqShader = game.shaders.getShader(SHADER_TYPE_LIQUID);
     al_use_shader(liqShader);
     al_set_shader_float("area_time", time * lPtr->animSpeed);
-    al_set_shader_float("opacity", liquidOpacityMult);
+    al_set_shader_float("opacity", drainOpacity);
     al_set_shader_float("sector_brightness", brightnessMult);
     al_set_shader_float_vector("sector_scroll", 2, &sectorScroll[0], 1);
     al_set_shader_float("shine_min_threshold", lPtr->shineMinThreshold);
@@ -1256,10 +1251,11 @@ void drawPlayerActionInputSourceIcon(
  * for an effect that indicates the ice is just about to thaw.
  * @param flashEffectOpacity If not 0, draw a flash of white with this opacity,
  * for an effect that indicates the liquid was just frozen.
+ * @param cracked If true, use the cracked texture.
  */
 void drawSectorIce(
     Sector* sPtr, const Point& where, float scale, float opacity,
-    float thawEffectOpacity, float flashEffectOpacity
+    float thawEffectOpacity, float flashEffectOpacity, bool cracked
 ) {
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
@@ -1298,7 +1294,10 @@ void drawSectorIce(
     }
     
     al_draw_prim(
-        av, nullptr, game.sysContent.bmpFrozenLiquid,
+        av, nullptr,
+        cracked ?
+        game.sysContent.bmpFrozenLiquidCracked :
+        game.sysContent.bmpFrozenLiquid,
         0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     

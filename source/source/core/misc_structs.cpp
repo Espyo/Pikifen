@@ -2171,6 +2171,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("focus_box", bmpFocusBox);
     graRS.set("frame_box", bmpFrameBox);
     graRS.set("frozen_liquid", bmpFrozenLiquid);
+    graRS.set("frozen_liquid_cracked", bmpFrozenLiquidCracked);
     graRS.set("github_icon", bmpGithubIcon);
     graRS.set("hard_bubble", bmpHardBubble);
     graRS.set("icon", bmpIcon);

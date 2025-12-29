@@ -39,6 +39,9 @@ const float FREEZING_POINT_AREA_MULT = 0.0003f;
 //Sectors can have a var with this name to control the freezing point.
 const string FREEZING_POINT_SECTOR_VAR = "freezing_point";
 
+//Frozen liquids should show up as cracked for this long.
+const float THAW_CRACKED_DURATION = 4.0f;
+
 //Liquids thaw from being frozen for this long.
 const float THAW_DURATION = 8.0f;
 
@@ -83,7 +86,10 @@ Liquid::Liquid(Hazard* hazard, const vector<Sector*>& sectors) :
         if(freezingPointFromVars && highestVarValue > 0) {
             freezingPoint = highestVarValue;
         } else {
-            freezingPoint = totalSurfaceArea * LIQUID::FREEZING_POINT_AREA_MULT;
+            freezingPoint =
+                roundToNearestMultipleOf(
+                    totalSurfaceArea * LIQUID::FREEZING_POINT_AREA_MULT, 5
+                );
         }
     }
 }
@@ -168,32 +174,54 @@ vector<Mob*> Liquid::getMobsOn() const {
 
 
 /**
+ * @brief Sets the liquid's state.
+ *
+ * @param newState The new state.
+ */
+void Liquid::setState(LIQUID_STATE newState) {
+    state = newState;
+    stateTime = 0.0f;
+}
+
+
+/**
  * @brief Returns whether the liquid is currently frozen.
  *
  * @param thawOpacity If it's just about to thaw, the opacity of the ice
  * is returned here [0 - 1]. Otherwise, 0 is returned.
  * @param flashOpacity If it's just been frozen, the opacity of the white flash
  * is returned here [0 - 1]. Otherwise, 0 is returned.
+ * @param cracked If it's getting close to thawing, true is returned here so
+ * the ice texture can be drawn cracked. Otherwise, false is returned.
  * @return Whether it is frozen.
  */
-bool Liquid::isFrozen(float* thawOpacity, float* flashOpacity) const {
+bool Liquid::isFrozen(
+    float* thawOpacity, float* flashOpacity, bool* cracked
+) const {
     *thawOpacity = 0.0f;
     *flashOpacity = 0.0f;
+    *cracked = false;
+    
     if(freezingPoint == 0) return false;
-    if(thawing) {
+    
+    if(state == LIQUID_STATE_THAWING) {
         float timeLeft = LIQUID::THAW_DURATION - stateTime;
         if(timeLeft < LIQUID::THAW_EFFECT_DURATION) {
             *thawOpacity = timeLeft / LIQUID::THAW_EFFECT_DURATION;
         }
+        if(timeLeft < LIQUID::THAW_CRACKED_DURATION) {
+            *cracked = true;
+        }
         return true;
     }
-    if(chillAmount >= freezingPoint) {
+    if(state == LIQUID_STATE_FROZEN) {
         if(stateTime < LIQUID::FREEZING_EFFECT_DURATION) {
             *flashOpacity =
                 1.0f - (stateTime / LIQUID::FREEZING_EFFECT_DURATION);
         }
         return true;
     }
+    
     return false;
 }
 
@@ -204,9 +232,9 @@ bool Liquid::isFrozen(float* thawOpacity, float* flashOpacity) const {
  * @return Whether it could start draining.
  */
 bool Liquid::startDraining() {
-    if(draining) return false;
-    draining = true;
-    stateTime = 0.0f;
+    if(state == LIQUID_STATE_GONE) return false;
+    if(state == LIQUID_STATE_DRAINING) return false;
+    setState(LIQUID_STATE_DRAINING);
     return true;
 }
 
@@ -218,22 +246,24 @@ bool Liquid::startDraining() {
  */
 void Liquid::tick(float deltaT) {
     stateTime += deltaT;
-    if(draining) {
+    
+    switch(state) {
+    case LIQUID_STATE_DRAINING: {
         if(stateTime >= LIQUID::DRAIN_DURATION) {
-            draining = false;
-            stateTime = 0.0f;
-            
+            setState(LIQUID_STATE_GONE);
             changeSectorsHazard(nullptr);
         }
-    }
-    
-    if(thawing) {
+        break;
+        
+    } case LIQUID_STATE_THAWING: {
         if(stateTime >= LIQUID::THAW_DURATION) {
-            thawing = false;
-            stateTime = 0.0f;
-            
+            setState(LIQUID_STATE_NORMAL);
             changeSectorsHazard(hazard);
         }
+        break;
+    } default: {
+        break;
+    }
     }
     
     if(freezingPoint != 0) {
@@ -276,32 +306,54 @@ void Liquid::updateChill(
     size_t newAmount, Point* where, const vector<Mob*>& mobsOn
 ) {
     if(!hazard) return;
-    if(draining) return;
     if(!hazard->associatedLiquid->canFreeze) return;
     if(freezingPoint == 0) return;
     if(chillAmount == newAmount) return;
     
-    bool wasFrozen = chillAmount >= freezingPoint;
-    bool willFreeze = newAmount >= freezingPoint;
-    
-    if(!wasFrozen && willFreeze) {
-        thawing = false;
-        stateTime = 0.0f;
-        changeSectorsHazard(nullptr);
-    } else if(wasFrozen && !willFreeze) {
-        thawing = true;
-        stateTime = 0.0f;
+    switch(state) {
+    case LIQUID_STATE_NORMAL: {
+        if(newAmount >= freezingPoint) {
+            setState(LIQUID_STATE_FROZEN);
+            changeSectorsHazard(nullptr);
+        }
+        break;
+    } case LIQUID_STATE_GONE:
+    case LIQUID_STATE_DRAINING: {
+        return;
+        break;
+    } case LIQUID_STATE_FROZEN: {
+        if(newAmount < freezingPoint) {
+            setState(LIQUID_STATE_THAWING);
+        }
+        break;
+    } case LIQUID_STATE_THAWING: {
+        if(newAmount >= freezingPoint) {
+            setState(LIQUID_STATE_FROZEN);
+        }
+        break;
+    }
     }
     
     if(chillAmount == 0 && newAmount > 0) {
         if(chillFraction) delete chillFraction;
         chillFraction = new InWorldFraction();
         chillFraction->setNoMobPos(getDefaultChillFractionPos());
-        if(where) chillFraction->setNoMobPos(*where);
+        if(where) {
+            chillFraction->setNoMobPos(
+                Point(
+                    where->x,
+                    where->y - game.config.pikmin.standardRadius *  2.0f
+                )
+            );
+        }
     }
     
     if(chillFraction) {
-        chillFraction->setColor(game.config.aestheticGen.carryingColorMove);
+        chillFraction->setColor(
+            newAmount >= freezingPoint ?
+            game.config.aestheticGen.carryingColorMove :
+            game.config.aestheticGen.carryingColorStop
+        );
         chillFraction->setRequirementNumber(freezingPoint);
         chillFraction->setValueNumber(newAmount);
         if(newAmount == 0) {

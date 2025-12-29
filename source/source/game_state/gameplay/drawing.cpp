@@ -2169,11 +2169,13 @@ void GameplayState::drawWorldComponents(
             bool frozen = false;
             float frozenFlashEffectOpacity = 0.0f;
             float frozenThawEffectOpacity = 0.0f;
+            bool cracked = false;
             
             if(cPtr->sectorPtr->liquid) {
                 frozen =
                     cPtr->sectorPtr->liquid->isFrozen(
-                        &frozenThawEffectOpacity, &frozenFlashEffectOpacity
+                        &frozenThawEffectOpacity, &frozenFlashEffectOpacity,
+                        &cracked
                     );
             }
             
@@ -2194,12 +2196,12 @@ void GameplayState::drawWorldComponents(
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
             if(mustDrawLiquid) {
-                float liquidOpacityMult = 1.0f;
+                float drainOpacity = 1.0f;
                 if(
                     cPtr->sectorPtr->liquid &&
-                    cPtr->sectorPtr->liquid->draining
+                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_DRAINING
                 ) {
-                    liquidOpacityMult =
+                    drainOpacity =
                         (
                             LIQUID::DRAIN_DURATION -
                             cPtr->sectorPtr->liquid->stateTime
@@ -2209,20 +2211,20 @@ void GameplayState::drawWorldComponents(
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->liquid->hazard->associatedLiquid,
-                    Point(), 1.0f, areaTimePassed
+                    Point(), 1.0f, areaTimePassed, drainOpacity
                 );
                 drawSectorEdgeOffsets(
                     cPtr->sectorPtr,
                     bmpOutput ?
                     customLiquidLimitEffectBuffer :
                     game.liquidLimitEffectBuffer,
-                    liquidOpacityMult, view
+                    drainOpacity, view
                 );
             }
             if(mustDrawIce) {
                 drawSectorIce(
                     cPtr->sectorPtr, Point(), 1.0f, LIQUID::FREEZING_OPACITY,
-                    frozenThawEffectOpacity, frozenFlashEffectOpacity
+                    frozenThawEffectOpacity, frozenFlashEffectOpacity, cracked
                 );
             }
             

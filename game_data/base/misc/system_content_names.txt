@@ -16,6 +16,7 @@ graphics {
     focus_box = gui/focus_box
     frame_box = gui/frame_box
     frozen_liquid = textures/ice
+    frozen_liquid_cracked = textures/ice_cracked
     github_icon = gui/github_icon
     hard_bubble = gui/hard_bubble
     icon = gui/icon

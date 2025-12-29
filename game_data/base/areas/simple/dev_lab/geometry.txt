@@ -12482,6 +12482,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
+		vars=freezing_point=1
 		hazard=water
 		hazards_floor=true
 		texture=textures/dirt

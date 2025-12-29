@@ -1733,7 +1733,9 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                 if(sPtr->hazard) {
                     LiquidType* lPtr = sPtr->hazard->associatedLiquid;
                     if(lPtr) {
-                        drawLiquid(sPtr, lPtr, Point(), 1.0f, game.timePassed);
+                        drawLiquid(
+                            sPtr, lPtr, Point(), 1.0f, game.timePassed, 1.0f
+                        );
                         hasLiquid = true;
                     }
                 }

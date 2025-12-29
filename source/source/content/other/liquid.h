@@ -37,9 +37,31 @@ extern const float FREEZING_EFFECT_DURATION;
 extern const float FREEZING_OPACITY;
 extern const float FREEZING_POINT_AREA_MULT;
 extern const string FREEZING_POINT_SECTOR_VAR;
+extern const float THAW_CRACKED_DURATION;
 extern const float THAW_DURATION;
 extern const float THAW_EFFECT_DURATION;
 }
+
+
+//Possible states for a liquid.
+enum LIQUID_STATE {
+
+    //Normal.
+    LIQUID_STATE_NORMAL,
+    
+    //Gone, like after being drained.
+    LIQUID_STATE_GONE,
+    
+    //Draining.
+    LIQUID_STATE_DRAINING,
+    
+    //Frozen, and staying frozen.
+    LIQUID_STATE_FROZEN,
+    
+    //Frozen, but thawing.
+    LIQUID_STATE_THAWING,
+    
+};
 
 
 /**
@@ -58,8 +80,8 @@ struct Liquid {
     //Time passed in the current state.
     float stateTime = 0.0f;
     
-    //Is it currently draining its liquid?
-    bool draining = false;
+    //Current state.
+    LIQUID_STATE state = LIQUID_STATE_NORMAL;
     
     //How chilled it is.
     size_t chillAmount = 0;
@@ -78,7 +100,7 @@ struct Liquid {
     
     Liquid(Hazard* hazard, const vector<Sector*>& sectors);
     ~Liquid();
-    bool isFrozen(float* thawOpacity, float* flashOpacity) const;
+    bool isFrozen(float* thawOpacity, float* flashOpacity, bool* cracked) const;
     bool startDraining();
     void tick(float deltaT);
     
@@ -90,6 +112,7 @@ struct Liquid {
     void changeSectorsHazard(Hazard* hPtr);
     Point getDefaultChillFractionPos() const;
     vector<Mob*> getMobsOn() const;
+    void setState(LIQUID_STATE newState);
     void updateChill(size_t amount, Point* where, const vector<Mob*>& mobsOn);
     
 };
