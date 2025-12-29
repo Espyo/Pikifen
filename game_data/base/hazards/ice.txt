@@ -1,0 +1,9 @@
+name = Ice
+description = Cold ice that freezes a Pikmin on the spot.
+
+color = 12 192 192
+effects = frozen_pikmin
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

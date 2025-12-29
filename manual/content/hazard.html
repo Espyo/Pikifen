@@ -56,7 +56,7 @@
       </tr>
       <tr>
         <td>liquid</td>
-        <td>If this hazard has an associated liquid (read the next section), specify its name here.</td>
+        <td>If this hazard has an associated liquid type (read the next section), specify its name here.</td>
         <td>Text</td>
         <td></td>
       </tr>
@@ -66,9 +66,9 @@
     
     <p>As stated at the start of the page, a hazard is an abstract danger. This means that a body of water is not a hazard, but the concept of "water" is. The thing is, hazards like water and other liquids (e.g. acid or lava) are meant to be used in sectors and have a liquid appearance, with an animated water surface. Simply stating that a water hazard applies the "drowning" effect to non-Blue Pikmin, and having a sector use the "water" hazard is not enough. How can the engine know what color the water is, how opaque it is, and what its surface animation is? For this, we'll need a different file.</p>
 
-    <p>Open the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/liquids</code> folder. This contains data about all liquids. Liquids will bridge the gap between a water body sector and the water hazard, for instance. Much like the files in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/hazards</code>, this folder contains <a href="making.html#data-file">data files</a>, one for each liquid defined.</p>
+    <p>Open the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/liquids</code> folder. This contains data about all liquid types. For instance, the "water" liquid type is what bridges the gap between a water body sector and the water hazard. Much like the files in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/hazards</code>, this folder contains <a href="making.html#data-file">data files</a>, one for each liquid type defined.</p>
 
-    <p>Each liquid has the following properties:</p>
+    <p>Each liquid type has the following properties:</p>
 
     <h3 id="liquid-common">Common</h3>
 

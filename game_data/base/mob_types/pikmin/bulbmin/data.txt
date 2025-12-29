@@ -193,6 +193,7 @@ vulnerabilities {
     fire = 0
     electricity_stunning = 0
     electricity_fatal = 0
+    ice = 0
     water = 0
     water_bubble = 0
     poison = 0

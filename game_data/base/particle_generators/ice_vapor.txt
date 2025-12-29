@@ -1,15 +1,15 @@
-name=Vapor
-description=Water vapor rising up, used to signify cold.
+name=Ice vapor
+description=Ice vapor rising up, used to signify cold.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0
 emission{
-	number=2
+	number=1
 	number_deviation=0
-	interval=0.5000
+	interval=1.0000
 	interval_deviation=0.0000
 	shape=0
-	circle_outer_dist=40.0000
+	circle_outer_dist=5.0000
 	circle_inner_dist=0.0000
 	circle_arc=6.2832
 	circle_arc_rot=0.0000
@@ -23,8 +23,8 @@ base{
 	friction=-0.5000
 	blend_type=0
 	color{
-		0.0000=255 255 255
-		1.0000=255 255 255 0
+		0.0000=202 255 254
+		1.0000=201 255 254 0
 	}
 	size{
 		0.0000=0.0000
@@ -48,4 +48,4 @@ orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=0.0000
 linear_speed_deviation=0.0000 0.0000
-angles_are_absolute=false
+angles_are_absolute=true
