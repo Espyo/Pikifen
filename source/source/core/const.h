@@ -35,14 +35,14 @@ constexpr unsigned char VERSION_MAJOR = 1;
 constexpr unsigned char VERSION_MINOR = 1;
 
 //Version, revision number.
-constexpr unsigned char VERSION_REV   = 0;
+constexpr unsigned char VERSION_REV   = 1;
 
 //Whether the given version number refers to the next version, currently
 //in development. If false, it refers to a released version.
 constexpr bool VERSION_IN_DEV = false;
 
 //Non-in-development version's release day.
-constexpr unsigned char VERSION_DAY   = 25;
+constexpr unsigned char VERSION_DAY   = 29;
 
 //Non-in-development version's release month.
 constexpr unsigned char VERSION_MONTH = 12;
