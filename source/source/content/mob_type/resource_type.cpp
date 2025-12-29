@@ -73,6 +73,8 @@ void ResourceType::loadCatProperties(DataNode* file) {
             carryingDestinationStr,
         (int*) &carryingDestination, {
             "ship",
+            "",
+            "",
             "linked_mob",
             "linked_mob_matching_type"
         },

@@ -1198,6 +1198,7 @@ bool readEnumProp(
     const string& errorThing, DataNode* errorNode
 ) {
     for(size_t v = 0; v < possibleValues.size(); v++) {
+        if(possibleValues[v].empty()) continue;
         if(valueStr == possibleValues[v]) {
             *outInt = (int) v;
             return true;
