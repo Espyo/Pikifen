@@ -2,22 +2,17 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Placing the cursor on a body of water should show its requirements, if the player is holding an Ice Pikmin
+    The ability for Ice Pikmin to be on the water's surface without harm, while not being allowed to carry on water, or be grabbed by a leader on water
+    Add sounds to a liquid freezing, thawing crack, and complete thaw
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Applying statuses with buildup isn't reaching the important half of Mob::applyStatusEffects()
+    Leader antenna particles should be a proper particle generator, instead of creating one manually every frame. This is important because they keep getting created while the game is paused, and create at different intervals when the game speed is changed (thanks Helodity)
 
     --- 1.2.0 ---
     Ice Pikmin
-        Water freezing
-            How does the area maker specify the amount for each body of water? Should they, or should it be determined by the area?
-            The indicator for the amount of Ice Pikmin on it should be where the first Ice Pikmin was placed
-            Logic to turn the sector solid and navigable by non-Blues
-            Logic to freeze all enemies in the water
-            Logic to call the Pikmin out and thawing
-        Ice hazard for Pikmin attacks, and ice hazard for enemy attacks
-        The ability to be on the water's surface without harm, while not being allowed to carry on water, or be grabbed by a leader on water
         Ice gates
         Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
     Glow Pikmin
@@ -25,10 +20,10 @@ Next tasks (roughly sorted most important first)
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
         Glowmob?
-    Rookie Rescue Officer
     Puffstool and mushroom Pikmin
         The ability for statuses to change the team to the team of the one that gave the status
         The ability for statuses to change the graphic for a Pikmin's top
+    Rookie Rescue Officer
     Swarming jingle
 
     --- 1.3.0 ---

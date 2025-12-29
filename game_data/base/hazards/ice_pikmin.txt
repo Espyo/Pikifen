@@ -1,0 +1,9 @@
+name = Ice Pikmin
+description = Ice Pikmin have cold attacks, which can chill enemies and eventually freeze them.
+
+color = 12 192 192
+effects = frozen_enemy
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0
