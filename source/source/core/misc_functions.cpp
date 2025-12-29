@@ -1197,6 +1197,8 @@ bool readEnumProp(
     const string& valueStr, int* outInt, const vector<string> possibleValues,
     const string& errorThing, DataNode* errorNode
 ) {
+    if(valueStr.empty()) return false;
+    
     for(size_t v = 0; v < possibleValues.size(); v++) {
         if(possibleValues[v].empty()) continue;
         if(valueStr == possibleValues[v]) {
