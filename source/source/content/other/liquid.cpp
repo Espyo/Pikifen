@@ -287,7 +287,7 @@ void Liquid::tick(float deltaT) {
         if(mPtr->health <= 0.0f) continue;
         mPtr->applyStatus(
             hazard->associatedLiquid->freezeMobStatus,
-            false, true, true, true
+            false, true, 1.0f, true
         );
     }
     

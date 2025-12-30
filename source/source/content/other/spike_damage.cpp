@@ -31,11 +31,13 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
     DataNode* damageNode = nullptr;
     DataNode* particleGeneratorNode = nullptr;
     DataNode* statusNameNode = nullptr;
+    DataNode* statusBuildupNode = nullptr;
     
     sRS.set("damage", damage, &damageNode);
     sRS.set("ingestion_only", ingestionOnly);
     sRS.set("is_damage_ratio", isDamageRatio);
     sRS.set("status_to_apply", statusName, &statusNameNode);
+    sRS.set("status_buildup_amount", statusBuildupAmount, &statusBuildupNode);
     sRS.set(
         "particle_generator", particleGeneratorName,
         &particleGeneratorNode
@@ -68,5 +70,9 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
                 statusNameNode
             );
         }
+    }
+
+    if(statusBuildupNode) {
+        statusBuildupAmount /= 100.0f;
     }
 }

@@ -2871,7 +2871,7 @@ void PikminFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
         pikPtr->applyStatus(
-            droPtr->droType->statusToGive, false, false, false
+            droPtr->droType->statusToGive, false, false
         );
         break;
     } default: {
@@ -4623,11 +4623,11 @@ void PikminFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            pikPtr->applyStatus(hazPtr->effects[e], false, true, false);
+            pikPtr->applyStatus(hazPtr->effects[e], false, true);
         }
     }
     if(vuln.statusToApply) {
-        pikPtr->applyStatus(vuln.statusToApply, false, true, false);
+        pikPtr->applyStatus(vuln.statusToApply, false, true);
     }
 }
 
@@ -4645,7 +4645,7 @@ void PikminFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->applyStatus(s->effects[e], false, false, false);
+        m->applyStatus(s->effects[e], false, false);
     }
     
     if(s->buriesPikmin) {

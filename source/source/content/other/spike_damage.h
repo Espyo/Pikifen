@@ -54,6 +54,10 @@ public:
     
     //Apply this status effect when the spike damage is applied.
     StatusType* statusToApply = nullptr;
+
+    //If the status effect uses buildup, increase it by this much [0 - 1].
+    //0 means it increases the normal amount.
+    float statusBuildupAmount = 0.0f;
     
     
     //--- Function declarations ---

@@ -495,7 +495,7 @@ public:
     
     void applyStatus(
         StatusType* s, bool givenByParent, bool fromHazard,
-        bool overrideBuildup = false, bool forceReapplyResetTime = false
+        float overrideBuildup = FLT_MAX, bool forceReapplyResetTime = false
     );
     void deleteOldStatusEffects();
     void removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
@@ -536,7 +536,7 @@ protected:
     //--- Function declarations ---
     
     bool applyStatusBuildup(
-        StatusType* s, bool givenByParent, bool fromHazard, bool force
+        StatusType* s, bool givenByParent, bool fromHazard, float overrideAmount
     );
     void applyStatusEffects(
         StatusType* s, bool givenByParent, bool fromHazard,

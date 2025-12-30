@@ -1736,7 +1736,7 @@ void MobActionRunners::print(MobActionRunData& data) {
  */
 void MobActionRunners::receiveStatus(MobActionRunData& data) {
     data.m->applyStatus(
-        game.content.statusTypes.list[data.args[0]], false, false, false
+        game.content.statusTypes.list[data.args[0]], false, false
     );
 }
 
