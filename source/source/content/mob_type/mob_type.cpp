@@ -650,85 +650,10 @@ void MobType::loadFromDataNode(
     DataNode* soundsNode = node->getChildByName("sounds");
     size_t nSounds = soundsNode->getNrOfChildren();
     for(size_t s = 0; s < nSounds; s++) {
-    
         DataNode* soundNode = soundsNode->getChild(s);
-        ReaderSetter sRS(soundNode);
         MobType::Sound newSound;
-        
-        string soundINameStr;
-        DataNode* soundINameNode = nullptr;
-        string typeStr;
-        DataNode* typeNode = nullptr;
-        string stackModeStr;
-        DataNode* stackModeNode = nullptr;
-        float volumeFloat = 100.0f;
-        float speedFloat = 100.0f;
-        bool loopBool = false;
-        
+        newSound.loadFromDataNode(soundNode);
         newSound.name = soundNode->name;
-        
-        sRS.set("sound", soundINameStr, &soundINameNode);
-        sRS.set("type", typeStr, &typeNode);
-        sRS.set("stack_mode", stackModeStr, &stackModeNode);
-        sRS.set("stack_min_pos", newSound.config.stackMinPos);
-        sRS.set("loop", loopBool);
-        sRS.set("volume", volumeFloat);
-        sRS.set("speed", speedFloat);
-        sRS.set("volume_deviation", newSound.config.volumeDeviation);
-        sRS.set("speed_deviation", newSound.config.speedDeviation);
-        sRS.set("random_chance", newSound.config.randomChance);
-        sRS.set("random_delay", newSound.config.randomDelay);
-        
-        newSound.sample =
-            game.content.sounds.list.get(soundINameStr, soundINameNode);
-            
-        if(typeNode) {
-            if(typeStr == "gameplay_global") {
-                newSound.type = SOUND_TYPE_GAMEPLAY_GLOBAL;
-            } else if(typeStr == "gameplay_pos") {
-                newSound.type = SOUND_TYPE_GAMEPLAY_POS;
-            } else if(typeStr == "ambiance_global") {
-                newSound.type = SOUND_TYPE_AMBIANCE_GLOBAL;
-            } else if(typeStr == "ambiance_pos") {
-                newSound.type = SOUND_TYPE_AMBIANCE_POS;
-            } else if(typeStr == "ui") {
-                newSound.type = SOUND_TYPE_UI;
-            } else {
-                game.errors.report(
-                    "Unknow sound effect type \"" +
-                    typeStr + "\"!", typeNode
-                );
-            }
-        }
-        
-        if(stackModeNode) {
-            if(stackModeStr == "normal") {
-                newSound.config.stackMode = SOUND_STACK_MODE_NORMAL;
-            } else if(stackModeStr == "override") {
-                newSound.config.stackMode = SOUND_STACK_MODE_OVERRIDE;
-            } else if(stackModeStr == "never") {
-                newSound.config.stackMode = SOUND_STACK_MODE_NEVER;
-            } else {
-                game.errors.report(
-                    "Unknow sound effect stack mode \"" +
-                    stackModeStr + "\"!", stackModeNode
-                );
-            }
-        }
-        
-        if(loopBool) {
-            enableFlag(newSound.config.flags, SOUND_FLAG_LOOP);
-        }
-        
-        newSound.config.volume = volumeFloat / 100.0f;
-        newSound.config.volume = std::clamp(newSound.config.volume, 0.0f, 1.0f);
-        
-        newSound.config.speed = speedFloat / 100.0f;
-        newSound.config.speed = std::max(0.0f, newSound.config.speed);
-        
-        newSound.config.volumeDeviation /= 100.0f;
-        newSound.config.speedDeviation /= 100.0f;
-        
         sounds.push_back(newSound);
     }
     

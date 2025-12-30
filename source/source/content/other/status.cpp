@@ -201,4 +201,8 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
             );
         }
     }
+
+    if(node->getNrOfChildrenByName("sound") > 0) {
+        sound.loadFromDataNode(node->getChildByName("sound"));
+    }
 }

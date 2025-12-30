@@ -1270,6 +1270,87 @@ void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
 
 
 /**
+ * @brief Loads data from a data node.
+ * 
+ * @param node The node.
+ */
+void DataNodeSound::loadFromDataNode(DataNode* node) {
+    ReaderSetter sRS(node);
+    string soundINameStr;
+    DataNode* soundINameNode = nullptr;
+    string typeStr;
+    DataNode* typeNode = nullptr;
+    string stackModeStr;
+    DataNode* stackModeNode = nullptr;
+    float volumeFloat = 100.0f;
+    float speedFloat = 100.0f;
+    bool loopBool = false;
+    
+    sRS.set("sound", soundINameStr, &soundINameNode);
+    sRS.set("type", typeStr, &typeNode);
+    sRS.set("stack_mode", stackModeStr, &stackModeNode);
+    sRS.set("stack_min_pos", config.stackMinPos);
+    sRS.set("loop", loopBool);
+    sRS.set("volume", volumeFloat);
+    sRS.set("speed", speedFloat);
+    sRS.set("volume_deviation", config.volumeDeviation);
+    sRS.set("speed_deviation", config.speedDeviation);
+    sRS.set("random_chance", config.randomChance);
+    sRS.set("random_delay", config.randomDelay);
+    
+    sample =
+        game.content.sounds.list.get(soundINameStr, soundINameNode);
+        
+    if(typeNode) {
+        if(typeStr == "gameplay_global") {
+            type = SOUND_TYPE_GAMEPLAY_GLOBAL;
+        } else if(typeStr == "gameplay_pos") {
+            type = SOUND_TYPE_GAMEPLAY_POS;
+        } else if(typeStr == "ambiance_global") {
+            type = SOUND_TYPE_AMBIANCE_GLOBAL;
+        } else if(typeStr == "ambiance_pos") {
+            type = SOUND_TYPE_AMBIANCE_POS;
+        } else if(typeStr == "ui") {
+            type = SOUND_TYPE_UI;
+        } else {
+            game.errors.report(
+                "Unknow sound effect type \"" +
+                typeStr + "\"!", typeNode
+            );
+        }
+    }
+    
+    if(stackModeNode) {
+        if(stackModeStr == "normal") {
+            config.stackMode = SOUND_STACK_MODE_NORMAL;
+        } else if(stackModeStr == "override") {
+            config.stackMode = SOUND_STACK_MODE_OVERRIDE;
+        } else if(stackModeStr == "never") {
+            config.stackMode = SOUND_STACK_MODE_NEVER;
+        } else {
+            game.errors.report(
+                "Unknow sound effect stack mode \"" +
+                stackModeStr + "\"!", stackModeNode
+            );
+        }
+    }
+    
+    if(loopBool) {
+        enableFlag(config.flags, SOUND_FLAG_LOOP);
+    }
+    
+    config.volume = volumeFloat / 100.0f;
+    config.volume = std::clamp(config.volume, 0.0f, 1.0f);
+    
+    config.speed = speedFloat / 100.0f;
+    config.speed = std::max(0.0f, config.speed);
+    
+    config.volumeDeviation /= 100.0f;
+    config.speedDeviation /= 100.0f;
+}
+
+
+/**
  * @brief Loads song data from a data node.
  *
  * @param node Data node to load from.

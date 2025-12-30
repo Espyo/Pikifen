@@ -252,21 +252,12 @@ public:
     /**
      * @brief Info on a sound effect this mob can emit.
      */
-    struct Sound {
+    struct Sound : public DataNodeSound {
     
         //--- Members ---
         
         //Its name.
         string name;
-        
-        //The loaded sample.
-        ALLEGRO_SAMPLE* sample = nullptr;
-        
-        //Type of sound.
-        SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_POS;
-        
-        //Configuration.
-        SoundSourceConfig config;
         
     };
     

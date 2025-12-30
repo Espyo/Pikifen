@@ -478,6 +478,12 @@ void Mob::applyStatusEffects(
         pg.followZOffset = s->particleOffsetZ;
         particleGenerators.push_back(pg);
     }
+
+    if(s->sound.sample) {
+        game.audio.createMobSoundSource(
+            s->sound.sample, this, false, s->sound.config
+        );
+    }
     
     if(s->freezesAnimation) {
         getSpriteData(&forcedSprite, nullptr, nullptr);

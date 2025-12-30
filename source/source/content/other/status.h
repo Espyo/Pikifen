@@ -15,6 +15,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "../../core/audio.h"
 #include "../../util/drawing_utils.h"
 #include "../animation/animation.h"
 #include "../content.h"
@@ -177,6 +178,9 @@ public:
     
     //Vertical offset of the particle generator.
     float particleOffsetZ = 0.0f;
+
+    //Sound to play, if any.
+    DataNodeSound sound;
     
     //How much the affected mob should shake by, if at all.
     float shakingEffect = 0.0f;

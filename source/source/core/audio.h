@@ -482,3 +482,27 @@ private:
     void updatePlaybackTargetVolAndPan(size_t playbackIdx);
     
 };
+
+    
+/**
+ * @brief Info on a sound that can be emitted, from a data node.
+ */
+struct DataNodeSound {
+
+    //--- Members ---
+    
+    //The loaded sample.
+    ALLEGRO_SAMPLE* sample = nullptr;
+    
+    //Type of sound.
+    SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_POS;
+    
+    //Configuration.
+    SoundSourceConfig config;
+
+
+    //--- Function declarations ---
+
+    void loadFromDataNode(DataNode* node);
+    
+};
