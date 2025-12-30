@@ -1465,7 +1465,10 @@ vector<Hazard*> getMobTypeListInvulnerabilities(
     map<Hazard*, size_t> invInstances;
     for(auto& t : types) {
         for(auto& h : t->hazardVulnerabilities) {
-            if(h.second.effectMult == 0.0f) {
+            if(
+                h.second.effectMult == 0.0f &&
+                !h.second.invulnBlockedBySectors
+            ) {
                 invInstances[h.first]++;
             }
         }

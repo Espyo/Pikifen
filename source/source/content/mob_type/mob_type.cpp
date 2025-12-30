@@ -324,14 +324,20 @@ void MobType::loadFromDataNode(
         float percentage = defaultVulnerability;
         string statusName;
         bool statusOverrides = false;
+        bool invulnBlockedBySectors = false;
         if(!words.empty()) {
             percentage = s2f(words[0]);
         }
         if(words.size() >= 2) {
-            statusName = words[1];
+            if(words[1] != "none") {
+                statusName = words[1];
+            }
         }
         if(words.size() >= 3) {
             statusOverrides = s2b(words[2]);
+        }
+        if(words.size() >= 4) {
+            invulnBlockedBySectors = s2b(words[3]);
         }
         auto statusIt = game.content.statusTypes.list.find(statusName);
         
@@ -358,6 +364,7 @@ void MobType::loadFromDataNode(
                 vuln.statusToApply = statusIt->second;
             }
             vuln.statusOverrides = statusOverrides;
+            vuln.invulnBlockedBySectors = invulnBlockedBySectors;
         }
     }
     

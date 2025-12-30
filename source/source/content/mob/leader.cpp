@@ -224,10 +224,16 @@ bool Leader::canGrabGroupMember(Mob* m) const {
         groundSector &&
         groundSector->hazard &&
         !standingOnMob &&
-        groundSector->hazard->blocksPaths &&
-        m->getHazardVulnerability(groundSector->hazard).effectMult != 0.0f
+        groundSector->hazard->blocksPaths
     ) {
-        return false;
+        MobType::Vulnerability vuln =
+            m->getHazardVulnerability(groundSector->hazard);
+        if(vuln.effectMult != 0.0f) {
+            return false;
+        }
+        if(vuln.effectMult == 0.0f && vuln.invulnBlockedBySectors) {
+            return false;
+        }
     }
     
     //Check if the mob is within range.

@@ -194,8 +194,7 @@ sounds {
 vulnerabilities {
     ice = 0
     fire = 200
-    //TODO
-    water = 0
+    water = 0 none false true
 }
 
 maker = Espyo

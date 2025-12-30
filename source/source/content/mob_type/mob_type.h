@@ -242,6 +242,11 @@ public:
         //If "statusToApply" overrides any status effect that'd be received.
         bool statusOverrides = true;
         
+        //If true and the mob is invulnerable to this hazard, then sectors
+        //with the hazard will still be blocked in terms of carrying or
+        //grabbing Pikmin within them.
+        bool invulnBlockedBySectors = false;
+        
     };
     
     /**
