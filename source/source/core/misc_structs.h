@@ -864,6 +864,15 @@ struct SystemContentList {
     //Enemy soul.
     ALLEGRO_SAMPLE* sndEnemySoul = nullptr;
     
+    //Liquid becomes frozen.
+    ALLEGRO_SAMPLE* sndFrozenLiquid = nullptr;
+    
+    //Frozen liquid cracks.
+    ALLEGRO_SAMPLE* sndFrozenLiquidCrack = nullptr;
+    
+    //Frozen liquid thaws completely.
+    ALLEGRO_SAMPLE* sndFrozenLiquidThaw = nullptr;
+    
     //Gameplay message character being typed out.
     ALLEGRO_SAMPLE* sndGameplayMsgChar = nullptr;
     
@@ -1149,6 +1158,15 @@ struct SystemContentNames {
     
     //Enemy soul.
     string sndEnemySoul = "effects/enemy_soul";
+    
+    //Liquid becomes frozen.
+    string sndFrozenLiquid = "nature/frozen_liquid";
+    
+    //Frozen liquid cracks.
+    string sndFrozenLiquidCrack = "nature/frozen_liquid_crack";
+    
+    //Frozen liquid thaws completely.
+    string sndFrozenLiquidThaw = "nature/frozen_liquid_thaw";
     
     //Gameplay message character being typed out.
     string sndGameplayMsgChar = "gui/gameplay_message_char";

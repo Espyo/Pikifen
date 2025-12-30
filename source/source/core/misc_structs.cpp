@@ -2243,6 +2243,9 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("countdown_tick", sndCountdownTick);
     sndRS.set("ding", sndDing);
     sndRS.set("enemy_soul", sndEnemySoul);
+    sndRS.set("frozen_liquid", sndFrozenLiquid);
+    sndRS.set("frozen_liquid_crack", sndFrozenLiquidCrack);
+    sndRS.set("frozen_liquid_thaw", sndFrozenLiquidThaw);
     sndRS.set("gameplay_message_char", sndGameplayMsgChar);
     sndRS.set("go", sndGo);
     sndRS.set("medal_got_it", sndMedalGotIt);

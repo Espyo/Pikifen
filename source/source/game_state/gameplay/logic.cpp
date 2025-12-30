@@ -1117,9 +1117,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     timeLimit - game.states.gameplay->gameplayTimePassed;
                 float timeLeftPrevFrame =
                     timeLeftCurFrame + game.deltaT;
-                if(
-                    timeLeftPrevFrame > 60.0f && timeLeftCurFrame <= 60.0f
-                ) {
+                if(passedBy(timeLeftPrevFrame, timeLeftCurFrame, 60.0f)) {
                     game.states.gameplay->bigMsg.set(BIG_MESSAGE_ONE_MIN_LEFT);
                     game.audio.createUiSoundSource(
                         game.sysContent.sndOneMinuteLeft,

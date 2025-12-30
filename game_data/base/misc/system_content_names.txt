@@ -76,6 +76,9 @@ sounds {
     countdown_tick = gui/countdown_tick
     ding = effects/ding
     enemy_soul = effects/enemy_soul
+    frozen_liquid = nature/frozen_liquid
+    frozen_liquid_crack = nature/frozen_liquid_crack
+    frozen_liquid_thaw = nature/frozen_liquid_thaw
     gameplay_message_char = gui/gameplay_message_char
     go = gui/go
     medal_got_it = gui/medal_got_it

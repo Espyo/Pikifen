@@ -131,9 +131,9 @@ void Liquid::changeSectorsHazard(Hazard* hPtr) {
 
 
 /**
- * @brief Returns a nice default position for the chill fraction.
+ * @brief Returns the center point of the entire liquid.
  */
-Point Liquid::getDefaultChillFractionPos() const {
+Point Liquid::getCenter() const {
     Point tl(FLT_MAX);
     Point br(-FLT_MAX);
     
@@ -147,6 +147,67 @@ Point Liquid::getDefaultChillFractionPos() const {
             (tl.x + br.x) / 2.0f,
             (tl.y + br.y) / 2.0f
         );
+}
+
+
+/**
+ * @brief Returns the hotspot of where the chilliness GUI and sounds
+ * should be.
+ *
+ * @param cachedCursor If the leader cursor position had been calculated
+ * earlier, pass it here. Otherwise, pass nullptr.
+ * @return The spot.
+ */
+Point Liquid::getChillHotspot(Point* cachedCursor) const {
+    if(firstChillingMobPos.x != FLT_MAX) {
+        return
+            Point(
+                firstChillingMobPos.x,
+                firstChillingMobPos.y -
+                game.config.pikmin.standardRadius *  2.0f
+            );
+    }
+    
+    Point cursorPos = cachedCursor ? *cachedCursor : getCursorOn();
+    if(cursorPos.x != FLT_MAX) {
+        return
+            Point(
+                cursorPos.x,
+                cursorPos.y - 32.0f
+            );
+    }
+    
+    return getCenter();
+}
+
+
+/**
+ * @brief Returns the leader cursor coordinates that are on the liquid.
+ * If no leader cursor is on the liquid, returns FLT_MAX.
+ *
+ * @return The coordinates.
+ */
+Point Liquid::getCursorOn() const {
+    Point cursorPos(FLT_MAX);
+    for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+        Player* pPtr = &game.states.gameplay->players[p];
+        Pikmin* throwee = nullptr;
+        if(!pPtr->leaderCursorSector) continue;
+        if(pPtr->leaderCursorSector->liquid != this) continue;
+        if(!pPtr->leaderPtr) continue;
+        if(!pPtr->leaderPtr->throwee) continue;
+        if(
+            pPtr->leaderPtr->throwee->type->category->id ==
+            MOB_CATEGORY_PIKMIN
+        ) {
+            throwee = (Pikmin*) pPtr->leaderPtr->throwee;
+        }
+        if(!throwee) continue;
+        if(!throwee->pikType->chillsLiquids) continue;
+        
+        cursorPos = pPtr->leaderCursorWorld;
+    }
+    return cursorPos;
 }
 
 
@@ -260,7 +321,23 @@ void Liquid::tick(float deltaT) {
         if(stateTime >= LIQUID::THAW_DURATION) {
             setState(LIQUID_STATE_NORMAL);
             changeSectorsHazard(hazard);
+            game.audio.createPosSoundSource(
+                game.sysContent.sndFrozenLiquidThaw,
+                getChillHotspot(nullptr), false,
+            { .speedDeviation = 0.1f }
+            );
             freezeCaughtMobs.clear();
+        }
+        if(
+            passedBy(
+                stateTime - deltaT, stateTime, LIQUID::THAW_CRACKED_DURATION
+            )
+        ) {
+            game.audio.createPosSoundSource(
+                game.sysContent.sndFrozenLiquidCrack,
+                getChillHotspot(nullptr), false,
+            { .speedDeviation = 0.1f }
+            );
         }
         break;
     } default: {
@@ -291,10 +368,11 @@ void Liquid::tick(float deltaT) {
         );
     }
     
+    //Tick chill.
     if(freezingPoint != 0) {
         vector<Mob*> mobsOn = getMobsOn();
         size_t chillingMobs = 0;
-        Point chillingMobPos;
+        Point chillingMobPos(FLT_MAX);
         for(size_t m = 0; m < mobsOn.size(); m++) {
             if(mobsOn[m]->type->category->id == MOB_CATEGORY_PIKMIN) {
                 Pikmin* pikPtr = (Pikmin*) mobsOn[m];
@@ -307,12 +385,34 @@ void Liquid::tick(float deltaT) {
         
         updateChill(chillingMobs, &chillingMobPos, mobsOn);
         
+        //Update chill fraction.
+        Point cursorPos = getCursorOn();
+        bool mustShowFraction = chillAmount > 0.0f || cursorPos.x != FLT_MAX;
+        
+        if(mustShowFraction && !chillFraction) {
+            chillFraction = new InWorldFraction();
+        } else if(!mustShowFraction && chillFraction) {
+            chillFraction->startFading();
+        }
+        
         if(chillFraction) {
+            chillFraction->setColor(
+                chillAmount >= freezingPoint ?
+                game.config.aestheticGen.carryingColorMove :
+                game.config.aestheticGen.carryingColorStop
+            );
+            chillFraction->setRequirementNumber(freezingPoint);
+            chillFraction->setValueNumber(chillAmount);
+            chillFraction->setNoMobPos(getChillHotspot(&cursorPos));
             chillFraction->tick(deltaT);
             if(chillFraction->toDelete) {
                 delete chillFraction;
                 chillFraction = nullptr;
             }
+        }
+        
+        if(!chillFraction) {
+            firstChillingMobPos.x = FLT_MAX;
         }
     }
 }
@@ -339,6 +439,11 @@ void Liquid::updateChill(
     case LIQUID_STATE_NORMAL: {
         if(newAmount >= freezingPoint) {
             setState(LIQUID_STATE_FROZEN);
+            game.audio.createPosSoundSource(
+                game.sysContent.sndFrozenLiquid,
+                getChillHotspot(nullptr), false,
+            { .speedDeviation = 0.1f }
+            );
             changeSectorsHazard(nullptr);
             if(hazard->associatedLiquid->freezeMobStatus) {
                 freezeCaughtMobs = mobsOn;
@@ -357,36 +462,18 @@ void Liquid::updateChill(
     } case LIQUID_STATE_THAWING: {
         if(newAmount >= freezingPoint) {
             setState(LIQUID_STATE_FROZEN);
+            game.audio.createPosSoundSource(
+                game.sysContent.sndFrozenLiquid,
+                getChillHotspot(nullptr), false,
+            { .speedDeviation = 0.1f }
+            );
         }
         break;
     }
     }
     
-    if(chillAmount == 0 && newAmount > 0) {
-        if(chillFraction) delete chillFraction;
-        chillFraction = new InWorldFraction();
-        chillFraction->setNoMobPos(getDefaultChillFractionPos());
-        if(where) {
-            chillFraction->setNoMobPos(
-                Point(
-                    where->x,
-                    where->y - game.config.pikmin.standardRadius *  2.0f
-                )
-            );
-        }
-    }
-    
-    if(chillFraction) {
-        chillFraction->setColor(
-            newAmount >= freezingPoint ?
-            game.config.aestheticGen.carryingColorMove :
-            game.config.aestheticGen.carryingColorStop
-        );
-        chillFraction->setRequirementNumber(freezingPoint);
-        chillFraction->setValueNumber(newAmount);
-        if(newAmount == 0) {
-            chillFraction->startFading();
-        }
+    if(where && firstChillingMobPos.x == FLT_MAX) {
+        firstChillingMobPos = *where;
     }
     
     chillAmount = newAmount;

@@ -157,6 +157,28 @@ size_t getRandomIdxWithWeights(
 
 
 /**
+ * @brief Returns whether the value passed by the given threshold when it
+ * changed from oldValue to newValue. If the threshold is at oldValue, this
+ * will be considered false, but if it's at newValue, it's considered true.
+ *
+ * @param oldValue The old value.
+ * @param newValue The new value.
+ * @param threshold The threshold.
+ * @return Whether it passed.
+ */
+bool passedBy(float oldValue, float newValue, float threshold) {
+    if(oldValue == newValue) return false;
+    if(oldValue == threshold) return false;
+    if(newValue == threshold) return true;
+    if(oldValue < newValue) {
+        return oldValue < threshold && newValue > threshold;
+    } else {
+        return oldValue > threshold && newValue < threshold;
+    }
+}
+
+
+/**
  * @brief Rounds a number to the nearest multiple of a given number,
  * above or below.
  *

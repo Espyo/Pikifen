@@ -12,6 +12,7 @@
 
 #include <allegro5/allegro.h>
 
+#include <float.h>
 #include <string>
 #include <vector>
 
@@ -94,6 +95,9 @@ struct Liquid {
     
     //Data about the in-world chill fraction numbers, if any.
     InWorldFraction* chillFraction = nullptr;
+
+    //Position of the first mob that caused chilling. If FLT_MAX, none is set.
+    Point firstChillingMobPos = Point(FLT_MAX);
     
     
     //--- Function declarations ---
@@ -110,7 +114,9 @@ struct Liquid {
     //--- Function declarations ---
     
     void changeSectorsHazard(Hazard* hPtr);
-    Point getDefaultChillFractionPos() const;
+    Point getCenter() const;
+    Point getChillHotspot(Point* cachedCursor) const;
+    Point getCursorOn() const;
     vector<Mob*> getMobsOn() const;
     void setState(LIQUID_STATE newState);
     void updateChill(size_t amount, Point* where, const vector<Mob*>& mobsOn);
