@@ -209,6 +209,24 @@ Leader::Leader(const Point& pos, LeaderType* type, float angle) :
         game.states.gameplay->particles.add(p);
     };
     swarmNextArrowTimer.start();
+    
+    ParticleGenerator antennaPG =
+        standardParticleGenSetup(
+            leaType->lightParticleGenIName, nullptr
+        );
+    adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
+        antennaPG.baseParticle.color,
+    [ = ] (const ALLEGRO_COLOR & c) {
+        ALLEGRO_COLOR newColor = c;
+        newColor.r *= leaType->lightParticleTint.r;
+        newColor.g *= leaType->lightParticleTint.g;
+        newColor.b *= leaType->lightParticleTint.b;
+        newColor.a *= leaType->lightParticleTint.a;
+        return newColor;
+    }
+    );
+    antennaPG.id = MOB_PARTICLE_GENERATOR_ID_ANTENNA;
+    particleGenerators.push_back(antennaPG);
 }
 
 
@@ -733,6 +751,18 @@ void Leader::drawMob() {
     drawBitmapWithEffects(curSPtr->bitmap, leaSpriteEff);
     
     //Light.
+    ParticleGenerator* antennaPG = nullptr;
+    for(size_t p = 0; p < particleGenerators.size(); p++) {
+        if(
+            particleGenerators[p].id ==
+            MOB_PARTICLE_GENERATOR_ID_ANTENNA
+        ) {
+            antennaPG = &particleGenerators[p];
+            break;
+        }
+    }
+    antennaPG->canEmit = false;
+    
     if(curSPtr->topVisible && leaType->bmpLight) {
         Point lightCoords;
         float lightAngle;
@@ -759,32 +789,17 @@ void Leader::drawMob() {
         
         drawBitmapWithEffects(leaType->bmpLight, lightEff);
         
-        //This is the best place to do the light particles, so do them here.
-        ParticleGenerator pg =
-            standardParticleGenSetup(
-                leaType->lightParticleGenIName, nullptr
-            );
-        pg.baseParticle.pos = lightEff.tf.trans;
-        pg.baseParticle.bmpAngle = lightEff.tf.rot;
-        pg.baseParticle.z = z + height + 1.0f;
-        adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
-            pg.baseParticle.color,
-        [ = ] (const ALLEGRO_COLOR & c) {
-            ALLEGRO_COLOR newColor = c;
-            newColor.r *= leaType->lightParticleTint.r;
-            newColor.g *= leaType->lightParticleTint.g;
-            newColor.b *= leaType->lightParticleTint.b;
-            newColor.a *= leaType->lightParticleTint.a;
-            return newColor;
-        }
-        );
+        //This is the best place to position the light particles, so do that.
+        antennaPG->baseParticle.pos = lightEff.tf.trans;
+        antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
+        antennaPG->baseParticle.z = z + height + 1.0f;
         adjustKeyframeInterpolatorValues<float>(
-            pg.baseParticle.size,
+            antennaPG->baseParticle.size,
         [ = ] (float s) {
             return std::max(lightSize.x, lightSize.y);
         }
         );
-        pg.emit(game.states.gameplay->particles);
+        antennaPG->canEmit = true;
     }
     
     //Invulnerability sparks.

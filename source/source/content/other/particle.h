@@ -62,6 +62,9 @@ enum MOB_PARTICLE_GENERATOR_ID {
     //Ring-shaped wave when going in water.
     MOB_PARTICLE_GENERATOR_ID_WAVE_RING,
     
+    //Leader antenna light.
+    MOB_PARTICLE_GENERATOR_ID_ANTENNA,
+    
     //Specific status effects are numbered starting on this.
     //So make sure this is the last on the enum.
     MOB_PARTICLE_GENERATOR_ID_STATUS,
@@ -336,6 +339,9 @@ struct ParticleGenerator : public Content {
     
     //Follow the given angle. e.g. a mob's angle.
     float* followAngle = nullptr;
+
+    //Whether it is currently allowed to emit.
+    bool canEmit = true;
     
     //Maximum random deviation of the bitmap's rotation.
     float bmpAngleDeviation = 0.0f;

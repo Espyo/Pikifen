@@ -254,6 +254,7 @@ ParticleGenerator::ParticleGenerator(
  * @param manager The particle manager to place these particles on.
  */
 void ParticleGenerator::emit(ParticleManager& manager) {
+    if(!canEmit) return;
     Point basePPos = baseParticle.pos;
     float basePZ = baseParticle.z;
     Point offs = followPosOffset;

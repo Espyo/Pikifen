@@ -2,17 +2,19 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Placing the cursor on a body of water should show its requirements, if the player is holding an Ice Pikmin
-    The ability for Ice Pikmin to be on the water's surface without harm, while not being allowed to carry on water, or be grabbed by a leader on water
-    Add sounds to a liquid freezing, thawing crack, and complete thaw
+    Add a freeze icon to the liquid chill fraction numbers
+    Play a sound when a Pikmin or enemy is frozen
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Bitter sprays chosen by the inventory with the mouse will make the leader face the mouse click direction and spray in the wrong direction, even if visually the spray in the right direction (thanks Helodity)
+    Leader damage spark effects are shown at twice the size they should (thanks Helodity)
     Applying statuses with buildup isn't reaching the important half of Mob::applyStatusEffects()
-    Leader antenna particles should be a proper particle generator, instead of creating one manually every frame. This is important because they keep getting created while the game is paused, and create at different intervals when the game speed is changed (thanks Helodity)
 
     --- 1.2.0 ---
     Ice Pikmin
+        Graphics and animations, and the icon graphic as well
+        Attack hitboxes should be weaker, but have the ice_pikmin hazard
         Ice gates
         Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
     Glow Pikmin
