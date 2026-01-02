@@ -2365,13 +2365,9 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    float leaderCursorAngle =
-        getAngle(m->pos, leaPtr->player->leaderCursorWorld);
-    float shootAngle =
-        leaderCursorAngle + ((sprayTypeRef.angle) ? TAU / 2 : 0);
+    float shootAngle = m->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
         
     unordered_set<Mob*> affectedMobs;
-    
     if(sprayTypeRef.affectsUser) {
         affectedMobs.insert(m);
     }
