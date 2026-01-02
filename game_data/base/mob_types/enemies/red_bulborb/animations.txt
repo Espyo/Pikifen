@@ -2,7 +2,7 @@ name=Red Bulborb animations
 description=Animations for the Red Bulborb.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		hit_rate=50
@@ -382,7 +382,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -390,7 +390,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 -8.0000 0.0000
@@ -413,7 +413,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -421,7 +421,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=104.0000 -10.0000 0.0000
@@ -445,7 +445,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -453,7 +453,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=104.0000 -10.0000 0.0000
@@ -476,7 +476,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -484,7 +484,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=102.0000 0.0000 -40.0000
@@ -492,6 +492,7 @@ sprites{
 				radius=38.0000
 				type=1
 				value=25.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -507,7 +508,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -515,7 +516,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=95.0000 4.0000 -40.0000
@@ -523,6 +524,7 @@ sprites{
 				radius=38.0000
 				type=1
 				value=25.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -537,7 +539,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -545,7 +547,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=55.0000 0.0000 0.0000
@@ -568,6 +570,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=1
 			}
 			back{
 				coords=-44.0000 0.0000 0.0000
@@ -575,6 +578,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
+				surface_type=1
 			}
 			mouth{
 				coords=28.0000 0.0000 0.0000
@@ -597,7 +601,7 @@ sprites{
 				radius=52.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-14.0000 0.0000 0.0000
@@ -605,7 +609,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=39.0000 0.0000 0.0000
@@ -628,7 +632,7 @@ sprites{
 				radius=52.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-14.0000 0.0000 0.0000
@@ -636,7 +640,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=32.0000 0.0000 0.0000
@@ -862,7 +866,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=12.0000 -13.0000 0.0000
@@ -870,7 +874,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=97.0000 33.0000 0.0000
@@ -893,7 +897,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=12.0000 -13.0000 0.0000
@@ -901,7 +905,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=97.0000 33.0000 0.0000
@@ -924,7 +928,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -932,7 +936,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=94.0000 12.0000 0.0000
@@ -956,7 +960,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -964,7 +968,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=94.0000 12.0000 0.0000
@@ -987,7 +991,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -995,7 +999,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1018,7 +1022,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-9.0000 3.0000 0.0000
@@ -1026,7 +1030,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=85.0000 28.0000 0.0000
@@ -1049,7 +1053,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-10.0000 1.0000 0.0000
@@ -1057,7 +1061,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=52.0000 66.0000 0.0000
@@ -1081,7 +1085,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-9.0000 -3.0000 0.0000
@@ -1089,7 +1093,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=85.0000 -28.0000 0.0000
@@ -1113,7 +1117,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-10.0000 -1.0000 0.0000
@@ -1121,7 +1125,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=52.0000 -66.0000 0.0000
@@ -1145,7 +1149,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 -4.0000 0.0000
@@ -1153,7 +1157,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 -4.0000 0.0000
@@ -1177,7 +1181,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 -10.0000 0.0000
@@ -1185,7 +1189,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 -10.0000 0.0000
@@ -1208,7 +1212,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -1216,7 +1220,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 4.0000 0.0000
@@ -1239,7 +1243,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 10.0000 0.0000
@@ -1247,7 +1251,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 10.0000 0.0000
@@ -1270,7 +1274,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 2.0000 0.0000
@@ -1278,7 +1282,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 2.0000 0.0000
@@ -1301,7 +1305,7 @@ sprites{
 				radius=60.0000
 				type=1
 				value=5.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 				wither_chance=10
 			}
@@ -1311,7 +1315,7 @@ sprites{
 				radius=64.0000
 				type=1
 				value=5.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=3.0000
 				wither_chance=10
 			}
@@ -1336,7 +1340,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 -4.0000 0.0000
@@ -1344,7 +1348,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=92.0000 6.0000 0.0000
@@ -1367,7 +1371,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 -1.0000 0.0000
@@ -1375,7 +1379,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 13.0000 0.0000
@@ -1399,7 +1403,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 1.0000 0.0000
@@ -1407,7 +1411,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 -13.0000 0.0000
@@ -1431,7 +1435,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 4.0000 0.0000
@@ -1439,7 +1443,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=92.0000 -6.0000 0.0000
@@ -1462,7 +1466,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1470,7 +1474,7 @@ sprites{
 				radius=53.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1493,7 +1497,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1501,7 +1505,7 @@ sprites{
 				radius=52.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000
@@ -1524,7 +1528,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			back{
 				coords=-12.0000 0.0000 0.0000
@@ -1532,7 +1536,7 @@ sprites{
 				radius=52.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=90.0000 0.0000 0.0000

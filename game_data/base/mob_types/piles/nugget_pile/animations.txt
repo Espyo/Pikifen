@@ -2,7 +2,7 @@ name=Nugget Pile animations
 description=Animations for the Nugget Pile.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	idling_empty{
 		frames{
@@ -59,6 +59,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -73,6 +74,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -87,6 +89,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

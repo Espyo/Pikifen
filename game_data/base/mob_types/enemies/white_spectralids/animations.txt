@@ -2,7 +2,7 @@ name=White Spectralids animations
 description=Animations for the White Spectralids.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	dying{
 		loop_frame=3
@@ -77,6 +77,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -136,6 +137,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -150,6 +152,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -165,6 +168,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -180,6 +184,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

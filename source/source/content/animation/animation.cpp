@@ -467,7 +467,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             string hazardStr;
             DataNode* hazardNode = nullptr;
             int knockbackTypeInt = KNOCKBACK_TYPE_DIRECTIONAL;
-            int surfaceTypeInt = HITBOX_SURFACE_TYPE_BOUNCY;
+            int surfaceTypeInt = HITBOX_SURFACE_TYPE_SMOOTH;
             
             //DEPRECATED in 1.2.0 by "knockback_type".
             bool knockbackOutward = false;
@@ -491,7 +491,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
                 surfaceTypeInt =
                     canPikminLatch ?
                     (int) HITBOX_SURFACE_TYPE_LATCHABLE :
-                    (int) HITBOX_SURFACE_TYPE_BOUNCY;
+                    (int) HITBOX_SURFACE_TYPE_SMOOTH;
             }
             
             hRS.set("coords", coordsStr);

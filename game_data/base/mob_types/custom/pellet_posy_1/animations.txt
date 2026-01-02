@@ -2,7 +2,7 @@ name=1 Pellet Posy animations
 description=Animations for the 1 Pellet Posy.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	blooming{
 		frames{
@@ -350,7 +350,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -358,6 +358,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -373,7 +374,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -381,6 +382,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -396,7 +398,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -404,6 +406,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -419,7 +422,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -427,6 +430,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -442,7 +446,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -450,6 +454,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -466,7 +471,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -474,6 +479,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -490,7 +496,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -498,6 +504,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -514,7 +521,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -522,6 +529,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -538,7 +546,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -546,6 +554,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -562,7 +571,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -570,6 +579,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -586,7 +596,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -594,6 +604,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -610,7 +621,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -618,6 +629,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -634,7 +646,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -642,6 +654,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -658,7 +671,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -666,6 +679,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -682,7 +696,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=0.1000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -690,6 +704,7 @@ sprites{
 				radius=15.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

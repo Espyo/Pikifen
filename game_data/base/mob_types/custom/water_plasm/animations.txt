@@ -2,7 +2,7 @@ name=Water Plasm animations
 description=Animations for the Plasm Wraith's Water Plasm.
 maker=Helodity
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -75,6 +75,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=water_bubble
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 100.0000
@@ -99,6 +100,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=water_bubble
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 100.0000
@@ -123,6 +125,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=water_bubble
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 100.0000
@@ -147,6 +150,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=water_bubble
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 100.0000
@@ -171,6 +175,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=water_bubble
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 100.0000

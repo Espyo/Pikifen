@@ -2,7 +2,7 @@ name=Downy Snagret animations
 description=Animations for the Downy Snagret.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	biting{
 		hit_rate=50
@@ -237,7 +237,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=55.2005 0.0929 0.0000
@@ -246,6 +246,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -261,7 +262,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=54.5464 0.0929 0.0000
@@ -270,6 +271,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -285,7 +287,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=20.9943 0.8050 0.0000
@@ -308,7 +310,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=12.5211 -0.4411 0.0000
@@ -331,7 +333,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=0.0605 -0.6903 0.0000
@@ -464,7 +466,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=33.6942 0.3884 0.0000
@@ -487,7 +489,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=31.5179 0.5862 0.0000
@@ -510,7 +512,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=33.1007 0.9819 0.0000
@@ -533,7 +535,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=33.2985 -0.2051 0.0000
@@ -556,7 +558,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=32.1115 0.3884 0.0000
@@ -579,7 +581,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=32.1115 0.3884 0.0000
@@ -603,7 +605,7 @@ sprites{
 				radius=35.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			mouth{
@@ -628,7 +630,7 @@ sprites{
 				radius=35.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			mouth{
@@ -653,7 +655,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=33.6942 0.3884 0.0000
@@ -677,7 +679,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			mouth{
 				coords=33.6942 0.3884 0.0000
@@ -701,6 +703,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
+				surface_type=1
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000
@@ -724,6 +727,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
+				surface_type=1
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000

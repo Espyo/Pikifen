@@ -2,7 +2,7 @@ name=Timed lever animations
 description=Animations for the timed lever.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	flipping_off{
 		frames{
@@ -82,6 +82,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=2
 			}
 		}
 	}
@@ -96,6 +97,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=2
 			}
 		}
 	}
@@ -110,6 +112,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=2
 			}
 		}
 	}
@@ -124,6 +127,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=2
 			}
 		}
 	}

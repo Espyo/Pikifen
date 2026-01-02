@@ -2,7 +2,7 @@ name=Plasm Blob animations
 description=Animations for the Plasm Wraith's Plasm Blob.
 maker=Helodity
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -83,6 +83,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -98,6 +99,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -113,6 +115,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -128,6 +131,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -143,6 +147,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -158,6 +163,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

@@ -2,7 +2,7 @@ name=Large crystal animations
 description=Animations for the large crystal.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -76,6 +76,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -91,6 +92,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -106,6 +108,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -120,6 +123,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -135,6 +139,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -150,6 +155,7 @@ sprites{
 				radius=50.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

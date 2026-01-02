@@ -2,7 +2,7 @@ name=Yellow Pikmin animations
 description=Animations for the Yellow Pikmin.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	arms_out{
 		frames{
@@ -925,6 +925,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=10.0000
+				knockback_type=0
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -932,6 +933,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -952,6 +954,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=10.0000
+				knockback_type=0
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -959,6 +962,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -985,6 +989,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1011,6 +1016,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1037,6 +1043,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1063,6 +1070,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1090,6 +1098,7 @@ sprites{
 				radius=7.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1117,6 +1126,7 @@ sprites{
 				radius=7.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1144,6 +1154,7 @@ sprites{
 				radius=7.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1171,6 +1182,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1279,6 +1291,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1306,6 +1319,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1334,6 +1348,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1362,6 +1377,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1416,6 +1432,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1443,6 +1460,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1470,6 +1488,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1497,6 +1516,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1523,6 +1543,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1550,6 +1571,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1577,6 +1599,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1604,6 +1627,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1631,6 +1655,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1658,6 +1683,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1684,6 +1710,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1711,6 +1738,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1738,6 +1766,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1764,6 +1793,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1790,6 +1820,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1817,6 +1848,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1844,6 +1876,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1871,6 +1904,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1898,6 +1932,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1925,6 +1960,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1952,6 +1988,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -1979,6 +2016,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2006,6 +2044,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2033,6 +2072,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2060,6 +2100,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2087,6 +2128,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2114,6 +2156,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2141,6 +2184,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2168,6 +2212,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2195,6 +2240,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2222,6 +2268,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2249,6 +2296,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2276,6 +2324,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2303,6 +2352,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2330,6 +2380,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2357,6 +2408,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2384,6 +2436,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2412,6 +2465,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2440,6 +2494,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2468,6 +2523,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2496,6 +2552,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2524,6 +2581,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2552,6 +2610,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2580,6 +2639,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2608,6 +2668,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2635,6 +2696,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2662,6 +2724,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2689,6 +2752,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2716,6 +2780,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2743,6 +2808,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2770,6 +2836,7 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2874,6 +2941,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2900,6 +2968,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2926,6 +2995,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2952,6 +3022,7 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -2979,6 +3050,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3006,6 +3078,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3033,6 +3106,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3060,6 +3134,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3087,6 +3162,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3114,6 +3190,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3140,6 +3217,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3166,6 +3244,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -3193,6 +3272,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

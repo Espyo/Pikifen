@@ -2,7 +2,7 @@ name=Plasm Wraith animations
 description=Animations for the Plasm Wraith.
 maker=Helodity
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	absorbing{
 		loop_frame=4
@@ -787,7 +787,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-10.0000 18.0000 0.0000
@@ -795,7 +795,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-22.0000 -58.0000 0.0000
@@ -861,7 +861,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-22.0000 18.0000 0.0000
@@ -869,7 +869,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-29.0000 -58.0000 0.0000
@@ -935,7 +935,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-21.0000 18.0000 0.0000
@@ -943,7 +943,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-29.0000 -58.0000 0.0000
@@ -1009,7 +1009,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -1017,7 +1017,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=67.8714 -12.6655 0.0000
@@ -1026,6 +1026,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 			arm_r{
 				coords=60.3674 61.9103 0.0000
@@ -1048,7 +1049,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -1056,7 +1057,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=104.9652 -8.1272 0.0000
@@ -1065,6 +1066,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 			arm_r{
 				coords=60.3674 61.9103 0.0000
@@ -1088,7 +1090,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -1096,7 +1098,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=61.4494 -60.2937 0.0000
@@ -1112,6 +1114,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -1128,7 +1131,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -1136,7 +1139,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=61.4494 -60.2937 0.0000
@@ -1152,6 +1155,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -1426,7 +1430,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -1434,7 +1438,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=39.6638 -49.0810 0.0000
@@ -1464,7 +1468,7 @@ sprites{
 				radius=41.6385
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-19.4900 21.9786 0.0000
@@ -1472,7 +1476,7 @@ sprites{
 				radius=41.6385
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-0.4660 -13.7419 0.0000
@@ -1502,7 +1506,7 @@ sprites{
 				radius=41.6385
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-19.4900 21.9786 0.0000
@@ -1510,7 +1514,7 @@ sprites{
 				radius=41.6385
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-22.2183 -9.8413 0.0000
@@ -1541,7 +1545,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-22.0000 18.0000 0.0000
@@ -1549,7 +1553,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-29.1669 -70.9247 0.0000
@@ -1580,7 +1584,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-18.0000 18.0000 -0.0000
@@ -1588,7 +1592,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-24.8699 -67.7706 0.0000
@@ -1619,7 +1623,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -1627,7 +1631,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-6.7595 -71.2663 0.0000
@@ -1658,7 +1662,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -1666,7 +1670,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-2.2829 -70.7397 0.0000
@@ -1697,7 +1701,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=4.0000 18.0000 0.0000
@@ -1705,7 +1709,7 @@ sprites{
 				radius=42.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=1.1404 -70.4763 0.0000
@@ -1736,7 +1740,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=5.0000 18.0000 0.0000
@@ -1744,7 +1748,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=0.9712 -70.4279 0.0000
@@ -1775,7 +1779,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -1783,7 +1787,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=91.0650 -14.2929 -744.2495
@@ -1792,6 +1796,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 			arm_r{
 				coords=89.5064 71.4881 0.0000
@@ -1815,7 +1820,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -1823,7 +1828,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=115.0379 -21.0731 -745.7511
@@ -1832,6 +1837,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 			arm_r{
 				coords=88.0302 70.1458 0.0000
@@ -1855,7 +1861,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -1863,7 +1869,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=89.5064 -71.4881 0.0000
@@ -1879,6 +1885,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -1895,7 +1902,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -1903,7 +1910,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=88.0302 -70.1458 0.0000
@@ -1919,6 +1926,7 @@ sprites{
 				type=1
 				value=10.0000
 				hazard=stab
+				knockback_type=1
 			}
 		}
 	}
@@ -1936,7 +1944,7 @@ sprites{
 				radius=55.7688
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-19.6708 18.0000 0.0000
@@ -1944,7 +1952,7 @@ sprites{
 				radius=55.7688
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-28.3648 -77.7092 0.0000
@@ -1975,7 +1983,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-5.4939 18.0000 0.0000
@@ -1983,7 +1991,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=70.5688 -56.0406 0.0000
@@ -2014,7 +2022,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-5.4939 18.0000 0.0000
@@ -2022,7 +2030,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=68.1758 -20.8296 0.0000
@@ -2053,7 +2061,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-5.4939 18.0000 0.0000
@@ -2061,7 +2069,7 @@ sprites{
 				radius=56.5769
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=39.4486 -10.6704 0.0000
@@ -2092,7 +2100,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=4.4000 18.0000 0.0000
@@ -2100,7 +2108,7 @@ sprites{
 				radius=45.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=2.0385 -71.3660 0.0000
@@ -2131,7 +2139,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2139,7 +2147,7 @@ sprites{
 				radius=58.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=17.2099 -70.2824 0.0000
@@ -2169,7 +2177,7 @@ sprites{
 				radius=52.5881
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -2178,7 +2186,7 @@ sprites{
 				radius=52.5881
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -2210,7 +2218,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2218,7 +2226,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=18.2650 -75.5263 0.0000
@@ -2249,7 +2257,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2257,7 +2265,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=17.5813 -83.0471 0.0000
@@ -2288,7 +2296,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2296,7 +2304,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=31.2555 -79.2867 0.0000
@@ -2327,7 +2335,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2335,7 +2343,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=54.8435 -78.2612 0.0000
@@ -2366,7 +2374,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2374,7 +2382,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=66.8084 -73.1333 0.0000
@@ -2405,7 +2413,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=2.0000 18.0000 0.0000
@@ -2413,7 +2421,7 @@ sprites{
 				radius=60.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=90.3963 -71.4241 0.0000
@@ -2443,7 +2451,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -2451,7 +2459,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=0.0000 -57.8685 0.0000
@@ -2517,7 +2525,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -2525,7 +2533,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=0.0000 -60.0000 0.0000
@@ -2591,7 +2599,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=0.0000 18.0000 0.0000
@@ -2599,7 +2607,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-6.0000 -57.8685 0.0000
@@ -2665,7 +2673,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -2673,7 +2681,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=19.9040 -49.5596 0.0000
@@ -2703,7 +2711,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -2712,7 +2720,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -2743,7 +2751,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-23.5016 15.9365 0.0000
@@ -2751,7 +2759,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=42.3820 -27.4692 0.0000
@@ -2781,7 +2789,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -2790,7 +2798,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -2821,7 +2829,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-33.0000 0.0000 0.0000
@@ -2829,7 +2837,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=49.7455 -3.0535 0.0000
@@ -2859,7 +2867,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -2868,7 +2876,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -2899,7 +2907,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-23.8892 -8.8667 0.0000
@@ -2907,7 +2915,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=45.0948 26.7879 0.0000
@@ -2937,7 +2945,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -2946,7 +2954,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -2977,7 +2985,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-10.7125 -17.3929 0.0000
@@ -2985,7 +2993,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=24.9422 48.1032 0.0000
@@ -3015,7 +3023,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3024,7 +3032,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3055,7 +3063,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-7.0000 -22.0000 0.0000
@@ -3063,7 +3071,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-3.7365 57.4044 0.0000
@@ -3093,7 +3101,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3102,7 +3110,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3134,7 +3142,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=9.0526 -24.3688 0.0000
@@ -3142,7 +3150,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-32.8028 51.2036 0.0000
@@ -3173,7 +3181,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3182,7 +3190,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3214,7 +3222,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=14.4783 -16.2302 0.0000
@@ -3222,7 +3230,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-51.7928 31.0510 0.0000
@@ -3253,7 +3261,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3262,7 +3270,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3294,7 +3302,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=27.0000 0.0000 0.0000
@@ -3302,7 +3310,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-63.4193 4.3100 0.0000
@@ -3333,7 +3341,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3342,7 +3350,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3374,7 +3382,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=7.5024 12.4485 0.0000
@@ -3382,7 +3390,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-56.8310 -27.4692 0.0000
@@ -3413,7 +3421,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3422,7 +3430,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3454,7 +3462,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=4.4020 15.9365 0.0000
@@ -3462,7 +3470,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-35.9033 -49.1720 0.0000
@@ -3493,7 +3501,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3502,7 +3510,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3533,7 +3541,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3541,7 +3549,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-7.9996 -56.9230 0.0000
@@ -3571,7 +3579,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			body_r{
@@ -3580,7 +3588,7 @@ sprites{
 				radius=45.0000
 				type=1
 				value=1.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=2.0000
 			}
 			arm_l{
@@ -3611,7 +3619,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3619,7 +3627,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=10.9904 -56.5355 0.0000
@@ -3649,7 +3657,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3657,7 +3665,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=0.2859 -57.8685 0.0000
@@ -3688,7 +3696,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=25.0000 -7.0000 0.0000
@@ -3696,7 +3704,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-61.8691 -17.3929 0.0000
@@ -3727,7 +3735,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=25.0000 -7.0000 0.0000
@@ -3735,7 +3743,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-61.4816 -8.4792 0.0000
@@ -3765,7 +3773,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-25.0000 7.0000 0.0000
@@ -3773,7 +3781,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=51.2957 18.2618 0.0000
@@ -3803,7 +3811,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-25.0000 7.0000 0.0000
@@ -3811,7 +3819,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=52.8459 8.5730 0.0000
@@ -3841,7 +3849,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-10.0000 18.0000 0.0000
@@ -3849,7 +3857,7 @@ sprites{
 				radius=40.0000
 				type=0
 				value=2.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-22.0000 -58.0000 0.0000
@@ -3879,7 +3887,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3887,7 +3895,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=6.8006 -57.4802 0.0000
@@ -3917,7 +3925,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3925,7 +3933,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=12.8572 -55.6369 0.0000
@@ -3955,7 +3963,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -3963,7 +3971,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=8.9072 -57.7435 0.0000
@@ -3994,7 +4002,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -4002,7 +4010,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-6.8006 -57.4802 0.0000
@@ -4033,7 +4041,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -4041,7 +4049,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-12.8572 -55.6369 0.0000
@@ -4072,7 +4080,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=3.0000 18.0000 0.0000
@@ -4080,7 +4088,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-8.9072 -57.7435 0.0000
@@ -4110,7 +4118,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4118,7 +4126,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=0.8833 -62.1698 0.0000
@@ -4148,7 +4156,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4156,7 +4164,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=-1.2080 -66.8170 0.0000
@@ -4186,7 +4194,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4194,7 +4202,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=10.1777 -64.7258 0.0000
@@ -4224,7 +4232,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4232,7 +4240,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=30.6253 -64.9581 0.0000
@@ -4262,7 +4270,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4270,7 +4278,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=38.0608 -61.0080 0.0000
@@ -4300,7 +4308,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			body_r{
 				coords=-3.0000 18.0000 0.0000
@@ -4308,7 +4316,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			arm_l{
 				coords=56.8820 -57.2903 0.0000

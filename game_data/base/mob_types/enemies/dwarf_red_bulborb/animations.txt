@@ -2,7 +2,7 @@ name=Dwarf Red Bulborb animations
 description=Animations for the Dwarf Red Bulborb.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		hit_rate=75
@@ -328,6 +328,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=31.0000 -2.0000 0.0000
@@ -351,6 +352,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=33.0000 -4.0000 0.0000
@@ -374,6 +376,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=33.0000 -4.0000 0.0000
@@ -397,6 +400,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=32.0000 0.0000 -16.0000
@@ -404,6 +408,7 @@ sprites{
 				radius=16.0000
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -420,6 +425,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=24.0000 3.0000 0.0000
@@ -442,6 +448,7 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=16.0000 0.0000 0.0000
@@ -465,6 +472,7 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=12.0000 0.0000 0.0000
@@ -488,6 +496,7 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=11.0000 0.0000 0.0000
@@ -511,6 +520,7 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=8.0000 0.0000 0.0000
@@ -740,6 +750,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 0.0000 0.0000
@@ -763,6 +774,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=26.0000 4.0000 0.0000
@@ -786,6 +798,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 0.0000 0.0000
@@ -809,6 +822,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=26.0000 -4.0000 0.0000
@@ -832,6 +846,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 0.0000 0.0000
@@ -855,6 +870,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=14.0000 17.0000 0.0000
@@ -878,6 +894,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=23.0000 10.0000 0.0000
@@ -901,6 +918,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=14.0000 -17.0000 0.0000
@@ -924,6 +942,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=23.0000 -10.0000 0.0000
@@ -947,6 +966,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 -1.0000 0.0000
@@ -970,6 +990,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 -2.0000 0.0000
@@ -993,6 +1014,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 1.0000 0.0000
@@ -1016,6 +1038,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 2.0000 0.0000
@@ -1039,6 +1062,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 1.0000 0.0000
@@ -1062,7 +1086,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 				wither_chance=5
 			}
@@ -1088,6 +1112,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 1.0000 0.0000
@@ -1111,6 +1136,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 1.0000 0.0000
@@ -1134,6 +1160,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 1.0000 0.0000
@@ -1157,6 +1184,7 @@ sprites{
 				radius=22.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			mouth{
 				coords=30.0000 -1.0000 0.0000

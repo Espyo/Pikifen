@@ -2,7 +2,7 @@ name=Whiptongue Bulborb animations
 description=Animations for the Whiptongue Bulborb.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		hit_rate=40
@@ -277,7 +277,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 -2.0000 0.0000
@@ -285,7 +285,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 -3.0000 0.0000
@@ -315,7 +315,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 -9.0000 0.0000
@@ -323,7 +323,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=104.0000 -9.0000 0.0000
@@ -353,7 +353,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=78.0000 2.0000 0.0000
@@ -361,7 +361,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=93.0000 4.0000 -40.0000
@@ -369,6 +369,7 @@ sprites{
 				radius=37.0000
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=131.0000 -4.0000 -40.0000
@@ -376,6 +377,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -391,7 +393,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=80.2200 4.5900 0.0000
@@ -399,7 +401,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=90.0000 4.0000 -40.0000
@@ -407,6 +409,7 @@ sprites{
 				radius=33.0000
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=155.0000 4.0000 -40.0000
@@ -414,6 +417,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -429,7 +433,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=81.6300 9.1700 0.0000
@@ -437,7 +441,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=153.8500 31.3700 -40.0000
@@ -445,6 +449,7 @@ sprites{
 				radius=30.2900
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=212.1000 22.1000 -40.0000
@@ -452,6 +457,7 @@ sprites{
 				radius=32.4700
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -467,7 +473,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=79.5100 7.4100 0.0000
@@ -475,7 +481,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=147.1100 28.5700 -40.0000
@@ -483,6 +489,7 @@ sprites{
 				radius=25.1900
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=183.2600 62.8900 -40.0000
@@ -490,6 +497,7 @@ sprites{
 				radius=27.3600
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -505,7 +513,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=84.0000 14.0000 0.0000
@@ -513,7 +521,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=143.7000 9.0800 -40.0000
@@ -521,6 +529,7 @@ sprites{
 				radius=20.0800
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=151.4300 30.4400 -40.0000
@@ -528,6 +537,7 @@ sprites{
 				radius=22.2700
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -543,7 +553,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=78.1000 -6.6900 0.0000
@@ -551,7 +561,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=119.0600 -27.4400 -40.0000
@@ -559,6 +569,7 @@ sprites{
 				radius=10.4500
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 			tongue2{
 				coords=126.2000 -17.1100 -40.0000
@@ -566,6 +577,7 @@ sprites{
 				radius=11.5600
 				type=1
 				value=15.0000
+				knockback_type=1
 			}
 		}
 	}
@@ -581,7 +593,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=80.2200 -0.7000 0.0000
@@ -589,7 +601,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=116.6900 -6.0000 0.0000
@@ -619,7 +631,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -627,7 +639,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=114.0000 0.0000 0.0000
@@ -657,7 +669,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=67.4500 0.0000 0.0000
@@ -665,7 +677,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 0.0000 0.0000
@@ -695,7 +707,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=64.9100 0.0800 0.0000
@@ -703,7 +715,7 @@ sprites{
 				radius=29.4600
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=104.0000 0.0000 0.0000
@@ -949,7 +961,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 0.0000 0.0000
@@ -957,7 +969,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 0.0000 0.0000
@@ -987,7 +999,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 2.0000 0.0000
@@ -995,7 +1007,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 2.0000 0.0000
@@ -1025,6 +1037,7 @@ sprites{
 				radius=60.5700
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1035,6 +1048,7 @@ sprites{
 				radius=36.0000
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1067,6 +1081,7 @@ sprites{
 				radius=60.5700
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1077,6 +1092,7 @@ sprites{
 				radius=36.0000
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1110,7 +1126,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 2.0000 0.0000
@@ -1118,7 +1134,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 2.0000 0.0000
@@ -1149,7 +1165,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 18.0000 0.0000
@@ -1157,7 +1173,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 -13.0000 0.0000
@@ -1187,7 +1203,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1195,7 +1211,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 0.0000 0.0000
@@ -1225,7 +1241,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1233,7 +1249,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=108.0000 -7.0000 0.0000
@@ -1263,7 +1279,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 -6.0000 0.0000
@@ -1271,7 +1287,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=102.0000 -16.0000 0.0000
@@ -1302,7 +1318,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 0.0000 0.0000
@@ -1310,7 +1326,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=108.0000 7.0000 0.0000
@@ -1341,7 +1357,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=70.0000 6.0000 0.0000
@@ -1349,7 +1365,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=102.0000 16.0000 0.0000
@@ -1379,7 +1395,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 1.0000 0.0000
@@ -1387,7 +1403,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 3.0000 0.0000
@@ -1417,7 +1433,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 9.0000 0.0000
@@ -1425,7 +1441,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 10.0000 0.0000
@@ -1456,7 +1472,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 -1.0000 0.0000
@@ -1464,7 +1480,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 -3.0000 0.0000
@@ -1495,7 +1511,7 @@ sprites{
 				radius=56.0000
 				type=0
 				value=0.8000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			head{
 				coords=75.0000 -9.0000 0.0000
@@ -1503,7 +1519,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			tongue1{
 				coords=110.0000 -10.0000 0.0000

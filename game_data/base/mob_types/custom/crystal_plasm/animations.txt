@@ -2,7 +2,7 @@ name=Crystal Plasm animations
 description=Animations for the Plasm Wraith's Crystal Plasm.
 maker=Helodity
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -105,6 +105,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -120,7 +121,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -136,6 +137,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -166,6 +168,7 @@ sprites{
 				radius=18.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -196,6 +199,7 @@ sprites{
 				radius=36.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -219,6 +223,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			crystal{
 				coords=0.0000 0.0000 0.0000
@@ -226,6 +231,7 @@ sprites{
 				radius=54.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -249,6 +255,7 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			crystal{
 				coords=0.0000 0.0000 0.0000
@@ -256,6 +263,7 @@ sprites{
 				radius=70.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -285,6 +293,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -314,6 +323,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -343,6 +353,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -371,6 +382,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -386,7 +398,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -402,6 +414,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -417,7 +430,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -433,6 +446,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -448,7 +462,7 @@ sprites{
 				type=1
 				value=1.0000
 				hazard=crush
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			hold{
@@ -464,6 +478,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

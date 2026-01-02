@@ -2,7 +2,7 @@ name=Electric gate animations
 description=Animations for the electric gate.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -198,6 +198,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -207,7 +208,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -216,6 +217,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -225,7 +227,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -234,6 +236,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -243,7 +246,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -252,6 +255,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -261,7 +265,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -270,6 +274,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -279,7 +284,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -295,6 +300,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -304,7 +310,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -313,6 +319,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -322,7 +329,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -331,6 +338,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -340,7 +348,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -349,6 +357,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -358,7 +367,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -367,6 +376,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -376,7 +386,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -392,6 +402,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -401,7 +412,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -410,6 +421,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -419,7 +431,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -428,6 +440,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -437,7 +450,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -446,6 +459,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -455,7 +469,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -464,6 +478,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -473,7 +488,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -490,6 +505,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -499,7 +515,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -508,6 +524,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -517,7 +534,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -526,6 +543,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -535,7 +553,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -544,6 +562,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -553,7 +572,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -562,6 +581,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -571,7 +591,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -588,6 +608,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -597,7 +618,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -606,6 +627,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -615,7 +637,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -624,6 +646,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -633,7 +656,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -642,6 +665,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -651,7 +675,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -660,6 +684,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -669,7 +694,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -685,6 +710,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -694,7 +720,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -703,6 +729,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -712,7 +739,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -721,6 +748,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -730,7 +758,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -739,6 +767,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -748,7 +777,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -757,6 +786,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -766,7 +796,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -782,6 +812,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -791,7 +822,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -800,6 +831,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -809,7 +841,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -818,6 +850,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -827,7 +860,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -836,6 +869,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -845,7 +879,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -854,6 +888,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -863,7 +898,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -879,6 +914,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -888,7 +924,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -897,6 +933,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -906,7 +943,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -915,6 +952,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -924,7 +962,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -933,6 +971,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -942,7 +981,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -951,6 +990,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -960,7 +1000,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -977,6 +1017,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -986,7 +1027,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -995,6 +1036,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1004,7 +1046,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1013,6 +1055,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1022,7 +1065,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1031,6 +1074,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1040,7 +1084,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1049,6 +1093,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1058,7 +1103,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1075,6 +1120,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1084,7 +1130,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1093,6 +1139,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1102,7 +1149,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1111,6 +1158,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1120,7 +1168,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1129,6 +1177,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1138,7 +1187,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1147,6 +1196,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1156,7 +1206,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1172,6 +1222,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1181,7 +1232,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1190,6 +1241,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1199,7 +1251,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1208,6 +1260,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1217,7 +1270,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1226,6 +1279,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1235,7 +1289,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1244,6 +1298,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1253,7 +1308,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1269,6 +1324,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1278,7 +1334,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1287,6 +1343,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1296,7 +1353,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1305,6 +1362,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1314,7 +1372,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1323,6 +1381,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1332,7 +1391,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1341,6 +1400,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1350,7 +1410,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1366,6 +1426,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1375,7 +1436,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1384,6 +1445,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1393,7 +1455,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1402,6 +1464,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1411,7 +1474,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1420,6 +1483,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1429,7 +1493,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1438,6 +1502,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1447,7 +1512,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1464,6 +1529,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1473,7 +1539,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1482,6 +1548,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1491,7 +1558,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1500,6 +1567,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1509,7 +1577,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1518,6 +1586,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1527,7 +1596,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1536,6 +1605,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1545,7 +1615,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -1562,6 +1632,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			center_zap{
@@ -1571,7 +1642,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_left{
@@ -1580,6 +1651,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_left_zap{
@@ -1589,7 +1661,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			near_right{
@@ -1598,6 +1670,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			near_right_zap{
@@ -1607,7 +1680,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_left{
@@ -1616,6 +1689,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_left_zap{
@@ -1625,7 +1699,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			far_right{
@@ -1634,6 +1708,7 @@ sprites{
 				radius=28.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=electricity_stunning
 			}
 			far_right_zap{
@@ -1643,7 +1718,7 @@ sprites{
 				type=1
 				value=2.0000
 				hazard=electricity_stunning
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}

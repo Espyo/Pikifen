@@ -2,7 +2,7 @@ name=Spicy Burgeoning Spiderwort animations
 description=Animations for the spicy Burgeoning Spiderwort.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	idling_0{
 		frames{
@@ -138,6 +138,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -154,6 +155,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -170,6 +172,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -185,6 +188,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -201,6 +205,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -217,6 +222,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -232,6 +238,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -248,6 +255,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -264,6 +272,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -279,6 +288,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -295,6 +305,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -311,6 +322,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -326,6 +338,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -342,6 +355,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -358,6 +372,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -373,6 +388,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -389,6 +405,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -405,6 +422,7 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}

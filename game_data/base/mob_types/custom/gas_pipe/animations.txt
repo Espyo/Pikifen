@@ -2,7 +2,7 @@ name=Gas pipe animations
 description=Animations for the gas pipe.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -36,6 +36,7 @@ sprites{
 				radius=48.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -58,6 +59,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=poison
 			}
 			gas{
@@ -67,6 +69,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=poison
+				knockback_type=1
 			}
 		}
 	}
@@ -82,6 +85,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
+				surface_type=0
 				hazard=poison
 			}
 			gas{
@@ -91,6 +95,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=poison
+				knockback_type=1
 			}
 		}
 	}

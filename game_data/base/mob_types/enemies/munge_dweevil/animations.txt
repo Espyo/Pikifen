@@ -2,7 +2,7 @@ name=Munge Dweevil animations
 description=Animations for the Munge Dweevil.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		frames{
@@ -276,6 +276,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=poison
+				knockback_type=1
 			}
 			treasure{
 				coords=0.0000 0.0000 48.0000
@@ -306,6 +307,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=poison
+				knockback_type=1
 			}
 			treasure{
 				coords=0.0000 0.0000 48.0000
@@ -327,7 +329,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -357,7 +359,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -590,7 +592,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -619,7 +621,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -632,7 +634,7 @@ sprites{
 				coords=-2.0000 2.0000 48.0000
 				height=8.0000
 				radius=8.0000
-				type=0
+				type=2
 				value=1.0000
 			}
 		}
@@ -648,7 +650,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -678,7 +680,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -708,7 +710,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -738,7 +740,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -768,7 +770,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -798,7 +800,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -828,7 +830,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -946,7 +948,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -976,7 +978,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -1012,7 +1014,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=2.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			treasure{

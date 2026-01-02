@@ -2,7 +2,7 @@ name=Ceramic pile (red) animations
 description=Animations for the red ceramic pile.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	idling_empty{
 		frames{
@@ -45,8 +45,6 @@ sprites{
 				radius=80.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -61,8 +59,7 @@ sprites{
 				radius=80.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -77,8 +74,7 @@ sprites{
 				radius=80.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -93,8 +89,7 @@ sprites{
 				radius=80.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				surface_type=0
 			}
 		}
 	}

@@ -2,7 +2,7 @@ name=Crystal nodule animations
 description=Animations for the crystal nodule.
 maker=Espyo
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -67,6 +67,7 @@ sprites{
 				radius=20.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -82,6 +83,7 @@ sprites{
 				type=1
 				value=25.0000
 				hazard=crush
+				knockback_type=1
 			}
 		}
 	}

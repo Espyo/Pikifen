@@ -2,7 +2,7 @@ name=Fire Plasm animations
 description=Animations for the Plasm Wraith's Fire Plasm.
 maker=Helodity
 version=1.0.0
-engine_version=1.1.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -74,6 +74,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=31.1294 34.4013 0.0000
@@ -82,6 +83,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 20.0000
@@ -106,6 +108,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=6.3355 7.2755 0.0000
@@ -114,6 +117,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 20.0000
@@ -138,6 +142,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=12.3710 14.3414 0.0000
@@ -146,6 +151,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 20.0000
@@ -170,6 +176,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=17.2381 20.8167 0.0000
@@ -178,6 +185,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 20.0000
@@ -202,6 +210,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=21.7896 27.1848 0.0000
@@ -210,6 +219,7 @@ sprites{
 				type=1
 				value=0.0000
 				hazard=fire
+				knockback_type=1
 			}
 			hold{
 				coords=0.0000 0.0000 20.0000

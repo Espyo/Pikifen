@@ -2,7 +2,7 @@ name=Electrical wire animations
 description=Animations for the electrical wire's main part.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
@@ -95,6 +95,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
@@ -145,6 +146,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
@@ -153,7 +155,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap2{
@@ -163,7 +165,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap3{
@@ -173,7 +175,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap4{
@@ -183,7 +185,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap5{
@@ -193,7 +195,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -210,6 +212,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
@@ -218,7 +221,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap2{
@@ -228,7 +231,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap3{
@@ -238,7 +241,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap4{
@@ -248,7 +251,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap5{
@@ -258,7 +261,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}
@@ -275,6 +278,7 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
@@ -283,7 +287,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap2{
@@ -293,7 +297,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap3{
@@ -303,7 +307,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap4{
@@ -313,7 +317,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 			zap5{
@@ -323,7 +327,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=electricity_fatal
-				knockback_outward=true
+				knockback_type=2
 				knockback=1.0000
 			}
 		}

@@ -2,7 +2,7 @@ name=Fiery Blowhog animations
 description=Animations for the Fiery Blowhog.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	attacking{
 		frames{
@@ -216,7 +216,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=88.0000 0.0000 -32.0000
@@ -225,6 +225,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=112.0000 0.0000 -32.0000
@@ -233,6 +234,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire3{
 				coords=142.0000 0.0000 -32.0000
@@ -241,6 +243,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 		}
 	}
@@ -256,7 +259,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -265,6 +268,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -273,6 +277,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -281,6 +286,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 		}
 	}
@@ -296,7 +302,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -305,6 +311,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -313,6 +320,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -321,6 +329,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 		}
 	}
@@ -336,7 +345,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -345,6 +354,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -353,6 +363,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -361,6 +372,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 		}
 	}
@@ -376,7 +388,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=100.0000 0.0000 -32.0000
@@ -393,6 +405,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -401,6 +414,7 @@ sprites{
 				type=1
 				value=20.0000
 				hazard=fire
+				knockback_type=1
 			}
 		}
 	}
@@ -416,7 +430,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -453,7 +467,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=52.5600 0.0000 0.0000
@@ -490,7 +504,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=6.8700 0.8300 0.0000
@@ -527,6 +541,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -565,6 +580,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=5.0000
+				knockback_type=3
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -603,7 +619,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -640,7 +656,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -929,7 +945,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -967,7 +983,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 -8.7600 0.0000
@@ -1005,7 +1021,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.1100 -10.9900 0.0000
@@ -1043,7 +1059,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=68.9500 -15.0700 0.0000
@@ -1081,7 +1097,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=68.2500 -14.7200 0.0000
@@ -1118,7 +1134,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 8.0000 0.0000
@@ -1155,7 +1171,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=68.9500 10.8700 0.0000
@@ -1192,7 +1208,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=69.3200 12.4700 0.0000
@@ -1229,7 +1245,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=67.9000 16.4700 0.0000
@@ -1266,7 +1282,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=72.1000 -3.1500 0.0000
@@ -1303,7 +1319,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=72.1000 2.4600 0.0000
@@ -1341,7 +1357,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000
@@ -1379,7 +1395,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			fire1{
 				coords=70.0000 0.0000 0.0000

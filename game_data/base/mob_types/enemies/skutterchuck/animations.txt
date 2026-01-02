@@ -2,7 +2,7 @@ name=Skutterchuck animations
 description=Animations for the Skutterchuck.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	dying{
 		loop_frame=17
@@ -502,6 +502,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=0.0000 0.0000 33.0000
@@ -524,6 +525,7 @@ sprites{
 				radius=30.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=-30.0000 0.0000 33.0000
@@ -546,6 +548,7 @@ sprites{
 				radius=30.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=-30.0000 0.0000 33.0000
@@ -568,6 +571,7 @@ sprites{
 				radius=32.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=0.0000 0.0000 33.0000
@@ -590,6 +594,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=7.0000 0.0000 33.0000
@@ -612,6 +617,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=9.0000 0.0000 33.0000
@@ -634,6 +640,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=10.0000 0.0000 33.0000
@@ -656,6 +663,7 @@ sprites{
 				radius=30.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=68.0000 0.0000 33.0000
@@ -678,6 +686,7 @@ sprites{
 				radius=30.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=45.0000 0.0000 33.0000
@@ -700,6 +709,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=8.0000 0.0000 33.0000
@@ -722,6 +732,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=9.0000 0.0000 33.0000
@@ -745,6 +756,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=7.0000 0.0000 33.0000
@@ -768,6 +780,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=7.0000 0.0000 33.0000
@@ -790,6 +803,7 @@ sprites{
 				radius=35.0000
 				type=1
 				value=2.0000
+				knockback_type=3
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30
@@ -815,6 +829,7 @@ sprites{
 				radius=38.0000
 				type=1
 				value=2.0000
+				knockback_type=3
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30
@@ -841,6 +856,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=-30.0000 0.0000 33.0000
@@ -864,6 +880,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=-30.0000 0.0000 33.0000
@@ -886,6 +903,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=8.0000 1.0000 33.0000
@@ -908,6 +926,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=8.0000 2.0000 33.0000
@@ -931,6 +950,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=8.0000 -1.0000 33.0000
@@ -954,6 +974,7 @@ sprites{
 				radius=35.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 			nodule{
 				coords=8.0000 -2.0000 33.0000

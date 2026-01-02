@@ -2,7 +2,7 @@ name=Armored Cannon Beetle animations
 description=Animations for the Armored Cannon Beetle.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	bored{
 		frames{
@@ -386,6 +386,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -423,6 +424,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -438,7 +440,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -448,7 +450,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -465,7 +467,7 @@ sprites{
 				radius=140.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -483,7 +485,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -493,7 +495,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -510,7 +512,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -528,7 +530,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -538,7 +540,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -555,7 +557,7 @@ sprites{
 				radius=140.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -573,7 +575,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -583,7 +585,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -600,7 +602,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=0.0000
-				knockback_outward=true
+				knockback_type=2
 				knockback_angle=3.1400
 				knockback=1.0000
 			}
@@ -618,7 +620,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 0.0000 50.0000
@@ -626,7 +628,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -641,6 +643,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -821,6 +824,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -836,7 +840,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 0.0000 50.0000
@@ -844,7 +848,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -859,6 +863,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -874,7 +879,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -884,6 +889,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -898,6 +904,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -934,6 +941,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -963,6 +971,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=0.0000
+				knockback_type=0
 			}
 			shell{
 				coords=-4.0000 0.0000 0.0000
@@ -970,6 +979,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -999,6 +1009,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=0.0000
+				knockback_type=0
 			}
 			shell{
 				coords=-8.0000 0.0000 0.0000
@@ -1006,6 +1017,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1035,6 +1047,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=0.0000
+				knockback_type=0
 			}
 			shell{
 				coords=-4.0000 0.0000 0.0000
@@ -1042,6 +1055,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1071,6 +1085,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=0.0000
+				knockback_type=0
 			}
 			shell{
 				coords=-8.0000 0.0000 0.0000
@@ -1078,6 +1093,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1115,6 +1131,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1151,6 +1168,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1187,6 +1205,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1224,6 +1243,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1239,7 +1259,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 2.0000 50.0000
@@ -1247,7 +1267,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 2.0000 50.0000
@@ -1262,6 +1282,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1277,7 +1298,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 4.0000 50.0000
@@ -1285,7 +1306,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 4.0000 50.0000
@@ -1300,6 +1321,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1316,7 +1338,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 -2.0000 50.0000
@@ -1324,7 +1346,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 -2.0000 50.0000
@@ -1339,6 +1361,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1355,7 +1378,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			hot_flesh{
 				coords=0.0000 -4.0000 50.0000
@@ -1363,7 +1386,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 			}
 			blowhole{
 				coords=116.0000 -4.0000 50.0000
@@ -1378,6 +1401,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1393,7 +1417,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -1403,6 +1427,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 2.0000 50.0000
@@ -1417,6 +1442,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1432,7 +1458,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -1442,6 +1468,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 4.0000 50.0000
@@ -1456,6 +1483,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1472,7 +1500,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -1482,6 +1510,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 -2.0000 50.0000
@@ -1496,6 +1525,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1512,7 +1542,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -1522,6 +1552,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 -4.0000 50.0000
@@ -1536,6 +1567,7 @@ sprites{
 				radius=90.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1572,6 +1604,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1587,7 +1620,7 @@ sprites{
 				radius=100.0000
 				type=0
 				value=1.0000
-				can_pikmin_latch=true
+				surface_type=1
 				hazard=fire
 			}
 			hot_flesh{
@@ -1597,6 +1630,7 @@ sprites{
 				type=1
 				value=5.0000
 				hazard=fire
+				knockback_type=1
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1611,6 +1645,7 @@ sprites{
 				radius=140.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1647,6 +1682,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}
@@ -1683,6 +1719,7 @@ sprites{
 				radius=110.0000
 				type=0
 				value=0.0000
+				surface_type=2
 			}
 		}
 	}

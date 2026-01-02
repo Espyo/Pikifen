@@ -2,7 +2,7 @@ name=Female Sheargrub animations
 description=Animations for the Female Sheargrub.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	burying{
 		frames{
@@ -115,6 +115,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -131,6 +132,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -146,6 +148,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -162,6 +165,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -233,6 +237,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -248,6 +253,7 @@ sprites{
 				radius=9.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -264,6 +270,7 @@ sprites{
 				radius=9.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -279,6 +286,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -295,6 +303,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -309,6 +318,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -324,6 +334,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
@@ -339,6 +350,7 @@ sprites{
 				radius=12.0000
 				type=0
 				value=1.0000
+				surface_type=0
 			}
 		}
 	}
