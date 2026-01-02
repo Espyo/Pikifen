@@ -2653,7 +2653,8 @@ void PikminFsm::decideAttack(Mob* m, void* info1, void* info2) {
         }
         
         if(
-            !closestH || !closestH->canPikminLatch ||
+            !closestH ||
+            closestH->surfaceType != HITBOX_SURFACE_TYPE_LATCHABLE ||
             hZ > pikPtr->z + pikPtr->height ||
             hZ + closestH->height < pikPtr->z ||
             d >= closestH->radius + pikPtr->radius
@@ -3494,12 +3495,18 @@ void PikminFsm::landOnMob(Mob* m, void* info1, void* info2) {
         !hboxPtr ||
         (
             pikPtr->pikType->attackMethod == PIKMIN_ATTACK_LATCH &&
-            !hboxPtr->canPikminLatch
+            hboxPtr->surfaceType != HITBOX_SURFACE_TYPE_LATCHABLE
         )
     ) {
-        //No good. Make it bounce back.
-        m->speed.x *= -0.3;
-        m->speed.y *= -0.3;
+        if(hboxPtr->surfaceType == HITBOX_SURFACE_TYPE_BOUNCY) {
+            //No good. Make it bounce back.
+            m->speed.x *= -1.3f;
+            m->speed.y *= -1.3f;
+        } else {
+            //No good. Make it stop.
+            m->speed.x = 0.0f;
+            m->speed.y = 0.0f;
+        }
         return;
     }
     

@@ -47,6 +47,14 @@
       <li><span class="cl-a">Added</span> the <code>status_buildup_amount</code> <a href="spike_damage.html">spike damage</a> property.</li>
       <li><span class="cl-a">Added</span> a sector-blocking-related word to <a href="mob_type.html">mob type</a> vulnerability data entries.</li>
       <li><span class="cl-a">Added</span> the ability for <a href="status.html">status types</a> to have a sound play when the status is applied.</li>
+      <li><span class="cl-a">Added</span> different types of knockback for <a href="animation.html">animation sprite</a> hitboxes: none, flinch, outward, and directional.</li>
+      <li><span class="cl-a">Added</span> different types of surface for <a href="animation.html">animation sprite</a> hitboxes: smooth, latchable, and bouncy.</li>
+    </ul>
+
+    <h3 id="1.2.0-compatibility">Compatibility changes</h3>
+
+    <ul>
+      <li><span class="cl-d">Deprecated</span> the <code>knockback_outward</code> and <code>can_pikmin_latch</code> hitbox properties in <a href="animation.html">animation sprites</a>. Save an animation database in 1.2.0's editor to automatically rename them to the new properties <code>knockback_type</code> and <code>surface_type</code>.</li>
     </ul>
 
     <h2 id="1.1.1">1.1.1</h2>

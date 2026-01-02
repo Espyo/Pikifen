@@ -871,7 +871,7 @@ void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
         if(!matchPtr) continue;
         if(isHitboxOnSide(matchPtr, horizontal, topLeft)) continue;
         
-        matchPtr->canPikminLatch = hPtr->canPikminLatch;
+        matchPtr->surfaceType = hPtr->surfaceType;
         matchPtr->hazard = hPtr->hazard;
         matchPtr->height = hPtr->height;
         matchPtr->knockbackType = hPtr->knockbackType;

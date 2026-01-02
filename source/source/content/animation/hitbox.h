@@ -54,6 +54,21 @@ enum KNOCKBACK_TYPE {
 };
 
 
+//Types of surfaces a hitbox can have, for thrown Pikmin purposes.
+enum HITBOX_SURFACE_TYPE {
+
+    //Thrown Pikmin just collide with it.
+    HITBOX_SURFACE_TYPE_SMOOTH,
+    
+    //Thrown Pikmin can latch onto it.
+    HITBOX_SURFACE_TYPE_LATCHABLE,
+    
+    //Thrown Pikmin bounce off of it.
+    HITBOX_SURFACE_TYPE_BOUNCY,
+    
+};
+
+
 struct Hazard;
 
 
@@ -129,9 +144,8 @@ public:
     //Chance of this attack withering a Pikmin's maturity [0 - 100].
     unsigned char witherChance = 0.0f;
     
-    //Can the Pikmin latch on to this hitbox to continue inflicting damage?
-    //Example of a non-latchable hitbox: Goolix' larger core.
-    bool canPikminLatch = false;
+    //Surface type for normal hitboxes.
+    HITBOX_SURFACE_TYPE surfaceType = HITBOX_SURFACE_TYPE_SMOOTH;
     
     
     //--- Function declarations ---

@@ -467,6 +467,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             string hazardStr;
             DataNode* hazardNode = nullptr;
             int knockbackTypeInt = KNOCKBACK_TYPE_DIRECTIONAL;
+            int surfaceTypeInt = HITBOX_SURFACE_TYPE_BOUNCY;
             
             //DEPRECATED in 1.2.0 by "knockback_type".
             bool knockbackOutward = false;
@@ -480,13 +481,25 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
                     (int) KNOCKBACK_TYPE_OUTWARD :
                     (int) KNOCKBACK_TYPE_DIRECTIONAL;
             }
+            //DEPRECATED in 1.2.0 by "surface_type".
+            bool canPikminLatch = false;
+            DataNode* canPikminLatchNode = nullptr;
+            hRS.set(
+                "can_pikmin_latch", canPikminLatch, &canPikminLatchNode
+            );
+            if(canPikminLatchNode) {
+                surfaceTypeInt =
+                    canPikminLatch ?
+                    (int) HITBOX_SURFACE_TYPE_LATCHABLE :
+                    (int) HITBOX_SURFACE_TYPE_BOUNCY;
+            }
             
             hRS.set("coords", coordsStr);
             hRS.set("height", newHitbox.height);
             hRS.set("radius", newHitbox.radius);
             hRS.set("type", hitboxTypeInt);
             hRS.set("value", newHitbox.value);
-            hRS.set("can_pikmin_latch", newHitbox.canPikminLatch);
+            hRS.set("surface_type", surfaceTypeInt);
             hRS.set("knockback_type", knockbackTypeInt);
             hRS.set("knockback_angle", newHitbox.knockbackAngle);
             hRS.set("knockback", newHitbox.knockbackStrength);
@@ -497,6 +510,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             newHitbox.pos = s2p(coordsStr, &newHitbox.z);
             newHitbox.type = (HITBOX_TYPE) hitboxTypeInt;
             newHitbox.knockbackType = (KNOCKBACK_TYPE) knockbackTypeInt;
+            newHitbox.surfaceType = (HITBOX_SURFACE_TYPE) surfaceTypeInt;
             if(!hazardStr.empty()) {
                 auto hazardIt = game.content.hazards.list.find(hazardStr);
                 if(hazardIt != game.content.hazards.list.end()) {
@@ -669,11 +683,8 @@ void AnimationDatabase::saveToDataNode(
                 hGW.write("radius", hitboxPtr->radius);
                 hGW.write("type", hitboxPtr->type);
                 hGW.write("value", hitboxPtr->value);
-                if(
-                    hitboxPtr->type == HITBOX_TYPE_NORMAL &&
-                    hitboxPtr->canPikminLatch
-                ) {
-                    hGW.write("can_pikmin_latch", hitboxPtr->canPikminLatch);
+                if(hitboxPtr->type == HITBOX_TYPE_NORMAL) {
+                    hGW.write("surface_type", (int) hitboxPtr->surfaceType);
                 }
                 if(hitboxPtr->hazard) {
                     hGW.write(

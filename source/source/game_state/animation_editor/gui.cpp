@@ -2749,16 +2749,26 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            //Pikmin latch checkbox.
+            //Surface type combobox.
+            vector<string> surfaceTypesList {
+                "Smooth",
+                "Latchable",
+                "Bouncy",
+            };
+            int surfaceType = curHitbox->surfaceType;
             if(
-                ImGui::Checkbox(
-                    "Pikmin can latch", &curHitbox->canPikminLatch
+                ImGui::Combo(
+                    "Surface type", &surfaceType, surfaceTypesList, 15
                 )
             ) {
                 changesMgr.markAsChanged();
+                curHitbox->surfaceType = (HITBOX_SURFACE_TYPE) surfaceType;
             }
             setTooltip(
-                "Can the Pikmin latch on to this hitbox?"
+                "What type of surface it uses, for the purposes of thrown\n"
+                "Pikmin. Smooth means the Pikmin just collides with it.\n"
+                "Latchable means the Pikmin can latch on to it.\n"
+                "Bouncy means the Pikmin bounces off."
             );
             
             //Hazard.
