@@ -824,27 +824,45 @@ bool Mob::calculateAttackDamage(
  * @param victimH The hitbox of the victim mob, if any.
  * @param offenseMultiplier Pre-calculated attack offense multiplier.
  * @param defenseMultiplier Pre-calculated victim defense multiplier.
- * @param outKbStrength The variable to return the knockback amount to.
- * @param outKbAngle The variable to return the angle of the knockback to.
+ * @param outKbExists Whether knockback exists at all is returned here.
+ * @param outKbStrength The knockback amount is returned here.
+ * @param outKbAngle The knockback angle is returned here.
  */
 void Mob::calculateAttackKnockback(
     const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
     float offenseMultiplier, float defenseMultiplier,
-    float* outKbStrength, float* outKbAngle
+    bool* outKbExists, float* outKbStrength, float* outKbAngle
 ) const {
     if(attackH) {
-        *outKbStrength = attackH->knockback;
-        *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
-        if(attackH->knockbackOutward) {
-            *outKbAngle =
-                getAngle(attackH->getCurPos(pos, angle), victim->pos);
-        } else {
-            *outKbAngle =
-                angle + attackH->knockbackAngle;
+        switch(attackH->knockbackType) {
+        case KNOCKBACK_TYPE_NONE: {
+            *outKbExists = false;
+            *outKbStrength = 0.0f;
+            *outKbAngle = 0.0f;
+            break;
+        } case KNOCKBACK_TYPE_FLINCH: {
+            *outKbExists = true;
+            *outKbStrength = 0.0f;
+            *outKbAngle = 0.0f;
+            break;
+        } case KNOCKBACK_TYPE_OUTWARD: {
+            *outKbExists = true;
+            *outKbStrength = attackH->knockbackStrength;
+            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbAngle = getAngle(attackH->getCurPos(pos, angle), victim->pos);
+            break;
+        } case KNOCKBACK_TYPE_DIRECTIONAL: {
+            *outKbExists = true;
+            *outKbStrength = attackH->knockbackStrength;
+            *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
+            *outKbAngle = angle + attackH->knockbackAngle;
+            break;
+        }
         }
     } else {
-        *outKbStrength = 0;
-        *outKbAngle = 0;
+        *outKbExists = false;
+        *outKbStrength = 0.0f;
+        *outKbAngle = 0.0f;
     }
 }
 
@@ -1570,11 +1588,11 @@ void Mob::deleteOldStatusEffects() {
  * @param attackH Hitbox that caused the attack.
  * @param victimH Hitbox that suffered the attack.
  * @param damage Total damage caused.
- * @param knockback Total knockback strength.
+ * @param knockbackStrength Total knockback strength.
  */
 void Mob::doAttackEffects(
     const Mob* attacker, const Hitbox* attackH, const Hitbox* victimH,
-    float damage, float knockback
+    float damage, float knockbackStrength
 ) {
     if(attackH->value == 0.0f) {
         //Attack hitboxes that cause 0 damage don't need to smack or ding.
@@ -1610,7 +1628,7 @@ void Mob::doAttackEffects(
             attacker->z + attacker->getDrawingHeight() + 1.0f
         );
         
-    bool useless = (damage <= 0 && knockback == 0.0f);
+    bool useless = (damage <= 0 && knockbackStrength == 0.0f);
     
     //Create the particle.
     string particleInternalName =

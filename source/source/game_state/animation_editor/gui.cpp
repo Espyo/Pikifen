@@ -2779,20 +2779,31 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            //Outward knockback checkbox.
+            //Knockback type combobox.
+            vector<string> knockbackTypesList {
+                "None",
+                "Flinch",
+                "Outward",
+                "Directional",
+            };
+            int knockbackType = curHitbox->knockbackType;
             if(
-                ImGui::Checkbox(
-                    "Outward knockback", &curHitbox->knockbackOutward
+                ImGui::Combo(
+                    "Knockback type", &knockbackType, knockbackTypesList, 15
                 )
             ) {
                 changesMgr.markAsChanged();
+                curHitbox->knockbackType = (KNOCKBACK_TYPE) knockbackType;
             }
             setTooltip(
-                "If true, opponents are knocked away from the hitbox's center."
+                "What type of knockback it causes. None means no knockback\n"
+                "at all. Flinch doesn't move the mob, but makes them\n"
+                "flinch in place. Outwards knocks away from the hitbox's\n"
+                "center. Directional knocks away in a specific direction."
             );
             
             //Knockback angle value.
-            if(!curHitbox->knockbackOutward) {
+            if(curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL) {
                 curHitbox->knockbackAngle =
                     normalizeAngle(curHitbox->knockbackAngle);
                 ImGui::SetNextItemWidth(128.0f);
@@ -2811,18 +2822,24 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             }
             
             //Knockback strength value.
-            ImGui::SetNextItemWidth(128.0f);
             if(
-                ImGui::DragFloat(
-                    "Knockback value", &curHitbox->knockback, 0.01
-                )
+                curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD ||
+                curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL
             ) {
-                changesMgr.markAsChanged();
+                ImGui::SetNextItemWidth(128.0f);
+                if(
+                    ImGui::DragFloat(
+                        "Knockback strength",
+                        &curHitbox->knockbackStrength, 0.01
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+                setTooltip(
+                    "How strong the knockback is. 3 is a good value.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
             }
-            setTooltip(
-                "How strong the knockback is. 3 is a good value.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
             
             //Wither chance value.
             int witherChanceInt = curHitbox->witherChance;

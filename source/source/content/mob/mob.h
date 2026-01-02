@@ -398,7 +398,7 @@ public:
     void calculateAttackKnockback(
         const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
         float offenseMultiplier, float defenseMultiplier,
-        float* outKbStrength, float* outKbAngle
+        bool* outKbExists, float* outKbStrength, float* outKbAngle
     ) const;
     void causeSpikeDamage(Mob* victim, bool isIngestion);
     void chomp(Mob* m, const Hitbox* hitboxInfo);

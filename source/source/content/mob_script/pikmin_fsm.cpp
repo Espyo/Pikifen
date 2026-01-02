@@ -135,7 +135,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -198,7 +198,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -249,7 +249,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -322,7 +322,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -369,7 +369,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::notifyLeaderRelease);
@@ -448,8 +448,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(PikminFsm::unlatch);
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -503,7 +502,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -575,7 +574,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -615,7 +614,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -654,7 +653,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -696,7 +695,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -744,8 +743,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(PikminFsm::forgetCarriableObject);
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::forgetCarriableObject);
@@ -787,8 +785,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(PikminFsm::forgetTool);
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::forgetTool);
@@ -834,8 +831,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(PikminFsm::forgetGroupTask);
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::forgetGroupTask);
@@ -875,7 +871,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -915,7 +911,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(PikminFsm::touchedHazard);
@@ -955,7 +951,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1016,7 +1012,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(PikminFsm::checkOutgoingAttack);
@@ -1055,7 +1051,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1094,7 +1090,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(PikminFsm::checkOutgoingAttack);
@@ -1134,7 +1130,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(PikminFsm::checkOutgoingAttack);
@@ -1175,7 +1171,6 @@ void PikminFsm::createFsm(MobType* typ) {
     
     efc.newState("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(PikminFsm::beAttacked);
             efc.run(PikminFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1214,7 +1209,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1250,7 +1245,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1426,7 +1421,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1463,7 +1458,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(PikminFsm::touchedHazard);
@@ -1514,7 +1509,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1566,7 +1561,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1625,7 +1620,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1684,7 +1679,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1723,7 +1718,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::notifyLeaderRelease);
@@ -1817,7 +1812,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1861,7 +1856,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);
@@ -1895,7 +1890,7 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::checkIncomingAttack);
         }
         efc.newEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.changeState("knocked_back");
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
@@ -1984,6 +1979,7 @@ void PikminFsm::createFsm(MobType* typ) {
 void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
     HitboxInteraction* info = (HitboxInteraction*) info1;
     Pikmin* pikPtr = (Pikmin*) m;
+    bool knockbackExists = false;
     
     if(info) {
         //Damage.
@@ -2015,14 +2011,16 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
         }
         
         //Knockback.
-        float knockback = 0;
-        float knockbackAngle = 0;
+        float knockbackStrength = 0.0f;
+        float knockbackAngle = 0.0f;
         info->mob2->calculateAttackKnockback(
             m, info->h2, info->h1,
             offenseMultiplier, defenseMultiplier,
-            &knockback, &knockbackAngle
+            &knockbackExists, &knockbackStrength, &knockbackAngle
         );
-        m->applyKnockback(knockback, knockbackAngle);
+        if(knockbackExists) {
+            m->applyKnockback(knockbackStrength, knockbackAngle);
+        }
         
         //Withering.
         if(info->h2->witherChance > 0 && pikPtr->maturity > 0) {
@@ -2033,7 +2031,9 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
         }
         
         //Effects.
-        m->doAttackEffects(info->mob2, info->h2, info->h1, damage, knockback);
+        m->doAttackEffects(
+            info->mob2, info->h2, info->h1, damage, knockbackStrength
+        );
         
     } else {
         //This can happen, for example, if the Pikmin got told to get knocked
@@ -2043,11 +2043,18 @@ void PikminFsm::beAttacked(Mob* m, void* info1, void* info2) {
     }
     
     //Finish up.
-    m->leaveGroup();
-    PikminFsm::beReleased(m, info1, info2);
-    PikminFsm::notifyLeaderRelease(m, info1, info2);
-    PikminFsm::releaseTool(m, nullptr, nullptr);
-    m->face(m->angle, nullptr);
+    if(knockbackExists) {
+        PikminFsm::forgetGroupTask(m, info1, info2);
+        PikminFsm::unlatch(m, info1, info2);
+        PikminFsm::forgetCarriableObject(m, info1, info2);
+        PikminFsm::forgetTool(m, info1, info2);
+        m->leaveGroup();
+        PikminFsm::beReleased(m, info1, info2);
+        PikminFsm::notifyLeaderRelease(m, info1, info2);
+        PikminFsm::releaseTool(m, nullptr, nullptr);
+        m->face(m->angle, nullptr);
+        m->fsm.setState(PIKMIN_STATE_KNOCKED_BACK, info1, info2);
+    }
 }
 
 
@@ -3029,6 +3036,7 @@ void PikminFsm::forgetCarriableObject(Mob* m, void* info1, void* info2) {
  */
 void PikminFsm::forgetGroupTask(Mob* m, void* info1, void* info2) {
     if(!m->focusedMob) return;
+    if(m->focusedMob->type->category->id != MOB_CATEGORY_GROUP_TASKS) return;
     
     GroupTask* tasPtr = (GroupTask*) (m->focusedMob);
     Pikmin* pikPtr = (Pikmin*) m;

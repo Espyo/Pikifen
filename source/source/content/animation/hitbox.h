@@ -36,6 +36,24 @@ enum HITBOX_TYPE {
 };
 
 
+//Types of knockback an attack hitbox can cause.
+enum KNOCKBACK_TYPE {
+
+    //No knockback whatsoever.
+    KNOCKBACK_TYPE_NONE,
+    
+    //Makes the mob flinch but not leave their spot.
+    KNOCKBACK_TYPE_FLINCH,
+    
+    //Knocks the mob away from the hitbox center.
+    KNOCKBACK_TYPE_OUTWARD,
+    
+    //Knocks the mob away in a specific direction.
+    KNOCKBACK_TYPE_DIRECTIONAL,
+    
+};
+
+
 struct Hazard;
 
 
@@ -99,14 +117,14 @@ public:
     //If it's an attack one, the attack power.
     float value = 1.0f;
     
-    //If true, the Pikmin is knocked away from the center.
-    bool knockbackOutward = false;
-    
-    //Knockback angle.
-    float knockbackAngle = 0.0f;
+    //Type of knockback.
+    KNOCKBACK_TYPE knockbackType = KNOCKBACK_TYPE_DIRECTIONAL;
     
     //Knockback strength.
-    float knockback = 0.0f;
+    float knockbackStrength = 0.0f;
+    
+    //Knockback angle, if directional.
+    float knockbackAngle = 0.0f;
     
     //Chance of this attack withering a Pikmin's maturity [0 - 100].
     unsigned char witherChance = 0.0f;

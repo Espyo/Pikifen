@@ -1261,15 +1261,14 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Leader* leaPtr = (Leader*) m;
-    
-    if(m->invulnPeriod.timeLeft > 0.0f) return;
-    
     HitboxInteraction* info = (HitboxInteraction*) info1;
     float healthBefore = m->health;
     float offenseMultiplier = 1.0f;
     float defenseMultiplier = 1.0f;
-    float damage = 0;
+    float damage = 0.0f;
     
+    //Initial checks.
+    if(m->invulnPeriod.timeLeft > 0.0f) return;
     if(
         !info->mob2->calculateAttackBasics(
             m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
@@ -1285,36 +1284,46 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
-    
+    //Behavior changes.
     m->stopChasing();
-    
-    float knockback = 0;
-    float knockbackAngle = 0;
-    info->mob2->calculateAttackKnockback(
-        m, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
-        &knockback, &knockbackAngle
-    );
-    m->applyKnockback(knockback, knockbackAngle);
-    
     m->leaveGroup();
     
-    m->doAttackEffects(info->mob2, info->h2, info->h1, damage, knockback);
+    //Damage.
+    m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
     
-    if(knockback > 0) {
-        m->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
-        if(leaPtr->player) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
-        else m->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
-    } else {
-        m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-        if(leaPtr->player) m->fsm.setState(LEADER_STATE_PAIN);
-        else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
+    //Knockback.
+    bool knockbackExists = false;
+    float knockbackStrength = 0.0f;
+    float knockbackAngle = 0.0f;
+    info->mob2->calculateAttackKnockback(
+        m, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
+        &knockbackExists, &knockbackStrength, &knockbackAngle
+    );
+    if(knockbackExists) {
+        m->applyKnockback(knockbackStrength, knockbackAngle);
     }
     
+    //Effects.
+    m->doAttackEffects(
+        info->mob2, info->h2, info->h1, damage, knockbackStrength
+    );
     leaPtr->healthWheelShaker.shake(1.0f);
     game.states.gameplay->lastHurtLeaderPos = m->pos;
     if(healthBefore > 0.0f && m->health < healthBefore) {
         game.statistics.leaderDamageSuffered += healthBefore - m->health;
+    }
+
+    //Next state.
+    if(knockbackExists) {
+        if(knockbackStrength > 0) {
+            m->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
+            if(leaPtr->player) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
+            else m->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+        } else {
+            m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
+            if(leaPtr->player) m->fsm.setState(LEADER_STATE_PAIN);
+            else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
+        }
     }
 }
 

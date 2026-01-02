@@ -466,6 +466,20 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             int hitboxTypeInt = HITBOX_TYPE_NORMAL;
             string hazardStr;
             DataNode* hazardNode = nullptr;
+            int knockbackTypeInt = KNOCKBACK_TYPE_DIRECTIONAL;
+            
+            //DEPRECATED in 1.2.0 by "knockback_type".
+            bool knockbackOutward = false;
+            DataNode* knockbackOutwardNode = nullptr;
+            hRS.set(
+                "knockback_outward", knockbackOutward, &knockbackOutwardNode
+            );
+            if(knockbackOutwardNode) {
+                knockbackTypeInt =
+                    knockbackOutward ?
+                    (int) KNOCKBACK_TYPE_OUTWARD :
+                    (int) KNOCKBACK_TYPE_DIRECTIONAL;
+            }
             
             hRS.set("coords", coordsStr);
             hRS.set("height", newHitbox.height);
@@ -473,15 +487,16 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             hRS.set("type", hitboxTypeInt);
             hRS.set("value", newHitbox.value);
             hRS.set("can_pikmin_latch", newHitbox.canPikminLatch);
-            hRS.set("knockback_outward", newHitbox.knockbackOutward);
+            hRS.set("knockback_type", knockbackTypeInt);
             hRS.set("knockback_angle", newHitbox.knockbackAngle);
-            hRS.set("knockback", newHitbox.knockback);
+            hRS.set("knockback", newHitbox.knockbackStrength);
             hRS.set("wither_chance", newHitbox.witherChance);
             hRS.set("hazard", hazardStr, &hazardNode);
             
             newHitbox.bodyPartName = hitboxNode->name;
             newHitbox.pos = s2p(coordsStr, &newHitbox.z);
             newHitbox.type = (HITBOX_TYPE) hitboxTypeInt;
+            newHitbox.knockbackType = (KNOCKBACK_TYPE) knockbackTypeInt;
             if(!hazardStr.empty()) {
                 auto hazardIt = game.content.hazards.list.find(hazardStr);
                 if(hazardIt != game.content.hazards.list.end()) {
@@ -665,11 +680,8 @@ void AnimationDatabase::saveToDataNode(
                         "hazard", hitboxPtr->hazard->manifest->internalName
                     );
                 }
-                if(
-                    hitboxPtr->type == HITBOX_TYPE_ATTACK &&
-                    hitboxPtr->knockbackOutward
-                ) {
-                    hGW.write("knockback_outward", hitboxPtr->knockbackOutward);
+                if(hitboxPtr->type == HITBOX_TYPE_ATTACK) {
+                    hGW.write("knockback_type", (int) hitboxPtr->knockbackType);
                 }
                 if(
                     hitboxPtr->type == HITBOX_TYPE_ATTACK &&
@@ -679,9 +691,9 @@ void AnimationDatabase::saveToDataNode(
                 }
                 if(
                     hitboxPtr->type == HITBOX_TYPE_ATTACK &&
-                    hitboxPtr->knockback != 0
+                    hitboxPtr->knockbackStrength != 0
                 ) {
-                    hGW.write("knockback", hitboxPtr->knockback);
+                    hGW.write("knockback", hitboxPtr->knockbackStrength);
                 }
                 if(
                     hitboxPtr->type == HITBOX_TYPE_ATTACK &&
