@@ -9,6 +9,7 @@ graphics {
     button_box = gui/button_box
     checkbox_check = gui/checkbox_check
     checkbox_no_check = gui/checkbox_no_check
+    chill = gui/chill
     difficulty = gui/difficulty
     discord_icon = gui/discord_icon
     editor_icons = gui/editor_icons

@@ -660,6 +660,9 @@ struct SystemContentList {
     //Checkbox without a checkmark.
     ALLEGRO_BITMAP* bmpCheckboxNoCheck = nullptr;
     
+    //Chill icon.
+    ALLEGRO_BITMAP* bmpChill = nullptr;
+    
     //Mission difficulty.
     ALLEGRO_BITMAP* bmpDifficulty = nullptr;
     
@@ -953,6 +956,9 @@ struct SystemContentNames {
     
     //Checkbox without a checkmark.
     string bmpCheckboxNoCheck = "gui/checkbox_no_check";
+    
+    //Chill icon.
+    string bmpChill = "gui/chill";
     
     //Mission difficulty.
     string bmpDifficulty = "gui/difficulty";

@@ -154,26 +154,23 @@ Point Liquid::getCenter() const {
  * @brief Returns the hotspot of where the chilliness GUI and sounds
  * should be.
  *
- * @param cachedCursor If the leader cursor position had been calculated
- * earlier, pass it here. Otherwise, pass nullptr.
  * @return The spot.
  */
-Point Liquid::getChillHotspot(Point* cachedCursor) const {
-    if(firstChillingMobPos.x != FLT_MAX) {
+Point Liquid::getChillHotspot() const {
+    if(lastFirstChillingMobPos.x != FLT_MAX) {
         return
             Point(
-                firstChillingMobPos.x,
-                firstChillingMobPos.y -
+                lastFirstChillingMobPos.x,
+                lastFirstChillingMobPos.y -
                 game.config.pikmin.standardRadius *  2.0f
             );
     }
     
-    Point cursorPos = cachedCursor ? *cachedCursor : getCursorOn();
-    if(cursorPos.x != FLT_MAX) {
+    if(lastCursorPos.x != FLT_MAX) {
         return
             Point(
-                cursorPos.x,
-                cursorPos.y - 32.0f
+                lastCursorPos.x,
+                lastCursorPos.y - 32.0f
             );
     }
     
@@ -323,7 +320,7 @@ void Liquid::tick(float deltaT) {
             changeSectorsHazard(hazard);
             game.audio.createPosSoundSource(
                 game.sysContent.sndFrozenLiquidThaw,
-                getChillHotspot(nullptr), false,
+                getChillHotspot(), false,
             { .speedDeviation = 0.1f }
             );
             freezeCaughtMobs.clear();
@@ -335,7 +332,7 @@ void Liquid::tick(float deltaT) {
         ) {
             game.audio.createPosSoundSource(
                 game.sysContent.sndFrozenLiquidCrack,
-                getChillHotspot(nullptr), false,
+                getChillHotspot(), false,
             { .speedDeviation = 0.1f }
             );
         }
@@ -370,27 +367,40 @@ void Liquid::tick(float deltaT) {
     
     //Tick chill.
     if(freezingPoint != 0) {
+        Point cursorPos = getCursorOn();
         vector<Mob*> mobsOn = getMobsOn();
         size_t chillingMobs = 0;
-        Point chillingMobPos(FLT_MAX);
+        Point firstChillingMobPos(FLT_MAX);
         for(size_t m = 0; m < mobsOn.size(); m++) {
             if(mobsOn[m]->type->category->id == MOB_CATEGORY_PIKMIN) {
                 Pikmin* pikPtr = (Pikmin*) mobsOn[m];
                 if(pikPtr->pikType->chillsLiquids) {
                     chillingMobs++;
-                    chillingMobPos = pikPtr->pos;
+                    firstChillingMobPos = pikPtr->pos;
                 }
             }
         }
         
-        updateChill(chillingMobs, &chillingMobPos, mobsOn);
+        updateChill(chillingMobs, mobsOn);
+        
+        if(
+            lastFirstChillingMobPos.x == FLT_MAX &&
+            firstChillingMobPos.x != FLT_MAX
+        ) {
+            lastFirstChillingMobPos = firstChillingMobPos;
+        }
+        if(
+            cursorPos.x != FLT_MAX
+        ) {
+            lastCursorPos = cursorPos;
+        }
         
         //Update chill fraction.
-        Point cursorPos = getCursorOn();
         bool mustShowFraction = chillAmount > 0.0f || cursorPos.x != FLT_MAX;
         
         if(mustShowFraction && !chillFraction) {
             chillFraction = new InWorldFraction();
+            chillFraction->bmpIcon = game.sysContent.bmpChill;
         } else if(!mustShowFraction && chillFraction) {
             chillFraction->startFading();
         }
@@ -403,7 +413,7 @@ void Liquid::tick(float deltaT) {
             );
             chillFraction->setRequirementNumber(freezingPoint);
             chillFraction->setValueNumber(chillAmount);
-            chillFraction->setNoMobPos(getChillHotspot(&cursorPos));
+            chillFraction->setNoMobPos(getChillHotspot());
             chillFraction->tick(deltaT);
             if(chillFraction->toDelete) {
                 delete chillFraction;
@@ -412,7 +422,8 @@ void Liquid::tick(float deltaT) {
         }
         
         if(!chillFraction) {
-            firstChillingMobPos.x = FLT_MAX;
+            lastFirstChillingMobPos.x = FLT_MAX;
+            lastCursorPos.x = FLT_MAX;
         }
     }
 }
@@ -423,12 +434,10 @@ void Liquid::tick(float deltaT) {
  * thawing if necessary.
  *
  * @param newAmount The new amount.
- * @param where Source location. Used to know where to show the
- * fraction numbers. nullptr for none.
  * @param mobsOn Mobs currently on the liquid.
  */
 void Liquid::updateChill(
-    size_t newAmount, Point* where, const vector<Mob*>& mobsOn
+    size_t newAmount, const vector<Mob*>& mobsOn
 ) {
     if(!hazard) return;
     if(!hazard->associatedLiquid->canFreeze) return;
@@ -441,7 +450,7 @@ void Liquid::updateChill(
             setState(LIQUID_STATE_FROZEN);
             game.audio.createPosSoundSource(
                 game.sysContent.sndFrozenLiquid,
-                getChillHotspot(nullptr), false,
+                getChillHotspot(), false,
             { .speedDeviation = 0.1f }
             );
             changeSectorsHazard(nullptr);
@@ -464,16 +473,12 @@ void Liquid::updateChill(
             setState(LIQUID_STATE_FROZEN);
             game.audio.createPosSoundSource(
                 game.sysContent.sndFrozenLiquid,
-                getChillHotspot(nullptr), false,
+                getChillHotspot(), false,
             { .speedDeviation = 0.1f }
             );
         }
         break;
     }
-    }
-    
-    if(where && firstChillingMobPos.x == FLT_MAX) {
-        firstChillingMobPos = *where;
     }
     
     chillAmount = newAmount;

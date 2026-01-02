@@ -96,8 +96,12 @@ struct Liquid {
     //Data about the in-world chill fraction numbers, if any.
     InWorldFraction* chillFraction = nullptr;
 
-    //Position of the first mob that caused chilling. If FLT_MAX, none is set.
-    Point firstChillingMobPos = Point(FLT_MAX);
+    //Last known position of the first mob that caused chilling.
+    //If FLT_MAX, none is set.
+    Point lastFirstChillingMobPos = Point(FLT_MAX);
+
+    //Last known cursor position on top of the liquid. If FLT_MAX, none is set.
+    Point lastCursorPos = Point(FLT_MAX);
     
     
     //--- Function declarations ---
@@ -115,11 +119,11 @@ struct Liquid {
     
     void changeSectorsHazard(Hazard* hPtr);
     Point getCenter() const;
-    Point getChillHotspot(Point* cachedCursor) const;
+    Point getChillHotspot() const;
     Point getCursorOn() const;
     vector<Mob*> getMobsOn() const;
     void setState(LIQUID_STATE newState);
-    void updateChill(size_t amount, Point* where, const vector<Mob*>& mobsOn);
+    void updateChill(size_t amount, const vector<Mob*>& mobsOn);
     
 };
 

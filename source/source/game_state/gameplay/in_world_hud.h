@@ -20,6 +20,8 @@
 namespace IN_WORLD_FRACTION {
 extern const float GROW_JUICE_DURATION;
 extern const float GROW_JUICE_AMOUNT;
+extern const float ICON_SIZE;
+extern const float ICON_X_OFFSET;
 extern const float PADDING;
 extern const float REQ_MET_GROW_JUICE_AMOUNT;
 extern const float REQ_MET_JUICE_DURATION;
@@ -108,6 +110,13 @@ class InWorldFraction : public InWorldHudItem {
 
 public:
 
+
+    //--- Members ---
+    
+    //Icon to show alongside it, if any.
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
+    
+    
     //--- Function declarations ---
     
     InWorldFraction(Mob* m = nullptr);
@@ -120,6 +129,7 @@ public:
     void tick(float deltaT) override;
     
 private:
+
 
     //--- Members ---
     

@@ -26,6 +26,12 @@ const float GROW_JUICE_AMOUNT = 0.06f;
 //How long it takes to animate the numbers growing.
 const float GROW_JUICE_DURATION = 0.3f;
 
+//Width and height of the icon bitmap.
+const float ICON_SIZE = 32.0f;
+
+//The icon bitmap has this X offset from the fraction center.
+const float ICON_X_OFFSET = -40.0f;
+
 //Padding between mob and fraction.
 const float PADDING = 8.0f;
 
@@ -154,6 +160,7 @@ void InWorldFraction::draw() {
     finalColor.a *= alphaMult;
     
     Point pos = noMobPos;
+    Point bmpPos = noMobPos;
     if(requirementNumber > 0) {
         if(m) {
             pos =
@@ -162,6 +169,11 @@ void InWorldFraction::draw() {
                     m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING
                 );
         }
+        bmpPos =
+            Point(
+                pos.x,
+                pos.y - IN_WORLD_FRACTION::ROW_HEIGHT * 1.5f
+            );
         drawFraction(
             pos,
             valueNumber, requirementNumber, finalColor, sizeMult
@@ -176,10 +188,19 @@ void InWorldFraction::draw() {
                     IN_WORLD_FRACTION::PADDING
                 );
         }
+        bmpPos = pos;
         drawText(
             i2s(valueNumber), game.sysContent.fntStandard, pos,
             Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * sizeMult),
             finalColor
+        );
+    }
+    
+    if(bmpIcon) {
+        bmpPos.x += IN_WORLD_FRACTION::ICON_X_OFFSET;
+        drawBitmap(
+            bmpIcon, bmpPos, Point(IN_WORLD_FRACTION::ICON_SIZE),
+            0.0f, mapAlpha(finalColor.a * 255)
         );
     }
 }
