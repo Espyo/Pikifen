@@ -810,10 +810,19 @@ void Leader::drawMob() {
         );
         
         if(sparkS && sparkS->bitmap) {
-            BitmapEffect sparkEff = leaSpriteEff;
-            Point size = getBitmapDimensions(curSPtr->bitmap) * mobEff.tf.scale;
-            Point sparkSize = getBitmapDimensions(sparkS->bitmap);
-            sparkEff.tf.scale = size / sparkSize;
+            BitmapEffect sparkEff;
+            getSpriteBitmapEffects(
+                curSPtr, nextSPtr, interpolationFactor,
+                &sparkEff,
+                SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+                SPRITE_BMP_EFFECT_DELIVERY |
+                SPRITE_BMP_EFFECT_CARRY
+            );
+            sparkEff.tf.trans = pos;
+            Point leaderBmpSize =
+                getBitmapDimensions(curSPtr->bitmap) * leaSpriteEff.tf.scale;
+            Point sparkBmpSize = getBitmapDimensions(sparkS->bitmap);
+            sparkEff.tf.scale *= leaderBmpSize / sparkBmpSize;
             drawBitmapWithEffects(sparkS->bitmap, sparkEff);
         }
     }
