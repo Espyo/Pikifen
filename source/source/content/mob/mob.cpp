@@ -380,6 +380,7 @@ bool Mob::applyStatusBuildup(
         
     if(statusIt == statuses.end()) {
         Status newStatus(statusType);
+        newStatus.state = STATUS_STATE_BUILDING;
         newStatus.fromHazard = fromHazard;
         statuses.push_back(newStatus);
         statusIt = statuses.end() - 1;
@@ -428,37 +429,53 @@ void Mob::applyStatusEffects(
         }
     }
     
-    //Check if the mob is already under this status.
+    //Check how this status is doing in the list, if it's there.
+    size_t listIdx = INVALID;
+    bool alreadyActive = false;
     for(size_t ms = 0; ms < statuses.size(); ms++) {
         if(statuses[ms].type == s) {
-            //Already exists. What do we do with the time left?
-            STATUS_REAPPLY_RULE reapplyRule = s->reapplyRule;
-            if(forceReapplyResetTime) {
-                reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
+            listIdx = ms;
+            if(statuses[ms].state == STATUS_STATE_ACTIVE) {
+                alreadyActive = true;
             }
-            
-            switch(reapplyRule) {
-            case STATUS_REAPPLY_RULE_KEEP_TIME: {
-                break;
-            }
-            case STATUS_REAPPLY_RULE_RESET_TIME: {
-                statuses[ms].timeLeft = s->autoRemoveTime;
-                break;
-            }
-            case STATUS_REAPPLY_RULE_ADD_TIME: {
-                statuses[ms].timeLeft += s->autoRemoveTime;
-                break;
-            }
-            }
-            
-            return;
         }
     }
     
-    //This status is not already inflicted. Let's do so.
-    Status newStatus(s);
-    newStatus.fromHazard = fromHazard;
-    statuses.push_back(newStatus);
+    //Check if it's already active.
+    //If so, just do something to the time left and then quit out.
+    if(alreadyActive) {
+        STATUS_REAPPLY_RULE reapplyRule = s->reapplyRule;
+        if(forceReapplyResetTime) {
+            reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
+        }
+        
+        switch(reapplyRule) {
+        case STATUS_REAPPLY_RULE_KEEP_TIME: {
+            break;
+        }
+        case STATUS_REAPPLY_RULE_RESET_TIME: {
+            statuses[listIdx].timeLeft = s->autoRemoveTime;
+            break;
+        }
+        case STATUS_REAPPLY_RULE_ADD_TIME: {
+            statuses[listIdx].timeLeft += s->autoRemoveTime;
+            break;
+        }
+        }
+        
+        return;
+    }
+    
+    //This status is not already active. Let's activate it.
+    if(listIdx == INVALID) {
+        Status newStatus(s);
+        newStatus.fromHazard = fromHazard;
+        statuses.push_back(newStatus);
+        listIdx = statuses.size() - 1;
+    }
+    
+    statuses[listIdx].state = STATUS_STATE_ACTIVE;
+    
     handleStatusEffectGain(s);
     
     if(!s->animationChange.empty()) {
@@ -478,7 +495,7 @@ void Mob::applyStatusEffects(
         pg.followZOffset = s->particleOffsetZ;
         particleGenerators.push_back(pg);
     }
-
+    
     if(s->sound.sample) {
         game.audio.createMobSoundSource(
             s->sound.sample, this, false, s->sound.config
@@ -757,11 +774,11 @@ bool Mob::calculateAttackBasics(
     
     //Calculate the status multipliers.
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(!statuses[s].isActive()) continue;
+        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         *outOffenseMultiplier *= statuses[s].type->attackMultiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); s++) {
-        if(!victim->statuses[s].isActive()) continue;
+        if(victim->statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float statusDefMult =
             victim->statuses[s].type->defenseMultiplier - 1.0f;
         auto statusVulnIt =
@@ -1521,7 +1538,7 @@ void Mob::deleteOldStatusEffects() {
     
     for(size_t s = 0; s < statuses.size(); ) {
         Status& sPtr = statuses[s];
-        if(sPtr.toDelete) {
+        if(sPtr.state == STATUS_STATE_TO_DELETE) {
             handleStatusEffectLoss(sPtr.type);
             
             if(sPtr.type->generatesParticles) {
@@ -1572,7 +1589,10 @@ void Mob::deleteOldStatusEffects() {
     //Update some flags.
     hasInvisibilityStatus = false;
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(statuses[s].isActive() && statuses[s].type->turnsInvisible) {
+        if(
+            statuses[s].state == STATUS_STATE_ACTIVE &&
+            statuses[s].type->turnsInvisible
+        ) {
             hasInvisibilityStatus = true;
             break;
         }
@@ -2275,7 +2295,7 @@ size_t Mob::getPlayerTeamIdx() const {
 float Mob::getSpeedMultiplier() const {
     float moveSpeedMult = 1.0f;
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(!statuses[s].isActive()) continue;
+        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float vulnMult = statuses[s].type->speedMultiplier - 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
@@ -2332,7 +2352,7 @@ void Mob::getSpriteBitmapEffects(
         ALLEGRO_COLOR colorizeSum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); s++) {
-            if(!statuses[s].isActive()) continue;
+            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             StatusType* t = statuses[s].type;
             if(
                 t->tint.r == 1.0f &&
@@ -2699,7 +2719,7 @@ void Mob::getSpriteData(
 ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
     *bmpScale = 0.0f;
     for(size_t st = 0; st < statuses.size(); st++) {
-        if(!statuses[st].isActive()) continue;
+        if(statuses[st].state != STATUS_STATE_ACTIVE) continue;
         StatusType* t = statuses[st].type;
         if(t->overlayAnimation.empty()) continue;
         Sprite* sp;
@@ -3524,7 +3544,7 @@ void Mob::startDying() {
     gravityMult = 1.0;
     
     for(size_t s = 0; s < statuses.size(); s++) {
-        statuses[s].toDelete = true;
+        statuses[s].state = STATUS_STATE_TO_DELETE;
     }
     
     if(group) {
@@ -3831,7 +3851,7 @@ void Mob::tick(float deltaT) {
 void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
     for(size_t s = 0; s < statuses.size(); s++) {
-        if(!statuses[s].isActive()) continue;
+        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float vulnMult = statuses[s].type->animSpeedMultiplier - 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
         if(vulnIt != type->statusVulnerabilities.end()) {
@@ -4063,7 +4083,7 @@ void Mob::tickMiscLogic(float deltaT) {
     for(size_t s = 0; s < statuses.size(); s++) {
         statuses[s].tick(deltaT);
         
-        if(!statuses[s].isActive()) continue;
+        if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         
         float damageMult = 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
@@ -4405,9 +4425,9 @@ void Mob::tickScript(float deltaT) {
         
         bool savedByWhistle = false;
         for(size_t s = 0; s < statuses.size(); s++) {
-            if(!statuses[s].isActive()) continue;
+            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             if(statuses[s].type->removableWithWhistle) {
-                statuses[s].toDelete = true;
+                statuses[s].state = STATUS_STATE_TO_DELETE;
                 if(
                     statuses[s].type->healthChange < 0.0f ||
                     statuses[s].type->healthChangeRatio < 0.0f

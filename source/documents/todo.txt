@@ -8,7 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Leader damage spark effects are shown at twice the size they should (thanks Helodity)
-    Applying statuses with buildup isn't reaching the important half of Mob::applyStatusEffects()
 
     --- 1.2.0 ---
     Ice Pikmin

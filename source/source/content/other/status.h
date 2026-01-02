@@ -64,6 +64,21 @@ enum STATUS_STATE_CHANGE {
 };
 
 
+//Possible states for a status effect instance.
+enum STATUS_STATE {
+
+    //Active and normal.
+    STATUS_STATE_ACTIVE,
+
+    //Inactive, but is being built up.
+    STATUS_STATE_BUILDING,
+
+    //Inactive, needs to be deleted.
+    STATUS_STATE_TO_DELETE,
+
+};
+
+
 //Rule to follow when re-applying a status effect.
 enum STATUS_REAPPLY_RULE {
 
@@ -217,8 +232,11 @@ struct Status {
     
     //Status type.
     StatusType* type = nullptr;
+
+    //Current state.
+    STATUS_STATE state = STATUS_STATE_ACTIVE;
     
-    //Buildup, if applicable [0 - 1].
+    //Current buildup, if applicable [0 - 1].
     float buildup = 0.0f;
     
     //Time left until the buildup is removed, if applicable.
@@ -230,14 +248,10 @@ struct Status {
     //Was this status inflicted by a hazard?
     bool fromHazard = false;
     
-    //Should this status be deleted from the mob's statuses?
-    bool toDelete = false;
-    
     
     //--- Function declarations ---
     
     explicit Status(StatusType* type);
-    bool isActive() const;
     void tick(float deltaT);
     
 };

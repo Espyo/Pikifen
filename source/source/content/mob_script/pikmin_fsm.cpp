@@ -4573,7 +4573,7 @@ void PikminFsm::touchedEatHitbox(Mob* m, void* info1, void* info2) {
     }
     
     for(size_t s = 0; s < m->statuses.size(); s++) {
-        if(!m->statuses[s].isActive()) continue;
+        if(m->statuses[s].state != STATUS_STATE_ACTIVE) continue;
         if(m->statuses[s].type->turnsInedible) {
             return;
         }

@@ -31,29 +31,16 @@ Status::Status(StatusType* type) :
 
 
 /**
- * @brief Returns whether or not the status is currently active, i.e. whether
- * its effects are being applied right now.
- *
- * @return Whether it's active.
- */
-bool Status::isActive() const {
-    if(toDelete) return false;
-    if(type->buildup != 0.0f && buildup < 1.0f) return false;
-    return true;
-}
-
-
-/**
  * @brief Ticks a status effect instance's time by one frame of logic,
  * but does not tick its effects logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Status::tick(float deltaT) {
-    if(type->autoRemoveTime > 0.0f && isActive()) {
+    if(type->autoRemoveTime > 0.0f && state == STATUS_STATE_ACTIVE) {
         timeLeft -= deltaT;
         if(timeLeft <= 0.0f) {
-            toDelete = true;
+            state = STATUS_STATE_TO_DELETE;
         }
     }
     if(
@@ -62,7 +49,7 @@ void Status::tick(float deltaT) {
     ) {
         buildupRemovalTimeLeft -= deltaT;
         if(buildupRemovalTimeLeft <= 0.0f) {
-            toDelete = true;
+            state = STATUS_STATE_TO_DELETE;
         }
     }
 }

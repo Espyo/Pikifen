@@ -1769,7 +1769,7 @@ void MobActionRunners::releaseStoredMobs(MobActionRunData& data) {
 void MobActionRunners::removeStatus(MobActionRunData& data) {
     for(size_t s = 0; s < data.m->statuses.size(); s++) {
         if(data.m->statuses[s].type->manifest->internalName == data.args[0]) {
-            data.m->statuses[s].toDelete = true;
+            data.m->statuses[s].state = STATUS_STATE_TO_DELETE;
         }
     }
 }

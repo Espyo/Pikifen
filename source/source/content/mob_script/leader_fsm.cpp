@@ -2673,7 +2673,7 @@ void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
     if(leaPtr->leaType->sleepingStatus) {
         for(size_t s = 0; s < m->statuses.size(); s++) {
             if(m->statuses[s].type == leaPtr->leaType->sleepingStatus) {
-                m->statuses[s].toDelete = true;
+                m->statuses[s].state = STATUS_STATE_TO_DELETE;
             }
         }
     }

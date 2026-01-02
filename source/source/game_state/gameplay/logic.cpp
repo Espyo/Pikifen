@@ -2325,7 +2325,9 @@ void GameplayState::processMobTouches(
                 //that disables attacks.
                 bool disableAttackStatus = false;
                 for(size_t s = 0; s < m2Ptr->statuses.size(); s++) {
-                    if(!m2Ptr->statuses[s].isActive()) continue;
+                    if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
+                        continue;
+                    }
                     if(m2Ptr->statuses[s].type->disablesAttack) {
                         disableAttackStatus = true;
                         break;
