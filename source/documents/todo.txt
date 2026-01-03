@@ -3,18 +3,22 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Play a sound when a Pikmin or enemy is frozen
-    A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
+    Make the bitter spray long and massively up the enemy's defense, while ice should just be quick and not change the defense
+    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Ice Pikmin aren't dying faster to fire
+    Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
     --- 1.2.0 ---
     Ice Pikmin
-        Graphics and animations, and the icon graphic as well
-        Attack hitboxes should be weaker, but have the ice_pikmin hazard
+        Cyan Candypop Buds
+        Ice pellets
         Ice gates
         Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
+            Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
+        Some icy enemy
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
