@@ -1,18 +1,17 @@
-name = Queen Candypop Bud
-description = Converts any Pikmin thrown inside into a bunch of Pikmin of the dots' color.
+name = Cyan Candypop Bud
+description = Converts any Pikmin thrown inside into Ice Pikmin seeds.
 
-available_pikmin_types = red_pikmin; yellow_pikmin; blue_pikmin; rock_pikmin; winged_pikmin; ice_pikmin
-buffer_size = 1
+available_pikmin_types = ice_pikmin
+buffer_size = 5
 custom_category_name = Candypop Bud
 height = 32
-pikmin_per_conversion = 9
+pikmin_per_conversion = 1
 pushable = false
 pushes = true
 pushes_softly = true
 radius = 48
-same_type_counts_for_output = true
-total_input_pikmin = 1
-type_animation_suffixes = _red;_yellow;_blue;_rock;_winged;_ice
+same_type_counts_for_output = false
+total_input_pikmin = 5
 
 sounds {
     pop {
@@ -47,5 +46,5 @@ sounds {
 }
 
 maker = Espyo
-version = 1.1.0
+version = 1.0.0
 engine_version = 1.2.0

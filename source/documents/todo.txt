@@ -14,8 +14,7 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     Ice Pikmin
-        Cyan Candypop Buds
-        Ice pellets
+        Ice pellets and Pellet Posies
         Ice gates
         Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
             Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
