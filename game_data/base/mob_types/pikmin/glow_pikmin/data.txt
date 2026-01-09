@@ -1,28 +1,28 @@
-name = Bulbmin
-description = Bulbmin are immune to every single hazard!
+name = Glow Pikmin
+description = Glow Pikmin are immune to every single hazard!
 
 can_carry_tools = true
 can_walk_on_others = true
 carry_strength = 1
 health_regen = 10
 height = 24
-icon = pikmin/bulbmin_icon
-icon_bud = pikmin/white_bud_icon
-icon_flower = pikmin/white_flower_icon
+icon = pikmin/glow_icon
+icon_bud = pikmin/pointy_yellow_bud_icon
+icon_flower = pikmin/pointy_yellow_flower_icon
 icon_leaf = pikmin/leaf_icon
-icon_onion = other_mobs/hocotate_ship_icon
-main_color = 240 136 24
+icon_onion = onions/red_icon
+main_color = 100 210 48
 max_health = 100
 max_throw_height = 260
 move_speed = 110
 pushable = true
 pushes = false
-radius = 7
+radius = 5
 sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
-top_bud = pikmin/white_bud_top
-top_flower = pikmin/white_flower_top
+top_bud = pikmin/pointy_yellow_bud_top
+top_flower = pikmin/pointy_yellow_flower_top
 top_leaf = pikmin/leaf_top
 
 sounds {
@@ -74,7 +74,6 @@ sounds {
     footstep {
         sound = pikmin/footstep
         volume = 20
-        speed = 95
         speed_deviation = 40
         random_delay = 0.05
         stack_min_pos = 0.2
@@ -202,4 +201,4 @@ vulnerabilities {
 
 maker = Espyo
 version = 1.0.0
-engine_version = 1.0.0
+engine_version = 1.2.0

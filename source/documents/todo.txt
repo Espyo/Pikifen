@@ -8,6 +8,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Standardize Pikmin climbing sprites
     Ice Pikmin aren't dying faster to fire
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
@@ -21,6 +22,7 @@ Next tasks (roughly sorted most important first)
         Some icy enemy
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
+        The ability to keep their maturity, and to evolve automatically with time
         Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
         Glowmob?
@@ -519,6 +521,7 @@ Misc things (so I don't forget)
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
         Hiding spots
             A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
+        An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
     Audio
         Weird limitations
             If Pikmin are already carrying something elsewhere in the area, far away, the Pikmin told to carry something here will rarely play their sound, because the others are already doing it. Likewise, I think only a few geysers in DEV Lab actually play a sound. I can't make 0-volume sounds not play, otherwise stuff like geysers that are far away at spawn will never play sounds...
@@ -617,6 +620,7 @@ Misc things (so I don't forget)
         Pikmin that are bounced by a bouncer shouldn't go through the period where they don't let leaders bump them when idle
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
+            It could be lighter in a circle around the mouse cursor
         Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
         Enemy souls?
     Pathing
