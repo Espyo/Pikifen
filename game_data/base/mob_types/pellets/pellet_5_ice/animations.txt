@@ -1,0 +1,22 @@
+name=Ice 5 pellet animations
+description=Animations for the ice 5 pellet.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=pellets/ice
+		file_pos=0.0000 0.0000
+		file_size=128.0000 128.0000
+	}
+}
+body_parts

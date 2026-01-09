@@ -247,8 +247,8 @@ vertexes{
 	v=-2624.0000 -2208.0000
 	v=-192.0000 -2592.0000
 	v=-192.0000 -3168.0000
-	v=-2784.0000 -3168.0000
-	v=-2784.0000 -2592.0000
+	v=-3328.0000 -3168.0000
+	v=-3328.0000 -2592.0000
 	v=-96.0000 -2304.0000
 	v=-64.0000 -2304.0000
 	v=-64.0000 -2368.0000
@@ -13336,23 +13336,23 @@ mobs{
 	}
 	custom{
 		type=pellet_posy_5
-		p=-2688.0000 -2752.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		p=-3168.0000 -2752.0000
+		vars=bloom_time=0.0000;blue=true;ice=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_10
-		p=-2688.0000 -2880.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		p=-3168.0000 -2880.0000
+		vars=bloom_time=0.0000;blue=true;ice=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_20
-		p=-2688.0000 -3040.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		p=-3168.0000 -3040.0000
+		vars=bloom_time=0.0000;blue=true;ice=true;red=true;rock=true;winged=true;yellow=true
 	}
 	custom{
 		type=pellet_posy_1
-		p=-2688.0000 -2656.0000
-		vars=bloom_time=0.0000;blue=true;red=true;rock=true;winged=true;yellow=true
+		p=-3168.0000 -2656.0000
+		vars=bloom_time=0.0000;blue=true;ice=true;red=true;rock=true;winged=true;yellow=true
 	}
 	interactable{
 		type=orb_sign
@@ -14993,6 +14993,42 @@ mobs{
 	converter{
 		type=queen_candypop_bud
 		p=-2432.0000 -2368.0000
+	}
+	custom{
+		type=pellet_posy_5
+		p=-2848.0000 -2752.0000
+		vars=bloom_time=0.0000;ice=true
+	}
+	custom{
+		type=pellet_posy_10
+		p=-2848.0000 -2880.0000
+		vars=bloom_time=0.0000;ice=true
+	}
+	custom{
+		type=pellet_posy_20
+		p=-2848.0000 -3040.0000
+		vars=bloom_time=0.0000;ice=true
+	}
+	pellet{
+		type=pellet_1_ice
+		p=-2560.0000 -2656.0000
+	}
+	pellet{
+		type=pellet_5_ice
+		p=-2560.0000 -2752.0000
+	}
+	pellet{
+		type=pellet_10_ice
+		p=-2560.0000 -2880.0000
+	}
+	pellet{
+		type=pellet_20_ice
+		p=-2560.0000 -3040.0000
+	}
+	custom{
+		type=pellet_posy_1
+		p=-2848.0000 -2656.0000
+		vars=bloom_time=0.0000;ice=true
 	}
 }
 path_stops{

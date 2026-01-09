@@ -1,7 +1,7 @@
 name=1 Pellet Posy animations
 description=Animations for the 1 Pellet Posy.
 maker=Espyo
-version=1.0.0
+version=1.1.0
 engine_version=1.2.0
 animations{
 	blooming{
@@ -53,6 +53,26 @@ animations{
 				interpolate=true
 			}
 			idling_02_blue{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+	idling_ice{
+		frames{
+			idling_01_ice{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_ice{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_03_ice{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02_ice{
 				duration=0.3000
 				interpolate=true
 			}
@@ -362,6 +382,30 @@ sprites{
 			}
 		}
 	}
+	idling_01_ice{
+		file=other_mobs/pellet_posy_ice
+		file_pos=393.0000 117.0000
+		file_size=63.0000 58.0000
+		offset=25.0000 0.0000
+		hitboxes{
+			pellet{
+				coords=32.0000 0.0000 96.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=0.1000
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
 	idling_01_red{
 		file=other_mobs/pellet_posy_red
 		file_pos=393.0000 117.0000
@@ -460,6 +504,31 @@ sprites{
 	}
 	idling_02_blue{
 		file=other_mobs/pellet_posy_blue
+		file_pos=393.0000 117.0000
+		file_size=63.0000 58.0000
+		offset=25.4000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=32.4000 0.0000 96.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=0.1000
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_02_ice{
+		file=other_mobs/pellet_posy_ice
 		file_pos=393.0000 117.0000
 		file_size=63.0000 58.0000
 		offset=25.4000 0.0000
@@ -585,6 +654,31 @@ sprites{
 	}
 	idling_03_blue{
 		file=other_mobs/pellet_posy_blue
+		file_pos=393.0000 117.0000
+		file_size=63.0000 58.0000
+		offset=25.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=32.7000 0.0000 96.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=0.1000
+				surface_type=1
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_03_ice{
+		file=other_mobs/pellet_posy_ice
 		file_pos=393.0000 117.0000
 		file_size=63.0000 58.0000
 		offset=25.7000 0.0000

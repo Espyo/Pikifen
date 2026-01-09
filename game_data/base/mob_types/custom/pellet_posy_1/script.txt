@@ -7,6 +7,7 @@ init {
     set_var blue false
     set_var rock false
     set_var winged false
+    set_var ice false
     set_var cur_color none
     set_var bloom_time 240
 }
@@ -27,6 +28,9 @@ script {
                 set_state sprout
             end_if
             if $winged = true
+                set_state sprout
+            end_if
+            if $ice = true
                 set_state sprout
             end_if
             
@@ -70,7 +74,7 @@ script {
         }
         on_animation_end {
             set_huntable true
-            set_var cur_color winged
+            set_var cur_color ice
             set_state picking_next_color
         }
     }
@@ -89,6 +93,8 @@ script {
             else_if $cur_color = rock
                 set_var cur_color winged
             else_if $cur_color = winged
+                set_var cur_color ice
+            else_if $cur_color = ice
                 set_var cur_color red
             end_if
             
@@ -112,6 +118,10 @@ script {
                 if $winged != true
                     goto try_next
                 end_if
+            else_if $cur_color = ice
+                if $ice != true
+                    goto try_next
+                end_if
             end_if
             
             set_state idling
@@ -129,6 +139,8 @@ script {
                 set_animation idling_rock no_restart
             else_if $cur_color = winged
                 set_animation idling_winged no_restart
+            else_if $cur_color = ice
+                set_animation idling_ice no_restart
             end_if
         }
         on_damage {
@@ -154,6 +166,8 @@ script {
                 spawn rock
             else_if $cur_color = winged
                 spawn winged
+            else_if $cur_color = ice
+                spawn ice
             end_if
         }
         on_animation_end {

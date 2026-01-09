@@ -52,6 +52,12 @@ area_editor_properties {
         def_value = false
         tooltip = Does it have a winged pellet?
     }
+    Ice {
+        var = ice
+        type = bool
+        def_value = false
+        tooltip = Does it have an ice pellet?
+    }
 }
 
 spawns {
@@ -90,6 +96,13 @@ spawns {
         angle = 270
         momentum = 10
     }
+    ice {
+        object = pellet_20_ice
+        relative = true
+        coordinates = 128 0 96
+        angle = 270
+        momentum = 10
+    }
 }
 
 sounds{
@@ -112,5 +125,5 @@ sounds{
 }
 
 maker = Espyo
-version = 1.0.0
-engine_version = 1.0.0
+version = 1.1.0
+engine_version = 1.2.0
