@@ -1,12 +1,12 @@
 name = Petrified
-description = Enemies that are petrified will just stay in place, unable to cause harm. They will be slightly more resistant to damage, however.
+description = Enemies that are petrified will just stay in place, unable to cause harm. They will be much more resistant to damage, however.
 
 affects = enemies
 anim_speed_multiplier = 0
-auto_remove_time = 2.5
+auto_remove_time = 6.5
 color = 128 0 255
 colorize = 64 64 64 240
-defense_multiplier = 1.2
+defense_multiplier = 20
 disables_attack = true
 freezes_animation = true
 reapply_rule = keep_time
@@ -14,5 +14,5 @@ replacement_on_timeout = petrified_cracking
 speed_multiplier = 0
 
 maker = Espyo
-version = 1.0.0
+version = 1.1.0
 engine_version = 1.0.0

@@ -1,5 +1,5 @@
 name = Ultra-Bitter Spray
-description = Spray one of these in front of you, and any enemy in range will be instantly petrified! While harmless, it is a bit more resistant to attacks, and will eventually break free.
+description = Spray one of these in front of you, and any enemy in range will be instantly petrified! Use this opportunity to regroup and retreat, because attacking it will be like hitting a brick wall.
 
 angle = 0
 angle_range = 135
@@ -11,5 +11,5 @@ icon = other_mobs/ultra-bitter_spray
 ingredients = 10
 
 maker = Espyo
-version = 1.0.0
+version = 1.1.0
 engine_version = 1.0.0

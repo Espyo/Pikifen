@@ -3,21 +3,23 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Play a sound when a Pikmin or enemy is frozen
-    Make the bitter spray long and massively up the enemy's defense, while ice should just be quick and not change the defense
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    An adult Bulbmin's stem will have its freezing progress and health wheel show up if hit by an Ice Pikmin
+    Ice Pikmin can continuously hit a Bulborb to keep it frozen forever -- not only because when it unfreezes they're all already on it, but also because when it's no longer in the frozen_enemy status and is in the frozen_enemy_thawing status, it can start receiving buildup for frozen_enemy again
     Standardize Pikmin climbing sprites
     Ice Pikmin aren't dying faster to fire
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
     --- 1.2.0 ---
     Ice Pikmin
+        Ice Onion and Master Onion
         Ice gates
         Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
             Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
-        Some icy enemy
+        Freezecake
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         The ability to keep their maturity, and to evolve automatically with time

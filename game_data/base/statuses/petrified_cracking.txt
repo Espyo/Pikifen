@@ -6,7 +6,7 @@ anim_speed_multiplier = 0
 auto_remove_time = 1.5
 color = 128 0 255
 colorize = 64 64 64 240
-defense_multiplier = 1.2
+defense_multiplier = 20
 disables_attack = true
 freezes_animation = true
 reapply_rule = keep_time
@@ -15,5 +15,5 @@ shaking_effect = 1.5
 speed_multiplier = 0
 
 maker = Espyo
-version = 1.0.0
+version = 1.1.0
 engine_version = 1.0.0

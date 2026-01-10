@@ -3,7 +3,7 @@ description = Enemies that are frozen will just stay in place, unable to cause h
 
 affects = enemies
 anim_speed_multiplier = 0
-auto_remove_time = 2.5
+auto_remove_time = 1.5
 buildup = 5
 buildup_removal_duration = 5
 color = 16 192 192
