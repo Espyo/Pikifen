@@ -533,6 +533,7 @@ Misc things (so I don't forget)
             Mix tracks, like for when the player is drawing something, or dragging something, or whatever else
         The audio options menu should have a button to playback one or two sound effects
         More sounds
+            Opening/Closing an Onion menu
             Onion spinning up to generate
             Un/Pausing
     Radar
