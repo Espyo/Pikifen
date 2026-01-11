@@ -2385,11 +2385,24 @@ void Mob::getSpriteBitmapEffects(
             }
             
             if(t->shakingEffect != 0.0f) {
-                info->tf.trans.x +=
-                    sin(
-                        game.states.gameplay->areaTimePassed *
-                        MOB::STATUS_SHAKING_TIME_MULT
-                    ) * t->shakingEffect;
+                bool doShaking = false;
+                if(t->shakingEffectOnEnd == 0.0f) {
+                    doShaking = true;
+                } else {
+                    if(
+                        t->autoRemoveTime != 0.0f &&
+                        statuses[s].timeLeft <= t->shakingEffectOnEnd
+                    ) {
+                        doShaking = true;
+                    }
+                }
+                if(doShaking) {
+                    info->tf.trans.x +=
+                        sin(
+                            game.states.gameplay->areaTimePassed *
+                            MOB::STATUS_SHAKING_TIME_MULT
+                        ) * t->shakingEffect;
+                }
             }
         }
     }

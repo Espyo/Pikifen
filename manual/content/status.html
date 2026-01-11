@@ -235,7 +235,13 @@
       </tr>
       <tr>
         <td>shaking_effect</td>
-        <td>If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking.</td>
+        <td>If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking. See also <code>shaking_effect_on_end</code>.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>shaking_effect_on_end</td>
+        <td>If you want the shaking effect from <code>shaking_effect</code> to only take place at the last X seconds, specify that here. Use 0 to make the shaking occur throughout the entire status effect's lifetime. Useful for making enemies seem like they're about to break free from whatever's afflicting them.</td>
         <td>Number</td>
         <td>0</td>
       </tr>

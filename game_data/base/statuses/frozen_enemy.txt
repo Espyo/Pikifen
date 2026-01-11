@@ -3,7 +3,7 @@ description = Enemies that are frozen will just stay in place, unable to cause h
 
 affects = enemies
 anim_speed_multiplier = 0
-auto_remove_time = 1.5
+auto_remove_time = 3
 buildup = 5
 buildup_removal_duration = 5
 color = 16 192 192
@@ -13,7 +13,9 @@ freezes_animation = true
 particle_generator = ice_vapor
 particle_offset = 0 0 300
 reapply_rule = keep_time
-replacement_on_timeout = frozen_enemy_thawing
+replacement_on_timeout = frozen_enemy_thawed
+shaking_effect = 1.5
+shaking_effect_on_end = 1.5
 speed_multiplier = 0
 
 maker = Espyo

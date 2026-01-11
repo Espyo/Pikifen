@@ -102,6 +102,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("anim_speed_multiplier",    animSpeedMultiplier);
     sRS.set("freezes_animation",        freezesAnimation);
     sRS.set("shaking_effect",           shakingEffect);
+    sRS.set("shaking_effect_on_end",    shakingEffectOnEnd);
     sRS.set("overlay_animation",        overlayAnimation);
     sRS.set("overlay_anim_mob_scale",   overlayAnimMobScale);
     sRS.set("particle_generator",       particleGenStr, &particleGenNode);
@@ -188,7 +189,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
             );
         }
     }
-
+    
     if(node->getNrOfChildrenByName("sound") > 0) {
         sound.loadFromDataNode(node->getChildByName("sound"));
     }

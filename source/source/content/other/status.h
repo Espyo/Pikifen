@@ -69,13 +69,13 @@ enum STATUS_STATE {
 
     //Active and normal.
     STATUS_STATE_ACTIVE,
-
+    
     //Inactive, but is being built up.
     STATUS_STATE_BUILDING,
-
+    
     //Inactive, needs to be deleted.
     STATUS_STATE_TO_DELETE,
-
+    
 };
 
 
@@ -193,12 +193,16 @@ public:
     
     //Vertical offset of the particle generator.
     float particleOffsetZ = 0.0f;
-
+    
     //Sound to play, if any.
     DataNodeSound sound;
     
     //How much the affected mob should shake by, if at all.
     float shakingEffect = 0.0f;
+    
+    //Whether the shaking should only occur on the final X seconds.
+    //0 means it occurs the entire status duration.
+    float shakingEffectOnEnd = 0.0f;
     
     //Name of the animation to overlay on top of affected mobs.
     string overlayAnimation;
@@ -232,7 +236,7 @@ struct Status {
     
     //Status type.
     StatusType* type = nullptr;
-
+    
     //Current state.
     STATUS_STATE state = STATUS_STATE_ACTIVE;
     
