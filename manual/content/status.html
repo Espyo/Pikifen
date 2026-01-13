@@ -223,8 +223,20 @@
       </tr>
       <tr>
         <td>particle_generator</td>
-        <td>If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to make some.</td>
-        <td>Text</td>
+        <td>If you want objects under this status effect to continuously generate particles, specify the <a href="particle.html">particle generator</a> here.</td>
+        <td>Internal name</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>particle_generator_end</td>
+        <td>If you want particles to be spawned when this status effect is no longer being applied, specify the <a href="particle.html">particle generator</a> here. There is no way to remove it, so make sure it emits particles once instead of continuously.</td>
+        <td>Internal name</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>particle_generator_start</td>
+        <td>If you want particles to be spawned the moment this status effect is applied, specify the <a href="particle.html">particle generator</a> here. There is no way to remove it, so make sure it emits particles once instead of continuously.</td>
+        <td>Internal name</td>
         <td></td>
       </tr>
       <tr>
@@ -245,17 +257,11 @@
         <td>Number</td>
         <td>0</td>
       </tr>
-      <tr>
-        <td>sound</td>
-        <td>When the status effect is applied to the object, this sound plays, if any. This property is If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking.</td>
-        <td>Number</td>
-        <td>0</td>
-      </tr>
     </table>
 
-    <h3 id="props-sound">Sound</h3>
+    <h3 id="props-sounds">Sounds</h3>
 
-    <p>When the status effect is applied to the object, a sound can be played. To specify what sound to play, add a <code>sound</code> block, and format it the same way you would any <a href="mob_type.html#sounds">object type sound entry</a>.</p>
+    <p>When the status effect is applied to the object, or removed from the object, sounds can be played. To specify what sound to play when applied, add a <code>sound_start</code> block, and format it the same way you would any <a href="mob_type.html#sounds">object type sound entry</a>. For a sound when the status is removed, add a <code>sound_end</code> block.</p>
     
   </div>
 </body>

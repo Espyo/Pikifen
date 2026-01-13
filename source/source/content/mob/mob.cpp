@@ -486,8 +486,8 @@ void Mob::applyStatusEffects(
         hasInvisibilityStatus = true;
     }
     
-    if(s->generatesParticles) {
-        ParticleGenerator pg = *s->particleGen;
+    if(s->particleGenStart) {
+        ParticleGenerator pg = *s->particleGenStart;
         pg.restartTimer();
         pg.followMob = this;
         pg.followAngle = &this->angle;
@@ -496,10 +496,20 @@ void Mob::applyStatusEffects(
         particleGenerators.push_back(pg);
     }
     
-    if(s->sound.sample) {
+    if(s->soundStart.sample) {
         game.audio.createMobSoundSource(
-            s->sound.sample, this, false, s->sound.config
+            s->soundStart.sample, this, false, s->soundStart.config
         );
+    }
+    
+    if(s->particleGen) {
+        ParticleGenerator pg = *s->particleGen;
+        pg.restartTimer();
+        pg.followMob = this;
+        pg.followAngle = &this->angle;
+        pg.followPosOffset = s->particleOffsetPos;
+        pg.followZOffset = s->particleOffsetZ;
+        particleGenerators.push_back(pg);
     }
     
     if(s->freezesAnimation) {
@@ -1541,8 +1551,25 @@ void Mob::deleteOldStatusEffects() {
         if(sPtr.state == STATUS_STATE_TO_DELETE) {
             handleStatusEffectLoss(sPtr.type);
             
-            if(sPtr.type->generatesParticles) {
+            if(sPtr.type->particleGen) {
                 removeParticleGenerator(sPtr.type->particleGen->id);
+            }
+            
+            if(sPtr.type->particleGenEnd) {
+                ParticleGenerator pg = *sPtr.type->particleGenEnd;
+                pg.restartTimer();
+                pg.followMob = this;
+                pg.followAngle = &this->angle;
+                pg.followPosOffset = sPtr.type->particleOffsetPos;
+                pg.followZOffset = sPtr.type->particleOffsetZ;
+                particleGenerators.push_back(pg);
+            }
+            
+            if(sPtr.type->soundEnd.sample) {
+                game.audio.createMobSoundSource(
+                    sPtr.type->soundEnd.sample,
+                    this, false, sPtr.type->soundEnd.config
+                );
             }
             
             if(sPtr.type->freezesAnimation) {

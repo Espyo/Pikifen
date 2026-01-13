@@ -182,20 +182,26 @@ public:
     //Does this status effect freeze the mob's animation?
     bool freezesAnimation = false;
     
-    //Generates particles? We need to know so we can remove the generator later.
-    bool generatesParticles = false;
-    
-    //Particle generator, if any.
+    //Particles to emit constantly, if any.
     ParticleGenerator* particleGen = nullptr;
     
-    //Horizontal offset of the particle generator.
+    //Particles to emit when the status is applied, if any.
+    ParticleGenerator* particleGenStart = nullptr;
+    
+    //Particles to emit when the status is removed, if any.
+    ParticleGenerator* particleGenEnd = nullptr;
+    
+    //Horizontal offset of the particle generators.
     Point particleOffsetPos;
     
-    //Vertical offset of the particle generator.
+    //Vertical offset of the particle generators.
     float particleOffsetZ = 0.0f;
     
-    //Sound to play, if any.
-    DataNodeSound sound;
+    //Sound to play when the status is applied, if any.
+    DataNodeSound soundStart;
+    
+    //Sound to play when the status is removed, if any.
+    DataNodeSound soundEnd;
     
     //How much the affected mob should shake by, if at all.
     float shakingEffect = 0.0f;

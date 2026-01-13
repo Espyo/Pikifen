@@ -8,7 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     An adult Bulbmin's stem will have its freezing progress and health wheel show up if hit by an Ice Pikmin
-    Ice Pikmin can continuously hit a Bulborb to keep it frozen forever -- not only because when it unfreezes they're all already on it, but also because when it's no longer in the frozen_enemy status and is in the frozen_enemy_thawing status, it can start receiving buildup for frozen_enemy again
     Standardize Pikmin climbing sprites
     Ice Pikmin aren't dying faster to fire
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that

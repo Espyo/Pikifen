@@ -72,11 +72,15 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     string reapplyRuleStr;
     string scTypeStr;
     string particleOffsetStr;
-    string particleGenStr;
+    string pgStr;
+    string pgStartStr;
+    string pgEndStr;
     DataNode* affectsNode = nullptr;
     DataNode* reapplyRuleNode = nullptr;
     DataNode* scTypeNode = nullptr;
-    DataNode* particleGenNode = nullptr;
+    DataNode* pgNode = nullptr;
+    DataNode* pgStartNode = nullptr;
+    DataNode* pgEndNode = nullptr;
     DataNode* buildupNode = nullptr;
     
     sRS.set("color",                    color);
@@ -105,7 +109,9 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("shaking_effect_on_end",    shakingEffectOnEnd);
     sRS.set("overlay_animation",        overlayAnimation);
     sRS.set("overlay_anim_mob_scale",   overlayAnimMobScale);
-    sRS.set("particle_generator",       particleGenStr, &particleGenNode);
+    sRS.set("particle_generator",       pgStr, &pgNode);
+    sRS.set("particle_generator_start", pgStartStr, &pgStartNode);
+    sRS.set("particle_generator_end",   pgEndStr, &pgEndNode);
     sRS.set("particle_offset",          particleOffsetStr);
     sRS.set("replacement_on_timeout",   replacementOnTimeoutStr);
     sRS.set("buildup",                  buildup, &buildupNode);
@@ -162,22 +168,28 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
         }
     }
     
-    if(particleGenNode) {
-        if(!isInMap(game.content.particleGens.list, particleGenStr)) {
-            game.errors.report(
-                "Unknown particle generator \"" +
-                particleGenStr + "\"!", particleGenNode
-            );
-        } else {
-            generatesParticles =
-                true;
-            particleGen =
-                &game.content.particleGens.list[particleGenStr];
-            particleOffsetPos =
-                s2p(particleOffsetStr, &particleOffsetZ);
+    const auto loadPg =
+    [this] (DataNode * node, const string& str, ParticleGenerator** pg) {
+        if(node) {
+            if(!isInMap(game.content.particleGens.list, str)) {
+                game.errors.report(
+                    "Unknown particle generator \"" +
+                    str + "\"!", node
+                );
+            } else {
+                *pg = &game.content.particleGens.list[str];
+                
+            }
         }
-    }
+    };
     
+    loadPg(pgNode, pgStr, &particleGen);
+    loadPg(pgStartNode, pgStartStr, &particleGenStart);
+    loadPg(pgEndNode, pgEndStr, &particleGenEnd);
+    
+    particleOffsetPos =
+        s2p(particleOffsetStr, &particleOffsetZ);
+        
     if(buildupNode) {
         buildup /= 100.0f;
     }
@@ -190,7 +202,11 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
         }
     }
     
-    if(node->getNrOfChildrenByName("sound") > 0) {
-        sound.loadFromDataNode(node->getChildByName("sound"));
+    if(node->getNrOfChildrenByName("sound_start") > 0) {
+        soundStart.loadFromDataNode(node->getChildByName("sound_start"));
+    }
+    
+    if(node->getNrOfChildrenByName("sound_end") > 0) {
+        soundEnd.loadFromDataNode(node->getChildByName("sound_end"));
     }
 }
