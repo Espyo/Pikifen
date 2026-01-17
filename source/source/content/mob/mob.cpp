@@ -487,13 +487,7 @@ void Mob::applyStatusEffects(
     }
     
     if(s->particleGenStart) {
-        ParticleGenerator pg = *s->particleGenStart;
-        pg.restartTimer();
-        pg.followMob = this;
-        pg.followAngle = &this->angle;
-        pg.followPosOffset = s->particleOffsetPos;
-        pg.followZOffset = s->particleOffsetZ;
-        particleGenerators.push_back(pg);
+        statuses[listIdx].applyParticles(this, s->particleGenStart);
     }
     
     if(s->soundStart.sample) {
@@ -503,13 +497,7 @@ void Mob::applyStatusEffects(
     }
     
     if(s->particleGen) {
-        ParticleGenerator pg = *s->particleGen;
-        pg.restartTimer();
-        pg.followMob = this;
-        pg.followAngle = &this->angle;
-        pg.followPosOffset = s->particleOffsetPos;
-        pg.followZOffset = s->particleOffsetZ;
-        particleGenerators.push_back(pg);
+        statuses[listIdx].applyParticles(this, s->particleGen);
     }
     
     if(s->freezesAnimation) {
@@ -1547,48 +1535,42 @@ void Mob::deleteOldStatusEffects() {
     bool removedForcedSprite = false;
     
     for(size_t s = 0; s < statuses.size(); ) {
-        Status& sPtr = statuses[s];
-        if(sPtr.state == STATUS_STATE_TO_DELETE) {
-            handleStatusEffectLoss(sPtr.type);
+        Status& sRef = statuses[s];
+        if(sRef.state == STATUS_STATE_TO_DELETE) {
+            handleStatusEffectLoss(sRef.type);
             
-            if(sPtr.type->particleGen) {
-                removeParticleGenerator(sPtr.type->particleGen->id);
+            if(sRef.type->particleGen) {
+                removeParticleGenerator(sRef.type->particleGen->id);
             }
             
-            if(sPtr.type->particleGenEnd) {
-                ParticleGenerator pg = *sPtr.type->particleGenEnd;
-                pg.restartTimer();
-                pg.followMob = this;
-                pg.followAngle = &this->angle;
-                pg.followPosOffset = sPtr.type->particleOffsetPos;
-                pg.followZOffset = sPtr.type->particleOffsetZ;
-                particleGenerators.push_back(pg);
+            if(sRef.type->particleGenEnd) {
+                sRef.applyParticles(this, sRef.type->particleGenEnd);
             }
             
-            if(sPtr.type->soundEnd.sample) {
+            if(sRef.type->soundEnd.sample) {
                 game.audio.createMobSoundSource(
-                    sPtr.type->soundEnd.sample,
-                    this, false, sPtr.type->soundEnd.config
+                    sRef.type->soundEnd.sample,
+                    this, false, sRef.type->soundEnd.config
                 );
             }
             
-            if(sPtr.type->freezesAnimation) {
+            if(sRef.type->freezesAnimation) {
                 removedForcedSprite = true;
             }
             
             bool justBuildup =
-                sPtr.type->buildup != 0.0f && sPtr.buildup < 1.0f;
+                sRef.type->buildup != 0.0f && sRef.buildup < 1.0f;
             if(
                 !justBuildup &&
-                sPtr.type->replacementOnTimeout && sPtr.timeLeft <= 0.0f
+                sRef.type->replacementOnTimeout && sRef.timeLeft <= 0.0f
             ) {
                 newStatusesToApply.push_back(
                     std::make_pair(
-                        sPtr.type->replacementOnTimeout,
-                        sPtr.fromHazard
+                        sRef.type->replacementOnTimeout,
+                        sRef.fromHazard
                     )
                 );
-                if(sPtr.type->replacementOnTimeout->freezesAnimation) {
+                if(sRef.type->replacementOnTimeout->freezesAnimation) {
                     //Actually, never mind, let's keep the current forced
                     //sprite so that the next status effect can use it too.
                     removedForcedSprite = false;

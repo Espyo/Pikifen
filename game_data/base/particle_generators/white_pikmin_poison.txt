@@ -1,21 +1,24 @@
-name = White Pikmin poison
+name=White Pikmin poison
 description=A continuous stream of poison particles, signifying an enemy's poison from having ingested a White Pikmin.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.1.0
+engine_version=1.2.0
 emission{
 	number=1
 	number_deviation=0
 	interval=0.3000
 	interval_deviation=0.0000
 	shape=0
-	circle_outer_dist=32.0000
+	circle_outer_dist=100.0000
 	circle_inner_dist=0.0000
 	circle_arc=6.2832
+	circle_arc_rot=0.0000
+	evenly_spread=false
 }
 base{
 	bitmap=effects/smoke
 	bitmap_angle=0.0000
+	bitmap_angle_type=0
 	duration=1.5000
 	friction=1.0000
 	blend_type=0
@@ -26,7 +29,7 @@ base{
 		1.0000=128 16 112 0
 	}
 	size{
-		0.0000=24.0000
+		0.0000=40.0000
 	}
 	linear_speed{
 		0.0000=40.0000 0.0000
@@ -42,8 +45,9 @@ base{
 bitmap_angle_deviation=0.0019
 duration_deviation=0.3000
 friction_deviation=0.0000
-size_deviation=2.0000
+size_deviation=10.0000
 orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=180.0000
 linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=false

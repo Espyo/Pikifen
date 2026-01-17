@@ -196,6 +196,12 @@ public:
     
     //Vertical offset of the particle generators.
     float particleOffsetZ = 0.0f;
+
+    //Whether the particle sizes scale with the mob.
+    bool particleScaleSizes = false;
+    
+    //Whether the particle emission reaches scale with the mob.
+    bool particleScaleReaches = false;
     
     //Sound to play when the status is applied, if any.
     DataNodeSound soundStart;
@@ -262,6 +268,7 @@ struct Status {
     //--- Function declarations ---
     
     explicit Status(StatusType* type);
+    void applyParticles(Mob* m, ParticleGenerator* pg);
     void tick(float deltaT);
     
 };

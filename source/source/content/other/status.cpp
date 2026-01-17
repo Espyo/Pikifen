@@ -14,6 +14,7 @@
 
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../core/misc_structs.h"
 #include "../../util/general_utils.h"
 
@@ -27,6 +28,42 @@ Status::Status(StatusType* type) :
     type(type) {
     
     timeLeft = type->autoRemoveTime;
+}
+
+
+/**
+ * @brief Applies one of the status's particle generators to a mob.
+ *
+ * @param m The mob.
+ * @param pg The particle generator.
+ */
+void Status::applyParticles(Mob* m, ParticleGenerator* pg) {
+    ParticleGenerator newPg = *pg;
+    newPg.restartTimer();
+    newPg.followMob = m;
+    newPg.followAngle = &m->angle;
+    newPg.followPosOffset = type->particleOffsetPos;
+    newPg.followZOffset = type->particleOffsetZ;
+    if(type->particleScaleReaches) {
+        newPg.emission.circleInnerDist =
+            (newPg.emission.circleInnerDist / 100.0f) * m->radius;
+        newPg.emission.circleOuterDist =
+            (newPg.emission.circleOuterDist / 100.0f) * m->radius;
+        newPg.emission.rectInnerDist =
+            (newPg.emission.rectInnerDist / 100.0f) * m->radius;
+        newPg.emission.rectOuterDist =
+            (newPg.emission.rectOuterDist / 100.0f) * m->radius;
+    }
+    if(type->particleScaleSizes) {
+        adjustKeyframeInterpolatorValues<float>(
+            newPg.baseParticle.size,
+        [ = ] (const float & s) {
+            return (s / 100.0f) * m->radius;
+        }
+        );
+        newPg.sizeDeviation = (newPg.sizeDeviation / 100.0f) * m->radius;
+    }
+    m->particleGenerators.push_back(newPg);
 }
 
 
@@ -113,6 +150,8 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("particle_generator_start", pgStartStr, &pgStartNode);
     sRS.set("particle_generator_end",   pgEndStr, &pgEndNode);
     sRS.set("particle_offset",          particleOffsetStr);
+    sRS.set("particle_scale_reaches",   particleScaleReaches);
+    sRS.set("particle_scale_sizes",     particleScaleSizes);
     sRS.set("replacement_on_timeout",   replacementOnTimeoutStr);
     sRS.set("buildup",                  buildup, &buildupNode);
     sRS.set("buildup_removal_duration", buildupRemovalDuration);

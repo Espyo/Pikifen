@@ -246,6 +246,18 @@
         <td>0 0 0</td>
       </tr>
       <tr>
+        <td>particle_scale_reaches</td>
+        <td>If particles are meant to spawn and this is set to true, the inner reach and outer reach act like a percentage of the object's radius. So if you want a particle generator to cover the entire object, set this to true and the outer reach to 100, to cover half the object's radius set it to 50, etc.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>particle_scale_sizes</td>
+        <td>If particles are meant to spawn and this is set to true, the size of each particle acts like a percentage of the object's radius. So if a particle has a size of 100, it will be the size of the object, a size of 30 will be 30%, etc.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
         <td>shaking_effect</td>
         <td>If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking. See also <code>shaking_effect_on_end</code>.</td>
         <td>Number</td>

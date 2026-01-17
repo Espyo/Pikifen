@@ -7,6 +7,8 @@ color = 128 16 112
 health_change = -200
 particle_generator = white_pikmin_poison
 particle_offset = 0 0 300
+particle_scale_reaches = true
+particle_scale_sizes = true
 reapply_rule = add_time
 
 maker = Espyo
