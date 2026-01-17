@@ -241,6 +241,9 @@ struct DeliveryInfo {
     //Index of the player team in charge, or INVALID if none.
     size_t playerTeamIdx = INVALID;
     
+    //Coordinates of the final delivery point.
+    Point finalPoint;
+    
     //--- Function declarations ---
     
     DeliveryInfo();
@@ -662,6 +665,9 @@ struct PikminNestType {
     //Speed at which Pikmin exit the nest.
     float pikminExitSpeed = 2.0f;
     
+    //Whether it has a menu that can be interacted with by leaders.
+    bool hasMenu = true;
+    
     //Sound data index for the Pikmin entry sound. Cache for performance.
     size_t soundPikminEntryIdx = INVALID;
     
@@ -715,6 +721,7 @@ struct PikminNest {
     PikminNest(Mob* mPtr, PikminNestType* type);
     bool callPikmin(Mob* mPtr, size_t typeIdx);
     size_t getAmountByType(const PikminType* type);
+    bool hasPikminInside(size_t typeIdx);
     void readScriptVars(const ScriptVarReader& svr);
     void requestPikmin(
         size_t typeIdx, size_t amount, Leader* lPtr

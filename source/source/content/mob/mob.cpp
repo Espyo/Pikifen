@@ -2619,7 +2619,7 @@ void Mob::getSpriteBitmapEffects(
                     hashNr((unsigned int) id) / (float) UINT32_MAX;
                 deviationMult = deviationMult * 2.0f - 1.0f;
                 deviationMult *= MOB::DELIVERY_TOSS_X_OFFSET;
-                newOffset.x =
+                newOffset.x +=
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft,
                         0.0f, 0.85f,
@@ -2633,6 +2633,12 @@ void Mob::getSpriteBitmapEffects(
                     );
             }
             
+            newOffset +=
+                interpolatePoint(
+                    deliveryInfo->animTimeRatioLeft, 0.0f, 1.0f,
+                    deliveryInfo->finalPoint - pos, 0.0f
+                );
+                
             info->tf.trans += newOffset;
             info->tf.scale *= newScale;
             break;

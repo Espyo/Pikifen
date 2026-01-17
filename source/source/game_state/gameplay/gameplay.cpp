@@ -816,9 +816,9 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
             if(filter && oPtr->oniType->nest->pikTypes[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += (long) oPtr->nest->pikminInside[t][m];
-            }
+            total +=
+                (long)
+                oPtr->nest->getAmountByType(oPtr->oniType->nest->pikTypes[t]);
         }
     }
     
@@ -834,9 +834,9 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
             if(filter && sPtr->shiType->nest->pikTypes[t] != filter) {
                 continue;
             }
-            for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += (long) sPtr->nest->pikminInside[t][m];
-            }
+            total +=
+                (long)
+                sPtr->nest->getAmountByType(sPtr->shiType->nest->pikTypes[t]);
         }
     }
     return total;

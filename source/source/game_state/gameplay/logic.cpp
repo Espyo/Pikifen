@@ -476,6 +476,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToNestToOpen = nullptr;
         if(!leaderPromptDone) {
             for(size_t o = 0; o < mobs.onions.size(); o++) {
+                if(!mobs.onions[o]->nest->nestType->hasMenu) continue;
                 d = Distance(player->leaderPtr->pos, mobs.onions[o]->pos);
                 if(d > game.config.leaders.onionOpenRange) continue;
                 if(d < closestD || !player->closeToNestToOpen) {

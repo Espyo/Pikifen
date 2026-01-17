@@ -126,10 +126,21 @@ void GenMobFsm::carryGetPath(Mob* m, void* info1, void* info2) {
             Ship* shiPtr = (Ship*) m->carryInfo->intendedMob;
             settings.finalTargetDistance =
                 std::max(
-                    m->radius -
-                    shiPtr->shiType->controlPointRadius,
+                    m->radius - shiPtr->shiType->controlPointRadius,
                     3.0f
                 );
+        }
+        
+    } else if(m->carryInfo->destination == CARRY_DESTINATION_ONION) {
+        //Special case: Onions.
+        //Like ships, Onions can have their delivery area larger than a
+        //single point.
+        if(m->carryInfo->intendedMob) {
+            Onion* oniPtr = (Onion*) m->carryInfo->intendedMob;
+            if(oniPtr->oniType->deliveryAreaRadius != 0.0f) {
+                settings.finalTargetDistance =
+                    m->radius + oniPtr->oniType->deliveryAreaRadius;
+            }
         }
         
     } else if(m->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB) {
@@ -188,6 +199,7 @@ void GenMobFsm::carryReachDestination(Mob* m, void* info1, void* info2) {
         m->deliveryInfo->intendedPikType = m->carryInfo->intendedPikType;
     }
     m->deliveryInfo->playerTeamIdx = m->carryInfo->getPlayerTeamIdx();
+    m->deliveryInfo->finalPoint = m->carryInfo->intendedPoint;
     
     m->fsm.runEvent(MOB_EV_CARRY_DELIVERED);
 }
@@ -449,6 +461,11 @@ void GenMobFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
         if(pikPtr) {
             pikPtr->fsm.runEvent(MOB_EV_FINISHED_TASK);
         }
+    }
+    
+    if(m->carryInfo->intendedMob->type->category->id == MOB_CATEGORY_ONIONS) {
+        Onion* oniPtr = (Onion*) m->carryInfo->intendedMob;
+        m->deliveryInfo->animType = oniPtr->oniType->deliveryAnim;
     }
     
     m->focusOnMob(m->carryInfo->intendedMob);

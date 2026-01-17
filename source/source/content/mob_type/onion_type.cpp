@@ -75,6 +75,23 @@ void OnionType::loadCatProperties(DataNode* file) {
     nest->loadProperties(file, this);
     nest->createColormap();
     
+    ReaderSetter oRS(file);
+    string deliveryAnimStr;
+    DataNode* deliveryAnimNode;
+    
+    oRS.set("auto_eject", autoEject);
+    oRS.set("delivery_animation", deliveryAnimStr, &deliveryAnimNode);
+    oRS.set("delivery_area_radius", deliveryAreaRadius);
+    oRS.set("eject_grown_pikmin", ejectGrownPikmin);
+    
+    if(deliveryAnimNode) {
+        readEnumProp(
+            deliveryAnimStr, (int*) &deliveryAnim,
+            vector<string> { "suck", "toss" },
+            "delivery animation", deliveryAnimNode
+        );
+    }
+    
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
             soundPopIdx = s;

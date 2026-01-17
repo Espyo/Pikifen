@@ -80,6 +80,7 @@ public:
     void drawMob() override;
     void generate();
     void readScriptVars(const ScriptVarReader& svr) override;
+    void spitPikminSeed(size_t typeIdx);
     void startGenerating();
     void stopGenerating();
     

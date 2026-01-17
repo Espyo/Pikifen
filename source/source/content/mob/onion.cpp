@@ -141,15 +141,14 @@ void Onion::generate() {
         
         game.statistics.pikminBirths++;
         game.states.gameplay->pikminBorn++;
-        game.states.gameplay->pikminBornPerType[
-            oniType->nest->pikTypes[t]
-        ]++;
+        game.states.gameplay->pikminBornPerType[oniType->nest->pikTypes[t]]++;
         game.states.gameplay->lastPikminBornPos = pos;
         
-        size_t totalAfter =
-            game.states.gameplay->mobs.pikmin.size() + 1;
-            
+        size_t totalAfter = game.states.gameplay->mobs.pikmin.size() + 1;
+        
         if(totalAfter > game.config.rules.maxPikminInField) {
+            //Can't eject this Pikmin because we're at the limit.
+            //Generate inside.
             nest->pikminInside[t][0]++;
             
             ParticleGenerator pg =
@@ -159,18 +158,24 @@ void Onion::generate() {
             pg.baseParticle.priority = PARTICLE_PRIORITY_LOW;
             particleGenerators.push_back(pg);
             
-            return;
+        } else if(oniType->autoEject) {
+            //Generate inside, and let the Onion's tick logic automatically
+            //spit a seed or call it out.
+            nest->pikminInside[t][0]++;
+            
+        } else if(oniType->ejectGrownPikmin) {
+            //Generate inside and then immediately eject it out.
+            nest->pikminInside[t][0]++;
+            nest->requestPikmin(t, 1, nullptr);
+            
+        } else {
+            //Don't generate inside, just spit the seed out directly.
+            spitPikminSeed(t);
+            
         }
         
-        spitPikminSeed(
-            pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[t],
-            nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
-            ONION::SPIT_V_SPEED
-        );
-        nSpits++;
-        
-        playSound(oniType->soundPopIdx);
-        
+        //Only one Pikmin is allowed to generate per function call, so quit
+        //out once we generate one.
         return;
     }
 }
@@ -185,6 +190,28 @@ void Onion::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     nest->readScriptVars(svr);
+}
+
+
+/**
+ * @brief Spits a Pikmin seed right now.
+ *
+ * @param typeIdx Index of the Pikmin type in the nest's data.
+ */
+void Onion::spitPikminSeed(size_t typeIdx) {
+    if(
+        game.states.gameplay->mobs.pikmin.size() >=
+        game.config.rules.maxPikminInField
+    ) {
+        return;
+    }
+    ::spitPikminSeed(
+        pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
+        nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
+        ONION::SPIT_V_SPEED
+    );
+    nSpits++;
+    playSound(oniType->soundPopIdx);
 }
 
 
@@ -216,9 +243,11 @@ void Onion::stopGenerating() {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Onion::tickClassSpecifics(float deltaT) {
+    //Timers.
     generationDelayTimer.tick(deltaT);
     nextGenerationTimer.tick(deltaT);
     
+    //See-through effect.
     unsigned char finalAlpha = 255;
     
     for(const Player& player : game.states.gameplay->players) {
@@ -258,5 +287,31 @@ void Onion::tickClassSpecifics(float deltaT) {
         }
     }
     
+    //Auto-ejection.
+    if(
+        oniType->autoEject &&
+        game.states.gameplay->mobs.pikmin.size() <
+        game.config.rules.maxPikminInField
+    ) {
+        for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
+            if(!nest->hasPikminInside(t)) continue;
+            if(
+                game.states.gameplay->mobs.pikmin.size() >=
+                game.config.rules.maxPikminInField
+            ) {
+                break;
+            }
+            
+            if(oniType->ejectGrownPikmin) {
+                if(nest->callQueue[t] == 0) {
+                    nest->requestPikmin(t, 1, nullptr);
+                }
+            } else {
+                spitPikminSeed(t);
+            }
+        }
+    }
+    
+    //Nest.
     nest->tick(deltaT);
 }

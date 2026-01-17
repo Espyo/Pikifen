@@ -919,6 +919,22 @@ size_t PikminNest::getAmountByType(const PikminType* type) {
 
 
 /**
+ * @brief Returns whether there are any Pikmin inside of the given type.
+ *
+ * @param typeIdx The type.
+ * @return Whether there are any.
+ */
+bool PikminNest::hasPikminInside(size_t typeIdx) {
+    for(size_t m = 0; m < N_MATURITIES; m++) {
+        if(pikminInside[typeIdx][m] > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Reads the provided script variables, if any, and does stuff with
  * any that are related to nests.
  *
@@ -1088,6 +1104,7 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     DataNode* pikTypesNode = nullptr;
     DataNode* legsNode = nullptr;
     
+    nRS.set("has_nest_menu", hasMenu);
     nRS.set("leg_body_parts", legsStr, &legsNode);
     nRS.set("pikmin_types", pikTypesStr, &pikTypesNode);
     nRS.set("pikmin_enter_speed", pikminEnterSpeed);

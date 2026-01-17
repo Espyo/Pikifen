@@ -63,6 +63,12 @@ public:
     //Nest data.
     PikminNestType* nest = nullptr;
     
+    //Whether it automatically ejects seeds or Pikmin if there's space.
+    bool autoEject = false;
+    
+    //Whether it ejects seeds or fully-formed Pikmin.
+    bool ejectGrownPikmin = false;
+    
     //Sound data index for the beam sound. Cache for performance.
     size_t soundBeamIdx = INVALID;
     
@@ -71,6 +77,12 @@ public:
     
     //Sound data index for the object reception sound. Cache for performance.
     size_t soundReceptionIdx = INVALID;
+    
+    //Delivery animation to play for items that get delivered.
+    DELIVERY_ANIM deliveryAnim = DELIVERY_ANIM_SUCK;
+    
+    //Radius of the area where a carried mob can be delivered.
+    float deliveryAreaRadius = 0.0f;
     
     
     //--- Function declarations ---
