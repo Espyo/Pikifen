@@ -22,9 +22,7 @@ Next tasks (roughly sorted most important first)
     Glow Pikmin
         The ability for Pikmin to teleport to the current leader if they've been idling for a bit
         The ability to keep their maturity, and to evolve automatically with time
-        Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
-        Glowmob?
     Puffstool and mushroom Pikmin
         The ability for statuses to change the team to the team of the one that gave the status
         The ability for statuses to change the graphic for a Pikmin's top
@@ -73,9 +71,8 @@ Next tasks (roughly sorted most important first)
                 https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
     
     --- 2.0.0 ---
-    Multiplayer
-        1 struct of info for each player, multiplayer controls
-        During loading, show how the screen is going to be split, and show which player is in which screen
+    Multiplayer co-op
+        Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus
             Options menu
                 Links to the control binds menu and the player setup menu
@@ -92,26 +89,55 @@ Next tasks (roughly sorted most important first)
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
                 Each column has buttons to toggle that player on or off
-                Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
-                Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area
             Pause menu
                 The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
                 The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
             Area selection
                 Add a button that takes you to the player setup menu
+                Only show areas that match the corresponding number of players, but allow other areas to be entered
+                If you try to play with a number of players not marked as compatible by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
+                    It should spawn them in the same coordinates, though maybe slightly offset
+                    It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
+            The widget focus cursor should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         HUD changes
             Split-screen logic: vertical split (better because you can increase the window size and better fit modern monitors, and also because physically chances are one player's sitting to the left of the other, and the other on the right), and four-way split
                 In the case of three players, the first two are on the top half, the third is centered on the bottom half
             Add HUD support for all the different split-screen layouts
-            In competitive modes, tint each player's HUD with their team color or something
+            During loading, show how the screen is going to be split, and show which player is in which screen
             Show each player's name in their screen somewhere
+        Make sure that:
+            Leaders can't steal each other's group members
+            Logic like culling isn't relying on just the first player
+        [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
+            A player's leader needs to throw another's
+                Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around
+                    Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
+                    Careful for when two players are near each other, spamming the throw input towards an enemy, and one of them ends up accidentally throwing the other. Maybe throwing should only happen if the throwee has nobody in their group?
+        New area data
+            Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
+            The ability to mark a leader as "multiplayer extra", so it's only used if the normal leaders are all taken up by players, and if not, it doesn't spawn in the first place
+        Gameplay
+            All players are under the same team
+            The game just gives the earliest leader in the leader order to player 1, then to player 2, etc. e.g. if there's a Louie mob and an Olimar mob, P1 should get Olimar
+        Onions should be able to auto-eject seeds
+        Mission high scores need to be saved independently for each player amount
+        Game statistics for how much time was spent in multiplayer play
+        Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
+        An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
+    Multiplayer competitive
+        Menus
+            Player setup menu
+                Each column should also let players pick which teams they belong to
+                Each column should also let players pick what leader they want to control first. Should probably let you pick from all leaders, not just the ones in the area
+            Area selection menu
+                Areas that don't match up with the current ruleset can still be selected, but with a warning.
+        HUD changes
+            Tint each player's HUD with their team color or something
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
-            The widget focus cursor should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts
             Leaders can't interact with each others's Onions or ships
-            Logic like culling isn't relying on just the first player
             Pikmin can't carry something the opposing team is already carrying
             Flower Pikmin will overpower bud Pikmin in a 1v1
             Candypop Buds can't accept Pikmin from another team
@@ -120,10 +146,6 @@ Next tasks (roughly sorted most important first)
                 The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to curLeaderPtr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is nullptr they just try something peaceful instead of crashing
                 Actually, the "KO" should be in a corner or something, and the player should be allowed to pan the camera to spectate
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
-            A player's leader needs to throw another's
-                Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around
-                    Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
-                    Careful for when two players are near each other, spamming the throw input towards an enemy, and one of them ends up accidentally throwing the other. Maybe throwing should only happen if the throwee has nobody in their group?
             A player sees an opposing team's Pikmin on their screen
                 I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
         Roulette items
@@ -222,32 +244,18 @@ Next tasks (roughly sorted most important first)
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
             A handful of rulesets for basic battles, Pikmin 2 battles, Pikmin 3 Bingo Battles, Pikmin 4 Dandori Battles, etc.
             Rulesets should be saved in a folder, that way players can share the data file of a ruleset they've made
-        Onions should be able to auto-eject seeds
-        Area gameplay
-            New area data
-                Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
-                Area makers can specify where cherries can spawn. If they don't, no cherries spawn
-                If you try to play with a number of players/teams not marked as compatible by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
-                    It should spawn them in the same coordinates, though maybe slightly offset
-                    It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
-            For simple-type areas and mission-type...
-                All players are under the same team
-                Each leader placed in the area is one player
-                The game just gives the earliest leader in the leader order to player 1, then to player 2, etc. e.g. if there's a Louie mob and an Olimar mob, P1 should get Olimar
-            For arena-type areas...
-                Players can be in teams or not; depends on their choices
-                The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
-                Alternatively, they must specify what leader mob corresponds to what team's leader, but since players can pick their leaders, this doesn't mean they will get the leader in the area
-                Players in the same team spawn in the same spot, though slightly offset, just like how if the game wants to spawn more leaders than there are available
-                The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
-            Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
-        Mission high scores need to be saved independently for each player amount
+        New area data
+            Area makers can specify where cherries can spawn. If they don't, no cherries spawn
+        Gameplay
+            Players can be in teams or not; depends on their choices
+            The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
+            Alternatively, they must specify what leader mob corresponds to what team's leader, but since players can pick their leaders, this doesn't mean they will get the leader in the area
+            Players in the same team spawn in the same spot, though slightly offset, just like how if the game wants to spawn more leaders than there are available
+            The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
         Results screen
             Take ideas from the Today's Report section of this file
             Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
-        Save stats for how much time was spent in normal gameplay, and how much time was spent in competitive modes
-        Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
-        An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
+        Game statistics for how much time was spent in multiplayer should be changed to co-op time, and a new statistic for competitive play time should be added
     Buried treasure
     Solid logic for enemies carrying treasures
         Breadbug tug-of-war logic
@@ -459,6 +467,7 @@ Misc things (so I don't forget)
             Or not -- most obstacles already show their progress visually rather than with a health wheel
         [NEEDS BRAINSTORMING] Mob rotation should have acceleration too
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the leader cursor goes over them
+        The ability for any object to fade when the leader's cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
         The sparkle particles on treasures need to be more obvious
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
@@ -481,7 +490,6 @@ Misc things (so I don't forget)
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
-            The Pikmin flowers should render a small shadow under them too
         Healing at the ship should make a sound
         Cursor trail improvements
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
@@ -509,6 +517,7 @@ Misc things (so I don't forget)
             Allow the player to pick between full-squad charging or standby type charging; hitting the button again within a time limit charges the full squad however
                 Make the second charge sound higher pitched to indicate this
             Allow the player to pick between placing only the minimum amount of Pikmin necessary onto the task (P4) or maximum (P3); hitting charge again should use the maximum
+            Glow Pikmin Glowmob
         Half-whistle
             Options for whether whistling workers brings them to you right away, brings the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
         Water depth (thanks ThyCheshireCat)
@@ -592,7 +601,7 @@ Misc things (so I don't forget)
         Call all Pikmin to the landing site [PIKMIN 3][PIKMIN 4]
         Increased defense
         Increased running speed?
-        invulnerability to certain hazards?
+        Invulnerability to certain hazards?
         A Survey Drone? [PIKMIN 4]
         Maybe the abilities to swarm and charge should be upgrades too?
         Sleeping
@@ -661,6 +670,7 @@ Misc things (so I don't forget)
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic
             Have SOMETHING moving... If the player doesn't touch anything, the screen shouldn't be mistakable with a frozen game
+            When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Style it after the KopPad? (thanks Helodity)
             Juice
                 Pop sound and pop line particles when something gets created
@@ -720,11 +730,9 @@ Misc things (so I don't forget)
             Bulbears
             Scuttlebug?
             An enemy that follows you anywhere, but only at short-range. You can use this to goad it towards the Onion for less corpse carrying time, or to an opponent's Onion in multiplayer arenas
-        The Pikmin 4 default leader
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-        Pellet Posies could have properties that make them regrow
         A tall grass mob
         A turnstile mob
         Sounds
@@ -746,6 +754,7 @@ Misc things (so I don't forget)
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty
+        Pellet Posies could have properties that make them regrow
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
@@ -757,7 +766,6 @@ Misc things (so I don't forget)
         The Yellow Wollyhop should throw Pikmin farther away when landing, so that the Pikmin don't land immediately in crushing distance of the next jump (thanks Gatling Groink)
         Onions should be shaded with hue shifting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
-    The ability for any object to fade when the leader's cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Boss music logic for attack jingles
     Missions
         A goal where you reach X sprays of type Y
@@ -800,7 +808,6 @@ Tasks for later on (I might never implement these)
     Mechanics
         The ability for enemies to eat other enemies
         The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
-        Make it so players can request all Pikmin to come to the landing site by interacting with the ship?
         The ability for Blue Pikmin to rescue drowning Pikmin
         Nighttime (what enemies can spawn at night, their changes, etc.)
             Change the HUD icon to a moon
@@ -842,7 +849,6 @@ Tasks for later on (I might never implement these)
             [NEEDS BRAINSTORMING] Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
             A tool that checks every point in the map (more like every 2 units) and checks if the closest carrying point is on the other side of a wall or something
             The area editor could have a button to start testing from where the mouse cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
-            When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Backups
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
                 If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup

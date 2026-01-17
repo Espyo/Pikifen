@@ -52,6 +52,7 @@ void PelletType::loadCatProperties(DataNode* file) {
     string pikTypeStr;
     DataNode* pikTypeNode = nullptr;
     
+    pRS.set("draw_number", drawNumber);
     pRS.set("match_seeds", matchSeeds);
     pRS.set("non_match_seeds", nonMatchSeeds);
     pRS.set("number", number);

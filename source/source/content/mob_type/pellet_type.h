@@ -65,6 +65,9 @@ public:
     
     //Bitmap to use to represent the number on the pellet.
     ALLEGRO_BITMAP* bmpNumber = nullptr;
+
+    //Whether to draw the number on it.
+    bool drawNumber = true;
     
     
     //--- Function declarations ---
