@@ -1,12 +1,12 @@
-name = Master Onion
-description = Combined Onion that houses all Pikmin types.
+name = Ice Onion
+description = Onion that houses Ice Pikmin.
 
 blackout_radius = 48
 height = 200
 leg_body_parts = hole_1; foot_1; hole_2; foot_2; hole_3; foot_3
 pikmin_enter_speed = 0.7
 pikmin_exit_speed = 2
-pikmin_types = red_pikmin; yellow_pikmin; blue_pikmin; rock_pikmin; winged_pikmin; ice_pikmin
+pikmin_types = ice_pikmin
 pushable = false
 pushes = false
 radius = 16
@@ -46,5 +46,5 @@ sounds {
 }
 
 maker = Espyo
-version = 1.1.0
+version = 1.0.0
 engine_version = 1.2.0

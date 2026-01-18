@@ -1,0 +1,546 @@
+name=Ice Onion animations
+description=Animations for the Ice Onion.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	generating{
+		loop_frame=6
+		frames{
+			idling_03{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_06{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_07{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_03{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_04{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_05{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_06{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_07{
+				duration=0.1100
+				interpolate=true
+			}
+			idling_08{
+				duration=0.1100
+				interpolate=true
+			}
+		}
+	}
+	stopping_generation{
+		frames{
+			idling_01{
+				duration=0.0600
+				interpolate=true
+			}
+			idling_03{
+				duration=0.0300
+				interpolate=true
+			}
+			idling_04{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_05{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_06{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_07{
+				duration=0.0400
+				interpolate=true
+			}
+			idling_08{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.0500
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_01{
+		file=onions/ice
+		file_pos=0.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_02{
+		file=onions/ice
+		file_pos=0.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5060 0.5060
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_03{
+		file=onions/ice
+		file_pos=282.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_04{
+		file=onions/ice
+		file_pos=282.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5060 0.5060
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_05{
+		file=onions/ice
+		file_pos=564.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_06{
+		file=onions/ice
+		file_pos=564.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5060 0.5060
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_07{
+		file=onions/ice
+		file_pos=846.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_08{
+		file=onions/ice
+		file_pos=846.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5060 0.5060
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hole_1
+	foot_1
+	hole_2
+	foot_2
+	hole_3
+	foot_3
+}
