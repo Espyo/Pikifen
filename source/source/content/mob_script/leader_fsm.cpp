@@ -1312,7 +1312,7 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     if(healthBefore > 0.0f && m->health < healthBefore) {
         game.statistics.leaderDamageSuffered += healthBefore - m->health;
     }
-
+    
     //Next state.
     if(knockbackExists) {
         if(knockbackStrength > 0) {
@@ -2375,7 +2375,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
     }
     
     float shootAngle = m->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
-        
+    
     unordered_set<Mob*> affectedMobs;
     if(sprayTypeRef.affectsUser) {
         affectedMobs.insert(m);
@@ -2673,6 +2673,7 @@ void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
     if(leaPtr->leaType->sleepingStatus) {
         for(size_t s = 0; s < m->statuses.size(); s++) {
             if(m->statuses[s].type == leaPtr->leaType->sleepingStatus) {
+                m->statuses[s].prevState = m->statuses[s].state;
                 m->statuses[s].state = STATUS_STATE_TO_DELETE;
             }
         }

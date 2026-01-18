@@ -9,6 +9,7 @@ height = 8
 pushable = false
 pushes = false
 radius = 5
+show_health = false
 target_type = none
 team = none
 

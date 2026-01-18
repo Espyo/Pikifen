@@ -196,6 +196,10 @@ vulnerabilities {
     water = 0 none false true
 }
 
+status_vulnerabilities {
+    burned = 200
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.2.0

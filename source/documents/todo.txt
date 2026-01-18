@@ -7,9 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    An adult Bulbmin's stem will have its freezing progress and health wheel show up if hit by an Ice Pikmin
     Standardize Pikmin climbing sprites
-    Ice Pikmin aren't dying faster to fire
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
     --- 1.2.0 ---

@@ -196,7 +196,7 @@ public:
     
     //Vertical offset of the particle generators.
     float particleOffsetZ = 0.0f;
-
+    
     //Whether the particle sizes scale with the mob.
     bool particleScaleSizes = false;
     
@@ -251,6 +251,9 @@ struct Status {
     
     //Current state.
     STATUS_STATE state = STATUS_STATE_ACTIVE;
+    
+    //Previous state.
+    STATUS_STATE prevState = STATUS_STATE_ACTIVE;
     
     //Current buildup, if applicable [0 - 1].
     float buildup = 0.0f;

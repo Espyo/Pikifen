@@ -77,6 +77,7 @@ void Status::tick(float deltaT) {
     if(type->autoRemoveTime > 0.0f && state == STATUS_STATE_ACTIVE) {
         timeLeft -= deltaT;
         if(timeLeft <= 0.0f) {
+            prevState = state;
             state = STATUS_STATE_TO_DELETE;
         }
     }
@@ -86,6 +87,7 @@ void Status::tick(float deltaT) {
     ) {
         buildupRemovalTimeLeft -= deltaT;
         if(buildupRemovalTimeLeft <= 0.0f) {
+            prevState = state;
             state = STATUS_STATE_TO_DELETE;
         }
     }

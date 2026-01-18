@@ -846,6 +846,7 @@ void Mob::tickVerticalMovementPhysics(
         
         for(size_t s = 0; s < statuses.size(); s++) {
             if(statuses[s].type->removeOnHazardLeave) {
+                statuses[s].prevState = statuses[s].state;
                 statuses[s].state = STATUS_STATE_TO_DELETE;
             }
         }

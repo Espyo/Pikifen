@@ -474,6 +474,7 @@ void Mob::applyStatusEffects(
         listIdx = statuses.size() - 1;
     }
     
+    statuses[listIdx].prevState = statuses[listIdx].state;
     statuses[listIdx].state = STATUS_STATE_ACTIVE;
     
     handleStatusEffectGain(s);
@@ -1537,43 +1538,45 @@ void Mob::deleteOldStatusEffects() {
     for(size_t s = 0; s < statuses.size(); ) {
         Status& sRef = statuses[s];
         if(sRef.state == STATUS_STATE_TO_DELETE) {
-            handleStatusEffectLoss(sRef.type);
-            
-            if(sRef.type->particleGen) {
-                removeParticleGenerator(sRef.type->particleGen->id);
-            }
-            
-            if(sRef.type->particleGenEnd) {
-                sRef.applyParticles(this, sRef.type->particleGenEnd);
-            }
-            
-            if(sRef.type->soundEnd.sample) {
-                game.audio.createMobSoundSource(
-                    sRef.type->soundEnd.sample,
-                    this, false, sRef.type->soundEnd.config
-                );
-            }
-            
-            if(sRef.type->freezesAnimation) {
-                removedForcedSprite = true;
-            }
-            
-            bool justBuildup =
-                sRef.type->buildup != 0.0f && sRef.buildup < 1.0f;
-            if(
-                !justBuildup &&
-                sRef.type->replacementOnTimeout && sRef.timeLeft <= 0.0f
-            ) {
-                newStatusesToApply.push_back(
-                    std::make_pair(
-                        sRef.type->replacementOnTimeout,
-                        sRef.fromHazard
-                    )
-                );
-                if(sRef.type->replacementOnTimeout->freezesAnimation) {
-                    //Actually, never mind, let's keep the current forced
-                    //sprite so that the next status effect can use it too.
-                    removedForcedSprite = false;
+            if(sRef.prevState == STATUS_STATE_ACTIVE) {
+                handleStatusEffectLoss(sRef.type);
+                
+                if(sRef.type->particleGen) {
+                    removeParticleGenerator(sRef.type->particleGen->id);
+                }
+                
+                if(sRef.type->particleGenEnd) {
+                    sRef.applyParticles(this, sRef.type->particleGenEnd);
+                }
+                
+                if(sRef.type->soundEnd.sample) {
+                    game.audio.createMobSoundSource(
+                        sRef.type->soundEnd.sample,
+                        this, false, sRef.type->soundEnd.config
+                    );
+                }
+                
+                if(sRef.type->freezesAnimation) {
+                    removedForcedSprite = true;
+                }
+                
+                bool justBuildup =
+                    sRef.type->buildup != 0.0f && sRef.buildup < 1.0f;
+                if(
+                    !justBuildup &&
+                    sRef.type->replacementOnTimeout && sRef.timeLeft <= 0.0f
+                ) {
+                    newStatusesToApply.push_back(
+                        std::make_pair(
+                            sRef.type->replacementOnTimeout,
+                            sRef.fromHazard
+                        )
+                    );
+                    if(sRef.type->replacementOnTimeout->freezesAnimation) {
+                        //Actually, never mind, let's keep the current forced
+                        //sprite so that the next status effect can use it too.
+                        removedForcedSprite = false;
+                    }
                 }
             }
             
@@ -4167,9 +4170,10 @@ void Mob::tickMiscLogic(float deltaT) {
     }
     
     //Health wheel.
-    bool shouldShowHealth =
+    bool hasHealthWheel =
         type->showHealth &&
-        !hasFlag(flags, MOB_FLAG_HIDDEN) &&
+        !hasFlag(flags, MOB_FLAG_HIDDEN);
+    bool shouldShowHealth =
         health > 0.0f &&
         health < maxHealth;
     bool shouldShowStatusBuildups = false;
@@ -4179,9 +4183,15 @@ void Mob::tickMiscLogic(float deltaT) {
             break;
         }
     }
-    if(!healthWheel && (shouldShowHealth || shouldShowStatusBuildups)) {
+    if(
+        !healthWheel &&
+        hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
+    ) {
         healthWheel = new InWorldHealthWheel(this);
-    } else if(healthWheel && !(shouldShowHealth || shouldShowStatusBuildups)) {
+    } else if(
+        healthWheel &&
+        (!hasHealthWheel || (!shouldShowHealth && !shouldShowStatusBuildups))
+    ) {
         healthWheel->startFading();
     }
     
