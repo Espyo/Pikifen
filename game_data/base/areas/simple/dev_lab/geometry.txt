@@ -311,8 +311,8 @@ vertexes{
 	v=1984.0000 -512.0000
 	v=192.0000 -896.0000
 	v=192.0000 -1280.0000
-	v=3520.0000 -1280.0000
-	v=3520.0000 -896.0000
+	v=3936.0000 -1280.0000
+	v=3936.0000 -896.0000
 	v=192.0000 -1344.0000
 	v=192.0000 -1664.0000
 	v=2816.0000 -1664.0000
@@ -1527,53 +1527,53 @@ vertexes{
 	v=64.0000 3136.0000
 	v=104.0000 3072.0000
 	v=104.0000 3136.0000
-	v=2448.0000 -1184.0000
-	v=2464.0000 -1184.0000
-	v=2448.0000 -1120.0000
-	v=2432.0000 -1120.0000
-	v=2744.0000 -1160.0000
-	v=2760.0000 -1160.0000
-	v=2760.0000 -1176.0000
-	v=2776.0000 -1176.0000
-	v=2776.0000 -1160.0000
-	v=2792.0000 -1160.0000
-	v=2792.0000 -1144.0000
-	v=2776.0000 -1144.0000
-	v=2776.0000 -1128.0000
-	v=2760.0000 -1128.0000
-	v=2760.0000 -1144.0000
-	v=2744.0000 -1144.0000
-	v=3232.0000 -1164.0000
-	v=3256.0000 -1164.0000
-	v=3264.0000 -1172.0000
-	v=3272.0000 -1172.0000
-	v=3264.0000 -1164.0000
-	v=3272.0000 -1164.0000
-	v=3272.0000 -1156.0000
-	v=3264.0000 -1156.0000
-	v=3256.0000 -1148.0000
-	v=3272.0000 -1148.0000
-	v=3272.0000 -1140.0000
-	v=3248.0000 -1140.0000
-	v=3240.0000 -1132.0000
-	v=3232.0000 -1132.0000
-	v=3240.0000 -1140.0000
-	v=3232.0000 -1140.0000
-	v=3232.0000 -1148.0000
-	v=3248.0000 -1148.0000
-	v=3256.0000 -1156.0000
-	v=3232.0000 -1156.0000
-	v=3032.0000 -1128.0000
-	v=3032.0000 -1136.0000
-	v=3040.0000 -1136.0000
-	v=3040.0000 -1168.0000
-	v=3032.0000 -1160.0000
-	v=3032.0000 -1168.0000
-	v=3040.0000 -1176.0000
-	v=3048.0000 -1176.0000
-	v=3048.0000 -1136.0000
-	v=3056.0000 -1136.0000
-	v=3056.0000 -1128.0000
+	v=2640.0000 -1184.0000
+	v=2656.0000 -1184.0000
+	v=2640.0000 -1120.0000
+	v=2624.0000 -1120.0000
+	v=2936.0000 -1160.0000
+	v=2952.0000 -1160.0000
+	v=2952.0000 -1176.0000
+	v=2968.0000 -1176.0000
+	v=2968.0000 -1160.0000
+	v=2984.0000 -1160.0000
+	v=2984.0000 -1144.0000
+	v=2968.0000 -1144.0000
+	v=2968.0000 -1128.0000
+	v=2952.0000 -1128.0000
+	v=2952.0000 -1144.0000
+	v=2936.0000 -1144.0000
+	v=3424.0000 -1164.0000
+	v=3448.0000 -1164.0000
+	v=3456.0000 -1172.0000
+	v=3464.0000 -1172.0000
+	v=3456.0000 -1164.0000
+	v=3464.0000 -1164.0000
+	v=3464.0000 -1156.0000
+	v=3456.0000 -1156.0000
+	v=3448.0000 -1148.0000
+	v=3464.0000 -1148.0000
+	v=3464.0000 -1140.0000
+	v=3440.0000 -1140.0000
+	v=3432.0000 -1132.0000
+	v=3424.0000 -1132.0000
+	v=3432.0000 -1140.0000
+	v=3424.0000 -1140.0000
+	v=3424.0000 -1148.0000
+	v=3440.0000 -1148.0000
+	v=3448.0000 -1156.0000
+	v=3424.0000 -1156.0000
+	v=3232.0000 -1128.0000
+	v=3232.0000 -1136.0000
+	v=3240.0000 -1136.0000
+	v=3240.0000 -1168.0000
+	v=3232.0000 -1160.0000
+	v=3232.0000 -1168.0000
+	v=3240.0000 -1176.0000
+	v=3248.0000 -1176.0000
+	v=3248.0000 -1136.0000
+	v=3256.0000 -1136.0000
+	v=3256.0000 -1128.0000
 	v=-1856.0000 576.0000
 	v=-1856.0000 1024.0000
 	v=-2304.0000 1024.0000
@@ -13467,19 +13467,19 @@ mobs{
 	}
 	custom{
 		type=reinforced_wall
-		p=1152.0000 -1088.0000
+		p=1344.0000 -1088.0000
 	}
 	tool{
 		type=bomb_rock
-		p=1200.0000 -1152.0000
+		p=1392.0000 -1152.0000
 	}
 	tool{
 		type=bomb_rock
-		p=1216.0000 -1088.0000
+		p=1408.0000 -1088.0000
 	}
 	tool{
 		type=bomb_rock
-		p=1232.0000 -1024.0000
+		p=1424.0000 -1024.0000
 	}
 	group_task{
 		type=cardboard_box
@@ -14281,11 +14281,11 @@ mobs{
 	}
 	custom{
 		type=automatic_gate
-		p=1408.0000 -1088.0000
+		p=1600.0000 -1088.0000
 	}
 	scale{
 		type=pressure_plate
-		p=1536.0000 -1088.0000
+		p=1728.0000 -1088.0000
 		vars=goal_number=3
 		links=338
 	}
@@ -14406,46 +14406,6 @@ mobs{
 		type=ceramic_fragment_red
 		p=-2176.0000 2656.0000
 	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
-	pikmin{
-		type=winged_pikmin
-		p=896.0000 -1248.0000
-	}
 	treasure{
 		type=fidget_spinner
 		p=1056.0000 -2720.0000
@@ -14461,7 +14421,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=224.0000 3040.0000
-		links=379
+		links=369
 	}
 	custom{
 		type=dummy
@@ -14474,105 +14434,105 @@ mobs{
 	}
 	custom{
 		type=automatic_gate
-		p=1728.0000 -1088.0000
+		p=1920.0000 -1088.0000
 	}
 	interactable{
 		type=lever
-		p=1792.0000 -1088.0000
-		links=381
+		p=1984.0000 -1088.0000
+		links=371
 	}
 	custom{
 		type=automatic_gate
-		p=2112.0000 -1088.0000
+		p=2304.0000 -1088.0000
 	}
 	interactable{
 		type=button
-		p=2176.0000 -1088.0000
+		p=2368.0000 -1088.0000
+		links=373
+	}
+	custom{
+		type=automatic_gate
+		p=2624.0000 -1024.0000
+		angle=1.5708
+	}
+	scale{
+		type=pressure_plate
+		p=2560.0000 -1152.0000
+		vars=goal_number=3
+		links=378
+	}
+	interactable{
+		type=lever
+		p=2688.0000 -1152.0000
+		links=378
+	}
+	custom{
+		type=logic_or_gate
+		p=2624.0000 -1088.0000
+		links=375
+	}
+	custom{
+		type=automatic_gate
+		p=2944.0000 -1024.0000
+		angle=1.5708
+	}
+	scale{
+		type=pressure_plate
+		p=2880.0000 -1152.0000
+		vars=goal_number=3
+		links=382
+	}
+	interactable{
+		type=lever
+		p=3008.0000 -1152.0000
+		links=382
+	}
+	custom{
+		type=logic_and_gate
+		p=2944.0000 -1088.0000
+		links=379
+	}
+	custom{
+		type=automatic_gate
+		p=3520.0000 -1024.0000
+		angle=1.5708
+	}
+	scale{
+		type=pressure_plate
+		p=3520.0000 -1152.0000
+		vars=goal_number=3
+		links=385
+	}
+	custom{
+		type=logic_not_gate
+		p=3520.0000 -1088.0000
 		links=383
 	}
 	custom{
 		type=automatic_gate
-		p=2432.0000 -1024.0000
+		p=3232.0000 -1024.0000
 		angle=1.5708
 	}
 	scale{
 		type=pressure_plate
-		p=2368.0000 -1152.0000
+		p=3168.0000 -1152.0000
 		vars=goal_number=3
 		links=388
-	}
-	interactable{
-		type=lever
-		p=2496.0000 -1152.0000
-		links=388
-	}
-	custom{
-		type=logic_or_gate
-		p=2432.0000 -1088.0000
-		links=385
-	}
-	custom{
-		type=automatic_gate
-		p=2752.0000 -1024.0000
-		angle=1.5708
-	}
-	scale{
-		type=pressure_plate
-		p=2688.0000 -1152.0000
-		vars=goal_number=3
-		links=392
-	}
-	interactable{
-		type=lever
-		p=2816.0000 -1152.0000
-		links=392
-	}
-	custom{
-		type=logic_and_gate
-		p=2752.0000 -1088.0000
-		links=389
-	}
-	custom{
-		type=automatic_gate
-		p=3328.0000 -1024.0000
-		angle=1.5708
-	}
-	scale{
-		type=pressure_plate
-		p=3328.0000 -1152.0000
-		vars=goal_number=3
-		links=395
-	}
-	custom{
-		type=logic_not_gate
-		p=3328.0000 -1088.0000
-		links=393
-	}
-	custom{
-		type=automatic_gate
-		p=3040.0000 -1024.0000
-		angle=1.5708
-	}
-	scale{
-		type=pressure_plate
-		p=2976.0000 -1152.0000
-		vars=goal_number=3
-		links=398
 	}
 	custom{
 		type=logic_xor_gate
-		p=3040.0000 -1088.0000
-		links=396
+		p=3232.0000 -1088.0000
+		links=386
 	}
 	interactable{
 		type=lever
-		p=3104.0000 -1152.0000
-		links=398
+		p=3296.0000 -1152.0000
+		links=388
 	}
 	bouncer{
 		type=geyser
 		p=-1888.0000 608.0000
-		links=401
+		links=391
 	}
 	custom{
 		type=dummy
@@ -14581,12 +14541,12 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-1888.0000 672.0000
-		links=404
+		links=394
 	}
 	resource{
 		type=ceramic_fragment_red
 		p=-1952.0000 672.0000
-		links=404
+		links=394
 	}
 	custom{
 		type=carry_target
@@ -14596,7 +14556,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1760.0000 160.0000
-		links=406
+		links=396
 	}
 	custom{
 		type=dummy
@@ -14610,7 +14570,7 @@ mobs{
 	resource{
 		type=ceramic_fragment_red
 		p=-2080.0000 288.0000
-		links=407
+		links=397
 	}
 	resource{
 		type=ceramic_fragment_red
@@ -14624,12 +14584,12 @@ mobs{
 	}
 	interactable{
 		type=timed_lever
-		p=1984.0000 -1088.0000
-		links=412
+		p=2176.0000 -1088.0000
+		links=402
 	}
 	custom{
 		type=automatic_gate
-		p=1920.0000 -1088.0000
+		p=2112.0000 -1088.0000
 	}
 	pile{
 		type=chocolate_bar
@@ -14650,7 +14610,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-992.0000 -1248.0000
-		links=418
+		links=408
 	}
 	custom{
 		type=dummy
@@ -14918,7 +14878,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-1696.0000 -736.0000
-		links=472
+		links=462
 	}
 	custom{
 		type=dummy
@@ -14939,7 +14899,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=1088.0000 -160.0000
-		links=477
+		links=467
 	}
 	custom{
 		type=dummy
@@ -14975,7 +14935,7 @@ mobs{
 	bouncer{
 		type=geyser
 		p=-2688.0000 -1504.0000
-		links=485
+		links=475
 	}
 	custom{
 		type=dummy
@@ -15034,6 +14994,10 @@ mobs{
 		type=ice_onion
 		p=-1312.0000 -544.0000
 		vars=pikmin_inside=3 3 3
+	}
+	custom{
+		type=ice_wall
+		p=1152.0000 -1088.0000
 	}
 }
 path_stops{

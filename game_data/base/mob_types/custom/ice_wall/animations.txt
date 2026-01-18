@@ -1,0 +1,1086 @@
+name=Ice wall animations
+description=Animations for the ice wall.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.0000
+			}
+		}
+	}
+	stage_1_idling{
+		frames{
+			stage_1_01{
+				duration=0.0000
+			}
+		}
+	}
+	stage_1_shaking{
+		frames{
+			stage_1_02{
+				duration=0.0600
+				interpolate=true
+			}
+			stage_1_03{
+				duration=0.0600
+				interpolate=true
+			}
+		}
+	}
+	stage_2_idling{
+		frames{
+			stage_2_01{
+				duration=0.0000
+			}
+		}
+	}
+	stage_2_shaking{
+		frames{
+			stage_2_02{
+				duration=0.0600
+				interpolate=true
+			}
+			stage_2_03{
+				duration=0.0600
+				interpolate=true
+			}
+		}
+	}
+	stage_3_idling{
+		frames{
+			stage_3_01{
+				duration=0.0000
+			}
+		}
+	}
+	stage_3_shaking{
+		frames{
+			stage_3_02{
+				duration=0.0600
+				interpolate=true
+			}
+			stage_3_03{
+				duration=0.0600
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 628.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	stage_1_01{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 49.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_1_02{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 49.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_1_03{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 49.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_2_01{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_2_02{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_2_03{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_3_01{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_3_02{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+	stage_3_03{
+		file=other_mobs/ice_wall
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			center_ice{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_left_ice{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			far_right_ice{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_left_ice{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			near_right_ice{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=2
+				knockback=0.2000
+			}
+		}
+	}
+}
+body_parts{
+	center
+	center_ice
+	far_left
+	far_left_ice
+	far_right
+	far_right_ice
+	near_left
+	near_left_ice
+	near_right
+	near_right_ice
+}
