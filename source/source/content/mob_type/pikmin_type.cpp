@@ -185,6 +185,7 @@ void PikminType::loadCatProperties(DataNode* file) {
     DataNode* topFlowerNode = nullptr;
     
     pRS.set("attack_method", attackMethodStr, &attackMethodNode);
+    pRS.set("auto_maturate_interval", autoMaturateInterval);
     pRS.set("can_carry_tools", canCarryTools);
     pRS.set("chills_liquids", chillsLiquids);
     pRS.set("can_fly", canFly);

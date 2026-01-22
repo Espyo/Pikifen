@@ -96,7 +96,18 @@ Pikmin::Pikmin(const Point& pos, PikminType* type, float angle) :
             PIKMIN::MISSED_ATTACK_DURATION,
     [this] () { this->missedAttackPtr = nullptr; }
         );
-        
+    if(pikType->autoMaturateInterval != 0.0f) {
+        autoMaturateTimer =
+            Timer(
+                pikType->autoMaturateInterval,
+        [this] () {
+            this->increaseMaturity(1);
+            this->autoMaturateTimer.start();
+        }
+            );
+        autoMaturateTimer.start();
+    }
+    
     if(pikType->canFly) {
         enableFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
@@ -617,6 +628,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     //Tick some timers.
     missedAttackTimer.tick(deltaT);
     bumpLock = std::max(bumpLock - deltaT, 0.0f);
+    autoMaturateTimer.tick(deltaT);
     
     //Forcefully follow another mob as a leader.
     if(mustFollowLinkAsLeader && !links.empty()) {

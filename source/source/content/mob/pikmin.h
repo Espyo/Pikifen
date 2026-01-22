@@ -57,6 +57,9 @@ public:
     //The Pikmin will consider the miss for this long.
     Timer missedAttackTimer;
     
+    //The Pikmin will automatically maturate one stage after this long.
+    Timer autoMaturateTimer;
+    
     //Did the Pikmin's last attack cause zero damage?
     bool wasLastHitDing = false;
     

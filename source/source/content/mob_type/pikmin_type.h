@@ -395,6 +395,10 @@ public:
     //-0.5 = misses twice as often. etc.
     float enemyHitRateModifierStanding = 0.0f;
     
+    //Time before it maturates one stage automatically.
+    //0 for no automatic maturation.
+    float autoMaturateInterval = 0.0f;
+    
     //Whether it can lose its maturity from things like attacks.
     bool canLoseMaturity = true;
     
