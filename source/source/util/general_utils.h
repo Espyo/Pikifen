@@ -127,6 +127,7 @@ struct EnumNameDatabase {
     void registerItem(size_t enum_idx, const string& name);
     size_t getIdx(const string& name) const;
     string getName(size_t idx) const;
+    vector<string> getNames() const;
     size_t getNrOfItems() const;
     void clear();
     

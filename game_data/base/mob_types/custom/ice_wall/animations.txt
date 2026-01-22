@@ -169,7 +169,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -188,7 +188,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -207,7 +207,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -226,7 +226,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -245,7 +245,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -272,7 +272,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -291,7 +291,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -310,7 +310,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -329,7 +329,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -348,7 +348,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -375,7 +375,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -394,7 +394,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -413,7 +413,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -432,7 +432,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -451,7 +451,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -477,7 +477,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -496,7 +496,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -515,7 +515,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -534,7 +534,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -553,7 +553,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -580,7 +580,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -599,7 +599,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -618,7 +618,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -637,7 +637,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -656,7 +656,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -683,7 +683,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -702,7 +702,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -721,7 +721,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -740,7 +740,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -759,7 +759,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -785,7 +785,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -804,7 +804,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -823,7 +823,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -842,7 +842,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -861,7 +861,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -888,7 +888,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -907,7 +907,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -926,7 +926,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -945,7 +945,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -964,7 +964,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}
@@ -991,7 +991,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -1010,7 +1010,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -1029,7 +1029,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -1048,7 +1048,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -1067,7 +1067,7 @@ sprites{
 				value=2.0000
 				hazard=ice
 				knockback_type=2
-				knockback=0.2000
+				knockback=1.0000
 			}
 		}
 	}

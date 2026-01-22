@@ -100,6 +100,20 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
             case EDITOR_STATE_MAIN: {
                 quitCmd(1.0f);
                 break;
+            } case EDITOR_STATE_SPRITE_BITMAP: {
+                game.editorsView.cam.setPos(preSpriteBmpCamPos);
+                game.editorsView.cam.setZoom(preSpriteBmpCamZoom);
+                changeState(EDITOR_STATE_SPRITE);
+                break;
+            } case EDITOR_STATE_SPRITE_TRANSFORM: {
+                changeState(EDITOR_STATE_SPRITE);
+                break;
+            } case EDITOR_STATE_HITBOXES: {
+                changeState(EDITOR_STATE_SPRITE);
+                break;
+            } case EDITOR_STATE_TOP: {
+                changeState(EDITOR_STATE_SPRITE);
+                break;
             }
             }
         }

@@ -120,6 +120,20 @@ string EnumNameDatabase::getName(size_t idx) const {
 
 
 /**
+ * @brief Returns all item names, in order.
+ *
+ * @return The names.
+ */
+vector<string> EnumNameDatabase::getNames() const {
+    vector<string> result;
+    for(size_t n = 0; n < names.size(); n++) {
+        result.push_back(names[n]);
+    }
+    return result;
+}
+
+
+/**
  * @brief Returns the number of items registered.
  *
  * @return The amount.

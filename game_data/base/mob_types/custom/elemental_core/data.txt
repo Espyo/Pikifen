@@ -1,6 +1,7 @@
 name = Elemental Core
 description = The center of an Elemental Plasm from the Plasm Wraith.
 
+appears_in_area_editor = false
 height = 48
 max_health = 200
 pushable = false

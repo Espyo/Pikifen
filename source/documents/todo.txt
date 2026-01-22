@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Play a sound when a Pikmin or enemy is frozen
+    Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
 
 Next tasks (roughly sorted most important first)
@@ -16,12 +16,8 @@ Next tasks (roughly sorted most important first)
             Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
         Freezecake
     Glow Pikmin
-        The ability for Pikmin to teleport to the current leader if they've been idling for a bit
-        The ability to keep their maturity, and to evolve automatically with time
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Puffstool and mushroom Pikmin
-        The ability for statuses to change the team to the team of the one that gave the status
-        The ability for statuses to change the graphic for a Pikmin's top
     Rookie Rescue Officer
     Swarming jingle
 
@@ -713,6 +709,7 @@ Misc things (so I don't forget)
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
+    The ability for areas to have multiple bases, and for the player to move the ship and Onion between them [PIKMIN 4]
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions

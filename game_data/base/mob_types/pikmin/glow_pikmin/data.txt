@@ -2,6 +2,7 @@ name = Glow Pikmin
 description = Glow Pikmin are immune to every single hazard!
 
 auto_maturate_interval = 32
+blackout_radius = 20
 can_carry_tools = true
 can_lose_maturity = false
 can_walk_on_others = true

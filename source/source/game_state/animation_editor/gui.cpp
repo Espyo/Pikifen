@@ -1146,7 +1146,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
         openInputPopup("newPartName");
     }
     setTooltip(
-        "Create a new body part."
+        "Create a new body part.\n"
         "It will be placed after the currently selected body part."
     );
     
