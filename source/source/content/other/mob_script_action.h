@@ -63,6 +63,9 @@ enum MOB_ACTION {
     //Focus on another mob.
     MOB_ACTION_FOCUS,
     
+    //Follow a mob as its leader.
+    MOB_ACTION_FOLLOW_MOB_AS_LEADER,
+    
     //Follow a path randomly.
     MOB_ACTION_FOLLOW_PATH_RANDOMLY,
     
@@ -723,6 +726,7 @@ void easeNumber(MobActionRunData& data);
 void finishDying(MobActionRunData& data);
 void floorNumber(MobActionRunData& data);
 void focus(MobActionRunData& data);
+void followMobAsLeader(MobActionRunData& data);
 void followPathRandomly(MobActionRunData& data);
 void followPathToAbsolute(MobActionRunData& data);
 void getAngle(MobActionRunData& data);
@@ -811,6 +815,7 @@ bool arachnorbPlanLogic(MobActionCall& call);
 bool calculate(MobActionCall& call);
 bool easeNumber(MobActionCall& call);
 bool focus(MobActionCall& call);
+bool followMobAsLeader(MobActionCall& call);
 bool getAreaInfo(MobActionCall& call);
 bool getEventInfo(MobActionCall& call);
 bool getMobInfo(MobActionCall& call);

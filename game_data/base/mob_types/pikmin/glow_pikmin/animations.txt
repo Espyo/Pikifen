@@ -831,6 +831,52 @@ animations{
 			}
 		}
 	}
+	teleport_end{
+		frames{
+			teleport_05{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_04{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_03{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_02{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_01{
+				duration=0.0100
+			}
+		}
+	}
+	teleport_start{
+		frames{
+			teleport_01{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_02{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_03{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_04{
+				duration=0.1000
+				interpolate=true
+			}
+			teleport_05{
+				duration=0.0100
+			}
+		}
+	}
 	thrown{
 		frames{
 			thrown_01{
@@ -2983,6 +3029,151 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
+			}
+		}
+	}
+	teleport_01{
+		file=pikmin/glow
+		file_pos=174.0000 48.0000
+		file_size=23.0000 28.0000
+		offset=-0.3976 0.2832
+		scale=0.4500 0.4500
+		angle=5.9341
+		top_visible=true
+		top_pos=-6.5987 1.4164
+		top_size=4.9500 9.0000
+		top_angle=0.1539
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	teleport_02{
+		file=pikmin/glow
+		file_pos=174.0000 48.0000
+		file_size=23.0000 28.0000
+		offset=-0.3976 0.2832
+		scale=0.4000 0.4000
+		angle=5.0121
+		top_visible=true
+		top_pos=-3.1602 5.9490
+		top_size=4.4000 8.0000
+		top_angle=5.4678
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	teleport_03{
+		file=pikmin/glow
+		file_pos=174.0000 48.0000
+		file_size=23.0000 28.0000
+		offset=-0.3976 0.2832
+		scale=0.3000 0.3000
+		angle=3.5974
+		top_visible=true
+		top_pos=3.2912 3.1445
+		top_size=3.3000 6.0000
+		top_angle=4.1629
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	teleport_04{
+		file=pikmin/glow
+		file_pos=174.0000 48.0000
+		file_size=23.0000 28.0000
+		offset=-0.3976 0.2832
+		scale=0.2000 0.2000
+		angle=2.2371
+		top_visible=true
+		top_pos=1.9535 -1.2578
+		top_size=2.2000 4.0000
+		top_angle=3.2749
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	teleport_05{
+		file=pikmin/glow
+		file_pos=174.0000 48.0000
+		file_size=23.0000 28.0000
+		offset=-0.3976 0.2832
+		scale=0.0500 0.0500
+		angle=0.8371
+		top_visible=true
+		top_pos=-0.7340 -0.6015
+		top_size=1.0000 1.8182
+		top_angle=1.4512
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				surface_type=0
 			}
 		}
 	}

@@ -141,6 +141,10 @@
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-active-leader-changed">
+        <th style="text-align: left;"><code>on_active_leader_changed</code></th>
+        <td>Triggered every frame that the leader it's following is different from the player's current active leader. It won't trigger if there is no active leader. The <a href="#target-mob">trigger mob</a> is the current active leader. Particularly useful for Glow Pikmin.</td>
+      </tr>
       <tr id="on-damage">
         <th style="text-align: left;"><code>on_damage</code></th>
         <td>Triggered when the object takes any sort of damage.</td>
@@ -937,6 +941,15 @@
       <tr id="drain-liquid">
         <th><code>drain_liquid</code></th>
         <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</td>
+      </tr>
+      <tr id="follow-mob-as-leader">
+        <th><code>follow_mob_as_leader</code></th>
+        <td><dl>
+          <dt><code><b>follow_mob_as_leader</b> &lt;target_mob&gt;</code></dt>
+          <dd>Follows <a href="#target-mob">a given mob</a> as its new leader. For Pikmin, this calls the "whistled" event, and for other object types, it simply adds them to the group.</dd>
+          <dt><code><b>follow_mob_as_leader</b> &lt;target_mob&gt; true</code></dt>
+          <dd>Same as above, but makes the Pikmin silent when joining the group.</dd>
+        </dl></td>
       </tr>
       <tr id="print">
         <th><code>print</code></th>

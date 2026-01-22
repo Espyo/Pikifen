@@ -4497,6 +4497,16 @@ void Mob::tickScript(float deltaT) {
             }
         }
     }
+
+    //Check if the active leader is different from the current leader.
+    MobEvent* activeLeaderChangedEv =
+        fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
+    if(activeLeaderChangedEv) {
+        Leader* curLeader = game.states.gameplay->players[0].leaderPtr;
+        if(curLeader && followingGroup != curLeader) {
+            activeLeaderChangedEv->run(this, (void*) curLeader);
+        }
+    }
     
     //Far away from home.
     MobEvent* farFromHomeEv = fsm.getEvent(MOB_EV_FAR_FROM_HOME);

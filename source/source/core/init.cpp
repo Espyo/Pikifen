@@ -1319,6 +1319,16 @@ void initMobActions() {
         MobActionLoaders::focus
     );
     
+    //Follow mob as a leader.
+    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("silent", MOB_ACTION_PARAM_BOOL, false, true);
+    regAction(
+        MOB_ACTION_FOLLOW_MOB_AS_LEADER,
+        "follow_mob_as_leader",
+        MobActionRunners::followMobAsLeader,
+        MobActionLoaders::followMobAsLeader
+    );
+    
     //Follow path randomly.
     regParam("label", MOB_ACTION_PARAM_STRING, false, true);
     regAction(

@@ -111,6 +111,9 @@
 
       <dt><b>Screenshots are sometimes saved fully black on Linux.</b></dt>
       <dd>I do not know the reason for this yet.</dd>
+
+      <dt><b>Glow Pikmin perform their bored animations after only 1 second of idling.</b></dt>
+      <dd>This is because the timer that counts down when to do the animations is the same as the one used for figuring out if it should teleport to a leader. This can be fixed by allowing multiple timers, but until then it's not important enough to fix, especially since this can only be seen in areas with zero leaders.</dd>
     </dl>
 
     <h2 id="bug-reporting">Bug reporting</h2>

@@ -1,0 +1,77 @@
+init {
+    set_var follow_focus false
+    set_var idling_can_teleport false
+}
+
+script {
+    idling {
+        on_enter {
+            custom_actions_after
+            if $follow_focus = true
+                load_focused_mob_memory 1
+                follow_mob_as_leader focus true
+                set_var follow_focus false
+            else
+                set_var idling_can_teleport false
+                set_timer 1
+            end_if
+        }
+        on_timer {
+            set_var idling_can_teleport true
+        }
+        on_active_leader_changed {
+            if $idling_can_teleport = true
+                focus trigger
+                set_state teleporting_to_leader
+            end_if
+        }
+    }
+    in_group_chasing {
+        on_active_leader_changed {
+            focus trigger
+            set_state teleporting_to_leader
+        }
+    }
+    in_group_stopped {
+        on_active_leader_changed {
+            focus trigger
+            set_state teleporting_to_leader
+        }
+    }
+    teleporting_to_leader {
+        on_enter {
+            save_focused_mob_memory 1
+            set_shadow_visibility false
+            set_animation teleport_start
+        }
+        on_animation_end {
+            //Check if the focus is valid.
+            set_var cur_leader_a 9999
+            get_mob_info cur_leader_a focus angle
+            if $cur_leader_a != 9999
+                get_mob_info cur_leader_x focus x
+                get_mob_info cur_leader_y focus y
+                get_mob_info cur_leader_z focus z
+                get_coordinates_from_angle temp_x temp_y $cur_leader_a -40
+                calculate cur_leader_x $cur_leader_x + $temp_x
+                calculate cur_leader_y $cur_leader_y + $temp_y
+                get_random_float temp_x -30 30
+                get_random_float temp_y -30 30
+                calculate cur_leader_x $cur_leader_x + $temp_x
+                calculate cur_leader_y $cur_leader_y + $temp_y
+                teleport_to_absolute $cur_leader_x $cur_leader_y $cur_leader_z
+                set_state teleported_to_leader
+            end_if
+        }
+    }
+    teleported_to_leader {
+        on_enter {
+            set_animation teleport_end
+        }
+        on_animation_end {
+            set_shadow_visibility true
+            set_var follow_focus true
+            set_state idling
+        }
+    }
+}

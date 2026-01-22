@@ -309,6 +309,17 @@ bool MobActionLoaders::focus(MobActionCall& call) {
 
 
 /**
+ * @brief Loading code for the follow mob as leader mob script action.
+ *
+ * @param call Mob action call that called this.
+ * @return Whether it succeeded.
+ */
+bool MobActionLoaders::followMobAsLeader(MobActionCall& call) {
+    return loadMobTargetType(call, 0);
+}
+
+
+/**
  * @brief Loading code for the info getting script actions.
  *
  * @param call Mob action call that called this.
@@ -980,6 +991,33 @@ void MobActionRunners::focus(MobActionRunData& data) {
     if(!target) return;
     
     data.m->focusOnMob(target);
+}
+
+
+/**
+ * @brief Code for the follow mob as leader mob script action.
+ *
+ * @param data Data about the action call.
+ */
+void MobActionRunners::followMobAsLeader(MobActionRunData& data) {
+    MOB_ACTION_MOB_TARGET_TYPE s =
+        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+    Mob* target = getTargetMob(data, s);
+    bool silent = false;
+    if(data.args.size() >= 2) {
+        silent = s2b(data.args[1]);
+    }
+    
+    if(!target) return;
+    if(target->health <= 0.0f) return;
+    
+    data.m->leaveGroup();
+    
+    if(data.m->type->category->id == MOB_CATEGORY_PIKMIN) {
+        data.m->fsm.runEvent(MOB_EV_WHISTLED, (void*) target, (void*) silent);
+    } else {
+        target->addToGroup(data.m);
+    }
 }
 
 
@@ -2696,7 +2734,8 @@ Mob* getTriggerMob(MobActionRunData& data) {
         data.call->parentEvent == MOB_EV_RELEASED ||
         data.call->parentEvent == MOB_EV_SWALLOWED ||
         data.call->parentEvent == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-        data.call->parentEvent == MOB_EV_FINISHED_RECEIVING_DELIVERY
+        data.call->parentEvent == MOB_EV_FINISHED_RECEIVING_DELIVERY ||
+        data.call->parentEvent == MOB_EV_ACTIVE_LEADER_CHANGED
     ) {
         return (Mob*)(data.customData1);
         
