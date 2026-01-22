@@ -381,7 +381,7 @@ public:
     
     //Whether it can carry tool-type objects or not.
     bool canCarryTools = true;
-
+    
     //Whether it chills any freezable liquids it is touching.
     bool chillsLiquids = false;
     
@@ -394,6 +394,9 @@ public:
     //0 = normal. -1 = always misses. 1 = always hits.
     //-0.5 = misses twice as often. etc.
     float enemyHitRateModifierStanding = 0.0f;
+    
+    //Whether it can lose its maturity from things like attacks.
+    bool canLoseMaturity = true;
     
     //How long it takes to evolve in maturity, as a sprout.
     float sproutEvolutionTime[N_MATURITIES] = { 0.0f, 0.0f, 0.0f };

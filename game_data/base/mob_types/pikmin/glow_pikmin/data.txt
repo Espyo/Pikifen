@@ -2,6 +2,7 @@ name = Glow Pikmin
 description = Glow Pikmin are immune to every single hazard!
 
 can_carry_tools = true
+can_lose_maturity = false
 can_walk_on_others = true
 carry_strength = 1
 health_regen = 10

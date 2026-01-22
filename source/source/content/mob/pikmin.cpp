@@ -422,9 +422,9 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
 bool Pikmin::increaseMaturity(int amount) {
     int oldMaturity = maturity;
     int newMaturity = maturity + amount;
-    maturity = std::clamp(newMaturity, 0, (int) (N_MATURITIES - 1));
+    newMaturity = std::clamp(newMaturity, 0, (int) (N_MATURITIES - 1));
     
-    if(maturity > oldMaturity) {
+    if(newMaturity > oldMaturity) {
         game.statistics.pikminBlooms++;
         ParticleGenerator pg =
             standardParticleGenSetup(
@@ -433,7 +433,10 @@ bool Pikmin::increaseMaturity(int amount) {
         particleGenerators.push_back(pg);
         playSound(pikType->soundDataIdxs[PIKMIN_SOUND_MATURING]);
         
-    } else if(maturity < oldMaturity) {
+    } else if(newMaturity < oldMaturity) {
+        if(!pikType->canLoseMaturity) {
+            return false;
+        }
         ParticleGenerator pg =
             standardParticleGenSetup(
                 game.sysContentNames.parSproutRegression, this
@@ -441,7 +444,8 @@ bool Pikmin::increaseMaturity(int amount) {
         particleGenerators.push_back(pg);
     }
     
-    return maturity != oldMaturity;
+    maturity = newMaturity;
+    return newMaturity != oldMaturity;
 }
 
 
