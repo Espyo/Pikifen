@@ -163,6 +163,14 @@ void Pikmin::drawMob() {
         Point topSize;
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
+        
+        for(size_t s = 0; s < statuses.size(); s++) {
+            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
+            if(statuses[s].type->topReplacementBmp) {
+                topBmp = statuses[s].type->topReplacementBmp;
+            }
+        }
+        
         getSpriteBasicTopEffects(
             curSPtr, nextSPtr, interpolationFactor,
             &topCoords, &topAngle, &topSize

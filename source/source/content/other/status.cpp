@@ -114,6 +114,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     string pgStr;
     string pgStartStr;
     string pgEndStr;
+    string topReplacementStr;
     DataNode* affectsNode = nullptr;
     DataNode* reapplyRuleNode = nullptr;
     DataNode* scTypeNode = nullptr;
@@ -121,6 +122,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     DataNode* pgStartNode = nullptr;
     DataNode* pgEndNode = nullptr;
     DataNode* buildupNode = nullptr;
+    DataNode* topReplacementNode = nullptr;
     
     sRS.set("color",                    color);
     sRS.set("tint",                     tint);
@@ -149,6 +151,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("shaking_effect_on_end",    shakingEffectOnEnd);
     sRS.set("overlay_animation",        overlayAnimation);
     sRS.set("overlay_anim_mob_scale",   overlayAnimMobScale);
+    sRS.set("top_replacement",          topReplacementStr, &topReplacementNode);
     sRS.set("particle_generator",       pgStr, &pgNode);
     sRS.set("particle_generator_start", pgStartStr, &pgStartNode);
     sRS.set("particle_generator_end",   pgEndStr, &pgEndNode);
@@ -241,6 +244,13 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
             overlayAnim.initToFirstAnim(
                 &game.content.globalAnimDbs.list[overlayAnimation]
             );
+        }
+        
+        if(topReplacementNode) {
+            topReplacementBmp =
+                game.content.bitmaps.list.get(
+                    topReplacementStr, topReplacementNode
+                );
         }
     }
     

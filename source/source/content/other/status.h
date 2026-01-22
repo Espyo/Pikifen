@@ -229,6 +229,9 @@ public:
     //Animation instance for the overlay animation.
     AnimationInstance overlayAnim;
     
+    //If not nullptr, replace the Pikmin top/leader antenna with this graphic.
+    ALLEGRO_BITMAP* topReplacementBmp = nullptr;
+    
     //Replace with this other status effect, when its time is over.
     StatusType* replacementOnTimeout = nullptr;
     

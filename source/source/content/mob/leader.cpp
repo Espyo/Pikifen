@@ -768,6 +768,15 @@ void Leader::drawMob() {
         float lightAngle;
         Point lightSize;
         BitmapEffect lightEff = mobEff;
+        ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
+
+        for(size_t s = 0; s < statuses.size(); s++) {
+            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
+            if(statuses[s].type->topReplacementBmp) {
+                lightBmp = statuses[s].type->topReplacementBmp;
+            }
+        }
+
         getSpriteBasicTopEffects(
             curSPtr, nextSPtr, interpolationFactor,
             &lightCoords, &lightAngle, &lightSize
@@ -780,14 +789,14 @@ void Leader::drawMob() {
         //will be more than enough.
         float avgScale =
             (lightEff.tf.scale.x + lightEff.tf.scale.y) / 2.0f;
-        Point topBmpSize = getBitmapDimensions(leaType->bmpLight);
+        Point topBmpSize = getBitmapDimensions(lightBmp);
         lightEff.tf.trans +=
             pos + rotatePoint(lightCoords, angle) * avgScale;
         lightEff.tf.scale *= lightSize / topBmpSize;
         lightEff.tf.rot += angle + lightAngle;
         lightEff.tintColor = leaType->lightBmpTint;
         
-        drawBitmapWithEffects(leaType->bmpLight, lightEff);
+        drawBitmapWithEffects(lightBmp, lightEff);
         
         //This is the best place to position the light particles, so do that.
         antennaPG->baseParticle.pos = lightEff.tf.trans;
