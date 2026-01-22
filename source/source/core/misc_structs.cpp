@@ -907,7 +907,7 @@ void InventoryItemDatabase::init() {
         [this, s] (Player * player) {
             if(!player->leaderPtr) return;
             player->leaderPtr->fsm.runEvent(
-                LEADER_EV_SPRAY, (void*) &s
+                LEADER_EV_SPRAY, (void*) &s, (void*) player->leaderPtr
             );
         };
         item.onGetExtraInfo =

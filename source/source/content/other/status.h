@@ -170,6 +170,10 @@ public:
     //Multiply the affected mob's animation speed by this much.
     float animSpeedMultiplier = 1.0f;
     
+    //Does this status effect cause affected mobs to change to the
+    //attacker's team, if applicable?
+    bool causesBetrayal = false;
+    
     //Does this status effect disable the affected mob's attacking ability?
     bool disablesAttack = false;
     
@@ -266,6 +270,9 @@ struct Status {
     
     //Was this status inflicted by a hazard?
     bool fromHazard = false;
+    
+    //If the status effect causes betrayal, return to this team once it's over.
+    MOB_TEAM preBetrayalTeam = MOB_TEAM_NONE;
     
     
     //--- Function declarations ---

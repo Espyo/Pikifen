@@ -509,15 +509,16 @@ void GenMobFsm::touchHazard(Mob* m, void* info1, void* info2) {
  * @brief Generic handler for a mob touching a spray.
  *
  * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
+ * @param info1 Pointer to the spray type.
+ * @param info2 Pointer to the mob that sprayed, if any.
  */
 void GenMobFsm::touchSpray(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     SprayType* s = (SprayType*) info1;
+    Mob* sprayer = (Mob*) info2;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->applyStatus(s->effects[e], false, false);
+        m->applyStatus(s->effects[e], false, false, sprayer);
     }
 }

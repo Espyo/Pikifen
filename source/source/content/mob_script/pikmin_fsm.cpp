@@ -2879,7 +2879,7 @@ void PikminFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
         pikPtr->applyStatus(
-            droPtr->droType->statusToGive, false, false
+            droPtr->droType->statusToGive, false, false, droPtr
         );
         break;
     } default: {
@@ -4595,10 +4595,12 @@ void PikminFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     Pikmin* pikPtr = (Pikmin*) m;
     Hazard* hazPtr = (Hazard*) info1;
+    Mob* hitboxMob = nullptr;
     
     if(info2) {
         //This is an attack.
         HitboxInteraction* hInfo = (HitboxInteraction*) info2;
+        hitboxMob = hInfo->mob2;
         if(!pikPtr->processAttackMiss(hInfo)) {
             //It has been decided that this attack missed.
             return;
@@ -4638,11 +4640,11 @@ void PikminFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            pikPtr->applyStatus(hazPtr->effects[e], false, true);
+            pikPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
         }
     }
     if(vuln.statusToApply) {
-        pikPtr->applyStatus(vuln.statusToApply, false, true);
+        pikPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
     }
 }
 
@@ -4652,15 +4654,16 @@ void PikminFsm::touchedHazard(Mob* m, void* info1, void* info2) {
  *
  * @param m The mob.
  * @param info1 Pointer to the spray type.
- * @param info2 Unused.
+ * @param info2 Pointer to the mob that sprayed, if any.
  */
 void PikminFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     SprayType* s = (SprayType*) info1;
+    Mob* sprayer = (Mob*) info2;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->applyStatus(s->effects[e], false, false);
+        m->applyStatus(s->effects[e], false, false, sprayer);
     }
     
     if(s->buriesPikmin) {

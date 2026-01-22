@@ -139,6 +139,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     sRS.set("attack_multiplier",        attackMultiplier);
     sRS.set("defense_multiplier",       defenseMultiplier);
     sRS.set("maturity_change_amount",   maturityChangeAmount);
+    sRS.set("causes_betrayal",          causesBetrayal);
     sRS.set("disables_attack",          disablesAttack);
     sRS.set("turns_inedible",           turnsInedible);
     sRS.set("turns_invisible",          turnsInvisible);

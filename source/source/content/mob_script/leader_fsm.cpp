@@ -1803,7 +1803,7 @@ void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->applyStatus(droPtr->droType->statusToGive, false, false);
+        m->applyStatus(droPtr->droType->statusToGive, false, false, droPtr);
         break;
     } default: {
         break;
@@ -2804,22 +2804,25 @@ void LeaderFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
  *
  * @param m The mob.
  * @param info1 Pointer to the hazard.
- * @param info2 Unused.
+ * @param info2 Pointer to the hitbox that caused this, if any.
  */
 void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Leader* leaPtr = (Leader*) m;
     Hazard* hazPtr = (Hazard*) info1;
+    HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
     MobType::Vulnerability vuln = m->getHazardVulnerability(hazPtr);
+    Mob* hitboxMob = nullptr;
+    if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            leaPtr->applyStatus(hazPtr->effects[e], false, true);
+            leaPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
         }
     }
     if(vuln.statusToApply) {
-        leaPtr->applyStatus(vuln.statusToApply, false, true);
+        leaPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
     }
     
     if(hazPtr->associatedLiquid) {
@@ -2856,16 +2859,17 @@ void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
  *
  * @param m The mob.
  * @param info1 Pointer to the spray type.
- * @param info2 Unused.
+ * @param info2 Pointer to the mob that sprayed, if any.
  */
 void LeaderFsm::touchedSpray(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Leader* l = (Leader*) m;
     SprayType* s = (SprayType*) info1;
+    Mob* sprayer = (Mob*) info2;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        l->applyStatus(s->effects[e], false, false);
+        l->applyStatus(s->effects[e], false, false, sprayer);
     }
 }
 

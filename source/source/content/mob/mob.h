@@ -495,7 +495,8 @@ public:
     
     void applyStatus(
         StatusType* s, bool givenByParent, bool fromHazard,
-        float overrideBuildup = FLT_MAX, bool forceReapplyResetTime = false
+        Mob* fromMob = nullptr, float overrideBuildup = FLT_MAX,
+        bool forceReapplyResetTime = false
     );
     void deleteOldStatusEffects();
     void removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
@@ -536,14 +537,16 @@ protected:
     //--- Function declarations ---
     
     bool applyStatusBuildup(
-        StatusType* s, bool givenByParent, bool fromHazard, float overrideAmount
+        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
+        float overrideAmount
     );
     void applyStatusEffects(
-        StatusType* s, bool givenByParent, bool fromHazard,
+        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
         bool forceReapplyResetTime
     );
     bool applyStatusParentLogic(
-        StatusType* s, bool givenByParent, bool fromHazard
+        StatusType* s, bool givenByParent, bool fromHazard,
+        Mob* fromMob = nullptr
     );
     void chaseNextPathStop(float speed, float acceleration = LARGE_FLOAT);
     PikminType* decideCarryPikminType(

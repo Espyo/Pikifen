@@ -321,13 +321,14 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param fromMob If not nullptr, this status effect was given by this mob.
  * @param overrideBuildup If not FLT_MAX, override the status buildup amount
  * with this.
  * @param forceReapplyResetTime If true, forces the reapply rule to
  * be reset time.
  */
 void Mob::applyStatus(
-    StatusType* s, bool givenByParent, bool fromHazard,
+    StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
     float overrideBuildup, bool forceReapplyResetTime
 ) {
     //Initial checks.
@@ -339,12 +340,18 @@ void Mob::applyStatus(
     if(applyStatusParentLogic(s, givenByParent, fromHazard)) {
         return;
     }
-    if(!applyStatusBuildup(s, givenByParent, fromHazard, overrideBuildup)) {
+    if(
+        !applyStatusBuildup(
+            s, givenByParent, fromHazard, fromMob, overrideBuildup
+        )
+    ) {
         return;
     }
     
     //At this point the mob must really be given the status effect's effects.
-    applyStatusEffects(s, givenByParent, fromHazard, forceReapplyResetTime);
+    applyStatusEffects(
+        s, givenByParent, fromHazard, fromMob, forceReapplyResetTime
+    );
 }
 
 
@@ -355,13 +362,14 @@ void Mob::applyStatus(
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param fromMob If not nullptr, this status effect was given by this mob.
  * @param overrideAmount If not FLT_MAX, override the buildup amount by this.
  * @return True if enough buildup was caused to apply the effect, or if no
  * buildup is required to apply the effect. False if buildup was applied and
  * nothing else happened.
  */
 bool Mob::applyStatusBuildup(
-    StatusType* statusType, bool givenByParent, bool fromHazard,
+    StatusType* statusType, bool givenByParent, bool fromHazard, Mob* fromMob,
     float overrideAmount
 ) {
     if(statusType->buildup == 0.0f) {
@@ -409,11 +417,12 @@ bool Mob::applyStatusBuildup(
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param fromMob If not nullptr, this status effect was given by this mob.
  * @param forceReapplyResetTime If true, forces the reapply rule to
  * be reset time.
  */
 void Mob::applyStatusEffects(
-    StatusType* s, bool givenByParent, bool fromHazard,
+    StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
     bool forceReapplyResetTime
 ) {
     //Get the vulnerabilities to this status.
@@ -422,8 +431,8 @@ void Mob::applyStatusEffects(
         if(vulnIt->second.statusToApply) {
             //It must instead receive this status.
             applyStatus(
-                vulnIt->second.statusToApply, givenByParent, fromHazard, false,
-                forceReapplyResetTime
+                vulnIt->second.statusToApply, givenByParent, fromHazard,
+                fromMob, false, forceReapplyResetTime
             );
             return;
         }
@@ -477,6 +486,7 @@ void Mob::applyStatusEffects(
     statuses[listIdx].prevState = statuses[listIdx].state;
     statuses[listIdx].state = STATUS_STATE_ACTIVE;
     
+    //Apply all the necessary changes.
     handleStatusEffectGain(s);
     
     if(!s->animationChange.empty()) {
@@ -504,6 +514,13 @@ void Mob::applyStatusEffects(
     if(s->freezesAnimation) {
         getSpriteData(&forcedSprite, nullptr, nullptr);
     }
+    
+    if(s->causesBetrayal) {
+        statuses[listIdx].preBetrayalTeam = team;
+        if(fromMob) {
+            team = fromMob->team;
+        }
+    }
 }
 
 
@@ -514,24 +531,25 @@ void Mob::applyStatusEffects(
  * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
  * @param fromHazard If true, this status effect was given from a hazard.
+ * @param fromMob If not nullptr, this status effect was given by this mob.
  * @return True if the work got delegated to a parent, and so status
  * application logic shouldn't continue. False if the status application
  * logic should continue.
  */
 bool Mob::applyStatusParentLogic(
-    StatusType* s, bool givenByParent, bool fromHazard
+    StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob
 ) {
     //Send the status to the child mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* m2Ptr = game.states.gameplay->mobs.all[m];
         if(m2Ptr->parent && m2Ptr->parent->m == this) {
-            m2Ptr->applyStatus(s, true, fromHazard);
+            m2Ptr->applyStatus(s, true, fromHazard, fromMob);
         }
     }
     
     //Relay it to the parent mob, if applicable.
     if(parent && parent->relayStatuses && !givenByParent) {
-        parent->m->applyStatus(s, false, fromHazard);
+        parent->m->applyStatus(s, false, fromHazard, fromMob);
         if(!parent->handleStatuses) return true;
     }
     
@@ -1212,7 +1230,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     
     if(type->spikeDamage->statusToApply) {
         victim->applyStatus(
-            type->spikeDamage->statusToApply, false, false,
+            type->spikeDamage->statusToApply, false, false, this,
             type->spikeDamage->statusBuildupAmount
         );
     }
@@ -1234,7 +1252,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
         v->second.statusToApply
     ) {
         victim->applyStatus(
-            v->second.statusToApply, false, false
+            v->second.statusToApply, false, false, this
         );
     }
 }
@@ -1560,6 +1578,10 @@ void Mob::deleteOldStatusEffects() {
                     removedForcedSprite = true;
                 }
                 
+                if(sRef.type->causesBetrayal) {
+                    team = sRef.preBetrayalTeam;
+                }
+                
                 bool justBuildup =
                     sRef.type->buildup != 0.0f && sRef.buildup < 1.0f;
                 if(
@@ -1590,7 +1612,7 @@ void Mob::deleteOldStatusEffects() {
     for(size_t s = 0; s < newStatusesToApply.size(); s++) {
         applyStatus(
             newStatusesToApply[s].first,
-            false, newStatusesToApply[s].second
+            false, newStatusesToApply[s].second, nullptr
         );
     }
     
@@ -4497,7 +4519,7 @@ void Mob::tickScript(float deltaT) {
             }
         }
     }
-
+    
     //Check if the active leader is different from the current leader.
     MobEvent* activeLeaderChangedEv =
         fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
