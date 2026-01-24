@@ -2431,6 +2431,14 @@ void AreaEditor::resizeEverything(float mults[2]) {
         sPtr->sway.y *= mults[1];
     }
     
+    for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+        AreaRegion* rPtr = game.curAreaData->regions[r];
+        rPtr->center.x *= mults[0];
+        rPtr->center.y *= mults[1];
+        rPtr->size.x *= mults[0];
+        rPtr->size.y *= mults[1];
+    }
+    
     game.curAreaData->mission.goalExitCenter.x *= mults[0];
     game.curAreaData->mission.goalExitCenter.y *= mults[1];
     game.curAreaData->mission.goalExitSize.x *= mults[0];

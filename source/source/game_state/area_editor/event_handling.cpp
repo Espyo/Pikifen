@@ -554,6 +554,15 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
                     &selectedShadow->pose.angle,
                     1.0f / game.editorsView.cam.zoom
                 );
+        } else if(selectedRegion) {
+            twHandled =
+                curTransformationWidget.handleMouseDown(
+                    game.editorsView.mouseCursorWorldPos,
+                    &selectedRegion->center,
+                    &selectedRegion->size,
+                    nullptr,
+                    1.0f / game.editorsView.cam.zoom
+                );
         }
         
         if(!twHandled) {
@@ -578,6 +587,25 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
                     game.editorsView.mouseCursorWorldPos.y <= maxCoords.y
                 ) {
                     selectTreeShadow(sPtr);
+                    break;
+                }
+            }
+            
+            //Select a region
+            selectedRegion = nullptr;
+            for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+            
+                AreaRegion* rPtr = game.curAreaData->regions[r];
+                Point minCoords = rPtr->center - rPtr->size / 2.0f;
+                Point maxCoords = rPtr->center + rPtr->size / 2.0f;
+                
+                if(
+                    game.editorsView.mouseCursorWorldPos.x >= minCoords.x &&
+                    game.editorsView.mouseCursorWorldPos.x <= maxCoords.x &&
+                    game.editorsView.mouseCursorWorldPos.y >= minCoords.y &&
+                    game.editorsView.mouseCursorWorldPos.y <= maxCoords.y
+                ) {
+                    selectRegion(rPtr);
                     break;
                 }
             }
@@ -1762,6 +1790,30 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     selectedShadow->pose.pos = shadowCenter;
                     selectedShadow->pose.size = shadowSize;
                     selectedShadow->pose.angle = shadowAngle;
+                }
+            } else if(
+                selectedRegion &&
+                subState == EDITOR_SUB_STATE_NONE
+            ) {
+                //Move region.
+                Point regionCenter = selectedRegion->center;
+                Point regionSize = selectedRegion->size;
+                if(
+                    curTransformationWidget.handleMouseMove(
+                        snapPoint(game.editorsView.mouseCursorWorldPos),
+                        &regionCenter,
+                        &regionSize,
+                        nullptr,
+                        1.0f / game.editorsView.cam.zoom,
+                        false,
+                        false,
+                        -FLT_MAX,
+                        isAltPressed
+                    )
+                ) {
+                    registerChange("region transformation");
+                    selectedRegion->center = regionCenter;
+                    selectedRegion->size = regionSize;
                 }
             }
             

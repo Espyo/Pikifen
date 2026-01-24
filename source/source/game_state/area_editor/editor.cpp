@@ -416,6 +416,7 @@ void AreaEditor::clearSelection() {
     selectedPathStops.clear();
     selectedPathLinks.clear();
     selectedShadow = nullptr;
+    selectedRegion = nullptr;
     selectionHomogenized = false;
     setSelectionStatusText();
 }
@@ -906,6 +907,37 @@ void AreaEditor::deletePathCmd(float inputValue) {
         ) +
         "."
     );
+}
+
+
+/**
+ * @brief Code to run for the remove region command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteRegionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(!selectedRegion) {
+        setStatus("You have to select a region to delete!", true);
+    } else {
+        registerChange("region deletion");
+        for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+            if(game.curAreaData->regions[r] == selectedRegion) {
+                game.curAreaData->regions.erase(
+                    game.curAreaData->regions.begin() + r
+                );
+                delete selectedRegion;
+                selectedRegion = nullptr;
+                break;
+            }
+        }
+        setStatus("Deleted region.");
+    }
 }
 
 
@@ -2157,6 +2189,7 @@ void AreaEditor::load() {
     lastMobCustomCatName.clear();
     lastMobType = nullptr;
     selectedShadow = nullptr;
+    selectedRegion = nullptr;
     selectionEffect = 0.0;
     selectionHomogenized = false;
     showClosestStop = false;
@@ -2391,6 +2424,28 @@ void AreaEditor::newPathCmd(float inputValue) {
     pathDrawingStop1 = nullptr;
     setStatus("Use the canvas to draw a path.");
     subState = EDITOR_SUB_STATE_PATH_DRAWING;
+}
+
+
+/**
+ * @brief Code to run for the new region command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::newRegionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("region addition");
+    AreaRegion* newRegion = new AreaRegion();
+    newRegion->size = MISSION::EXIT_MIN_SIZE;
+    game.curAreaData->regions.push_back(newRegion);
+    selectRegion(newRegion);
+    setStatus("Created a new region.");
 }
 
 
@@ -3090,6 +3145,17 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
 
 
 /**
+ * @brief Selects an area region.
+ *
+ * @param rPtr Region to select.
+ */
+void AreaEditor::selectRegion(AreaRegion* rPtr) {
+    selectedRegion = rPtr;
+    setSelectionStatusText();
+}
+
+
+/**
  * @brief Selects a sector and its edges and vertexes.
  *
  * @param s Sector to select.
@@ -3262,6 +3328,8 @@ void AreaEditor::setSelectionStatusText() {
     } case EDITOR_STATE_DETAILS: {
         if(selectedShadow) {
             setStatus("Selected a tree shadow.");
+        } else if(selectedRegion) {
+            setStatus("Selected a region.");
         }
         break;
         

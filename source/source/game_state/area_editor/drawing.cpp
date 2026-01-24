@@ -269,6 +269,7 @@ void AreaEditor::drawCanvas() {
     drawPaths(style);
     
     drawTreeShadows(style);
+    drawRegions(style);
     
     //Mission exit region transformation widget.
     if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
@@ -1677,6 +1678,39 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
 
 
 /**
+ * @brief Draws the regions onto the canvas.
+ *
+ * @param style Canvas style.
+ */
+void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
+    if(state == EDITOR_STATE_DETAILS) {
+        for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+        
+            AreaRegion* rPtr = game.curAreaData->regions[r];
+            
+            al_draw_rectangle(
+                rPtr->center.x - rPtr->size.x / 2.0f,
+                rPtr->center.y - rPtr->size.y / 2.0f,
+                rPtr->center.x + rPtr->size.x / 2.0f,
+                rPtr->center.y + rPtr->size.y / 2.0f,
+                al_map_rgb(128, 128, 64),
+                4.0 / game.editorsView.cam.zoom
+            );
+        }
+        
+        if(selectedRegion) {
+            curTransformationWidget.draw(
+                &selectedRegion->center,
+                &selectedRegion->size,
+                nullptr,
+                1.0f / game.editorsView.cam.zoom
+            );
+        }
+    }
+}
+
+
+/**
  * @brief Draws the sectors onto the canvas.
  *
  * @param style Canvas style.
@@ -1902,7 +1936,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                     al_draw_rectangle(
                         minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
                         al_map_rgb(128, 128, 64),
-                        2.0 / game.editorsView.cam.zoom
+                        4.0 / game.editorsView.cam.zoom
                     );
                 }
             }

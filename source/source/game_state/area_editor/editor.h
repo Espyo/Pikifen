@@ -770,6 +770,9 @@ private:
     //Currently selected tree shadow.
     TreeShadow* selectedShadow = nullptr;
     
+    //Currently selected region.
+    AreaRegion* selectedRegion = nullptr;
+    
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
     
@@ -1106,6 +1109,7 @@ private:
     );
     void drawMobs(const AreaEdCanvasStyle& style);
     void drawPaths(const AreaEdCanvasStyle& style);
+    void drawRegions(const AreaEdCanvasStyle& style);
     void drawSectors(const AreaEdCanvasStyle& style);
     void drawTreeShadows(const AreaEdCanvasStyle& style);
     void drawVertexes(const AreaEdCanvasStyle& style);
@@ -1127,6 +1131,7 @@ private:
     void deleteEdgeCmd(float inputValue);
     void deleteMobCmd(float inputValue);
     void deletePathCmd(float inputValue);
+    void deleteRegionCmd(float inputValue);
     void deleteTreeShadowCmd(float inputValue);
     void duplicateMobsCmd(float inputValue);
     void gridIntervalDecreaseCmd(float inputValue);
@@ -1135,6 +1140,7 @@ private:
     void loadCmd(float inputValue);
     void newMobCmd(float inputValue);
     void newPathCmd(float inputValue);
+    void newRegionCmd(float inputValue);
     void newTreeShadowCmd(float inputValue);
     void openExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);

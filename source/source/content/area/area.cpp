@@ -141,6 +141,9 @@ void Area::clear() {
     for(size_t s = 0; s < treeShadows.size(); s++) {
         delete treeShadows[s];
     }
+    for(size_t r = 0; r < regions.size(); r++) {
+        delete regions[r];
+    }
     
     vertexes.clear();
     edges.clear();
@@ -148,6 +151,7 @@ void Area::clear() {
     mobGenerators.clear();
     pathStops.clear();
     treeShadows.clear();
+    regions.clear();
     bmap.clear();
     
     if(bgBmp) {
@@ -225,6 +229,10 @@ void Area::clone(Area& other) {
     other.treeShadows.reserve(treeShadows.size());
     for(size_t t = 0; t < treeShadows.size(); t++) {
         other.treeShadows.push_back(new TreeShadow());
+    }
+    other.regions.reserve(regions.size());
+    for(size_t r = 0; r < regions.size(); r++) {
+        other.regions.push_back(new AreaRegion());
     }
     
     for(size_t v = 0; v < vertexes.size(); v++) {
@@ -338,6 +346,13 @@ void Area::clone(Area& other) {
         otPtr->sway = tPtr->sway;
         otPtr->bitmap =
             game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
+    }
+    
+    for(size_t r = 0; r < regions.size(); r++) {
+        AreaRegion* rPtr = regions[r];
+        AreaRegion* orPtr = other.regions[r];
+        orPtr->center = rPtr->center;
+        orPtr->size = rPtr->size;
     }
     
     other.manifest = manifest;
@@ -1152,6 +1167,21 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->finishMeasurement();
     }
     
+    //Regions.
+    
+    DataNode* regionsNode = node->getChildByName("regions");
+    size_t nRegions = regionsNode->getNrOfChildren();
+    for(size_t r = 0; r < nRegions; r++) {
+        DataNode* regionNode = regionsNode->getChild(r);
+        ReaderSetter rRS(regionNode);
+        AreaRegion* newRegion = new AreaRegion();
+        
+        rRS.set("center", newRegion->center);
+        rRS.set("size", newRegion->size);
+        
+        regions.push_back(newRegion);
+    }
+    
     //Set up stuff.
     if(game.perfMon) {
         game.perfMon->startMeasurement("Area -- Geometry calculations");
@@ -1792,6 +1822,20 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(sPtr->alpha != 255) {
             sGW.write("alpha", sPtr->alpha);
         }
+        
+    }
+    
+    //Regions.
+    DataNode* regionsNode = node->addNew("regions");
+    for(size_t r = 0; r < regions.size(); r++) {
+    
+        //Region.
+        AreaRegion* rPtr = regions[r];
+        DataNode* regionNode = regionsNode->addNew("region");
+        GetterWriter rGW(regionNode);
+        
+        rGW.write("center", rPtr->center);
+        rGW.write("size", rPtr->size);
         
     }
 }

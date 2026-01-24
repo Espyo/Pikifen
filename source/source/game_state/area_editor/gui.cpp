@@ -1628,6 +1628,93 @@ void AreaEditor::processGuiPanelDetails() {
             
         }
         
+        //Regions node.
+        if(saveableTreeNode("details", "Regions")) {
+        
+            //New region button.
+            if(
+                ImGui::ImageButton(
+                    "newRegionButton", editorIcons[EDITOR_ICON_ADD],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                newRegionCmd(1.0f);
+            }
+            setTooltip("Create a new area region.", "N");
+            
+            //Delete region button.
+            if(selectedRegion) {
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        "delRegionButton", editorIcons[EDITOR_ICON_REMOVE],
+                        Point(EDITOR::ICON_BMP_SIZE)
+                    )
+                ) {
+                    deleteRegionCmd(1.0f);
+                }
+                setTooltip(
+                    "Delete the selected region.",
+                    "Delete"
+                );
+            }
+            
+            ImGui::Spacer();
+            
+            if(selectedRegion) {
+            
+                //Region number text.
+                size_t curRegionIdx = 0;
+                for(
+                    ; curRegionIdx < game.curAreaData->regions.size();
+                    curRegionIdx++
+                ) {
+                    if(
+                        game.curAreaData->regions[curRegionIdx] ==
+                        selectedRegion
+                    ) {
+                        break;
+                    }
+                }
+                ImGui::Text("Region #%u", (unsigned int) curRegionIdx);
+                
+                //Region center value.
+                Point regionCenter = selectedRegion->center;
+                if(
+                    ImGui::DragFloat2("Center", (float*) &regionCenter)
+                ) {
+                    registerChange("region center change");
+                    selectedRegion->center = regionCenter;
+                };
+                setTooltip(
+                    "Center coordinates of the region.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Region size value.
+                Point regionSize = selectedRegion->size;
+                if(
+                    ImGui::DragFloat2("Size", (float*) &regionSize)
+                ) {
+                    registerChange("region size change");
+                    selectedRegion->size = regionSize;
+                };
+                setTooltip(
+                    "Width and height of the region.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            } else {
+            
+                //"No region selected" text.
+                ImGui::TextDisabled("(No region selected)");
+                
+            }
+            
+            ImGui::TreePop();
+            
+        }
+        
     }
     
     ImGui::EndChild();

@@ -172,6 +172,22 @@ struct TreeShadow {
 
 
 /**
+ * @brief A rectangular region within the area. Used for all sorts of purposes.
+ */
+struct AreaRegion {
+
+    //--- Members ---
+
+    //Center.
+    Point center;
+
+    //Size.
+    Point size;
+    
+};
+
+
+/**
  * @brief Info about an area.
  *
  * This structure is so that the sectors know how to communicate with
@@ -204,6 +220,9 @@ struct Area : public Content {
     
     //List of tree shadows.
     vector<TreeShadow*> treeShadows;
+
+    //List of regions.
+    vector<AreaRegion*> regions;
     
     //Bitmap of the background.
     ALLEGRO_BITMAP* bgBmp = nullptr;
