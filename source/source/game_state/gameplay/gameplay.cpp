@@ -1323,11 +1323,11 @@ void GameplayState::load() {
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
         unordered_set<size_t> missionRequiredMobGenIdxs;
         
-        if(game.curAreaData->mission.goalAllMobs) {
+        if(game.curAreaData->missionOld.goalAllMobs) {
             for(size_t m = 0; m < mobsPerGen.size(); m++) {
                 if(
                     mobsPerGen[m] &&
-                    game.missionGoals[game.curAreaData->mission.goal]->
+                    game.missionGoals[game.curAreaData->missionOld.goal]->
                     isMobApplicable(mobsPerGen[m]->type)
                 ) {
                     missionRequiredMobGenIdxs.insert(m);
@@ -1336,7 +1336,7 @@ void GameplayState::load() {
             
         } else {
             missionRequiredMobGenIdxs =
-                game.curAreaData->mission.goalMobIdxs;
+                game.curAreaData->missionOld.goalMobIdxs;
         }
         
         for(size_t i : missionRequiredMobGenIdxs) {

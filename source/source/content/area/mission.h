@@ -25,6 +25,9 @@ using std::unordered_set;
 class GameplayState;
 
 
+#pragma region Constants
+
+
 namespace MISSION {
 extern const int DEF_MEDAL_REQ_BRONZE;
 extern const int DEF_MEDAL_REQ_GOLD;
@@ -152,7 +155,7 @@ enum MISSION_SCORE_CRITERIA {
 /**
  * @brief Info about a given area's mission.
  */
-struct MissionData {
+struct MissionDataOld {
 
     //--- Members ---
     
@@ -172,12 +175,8 @@ struct MissionData {
     Point goalExitCenter;
     
     //Mission exit region dimensions.
-    Point goalExitSize =
-        Point(
-            MISSION::EXIT_MIN_SIZE,
-            MISSION::EXIT_MIN_SIZE
-        );
-        
+    Point goalExitSize = Point(MISSION::EXIT_MIN_SIZE);
+    
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND's indexes.
     Bitmask8 failConditions = 0;
     
@@ -215,7 +214,7 @@ struct MissionData {
     int pointsPerPikminDeath = 0;
     
     //Mission point multiplier for each second left (only if time limit is on).
-    int pointsPerSecLeft;
+    int pointsPerSecLeft = 0;
     
     //Mission point multiplier for each second passed.
     int pointsPerSecPassed = 0;
@@ -283,7 +282,7 @@ struct MissionRecord {
     
     //--- Function declarations ---
     
-    bool isPlatinum(const MissionData& mission);
+    bool isPlatinum(const MissionDataOld& mission);
     
 };
 
@@ -301,11 +300,11 @@ public:
     virtual string getName() const = 0;
     virtual int getCurAmount(GameplayState* gameplay) const = 0;
     virtual int getReqAmount(GameplayState* gameplay) const = 0;
-    virtual string getPlayerDescription(MissionData* mission) const = 0;
+    virtual string getPlayerDescription(MissionDataOld* mission) const = 0;
     virtual string getStatus(
         int cur, int req, float percentage
     ) const = 0;
-    virtual string getEndReason(MissionData* mission) const = 0;
+    virtual string getEndReason(MissionDataOld* mission) const = 0;
     virtual bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const = 0;
@@ -328,11 +327,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -355,11 +354,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -382,11 +381,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -409,11 +408,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -436,11 +435,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -463,11 +462,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -490,11 +489,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -517,11 +516,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -530,6 +529,10 @@ public:
     bool isMet(GameplayState* gameplay) const override;
     
 };
+
+
+#pragma endregion
+#pragma region Goals
 
 
 /**
@@ -545,11 +548,11 @@ public:
     virtual string getName() const = 0;
     virtual int getCurAmount(GameplayState* gameplay) const = 0;
     virtual int getReqAmount(GameplayState* gameplay) const = 0;
-    virtual string getPlayerDescription(MissionData* mission) const = 0;
+    virtual string getPlayerDescription(MissionDataOld* mission) const = 0;
     virtual string getStatus(
         int cur, int req, float percentage
     ) const = 0;
-    virtual string getEndReason(MissionData* mission) const = 0;
+    virtual string getEndReason(MissionDataOld* mission) const = 0;
     virtual bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const = 0;
@@ -572,11 +575,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -599,11 +602,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -626,11 +629,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -653,11 +656,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -680,11 +683,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -707,11 +710,11 @@ public:
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
     int getReqAmount(GameplayState* gameplay) const override;
-    string getPlayerDescription(MissionData* mission) const override;
+    string getPlayerDescription(MissionDataOld* mission) const override;
     string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string getEndReason(MissionData* mission) const override;
+    string getEndReason(MissionDataOld* mission) const override;
     bool getEndZoomData(
         GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
@@ -720,6 +723,10 @@ public:
     bool isMobApplicable(MobType* type) const override;
     
 };
+
+
+#pragma endregion
+#pragma region Score criteria
 
 
 /**
@@ -733,9 +740,9 @@ public:
     
     virtual ~MissionScoreCriterion() = default;
     virtual string getName() const = 0;
-    virtual int getMultiplier(MissionData* mission) const = 0;
+    virtual int getMultiplier(MissionDataOld* mission) const = 0;
     virtual int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const = 0;
     
 };
@@ -751,9 +758,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };
@@ -769,9 +776,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };
@@ -787,9 +794,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };
@@ -805,9 +812,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };
@@ -823,9 +830,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };
@@ -841,9 +848,9 @@ public:
     //--- Function declarations ---
     
     string getName() const override;
-    int getMultiplier(MissionData* mission) const override;
+    int getMultiplier(MissionDataOld* mission) const override;
     int getScore(
-        GameplayState* gameplay, MissionData* mission
+        GameplayState* gameplay, MissionDataOld* mission
     ) const override;
     
 };

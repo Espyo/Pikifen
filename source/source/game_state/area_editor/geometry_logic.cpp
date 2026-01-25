@@ -565,15 +565,15 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
         
         //Check the list of mission requirement objects.
         unordered_set<size_t> newMrmi;
-        newMrmi.reserve(game.curAreaData->mission.goalMobIdxs.size());
-        for(size_t m2 : game.curAreaData->mission.goalMobIdxs) {
+        newMrmi.reserve(game.curAreaData->missionOld.goalMobIdxs.size());
+        for(size_t m2 : game.curAreaData->missionOld.goalMobIdxs) {
             if(m2 > mIdx) {
                 newMrmi.insert(m2 - 1);
             } else if(m2 != mIdx) {
                 newMrmi.insert(m2);
             }
         }
-        game.curAreaData->mission.goalMobIdxs = newMrmi;
+        game.curAreaData->missionOld.goalMobIdxs = newMrmi;
         
         //Finally, delete it.
         game.curAreaData->mobGenerators.erase(
@@ -1096,9 +1096,9 @@ void AreaEditor::findProblemsNoGoalMob() {
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
         (
-            game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.curAreaData->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.curAreaData->mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.curAreaData->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.curAreaData->missionOld.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
         )
     ) {
         if(getMissionRequiredMobCount() == 0) {
@@ -1157,13 +1157,13 @@ void AreaEditor::findProblemsNonSimpleSector() {
 void AreaEditor::findProblemsNoScoreCriteria() {
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curAreaData->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
     ) {
         bool hasAnyCriterion = false;
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
             if(
                 game.missionScoreCriteria[c]->getMultiplier(
-                    &game.curAreaData->mission
+                    &game.curAreaData->missionOld
                 ) != 0
             ) {
                 hasAnyCriterion = true;
@@ -2439,10 +2439,10 @@ void AreaEditor::resizeEverything(float mults[2]) {
         rPtr->size.y *= mults[1];
     }
     
-    game.curAreaData->mission.goalExitCenter.x *= mults[0];
-    game.curAreaData->mission.goalExitCenter.y *= mults[1];
-    game.curAreaData->mission.goalExitSize.x *= mults[0];
-    game.curAreaData->mission.goalExitSize.y *= mults[1];
+    game.curAreaData->missionOld.goalExitCenter.x *= mults[0];
+    game.curAreaData->missionOld.goalExitCenter.y *= mults[1];
+    game.curAreaData->missionOld.goalExitSize.x *= mults[0];
+    game.curAreaData->missionOld.goalExitSize.y *= mults[1];
 }
 
 

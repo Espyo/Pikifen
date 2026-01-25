@@ -177,7 +177,7 @@ void Area::clear() {
     bgColor = COLOR_BLACK;
     bgDist = 2.0f;
     bgBmpZoom = 1.0f;
-    mission = MissionData();
+    missionOld = MissionDataOld();
     
     problems.nonSimples.clear();
     problems.loneEdges.clear();
@@ -374,36 +374,36 @@ void Area::clone(Area& other) {
     
     other.thumbnail = thumbnail;
     
-    other.mission.goal = mission.goal;
-    other.mission.goalAllMobs = mission.goalAllMobs;
-    other.mission.goalMobIdxs = mission.goalMobIdxs;
-    other.mission.goalAmount = mission.goalAmount;
-    other.mission.goalExitCenter = mission.goalExitCenter;
-    other.mission.goalExitSize = mission.goalExitSize;
-    other.mission.failConditions = mission.failConditions;
-    other.mission.failTooFewPikAmount = mission.failTooFewPikAmount;
-    other.mission.failTooManyPikAmount = mission.failTooManyPikAmount;
-    other.mission.failPikKilled = mission.failPikKilled;
-    other.mission.failLeadersKod = mission.failLeadersKod;
-    other.mission.failEnemiesDefeated = mission.failEnemiesDefeated;
-    other.mission.failTimeLimit = mission.failTimeLimit;
-    other.mission.gradingMode = mission.gradingMode;
-    other.mission.pointsPerPikminBorn = mission.pointsPerPikminBorn;
-    other.mission.pointsPerPikminDeath = mission.pointsPerPikminDeath;
-    other.mission.pointsPerSecLeft = mission.pointsPerSecLeft;
-    other.mission.pointsPerSecPassed = mission.pointsPerSecPassed;
-    other.mission.pointsPerTreasurePoint = mission.pointsPerTreasurePoint;
-    other.mission.pointsPerEnemyPoint = mission.pointsPerEnemyPoint;
-    other.mission.enemyPointsOnCollection = mission.enemyPointsOnCollection;
-    other.mission.pointLossData = mission.pointLossData;
-    other.mission.pointHudData = mission.pointHudData;
-    other.mission.startingPoints = mission.startingPoints;
-    other.mission.bronzeReq = mission.bronzeReq;
-    other.mission.silverReq = mission.silverReq;
-    other.mission.goldReq = mission.goldReq;
-    other.mission.platinumReq = mission.platinumReq;
-    other.mission.makerRecord = mission.makerRecord;
-    other.mission.makerRecordDate = mission.makerRecordDate;
+    other.missionOld.goal = missionOld.goal;
+    other.missionOld.goalAllMobs = missionOld.goalAllMobs;
+    other.missionOld.goalMobIdxs = missionOld.goalMobIdxs;
+    other.missionOld.goalAmount = missionOld.goalAmount;
+    other.missionOld.goalExitCenter = missionOld.goalExitCenter;
+    other.missionOld.goalExitSize = missionOld.goalExitSize;
+    other.missionOld.failConditions = missionOld.failConditions;
+    other.missionOld.failTooFewPikAmount = missionOld.failTooFewPikAmount;
+    other.missionOld.failTooManyPikAmount = missionOld.failTooManyPikAmount;
+    other.missionOld.failPikKilled = missionOld.failPikKilled;
+    other.missionOld.failLeadersKod = missionOld.failLeadersKod;
+    other.missionOld.failEnemiesDefeated = missionOld.failEnemiesDefeated;
+    other.missionOld.failTimeLimit = missionOld.failTimeLimit;
+    other.missionOld.gradingMode = missionOld.gradingMode;
+    other.missionOld.pointsPerPikminBorn = missionOld.pointsPerPikminBorn;
+    other.missionOld.pointsPerPikminDeath = missionOld.pointsPerPikminDeath;
+    other.missionOld.pointsPerSecLeft = missionOld.pointsPerSecLeft;
+    other.missionOld.pointsPerSecPassed = missionOld.pointsPerSecPassed;
+    other.missionOld.pointsPerTreasurePoint = missionOld.pointsPerTreasurePoint;
+    other.missionOld.pointsPerEnemyPoint = missionOld.pointsPerEnemyPoint;
+    other.missionOld.enemyPointsOnCollection = missionOld.enemyPointsOnCollection;
+    other.missionOld.pointLossData = missionOld.pointLossData;
+    other.missionOld.pointHudData = missionOld.pointHudData;
+    other.missionOld.startingPoints = missionOld.startingPoints;
+    other.missionOld.bronzeReq = missionOld.bronzeReq;
+    other.missionOld.silverReq = missionOld.silverReq;
+    other.missionOld.goldReq = missionOld.goldReq;
+    other.missionOld.platinumReq = missionOld.platinumReq;
+    other.missionOld.makerRecord = missionOld.makerRecord;
+    other.missionOld.makerRecordDate = missionOld.makerRecordDate;
     
     other.problems.nonSimples.clear();
     other.problems.loneEdges.clear();
@@ -1317,8 +1317,9 @@ void Area::loadMainDataFromDataNode(
  * @param node Data node to load from.
  */
 void Area::loadMissionDataFromDataNode(DataNode* node) {
-    mission.failHudPrimaryCond = INVALID;
-    mission.failHudSecondaryCond = INVALID;
+    //General properties.
+    missionOld.failHudPrimaryCond = INVALID;
+    missionOld.failHudSecondaryCond = INVALID;
     
     ReaderSetter mRS(node);
     
@@ -1327,68 +1328,68 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
     
     mRS.set("mission_goal", goalStr);
-    mRS.set("mission_goal_amount", mission.goalAmount);
-    mRS.set("mission_goal_all_mobs", mission.goalAllMobs);
+    mRS.set("mission_goal_amount", missionOld.goalAmount);
+    mRS.set("mission_goal_all_mobs", missionOld.goalAllMobs);
     mRS.set("mission_required_mobs", requiredMobsStr);
-    mRS.set("mission_goal_exit_center", mission.goalExitCenter);
-    mRS.set("mission_goal_exit_size", mission.goalExitSize);
-    mRS.set("mission_fail_conditions", mission.failConditions);
-    mRS.set("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
-    mRS.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
-    mRS.set("mission_fail_pik_killed", mission.failPikKilled);
-    mRS.set("mission_fail_leaders_kod", mission.failLeadersKod);
-    mRS.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
-    mRS.set("mission_fail_time_limit", mission.failTimeLimit);
-    mRS.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
-    mRS.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+    mRS.set("mission_goal_exit_center", missionOld.goalExitCenter);
+    mRS.set("mission_goal_exit_size", missionOld.goalExitSize);
+    mRS.set("mission_fail_conditions", missionOld.failConditions);
+    mRS.set("mission_fail_too_few_pik_amount", missionOld.failTooFewPikAmount);
+    mRS.set("mission_fail_too_many_pik_amount", missionOld.failTooManyPikAmount);
+    mRS.set("mission_fail_pik_killed", missionOld.failPikKilled);
+    mRS.set("mission_fail_leaders_kod", missionOld.failLeadersKod);
+    mRS.set("mission_fail_enemies_defeated", missionOld.failEnemiesDefeated);
+    mRS.set("mission_fail_time_limit", missionOld.failTimeLimit);
+    mRS.set("mission_fail_hud_primary_cond", missionOld.failHudPrimaryCond);
+    mRS.set("mission_fail_hud_secondary_cond", missionOld.failHudSecondaryCond);
     mRS.set("mission_grading_mode", missionGradingModeInt);
-    mRS.set("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
-    mRS.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
-    mRS.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
-    mRS.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+    mRS.set("mission_points_per_pikmin_born", missionOld.pointsPerPikminBorn);
+    mRS.set("mission_points_per_pikmin_death", missionOld.pointsPerPikminDeath);
+    mRS.set("mission_points_per_sec_left", missionOld.pointsPerSecLeft);
+    mRS.set("mission_points_per_sec_passed", missionOld.pointsPerSecPassed);
     mRS.set(
-        "mission_points_per_treasure_point", mission.pointsPerTreasurePoint
+        "mission_points_per_treasure_point", missionOld.pointsPerTreasurePoint
     );
-    mRS.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
-    mRS.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
-    mRS.set("mission_point_loss_data", mission.pointLossData);
-    mRS.set("mission_point_hud_data", mission.pointHudData);
-    mRS.set("mission_starting_points", mission.startingPoints);
-    mRS.set("mission_bronze_req", mission.bronzeReq);
-    mRS.set("mission_silver_req", mission.silverReq);
-    mRS.set("mission_gold_req", mission.goldReq);
-    mRS.set("mission_platinum_req", mission.platinumReq);
-    mRS.set("mission_maker_record", mission.makerRecord);
-    mRS.set("mission_maker_record_date", mission.makerRecordDate);
+    mRS.set("mission_points_per_enemy_point", missionOld.pointsPerEnemyPoint);
+    mRS.set("enemy_points_on_collection", missionOld.enemyPointsOnCollection);
+    mRS.set("mission_point_loss_data", missionOld.pointLossData);
+    mRS.set("mission_point_hud_data", missionOld.pointHudData);
+    mRS.set("mission_starting_points", missionOld.startingPoints);
+    mRS.set("mission_bronze_req", missionOld.bronzeReq);
+    mRS.set("mission_silver_req", missionOld.silverReq);
+    mRS.set("mission_gold_req", missionOld.goldReq);
+    mRS.set("mission_platinum_req", missionOld.platinumReq);
+    mRS.set("mission_maker_record", missionOld.makerRecord);
+    mRS.set("mission_maker_record_date", missionOld.makerRecordDate);
     
-    mission.goal = MISSION_GOAL_END_MANUALLY;
+    //Goal.
+    missionOld.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
         if(game.missionGoals[g]->getName() == goalStr) {
-            mission.goal = (MISSION_GOAL) g;
+            missionOld.goal = (MISSION_GOAL) g;
             break;
         }
     }
     vector<string> missionRequiredMobsStr =
         semicolonListToVector(requiredMobsStr);
-    mission.goalMobIdxs.reserve(
+    missionOld.goalMobIdxs.reserve(
         missionRequiredMobsStr.size()
     );
     for(size_t m = 0; m < missionRequiredMobsStr.size(); m++) {
-        mission.goalMobIdxs.insert(
+        missionOld.goalMobIdxs.insert(
             s2i(missionRequiredMobsStr[m])
         );
     }
-    mission.gradingMode = (MISSION_GRADING_MODE) missionGradingModeInt;
     
     //Automatically turn the pause menu fail condition on/off for convenience.
-    if(mission.goal == MISSION_GOAL_END_MANUALLY) {
+    if(missionOld.goal == MISSION_GOAL_END_MANUALLY) {
         disableFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     } else {
         enableFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     }
@@ -1396,20 +1397,22 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     //Automatically turn off the seconds left score criterion for convenience.
     if(
         !hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        mission.pointsPerSecLeft = 0;
+        missionOld.pointsPerSecLeft = 0;
         disableFlag(
-            mission.pointHudData,
+            missionOld.pointHudData,
             getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
         disableFlag(
-            mission.pointLossData,
+            missionOld.pointLossData,
             getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
     }
+    
+    missionOld.gradingMode = (MISSION_GRADING_MODE) missionGradingModeInt;
 }
 
 
@@ -1873,26 +1876,28 @@ void Area::saveMainDataToDataNode(DataNode* node) {
  * @param node Data node to save to.
  */
 void Area::saveMissionDataToDataNode(DataNode* node) {
+    //General properties.
     GetterWriter mGW(node);
     
-    if(mission.goal != MISSION_GOAL_END_MANUALLY) {
-        string goalName = game.missionGoals[mission.goal]->getName();
+    //Goal.
+    if(missionOld.goal != MISSION_GOAL_END_MANUALLY) {
+        string goalName = game.missionGoals[missionOld.goal]->getName();
         mGW.write("mission_goal", goalName);
     }
     if(
-        mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
-        mission.goal == MISSION_GOAL_GROW_PIKMIN
+        missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL ||
+        missionOld.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
-        mGW.write("mission_goal_amount", mission.goalAmount);
+        mGW.write("mission_goal_amount", missionOld.goalAmount);
     }
     if(
-        mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-        mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-        mission.goal == MISSION_GOAL_GET_TO_EXIT
+        missionOld.goal == MISSION_GOAL_COLLECT_TREASURE ||
+        missionOld.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+        missionOld.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
-        mGW.write("mission_goal_all_mobs", mission.goalAllMobs);
+        mGW.write("mission_goal_all_mobs", missionOld.goalAllMobs);
         vector<string> missionMobIdxStrs;
-        for(auto m : mission.goalMobIdxs) {
+        for(auto m : missionOld.goalMobIdxs) {
             missionMobIdxStrs.push_back(i2s(m));
         }
         string missionMobIdxStr = join(missionMobIdxStrs, ";");
@@ -1900,129 +1905,133 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             mGW.write("mission_required_mobs", missionMobIdxStr);
         }
     }
-    if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
-        mGW.write("mission_goal_exit_center", mission.goalExitCenter);
-        mGW.write("mission_goal_exit_size", mission.goalExitSize);
+    if(missionOld.goal == MISSION_GOAL_GET_TO_EXIT) {
+        mGW.write("mission_goal_exit_center", missionOld.goalExitCenter);
+        mGW.write("mission_goal_exit_size", missionOld.goalExitSize);
     }
-    if(mission.failConditions > 0) {
-        mGW.write("mission_fail_conditions", mission.failConditions);
+    if(missionOld.failConditions > 0) {
+        mGW.write("mission_fail_conditions", missionOld.failConditions);
     }
+    
+    //Fail conditions.
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
         mGW.write(
-            "mission_fail_too_few_pik_amount", mission.failTooFewPikAmount
+            "mission_fail_too_few_pik_amount", missionOld.failTooFewPikAmount
         );
     }
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
         mGW.write(
-            "mission_fail_too_many_pik_amount", mission.failTooManyPikAmount
+            "mission_fail_too_many_pik_amount", missionOld.failTooManyPikAmount
         );
     }
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
-        mGW.write("mission_fail_pik_killed", mission.failPikKilled);
+        mGW.write("mission_fail_pik_killed", missionOld.failPikKilled);
     }
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
-        mGW.write("mission_fail_leaders_kod", mission.failLeadersKod);
+        mGW.write("mission_fail_leaders_kod", missionOld.failLeadersKod);
     }
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         )
     ) {
-        mGW.write("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
+        mGW.write("mission_fail_enemies_defeated", missionOld.failEnemiesDefeated);
     }
     if(
         hasFlag(
-            mission.failConditions,
+            missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        mGW.write("mission_fail_time_limit", mission.failTimeLimit);
+        mGW.write("mission_fail_time_limit", missionOld.failTimeLimit);
     }
-    if(mission.failHudPrimaryCond != INVALID) {
+    if(missionOld.failHudPrimaryCond != INVALID) {
         mGW.write(
-            "mission_fail_hud_primary_cond", mission.failHudPrimaryCond
+            "mission_fail_hud_primary_cond", missionOld.failHudPrimaryCond
         );
     }
-    if(mission.failHudSecondaryCond != INVALID) {
+    if(missionOld.failHudSecondaryCond != INVALID) {
         mGW.write(
-            "mission_fail_hud_secondary_cond", mission.failHudSecondaryCond
+            "mission_fail_hud_secondary_cond", missionOld.failHudSecondaryCond
         );
     }
-    mGW.write("mission_grading_mode", mission.gradingMode);
-    if(mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
-        if(mission.pointsPerPikminBorn != 0) {
+    
+    //Points.
+    mGW.write("mission_grading_mode", missionOld.gradingMode);
+    if(missionOld.gradingMode == MISSION_GRADING_MODE_POINTS) {
+        if(missionOld.pointsPerPikminBorn != 0) {
             mGW.write(
-                "mission_points_per_pikmin_born", mission.pointsPerPikminBorn
+                "mission_points_per_pikmin_born", missionOld.pointsPerPikminBorn
             );
         }
-        if(mission.pointsPerPikminDeath != 0) {
+        if(missionOld.pointsPerPikminDeath != 0) {
             mGW.write(
-                "mission_points_per_pikmin_death", mission.pointsPerPikminDeath
+                "mission_points_per_pikmin_death", missionOld.pointsPerPikminDeath
             );
         }
-        if(mission.pointsPerSecLeft != 0) {
+        if(missionOld.pointsPerSecLeft != 0) {
             mGW.write(
-                "mission_points_per_sec_left", mission.pointsPerSecLeft
+                "mission_points_per_sec_left", missionOld.pointsPerSecLeft
             );
         }
-        if(mission.pointsPerSecPassed != 0) {
+        if(missionOld.pointsPerSecPassed != 0) {
             mGW.write(
-                "mission_points_per_sec_passed", mission.pointsPerSecPassed
+                "mission_points_per_sec_passed", missionOld.pointsPerSecPassed
             );
         }
-        if(mission.pointsPerTreasurePoint != 0) {
+        if(missionOld.pointsPerTreasurePoint != 0) {
             mGW.write(
                 "mission_points_per_treasure_point",
-                mission.pointsPerTreasurePoint
+                missionOld.pointsPerTreasurePoint
             );
         }
-        if(mission.pointsPerEnemyPoint != 0) {
+        if(missionOld.pointsPerEnemyPoint != 0) {
             mGW.write(
-                "mission_points_per_enemy_point", mission.pointsPerEnemyPoint
+                "mission_points_per_enemy_point", missionOld.pointsPerEnemyPoint
             );
         }
-        if(mission.enemyPointsOnCollection) {
+        if(missionOld.enemyPointsOnCollection) {
             mGW.write(
-                "enemy_points_on_collection", mission.enemyPointsOnCollection
+                "enemy_points_on_collection", missionOld.enemyPointsOnCollection
             );
         }
-        if(mission.pointLossData > 0) {
-            mGW.write("mission_point_loss_data", mission.pointLossData);
+        if(missionOld.pointLossData > 0) {
+            mGW.write("mission_point_loss_data", missionOld.pointLossData);
         }
-        if(mission.pointHudData != 255) {
-            mGW.write("mission_point_hud_data", mission.pointHudData);
+        if(missionOld.pointHudData != 255) {
+            mGW.write("mission_point_hud_data", missionOld.pointHudData);
         }
-        if(mission.startingPoints != 0) {
-            mGW.write("mission_starting_points", mission.startingPoints);
+        if(missionOld.startingPoints != 0) {
+            mGW.write("mission_starting_points", missionOld.startingPoints);
         }
-        mGW.write("mission_bronze_req", mission.bronzeReq);
-        mGW.write("mission_silver_req", mission.silverReq);
-        mGW.write("mission_gold_req", mission.goldReq);
-        mGW.write("mission_platinum_req", mission.platinumReq);
-        if(!mission.makerRecordDate.empty()) {
-            mGW.write("mission_maker_record", mission.makerRecord);
-            mGW.write("mission_maker_record_date", mission.makerRecordDate);
+        mGW.write("mission_bronze_req", missionOld.bronzeReq);
+        mGW.write("mission_silver_req", missionOld.silverReq);
+        mGW.write("mission_gold_req", missionOld.goldReq);
+        mGW.write("mission_platinum_req", missionOld.platinumReq);
+        if(!missionOld.makerRecordDate.empty()) {
+            mGW.write("mission_maker_record", missionOld.makerRecord);
+            mGW.write("mission_maker_record_date", missionOld.makerRecordDate);
         }
     }
 }

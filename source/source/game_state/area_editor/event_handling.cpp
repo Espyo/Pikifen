@@ -630,8 +630,8 @@ void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
     if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
         curTransformationWidget.handleMouseDown(
             game.editorsView.mouseCursorWorldPos,
-            &game.curAreaData->mission.goalExitCenter,
-            &game.curAreaData->mission.goalExitSize,
+            &game.curAreaData->missionOld.goalExitCenter,
+            &game.curAreaData->missionOld.goalExitSize,
             nullptr,
             1.0f / game.editorsView.cam.zoom
         );
@@ -1548,9 +1548,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     
             if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
                 Point exitCenter =
-                    game.curAreaData->mission.goalExitCenter;
+                    game.curAreaData->missionOld.goalExitCenter;
                 Point exitSize =
-                    game.curAreaData->mission.goalExitSize;
+                    game.curAreaData->missionOld.goalExitSize;
                 if(
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.editorsView.mouseCursorWorldPos, true),
@@ -1564,8 +1564,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     )
                 ) {
                     registerChange("mission exit change");
-                    game.curAreaData->mission.goalExitCenter = exitCenter;
-                    game.curAreaData->mission.goalExitSize = exitSize;
+                    game.curAreaData->missionOld.goalExitCenter = exitCenter;
+                    game.curAreaData->missionOld.goalExitSize = exitSize;
                 }
             }
             break;

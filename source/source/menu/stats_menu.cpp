@@ -287,10 +287,10 @@ void StatsMenu::populateStatsList() {
         if(record.clear) {
             missionClears++;
         }
-        if(record.isPlatinum(areaPtr->mission)) {
+        if(record.isPlatinum(areaPtr->missionOld)) {
             missionPlatinums++;
         }
-        if(areaPtr->mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
+        if(areaPtr->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS) {
             missionScores += record.score;
         }
     }

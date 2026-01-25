@@ -772,7 +772,7 @@ Hud::Hud() :
         
         
         string goalCurLabelText =
-            game.missionGoals[game.curAreaData->mission.goal]->
+            game.missionGoals[game.curAreaData->missionOld.goal]->
             getHudLabel();
             
         if(!goalCurLabelText.empty()) {
@@ -796,11 +796,11 @@ Hud::Hud() :
                 [this, missionGoalCur]
             (const DrawInfo & draw) {
                 int value =
-                    game.missionGoals[game.curAreaData->mission.goal]->
+                    game.missionGoals[game.curAreaData->missionOld.goal]->
                     getCurAmount(game.states.gameplay);
                 string text;
                 if(
-                    game.curAreaData->mission.goal ==
+                    game.curAreaData->missionOld.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = timeToStr2(value, ":", "");
@@ -836,11 +836,11 @@ Hud::Hud() :
             missionGoalReq->onDraw =
             [this] (const DrawInfo & draw) {
                 int value =
-                    game.missionGoals[game.curAreaData->mission.goal]->
+                    game.missionGoals[game.curAreaData->missionOld.goal]->
                     getReqAmount(game.states.gameplay);
                 string text;
                 if(
-                    game.curAreaData->mission.goal ==
+                    game.curAreaData->missionOld.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = timeToStr2(value, ":", "");
@@ -873,7 +873,7 @@ Hud::Hud() :
             missionGoalName->onDraw =
             [this] (const DrawInfo & draw) {
                 drawText(
-                    game.missionGoals[game.curAreaData->mission.goal]->
+                    game.missionGoals[game.curAreaData->missionOld.goal]->
                     getName(), game.sysContent.fntStandard,
                     draw.center, draw.size,
                     tintColor(mapAlpha(128), draw.tint)
@@ -887,8 +887,8 @@ Hud::Hud() :
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS &&
-        game.curAreaData->mission.pointHudData != 0
+        game.curAreaData->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS &&
+        game.curAreaData->missionOld.pointHudData != 0
     ) {
     
         //Mission score bubble.
@@ -960,11 +960,11 @@ Hud::Hud() :
         [this] (const DrawInfo & draw) {
             //Setup.
             const float lowestNormalValue =
-                std::min(0, game.curAreaData->mission.bronzeReq);
+                std::min(0, game.curAreaData->missionOld.bronzeReq);
             const float highestNormalValue =
                 std::max(
-                    game.curAreaData->mission.startingPoints,
-                    game.curAreaData->mission.platinumReq
+                    game.curAreaData->missionOld.startingPoints,
+                    game.curAreaData->missionOld.platinumReq
                 );
             const float valueRange =
                 (highestNormalValue - lowestNormalValue) *
@@ -989,13 +989,13 @@ Hud::Hud() :
             const float segLimits[] = {
                 std::min(startValue, 0.0f),
                 0,
-                (float) game.curAreaData->mission.bronzeReq,
-                (float) game.curAreaData->mission.silverReq,
-                (float) game.curAreaData->mission.goldReq,
-                (float) game.curAreaData->mission.platinumReq,
+                (float) game.curAreaData->missionOld.bronzeReq,
+                (float) game.curAreaData->missionOld.silverReq,
+                (float) game.curAreaData->missionOld.goldReq,
+                (float) game.curAreaData->missionOld.platinumReq,
                 std::max(
                     endValue,
-                    (float) game.curAreaData->mission.platinumReq
+                    (float) game.curAreaData->missionOld.platinumReq
                 )
             };
             ALLEGRO_COLOR segColorsTop[] = {
@@ -1208,13 +1208,13 @@ Hud::Hud() :
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.failHudPrimaryCond != INVALID
+        game.curAreaData->missionOld.failHudPrimaryCond != INVALID
     ) {
         createMissionFailCondItems(true);
     }
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.failHudSecondaryCond != INVALID
+        game.curAreaData->missionOld.failHudSecondaryCond != INVALID
     ) {
         createMissionFailCondItems(false);
     }
@@ -1324,9 +1324,9 @@ void Hud::createMissionFailCondItems(bool primary) {
     MISSION_FAIL_COND cond =
         primary ?
         (MISSION_FAIL_COND)
-        game.curAreaData->mission.failHudPrimaryCond :
+        game.curAreaData->missionOld.failHudPrimaryCond :
         (MISSION_FAIL_COND)
-        game.curAreaData->mission.failHudSecondaryCond;
+        game.curAreaData->missionOld.failHudSecondaryCond;
         
     //Mission fail condition bubble.
     GuiItem* missionFailBubble = new GuiItem();

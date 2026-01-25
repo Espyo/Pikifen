@@ -155,7 +155,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         getSubtitleOrMissionGoal(
             areaPtr->subtitle,
             areaType,
-            areaPtr->mission.goal
+            areaPtr->missionOld.goal
         );
     descriptionText->text = areaPtr->description;
     tagsText->text =
@@ -171,7 +171,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         recordInfoText->text =
             !recordExists ?
             "(None)" :
-            areaPtr->mission.gradingMode ==
+            areaPtr->missionOld.gradingMode ==
             MISSION_GRADING_MODE_POINTS ?
             amountStr(score, "point") :
             "";
@@ -184,9 +184,9 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         if(!recordExists) {
             curMedal = nullptr;
         } else {
-            switch(areaPtr->mission.gradingMode) {
+            switch(areaPtr->missionOld.gradingMode) {
             case MISSION_GRADING_MODE_POINTS: {
-                MISSION_MEDAL medal = areaPtr->mission.getScoreMedal(score);
+                MISSION_MEDAL medal = areaPtr->missionOld.getScoreMedal(score);
                 switch(medal) {
                 case MISSION_MEDAL_NONE: {
                     curMedal = game.sysContent.bmpMedalNone;
@@ -223,7 +223,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     //Now fill in the mission specs.
     if(areaType == AREA_TYPE_MISSION) {
         specsNameText->text = areaPtr->name;
-        MissionData& mission = areaPtr->mission;
+        MissionDataOld& mission = areaPtr->missionOld;
         goalText->text =
             game.missionGoals[mission.goal]->
             getPlayerDescription(&mission);
@@ -635,11 +635,11 @@ void AreaMenu::initGuiMain() {
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
-                    switch(areaPtr->mission.gradingMode) {
+                    switch(areaPtr->missionOld.gradingMode) {
                     case MISSION_GRADING_MODE_POINTS: {
                         int score = areaRecords[a].score;
                         MISSION_MEDAL medal =
-                            areaPtr->mission.getScoreMedal(score);
+                            areaPtr->missionOld.getScoreMedal(score);
                         switch(medal) {
                         case MISSION_MEDAL_NONE: {
                             break;

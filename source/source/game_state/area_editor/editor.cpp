@@ -1746,7 +1746,7 @@ void AreaEditor::getHoveredLayoutElement(
 size_t AreaEditor::getMissionRequiredMobCount() const {
     size_t totalRequired = 0;
     
-    if(game.curAreaData->mission.goalAllMobs) {
+    if(game.curAreaData->missionOld.goalAllMobs) {
         for(
             size_t m = 0;
             m < game.curAreaData->mobGenerators.size();
@@ -1754,7 +1754,7 @@ size_t AreaEditor::getMissionRequiredMobCount() const {
         ) {
             MobGen* g = game.curAreaData->mobGenerators[m];
             if(
-                game.missionGoals[game.curAreaData->mission.goal]->
+                game.missionGoals[game.curAreaData->missionOld.goal]->
                 isMobApplicable(g->type)
             ) {
                 totalRequired++;
@@ -1762,7 +1762,7 @@ size_t AreaEditor::getMissionRequiredMobCount() const {
         }
     } else {
         totalRequired =
-            game.curAreaData->mission.goalMobIdxs.size();
+            game.curAreaData->missionOld.goalMobIdxs.size();
     }
     
     return totalRequired;

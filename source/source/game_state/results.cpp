@@ -38,13 +38,13 @@ const string GUI_FILE_NAME = "results_menu";
 void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
     if(
         game.curAreaData->type != AREA_TYPE_MISSION ||
-        game.curAreaData->mission.gradingMode != MISSION_GRADING_MODE_POINTS
+        game.curAreaData->missionOld.gradingMode != MISSION_GRADING_MODE_POINTS
     ) {
         return;
     }
     
     MissionScoreCriterion* cPtr = game.missionScoreCriteria[criterion];
-    MissionData* mission = &game.curAreaData->mission;
+    MissionDataOld* mission = &game.curAreaData->missionOld;
     int mult = cPtr->getMultiplier(mission);
     
     if(mult == 0) return;
@@ -54,7 +54,7 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
         (MISSION_FAIL_COND) INVALID;
     bool lost =
         hasFlag(
-            game.curAreaData->mission.pointLossData,
+            game.curAreaData->missionOld.pointLossData,
             getIdxBitmask(criterion)
         ) &&
         !goalWasCleared;
@@ -247,16 +247,16 @@ void Results::load() {
         (MISSION_FAIL_COND) INVALID;
         
     //Calculate score things.
-    finalMissionScore = game.curAreaData->mission.startingPoints;
+    finalMissionScore = game.curAreaData->missionOld.startingPoints;
     
     for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
         MissionScoreCriterion* cPtr =
             game.missionScoreCriteria[c];
         int cScore =
-            cPtr->getScore(game.states.gameplay, &game.curAreaData->mission);
+            cPtr->getScore(game.states.gameplay, &game.curAreaData->missionOld);
         bool lost =
             hasFlag(
-                game.curAreaData->mission.pointLossData,
+                game.curAreaData->missionOld.pointLossData,
                 getIdxBitmask(c)
             ) &&
             !goalWasCleared;
@@ -296,7 +296,7 @@ void Results::load() {
         isNewRecord = true;
     } else if(oldRecord.clear == goalWasCleared) {
         if(
-            game.curAreaData->mission.gradingMode ==
+            game.curAreaData->missionOld.gradingMode ==
             MISSION_GRADING_MODE_POINTS &&
             oldRecord.score < finalMissionScore
         ) {
@@ -372,7 +372,7 @@ void Results::load() {
         getSubtitleOrMissionGoal(
             game.curAreaData->subtitle,
             game.curAreaData->type,
-            game.curAreaData->mission.goal
+            game.curAreaData->missionOld.goal
         );
     if(!subtitle.empty()) {
         TextGuiItem* areaSubtitleText =
@@ -400,14 +400,14 @@ void Results::load() {
         string endReason;
         if(goalWasCleared) {
             endReason =
-                game.missionGoals[game.curAreaData->mission.goal]->
-                getEndReason(&game.curAreaData->mission);
+                game.missionGoals[game.curAreaData->missionOld.goal]->
+                getEndReason(&game.curAreaData->missionOld);
         } else {
             endReason =
                 game.missionFailConds[
                     game.states.gameplay->missionFailReason
                 ]->getEndReason(
-                    &game.curAreaData->mission
+                    &game.curAreaData->missionOld
                 );
         }
         
@@ -426,10 +426,10 @@ void Results::load() {
         MISSION_MEDAL medal = MISSION_MEDAL_NONE;
         string medalReason;
         ALLEGRO_COLOR medalReasonColor;
-        switch(game.curAreaData->mission.gradingMode) {
+        switch(game.curAreaData->missionOld.gradingMode) {
         case MISSION_GRADING_MODE_POINTS: {
             medalReason = "Got " + i2s(finalMissionScore) + " points";
-            medal = game.curAreaData->mission.getScoreMedal(finalMissionScore);
+            medal = game.curAreaData->missionOld.getScoreMedal(finalMissionScore);
             switch(medal) {
             case MISSION_MEDAL_NONE: {
                 medalReason += "...";
@@ -537,7 +537,7 @@ void Results::load() {
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            game.curAreaData->mission.gradingMode ==
+            game.curAreaData->missionOld.gradingMode ==
             MISSION_GRADING_MODE_POINTS &&
             oldRecord.clear &&
             !goalWasCleared &&
@@ -651,12 +651,12 @@ void Results::load() {
 void Results::populateStatsList(const MissionRecord& oldRecord) {
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.startingPoints != 0
+        game.curAreaData->missionOld.startingPoints != 0
     ) {
         //Starting score bullet.
         addStat(
             "Starting score: ",
-            i2s(game.curAreaData->mission.startingPoints),
+            i2s(game.curAreaData->missionOld.startingPoints),
             game.config.guiColors.gold
         );
     }
@@ -687,13 +687,13 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.pointsPerSecLeft != 0
+        game.curAreaData->missionOld.pointsPerSecLeft != 0
     ) {
         //Seconds left bullet.
         addStat(
             "Seconds left:",
             i2s(
-                game.curAreaData->mission.failTimeLimit -
+                game.curAreaData->missionOld.failTimeLimit -
                 floor(game.states.gameplay->gameplayTimePassed)
             )
         );
@@ -704,7 +704,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.pointsPerSecPassed != 0
+        game.curAreaData->missionOld.pointsPerSecPassed != 0
     ) {
         //Seconds passed bullet.
         addStat(
@@ -752,7 +752,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curAreaData->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
     ) {
         //Final score bullet.
         addStat(
@@ -769,10 +769,10 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         );
         
         //Maker's record bullet.
-        if(!game.curAreaData->mission.makerRecordDate.empty()) {
+        if(!game.curAreaData->missionOld.makerRecordDate.empty()) {
             addStat(
                 "Maker's record:",
-                i2s(game.curAreaData->mission.makerRecord),
+                i2s(game.curAreaData->missionOld.makerRecord),
                 COLOR_WHITE
             );
         }

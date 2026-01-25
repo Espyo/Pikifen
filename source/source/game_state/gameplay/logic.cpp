@@ -900,7 +900,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *******************/
         if(
             game.curAreaData->type == AREA_TYPE_MISSION &&
-            game.curAreaData->mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             curLeadersInMissionExit = 0;
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
@@ -916,14 +916,14 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 if(
                     fabs(
                         lPtr->pos.x -
-                        game.curAreaData->mission.goalExitCenter.x
+                        game.curAreaData->missionOld.goalExitCenter.x
                     ) <=
-                    game.curAreaData->mission.goalExitSize.x / 2.0f &&
+                    game.curAreaData->missionOld.goalExitSize.x / 2.0f &&
                     fabs(
                         lPtr->pos.y -
-                        game.curAreaData->mission.goalExitCenter.y
+                        game.curAreaData->missionOld.goalExitCenter.y
                     ) <=
-                    game.curAreaData->mission.goalExitSize.y / 2.0f
+                    game.curAreaData->missionOld.goalExitSize.y / 2.0f
                 ) {
                     curLeadersInMissionExit++;
                 }
@@ -932,11 +932,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
         float realGoalRatio = 0.0f;
         int goalCurAmount =
-            game.missionGoals[game.curAreaData->mission.goal]->getCurAmount(
+            game.missionGoals[game.curAreaData->missionOld.goal]->getCurAmount(
                 this
             );
         int goalReqAmount =
-            game.missionGoals[game.curAreaData->mission.goal]->getReqAmount(
+            game.missionGoals[game.curAreaData->missionOld.goal]->getReqAmount(
                 this
             );
         if(goalReqAmount != 0.0f) {
@@ -948,15 +948,15 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 HUD::GOAL_INDICATOR_SMOOTHNESS_FACTOR, deltaT
             );
             
-        if(game.curAreaData->mission.failHudPrimaryCond != INVALID) {
+        if(game.curAreaData->missionOld.failHudPrimaryCond != INVALID) {
             float realFailRatio = 0.0f;
             int failCurAmount =
                 game.missionFailConds[
-                    game.curAreaData->mission.failHudPrimaryCond
+                    game.curAreaData->missionOld.failHudPrimaryCond
                 ]->getCurAmount(this);
             int failReqAmount =
                 game.missionFailConds[
-                    game.curAreaData->mission.failHudPrimaryCond
+                    game.curAreaData->missionOld.failHudPrimaryCond
                 ]->getReqAmount(this);
             if(failReqAmount != 0.0f) {
                 realFailRatio = failCurAmount / (float) failReqAmount;
@@ -968,15 +968,15 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 );
         }
         
-        if(game.curAreaData->mission.failHudSecondaryCond != INVALID) {
+        if(game.curAreaData->missionOld.failHudSecondaryCond != INVALID) {
             float realFailRatio = 0.0f;
             int failCurAmount =
                 game.missionFailConds[
-                    game.curAreaData->mission.failHudSecondaryCond
+                    game.curAreaData->missionOld.failHudSecondaryCond
                 ]->getCurAmount(this);
             int failReqAmount =
                 game.missionFailConds[
-                    game.curAreaData->mission.failHudSecondaryCond
+                    game.curAreaData->missionOld.failHudSecondaryCond
                 ]->getReqAmount(this);
             if(failReqAmount != 0.0f) {
                 realFailRatio = failCurAmount / (float) failReqAmount;
@@ -1005,11 +1005,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
             lastPikminDeathPos = Point(LARGE_FLOAT);
             lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
             
-            missionScore = game.curAreaData->mission.startingPoints;
+            missionScore = game.curAreaData->missionOld.startingPoints;
             for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
                 if(
                     !hasFlag(
-                        game.curAreaData->mission.pointHudData,
+                        game.curAreaData->missionOld.pointHudData,
                         getIdxBitmask(c)
                     )
                 ) {
@@ -1018,7 +1018,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 MissionScoreCriterion* cPtr =
                     game.missionScoreCriteria[c];
                 int cScore =
-                    cPtr->getScore(this, &game.curAreaData->mission);
+                    cPtr->getScore(this, &game.curAreaData->missionOld);
                 missionScore += cScore;
             }
             if(missionScore != oldMissionScore) {
@@ -1026,9 +1026,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
                 MISSION_MEDAL oldMedal =
-                    game.curAreaData->mission.getScoreMedal(oldMissionScore);
+                    game.curAreaData->missionOld.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
-                    game.curAreaData->mission.getScoreMedal(missionScore);
+                    game.curAreaData->missionOld.getScoreMedal(missionScore);
                 if(oldMedal < newMedal) {
                     medalGotItJuiceTimer = 0.0f;
                     game.audio.createUiSoundSource(
@@ -1049,7 +1049,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             medalGotItJuiceTimer += deltaT;
             
             int goalCur =
-                game.missionGoals[game.curAreaData->mission.goal]->
+                game.missionGoals[game.curAreaData->missionOld.goal]->
                 getCurAmount(game.states.gameplay);
             if(goalCur != oldMissionGoalCur) {
                 missionGoalCurText->startJuiceAnimation(
@@ -1059,11 +1059,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
             }
             
             if(
-                game.curAreaData->mission.failHudPrimaryCond !=
+                game.curAreaData->missionOld.failHudPrimaryCond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.curAreaData->mission.failHudPrimaryCond;
+                    game.curAreaData->missionOld.failHudPrimaryCond;
                 int fail1Cur =
                     game.missionFailConds[cond]->getCurAmount(
                         game.states.gameplay
@@ -1076,11 +1076,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 }
             }
             if(
-                game.curAreaData->mission.failHudSecondaryCond !=
+                game.curAreaData->missionOld.failHudSecondaryCond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.curAreaData->mission.failHudSecondaryCond;
+                    game.curAreaData->missionOld.failHudSecondaryCond;
                 int fail2Cur =
                     game.missionFailConds[cond]->getCurAmount(
                         game.states.gameplay
@@ -1096,16 +1096,17 @@ void GameplayState::doGameplayLogic(float deltaT) {
             float timeLimit = 0;
             if(
                 hasFlag(
-                    game.curAreaData->mission.failConditions,
+                    game.curAreaData->missionOld.failConditions,
                     getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
-                timeLimit = game.curAreaData->mission.failTimeLimit;
+                timeLimit = game.curAreaData->missionOld.failTimeLimit;
             } else if(
-                game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+                game.curAreaData->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL
             ) {
-                timeLimit = game.curAreaData->mission.goalAmount;
+                timeLimit = game.curAreaData->missionOld.goalAmount;
             }
+            timeLimit = game.curAreaData->mission.timeLimit;
             
             if(
                 timeLimit >= 120.0f &&
@@ -1460,7 +1461,7 @@ void GameplayState::doMenuLogic() {
  * @return Whether the goal is met.
  */
 bool GameplayState::isMissionClearMet() {
-    return game.missionGoals[game.curAreaData->mission.goal]->isMet(this);
+    return game.missionGoals[game.curAreaData->missionOld.goal]->isMet(this);
 }
 
 
@@ -1474,7 +1475,7 @@ bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
     for(size_t f = 0; f < game.missionFailConds.size(); f++) {
         if(
             hasFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(f)
             )
         ) {

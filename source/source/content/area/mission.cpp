@@ -75,7 +75,7 @@ int MissionFailDefeatEnemies::getCurAmount(
  * @return The reason.
  */
 string MissionFailDefeatEnemies::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Defeated " +
@@ -96,8 +96,8 @@ string MissionFailDefeatEnemies::getEndReason(
 bool MissionFailDefeatEnemies::getEndZoomData(
     GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
-    if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastEnemyDefeatedPos;
+    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
+        *outCamPos = gameplay->lastMobClearedPos;
         *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
@@ -135,7 +135,7 @@ string MissionFailDefeatEnemies::getName() const {
  * @return The description.
  */
 string MissionFailDefeatEnemies::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Defeat " +
@@ -155,7 +155,7 @@ string MissionFailDefeatEnemies::getPlayerDescription(
 int MissionFailDefeatEnemies::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failEnemiesDefeated;
+    return (int) game.curAreaData->missionOld.failEnemiesDefeated;
 }
 
 
@@ -220,7 +220,7 @@ int MissionFailLoseLeaders::getCurAmount(
  * @return The reason.
  */
 string MissionFailLoseLeaders::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Lost " +
@@ -280,7 +280,7 @@ string MissionFailLoseLeaders::getName() const {
  * @return The description.
  */
 string MissionFailLoseLeaders::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Lose " +
@@ -298,7 +298,7 @@ string MissionFailLoseLeaders::getPlayerDescription(
 int MissionFailLoseLeaders::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failLeadersKod;
+    return (int) game.curAreaData->missionOld.failLeadersKod;
 }
 
 
@@ -363,7 +363,7 @@ int MissionFailLosePikmin::getCurAmount(
  * @return The reason.
  */
 string MissionFailLosePikmin::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Lost " +
@@ -423,7 +423,7 @@ string MissionFailLosePikmin::getName() const {
  * @return The description.
  */
 string MissionFailLosePikmin::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Lose " + i2s(mission->failPikKilled) + " Pikmin or more.";
@@ -439,7 +439,7 @@ string MissionFailLosePikmin::getPlayerDescription(
 int MissionFailLosePikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failPikKilled;
+    return (int) game.curAreaData->missionOld.failPikKilled;
 }
 
 
@@ -504,7 +504,7 @@ int MissionFailPauseMenu::getCurAmount(
  * @return The reason.
  */
 string MissionFailPauseMenu::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "Ended from pause menu...";
 }
@@ -556,7 +556,7 @@ string MissionFailPauseMenu::getName() const {
  * @return The description.
  */
 string MissionFailPauseMenu::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "End from the pause menu.";
 }
@@ -634,7 +634,7 @@ int MissionFailTakeDamage::getCurAmount(
  * @return The reason.
  */
 string MissionFailTakeDamage::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "A leader took damage...";
 }
@@ -691,7 +691,7 @@ string MissionFailTakeDamage::getName() const {
  * @return The description.
  */
 string MissionFailTakeDamage::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "A leader takes damage.";
 }
@@ -781,7 +781,7 @@ int MissionFailTimeLimit::getCurAmount(
  * @return The reason.
  */
 string MissionFailTimeLimit::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Took " +
@@ -841,7 +841,7 @@ string MissionFailTimeLimit::getName() const {
  * @return The description.
  */
 string MissionFailTimeLimit::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Run out of time. Time limit: " +
@@ -860,7 +860,7 @@ string MissionFailTimeLimit::getPlayerDescription(
 int MissionFailTimeLimit::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failTimeLimit;
+    return (int) game.curAreaData->missionOld.failTimeLimit;
 }
 
 
@@ -925,7 +925,7 @@ int MissionFailTooFewPikmin::getCurAmount(
  * @return The reason.
  */
 string MissionFailTooFewPikmin::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Reached <=" +
@@ -985,7 +985,7 @@ string MissionFailTooFewPikmin::getName() const {
  * @return The description.
  */
 string MissionFailTooFewPikmin::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Reach " + i2s(mission->failTooFewPikAmount) + " Pikmin or fewer.";
@@ -1001,7 +1001,7 @@ string MissionFailTooFewPikmin::getPlayerDescription(
 int MissionFailTooFewPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failTooFewPikAmount;
+    return (int) game.curAreaData->missionOld.failTooFewPikAmount;
 }
 
 
@@ -1068,7 +1068,7 @@ int MissionFailTooManyPikmin::getCurAmount(
  * @return The reason.
  */
 string MissionFailTooManyPikmin::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Reached >=" +
@@ -1128,7 +1128,7 @@ string MissionFailTooManyPikmin::getName() const {
  * @return The description.
  */
 string MissionFailTooManyPikmin::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Reach " + i2s(mission->failTooManyPikAmount) + " Pikmin or more.";
@@ -1144,7 +1144,7 @@ string MissionFailTooManyPikmin::getPlayerDescription(
 int MissionFailTooManyPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failTooManyPikAmount;
+    return (int) game.curAreaData->missionOld.failTooManyPikAmount;
 }
 
 
@@ -1191,6 +1191,10 @@ bool MissionFailTooManyPikmin::isMet(
 }
 
 
+#pragma endregion
+#pragma region Goals
+
+
 /**
  * @brief Returns the player's current amount for whatever the mission needs.
  *
@@ -1214,7 +1218,7 @@ int MissionGoalBattleEnemies::getCurAmount(
  * @return The reason.
  */
 string MissionGoalBattleEnemies::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(mission->goalAllMobs) {
         return
@@ -1244,8 +1248,8 @@ string MissionGoalBattleEnemies::getEndReason(
 bool MissionGoalBattleEnemies::getEndZoomData(
     GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
-    if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastEnemyDefeatedPos;
+    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
+        *outCamPos = gameplay->lastMobClearedPos;
         *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
@@ -1280,7 +1284,7 @@ string MissionGoalBattleEnemies::getName() const {
  * @return The description.
  */
 string MissionGoalBattleEnemies::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(mission->goalAllMobs) {
         return
@@ -1372,7 +1376,7 @@ int MissionGoalCollectTreasures::getCurAmount(
  * @return The reason.
  */
 string MissionGoalCollectTreasures::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(mission->goalAllMobs) {
         return
@@ -1432,7 +1436,7 @@ string MissionGoalCollectTreasures::getName() const {
  * @return The description.
  */
 string MissionGoalCollectTreasures::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(mission->goalAllMobs) {
         return
@@ -1549,7 +1553,7 @@ int MissionGoalEndManually::getCurAmount(
  * @return The reason.
  */
 string MissionGoalEndManually::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "Ended successfully!";
 }
@@ -1598,7 +1602,7 @@ string MissionGoalEndManually::getName() const {
  * @return The description.
  */
 string MissionGoalEndManually::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "End from the pause menu whenever you want.";
 }
@@ -1681,7 +1685,7 @@ int MissionGoalGetToExit::getCurAmount(
  * @return The reason.
  */
 string MissionGoalGetToExit::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "Got to the exit!";
 }
@@ -1748,7 +1752,7 @@ string MissionGoalGetToExit::getName() const {
  * @return The description.
  */
 string MissionGoalGetToExit::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(mission->goalAllMobs) {
         return
@@ -1842,7 +1846,7 @@ int MissionGoalGrowPikmin::getCurAmount(
  * @return The reason.
  */
 string MissionGoalGrowPikmin::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Reached " +
@@ -1899,7 +1903,7 @@ string MissionGoalGrowPikmin::getName() const {
  * @return The description.
  */
 string MissionGoalGrowPikmin::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return "Reach a total of " + i2s(mission->goalAmount) + " Pikmin.";
 }
@@ -1914,7 +1918,7 @@ string MissionGoalGrowPikmin::getPlayerDescription(
 int MissionGoalGrowPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.goalAmount;
+    return (int) game.curAreaData->missionOld.goalAmount;
 }
 
 
@@ -1983,7 +1987,7 @@ int MissionGoalTimedSurvival::getCurAmount(
  * @return The reason.
  */
 string MissionGoalTimedSurvival::getEndReason(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Survived for " +
@@ -2037,7 +2041,7 @@ string MissionGoalTimedSurvival::getName() const {
  * @return The description.
  */
 string MissionGoalTimedSurvival::getPlayerDescription(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return
         "Survive for " +
@@ -2056,7 +2060,7 @@ string MissionGoalTimedSurvival::getPlayerDescription(
 int MissionGoalTimedSurvival::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.goalAmount;
+    return (int) game.curAreaData->missionOld.goalAmount;
 }
 
 
@@ -2111,7 +2115,7 @@ bool MissionGoalTimedSurvival::isMobApplicable(
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::isPlatinum(const MissionData& mission) {
+bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
     switch(mission.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
         return score >= mission.platinumReq;
@@ -2125,6 +2129,10 @@ bool MissionRecord::isPlatinum(const MissionData& mission) {
 }
 
 
+#pragma endregion
+#pragma region Score criteria
+
+
 /**
  * @brief Returns the mission score criterion's point multiplier.
  *
@@ -2132,7 +2140,7 @@ bool MissionRecord::isPlatinum(const MissionData& mission) {
  * @return The multiplier.
  */
 int MissionScoreCriterionEnemyPoints::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return mission->pointsPerEnemyPoint;
 }
@@ -2156,7 +2164,7 @@ string MissionScoreCriterionEnemyPoints::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionEnemyPoints::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         (int)
@@ -2172,7 +2180,7 @@ int MissionScoreCriterionEnemyPoints::getScore(
  * @return The multiplier.
  */
 int MissionScoreCriterionPikminBorn::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return mission->pointsPerPikminBorn;
 }
@@ -2196,7 +2204,7 @@ string MissionScoreCriterionPikminBorn::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionPikminBorn::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         (int)
@@ -2212,7 +2220,7 @@ int MissionScoreCriterionPikminBorn::getScore(
  * @return The multiplier.
  */
 int MissionScoreCriterionPikminDeath::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return mission->pointsPerPikminDeath;
 }
@@ -2236,7 +2244,7 @@ string MissionScoreCriterionPikminDeath::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionPikminDeath::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         (int)
@@ -2252,7 +2260,7 @@ int MissionScoreCriterionPikminDeath::getScore(
  * @return The multiplier.
  */
 int MissionScoreCriterionSecLeft::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     if(
         hasFlag(
@@ -2285,7 +2293,7 @@ string MissionScoreCriterionSecLeft::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionSecLeft::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         (mission->failTimeLimit - floor(gameplay->gameplayTimePassed)) *
@@ -2300,7 +2308,7 @@ int MissionScoreCriterionSecLeft::getScore(
  * @return The multiplier.
  */
 int MissionScoreCriterionSecPassed::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return mission->pointsPerSecPassed;
 }
@@ -2324,7 +2332,7 @@ string MissionScoreCriterionSecPassed::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionSecPassed::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         floor(gameplay->gameplayTimePassed) *
@@ -2339,7 +2347,7 @@ int MissionScoreCriterionSecPassed::getScore(
  * @return The multiplier.
  */
 int MissionScoreCriterionTreasurePoints::getMultiplier(
-    MissionData* mission
+    MissionDataOld* mission
 ) const {
     return mission->pointsPerTreasurePoint;
 }
@@ -2363,7 +2371,7 @@ string MissionScoreCriterionTreasurePoints::getName() const {
  * @return The score.
  */
 int MissionScoreCriterionTreasurePoints::getScore(
-    GameplayState* gameplay, MissionData* mission
+    GameplayState* gameplay, MissionDataOld* mission
 ) const {
     return
         (int)

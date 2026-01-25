@@ -274,8 +274,8 @@ void AreaEditor::drawCanvas() {
     //Mission exit region transformation widget.
     if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
         curTransformationWidget.draw(
-            &game.curAreaData->mission.goalExitCenter,
-            &game.curAreaData->mission.goalExitSize,
+            &game.curAreaData->missionOld.goalExitCenter,
+            &game.curAreaData->missionOld.goalExitSize,
             nullptr,
             1.0f / game.editorsView.cam.zoom
         );

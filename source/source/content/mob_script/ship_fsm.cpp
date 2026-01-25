@@ -65,7 +65,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        if(game.curAreaData->mission.enemyPointsOnCollection) {
+        if(game.curAreaData->missionOld.enemyPointsOnCollection) {
             game.states.gameplay->enemyPointsCollected +=
                 ((Enemy*) delivery)->eneType->points;
         }
@@ -79,7 +79,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
             trePtr->treType->points;
         game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
         
-        if(game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.curAreaData->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
             auto it =
                 game.states.gameplay->missionRemainingMobIds.find(
                     delivery->id
@@ -100,7 +100,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
                 resPtr->resType->pointAmount;
             game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
             if(
-                game.curAreaData->mission.goal ==
+                game.curAreaData->missionOld.goal ==
                 MISSION_GOAL_COLLECT_TREASURE
             ) {
                 unordered_set<size_t>& goalMobs =

@@ -168,7 +168,7 @@ bool AreaContentManager::loadArea(
             getSubtitleOrMissionGoal(
                 areaPtr->subtitle,
                 areaPtr->type,
-                areaPtr->mission.goal
+                areaPtr->missionOld.goal
             ),
             areaPtr->maker,
             1.0f

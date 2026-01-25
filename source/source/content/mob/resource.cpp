@@ -42,7 +42,7 @@ Resource::Resource(const Point& pos, ResourceType* type, float angle) :
 int Resource::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
         *applicableInThisMission =
-            game.curAreaData->mission.pointsPerTreasurePoint != 0;
+            game.curAreaData->missionOld.pointsPerTreasurePoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     if(

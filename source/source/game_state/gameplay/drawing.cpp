@@ -194,7 +194,7 @@ void GameplayState::doGameDrawing(
                 getSubtitleOrMissionGoal(
                     game.curAreaData->subtitle,
                     game.curAreaData->type,
-                    game.curAreaData->mission.goal
+                    game.curAreaData->missionOld.goal
                 ),
                 game.curAreaData->maker,
                 areaTitleFadeTimer.getRatioLeft()
@@ -1162,11 +1162,11 @@ void GameplayState::drawInGameText(Player* player) {
     //Mission exit region.
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.goal == MISSION_GOAL_GET_TO_EXIT
+        game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         drawHighlightedRectRegion(
-            game.curAreaData->mission.goalExitCenter,
-            game.curAreaData->mission.goalExitSize,
+            game.curAreaData->missionOld.goalExitCenter,
+            game.curAreaData->missionOld.goalExitSize,
             changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
         );
     }

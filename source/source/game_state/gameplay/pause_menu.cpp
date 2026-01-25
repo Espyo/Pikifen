@@ -588,7 +588,7 @@ void PauseMenu::confirmOrLeave() {
                 "results menu.";
             if(game.curAreaData->type == AREA_TYPE_MISSION) {
                 if(
-                    game.curAreaData->mission.goal ==
+                    game.curAreaData->missionOld.goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
                     confirmationExplanation +=
@@ -599,7 +599,7 @@ void PauseMenu::confirmOrLeave() {
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
-                        game.curAreaData->mission.gradingMode ==
+                        game.curAreaData->missionOld.gradingMode ==
                         MISSION_GRADING_MODE_POINTS
                     ) {
                         confirmationExplanation +=
@@ -927,11 +927,11 @@ void PauseMenu::drawRadar(
     //Mission exit region.
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->mission.goal == MISSION_GOAL_GET_TO_EXIT
+        game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         drawHighlightedRectRegion(
-            game.curAreaData->mission.goalExitCenter,
-            game.curAreaData->mission.goalExitSize,
+            game.curAreaData->missionOld.goalExitCenter,
+            game.curAreaData->missionOld.goalExitSize,
             changeAlpha(game.config.guiColors.gold, 192), game.timePassed
         );
     }
@@ -1380,14 +1380,14 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
     for(size_t f = 0; f < game.missionFailConds.size(); f++) {
         if(
             hasFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(f)
             )
         ) {
             MissionFail* cond = game.missionFailConds[f];
             
             string description =
-                cond->getPlayerDescription(&game.curAreaData->mission);
+                cond->getPlayerDescription(&game.curAreaData->missionOld);
             addBullet(list, description, game.config.guiColors.bad);
             
             float percentage = 0.0f;
@@ -1406,7 +1406,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
         }
     }
     
-    if(game.curAreaData->mission.failConditions == 0) {
+    if(game.curAreaData->missionOld.failConditions == 0) {
         addBullet(list, "(None)");
     }
 }
@@ -1418,7 +1418,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
  * @param list List item to fill.
  */
 void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    switch(game.curAreaData->mission.gradingMode) {
+    switch(game.curAreaData->missionOld.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
         addBullet(
             list,
@@ -1427,25 +1427,25 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         addBullet(
             list,
             "    Platinum: " +
-            i2s(game.curAreaData->mission.platinumReq) + "+ points.",
+            i2s(game.curAreaData->missionOld.platinumReq) + "+ points.",
             game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Gold: " +
-            i2s(game.curAreaData->mission.goldReq) + "+ points.",
+            i2s(game.curAreaData->missionOld.goldReq) + "+ points.",
             game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Silver: " +
-            i2s(game.curAreaData->mission.silverReq) + "+ points.",
+            i2s(game.curAreaData->missionOld.silverReq) + "+ points.",
             game.config.guiColors.gold
         );
         addBullet(
             list,
             "    Bronze: " +
-            i2s(game.curAreaData->mission.bronzeReq) + "+ points.",
+            i2s(game.curAreaData->missionOld.bronzeReq) + "+ points.",
             game.config.guiColors.gold
         );
         
@@ -1453,7 +1453,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
             MissionScoreCriterion* cPtr =
                 game.missionScoreCriteria[c];
-            int mult = cPtr->getMultiplier(&game.curAreaData->mission);
+            int mult = cPtr->getMultiplier(&game.curAreaData->missionOld);
             if(mult != 0) {
                 scoreNotes.push_back(
                     "    " + cPtr->getName() + " x " + i2s(mult) + "."
@@ -1481,7 +1481,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
                 game.missionScoreCriteria[c];
             if(
                 hasFlag(
-                    game.curAreaData->mission.pointLossData,
+                    game.curAreaData->missionOld.pointLossData,
                     getIdxBitmask(c)
                 )
             ) {
@@ -1528,17 +1528,17 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
 string PauseMenu::getMissionGoalStatus() {
     float percentage = 0.0f;
     int cur =
-        game.missionGoals[game.curAreaData->mission.goal]->
+        game.missionGoals[game.curAreaData->missionOld.goal]->
         getCurAmount(game.states.gameplay);
     int req =
-        game.missionGoals[game.curAreaData->mission.goal]->
+        game.missionGoals[game.curAreaData->missionOld.goal]->
         getReqAmount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
     return
-        game.missionGoals[game.curAreaData->mission.goal]->
+        game.missionGoals[game.curAreaData->missionOld.goal]->
         getStatus(cur, req, percentage);
 }
 
@@ -1822,7 +1822,7 @@ void PauseMenu::initMainPauseMenu() {
         new TextGuiItem(
         getSubtitleOrMissionGoal(
             game.curAreaData->subtitle, game.curAreaData->type,
-            game.curAreaData->mission.goal
+            game.curAreaData->missionOld.goal
         ),
         game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
@@ -1884,7 +1884,7 @@ void PauseMenu::initMainPauseMenu() {
     [] () {
         bool asFail =
             hasFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
@@ -2076,8 +2076,8 @@ void PauseMenu::initMissionPage() {
     //Goal explanation text.
     TextGuiItem* goalText =
         new TextGuiItem(
-        game.missionGoals[game.curAreaData->mission.goal]->
-        getPlayerDescription(&game.curAreaData->mission),
+        game.missionGoals[game.curAreaData->missionOld.goal]->
+        getPlayerDescription(&game.curAreaData->missionOld),
         game.sysContent.fntStandard,
         game.config.guiColors.gold
     );

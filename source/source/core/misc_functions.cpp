@@ -520,7 +520,7 @@ string getMissionRecordEntryName(Area* areaPtr) {
         areaPtr->name + ";" +
         getSubtitleOrMissionGoal(
             areaPtr->subtitle, areaPtr->type,
-            areaPtr->mission.goal
+            areaPtr->missionOld.goal
         ) + ";" +
         areaPtr->maker + ";" +
         areaPtr->version;

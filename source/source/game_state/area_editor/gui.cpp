@@ -298,7 +298,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
         ImGui::Indent();
         
         //Loss on fail checkbox.
-        int flags = game.curAreaData->mission.pointLossData;
+        int flags = game.curAreaData->missionOld.pointLossData;
         if(
             ImGui::CheckboxFlags(
                 ("0 points on fail##zpof" + i2s(criterionIdx)).c_str(),
@@ -307,7 +307,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
             )
         ) {
             registerChange("mission grading change");
-            game.curAreaData->mission.pointLossData = flags;
+            game.curAreaData->missionOld.pointLossData = flags;
         }
         setTooltip(
             "If checked, the player will receive 0 points for\n"
@@ -315,7 +315,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
         );
         
         //Use in HUD checkbox.
-        flags = game.curAreaData->mission.pointHudData;
+        flags = game.curAreaData->missionOld.pointHudData;
         if(
             ImGui::CheckboxFlags(
                 ("Use in HUD counter##uihc" + i2s(criterionIdx)).c_str(),
@@ -323,7 +323,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
             )
         ) {
             registerChange("mission grading change");
-            game.curAreaData->mission.pointHudData = flags;
+            game.curAreaData->missionOld.pointHudData = flags;
         }
         setTooltip(
             "If checked, the HUD item for the score counter will\n"
@@ -379,10 +379,10 @@ void AreaEditor::processGuiGradingModeWidgets(
     int value, const string& widgetLabel, const string& tooltip
 ) {
     //Radio button.
-    int mode = game.curAreaData->mission.gradingMode;
+    int mode = game.curAreaData->missionOld.gradingMode;
     if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
         registerChange("mission grading change");
-        game.curAreaData->mission.gradingMode =
+        game.curAreaData->missionOld.gradingMode =
             (MISSION_GRADING_MODE) mode;
     }
     setTooltip(tooltip);
@@ -1958,15 +1958,15 @@ void AreaEditor::processGuiPanelGameplay() {
         //Region center text.
         ImGui::Text(
             "Exit region center: %s,%s",
-            f2s(game.curAreaData->mission.goalExitCenter.x).c_str(),
-            f2s(game.curAreaData->mission.goalExitCenter.y).c_str()
+            f2s(game.curAreaData->missionOld.goalExitCenter.x).c_str(),
+            f2s(game.curAreaData->missionOld.goalExitCenter.y).c_str()
         );
         
         //Region center text.
         ImGui::Text(
             "Exit region size: %s x %s",
-            f2s(game.curAreaData->mission.goalExitSize.x).c_str(),
-            f2s(game.curAreaData->mission.goalExitSize.y).c_str()
+            f2s(game.curAreaData->missionOld.goalExitSize.x).c_str(),
+            f2s(game.curAreaData->missionOld.goalExitSize.y).c_str()
         );
         
         //Finish button.
@@ -2319,20 +2319,20 @@ void AreaEditor::processGuiPanelInfo() {
         float missionMin = 0;
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
             if(
-                game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+                game.curAreaData->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 hasTimeLimit = true;
                 missionMin =
-                    game.curAreaData->mission.goalAmount / 60.0f;
+                    game.curAreaData->missionOld.goalAmount / 60.0f;
             } else if(
                 hasFlag(
-                    game.curAreaData->mission.failConditions,
+                    game.curAreaData->missionOld.failConditions,
                     getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 hasTimeLimit = true;
                 missionMin =
-                    game.curAreaData->mission.failTimeLimit / 60.0f;
+                    game.curAreaData->missionOld.failTimeLimit / 60.0f;
             }
         }
         int dayStartMin = (int) game.curAreaData->dayTimeStart;
@@ -3036,9 +3036,9 @@ void AreaEditor::processGuiPanelMain() {
  */
 void AreaEditor::processGuiPanelMission() {
     float oldMissionSurvivalMin =
-        game.curAreaData->mission.goalAmount / 60.0f;
+        game.curAreaData->missionOld.goalAmount / 60.0f;
     float oldMissionTimeLimitMin =
-        game.curAreaData->mission.failTimeLimit / 60.0f;
+        game.curAreaData->missionOld.failTimeLimit / 60.0f;
     bool dayDurationNeedsUpdate = false;
     
     //Mission goal node.
@@ -3049,21 +3049,21 @@ void AreaEditor::processGuiPanelMission() {
         for(size_t g = 0; g < game.missionGoals.size(); g++) {
             goalsList.push_back(game.missionGoals[g]->getName());
         }
-        int missionGoal = game.curAreaData->mission.goal;
+        int missionGoal = game.curAreaData->missionOld.goal;
         if(ImGui::Combo("Goal", &missionGoal, goalsList, 15)) {
             registerChange("mission requirements change");
-            game.curAreaData->mission.goalMobIdxs.clear();
-            game.curAreaData->mission.goalAmount = 1;
-            game.curAreaData->mission.goal = (MISSION_GOAL) missionGoal;
+            game.curAreaData->missionOld.goalMobIdxs.clear();
+            game.curAreaData->missionOld.goalAmount = 1;
+            game.curAreaData->missionOld.goal = (MISSION_GOAL) missionGoal;
             if(
-                game.curAreaData->mission.goal ==
+                game.curAreaData->missionOld.goal ==
                 MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 dayDurationNeedsUpdate = true;
             }
         }
         
-        switch(game.curAreaData->mission.goal) {
+        switch(game.curAreaData->missionOld.goal) {
         case MISSION_GOAL_END_MANUALLY: {
     
             //Explanation text.
@@ -3097,11 +3097,11 @@ void AreaEditor::processGuiPanelMission() {
             //Time values.
             ImGui::Spacer();
             int totalSeconds =
-                (int) game.curAreaData->mission.goalAmount;
+                (int) game.curAreaData->missionOld.goalAmount;
             if(ImGui::DragTime2("Time", &totalSeconds)) {
                 registerChange("mission requirements change");
                 totalSeconds = std::max(totalSeconds, 1);
-                game.curAreaData->mission.goalAmount =
+                game.curAreaData->missionOld.goalAmount =
                     (size_t) totalSeconds;
                 dayDurationNeedsUpdate = true;
             }
@@ -3130,11 +3130,11 @@ void AreaEditor::processGuiPanelMission() {
             //Pikmin amount value.
             ImGui::Spacer();
             int amount =
-                (int) game.curAreaData->mission.goalAmount;
+                (int) game.curAreaData->missionOld.goalAmount;
             ImGui::SetNextItemWidth(80);
             if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
                 registerChange("mission requirements change");
-                game.curAreaData->mission.goalAmount =
+                game.curAreaData->missionOld.goalAmount =
                     (size_t) amount;
             }
             setTooltip(
@@ -3174,17 +3174,17 @@ void AreaEditor::processGuiPanelMission() {
         float daySpeed = game.curAreaData->dayTimeSpeed;
         float oldMissionMin = 0;
         size_t missionSeconds = 0;
-        if(game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.curAreaData->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
             oldMissionMin = oldMissionSurvivalMin;
-            missionSeconds = game.curAreaData->mission.goalAmount;
-            game.curAreaData->mission.failTimeLimit = 0.0f;
+            missionSeconds = game.curAreaData->missionOld.goalAmount;
+            game.curAreaData->missionOld.failTimeLimit = 0.0f;
             disableFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
         } else {
             oldMissionMin = oldMissionTimeLimitMin;
-            missionSeconds = game.curAreaData->mission.failTimeLimit;
+            missionSeconds = game.curAreaData->missionOld.failTimeLimit;
         }
         float oldDayEndMin = dayStartMin + oldMissionMin * daySpeed;
         oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
@@ -3210,12 +3210,12 @@ void AreaEditor::processGuiPanelMissionFail(
     bool* dayDurationNeedsUpdate
 ) {
     unsigned int failFlags =
-        (unsigned int) game.curAreaData->mission.failConditions;
+        (unsigned int) game.curAreaData->missionOld.failConditions;
     bool failFlagsChanged = false;
     
     //Pause menu end checkbox.
     bool pauseMenuEndIsFail =
-        game.curAreaData->mission.goal != MISSION_GOAL_END_MANUALLY;
+        game.curAreaData->missionOld.goal != MISSION_GOAL_END_MANUALLY;
     ImGui::BeginDisabled();
     ImGui::CheckboxFlags(
         "End from pause menu",
@@ -3225,7 +3225,7 @@ void AreaEditor::processGuiPanelMissionFail(
     ImGui::EndDisabled();
     if(pauseMenuEndIsFail) {
         enableFlag(
-            game.curAreaData->mission.failConditions,
+            game.curAreaData->missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
         setTooltip(
@@ -3236,7 +3236,7 @@ void AreaEditor::processGuiPanelMissionFail(
         );
     } else {
         disableFlag(
-            game.curAreaData->mission.failConditions,
+            game.curAreaData->missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
         setTooltip(
@@ -3246,13 +3246,13 @@ void AreaEditor::processGuiPanelMissionFail(
     }
     
     //Time limit checkbox.
-    if(game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+    if(game.curAreaData->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
         disableFlag(
             failFlags,
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         );
         disableFlag(
-            game.curAreaData->mission.failConditions,
+            game.curAreaData->missionOld.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         );
         ImGui::BeginDisabled();
@@ -3273,7 +3273,7 @@ void AreaEditor::processGuiPanelMissionFail(
     ) {
         *dayDurationNeedsUpdate = true;
     }
-    if(game.curAreaData->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+    if(game.curAreaData->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
         ImGui::EndDisabled();
         setTooltip(
             "The mission's goal is to survive for a certain amount of\n"
@@ -3295,12 +3295,12 @@ void AreaEditor::processGuiPanelMissionFail(
     ) {
         //Time limit values.
         int seconds =
-            (int) game.curAreaData->mission.failTimeLimit;
+            (int) game.curAreaData->missionOld.failTimeLimit;
         ImGui::Indent();
         if(ImGui::DragTime2("Time limit", &seconds)) {
             registerChange("mission fail conditions change");
             seconds = std::max(seconds, 1);
-            game.curAreaData->mission.failTimeLimit = (size_t) seconds;
+            game.curAreaData->missionOld.failTimeLimit = (size_t) seconds;
             *dayDurationNeedsUpdate = true;
         }
         setTooltip(
@@ -3337,11 +3337,11 @@ void AreaEditor::processGuiPanelMissionFail(
         
         //Pikmin amount value.
         int amount =
-            (int) game.curAreaData->mission.failTooFewPikAmount;
+            (int) game.curAreaData->missionOld.failTooFewPikAmount;
         ImGui::SetNextItemWidth(50);
         if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failTooFewPikAmount =
+            game.curAreaData->missionOld.failTooFewPikAmount =
                 (size_t) amount;
         }
         setTooltip(
@@ -3375,11 +3375,11 @@ void AreaEditor::processGuiPanelMissionFail(
         
         //Pikmin amount value.
         int amount =
-            (int) game.curAreaData->mission.failTooManyPikAmount;
+            (int) game.curAreaData->missionOld.failTooManyPikAmount;
         ImGui::SetNextItemWidth(50);
         if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failTooManyPikAmount =
+            game.curAreaData->missionOld.failTooManyPikAmount =
                 (size_t) amount;
         }
         setTooltip(
@@ -3410,12 +3410,12 @@ void AreaEditor::processGuiPanelMissionFail(
     ) {
         //Pikmin deaths value.
         int amount =
-            (int) game.curAreaData->mission.failPikKilled;
+            (int) game.curAreaData->missionOld.failPikKilled;
         ImGui::Indent();
         ImGui::SetNextItemWidth(50);
         if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failPikKilled =
+            game.curAreaData->missionOld.failPikKilled =
                 (size_t) amount;
         }
         setTooltip(
@@ -3462,12 +3462,12 @@ void AreaEditor::processGuiPanelMissionFail(
     ) {
         //Leader KOs value.
         int amount =
-            (int) game.curAreaData->mission.failLeadersKod;
+            (int) game.curAreaData->missionOld.failLeadersKod;
         ImGui::Indent();
         ImGui::SetNextItemWidth(50);
         if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failLeadersKod =
+            game.curAreaData->missionOld.failLeadersKod =
                 (size_t) amount;
         }
         setTooltip(
@@ -3498,12 +3498,12 @@ void AreaEditor::processGuiPanelMissionFail(
     ) {
         //Enemy defeats value.
         int amount =
-            (int) game.curAreaData->mission.failEnemiesDefeated;
+            (int) game.curAreaData->missionOld.failEnemiesDefeated;
         ImGui::Indent();
         ImGui::SetNextItemWidth(50);
         if(ImGui::DragInt("Defeats", &amount, 0.1f, 1, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failEnemiesDefeated =
+            game.curAreaData->missionOld.failEnemiesDefeated =
                 (size_t) amount;
         }
         setTooltip(
@@ -3516,7 +3516,7 @@ void AreaEditor::processGuiPanelMissionFail(
     
     if(failFlagsChanged) {
         registerChange("mission fail conditions change");
-        game.curAreaData->mission.failConditions =
+        game.curAreaData->missionOld.failConditions =
             (Bitmask8) failFlags;
     }
     
@@ -3524,7 +3524,7 @@ void AreaEditor::processGuiPanelMissionFail(
     for(size_t c = 0; c < game.missionFailConds.size(); c++) {
         if(
             hasFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(c)
             )
         ) {
@@ -3537,10 +3537,10 @@ void AreaEditor::processGuiPanelMissionFail(
         //Primary HUD condition checkbox.
         ImGui::Spacer();
         bool showPrimary =
-            game.curAreaData->mission.failHudPrimaryCond != INVALID;
+            game.curAreaData->missionOld.failHudPrimaryCond != INVALID;
         if(ImGui::Checkbox("Show primary HUD element", &showPrimary)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failHudPrimaryCond =
+            game.curAreaData->missionOld.failHudPrimaryCond =
                 showPrimary ?
                 (size_t) activeConditions[0] :
                 INVALID;
@@ -3562,14 +3562,14 @@ void AreaEditor::processGuiPanelMissionFail(
                 );
                 if(
                     condId ==
-                    game.curAreaData->mission.failHudPrimaryCond
+                    game.curAreaData->missionOld.failHudPrimaryCond
                 ) {
                     found = true;
                     selected = (int) c;
                 }
             }
             if(!found) {
-                game.curAreaData->mission.failHudSecondaryCond = 0;
+                game.curAreaData->missionOld.failHudSecondaryCond = 0;
             }
             ImGui::Indent();
             if(
@@ -3578,7 +3578,7 @@ void AreaEditor::processGuiPanelMissionFail(
                 )
             ) {
                 registerChange("mission fail conditions change");
-                game.curAreaData->mission.failHudPrimaryCond =
+                game.curAreaData->missionOld.failHudPrimaryCond =
                     activeConditions[selected];
             }
             setTooltip(
@@ -3589,10 +3589,10 @@ void AreaEditor::processGuiPanelMissionFail(
         
         //Secondary HUD condition checkbox.
         bool showSecondary =
-            game.curAreaData->mission.failHudSecondaryCond != INVALID;
+            game.curAreaData->missionOld.failHudSecondaryCond != INVALID;
         if(ImGui::Checkbox("Show secondary HUD element", &showSecondary)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failHudSecondaryCond =
+            game.curAreaData->missionOld.failHudSecondaryCond =
                 showSecondary ?
                 (size_t) activeConditions[0] :
                 INVALID;
@@ -3614,14 +3614,14 @@ void AreaEditor::processGuiPanelMissionFail(
                 );
                 if(
                     condId ==
-                    game.curAreaData->mission.failHudSecondaryCond
+                    game.curAreaData->missionOld.failHudSecondaryCond
                 ) {
                     found = true;
                     selected = (int) c;
                 }
             }
             if(!found) {
-                game.curAreaData->mission.failHudSecondaryCond = 0;
+                game.curAreaData->missionOld.failHudSecondaryCond = 0;
             }
             ImGui::Indent();
             if(
@@ -3630,7 +3630,7 @@ void AreaEditor::processGuiPanelMissionFail(
                 )
             ) {
                 registerChange("mission fail conditions change");
-                game.curAreaData->mission.failHudSecondaryCond =
+                game.curAreaData->missionOld.failHudSecondaryCond =
                     activeConditions[selected];
             }
             setTooltip(
@@ -3640,8 +3640,8 @@ void AreaEditor::processGuiPanelMissionFail(
         }
         
     } else {
-        game.curAreaData->mission.failHudPrimaryCond = INVALID;
-        game.curAreaData->mission.failHudSecondaryCond = INVALID;
+        game.curAreaData->missionOld.failHudPrimaryCond = INVALID;
+        game.curAreaData->missionOld.failHudSecondaryCond = INVALID;
         
     }
 }
@@ -3662,12 +3662,12 @@ void AreaEditor::processGuiPanelMissionGoalBe() {
     ImGui::Text("Enemy requirements:");
     
     int requiresAllOption =
-        game.curAreaData->mission.goalAllMobs ? 0 : 1;
+        game.curAreaData->missionOld.goalAllMobs ? 0 : 1;
         
     //All enemies requirement radio button.
     if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3681,7 +3681,7 @@ void AreaEditor::processGuiPanelMissionGoalBe() {
         ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
     ) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3690,7 +3690,7 @@ void AreaEditor::processGuiPanelMissionGoalBe() {
         "You must specify which enemies these are."
     );
     
-    if(!game.curAreaData->mission.goalAllMobs) {
+    if(!game.curAreaData->missionOld.goalAllMobs) {
     
         //Start mob selector mode button.
         if(ImGui::Button("Pick enemies...")) {
@@ -3725,12 +3725,12 @@ void AreaEditor::processGuiPanelMissionGoalCt() {
     ImGui::Text("Treasure requirements:");
     
     int requiresAllOption =
-        game.curAreaData->mission.goalAllMobs ? 0 : 1;
+        game.curAreaData->missionOld.goalAllMobs ? 0 : 1;
         
     //All treasures requirement radio button.
     if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3744,7 +3744,7 @@ void AreaEditor::processGuiPanelMissionGoalCt() {
         ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
     ) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3753,7 +3753,7 @@ void AreaEditor::processGuiPanelMissionGoalCt() {
         "You must specify which treasures these are."
     );
     
-    if(!game.curAreaData->mission.goalAllMobs) {
+    if(!game.curAreaData->missionOld.goalAllMobs) {
     
         //Start mob selector mode button.
         if(ImGui::Button("Pick treasures...")) {
@@ -3797,15 +3797,15 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
     //Region center text.
     ImGui::Text(
         "Exit region center: %s,%s",
-        f2s(game.curAreaData->mission.goalExitCenter.x).c_str(),
-        f2s(game.curAreaData->mission.goalExitCenter.y).c_str()
+        f2s(game.curAreaData->missionOld.goalExitCenter.x).c_str(),
+        f2s(game.curAreaData->missionOld.goalExitCenter.y).c_str()
     );
     
     //Region center text.
     ImGui::Text(
         "Exit region size: %s x %s",
-        f2s(game.curAreaData->mission.goalExitSize.x).c_str(),
-        f2s(game.curAreaData->mission.goalExitSize.y).c_str()
+        f2s(game.curAreaData->missionOld.goalExitSize.x).c_str(),
+        f2s(game.curAreaData->missionOld.goalExitSize.y).c_str()
     );
     
     //Leader requirements text.
@@ -3813,12 +3813,12 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
     ImGui::Text("Leader requirements:");
     
     int requiresAllOption =
-        game.curAreaData->mission.goalAllMobs ? 0 : 1;
+        game.curAreaData->missionOld.goalAllMobs ? 0 : 1;
         
     //All leaders requirement radio button.
     if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3832,7 +3832,7 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
         ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
     ) {
         registerChange("mission requirements change");
-        game.curAreaData->mission.goalAllMobs =
+        game.curAreaData->missionOld.goalAllMobs =
             requiresAllOption == 0;
     }
     setTooltip(
@@ -3841,7 +3841,7 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
         "You must specify which leaders these are."
     );
     
-    if(!game.curAreaData->mission.goalAllMobs) {
+    if(!game.curAreaData->missionOld.goalAllMobs) {
     
         //Start mob selector mode button.
         if(ImGui::Button("Pick leaders...")) {
@@ -3892,12 +3892,12 @@ void AreaEditor::processGuiPanelMissionGrading() {
     
     //Grading criterion widgets.
     if(
-        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curAreaData->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
     ) {
     
         ImGui::Spacer();
         processGuiGradingCriterionWidgets(
-            &game.curAreaData->mission.pointsPerPikminBorn,
+            &game.curAreaData->missionOld.pointsPerPikminBorn,
             MISSION_SCORE_CRITERIA_PIKMIN_BORN,
             "Points per Pikmin born",
             "Amount of points that the player receives for each\n"
@@ -3905,7 +3905,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         );
         
         processGuiGradingCriterionWidgets(
-            &game.curAreaData->mission.pointsPerPikminDeath,
+            &game.curAreaData->missionOld.pointsPerPikminDeath,
             MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
             "Points per Pikmin death",
             "Amount of points that the player receives for each\n"
@@ -3914,12 +3914,12 @@ void AreaEditor::processGuiPanelMissionGrading() {
         
         if(
             hasFlag(
-                game.curAreaData->mission.failConditions,
+                game.curAreaData->missionOld.failConditions,
                 getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             processGuiGradingCriterionWidgets(
-                &game.curAreaData->mission.pointsPerSecLeft,
+                &game.curAreaData->missionOld.pointsPerSecLeft,
                 MISSION_SCORE_CRITERIA_SEC_LEFT,
                 "Points per second left",
                 "Amount of points that the player receives for each\n"
@@ -3928,7 +3928,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         }
         
         processGuiGradingCriterionWidgets(
-            &game.curAreaData->mission.pointsPerSecPassed,
+            &game.curAreaData->missionOld.pointsPerSecPassed,
             MISSION_SCORE_CRITERIA_SEC_PASSED,
             "Points per second passed",
             "Amount of points that the player receives for each\n"
@@ -3936,7 +3936,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         );
         
         processGuiGradingCriterionWidgets(
-            &game.curAreaData->mission.pointsPerTreasurePoint,
+            &game.curAreaData->missionOld.pointsPerTreasurePoint,
             MISSION_SCORE_CRITERIA_TREASURE_POINTS,
             "Points per treasure point",
             "Amount of points that the player receives for each\n"
@@ -3945,7 +3945,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         );
         
         processGuiGradingCriterionWidgets(
-            &game.curAreaData->mission.pointsPerEnemyPoint,
+            &game.curAreaData->missionOld.pointsPerEnemyPoint,
             MISSION_SCORE_CRITERIA_ENEMY_POINTS,
             "Points per enemy point",
             "Amount of points that the player receives for each\n"
@@ -3954,9 +3954,9 @@ void AreaEditor::processGuiPanelMissionGrading() {
         );
         
         //Award points on collection checkbox.
-        if(game.curAreaData->mission.pointsPerEnemyPoint != 0) {
+        if(game.curAreaData->missionOld.pointsPerEnemyPoint != 0) {
             bool enemyPointsOnCollection =
-                game.curAreaData->mission.enemyPointsOnCollection;
+                game.curAreaData->missionOld.enemyPointsOnCollection;
             ImGui::Indent();
             if(
                 ImGui::Checkbox(
@@ -3964,7 +3964,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
                 )
             ) {
                 registerChange("mission grading change");
-                game.curAreaData->mission.enemyPointsOnCollection =
+                game.curAreaData->missionOld.enemyPointsOnCollection =
                     enemyPointsOnCollection;
             }
             setTooltip(
@@ -3977,11 +3977,11 @@ void AreaEditor::processGuiPanelMissionGrading() {
         
         //Starting score value.
         ImGui::Spacer();
-        int startingPoints = game.curAreaData->mission.startingPoints;
+        int startingPoints = game.curAreaData->missionOld.startingPoints;
         ImGui::SetNextItemWidth(60);
         if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
             registerChange("mission grading change");
-            game.curAreaData->mission.startingPoints = startingPoints;
+            game.curAreaData->missionOld.startingPoints = startingPoints;
         }
         setTooltip(
             "Starting amount of points. It can be positive or negative.",
@@ -3994,42 +3994,42 @@ void AreaEditor::processGuiPanelMissionGrading() {
         
         //Medal point requirement widgets.
         processGuiGradingMedalWidgets(
-            &game.curAreaData->mission.bronzeReq, "Bronze",
-            INT_MIN, game.curAreaData->mission.silverReq - 1,
+            &game.curAreaData->missionOld.bronzeReq, "Bronze",
+            INT_MIN, game.curAreaData->missionOld.silverReq - 1,
             "To get a bronze medal, the player needs at least these\n"
             "many points. Fewer than this, and the player gets no medal."
         );
         
         processGuiGradingMedalWidgets(
-            &game.curAreaData->mission.silverReq, "Silver",
-            game.curAreaData->mission.bronzeReq + 1,
-            game.curAreaData->mission.goldReq - 1,
+            &game.curAreaData->missionOld.silverReq, "Silver",
+            game.curAreaData->missionOld.bronzeReq + 1,
+            game.curAreaData->missionOld.goldReq - 1,
             "To get a silver medal, the player needs at least these\n"
             "many points."
         );
         
         processGuiGradingMedalWidgets(
-            &game.curAreaData->mission.goldReq, "Gold",
-            game.curAreaData->mission.silverReq + 1,
-            game.curAreaData->mission.platinumReq - 1,
+            &game.curAreaData->missionOld.goldReq, "Gold",
+            game.curAreaData->missionOld.silverReq + 1,
+            game.curAreaData->missionOld.platinumReq - 1,
             "To get a gold medal, the player needs at least these\n"
             "many points."
         );
         
         processGuiGradingMedalWidgets(
-            &game.curAreaData->mission.platinumReq, "Platinum",
-            game.curAreaData->mission.goldReq + 1, INT_MAX,
+            &game.curAreaData->missionOld.platinumReq, "Platinum",
+            game.curAreaData->missionOld.goldReq + 1, INT_MAX,
             "To get a platinum medal, the player needs at least these\n"
             "many points."
         );
         
         //Maker record value.
         ImGui::Spacer();
-        int makerRecord = game.curAreaData->mission.makerRecord;
+        int makerRecord = game.curAreaData->missionOld.makerRecord;
         ImGui::SetNextItemWidth(60);
         if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
             registerChange("maker record change");
-            game.curAreaData->mission.makerRecord = makerRecord;
+            game.curAreaData->missionOld.makerRecord = makerRecord;
         }
         setTooltip(
             "Specify your best score here, if you want.",
@@ -4038,7 +4038,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         
         //Maker record date input.
         string makerRecordDate =
-            game.curAreaData->mission.makerRecordDate;
+            game.curAreaData->missionOld.makerRecordDate;
         ImGui::SetNextItemWidth(120);
         if(
             monoInputText(
@@ -4046,7 +4046,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             )
         ) {
             registerChange("maker record change");
-            game.curAreaData->mission.makerRecordDate = makerRecordDate;
+            game.curAreaData->missionOld.makerRecordDate = makerRecordDate;
         }
         setTooltip(
             "Specify the date in which you got your best score here,\n"

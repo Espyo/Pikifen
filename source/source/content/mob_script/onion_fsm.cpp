@@ -136,7 +136,7 @@ void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
     case MOB_CATEGORY_ENEMIES: {
         seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
         
-        if(game.curAreaData->mission.enemyPointsOnCollection) {
+        if(game.curAreaData->missionOld.enemyPointsOnCollection) {
             game.states.gameplay->enemyPointsCollected +=
                 ((Enemy*) delivery)->eneType->points;
         }
