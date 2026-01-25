@@ -195,8 +195,17 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
+    //Database of all mission rulesets and their names.
+    EnumNameDatabase missionRulesetNames;
+    
     //Database of all mission mob checklist types and their names.
     EnumNameDatabase missionMobChecklistTypeNames;
+    
+    //Database of all mission event types.
+    vector<MissionEvType*> missionEvTypes;
+    
+    //Database of all mission action types.
+    vector<MissionActionType*> missionActionTypes;
     
     //Database of all mission fail conditions.
     vector<MissionFail*> missionFailConds;

@@ -803,6 +803,50 @@ void AreaEditor::processGuiMenuBar() {
 
 
 /**
+ * @brief Processes the Dear ImGui "change mission ruleset" dialog
+ * for this frame.
+ */
+void AreaEditor::processGuiMissionRulesetDialog() {
+    //Explanation text.
+    string explanationStr =
+        "If you change the ruleset to one of the presets, the previous\n"
+        "mission data will be LOST.\n"
+        "If you choose \"custom\", they will be kept, and you can\n"
+        "customize the mission in depth.";
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::Text("%s", explanationStr.c_str());
+    
+    //New ruleset combobox.
+    int rulesetInt = missionRulesetDialogRuleset;
+    if(
+        ImGui::Combo(
+            "New ruleset", &rulesetInt, game.missionRulesetNames.getNames(), 15
+        )
+    ) {
+        missionRulesetDialogRuleset = (MISSION_RULESET) rulesetInt;
+    }
+    setTooltip("The new ruleset.");
+    
+    //Cancel button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(100 + 100 + 30);
+    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
+        closeTopDialog();
+    }
+    setTooltip("Cancel.");
+    
+    //Change button.
+    ImGui::SameLine(0.0f, 30);
+    if(ImGui::Button("Change", ImVec2(100, 40))) {
+        registerChange("mission ruleset change");
+        game.curAreaData->mission.applyRuleset(missionRulesetDialogRuleset);
+        closeTopDialog();
+    }
+    setTooltip("Apply the new ruleset.");
+}
+
+
+/**
  * @brief Processes the Dear ImGui mob script vars for this frame.
  *
  * @param mPtr Mob to process.
@@ -1676,7 +1720,7 @@ void AreaEditor::processGuiPanelDetails() {
                         break;
                     }
                 }
-                ImGui::Text("Region #%u", (unsigned int) curRegionIdx);
+                ImGui::Text("Region #%u", (unsigned int) curRegionIdx + 1);
                 
                 //Region center value.
                 Point regionCenter = selectedRegion->center;
@@ -1879,7 +1923,7 @@ void AreaEditor::processGuiPanelEdge() {
             );
             
             for(size_t s = 0; s < 2; s++) {
-                //Side textbox.
+                //Side value.
                 int sInt = (int) ePtr->sectorIdxs[s];
                 ImGui::SetNextItemWidth(80);
                 string label = s == 0 ? "A-side" : "B-side";
@@ -2027,6 +2071,7 @@ void AreaEditor::processGuiPanelGameplay() {
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
             processGuiPanelMission();
+            processGuiPanelMissionOld();
         }
         
         break;
@@ -3035,6 +3080,89 @@ void AreaEditor::processGuiPanelMain() {
  * @brief Processes the Dear ImGui mission control panel for this frame.
  */
 void AreaEditor::processGuiPanelMission() {
+    float oldTimeLimit = game.curAreaData->mission.timeLimit;
+    bool dayDurationNeedsUpdate = false;
+    
+    //Mission essentials node.
+    if(saveableTreeNode("gameplay", "Mission essentials")) {
+    
+        //Ruleset text.
+        ImGui::Text(
+            "Ruleset: %s",
+            game.missionRulesetNames.getNames()[
+                game.curAreaData->mission.ruleset
+            ].c_str()
+        );
+        
+        //Change ruleset button.
+        ImGui::SameLine();
+        if(ImGui::Button("Change...")) {
+            missionRulesetDialogRuleset = game.curAreaData->mission.ruleset;
+            openDialog(
+                "Change mission ruleset",
+                std::bind(
+                    &AreaEditor::processGuiMissionRulesetDialog, this
+                )
+            );
+            dialogs.back()->customSize = Point(400, 0);
+        }
+        setTooltip(
+            "Change the mission's ruleset.\n"
+            "You can use one of the presets to skip all the setup,\n"
+            "or pick \"custom\" so you can control all the details."
+        );
+        
+        //Time limit values.
+        int seconds = (int) game.curAreaData->mission.timeLimit;
+        if(ImGui::DragTime2("Time limit", &seconds)) {
+            registerChange("mission time limit change");
+            game.curAreaData->mission.timeLimit = (size_t) seconds;
+            dayDurationNeedsUpdate = true;
+        }
+        setTooltip(
+            "Time limit for the mission. 0 means no time limit.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
+    
+    if(game.curAreaData->mission.ruleset == MISSION_RULESET_CUSTOM) {
+        processGuiPanelMissionEv();
+        processGuiPanelMissionMobChecklists();
+    }
+    
+    if(dayDurationNeedsUpdate) {
+        if(
+            game.curAreaData->mission.timeLimit == 0 &&
+            oldTimeLimit > 0
+        ) {
+            game.curAreaData->dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
+        } else {
+            float oldDayStartMin = game.curAreaData->dayTimeStart;
+            oldDayStartMin = wrapFloat(oldDayStartMin, 0, 60 * 24);
+            float oldDaySpeed = game.curAreaData->dayTimeSpeed;
+            float oldTimeLimitMin = oldTimeLimit / 60.0f;
+            size_t newTimeLimitSec = game.curAreaData->mission.timeLimit;
+            float oldDayEndMin = oldDayStartMin + oldTimeLimitMin * oldDaySpeed;
+            oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
+            newTimeLimitSec = std::max(newTimeLimitSec, (size_t) 1);
+            float newTimeLimitMin = newTimeLimitSec / 60.0f;
+            game.curAreaData->dayTimeSpeed =
+                calculateDaySpeed(
+                    oldDayStartMin, oldDayEndMin, newTimeLimitMin
+                );
+        }
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionOld() {
     float oldMissionSurvivalMin =
         game.curAreaData->missionOld.goalAmount / 60.0f;
     float oldMissionTimeLimitMin =
@@ -3196,6 +3324,277 @@ void AreaEditor::processGuiPanelMission() {
             );
     }
     
+}
+
+
+/**
+ * @brief Processes the Dear ImGui event part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionEv() {
+    //Mission events node.
+    if(saveableTreeNode("gameplay", "Mission events")) {
+    
+        //Event count text.
+        static size_t curEventIdx = 0;
+        if(game.curAreaData->mission.events.empty()) {
+            curEventIdx = 0;
+        } else if(curEventIdx >= game.curAreaData->mission.events.size()) {
+            curEventIdx = game.curAreaData->mission.events.size() - 1;
+        }
+        ImGui::Text(
+            "Event: %s/%u",
+            (
+                game.curAreaData->mission.events.empty() ?
+                "-" :
+                i2s(curEventIdx + 1)
+            ).c_str(),
+            (unsigned int) game.curAreaData->mission.events.size()
+        );
+        
+        //Add event button.
+        if(
+            ImGui::ImageButton(
+                "addEvButton", editorIcons[EDITOR_ICON_ADD],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            registerChange("mission event addition");
+            if(game.curAreaData->mission.events.empty()) {
+                curEventIdx = 0;
+            } else {
+                curEventIdx++;
+            }
+            game.curAreaData->mission.events.insert(
+                game.curAreaData->mission.events.begin() +
+                curEventIdx,
+                MissionEvent()
+            );
+        }
+        setTooltip("Add a new mission event.");
+        
+        if(!game.curAreaData->mission.events.empty()) {
+        
+            //Delete event button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "delEvButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                registerChange("mission event deletion");
+                game.curAreaData->mission.events.erase(
+                    game.curAreaData->mission.events.begin() +
+                    curEventIdx
+                );
+            }
+            setTooltip("Delete the current event.");
+            
+        }
+        
+        if(game.curAreaData->mission.events.size() > 1) {
+        
+            //Previous event button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "prevEvButton", editorIcons[EDITOR_ICON_PREVIOUS],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curEventIdx =
+                    sumAndWrap(
+                        curEventIdx, -1,
+                        game.curAreaData->mission.events.size()
+                    );
+            }
+            setTooltip("Change to the previous event.");
+            
+            //Next event button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "nextEvButton", editorIcons[EDITOR_ICON_NEXT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curEventIdx =
+                    sumAndWrap(
+                        curEventIdx, +1,
+                        game.curAreaData->mission.events.size()
+                    );
+            }
+            setTooltip("Change to the next event.");
+            
+            //Trigger earlier button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "moveEvLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                if(curEventIdx == 0) {
+                    setStatus("This is already the earliest event.");
+                } else {
+                    registerChange("mission event reorder");
+                    std::swap(
+                        game.curAreaData->mission.events[curEventIdx],
+                        game.curAreaData->mission.events[curEventIdx - 1]
+                    );
+                    curEventIdx--;
+                    setStatus("Made the event trigger earlier.");
+                }
+            }
+            setTooltip(
+                "Make this event trigger earlier.\n"
+                "Events are triggered in the order they're displayed here."
+            );
+            
+            //Trigger later button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "moveEvRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                if(curEventIdx == game.curAreaData->mission.events.size() - 1) {
+                    setStatus("This is already the last event.");
+                } else {
+                    registerChange("mission event reorder");
+                    std::swap(
+                        game.curAreaData->mission.events[curEventIdx],
+                        game.curAreaData->mission.events[curEventIdx + 1]
+                    );
+                    curEventIdx++;
+                    setStatus("Made the event trigger later.");
+                }
+            }
+            setTooltip(
+                "Make this event trigger later.\n"
+                "Events are triggered in the order they're displayed here."
+            );
+            
+        }
+        
+        if(!game.curAreaData->mission.events.empty()) {
+        
+            MissionEvent* evPtr =
+                &game.curAreaData->mission.events[curEventIdx];
+            MissionEvType::EditorInfo evEditorInfo =
+                game.missionEvTypes[evPtr->type]->getEditorInfo();
+                
+            //Event type combobox.
+            ImGui::Spacer();
+            vector<string> evTypeNames;
+            for(size_t e = 0; e < game.missionEvTypes.size(); e++) {
+                evTypeNames.push_back(game.missionEvTypes[e]->getName());
+            }
+            int missionEvType = evPtr->type;
+            if(ImGui::Combo("Type", &missionEvType, evTypeNames, 15)) {
+                registerChange("mission event type change");
+                evPtr->type = (MISSION_EV) missionEvType;
+            }
+            setTooltip("What thing needs to happen for the event to trigger.");
+            
+            if(!evEditorInfo.description.empty()) {
+            
+                //Event description text.
+                ImGui::TextWrapped("%s", evEditorInfo.description.c_str());
+                
+            }
+            
+            if(!evEditorInfo.param1Name.empty()) {
+            
+                //Event param 1 value.
+                int number = (int) evPtr->param1;
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        (evEditorInfo.param1Name + "##param1").c_str(),
+                        &number, 0.1f, 0, INT_MAX
+                    )
+                ) {
+                    registerChange("mission event number change");
+                    evPtr->param1 = (size_t) number;
+                }
+                setTooltip(
+                    evEditorInfo.param1Description, "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+            
+            if(!evEditorInfo.param2Name.empty()) {
+            
+                //Event param 2 value.
+                int number = (int) evPtr->param2;
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        (evEditorInfo.param2Name + "##param2").c_str(),
+                        &number, 0.1f, 0, INT_MAX
+                    )
+                ) {
+                    registerChange("mission event number change");
+                    evPtr->param2 = (size_t) number;
+                }
+                setTooltip(
+                    evEditorInfo.param2Description, "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+            
+            //Action combobox.
+            vector<string> actionTypeNames;
+            for(size_t a = 0; a < game.missionActionTypes.size(); a++) {
+                actionTypeNames.push_back(
+                    game.missionActionTypes[a]->getName()
+                );
+            }
+            int missionActionType = evPtr->actionType;
+            ImGui::Spacer();
+            if(
+                ImGui::Combo("Action", &missionActionType, actionTypeNames, 15)
+            ) {
+                registerChange("mission event action change");
+                evPtr->actionType = (MISSION_ACTION) missionActionType;
+            }
+            setTooltip(
+                "What action to perform when the event is triggered."
+            );
+            
+            MissionActionType::EditorInfo actionEditorInfo =
+                game.missionActionTypes[evPtr->actionType]->getEditorInfo();
+                
+            if(!actionEditorInfo.description.empty()) {
+            
+                //Action description text.
+                ImGui::TextWrapped("%s", actionEditorInfo.description.c_str());
+                
+            }
+            
+            if(evPtr->actionType == MISSION_ACTION_SEND_MESSAGE) {
+            
+                //Action message input.
+                string message = evPtr->actionMessage;
+                if(monoInputText("Message", &message)) {
+                    registerChange("mission event action message change");
+                    evPtr->actionMessage = message;
+                }
+                setTooltip(
+                    "Specify what message you want to be sent to the script."
+                );
+                
+            }
+            
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
 }
 
 

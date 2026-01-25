@@ -69,6 +69,12 @@ const float BIG_MSG_READY_DUR = 2.5f;
 //What text to show in the "Ready?" big message.
 const string BIG_MSG_READY_TEXT = "READY?";
 
+//How long the "Time's up!" big message lasts for.
+const float BIG_MSG_TIMES_UP_DUR = 4.5f;
+
+//What text to show in the "Time's up!" big message.
+const string BIG_MSG_TIMES_UP_TEXT = "TIME'S UP!";
+
 //Distance between current leader and boss before the boss music kicks in.
 const float BOSS_MUSIC_DISTANCE = 300.0f;
 
@@ -459,9 +465,14 @@ void GameplayState::doLogic() {
 /**
  * @brief Ends the currently ongoing mission.
  *
- * @param cleared Did the player reach the goal?
+ * @param clear Is it a clear or a failure?
+ * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
+ * normal mission end messages.
+ * @param ev Mission event responsible for this end, if any.
  */
-void GameplayState::endMission(bool cleared) {
+void GameplayState::endMission(
+    bool clear, bool showTimesUpMsg, MissionEvent* ev
+) {
     if(interlude.get() != INTERLUDE_NONE) return;
     
     interlude.set(INTERLUDE_MISSION_END, false);
@@ -472,31 +483,33 @@ void GameplayState::endMission(bool cleared) {
     for(Player& player : players) {
         Point newCamPos = player.view.cam.targetPos;
         float newCamZoom = player.view.cam.targetZoom;
-        if(cleared) {
-            MissionGoal* goal =
-                game.missionGoals[game.curAreaData->mission.goal];
-            if(goal->getEndZoomData(this, &newCamPos, &newCamZoom)) {
-                player.view.cam.targetPos = newCamPos;
-                player.view.cam.targetZoom = newCamZoom;
-            }
-            
-        } else {
-            MissionFail* cond =
-                game.missionFailConds[missionFailReason];
-            if(cond->getEndZoomData(this, &newCamPos, &newCamZoom)) {
-                player.view.cam.targetPos = newCamPos;
-                player.view.cam.targetZoom = newCamZoom;
-            }
+        
+        MissionEvType* evTypePtr = game.missionEvTypes[ev->type];
+        if(
+            evTypePtr->getZoomData(
+                ev, &game.curAreaData->mission, this, &newCamPos, &newCamZoom
+            )
+        ) {
+            player.view.cam.targetPos = newCamPos;
+            player.view.cam.targetZoom = newCamZoom;
         }
     }
     
-    if(cleared) {
-        bigMsg.set(BIG_MESSAGE_MISSION_CLEAR);
-        game.audio.createUiSoundSource(game.sysContent.sndMissionClear);
+    BIG_MESSAGE bigMsgToShow;
+    ALLEGRO_SAMPLE* sndToPlay;
+    if(clear) {
+        bigMsgToShow = BIG_MESSAGE_MISSION_CLEAR;
+        sndToPlay = game.sysContent.sndMissionClear;
     } else {
-        bigMsg.set(BIG_MESSAGE_MISSION_FAILED);
-        game.audio.createUiSoundSource(game.sysContent.sndMissionFailed);
+        bigMsgToShow = BIG_MESSAGE_MISSION_FAILED;
+        sndToPlay = game.sysContent.sndMissionFailed;
     }
+    if(showTimesUpMsg) {
+        bigMsgToShow = BIG_MESSAGE_TIMES_UP;
+    }
+    
+    bigMsg.set(bigMsgToShow);
+    game.audio.createUiSoundSource(sndToPlay);
     game.audio.setCurrentSong("");
     
     for(Player& player : players) {
@@ -1344,6 +1357,13 @@ void GameplayState::load() {
         }
         missionRequiredMobAmount = missionRemainingMobIds.size();
         
+        missionEventsTriggered.clear();
+        missionEventsTriggered.insert(
+            missionEventsTriggered.begin(),
+            game.curAreaData->mission.events.size(),
+            false
+        );
+        
         missionMobChecklists.clear();
         for(
             size_t c = 0;
@@ -1441,6 +1461,12 @@ void GameplayState::load() {
     );
     
     //Initialize some other things.
+    areaRegions.clear();
+    areaRegions.insert(
+        areaRegions.begin(),
+        game.curAreaData->regions.size(), AreaRegionStatus()
+    );
+    
     pathMgr.handleAreaLoad();
     
     for(Player& player : players) {

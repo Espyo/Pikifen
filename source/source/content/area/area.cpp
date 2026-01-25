@@ -374,6 +374,28 @@ void Area::clone(Area& other) {
     
     other.thumbnail = thumbnail;
     
+    other.mission.ruleset = mission.ruleset;
+    other.mission.events = mission.events;
+    other.mission.mobChecklists = mission.mobChecklists;
+    other.mission.timeLimit = mission.timeLimit;
+    other.mission.gradingMode = mission.gradingMode;
+    other.mission.pointsPerPikminBorn = mission.pointsPerPikminBorn;
+    other.mission.pointsPerPikminDeath = mission.pointsPerPikminDeath;
+    other.mission.pointsPerSecLeft = mission.pointsPerSecLeft;
+    other.mission.pointsPerSecPassed = mission.pointsPerSecPassed;
+    other.mission.pointsPerTreasurePoint = mission.pointsPerTreasurePoint;
+    other.mission.pointsPerEnemyPoint = mission.pointsPerEnemyPoint;
+    other.mission.enemyPointsOnCollection = mission.enemyPointsOnCollection;
+    other.mission.pointLossData = mission.pointLossData;
+    other.mission.pointHudData = mission.pointHudData;
+    other.mission.startingPoints = mission.startingPoints;
+    other.mission.bronzeReq = mission.bronzeReq;
+    other.mission.silverReq = mission.silverReq;
+    other.mission.goldReq = mission.goldReq;
+    other.mission.platinumReq = mission.platinumReq;
+    other.mission.makerRecord = mission.makerRecord;
+    other.mission.makerRecordDate = mission.makerRecordDate;
+    
     other.missionOld.goal = missionOld.goal;
     other.missionOld.goalAllMobs = missionOld.goalAllMobs;
     other.missionOld.goalMobIdxs = missionOld.goalMobIdxs;
@@ -1325,8 +1347,11 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     string goalStr;
     string requiredMobsStr;
+    int missionRulesetInt = MISSION_RULESET_CUSTOM;
     int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
     
+    mRS.set("mission_ruleset", missionRulesetInt);
+    mRS.set("mission_time_limit", mission.timeLimit);
     mRS.set("mission_goal", goalStr);
     mRS.set("mission_goal_amount", missionOld.goalAmount);
     mRS.set("mission_goal_all_mobs", missionOld.goalAllMobs);
@@ -1361,6 +1386,29 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_platinum_req", missionOld.platinumReq);
     mRS.set("mission_maker_record", missionOld.makerRecord);
     mRS.set("mission_maker_record_date", missionOld.makerRecordDate);
+    
+    //Events.
+    DataNode* eventsNode = node->getChildByName("mission_events");
+    size_t nEvents = eventsNode->getNrOfChildren();
+    for(size_t e = 0; e < nEvents; e++) {
+        DataNode* eventNode = eventsNode->getChild(e);
+        MissionEvent newEvent;
+        
+        ReaderSetter eRS(eventNode);
+        int typeInt = 0;
+        int actionTypeInt = 0;
+        
+        eRS.set("type", typeInt);
+        eRS.set("param_1", newEvent.param1);
+        eRS.set("param_2", newEvent.param2);
+        eRS.set("action_type", actionTypeInt);
+        eRS.set("action_message", newEvent.actionMessage);
+        
+        newEvent.type = (MISSION_EV) typeInt;
+        newEvent.actionType = (MISSION_ACTION) actionTypeInt;
+        
+        mission.events.push_back(newEvent);
+    }
     
     //Mob checklists.
     DataNode* mobChecklistsNode =
@@ -1906,6 +1954,27 @@ void Area::saveMainDataToDataNode(DataNode* node) {
 void Area::saveMissionDataToDataNode(DataNode* node) {
     //General properties.
     GetterWriter mGW(node);
+    
+    mGW.write("mission_ruleset", mission.ruleset);
+    mGW.write("mission_time_limit", mission.timeLimit);
+    
+    //Events.
+    DataNode* eventsNode = node->addNew("mission_events");
+    for(size_t e = 0; e < mission.events.size(); e++) {
+        DataNode* eventNode = eventsNode->addNew("event");
+        MissionEvent* eventPtr = &mission.events[e];
+        
+        GetterWriter eGW(eventNode);
+        
+        eGW.write("type", eventPtr->type);
+        eGW.write("param_1", eventPtr->param1);
+        eGW.write("param_2", eventPtr->param2);
+        eGW.write("action_type", eventPtr->actionType);
+        
+        if(!eventPtr->actionMessage.empty()) {
+            eGW.write("action_message", eventPtr->actionMessage);
+        }
+    }
     
     //Mob checklists.
     DataNode* checklistsNode = node->addNew("mission_mob_checklists");

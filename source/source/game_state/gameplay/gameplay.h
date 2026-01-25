@@ -43,6 +43,8 @@ extern const float BIG_MSG_ONE_MIN_LEFT_DUR;
 extern const string BIG_MSG_ONE_MIN_LEFT_TEXT;
 extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
+extern const float BIG_MSG_TIMES_UP_DUR;
+extern const string BIG_MSG_TIMES_UP_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_FACTOR;
@@ -96,6 +98,9 @@ enum BIG_MESSAGE {
     
     //1 minute left!
     BIG_MESSAGE_ONE_MIN_LEFT,
+    
+    //Time's up!
+    BIG_MESSAGE_TIMES_UP,
     
     //Mission clear!
     BIG_MESSAGE_MISSION_CLEAR,
@@ -176,6 +181,19 @@ struct BigMessageInfo {
     
     //Time passed in the current big message.
     float curTime = 0.0f;
+    
+};
+
+
+/**
+ * @brief Information about how an area region is doing.
+ */
+struct AreaRegionStatus {
+
+    //--- Members ---
+    
+    //Which leaders are currently in it.
+    vector<Leader*> leadersInside;
     
 };
 
@@ -276,7 +294,7 @@ public:
     
     //Path manager.
     PathManager pathMgr;
-
+    
     //Liquids in the area.
     vector<Liquid*> liquids;
     
@@ -306,6 +324,12 @@ public:
     
     //Have we went to the results screen yet?
     bool wentToResults = false;
+    
+    //Status of each area region.
+    vector<AreaRegionStatus> areaRegions;
+    
+    //Whether each mission event got triggered already.
+    vector<bool> missionEventsTriggered;
     
     //Status of each mission mob checklist.
     vector<MissionMobChecklistStatus> missionMobChecklists;
@@ -351,6 +375,9 @@ public:
     
     //How many enemy points exist in total.
     size_t enemyPointsTotal = 0;
+    
+    //Whether the mission ended in a clear or a failure.
+    bool missionWasCleared = false;
     
     //Reason for mission fail, if any. INVALID for none.
     MISSION_FAIL_COND missionFailReason = (MISSION_FAIL_COND) INVALID;
@@ -443,6 +470,9 @@ public:
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
+    void endMission(
+        bool clear, bool showTimesUpMsg = false, MissionEvent* ev = nullptr
+    );
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
     size_t getAmountOfGroupPikmin(
         Player* player, const PikminType* filter = nullptr
@@ -534,7 +564,6 @@ private:
     void drawThrowPreview(Player* player);
     void drawTreeShadows();
     void drawWorldComponents(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
-    void endMission(bool cleared);
     ALLEGRO_BITMAP* generateFogBitmap(
         float nearRadius, float farRadius
     );

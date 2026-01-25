@@ -190,12 +190,7 @@ void Enemy::startDyingClassSpecifics() {
     if(!game.curAreaData->missionOld.enemyPointsOnCollection) {
         game.states.gameplay->enemyPointsCollected += eneType->points;
     }
-    game.states.gameplay->lastEnemyDefeatedPos = pos;
     game.statistics.enemyDefeats++;
-    
-    if(game.curAreaData->mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
-        game.states.gameplay->missionRemainingMobIds.erase(id);
-    }
     
     //Music.
     if(isBoss) {

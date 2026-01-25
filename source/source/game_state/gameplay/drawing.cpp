@@ -373,11 +373,14 @@ void GameplayState::drawBigMsg() {
         break;
         
     } case BIG_MESSAGE_MISSION_CLEAR:
-    case BIG_MESSAGE_MISSION_FAILED: {
+    case BIG_MESSAGE_MISSION_FAILED:
+    case BIG_MESSAGE_TIMES_UP: {
         const string& TEXT =
             bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
-            GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
+            bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
+            GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT :
+            GAMEPLAY::BIG_MSG_TIMES_UP_TEXT;
         const float TEXT_W = game.winW * 0.80f;
         const float TEXT_INITIAL_HEIGHT = 0.05f;
         const float TEXT_VARIATION_DUR = 0.08f;
@@ -387,7 +390,9 @@ void GameplayState::drawBigMsg() {
         const float t =
             bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
-            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
+            bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) :
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_TIMES_UP_DUR);
             
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
         kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);

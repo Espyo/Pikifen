@@ -989,6 +989,20 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
+            for(
+                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
+            ) {
+                if(missionEventsTriggered[e]) continue;
+                MissionEvent* evPtr = &game.curAreaData->mission.events[e];
+                MissionEvType* evTypePtr = game.missionEvTypes[evPtr->type];
+                if(evTypePtr->isMet(evPtr, &game.curAreaData->mission, this)) {
+                    MissionActionType* actionTypePtr =
+                        game.missionActionTypes[evPtr->actionType];
+                    actionTypePtr->run(evPtr, this);
+                    missionEventsTriggered[e] = true;
+                }
+            }
+            
             if(interlude.get() == INTERLUDE_NONE) {
                 if(isMissionClearMet()) {
                     endMission(true);
@@ -1150,7 +1164,28 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 }
             }
             
-            
+        }
+        
+        /*******************
+        *                  *
+        *   Others   . . . *
+        *                  *
+        ********************/
+        
+        for(size_t r = 0; r < areaRegions.size(); r++) {
+            areaRegions[r].leadersInside.clear();
+            for(size_t l = 0; l < mobs.leaders.size(); l++) {
+                Leader* lPtr = mobs.leaders[l];
+                AreaRegion* rPtr = game.curAreaData->regions[r];
+                if(
+                    fabs(lPtr->pos.x - rPtr->center.x) <=
+                    rPtr->size.x / 2.0f &&
+                    fabs(lPtr->pos.y - rPtr->center.y) <=
+                    rPtr->size.y / 2.0f
+                ) {
+                    areaRegions[r].leadersInside.push_back(lPtr);
+                }
+            }
         }
         
     } else {
@@ -1402,6 +1437,11 @@ void GameplayState::doMenuLogic() {
         break;
     } case BIG_MESSAGE_ONE_MIN_LEFT: {
         if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
+        }
+        break;
+    } case BIG_MESSAGE_TIMES_UP: {
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_TIMES_UP_DUR) {
             bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;

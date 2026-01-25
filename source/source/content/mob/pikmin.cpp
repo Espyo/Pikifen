@@ -222,6 +222,7 @@ void Pikmin::drawMob() {
 void Pikmin::finishDyingClassSpecifics() {
     //Essentials.
     toDelete = true;
+    game.states.gameplay->lastPikminDeathPos = pos;
     
     //Soul.
     Particle par(

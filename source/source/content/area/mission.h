@@ -38,56 +38,105 @@ extern const float EXIT_MIN_SIZE;
 }
 
 
-//Possible goals in a mission.
-enum MISSION_GOAL {
+//Possible rulesets for missions.
+enum MISSION_RULESET {
 
-    //The player plays until they end from the pause menu.
-    MISSION_GOAL_END_MANUALLY,
+    //Grow as many Pikmin as you can within the time limit.
+    //Medal depends on how many you grew. Matches P1.
+    MISSION_RULESET_GROW_PIKMIN,
     
-    //The player must collect certain treasures, or all of them.
-    MISSION_GOAL_COLLECT_TREASURE,
+    //Collect treasures within the time limit.
+    //Medal depends on how many got collected, platinum for all. Matches P3.
+    MISSION_RULESET_COLLECT_TREASURE,
     
-    //The player must defeat certain enemies, or all of them.
-    MISSION_GOAL_BATTLE_ENEMIES,
+    //Battle enemies within the time limit.
+    //Medal depends on how many were defeated, platinum for all. Matches P3.
+    MISSION_RULESET_BATTLE_ENEMIES,
     
-    //The player must survive for a certain amount of time.
-    MISSION_GOAL_TIMED_SURVIVAL,
+    //Defeat bosses within the time limit.
+    //Medal depends on time taken. Matches P3.
+    MISSION_RULESET_DEFEAT_BOSSES,
     
-    //The player must get a leader or all of them to the exit point.
-    MISSION_GOAL_GET_TO_EXIT,
+    //Collect treasures and enemies within the time limit. Matches P4.
+    MISSION_RULESET_COLLECT_EVERYTHING,
     
-    //The player must grow enough Pikmin to reach a certain total.
-    MISSION_GOAL_GROW_PIKMIN,
+    //Custom rules.
+    MISSION_RULESET_CUSTOM,
     
 };
 
 
-//Possible ways to fail at a mission.
-enum MISSION_FAIL_COND {
+//Possible events that can happen in missions.
+enum MISSION_EV {
 
-    //Reaching the time limit.
-    MISSION_FAIL_COND_TIME_LIMIT,
+    //Mission was ended from the pause menu.
+    MISSION_EV_PAUSE_MENU_END,
     
-    //Reaching a certain Pikmin amount or fewer. 0 = total extinction.
-    MISSION_FAIL_COND_TOO_FEW_PIKMIN,
+    //Specified mobs were cleared out.
+    MISSION_EV_MOB_CLEAR,
     
-    //Reaching a certain Pikmin amount or more.
-    MISSION_FAIL_COND_TOO_MANY_PIKMIN,
+    //Time limit was reached.
+    MISSION_EV_TIME_LIMIT,
     
-    //Losing a certain amount of Pikmin.
-    MISSION_FAIL_COND_LOSE_PIKMIN,
+    //Specified amount of leaders entered the specified in-area region.
+    MISSION_EV_LEADERS_IN_REGION,
     
-    //A leader takes damage.
-    MISSION_FAIL_COND_TAKE_DAMAGE,
+    //Pikmin count reached specified amount or more.
+    MISSION_EV_PIKMIN_OR_MORE,
     
-    //Losing a certain amount of leaders.
-    MISSION_FAIL_COND_LOSE_LEADERS,
+    //Pikmin count reached specified amount or fewer.
+    MISSION_EV_PIKMIN_OR_FEWER,
     
-    //Defeating a certain amount of enemies.
-    MISSION_FAIL_COND_DEFEAT_ENEMIES,
+    //Specified amount of Pikmin was lost.
+    MISSION_EV_LOSE_PIKMIN,
     
-    //Ending from the pause menu.
-    MISSION_FAIL_COND_PAUSE_MENU,
+    //Specified amount of leaders were lost.
+    MISSION_EV_LOSE_LEADERS,
+    
+    //A leader took damage.
+    MISSION_EV_TAKE_DAMAGE,
+    
+    //Triggered via scripting.
+    MISSION_EV_SCRIPT,
+    
+};
+
+
+//Possible actions to take when a mission event happens.
+enum MISSION_ACTION {
+
+    //End the mission as a clear. A medal can be awarded.
+    MISSION_ACTION_END_CLEAR,
+    
+    //End the mission as a failure. A medal cannot be awarded.
+    MISSION_ACTION_END_FAIL,
+    
+    //Send a message to the script.
+    MISSION_ACTION_SEND_MESSAGE,
+    
+};
+
+
+//Types of mission mob checklists.
+enum MISSION_MOB_CHECKLIST {
+
+    //Mobs from the given list.
+    MISSION_MOB_CHECKLIST_CUSTOM,
+    
+    //Treasures and treasure-like objects.
+    MISSION_MOB_CHECKLIST_TREASURES,
+    
+    //Enemies and enemy-like objects.
+    MISSION_MOB_CHECKLIST_ENEMIES,
+    
+    //Treasures, treasure-like objects, enemies, and enemy-like objects.
+    MISSION_MOB_CHECKLIST_TREASURES_ENEMIES,
+    
+    //Leader objects.
+    MISSION_MOB_CHECKLIST_LEADERS,
+    
+    //Pikmin objects.
+    MISSION_MOB_CHECKLIST_PIKMIN,
     
 };
 
@@ -152,30 +201,120 @@ enum MISSION_SCORE_CRITERIA {
 };
 
 
-//Types of mission mob checklists.
-enum MISSION_MOB_CHECKLIST {
+//DEPRECATED by MISSION_EV in 1.2.0.
+//Possible goals in a mission.
+enum MISSION_GOAL {
 
-    //Mobs from the given list.
-    MISSION_MOB_CHECKLIST_CUSTOM,
+    //The player plays until they end from the pause menu.
+    MISSION_GOAL_END_MANUALLY,
     
-    //Treasures and treasure-like objects.
-    MISSION_MOB_CHECKLIST_TREASURES,
+    //The player must collect certain treasures, or all of them.
+    MISSION_GOAL_COLLECT_TREASURE,
     
-    //Enemies and enemy-like objects.
-    MISSION_MOB_CHECKLIST_ENEMIES,
+    //The player must defeat certain enemies, or all of them.
+    MISSION_GOAL_BATTLE_ENEMIES,
     
-    //Treasures, treasure-like objects, enemies, and enemy-like objects.
-    MISSION_MOB_CHECKLIST_TREASURES_ENEMIES,
+    //The player must survive for a certain amount of time.
+    MISSION_GOAL_TIMED_SURVIVAL,
     
-    //Leader objects.
-    MISSION_MOB_CHECKLIST_LEADERS,
+    //The player must get a leader or all of them to the exit point.
+    MISSION_GOAL_GET_TO_EXIT,
     
-    //Pikmin objects.
-    MISSION_MOB_CHECKLIST_PIKMIN,
+    //The player must grow enough Pikmin to reach a certain total.
+    MISSION_GOAL_GROW_PIKMIN,
     
 };
 
 
+//DEPRECATED by MISSION_EV in 1.2.0.
+//Possible ways to fail at a mission.
+enum MISSION_FAIL_COND {
+
+    //Reaching the time limit.
+    MISSION_FAIL_COND_TIME_LIMIT,
+    
+    //Reaching a certain Pikmin amount or fewer. 0 = total extinction.
+    MISSION_FAIL_COND_TOO_FEW_PIKMIN,
+    
+    //Reaching a certain Pikmin amount or more.
+    MISSION_FAIL_COND_TOO_MANY_PIKMIN,
+    
+    //Losing a certain amount of Pikmin.
+    MISSION_FAIL_COND_LOSE_PIKMIN,
+    
+    //A leader takes damage.
+    MISSION_FAIL_COND_TAKE_DAMAGE,
+    
+    //Losing a certain amount of leaders.
+    MISSION_FAIL_COND_LOSE_LEADERS,
+    
+    //Defeating a certain amount of enemies.
+    MISSION_FAIL_COND_DEFEAT_ENEMIES,
+    
+    //Ending from the pause menu.
+    MISSION_FAIL_COND_PAUSE_MENU,
+    
+};
+
+
+#pragma endregion
+#pragma region General classes
+
+
+/**
+ * @brief A checklist of mobs that is relevant to a mission.
+ */
+struct MissionMobChecklist {
+
+    //--- Members ---
+    
+    //Type.
+    MISSION_MOB_CHECKLIST type = MISSION_MOB_CHECKLIST_CUSTOM;
+    
+    //Amount, if any. 0 means all.
+    size_t requiredAmount = 0;
+    
+    //For enemies, do they need to be collected, or is it enough for them
+    //to be defeated?
+    bool enemiesNeedCollection = false;
+    
+    //List of mob indexes, if applicable.
+    vector<size_t> mobIdxs;
+    
+    
+    //--- Function declarations ---
+    
+    vector<size_t> calculateList() const;
+    
+};
+
+
+/**
+ * @brief Represents an event in the mission.
+ */
+struct MissionEvent {
+
+    //--- Members ---
+    
+    //Type of event.
+    MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
+    
+    //First parameter, if applicable.
+    size_t param1 = 1;
+    
+    //Second parameter, if applicable.
+    size_t param2 = 1;
+    
+    //Action to take when the event happens.
+    MISSION_ACTION actionType = MISSION_ACTION_END_CLEAR;
+    
+    //Action script message to send, if applicable.
+    string actionMessage;
+    
+};
+
+
+//DEPRECATED by MissionData in 1.2.0.
 /**
  * @brief Info about a given area's mission.
  */
@@ -294,6 +433,12 @@ struct MissionData {
 
     //--- Members ---
     
+    //Ruleset. Only really used for the editor's GUI.
+    MISSION_RULESET ruleset = MISSION_RULESET_CUSTOM;
+    
+    //Mission events.
+    vector<MissionEvent> events;
+    
     //Mob checklists.
     vector<MissionMobChecklist> mobChecklists;
     
@@ -351,6 +496,13 @@ struct MissionData {
     //The date of the maker's record, or empty for no record.
     string makerRecordDate = "";
     
+    
+    //--- Function declarations ---
+    
+    void applyRuleset(MISSION_RULESET ruleset);
+    MISSION_MEDAL getScoreMedal(int score);
+    void resetRuleset();
+    
 };
 
 
@@ -376,6 +528,417 @@ struct MissionRecord {
     bool isPlatinum(const MissionDataOld& mission);
     
 };
+
+
+#pragma endregion
+#pragma region Event types
+
+
+/**
+ * @brief Class interface for a mission event type.
+ */
+class MissionEvType {
+
+public:
+
+    //--- Misc. definitions ---
+    
+    /**
+     * @brief Information that's only useful for the editor.
+     */
+    struct EditorInfo {
+    
+        //--- Members ---
+        
+        //Description of the event.
+        string description;
+        
+        //The first parameter's name. Empty if not used.
+        string param1Name;
+        
+        //The first parameter's description. Empty if not used.
+        string param1Description;
+        
+        //The second parameter's name. Empty if not used.
+        string param2Name;
+        
+        //The second parameter's description. Empty if not used.
+        string param2Description;
+        
+    };
+    
+    
+    /**
+     * @brief Information that's only useful for the HUD.
+     */
+    struct HudInfo {
+    
+        //--- Members ---
+        
+        //A description of the event. Empty if not used.
+        string description;
+        
+        //The reason of what happened to trigger the event. Empty if not used.
+        string reason;
+        
+    };
+    
+    
+    //--- Function declarations ---
+    
+    virtual ~MissionEvType() = default;
+    virtual string getName() const = 0;
+    virtual EditorInfo getEditorInfo() const = 0;
+    virtual HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const = 0;
+    virtual bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const = 0;
+    virtual bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const = 0;
+    
+};
+
+
+/**
+ * @brief Class representing the "pause menu end" mission event.
+ */
+class MissionEvTypePauseEnd : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "mob clear" mission event.
+ */
+class MissionEvTypeMobChecklist : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "time limit" mission event.
+ */
+class MissionEvTypeTimeLimit : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "leaders in region" mission event.
+ */
+class MissionEvTypeLeadersInRegion : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "Pikmin or more" mission event.
+ */
+class MissionEvTypePikminOrMore : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "Pikmin or fewer" mission event.
+ */
+class MissionEvTypePikminOrFewer : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "lose Pikmin" mission event.
+ */
+class MissionEvTypeLosePikmin : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "lose leaders" mission event.
+ */
+class MissionEvTypeLoseLeaders : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "take damage" mission event.
+ */
+class MissionEvTypeTakeDamage : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "script" mission event.
+ */
+class MissionEvTypeScriptTrigger : public MissionEvType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+#pragma endregion
+#pragma region Action types
+
+
+/**
+ * @brief Class interface for a mission action type.
+ */
+class MissionActionType {
+
+public:
+
+    //--- Misc. definitions ---
+    
+    /**
+     * @brief Information that's only useful for the editor.
+     */
+    struct EditorInfo {
+    
+        //--- Members ---
+        
+        //Description of the event.
+        string description;
+        
+    };
+    
+    
+    //--- Function declarations ---
+    
+    virtual ~MissionActionType() = default;
+    virtual string getName() const = 0;
+    virtual EditorInfo getEditorInfo() const = 0;
+    virtual void run(MissionEvent* ev, GameplayState* gameplay) const = 0;
+    
+};
+
+
+/**
+ * @brief Class representing the "mission end, clear" mission event.
+ */
+class MissionActionTypeEndClear : public MissionActionType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "mission end, fail" mission event.
+ */
+class MissionActionTypeEndFail : public MissionActionType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "send script message" mission event.
+ */
+class MissionActionTypeScriptMessage : public MissionActionType {
+
+public:
+
+    //--- Function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    
+};
+
+
+#pragma endregion
+#pragma region Fail conditions
 
 
 /**

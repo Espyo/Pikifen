@@ -2641,13 +2641,21 @@ void PauseMenu::startClosing(GuiManager* curGui) {
 void PauseMenu::startLeavingGameplay() {
     if(
         leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
-        hasFlag(
-            game.curAreaData->mission.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        )
+        game.curAreaData->type == AREA_TYPE_MISSION
     ) {
-        game.states.gameplay->missionFailReason =
-            MISSION_FAIL_COND_PAUSE_MENU;
+        bool missionEndsInClear = false;
+        for(size_t e = 0; e < game.curAreaData->mission.events.size(); e++) {
+            MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+            if(ePtr->type != MISSION_EV_PAUSE_MENU_END) continue;
+            if(ePtr->actionType == MISSION_ACTION_END_CLEAR) {
+                missionEndsInClear = true;
+                break;
+            } else if(ePtr->actionType == MISSION_ACTION_END_FAIL) {
+                missionEndsInClear = false;
+                break;
+            }
+        }
+        game.states.gameplay->missionWasCleared = missionEndsInClear;
     }
     game.states.gameplay->startLeaving(leaveTarget);
 }

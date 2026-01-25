@@ -89,7 +89,15 @@ void destroyMisc() {
     game.audio.destroy();
     
     game.sectorTypes.clear();
+    game.missionRulesetNames.clear();
     game.missionMobChecklistTypeNames.clear();
+    for(size_t e = 0; e < game.missionEvTypes.size(); e++) {
+        delete game.missionEvTypes[e];
+    }
+    for(size_t a = 0; a < game.missionActionTypes.size(); a++) {
+        delete game.missionActionTypes[a];
+    }
+    game.missionGoals.clear();
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
         delete game.missionGoals[g];
     }
@@ -1089,6 +1097,26 @@ void initMiscDatabases() {
         SECTOR_TYPE_BLOCKING, "blocking"
     );
     
+    //Mission ruleset names.
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_GROW_PIKMIN, "Grow Pikmin"
+    );
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_COLLECT_TREASURE, "Collect Treasure"
+    );
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_BATTLE_ENEMIES, "Battle Enemies"
+    );
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_DEFEAT_BOSSES, "Defeat Bosses"
+    );
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_COLLECT_EVERYTHING, "Collect Everything"
+    );
+    game.missionRulesetNames.registerItem(
+        MISSION_RULESET_CUSTOM, "Custom"
+    );
+    
     //Mission mob checklist type names.
     game.missionMobChecklistTypeNames.registerItem(
         MISSION_MOB_CHECKLIST_CUSTOM, "Custom"
@@ -1109,74 +1137,62 @@ void initMiscDatabases() {
         MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin"
     );
     
+    //Mission events.
+    //Order matters, and should match MISSION_EV.
+    game.missionEvTypes = {
+        new MissionEvTypePauseEnd(),
+        new MissionEvTypeMobChecklist(),
+        new MissionEvTypeTimeLimit(),
+        new MissionEvTypeLeadersInRegion(),
+        new MissionEvTypePikminOrMore(),
+        new MissionEvTypePikminOrFewer(),
+        new MissionEvTypeLosePikmin(),
+        new MissionEvTypeLoseLeaders(),
+        new MissionEvTypeTakeDamage(),
+    };
+    
+    //Mission actions.
+    //Order matters, and should match MISSION_ACTION.
+    game.missionActionTypes = {
+        new MissionActionTypeEndClear(),
+        new MissionActionTypeEndFail(),
+        new MissionActionTypeScriptMessage(),
+    };
+    
     //Mission goals.
     //Order matters, and should match MISSION_GOAL.
-    game.missionGoals.push_back(
-        new MissionGoalEndManually()
-    );
-    game.missionGoals.push_back(
-        new MissionGoalCollectTreasures()
-    );
-    game.missionGoals.push_back(
-        new MissionGoalBattleEnemies()
-    );
-    game.missionGoals.push_back(
-        new MissionGoalTimedSurvival()
-    );
-    game.missionGoals.push_back(
-        new MissionGoalGetToExit()
-    );
-    game.missionGoals.push_back(
-        new MissionGoalGrowPikmin()
-    );
+    game.missionGoals = {
+        new MissionGoalEndManually(),
+        new MissionGoalCollectTreasures(),
+        new MissionGoalBattleEnemies(),
+        new MissionGoalTimedSurvival(),
+        new MissionGoalGetToExit(),
+        new MissionGoalGrowPikmin(),
+    };
     
     //Mission fail conditions.
     //Order matters, and should match MISSION_FAIL_COND.
-    game.missionFailConds.push_back(
-        new MissionFailTimeLimit()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailTooFewPikmin()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailTooManyPikmin()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailLosePikmin()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailTakeDamage()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailLoseLeaders()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailDefeatEnemies()
-    );
-    game.missionFailConds.push_back(
-        new MissionFailPauseMenu()
-    );
+    game.missionFailConds = {
+        new MissionFailTimeLimit(),
+        new MissionFailTooFewPikmin(),
+        new MissionFailTooManyPikmin(),
+        new MissionFailLosePikmin(),
+        new MissionFailTakeDamage(),
+        new MissionFailLoseLeaders(),
+        new MissionFailDefeatEnemies(),
+        new MissionFailPauseMenu(),
+    };
     
     //Mission score criteria.
     //Order matters, and should match MISSION_SCORE_CRITERIA.
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionPikminBorn()
-    );
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionPikminDeath()
-    );
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionSecLeft()
-    );
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionSecPassed()
-    );
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionTreasurePoints()
-    );
-    game.missionScoreCriteria.push_back(
-        new MissionScoreCriterionEnemyPoints()
-    );
+    game.missionScoreCriteria = {
+        new MissionScoreCriterionPikminBorn(),
+        new MissionScoreCriterionPikminDeath(),
+        new MissionScoreCriterionSecLeft(),
+        new MissionScoreCriterionSecPassed(),
+        new MissionScoreCriterionTreasurePoints(),
+        new MissionScoreCriterionEnemyPoints(),
+    };
 }
 
 
