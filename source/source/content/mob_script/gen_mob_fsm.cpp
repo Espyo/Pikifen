@@ -432,6 +432,15 @@ void GenMobFsm::handleDelivery(Mob* m, void* info1, void* info2) {
             MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
         );
     }
+    
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+        for(
+            size_t c = 0;
+            c < game.states.gameplay->missionMobChecklists.size(); c++
+        ) {
+            game.states.gameplay->missionMobChecklists[c].remove(m);
+        }
+    }
     m->toDelete = true;
 }
 

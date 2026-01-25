@@ -549,7 +549,7 @@ void GameplayState::enter() {
         player.radarZoom = zoomLevels[1] * 0.4f;
     }
     
-    lastEnemyDefeatedPos = Point(LARGE_FLOAT);
+    lastMobClearedPos = Point(LARGE_FLOAT);
     lastHurtLeaderPos = Point(LARGE_FLOAT);
     lastPikminBornPos = Point(LARGE_FLOAT);
     lastPikminDeathPos = Point(LARGE_FLOAT);
@@ -1344,7 +1344,31 @@ void GameplayState::load() {
         }
         missionRequiredMobAmount = missionRemainingMobIds.size();
         
-        if(game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        missionMobChecklists.clear();
+        for(
+            size_t c = 0;
+            c < game.curAreaData->mission.mobChecklists.size(); c++
+        ) {
+            missionMobChecklists.push_back(MissionMobChecklistStatus());
+            vector<size_t> idxs =
+                game.curAreaData->mission.mobChecklists[c].calculateList();
+            missionMobChecklists.back().remaining.reserve(idxs.size());
+            for(size_t i = 0; i < idxs.size(); i++) {
+                missionMobChecklists.back().remaining.insert(
+                    mobsPerGen[idxs[i]]
+                );
+            }
+            missionMobChecklists.back().startingAmount =
+                missionMobChecklists.back().remaining.size();
+            missionMobChecklists.back().requiredAmount =
+                game.curAreaData->mission.mobChecklists[c].requiredAmount;
+            if(missionMobChecklists.back().requiredAmount == 0) {
+                missionMobChecklists.back().requiredAmount =
+                    missionMobChecklists.back().startingAmount;
+            }
+        }
+        
+        if(game.curAreaData->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : missionRequiredMobGenIdxs) {
@@ -1672,6 +1696,7 @@ void GameplayState::unload() {
         lightmapBmp = nullptr;
     }
     
+    missionMobChecklists.clear();
     missionRemainingMobIds.clear();
     pathMgr.clear();
     particles.clear();
@@ -1906,4 +1931,21 @@ void InterludeInfo::tick(float deltaT) {
     if(curId != INTERLUDE_NONE) {
         curTime += deltaT;
     }
+}
+
+
+/**
+ * @brief Marks a mob as cleared by removing it from the list, if it's there.
+ *
+ * @param m The mob.
+ * @return Whether the mob is in the list.
+ */
+bool MissionMobChecklistStatus::remove(Mob* m) {
+    auto it = std::find(remaining.begin(), remaining.end(), m);
+    if(it == remaining.end()) {
+        return false;
+    }
+    game.states.gameplay->lastMobClearedPos = m->pos;
+    remaining.erase(it);
+    return true;
 }

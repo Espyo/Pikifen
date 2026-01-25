@@ -4058,6 +4058,204 @@ void AreaEditor::processGuiPanelMissionGrading() {
 
 
 /**
+ * @brief Processes the Dear ImGui mob checklists part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionMobChecklists() {
+    //Mission mob checklists node.
+    if(saveableTreeNode("gameplay", "Mission mob checklists")) {
+    
+        //Checklist count text.
+        if(
+            game.curAreaData->mission.mobChecklists.empty()
+        ) {
+            curMobChecklistIdx = 0;
+        } else if(
+            curMobChecklistIdx >= game.curAreaData->mission.mobChecklists.size()
+        ) {
+            curMobChecklistIdx =
+                game.curAreaData->mission.mobChecklists.size() - 1;
+        }
+        ImGui::Text(
+            "Checklist: %s/%u",
+            (
+                game.curAreaData->mission.mobChecklists.empty() ?
+                "-" :
+                i2s(curMobChecklistIdx + 1)
+            ).c_str(),
+            (unsigned int) game.curAreaData->mission.mobChecklists.size()
+        );
+        
+        //Add checklist button.
+        if(
+            ImGui::ImageButton(
+                "addChecklistButton", editorIcons[EDITOR_ICON_ADD],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            registerChange("mission mob checklist addition");
+            if(game.curAreaData->mission.mobChecklists.empty()) {
+                curMobChecklistIdx = 0;
+            } else {
+                curMobChecklistIdx++;
+            }
+            game.curAreaData->mission.mobChecklists.insert(
+                game.curAreaData->mission.mobChecklists.begin() +
+                curMobChecklistIdx,
+                MissionMobChecklist()
+            );
+        }
+        setTooltip("Add a new mission mob checklist.");
+        
+        if(!game.curAreaData->mission.mobChecklists.empty()) {
+        
+            //Delete checklist button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "delChecklistButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                registerChange("mission mob checklist");
+                game.curAreaData->mission.mobChecklists.erase(
+                    game.curAreaData->mission.mobChecklists.begin() +
+                    curMobChecklistIdx
+                );
+            }
+            setTooltip("Delete the current mob checklist.");
+            
+        }
+        
+        if(game.curAreaData->mission.mobChecklists.size() > 1) {
+        
+            //Previous checklist button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "prevChecklistButton", editorIcons[EDITOR_ICON_PREVIOUS],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curMobChecklistIdx =
+                    sumAndWrap(
+                        curMobChecklistIdx, -1,
+                        game.curAreaData->mission.mobChecklists.size()
+                    );
+            }
+            setTooltip("Change to the previous mob checklist.");
+            
+            //Next checklist button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "nextChecklistButton", editorIcons[EDITOR_ICON_NEXT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curMobChecklistIdx =
+                    sumAndWrap(
+                        curMobChecklistIdx, +1,
+                        game.curAreaData->mission.mobChecklists.size()
+                    );
+            }
+            setTooltip("Change to the next mob checklist.");
+            
+        }
+        
+        if(!game.curAreaData->mission.mobChecklists.empty()) {
+        
+            MissionMobChecklist* checklistPtr =
+                &game.curAreaData->mission.mobChecklists[curMobChecklistIdx];
+                
+            //Checklist type combobox.
+            ImGui::Spacer();
+            int checklistType = checklistPtr->type;
+            if(
+                ImGui::Combo(
+                    "Type", &checklistType,
+                    game.missionMobChecklistTypeNames.getNames(), 15
+                )
+            ) {
+                registerChange("mission mob checklist type change");
+                checklistPtr->type = (MISSION_MOB_CHECKLIST) checklistType;
+            }
+            setTooltip(
+                "The checklist type controls how the objects that are\n"
+                "a part of it are determined."
+            );
+            
+            //Amount value.
+            int amount = (int) checklistPtr->requiredAmount;
+            ImGui::SetNextItemWidth(50);
+            if(
+                ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)
+            ) {
+                registerChange("mission mob checklist amount change");
+                checklistPtr->requiredAmount = (size_t) amount;
+            }
+            setTooltip(
+                "0 means the checklist contains all of the matching objects.\n"
+                "Any other number means the checklist gets cleared if\n"
+                "any X of the maching objects are cleared."
+                , "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            if(
+                checklistPtr->type == MISSION_MOB_CHECKLIST_CUSTOM ||
+                checklistPtr->type == MISSION_MOB_CHECKLIST_ENEMIES ||
+                checklistPtr->type == MISSION_MOB_CHECKLIST_TREASURES_ENEMIES
+            ) {
+            
+                //Enemies need collection checkbox.
+                bool enemiesNeedCollection =
+                    checklistPtr->enemiesNeedCollection;
+                if(
+                    ImGui::Checkbox(
+                        "Enemies need collection", &enemiesNeedCollection
+                    )
+                ) {
+                    registerChange("mission mob checklist requirement change");
+                    checklistPtr->enemiesNeedCollection = enemiesNeedCollection;
+                }
+                setTooltip(
+                    "If true, enemies need to be defeated and\n"
+                    "collected in order to be checked.\n"
+                    "If false, they only need to be defeated."
+                );
+                
+            }
+            
+            if(checklistPtr->type == MISSION_MOB_CHECKLIST_CUSTOM) {
+            
+                //Choose mobs button.
+                if(ImGui::Button("Pick objects...")) {
+                    changeState(EDITOR_STATE_MOBS);
+                    subState = EDITOR_SUB_STATE_MISSION_MOBS;
+                }
+                setTooltip(
+                    "Click here to start picking which objects do and\n"
+                    "do not belong to the checklist."
+                );
+                
+                //Mob amount text.
+                ImGui::SameLine();
+                ImGui::Text(
+                    "(%u chosen)", (unsigned int) checklistPtr->mobIdxs.size()
+                );
+                
+            }
+            
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
+}
+
+
+/**
  * @brief Processes the Dear ImGui mob control panel for this frame.
  */
 void AreaEditor::processGuiPanelMob() {
@@ -4368,27 +4566,19 @@ void AreaEditor::processGuiPanelMobs() {
         
     } else if(subState == EDITOR_SUB_STATE_MISSION_MOBS) {
     
-        string catName =
-            game.curAreaData->mission.goal ==
-            MISSION_GOAL_COLLECT_TREASURE ?
-            "treasure/pile/resource" :
-            game.curAreaData->mission.goal ==
-            MISSION_GOAL_BATTLE_ENEMIES ?
-            "enemy" :
-            "leader";
-            
         //Instructions text.
         ImGui::TextWrapped(
-            "Click a %s object to mark or unmark it as a required "
-            "object for the mission. Objects flashing yellow are considered "
-            "required. Click the finish button when you are done.",
-            catName.c_str()
+            "Click an object to mark or unmark it as part of the checklist. "
+            "Objects flashing yellow are a part of the checklist. "
+            "Click the finish button when you are done."
         );
         
-        //Total objects required text.
+        //Total objects chosen text.
         ImGui::Text(
-            "Total objects required: %lu",
-            game.curAreaData->mission.goalMobIdxs.size()
+            "Total objects chosen: %lu",
+            game.curAreaData->mission.mobChecklists[
+                curMobChecklistIdx
+            ].mobIdxs.size()
         );
         
         //Finish button.

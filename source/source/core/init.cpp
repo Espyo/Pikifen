@@ -89,6 +89,7 @@ void destroyMisc() {
     game.audio.destroy();
     
     game.sectorTypes.clear();
+    game.missionMobChecklistTypeNames.clear();
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
         delete game.missionGoals[g];
     }
@@ -1086,6 +1087,26 @@ void initMiscDatabases() {
     );
     game.sectorTypes.registerItem(
         SECTOR_TYPE_BLOCKING, "blocking"
+    );
+    
+    //Mission mob checklist type names.
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_CUSTOM, "Custom"
+    );
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_TREASURES, "Treasures"
+    );
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_ENEMIES, "Enemies"
+    );
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_TREASURES_ENEMIES, "Treasures and enemies"
+    );
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_LEADERS, "Leaders"
+    );
+    game.missionMobChecklistTypeNames.registerItem(
+        MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin"
     );
     
     //Mission goals.

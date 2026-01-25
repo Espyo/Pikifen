@@ -1362,6 +1362,34 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_maker_record", missionOld.makerRecord);
     mRS.set("mission_maker_record_date", missionOld.makerRecordDate);
     
+    //Mob checklists.
+    DataNode* mobChecklistsNode =
+        node->getChildByName("mission_mob_checklists");
+    size_t nMobChecklists = mobChecklistsNode->getNrOfChildren();
+    for(size_t c = 0; c < nMobChecklists; c++) {
+        DataNode* checklistNode = mobChecklistsNode->getChild(c);
+        MissionMobChecklist newChecklist;
+        
+        ReaderSetter cRS(checklistNode);
+        int typeInt = 0;
+        string mobIdxsStr;
+        
+        cRS.set("type", typeInt);
+        cRS.set("amount", newChecklist.requiredAmount);
+        cRS.set("enemies_need_collection", newChecklist.enemiesNeedCollection);
+        cRS.set("mob_idxs", mobIdxsStr);
+        
+        newChecklist.type = (MISSION_MOB_CHECKLIST) typeInt;
+        
+        vector<string> mobIdxsStrVec = semicolonListToVector(mobIdxsStr);
+        newChecklist.mobIdxs.reserve(mobIdxsStrVec.size());
+        for(size_t m = 0; m < mobIdxsStrVec.size(); m++) {
+            newChecklist.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
+        }
+        
+        mission.mobChecklists.push_back(newChecklist);
+    }
+    
     //Goal.
     missionOld.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
@@ -1878,6 +1906,30 @@ void Area::saveMainDataToDataNode(DataNode* node) {
 void Area::saveMissionDataToDataNode(DataNode* node) {
     //General properties.
     GetterWriter mGW(node);
+    
+    //Mob checklists.
+    DataNode* checklistsNode = node->addNew("mission_mob_checklists");
+    for(size_t c = 0; c < mission.mobChecklists.size(); c++) {
+        DataNode* checklistNode = checklistsNode->addNew("checklist");
+        MissionMobChecklist* checklistPtr = &mission.mobChecklists[c];
+        
+        GetterWriter cGW(checklistNode);
+        
+        cGW.write("type", checklistPtr->type);
+        cGW.write("amount", checklistPtr->requiredAmount);
+        cGW.write(
+            "enemies_need_collection", checklistPtr->enemiesNeedCollection
+        );
+        
+        vector<string> mobIdxsStrVec;
+        for(auto m : checklistPtr->mobIdxs) {
+            mobIdxsStrVec.push_back(i2s(m));
+        }
+        string mobIdxsStr = join(mobIdxsStrVec, ";");
+        if(!mobIdxsStr.empty()) {
+            cGW.write("mob_idxs", mobIdxsStr);
+        }
+    }
     
     //Goal.
     if(missionOld.goal != MISSION_GOAL_END_MANUALLY) {

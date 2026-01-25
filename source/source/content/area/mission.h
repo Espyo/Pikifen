@@ -152,6 +152,30 @@ enum MISSION_SCORE_CRITERIA {
 };
 
 
+//Types of mission mob checklists.
+enum MISSION_MOB_CHECKLIST {
+
+    //Mobs from the given list.
+    MISSION_MOB_CHECKLIST_CUSTOM,
+    
+    //Treasures and treasure-like objects.
+    MISSION_MOB_CHECKLIST_TREASURES,
+    
+    //Enemies and enemy-like objects.
+    MISSION_MOB_CHECKLIST_ENEMIES,
+    
+    //Treasures, treasure-like objects, enemies, and enemy-like objects.
+    MISSION_MOB_CHECKLIST_TREASURES_ENEMIES,
+    
+    //Leader objects.
+    MISSION_MOB_CHECKLIST_LEADERS,
+    
+    //Pikmin objects.
+    MISSION_MOB_CHECKLIST_PIKMIN,
+    
+};
+
+
 /**
  * @brief Info about a given area's mission.
  */
@@ -259,6 +283,73 @@ struct MissionDataOld {
     //--- Function declarations ---
     
     MISSION_MEDAL getScoreMedal(int score);
+    
+};
+
+
+/**
+ * @brief Info about a given area's mission.
+ */
+struct MissionData {
+
+    //--- Members ---
+    
+    //Mob checklists.
+    vector<MissionMobChecklist> mobChecklists;
+    
+    //Mission grading mode.
+    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
+    
+    //Time limit in seconds, if any.
+    size_t timeLimit = MISSION::DEF_TIME_LIMIT;
+    
+    //Mission point multiplier for each Pikmin born.
+    int pointsPerPikminBorn = 0;
+    
+    //Mission point multiplier for each Pikmin lost.
+    int pointsPerPikminDeath = 0;
+    
+    //Mission point multiplier for each second left (only if time limit is on).
+    int pointsPerSecLeft = 0;
+    
+    //Mission point multiplier for each second passed.
+    int pointsPerSecPassed = 0;
+    
+    //Mission point multiplier for each treasure point obtained.
+    int pointsPerTreasurePoint = 0;
+    
+    //Mission point multiplier for each enemy point obtained.
+    int pointsPerEnemyPoint = 0;
+    
+    //If true, award points on enemy collection rather than on defeat.
+    bool enemyPointsOnCollection = false;
+    
+    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
+    Bitmask8 pointLossData = 0;
+    
+    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
+    Bitmask8 pointHudData = 255;
+    
+    //Starting number of points.
+    int startingPoints = 0;
+    
+    //Bronze medal point requirement.
+    int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
+    
+    //Silver medal point requirement.
+    int silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
+    
+    //Gold medal point requirement.
+    int goldReq = MISSION::DEF_MEDAL_REQ_GOLD;
+    
+    //Platinum medal point requirement.
+    int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
+    
+    //The maker's record.
+    int makerRecord = 0;
+    
+    //The date of the maker's record, or empty for no record.
+    string makerRecordDate = "";
     
 };
 

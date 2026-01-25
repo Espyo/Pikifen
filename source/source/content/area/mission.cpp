@@ -2109,6 +2109,101 @@ bool MissionGoalTimedSurvival::isMobApplicable(
 }
 
 
+#pragma endregion
+#pragma region Mob checklists
+
+
+/**
+ * @brief Calculates the list of all applicable mob indexes,
+ * from the mob generators.
+ *
+ * @return The list.
+ */
+vector<size_t> MissionMobChecklist::calculateList() const {
+    if(type == MISSION_MOB_CHECKLIST_CUSTOM) {
+        return mobIdxs;
+    }
+    
+    vector<size_t> result;
+    
+    for(size_t g = 0; g < game.curAreaData->mobGenerators.size(); g++) {
+        MobGen* gPtr = game.curAreaData->mobGenerators[g];
+        bool toAdd = false;
+        
+        const auto checkTreasure = [gPtr] () {
+            if(gPtr->type->category->id == MOB_CATEGORY_TREASURES) {
+                return true;
+            } else if(gPtr->type->category->id == MOB_CATEGORY_RESOURCES) {
+                ResourceType* resType = (ResourceType*) gPtr->type;
+                if(
+                    resType->deliveryResult ==
+                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                ) {
+                    return true;
+                }
+            } else if(gPtr->type->category->id == MOB_CATEGORY_PILES) {
+                PileType* pilType = (PileType*) gPtr->type;
+                if(
+                    pilType->contents->deliveryResult ==
+                    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        
+        const auto checkEnemy = [gPtr] () {
+            if(gPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
+                return true;
+            }
+            return false;
+        };
+        
+        const auto checkLeader = [gPtr] () {
+            if(gPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+                return true;
+            }
+            return false;
+        };
+        
+        const auto checkPikmin = [gPtr] () {
+            if(gPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                return true;
+            }
+            return false;
+        };
+        
+        switch(type) {
+        case MISSION_MOB_CHECKLIST_CUSTOM: {
+            break;
+        } case MISSION_MOB_CHECKLIST_TREASURES: {
+            toAdd = checkTreasure();
+            break;
+        } case MISSION_MOB_CHECKLIST_ENEMIES: {
+            toAdd = checkEnemy();
+            break;
+        } case MISSION_MOB_CHECKLIST_TREASURES_ENEMIES: {
+            toAdd = checkTreasure() || checkEnemy();
+            break;
+        } case MISSION_MOB_CHECKLIST_LEADERS: {
+            toAdd = checkLeader();
+            break;
+        } case MISSION_MOB_CHECKLIST_PIKMIN: {
+            toAdd = checkPikmin();
+            break;
+        }
+        }
+        
+        if(toAdd) {
+            result.push_back(g);
+        }
+    }
+    
+    return result;
+}
+
+
 /**
  * @brief Returns whether or not this record is a platinum medal.
  *

@@ -181,6 +181,30 @@ struct BigMessageInfo {
 
 
 /**
+ * @brief Information about how a mission mob checklist is doing.
+ */
+struct MissionMobChecklistStatus {
+
+    //--- Members ---
+    
+    //Which mobs remain.
+    unordered_set<Mob*> remaining;
+    
+    //The list's starting amount.
+    size_t startingAmount = 0;
+    
+    //The list's required number.
+    size_t requiredAmount = 0;
+    
+    
+    //--- Function declarations ---
+    
+    bool remove(Mob* m);
+    
+};
+
+
+/**
  * @brief Standard gameplay state. This is where the action happens.
  */
 class GameplayState : public GameState {
@@ -223,8 +247,8 @@ public:
     //How many seconds of actual playtime. Only counts on player control.
     float gameplayTimePassed = 0.0f;
     
-    //Position of the last enemy defeated. LARGE_FLOAT for none.
-    Point lastEnemyDefeatedPos;
+    //Position of the last mob that got cleared. LARGE_FLOAT for none.
+    Point lastMobClearedPos;
     
     //Position of the last leader to get hurt. LARGE_FLOAT for none.
     Point lastHurtLeaderPos;
@@ -282,6 +306,9 @@ public:
     
     //Have we went to the results screen yet?
     bool wentToResults = false;
+    
+    //Status of each mission mob checklist.
+    vector<MissionMobChecklistStatus> missionMobChecklists;
     
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> missionRemainingMobIds;

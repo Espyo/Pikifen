@@ -3620,6 +3620,22 @@ void Mob::startDying() {
     
     releaseStoredMobs();
     
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+        for(
+            size_t c = 0;
+            c < game.states.gameplay->missionMobChecklists.size(); c++
+        ) {
+            if(
+                game.curAreaData->mission.mobChecklists[c].
+                enemiesNeedCollection &&
+                type->category->id == MOB_CATEGORY_ENEMIES
+            ) {
+                continue;
+            }
+            game.states.gameplay->missionMobChecklists[c].remove(this);
+        }
+    }
+    
     startDyingClassSpecifics();
 }
 

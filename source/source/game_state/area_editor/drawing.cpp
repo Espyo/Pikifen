@@ -1330,14 +1330,18 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         );
         
         bool isSelected = isInContainer(selectedMobs, mPtr);
-        bool isMissionRequirement =
+        bool isInMobChecklist =
             subState == EDITOR_SUB_STATE_MISSION_MOBS &&
-            isInContainer(game.curAreaData->mission.goalMobIdxs, m);
+            isInContainer(
+                game.curAreaData->mission.mobChecklists[
+                    curMobChecklistIdx
+                ].mobIdxs, m
+            );
         bool isHighlighted =
             highlightedMob == mPtr &&
             state == EDITOR_STATE_MOBS;
             
-        if(isSelected || isMissionRequirement) {
+        if(isSelected || isInMobChecklist) {
             al_draw_filled_circle(
                 mPtr->pos.x, mPtr->pos.y, radius,
                 al_map_rgba(

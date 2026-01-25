@@ -270,6 +270,9 @@ struct Area : public Content {
     GeometryProblems problems;
     
     //Mission data.
+    MissionData mission;
+    
+    //Mission data.
     MissionDataOld missionOld;
     
     //Path to the user data folder for this area.

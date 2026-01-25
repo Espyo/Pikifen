@@ -1092,27 +1092,21 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_MISSION_MOBS: {
 
         size_t clickedMobIdx;
-        MobGen* clickedMob =
-            getMobUnderPoint(
-                game.editorsView.mouseCursorWorldPos, &clickedMobIdx
-            );
-            
-        if(
-            clickedMobIdx != INVALID &&
-            game.missionGoals[game.curAreaData->mission.goal]->
-            isMobApplicable(clickedMob->type)
-        ) {
-            registerChange("mission object requirements change");
-            auto it =
-                game.curAreaData->mission.goalMobIdxs.find(
-                    clickedMobIdx
-                );
-            if(it == game.curAreaData->mission.goalMobIdxs.end()) {
-                game.curAreaData->mission.goalMobIdxs.insert(
-                    clickedMobIdx
-                );
+        getMobUnderPoint(
+            game.editorsView.mouseCursorWorldPos, &clickedMobIdx
+        );
+        
+        if(clickedMobIdx != INVALID) {
+            auto& listRef =
+                game.curAreaData->mission.mobChecklists[
+                    curMobChecklistIdx
+                ].mobIdxs;
+            registerChange("mission mob checklist choice change");
+            auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
+            if(it == listRef.end()) {
+                listRef.push_back(clickedMobIdx);
             } else {
-                game.curAreaData->mission.goalMobIdxs.erase(it);
+                listRef.erase(it);
             }
         }
         

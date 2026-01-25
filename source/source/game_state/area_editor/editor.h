@@ -427,7 +427,7 @@ private:
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
         
-        //Picking required mobs for the mission.
+        //Picking mobs for the mission mob checklist.
         EDITOR_SUB_STATE_MISSION_MOBS,
         
         //Drawing paths.
@@ -515,6 +515,9 @@ private:
     
     //When showing a hazard in the list, this is the index of the current one.
     size_t curHazardIdx = INVALID;
+    
+    //Mission mob checklist index currently being edited.
+    size_t curMobChecklistIdx = INVALID;
     
     //The current transformation widget.
     TransformationWidget curTransformationWidget;
@@ -1047,6 +1050,7 @@ private:
     void saveReference();
     void selectEdge(Edge* ePtr);
     void selectPathStopsWithLabel(const string& label);
+    void selectRegion(AreaRegion* rPtr);
     void selectSector(Sector* sPtr);
     void selectTreeShadow(TreeShadow* sPtr);
     void selectVertex(Vertex* vPtr);
@@ -1190,6 +1194,7 @@ private:
     void processGuiPanelMissionGoalCt();
     void processGuiPanelMissionGoalGte();
     void processGuiPanelMissionGrading();
+    void processGuiPanelMissionMobChecklists();
     void processGuiPanelMob();
     void processGuiPanelMobs();
     void processGuiPanelPathLink();

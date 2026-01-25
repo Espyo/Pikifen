@@ -3057,17 +3057,16 @@ void AreaEditor::selectAllCmd(float inputValue) {
     } else if(
         subState == EDITOR_SUB_STATE_MISSION_MOBS
     ) {
-        registerChange("mission object requirements change");
+        registerChange("mission mob checklist choice change");
+        game.curAreaData->mission.mobChecklists[
+            curMobChecklistIdx
+        ].mobIdxs.clear();
         for(
             size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++
         ) {
-            MobGen* mPtr = game.curAreaData->mobGenerators[m];
-            if(
-                game.missionGoals[game.curAreaData->mission.goal]->
-                isMobApplicable(mPtr->type)
-            ) {
-                game.curAreaData->mission.goalMobIdxs.insert(m);
-            }
+            game.curAreaData->mission.mobChecklists[
+                curMobChecklistIdx
+            ].mobIdxs.push_back(m);
         }
     }
 }

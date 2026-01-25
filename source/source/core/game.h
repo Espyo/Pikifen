@@ -195,6 +195,9 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
+    //Database of all mission mob checklist types and their names.
+    EnumNameDatabase missionMobChecklistTypeNames;
+    
     //Database of all mission fail conditions.
     vector<MissionFail*> missionFailConds;
     
