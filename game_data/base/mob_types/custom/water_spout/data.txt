@@ -1,0 +1,25 @@
+name = Water spout
+description = A hole that occasionally spits out a spray of water, like a geyser.
+
+can_hurt = player; fragile
+custom_category_name = Obstacle, dangerous
+height = 23
+max_health = 150
+pushable = false
+pushes = false
+radius = 16
+target_type = strong_plain_obstacle
+team = obstacle
+
+sounds {
+    fountain {
+        sound = nature/fountain
+        type = ambiance_pos
+        loop = true
+        volume = 5
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

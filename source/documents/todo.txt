@@ -2,11 +2,16 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    New mission system
+        HUD logic
+        Scoring logic
+        Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Standardize Pikmin climbing sprites
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
@@ -16,6 +21,7 @@ Next tasks (roughly sorted most important first)
             Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
         Freezecake
     Glow Pikmin
+        Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Puffstool and mushroom Pikmin
     Rookie Rescue Officer
@@ -25,10 +31,15 @@ Next tasks (roughly sorted most important first)
     [NEEDS BRAINSTORMING] Re-think how missions work
         Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
         I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
+        If not using a preset, the mission should control all of the things that make the mission end, be they positive (grab all things, reach the exit, etc.), negative (lose all Pikmin, run out of time, etc.), or neutral (quit from the pause menu). Then, it must specify what happens for each one (you get graded with a medal or you get a fail)
+        Replace the clear + medal system with just a medal system, per the above
+    Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
         A mission's data should control how each HUD element displays its information
             Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
         The results menu should show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
+    Add area editor review checks for the new mission system, like having a time limit but no associated event
+    Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
         Maximum Pikmin in field

@@ -1,0 +1,53 @@
+first_state = safe
+death_state = destroyed
+
+script {
+    safe {
+        on_enter {
+            set_timer 3
+            set_animation safe
+        }
+        on_timer {
+            set_state starting
+        }
+    }
+    starting {
+        on_enter {
+            set_animation starting
+        }
+        on_animation_end {
+            set_state shooting
+        }
+    }
+    shooting {
+        on_enter {
+            set_timer 3
+            set_animation shooting
+            start_particles water_spout_droplets 0 0 300
+            play_sound fountain sound_id
+        }
+        on_leave {
+            stop_sound $sound_id
+        }
+        on_timer {
+            set_state stopping
+        }
+    }
+    stopping {
+        on_enter {
+            set_animation stopping
+            stop_particles
+        }
+        on_animation_end {
+            set_state safe
+        }
+    }
+    destroyed {
+        on_enter {
+            set_animation destroyed
+            stop_particles
+            start_particles enemy_defeat 0 0 150
+            start_dying
+        }
+    }
+}

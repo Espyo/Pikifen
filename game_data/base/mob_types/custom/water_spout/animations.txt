@@ -1,0 +1,235 @@
+name=Water spout animations
+description=Animations for the water spout.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.0000
+			}
+		}
+	}
+	safe{
+		frames{
+			safe{
+				duration=0.0000
+			}
+		}
+	}
+	shooting{
+		frames{
+			shooting_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shooting_02{
+				duration=0.1000
+				interpolate=true
+			}
+			shooting_03{
+				duration=0.1000
+				interpolate=true
+			}
+			shooting_04{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	starting{
+		frames{
+			low{
+				duration=0.1000
+				interpolate=true
+			}
+			shooting_04{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	stopping{
+		frames{
+			low{
+				duration=0.1000
+			}
+			safe{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=other_mobs/water_spout
+		file_pos=390.0000 0.0000
+		file_size=36.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	low{
+		file=other_mobs/water_spout
+		file_pos=65.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=20.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+				knockback_type=0
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	safe{
+		file=other_mobs/water_spout
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	shooting_01{
+		file=other_mobs/water_spout
+		file_pos=130.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+				knockback_type=0
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	shooting_02{
+		file=other_mobs/water_spout
+		file_pos=195.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+				knockback_type=0
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+				hazard=water_bubble
+			}
+		}
+	}
+	shooting_03{
+		file=other_mobs/water_spout
+		file_pos=260.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+				knockback_type=0
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+				hazard=water_bubble
+			}
+		}
+	}
+	shooting_04{
+		file=other_mobs/water_spout
+		file_pos=325.0000 0.0000
+		file_size=64.0000 64.0000
+		hitboxes{
+			water{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=24.0000
+				type=1
+				value=0.0000
+				hazard=water_bubble
+				knockback_type=0
+			}
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=0
+				hazard=water_bubble
+			}
+		}
+	}
+}
+body_parts{
+	water
+	hit
+}
