@@ -2,58 +2,69 @@ name=Geyser animations
 description=Animations for the geyser.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	bouncing{
 		frames{
-			spraying_01{
+			mid{
 				duration=0.1000
-			}
-			spraying_02{
-				duration=0.1000
-			}
-			spraying_03{
-				duration=0.1000
-			}
-			spraying_04{
-				duration=0.1000
+				interpolate=true
 			}
 			spraying_01{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_04{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_01{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_02{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_03{
 				duration=0.1000
+				interpolate=true
 			}
 			spraying_04{
 				duration=0.1000
+				interpolate=true
+			}
+			mid{
+				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
 	idling{
 		frames{
 			idling_01{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			idling_02{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
 			}
 			idling_03{
-				duration=0.1000
+				duration=0.1500
+				interpolate=true
+			}
+			idling_04{
+				duration=0.1500
+				interpolate=true
 			}
 		}
 	}
@@ -68,31 +79,43 @@ sprites{
 		file=other_mobs/geyser
 		file_pos=49.0000 0.0000
 		file_size=48.0000 48.0000
+		scale=1.0200 1.0200
 	}
 	idling_03{
 		file=other_mobs/geyser
 		file_pos=98.0000 0.0000
 		file_size=48.0000 48.0000
 	}
-	spraying_01{
+	idling_04{
 		file=other_mobs/geyser
 		file_pos=147.0000 0.0000
+		file_size=48.0000 48.0000
+		scale=0.9800 0.9800
+	}
+	mid{
+		file=other_mobs/geyser
+		file_pos=196.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	spraying_01{
+		file=other_mobs/geyser
+		file_pos=245.0000 0.0000
 		file_size=48.0000 48.0000
 	}
 	spraying_02{
 		file=other_mobs/geyser
-		file_pos=196.0000 0.0000
+		file_pos=294.0000 0.0000
 		file_size=48.0000 48.0000
 		scale=1.0500 1.0500
 	}
 	spraying_03{
 		file=other_mobs/geyser
-		file_pos=245.0000 0.0000
+		file_pos=343.0000 0.0000
 		file_size=48.0000 48.0000
 	}
 	spraying_04{
 		file=other_mobs/geyser
-		file_pos=294.0000 0.0000
+		file_pos=392.0000 0.0000
 		file_size=48.0000 48.0000
 		scale=0.9500 0.9500
 	}

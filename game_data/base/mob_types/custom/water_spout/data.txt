@@ -16,7 +16,7 @@ sounds {
         sound = nature/fountain
         type = ambiance_pos
         loop = true
-        volume = 5
+        volume = 30
     }
 }
 

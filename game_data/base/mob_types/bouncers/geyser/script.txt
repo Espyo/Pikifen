@@ -3,16 +3,9 @@ init {
 }
 
 script {
-    idling {
-        on_enter {
-            set_timer 1
-        }
-        on_timer {
-            play_sound fountain
-        }
-    }
     bouncing {
         on_enter {
+            start_particles geyser_puff
             play_sound steam sound_id
         }
         on_leave {

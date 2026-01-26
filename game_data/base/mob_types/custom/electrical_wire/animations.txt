@@ -154,7 +154,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -164,7 +164,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -174,7 +174,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -184,7 +184,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -194,7 +194,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -220,7 +220,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -230,7 +230,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -240,7 +240,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -250,7 +250,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -260,7 +260,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -286,7 +286,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -296,7 +296,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -306,7 +306,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -316,7 +316,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}
@@ -326,7 +326,7 @@ sprites{
 				radius=22.0000
 				type=1
 				value=20.0000
-				hazard=electricity_fatal
+				hazard=electricity_stunning
 				knockback_type=2
 				knockback=1.0000
 			}

@@ -1,5 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    
+
 
 Current tasks (tasks being worked on, but not yet committed)
     New mission system
@@ -17,15 +17,13 @@ Next tasks (roughly sorted most important first)
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
     --- 1.2.0 ---
-    Ice Pikmin
-        Ice geysers, as well as geysers of each element? Then have the ones that transport leaders be air geysers (though good luck explaining how Pikmin won't take them)
-            Make electrical wires use non-lethal electricity so all elemental obstacles consistently don't kill Pikmin
-        Freezecake
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Puffstool and mushroom Pikmin
     Rookie Rescue Officer
+    Ice geysers
+    Freezecake
     Swarming jingle
 
     --- 1.3.0 ---

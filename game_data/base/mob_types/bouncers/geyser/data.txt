@@ -1,5 +1,5 @@
 name = Geyser
-description = A geyser of hot water that throws leaders elsewhere. Pikmin don't like the sensation, so they don't use it.
+description = A geyser that throws leaders elsewhere. Leaders jump in, clog the airway, and get shot out with the pressure, but Pikmin are too small to do that.
 
 area_editor_recommend_links_from = true
 custom_category_name = Useful
@@ -16,14 +16,8 @@ sounds {
         loop = true
         volume = 35
     }
-    fountain {
-        sound = nature/fountain
-        type = ambiance_pos
-        loop = true
-        volume = 5
-    }
 }
 
 maker = Espyo
-version = 1.0.0
-engine_version = 1.0.0
+version = 1.1.0
+engine_version = 1.2.0
