@@ -101,7 +101,7 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         );
         events.push_back(
         MissionEvent {
-            .type = MISSION_EV_MOB_CLEAR,
+            .type = MISSION_EV_MOB_CHECKLIST,
             .param1 = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
@@ -136,7 +136,7 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         );
         events.push_back(
         MissionEvent {
-            .type = MISSION_EV_MOB_CLEAR,
+            .type = MISSION_EV_MOB_CHECKLIST,
             .param1 = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
@@ -171,7 +171,7 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         );
         events.push_back(
         MissionEvent {
-            .type = MISSION_EV_MOB_CLEAR,
+            .type = MISSION_EV_MOB_CHECKLIST,
             .param1 = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
@@ -205,7 +205,7 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         );
         events.push_back(
         MissionEvent {
-            .type = MISSION_EV_MOB_CLEAR,
+            .type = MISSION_EV_MOB_CHECKLIST,
             .param1 = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
@@ -322,11 +322,12 @@ string MissionActionTypeEndClear::getName() const {
  *
  * @param ev Mission event that triggered this action.
  * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it was able to run.
  */
-void MissionActionTypeEndClear::run(
+bool MissionActionTypeEndClear::run(
     MissionEvent* ev, GameplayState* gameplay
 ) const {
-    gameplay->endMission(true, ev->type == MISSION_EV_TIME_LIMIT, ev);
+    return gameplay->endMission(true, ev->type == MISSION_EV_TIME_LIMIT, ev);
 }
 
 
@@ -360,11 +361,12 @@ string MissionActionTypeEndFail::getName() const {
  *
  * @param ev Mission event that triggered this action.
  * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it was able to run.
  */
-void MissionActionTypeEndFail::run(
+bool MissionActionTypeEndFail::run(
     MissionEvent* ev, GameplayState* gameplay
 ) const {
-    gameplay->endMission(false, ev->type == MISSION_EV_TIME_LIMIT, ev);
+    return gameplay->endMission(false, ev->type == MISSION_EV_TIME_LIMIT, ev);
 }
 
 
@@ -398,11 +400,12 @@ string MissionActionTypeScriptMessage::getName() const {
  *
  * @param ev Mission event that triggered this action.
  * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it was able to run.
  */
-void MissionActionTypeScriptMessage::run(
+bool MissionActionTypeScriptMessage::run(
     MissionEvent* ev, GameplayState* gameplay
 ) const {
-    //TODO
+    return true; //TODO
 }
 
 

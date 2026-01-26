@@ -13,7 +13,8 @@ script {
                 set_var follow_focus false
             else
                 set_var idling_can_teleport false
-                set_timer 1
+                get_random_float temp 1.0 1.5
+                set_timer $temp
             end_if
         }
         on_timer {

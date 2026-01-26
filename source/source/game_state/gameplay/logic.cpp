@@ -998,8 +998,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 if(evTypePtr->isMet(evPtr, &game.curAreaData->mission, this)) {
                     MissionActionType* actionTypePtr =
                         game.missionActionTypes[evPtr->actionType];
-                    actionTypePtr->run(evPtr, this);
-                    missionEventsTriggered[e] = true;
+                    if(actionTypePtr->run(evPtr, this)) {
+                        missionEventsTriggered[e] = true;
+                    }
                 }
             }
             

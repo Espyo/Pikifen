@@ -529,6 +529,7 @@ Procedure for every version release
             Use the helper tool, or edit const.h and the *.rc files
         Add to the todo for the start of the next version:
             Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
+            Remove deprecated things that have been around for too long (search the entire project for the word DEPRECATED)
             If this is a big release:
                 Compile with -Wall and correct all problems
                 Use cppcheck on the code and correct the problems

@@ -2653,6 +2653,10 @@ void PauseMenu::startLeavingGameplay() {
             } else if(ePtr->actionType == MISSION_ACTION_END_FAIL) {
                 missionEndsInClear = false;
                 break;
+            } else {
+                MissionActionType* actionType =
+                    game.missionActionTypes[ePtr->actionType];
+                actionType->run(ePtr, game.states.gameplay);
             }
         }
         game.states.gameplay->missionWasCleared = missionEndsInClear;

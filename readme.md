@@ -93,6 +93,7 @@ Depending on the area you select, you can either explore around freely without a
 * Made almost exclusively using free and open-source software.
 * Organized codebase with very few external dependencies.
 * The source "code" for some of the graphics and songs is also available.
+* All handmade, none of it created by Generative AI.
 
 [Accessible Games Initiative](https://accessiblegames.com/accessibility-tags/) tags:
 

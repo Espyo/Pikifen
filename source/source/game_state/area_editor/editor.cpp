@@ -926,14 +926,25 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         setStatus("You have to select a region to delete!", true);
     } else {
         registerChange("region deletion");
-        for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
-            if(game.curAreaData->regions[r] == selectedRegion) {
-                game.curAreaData->regions.erase(
-                    game.curAreaData->regions.begin() + r
-                );
-                delete selectedRegion;
-                selectedRegion = nullptr;
+        size_t regionIdx = 0;
+        for(; regionIdx < game.curAreaData->regions.size(); regionIdx++) {
+            if(game.curAreaData->regions[regionIdx] == selectedRegion) {
                 break;
+            }
+        }
+        game.curAreaData->regions.erase(
+            game.curAreaData->regions.begin() + regionIdx
+        );
+        delete selectedRegion;
+        selectedRegion = nullptr;
+        for(size_t e = 0; e < game.curAreaData->mission.events.size(); e++) {
+            MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+            if(ePtr->type == MISSION_EV_LEADERS_IN_REGION) {
+                if(ePtr->param2 == regionIdx) {
+                    ePtr->param2 = 0;
+                } else if(ePtr->param2 > regionIdx) {
+                    ePtr->param2--;
+                }
             }
         }
         setStatus("Deleted region.");

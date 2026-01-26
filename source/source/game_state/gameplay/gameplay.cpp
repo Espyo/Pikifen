@@ -469,11 +469,12 @@ void GameplayState::doLogic() {
  * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
  * normal mission end messages.
  * @param ev Mission event responsible for this end, if any.
+ * @return Whether it was able to end the mission.
  */
-void GameplayState::endMission(
+bool GameplayState::endMission(
     bool clear, bool showTimesUpMsg, MissionEvent* ev
 ) {
-    if(interlude.get() != INTERLUDE_NONE) return;
+    if(interlude.get() != INTERLUDE_NONE) return false;
     
     interlude.set(INTERLUDE_MISSION_END, false);
     deltaTMult = 0.5f;
@@ -519,6 +520,8 @@ void GameplayState::endMission(
         );
         player.inventory->close();
     }
+    
+    return true;
 }
 
 

@@ -72,8 +72,8 @@ enum MISSION_EV {
     //Mission was ended from the pause menu.
     MISSION_EV_PAUSE_MENU_END,
     
-    //Specified mobs were cleared out.
-    MISSION_EV_MOB_CLEAR,
+    //Specified mob checklist was cleared.
+    MISSION_EV_MOB_CHECKLIST,
     
     //Time limit was reached.
     MISSION_EV_TIME_LIMIT,
@@ -884,7 +884,7 @@ public:
     virtual ~MissionActionType() = default;
     virtual string getName() const = 0;
     virtual EditorInfo getEditorInfo() const = 0;
-    virtual void run(MissionEvent* ev, GameplayState* gameplay) const = 0;
+    virtual bool run(MissionEvent* ev, GameplayState* gameplay) const = 0;
     
 };
 
@@ -900,7 +900,7 @@ public:
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
-    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
     
 };
 
@@ -916,7 +916,7 @@ public:
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
-    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
     
 };
 
@@ -932,7 +932,7 @@ public:
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
-    void run(MissionEvent* ev, GameplayState* gameplay) const override;
+    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
     
 };
 

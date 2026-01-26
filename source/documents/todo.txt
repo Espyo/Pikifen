@@ -11,6 +11,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    The manual isn't opening on Windows (#89)
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Standardize Pikmin climbing sprites
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
@@ -47,6 +48,7 @@ Next tasks (roughly sorted most important first)
         If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
         If Onions should pop new seeds when an extinction happen or if they should let the extinction happen
     Global script and script variables, which apply to the whole area
+        A way for missions to receive mission events, score updates, etc. through scripting
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all

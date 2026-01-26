@@ -470,7 +470,7 @@ public:
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
-    void endMission(
+    bool endMission(
         bool clear, bool showTimesUpMsg = false, MissionEvent* ev = nullptr
     );
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);

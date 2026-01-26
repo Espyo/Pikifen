@@ -4503,6 +4503,17 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                 curMobChecklistIdx,
                 MissionMobChecklist()
             );
+            for(
+                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
+            ) {
+                MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+                if(ePtr->type == MISSION_EV_MOB_CHECKLIST) {
+                    if(ePtr->param1 == 0) continue;
+                    if(ePtr->param1 > curMobChecklistIdx) {
+                        ePtr->param1++;
+                    }
+                }
+            }
         }
         setTooltip("Add a new mission mob checklist.");
         
@@ -4521,6 +4532,20 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                     game.curAreaData->mission.mobChecklists.begin() +
                     curMobChecklistIdx
                 );
+                
+                for(
+                    size_t e = 0;
+                    e < game.curAreaData->mission.events.size(); e++
+                ) {
+                    MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+                    if(ePtr->type == MISSION_EV_MOB_CHECKLIST) {
+                        if(ePtr->param1 == curMobChecklistIdx + 1) {
+                            ePtr->param1 = 0;
+                        } else if(ePtr->param1 > curMobChecklistIdx + 1) {
+                            ePtr->param1--;
+                        }
+                    }
+                }
             }
             setTooltip("Delete the current mob checklist.");
             
