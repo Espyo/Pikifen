@@ -86,10 +86,10 @@ Depending on the area you select, you can either explore around freely without a
 * Tools to help with debugging custom content.
 * A comprehensive but easy-to-follow manual to help with making content.
 * A pack system, designed to make sharing custom content easy.
-* Customizable control schemes.
+* Highly-customizable control schemes.
 * Filled with quality-of-life features and details, both for gameplay and for content-making.
 * Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 100 MB when extracted.
-* Made almost entirely from scratch, as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
+* Made almost entirely from scratch (with [Allegro](https://github.com/liballeg/allegro5)!), as free and open-source software, for Windows, Linux (Steam Deck too!), and Mac.
 * Made almost exclusively using free and open-source software.
 * Organized codebase with very few external dependencies.
 * The source "code" for some of the graphics and songs is also available.

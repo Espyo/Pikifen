@@ -21,7 +21,6 @@ Next tasks (roughly sorted most important first)
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Puffstool and mushroom Pikmin
-    Rookie Rescue Officer
     Ice geysers
     Freezecake
     Swarming jingle

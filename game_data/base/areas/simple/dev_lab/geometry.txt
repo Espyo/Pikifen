@@ -14261,11 +14261,11 @@ mobs{
 	}
 	leader{
 		type=brittany
-		p=2176.0000 1856.0000
+		p=2784.0000 1312.0000
 	}
 	leader{
 		type=charlie
-		p=-1440.0000 1568.0000
+		p=0.0000 3104.0000
 	}
 	resource{
 		type=carriable_rock
@@ -15006,6 +15006,10 @@ mobs{
 	custom{
 		type=water_spout
 		p=1248.0000 -1888.0000
+	}
+	leader{
+		type=rookie
+		p=-2208.0000 1536.0000
 	}
 }
 path_stops{
