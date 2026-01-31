@@ -303,22 +303,24 @@ public:
     } quickPlay;
     
     //Engine debugging tools.
-    //Set them to true in the Game constructor as needed.
     struct {
     
         //--- Members ---
         
-        //Print each frame's player actions to the terminal.
-        bool printActions = false;
+        //Show each frame's player actions on the in-game console.
+        bool showPlayerActions = false;
+        
+        //Show which area cells are active in the radar.
+        bool showAreaActiveCells = false;
+        
+        //Show all Allegro game controller events on the in-game console.
+        bool showControllerEvents = false;
         
         //Show and operate on a Dear ImGui demo window.
         bool showDearImGuiDemo = false;
         
         //Show visual information about the leader's group.
         bool showGroupInfo = false;
-        
-        //Show which area cells are active in the radar.
-        bool showAreaActiveCells = false;
         
     } debug;
     

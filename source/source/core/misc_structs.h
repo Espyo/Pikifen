@@ -224,11 +224,15 @@ struct Console {
     //--- Function declarations ---
     
     Console();
+    void addToLog(const string& text);
     void clear();
     void draw() const;
     void tick(float deltaT);
     void write(
         const string& text,
+        float totalDuration = 5.0f, float fadeDuration = 3.0f
+    );
+    void writeLog(
         float totalDuration = 5.0f, float fadeDuration = 3.0f
     );
     
@@ -245,6 +249,9 @@ struct Console {
     
     //How long its fade period lasts.
     float fadeDuration = 3.0f;
+
+    //Log buffer, if any.
+    vector<string> log;
     
     //Text it is showing, if any.
     string text;

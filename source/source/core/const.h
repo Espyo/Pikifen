@@ -193,6 +193,9 @@ const string MOB_TYPE_ANIMATION = "animations.txt";
 //System content names file.
 const string SYSTEM_CONTENT_NAMES = "system_content_names.txt";
 
+//Debug config file.
+const string DEBUG_CONFIG = "debug.txt";
+
 //Error log file.
 const string ERROR_LOG = "error_log.txt";
 
@@ -241,6 +244,10 @@ const string AREA_USER_DATA =
 
 //Paths to files from the engine's root folder.
 namespace FILE_PATHS_FROM_ROOT {
+
+//Debug config.
+const string DEBUG_CONFIG =
+    FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::DEBUG_CONFIG;
 
 //Error log.
 const string ERROR_LOG =

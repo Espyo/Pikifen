@@ -96,16 +96,16 @@ string wordWrap(const string& s, size_t nCharsPerLine);
  * @brief Joins a list of strings together into one final string,
  * using a delimiter between them.
  *
- * @tparam ContentT Type of the container of parts.
+ * @tparam ContainerT Type of the container of parts.
  * @param parts Parts to join.
  * @param delimiter The delimiter to place between each part.
  * @return The joined string.
  */
-template<typename ContentT>
-string join(const ContentT& parts, const string& delimiter = " ") {
+template<typename ContainerT>
+string join(const ContainerT& parts, const string& delimiter = " ") {
     string result;
     for(const auto& p : parts) {
-        if(!result.empty()) result += ";";
+        if(!result.empty()) result += delimiter;
         result += p;
     }
     return result;

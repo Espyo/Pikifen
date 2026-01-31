@@ -911,6 +911,32 @@ void initDearImGuiColors() {
 
 
 /**
+ * @brief Initializes the developer debug configuration.
+ */
+void initDebugConfig() {
+    if(!game.options.advanced.engineDev) return;
+    if(!al_filename_exists(FILE_PATHS_FROM_ROOT::DEBUG_CONFIG.c_str())) return;
+    
+    DataNode debugConfigFile(FILE_PATHS_FROM_ROOT::DEBUG_CONFIG);
+    
+    const auto getProp = [&debugConfigFile] (const string& name) {
+        return
+            s2b(
+                debugConfigFile.getChildByName(
+                    name
+                )->getValueOrDefault("false")
+            );
+    };
+    
+    game.debug.showPlayerActions = getProp("show_player_actions");
+    game.debug.showAreaActiveCells = getProp("show_area_active_cells");
+    game.debug.showControllerEvents = getProp("show_controller_events");
+    game.debug.showDearImGuiDemo = getProp("show_dear_imgui_demo");
+    game.debug.showGroupInfo = getProp("show_group_info");
+}
+
+
+/**
  * @brief Initializes the error bitmap.
  */
 void initErrorBitmap() {

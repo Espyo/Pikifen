@@ -285,6 +285,19 @@ Console::Console() {
 
 
 /**
+ * @brief Adds a log entry to the log buffer.
+ * 
+ * @param text Text to add.
+ */
+void Console::addToLog(const string& text) {
+    log.push_back("[" + f2s(game.timePassed) + "] " + text);
+    while(log.size() > 8) {
+        log.erase(log.begin());
+    }
+}
+
+
+/**
  * @brief Clears the contents of the console instantly.
  */
 void Console::clear() {
@@ -344,6 +357,18 @@ void Console::write(
     this->visibilityDuration = totalDuration;
     this->fadeDuration = fadeDuration;
     this->visibilityTimer.start(totalDuration);
+}
+
+
+/**
+ * @brief Prints the contents of the log buffer onto the console
+ * for some seconds.
+ *
+ * @param totalDuration Total amount of time in which the text is present.
+ * @param fadeDuration When closing, fade out in the last N seconds.
+ */
+void Console::writeLog(float totalDuration, float fadeDuration) {
+    this->write(join(log, "\n"), totalDuration, fadeDuration);
 }
 
 

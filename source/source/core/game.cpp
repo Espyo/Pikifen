@@ -258,6 +258,28 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
     }
     
+    //Controller event debugging.
+    if(debug.showControllerEvents) {
+        if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+            console.addToLog(
+                "Controller event: stick " + i2s(ev.joystick.stick) + " "
+                " axis " + i2s(ev.joystick.axis) + " "
+                " pos " + f2s(ev.joystick.pos)
+            );
+            console.writeLog();
+        } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
+            console.addToLog(
+                "Controller event: button down " + i2s(ev.joystick.button)
+            );
+            console.writeLog();
+        } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP) {
+            console.addToLog(
+                "Controller event: button up " + i2s(ev.joystick.button)
+            );
+            console.writeLog();
+        }
+    }
+    
     //Hardware mediator.
     hardware.handleAllegroEvent(ev);
     
@@ -326,22 +348,25 @@ void Game::globalLogicPost() {
  * logic.
  */
 void Game::globalLogicPre() {
-    if(debug.printActions && !controls.actionQueue.empty()) {
-        std::cout << "Actions: ";
+    //Debug printing.
+    if(debug.showPlayerActions && !controls.actionQueue.empty()) {
+        string str = "Actions: ";
         for(size_t a = 0; a < controls.actionQueue.size(); a++) {
             string actionName =
                 controls.getActionTypeById(
                     (PLAYER_ACTION_TYPE) controls.actionQueue[a].actionTypeId
                 ).name;
-            std::cout << resizeString(actionName, 15);
-            std::cout << " ";
-            std::cout << resizeString(f2s(controls.actionQueue[a].value), 3);
-            std::cout << " F" << (unsigned int) controls.actionQueue[a].flags;
+            str += resizeString(actionName, 15);
+            str += " ";
+            str += resizeString(f2s(controls.actionQueue[a].value), 3);
+            str += " F" + i2s(controls.actionQueue[a].flags);
             if(a < controls.actionQueue.size() - 1) {
-                std::cout << " | ";
+                str += " | ";
             }
         }
-        std::cout << std::endl;
+        str += "\n";
+        console.addToLog(str);
+        console.writeLog();
     }
     
     //Player action handling.
@@ -718,6 +743,7 @@ int Game::start() {
     
     //Other fundamental initializations and loadings.
     initMisc();
+    initDebugConfig();
     initErrorBitmap();
     content.reloadPacks();
     content.loadAll(
