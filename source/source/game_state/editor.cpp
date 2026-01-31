@@ -416,7 +416,7 @@ void Editor::getQuickPlayAreaList(
         for(size_t a = 0; a < areas.size(); a++) {
             Area* aPtr = areas[a];
             if(aPtr->manifest->path == selectedAreaPath) {
-                *outSelectedAreaIdx = outAreaNames->size();
+                *outSelectedAreaIdx = (int) outAreaNames->size();
             }
             outAreaNames->push_back(
                 aPtr->name + "##" + aPtr->manifest->internalName
@@ -2194,7 +2194,7 @@ bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
         allHazardInames.push_back(h.first);
         allHazardLabels.push_back(h.second.name + "##" + h.first);
         if(selectedHazardIname == h.first) {
-            selectedHazardIdx = allHazardLabels.size() - 1;
+            selectedHazardIdx = (int) allHazardLabels.size() - 1;
         }
     }
     
@@ -2701,7 +2701,7 @@ void Editor::processGuiNewPackDialog() {
             size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++
         ) {
             if(game.content.packs.manifestsWithBase[p] == internalName) {
-                newContentDialogPackIdx = p;
+                newContentDialogPackIdx = (int) p;
                 break;
             }
         }

@@ -146,7 +146,7 @@ void AnimationEditor::applyChangesToAllMatchingSprites(
     
     setStatus(
         "Changed " + i2s(spritesAffected) + " other " +
-        amountStr(spritesAffected, "sprite", "", true) + "."
+        amountStr((int) spritesAffected, "sprite", "", true) + "."
     );
 }
 
@@ -891,7 +891,8 @@ void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
     
     changesMgr.markAsChanged();
     setStatus(
-        "Arranged " + amountStr(nHitboxesArranged, "hitbox", "hitboxes") + "."
+        "Arranged " +
+        amountStr((int) nHitboxesArranged, "hitbox", "hitboxes") + "."
     );
 }
 

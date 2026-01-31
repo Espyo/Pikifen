@@ -199,7 +199,10 @@ void Interface::flattenItems() {
         if(getItemParent(i.first)) continue;
         list.push_back(i.second);
     }
-    flattenItemsInList(list, limitX1, limitY1, limitX2, limitY2);
+    flattenItemsInList(
+        list,
+        (float) limitX1, (float) limitY1, (float) limitX2, (float) limitY2
+    );
 }
 
 
@@ -254,10 +257,10 @@ void Interface::flattenItemsInList(
         //Now, flatten the children.
         flattenItemsInList(
             getItemChildren(iPtr->id),
-            iPtr->flatX - iPtr->flatW / 2.0f,
-            iPtr->flatY - iPtr->flatH / 2.0f,
-            iPtr->flatX + iPtr->flatW / 2.0f,
-            iPtr->flatY + iPtr->flatH / 2.0f
+            (float) (iPtr->flatX - iPtr->flatW / 2.0f),
+            (float) (iPtr->flatY - iPtr->flatH / 2.0f),
+            (float) (iPtr->flatX + iPtr->flatW / 2.0f),
+            (float) (iPtr->flatY + iPtr->flatH / 2.0f)
         );
     }
 }

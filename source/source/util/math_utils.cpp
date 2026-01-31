@@ -38,7 +38,7 @@ float ease(float n, EASE_METHOD method) {
         return
             n < 0.5f ?
             4.0f * n * n * n :
-            1.0f - pow(-2.0f * n + 2.0f, 3.0f) / 2.0f;
+            1.0f - (float) pow(-2.0f * n + 2.0f, 3.0f) / 2.0f;
             
     } case EASE_METHOD_IN_BACK: {
         const float mag1 = 1.70158f;
@@ -188,7 +188,7 @@ bool passedBy(float oldValue, float newValue, float threshold) {
  */
 float roundToNearestMultipleOf(float n, float multiple) {
     float result = n / multiple;
-    result = round(result);
+    result = (float) round(result);
     result = result * multiple;
     return result;
 }
@@ -302,7 +302,7 @@ int32_t linearCongruentialGenerator(int32_t* state) {
  * @return The noise value, range [0 - 1].
  */
 float simpleNoise(uint32_t seed, float x) {
-    uint32_t x1i = floor(x);
+    uint32_t x1i = (uint32_t) floor(x);
     uint32_t x2i = x1i + 1;
     uint32_t y1i = hashNr2(seed, x1i);
     uint32_t y2i = hashNr2(seed, x2i);

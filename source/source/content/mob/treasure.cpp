@@ -59,5 +59,5 @@ int Treasure::getMissionPoints(bool* applicableInThisMission) const {
             game.curAreaData->missionOld.pointsPerTreasurePoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
-    return treType->points;
+    return (int) treType->points;
 }

@@ -1282,8 +1282,8 @@ void GameplayState::load() {
         vector<Sector*> liquidSectors;
         
         sPtr->getNeighborSectorsConditionally(
-        [] (Sector * s) -> bool {
-            return s->hazard && s->hazard->associatedLiquid;
+        [] (Sector * s2) -> bool {
+            return s2->hazard && s2->hazard->associatedLiquid;
         },
         liquidSectors
         );

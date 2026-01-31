@@ -28,7 +28,7 @@ using std::vector;
 struct Hazard;
 class InWorldFraction;
 class Mob;
-class Sector;
+struct Sector;
 class StatusType;
 
 
@@ -95,11 +95,11 @@ struct Liquid {
     
     //Data about the in-world chill fraction numbers, if any.
     InWorldFraction* chillFraction = nullptr;
-
+    
     //Last known position of the first mob that caused chilling.
     //If FLT_MAX, none is set.
     Point lastFirstChillingMobPos = Point(FLT_MAX);
-
+    
     //Last known cursor position on top of the liquid. If FLT_MAX, none is set.
     Point lastCursorPos = Point(FLT_MAX);
     

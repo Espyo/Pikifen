@@ -223,7 +223,7 @@ string replaceAll(string s, const string& search, const string& replacement) {
  * @return The final string.
  */
 string resizeString(
-    const string& s, float intendedSize, bool canShrink, bool canGrow,
+    const string& s, size_t intendedSize, bool canShrink, bool canGrow,
     bool changeLeft, unsigned char filler, const string& between
 ) {
     size_t coreSize = s.size() + between.size();

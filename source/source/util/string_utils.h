@@ -55,7 +55,7 @@ string replaceAll(
     string s, const string& search, const string& replacement
 );
 string resizeString(
-    const string& s, float intendedSize,
+    const string& s, size_t intendedSize,
     bool canShrink = true, bool canGrow = true, bool changeLeft = false,
     unsigned char filler = ' ', const string& between = ""
 );

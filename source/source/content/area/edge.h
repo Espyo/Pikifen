@@ -59,7 +59,7 @@ struct Edge {
     
     explicit Edge(size_t v1Idx = INVALID, size_t v2Idx = INVALID);
     void clone(Edge* destination) const;
-    Sector* getOtherSector(const Sector* vPtr) const;
+    Sector* getOtherSector(const Sector* sPtr) const;
     Vertex* getOtherVertex(const Vertex* vPtr) const;
     size_t getSideWithSector(const Sector* sPtr) const;
     Vertex* hasNeighbor(const Edge* other) const;

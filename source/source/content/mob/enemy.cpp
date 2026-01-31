@@ -161,7 +161,7 @@ int Enemy::getMissionPoints(bool* applicableInThisMission) const {
             game.curAreaData->missionOld.pointsPerEnemyPoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
-    return eneType->points;
+    return (int) eneType->points;
 }
 
 

@@ -964,6 +964,7 @@ float expSmoothingAngle(
     float smoothingFactor, float deltaT
 ) {
     float angleDiff =
+        (float)
         fmod(targetAngle - currentAngle + TAU + TAU / 2.0f, TAU) - TAU / 2.0f;
     return
         currentAngle +

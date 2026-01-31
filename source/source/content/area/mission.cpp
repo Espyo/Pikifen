@@ -447,7 +447,7 @@ MissionEvType::HudInfo MissionEvTypeLoseLeaders::getHudInfo(
         .description =
         "Lose " + i2s(ev->param1) + " or more leaders.",
         .reason =
-        "Lost " + amountStr(gameplay->leadersKod, "leader") + "!",
+        "Lost " + amountStr((int) gameplay->leadersKod, "leader") + "!",
     };
 }
 

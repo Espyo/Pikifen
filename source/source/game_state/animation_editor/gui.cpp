@@ -2165,7 +2165,7 @@ void AnimationEditor::processGuiPanelSprite() {
                     ImGui::PopFont();
                     setTooltip(
                         "The sprite is used in this animation " +
-                        amountStr(e.second.size(), "time") + ".\n"
+                        amountStr((int) e.second.size(), "time") + ".\n"
                         "Click to go to this animation."
                     );
                     
