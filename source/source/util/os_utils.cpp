@@ -14,7 +14,8 @@
 #include <time.h>
 
 #ifdef _WIN32
-#include <shellapi.h> //For ShellExecuteW().
+#include <windows.h>
+#include <shellapi.h> //For ShellExecuteA().
 #endif
 
 #include "os_utils.h"
@@ -65,21 +66,21 @@ string getCurrentTime(bool fileNameFriendly) {
 bool openFileExplorer(const string& path) {
 #ifdef _WIN32
     return
-        ShellExecuteW(
-            NULL, L"open", path.c_str(), NULL, NULL, SW_SHOWDEFAULT
+        ShellExecuteA(
+            NULL, "open", path.c_str(), NULL, NULL, SW_SHOWDEFAULT
         ) > 32;
-
+        
 #elif __APPLE__
     string command = "open \"" + path + "\"";
     return std::system(command.c_str()) == 0;
-
+        
 #elif __linux__
     string command = "xdg-open \"" + path + "\"";
     return std::system(command.c_str()) == 0;
-
+        
 #else
     return false;
-
+        
 #endif
 }
 
@@ -93,21 +94,21 @@ bool openFileExplorer(const string& path) {
 bool openWebBrowser(const string& url) {
 #ifdef _WIN32
     return
-        ShellExecuteW(
-            NULL, L"open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
+        ShellExecuteA(
+            NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
         ) > 32;
-
+        
 #elif __APPLE__
     string command = "open \"" + url + "\"";
     return std::system(command.c_str()) == 0;
-
+        
 #elif __linux__
     string command = "xdg-open \"" + url + "\"";
     return std::system(command.c_str()) == 0;
-
+        
 #else
     return false;
-
+        
 #endif
 }
 
