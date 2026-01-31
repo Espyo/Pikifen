@@ -21,6 +21,6 @@ string getCurrentTime(bool fileNameFriendly);
 bool openFileExplorer(const std::string& path);
 bool openWebBrowser(const std::string& url);
 
-#if defined(_WIN32)
+#ifdef _WIN32
 string strsignal(int signum);
-#endif //#if defined(_WIN32)
+#endif

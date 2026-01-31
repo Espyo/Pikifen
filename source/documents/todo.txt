@@ -2,19 +2,23 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
+    Use adjustMisalignedIndexes in more places
     New mission system
         HUD logic
         Scoring logic
+        Logic to port old missions to the new format
         Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The manual isn't opening on Windows (#89)
+    Pathing in Olympian Ruins needs work
+    Controller recognition on Windows is pretty janky
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Standardize Pikmin climbing sprites
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
+    Move <direction> player actions have auto-repeat on for some reason
 
     --- 1.2.0 ---
     Glow Pikmin
@@ -479,6 +483,7 @@ Misc things (so I don't forget)
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animate the mission results screen. Basically, reveal one thing at a time
             Add sounds for an item's run-up ticking, an item's run-up finishing, a ka-ching for getting a medal, and a puff for the complete/failed stamp
+            Add particles to the medal
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
@@ -497,6 +502,7 @@ Misc things (so I don't forget)
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
             If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
         There should be some way to represent what item is bound to what shortcut within the inventory menu
+        Particles for every time the player activates a GUI item, and/or whenever they click? Same for editors
     New options
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     Mechanics
