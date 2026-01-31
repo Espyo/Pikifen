@@ -66,7 +66,7 @@ string getCurrentTime(bool fileNameFriendly) {
 bool openFileExplorer(const string& path) {
 #ifdef _WIN32
     return
-        ShellExecuteA(
+        (INT_PTR) ShellExecuteA(
             NULL, "open", path.c_str(), NULL, NULL, SW_SHOWDEFAULT
         ) > 32;
         
@@ -94,7 +94,7 @@ bool openFileExplorer(const string& path) {
 bool openWebBrowser(const string& url) {
 #ifdef _WIN32
     return
-        ShellExecuteA(
+        (INT_PTR) ShellExecuteA(
             NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
         ) > 32;
         
