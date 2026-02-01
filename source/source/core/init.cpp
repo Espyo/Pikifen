@@ -91,6 +91,9 @@ void destroyMisc() {
     game.sectorTypes.clear();
     game.missionRulesetNames.clear();
     game.missionMobChecklistTypeNames.clear();
+    game.missionHudItemIdNames.clear();
+    game.missionHudItemContentTypeNames.clear();
+    game.missionHudItemAmountTypeNames.clear();
     for(size_t e = 0; e < game.missionEvTypes.size(); e++) {
         delete game.missionEvTypes[e];
     }
@@ -1161,6 +1164,63 @@ void initMiscDatabases() {
     );
     game.missionMobChecklistTypeNames.registerItem(
         MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin"
+    );
+    
+    //Mission HUD item ID names.
+    game.missionHudItemIdNames.registerItem(
+        MISSION_HUD_ITEM_ID_GOAL_MAIN, "Goal, main"
+    );
+    game.missionHudItemIdNames.registerItem(
+        MISSION_HUD_ITEM_ID_GOAL_SEC, "Goal, secondary"
+    );
+    game.missionHudItemIdNames.registerItem(
+        MISSION_HUD_ITEM_ID_FAIL_MAIN, "Failure, main"
+    );
+    game.missionHudItemIdNames.registerItem(
+        MISSION_HUD_ITEM_ID_FAIL_SEC, "Failure, secondary"
+    );
+    
+    //Mission HUD item content type names.
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_TEXT, "Custom text"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_CLOCK, "Clock"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_SCORE, "Score"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_CUR_TOT, "Current amount / total"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_REM_TOT, "Remaining amount / total"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_CUR_AMT, "Current amount"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_REM_AMT, "Remaining amount"
+    );
+    game.missionHudItemContentTypeNames.registerItem(
+        MISSION_HUD_ITEM_CONTENT_TOT_AMT, "Total amount"
+    );
+    
+    //Mission HUD item amount type names.
+    game.missionHudItemAmountTypeNames.registerItem(
+        MISSION_HUD_ITEM_AMT_MOB_CHECKLIST, "Mob checklist"
+    );
+    game.missionHudItemAmountTypeNames.registerItem(
+        MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION, "Leaders in region"
+    );
+    game.missionHudItemAmountTypeNames.registerItem(
+        MISSION_HUD_ITEM_AMT_PIKMIN, "Pikmin count"
+    );
+    game.missionHudItemAmountTypeNames.registerItem(
+        MISSION_HUD_ITEM_AMT_LEADERS, "Leader count"
+    );
+    game.missionHudItemAmountTypeNames.registerItem(
+        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS, "Pikmin deaths"
     );
     
     //Mission events.

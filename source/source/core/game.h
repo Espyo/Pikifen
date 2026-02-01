@@ -201,6 +201,15 @@ public:
     //Database of all mission mob checklist types and their names.
     EnumNameDatabase missionMobChecklistTypeNames;
     
+    //Database of all mission HUD items and their names.
+    EnumNameDatabase missionHudItemIdNames;
+    
+    //Database of all mission HUD item content types and their names.
+    EnumNameDatabase missionHudItemContentTypeNames;
+    
+    //Database of all mission HUD item amount types and their names.
+    EnumNameDatabase missionHudItemAmountTypeNames;
+    
     //Database of all mission event types.
     vector<MissionEvType*> missionEvTypes;
     

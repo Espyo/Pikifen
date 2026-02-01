@@ -736,7 +736,7 @@ public:
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     bool hideItems();
-    bool readDataFile(DataNode* node);
+    bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
     bool registerCoords(
         const string& id,
         float cx, float cy, float w, float h
@@ -822,7 +822,7 @@ protected:
     
     
     //--- Function declarations ---
-    void createCustomItems();
+    void createCustomItems(GuiItem* customChildrenParent = nullptr);
     void handleSpatialNavigationAction(const Inpution::Action& action);
     
 };

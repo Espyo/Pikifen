@@ -1,0 +1,23 @@
+name=Gameplay, mission text
+description=GUI for the simple mission text HUD items.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+hardcoded_items{
+	mission_text_text{
+		center=50.0000 50.0000
+		size=92.0000 56.0000
+		description=The text.
+	}
+}
+custom_items{
+	mission_text_bubble{
+		center=50.0000 50.0000
+		size=100.0000 100.0000
+		description=Bubble background.
+		type=9_slice
+		color=255 255 255 200
+		draw_before_hardcoded=true
+		bitmap=gui/bubble_box
+	}
+}

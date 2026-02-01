@@ -3132,6 +3132,7 @@ void AreaEditor::processGuiPanelMission() {
     if(game.curAreaData->mission.ruleset == MISSION_RULESET_CUSTOM) {
         processGuiPanelMissionEv();
         processGuiPanelMissionMobChecklists();
+        processGuiPanelMissionHudItems();
     }
     
     if(dayDurationNeedsUpdate) {
@@ -4453,6 +4454,298 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "The format must be YYYY/MM/DD."
         );
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui HUD items part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionHudItems() {
+    //Mission HUD items node.
+    if(saveableTreeNode("gameplay", "Mission HUD items")) {
+    
+        static size_t curHudItemIdx = 0;
+        
+        //Item count text.
+        ImGui::Text(
+            "Item: %s",
+            game.missionHudItemIdNames.getName(curHudItemIdx).c_str()
+        );
+        
+        //Previous item button.
+        if(
+            ImGui::ImageButton(
+                "prevItemButton", editorIcons[EDITOR_ICON_PREVIOUS],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            curHudItemIdx =
+                sumAndWrap(
+                    curHudItemIdx, -1,
+                    game.missionHudItemIdNames.getNrOfItems()
+                );
+        }
+        setTooltip("Change to the previous HUD item.");
+        
+        //Next item button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "nextItemButton", editorIcons[EDITOR_ICON_NEXT],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            curHudItemIdx =
+                sumAndWrap(
+                    curHudItemIdx, +1,
+                    game.missionHudItemIdNames.getNrOfItems()
+                );
+        }
+        setTooltip("Change to the next HUD item.");
+        
+        MissionHudItem* itemPtr =
+            &game.curAreaData->mission.hudItems[curHudItemIdx];
+            
+        //Enabled checkbox.
+        bool enabled = itemPtr->enabled;
+        ImGui::Spacer();
+        if(
+            ImGui::Checkbox("Enabled", &enabled)
+        ) {
+            registerChange("mission HUD item toggle");
+            itemPtr->enabled = enabled;
+        }
+        setTooltip(
+            "Whether this HUD item is enabled and visible in this mission."
+        );
+        
+        if(itemPtr->enabled) {
+        
+            //Content type combobox.
+            int contentType = itemPtr->contentType;
+            if(
+                ImGui::Combo(
+                    "Content type", &contentType,
+                    game.missionHudItemContentTypeNames.getNames(), 15
+                )
+            ) {
+                registerChange("mission HUD item content type change");
+                itemPtr->contentType = (MISSION_HUD_ITEM_CONTENT) contentType;
+            }
+            setTooltip(
+                "What sort of content will be shown inside."
+            );
+            
+            switch(itemPtr->contentType) {
+            case MISSION_HUD_ITEM_CONTENT_TEXT: {
+        
+                //Text input.
+                string text = itemPtr->text;
+                if(ImGui::InputText("Text", &text)) {
+                    registerChange("mission HUD item text change");
+                    itemPtr->text = text;
+                }
+                setTooltip(
+                    "The HUD item won't have anything other than this text."
+                );
+                
+                break;
+                
+            } case MISSION_HUD_ITEM_CONTENT_CLOCK: {
+        
+                break;
+                
+            } case MISSION_HUD_ITEM_CONTENT_SCORE: {
+        
+                break;
+                
+            } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
+            case MISSION_HUD_ITEM_CONTENT_REM_TOT:
+            case MISSION_HUD_ITEM_CONTENT_CUR_AMT:
+            case MISSION_HUD_ITEM_CONTENT_REM_AMT:
+            case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
+        
+                const auto processIdxsListWidgets =
+                    [this] (
+                        vector<size_t>* idxs,
+                        const string& label, const string& descriptor
+                ) {
+                
+                    if(idxs->empty()) idxs->push_back(0);
+                    
+                    for(size_t i = 0; i < idxs->size(); i++) {
+                    
+                        //Add button.
+                        if(
+                            ImGui::ImageButton(
+                                "addIdxButton",
+                                editorIcons[EDITOR_ICON_ADD],
+                                Point(EDITOR::ICON_BMP_SIZE)
+                            )
+                        ) {
+                            registerChange(
+                                "mission HUD item " + descriptor +
+                                " addition"
+                            );
+                            idxs->insert(idxs->begin() + i, 0);
+                        }
+                        
+                        //Remove button.
+                        ImGui::SameLine();
+                        if(idxs->size() != 1) {
+                        
+                            if(
+                                ImGui::ImageButton(
+                                    "remIdxButton",
+                                    editorIcons[EDITOR_ICON_REMOVE],
+                                    Point(EDITOR::ICON_BMP_SIZE)
+                                )
+                            ) {
+                                registerChange(
+                                    "mission HUD item " + descriptor +
+                                    " removal"
+                                );
+                                idxs->erase(idxs->begin() + i);
+                            }
+                            
+                        } else {
+                        
+                            ImGui::Dummy(
+                                ImVec2(
+                                    EDITOR::ICON_BMP_SIZE,
+                                    EDITOR::ICON_BMP_SIZE
+                                )
+                            );
+                            
+                        }
+                        
+                        //Number input.
+                        int idx = idxs->operator[](i);
+                        ImGui::SameLine();
+                        ImGui::SetNextItemWidth(50);
+                        if(
+                            ImGui::DragInt(
+                                (label + "##idx" + i2s(i)).c_str(),
+                                &idx, 0.1f, 1, INT_MAX
+                            )
+                        ) {
+                            registerChange(
+                                "mission HUD item " + descriptor + " change"
+                            );
+                            idxs->operator[](i) = (size_t) idx;
+                        }
+                        setTooltip(
+                            "Number of the " + descriptor + " to get the\n"
+                            "amounts from. If you specify multiple ones,\n"
+                            "it combines all of them."
+                        );
+                        
+                    }
+                    
+                };
+                
+                //Label input.
+                string text = itemPtr->text;
+                if(ImGui::InputText("Label", &text)) {
+                    registerChange("mission HUD item text change");
+                    itemPtr->text = text;
+                }
+                setTooltip(
+                    "Text to accompany the amounts, if any."
+                );
+                
+                //Amount type combobox.
+                int amountType = itemPtr->amountType;
+                if(
+                    ImGui::Combo(
+                        "Amount type", &amountType,
+                        game.missionHudItemAmountTypeNames.getNames(), 15
+                    )
+                ) {
+                    registerChange("mission HUD item amount type change");
+                    itemPtr->amountType = (MISSION_HUD_ITEM_AMT) amountType;
+                }
+                setTooltip(
+                    "What type of information the amount "
+                    "should be calculated from."
+                );
+                
+                if(
+                    itemPtr->amountType ==
+                    MISSION_HUD_ITEM_AMT_MOB_CHECKLIST
+                ) {
+                
+                    //Mob checklist number widgets.
+                    processIdxsListWidgets(
+                        &itemPtr->idxsList,
+                        "Mob checklist number", "mob checklist"
+                    );
+                    
+                    break;
+                    
+                }
+                
+                if(
+                    itemPtr->amountType ==
+                    MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION
+                ) {
+                
+                    //Region number widgets.
+                    processIdxsListWidgets(
+                        &itemPtr->idxsList,
+                        "Region number", "region"
+                    );
+                    
+                    break;
+                    
+                }
+                
+                if(
+                    itemPtr->contentType !=
+                    MISSION_HUD_ITEM_CONTENT_CUR_AMT &&
+                    (
+                        itemPtr->amountType ==
+                        MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION ||
+                        itemPtr->amountType ==
+                        MISSION_HUD_ITEM_AMT_PIKMIN ||
+                        itemPtr->amountType ==
+                        MISSION_HUD_ITEM_AMT_LEADERS ||
+                        itemPtr->amountType ==
+                        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS
+                    )
+                ) {
+                
+                    //Total amount value.
+                    int total = itemPtr->totalAmount;
+                    if(
+                        ImGui::DragInt(
+                            "Total", &total, 0.1f, 1, INT_MAX
+                        )
+                    ) {
+                        registerChange("mission HUD item amount change");
+                        itemPtr->totalAmount = total;
+                    }
+                    setTooltip(
+                        "Amount to use as the total."
+                    );
+                    
+                    break;
+                    
+                }
+                
+                break;
+                
+            }
+            }
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::Spacer();
 }
 
 

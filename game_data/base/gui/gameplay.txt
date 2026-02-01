@@ -144,6 +144,26 @@ hardcoded_items{
 		size=0.0000 0.0000
 		description=See "counters_slash_1".
 	}
+	mission_goal_main{
+		center=18.0000 8.0000
+		size=32.0000 12.0000
+		description=Space for the HUD items that hold mission information, mostly about primary goal things.
+	}
+	mission_goal_sec{
+		center=18.0000 20.0000
+		size=32.0000 10.0000
+		description=Space for the HUD items that hold mission information, mostly about secondary goal things.
+	}
+	mission_fail_main{
+		center=82.0000 8.0000
+		size=32.0000 12.0000
+		description=Space for the HUD items that hold mission information, mostly about primary failure things.
+	}
+	mission_fail_sec{
+		center=82.0000 20.0000
+		size=32.0000 10.0000
+		description=Space for the HUD items that hold mission information, mostly about secondary failure things.
+	}
 	mission_goal_bubble{
 		center=18.0000 8.0000
 		size=32.0000 12.0000

@@ -1200,6 +1200,7 @@ private:
     void processGuiPanelMissionGoalCt();
     void processGuiPanelMissionGoalGte();
     void processGuiPanelMissionGrading();
+    void processGuiPanelMissionHudItems();
     void processGuiPanelMissionMobChecklists();
     void processGuiPanelMob();
     void processGuiPanelMobs();

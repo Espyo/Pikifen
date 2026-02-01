@@ -141,6 +141,75 @@ enum MISSION_MOB_CHECKLIST {
 };
 
 
+//Mission HUD item IDs and their typical purposes.
+enum MISSION_HUD_ITEM_ID {
+
+    //Primary item for something related to the goal.
+    MISSION_HUD_ITEM_ID_GOAL_MAIN,
+    
+    //Secondary item for something related to the goal.
+    MISSION_HUD_ITEM_ID_GOAL_SEC,
+    
+    //Primary item for something related to failing the mission.
+    MISSION_HUD_ITEM_ID_FAIL_MAIN,
+    
+    //Secondary item for something related to failing the mission.
+    MISSION_HUD_ITEM_ID_FAIL_SEC,
+    
+};
+
+
+//Possible types of content to show in a mission HUD item.
+enum MISSION_HUD_ITEM_CONTENT {
+
+    //Custom text.
+    MISSION_HUD_ITEM_CONTENT_TEXT,
+    
+    //The time limit in a clock.
+    MISSION_HUD_ITEM_CONTENT_CLOCK,
+    
+    //Current score.
+    MISSION_HUD_ITEM_CONTENT_SCORE,
+    
+    //Current amount of something, out of a total.
+    MISSION_HUD_ITEM_CONTENT_CUR_TOT,
+    
+    //Remaining amount of something, out of a total.
+    MISSION_HUD_ITEM_CONTENT_REM_TOT,
+    
+    //Current amount of something.
+    MISSION_HUD_ITEM_CONTENT_CUR_AMT,
+    
+    //Remaining amount of something.
+    MISSION_HUD_ITEM_CONTENT_REM_AMT,
+    
+    //Total amount of something.
+    MISSION_HUD_ITEM_CONTENT_TOT_AMT,
+    
+};
+
+
+//Types of things a mission HUD item can show amounts of.
+enum MISSION_HUD_ITEM_AMT {
+
+    //Amounts in one or more mob checklist.
+    MISSION_HUD_ITEM_AMT_MOB_CHECKLIST,
+    
+    //Amount of leaders inside one or more regions.
+    MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION,
+    
+    //Total amount of Pikmin.
+    MISSION_HUD_ITEM_AMT_PIKMIN,
+    
+    //Total amount of leaders.
+    MISSION_HUD_ITEM_AMT_LEADERS,
+    
+    //Amount of Pikmin deaths so far.
+    MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS,
+    
+};
+
+
 //Possible types of mission medal.
 enum MISSION_MEDAL {
 
@@ -262,6 +331,34 @@ enum MISSION_FAIL_COND {
 
 
 /**
+ * @brief Represents an event in the mission.
+ */
+struct MissionEvent {
+
+    //--- Members ---
+    
+    //Type of event.
+    MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
+    
+    //First parameter, if applicable.
+    size_t param1 = 1;
+    
+    //Second parameter, if applicable.
+    size_t param2 = 1;
+    
+    //Action to take when the event happens.
+    MISSION_ACTION actionType = MISSION_ACTION_END_CLEAR;
+    
+    //Action script message to send, if applicable.
+    string actionMessage;
+    
+    //Whether the time remaining becomes 0 for scoring purposes, if applicable.
+    bool zeroTimeForScore = false;
+    
+};
+
+
+/**
  * @brief A checklist of mobs that is relevant to a mission.
  */
 struct MissionMobChecklist {
@@ -290,26 +387,85 @@ struct MissionMobChecklist {
 
 
 /**
- * @brief Represents an event in the mission.
+ * @brief Represents the sort of stuff that should be in a mission HUD item.
  */
-struct MissionEvent {
+struct MissionHudItem {
 
     //--- Members ---
     
-    //Type of event.
-    MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
+    //Whether it is enabled and visible.
+    bool enabled = false;
     
-    //First parameter, if applicable.
-    size_t param1 = 1;
+    //Type of content to show.
+    MISSION_HUD_ITEM_CONTENT contentType = MISSION_HUD_ITEM_CONTENT_TEXT;
     
-    //Second parameter, if applicable.
-    size_t param2 = 1;
+    //Text to show, if applicable.
+    string text;
     
-    //Action to take when the event happens.
-    MISSION_ACTION actionType = MISSION_ACTION_END_CLEAR;
+    //Amount type, if applicable.
+    MISSION_HUD_ITEM_AMT amountType = MISSION_HUD_ITEM_AMT_PIKMIN;
     
-    //Action script message to send, if applicable.
-    string actionMessage;
+    //Fixed number for the total amount, if applicable.
+    size_t totalAmount = 0;
+    
+    //List of mob checklists or regions to account for, if applicable.
+    vector<size_t> idxsList;
+    
+};
+
+
+/**
+ * @brief Info about a given area's mission.
+ */
+struct MissionData {
+
+    //--- Members ---
+    
+    //Ruleset. Only really used for the editor's GUI.
+    MISSION_RULESET ruleset = MISSION_RULESET_CUSTOM;
+    
+    //Mission events.
+    vector<MissionEvent> events;
+    
+    //Mob checklists.
+    vector<MissionMobChecklist> mobChecklists;
+    
+    //Mission grading mode.
+    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
+    
+    //Time limit in seconds, if any.
+    size_t timeLimit = MISSION::DEF_TIME_LIMIT;
+    
+    //HUD items.
+    vector<MissionHudItem> hudItems;
+        
+    //Starting number of points.
+    int startingPoints = 0;
+    
+    //Bronze medal point requirement.
+    int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
+    
+    //Silver medal point requirement.
+    int silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
+    
+    //Gold medal point requirement.
+    int goldReq = MISSION::DEF_MEDAL_REQ_GOLD;
+    
+    //Platinum medal point requirement.
+    int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
+    
+    //The maker's record.
+    int makerRecord = 0;
+    
+    //The date of the maker's record, or empty for no record.
+    string makerRecordDate = "";
+    
+    
+    //--- Function declarations ---
+    
+    void applyPreset(MISSION_PRESET newPreset);
+    MISSION_MEDAL getScoreMedal(int score);
+    void reset();
     
 };
 
@@ -422,86 +578,6 @@ struct MissionDataOld {
     //--- Function declarations ---
     
     MISSION_MEDAL getScoreMedal(int score);
-    
-};
-
-
-/**
- * @brief Info about a given area's mission.
- */
-struct MissionData {
-
-    //--- Members ---
-    
-    //Ruleset. Only really used for the editor's GUI.
-    MISSION_RULESET ruleset = MISSION_RULESET_CUSTOM;
-    
-    //Mission events.
-    vector<MissionEvent> events;
-    
-    //Mob checklists.
-    vector<MissionMobChecklist> mobChecklists;
-    
-    //Mission grading mode.
-    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
-    
-    //Time limit in seconds, if any.
-    size_t timeLimit = MISSION::DEF_TIME_LIMIT;
-    
-    //Mission point multiplier for each Pikmin born.
-    int pointsPerPikminBorn = 0;
-    
-    //Mission point multiplier for each Pikmin lost.
-    int pointsPerPikminDeath = 0;
-    
-    //Mission point multiplier for each second left (only if time limit is on).
-    int pointsPerSecLeft = 0;
-    
-    //Mission point multiplier for each second passed.
-    int pointsPerSecPassed = 0;
-    
-    //Mission point multiplier for each treasure point obtained.
-    int pointsPerTreasurePoint = 0;
-    
-    //Mission point multiplier for each enemy point obtained.
-    int pointsPerEnemyPoint = 0;
-    
-    //If true, award points on enemy collection rather than on defeat.
-    bool enemyPointsOnCollection = false;
-    
-    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    Bitmask8 pointLossData = 0;
-    
-    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    Bitmask8 pointHudData = 255;
-    
-    //Starting number of points.
-    int startingPoints = 0;
-    
-    //Bronze medal point requirement.
-    int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
-    
-    //Silver medal point requirement.
-    int silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
-    
-    //Gold medal point requirement.
-    int goldReq = MISSION::DEF_MEDAL_REQ_GOLD;
-    
-    //Platinum medal point requirement.
-    int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
-    
-    //The maker's record.
-    int makerRecord = 0;
-    
-    //The date of the maker's record, or empty for no record.
-    string makerRecordDate = "";
-    
-    
-    //--- Function declarations ---
-    
-    void applyRuleset(MISSION_RULESET ruleset);
-    MISSION_MEDAL getScoreMedal(int score);
-    void resetRuleset();
     
 };
 

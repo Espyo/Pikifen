@@ -53,6 +53,18 @@ const float MEDAL_ICON_SCALE_NEXT = 1.5f;
 //Multiply time by this much to get the right scale animation speed.
 const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
 
+//Name of the GUI definition file for the mission amount (one amount) items.
+const string MISSION_AMT_ONE_GUI_FILE_NAME = "gameplay_mission_amount_one";
+
+//Name of the GUI definition file for the mission amount (two amounts) items.
+const string MISSION_AMT_TWO_GUI_FILE_NAME = "gameplay_mission_amount_two";
+
+//Name of the GUI definition file for the mission score items.
+const string MISSION_SCORE_GUI_FILE_NAME = "gameplay_mission_score";
+
+//Name of the GUI definition file for the mission custom text items.
+const string MISSION_TEXT_GUI_FILE_NAME = "gameplay_mission_text";
+
 //Smoothen the mission score indicator's movement by this factor.
 const float SCORE_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 
@@ -730,6 +742,30 @@ Hud::Hud() :
     
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
     
+        //Mission "goal, main" item.
+        GuiItem* missionGoalMainItem = new GuiItem();
+        gui.addItem(missionGoalMainItem, "mission_goal_main");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL_MAIN, missionGoalMainItem);
+        
+        
+        //Mission "goal, secondary" item.
+        GuiItem* missionGoalSecItem = new GuiItem();
+        gui.addItem(missionGoalSecItem, "mission_goal_sec");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL_SEC, missionGoalSecItem);
+        
+        
+        //Mission "fail, main" item.
+        GuiItem* missionFailMainItem = new GuiItem();
+        gui.addItem(missionFailMainItem, "mission_fail_main");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_FAIL_MAIN, missionFailMainItem);
+        
+        
+        //Mission "fail, secondary" item.
+        GuiItem* missionFailSecItem = new GuiItem();
+        gui.addItem(missionFailSecItem, "mission_fail_sec");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_FAIL_SEC, missionFailSecItem);
+        
+        
         //Mission goal bubble.
         GuiItem* missionGoalBubble = new GuiItem();
         missionGoalBubble->onDraw =
@@ -1553,6 +1589,550 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     }
     
     drawBitmapInBox(bmpBubble, draw.center, draw.size, true, 0.0f, color);
+}
+
+
+/**
+ * @brief Sets up a mission HUD item.
+ *
+ * @param which Which of the items to set up.
+ * @param item The item being set up.
+ */
+void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
+    MissionHudItem* itemInfo = &game.curAreaData->mission.hudItems[which];
+    if(!itemInfo->enabled) return;
+    
+    switch(itemInfo->contentType) {
+    case MISSION_HUD_ITEM_CONTENT_TEXT: {
+        //Text.
+        
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_TEXT_GUI_FILE_NAME];
+        gui.registerCoords("asdasdasdasds",    36,  6, 68,  8); //TODO
+        gui.readDataFile(guiFile, item);
+        
+        //The text.
+        GuiItem* text = new GuiItem();
+        text->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            drawText(
+                itemInfo->text, game.sysContent.fntStandard,
+                draw.center, draw.size,
+                tintColor(mapAlpha(128), draw.tint)
+            );
+        };
+        item->addChild(text);
+        gui.addItem(text, "mission_text_text");
+        
+        break;
+        
+    } case MISSION_HUD_ITEM_CONTENT_CLOCK: {
+        //Clock.
+        
+        //TODO
+        break;
+        
+    } case MISSION_HUD_ITEM_CONTENT_SCORE: {
+        //Score.
+        
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_SCORE_GUI_FILE_NAME];
+        gui.registerCoords("asdasdasdasds",    36,  6, 68,  8); //TODO
+        gui.readDataFile(guiFile, item);
+        
+        //"Score" label.
+        GuiItem* scoreLabel = new GuiItem();
+        scoreLabel->onDraw =
+        [this] (const DrawInfo & draw) {
+            drawText(
+                "Score:", game.sysContent.fntStandard,
+                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
+                draw.size,
+                tintColor(mapAlpha(128), draw.tint), ALLEGRO_ALIGN_RIGHT
+            );
+        };
+        item->addChild(scoreLabel);
+        gui.addItem(scoreLabel, "mission_score_label");
+        
+        
+        //Score points.
+        GuiItem* points = new GuiItem();
+        points->onDraw =
+            [this, points]
+        (const DrawInfo & draw) {
+            float juicyGrowAmount = points->getJuiceValue();
+            drawText(
+                i2s(game.states.gameplay->missionScore),
+                game.sysContent.fntCounter, draw.center, draw.size, draw.tint,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                Point(1.0 + juicyGrowAmount)
+            );
+        };
+        item->addChild(points);
+        gui.addItem(points, "mission_score_points");
+        game.states.gameplay->missionScoreCurText = points;
+        
+        
+        //"Points" label.
+        GuiItem* pointsLabel = new GuiItem();
+        pointsLabel->onDraw =
+        [this] (const DrawInfo & draw) {
+            drawText(
+                "pts", game.sysContent.fntStandard,
+                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
+                draw.size,
+                tintColor(mapAlpha(128), draw.tint),
+                ALLEGRO_ALIGN_RIGHT,
+                V_ALIGN_MODE_CENTER, 0, 0.66f
+            );
+        };
+        item->addChild(pointsLabel);
+        gui.addItem(pointsLabel, "mission_score_points_label");
+        
+        
+        //Ruler.
+        GuiItem* ruler = new GuiItem();
+        ruler->onDraw =
+        [this] (const DrawInfo & draw) {
+            //Setup.
+            const float lowestNormalValue =
+                std::min(0, game.curAreaData->missionOld.bronzeReq);
+            const float highestNormalValue =
+                std::max(
+                    game.curAreaData->missionOld.startingPoints,
+                    game.curAreaData->missionOld.platinumReq
+                );
+            const float valueRange =
+                (highestNormalValue - lowestNormalValue) *
+                HUD::SCORE_RULER_RATIO_RANGE;
+            const float startValue =
+                game.states.gameplay->scoreFlapper -
+                valueRange / 2.0f;
+            const float endValue =
+                game.states.gameplay->scoreFlapper +
+                valueRange / 2.0f;
+            const float valueScale = draw.size.x / valueRange;
+            const float startX = draw.center.x - draw.size.x / 2.0f;
+            const float endX = draw.center.x + draw.size.x / 2.0f;
+            
+            auto valueToWindowX = [&draw, &valueScale] (float value) {
+                return
+                    draw.center.x -
+                    (game.states.gameplay->scoreFlapper - value) *
+                    valueScale;
+            };
+            
+            const float segLimits[] = {
+                std::min(startValue, 0.0f),
+                0,
+                (float) game.curAreaData->missionOld.bronzeReq,
+                (float) game.curAreaData->missionOld.silverReq,
+                (float) game.curAreaData->missionOld.goldReq,
+                (float) game.curAreaData->missionOld.platinumReq,
+                std::max(
+                    endValue,
+                    (float) game.curAreaData->missionOld.platinumReq
+                )
+            };
+            ALLEGRO_COLOR segColorsTop[] = {
+                al_map_rgba(152, 160, 152, 96),  //Negatives.
+                al_map_rgba(204, 229, 172, 160), //No medal.
+                al_map_rgb(229, 175, 126),       //Bronze.
+                al_map_rgb(190, 224, 229),       //Silver.
+                al_map_rgb(229, 212, 110),       //Gold.
+                al_map_rgb(110, 229, 193)        //Platinum.
+            };
+            ALLEGRO_COLOR segColorsBottom[] = {
+                al_map_rgba(152, 160, 152, 96),  //Negatives.
+                al_map_rgba(190, 214, 160, 160), //No medal.
+                al_map_rgb(214, 111, 13),        //Bronze.
+                al_map_rgb(156, 207, 214),       //Silver.
+                al_map_rgb(214, 184, 4),         //Gold.
+                al_map_rgb(3, 214, 144)          //Platinum.
+            };
+            for(unsigned char c = 0; c < 6; c++) {
+                segColorsTop[c] = tintColor(segColorsTop[c], draw.tint);
+                segColorsTop[c] = tintColor(segColorsBottom[c], draw.tint);
+            }
+            ALLEGRO_BITMAP* segIcons[] = {
+                nullptr,
+                nullptr,
+                game.sysContent.bmpMedalBronze,
+                game.sysContent.bmpMedalSilver,
+                game.sysContent.bmpMedalGold,
+                game.sysContent.bmpMedalPlatinum
+            };
+            
+            //Draw each segment (negatives, no medal, bronze, etc.).
+            for(int s = 0; s < 6; s++) {
+                float segStartValue =
+                    s == 0 ? -FLT_MAX : segLimits[s];
+                float segEndValue =
+                    s == 5 ? FLT_MAX : segLimits[s + 1];
+                float segStartX =
+                    s == 0 ? -FLT_MAX : valueToWindowX(segStartValue);
+                float segEndX =
+                    s == 5 ? FLT_MAX : valueToWindowX(segEndValue);
+                if(endX < segStartX) continue;
+                if(startX > segEndX) continue;
+                float segVisStartX = std::max(segStartX, startX);
+                float segVisEndX = std::min(segEndX, endX);
+                const ALLEGRO_COLOR& colorTop1 =
+                    segColorsTop[s];
+                const ALLEGRO_COLOR& colorTop2 =
+                    s == 5 ? segColorsTop[5] : segColorsTop[s + 1];
+                const ALLEGRO_COLOR& colorBottom1 =
+                    segColorsBottom[s];
+                const ALLEGRO_COLOR& colorBottom2 =
+                    s == 5 ? segColorsBottom[5] : segColorsBottom[s + 1];
+                ALLEGRO_COLOR segVisStartColorTop =
+                    interpolateColor(
+                        segVisStartX, segStartX, segEndX,
+                        colorTop1, colorTop2
+                    );
+                ALLEGRO_COLOR segVisStartColorBottom =
+                    interpolateColor(
+                        segVisStartX, segStartX, segEndX,
+                        colorBottom1, colorBottom2
+                    );
+                ALLEGRO_COLOR segVisEndColorTop =
+                    interpolateColor(
+                        segVisEndX, segStartX, segEndX,
+                        colorTop1, colorTop2
+                    );
+                ALLEGRO_COLOR segVisEndColorBottom =
+                    interpolateColor(
+                        segVisEndX, segStartX, segEndX,
+                        colorBottom1, colorBottom2
+                    );
+                    
+                ALLEGRO_VERTEX vertexes[4];
+                for(unsigned char v = 0; v < 4; v++) {
+                    vertexes[v].z = 0.0f;
+                }
+                vertexes[0].x = segVisStartX;
+                vertexes[0].y = draw.center.y - draw.size.y / 2.0f;
+                vertexes[0].color = segVisStartColorTop;
+                vertexes[1].x = segVisStartX;
+                vertexes[1].y = draw.center.y + draw.size.y / 2.0f;
+                vertexes[1].color = segVisStartColorBottom;
+                vertexes[2].x = segVisEndX;
+                vertexes[2].y = draw.center.y + draw.size.y / 2.0f;
+                vertexes[2].color = segVisEndColorBottom;
+                vertexes[3].x = segVisEndX;
+                vertexes[3].y = draw.center.y - draw.size.y / 2.0f;
+                vertexes[3].color = segVisEndColorTop;
+                al_draw_prim(
+                    vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
+            
+            //Draw the markings.
+            for(
+                float m = floor(startValue / 25.0f) * 25.0f;
+                m <= endValue;
+                m += 25.0f
+            ) {
+                if(m < 0.0f || m < startValue) continue;
+                float markingX = valueToWindowX(m);
+                float markingLength =
+                    fmod(m, 100) == 0 ?
+                    draw.size.y * 0.7f :
+                    fmod(m, 50) == 0 ?
+                    draw.size.y * 0.4f :
+                    draw.size.y * 0.1f;
+                al_draw_filled_triangle(
+                    markingX,
+                    draw.center.y - draw.size.y / 2.0f + markingLength,
+                    markingX + 2.0f,
+                    draw.center.y - draw.size.y / 2.0f,
+                    markingX - 2.0f,
+                    draw.center.y - draw.size.y / 2.0f,
+                    tintColor(al_map_rgb(100, 110, 180), draw.tint)
+                );
+            }
+            
+            //Draw the medal icons.
+            int curSeg = 0;
+            int lastPassedSeg = 0;
+            float curMedalScale =
+                HUD::MEDAL_ICON_SCALE_CUR +
+                sin(
+                    game.states.gameplay->areaTimePassed *
+                    HUD::MEDAL_ICON_SCALE_TIME_MULT
+                ) *
+                HUD::MEDAL_ICON_SCALE_MULT;
+            for(int s = 0; s < 6; s++) {
+                float segStartValue = segLimits[s];
+                if(segStartValue <= game.states.gameplay->missionScore) {
+                    curSeg = s;
+                }
+                if(segStartValue <= startValue) {
+                    lastPassedSeg = s;
+                }
+            }
+            float gotItX = LARGE_FLOAT;
+            for(int s = 0; s < 6; s++) {
+                if(!segIcons[s]) continue;
+                float segStartValue = segLimits[s];
+                if(segStartValue < startValue) continue;
+                if(segStartValue > endValue) continue;
+                float segVisStartX = valueToWindowX(segStartValue);
+                float iconX = segVisStartX;
+                float iconScale = HUD::MEDAL_ICON_SCALE_NEXT;
+                if(curSeg == s) {
+                    iconScale = curMedalScale;
+                }
+                drawBitmap(
+                    segIcons[s],
+                    Point(iconX, draw.center.y),
+                    Point(-1, draw.size.y * iconScale), 0.0f, draw.tint
+                );
+                if(curSeg == s) {
+                    gotItX = iconX;
+                }
+                if(segStartValue > endValue) {
+                    //If we found the first icon that goes past the ruler's end,
+                    //then we shouldn't draw the other ones that come after.
+                    break;
+                }
+            }
+            if(segIcons[lastPassedSeg] && lastPassedSeg == curSeg) {
+                drawBitmap(
+                    segIcons[lastPassedSeg],
+                    Point(startX, draw.center.y),
+                    Point(-1, draw.size.y * curMedalScale), 0.0f, draw.tint
+                );
+                gotItX = startX;
+            }
+            
+            if(gotItX != LARGE_FLOAT) {
+                float juiceTime =
+                    game.states.gameplay->medalGotItJuiceTimer /
+                    HUD::MEDAL_GOT_IT_JUICE_DURATION;
+                juiceTime = std::min(juiceTime, 1.0f);
+                drawBitmap(
+                    game.sysContent.bmpMedalGotIt,
+                    Point(gotItX, draw.center.y + draw.size.y / 2.0f),
+                    Point(
+                        -1,
+                        draw.size.y * ease(juiceTime, EASE_METHOD_OUT_ELASTIC)
+                    ),
+                    TAU * 0.05f, draw.tint
+                );
+            }
+            
+            //Draw the flapper.
+            al_draw_filled_triangle(
+                draw.center.x, draw.center.y + draw.size.y / 2.0f,
+                draw.center.x, draw.center.y,
+                draw.center.x + (draw.size.y * 0.4),
+                draw.center.y + draw.size.y / 2.0f,
+                tintColor(al_map_rgb(64, 186, 64), draw.tint)
+            );
+            al_draw_filled_triangle(
+                draw.center.x, draw.center.y + draw.size.y / 2.0f,
+                draw.center.x, draw.center.y,
+                draw.center.x - (draw.size.y * 0.4),
+                draw.center.y + draw.size.y / 2.0f,
+                tintColor(al_map_rgb(75, 218, 75), draw.tint)
+            );
+        };
+        item->addChild(ruler);
+        gui.addItem(ruler, "mission_score_ruler");
+        
+        break;
+        
+    } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
+    case MISSION_HUD_ITEM_CONTENT_REM_TOT:
+    case MISSION_HUD_ITEM_CONTENT_CUR_AMT:
+    case MISSION_HUD_ITEM_CONTENT_REM_AMT:
+    case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
+        //Amount.
+        
+        bool oneAmount =
+            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CUR_AMT ||
+            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_REM_AMT ||
+            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_TOT_AMT;
+            
+        DataNode* guiFile =
+            &game.content.guiDefs.list[
+                oneAmount ?
+                HUD::MISSION_AMT_ONE_GUI_FILE_NAME :
+                HUD::MISSION_AMT_TWO_GUI_FILE_NAME
+            ];
+        gui.registerCoords("asdasdasdasds",    36,  6, 68,  8); //TODO
+        gui.readDataFile(guiFile, item);
+        
+        const auto getAmounts =
+        [itemInfo] (int* amt1, int* amt2) {
+            int currentAmount = 0;
+            int remainingAmount = 0;
+            int totalAmount = 0;
+            
+            switch(itemInfo->amountType) {
+            case MISSION_HUD_ITEM_AMT_MOB_CHECKLIST: {
+                for(size_t c = 0; c < itemInfo->idxsList.size(); c++) {
+                    MissionMobChecklistStatus* cPtr =
+                        &game.states.gameplay->missionMobChecklists[
+                            itemInfo->idxsList[c] - 1
+                        ];
+                    currentAmount +=
+                        cPtr->startingAmount - cPtr->remaining.size();
+                    remainingAmount += cPtr->remaining.size();
+                    totalAmount += cPtr->requiredAmount;
+                }
+                break;
+                
+            } case MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION: {
+                unordered_set<Leader*> leadersInRegions;
+                for(size_t r = 0; r < itemInfo->idxsList.size(); r++) {
+                    AreaRegionStatus* rPtr =
+                        &game.states.gameplay->areaRegions[
+                            itemInfo->idxsList[r] - 1
+                        ];
+                    leadersInRegions.insert(
+                        rPtr->leadersInside.begin(), rPtr->leadersInside.end()
+                    );
+                }
+                currentAmount = leadersInRegions.size();
+                remainingAmount = itemInfo->totalAmount - currentAmount;
+                totalAmount = itemInfo->totalAmount;
+                break;
+                
+            } case MISSION_HUD_ITEM_AMT_PIKMIN: {
+                currentAmount = game.states.gameplay->getAmountOfTotalPikmin();
+                remainingAmount = itemInfo->totalAmount - currentAmount;
+                totalAmount = itemInfo->totalAmount;
+                break;
+                
+            } case MISSION_HUD_ITEM_AMT_LEADERS: {
+                for(
+                    size_t l = 0;
+                    l < game.states.gameplay->mobs.leaders.size(); l++
+                ) {
+                    Leader* lPtr = game.states.gameplay->mobs.leaders[l];
+                    if(lPtr->health > 0) {
+                        currentAmount++;
+                    }
+                }
+                remainingAmount = itemInfo->totalAmount - currentAmount;
+                totalAmount = itemInfo->totalAmount;
+                break;
+                
+            } case MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS: {
+                currentAmount = game.states.gameplay->pikminDeaths;
+                remainingAmount = itemInfo->totalAmount - currentAmount;
+                totalAmount = itemInfo->totalAmount;
+                break;
+                
+            }
+            }
+            
+            switch(itemInfo->contentType) {
+            case MISSION_HUD_ITEM_CONTENT_CUR_TOT: {
+                *amt1 = currentAmount;
+                *amt2 = totalAmount;
+                break;
+            } case MISSION_HUD_ITEM_CONTENT_REM_TOT: {
+                *amt1 = remainingAmount;
+                *amt2 = totalAmount;
+                break;
+            } case MISSION_HUD_ITEM_CONTENT_CUR_AMT: {
+                *amt1 = currentAmount;
+                break;
+            } case MISSION_HUD_ITEM_CONTENT_REM_AMT: {
+                *amt1 = remainingAmount;
+                break;
+            } case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
+                *amt1 = totalAmount;
+                break;
+            } default: {
+                break;
+            }
+            }
+        };
+        
+        //Label.
+        GuiItem* label = new GuiItem();
+        label->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            drawText(
+                itemInfo->text, game.sysContent.fntStandard,
+                draw.center, draw.size,
+                tintColor(mapAlpha(128), draw.tint)
+            );
+        };
+        item->addChild(label);
+        gui.addItem(
+            label,
+            oneAmount ? "mission_amount_1_label" : "mission_amount_2_label"
+        );
+        
+        //First amount.
+        GuiItem* amt1Text = new GuiItem();
+        amt1Text->onDraw =
+        [itemInfo, getAmounts, amt1Text] (const DrawInfo & draw) {
+            static int oldAmt1 = INT_MAX;
+            static int amt1 = 0;
+            int dummy = 0;
+            getAmounts(&amt1, &dummy);
+            
+            if(oldAmt1 != amt1) {
+                amt1Text->startJuiceAnimation(
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                );
+                oldAmt1 = amt1;
+            }
+            float juicyGrowAmount = amt1Text->getJuiceValue();
+            drawText(
+                i2s(amt1), game.sysContent.fntCounter, draw.center, draw.size,
+                draw.tint, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                Point(1.0 + juicyGrowAmount)
+            );
+        };
+        item->addChild(amt1Text);
+        gui.addItem(
+            amt1Text,
+            oneAmount ? "mission_amount_1_first" : "mission_amount_2_first"
+        );
+        
+        if(!oneAmount) {
+        
+            //Second amount.
+            GuiItem* amt2Text = new GuiItem();
+            amt2Text->onDraw =
+            [itemInfo, getAmounts, amt2Text] (const DrawInfo & draw) {
+                static int oldAmt2 = INT_MAX;
+                static int amt2 = 0;
+                int dummy = 0;
+                getAmounts(&dummy, &amt2);
+                
+                if(oldAmt2 != amt2) {
+                    amt2Text->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    );
+                    oldAmt2 = amt2;
+                }
+                float juicyGrowAmount = amt2Text->getJuiceValue();
+                drawText(
+                    i2s(amt2), game.sysContent.fntCounter,
+                    draw.center, draw.size,
+                    draw.tint, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                    Point(1.0 + juicyGrowAmount)
+                );
+            };
+            item->addChild(amt2Text);
+            gui.addItem(
+                amt2Text, "mission_amount_2_second"
+            );
+            
+        }
+        
+        break;
+        
+    }
+    }
 }
 
 

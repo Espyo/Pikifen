@@ -270,6 +270,8 @@ void MissionData::resetRuleset() {
     makerRecord = 0;
     makerRecordDate.clear();
     events.clear();
+    hudItems.clear();
+    hudItems.insert(hudItems.begin(), 4, MissionHudItem());
 }
 
 

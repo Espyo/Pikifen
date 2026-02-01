@@ -649,8 +649,11 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
 
 /**
  * @brief Creates any registered custom items.
+ *
+ * @param customChildrenParent Custom items become children of this parent,
+ * if not nullptr.
  */
-void GuiManager::createCustomItems() {
+void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
     for(size_t i = 0; i < customItemDefs.size(); i++) {
         CustomGuiItemDef* infoPtr = &customItemDefs[i];
         infoPtr->center /= 100.0f;
@@ -767,6 +770,7 @@ void GuiManager::createCustomItems() {
             }
             }
         };
+        if(customChildrenParent) customChildrenParent->addChild(guiItem);
         addItem(guiItem);
     }
 }
@@ -1412,9 +1416,11 @@ bool GuiManager::hideItems() {
  * Then it reads the custom item definitions and creates the items.
  *
  * @param node Data file to read from.
+ * @param customChildrenParent Custom items become children of this parent,
+ * if not nullptr.
  * @return Whether it succeeded.
  */
-bool GuiManager::readDataFile(DataNode* node) {
+bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
     vector<HardcodedGuiItemDef> hardcodedItemDefs;
     bool success =
         getItemDefsFromDataFile(node, &hardcodedItemDefs, &customItemDefs);
@@ -1431,7 +1437,7 @@ bool GuiManager::readDataFile(DataNode* node) {
         );
     }
     
-    createCustomItems();
+    createCustomItems(customChildrenParent);
     
     return true;
 }

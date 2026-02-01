@@ -1438,6 +1438,37 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         mission.mobChecklists.push_back(newChecklist);
     }
     
+    //HUD items.
+    mission.hudItems.clear();
+    DataNode* itemsNode = node->getChildByName("mission_hud_items");
+    for(size_t i = 0; i < game.missionHudItemIdNames.getNrOfItems(); i++) {
+        DataNode* itemNode = itemsNode->getChild(i);
+        MissionHudItem newItem;
+        
+        ReaderSetter iRS(itemNode);
+        int contentTypeInt = 0;
+        int amountTypeInt = 0;
+        string idxsListStr;
+        
+        iRS.set("enabled", newItem.enabled);
+        iRS.set("content_type", contentTypeInt);
+        iRS.set("text", newItem.text);
+        iRS.set("amount_type", amountTypeInt);
+        iRS.set("total_amount", newItem.totalAmount);
+        iRS.set("idxs_list", idxsListStr);
+        
+        newItem.contentType = (MISSION_HUD_ITEM_CONTENT) contentTypeInt;
+        newItem.amountType = (MISSION_HUD_ITEM_AMT) amountTypeInt;
+        
+        vector<string> idxsListStrVec = semicolonListToVector(idxsListStr);
+        newItem.idxsList.reserve(idxsListStrVec.size());
+        for(size_t i = 0; i < idxsListStrVec.size(); i++) {
+            newItem.idxsList.push_back(s2i(idxsListStrVec[i]));
+        }
+        
+        mission.hudItems.push_back(newItem);
+    }
+    
     //Goal.
     missionOld.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
@@ -1998,6 +2029,27 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         if(!mobIdxsStr.empty()) {
             cGW.write("mob_idxs", mobIdxsStr);
         }
+    }
+    
+    //HUD items.
+    DataNode* itemsNode = node->addNew("mission_hud_items");
+    for(size_t i = 0; i < mission.hudItems.size(); i++) {
+        DataNode* itemNode = itemsNode->addNew("item");
+        MissionHudItem* itemPtr = &mission.hudItems[i];
+        
+        GetterWriter iGW(itemNode);
+        string idxsList;
+        
+        for(size_t i = 0; i < itemPtr->idxsList.size(); i++) {
+            idxsList += i2s(itemPtr->idxsList[i]) + " ";
+        }
+        
+        iGW.write("enabled", itemPtr->enabled);
+        iGW.write("content_type", itemPtr->contentType);
+        iGW.write("text", itemPtr->text);
+        iGW.write("amount_type", itemPtr->amountType);
+        iGW.write("total_amount", itemPtr->totalAmount);
+        iGW.write("idxs_list", idxsList);
     }
     
     //Goal.

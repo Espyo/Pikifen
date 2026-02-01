@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "../../content/area/mission.h"
 #include "../../content/other/gui.h"
 #include "../../util/drawing_utils.h"
 #include "hud_bubble_manager.h"
@@ -26,6 +27,10 @@ extern const float MEDAL_ICON_SCALE_CUR;
 extern const float MEDAL_ICON_SCALE_MULT;
 extern const float MEDAL_ICON_SCALE_NEXT;
 extern const float MEDAL_ICON_SCALE_TIME_MULT;
+extern const string MISSION_AMT_ONE_GUI_FILE_NAME;
+extern const string MISSION_AMT_TWO_GUI_FILE_NAME;
+extern const string MISSION_SCORE_GUI_FILE_NAME;
+extern const string MISSION_TEXT_GUI_FILE_NAME;
 extern const float SCORE_INDICATOR_SMOOTHNESS_FACTOR;
 extern const float SCORE_RULER_RATIO_RANGE;
 extern const float STANDBY_SWAP_JUICE_DURATION;
@@ -194,5 +199,6 @@ private:
     
     void createMissionFailCondItems(bool primary);
     void drawStandbyIcon(BUBBLE_RELATION which);
+    void setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item);
     
 };
