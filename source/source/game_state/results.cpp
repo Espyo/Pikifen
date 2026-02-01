@@ -43,7 +43,7 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
         return;
     }
     
-    MissionScoreCriterion* cPtr = game.missionScoreCriteria[criterion];
+    MissionScoreCriterionOld* cPtr = game.missionScoreCriteria[criterion];
     MissionDataOld* mission = &game.curAreaData->missionOld;
     int mult = cPtr->getMultiplier(mission);
     
@@ -250,7 +250,7 @@ void Results::load() {
     finalMissionScore = game.curAreaData->missionOld.startingPoints;
     
     for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-        MissionScoreCriterion* cPtr =
+        MissionScoreCriterionOld* cPtr =
             game.missionScoreCriteria[c];
         int cScore =
             cPtr->getScore(game.states.gameplay, &game.curAreaData->missionOld);

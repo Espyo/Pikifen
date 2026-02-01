@@ -244,6 +244,7 @@ void MissionData::reset() {
     events.clear();
     hudItems.clear();
     hudItems.insert(hudItems.begin(), 4, MissionHudItem());
+    scoreCriteria.clear();
 }
 
 

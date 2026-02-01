@@ -1451,7 +1451,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         
         vector<string> scoreNotes;
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            MissionScoreCriterion* cPtr =
+            MissionScoreCriterionOld* cPtr =
                 game.missionScoreCriteria[c];
             int mult = cPtr->getMultiplier(&game.curAreaData->missionOld);
             if(mult != 0) {
@@ -1477,7 +1477,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         
         vector<string> lossNotes;
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            MissionScoreCriterion* cPtr =
+            MissionScoreCriterionOld* cPtr =
                 game.missionScoreCriteria[c];
             if(
                 hasFlag(

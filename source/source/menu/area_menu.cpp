@@ -266,7 +266,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             );
             vector<string> scoreNotes;
             for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterion* cPtr =
+                MissionScoreCriterionOld* cPtr =
                     game.missionScoreCriteria[c];
                 int mult = cPtr->getMultiplier(&mission);
                 if(mult != 0) {
@@ -291,7 +291,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             }
             vector<string> lossNotes;
             for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterion* cPtr =
+                MissionScoreCriterionOld* cPtr =
                     game.missionScoreCriteria[c];
                 if(
                     hasFlag(

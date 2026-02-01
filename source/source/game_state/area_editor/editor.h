@@ -1202,6 +1202,7 @@ private:
     void processGuiPanelMissionGrading();
     void processGuiPanelMissionHudItems();
     void processGuiPanelMissionMobChecklists();
+    void processGuiPanelMissionScoreCriteria();
     void processGuiPanelMob();
     void processGuiPanelMobs();
     void processGuiPanelPathLink();

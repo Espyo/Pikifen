@@ -1030,7 +1030,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 ) {
                     continue;
                 }
-                MissionScoreCriterion* cPtr =
+                MissionScoreCriterionOld* cPtr =
                     game.missionScoreCriteria[c];
                 int cScore =
                     cPtr->getScore(this, &game.curAreaData->missionOld);

@@ -141,6 +141,36 @@ enum MISSION_MOB_CHECKLIST {
 };
 
 
+//Scoring criterion types for score-based missions.
+enum MISSION_SCORE_CRITERION {
+
+    //Amount of mobs from a checklist cleared.
+    MISSION_SCORE_CRITERION_MOB_CHECKLIST,
+    
+    //Total amount of Pikmin.
+    MISSION_SCORE_CRITERION_PIKMIN,
+    
+    //Amount of Pikmin born.
+    MISSION_SCORE_CRITERION_PIKMIN_BORN,
+    
+    //Amount of Pikmin deaths.
+    MISSION_SCORE_CRITERION_PIKMIN_DEATHS,
+    
+    //Seconds left in the time limit.
+    MISSION_SCORE_CRITERION_SEC_LEFT,
+    
+    //Seconds since the mission started.
+    MISSION_SCORE_CRITERION_SEC_PASSED,
+    
+    //Treasure or enemy collection points collected.
+    MISSION_SCORE_CRITERION_COLLECTION_PTS,
+    
+    //Enemy defeat points obtained.
+    MISSION_SCORE_CRITERION_DEFEAT_PTS,
+    
+};
+
+
 //Mission HUD item IDs and their typical purposes.
 enum MISSION_HUD_ITEM_ID {
 
@@ -387,6 +417,28 @@ struct MissionMobChecklist {
 
 
 /**
+ * @brief One rule for how the score is determined.
+ */
+struct MissionScoreCriterion {
+
+    //--- Members ---
+    
+    //Type.
+    MISSION_SCORE_CRITERION type = MISSION_SCORE_CRITERION_MOB_CHECKLIST;
+    
+    //First parameter, if applicable.
+    size_t param1 = 0;
+    
+    //Points received per every item in the criterion.
+    int points = 1;
+    
+    //Whether it affects the HUD score, or only the final results.
+    bool affectsHud = true;
+    
+};
+
+
+/**
  * @brief Represents the sort of stuff that should be in a mission HUD item.
  */
 struct MissionHudItem {
@@ -438,7 +490,10 @@ struct MissionData {
     
     //HUD items.
     vector<MissionHudItem> hudItems;
-        
+    
+    //Scoring criteria.
+    vector<MissionScoreCriterion> scoreCriteria;
+    
     //Starting number of points.
     int startingPoints = 0;
     
@@ -1462,13 +1517,13 @@ public:
 /**
  * @brief Class interface for a mission score criterion.
  */
-class MissionScoreCriterion {
+class MissionScoreCriterionOld {
 
 public:
 
     //--- Function declarations ---
     
-    virtual ~MissionScoreCriterion() = default;
+    virtual ~MissionScoreCriterionOld() = default;
     virtual string getName() const = 0;
     virtual int getMultiplier(MissionDataOld* mission) const = 0;
     virtual int getScore(
@@ -1481,7 +1536,7 @@ public:
 /**
  * @brief Class representing the "enemy points" mission score criterion.
  */
-class MissionScoreCriterionEnemyPoints : public MissionScoreCriterion {
+class MissionScoreCriterionEnemyPoints : public MissionScoreCriterionOld {
 
 public:
 
@@ -1499,7 +1554,7 @@ public:
 /**
  * @brief Class representing the "Pikmin born" mission score criterion.
  */
-class MissionScoreCriterionPikminBorn : public MissionScoreCriterion {
+class MissionScoreCriterionPikminBorn : public MissionScoreCriterionOld {
 
 public:
 
@@ -1517,7 +1572,7 @@ public:
 /**
  * @brief Class representing the "Pikmin death" mission score criterion.
  */
-class MissionScoreCriterionPikminDeath : public MissionScoreCriterion {
+class MissionScoreCriterionPikminDeath : public MissionScoreCriterionOld {
 
 public:
 
@@ -1535,7 +1590,7 @@ public:
 /**
  * @brief Class representing the "seconds left" mission score criterion.
  */
-class MissionScoreCriterionSecLeft : public MissionScoreCriterion {
+class MissionScoreCriterionSecLeft : public MissionScoreCriterionOld {
 
 public:
 
@@ -1553,7 +1608,7 @@ public:
 /**
  * @brief Class representing the "seconds passed" mission score criterion.
  */
-class MissionScoreCriterionSecPassed : public MissionScoreCriterion {
+class MissionScoreCriterionSecPassed : public MissionScoreCriterionOld {
 
 public:
 
@@ -1571,7 +1626,7 @@ public:
 /**
  * @brief Class representing the "treasure points" mission score criterion.
  */
-class MissionScoreCriterionTreasurePoints : public MissionScoreCriterion {
+class MissionScoreCriterionTreasurePoints : public MissionScoreCriterionOld {
 
 public:
 

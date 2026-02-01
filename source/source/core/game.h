@@ -201,6 +201,9 @@ public:
     //Database of all mission mob checklist types and their names.
     EnumNameDatabase missionMobChecklistTypeNames;
     
+    //Database of all mission score criterion types and their names.
+    EnumNameDatabase missionScoreCriterionTypeNames;
+    
     //Database of all mission HUD items and their names.
     EnumNameDatabase missionHudItemIdNames;
     
@@ -223,7 +226,7 @@ public:
     vector<MissionGoal*> missionGoals;
     
     //Database of all mission score criteria.
-    vector<MissionScoreCriterion*> missionScoreCriteria;
+    vector<MissionScoreCriterionOld*> missionScoreCriteria;
     
     //User options.
     Options options;

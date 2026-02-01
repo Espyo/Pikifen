@@ -91,6 +91,7 @@ void destroyMisc() {
     game.sectorTypes.clear();
     game.missionPresetNames.clear();
     game.missionMobChecklistTypeNames.clear();
+    game.missionScoreCriterionTypeNames.clear();
     game.missionHudItemIdNames.clear();
     game.missionHudItemContentTypeNames.clear();
     game.missionHudItemAmountTypeNames.clear();
@@ -1164,6 +1165,32 @@ void initMiscDatabases() {
     );
     game.missionMobChecklistTypeNames.registerItem(
         MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin"
+    );
+    
+    //Mission score criterion type names.
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_MOB_CHECKLIST, "Mob checklist item"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_PIKMIN, "Total Pikmin"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_PIKMIN_BORN, "Pikmin born"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_PIKMIN_DEATHS, "Pikmin deaths"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_SEC_LEFT, "Seconds left"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_SEC_PASSED, "Seconds passed"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_COLLECTION_PTS, "Mob collection points"
+    );
+    game.missionScoreCriterionTypeNames.registerItem(
+        MISSION_SCORE_CRITERION_DEFEAT_PTS, "Enemy defeat points"
     );
     
     //Mission HUD item ID names.

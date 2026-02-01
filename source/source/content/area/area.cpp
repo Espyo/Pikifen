@@ -379,15 +379,6 @@ void Area::clone(Area& other) {
     other.mission.mobChecklists = mission.mobChecklists;
     other.mission.timeLimit = mission.timeLimit;
     other.mission.gradingMode = mission.gradingMode;
-    other.mission.pointsPerPikminBorn = mission.pointsPerPikminBorn;
-    other.mission.pointsPerPikminDeath = mission.pointsPerPikminDeath;
-    other.mission.pointsPerSecLeft = mission.pointsPerSecLeft;
-    other.mission.pointsPerSecPassed = mission.pointsPerSecPassed;
-    other.mission.pointsPerTreasurePoint = mission.pointsPerTreasurePoint;
-    other.mission.pointsPerEnemyPoint = mission.pointsPerEnemyPoint;
-    other.mission.enemyPointsOnCollection = mission.enemyPointsOnCollection;
-    other.mission.pointLossData = mission.pointLossData;
-    other.mission.pointHudData = mission.pointHudData;
     other.mission.startingPoints = mission.startingPoints;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
@@ -1403,6 +1394,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         eRS.set("param_2", newEvent.param2);
         eRS.set("action_type", actionTypeInt);
         eRS.set("action_message", newEvent.actionMessage);
+        eRS.set("zero_time_for_score", newEvent.zeroTimeForScore);
         
         newEvent.type = (MISSION_EV) typeInt;
         newEvent.actionType = (MISSION_ACTION) actionTypeInt;
@@ -2001,6 +1993,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         eGW.write("param_1", eventPtr->param1);
         eGW.write("param_2", eventPtr->param2);
         eGW.write("action_type", eventPtr->actionType);
+        eGW.write("zero_time_for_score", eventPtr->zeroTimeForScore);
         
         if(!eventPtr->actionMessage.empty()) {
             eGW.write("action_message", eventPtr->actionMessage);

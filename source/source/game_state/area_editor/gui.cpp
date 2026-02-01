@@ -3132,6 +3132,7 @@ void AreaEditor::processGuiPanelMission() {
     if(game.curAreaData->mission.preset == MISSION_PRESET_CUSTOM) {
         processGuiPanelMissionEv();
         processGuiPanelMissionMobChecklists();
+        processGuiPanelMissionScoreCriteria();
         processGuiPanelMissionHudItems();
     }
     
@@ -3586,6 +3587,23 @@ void AreaEditor::processGuiPanelMissionEv() {
                 }
                 setTooltip(
                     "Specify what message you want to be sent to the script."
+                );
+                
+            } else {
+            
+                //Zero time for scoring checkbox.
+                bool zeroTime = evPtr->zeroTimeForScore;
+                if(
+                    ImGui::Checkbox(
+                        "Zero time for score", &zeroTime
+                    )
+                ) {
+                    registerChange("mission event action time rule change");
+                    evPtr->zeroTimeForScore = zeroTime;
+                }
+                setTooltip(
+                    "If true, the time remaining in the time limit will\n"
+                    "be considered 0 for the sake of scoring."
                 );
                 
             }
@@ -4964,6 +4982,199 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
         }
         
         ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui score criteria part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionScoreCriteria() {
+    //Mission score criteria node.
+    if(saveableTreeNode("gameplay", "Mission scoring")) {
+    
+        //Criterion count text.
+        static size_t curCriterionIdx = 0;
+        if(
+            game.curAreaData->mission.scoreCriteria.empty()
+        ) {
+            curCriterionIdx = 0;
+        } else if(
+            curCriterionIdx >= game.curAreaData->mission.scoreCriteria.size()
+        ) {
+            curCriterionIdx =
+                game.curAreaData->mission.scoreCriteria.size() - 1;
+        }
+        ImGui::Text(
+            "Criterion: %s/%u",
+            (
+                game.curAreaData->mission.scoreCriteria.empty() ?
+                "-" :
+                i2s(curCriterionIdx + 1)
+            ).c_str(),
+            (unsigned int) game.curAreaData->mission.scoreCriteria.size()
+        );
+        
+        //Add criterion button.
+        if(
+            ImGui::ImageButton(
+                "addCriterionButton", editorIcons[EDITOR_ICON_ADD],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            registerChange("mission score criterion addition");
+            if(game.curAreaData->mission.scoreCriteria.empty()) {
+                curCriterionIdx = 0;
+            } else {
+                curCriterionIdx++;
+            }
+            game.curAreaData->mission.scoreCriteria.insert(
+                game.curAreaData->mission.scoreCriteria.begin() +
+                curCriterionIdx,
+                MissionScoreCriterion()
+            );
+        }
+        setTooltip("Add a new mission score criterion.");
+        
+        if(!game.curAreaData->mission.scoreCriteria.empty()) {
+        
+            //Delete criterion button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "delCriterionButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                registerChange("mission score criterion deletion");
+                game.curAreaData->mission.scoreCriteria.erase(
+                    game.curAreaData->mission.scoreCriteria.begin() +
+                    curCriterionIdx
+                );
+            }
+            setTooltip("Delete the current score criterion.");
+            
+        }
+        
+        if(game.curAreaData->mission.scoreCriteria.size() > 1) {
+        
+            //Previous criterion button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "prevCriterionButton", editorIcons[EDITOR_ICON_PREVIOUS],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curCriterionIdx =
+                    sumAndWrap(
+                        curCriterionIdx, -1,
+                        game.curAreaData->mission.scoreCriteria.size()
+                    );
+            }
+            setTooltip("Change to the previous score criterion.");
+            
+            //Next criterion button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "nextCriterionButton", editorIcons[EDITOR_ICON_NEXT],
+                    Point(EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                curCriterionIdx =
+                    sumAndWrap(
+                        curCriterionIdx, +1,
+                        game.curAreaData->mission.scoreCriteria.size()
+                    );
+            }
+            setTooltip("Change to the next score criterion.");
+            
+        }
+        
+        if(!game.curAreaData->mission.scoreCriteria.empty()) {
+        
+            MissionScoreCriterion* criterionPtr =
+                &game.curAreaData->mission.scoreCriteria[curCriterionIdx];
+                
+            //Criterion type combobox.
+            ImGui::Spacer();
+            int criterionType = criterionPtr->type;
+            if(
+                ImGui::Combo(
+                    "Type", &criterionType,
+                    game.missionScoreCriterionTypeNames.getNames(), 15
+                )
+            ) {
+                registerChange("mission score criterion type change");
+                criterionPtr->type = (MISSION_SCORE_CRITERION) criterionType;
+            }
+            setTooltip(
+                "What aspect of gameplay gets judged for this criterion."
+            );
+            
+            //Point multiplier value.
+            int points = criterionPtr->points;
+            if(
+                ImGui::DragInt(
+                    "Points", &points, 0.1f, 1, INT_MAX
+                )
+            ) {
+                registerChange("mission score criterion point change");
+                criterionPtr->points = points;
+            }
+            setTooltip(
+                "The player receives these many points per criterion item.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Score checkbox.
+            bool hud = criterionPtr->affectsHud;
+            if(
+                ImGui::Checkbox(
+                    "Applies to HUD", &hud
+                )
+            ) {
+                registerChange("mission score criterion option change");
+                criterionPtr->affectsHud = hud;
+            }
+            setTooltip(
+                "If unchecked, this criterion will only affect the score\n"
+                "received at the end of the mission.\n"
+                "If checked, it will also affect the score items in the HUD\n"
+                "in real time.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            if(
+                criterionPtr->type == MISSION_SCORE_CRITERION_MOB_CHECKLIST
+            ) {
+            
+                //Mob checklist number value.
+                int number = (int) criterionPtr->param1;
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        "Mob checklist number",
+                        &number, 0.1f, 0, INT_MAX
+                    )
+                ) {
+                    registerChange("mission score criterion checklist change");
+                    criterionPtr->param1 = (size_t) number;
+                }
+                setTooltip(
+                    "Number of the mob checklist to check the mobs of.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+        }
+        
+        ImGui::TreePop();
+        
     }
     
     ImGui::Spacer();
