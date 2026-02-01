@@ -139,6 +139,7 @@ int main() {
 ## Features
 
 ### Many settings
+
 * Different input value types.
   * Actions can have an analog (range [0 - 1]), digital (just 0 or 1), or "down-only" (just 1) value type. Conversions between them happen automatically.
   * e.g. A digital action can be triggered by an analog button, like shooting bound to an analog trigger.
@@ -161,7 +162,9 @@ int main() {
   * Comes with all sorts of interpolations.
   * See `ManagerOptions`.
 
+
 ### Varied support
+
 * Support for multiple controllers at once.
 * Support for free binds.
   * An input source can trigger multiple actions, and multiple input sources can trigger the same action.
@@ -174,7 +177,9 @@ int main() {
   * As long as you can identify an input source as an analog button, which are sometimes internally defined as analog sticks, then you can inform Inpution about it.
   * e.g. The X-Box 360 triggers.
 
+
 ### Specific features
+
 * Game states logic.
   * e.g. If you have a state for the "Ready..." cutscene before the player has control, and have a state for normal gameplay, then holding right in the cutscene state lets the player walk right on frame 1 of the gameplay state.
   * See `Manager::setGameState()`.
@@ -182,7 +187,9 @@ int main() {
   * e.g. You just captured an input in the options menu to assign to a bind, and you don't want that input to immediately trigger its action.
   * See `Manager::startIgnoringInputSource()`.
 
+
 ### About the library
+
 * Fairly light, and fairly simple.
 * Very agnostic, and with no external dependencies.
 
@@ -227,6 +234,8 @@ int main() {
   * You have a few ways. Whatever library you're using to get input from might be able to give you more information about a stick; if it reports it only has one axis then it may be an analog button. In addition, you can check the controller's name and/or GUID and cross-reference a list of known brands, like the [SDL Game Controller DB](https://github.com/mdqinc/SDL_GameControllerDB).
 * The player Alt+Tab'd and now some inputs are stuck. What can I do?
   * Whatever engine you're using probably has ways to detect the window is out of focus. When that happens, call `Manager::releaseEverything()`.
+* I don't want to receive actions right now (e.g. I have a textbox focused and don't want the key presses to be turned to actions). What can I do?
+  * Let Inpution work like normal, but simply discard the list of actions returned by `Manager::newFrame()`. This is preferred over not calling anything Inpution-related, since you still want the library to receive key-up events, do auto-repeat logic, etc.
 
 
 ## Inner workings notes

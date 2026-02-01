@@ -45,20 +45,20 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
- * @brief Applies the given ruleset to the rule variables.
- * Provided it's not a custom ruleset, this overwrites what was there before.
+ * @brief Applies the given preset.
+ * Provided it's not a custom preset, this overwrites what was there before.
  *
- * @param newRuleset Ruleset to apply.
+ * @param newPreset Preset to apply.
  */
-void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
-    ruleset = newRuleset;
+void MissionData::applyPreset(MISSION_PRESET newPreset) {
+    preset = newPreset;
     
-    if(newRuleset == MISSION_RULESET_CUSTOM) return;
+    if(newPreset == MISSION_PRESET_CUSTOM) return;
     
-    resetRuleset();
+    reset();
     
-    switch(newRuleset) {
-    case MISSION_RULESET_GROW_PIKMIN: {
+    switch(newPreset) {
+    case MISSION_PRESET_GROW_PIKMIN: {
         //Grow Pikmin -- events.
         events.push_back(
         MissionEvent {
@@ -80,12 +80,9 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         }
         );
         
-        //Grow Pikmin -- scoring.
-        pointsPerPikminBorn = 100;
-        
         break;
         
-    } case MISSION_RULESET_COLLECT_TREASURE: {
+    } case MISSION_PRESET_COLLECT_TREASURE: {
         //Collect Treasure -- events.
         events.push_back(
         MissionEvent {
@@ -114,13 +111,9 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         }
         );
         
-        //Collect Treasure -- scoring.
-        pointsPerTreasurePoint = 1;
-        pointsPerSecLeft = 10; //TODO 0 if you lose leaders.
-        
         break;
         
-    } case MISSION_RULESET_BATTLE_ENEMIES: {
+    } case MISSION_PRESET_BATTLE_ENEMIES: {
         //Battle Enemies -- events.
         events.push_back(
         MissionEvent {
@@ -149,13 +142,9 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         }
         );
         
-        //Battle Enemies -- scoring.
-        pointsPerEnemyPoint = 1;
-        pointsPerSecLeft = 10; //TODO 0 if you lose leaders.
-        
         break;
         
-    } case MISSION_RULESET_DEFEAT_BOSSES: {
+    } case MISSION_PRESET_DEFEAT_BOSSES: {
         //Defeat Bosses -- events.
         events.push_back(
         MissionEvent {
@@ -184,12 +173,9 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         }
         );
         
-        //Defeat Bosses -- scoring.
-        pointsPerSecLeft = 10;
-        
         break;
         
-    } case MISSION_RULESET_COLLECT_EVERYTHING: {
+    } case MISSION_PRESET_COLLECT_EVERYTHING: {
         //Collect Everything -- events.
         events.push_back(
         MissionEvent {
@@ -218,14 +204,9 @@ void MissionData::applyRuleset(MISSION_RULESET newRuleset) {
         }
         );
         
-        //Collect Everything -- scoring.
-        pointsPerTreasurePoint = 1;
-        pointsPerEnemyPoint = 1;
-        pointsPerSecLeft = 10; //TODO 0 if you lose leaders.
-        
         break;
         
-    } case MISSION_RULESET_CUSTOM: {
+    } case MISSION_PRESET_CUSTOM: {
         break;
         
     }
@@ -251,17 +232,8 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
 /**
  * @brief Clears the variables.
  */
-void MissionData::resetRuleset() {
+void MissionData::reset() {
     gradingMode = MISSION_GRADING_MODE_GOAL;
-    pointsPerPikminBorn = 0;
-    pointsPerPikminDeath = 0;
-    pointsPerSecLeft = 0;
-    pointsPerSecPassed = 0;
-    pointsPerTreasurePoint = 0;
-    pointsPerEnemyPoint = 0;
-    enemyPointsOnCollection = false;
-    pointLossData = 0;
-    pointHudData = 255;
     startingPoints = 0;
     bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     silverReq = MISSION::DEF_MEDAL_REQ_SILVER;

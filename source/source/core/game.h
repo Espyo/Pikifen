@@ -195,8 +195,8 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
-    //Database of all mission rulesets and their names.
-    EnumNameDatabase missionRulesetNames;
+    //Database of all mission presets and their names.
+    EnumNameDatabase missionPresetNames;
     
     //Database of all mission mob checklist types and their names.
     EnumNameDatabase missionMobChecklistTypeNames;

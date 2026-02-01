@@ -374,7 +374,7 @@ void Area::clone(Area& other) {
     
     other.thumbnail = thumbnail;
     
-    other.mission.ruleset = mission.ruleset;
+    other.mission.preset = mission.preset;
     other.mission.events = mission.events;
     other.mission.mobChecklists = mission.mobChecklists;
     other.mission.timeLimit = mission.timeLimit;
@@ -1347,10 +1347,10 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     string goalStr;
     string requiredMobsStr;
-    int missionRulesetInt = MISSION_RULESET_CUSTOM;
+    int missionPresetInt = MISSION_PRESET_CUSTOM;
     int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
     
-    mRS.set("mission_ruleset", missionRulesetInt);
+    mRS.set("mission_preset", missionPresetInt);
     mRS.set("mission_time_limit", mission.timeLimit);
     mRS.set("mission_goal", goalStr);
     mRS.set("mission_goal_amount", missionOld.goalAmount);
@@ -1986,7 +1986,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     //General properties.
     GetterWriter mGW(node);
     
-    mGW.write("mission_ruleset", mission.ruleset);
+    mGW.write("mission_preset", mission.preset);
     mGW.write("mission_time_limit", mission.timeLimit);
     
     //Events.

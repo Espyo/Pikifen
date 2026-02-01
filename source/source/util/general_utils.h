@@ -552,6 +552,42 @@ struct Timer {
 };
 
 
+/**
+ * @brief Adjusts all index numbers in a list of items, based on whether
+ * a given index got removed or added.
+ *
+ * @tparam ContainerT Type of the container of items.
+ * @tparam ItemT Type of the items.
+ * @param list List of items to check and update.
+ * @param addition True for a new index addition, false for a removal.
+ * @param idx Index number to check against.
+ * @param pred Predicate for how to obtain the index number out of an item.
+ * If the function returns nullptr, the item is skipped.
+ */
+template<typename ContainerT, typename PredT>
+void adjustMisalignedIndexes(
+    ContainerT& list, bool addition, size_t idx,
+    PredT&& pred
+) {
+    for(auto& i : list) {
+        size_t* idxMember = pred(i);
+        if(!idxMember) continue;
+        
+        if(addition) {
+            if(*idxMember > idx) {
+                (*idxMember)++;
+            }
+        } else {
+            if(*idxMember == idx + 1) {
+                *idxMember = 0;
+            } else if(*idxMember > idx + 1) {
+                (*idxMember)--;
+            }
+        }
+    }
+}
+
+
 string getCurrentTime(bool fileNameFriendly);
 string sanitizeFileName(const string& s);
 string standardizePath(const string& path);

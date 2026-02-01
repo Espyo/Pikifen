@@ -803,29 +803,29 @@ void AreaEditor::processGuiMenuBar() {
 
 
 /**
- * @brief Processes the Dear ImGui "change mission ruleset" dialog
+ * @brief Processes the Dear ImGui "change mission preset" dialog
  * for this frame.
  */
-void AreaEditor::processGuiMissionRulesetDialog() {
+void AreaEditor::processGuiMissionPresetDialog() {
     //Explanation text.
     string explanationStr =
-        "If you change the ruleset to one of the presets, the previous\n"
-        "mission data will be LOST.\n"
-        "If you choose \"custom\", they will be kept, and you can\n"
-        "customize the mission in depth.";
+        "If you change the preset, whatever mission data\n"
+        "the area had before will be LOST.\n"
+        "If you choose \"custom\", whatever was there before\n"
+        "will be kept, and you can then customize the mission in depth.";
     ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
     ImGui::Text("%s", explanationStr.c_str());
     
-    //New ruleset combobox.
-    int rulesetInt = missionRulesetDialogRuleset;
+    //New preset combobox.
+    int presetInt = missionPresetDialogPreset;
     if(
         ImGui::Combo(
-            "New ruleset", &rulesetInt, game.missionRulesetNames.getNames(), 15
+            "New preset", &presetInt, game.missionPresetNames.getNames(), 15
         )
     ) {
-        missionRulesetDialogRuleset = (MISSION_RULESET) rulesetInt;
+        missionPresetDialogPreset = (MISSION_PRESET) presetInt;
     }
-    setTooltip("The new ruleset.");
+    setTooltip("The new preset.");
     
     //Cancel button.
     ImGui::Spacer();
@@ -838,11 +838,11 @@ void AreaEditor::processGuiMissionRulesetDialog() {
     //Change button.
     ImGui::SameLine(0.0f, 30);
     if(ImGui::Button("Change", ImVec2(100, 40))) {
-        registerChange("mission ruleset change");
-        game.curAreaData->mission.applyRuleset(missionRulesetDialogRuleset);
+        registerChange("mission preset change");
+        game.curAreaData->mission.applyPreset(missionPresetDialogPreset);
         closeTopDialog();
     }
-    setTooltip("Apply the new ruleset.");
+    setTooltip("Apply the new preset.");
 }
 
 
@@ -3086,30 +3086,30 @@ void AreaEditor::processGuiPanelMission() {
     //Mission essentials node.
     if(saveableTreeNode("gameplay", "Mission essentials")) {
     
-        //Ruleset text.
+        //Preset text.
         ImGui::Text(
-            "Ruleset: %s",
-            game.missionRulesetNames.getNames()[
-                game.curAreaData->mission.ruleset
+            "Preset: %s",
+            game.missionPresetNames.getNames()[
+                game.curAreaData->mission.preset
             ].c_str()
         );
         
-        //Change ruleset button.
+        //Change preset button.
         ImGui::SameLine();
         if(ImGui::Button("Change...")) {
-            missionRulesetDialogRuleset = game.curAreaData->mission.ruleset;
+            missionPresetDialogPreset = game.curAreaData->mission.preset;
             openDialog(
-                "Change mission ruleset",
+                "Change mission preset",
                 std::bind(
-                    &AreaEditor::processGuiMissionRulesetDialog, this
+                    &AreaEditor::processGuiMissionPresetDialog, this
                 )
             );
             dialogs.back()->customSize = Point(400, 0);
         }
         setTooltip(
-            "Change the mission's ruleset.\n"
-            "You can use one of the presets to skip all the setup,\n"
-            "or pick \"custom\" so you can control all the details."
+            "Change the mission's preset.\n"
+            "By using one of the presets you can skip most of the setup,\n"
+            "whereas by picking \"custom\" you can control all the details."
         );
         
         //Time limit values.
@@ -3129,7 +3129,7 @@ void AreaEditor::processGuiPanelMission() {
     
     ImGui::Spacer();
     
-    if(game.curAreaData->mission.ruleset == MISSION_RULESET_CUSTOM) {
+    if(game.curAreaData->mission.preset == MISSION_PRESET_CUSTOM) {
         processGuiPanelMissionEv();
         processGuiPanelMissionMobChecklists();
         processGuiPanelMissionHudItems();
@@ -4796,17 +4796,15 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                 curMobChecklistIdx,
                 MissionMobChecklist()
             );
-            for(
-                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
-            ) {
-                MissionEvent* ePtr = &game.curAreaData->mission.events[e];
-                if(ePtr->type == MISSION_EV_MOB_CHECKLIST) {
-                    if(ePtr->param1 == 0) continue;
-                    if(ePtr->param1 > curMobChecklistIdx) {
-                        ePtr->param1++;
-                    }
-                }
+            adjustMisalignedIndexes(
+                game.curAreaData->mission.events,
+                true, curMobChecklistIdx,
+            [] (MissionEvent & ev) -> size_t* {
+                if(ev.type != MISSION_EV_MOB_CHECKLIST) return nullptr;
+                if(ev.param1 == 0) return nullptr;
+                return &ev.param1;
             }
+            );
         }
         setTooltip("Add a new mission mob checklist.");
         
@@ -4820,7 +4818,7 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                registerChange("mission mob checklist");
+                registerChange("mission mob checklist deletion");
                 game.curAreaData->mission.mobChecklists.erase(
                     game.curAreaData->mission.mobChecklists.begin() +
                     curMobChecklistIdx

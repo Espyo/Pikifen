@@ -38,30 +38,30 @@ extern const float EXIT_MIN_SIZE;
 }
 
 
-//Possible rulesets for missions.
-enum MISSION_RULESET {
+//Available presets for missions.
+enum MISSION_PRESET {
 
     //Grow as many Pikmin as you can within the time limit.
     //Medal depends on how many you grew. Matches P1.
-    MISSION_RULESET_GROW_PIKMIN,
+    MISSION_PRESET_GROW_PIKMIN,
     
     //Collect treasures within the time limit.
     //Medal depends on how many got collected, platinum for all. Matches P3.
-    MISSION_RULESET_COLLECT_TREASURE,
+    MISSION_PRESET_COLLECT_TREASURE,
     
     //Battle enemies within the time limit.
     //Medal depends on how many were defeated, platinum for all. Matches P3.
-    MISSION_RULESET_BATTLE_ENEMIES,
+    MISSION_PRESET_BATTLE_ENEMIES,
     
     //Defeat bosses within the time limit.
     //Medal depends on time taken. Matches P3.
-    MISSION_RULESET_DEFEAT_BOSSES,
+    MISSION_PRESET_DEFEAT_BOSSES,
     
     //Collect treasures and enemies within the time limit. Matches P4.
-    MISSION_RULESET_COLLECT_EVERYTHING,
+    MISSION_PRESET_COLLECT_EVERYTHING,
     
     //Custom rules.
-    MISSION_RULESET_CUSTOM,
+    MISSION_PRESET_CUSTOM,
     
 };
 
@@ -421,8 +421,8 @@ struct MissionData {
 
     //--- Members ---
     
-    //Ruleset. Only really used for the editor's GUI.
-    MISSION_RULESET ruleset = MISSION_RULESET_CUSTOM;
+    //Preset. Only really used for the editor's GUI.
+    MISSION_PRESET preset = MISSION_PRESET_CUSTOM;
     
     //Mission events.
     vector<MissionEvent> events;

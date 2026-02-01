@@ -866,8 +866,8 @@ private:
     //During this timer, don't save state for operations matching the last one.
     Timer undoSaveLockTimer;
     
-    //Chosen mission ruleset in the "change mission ruleset" dialog.
-    MISSION_RULESET missionRulesetDialogRuleset = MISSION_RULESET_CUSTOM;
+    //Chosen mission preset in the "change mission preset" dialog.
+    MISSION_PRESET missionPresetDialogPreset = MISSION_PRESET_CUSTOM;
     
     struct {
     
@@ -1184,7 +1184,7 @@ private:
     void processGuiLoadDialog();
     void processGuiNewDialog();
     void processGuiMenuBar();
-    void processGuiMissionRulesetDialog();
+    void processGuiMissionPresetDialog();
     void processGuiMobScriptVars(MobGen* gen);
     void processGuiPanelDetails();
     void processGuiPanelEdge();

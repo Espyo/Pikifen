@@ -485,14 +485,17 @@ bool GameplayState::endMission(
         Point newCamPos = player.view.cam.targetPos;
         float newCamZoom = player.view.cam.targetZoom;
         
-        MissionEvType* evTypePtr = game.missionEvTypes[ev->type];
-        if(
-            evTypePtr->getZoomData(
-                ev, &game.curAreaData->mission, this, &newCamPos, &newCamZoom
-            )
-        ) {
-            player.view.cam.targetPos = newCamPos;
-            player.view.cam.targetZoom = newCamZoom;
+        if(ev) {
+            MissionEvType* evTypePtr = game.missionEvTypes[ev->type];
+            if(
+                evTypePtr->getZoomData(
+                    ev, &game.curAreaData->mission, this,
+                    &newCamPos, &newCamZoom
+                )
+            ) {
+                player.view.cam.targetPos = newCamPos;
+                player.view.cam.targetZoom = newCamZoom;
+            }
         }
     }
     

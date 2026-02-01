@@ -89,7 +89,7 @@ void destroyMisc() {
     game.audio.destroy();
     
     game.sectorTypes.clear();
-    game.missionRulesetNames.clear();
+    game.missionPresetNames.clear();
     game.missionMobChecklistTypeNames.clear();
     game.missionHudItemIdNames.clear();
     game.missionHudItemContentTypeNames.clear();
@@ -1126,24 +1126,24 @@ void initMiscDatabases() {
         SECTOR_TYPE_BLOCKING, "blocking"
     );
     
-    //Mission ruleset names.
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_GROW_PIKMIN, "Grow Pikmin"
+    //Mission preset names.
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_GROW_PIKMIN, "Grow Pikmin"
     );
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_COLLECT_TREASURE, "Collect Treasure"
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_COLLECT_TREASURE, "Collect Treasure"
     );
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_BATTLE_ENEMIES, "Battle Enemies"
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_BATTLE_ENEMIES, "Battle Enemies"
     );
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_DEFEAT_BOSSES, "Defeat Bosses"
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_DEFEAT_BOSSES, "Defeat Bosses"
     );
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_COLLECT_EVERYTHING, "Collect Everything"
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_COLLECT_EVERYTHING, "Collect Everything"
     );
-    game.missionRulesetNames.registerItem(
-        MISSION_RULESET_CUSTOM, "Custom"
+    game.missionPresetNames.registerItem(
+        MISSION_PRESET_CUSTOM, "Custom"
     );
     
     //Mission mob checklist type names.
