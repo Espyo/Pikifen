@@ -17,6 +17,7 @@
 #include <time.h>
 
 #ifdef _WIN32
+#include <filesystem>
 #include <windows.h>
 #include <shellapi.h> //For ShellExecuteA().
 #endif
@@ -68,13 +69,14 @@ string getCurrentTime(bool fileNameFriendly) {
  */
 bool openFileExplorer(const string& path) {
 #ifdef _WIN32
+    string absPath = std::filesystem::absolute(path).string();
     INT_PTR result =
         (INT_PTR) ShellExecuteA(
-            NULL, "open", path.c_str(), NULL, NULL, SW_SHOWDEFAULT
+            NULL, "open", absPath.c_str(), NULL, NULL, SW_SHOWDEFAULT
         );
     if(result <= 32) {
         std::cout << "Failed to open file explorer with path \"";
-        std::cout << path << "\"! Error: " << ((int) result) << std::endl;
+        std::cout << absPath << "\"! Error: " << ((int) result) << std::endl;
         return false;
     }
     return true;
@@ -102,7 +104,16 @@ bool openFileExplorer(const string& path) {
  */
 bool openWebBrowser(const string& url) {
 #ifdef _WIN32
-    return openFileExplorer(url);
+    INT_PTR result =
+        (INT_PTR) ShellExecuteA(
+            NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
+        );
+    if(result <= 32) {
+        std::cout << "Failed to open web browser with URL \"";
+        std::cout << url << "\"! Error: " << ((int) result) << std::endl;
+        return false;
+    }
+    return true;
     
 #elif __APPLE__
     return openFileExplorer(url);
