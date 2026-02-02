@@ -10,6 +10,7 @@
  */
 
 #include <cstdlib>
+#include <iostream>
 #include <signal.h>
 #include <time.h>
 
@@ -65,22 +66,28 @@ string getCurrentTime(bool fileNameFriendly) {
  */
 bool openFileExplorer(const string& path) {
 #ifdef _WIN32
-    return
+    INT_PTR result =
         (INT_PTR) ShellExecuteA(
             NULL, "open", path.c_str(), NULL, NULL, SW_SHOWDEFAULT
-        ) > 32;
-        
+        );
+    if(result <= 32) {
+        std::cout << "Failed to open file explorer with path \"";
+        std::cout << path << "\"! Error: " << ((int) result) << std::endl;
+        return false;
+    }
+    return true;
+    
 #elif __APPLE__
     string command = "open \"" + path + "\"";
     return std::system(command.c_str()) == 0;
-        
+    
 #elif __linux__
     string command = "xdg-open \"" + path + "\"";
     return std::system(command.c_str()) == 0;
-        
+    
 #else
     return false;
-        
+    
 #endif
 }
 
@@ -93,22 +100,17 @@ bool openFileExplorer(const string& path) {
  */
 bool openWebBrowser(const string& url) {
 #ifdef _WIN32
-    return
-        (INT_PTR) ShellExecuteA(
-            NULL, "open", url.c_str(), NULL, NULL, SW_SHOWDEFAULT
-        ) > 32;
-        
+    return openFileExplorer(url);
+    
 #elif __APPLE__
-    string command = "open \"" + url + "\"";
-    return std::system(command.c_str()) == 0;
-        
+    return openFileExplorer(url);
+    
 #elif __linux__
-    string command = "xdg-open \"" + url + "\"";
-    return std::system(command.c_str()) == 0;
-        
+    return openFileExplorer(url);
+    
 #else
     return false;
-        
+    
 #endif
 }
 
