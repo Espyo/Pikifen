@@ -17,9 +17,6 @@
 #include "easy_analog_cleaner.h"
 
 
-//#define EASY_ANALOG_CLEANER
-
-
 const EasyAnalogCleaner::Settings EasyAnalogCleaner::SETTINGS_NO_CHANGES = {
     .deadzones = {
         .radial = {
@@ -554,7 +551,7 @@ void EasyAnalogCleaner::toPolar(
  * @param input Whether the values are the inputs or the outputs.
  */
 void EasyAnalogCleaner::writeDebugStickValues(float coords[2], bool input) {
-#ifdef EASY_ANALOG_CLEANER
+#ifdef EASY_ANALOG_CLEANER_DEBUG
     float angle, radius;
     toPolar(coords, angle, radius);
     if(input) std::cout << "--- Easy Analog Cleaner cleanup ---" << std::endl;

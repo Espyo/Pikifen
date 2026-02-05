@@ -1511,7 +1511,7 @@ public:
 
 
 #pragma endregion
-#pragma region Score criteria
+#pragma region Score criteria (old)
 
 
 /**

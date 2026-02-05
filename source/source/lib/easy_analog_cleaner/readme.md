@@ -64,14 +64,14 @@ while(myGame.running) {
   * Like analog sticks, the pressure value of analog buttons (or analog triggers) can make use of deadzones, interpolation, and low-pass filtering. Except instead of working in two dimensions, it works in one.
   * See `EasyAnalogCleaner::Settings::Deadzones::Button` and `EasyAnalogCleaner::Settings::LowPassFilter::factorButton`.
 * Library things:
-  * Basic debugging logic (see `EASY_ANALOG_CLEANER`).
+  * Basic debugging logic (see `EASY_ANALOG_CLEANER_DEBUG`).
   * Simple unit test coverage for the library itself.
 
 
 ## Other usage information
 
 * It's possible that whatever framework you're using sends you two events for analog stick: one axis at a time. If so, make sure to save the raw value of both somewhere, and whenever you receive _either_ event, clean up _both_ raw values together. The library won't work if you just try to clean one axis's value while leaving the other as zero!
-* You can define `EASY_ANALOG_CLEANER` (or uncomment its line near the top of the source file), to better understand how the input/output values work.
+* You can define `EASY_ANALOG_CLEANER_DEBUG` (or uncomment its line near the top of the source file), to better understand how the input/output values work.
 * For more information on how a part of the library works, read its comments in the header file, or check how the unit tests file does it.
 
 

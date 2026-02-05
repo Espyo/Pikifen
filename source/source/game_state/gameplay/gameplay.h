@@ -366,7 +366,7 @@ public:
     size_t goalTreasuresTotal = 0;
     
     //How many treasure points collected so far.
-    size_t treasurePointsCollected = 0;
+    size_t treasurePointsObtained = 0;
     
     //How many treasure points exist in total.
     size_t treasurePointsTotal = 0;
@@ -378,7 +378,7 @@ public:
     size_t enemyTotal = 0;
     
     //How many enemy points collected so far.
-    size_t enemyPointsCollected = 0;
+    size_t enemyPointsObtained = 0;
     
     //How many enemy points exist in total.
     size_t enemyPointsTotal = 0;

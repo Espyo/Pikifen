@@ -73,7 +73,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
         if(game.curAreaData->missionOld.enemyPointsOnCollection) {
-            game.states.gameplay->enemyPointsCollected +=
+            game.states.gameplay->enemyPointsObtained +=
                 ((Enemy*) delivery)->eneType->points;
         }
         break;
@@ -82,7 +82,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
     case MOB_CATEGORY_TREASURES: {
         Treasure* trePtr = (Treasure*) delivery;
         game.states.gameplay->treasuresCollected++;
-        game.states.gameplay->treasurePointsCollected +=
+        game.states.gameplay->treasurePointsObtained +=
             trePtr->treType->points;
         game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
         
@@ -103,7 +103,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
         switch(resPtr->resType->deliveryResult) {
         case RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS: {
             game.states.gameplay->treasuresCollected++;
-            game.states.gameplay->treasurePointsCollected +=
+            game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
             game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
             if(

@@ -21,6 +21,9 @@ using std::string;
 using std::vector;
 
 
+#pragma region Constants
+
+
 //Types of hitboxes.
 enum HITBOX_TYPE {
 
@@ -67,6 +70,10 @@ enum HITBOX_SURFACE_TYPE {
     HITBOX_SURFACE_TYPE_BOUNCY,
     
 };
+
+
+#pragma endregion
+#pragma region Classes
 
 
 struct Hazard;
@@ -164,3 +171,6 @@ public:
     ) const;
     
 };
+
+
+#pragma endregion

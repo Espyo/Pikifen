@@ -20,6 +20,9 @@
 #pragma once
 
 
+//define EASY_ANALOG_CLEANER_DEBUG
+
+
 /**
  * @brief Static utility class that holds analog stick cleaning logic.
  */

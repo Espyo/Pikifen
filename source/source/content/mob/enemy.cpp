@@ -188,7 +188,7 @@ void Enemy::startDyingClassSpecifics() {
     //Numbers.
     game.states.gameplay->enemyDefeats++;
     if(!game.curAreaData->missionOld.enemyPointsOnCollection) {
-        game.states.gameplay->enemyPointsCollected += eneType->points;
+        game.states.gameplay->enemyPointsObtained += eneType->points;
     }
     game.statistics.enemyDefeats++;
     

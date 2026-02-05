@@ -726,7 +726,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
     //Treasure points bullet.
     addStat(
         "Treasure points:",
-        i2s(game.states.gameplay->treasurePointsCollected) + "/" +
+        i2s(game.states.gameplay->treasurePointsObtained) + "/" +
         i2s(game.states.gameplay->treasurePointsTotal)
     );
     
@@ -743,7 +743,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
     //Enemy points bullet.
     addStat(
         "Enemy defeat points:",
-        i2s(game.states.gameplay->enemyPointsCollected) + "/" +
+        i2s(game.states.gameplay->enemyPointsObtained) + "/" +
         i2s(game.states.gameplay->enemyPointsTotal)
     );
     

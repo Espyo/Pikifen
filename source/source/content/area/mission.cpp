@@ -3479,7 +3479,7 @@ int MissionScoreCriterionEnemyPoints::getScore(
 ) const {
     return
         (int)
-        gameplay->enemyPointsCollected *
+        gameplay->enemyPointsObtained *
         getMultiplier(mission);
 }
 
@@ -3686,6 +3686,6 @@ int MissionScoreCriterionTreasurePoints::getScore(
 ) const {
     return
         (int)
-        gameplay->treasurePointsCollected *
+        gameplay->treasurePointsObtained *
         getMultiplier(mission);
 }
