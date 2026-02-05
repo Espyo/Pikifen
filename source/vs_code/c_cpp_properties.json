@@ -8,11 +8,11 @@
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c11",
-            "cppStandard": "c++11",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
             "intelliSenseMode": "gcc-x64",
             "compilerArgs": [
-                "-std=c++17",
+                "-std=c++20",
                 "-rdynamic",
                 "-D_GLIBCXX_USE_CXX11_ABI=0",
                 "-lm `pkg-config --libs allegro-5 allegro_main-5 allegro_audio-5 allegro_image-5 allegro_font-5 allegro_acodec-5 allegro_primitives-5 allegro_dialog-5`"

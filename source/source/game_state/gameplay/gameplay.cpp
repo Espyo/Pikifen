@@ -383,22 +383,6 @@ void GameplayMessageBox::tick(float deltaT) {
 
 
 /**
- * @brief Constructs a new gameplay state object.
- */
-GameplayState::GameplayState() {
-    game.signals.onMobDeleted.connect(
-        Simple::slot(this, &GameplayState::processMobDeletion)
-    );
-    game.signals.onMobDeathFinish.connect(
-        Simple::slot(this, &GameplayState::processMobDeathFinish)
-    );
-    game.signals.onMobDeathStart.connect(
-        Simple::slot(this, &GameplayState::processMobDeathStart)
-    );
-}
-
-
-/**
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
