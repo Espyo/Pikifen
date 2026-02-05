@@ -17,6 +17,9 @@
 #include "gen_mob_fsm.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the pellet's logic.
  *
@@ -135,6 +138,10 @@ void PelletFsm::createFsm(MobType* typ) {
 }
 
 
+#pragma endregion
+#pragma region FSM functions
+
+
 /**
  * @brief When the pellet should lose its momentum and stand still.
  *
@@ -146,3 +153,6 @@ void PelletFsm::standStill(Mob* m, void* info1, void* info2) {
     m->stopChasing();
     m->stopTurning();
 }
+
+
+#pragma endregion

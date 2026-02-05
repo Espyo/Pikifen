@@ -37,6 +37,9 @@ const unsigned char DEF_DIFFICULTY = 0;
 }
 
 
+#pragma region Area
+
+
 /**
  * @brief Checks to see if all indexes match their pointers,
  * for the various edges, vertexes, etc.
@@ -2221,6 +2224,10 @@ void Area::saveThumbnail(bool toBackup) {
 }
 
 
+#pragma endregion
+#pragma region Blockmap
+
+
 /**
  * @brief Clears the info of the blockmap.
  */
@@ -2318,6 +2325,10 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
 }
 
 
+#pragma endregion
+#pragma region Others
+
+
 /**
  * @brief Constructs a new mob generator object.
  *
@@ -2392,3 +2403,6 @@ TreeShadow::TreeShadow(
 TreeShadow::~TreeShadow() {
     game.content.bitmaps.list.free(bmpName);
 }
+
+
+#pragma endregion

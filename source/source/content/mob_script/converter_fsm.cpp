@@ -16,6 +16,9 @@
 #include "../mob/converter.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the converter's logic.
  *
@@ -89,6 +92,10 @@ void ConverterFsm::createFsm(MobType* typ) {
         i2s(N_CONVERTER_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -309,3 +316,6 @@ void ConverterFsm::startDying(Mob* m, void* info1, void* info2) {
     );
     conPtr->curBaseAnimIdx = CONVERTER_ANIM_DYING;
 }
+
+
+#pragma endregion

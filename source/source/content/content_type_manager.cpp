@@ -20,6 +20,9 @@
 #include "../util/string_utils.h"
 
 
+#pragma region Area
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -276,6 +279,10 @@ void AreaContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Bitmap
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -375,6 +382,10 @@ void BitmapContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Content type
+
+
 /**
  * @brief Fills in a given manifests map.
  *
@@ -421,6 +432,10 @@ void ContentTypeManager::fillManifestsMapFromPack(
             );
     }
 }
+
+
+#pragma endregion
+#pragma region Global animation
 
 
 /**
@@ -536,6 +551,10 @@ void GlobalAnimContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region GUI
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -625,6 +644,10 @@ void GuiContentManager::pathToManifest(
 void GuiContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
+
+
+#pragma endregion
+#pragma region Hazard
 
 
 /**
@@ -735,6 +758,10 @@ void HazardContentManager::pathToManifest(
 void HazardContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
+
+
+#pragma endregion
+#pragma region Liquid
 
 
 /**
@@ -850,6 +877,10 @@ void LiquidContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Misc. config
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -955,6 +986,10 @@ void MiscConfigContentManager::pathToManifest(
  */
 void MiscConfigContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
+
+
+#pragma endregion
+#pragma region Mob animation
 
 
 /**
@@ -1136,6 +1171,10 @@ void MobAnimContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     }
     list.clear();
 }
+
+
+#pragma endregion
+#pragma region Mob type
 
 
 /**
@@ -1406,6 +1445,10 @@ void MobTypeContentManager::unloadMobTypesOfCategory(
 }
 
 
+#pragma endregion
+#pragma region Particle generator
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -1521,6 +1564,10 @@ void ParticleGenContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Song
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -1634,6 +1681,10 @@ void SongContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Song track
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -1734,6 +1785,10 @@ void SongTrackContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Sound
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -1831,6 +1886,10 @@ void SoundContentManager::pathToManifest(
  */
 void SoundContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
+
+
+#pragma endregion
+#pragma region Spike damage
 
 
 /**
@@ -1943,6 +2002,10 @@ void SpikeDamageTypeContentManager::pathToManifest(
 void SpikeDamageTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
+
+
+#pragma endregion
+#pragma region Spray
 
 
 /**
@@ -2088,6 +2151,10 @@ void SprayTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     game.config.misc.sprayOrder.clear();
     list.clear();
 }
+
+
+#pragma endregion
+#pragma region Status
 
 
 /**
@@ -2236,6 +2303,10 @@ void StatusTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Weather
+
+
 /**
  * @brief Clears the manifests.
  */
@@ -2344,3 +2415,6 @@ void WeatherConditionContentManager::pathToManifest(
 void WeatherConditionContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
+
+
+#pragma endregion

@@ -54,6 +54,9 @@
 #include "misc_functions.h"
 
 
+#pragma region Destruction
+
+
 /**
  * @brief Destroys Allegro and modules.
  */
@@ -123,6 +126,10 @@ void destroyMisc() {
 void destroyMobCategories() {
     game.mobCategories.clear();
 }
+
+
+#pragma endregion
+#pragma region Initialization
 
 
 /**
@@ -2344,3 +2351,6 @@ void initMobCategories() {
         MOB_CATEGORY_CUSTOM, new CustomCategory()
     );
 }
+
+
+#pragma endregion

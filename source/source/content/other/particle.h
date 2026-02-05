@@ -29,6 +29,9 @@ class Mob;
 struct Viewport;
 
 
+#pragma region Constants
+
+
 //Particle priorities.
 enum PARTICLE_PRIORITY {
 
@@ -106,6 +109,10 @@ enum PARTICLE_BLEND_TYPE {
     PARTICLE_BLEND_TYPE_ADDITIVE,
     
 };
+
+
+#pragma endregion
+#pragma region Classes
 
 
 /**
@@ -392,3 +399,6 @@ struct ParticleGenerator : public Content {
     float emissionTimer = 0.0f;
     
 };
+
+
+#pragma endregion

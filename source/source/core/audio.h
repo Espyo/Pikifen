@@ -50,6 +50,9 @@ class AudioManager;
 class Mob;
 
 
+#pragma region Constants
+
+
 namespace AUDIO {
 extern const float DEF_STACK_MIN_POS;
 extern const float INTERLUDE_GAIN_SPEED;
@@ -181,6 +184,10 @@ enum MIX_TRACK_TYPE {
     N_MIX_TRACK_TYPES,
     
 };
+
+
+#pragma endregion
+#pragma region Classes
 
 
 /**
@@ -506,3 +513,6 @@ struct DataNodeSound {
     void loadFromDataNode(DataNode* node);
     
 };
+
+
+#pragma endregion

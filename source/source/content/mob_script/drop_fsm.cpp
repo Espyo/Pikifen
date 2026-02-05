@@ -15,6 +15,9 @@
 #include "../mob/drop.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the drop's logic.
  *
@@ -69,6 +72,10 @@ void DropFsm::createFsm(MobType* typ) {
         i2s(N_DROP_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -205,3 +212,6 @@ void DropFsm::setFallingAnim(Mob* m, void* info1, void* info2) {
 void DropFsm::setIdlingAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(DROP_ANIM_IDLING);
 }
+
+
+#pragma endregion

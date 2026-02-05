@@ -19,6 +19,9 @@
 #include "misc_structs.h"
 
 
+#pragma region Defaults
+
+
 namespace OPTIONS {
 
 namespace ADVANCED_D {
@@ -255,6 +258,10 @@ const float GRID_INTERVAL = 32.0f;
 
 
 }
+
+
+#pragma endregion
+#pragma region Classes
 
 
 /**
@@ -761,3 +768,6 @@ void Options::saveToDataNode(DataNode* file) const {
         pGW.write("quick_play_area_path", partEd.quickPlayAreaPath);
     }
 }
+
+
+#pragma endregion

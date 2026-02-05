@@ -32,6 +32,9 @@ using std::map;
 using std::vector;
 
 
+#pragma region Constants
+
+
 namespace GUI {
 extern const float AUTO_REPEAT_MAX_INTERVAL;
 extern const float AUTO_REPEAT_MIN_INTERVAL;
@@ -141,6 +144,10 @@ enum CUSTOM_GUI_ITEM_TYPE {
 };
 
 
+#pragma endregion
+#pragma region GUI item definitions
+
+
 class GuiManager;
 
 
@@ -224,6 +231,10 @@ struct CustomGuiItemDef : public GuiItemDef {
     void clearBitmap();
     
 };
+
+
+#pragma endregion
+#pragma region GUI items
 
 
 /**
@@ -686,6 +697,10 @@ private:
 };
 
 
+#pragma endregion
+#pragma region GUI manager
+
+
 /**
  * @brief GUI manager.
  *
@@ -826,3 +841,6 @@ protected:
     void handleSpatialNavigationAction(const Inpution::Action& action);
     
 };
+
+
+#pragma endregion

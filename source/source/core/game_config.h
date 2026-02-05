@@ -25,6 +25,9 @@ using std::size_t;
 using std::vector;
 
 
+#pragma region Regions
+
+
 namespace GAME_CONFIG {
 
 namespace AESTHETIC_GENERAL_D {
@@ -105,6 +108,10 @@ extern const float ZOOM_FARTHEST_REACH;
 
 
 }
+
+
+#pragma endregion
+#pragma region Classes
 
 
 using namespace GAME_CONFIG;
@@ -335,3 +342,6 @@ struct GameConfig {
     void load(DataNode* file);
     
 };
+
+
+#pragma endregion

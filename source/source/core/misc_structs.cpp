@@ -28,6 +28,9 @@
 #include "misc_functions.h"
 
 
+#pragma region Constants
+
+
 namespace GAMEPLAY_MSG_BOX {
 
 //How quickly the advance button icon fades, in alpha [0 - 1] per second.
@@ -165,6 +168,10 @@ const float RINGS_INTERVAL = 0.1f;
 }
 
 
+#pragma endregion
+#pragma region Audio stream manager
+
+
 /**
  * @brief Loads an audio stream for the manager.
  *
@@ -201,6 +208,10 @@ void AudioStreamManager::doUnload(ALLEGRO_AUDIO_STREAM* asset) {
 }
 
 
+#pragma endregion
+#pragma region Bitmap manager
+
+
 /**
  * @brief Loads a bitmap for the manager.
  *
@@ -231,6 +242,10 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
         al_destroy_bitmap(asset);
     }
 }
+
+
+#pragma endregion
+#pragma region Camera
 
 
 /**
@@ -274,6 +289,10 @@ void Camera::tick(float deltaT) {
             zoom, targetZoom, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
         );
 }
+
+
+#pragma endregion
+#pragma region Console
 
 
 /**
@@ -370,6 +389,10 @@ void Console::write(
 void Console::writeLog(float totalDuration, float fadeDuration) {
     this->write(join(log, "\n"), totalDuration, fadeDuration);
 }
+
+
+#pragma endregion
+#pragma region Error manager
 
 
 /**
@@ -520,6 +543,10 @@ bool ErrorManager::sessionHasErrors() {
 }
 
 
+#pragma endregion
+#pragma region Fade manager
+
+
 /**
  * @brief Constructs a new fade manager object.
  *
@@ -620,6 +647,10 @@ void FadeManager::tick(float deltaT) {
         if(durationOverride > 0.0f) durationOverride = 0.0f;
     }
 }
+
+
+#pragma endregion
+#pragma region Getter writer
 
 
 /**
@@ -860,6 +891,10 @@ void GetterWriter::write(
 }
 
 
+#pragma endregion
+#pragma region Inventory item database
+
+
 
 /**
  * @brief Clears the database.
@@ -963,6 +998,10 @@ void InventoryItemDatabase::init() {
         items.push_back(item);
     }
 }
+
+
+#pragma endregion
+#pragma region Leader prompt
 
 
 /**
@@ -1104,6 +1143,10 @@ void LeaderPrompt::tick(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Mouse cursor
+
+
 /**
  * @brief Hides the OS mouse in the game window.
  */
@@ -1159,6 +1202,10 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
     winPos.x = ev.mouse.x;
     winPos.y = ev.mouse.y;
 }
+
+
+#pragma endregion
+#pragma region Performance monitor
 
 
 /**
@@ -1467,6 +1514,10 @@ void PerformanceMonitor::Page::writeMeasurement(
     }
     str += "\n";
 }
+
+
+#pragma endregion
+#pragma region Reader setter
 
 
 /**
@@ -1802,6 +1853,9 @@ void ReaderSetter::set(
 }
 
 
+#pragma endregion
+#pragma region RNG manager
+
 
 /**
  * @brief Returns a random float between the provided range, inclusive.
@@ -1880,6 +1934,9 @@ void RngManager::init(int32_t initialSeed) {
 }
 
 
+#pragma endregion
+#pragma region Sample manager
+
 
 /**
  * @brief Loads an audio sample for the manager.
@@ -1910,6 +1967,9 @@ void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
     al_destroy_sample(asset);
 }
 
+
+#pragma endregion
+#pragma region Script var reader
 
 
 /**
@@ -2061,6 +2121,10 @@ bool ScriptVarReader::get(const string& name, Point& dest) const {
 }
 
 
+#pragma endregion
+#pragma region Subgroup type manager
+
+
 /**
  * @brief Clears the list of registered subgroup types.
  */
@@ -2164,6 +2228,10 @@ void SubgroupTypeManager::registerType(
     
     types.push_back(newSgType);
 }
+
+
+#pragma endregion
+#pragma region System content names
 
 
 /**
@@ -2319,6 +2387,10 @@ void SystemContentNames::load(DataNode* file) {
 }
 
 
+#pragma endregion
+#pragma region System notification manager
+
+
 /**
  * @brief Adds a new notification to the queue.
  *
@@ -2440,6 +2512,10 @@ void SystemNotificationManager::tick(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Viewport
+
+
 /**
  * @brief Constructs a new viewport object.
  */
@@ -2534,6 +2610,10 @@ void Viewport::updateTransformations() {
 }
 
 
+#pragma endregion
+#pragma region Whistle
+
+
 /**
  * @brief Constructs a new whistle struct object.
  */
@@ -2617,3 +2697,6 @@ void Whistle::tick(
         }
     }
 }
+
+
+#pragma endregion

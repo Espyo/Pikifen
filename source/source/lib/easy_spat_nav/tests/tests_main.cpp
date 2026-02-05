@@ -16,6 +16,9 @@
 #include "../easy_spat_nav.h"
 
 
+#pragma region Test scaffolding
+
+
 constexpr const char* COLOR_BOLD = "\033[1m";
 constexpr const char* COLOR_GREEN = "\033[32m";
 constexpr const char* COLOR_RED = "\033[31m";
@@ -325,6 +328,10 @@ using EasySpatNav::DIRECTION_RIGHT;
 using EasySpatNav::DIRECTION_DOWN;
 using EasySpatNav::DIRECTION_LEFT;
 using EasySpatNav::DIRECTION_UP;
+
+
+#pragma endregion
+#pragma region Test program
 
 
 /**
@@ -652,6 +659,9 @@ int main(int argc, char** argv) {
     
     return 0;
 }
+
+
+#pragma endregion
 
 
 #endif //ifdef EASY_SPAT_NAV_UNIT_TESTS

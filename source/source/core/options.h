@@ -25,6 +25,9 @@ using std::size_t;
 using std::vector;
 
 
+#pragma region Constants
+
+
 //Modes for the auto-throw feature.
 enum AUTO_THROW_MODE {
 
@@ -164,6 +167,10 @@ extern const float GRID_INTERVAL;
 
 
 }
+
+
+#pragma endregion
+#pragma region Classes
 
 
 using namespace OPTIONS;
@@ -476,3 +483,6 @@ private:
     vector<pair<string, string> > loadEditorHistory(const string& str) const;
     string saveEditorHistory(const vector<pair<string, string> >& vec) const;
 };
+
+
+#pragma endregion

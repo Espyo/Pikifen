@@ -19,6 +19,9 @@
 #include "../mob/bouncer.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the bouncer's logic.
  *
@@ -57,6 +60,10 @@ void BouncerFsm::createFsm(MobType* typ) {
         i2s(N_BOUNCER_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -170,3 +177,6 @@ void BouncerFsm::setIdlingAnimation(Mob* m, void* info1, void* info2) {
         BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
+
+
+#pragma endregion

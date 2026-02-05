@@ -41,6 +41,10 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+
+#pragma region Constants
+
+
 namespace GAMEPLAY_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float BUTTON_OFFSET_MULT;
@@ -134,6 +138,10 @@ enum ENGINE_FONT {
     ENGINE_FONT_VALUE,
     
 };
+
+
+#pragma endregion
+#pragma region Classes
 
 
 /**
@@ -2036,3 +2044,6 @@ protected:
     void doUnload(ALLEGRO_SAMPLE* asset) override;
     
 };
+
+
+#pragma endregion

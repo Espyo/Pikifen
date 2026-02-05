@@ -14,6 +14,9 @@
 #include "game.h"
 
 
+#pragma region Defaults
+
+
 namespace GAME_CONFIG {
 
 namespace AESTHETIC_GENERAL_D {
@@ -196,6 +199,10 @@ const float ZOOM_FARTHEST_REACH = 1340.0f;
 }
 
 
+#pragma endregion
+#pragma region Classes
+
+
 /**
  * @brief Loads the game's config from a file.
  *
@@ -336,3 +343,6 @@ void GameConfig::load(DataNode* file) {
             rules.zoomClosestReach, rules.zoomFarthestReach
         );
 }
+
+
+#pragma endregion

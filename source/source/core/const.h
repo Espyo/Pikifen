@@ -25,6 +25,9 @@ using std::size_t;
 using std::string;
 
 
+#pragma region Important
+
+
 //Engine version stuff. For every release, update these numbers, and
 //update the numbers in the resource (.rc) file.
 
@@ -86,6 +89,10 @@ const string DISCORD_SERVER_URL = "https://discord.gg/qbhz4u3";
 
 //URL to the project's GitHub page.
 const string GITHUB_PAGE_URL = "https://github.com/Espyo/Pikifen";
+
+
+#pragma endregion
+#pragma region Folder names
 
 
 //Folder names (not paths).
@@ -169,6 +176,10 @@ const string WEATHER = "weather";
 }
 
 
+#pragma endregion
+#pragma region File names
+
+
 //File names (not paths).
 namespace FILE_NAMES {
 
@@ -220,6 +231,10 @@ const string STATISTICS = "statistics.txt";
 }
 
 
+#pragma endregion
+#pragma region Folder paths from root
+
+
 //Paths to folders from the engine's root folder.
 namespace FOLDER_PATHS_FROM_ROOT {
 
@@ -240,6 +255,10 @@ const string AREA_USER_DATA =
     USER_DATA + "/" + FOLDER_NAMES::AREAS;
     
 };
+
+
+#pragma endregion
+#pragma region File paths from root
 
 
 //Paths to files from the engine's root folder.
@@ -274,6 +293,10 @@ const string MAKER_TOOLS =
     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::MAKER_TOOLS;
     
 };
+
+
+#pragma endregion
+#pragma region Folder paths from pack
 
 
 //Paths to game content folders from a pack's folder.
@@ -362,6 +385,10 @@ const string WEATHER =
 };
 
 
+#pragma endregion
+#pragma region File paths from pack
+
+
 //Paths to game content files from a pack's folder.
 namespace FILE_PATHS_FROM_PACK {
 
@@ -374,3 +401,6 @@ const string SYSTEM_CONTENT_NAMES =
     FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_CONTENT_NAMES;
     
 }
+
+
+#pragma endregion

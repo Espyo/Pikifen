@@ -18,6 +18,9 @@
 #include "../other/particle.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the Onion's logic.
  *
@@ -84,6 +87,10 @@ void OnionFsm::createFsm(MobType* typ) {
         i2s(N_ONION_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -243,3 +250,6 @@ void OnionFsm::startIdling(Mob* m, void* info1, void* info2) {
 void OnionFsm::stopGenerating(Mob* m, void* info1, void* info2) {
     m->setAnimation(ONION_ANIM_STOPPING_GENERATION);
 }
+
+
+#pragma endregion

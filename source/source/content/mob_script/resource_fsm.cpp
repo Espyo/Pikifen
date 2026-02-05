@@ -17,6 +17,9 @@
 #include "gen_mob_fsm.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the resource's logic.
  *
@@ -166,6 +169,10 @@ void ResourceFsm::createFsm(MobType* typ) {
         i2s(N_RESOURCE_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -319,3 +326,6 @@ void ResourceFsm::vanish(Mob* m, void* info1, void* info2) {
         resPtr->toDelete = true;
     }
 }
+
+
+#pragma endregion

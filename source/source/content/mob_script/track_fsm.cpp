@@ -16,6 +16,9 @@
 #include "../mob/track.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the track's logic.
  *
@@ -43,6 +46,10 @@ void TrackFsm::createFsm(MobType* typ) {
         i2s(N_TRACK_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -95,3 +102,6 @@ void TrackFsm::spawn(Mob* m, void* info1, void* info2) {
         TRACK_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
+
+
+#pragma endregion

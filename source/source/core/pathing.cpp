@@ -35,6 +35,9 @@ const float MIN_STOP_RADIUS = 16.0f;
 }
 
 
+#pragma region Path link
+
+
 /**
  * @brief Constructs a new path link object.
  *
@@ -82,6 +85,10 @@ void PathLink::clone(PathLink* destination) const {
 bool PathLink::isOneWay() const {
     return endPtr->getLink(startPtr) == nullptr;
 }
+
+
+#pragma endregion
+#pragma region Path manager
 
 
 /**
@@ -236,6 +243,10 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
 }
 
 
+#pragma endregion
+#pragma region Path stop
+
+
 /**
  * @brief Constructs a new path stop object.
  *
@@ -385,6 +396,10 @@ void PathStop::removeLink(const PathStop* otherStop) {
         }
     }
 }
+
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -964,3 +979,6 @@ string pathResultToString(PATH_RESULT result) {
     }
     return "";
 }
+
+
+#pragma endregion

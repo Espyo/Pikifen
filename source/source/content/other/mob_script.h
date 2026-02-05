@@ -30,6 +30,10 @@ class MobType;
 class MobState;
 class Hitbox;
 
+
+#pragma region Constants
+
+
 /**
  * @brief Function to run custom mob actions with.
  *
@@ -320,6 +324,10 @@ enum MOB_EV {
 };
 
 
+#pragma endregion
+#pragma region Classes
+
+
 /**
  * @brief Actions to run on an event, inside a FSM.
  */
@@ -498,6 +506,10 @@ struct HitboxInteraction {
 };
 
 
+#pragma endregion
+#pragma region Global functions
+
+
 size_t fixStates(
     vector<MobState*>& states, const string& startingState, const MobType* mt
 );
@@ -510,3 +522,6 @@ void loadState(
     MobState* statePtr
 );
 void unloadScript(MobType* mt);
+
+
+#pragma endregion

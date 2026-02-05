@@ -18,6 +18,9 @@
 #include "../easy_analog_cleaner.h"
 
 
+#pragma region Test scaffolding
+
+
 constexpr const char* COLOR_BOLD = "\033[1m";
 constexpr const char* COLOR_GREEN = "\033[32m";
 constexpr const char* COLOR_RED = "\033[31m";
@@ -195,6 +198,10 @@ void testCleanButton(
     float actualArr[1] = { pressure };
     test(testDescription, expectedArr, actualArr, inputArr, 1);
 }
+
+
+#pragma endregion
+#pragma region Test program
 
 
 /**
@@ -587,6 +594,9 @@ int main(int argc, char** argv) {
     
     return 0;
 }
+
+
+#pragma endregion
 
 
 #endif //ifdef EASY_ANALOG_CLEANER_UNIT_TESTS

@@ -135,6 +135,9 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 }
 
 
+#pragma region Big message
+
+
 /**
  * @brief Gets the current big message's ID.
  *
@@ -187,6 +190,10 @@ void BigMessageInfo::tick(float deltaT) {
         curTime += deltaT;
     }
 }
+
+
+#pragma endregion
+#pragma region Gameplay message box
 
 
 /**
@@ -369,6 +376,10 @@ void GameplayMessageBox::tick(float deltaT) {
             );
     }
 }
+
+
+#pragma endregion
+#pragma region Gameplay state
 
 
 /**
@@ -1898,6 +1909,10 @@ void GameplayState::updateClosestGroupMembers(Player* player) {
 }
 
 
+#pragma endregion
+#pragma region Interlude info
+
+
 /**
  * @brief Gets the current interlude's ID.
  *
@@ -1966,6 +1981,10 @@ void InterludeInfo::tick(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Mission mob checklist status
+
+
 /**
  * @brief Marks a mob as cleared by removing it from the list, if it's there.
  *
@@ -1981,3 +2000,6 @@ bool MissionMobChecklistStatus::remove(Mob* m) {
     remaining.erase(it);
     return true;
 }
+
+
+#pragma endregion

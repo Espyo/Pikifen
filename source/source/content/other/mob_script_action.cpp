@@ -25,6 +25,9 @@
 using std::set;
 
 
+#pragma region Action call
+
+
 /**
  * @brief Constructs a new mob action call object of a certain type.
  *
@@ -210,6 +213,9 @@ bool MobActionCall::run(
     return data.returnValue;
 }
 
+
+#pragma endregion
+#pragma region Action loaders
 
 
 /**
@@ -795,6 +801,10 @@ bool MobActionLoaders::turnToTarget(MobActionCall& call) {
 }
 
 
+#pragma endregion
+#pragma region Action param
+
+
 /**
  * @brief Constructs a new mob action param::mob action param object.
  *
@@ -816,6 +826,10 @@ MobActionParam::MobActionParam(
 }
 
 
+#pragma endregion
+#pragma region Action run data
+
+
 /**
  * @brief Constructs a new mob action run data object.
  *
@@ -827,6 +841,10 @@ MobActionRunData::MobActionRunData(Mob* m, MobActionCall* call) :
     call(call) {
     
 }
+
+
+#pragma endregion
+#pragma region Action runners
 
 
 /**
@@ -2543,6 +2561,10 @@ void MobActionRunners::turnToTarget(MobActionRunData& data) {
 }
 
 
+#pragma endregion
+#pragma region Global functions
+
+
 /**
  * @brief Confirms if the "if", "else", "end_if", "goto", and "label" actions in
  * a given vector of actions are all okay, and there are no mismatches, like
@@ -2809,3 +2831,6 @@ void loadActions(
     }
     assertActions(*outActions, node);
 }
+
+
+#pragma endregion

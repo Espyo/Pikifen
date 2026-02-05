@@ -29,6 +29,9 @@ using std::unordered_set;
 using std::vector;
 
 
+#pragma region Constants
+
+
 //List of player action types.
 enum PLAYER_ACTION_TYPE {
 
@@ -302,6 +305,10 @@ enum CONTROLS_GAME_STATE {
 };
 
 
+#pragma endregion
+#pragma region Classes
+
+
 /**
  * @brief Data about a type of action that can be performed in the game.
  * This data is pertinent only to Pikifen, not the library.
@@ -427,3 +434,6 @@ struct ControlsMediator {
     Inpution::Manager mgr;
     
 };
+
+
+#pragma endregion

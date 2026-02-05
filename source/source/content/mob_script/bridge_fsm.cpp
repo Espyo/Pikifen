@@ -18,6 +18,9 @@
 #include "gen_mob_fsm.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the bridge's logic.
  *
@@ -66,6 +69,10 @@ void BridgeFsm::createFsm(MobType* typ) {
         i2s(N_BRIDGE_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -125,3 +132,6 @@ void BridgeFsm::setup(Mob* m, void* info1, void* info2) {
     Bridge* briPtr = (Bridge*) m;
     briPtr->setup();
 }
+
+
+#pragma endregion

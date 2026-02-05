@@ -27,6 +27,9 @@
 using std::unordered_set;
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the leader's logic.
  *
@@ -1248,6 +1251,10 @@ void LeaderFsm::createFsm(MobType* typ) {
         i2s(N_LEADER_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -2960,3 +2967,6 @@ void LeaderFsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
     LeaderFsm::joinGroup(m, info1, nullptr);
     m->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
 }
+
+
+#pragma endregion

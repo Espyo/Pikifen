@@ -65,6 +65,8 @@ const float SONG_SOFTENED_VOLUME = 0.4f;
 }
 
 
+#pragma region Audio manager
+
 
 /**
  * @brief Creates an in-world global sound effect source and returns its ID.
@@ -1269,6 +1271,10 @@ void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
 }
 
 
+#pragma endregion
+#pragma region Others
+
+
 /**
  * @brief Loads data from a data node.
  * 
@@ -1413,3 +1419,6 @@ void Song::unload() {
         game.content.songTracks.list.free(t.second);
     }
 }
+
+
+#pragma endregion

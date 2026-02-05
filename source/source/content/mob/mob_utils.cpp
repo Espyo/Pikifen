@@ -25,6 +25,9 @@ using std::unordered_set;
 using std::size_t;
 
 
+#pragma region Carrier spot
+
+
 /**
  * @brief Constructs a new carrier spot struct object.
  *
@@ -34,6 +37,10 @@ CarrierSpot::CarrierSpot(const Point& pos) :
     pos(pos) {
     
 }
+
+
+#pragma endregion
+#pragma region Carry info
 
 
 /**
@@ -212,6 +219,10 @@ void CarryInfo::rotatePoints(float angle) {
 }
 
 
+#pragma endregion
+#pragma region Circling info
+
+
 /**
  * @brief Constructs a new circling info struct object.
  *
@@ -223,12 +234,20 @@ CirclingInfo::CirclingInfo(Mob* m) :
 }
 
 
+#pragma endregion
+#pragma region Delivery info
+
+
 /**
  * @brief Constructs a new delivery info struct object.
  */
 DeliveryInfo::DeliveryInfo() :
     color(game.config.aestheticGen.carryingColorMove) {
 }
+
+
+#pragma endregion
+#pragma region Group
 
 
 /**
@@ -677,6 +696,10 @@ void Group::sort(SubgroupType* leadingType) {
 }
 
 
+#pragma endregion
+#pragma region Hold info
+
+
 /**
  * @brief Clears the information.
  */
@@ -732,6 +755,10 @@ Point HoldInfo::getFinalPos(float* outZ) const {
 }
 
 
+#pragma endregion
+#pragma region Parent
+
+
 /**
  * @brief Constructs a new parent info struct object.
  *
@@ -741,6 +768,10 @@ Parent::Parent(Mob* m) :
     m(m) {
     
 }
+
+
+#pragma endregion
+#pragma region Path
 
 
 /**
@@ -803,6 +834,10 @@ bool Path::isDirect() const {
         result == PATH_RESULT_DIRECT_NO_STOPS ||
         result == PATH_RESULT_DIRECT_NO_ACCESSIBLE_STOPS;
 }
+
+
+#pragma endregion
+#pragma region Pikmin nest
 
 
 /**
@@ -1039,6 +1074,10 @@ void PikminNest::tick(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Pikmin nest type
+
+
 /**
  * @brief Destroys the nest type object.
  */
@@ -1146,6 +1185,10 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
 }
 
 
+#pragma endregion
+#pragma region Track ride info
+
+
 /**
  * @brief Constructs a new track ride info struct object.
  *
@@ -1161,6 +1204,10 @@ TrackRideInfo::TrackRideInfo(
     rideSpeed(rideSpeed) {
     
 }
+
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -1593,3 +1640,6 @@ MOB_TEAM stringToTeamNr(const string& teamStr) {
     }
     return (MOB_TEAM) INVALID;
 }
+
+
+#pragma endregion

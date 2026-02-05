@@ -16,6 +16,9 @@
 #include "../util/allegro_utils.h"
 
 
+#pragma region Content manager
+
+
 /**
  * @brief Constructs a new content manager object.
  */
@@ -266,6 +269,10 @@ void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
 }
 
 
+#pragma endregion
+#pragma region Pack manager
+
+
 /**
  * @brief Clears all loaded manifests.
  */
@@ -362,3 +369,6 @@ void PackManager::loadAll() {
 void PackManager::unloadAll() {
     list.clear();
 }
+
+
+#pragma endregion

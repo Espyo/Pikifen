@@ -26,6 +26,9 @@
 #include "gen_mob_fsm.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the Pikmin's logic.
  *
@@ -1967,6 +1970,10 @@ void PikminFsm::createFsm(MobType* typ) {
         i2s(N_PIKMIN_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -4869,3 +4876,6 @@ void PikminFsm::workOnGroupTask(Mob* m, void* info1, void* info2) {
     }
     }
 }
+
+
+#pragma endregion

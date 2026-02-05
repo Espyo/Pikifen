@@ -91,6 +91,9 @@ const Point STANDARD_CONTENT_SIZE = Point(0.95f, 0.80f);
 }
 
 
+#pragma region Bullet
+
+
 /**
  * @brief Constructs a new bullet point GUI item object.
  *
@@ -150,6 +153,10 @@ void BulletGuiItem::defDrawCode(const DrawInfo& draw) {
 }
 
 
+#pragma endregion
+#pragma region Button
+
+
 /**
  * @brief Constructs a new button GUI item object.
  *
@@ -186,6 +193,10 @@ void ButtonGuiItem::defDrawCode(
         focused, getJuiceValue(), draw.tint
     );
 }
+
+
+#pragma endregion
+#pragma region Check
 
 
 /**
@@ -284,6 +295,10 @@ void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
 }
 
 
+#pragma endregion
+#pragma region Custom GUI item
+
+
 /**
  * @brief Clears the custom GUI item definition object's data.
  */
@@ -293,6 +308,10 @@ void CustomGuiItemDef::clearBitmap() {
         bitmapName.clear();
     }
 }
+
+
+#pragma endregion
+#pragma region GUI item
 
 
 /**
@@ -589,6 +608,10 @@ bool GuiItem::startJuiceAnimation(JUICE_TYPE type) {
     }
     }
 }
+
+
+#pragma endregion
+#pragma region GUI manager
 
 
 /**
@@ -1750,6 +1773,10 @@ bool GuiManager::writeItemDefsToDataFile(
 }
 
 
+#pragma endregion
+#pragma region List
+
+
 /**
  * @brief Constructs a new list GUI item object.
  */
@@ -2007,6 +2034,10 @@ void ListGuiItem::defTickCode(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Picker
+
+
 /**
  * @brief Constructs a new picker GUI item object.
  *
@@ -2188,6 +2219,10 @@ void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
 }
 
 
+#pragma endregion
+#pragma region Scroll
+
+
 /**
  * @brief Constructs a new scroll GUI item object.
  */
@@ -2350,6 +2385,10 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
 }
 
 
+#pragma endregion
+#pragma region Text
+
+
 /**
  * @brief Constructs a new text GUI item object.
  *
@@ -2435,6 +2474,10 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
 }
 
 
+#pragma endregion
+#pragma region Tooltip
+
+
 /**
  * @brief Constructs a new tooltip GUI item object.
  *
@@ -2471,3 +2514,6 @@ void TooltipGuiItem::defDrawCode(const DrawInfo& draw) {
         Point(1.0f + juicyGrowAmount)
     );
 }
+
+
+#pragma endregion

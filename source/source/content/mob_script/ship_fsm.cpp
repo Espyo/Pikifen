@@ -18,6 +18,9 @@
 #include "../other/particle.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the ship's logic.
  *
@@ -48,6 +51,10 @@ void ShipFsm::createFsm(MobType* typ) {
         i2s(N_SHIP_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -194,3 +201,6 @@ void ShipFsm::startDelivery(Mob* m, void* info1, void* info2) {
         shiPtr->soundBeamId = shiPtr->playSound(shiPtr->shiType->soundBeamIdx);
     }
 }
+
+
+#pragma endregion

@@ -24,6 +24,9 @@
 using std::size_t;
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the pile's logic.
  *
@@ -52,6 +55,10 @@ void PileFsm::createFsm(MobType* typ) {
         i2s(N_PILE_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -162,3 +169,6 @@ void PileFsm::becomeIdle(Mob* m, void* info1, void* info2) {
     Pile* pilPtr = (Pile*) m;
     pilPtr->update();
 }
+
+
+#pragma endregion

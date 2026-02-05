@@ -23,6 +23,9 @@
 #include "particle.h"
 
 
+#pragma region Easy FSM creator
+
+
 /**
  * @brief Creates a new action call for the current event, one that changes
  * the mob's state to something else.
@@ -112,6 +115,10 @@ void EasyFsmCreator::run(CustomActionCode code) {
 }
 
 
+#pragma endregion
+#pragma region Hitbox interaction
+
+
 /**
  * @brief Constructs a new hitbox interaction object.
  *
@@ -126,6 +133,10 @@ HitboxInteraction::HitboxInteraction(
     this->h1 = h1;
     this->h2 = h2;
 }
+
+
+#pragma endregion
+#pragma region Mob event
 
 
 /**
@@ -357,6 +368,10 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
 }
 
 
+#pragma endregion
+#pragma region Mob FSM
+
+
 /**
  * @brief Constructs a new mob FSM object.
  *
@@ -449,6 +464,10 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
 }
 
 
+#pragma endregion
+#pragma region Mob state
+
+
 /**
  * @brief Constructs a new mob state object.
  *
@@ -504,6 +523,10 @@ MobState::MobState(const string& name, size_t id) :
 MobEvent* MobState::getEvent(const MOB_EV type) const {
     return events[type];
 }
+
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -806,3 +829,6 @@ void unloadScript(MobType* mt) {
     }
     mt->states.clear();
 }
+
+
+#pragma endregion

@@ -70,6 +70,9 @@ const float STEP_HEIGHT = 50;
 }
 
 
+#pragma region Polygon
+
+
 /**
  * @brief Constructs a new polygon object.
  */
@@ -489,6 +492,10 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     points[1] = v2;
     points[2] = v3;
 }
+
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -1242,3 +1249,6 @@ TRIANGULATION_ERROR triangulateSector(
     root.destroy();
     return result;
 }
+
+
+#pragma endregion

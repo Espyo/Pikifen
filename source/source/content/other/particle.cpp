@@ -21,6 +21,9 @@
 #include "../../util/string_utils.h"
 
 
+#pragma region Particle
+
+
 /**
  * @brief Constructs a new particle object.
  *
@@ -166,6 +169,10 @@ void Particle::tick(const float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Particle emission
+
+
 /**
  * @brief Constructs a new particle emission object.
  *
@@ -226,6 +233,10 @@ Point ParticleEmission::getEmissionOffset(float numberRatio) {
     }
     
 }
+
+
+#pragma endregion
+#pragma region Particle generator
 
 
 /**
@@ -629,6 +640,10 @@ void ParticleGenerator::tick(float deltaT, ParticleManager& manager) {
 }
 
 
+#pragma endregion
+#pragma region Particle manager
+
+
 /**
  * @brief Constructs a new particle manager object.
  *
@@ -832,3 +847,6 @@ void ParticleManager::tickAll(float deltaT) {
         }
     }
 }
+
+
+#pragma endregion

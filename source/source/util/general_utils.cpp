@@ -17,6 +17,9 @@
 #include "string_utils.h"
 
 
+#pragma region Auto repeater
+
+
 /**
  * @brief Constructs a new auto-repeater object.
  *
@@ -83,6 +86,10 @@ size_t AutoRepeater::tick(float deltaT) {
     
     return triggers;
 }
+
+
+#pragma endregion
+#pragma region Enum name database
 
 
 /**
@@ -159,6 +166,10 @@ void EnumNameDatabase::registerItem(
 }
 
 
+#pragma endregion
+#pragma region Movement info
+
+
 /**
  * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
@@ -192,6 +203,9 @@ void MovementInfo::reset() {
     down = 0.0f;
 }
 
+
+#pragma endregion
+#pragma region Shaker
 
 
 /**
@@ -277,6 +291,9 @@ void Shaker::tick(float deltaT) {
 }
 
 
+#pragma endregion
+#pragma region Timer
+
 
 /**
  * @brief Constructs a new timer object.
@@ -357,6 +374,9 @@ void Timer::tick(float deltaT) {
     }
 }
 
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -467,3 +487,6 @@ string vectorTailToString(const vector<string>& v, size_t pos) {
     }
     return result;
 }
+
+
+#pragma endregion

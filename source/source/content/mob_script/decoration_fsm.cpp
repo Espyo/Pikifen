@@ -16,6 +16,9 @@
 #include "gen_mob_fsm.h"
 
 
+#pragma region FSM
+
+
 /**
  * @brief Creates the finite-state machine for the decoration's logic.
  *
@@ -51,6 +54,10 @@ void DecorationFsm::createFsm(MobType* typ) {
         i2s(N_DECORATION_STATES) + " in enum."
     );
 }
+
+
+#pragma endregion
+#pragma region FSM functions
 
 
 /**
@@ -107,3 +114,6 @@ void DecorationFsm::checkBump(Mob* m, void* info1, void* info2) {
     
     m->fsm.setState(DECORATION_STATE_BUMPED);
 }
+
+
+#pragma endregion

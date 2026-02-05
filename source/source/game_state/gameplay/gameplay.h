@@ -29,6 +29,9 @@
 #include "pause_menu.h"
 
 
+#pragma region Constants
+
+
 namespace GAMEPLAY {
 extern const float AREA_INTRO_HUD_MOVE_TIME;
 extern const float AREA_TITLE_FADE_DURATION;
@@ -126,6 +129,10 @@ enum BOSS_MUSIC_STATE {
     //Playing the victory theme.
     BOSS_MUSIC_STATE_VICTORY,
 };
+
+
+#pragma endregion
+#pragma region Classes
 
 
 struct GameplayMessageBox;
@@ -659,3 +666,6 @@ struct GameplayMessageBox {
     void tick(float deltaT);
     
 };
+
+
+#pragma endregion

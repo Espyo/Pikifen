@@ -22,6 +22,9 @@
 using std::vector;
 
 
+#pragma region Distance
+
+
 /**
  * @brief Constructs a new distance object, given two points.
  *
@@ -267,6 +270,10 @@ float Distance::toFloat() {
     }
     return normalDistance;
 }
+
+
+#pragma endregion
+#pragma region Point
 
 
 /**
@@ -566,6 +573,9 @@ const Point operator /(float n, const Point& p) {
     return Point(n / p.x, n / p.y);
 }
 
+
+#pragma endregion
+#pragma region Global functions
 
 
 /**
@@ -2323,3 +2333,6 @@ void updateMinMaxCoords(
     updateMinCoords(minCoords, newCoords);
     updateMaxCoords(maxCoords, newCoords);
 }
+
+
+#pragma endregion

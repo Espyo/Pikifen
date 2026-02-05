@@ -15,6 +15,10 @@
 #include "mob_script.h"
 
 
+#pragma endregion
+#pragma region Constants
+
+
 //Types of script action.
 enum MOB_ACTION {
 
@@ -570,6 +574,10 @@ enum MOB_ACTION_PARAM {
 };
 
 
+#pragma endregion
+#pragma region Classes
+
+
 /**
  * @brief Info about a parameter that a mob action can receive.
  */
@@ -714,6 +722,10 @@ struct MobActionCall {
 };
 
 
+#pragma endregion
+#pragma region Loaders and runners
+
+
 namespace MobActionRunners {
 void absoluteNumber(MobActionRunData& data);
 void addHealth(MobActionRunData& data);
@@ -841,6 +853,10 @@ bool loadMobTargetType(MobActionCall& call, size_t argIdx);
 };
 
 
+#pragma endregion
+#pragma region Global functions
+
+
 bool assertActions(
     const vector<MobActionCall*>& actions, const DataNode* dn
 );
@@ -855,3 +871,6 @@ void loadActions(
     MobType* mt, DataNode* node,
     vector<MobActionCall*>* outActions, Bitmask8* outSettings = 0
 );
+
+
+#pragma endregion

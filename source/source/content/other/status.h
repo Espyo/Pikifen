@@ -25,6 +25,9 @@
 using std::string;
 
 
+#pragma region Constants
+
+
 //Flags that control what sorts of mob a status effect affects.
 enum STATUS_AFFECTS_FLAG {
 
@@ -92,6 +95,10 @@ enum STATUS_REAPPLY_RULE {
     STATUS_REAPPLY_RULE_ADD_TIME,
     
 };
+
+
+#pragma endregion
+#pragma region Status type
 
 
 /**
@@ -246,6 +253,10 @@ public:
 };
 
 
+#pragma endregion
+#pragma region Status
+
+
 /**
  * @brief Instance of an active status effect on a mob.
  */
@@ -285,3 +296,6 @@ struct Status {
     void tick(float deltaT);
     
 };
+
+
+#pragma endregion

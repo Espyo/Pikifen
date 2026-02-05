@@ -26,6 +26,9 @@ using std::string;
 using std::vector;
 
 
+#pragma region Animation
+
+
 /**
  * @brief Constructs a new animation object.
  *
@@ -187,6 +190,10 @@ float Animation::getTime(size_t frameIdx, float frameTime) {
     curTime += frameTime;
     return curTime;
 }
+
+
+#pragma endregion
+#pragma region Animation database
 
 
 /**
@@ -757,6 +764,10 @@ void AnimationDatabase::sortAlphabetically() {
 }
 
 
+#pragma endregion
+#pragma region Animation instance
+
+
 /**
  * @brief Constructs a new animation instance object.
  *
@@ -998,6 +1009,10 @@ bool AnimationInstance::validFrame() const {
 }
 
 
+#pragma endregion
+#pragma region Frame
+
+
 /**
  * @brief Constructs a new frame object.
  *
@@ -1023,6 +1038,10 @@ Frame::Frame(
     signal(s) {
     
 }
+
+
+#pragma endregion
+#pragma region Sprite
 
 
 /**
@@ -1207,6 +1226,10 @@ void Sprite::setBitmap(
 }
 
 
+#pragma endregion
+#pragma region Misc.
+
+
 /**
  * @brief Returns the final transformation data for a "basic" sprite effect.
  * i.e. the translation, angle, scale, and tint. This makes use of
@@ -1369,3 +1392,6 @@ void getSpriteBasicTopEffects(
         }
     }
 }
+
+
+#pragma endregion

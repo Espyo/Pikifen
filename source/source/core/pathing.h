@@ -31,6 +31,9 @@ struct Sector;
 struct PathLink;
 
 
+#pragma region Constants
+
+
 //Types of path link.
 enum PATH_LINK_TYPE {
 
@@ -165,6 +168,10 @@ namespace PATHS {
 extern const float DEF_CHASE_TARGET_DISTANCE;
 extern const float MIN_STOP_RADIUS;
 }
+
+
+#pragma endregion
+#pragma region Classes
 
 
 /**
@@ -323,6 +330,10 @@ struct PathManager {
 };
 
 
+#pragma endregion
+#pragma region Global functions
+
+
 bool canTakePathStop(
     PathStop* stopPtr, const PathFollowSettings& settings,
     PATH_BLOCK_REASON* outReason = nullptr
@@ -353,3 +364,5 @@ PATH_RESULT getPath(
 );
 string pathBlockReasonToString(PATH_BLOCK_REASON reason);
 string pathResultToString(PATH_RESULT result);
+
+#pragma endregion

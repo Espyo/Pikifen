@@ -19,6 +19,9 @@
 #include "../../util/general_utils.h"
 
 
+#pragma region Status
+
+
 /**
  * @brief Constructs a new status object.
  *
@@ -92,6 +95,10 @@ void Status::tick(float deltaT) {
         }
     }
 }
+
+
+#pragma endregion
+#pragma region Status type
 
 
 /**
@@ -262,3 +269,6 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
         soundEnd.loadFromDataNode(node->getChildByName("sound_end"));
     }
 }
+
+
+#pragma endregion

@@ -27,6 +27,9 @@ namespace Inpution {
 typedef int ActionTypeId;
 
 
+#pragma region Constants
+
+
 //Possible types of hardware sources for inputs.
 enum INPUT_SOURCE_TYPE {
 
@@ -107,6 +110,9 @@ enum ACTION_VALUE_TYPE {
     
 };
 
+
+#pragma endregion
+#pragma region Misc. classes
 
 
 /**
@@ -288,6 +294,10 @@ struct ManagerOptions {
 };
 
 
+#pragma endregion
+#pragma region Manager
+
+
 /**
  * @brief Manages the connections between inputs and actions.
  *
@@ -441,6 +451,9 @@ struct Manager {
         ActionTypeStatus& status, const ActionType& actionType, float deltaT
     );
 };
+
+
+#pragma endregion
 
 
 };
