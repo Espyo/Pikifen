@@ -216,7 +216,7 @@ Leader::Leader(const Point& pos, LeaderType* type, float angle) :
         );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         antennaPG.baseParticle.color,
-    [ = ] (const ALLEGRO_COLOR & c) {
+    [ this ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR newColor = c;
         newColor.r *= leaType->lightParticleTint.r;
         newColor.g *= leaType->lightParticleTint.g;
@@ -1108,11 +1108,11 @@ void Leader::startThrowTrail() {
     pg.followZOffset = 0.0f;
     adjustKeyframeInterpolatorValues<float>(
         pg.baseParticle.size,
-    [ = ] (const float & f) { return f * radius; }
+    [ this ] (const float & f) { return f * radius; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,
-    [ = ] (const ALLEGRO_COLOR & c) {
+    [ this ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR newColor = c;
         newColor.r *= type->mainColor.r;
         newColor.g *= type->mainColor.g;

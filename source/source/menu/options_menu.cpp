@@ -1637,7 +1637,7 @@ void OptionsMenu::initGuiTopPage() {
     packsButton->onActivate =
     [this] (const Point&) {
         packsMenu = new PacksMenu();
-        packsMenu->leaveCallback = [ = ] () {
+        packsMenu->leaveCallback = [ this ] () {
             packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
             transitionGuis(
                 packsMenu->gui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
