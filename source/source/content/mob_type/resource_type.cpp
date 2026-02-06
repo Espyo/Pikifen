@@ -70,30 +70,16 @@ void ResourceType::loadCatProperties(DataNode* file) {
     
     if(carryingDestinationNode) {
         readEnumProp(
-            carryingDestinationStr,
-        (int*) &carryingDestination, {
-            "ship",
-            "",
-            "",
-            "linked_mob",
-            "linked_mob_matching_type"
-        },
-        "carrying destination",
-        carryingDestinationNode
+            carryDestinationINames, carryingDestinationStr,
+            &carryingDestination,
+            "carrying destination", carryingDestinationNode
         );
     }
     
     if(deliveryResultNode) {
         readEnumProp(
-            deliveryResultStr,
-        (int*) &deliveryResult, {
-            "damage_mob",
-            "increase_ingredients",
-            "add_points",
-            "stay"
-        },
-        "delivery result",
-        deliveryResultNode
+            resourceDeliveryResultINames, deliveryResultStr,
+            &deliveryResult, "delivery result", deliveryResultNode
         );
     }
     

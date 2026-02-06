@@ -69,26 +69,15 @@ void DropType::loadCatProperties(DataNode* file) {
     
     if(consumerNode) {
         readEnumProp(
-            consumerStr,
-        (int*) &consumer, {
-            "pikmin",
-            "leaders"
-        },
-        "consumer",
-        consumerNode
+            dropConsumerINames, consumerStr, &consumer,
+            "consumer", consumerNode
         );
     }
     
     if(effectNode) {
         readEnumProp(
-            effectStr,
-        (int*) &effect, {
-            "maturate",
-            "increase_sprays",
-            "give_status",
-        },
-        "drop effect",
-        effectNode
+            dropEffectINames, effectStr, &effect,
+            "drop effect", effectNode
         );
     }
     

@@ -144,6 +144,22 @@ enum CUSTOM_GUI_ITEM_TYPE {
 };
 
 
+//Custom GUI item type enum naming (internal names).
+buildEnumNames(customGuiItemTypeINames, CUSTOM_GUI_ITEM_TYPE)({
+    { CUSTOM_GUI_ITEM_TYPE_BITMAP, "bitmap" },
+    { CUSTOM_GUI_ITEM_TYPE_9_SLICE, "9_slice" },
+    { CUSTOM_GUI_ITEM_TYPE_TEXT, "text" },
+    { CUSTOM_GUI_ITEM_TYPE_RECTANGLE, "rectangle" },
+    { CUSTOM_GUI_ITEM_TYPE_FILLED_RECTANGLE, "filled_rectangle" },
+    { CUSTOM_GUI_ITEM_TYPE_SQUARE, "square" },
+    { CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE, "filled_square" },
+    { CUSTOM_GUI_ITEM_TYPE_ELLIPSE, "ellipse" },
+    { CUSTOM_GUI_ITEM_TYPE_FILLED_ELLIPSE, "filled_ellipse" },
+    { CUSTOM_GUI_ITEM_TYPE_CIRCLE, "circle" },
+    { CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE, "filled_circle" },
+});
+
+
 #pragma endregion
 #pragma region GUI item definitions
 

@@ -1308,37 +1308,17 @@ void DataNodeSound::loadFromDataNode(DataNode* node) {
         game.content.sounds.list.get(soundINameStr, soundINameNode);
         
     if(typeNode) {
-        if(typeStr == "gameplay_global") {
-            type = SOUND_TYPE_GAMEPLAY_GLOBAL;
-        } else if(typeStr == "gameplay_pos") {
-            type = SOUND_TYPE_GAMEPLAY_POS;
-        } else if(typeStr == "ambiance_global") {
-            type = SOUND_TYPE_AMBIANCE_GLOBAL;
-        } else if(typeStr == "ambiance_pos") {
-            type = SOUND_TYPE_AMBIANCE_POS;
-        } else if(typeStr == "ui") {
-            type = SOUND_TYPE_UI;
-        } else {
-            game.errors.report(
-                "Unknow sound effect type \"" +
-                typeStr + "\"!", typeNode
-            );
-        }
+        readEnumProp(
+            soundTypeINames, typeStr, &type,
+            "sound effect type", typeNode
+        );
     }
     
     if(stackModeNode) {
-        if(stackModeStr == "normal") {
-            config.stackMode = SOUND_STACK_MODE_NORMAL;
-        } else if(stackModeStr == "override") {
-            config.stackMode = SOUND_STACK_MODE_OVERRIDE;
-        } else if(stackModeStr == "never") {
-            config.stackMode = SOUND_STACK_MODE_NEVER;
-        } else {
-            game.errors.report(
-                "Unknow sound effect stack mode \"" +
-                stackModeStr + "\"!", stackModeNode
-            );
-        }
+        readEnumProp(
+            soundStackModeINames, stackModeStr, &config.stackMode,
+            "sound effect stack mode", stackModeNode
+        );
     }
     
     if(loopBool) {

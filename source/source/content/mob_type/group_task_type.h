@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "../../util/enum_utils.h"
 #include "mob_type.h"
 
 
@@ -34,6 +35,16 @@ enum GROUP_TASK_PIKMIN_POSE {
 };
 
 
+//Group task Pikmin pose enum naming (internal names).
+buildEnumNames(groupTaskPikminPoseINames, GROUP_TASK_PIKMIN_POSE)({
+    { GROUP_TASK_PIKMIN_POSE_STOPPED, "stopped" },
+    { GROUP_TASK_PIKMIN_POSE_ARMS_OUT, "arms_out" },
+    { GROUP_TASK_PIKMIN_POSE_PUSHING, "pushing" },
+    { GROUP_TASK_PIKMIN_POSE_CARRYING, "carrying" },
+    { GROUP_TASK_PIKMIN_POSE_CARRYING_LIGHT, "carrying_light" },
+});
+
+
 //Methods by which a Pikmin can contribute to a group task.
 enum GROUP_TASK_CONTRIBUTION {
 
@@ -50,6 +61,15 @@ enum GROUP_TASK_CONTRIBUTION {
     GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH,
     
 };
+
+
+//Group task contribution enum naming (internal names).
+buildEnumNames(groupTaskContributionINames, GROUP_TASK_CONTRIBUTION)({
+    { GROUP_TASK_CONTRIBUTION_NORMAL, "normal" },
+    { GROUP_TASK_CONTRIBUTION_WEIGHT, "weight" },
+    { GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH, "carry_strength" },
+    { GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH, "push_strength" },
+});
 
 
 /**

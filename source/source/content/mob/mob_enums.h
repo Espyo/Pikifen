@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include "../../util/enum_utils.h"
+
+
 //Area editor mob property types.
 enum AEMP_TYPE {
 
@@ -34,6 +37,17 @@ enum AEMP_TYPE {
 };
 
 
+//Area editor mob property type enum naming (internal names).
+buildEnumNames(aempTypeINames, AEMP_TYPE)({
+    { AEMP_TYPE_TEXT, "text" },
+    { AEMP_TYPE_INT, "int" },
+    { AEMP_TYPE_FLOAT, "float" },
+    { AEMP_TYPE_BOOL, "bool" },
+    { AEMP_TYPE_LIST, "list" },
+    { AEMP_TYPE_NR_LIST, "number_list" },
+});
+
+
 //Carrying destinations.
 enum CARRY_DESTINATION {
 
@@ -53,6 +67,16 @@ enum CARRY_DESTINATION {
     CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE,
     
 };
+
+
+//Carrying destination enum naming (internal names).
+buildEnumNames(carryDestinationINames, CARRY_DESTINATION)({
+    { CARRY_DESTINATION_SHIP, "ship" },
+    { CARRY_DESTINATION_ONION, "onion" },
+    { CARRY_DESTINATION_SHIP_NO_ONION, "ship_no_onion" },
+    { CARRY_DESTINATION_LINKED_MOB, "linked_mob" },
+    { CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE, "linked_mob_matching_type" },
+});
 
 
 //States a carrying spot can be in.
@@ -114,6 +138,13 @@ enum DELIVERY_ANIM {
     DELIVERY_ANIM_TOSS,
     
 };
+
+
+//Delivery animation enum naming (internal names).
+buildEnumNames(deliveryAnimINames, DELIVERY_ANIM)({
+    { DELIVERY_ANIM_SUCK, "suck" },
+    { DELIVERY_ANIM_TOSS, "toss" },
+});
 
 
 //Extra states for enemies to apply to their FSM.
@@ -182,6 +213,14 @@ enum HOLD_ROTATION_METHOD {
 };
 
 
+//Hold rotation method enum naming (internal names, for child-parent use only).
+buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
+    { HOLD_ROTATION_METHOD_NEVER, "never" },
+    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_parent" },
+    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_parent" },
+});
+
+
 //Flags that control how a mob works while inactive.
 enum INACTIVE_LOGIC_FLAG {
 
@@ -216,6 +255,17 @@ enum LIMB_DRAW_METHOD {
     LIMB_DRAW_METHOD_ABOVE_BOTH,
     
 };
+
+
+//Limb draw method enum naming (internal names).
+buildEnumNames(limbDrawMethodINames, LIMB_DRAW_METHOD)({
+    { LIMB_DRAW_METHOD_BELOW_BOTH, "below_both" },
+    { LIMB_DRAW_METHOD_BELOW_CHILD, "below_child" },
+    { LIMB_DRAW_METHOD_BELOW_PARENT, "below_parent" },
+    { LIMB_DRAW_METHOD_ABOVE_PARENT, "above_parent" },
+    { LIMB_DRAW_METHOD_ABOVE_CHILD, "above_child" },
+    { LIMB_DRAW_METHOD_ABOVE_BOTH, "above_both" },
+});
 
 
 //Flags that affect something about a mob.
@@ -281,6 +331,23 @@ enum MOB_TARGET_FLAG {
 };
 
 
+//Mob target flag enum naming (internal names).
+buildEnumNames(mobTargetFlagINames, MOB_TARGET_FLAG)({
+    { MOB_TARGET_FLAG_NONE, "none" },
+    { MOB_TARGET_FLAG_PLAYER, "player" },
+    { MOB_TARGET_FLAG_ENEMY, "enemy" },
+    { MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE, "weak_plain_obstacle" },
+    { MOB_TARGET_FLAG_STRONG_PLAIN_OBSTACLE, "strong_plain_obstacle" },
+    { MOB_TARGET_FLAG_PIKMIN_OBSTACLE, "pikmin_obstacle" },
+    { MOB_TARGET_FLAG_EXPLODABLE, "explodable" },
+    {
+        MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE,
+        "explodable_pikmin_obstacle"
+    },
+    { MOB_TARGET_FLAG_FRAGILE, "fragile" },
+});
+
+
 //Flags for how a loaded script event's actions should work.
 enum EVENT_LOAD_FLAG {
     //Run scripted actions after hardcoded actions.
@@ -327,10 +394,39 @@ enum MOB_TEAM {
     //Whatever else.
     MOB_TEAM_OTHER,
     
-    //Total amount of mob teams.
-    N_MOB_TEAMS,
-    
 };
+
+
+//Mob team enum naming (internal names).
+buildEnumNames(mobTeamINames, MOB_TEAM)({
+    { MOB_TEAM_NONE, "none" },
+    { MOB_TEAM_PLAYER_1, "player_1" },
+    { MOB_TEAM_PLAYER_2, "player_2" },
+    { MOB_TEAM_PLAYER_3, "player_3" },
+    { MOB_TEAM_PLAYER_4, "player_4" },
+    { MOB_TEAM_ENEMY_1, "enemy_1" },
+    { MOB_TEAM_ENEMY_2, "enemy_2" },
+    { MOB_TEAM_ENEMY_3, "enemy_3" },
+    { MOB_TEAM_ENEMY_4, "enemy_4" },
+    { MOB_TEAM_OBSTACLE, "obstacle" },
+    { MOB_TEAM_OTHER, "other" },
+});
+
+
+//Mob team enum naming (proper names).
+buildEnumNames(mobTeamNames, MOB_TEAM)({
+    { MOB_TEAM_NONE, "None" },
+    { MOB_TEAM_PLAYER_1, "Player 1" },
+    { MOB_TEAM_PLAYER_2, "Player 2" },
+    { MOB_TEAM_PLAYER_3, "Player 3" },
+    { MOB_TEAM_PLAYER_4, "Player 4" },
+    { MOB_TEAM_ENEMY_1, "Enemy 1" },
+    { MOB_TEAM_ENEMY_2, "Enemy 2" },
+    { MOB_TEAM_ENEMY_3, "Enemy 3" },
+    { MOB_TEAM_ENEMY_4, "Enemy 4" },
+    { MOB_TEAM_OBSTACLE, "Obstacle" },
+    { MOB_TEAM_OTHER, "Other" },
+});
 
 
 //Flags for what sprite bitmap effects to use.
@@ -376,6 +472,15 @@ enum START_ANIM_OPTION {
     START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN,
     
 };
+
+
+//Start animation option enum naming (internal names).
+buildEnumNames(startAnimOptionINames, START_ANIM_OPTION)({
+    { START_ANIM_OPTION_NORMAL, "normal" },
+    { START_ANIM_OPTION_NO_RESTART, "no_restart" },
+    { START_ANIM_OPTION_RANDOM_TIME, "random_time" },
+    { START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, "random_time_on_spawn" },
+});
 
 
 //Categories of mobs in sub-group types.

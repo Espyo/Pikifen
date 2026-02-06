@@ -340,6 +340,17 @@ enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
 };
 
 
+//Mob action arachnorb plan logic type enum naming (internal names).
+buildEnumNames(
+    mobActionArachnorbPlanLogicTypeINames, MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE
+)({
+    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME, "home" },
+    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD, "forward" },
+    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN, "cw_turn" },
+    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN, "ccw_turn" },
+});
+
+
 //Turn action sub-types.
 enum MOB_ACTION_TURN_TYPE {
 
@@ -353,6 +364,16 @@ enum MOB_ACTION_TURN_TYPE {
     MOB_ACTION_TURN_TYPE_HOME,
     
 };
+
+
+//Mob action turn type enum naming (internal names).
+buildEnumNames(
+    mobActionTurnTypeINames, MOB_ACTION_TURN_TYPE
+)({
+    { MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC, "arachnorb_head_logic" },
+    { MOB_ACTION_TURN_TYPE_FOCUSED_MOB, "focused_mob" },
+    { MOB_ACTION_TURN_TYPE_HOME, "home" },
+});
 
 
 //If action operator types.
@@ -379,6 +400,17 @@ enum MOB_ACTION_IF_OP {
 };
 
 
+//Mob action if operator enum naming (internal names).
+buildEnumNames(mobActionIfOpINames, MOB_ACTION_IF_OP)({
+    { MOB_ACTION_IF_OP_EQUAL, "=" },
+    { MOB_ACTION_IF_OP_NOT, "!=" },
+    { MOB_ACTION_IF_OP_LESS, "<" },
+    { MOB_ACTION_IF_OP_MORE, ">" },
+    { MOB_ACTION_IF_OP_LESS_E, "<=" },
+    { MOB_ACTION_IF_OP_MORE_E, ">=" },
+});
+
+
 //Target types for actions that target mobs.
 enum MOB_ACTION_MOB_TARGET_TYPE {
 
@@ -400,6 +432,16 @@ enum MOB_ACTION_MOB_TARGET_TYPE {
 };
 
 
+//Mob action mob target type enum naming (internal names).
+buildEnumNames(mobActionMobTargetTypeINames, MOB_ACTION_MOB_TARGET_TYPE)({
+    { MOB_ACTION_MOB_TARGET_TYPE_SELF, "self" },
+    { MOB_ACTION_MOB_TARGET_TYPE_FOCUS, "focus" },
+    { MOB_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
+    { MOB_ACTION_MOB_TARGET_TYPE_LINK, "link" },
+    { MOB_ACTION_MOB_TARGET_TYPE_PARENT, "parent" },
+});
+
+
 //Get area info action info types.
 enum MOB_ACTION_GET_AREA_INFO_TYPE {
 
@@ -410,6 +452,13 @@ enum MOB_ACTION_GET_AREA_INFO_TYPE {
     MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN,
     
 };
+
+
+//Mob action get area info type enum naming (internal names).
+buildEnumNames(mobActionGetAreaInfoTypeINames, MOB_ACTION_GET_AREA_INFO_TYPE)({
+    { MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES, "day_minutes" },
+    { MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
+});
 
 
 //Get event info action info types.
@@ -437,6 +486,18 @@ enum MOB_ACTION_GET_EV_INFO_TYPE {
     MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
 };
+
+
+//Mob action get event info type enum naming (internal names).
+buildEnumNames(mobActionGetEvInfoTypeINames, MOB_ACTION_GET_EV_INFO_TYPE)({
+    { MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART, "body_part" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL, "frame_signal" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_HAZARD, "hazard" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME, "input_name" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE, "message" },
+    { MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
+});
 
 
 //Get mob info action info types.
@@ -493,6 +554,30 @@ enum MOB_ACTION_GET_MOB_INFO_TYPE {
 };
 
 
+//Mob action get mob info type enum naming (internal names).
+buildEnumNames(mobActionGetMobInfoTypeINames, MOB_ACTION_GET_MOB_INFO_TYPE)({
+    { MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE, "angle" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN, "chomped_pikmin" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE, "focus_distance" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER, "group_task_power" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH, "health" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO, "health_ratio" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_ID, "id" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN, "latched_pikmin" },
+    {
+        MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
+        "latched_pikmin_weight"
+    },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT, "weight" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_X, "x" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_Y, "y" },
+    { MOB_ACTION_GET_MOB_INFO_TYPE_Z, "z" },
+});
+
+
 //Moving action sub-types.
 enum MOB_ACTION_MOVE_TYPE {
 
@@ -515,6 +600,17 @@ enum MOB_ACTION_MOVE_TYPE {
     MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE,
     
 };
+
+
+//Mob action move type enum naming (internal names).
+buildEnumNames(mobActionMoveTypeINames, MOB_ACTION_MOVE_TYPE)({
+    { MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS, "away_from_focused_mob" },
+    { MOB_ACTION_MOVE_TYPE_FOCUS, "focused_mob" },
+    { MOB_ACTION_MOVE_TYPE_FOCUS_POS, "focus_mob_position" },
+    { MOB_ACTION_MOVE_TYPE_HOME, "home" },
+    { MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC, "arachnorb_foot_logic" },
+    { MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE, "linked_mob_average" },
+});
 
 
 //Calculate action sub-types.
@@ -541,6 +637,17 @@ enum MOB_ACTION_CALCULATE_TYPE {
 };
 
 
+//Mob action calculate type enum naming (internal names).
+buildEnumNames(mobActionCalculateTypeINames, MOB_ACTION_CALCULATE_TYPE)({
+    { MOB_ACTION_CALCULATE_TYPE_SUM, "+" },
+    { MOB_ACTION_CALCULATE_TYPE_SUBTRACT, "-" },
+    { MOB_ACTION_CALCULATE_TYPE_MULTIPLY, "*" },
+    { MOB_ACTION_CALCULATE_TYPE_DIVIDE, "/" },
+    { MOB_ACTION_CALCULATE_TYPE_MODULO, "%" },
+    { MOB_ACTION_CALCULATE_TYPE_POWER, "^" },
+});
+
+
 //Stabilize Z action sub-types.
 enum MOB_ACTION_STABILIZE_Z_TYPE {
 
@@ -551,6 +658,13 @@ enum MOB_ACTION_STABILIZE_Z_TYPE {
     MOB_ACTION_STABILIZE_Z_TYPE_LOWEST,
     
 };
+
+
+//Mob action stabilize Z type enum naming (internal names).
+buildEnumNames(mobActionStabilizeZTypeINames, MOB_ACTION_STABILIZE_Z_TYPE)({
+    { MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST, "highest" },
+    { MOB_ACTION_STABILIZE_Z_TYPE_LOWEST, "lowest" },
+});
 
 
 //Types of variables that a parameter can use.

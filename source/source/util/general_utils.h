@@ -116,32 +116,6 @@ struct AutoRepeater {
 
 
 /**
- * @brief Just a list of different elements in an enum and what their names are.
- */
-struct EnumNameDatabase {
-
-    public:
-    
-    //--- Function declarations ---
-    
-    void registerItem(size_t enum_idx, const string& name);
-    size_t getIdx(const string& name) const;
-    string getName(size_t idx) const;
-    vector<string> getNames() const;
-    size_t getNrOfItems() const;
-    void clear();
-    
-    private:
-    
-    //--- Members ---
-    
-    //Known items.
-    vector<string> names;
-    
-};
-
-
-/**
  * @brief A struct that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  * Keyframe times go from 0 (beginning) to 1 (end).

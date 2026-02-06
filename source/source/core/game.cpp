@@ -62,36 +62,6 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
 
 
 /**
- * @brief Constructs a new game class object.
- */
-Game::Game() {
-    teamInternalNames[MOB_TEAM_NONE] = "none";
-    teamInternalNames[MOB_TEAM_PLAYER_1] = "player_1";
-    teamInternalNames[MOB_TEAM_PLAYER_2] = "player_2";
-    teamInternalNames[MOB_TEAM_PLAYER_3] = "player_3";
-    teamInternalNames[MOB_TEAM_PLAYER_4] = "player_4";
-    teamInternalNames[MOB_TEAM_ENEMY_1] = "enemy_1";
-    teamInternalNames[MOB_TEAM_ENEMY_2] = "enemy_2";
-    teamInternalNames[MOB_TEAM_ENEMY_3] = "enemy_3";
-    teamInternalNames[MOB_TEAM_ENEMY_4] = "enemy_4";
-    teamInternalNames[MOB_TEAM_OBSTACLE] = "obstacle";
-    teamInternalNames[MOB_TEAM_OTHER] = "other";
-    
-    teamNames[MOB_TEAM_NONE] = "None";
-    teamNames[MOB_TEAM_PLAYER_1] = "Player 1";
-    teamNames[MOB_TEAM_PLAYER_2] = "Player 2";
-    teamNames[MOB_TEAM_PLAYER_3] = "Player 3";
-    teamNames[MOB_TEAM_PLAYER_4] = "Player 4";
-    teamNames[MOB_TEAM_ENEMY_1] = "Enemy 1";
-    teamNames[MOB_TEAM_ENEMY_2] = "Enemy 2";
-    teamNames[MOB_TEAM_ENEMY_3] = "Enemy 3";
-    teamNames[MOB_TEAM_ENEMY_4] = "Enemy 4";
-    teamNames[MOB_TEAM_OBSTACLE] = "Obstacle";
-    teamNames[MOB_TEAM_OTHER] = "Other";
-}
-
-
-/**
  * @brief Changes to a different game state.
  *
  * @param newState State to change to.

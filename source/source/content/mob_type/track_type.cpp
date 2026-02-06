@@ -63,32 +63,23 @@ void TrackType::loadCatProperties(DataNode* file) {
         riders = 0;
         vector<string> ridersStrWords = split(ridersStr);
         for(size_t r = 0; r < ridersStrWords.size(); r++) {
-            if(ridersStrWords[r] == "pikmin") {
-                enableFlag(riders, TRACK_RIDER_FLAG_PIKMIN);
-            } else if(ridersStrWords[r] == "leaders") {
-                enableFlag(riders, TRACK_RIDER_FLAG_LEADERS);
-            } else {
-                game.errors.report(
-                    "Unknown type of rider \"" + ridersStrWords[r] + "\"!",
-                    ridersNode
-                );
+            TRACK_RIDER_FLAG rf;
+            if(
+                readEnumProp(
+                    trackRiderFlagINames, ridersStrWords[r], &rf,
+                    "rider type", ridersNode
+                )
+            ) {
+                riders |= (Bitmask16) rf;
             }
         }
     }
     
     if(ridingPoseNode) {
-        if(ridingPoseStr == "stopped") {
-            ridingPose = TRACK_RIDING_POSE_STOPPED;
-        } else if(ridingPoseStr == "sliding") {
-            ridingPose = TRACK_RIDING_POSE_SLIDING;
-        } else if(ridingPoseStr == "climbing") {
-            ridingPose = TRACK_RIDING_POSE_CLIMBING;
-        } else {
-            game.errors.report(
-                "Unknown type of riding pose \"" + ridingPoseStr + "\"!",
-                ridingPoseNode
-            );
-        }
+        readEnumProp(
+            trackRidingPoseINames, ridingPoseStr, &ridingPose,
+            "type of riding pose", ridingPoseNode
+        );
     }
     
 }

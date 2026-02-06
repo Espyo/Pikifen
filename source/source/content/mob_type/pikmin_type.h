@@ -337,6 +337,7 @@ enum PIKMIN_SOUND {
 
 //Pikmin type attack methods.
 enum PIKMIN_ATTACK {
+
     //Latches on and attacks.
     PIKMIN_ATTACK_LATCH,
     
@@ -344,6 +345,13 @@ enum PIKMIN_ATTACK {
     PIKMIN_ATTACK_IMPACT,
     
 };
+
+
+//Pikmin attack enum naming (internal names).
+buildEnumNames(pikminAttackINames, PIKMIN_ATTACK)({
+    { PIKMIN_ATTACK_LATCH, "latch" },
+    { PIKMIN_ATTACK_IMPACT, "impact" },
+});
 
 
 /**

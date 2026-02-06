@@ -225,18 +225,16 @@ bool MobActionCall::run(
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::arachnorbPlanLogic(MobActionCall& call) {
-    if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME);
-    } else if(call.args[0] == "forward") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD);
-    } else if(call.args[0] == "cw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN);
-    } else if(call.args[0] == "ccw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN);
-    } else {
+    bool found;
+    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
+        enumGetValue(
+            mobActionArachnorbPlanLogicTypeINames, call.args[0], &found
+        );
+    if(!found) {
         reportEnumError(call, 0);
         return false;
     }
+    call.args[0] = i2s(type);
     return true;
 }
 
@@ -248,22 +246,14 @@ bool MobActionLoaders::arachnorbPlanLogic(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::calculate(MobActionCall& call) {
-    if(call.args[2] == "+") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_SUM);
-    } else if(call.args[2] == "-") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_SUBTRACT);
-    } else if(call.args[2] == "*") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_MULTIPLY);
-    } else if(call.args[2] == "/") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_DIVIDE);
-    } else if(call.args[2] == "%") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_MODULO);
-    } else if(call.args[2] == "^") {
-        call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_POWER);
-    } else {
+    bool found;
+    MOB_ACTION_CALCULATE_TYPE type =
+        enumGetValue(mobActionCalculateTypeINames, call.args[2], &found);
+    if(!found) {
         reportEnumError(call, 2);
         return false;
     }
+    call.args[2] = i2s(type);
     return true;
 }
 
@@ -275,30 +265,14 @@ bool MobActionLoaders::calculate(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::easeNumber(MobActionCall& call) {
-    if(call.args[2] == "in") {
-        call.args[2] = i2s(EASE_METHOD_IN);
-    } else if(call.args[2] == "out") {
-        call.args[2] = i2s(EASE_METHOD_OUT);
-    } else if(call.args[2] == "in_out") {
-        call.args[2] = i2s(EASE_METHOD_IN_OUT);
-    } else if(call.args[2] == "in_back") {
-        call.args[2] = i2s(EASE_METHOD_IN_BACK);
-    } else if(call.args[2] == "out_back") {
-        call.args[2] = i2s(EASE_METHOD_OUT_BACK);
-    } else if(call.args[2] == "in_out_back") {
-        call.args[2] = i2s(EASE_METHOD_IN_OUT_BACK);
-    } else if(call.args[2] == "in_elastic") {
-        call.args[2] = i2s(EASE_METHOD_IN_ELASTIC);
-    } else if(call.args[2] == "out_elastic") {
-        call.args[2] = i2s(EASE_METHOD_OUT_ELASTIC);
-    } else if(call.args[2] == "up_and_down") {
-        call.args[2] = i2s(EASE_METHOD_UP_AND_DOWN);
-    } else if(call.args[2] == "up_and_down_elastic") {
-        call.args[2] = i2s(EASE_METHOD_UP_AND_DOWN_ELASTIC);
-    } else {
+    bool found;
+    EASE_METHOD method =
+        enumGetValue(easeMethodINames, call.args[2], &found);
+    if(!found) {
         reportEnumError(call, 2);
         return false;
     }
+    call.args[2] = i2s(method);
     return true;
 }
 
@@ -332,17 +306,16 @@ bool MobActionLoaders::followMobAsLeader(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
-    if(call.args[1] == "day_minutes") {
-        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES);
-    } else if(call.args[1] == "field_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN);
-    } else {
+    bool found;
+    MOB_ACTION_GET_AREA_INFO_TYPE type =
+        enumGetValue(mobActionGetAreaInfoTypeINames, call.args[1], &found);
+    if(!found) {
         call.customError =
             "Unknown info type \"" + call.args[1] + "\"! "
             "Try using \"get_mob_info\" or \"get_event_info\".";
         return false;
     }
-    
+    call.args[1] = i2s(type);
     return true;
 }
 
@@ -354,27 +327,16 @@ bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::getEventInfo(MobActionCall& call) {
-    if(call.args[1] == "body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART);
-    } else if(call.args[1] == "frame_signal") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL);
-    } else if(call.args[1] == "hazard") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_HAZARD);
-    } else if(call.args[1] == "input_name") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME);
-    } else if(call.args[1] == "input_value") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE);
-    } else if(call.args[1] == "message") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE);
-    } else if(call.args[1] == "other_body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART);
-    } else {
+    bool found;
+    MOB_ACTION_GET_EV_INFO_TYPE type =
+        enumGetValue(mobActionGetEvInfoTypeINames, call.args[1], &found);
+    if(!found) {
         call.customError =
             "Unknown info type \"" + call.args[1] + "\"! "
             "Try using \"get_mob_info\" or \"get_area_info\".";
         return false;
     }
-    
+    call.args[1] = i2s(type);
     return true;
 }
 
@@ -386,50 +348,20 @@ bool MobActionLoaders::getEventInfo(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::getMobInfo(MobActionCall& call) {
-
     if(!loadMobTargetType(call, 1)) {
         return false;
     }
     
-    if(call.args[2] == "angle") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE);
-    } else if(call.args[2] == "chomped_pikmin") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN);
-    } else if(call.args[2] == "focus_distance") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE);
-    } else if(call.args[2] == "group_task_power") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER);
-    } else if(call.args[2] == "health") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH);
-    } else if(call.args[2] == "health_ratio") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO);
-    } else if(call.args[2] == "id") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_ID);
-    } else if(call.args[2] == "latched_pikmin") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN);
-    } else if(call.args[2] == "latched_pikmin_weight") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT);
-    } else if(call.args[2] == "mob_category") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY);
-    } else if(call.args[2] == "mob_type") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE);
-    } else if(call.args[2] == "state") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_STATE);
-    } else if(call.args[2] == "weight") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT);
-    } else if(call.args[2] == "x") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_X);
-    } else if(call.args[2] == "y") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Y);
-    } else if(call.args[2] == "z") {
-        call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Z);
-    } else {
+    bool found;
+    MOB_ACTION_GET_MOB_INFO_TYPE type =
+        enumGetValue(mobActionGetMobInfoTypeINames, call.args[2], &found);
+    if(!found) {
         call.customError =
             "Unknown info type \"" + call.args[2] + "\"! "
             "Try using \"get_event_info\" or \"get_area_info\".";
         return false;
     }
-    
+    call.args[2] = i2s(type);
     return true;
 }
 
@@ -459,22 +391,14 @@ bool MobActionLoaders::holdFocus(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::ifFunction(MobActionCall& call) {
-    if(call.args[1] == "=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_EQUAL);
-    } else if(call.args[1] == "!=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_NOT);
-    } else if(call.args[1] == "<") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS);
-    } else if(call.args[1] == ">") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE);
-    } else if(call.args[1] == "<=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS_E);
-    } else if(call.args[1] == ">=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE_E);
-    } else {
+    bool found;
+    MOB_ACTION_IF_OP op =
+        enumGetValue(mobActionIfOpINames, call.args[1], &found);
+    if(!found) {
         reportEnumError(call, 1);
         return false;
     }
+    call.args[1] = i2s(op);
     return true;
 }
 
@@ -488,20 +412,14 @@ bool MobActionLoaders::ifFunction(MobActionCall& call) {
 bool MobActionLoaders::loadMobTargetType(
     MobActionCall& call, size_t argIdx
 ) {
-    if(call.args[argIdx] == "self") {
-        call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_SELF);
-    } else if(call.args[argIdx] == "focus") {
-        call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_FOCUS);
-    } else if(call.args[argIdx] == "trigger") {
-        call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_TRIGGER);
-    } else if(call.args[argIdx] == "link") {
-        call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_LINK);
-    } else if(call.args[argIdx] == "parent") {
-        call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_PARENT);
-    } else {
+    bool found;
+    MOB_ACTION_MOB_TARGET_TYPE type =
+        enumGetValue(mobActionMobTargetTypeINames, call.args[argIdx], &found);
+    if(!found) {
         reportEnumError(call, argIdx);
         return false;
     }
+    call.args[argIdx] = i2s(type);
     return true;
 }
 
@@ -513,22 +431,14 @@ bool MobActionLoaders::loadMobTargetType(
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::moveToTarget(MobActionCall& call) {
-    if(call.args[0] == "arachnorb_foot_logic") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC);
-    } else if(call.args[0] == "away_from_focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS);
-    } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_FOCUS);
-    } else if(call.args[0] == "focused_mob_position") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_FOCUS_POS);
-    } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_HOME);
-    } else if(call.args[0] == "linked_mob_average") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE);
-    } else {
+    bool found;
+    MOB_ACTION_MOVE_TYPE type =
+        enumGetValue(mobActionMoveTypeINames, call.args[0], &found);
+    if(!found) {
         reportEnumError(call, 0);
         return false;
     }
+    call.args[0] = i2s(type);
     return true;
 }
 
@@ -616,16 +526,16 @@ bool MobActionLoaders::setAnimation(MobActionCall& call) {
     }
     call.args[0] = i2s(aPos);
     
-    for(size_t a = 1; a < call.args.size(); a++) {
-        if(call.args[a] == "no_restart") {
-            call.args[a] = i2s(START_ANIM_OPTION_NO_RESTART);
-        } else if(call.args[a] == "random_time") {
-            call.args[a] = i2s(START_ANIM_OPTION_RANDOM_TIME);
-        } else if(call.args[a] == "random_time_on_spawn") {
-            call.args[a] = i2s(START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN);
-        } else {
-            call.args[a] = i2s(START_ANIM_OPTION_NORMAL);
+    if(call.args.size() > 1) {
+        bool optionFound;
+        START_ANIM_OPTION option =
+            enumGetValue(startAnimOptionINames, call.args[1], &optionFound);
+        if(!optionFound) {
+            call.customError =
+                "Unknown animation start option \"" + call.args[1] + "\"!";
+            return false;
         }
+        call.args[1] = i2s(option);
     }
     
     return true;
@@ -658,14 +568,14 @@ bool MobActionLoaders::setFarReach(MobActionCall& call) {
  */
 bool MobActionLoaders::setHoldable(MobActionCall& call) {
     for(size_t a = 0; a < call.args.size(); a++) {
-        if(call.args[a] == "pikmin") {
-            call.args[a] = i2s(HOLDABILITY_FLAG_PIKMIN);
-        } else if(call.args[a] == "enemies") {
-            call.args[a] = i2s(HOLDABILITY_FLAG_ENEMIES);
-        } else {
+        bool found;
+        HOLDABILITY_FLAG flag =
+            enumGetValue(holdabilityFlagINames, call.args[a], &found);
+        if(!found) {
             reportEnumError(call, a);
             return false;
         }
+        call.args[a] = i2s(flag);
     }
     return true;
 }
@@ -696,8 +606,9 @@ bool MobActionLoaders::setNearReach(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::setTeam(MobActionCall& call) {
-    size_t teamNr = stringToTeamNr(call.args[0]);
-    if(teamNr == INVALID) {
+    bool found;
+    MOB_TEAM teamNr = enumGetValue(mobTeamINames, call.args[0], &found);
+    if(!found) {
         reportEnumError(call, 0);
         return false;
     }
@@ -732,14 +643,14 @@ bool MobActionLoaders::spawn(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::stabilizeZ(MobActionCall& call) {
-    if(call.args[0] == "lowest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_TYPE_LOWEST);
-    } else if(call.args[0] == "highest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST);
-    } else {
+    bool found;
+    MOB_ACTION_STABILIZE_Z_TYPE type =
+        enumGetValue(mobActionStabilizeZTypeINames, call.args[0], &found);
+    if(!found) {
         reportEnumError(call, 0);
         return false;
     }
+    call.args[0] = i2s(type);
     return true;
 }
 
@@ -787,16 +698,14 @@ bool MobActionLoaders::startParticles(MobActionCall& call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::turnToTarget(MobActionCall& call) {
-    if(call.args[0] == "arachnorb_head_logic") {
-        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC);
-    } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_FOCUSED_MOB);
-    } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_TURN_TYPE_HOME);
-    } else {
+    bool found;
+    MOB_ACTION_TURN_TYPE type =
+        enumGetValue(mobActionTurnTypeINames, call.args[0], &found);
+    if(!found) {
         reportEnumError(call, 0);
         return false;
     }
+    call.args[0] = i2s(type);
     return true;
 }
 

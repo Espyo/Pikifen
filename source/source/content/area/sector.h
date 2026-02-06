@@ -17,6 +17,7 @@
 #include <allegro5/allegro_color.h>
 
 #include "../../util/drawing_utils.h"
+#include "../../util/enum_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../other/hazard.h"
 #include "../other/liquid.h"
@@ -37,6 +38,13 @@ enum SECTOR_TYPE {
     SECTOR_TYPE_BLOCKING,
     
 };
+
+
+//Sector type enum naming (internal names).
+buildEnumNames(sectorTypeINames, SECTOR_TYPE)({
+    { SECTOR_TYPE_NORMAL, "normal" },
+    { SECTOR_TYPE_BLOCKING, "blocking" },
+});
 
 
 /**

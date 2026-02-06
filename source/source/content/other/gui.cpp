@@ -998,22 +998,8 @@ bool GuiManager::getItemDefsFromDataFile(
         
         if(typeNode) {
             readEnumProp(
-                typeStr,
-            (int*) &itemDef.type, {
-                "bitmap",
-                "9_slice",
-                "text",
-                "rectangle",
-                "filled_rectangle",
-                "square",
-                "filled_square",
-                "ellipse",
-                "filled_ellipse",
-                "circle",
-                "filled_circle",
-            },
-            "custom GUI item type",
-            typeNode
+                customGuiItemTypeINames, typeStr, &itemDef.type,
+                "custom GUI item type", typeNode
             );
         }
         
@@ -1032,18 +1018,10 @@ bool GuiManager::getItemDefsFromDataFile(
                 game.sysContent.fntStandard,
                 game.sysContent.fntValue,
             };
-            vector<string> fontNames = {
-                "area_name",
-                "counter",
-                "leader_cursor_counter",
-                "slim",
-                "standard",
-                "value",
-            };
             if(
                 readEnumProp(
-                    fontStr, (int*) &itemDef.fontType,
-                    fontNames, "custom GUI item font", fontNode
+                    engineFontINames, fontStr, &itemDef.fontType,
+                    "custom GUI item font", fontNode
                 )
             ) {
                 itemDef.font = fontPtrs[itemDef.fontType];

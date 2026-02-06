@@ -324,6 +324,45 @@ enum MOB_EV {
 };
 
 
+//Mob event enum naming (internal names for script files only).
+buildEnumNames(mobEvScriptFileINames, MOB_EV)({
+    { MOB_EV_ON_ENTER, "on_enter" },
+    { MOB_EV_ON_LEAVE, "on_leave" },
+    { MOB_EV_ON_TICK, "on_tick" },
+    { MOB_EV_ON_READY, "on_ready" },
+    { MOB_EV_ACTIVE_LEADER_CHANGED, "on_active_leader_changed" },
+    { MOB_EV_ANIMATION_END, "on_animation_end" },
+    { MOB_EV_DAMAGE, "on_damage" },
+    { MOB_EV_FAR_FROM_HOME, "on_far_from_home" },
+    { MOB_EV_FINISHED_RECEIVING_DELIVERY, "on_finish_receiving_delivery" },
+    { MOB_EV_FOCUS_OFF_REACH, "on_focus_off_reach" },
+    { MOB_EV_FRAME_SIGNAL, "on_frame_signal" },
+    { MOB_EV_HELD, "on_held" },
+    { MOB_EV_HITBOX_TOUCH_EAT, "on_hitbox_touch_eat" },
+    { MOB_EV_HITBOX_TOUCH_A_N, "on_hitbox_touch_a_n" },
+    { MOB_EV_HITBOX_TOUCH_N_N, "on_hitbox_touch_n_n" },
+    { MOB_EV_INPUT_RECEIVED, "on_input_received" },
+    { MOB_EV_ITCH, "on_itch" },
+    { MOB_EV_LANDED, "on_land" },
+    { MOB_EV_LEFT_HAZARD, "on_leave_hazard" },
+    { MOB_EV_OBJECT_IN_REACH, "on_object_in_reach" },
+    { MOB_EV_OPPONENT_IN_REACH, "on_opponent_in_reach" },
+    { MOB_EV_THROWN_PIKMIN_LANDED, "on_pikmin_land" },
+    { MOB_EV_RECEIVE_MESSAGE, "on_receive_message" },
+    { MOB_EV_RELEASED, "on_released" },
+    { MOB_EV_REACHED_DESTINATION, "on_reach_destination" },
+    { MOB_EV_STARTED_RECEIVING_DELIVERY, "on_start_receiving_delivery" },
+    { MOB_EV_SWALLOWED, "on_swallowed" },
+    { MOB_EV_TIMER, "on_timer" },
+    { MOB_EV_TOUCHED_HAZARD, "on_touch_hazard" },
+    { MOB_EV_TOUCHED_OBJECT, "on_touch_object" },
+    { MOB_EV_TOUCHED_OPPONENT, "on_touch_opponent" },
+    { MOB_EV_TOUCHED_WALL, "on_touch_wall" },
+    { MOB_EV_WEIGHT_ADDED, "on_weight_added" },
+    { MOB_EV_WEIGHT_REMOVED, "on_weight_removed" },
+});
+
+
 #pragma endregion
 #pragma region Classes
 

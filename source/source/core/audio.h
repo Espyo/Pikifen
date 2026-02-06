@@ -90,6 +90,16 @@ enum SOUND_TYPE {
 };
 
 
+//Sound type enum naming (internal names).
+buildEnumNames(soundTypeINames, SOUND_TYPE)({
+    { SOUND_TYPE_GAMEPLAY_GLOBAL, "gameplay_global" },
+    { SOUND_TYPE_GAMEPLAY_POS, "gameplay_pos" },
+    { SOUND_TYPE_AMBIANCE_GLOBAL, "ambiance_global" },
+    { SOUND_TYPE_AMBIANCE_POS, "ambiance_pos" },
+    { SOUND_TYPE_UI, "ui" },
+});
+
+
 //Ways to handle sound effect playback stacking.
 enum SOUND_STACK_MODE {
 
@@ -103,6 +113,14 @@ enum SOUND_STACK_MODE {
     SOUND_STACK_MODE_NEVER,
     
 };
+
+
+//Sound stack mode enum naming (internal names).
+buildEnumNames(soundStackModeINames, SOUND_STACK_MODE)({
+    { SOUND_STACK_MODE_NORMAL, "normal" },
+    { SOUND_STACK_MODE_OVERRIDE, "override" },
+    { SOUND_STACK_MODE_NEVER, "never" },
+});
 
 
 //Flags for sound effects.

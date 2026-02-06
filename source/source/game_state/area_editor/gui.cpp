@@ -17,6 +17,7 @@
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../lib/imgui/imgui_stdlib.h"
 #include "../../util/allegro_utils.h"
+#include "../../util/enum_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/imgui_utils.h"
 #include "../../util/string_utils.h"
@@ -820,7 +821,7 @@ void AreaEditor::processGuiMissionPresetDialog() {
     int presetInt = missionPresetDialogPreset;
     if(
         ImGui::Combo(
-            "New preset", &presetInt, game.missionPresetNames.getNames(), 15
+            "New preset", &presetInt, enumGetNames(missionPresetNames), 15
         )
     ) {
         missionPresetDialogPreset = (MISSION_PRESET) presetInt;
@@ -861,28 +862,26 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     //Start with the properties that apply to all objects.
     
     //Team property.
-    string teamValue;
+    string teamVar;
     if(isInMap(varsMap, "team")) {
-        teamValue = varsMap["team"];
+        teamVar = varsMap["team"];
     }
     
-    vector<string> teamNames;
-    teamNames.push_back("(Default)");
-    for(unsigned char t = 0; t < N_MOB_TEAMS; t++) {
-        teamNames.push_back(game.teamNames[t]);
-    }
+    vector<string> teamNames = enumGetNames(mobTeamNames);
+    teamNames.insert(teamNames.begin(), "(Default)");
     
     int teamNr;
-    if(teamValue.empty()) {
+    if(teamVar.empty()) {
         teamNr = 0;
     } else {
-        size_t teamNrSt = stringToTeamNr(teamValue);
-        if(teamNrSt == INVALID) {
+        bool found;
+        MOB_TEAM team = enumGetValue(mobTeamINames, teamVar, &found);
+        if(!found) {
             teamNr = 0;
         } else {
             //0 is reserved in this widget for "default".
             //Increase it by one to get the widget's team index number.
-            teamNr = (int) teamNrSt + 1;
+            teamNr = ((int) team) + 1;
         }
     }
     
@@ -892,9 +891,9 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
             //0 is reserved in this widget for "default".
             //Decrease it by one to get the real team index number.
             teamNr--;
-            teamValue = game.teamInternalNames[teamNr];
+            teamVar = enumGetName(mobTeamINames, teamNr);
         } else {
-            teamValue.clear();
+            teamVar.clear();
         }
     }
     setTooltip(
@@ -902,7 +901,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         "(Variable name: \"team\".)"
     );
     
-    if(!teamValue.empty()) newVarsMap["team"] = teamValue;
+    if(!teamVar.empty()) newVarsMap["team"] = teamVar;
     varsInWidgets["team"] = true;
     
     //Health property.
@@ -3089,9 +3088,8 @@ void AreaEditor::processGuiPanelMission() {
         //Preset text.
         ImGui::Text(
             "Preset: %s",
-            game.missionPresetNames.getNames()[
-                game.curAreaData->mission.preset
-            ].c_str()
+            enumGetName(missionPresetNames, game.curAreaData->mission.preset)
+            .c_str()
         );
         
         //Change preset button.
@@ -4488,7 +4486,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         //Item count text.
         ImGui::Text(
             "Item: %s",
-            game.missionHudItemIdNames.getName(curHudItemIdx).c_str()
+            enumGetName(missionHudItemIdNames, curHudItemIdx).c_str()
         );
         
         //Previous item button.
@@ -4501,7 +4499,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             curHudItemIdx =
                 sumAndWrap(
                     curHudItemIdx, -1,
-                    game.missionHudItemIdNames.getNrOfItems()
+                    enumGetCount(missionHudItemIdNames)
                 );
         }
         setTooltip("Change to the previous HUD item.");
@@ -4517,7 +4515,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             curHudItemIdx =
                 sumAndWrap(
                     curHudItemIdx, +1,
-                    game.missionHudItemIdNames.getNrOfItems()
+                    enumGetCount(missionHudItemIdNames)
                 );
         }
         setTooltip("Change to the next HUD item.");
@@ -4545,7 +4543,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             if(
                 ImGui::Combo(
                     "Content type", &contentType,
-                    game.missionHudItemContentTypeNames.getNames(), 15
+                    enumGetNames(missionHudItemContentTypeNames), 15
                 )
             ) {
                 registerChange("mission HUD item content type change");
@@ -4678,7 +4676,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 if(
                     ImGui::Combo(
                         "Amount type", &amountType,
-                        game.missionHudItemAmountTypeNames.getNames(), 15
+                        enumGetNames(missionHudItemAmountTypeNames), 15
                     )
                 ) {
                     registerChange("mission HUD item amount type change");
@@ -4907,7 +4905,7 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
             if(
                 ImGui::Combo(
                     "Type", &checklistType,
-                    game.missionMobChecklistTypeNames.getNames(), 15
+                    enumGetNames(missionMobChecklistTypeNames), 15
                 )
             ) {
                 registerChange("mission mob checklist type change");
@@ -5106,7 +5104,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             if(
                 ImGui::Combo(
                     "Type", &criterionType,
-                    game.missionScoreCriterionTypeNames.getNames(), 15
+                    enumGetNames(missionScoreCriterionTypeNames), 15
                 )
             ) {
                 registerChange("mission score criterion type change");
@@ -6497,11 +6495,11 @@ void AreaEditor::processGuiPanelSector() {
         
             //Sector type combobox.
             vector<string> typesList;
-            for(
-                size_t t = 0; t < game.sectorTypes.getNrOfItems(); t++
-            ) {
+            for(size_t t = 0; t < enumGetCount(sectorTypeINames); t++) {
                 typesList.push_back(
-                    strToSentence(game.sectorTypes.getName((SECTOR_TYPE) t))
+                    strToSentence(
+                        enumGetName(sectorTypeINames, (SECTOR_TYPE) t)
+                    )
                 );
             }
             int sectorType = sPtr->type;

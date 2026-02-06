@@ -3187,15 +3187,14 @@ void Mob::readScriptVars(const ScriptVarReader& svr) {
     string teamVar;
     
     if(svr.get("team", teamVar)) {
-        MOB_TEAM teamNr = stringToTeamNr(teamVar);
-        if(teamNr == INVALID) {
+        bool found;
+        team = enumGetValue(mobTeamINames, teamVar, &found);
+        if(!found) {
             game.errors.report(
                 "Unknown team name \"" + teamVar +
                 "\", when trying to create mob (" +
                 getErrorMessageMobInfo(this) + ")!", nullptr
             );
-        } else {
-            team = teamNr;
         }
     }
     

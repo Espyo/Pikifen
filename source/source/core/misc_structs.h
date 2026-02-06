@@ -140,6 +140,17 @@ enum ENGINE_FONT {
 };
 
 
+//Engine font enum naming (internal names).
+buildEnumNames(engineFontINames, ENGINE_FONT)({
+    { ENGINE_FONT_AREA_NAME, "area_name" },
+    { ENGINE_FONT_COUNTER, "counter" },
+    { ENGINE_FONT_LEADER_CURSOR_COUNTER, "leader_cursor_counter" },
+    { ENGINE_FONT_SLIM, "slim" },
+    { ENGINE_FONT_STANDARD, "standard" },
+    { ENGINE_FONT_VALUE, "value" },
+});
+
+
 #pragma endregion
 #pragma region Classes
 

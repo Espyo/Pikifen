@@ -14,6 +14,7 @@
 
 #include "../../core/misc_structs.h"
 #include "../../lib/data_file/data_file.h"
+#include "../../util/enum_utils.h"
 #include "../../util/general_utils.h"
 #include "../mob_type/mob_type.h"
 #include "../mob/mob_enums.h"
@@ -45,6 +46,15 @@ enum RESOURCE_DELIVERY_RESULT {
     RESOURCE_DELIVERY_RESULT_STAY,
     
 };
+
+
+//Resource delivery result enum naming (internal names).
+buildEnumNames(resourceDeliveryResultINames, RESOURCE_DELIVERY_RESULT)({
+    { RESOURCE_DELIVERY_RESULT_DAMAGE_MOB, "damage_mob" },
+    { RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS, "increase_ingredients" },
+    { RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS, "add_points" },
+    { RESOURCE_DELIVERY_RESULT_STAY, "stay" },
+});
 
 
 //Resource object states.

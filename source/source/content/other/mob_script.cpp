@@ -149,49 +149,15 @@ MobEvent::MobEvent(
     const DataNode* node, const vector<MobActionCall*>& actions
 ) :
     actions(actions) {
+
+    bool typeFound;
+    type = enumGetValue(mobEvScriptFileINames, node->name, &typeFound);
     
-#define r(name, number) \
-    else if(n == (name)) type = (number)
-    
-    const string& n = node->name;
-    if(n == "on_enter") type =          MOB_EV_ON_ENTER;
-    r("on_leave",                       MOB_EV_ON_LEAVE);
-    r("on_tick",                        MOB_EV_ON_TICK);
-    r("on_ready",                       MOB_EV_ON_READY);
-    r("on_active_leader_changed",       MOB_EV_ACTIVE_LEADER_CHANGED);
-    r("on_animation_end",               MOB_EV_ANIMATION_END);
-    r("on_damage",                      MOB_EV_DAMAGE);
-    r("on_far_from_home",               MOB_EV_FAR_FROM_HOME);
-    r("on_finish_receiving_delivery",   MOB_EV_FINISHED_RECEIVING_DELIVERY);
-    r("on_focus_off_reach",             MOB_EV_FOCUS_OFF_REACH);
-    r("on_frame_signal",                MOB_EV_FRAME_SIGNAL);
-    r("on_held",                        MOB_EV_HELD);
-    r("on_hitbox_touch_eat",            MOB_EV_HITBOX_TOUCH_EAT);
-    r("on_hitbox_touch_a_n",            MOB_EV_HITBOX_TOUCH_A_N);
-    r("on_hitbox_touch_n_n",            MOB_EV_HITBOX_TOUCH_N_N);
-    r("on_input_received",              MOB_EV_INPUT_RECEIVED);
-    r("on_itch",                        MOB_EV_ITCH);
-    r("on_land",                        MOB_EV_LANDED);
-    r("on_leave_hazard",                MOB_EV_LEFT_HAZARD);
-    r("on_object_in_reach",             MOB_EV_OBJECT_IN_REACH);
-    r("on_opponent_in_reach",           MOB_EV_OPPONENT_IN_REACH);
-    r("on_pikmin_land",                 MOB_EV_THROWN_PIKMIN_LANDED);
-    r("on_receive_message",             MOB_EV_RECEIVE_MESSAGE);
-    r("on_released",                    MOB_EV_RELEASED);
-    r("on_reach_destination",           MOB_EV_REACHED_DESTINATION);
-    r("on_start_receiving_delivery",    MOB_EV_STARTED_RECEIVING_DELIVERY);
-    r("on_swallowed",                   MOB_EV_SWALLOWED);
-    r("on_timer",                       MOB_EV_TIMER);
-    r("on_touch_hazard",                MOB_EV_TOUCHED_HAZARD);
-    r("on_touch_object",                MOB_EV_TOUCHED_OBJECT);
-    r("on_touch_opponent",              MOB_EV_TOUCHED_OPPONENT);
-    r("on_touch_wall",                  MOB_EV_TOUCHED_WALL);
-    r("on_weight_added",                MOB_EV_WEIGHT_ADDED);
-    r("on_weight_removed",              MOB_EV_WEIGHT_REMOVED);
-    
-    else {
+    if(!typeFound) {
         type = MOB_EV_UNKNOWN;
-        game.errors.report("Unknown script event name \"" + n + "\"!", node);
+        game.errors.report(
+            "Unknown script event name \"" + node->name + "\"!", node
+        );
     }
     
     for(size_t a = 0; a < this->actions.size(); a++) {

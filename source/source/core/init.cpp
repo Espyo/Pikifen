@@ -91,20 +91,14 @@ void destroyMisc() {
     al_destroy_bitmap(game.bmpError);
     game.audio.destroy();
     
-    game.sectorTypes.clear();
-    game.missionPresetNames.clear();
-    game.missionMobChecklistTypeNames.clear();
-    game.missionScoreCriterionTypeNames.clear();
-    game.missionHudItemIdNames.clear();
-    game.missionHudItemContentTypeNames.clear();
-    game.missionHudItemAmountTypeNames.clear();
     for(size_t e = 0; e < game.missionEvTypes.size(); e++) {
         delete game.missionEvTypes[e];
     }
+    game.missionEvTypes.clear();
     for(size_t a = 0; a < game.missionActionTypes.size(); a++) {
         delete game.missionActionTypes[a];
     }
-    game.missionGoals.clear();
+    game.missionActionTypes.clear();
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
         delete game.missionGoals[g];
     }
@@ -1126,137 +1120,6 @@ void initMisc() {
  * @brief Initializes the list of sector types, mission goals, etc.
  */
 void initMiscDatabases() {
-    //Sector types.
-    game.sectorTypes.registerItem(
-        SECTOR_TYPE_NORMAL, "normal"
-    );
-    game.sectorTypes.registerItem(
-        SECTOR_TYPE_BLOCKING, "blocking"
-    );
-    
-    //Mission preset names.
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_GROW_PIKMIN, "Grow Pikmin"
-    );
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_COLLECT_TREASURE, "Collect Treasure"
-    );
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_BATTLE_ENEMIES, "Battle Enemies"
-    );
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_DEFEAT_BOSSES, "Defeat Bosses"
-    );
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_COLLECT_EVERYTHING, "Collect Everything"
-    );
-    game.missionPresetNames.registerItem(
-        MISSION_PRESET_CUSTOM, "Custom"
-    );
-    
-    //Mission mob checklist type names.
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_CUSTOM, "Custom"
-    );
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_TREASURES, "Treasures"
-    );
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_ENEMIES, "Enemies"
-    );
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_TREASURES_ENEMIES, "Treasures and enemies"
-    );
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_LEADERS, "Leaders"
-    );
-    game.missionMobChecklistTypeNames.registerItem(
-        MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin"
-    );
-    
-    //Mission score criterion type names.
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_MOB_CHECKLIST, "Mob checklist item"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_PIKMIN, "Total Pikmin"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_PIKMIN_BORN, "Pikmin born"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_PIKMIN_DEATHS, "Pikmin deaths"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_SEC_LEFT, "Seconds left"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_SEC_PASSED, "Seconds passed"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_COLLECTION_PTS, "Mob collection points"
-    );
-    game.missionScoreCriterionTypeNames.registerItem(
-        MISSION_SCORE_CRITERION_DEFEAT_PTS, "Enemy defeat points"
-    );
-    
-    //Mission HUD item ID names.
-    game.missionHudItemIdNames.registerItem(
-        MISSION_HUD_ITEM_ID_GOAL_MAIN, "Goal, main"
-    );
-    game.missionHudItemIdNames.registerItem(
-        MISSION_HUD_ITEM_ID_GOAL_SEC, "Goal, secondary"
-    );
-    game.missionHudItemIdNames.registerItem(
-        MISSION_HUD_ITEM_ID_FAIL_MAIN, "Failure, main"
-    );
-    game.missionHudItemIdNames.registerItem(
-        MISSION_HUD_ITEM_ID_FAIL_SEC, "Failure, secondary"
-    );
-    
-    //Mission HUD item content type names.
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_TEXT, "Custom text"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_CLOCK, "Clock"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_SCORE, "Score"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_CUR_TOT, "Current amount / total"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_REM_TOT, "Remaining amount / total"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_CUR_AMT, "Current amount"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_REM_AMT, "Remaining amount"
-    );
-    game.missionHudItemContentTypeNames.registerItem(
-        MISSION_HUD_ITEM_CONTENT_TOT_AMT, "Total amount"
-    );
-    
-    //Mission HUD item amount type names.
-    game.missionHudItemAmountTypeNames.registerItem(
-        MISSION_HUD_ITEM_AMT_MOB_CHECKLIST, "Mob checklist"
-    );
-    game.missionHudItemAmountTypeNames.registerItem(
-        MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION, "Leaders in region"
-    );
-    game.missionHudItemAmountTypeNames.registerItem(
-        MISSION_HUD_ITEM_AMT_PIKMIN, "Pikmin count"
-    );
-    game.missionHudItemAmountTypeNames.registerItem(
-        MISSION_HUD_ITEM_AMT_LEADERS, "Leader count"
-    );
-    game.missionHudItemAmountTypeNames.registerItem(
-        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS, "Pikmin deaths"
-    );
-    
     //Mission events.
     //Order matters, and should match MISSION_EV.
     game.missionEvTypes = {

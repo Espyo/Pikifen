@@ -29,6 +29,13 @@ enum HOLDABILITY_FLAG {
 };
 
 
+//Holdability flag enum naming (internal names).
+buildEnumNames(holdabilityFlagINames, HOLDABILITY_FLAG)({
+    { HOLDABILITY_FLAG_PIKMIN, "pikmin" },
+    { HOLDABILITY_FLAG_ENEMIES, "enemies" },
+});
+
+
 /**
  * @brief A tool for Pikmin.
  * This is anything that a Pikmin can carry to use at a later date.

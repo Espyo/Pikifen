@@ -13,6 +13,7 @@
 #include <allegro5/allegro.h>
 
 #include "../../lib/data_file/data_file.h"
+#include "../../util/enum_utils.h"
 #include "../../util/general_utils.h"
 #include "../other/spray_type.h"
 #include "../other/status.h"
@@ -49,6 +50,13 @@ enum DROP_CONSUMER {
 };
 
 
+//Drop consumer enum naming (internal names).
+buildEnumNames(dropConsumerINames, DROP_CONSUMER)({
+    { DROP_CONSUMER_PIKMIN, "pikmin" },
+    { DROP_CONSUMER_LEADERS, "leaders" },
+});
+
+
 //Possible drop consumption effects.
 enum DROP_EFFECT {
 
@@ -62,6 +70,14 @@ enum DROP_EFFECT {
     DROP_EFFECT_GIVE_STATUS,
     
 };
+
+
+//Drop effect enum naming (internal names).
+buildEnumNames(dropEffectINames, DROP_EFFECT)({
+    { DROP_EFFECT_MATURATE, "maturate" },
+    { DROP_EFFECT_INCREASE_SPRAYS, "increase_sprays" },
+    { DROP_EFFECT_GIVE_STATUS, "give_status" },
+});
 
 
 //Drop object states.

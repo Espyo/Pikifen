@@ -1007,11 +1007,12 @@ void Area::loadGeometryFromDataNode(
         sRS.set("vars", newSector->vars);
         sRS.set("z", newSector->z);
         
-        size_t newType = game.sectorTypes.getIdx(typeStr);
-        if(newType == INVALID) {
-            newType = SECTOR_TYPE_NORMAL;
+        bool sectorTypeFound;
+        newSector->type =
+            enumGetValue(sectorTypeINames, typeStr, &sectorTypeFound);
+        if(!sectorTypeFound) {
+            newSector->type = SECTOR_TYPE_NORMAL;
         }
-        newSector->type = (SECTOR_TYPE) newType;
         
         if(!newSector->fade && !newSector->isBottomlessPit) {
             newSector->textureInfo.bitmap =
@@ -1436,7 +1437,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     //HUD items.
     mission.hudItems.clear();
     DataNode* itemsNode = node->getChildByName("mission_hud_items");
-    for(size_t i = 0; i < game.missionHudItemIdNames.getNrOfItems(); i++) {
+    for(size_t i = 0; i < enumGetCount(missionHudItemIdNames); i++) {
         DataNode* itemNode = itemsNode->getChild(i);
         MissionHudItem newItem;
         
@@ -1784,7 +1785,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         GetterWriter sGW(sectorNode);
         
         if(sPtr->type != SECTOR_TYPE_NORMAL) {
-            sGW.write("type", game.sectorTypes.getName(sPtr->type));
+            sGW.write("type", enumGetName(sectorTypeINames, sPtr->type));
         }
         if(sPtr->isBottomlessPit) {
             sGW.write("is_bottomless_pit", true);

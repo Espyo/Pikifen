@@ -66,28 +66,22 @@ void BouncerType::loadCatProperties(DataNode* file) {
         riders = 0;
         vector<string> ridersStrWords = split(ridersStr);
         for(size_t r = 0; r < ridersStrWords.size(); r++) {
-            if(ridersStrWords[r] == "pikmin") {
-                enableFlag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
-            } else if(ridersStrWords[r] == "leaders") {
-                enableFlag(riders, BOUNCER_RIDER_FLAG_LEADERS);
-            } else {
-                game.errors.report(
-                    "Unknown type of rider \"" + ridersStrWords[r] + "\"!",
-                    ridersNode
-                );
+            BOUNCER_RIDER_FLAG rf;
+            if(
+                readEnumProp(
+                    bouncerRiderFlagINames, ridersStrWords[r], &rf,
+                    "rider type", ridersNode
+                )
+            ) {
+                riders |= (Bitmask16) rf;
             }
         }
     }
     
     if(ridingPoseNode) {
         readEnumProp(
-            ridingPoseStr,
-        (int*) &ridingPose, {
-            "stopped",
-            "somersault"
-        },
-        "type of riding pose",
-        ridingPoseNode
+            bouncerRidingPoseINames, ridingPoseStr, &ridingPose,
+            "type of riding pose", ridingPoseNode
         );
     }
     

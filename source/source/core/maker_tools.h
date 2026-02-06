@@ -76,7 +76,6 @@ enum MAKER_TOOL_TYPE {
 
 
 namespace MAKER_TOOLS {
-extern const string NAMES[N_MAKER_TOOLS];
 extern const float PLAY_CONFIRMATION_TIMER;
 }
 

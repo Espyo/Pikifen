@@ -41,9 +41,18 @@ enum STATUS_AFFECTS_FLAG {
     STATUS_AFFECTS_FLAG_LEADERS = 1 << 2,
     
     //Affects other mobs.
-    STATUS_AFFECTS_FLAG_OTHERS = 1 << 4,
+    STATUS_AFFECTS_FLAG_OTHERS = 1 << 3,
     
 };
+
+
+//Status affects flag enum naming (internal names).
+buildEnumNames(statusAffectsFlagINames, STATUS_AFFECTS_FLAG)({
+    { STATUS_AFFECTS_FLAG_PIKMIN, "pikmin" },
+    { STATUS_AFFECTS_FLAG_ENEMIES, "enemies" },
+    { STATUS_AFFECTS_FLAG_LEADERS, "leaders" },
+    { STATUS_AFFECTS_FLAG_OTHERS, "others" },
+});
 
 
 //What mob script state the status effect changes to.
@@ -65,6 +74,16 @@ enum STATUS_STATE_CHANGE {
     STATUS_STATE_CHANGE_CUSTOM,
     
 };
+
+
+//Status state change enum naming (internal names).
+buildEnumNames(statusStateChangeINames, STATUS_STATE_CHANGE)({
+    { STATUS_STATE_CHANGE_NONE, "none" },
+    { STATUS_STATE_CHANGE_FLAILING, "flailing" },
+    { STATUS_STATE_CHANGE_HELPLESS, "helpless" },
+    { STATUS_STATE_CHANGE_PANIC, "panic" },
+    { STATUS_STATE_CHANGE_CUSTOM, "custom" },
+});
 
 
 //Possible states for a status effect instance.
@@ -97,6 +116,14 @@ enum STATUS_REAPPLY_RULE {
 };
 
 
+//Status reapply rule enum naming (internal names).
+buildEnumNames(statusReapplyRuleINames, STATUS_REAPPLY_RULE)({
+    { STATUS_REAPPLY_RULE_KEEP_TIME, "keep_time" },
+    { STATUS_REAPPLY_RULE_RESET_TIME, "reset_time" },
+    { STATUS_REAPPLY_RULE_ADD_TIME, "add_time" },
+});
+
+
 #pragma endregion
 #pragma region Status type
 
@@ -117,7 +144,7 @@ public:
     //--- Public members ---
     
     //Flags indicating what sorts of mobs it affects.
-    unsigned char affects = 0;
+    Bitmask8 affects = 0;
     
     //Color that best represents this status type.
     ALLEGRO_COLOR color = COLOR_EMPTY;

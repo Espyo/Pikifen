@@ -786,5 +786,3 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
 bool isMobInReach(
     MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
 );
-MOB_TARGET_FLAG stringToMobTargetType(const string& typeStr);
-MOB_TEAM stringToTeamNr(const string& teamStr);

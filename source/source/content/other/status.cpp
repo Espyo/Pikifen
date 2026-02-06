@@ -172,52 +172,29 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     affects = 0;
     vector<string> affectsStrParts = semicolonListToVector(affectsStr);
     for(size_t a = 0; a < affectsStrParts.size(); a++) {
-        if(affectsStrParts[a] == "pikmin") {
-            enableFlag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
-        } else if(affectsStrParts[a] == "leaders") {
-            enableFlag(affects, STATUS_AFFECTS_FLAG_LEADERS);
-        } else if(affectsStrParts[a] == "enemies") {
-            enableFlag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
-        } else if(affectsStrParts[a] == "others") {
-            enableFlag(affects, STATUS_AFFECTS_FLAG_OTHERS);
-        } else {
-            game.errors.report(
-                "Unknown affect target \"" + affectsStrParts[a] + "\"!",
-                affectsNode
-            );
+        STATUS_AFFECTS_FLAG af;
+        if(
+            readEnumProp(
+                statusAffectsFlagINames, affectsStrParts[a], &af,
+                "affect target", affectsNode
+            )
+        ) {
+            affects |= (Bitmask8) af;
         }
     }
     
     if(reapplyRuleNode) {
-        if(reapplyRuleStr == "keep_time") {
-            reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
-        } else if(reapplyRuleStr == "reset_time") {
-            reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
-        } else if(reapplyRuleStr == "add_time") {
-            reapplyRule = STATUS_REAPPLY_RULE_ADD_TIME;
-        } else {
-            game.errors.report(
-                "Unknown reapply rule \"" +
-                reapplyRuleStr + "\"!", reapplyRuleNode
-            );
-        }
+        readEnumProp(
+            statusReapplyRuleINames, reapplyRuleStr, &reapplyRule,
+            "reapply rule", reapplyRuleNode
+        );
     }
     
     if(scTypeNode) {
-        if(scTypeStr == "flailing") {
-            stateChangeType = STATUS_STATE_CHANGE_FLAILING;
-        } else if(scTypeStr == "helpless") {
-            stateChangeType = STATUS_STATE_CHANGE_HELPLESS;
-        } else if(scTypeStr == "panic") {
-            stateChangeType = STATUS_STATE_CHANGE_PANIC;
-        } else if(scTypeStr == "custom") {
-            stateChangeType = STATUS_STATE_CHANGE_CUSTOM;
-        } else {
-            game.errors.report(
-                "Unknown state change type \"" +
-                scTypeStr + "\"!", scTypeNode
-            );
-        }
+        readEnumProp(
+            statusStateChangeINames, scTypeStr, &stateChangeType,
+            "state change type", scTypeNode
+        );
     }
     
     const auto loadPg =

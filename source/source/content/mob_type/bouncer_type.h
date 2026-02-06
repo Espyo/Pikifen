@@ -11,6 +11,7 @@
 #pragma once
 
 #include "../../lib/data_file/data_file.h"
+#include "../../util/enum_utils.h"
 #include "mob_type.h"
 
 
@@ -26,6 +27,13 @@ enum BOUNCER_RIDER_FLAG {
 };
 
 
+//Bouncer rider flag enum naming (internal names).
+buildEnumNames(bouncerRiderFlagINames, BOUNCER_RIDER_FLAG)({
+    { BOUNCER_RIDER_FLAG_PIKMIN, "pikmin" },
+    { BOUNCER_RIDER_FLAG_LEADERS, "leaders" },
+});
+
+
 //Poses for riders to take.
 enum BOUNCER_RIDING_POSE {
 
@@ -36,6 +44,13 @@ enum BOUNCER_RIDING_POSE {
     BOUNCER_RIDING_POSE_SOMERSAULT,
     
 };
+
+
+//Bouncer riding pose enum naming (internal names).
+buildEnumNames(bouncerRidingPoseINames, BOUNCER_RIDING_POSE)({
+    { BOUNCER_RIDING_POSE_STOPPED, "stopped" },
+    { BOUNCER_RIDING_POSE_SOMERSAULT, "somersault" },
+});
 
 
 //Bouncer object animations.

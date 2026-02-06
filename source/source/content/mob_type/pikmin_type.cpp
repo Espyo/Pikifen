@@ -206,13 +206,8 @@ void PikminType::loadCatProperties(DataNode* file) {
     
     if(attackMethodNode) {
         readEnumProp(
-            attackMethodStr,
-        (int*) &attackMethod, {
-            "latch",
-            "impact"
-        },
-        "Pikmin attack type",
-        attackMethodNode
+            pikminAttackINames, attackMethodStr, &attackMethod,
+            "Pikmin attack type", attackMethodNode
         );
     }
     

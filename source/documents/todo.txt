@@ -2,7 +2,6 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    Use adjustMisalignedIndexes in more places
     New mission system
         HUD logic
         Scoring logic
@@ -14,7 +13,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Pathing in Olympian Ruins needs work
-    Controller recognition on Windows is pretty janky
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Standardize Pikmin climbing sprites
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
@@ -446,12 +444,14 @@ Small tasks (for when I'm feeling lazy)
         Document the code with comments
         Use #pragma region in header files?
         Remove parameter names in function declarations?
-        Struct/class contents in header files have comments with --- separating them, but those comments should also say whether it's the public or private things, so it's easier to navigate
+        Standardize classes and structs -- there's barely any rhyme or reason for me choosing one or the other
+            Maybe place a public:, protected:, or private: tag before ALL sections of the class as relevant?
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
-        Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
+        Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some use reportEnumError, some do things their own way by themselves
+            Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
     
     
 Misc things (so I don't forget)

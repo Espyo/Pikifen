@@ -195,24 +195,6 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
-    //Database of all mission presets and their names.
-    EnumNameDatabase missionPresetNames;
-    
-    //Database of all mission mob checklist types and their names.
-    EnumNameDatabase missionMobChecklistTypeNames;
-    
-    //Database of all mission score criterion types and their names.
-    EnumNameDatabase missionScoreCriterionTypeNames;
-    
-    //Database of all mission HUD items and their names.
-    EnumNameDatabase missionHudItemIdNames;
-    
-    //Database of all mission HUD item content types and their names.
-    EnumNameDatabase missionHudItemContentTypeNames;
-    
-    //Database of all mission HUD item amount types and their names.
-    EnumNameDatabase missionHudItemAmountTypeNames;
-    
     //Database of all mission event types.
     vector<MissionEvType*> missionEvTypes;
     
@@ -240,9 +222,6 @@ public:
     //Randomness manager.
     RngManager rng;
     
-    //Database of all sector types and their names.
-    EnumNameDatabase sectorTypes;
-    
     //Should we be showing system info? (Framerate, version, etc.)
     bool showSystemInfo = false;
     
@@ -261,12 +240,6 @@ public:
     
     //List of content that is needed system-wide.
     SystemContentList sysContent;
-    
-    //List of all mob team's internal names.
-    string teamInternalNames[N_MOB_TEAMS];
-    
-    //List of all mob team names, in proper English.
-    string teamNames[N_MOB_TEAMS];
     
     //How much time has passed since the program booted.
     float timePassed = 0.0f;
@@ -339,7 +312,6 @@ public:
     
     //--- Public function declarations ---
     
-    Game();
     void changeState(
         GameState* newState,
         bool unloadCurrent = true, bool loadNew = true

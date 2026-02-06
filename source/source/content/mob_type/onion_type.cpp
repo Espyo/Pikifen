@@ -86,8 +86,7 @@ void OnionType::loadCatProperties(DataNode* file) {
     
     if(deliveryAnimNode) {
         readEnumProp(
-            deliveryAnimStr, (int*) &deliveryAnim,
-            vector<string> { "suck", "toss" },
+            deliveryAnimINames, deliveryAnimStr, &deliveryAnim,
             "delivery animation", deliveryAnimNode
         );
     }

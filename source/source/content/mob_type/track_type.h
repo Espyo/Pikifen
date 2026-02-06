@@ -26,6 +26,13 @@ enum TRACK_RIDER_FLAG {
 };
 
 
+//Track rider flag enum naming (internal names).
+buildEnumNames(trackRiderFlagINames, TRACK_RIDER_FLAG)({
+    { TRACK_RIDER_FLAG_PIKMIN, "pikmin" },
+    { TRACK_RIDER_FLAG_LEADERS, "leaders" },
+});
+
+
 //Poses that a mob riding on a track can take.
 enum TRACK_RIDING_POSE {
 
@@ -39,6 +46,14 @@ enum TRACK_RIDING_POSE {
     TRACK_RIDING_POSE_SLIDING,
     
 };
+
+
+//Track riding pose enum naming (internal names).
+buildEnumNames(trackRidingPoseINames, TRACK_RIDING_POSE)({
+    { TRACK_RIDING_POSE_STOPPED, "stopped" },
+    { TRACK_RIDING_POSE_CLIMBING, "climbing" },
+    { TRACK_RIDING_POSE_SLIDING, "sliding" },
+});
 
 
 //Track object animations.

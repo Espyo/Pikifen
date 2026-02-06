@@ -67,15 +67,8 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
     
     if(contributionMethodNode) {
         readEnumProp(
-            contributionMethodStr,
-        (int*) &contributionMethod, {
-            "normal",
-            "weight",
-            "carry_strength",
-            "push_strength"
-        },
-        "contribution type",
-        contributionMethodNode
+            groupTaskContributionINames, contributionMethodStr,
+            &contributionMethod, "contribution type", contributionMethodNode
         );
     }
     
@@ -83,16 +76,8 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
     
     if(workerPikminPoseNode) {
         readEnumProp(
-            workerPikminPoseStr,
-        (int*) &workerPikminPose, {
-            "stopped",
-            "arms_out",
-            "pushing",
-            "carrying",
-            "carrying_light"
-        },
-        "pose",
-        workerPikminPoseNode
+            groupTaskPikminPoseINames, workerPikminPoseStr,
+            &workerPikminPose, "pose", workerPikminPoseNode
         );
     }
     

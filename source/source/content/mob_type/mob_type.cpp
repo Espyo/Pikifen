@@ -383,15 +383,10 @@ void MobType::loadFromDataNode(
     
     //Team.
     if(teamNode) {
-        MOB_TEAM t = stringToTeamNr(teamStr);
-        if(t != INVALID) {
-            startingTeam = t;
-        } else {
-            game.errors.report(
-                "Invalid team \"" + teamStr + "\"!",
-                teamNode
-            );
-        }
+        readEnumProp(
+            mobTeamINames, teamStr, &startingTeam,
+            "team", teamNode
+        );
     }
     
     //Inactive logic.
@@ -571,8 +566,8 @@ void MobType::loadFromDataNode(
         ReaderSetter cRS(childNode);
         MobType::Child newChild;
         
-        string limbDrawMethod;
-        string holdRotationMethod;
+        string limbDrawStr;
+        string holdRotationStr;
         DataNode* limbDrawNode = nullptr;
         DataNode* holdRotationNode = nullptr;
         
@@ -586,7 +581,7 @@ void MobType::loadFromDataNode(
         );
         cRS.set("hold_offset_angle", newChild.holdOffsetAngle);
         cRS.set(
-            "hold_rotation_method", holdRotationMethod, &holdRotationNode
+            "hold_rotation_method", holdRotationStr, &holdRotationNode
         );
         cRS.set("handle_damage", newChild.handleDamage);
         cRS.set("relay_damage", newChild.relayDamage);
@@ -600,47 +595,23 @@ void MobType::loadFromDataNode(
         cRS.set("limb_parent_offset", newChild.limbParentOffset);
         cRS.set("limb_child_body_part", newChild.limbChildBodyPart);
         cRS.set("limb_child_offset", newChild.limbChildOffset);
-        cRS.set("limb_draw_method", limbDrawMethod, &limbDrawNode);
+        cRS.set("limb_draw_method", limbDrawStr, &limbDrawNode);
         
         newChild.holdOffsetAngle = degToRad(newChild.holdOffsetAngle);
         
         if(limbDrawNode) {
-            if(limbDrawMethod == "below_both") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_BOTH;
-            } else if(limbDrawMethod == "below_child") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_CHILD;
-            } else if(limbDrawMethod == "below_parent") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_PARENT;
-            } else if(limbDrawMethod == "above_parent") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_PARENT;
-            } else if(limbDrawMethod == "above_child") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_CHILD;
-            } else if(limbDrawMethod == "above_both") {
-                newChild.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_BOTH;
-            } else {
-                game.errors.report(
-                    "Unknow limb draw method \"" +
-                    limbDrawMethod + "\"!", limbDrawNode
-                );
-            }
+            readEnumProp(
+                limbDrawMethodINames, limbDrawStr, &newChild.limbDrawMethod,
+                "limb draw method", limbDrawNode
+            );
         }
         
         if(holdRotationNode) {
-            if(holdRotationMethod == "never") {
-                newChild.holdRotationMethod =
-                    HOLD_ROTATION_METHOD_NEVER;
-            } else if(holdRotationMethod == "face_parent") {
-                newChild.holdRotationMethod =
-                    HOLD_ROTATION_METHOD_FACE_HOLDER;
-            } else if(holdRotationMethod == "copy_parent") {
-                newChild.holdRotationMethod =
-                    HOLD_ROTATION_METHOD_COPY_HOLDER;
-            } else {
-                game.errors.report(
-                    "Unknow parent holding rotation method \"" +
-                    holdRotationMethod + "\"!", holdRotationNode
-                );
-            }
+            readEnumProp(
+                holdRotationMethodParentINames, holdRotationStr,
+                &newChild.holdRotationMethod,
+                "parent holding rotation method", holdRotationNode
+            );
         }
         
         children.push_back(newChild);
@@ -690,17 +661,8 @@ void MobType::loadFromDataNode(
         
         if(typeNode) {
             readEnumProp(
-                typeStr,
-            (int*) &newProp.type, {
-                "text",
-                "int",
-                "float",
-                "bool",
-                "list",
-                "number_list"
-            },
-            "area editor property type",
-            typeNode
+                aempTypeINames, typeStr, &newProp.type,
+                "area editor property type", typeNode
             );
         }
         
@@ -728,16 +690,10 @@ void MobType::loadFromDataNode(
     }
     
     if(targetTypeNode) {
-        MOB_TARGET_FLAG targetTypeValue =
-            stringToMobTargetType(targetTypeStr);
-        if(targetTypeValue == INVALID) {
-            game.errors.report(
-                "Unknown target type \"" + targetTypeStr + "\"!",
-                targetTypeNode
-            );
-        } else {
-            targetType = targetTypeValue;
-        }
+        readEnumProp(
+            mobTargetFlagINames, targetTypeStr, &targetType,
+            "target type", targetTypeNode
+        );
     }
     
     vector<string> huntableTargetsStrs =
@@ -745,15 +701,15 @@ void MobType::loadFromDataNode(
     if(huntableTargetsNode) {
         huntableTargets = 0;
     }
-    for(size_t h = 0; h < huntableTargetsStrs.size(); h++) {
-        size_t v = stringToMobTargetType(huntableTargetsStrs[h]);
-        if(v == INVALID) {
-            game.errors.report(
-                "Unknown target type \"" + huntableTargetsStrs[h] + "\"!",
-                huntableTargetsNode
-            );
-        } else {
-            huntableTargets |= (Bitmask16) v;
+    for(size_t t = 0; t < huntableTargetsStrs.size(); t++) {
+        MOB_TARGET_FLAG tt;
+        if(
+            readEnumProp(
+                mobTargetFlagINames, huntableTargetsStrs[t], &tt,
+                "target type", huntableTargetsNode
+            )
+        ) {
+            huntableTargets |= (Bitmask16) tt;
         }
     }
     
@@ -762,15 +718,15 @@ void MobType::loadFromDataNode(
     if(hurtableTargetsNode) {
         hurtableTargets = 0;
     }
-    for(size_t h = 0; h < hurtableTargetsStrs.size(); h++) {
-        size_t v = stringToMobTargetType(hurtableTargetsStrs[h]);
-        if(v == INVALID) {
-            game.errors.report(
-                "Unknown target type \"" + hurtableTargetsStrs[h] + "\"!",
-                hurtableTargetsNode
-            );
-        } else {
-            hurtableTargets |= (Bitmask16) v;
+    for(size_t t = 0; t < hurtableTargetsStrs.size(); t++) {
+        MOB_TARGET_FLAG tt;
+        if(
+            readEnumProp(
+                mobTargetFlagINames, hurtableTargetsStrs[t], &tt,
+                "target type", hurtableTargetsNode
+            )
+        ) {
+            hurtableTargets |= (Bitmask16) tt;
         }
     }
     

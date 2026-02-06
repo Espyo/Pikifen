@@ -10,10 +10,12 @@
 
 #pragma once
 
+#include <array>
 #include <string>
 #include <unordered_set>
 
 #include "../../core/const.h"
+#include "../../util/enum_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../mob_category/mob_category.h"
@@ -64,6 +66,17 @@ enum MISSION_PRESET {
     MISSION_PRESET_CUSTOM,
     
 };
+
+
+//Mission preset enum naming.
+buildEnumNames(missionPresetNames, MISSION_PRESET)({
+    { MISSION_PRESET_GROW_PIKMIN, "Grow Pikmin" },
+    { MISSION_PRESET_COLLECT_TREASURE, "Collect Treasure" },
+    { MISSION_PRESET_BATTLE_ENEMIES, "Battle Enemies" },
+    { MISSION_PRESET_DEFEAT_BOSSES, "Defeat Bosses" },
+    { MISSION_PRESET_COLLECT_EVERYTHING, "Collect Everything" },
+    { MISSION_PRESET_CUSTOM, "Custom" },
+});
 
 
 //Possible events that can happen in missions.
@@ -141,6 +154,17 @@ enum MISSION_MOB_CHECKLIST {
 };
 
 
+//Mission mob checklist type enum naming.
+buildEnumNames(missionMobChecklistTypeNames, MISSION_MOB_CHECKLIST)({
+    { MISSION_MOB_CHECKLIST_CUSTOM, "Custom" },
+    { MISSION_MOB_CHECKLIST_TREASURES, "Treasures" },
+    { MISSION_MOB_CHECKLIST_ENEMIES, "Enemies" },
+    { MISSION_MOB_CHECKLIST_TREASURES_ENEMIES, "Treasures and enemies" },
+    { MISSION_MOB_CHECKLIST_LEADERS, "Leaders" },
+    { MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin" },
+});
+
+
 //Scoring criterion types for score-based missions.
 enum MISSION_SCORE_CRITERION {
 
@@ -171,6 +195,19 @@ enum MISSION_SCORE_CRITERION {
 };
 
 
+//Mission score criterion type enum naming.
+buildEnumNames(missionScoreCriterionTypeNames, MISSION_SCORE_CRITERION)({
+    { MISSION_SCORE_CRITERION_MOB_CHECKLIST, "Mob checklist item" },
+    { MISSION_SCORE_CRITERION_PIKMIN, "Total Pikmin" },
+    { MISSION_SCORE_CRITERION_PIKMIN_BORN, "Pikmin born" },
+    { MISSION_SCORE_CRITERION_PIKMIN_DEATHS, "Pikmin deaths" },
+    { MISSION_SCORE_CRITERION_SEC_LEFT, "Seconds left" },
+    { MISSION_SCORE_CRITERION_SEC_PASSED, "Seconds passed" },
+    { MISSION_SCORE_CRITERION_COLLECTION_PTS, "Mob collection points" },
+    { MISSION_SCORE_CRITERION_DEFEAT_PTS, "Enemy defeat points" },
+});
+
+
 //Mission HUD item IDs and their typical purposes.
 enum MISSION_HUD_ITEM_ID {
 
@@ -187,6 +224,15 @@ enum MISSION_HUD_ITEM_ID {
     MISSION_HUD_ITEM_ID_FAIL_SEC,
     
 };
+
+
+//Mission HUD item ID enum naming.
+buildEnumNames(missionHudItemIdNames, MISSION_HUD_ITEM_ID)({
+    { MISSION_HUD_ITEM_ID_GOAL_MAIN, "Goal, main" },
+    { MISSION_HUD_ITEM_ID_GOAL_SEC, "Goal, secondary" },
+    { MISSION_HUD_ITEM_ID_FAIL_MAIN, "Failure, main" },
+    { MISSION_HUD_ITEM_ID_FAIL_SEC, "Failure, secondary" },
+});
 
 
 //Possible types of content to show in a mission HUD item.
@@ -219,6 +265,19 @@ enum MISSION_HUD_ITEM_CONTENT {
 };
 
 
+//Mission HUD item content type enum naming.
+buildEnumNames(missionHudItemContentTypeNames, MISSION_HUD_ITEM_CONTENT)({
+    { MISSION_HUD_ITEM_CONTENT_TEXT, "Custom text" },
+    { MISSION_HUD_ITEM_CONTENT_CLOCK, "Clock" },
+    { MISSION_HUD_ITEM_CONTENT_SCORE, "Score" },
+    { MISSION_HUD_ITEM_CONTENT_CUR_TOT, "Current amount / total" },
+    { MISSION_HUD_ITEM_CONTENT_REM_TOT, "Remaining amount / total" },
+    { MISSION_HUD_ITEM_CONTENT_CUR_AMT, "Current amount" },
+    { MISSION_HUD_ITEM_CONTENT_REM_AMT, "Remaining amount" },
+    { MISSION_HUD_ITEM_CONTENT_TOT_AMT, "Total amount" },
+});
+
+
 //Types of things a mission HUD item can show amounts of.
 enum MISSION_HUD_ITEM_AMT {
 
@@ -238,6 +297,16 @@ enum MISSION_HUD_ITEM_AMT {
     MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS,
     
 };
+
+
+//Mission HUD item amount type enum naming.
+buildEnumNames(missionHudItemAmountTypeNames, MISSION_HUD_ITEM_AMT)({
+    { MISSION_HUD_ITEM_AMT_MOB_CHECKLIST, "Mob checklist" },
+    { MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION, "Leaders in region" },
+    { MISSION_HUD_ITEM_AMT_PIKMIN, "Pikmin count" },
+    { MISSION_HUD_ITEM_AMT_LEADERS, "Leader count" },
+    { MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS, "Pikmin deaths" },
+});
 
 
 //Possible types of mission medal.

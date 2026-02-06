@@ -2188,10 +2188,10 @@ void Editor::processGuiEditorStyle() {
 bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
     //Hazard combo.
     int selectedHazardIdx = -1;
-    vector<string> allHazardInames = {""};
+    vector<string> allHazardINames = {""};
     vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
     for(auto& h : game.content.hazards.list) {
-        allHazardInames.push_back(h.first);
+        allHazardINames.push_back(h.first);
         allHazardLabels.push_back(h.second.name + "##" + h.first);
         if(selectedHazardIname == h.first) {
             selectedHazardIdx = (int) allHazardLabels.size() - 1;
@@ -2203,7 +2203,7 @@ bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
     bool result =
         ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
         
-    selectedHazardIname = allHazardInames[selectedHazardIdx];
+    selectedHazardIname = allHazardINames[selectedHazardIdx];
     
     return result;
 }

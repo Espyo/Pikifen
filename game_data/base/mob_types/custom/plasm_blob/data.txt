@@ -13,7 +13,7 @@ acceleration = 500
 rotation_speed = 7000
 can_free_move = true
 target_type = weak_plain_obstacle
-team = enemy
+team = enemy_1
 
 vulnerabilities {
     rock = 300

@@ -188,10 +188,6 @@ bool monoSelectable(
     const ImVec2& size = ImVec2(0, 0)
 );
 bool openManual(const string& page);
-bool readEnumProp(
-    const string& valueStr, int* outInt, const vector<string> possibleValues,
-    const string& errorThing, DataNode* errorNode
-);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
 void saveOptions();
@@ -278,4 +274,43 @@ void monoText(Args_t && ...args) {
     );
     ImGui::Text(std::forward<Args_t>(args)...);
     ImGui::PopFont();
+}
+
+
+/**
+ * @brief Given a string name from a property in a data file, checks to see
+ * if it matches any of the possible names of an enum. If so, returns the
+ * enum value. If not, it outputs an error.
+ *
+ * @tparam MapT Type of the object containing the enum mappings.
+ * @param mapObj Object containing the enum mappings.
+ * @param name Property value, i.e. enum value name, in the data file.
+ * @param outVar The variable that will receive the enum value. If the name is
+ * not found, the variable will remain unchanged.
+ * @param errorThing What kind of thing this is. This is written to the
+ * error log.
+ * @param errorNode Data node this name was read from, if any. Used when
+ * reporting an error.
+ * @return Whether the name matched any of the possible names.
+ */
+template<class MapT, class EnumT>
+bool readEnumProp(
+    const MapT& mapObj, const string& name, EnumT* outVar,
+    const string& errorThing, DataNode* errorNode
+) {
+    if(name.empty()) return false;
+    
+    bool found;
+    EnumT value = enumGetValue(mapObj, name, &found);
+    
+    if(found) {
+        *outVar = value;
+        return true;
+    }
+    
+    game.errors.report(
+        "Unknown " + errorThing + " \"" + name + "\"!",
+        errorNode
+    );
+    return false;
 }

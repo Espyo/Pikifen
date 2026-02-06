@@ -19,6 +19,8 @@
 #include <stdint.h>
 #include <vector>
 
+#include "enum_utils.h"
+
 
 using std::vector;
 
@@ -64,6 +66,21 @@ enum EASE_METHOD {
     EASE_METHOD_UP_AND_DOWN_ELASTIC,
     
 };
+
+
+//Ease method enum naming (internal names).
+buildEnumNames(easeMethodINames, EASE_METHOD)({
+    { EASE_METHOD_NONE, "none" },
+    { EASE_METHOD_IN, "in" },
+    { EASE_METHOD_OUT, "out" },
+    { EASE_METHOD_IN_OUT, "in_out" },
+    { EASE_METHOD_IN_BACK, "in_back" },
+    { EASE_METHOD_OUT_BACK, "out_back" },
+    { EASE_METHOD_IN_ELASTIC, "in_elastic" },
+    { EASE_METHOD_OUT_ELASTIC, "out_elastic" },
+    { EASE_METHOD_UP_AND_DOWN, "up_and_down" },
+    { EASE_METHOD_UP_AND_DOWN_ELASTIC, "up_and_down_elastic" },
+});
 
 
 //Rounds a number. Ugh, why do I even have to create this.
