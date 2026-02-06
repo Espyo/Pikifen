@@ -28,7 +28,7 @@ class ShipCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ShipCategory();
     void getTypeNames(vector<string>& list) const override;

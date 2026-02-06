@@ -77,7 +77,7 @@ class InWorldHudItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Associated mob, if any.
     Mob* m = nullptr;
@@ -92,7 +92,7 @@ public:
     bool toDelete = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     InWorldHudItem(Mob* m);
     virtual ~InWorldHudItem() = default;
@@ -110,14 +110,13 @@ class InWorldFraction : public InWorldHudItem {
 
 public:
 
-
-    //--- Members ---
+    //--- Public members ---
     
     //Icon to show alongside it, if any.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     InWorldFraction(Mob* m = nullptr);
     void draw() override;
@@ -128,10 +127,10 @@ public:
     void startFading() override;
     void tick(float deltaT) override;
     
+    
 private:
 
-
-    //--- Members ---
+    //--- Private members ---
     
     //Upper number, the one representing the current value.
     float valueNumber = 0.0f;
@@ -162,13 +161,13 @@ class InWorldHealthWheel : public InWorldHudItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //How much the health wheel is filled. Gradually moves to the target amount.
     float visibleRatio = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit InWorldHealthWheel(Mob* m);
     void draw() override;

@@ -39,7 +39,7 @@ class StatusType;
  */
 struct Hazard : public Content {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Color that best represents this hazard.
     ALLEGRO_COLOR mainColor = COLOR_EMPTY;
@@ -54,7 +54,7 @@ struct Hazard : public Content {
     LiquidType* associatedLiquid = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node);
     

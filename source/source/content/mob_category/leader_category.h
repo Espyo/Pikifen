@@ -28,7 +28,7 @@ class LeaderCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     LeaderCategory();
     void getTypeNames(vector<string>& list) const override;

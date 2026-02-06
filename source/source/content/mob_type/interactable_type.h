@@ -22,7 +22,7 @@ class InteractableType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Text to display above the mob, prompting the player on what to do.
     string promptText;
@@ -31,7 +31,7 @@ public:
     float triggerRange = 64.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     InteractableType();
     void loadCatProperties(DataNode* file) override;

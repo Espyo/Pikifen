@@ -37,16 +37,17 @@ extern const string GUI_FILE_NAME;
  * serving as a modal dialog. It contains some simple text and buttons.
  */
 class ModalGuiManager : public GuiManager {
+
 public:
 
-    //--- Structs ---
+    //--- Public misc. definitions ---
     
     /**
      * @brief Represents an extra button.
      */
     struct Button {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Text to show.
         string text;
@@ -62,7 +63,7 @@ public:
         
     };
     
-    //--- Members ---
+    //--- Public members ---
     
     //Title text.
     string title;
@@ -84,7 +85,8 @@ public:
     size_t defaultFocusButtonIdx = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
+    
     ModalGuiManager();
     bool isActive() const;
     void draw();
@@ -96,7 +98,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Item for the title text.
     TextGuiItem* titleItem = nullptr;

@@ -68,12 +68,12 @@ class Interface {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Settings for how it works.
     struct Settings {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Top-left corner's X coordinate.
         //If not specified, i.e. left at the default values, the limits will
@@ -138,7 +138,7 @@ public:
      */
     struct DebugItem {
     
-        //--- Members ---
+        //--- Public members ---
         
         //X of the point on the focus that was checked.
         double focusX = 0.0f;
@@ -169,7 +169,7 @@ public:
 #endif
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ~Interface();
     bool addItem(ItemId id, float x, float y, float w, float h);
@@ -184,7 +184,7 @@ public:
     
 protected:
 
-    //--- Misc. definitions ---
+    //--- Protected misc. definitions ---
     
     
     //How much to flatten the coordinates of children outside their parents'
@@ -198,9 +198,7 @@ protected:
      */
     struct Item {
     
-        public:
-        
-        //--- Members ---
+        //--- Public members ---
         
         //Identifier.
         ItemId id = nullptr;
@@ -237,7 +235,7 @@ protected:
      */
     struct ItemWithRelUnits {
     
-        //--- Members ---
+        //--- Public members ---
         
         //The item.
         Item* item = nullptr;
@@ -257,7 +255,7 @@ protected:
     };
     
     
-    //--- Members ---
+    //--- Protected members ---
     
     //All registered items.
     std::map<ItemId, Item*> items;
@@ -275,7 +273,7 @@ protected:
     DIRECTION historyDirection = DIRECTION_RIGHT;
     
     
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     bool checkLoopRelativeCoordinates(
         DIRECTION direction, double* itemRelX,

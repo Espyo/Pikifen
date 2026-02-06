@@ -28,7 +28,7 @@ class TreasureCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TreasureCategory();
     void getTypeNames(vector<string>& list) const override;

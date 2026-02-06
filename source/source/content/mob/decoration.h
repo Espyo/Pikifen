@@ -22,7 +22,7 @@ class Decoration : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of decoration it is.
     DecorationType* decType = nullptr;
@@ -40,7 +40,7 @@ public:
     float individualRotation = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Decoration(const Point& pos, DecorationType* type, float angle);
     void drawMob() override;

@@ -195,7 +195,7 @@ enum MIX_TRACK_TYPE {
  */
 struct SoundSourceConfig {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Flags. Use SOUND_FLAG.
     Bitmask8 flags = 0;
@@ -239,7 +239,7 @@ struct SoundSourceConfig {
  */
 struct SoundSource {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Allegro sound sample that it plays.
     ALLEGRO_SAMPLE* sample = nullptr;
@@ -268,7 +268,7 @@ struct SoundSource {
  */
 struct SoundPlayback {
 
-    //--- Members ---
+    //--- Public members ---
     
     //The source of the sound effect.
     size_t sourceId = 0;
@@ -314,7 +314,7 @@ struct SoundPlayback {
  */
 struct Song : public Content {
 
-    //--- Members ---
+    //--- Public members ---
     
     //The main track. Other tracks can be mixed on top of this if applicable.
     ALLEGRO_AUDIO_STREAM* mainTrack = nullptr;
@@ -338,7 +338,7 @@ struct Song : public Content {
     double loopEnd = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node);
     void unload();
@@ -353,7 +353,7 @@ class AudioManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Base master mixer volume.
     float baseMasterMixerVolume = 1.0f;
@@ -374,7 +374,7 @@ public:
     std::function<void(const string& name)> onSongFinished = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     size_t createMobSoundSource(
         ALLEGRO_SAMPLE* sample, Mob* mPtr, bool ambiance = false,
@@ -418,7 +418,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Master mixer.
     ALLEGRO_MIXER* masterMixer = nullptr;
@@ -470,7 +470,7 @@ private:
     Point camBR;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     size_t createSoundSource(
         ALLEGRO_SAMPLE* sample,
@@ -496,7 +496,7 @@ private:
  */
 struct DataNodeSound {
 
-    //--- Members ---
+    //--- Public members ---
     
     //The loaded sample.
     ALLEGRO_SAMPLE* sample = nullptr;
@@ -508,7 +508,7 @@ struct DataNodeSound {
     SoundSourceConfig config;
 
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
 
     void loadFromDataNode(DataNode* node);
     

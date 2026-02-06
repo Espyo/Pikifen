@@ -28,7 +28,7 @@ class PelletCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PelletCategory();
     void getTypeNames(vector<string>& list) const override;

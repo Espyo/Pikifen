@@ -32,22 +32,24 @@ extern const string GUI_FILE_PATH;
  * the player.
  */
 class StatsMenu : public Menu {
+
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager.
     GuiManager gui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
+
     void load() override;
     void tick(float deltaT) override;
     
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Statistics list item.
     ListGuiItem* statsList = nullptr;
@@ -56,7 +58,7 @@ private:
     TextGuiItem* runtimeValueText = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void addHeader(const string& label);
     TextGuiItem* addStat(

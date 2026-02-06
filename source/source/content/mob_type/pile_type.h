@@ -50,7 +50,7 @@ class PileType : public MobType, public MobTypeWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Contents of the pile.
     ResourceType* contents = nullptr;
@@ -83,7 +83,7 @@ public:
     bool deleteWhenFinished = true;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PileType();
     void loadCatProperties(DataNode* file) override;

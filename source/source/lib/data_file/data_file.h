@@ -66,7 +66,7 @@ class DataNode {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The node's name.
     string name;
@@ -85,7 +85,7 @@ public:
     size_t lineNr = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DataNode();
     explicit DataNode(const string& filePath);
@@ -130,7 +130,7 @@ public:
     
 protected:
 
-    //--- Members ---
+    //--- Protected members ---
     
     //List of children nodes.
     vector<DataNode*> children;
@@ -139,7 +139,7 @@ protected:
     vector<DataNode*> dummyChildren;
     
     
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     DataNode* createDummy();
     static unsigned char decryptChar(unsigned char c);

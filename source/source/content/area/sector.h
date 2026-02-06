@@ -44,7 +44,7 @@ enum SECTOR_TYPE {
  */
 struct SectorTexture {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Transformation data.
     Transform2d tf;
@@ -70,7 +70,7 @@ struct SectorTexture {
  */
 struct Sector {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Its type.
     SECTOR_TYPE type = SECTOR_TYPE_NORMAL;
@@ -121,7 +121,7 @@ struct Sector {
     Point bbox[2];
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ~Sector();
     void addEdge(Edge* ePtr, size_t eIdx);

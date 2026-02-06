@@ -28,7 +28,7 @@ class DecorationCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DecorationCategory();
     void getTypeNames(vector<string>& list) const override;

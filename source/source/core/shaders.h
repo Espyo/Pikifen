@@ -52,13 +52,13 @@ enum SHADER_TYPE {
  */
 struct ShaderManager {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Array of compiled shaders,
     ALLEGRO_SHADER* compiledShaders[N_SHADER_TYPES];
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ALLEGRO_SHADER* getShader(SHADER_TYPE shaderType);
     void compileShaders();
@@ -66,7 +66,7 @@ struct ShaderManager {
     
     private:
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void compileShader(
         SHADER_TYPE type,

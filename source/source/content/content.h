@@ -101,7 +101,7 @@ enum CONTENT_LOAD_LEVEL {
  */
 struct ContentManifest {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Internal name. Basically file name sans extension or folder name.
     string internalName;
@@ -113,7 +113,7 @@ struct ContentManifest {
     string pack;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ContentManifest();
     ContentManifest(const string& name, const string& path, const string& pack);
@@ -130,7 +130,7 @@ struct ContentManifest {
 class PlainContent {
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The content's manifest.
     ContentManifest* manifest = nullptr;
@@ -145,7 +145,7 @@ public:
 class Content : public PlainContent {
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Optional player/maker-facing name.
     string name;
@@ -172,7 +172,7 @@ public:
     string notes;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadMetadataFromDataNode(DataNode* node);
     void resetMetadata();
@@ -186,7 +186,7 @@ public:
  */
 struct Pack {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Optional player/maker-facing name.
     string name;

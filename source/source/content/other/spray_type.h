@@ -31,7 +31,7 @@ class SprayType : public Content {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What the spray does.
     vector<StatusType*> effects;
@@ -70,7 +70,8 @@ public:
     //Does it bury Pikmin?
     bool buriesPikmin = false;
     
-    //--- Function declarations ---
+
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
     

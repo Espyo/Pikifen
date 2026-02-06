@@ -50,7 +50,7 @@ class MainMenu : public Menu {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What page to load when it is created.
     MAIN_MENU_PAGE pageToLoad = MAIN_MENU_PAGE_MAIN;
@@ -65,14 +65,14 @@ public:
     GuiManager makeGui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load() override;
     
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void initGuiMainPage();
     void initGuiMakePage();
@@ -89,13 +89,13 @@ class TitleScreen : public GameState {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What page to load when it is created.
     MAIN_MENU_PAGE pageToLoad = MAIN_MENU_PAGE_MAIN;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load() override;
     void unload() override;
@@ -107,14 +107,14 @@ public:
     
 private:
 
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     /**
      * @brief Represents a Pikmin in the logo.
      */
     struct LogoPikmin {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Position.
         Point pos;
@@ -143,7 +143,7 @@ private:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Main menu.
     MainMenu mainMenu;

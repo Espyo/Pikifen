@@ -49,7 +49,7 @@ class PelletType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of Pikmin this pellet relates to.
     PikminType* pikType = nullptr;
@@ -70,7 +70,7 @@ public:
     bool drawNumber = true;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PelletType();
     void loadCatProperties(DataNode* file) override;

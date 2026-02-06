@@ -28,7 +28,7 @@ struct Sector;
  */
 struct Edge {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Vertexes that make up the edge.
     Vertex* vertexes[2] = { nullptr, nullptr };
@@ -55,7 +55,7 @@ struct Edge {
     ALLEGRO_COLOR ledgeSmoothingColor = GEOMETRY::SMOOTHING_DEF_COLOR;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Edge(size_t v1Idx = INVALID, size_t v2Idx = INVALID);
     void clone(Edge* destination) const;
@@ -80,7 +80,7 @@ struct Edge {
  */
 struct EdgeIntersection {
 
-    //--- Members ---
+    //--- Public members ---
     
     //First edge in the intersection.
     Edge* e1 = nullptr;
@@ -89,7 +89,7 @@ struct EdgeIntersection {
     Edge* e2 = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     EdgeIntersection(Edge* e1, Edge* e2);
     bool contains(const Edge* e);

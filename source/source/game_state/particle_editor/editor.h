@@ -29,13 +29,13 @@ class ParticleEditor : public Editor {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Automatically load this file upon boot-up of the editor, if any.
     string autoLoadFile;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ParticleEditor();
     void doLogic() override;
@@ -48,7 +48,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Currently loaded particle generator.
     ParticleGenerator loadedGen;
@@ -133,7 +133,7 @@ private:
     } newDialog;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void closeLoadDialog();
     void closeOptionsDialog();

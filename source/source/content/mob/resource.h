@@ -24,7 +24,7 @@ class Resource : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of resource it is.
     ResourceType* resType = nullptr;
@@ -33,7 +33,7 @@ public:
     Pile* originPile = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Resource(const Point& pos, ResourceType* type, float angle);
     int getMissionPoints(bool* applicableInThisMission) const override;

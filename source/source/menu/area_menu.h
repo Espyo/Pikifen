@@ -38,7 +38,7 @@ class AreaMenu : public Menu {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of area that the menu is dealing with.
     AREA_TYPE areaType = AREA_TYPE_SIMPLE;
@@ -47,13 +47,13 @@ public:
     GuiManager gui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load() override;
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Button for each area available.
     vector<GuiItem*> areaButtons;
@@ -128,7 +128,7 @@ private:
     bool showMissionSpecs = false;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void addBullet(ListGuiItem* list, const string& text);
     void animateInfoAndSpecs();

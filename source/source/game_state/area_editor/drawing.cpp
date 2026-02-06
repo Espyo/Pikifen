@@ -601,7 +601,7 @@ void AreaEditor::drawCrossSectionGraph() {
          */
         struct Split {
         
-            //--- Members ---
+            //--- Public members ---
             
             //Sector pointers.
             Sector* sectorPtrs[2] = { nullptr, nullptr };
@@ -612,7 +612,7 @@ void AreaEditor::drawCrossSectionGraph() {
             //Line 2 intersection point.
             float l2r = 0.0f;
             
-            //--- Function definitions ---
+            //--- Public function definitions ---
             
             /**
              * @brief Constructs a new split info object.

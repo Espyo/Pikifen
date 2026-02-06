@@ -26,7 +26,7 @@ class TrackCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TrackCategory();
     void getTypeNames(vector<string>& list) const override;

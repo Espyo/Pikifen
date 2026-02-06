@@ -28,7 +28,7 @@ class DropCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DropCategory();
     void getTypeNames(vector<string>& list) const override;

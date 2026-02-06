@@ -25,13 +25,13 @@ class Pellet : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of pellet it is.
     PelletType* pelType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Pellet(const Point& pos, PelletType* type, float angle);
     void drawMob() override;

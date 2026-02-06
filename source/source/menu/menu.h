@@ -28,7 +28,7 @@ class Menu {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of GUI managers it has.
     vector<GuiManager*> guis;
@@ -55,7 +55,7 @@ public:
     bool active = true;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~Menu() = default;
     virtual void load();

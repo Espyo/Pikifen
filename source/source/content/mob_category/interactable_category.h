@@ -28,7 +28,7 @@ class InteractableCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     InteractableCategory();
     void getTypeNames(vector<string>& list) const override;

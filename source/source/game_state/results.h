@@ -28,7 +28,7 @@ class Results : public GameState {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load() override;
     void unload() override;
@@ -39,7 +39,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //GUI manager.
     GuiManager gui;
@@ -57,7 +57,7 @@ private:
     int finalMissionScore = 0;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void addScoreStat(const MISSION_SCORE_CRITERIA criterion);
     void addStat(

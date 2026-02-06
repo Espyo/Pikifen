@@ -73,7 +73,7 @@ Point fromString<Point>(const string& s);
  */
 struct AutoRepeaterSettings {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Interval between triggers, at the slowest speed.
     float slowestInterval = 0.3f;
@@ -93,7 +93,7 @@ struct AutoRepeaterSettings {
  */
 struct AutoRepeater {
 
-    //--- Members ---
+    //--- Public members ---
     
     //How long this auto-repeater has been active for. LARGE_FLOAT if inactive.
     float time = LARGE_FLOAT;
@@ -105,7 +105,7 @@ struct AutoRepeater {
     AutoRepeaterSettings* settings = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     AutoRepeater(AutoRepeaterSettings* settings);
     void start();
@@ -151,7 +151,7 @@ struct KeyframeInterpolator {
 
     public:
     
-    //--- Function definitions ---
+    //--- Public function definitions ---
     
     explicit KeyframeInterpolator(const InterT& initialValue = InterT()) {
         keyframeTimes.push_back(0.0f);
@@ -349,7 +349,7 @@ struct KeyframeInterpolator {
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Keyframe times.
     vector<float> keyframeTimes;
@@ -361,7 +361,7 @@ private:
     vector<EASE_METHOD> keyframeEases;
     
     
-    //--- Function definitions ---
+    //--- Private function definitions ---
     
     /**
      * @brief Returns the index at which a keyframe would be inserted to,
@@ -448,7 +448,7 @@ private:
  */
 struct MovementInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Amount to the east.
     float right = 0.0f;
@@ -463,7 +463,7 @@ struct MovementInfo {
     float down = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void getInfo(Point* coords, float* angle, float* magnitude) const;
     void reset();
@@ -478,7 +478,7 @@ struct MovementInfo {
  */
 struct Shaker {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Trauma amount to decrease per second.
     float decreaseAmount = 1.0f;
@@ -490,7 +490,8 @@ struct Shaker {
     unsigned int seed = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
+
     Shaker(std::function<float(float, float)> getRandomFloat);
     void shake(float strength);
     void getOffsets(
@@ -503,7 +504,7 @@ struct Shaker {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Current trauma amount (raw shake factor).
     float trauma = 0.0f;
@@ -524,7 +525,7 @@ struct Shaker {
  */
 struct Timer {
 
-    //--- Members ---
+    //--- Public members ---
     
     //How much time is left until 0.
     float timeLeft = 0.0f;
@@ -536,7 +537,7 @@ struct Timer {
     std::function<void()> onEnd = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Timer(
         float duration = 0,

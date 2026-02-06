@@ -84,7 +84,7 @@ class ConverterType : public MobType, public MobTypeWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of Pikmin types it can convert to.
     vector<PikminType*> availablePikminTypes;
@@ -112,7 +112,7 @@ public:
     size_t soundReceptionIdx = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ConverterType();
     void loadCatProperties(DataNode* file) override;

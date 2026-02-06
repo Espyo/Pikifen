@@ -73,7 +73,7 @@ class Leader : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Player that is currently controlling it, if any. Cache for performance.
     Player* player = nullptr;
@@ -159,7 +159,7 @@ public:
     size_t tempI = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Leader(const Point& pos, LeaderType* type, float angle);
     bool checkThrowOk() const;
@@ -188,19 +188,19 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Sound effect source ID of the whistle, or 0 for none.
     size_t whistleSoundSourceId = 0;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void dismissDetails();
     void dismissLogic();

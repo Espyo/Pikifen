@@ -25,7 +25,7 @@ class Drop : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of drop it is.
     DropType* droType = nullptr;
@@ -37,14 +37,14 @@ public:
     size_t dosesLeft = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Drop(const Point& pos, DropType* type, float angle);
     void drawMob() override;
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     

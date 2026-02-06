@@ -44,7 +44,7 @@ class AnnexScreen : public GameState {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What specific menu to load when it is created.
     ANNEX_SCREEN_MENU menuToLoad = ANNEX_SCREEN_MENU_HELP;
@@ -56,7 +56,7 @@ public:
     AREA_TYPE areaMenuAreaType = AREA_TYPE_SIMPLE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load() override;
     void unload() override;
@@ -68,13 +68,13 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Bitmap of the background.
     ALLEGRO_BITMAP* bmpBg = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void leave();
     

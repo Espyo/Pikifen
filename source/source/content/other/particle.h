@@ -160,7 +160,7 @@ struct ParticleEmission {
     bool evenlySpread = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit ParticleEmission(
         const float emissionInterval = 0.0f, const size_t number = 1
@@ -178,7 +178,7 @@ struct ParticleEmission {
  */
 struct Particle {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Behavior stats.
     
@@ -242,7 +242,7 @@ struct Particle {
     PARTICLE_PRIORITY priority = PARTICLE_PRIORITY_MEDIUM;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Particle(
         const Point& pos = Point(), const float z = 0.0f,
@@ -266,15 +266,13 @@ struct Particle {
  */
 struct ParticleManager {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Viewports it should keep in mind for calculating what particles
     //are off-screen.
     vector<Viewport*> viewports;
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit ParticleManager(size_t max_nr = 0);
     ParticleManager(const ParticleManager& pm2);
@@ -289,9 +287,10 @@ struct ParticleManager {
     size_t getCount() const;
     void tickAll(float deltaT);
     
+    
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //This list works as follows:
     //The first "count" particles are alive.
@@ -309,7 +308,7 @@ struct ParticleManager {
     size_t maxNr = 0;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void remove(size_t pos);
     
@@ -322,9 +321,7 @@ struct ParticleManager {
  */
 struct ParticleGenerator : public Content {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Optional ID, if you need to identify it later on.
     MOB_PARTICLE_GENERATOR_ID id = MOB_PARTICLE_GENERATOR_ID_NONE;
@@ -346,7 +343,7 @@ struct ParticleGenerator : public Content {
     
     //Follow the given angle. e.g. a mob's angle.
     float* followAngle = nullptr;
-
+    
     //Whether it is currently allowed to emit.
     bool canEmit = true;
     
@@ -378,7 +375,7 @@ struct ParticleGenerator : public Content {
     bool anglesAreAbsolute = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit ParticleGenerator(
         float emissionInterval = 0.0f,
@@ -393,7 +390,7 @@ struct ParticleGenerator : public Content {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Time left before the next emission.
     float emissionTimer = 0.0f;

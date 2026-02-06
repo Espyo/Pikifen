@@ -32,7 +32,7 @@ class Converter : public Mob, public MobWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of converter it is.
     ConverterType* conType = nullptr;
@@ -59,7 +59,7 @@ public:
     unsigned int nSpits = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Converter(const Point& pos, ConverterType* type, float angle);
     void changeType();
@@ -68,7 +68,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     

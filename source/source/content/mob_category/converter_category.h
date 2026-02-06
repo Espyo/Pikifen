@@ -29,7 +29,7 @@ class ConverterCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ConverterCategory();
     void getTypeNames(vector<string>& list) const override;

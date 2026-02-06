@@ -157,7 +157,7 @@ class GuiManager;
  */
 struct GuiItemDef {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Its internal name.
     string name;
@@ -190,7 +190,7 @@ struct HardcodedGuiItemDef : public GuiItemDef {
  */
 struct CustomGuiItemDef : public GuiItemDef {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type.
     CUSTOM_GUI_ITEM_TYPE type = CUSTOM_GUI_ITEM_TYPE_BITMAP;
@@ -226,7 +226,7 @@ struct CustomGuiItemDef : public GuiItemDef {
     float rectangleRounding = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearBitmap();
     
@@ -245,7 +245,7 @@ class GuiItem {
 
 public:
 
-    //--- Misc. definitions ---
+    //--- Public misc. definitions ---
     
     //Juicy animation types for GUI items.
     enum JUICE_TYPE {
@@ -291,7 +291,7 @@ public:
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //What GUI manager it belongs to, if any.
     GuiManager* manager = nullptr;
@@ -383,7 +383,7 @@ public:
     bool playFailSound = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit GuiItem(bool focusable = false);
     virtual ~GuiItem() = default;
@@ -411,7 +411,7 @@ class BulletGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Text to display on the bullet point.
     string text;
@@ -423,7 +423,7 @@ public:
     ALLEGRO_COLOR color = COLOR_WHITE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     BulletGuiItem(
         const string& text, ALLEGRO_FONT* font,
@@ -442,7 +442,7 @@ class ButtonGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Text to display on the button.
     string text;
@@ -454,7 +454,7 @@ public:
     ALLEGRO_COLOR color = COLOR_WHITE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ButtonGuiItem(
         const string& text, ALLEGRO_FONT* font,
@@ -473,7 +473,7 @@ class CheckGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Current value.
     bool value = false;
@@ -492,7 +492,7 @@ public:
     ALLEGRO_COLOR color = COLOR_WHITE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit CheckGuiItem(
         bool value, const string& text, ALLEGRO_FONT* font,
@@ -518,7 +518,7 @@ class ListGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What the offset is supposed to be, after it finishes animating.
     float targetOffset = 0.0f;
@@ -527,7 +527,7 @@ public:
     bool horizontal = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ListGuiItem();
     
@@ -547,7 +547,7 @@ class PickerGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The text to show before the currently chosen option.
     string baseText;
@@ -568,7 +568,7 @@ public:
     std::function<void()> onNext = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PickerGuiItem(
         const string& baseText, const string& option,
@@ -583,7 +583,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Highlight one of the arrows due to mouse-over. 255 = none.
     unsigned char arrowHighlight = 255;
@@ -598,7 +598,7 @@ class ScrollGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What item this scrollbar is in charge of controlling.
     ListGuiItem* listItem = nullptr;
@@ -610,7 +610,7 @@ public:
     bool isMouseDragging = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ScrollGuiItem();
     
@@ -620,7 +620,7 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void setOffsetFromMouse(float x, float y);
     
@@ -635,7 +635,7 @@ class TextGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Text to display.
     string text;
@@ -653,7 +653,7 @@ public:
     bool lineWrap = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TextGuiItem(
         const string& text, ALLEGRO_FONT* font,
@@ -674,13 +674,13 @@ class TooltipGuiItem : public GuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The GUI it belongs to.
     GuiManager* gui = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit TooltipGuiItem(GuiManager* gui);
     
@@ -689,7 +689,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Text it was showing the previous frame.
     string prevText;
@@ -716,7 +716,7 @@ class GuiManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of items.
     vector<GuiItem*> items;
@@ -734,7 +734,7 @@ public:
     std::function<void()> onFocusChanged = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GuiManager();
     bool addItem(GuiItem* item, const string& id = "");
@@ -774,7 +774,7 @@ public:
     
 protected:
 
-    //--- Members ---
+    //--- Protected members ---
     
     //Which item is currently focused.
     GuiItem* focusedItem = nullptr;
@@ -836,7 +836,8 @@ protected:
     } focusCursor;
     
     
-    //--- Function declarations ---
+    //--- Protected function declarations ---
+    
     void createCustomItems(GuiItem* customChildrenParent = nullptr);
     void handleSpatialNavigationAction(const Inpution::Action& action);
     

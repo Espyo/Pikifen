@@ -65,7 +65,7 @@ class AreaEditor : public Editor {
 
 public:
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     //Ways for the mouse cursor to snap.
     enum SNAP_MODE {
@@ -108,7 +108,7 @@ public:
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //Automatically load this folder upon boot-up of the editor, if any.
     string autoLoadFolder;
@@ -117,7 +117,7 @@ public:
     bool hackSkipDrawing = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     AreaEditor();
     void doLogic() override;
@@ -135,7 +135,7 @@ private:
      */
     struct TextureSuggestion {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Bitmap of the texture.
         ALLEGRO_BITMAP* bmp = nullptr;
@@ -144,7 +144,7 @@ private:
         string name;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit TextureSuggestion(const string& n);
         void destroy();
@@ -156,7 +156,7 @@ private:
      */
     struct LayoutDrawingNode {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Raw coordinates of the mouse click.
         Point rawSpot;
@@ -186,7 +186,7 @@ private:
         bool isNewVertex = false;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         LayoutDrawingNode(
             const AreaEditor* aePtr, const Point& mouseClick
@@ -200,7 +200,7 @@ private:
      */
     struct SectorSplit {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Area data from before the split.
         Area* preSplitAreaData = nullptr;
@@ -481,7 +481,7 @@ private:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Time left until a backup is generated.
     Timer backupTimer;
@@ -895,7 +895,7 @@ private:
     } newDialog;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     bool areNodesTraversable(
         const LayoutDrawingNode& n1,

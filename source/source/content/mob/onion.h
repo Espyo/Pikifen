@@ -40,7 +40,7 @@ class Onion : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of Onion it is.
     OnionType* oniType = nullptr;
@@ -73,7 +73,7 @@ public:
     size_t soundBeamId = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Onion(const Point& pos, OnionType* type, float angle);
     ~Onion();
@@ -87,7 +87,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     

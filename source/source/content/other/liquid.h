@@ -70,7 +70,7 @@ enum LIQUID_STATE {
  */
 struct Liquid {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Hazard that brought this liquid about.
     Hazard* hazard = nullptr;
@@ -104,7 +104,7 @@ struct Liquid {
     Point lastCursorPos = Point(FLT_MAX);
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Liquid(Hazard* hazard, const vector<Sector*>& sectors);
     ~Liquid();
@@ -115,7 +115,7 @@ struct Liquid {
     
     private:
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void changeSectorsHazard(Hazard* hPtr);
     Point getCenter() const;
@@ -140,7 +140,7 @@ struct Liquid {
  */
 struct LiquidType : public Content {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Color the body of liquid is.
     ALLEGRO_COLOR bodyColor = COLOR_BLACK;
@@ -171,7 +171,7 @@ struct LiquidType : public Content {
     StatusType* freezeMobStatus = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
     

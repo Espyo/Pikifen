@@ -54,7 +54,7 @@ class Weather : public Content {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Daylight color table for specific times of day, in minutes.
     vector<std::pair<int, ALLEGRO_COLOR> > daylight;
@@ -78,7 +78,7 @@ public:
     PRECIPITATION_TYPE precipitationType = PRECIPITATION_TYPE_NONE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Weather();
     Weather(
@@ -95,7 +95,7 @@ public:
     
 private:
 
-    //--- Function definitions ---
+    //--- Private function definitions ---
     
     /**
      * @brief Returns how to obtain a value from a table of values, based on the

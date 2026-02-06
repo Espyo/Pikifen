@@ -1718,7 +1718,7 @@ void AnimationEditor::spriteBmpFloodFill(
      */
     struct IntPoint {
     
-        //--- Members ---
+        //--- Public members ---
         
         //X coordinate.
         int x = 0;
@@ -1727,7 +1727,7 @@ void AnimationEditor::spriteBmpFloodFill(
         int y = 0;
         
         
-        //--- Function definitions ---
+        //--- Public function definitions ---
         
         /**
          * @brief Constructs a new int point object.

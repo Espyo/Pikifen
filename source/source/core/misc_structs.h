@@ -150,7 +150,7 @@ enum ENGINE_FONT {
  */
 struct Camera {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Current position.
     Point pos;
@@ -165,7 +165,7 @@ struct Camera {
     float zoom = 1.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void setPos(const Point& newPos);
     void setZoom(float newZoom);
@@ -180,7 +180,7 @@ struct Camera {
  */
 struct Viewport {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Center, in game window coordinates.
     Point center;
@@ -211,7 +211,7 @@ struct Viewport {
     Point mouseCursorWorldPos;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Viewport();
     Point getBottomRight();
@@ -229,7 +229,7 @@ struct Viewport {
  */
 struct Console {
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Console();
     void addToLog(const string& text);
@@ -247,7 +247,7 @@ struct Console {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Timer that controls visibility.
     Timer visibilityTimer;
@@ -272,7 +272,7 @@ struct Console {
  */
 struct ErrorManager {
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void report(const string& s, const DataNode* d = nullptr);
     void reportAreaLoadErrors();
@@ -281,7 +281,7 @@ struct ErrorManager {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //How many errors have been reported this application session.
     size_t nrSessionErrors = 0;
@@ -293,7 +293,7 @@ struct ErrorManager {
     string firstAreaLoadError;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void emitInGameplay(const string& s);
     void logToConsole(const string& s);
@@ -307,7 +307,7 @@ struct ErrorManager {
  */
 struct StringToken {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of token.
     STRING_TOKEN type = STRING_TOKEN_CHAR;
@@ -326,7 +326,7 @@ struct StringToken {
  */
 struct MouseCursor {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Position, in window coordinates.
     Point winPos;
@@ -354,7 +354,7 @@ struct MouseCursor {
     Timer saveTimer;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void hideInOS() const;
     void init();
@@ -373,7 +373,8 @@ struct Player;
  * @brief Represents a possible inventory item.
  */
 struct InventoryItem {
-    //--- Members ---
+
+    //--- Public members ---
     
     //Internal name.
     string iName;
@@ -402,7 +403,8 @@ struct InventoryItem {
  * what they do when used, etc.
  */
 struct InventoryItemDatabase {
-    //--- Function declarations ---
+
+    //--- Public function declarations ---
     
     void init();
     void clear();
@@ -413,7 +415,7 @@ struct InventoryItemDatabase {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //All items.
     vector<InventoryItem> items;
@@ -425,13 +427,14 @@ struct InventoryItemDatabase {
  * @brief Manages random number generation.
  */
 struct RngManager {
-    //--- Members ---
+
+    //--- Public members ---
     
     //The current randomness generator's state.
     int32_t state = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void init();
     void init(int32_t initialSeed);
@@ -441,7 +444,7 @@ struct RngManager {
     
     private:
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     int32_t generateGoodInt();
 };
@@ -455,13 +458,13 @@ struct RngManager {
  */
 struct GetterWriter {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Node that this getter-writer pertains to.
     DataNode* node = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit GetterWriter(DataNode* dn = nullptr);
     void write(
@@ -537,13 +540,13 @@ struct GetterWriter {
  */
 struct ReaderSetter {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Node that this reader-setter pertains to.
     DataNode* node = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit ReaderSetter(DataNode* dn = nullptr);
     void set(
@@ -614,13 +617,13 @@ struct ReaderSetter {
  */
 struct ScriptVarReader {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Reference to the list of script variables it pertains to.
     map<string, string>& vars;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit ScriptVarReader(map<string, string>& vars);
     bool get(const string& name, string& dest) const;
@@ -641,7 +644,7 @@ struct ScriptVarReader {
  */
 struct SystemContentList {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Graphics.
     
@@ -938,7 +941,7 @@ struct SystemContentList {
  */
 struct SystemContentNames {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Graphics.
     
@@ -1301,7 +1304,7 @@ struct SystemContentNames {
     string parWaveRing = "wave_ring";
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load(DataNode* file);
     
@@ -1315,7 +1318,7 @@ struct FadeManager {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     FadeManager(float duration);
     void setNextFadeDuration(float duration);
@@ -1328,7 +1331,7 @@ struct FadeManager {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Standard duration of a fade in/out.
     float duration = 0.0f;
@@ -1354,7 +1357,7 @@ struct FadeManager {
  */
 struct SystemNotificationManager {
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     bool add(const string& text, bool important = false, bool canRepeat = true);
     void draw() const;
@@ -1363,7 +1366,7 @@ struct SystemNotificationManager {
     
     private:
     
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     //Current notification's state.
     enum NOTIF_STATE {
@@ -1382,7 +1385,7 @@ struct SystemNotificationManager {
     //Represents a notification.
     struct Notification {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Text.
         string text;
@@ -1393,7 +1396,7 @@ struct SystemNotificationManager {
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Current notification's state.
     NOTIF_STATE curNotifState = NOTIF_STATE_SHOWING;
@@ -1418,7 +1421,7 @@ struct LeaderPrompt {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void draw(const Viewport& view) const;
     float getVisibility() const;
@@ -1432,7 +1435,7 @@ struct LeaderPrompt {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Is it meant to exist?
     bool enabled = true;
@@ -1459,7 +1462,7 @@ struct LeaderPrompt {
  */
 struct BitmapEffect {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Transformation data.
     Transform2d tf;
@@ -1493,7 +1496,7 @@ struct PerformanceMonitor {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PerformanceMonitor();
     void setAreaName(const string& name);
@@ -1507,7 +1510,7 @@ struct PerformanceMonitor {
     
     private:
     
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     /**
      * @brief A page in the report.
@@ -1516,7 +1519,7 @@ struct PerformanceMonitor {
     
         public:
         
-        //--- Members ---
+        //--- Public members ---
         
         //How long it lasted for in total.
         double duration = 0.0f;
@@ -1525,13 +1528,13 @@ struct PerformanceMonitor {
         vector<std::pair<string, double> > measurements;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         void write(string& s);
         
         private:
         
-        //--- Function declarations ---
+        //--- Private function declarations ---
         
         void writeMeasurement(
             string& str, const string& name,
@@ -1540,7 +1543,7 @@ struct PerformanceMonitor {
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Name of the area being monitored.
     string areaName;
@@ -1592,7 +1595,7 @@ struct SubgroupType {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     SUBGROUP_TYPE_CATEGORY getCategory() const { return category; }
     ALLEGRO_BITMAP* getIcon() const { return icon; }
@@ -1601,7 +1604,7 @@ private:
 
     friend SubgroupTypeManager;
     
-    //--- Members ---
+    //--- Private members ---
     
     //Category this subgroup type belongs to.
     SUBGROUP_TYPE_CATEGORY category = SUBGROUP_TYPE_CATEGORY_LEADER;
@@ -1622,7 +1625,7 @@ struct SubgroupTypeManager {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void registerType(
         const SUBGROUP_TYPE_CATEGORY category,
@@ -1640,7 +1643,7 @@ struct SubgroupTypeManager {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Known types.
     vector<SubgroupType*> types;
@@ -1653,7 +1656,7 @@ struct SubgroupTypeManager {
  */
 struct Statistics {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Times Pikifen was started.
     uint32_t startups = 0;
@@ -1717,7 +1720,7 @@ struct Statistics {
  */
 struct EdgeOffsetCache {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Length of the effect's "rectangle", per end vertex. 0 for none.
     float lengths[2] = {0.0f, 0.0f};
@@ -1745,7 +1748,7 @@ struct EdgeOffsetCache {
  */
 struct Whistle {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Current center.
     Point center;
@@ -1781,7 +1784,7 @@ struct Whistle {
     bool whistling = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Whistle();
     void startWhistling();
@@ -1832,7 +1835,7 @@ class AssetManager {
 
 public:
 
-    //--- Function definitions ---
+    //--- Public function definitions ---
     
     virtual ~AssetManager() = default;
     
@@ -1938,7 +1941,7 @@ public:
     
 protected:
 
-    //--- Misc. declarations ---
+    //--- Protected misc. declarations ---
     
     virtual AssetT doLoad(
         const string& path, DataNode* node, bool reportErrors
@@ -1950,7 +1953,7 @@ protected:
      */
     struct AssetUse {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Asset pointer.
         AssetT ptr = nullptr;
@@ -1959,13 +1962,13 @@ protected:
         size_t uses = 1;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit AssetUse(AssetT ptr = nullptr) : ptr(ptr) {}
     };
     
     
-    //--- Members ---
+    //--- Protected members ---
     
     //List of loaded assets.
     map<string, AssetUse> list;
@@ -1974,7 +1977,7 @@ protected:
     long totalUses = 0;
     
     
-    //--- Function definitions ---
+    //--- Protected function definitions ---
     
     /**
      * @brief Frees one use of the asset. If the asset has no more calls,
@@ -2002,7 +2005,7 @@ class AudioStreamManager : public AssetManager<ALLEGRO_AUDIO_STREAM*> {
 
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     ALLEGRO_AUDIO_STREAM* doLoad(
         const string& name, DataNode* node, bool reportErrors
@@ -2019,7 +2022,7 @@ class BitmapManager : public AssetManager<ALLEGRO_BITMAP*> {
 
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     ALLEGRO_BITMAP* doLoad(
         const string& name, DataNode* node, bool reportErrors
@@ -2036,7 +2039,7 @@ class SampleManager : public AssetManager<ALLEGRO_SAMPLE*> {
 
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     ALLEGRO_SAMPLE* doLoad(
         const string& name, DataNode* node, bool reportErrors

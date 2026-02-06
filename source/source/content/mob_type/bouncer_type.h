@@ -73,7 +73,7 @@ class BouncerType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Flags representing which mobs can ride on it.
     unsigned char riders = BOUNCER_RIDER_FLAG_PIKMIN;
@@ -82,7 +82,7 @@ public:
     BOUNCER_RIDING_POSE ridingPose = BOUNCER_RIDING_POSE_STOPPED;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     BouncerType();
     void loadCatProperties(DataNode* file) override;

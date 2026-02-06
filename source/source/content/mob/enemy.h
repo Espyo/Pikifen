@@ -28,7 +28,7 @@ class Enemy : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of enemy it is.
     EnemyType* eneType = nullptr;
@@ -39,7 +39,8 @@ public:
     //Is it a boss encounter?
     bool isBoss = false;
     
-    //--- Function declarations ---
+    
+    //--- Public function declarations ---
     
     Enemy(const Point& pos, EnemyType* type, float angle);
     bool canReceiveStatus(StatusType* s) const override;

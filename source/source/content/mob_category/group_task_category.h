@@ -29,7 +29,7 @@ class GroupTaskCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GroupTaskCategory();
     void getTypeNames(vector<string>& list) const override;

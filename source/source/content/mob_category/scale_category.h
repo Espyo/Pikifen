@@ -28,7 +28,7 @@ class ScaleCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ScaleCategory();
     void getTypeNames(vector<string>& list) const override;

@@ -34,7 +34,7 @@ struct Player;
  */
 struct InventoryItemInstance {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Index of the item in the database of inventory items.
     size_t dbIndex = INVALID;
@@ -50,7 +50,7 @@ struct InventoryItemInstance {
  */
 struct Inventory {
 
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager.
     GuiManager gui;
@@ -74,7 +74,7 @@ struct Inventory {
     bool isOpen = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Inventory(Player* player);
     ~Inventory();
@@ -88,7 +88,7 @@ struct Inventory {
     
     private:
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     bool canUseItem(InventoryItemInstance* iPtr);
     void initGui();

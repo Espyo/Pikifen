@@ -122,7 +122,7 @@ using namespace GAME_CONFIG;
  */
 struct GameConfig {
 
-    //--- Members ---
+    //--- Public members ---
     
     //General aesthetic details.
     struct {
@@ -337,7 +337,7 @@ struct GameConfig {
     } rules;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void load(DataNode* file);
     

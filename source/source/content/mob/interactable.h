@@ -23,13 +23,13 @@ class Interactable : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of interactable it is.
     InteractableType* intType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Interactable(const Point& pos, InteractableType* type, float angle);
     

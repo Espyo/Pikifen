@@ -28,7 +28,7 @@ class CustomCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     CustomCategory();
     void getTypeNames(vector<string>& list) const override;

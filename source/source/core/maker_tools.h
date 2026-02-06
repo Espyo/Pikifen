@@ -86,7 +86,7 @@ extern const float PLAY_CONFIRMATION_TIMER;
  */
 struct MakerTools {
 
-    //--- Misc. definitions ---
+    //--- Public misc. definitions ---
     
     struct AreaImageSettings {
     
@@ -105,7 +105,7 @@ struct MakerTools {
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //Are the tools enabled?
     bool enabled = true;
@@ -184,7 +184,7 @@ struct MakerTools {
     bool usedHelpingTools = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     bool checkMakerToolsAllowed(float inputValue);
     bool handleGameplayPlayerAction(const Inpution::Action& action);
@@ -197,7 +197,7 @@ struct MakerTools {
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     unsigned char getMakerToolSettingIdx() const;
     

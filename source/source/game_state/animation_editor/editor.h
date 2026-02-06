@@ -39,13 +39,13 @@ class AnimationEditor : public Editor {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Automatically load this file upon boot-up of the editor, if any.
     string autoLoadFile;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     AnimationEditor();
     void doLogic() override;
@@ -59,7 +59,7 @@ public:
     
 private:
 
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     //Editor states.
     enum EDITOR_STATE {
@@ -97,7 +97,7 @@ private:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Currently loaded animation database.
     AnimationDatabase db;
@@ -254,7 +254,7 @@ private:
     } newDialog;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void applyChangesToAllMatchingSprites(
         const Point& oldPos, const Point& oldSize,

@@ -436,7 +436,7 @@ void Leader::dismissLogic() {
      */
     struct DismissSubgroup {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Subgroup type.
         SubgroupType* type = nullptr;
@@ -539,7 +539,7 @@ void Leader::dismissLogic() {
      */
     struct Row {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Index of subgroups in this row.
         vector<size_t> subgroups;
@@ -554,7 +554,7 @@ void Leader::dismissLogic() {
         float angleOccupation;
         
         
-        //--- Function definitions ---
+        //--- Public function definitions ---
         
         Row() {
             distBetweenCenter = 0;

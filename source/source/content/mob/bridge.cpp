@@ -40,8 +40,8 @@ const float STEP_HEIGHT = 10;
  */
 Bridge::Bridge(const Point& pos, BridgeType* type, float angle) :
     Mob(pos, type, angle),
-    startPos(pos),
-    briType(type) {
+    briType(type),
+    startPos(pos) {
     
     team = MOB_TEAM_OBSTACLE;
     

@@ -24,7 +24,7 @@ class Pile : public Mob, public MobWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of pile it is.
     PileType* pilType = nullptr;
@@ -36,7 +36,7 @@ public:
     Timer rechargeTimer;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Pile(const Point& pos, PileType* type, float angle);
     void changeAmount(int change);
@@ -50,7 +50,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     

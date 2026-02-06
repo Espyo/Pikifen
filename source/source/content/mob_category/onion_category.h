@@ -28,7 +28,7 @@ class OnionCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     OnionCategory();
     void getTypeNames(vector<string>& list) const override;

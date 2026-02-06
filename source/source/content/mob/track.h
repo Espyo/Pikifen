@@ -23,13 +23,13 @@ class Track : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of track it is.
     TrackType* traType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Track(const Point& pos, TrackType* type, float angle);
     

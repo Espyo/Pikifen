@@ -55,14 +55,14 @@ class MobType : public Content {
 
 public:
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     /**
      * @brief Info about a mob's reach.
      */
     struct Reach {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Name of this reach.
         string name;
@@ -86,7 +86,7 @@ public:
      */
     struct SpawnInfo {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Name of this spawn information block.
         string name;
@@ -125,7 +125,7 @@ public:
      */
     struct Child {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Name of this child information block.
         string name;
@@ -198,7 +198,7 @@ public:
      */
     struct AreaEditorProp {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Name of the widget.
         string name;
@@ -231,7 +231,7 @@ public:
      */
     struct Vulnerability {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Multiply the effects (damage taken, speed reduction, etc.) by this.
         float effectMult = 1.0f;
@@ -254,7 +254,7 @@ public:
      */
     struct Sound : public DataNodeSound {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Its name.
         string name;
@@ -262,7 +262,7 @@ public:
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //- Basic information -
     
@@ -480,7 +480,7 @@ public:
     float physicalSpan = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit MobType(MOB_CATEGORY category_id);
     virtual ~MobType();
@@ -512,13 +512,13 @@ class MobTypeWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Suffixes used for each animation group.
     vector<string> animationGroupSuffixes;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MobTypeWithAnimGroups() = default;
     AnimConversionVector getAnimConversionsWithGroups(

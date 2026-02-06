@@ -55,7 +55,7 @@ class Editor : public GameState {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Editor();
     virtual ~Editor() = default;
@@ -70,7 +70,7 @@ public:
     
 protected:
 
-    //--- Misc. declarations ---
+    //--- Protected misc. declarations ---
     
     //Editor icons.
     enum EDITOR_ICON {
@@ -245,7 +245,7 @@ protected:
     
         public:
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         void draw(
             const Point* const center, const Point* const size,
@@ -271,7 +271,7 @@ protected:
         
         private:
         
-        //--- Members ---
+        //--- Private members ---
         
         //What handle is being moved. -1 for none. 9 for the rotation handle.
         signed char movingHandle = -1;
@@ -289,7 +289,7 @@ protected:
         float oldMouseAngle = 0.0f;
         
         
-        //--- Function declarations ---
+        //--- Private function declarations ---
         
         void getLocations(
             const Point* const center, const Point* const size,
@@ -306,7 +306,7 @@ protected:
     
     public:
     
-        //--- Members ---
+        //--- Public members ---
         
         //Callback for when it's time to process the dialog's contents.
         std::function<void()> processCallback = nullptr;
@@ -330,7 +330,7 @@ protected:
         Point customSize = Point(-1.0f);
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         void process();
         
@@ -341,7 +341,7 @@ protected:
      */
     struct PickerItem {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Its name.
         string name;
@@ -362,7 +362,7 @@ protected:
         ALLEGRO_BITMAP* bitmap = nullptr;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit PickerItem(
             const string& name,
@@ -380,7 +380,7 @@ protected:
     
     public:
     
-        //--- Members ---
+        //--- Public members ---
         
         //List of picker dialog items to choose from.
         vector<PickerItem> items;
@@ -412,14 +412,14 @@ protected:
         //Do we need to focus on the filter text box?
         bool needsFilterBoxFocus = true;
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit Picker(Editor* editorPtr);
         void process();
         
     private:
     
-        //--- Members ---
+        //--- Private members ---
         
         //Pointer to the editor that's using it.
         Editor* editorPtr = nullptr;
@@ -439,7 +439,7 @@ protected:
     
         public:
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit ChangesManager(Editor* ed);
         bool askIfUnsaved(
@@ -466,7 +466,7 @@ protected:
         
         private:
         
-        //--- Members ---
+        //--- Private members ---
         
         //Editor it belongs to.
         Editor* ed = nullptr;
@@ -525,14 +525,14 @@ protected:
     
         public:
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         Command(CommandFunc f, const string& n);
         void run(float inputValue);
         
         private:
         
-        //--- Members ---
+        //--- Private members ---
         
         //Function to run.
         CommandFunc func = nullptr;
@@ -543,7 +543,7 @@ protected:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Callback for when the item is really meant to be picked, in the base
     //content warning dialog.
@@ -688,7 +688,7 @@ protected:
     float zoomMinLevel = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void centerCamera(
         const Point& minCoords, const Point& maxCoords,

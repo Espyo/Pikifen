@@ -143,7 +143,7 @@ struct GameplayMessageBox;
  */
 struct InterludeInfo {
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void set(INTERLUDE id, bool instantVolumeChange);
     INTERLUDE get();
@@ -154,7 +154,7 @@ struct InterludeInfo {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //ID of the current interlude, if any.
     INTERLUDE curId = INTERLUDE_NONE;
@@ -170,7 +170,7 @@ struct InterludeInfo {
  */
 struct BigMessageInfo {
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void set(BIG_MESSAGE id);
     BIG_MESSAGE get();
@@ -181,7 +181,7 @@ struct BigMessageInfo {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //ID of the current big message, if any.
     BIG_MESSAGE curId = BIG_MESSAGE_NONE;
@@ -197,7 +197,7 @@ struct BigMessageInfo {
  */
 struct AreaRegionStatus {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Which leaders are currently in it.
     vector<Leader*> leadersInside;
@@ -210,7 +210,7 @@ struct AreaRegionStatus {
  */
 struct MissionMobChecklistStatus {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Which mobs remain.
     unordered_set<Mob*> remaining;
@@ -222,7 +222,7 @@ struct MissionMobChecklistStatus {
     size_t requiredAmount = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     bool remove(Mob* m);
     
@@ -236,7 +236,7 @@ class GameplayState : public GameState {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Is the player playing after hours?
     bool afterHours = false;
@@ -468,7 +468,7 @@ public:
     float zoomLevels[3] = { 0.0f, 0.0f, 0.0f };
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ALLEGRO_BITMAP* drawToBitmap(
         const MakerTools::AreaImageSettings& settings
@@ -500,7 +500,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Is input enabled, for reasons outside the readyForInput variable?
     bool isInputAllowed = false;
@@ -526,7 +526,7 @@ private:
     Timer replayTimer;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void doAestheticLeaderLogic(Player* player, float deltaT);
     void doAestheticLogic(float deltaT);
@@ -616,7 +616,7 @@ private:
  */
 struct GameplayMessageBox {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Full list of message tokens, per line.
     vector<vector<StringToken> > tokensPerLine;
@@ -658,7 +658,7 @@ struct GameplayMessageBox {
     bool toDelete = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GameplayMessageBox(const string& text, ALLEGRO_BITMAP* speakerIcon);
     void advance();

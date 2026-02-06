@@ -70,7 +70,7 @@ class Sprite {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Name of the sprite.
     string name;
@@ -106,7 +106,7 @@ public:
     vector<Hitbox> hitboxes;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Sprite(
         const string& name = "", ALLEGRO_BITMAP* const b = nullptr,
@@ -141,7 +141,7 @@ class Frame {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Name of the sprite to use in this frame.
     string spriteName;
@@ -168,7 +168,7 @@ public:
     size_t signal = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Frame(
         const string& sn = "", size_t si = INVALID,
@@ -186,7 +186,7 @@ class Animation {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Name of the animation.
     string name;
@@ -203,7 +203,7 @@ public:
     unsigned char hitRate = 100;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Animation(
         const string& name = "",
@@ -232,7 +232,7 @@ class AnimationDatabase : public Content {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of known animations.
     vector<Animation*> animations;
@@ -250,7 +250,7 @@ public:
     float hitboxSpan = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit AnimationDatabase(
         const vector<Animation*>& a = vector<Animation*>(),
@@ -283,7 +283,7 @@ class AnimationInstance {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The animation currently running.
     Animation* curAnim = nullptr;
@@ -298,7 +298,7 @@ public:
     size_t curFrameIdx = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit AnimationInstance(AnimationDatabase* animDb = nullptr);
     AnimationInstance(const AnimationInstance& ai2);

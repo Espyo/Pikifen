@@ -122,7 +122,7 @@ enum ACTION_VALUE_TYPE {
  */
 struct InputSource {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of input source.
     INPUT_SOURCE_TYPE type = INPUT_SOURCE_TYPE_NONE;
@@ -140,7 +140,7 @@ struct InputSource {
     int axisNr = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     bool operator==(const InputSource& s2) const;
     bool operator<(const InputSource& s2) const;
@@ -154,7 +154,7 @@ struct InputSource {
  */
 struct Input {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Hardware source.
     InputSource source;
@@ -171,7 +171,7 @@ struct Input {
  */
 struct Bind {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Action type ID.
     ActionTypeId actionTypeId = 0;
@@ -198,7 +198,7 @@ struct Bind {
  */
 struct ActionType {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of value it can take. If digital but the input source is analog,
     //the value is rounded to 0 or 1 (i.e. depends on whether it's more than
@@ -250,7 +250,7 @@ struct ActionType {
  */
 struct Action {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Action type ID.
     ActionTypeId actionTypeId = 0;
@@ -275,7 +275,7 @@ struct Action {
  */
 struct ManagerOptions {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Threshold for converting analog values to digital.
     //If the value is equal to or higher than this, it will convert to 1.
@@ -314,9 +314,7 @@ struct ManagerOptions {
  */
 struct Manager {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Map of all registered action types, using their IDs as the key.
     map<ActionTypeId, ActionType> actionTypes;
@@ -340,7 +338,7 @@ struct Manager {
     ManagerOptions options;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     float getInputSourceValue(const Inpution::InputSource& source) const;
     float getValue(ActionTypeId actionTypeId) const;
@@ -357,14 +355,14 @@ struct Manager {
     
     protected:
     
-    //--- Structs ---
+    //--- Protected structs ---
     
     /**
      * @brief Information about an action type's current status.
      */
     struct ActionTypeStatus {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Current value [0 - 1].
         float value = 0.0f;
@@ -386,7 +384,7 @@ struct Manager {
      */
     struct GameState {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Status of each action type in this game state.
         map<ActionTypeId, ActionTypeStatus> actionTypeStatuses;
@@ -399,7 +397,7 @@ struct Manager {
      */
     struct IgnoreRule {
     
-        //--- Members ---
+        //--- Public members ---
         
         //The input source to ignore.
         InputSource source;
@@ -411,7 +409,7 @@ struct Manager {
     };
     
     
-    //--- Members ---
+    //--- Protected members ---
     
     //Queue of actions the game needs to handle this frame.
     vector<Action> actionQueue;
@@ -436,7 +434,7 @@ struct Manager {
     float lastDeltaT = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     bool areBindRequirementsMet(const Bind& bind) const;
     float convertActionValue(ActionTypeId actionTypeId, float value) const;

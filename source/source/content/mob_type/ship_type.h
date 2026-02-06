@@ -47,7 +47,7 @@ class ShipType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Nest data.
     PikminNestType* nest = nullptr;
@@ -71,7 +71,7 @@ public:
     size_t soundReceptionIdx = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ShipType();
     ~ShipType();

@@ -25,7 +25,7 @@ using std::string;
  */
 struct PackManager {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Manifests, sans the base pack, organized via the player's options.
     vector<string> manifestsSansBase;
@@ -42,7 +42,7 @@ struct PackManager {
     //List of loaded packs, with the base pack.
     map<string, Pack> list;
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests();
     void fillManifests();
@@ -58,7 +58,7 @@ struct PackManager {
  */
 struct ContentManager {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Areas.
     AreaContentManager areas;
@@ -115,7 +115,7 @@ struct ContentManager {
     PackManager packs;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ContentManager();
     bool createPack(
@@ -133,12 +133,12 @@ struct ContentManager {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     CONTENT_LOAD_LEVEL loadLevels[N_CONTENT_TYPES];
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     ContentTypeManager* getMgrPtr(CONTENT_TYPE type);
     

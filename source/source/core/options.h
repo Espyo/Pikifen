@@ -181,7 +181,7 @@ using namespace OPTIONS;
  */
 struct Options {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Advanced. These typically don't appear in any options menu.
     struct {
@@ -470,7 +470,7 @@ struct Options {
     } partEd;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* file);
     void saveToDataNode(DataNode* file) const;
@@ -478,7 +478,7 @@ struct Options {
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     vector<pair<string, string> > loadEditorHistory(const string& str) const;
     string saveEditorHistory(const vector<pair<string, string> >& vec) const;

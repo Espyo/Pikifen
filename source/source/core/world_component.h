@@ -26,7 +26,7 @@ class WorldComponent {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //If it's a sector, this points to it.
     Sector* sectorPtr = nullptr;

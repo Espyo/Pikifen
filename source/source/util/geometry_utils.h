@@ -41,7 +41,7 @@ enum V_ALIGN_MODE {
  */
 struct Point {
 
-    //--- Members ---
+    //--- Public members ---
     
     //X coordinate.
     float x = 0.0f;
@@ -50,7 +50,7 @@ struct Point {
     float y = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Point(float x, float y);
     Point(float xy);
@@ -97,9 +97,7 @@ const Point operator/(float n, const Point& p);
  */
 struct Distance {
 
-    public:
-    
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Distance(const Point& p1, const Point& p2);
     explicit Distance(float d = 0.0f);
@@ -125,7 +123,7 @@ struct Distance {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Distance squared. Most operations are based on this number.
     float distanceSquared = 0.0f;
@@ -148,7 +146,7 @@ struct Distance {
  */
 struct Transform2d {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Translation.
     Point trans;
@@ -171,7 +169,7 @@ struct Transform2d {
  */
 struct Pose2d {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Position.
     Point pos;

@@ -48,13 +48,13 @@ class TreasureType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //How many points it is worth.
     size_t points = 10;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TreasureType();
     void loadCatProperties(DataNode* file) override;

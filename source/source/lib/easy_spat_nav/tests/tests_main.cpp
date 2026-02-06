@@ -37,7 +37,8 @@ EasySpatNav::Interface spatNavManager;
  * @brief Represents a test interface item.
  */
 struct SpatNavTestItem {
-    //--- Members ---
+
+    //--- Public members ---
     
     //Starting X coordinate.
     float startX = 0.0f;
@@ -58,7 +59,8 @@ struct SpatNavTestItem {
  * @brief Represents a test interface.
  */
 struct SpatNavTestInterface {
-    //--- Members ---
+
+    //--- Public members ---
     
     //List of items.
     std::vector<SpatNavTestItem> items;
@@ -76,7 +78,7 @@ struct SpatNavTestInterface {
     std::vector<SpatNavTestInterface*> children;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     SpatNavTestInterface();
     SpatNavTestInterface(

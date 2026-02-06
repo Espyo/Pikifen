@@ -53,7 +53,7 @@ struct MobGen;
  */
 struct CarrierSpot {
 
-    //--- Members ---
+    //--- Public members ---
     
     //State.
     CARRY_SPOT_STATE state = CARRY_SPOT_STATE_FREE;
@@ -65,7 +65,7 @@ struct CarrierSpot {
     Mob* pikPtr = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit CarrierSpot(const Point& pos);
     
@@ -77,7 +77,7 @@ struct CarrierSpot {
  */
 struct CarryInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that this struct belongs to.
     Mob* m = nullptr;
@@ -122,7 +122,7 @@ struct CarryInfo {
     float returnDist = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     CarryInfo(Mob* m, const CARRY_DESTINATION destination);
     bool isEmpty() const;
@@ -141,7 +141,7 @@ struct CarryInfo {
  */
 struct ChaseInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Current chasing state.
     CHASE_STATE state = CHASE_STATE_STOPPED;
@@ -185,7 +185,7 @@ struct ChaseInfo {
  */
 struct CirclingInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that this struct belongs to.
     Mob* m = nullptr;
@@ -212,7 +212,7 @@ struct CirclingInfo {
     float curAngle = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit CirclingInfo(Mob* m);
     
@@ -224,7 +224,7 @@ struct CirclingInfo {
  */
 struct DeliveryInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Animation type.
     DELIVERY_ANIM animType = DELIVERY_ANIM_SUCK;
@@ -244,7 +244,7 @@ struct DeliveryInfo {
     //Coordinates of the final delivery point.
     Point finalPoint;
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DeliveryInfo();
     
@@ -260,7 +260,7 @@ struct DeliveryInfo {
  */
 struct Group {
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     //Ways for Pikmin to follow the leader.
     enum MODE {
@@ -281,7 +281,7 @@ struct Group {
      */
     struct GroupSpot {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Position relative to the anchor.
         Point pos;
@@ -290,7 +290,7 @@ struct Group {
         Mob* mobPtr = nullptr;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit GroupSpot(const Point& p = Point(), Mob* m = nullptr) :
             pos(p), mobPtr(m) {}
@@ -298,7 +298,7 @@ struct Group {
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //All group members.
     vector<Mob*> members;
@@ -325,7 +325,7 @@ struct Group {
     MODE mode = MODE_SHUFFLE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Group(Mob* leaderPtr);
     void initSpots(Mob* affectedMobPtr = nullptr);
@@ -351,7 +351,7 @@ struct Group {
  */
 struct HoldInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Points to the mob holding the current one, if any.
     Mob* m = nullptr;
@@ -376,7 +376,7 @@ struct HoldInfo {
     HOLD_ROTATION_METHOD rotationMethod = HOLD_ROTATION_METHOD_NEVER;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clear();
     Point getFinalPos(float* outZ) const;
@@ -412,7 +412,7 @@ class ShipType;
  */
 struct MobLists {
 
-    //--- Members ---
+    //--- Public members ---
     
     //All mobs in the area.
     vector<Mob*> all;
@@ -485,7 +485,7 @@ struct MobLists {
  */
 struct MobTypeLists {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Bouncer types.
     map<string, BouncerType*> bouncer;
@@ -555,7 +555,7 @@ struct MobTypeLists {
  */
 struct Parent {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob serving as the parent.
     Mob* m = nullptr;
@@ -600,7 +600,7 @@ struct Parent {
     LIMB_DRAW_METHOD limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_CHILD;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Parent(Mob* m);
     
@@ -613,7 +613,7 @@ struct Parent {
  */
 struct Path {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that this struct belongs to.
     Mob* m = nullptr;
@@ -634,7 +634,7 @@ struct Path {
     PathFollowSettings settings;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Path(
         Mob* m,
@@ -651,7 +651,7 @@ struct Path {
  */
 struct PikminNestType {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Pikmin types it can manage.
     vector<PikminType*> pikTypes;
@@ -678,7 +678,7 @@ struct PikminNestType {
     ALLEGRO_BITMAP* menuColormap = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ~PikminNestType();
     
@@ -693,9 +693,7 @@ struct PikminNestType {
  */
 struct PikminNest {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Pointer to the nest mob responsible.
     Mob* mPtr = nullptr;
@@ -716,7 +714,7 @@ struct PikminNest {
     float nextCallTime = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PikminNest(Mob* mPtr, PikminNestType* type);
     bool callPikmin(Mob* mPtr, size_t typeIdx);
@@ -738,7 +736,7 @@ struct PikminNest {
  */
 struct TrackRideInfo {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Pointer to the track mob.
     Mob* m = nullptr;
@@ -757,7 +755,7 @@ struct TrackRideInfo {
     float rideSpeed = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TrackRideInfo(
         Mob* m, const vector<size_t>& checkpoints, float speed

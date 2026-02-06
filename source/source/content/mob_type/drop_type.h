@@ -92,7 +92,7 @@ class DropType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What sorts of mobs can consume this drop.
     DROP_CONSUMER consumer = DROP_CONSUMER_PIKMIN;
@@ -116,7 +116,7 @@ public:
     float shrinkSpeed = 40.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DropType();
     void loadCatProperties(DataNode* file) override;

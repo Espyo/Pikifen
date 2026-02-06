@@ -61,7 +61,7 @@ class OptionsMenuPickerGuiItem : public PickerGuiItem {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Points to the current value.
     ValueT* curValue = nullptr;
@@ -88,7 +88,7 @@ public:
     std::function<string(ValueT)> valueToString = nullptr;
     
     
-    //--- Function definitions ---
+    //--- Public function definitions ---
     
     /**
      * @brief Constructs a new options menu picker GUI item object.
@@ -205,9 +205,10 @@ public:
  * the player.
  */
 class OptionsMenu : public Menu {
+
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //GUI for the top-level page.
     GuiManager topGui;
@@ -231,7 +232,7 @@ public:
     GuiManager miscGui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void draw() override;
     void load() override;
@@ -243,7 +244,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Known good resolution presets.
     vector<std::pair<int, int> > resolutionPresets;
@@ -353,7 +354,7 @@ private:
     vector<PLAYER_ACTION_TYPE> unboundRecommendedActions;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void addBindEntryItems(
         const PlayerActionType& actionType, bool addSectionHeader,

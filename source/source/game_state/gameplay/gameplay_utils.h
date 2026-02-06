@@ -30,7 +30,7 @@ class PikminType;
  */
 struct PendingInterMobEvent {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Distance between both mobs.
     Distance d;
@@ -42,7 +42,7 @@ struct PendingInterMobEvent {
     Mob* mobPtr = nullptr;
     
     
-    //--- Function definitions ---
+    //--- Public function definitions ---
     
     PendingInterMobEvent(
         const Distance& d, MobEvent* eventPtr, Mob* mobPtr

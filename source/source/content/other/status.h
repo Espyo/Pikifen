@@ -114,7 +114,7 @@ class StatusType : public Content {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Flags indicating what sorts of mobs it affects.
     unsigned char affects = 0;
@@ -246,7 +246,7 @@ public:
     string replacementOnTimeoutStr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
     
@@ -262,7 +262,7 @@ public:
  */
 struct Status {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Status type.
     StatusType* type = nullptr;
@@ -289,7 +289,7 @@ struct Status {
     MOB_TEAM preBetrayalTeam = MOB_TEAM_NONE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Status(StatusType* type);
     void applyParticles(Mob* m, ParticleGenerator* pg);

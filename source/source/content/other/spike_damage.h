@@ -32,7 +32,7 @@ class SpikeDamageType : public Content {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Amount of damage to cause, either in absolute HP or max HP ratio.
     float damage = 0.0f;
@@ -60,7 +60,7 @@ public:
     float statusBuildupAmount = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void loadFromDataNode(DataNode* node);
     

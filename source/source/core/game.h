@@ -54,7 +54,7 @@ extern const size_t FRAMERATE_HISTORY_SIZE;
  */
 struct GameStateList {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Animation editor.
     AnimationEditor* animationEd = nullptr;
@@ -81,7 +81,7 @@ struct GameStateList {
     Results* results = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void init();
     void destroy();
@@ -96,7 +96,7 @@ class Game {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Audio.
     AudioManager audio;
@@ -295,7 +295,7 @@ public:
     //Data for when the quick play feature is used in an editor.
     struct {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Path of the folder of the area to quick play.
         string areaPath;
@@ -317,7 +317,7 @@ public:
     //Engine debugging tools.
     struct {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Show each frame's player actions on the in-game console.
         bool showPlayerActions = false;
@@ -337,7 +337,7 @@ public:
     } debug;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Game();
     void changeState(
@@ -354,7 +354,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Current game state: title screen, gameplay, etc.
     GameState* curState = nullptr;
@@ -369,7 +369,7 @@ private:
     bool resetDeltaT = true;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void drawFramerateChart() const;
     void globalDrawing();

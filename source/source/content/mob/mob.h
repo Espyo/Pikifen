@@ -91,7 +91,7 @@ class Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //-Basic information-
     
@@ -346,7 +346,7 @@ public:
     bool isActive = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Mob(const Point& pos, MobType* type, float angle);
     virtual ~Mob();
@@ -528,13 +528,13 @@ public:
     
 protected:
 
-    //--- Members ---
+    //--- Protected members ---
     
     //Is it currently capable of blocking paths?
     bool canBlockPaths = false;
     
     
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     bool applyStatusBuildup(
         StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
@@ -593,13 +593,13 @@ class MobWithAnimGroups {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Index of its current base animation.
     size_t curBaseAnimIdx = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     size_t getAnimationIdxFromBaseAndGroup(
         size_t baseAnimIdx, size_t groupIdx,

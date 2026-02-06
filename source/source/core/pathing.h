@@ -179,7 +179,7 @@ extern const float MIN_STOP_RADIUS;
  */
 struct PathFollowSettings {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Target location.
     Point targetPoint;
@@ -220,7 +220,7 @@ struct PathFollowSettings {
  */
 struct PathStop {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Coordinates.
     Point pos;
@@ -241,7 +241,7 @@ struct PathStop {
     Sector* sectorPtr = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit PathStop(
         const Point& pos = Point(),
@@ -265,7 +265,7 @@ struct PathStop {
  */
 struct PathLink {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Pointer to the path stop at the start.
     PathStop* startPtr = nullptr;
@@ -286,7 +286,7 @@ struct PathLink {
     bool blockedByObstacle = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PathLink(PathStop* startPtr, PathStop* endPtr, size_t endIdx);
     void calculateDist(const PathStop* startPtr);
@@ -310,7 +310,7 @@ struct PathLink {
  */
 struct PathManager {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Known obstructions.
     map<PathLink*, unordered_set<Mob*> > obstructions;
@@ -319,7 +319,7 @@ struct PathManager {
     unordered_set<PathStop*> hazardousStops;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void handleAreaLoad();
     void handleObstacleAdd(Mob* m);

@@ -28,7 +28,7 @@ class ToolCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ToolCategory();
     void getTypeNames(vector<string>& list) const override;

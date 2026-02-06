@@ -82,10 +82,8 @@ enum PAUSE_MENU_PAGE {
  *
  */
 struct PauseMenu {
-
-    public:
     
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     //Types of spots for each Go Here drawn path segment.
     enum GO_HERE_SEGMENT_SPOT {
@@ -102,7 +100,7 @@ struct PauseMenu {
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager for the main pause menu.
     GuiManager gui;
@@ -129,7 +127,7 @@ struct PauseMenu {
     bool toDelete = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit PauseMenu(bool startOnRadar);
     ~PauseMenu();
@@ -140,7 +138,7 @@ struct PauseMenu {
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Is it currently closing?
     bool closing = false;
@@ -251,7 +249,7 @@ private:
     MovementInfo radarZoom;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void addBullet(
         ListGuiItem* list, const string& text,

@@ -28,7 +28,7 @@ class PileCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PileCategory();
     void getTypeNames(vector<string>& list) const override;

@@ -244,7 +244,7 @@ class LeaderType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //How far its whistle reaches from the center point.
     float whistleRange = LEADER_TYPE::DEF_WHISTLE_RANGE;
@@ -280,7 +280,7 @@ public:
     size_t soundDataIdxs[N_LEADER_SOUNDS];
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     LeaderType();
     void loadCatProperties(DataNode* file) override;

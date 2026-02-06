@@ -70,7 +70,7 @@ class TrackType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Flags representing possible riders.
     unsigned char riders = TRACK_RIDER_FLAG_PIKMIN;
@@ -85,7 +85,7 @@ public:
     bool cancellableWithWhistle = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     TrackType();
     void loadCatProperties(DataNode* file) override;

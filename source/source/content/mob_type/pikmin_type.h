@@ -356,7 +356,7 @@ class PikminType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //How many Pikmin they are worth when carrying.
     float carryStrength = 1.0f;
@@ -422,7 +422,7 @@ public:
     size_t soundDataIdxs[N_PIKMIN_SOUNDS];
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PikminType();
     void loadCatProperties(DataNode* file) override;

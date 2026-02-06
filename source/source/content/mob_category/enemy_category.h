@@ -28,7 +28,7 @@ class EnemyCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     EnemyCategory();
     void getTypeNames(vector<string>& list) const override;

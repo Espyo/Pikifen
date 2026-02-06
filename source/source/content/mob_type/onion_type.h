@@ -58,7 +58,7 @@ class OnionType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Nest data.
     PikminNestType* nest = nullptr;
@@ -85,7 +85,7 @@ public:
     float deliveryAreaRadius = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     OnionType();
     ~OnionType();

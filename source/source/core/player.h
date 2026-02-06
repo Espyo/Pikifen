@@ -30,7 +30,7 @@ using std::vector;
  */
 struct SprayStats {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Number of sprays of this type owned.
     size_t nrSprays = 0;
@@ -48,9 +48,7 @@ struct Player;
  */
 struct PlayerTeam {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //How many of each spray/ingredients the player has.
     vector<SprayStats> sprayStats;
@@ -66,9 +64,7 @@ struct PlayerTeam {
  */
 struct Player {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Player number.
     unsigned char playerNr = 0;

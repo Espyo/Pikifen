@@ -82,7 +82,7 @@ class ResourceType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Should it vanish when the Pikmin carrying it drops it?
     bool vanishOnDrop = false;
@@ -110,7 +110,7 @@ public:
     float pointAmount = 1.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ResourceType();
     void loadCatProperties(DataNode* file) override;

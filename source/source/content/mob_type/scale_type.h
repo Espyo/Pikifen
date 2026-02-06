@@ -20,13 +20,13 @@ class ScaleType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Default weight number that must be met to reach a goal. 0 for none.
     size_t goalNumber = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ScaleType();
     void loadCatProperties(DataNode* file) override;

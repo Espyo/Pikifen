@@ -28,7 +28,7 @@ class BridgeCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     BridgeCategory();
     void getTypeNames(vector<string>& list) const override;

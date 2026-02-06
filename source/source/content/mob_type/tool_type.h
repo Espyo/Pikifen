@@ -21,7 +21,7 @@ class ToolType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Icon used to represent this tool in the HUD group info.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
@@ -45,7 +45,7 @@ public:
     bool pikminReturnsAfterUsing = true;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ToolType();
     void loadCatProperties(DataNode* file) override;

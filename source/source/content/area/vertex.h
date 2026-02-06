@@ -26,7 +26,7 @@ struct Edge;
  */
 struct Vertex {
 
-    //--- Members ---
+    //--- Public members ---
     
     //X coordinate.
     float x = 0.0f;
@@ -41,7 +41,7 @@ struct Vertex {
     vector<Edge*> edges;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Vertex(float x = 0.0f, float y = 0.0f);
     void addEdge(Edge* ePtr, size_t eIdx);

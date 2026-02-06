@@ -33,22 +33,24 @@ extern const string GUI_FILE_PATH;
  * the player.
  */
 class PacksMenu : public Menu {
+
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager.
     GuiManager gui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
+    
     void load() override;
     void unload() override;
     
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Working copy of the order of the packs. This is a list of internal
     //names and excludes the base pack.
@@ -91,7 +93,8 @@ private:
     //Bitmaps for each pack's thumbnail.
     std::map<string, ALLEGRO_BITMAP*> packThumbs;
     
-    //--- Function declarations ---
+    
+    //--- Private function declarations ---
     
     void changeInfo(int idx);
     void initGuiMain();

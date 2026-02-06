@@ -56,7 +56,7 @@ extern const unsigned char DEF_DIFFICULTY;
  */
 struct Blockmap {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Top-left corner of the blockmap.
     Point topLeftCorner;
@@ -74,7 +74,7 @@ struct Blockmap {
     size_t nRows = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     size_t getCol(float x) const;
     size_t getRow(float y) const;
@@ -96,7 +96,7 @@ struct Blockmap {
  */
 struct MobGen {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob type.
     MobType* type = nullptr;
@@ -123,7 +123,7 @@ struct MobGen {
     vector<MobGen*> links;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit MobGen(
         const Point& pos = Point(),
@@ -141,7 +141,7 @@ struct MobGen {
  */
 struct TreeShadow {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Internal name of the tree shadow texture.
     string bmpName;
@@ -159,7 +159,7 @@ struct TreeShadow {
     Point sway;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
@@ -176,7 +176,7 @@ struct TreeShadow {
  */
 struct AreaRegion {
 
-    //--- Members ---
+    //--- Public members ---
 
     //Center.
     Point center;
@@ -195,7 +195,7 @@ struct AreaRegion {
  */
 struct Area : public Content {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of area.
     AREA_TYPE type = AREA_TYPE_SIMPLE;
@@ -279,7 +279,7 @@ struct Area : public Content {
     string userDataPath;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void checkStability();
     void cleanup(bool* outdeleted_sectors = nullptr);

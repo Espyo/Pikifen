@@ -51,7 +51,7 @@ class DecorationType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Maximum amount it can deviate the tint by, for every color component.
     ALLEGRO_COLOR tintRandomMaximum = COLOR_EMPTY;
@@ -66,7 +66,7 @@ public:
     bool randomAnimationDelay = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     DecorationType();
     void loadCatProperties(DataNode* file) override;

@@ -25,14 +25,14 @@ class GroupTask : public Mob {
 
 public:
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     /**
      * @brief Info about a spot.
      */
     struct GroupTaskSpot {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Is position relative to the mob's position and angle.
         Point relativePos;
@@ -47,14 +47,14 @@ public:
         Pikmin* pikminHere = nullptr;
         
         
-        //--- Function declarations ---
+        //--- Public function declarations ---
         
         explicit GroupTaskSpot(const Point& pos);
         
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //What type of group task it is.
     GroupTaskType* tasType = nullptr;
@@ -66,7 +66,7 @@ public:
     vector<GroupTaskSpot> spots;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GroupTask(const Point& pos, GroupTaskType* type, float angle);
     void addWorker(Pikmin* who);
@@ -83,13 +83,13 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //Combined Pikmin power put into the task right now. Cache for performance.
     float power = 0.0f;
@@ -98,7 +98,7 @@ private:
     bool ranTaskFinishedCode = false;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void updateSpotAbsolutePositions();
     

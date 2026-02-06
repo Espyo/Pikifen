@@ -177,13 +177,13 @@ enum PLAYER_INPUT_ICON_SPRITE {
  */
 struct HardwareMediator {
 
-    //--- Members ---
+    //--- Public members ---
     
     //True if the last hardware input made from a game controller.
     //False if it was a keyboard, mouse, or other source.
     bool lastInputWasController = false;
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     size_t getControllerNr(ALLEGRO_JOYSTICK* aJoyPtr);
     void getInputSourceIconInfo(
@@ -201,11 +201,11 @@ struct HardwareMediator {
     
     private:
     
-    //--- Misc. definitions ---
+    //--- Private misc. definitions ---
     
     struct Controller {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Allegro joystick pointer.
         ALLEGRO_JOYSTICK* aJoyPtr = nullptr;
@@ -217,7 +217,7 @@ struct HardwareMediator {
     
     struct InputSourceMapEntry {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Whether it's an analog stick or an analog button.
         bool isButton = false;
@@ -229,7 +229,7 @@ struct HardwareMediator {
         int axisNr = 0;
         
         
-        //--- Function definitions ---
+        //--- Public function definitions ---
         bool operator<(const InputSourceMapEntry& e2) const {
             if(isButton != e2.isButton) {
                 return (int) isButton < (int) e2.isButton;
@@ -246,7 +246,7 @@ struct HardwareMediator {
     
     struct InputSourceIcon {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Its name.
         string name;
@@ -259,7 +259,7 @@ struct HardwareMediator {
     
     struct DeviceBrand {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Maps absurd sticks and axes to more logical ones.
         map<InputSourceMapEntry, InputSourceMapEntry> absurdityMap;
@@ -273,19 +273,19 @@ struct HardwareMediator {
     };
     
     
-    //--- Constants ---
+    //--- Private constants ---
     
     //Database of known brands.
     static const map<DEVICE_BRAND, DeviceBrand> deviceBrandDb;
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //List of connected game controllers.
     vector<Controller> controllers;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     const HardwareMediator::InputSourceIcon* getIconDbEntry(
         const Inpution::InputSource& s

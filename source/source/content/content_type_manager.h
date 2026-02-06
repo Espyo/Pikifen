@@ -35,7 +35,7 @@ class ContentTypeManager {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~ContentTypeManager() = default;
     virtual void clearManifests() = 0;
@@ -48,7 +48,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     void fillManifestsMap(
         map<string, ContentManifest>& manifests,
         const string& contentPath, bool folders
@@ -69,7 +69,7 @@ class AreaContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of loaded areas.
     vector<vector<Area*> > list;
@@ -78,7 +78,7 @@ public:
     vector<map<string, ContentManifest>> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -105,7 +105,7 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void loadAreaIntoVector(
         ContentManifest* manifest, AREA_TYPE type, bool fromBackup
@@ -122,7 +122,7 @@ class BitmapContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Manager proper.
     BitmapManager list;
@@ -131,7 +131,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -159,7 +159,7 @@ class GlobalAnimContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of animations.
     map<string, AnimationDatabase> list;
@@ -168,7 +168,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -184,7 +184,7 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     void loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -198,7 +198,7 @@ class GuiContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of GUI definitions.
     map<string, DataNode> list;
@@ -207,7 +207,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -231,7 +231,7 @@ class HazardContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of hazards.
     map<string, Hazard> list;
@@ -240,7 +240,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -256,7 +256,7 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     void loadHazard(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -270,7 +270,7 @@ class LiquidContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of liquid types.
     map<string, LiquidType*> list;
@@ -279,7 +279,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -295,7 +295,7 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     void loadLiquid(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -309,13 +309,13 @@ class MiscConfigContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Manifests.
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -340,7 +340,7 @@ class MobAnimContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of animations, by category.
     vector<map<string, AnimationDatabase> > list;
@@ -349,7 +349,7 @@ public:
     vector<map<string, ContentManifest> > manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -369,7 +369,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void fillCatManifestsFromPack(
         MobCategory* category, const string& packName
     );
@@ -389,7 +390,7 @@ class MobTypeContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of all mob types.
     MobTypeLists list;
@@ -398,7 +399,7 @@ public:
     vector<map<string, ContentManifest> > manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -417,7 +418,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadMobTypesOfCategory(
         MobCategory* category, CONTENT_LOAD_LEVEL level
     );
@@ -436,7 +438,7 @@ class ParticleGenContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of particle generators.
     map<string, ParticleGenerator> list;
@@ -445,7 +447,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -461,7 +463,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadGenerator(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -475,7 +478,7 @@ class SongContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of liquids.
     map<string, Song> list;
@@ -484,7 +487,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -500,7 +503,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadSong(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -514,7 +518,7 @@ class SongTrackContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Manager proper.
     AudioStreamManager list;
@@ -523,7 +527,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -550,7 +554,7 @@ class SoundContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Manager proper.
     SampleManager list;
@@ -559,7 +563,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -586,7 +590,7 @@ class SpikeDamageTypeContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of spike damage types.
     map<string, SpikeDamageType> list;
@@ -595,7 +599,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -611,7 +615,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadSpikeDamageType(
         ContentManifest* manifest, CONTENT_LOAD_LEVEL level
     );
@@ -627,7 +632,7 @@ class SprayTypeContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of spray types.
     map<string, SprayType> list;
@@ -636,7 +641,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -652,7 +657,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadSprayType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -666,7 +672,7 @@ class StatusTypeContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of status types.
     map<string, StatusType*> list;
@@ -675,7 +681,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -691,7 +697,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+
     void loadStatusType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
     
 };
@@ -705,7 +712,7 @@ class WeatherConditionContentManager : public ContentTypeManager {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of weather conditions.
     map<string, Weather> list;
@@ -714,7 +721,7 @@ public:
     map<string, ContentManifest> manifests;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void clearManifests() override;
     void fillManifests() override;
@@ -730,7 +737,8 @@ public:
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
+    
     void loadWeatherCondition(
         ContentManifest* manifest, CONTENT_LOAD_LEVEL level
     );

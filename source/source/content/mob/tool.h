@@ -37,7 +37,7 @@ class Tool : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of tool it is.
     ToolType* tooType = nullptr;
@@ -49,7 +49,7 @@ public:
     Pikmin* reserved = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Tool(const Point& pos, ToolType* type, float angle);
     

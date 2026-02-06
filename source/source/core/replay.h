@@ -74,7 +74,7 @@ enum REPLAY_EVENT {
  */
 struct ReplayElement {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of element this represents.
     REPLAY_ELEMENT type = REPLAY_ELEMENT_LEADER;
@@ -83,7 +83,7 @@ struct ReplayElement {
     Point pos;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ReplayElement(const REPLAY_ELEMENT type, const Point& pos);
     
@@ -97,7 +97,7 @@ struct ReplayElement {
  */
 struct ReplayEvent {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of event.
     REPLAY_EVENT type = REPLAY_EVENT_ADDED;
@@ -106,7 +106,7 @@ struct ReplayEvent {
     size_t data = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ReplayEvent(
         const REPLAY_EVENT type, size_t data
@@ -121,7 +121,7 @@ struct ReplayEvent {
  */
 struct ReplayState {
 
-    //--- Members ---
+    //--- Public members ---
     
     //List of elements.
     vector<ReplayElement> elements;
@@ -147,13 +147,13 @@ class Replay {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //States.
     vector<ReplayState> states;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Replay();
     void addState(
@@ -172,7 +172,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //List of mobs in the previous state.
     vector<Mob*> prevStateMobs;

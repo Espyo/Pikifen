@@ -39,13 +39,13 @@ class Treasure : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of treasure it is.
     TreasureType* treType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Treasure(const Point& pos, TreasureType* type, float angle);
     int getMissionPoints(bool* applicableInThisMission) const override;

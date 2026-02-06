@@ -52,16 +52,14 @@ enum HUD_BUBBLE_MOVE_METHOD {
 template<typename ContentT>
 struct HudBubbleManager {
 
-    public:
-    
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     /**
      * @brief Represents a bubble GUI item.
      */
     struct Bubble {
     
-        //--- Members ---
+        //--- Public members ---
         
         //GUI item.
         GuiItem* bubble = nullptr;
@@ -79,7 +77,7 @@ struct HudBubbleManager {
         ContentT preTransitionContent = ContentT();
         
         
-        //--- Function definitions ---
+        //--- Public function definitions ---
         
         /**
          * @brief Constructs a new bubble info object.
@@ -93,7 +91,7 @@ struct HudBubbleManager {
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager the HUD belongs to.
     GuiManager* hud = nullptr;
@@ -105,7 +103,7 @@ struct HudBubbleManager {
     HUD_BUBBLE_MOVE_METHOD moveMethod = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     
     
-    //--- Function definitions ---
+    //--- Public function definitions ---
     
     /**
      * @brief Constructs a new HUD bubble manager object.
@@ -339,7 +337,7 @@ struct HudBubbleManager {
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //List of all registered bubble GUI items.
     map<size_t, Bubble> bubbles;

@@ -64,14 +64,14 @@ struct Player;
  */
 struct Hud {
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     /**
      * @brief Bitmap and color of a leader's icon.
      */
     struct LeaderIconBubble {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Leader icon bitmap.
         ALLEGRO_BITMAP* bmp = nullptr;
@@ -86,7 +86,7 @@ struct Hud {
      */
     struct LeaderHealthBubble {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Ratio of health left in the health wheel.
         float ratio = 0.0f;
@@ -103,7 +103,7 @@ struct Hud {
     };
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager.
     GuiManager gui;
@@ -187,7 +187,7 @@ struct Hud {
     GuiItem* totalAmount = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Hud();
     ~Hud();
@@ -195,7 +195,7 @@ struct Hud {
     
 private:
 
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void createMissionFailCondItems(bool primary);
     void drawStandbyIcon(BUBBLE_RELATION which);

@@ -335,7 +335,7 @@ class MobEvent {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of event.
     MOB_EV type = MOB_EV_UNKNOWN;
@@ -344,7 +344,7 @@ public:
     vector<MobActionCall*> actions;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     MobEvent(
         const DataNode* node, const vector<MobActionCall*>& actions
@@ -366,7 +366,7 @@ class MobState {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Name of the state.
     string name;
@@ -378,7 +378,7 @@ public:
     MobEvent* events[N_MOB_EVENTS];
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit MobState(const string& name);
     MobState(const string& name, MobEvent* evs[N_MOB_EVENTS]);
@@ -397,7 +397,7 @@ class MobFsm {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that this FSM belongs to.
     Mob* m = nullptr;
@@ -415,7 +415,7 @@ public:
     size_t firstStateOverride = INVALID;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit MobFsm(Mob* m = nullptr);
     MobEvent* getEvent(const MOB_EV type) const;
@@ -449,7 +449,7 @@ class EasyFsmCreator {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void newState(const string& name, size_t id);
     void newEvent(const MOB_EV type);
@@ -459,7 +459,7 @@ public:
     
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //List of registered states.
     vector<MobState*> states;
@@ -471,7 +471,7 @@ private:
     MobEvent* curEvent = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void commitState();
     void commitEvent();
@@ -484,7 +484,7 @@ private:
  */
 struct HitboxInteraction {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that touched our mob.
     Mob* mob2 = nullptr;
@@ -496,7 +496,7 @@ struct HitboxInteraction {
     Hitbox* h2 = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit HitboxInteraction(
         Mob* mob2 = nullptr,

@@ -32,7 +32,7 @@ class Ship : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of ship it is.
     ShipType* shiType = nullptr;
@@ -65,7 +65,7 @@ public:
     float controlPointToReceptacleDist = 0.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Ship(const Point& pos, ShipType* type, float angle);
     ~Ship();

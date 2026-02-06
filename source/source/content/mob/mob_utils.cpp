@@ -463,7 +463,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
      */
     struct AlphaSpot {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Position of the spot.
         Point pos;
@@ -472,7 +472,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
         Distance distanceToRightmost;
         
         
-        //--- Function definitions ---
+        //--- Public function definitions ---
         
         /**
          * @brief Constructs a new alpha spot object.

@@ -28,7 +28,7 @@ class ResourceCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     ResourceCategory();
     void getTypeNames(vector<string>& list) const override;

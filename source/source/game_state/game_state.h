@@ -30,13 +30,13 @@ class GameState {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Is it currently loaded?
     bool loaded = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GameState() = default;
     virtual ~GameState() = default;

@@ -30,7 +30,7 @@ class EasyAnalogCleaner {
 
 public:
 
-    //--- Misc. declarations ---
+    //--- Public misc. declarations ---
     
     /**
      * @brief Settings for the cleaner.
@@ -208,13 +208,13 @@ public:
     };
     
     
-    //--- Constants ---
+    //--- Public constants ---
     
     //Settings for when you want no changes to be made to the values.
     static const Settings SETTINGS_NO_CHANGES;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     static void clean(float coords[2]);
     static void clean(
@@ -230,7 +230,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     static float getSnapDirDeadzone(
         int snapDirIdx, const Settings& settings

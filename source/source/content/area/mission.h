@@ -365,7 +365,7 @@ enum MISSION_FAIL_COND {
  */
 struct MissionEvent {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of event.
     MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
@@ -393,7 +393,7 @@ struct MissionEvent {
  */
 struct MissionMobChecklist {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type.
     MISSION_MOB_CHECKLIST type = MISSION_MOB_CHECKLIST_CUSTOM;
@@ -409,7 +409,7 @@ struct MissionMobChecklist {
     vector<size_t> mobIdxs;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     vector<size_t> calculateList() const;
     
@@ -421,7 +421,7 @@ struct MissionMobChecklist {
  */
 struct MissionScoreCriterion {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type.
     MISSION_SCORE_CRITERION type = MISSION_SCORE_CRITERION_MOB_CHECKLIST;
@@ -443,7 +443,7 @@ struct MissionScoreCriterion {
  */
 struct MissionHudItem {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Whether it is enabled and visible.
     bool enabled = false;
@@ -471,7 +471,7 @@ struct MissionHudItem {
  */
 struct MissionData {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Preset. Only really used for the editor's GUI.
     MISSION_PRESET preset = MISSION_PRESET_CUSTOM;
@@ -516,7 +516,7 @@ struct MissionData {
     string makerRecordDate = "";
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void applyPreset(MISSION_PRESET newPreset);
     MISSION_MEDAL getScoreMedal(int score);
@@ -531,7 +531,7 @@ struct MissionData {
  */
 struct MissionDataOld {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mission goal.
     MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
@@ -630,7 +630,7 @@ struct MissionDataOld {
     string makerRecordDate = "";
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     MISSION_MEDAL getScoreMedal(int score);
     
@@ -642,7 +642,7 @@ struct MissionDataOld {
  */
 struct MissionRecord {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Has the mission's goal been cleared?
     bool clear = false;
@@ -654,7 +654,7 @@ struct MissionRecord {
     string date;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     bool isPlatinum(const MissionDataOld& mission);
     
@@ -672,14 +672,14 @@ class MissionEvType {
 
 public:
 
-    //--- Misc. definitions ---
+    //--- Public misc. definitions ---
     
     /**
      * @brief Information that's only useful for the editor.
      */
     struct EditorInfo {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Description of the event.
         string description;
@@ -704,7 +704,7 @@ public:
      */
     struct HudInfo {
     
-        //--- Members ---
+        //--- Public members ---
         
         //A description of the event. Empty if not used.
         string description;
@@ -715,7 +715,7 @@ public:
     };
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MissionEvType() = default;
     virtual string getName() const = 0;
@@ -741,7 +741,7 @@ class MissionEvTypePauseEnd : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -766,7 +766,7 @@ class MissionEvTypeMobChecklist : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -791,7 +791,7 @@ class MissionEvTypeTimeLimit : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -816,7 +816,7 @@ class MissionEvTypeLeadersInRegion : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -841,7 +841,7 @@ class MissionEvTypePikminOrMore : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -866,7 +866,7 @@ class MissionEvTypePikminOrFewer : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -891,7 +891,7 @@ class MissionEvTypeLosePikmin : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -916,7 +916,7 @@ class MissionEvTypeLoseLeaders : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -941,7 +941,7 @@ class MissionEvTypeTakeDamage : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -966,7 +966,7 @@ class MissionEvTypeScriptTrigger : public MissionEvType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -995,14 +995,14 @@ class MissionActionType {
 
 public:
 
-    //--- Misc. definitions ---
+    //--- Public misc. definitions ---
     
     /**
      * @brief Information that's only useful for the editor.
      */
     struct EditorInfo {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Description of the event.
         string description;
@@ -1010,7 +1010,7 @@ public:
     };
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MissionActionType() = default;
     virtual string getName() const = 0;
@@ -1027,7 +1027,7 @@ class MissionActionTypeEndClear : public MissionActionType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -1043,7 +1043,7 @@ class MissionActionTypeEndFail : public MissionActionType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -1059,7 +1059,7 @@ class MissionActionTypeScriptMessage : public MissionActionType {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     EditorInfo getEditorInfo() const override;
@@ -1079,7 +1079,7 @@ class MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MissionFail() = default;
     virtual string getName() const = 0;
@@ -1107,7 +1107,7 @@ class MissionFailDefeatEnemies : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1134,7 +1134,7 @@ class MissionFailLoseLeaders : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1161,7 +1161,7 @@ class MissionFailLosePikmin : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1188,7 +1188,7 @@ class MissionFailPauseMenu : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1215,7 +1215,7 @@ class MissionFailTakeDamage : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1242,7 +1242,7 @@ class MissionFailTimeLimit: public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1269,7 +1269,7 @@ class MissionFailTooFewPikmin : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1296,7 +1296,7 @@ class MissionFailTooManyPikmin : public MissionFail {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1327,7 +1327,7 @@ class MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MissionGoal() = default;
     virtual string getName() const = 0;
@@ -1355,7 +1355,7 @@ class MissionGoalBattleEnemies : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1382,7 +1382,7 @@ class MissionGoalCollectTreasures : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1409,7 +1409,7 @@ class MissionGoalEndManually : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1436,7 +1436,7 @@ class MissionGoalGetToExit : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1463,7 +1463,7 @@ class MissionGoalGrowPikmin : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1490,7 +1490,7 @@ class MissionGoalTimedSurvival : public MissionGoal {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getCurAmount(GameplayState* gameplay) const override;
@@ -1521,7 +1521,7 @@ class MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     virtual ~MissionScoreCriterionOld() = default;
     virtual string getName() const = 0;
@@ -1540,7 +1540,7 @@ class MissionScoreCriterionEnemyPoints : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;
@@ -1558,7 +1558,7 @@ class MissionScoreCriterionPikminBorn : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;
@@ -1576,7 +1576,7 @@ class MissionScoreCriterionPikminDeath : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;
@@ -1594,7 +1594,7 @@ class MissionScoreCriterionSecLeft : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;
@@ -1612,7 +1612,7 @@ class MissionScoreCriterionSecPassed : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;
@@ -1630,7 +1630,7 @@ class MissionScoreCriterionTreasurePoints : public MissionScoreCriterionOld {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     string getName() const override;
     int getMultiplier(MissionDataOld* mission) const override;

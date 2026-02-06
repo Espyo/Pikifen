@@ -26,7 +26,7 @@ class BouncerCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     BouncerCategory();
     void getTypeNames(vector<string>& list) const override;

@@ -315,7 +315,7 @@ enum CONTROLS_GAME_STATE {
  */
 struct PlayerActionType : public Inpution::ActionType {
 
-    //--- Members ---
+    //--- Public members ---
     
     //ID of the action type.
     PLAYER_ACTION_TYPE id = PLAYER_ACTION_TYPE_NONE;
@@ -348,7 +348,7 @@ struct ControlsMediator {
 
     public:
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void addModifier(
         Inpution::ActionTypeId id, const Inpution::InputSource& source
@@ -414,7 +414,7 @@ struct ControlsMediator {
     );
     
     
-    //--- Members ---
+    //--- Public members ---
     
     //Player actions in this frame.
     vector<Inpution::Action> actionQueue;
@@ -422,7 +422,7 @@ struct ControlsMediator {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //List of registered player action types.
     vector<PlayerActionType> playerActionTypes;

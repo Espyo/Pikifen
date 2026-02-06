@@ -77,13 +77,13 @@ enum TRIANGULATION_ERROR {
  */
 struct Triangle {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Points that make up this triangle.
     Vertex* points[3] = { nullptr, nullptr, nullptr };
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Triangle(Vertex* v1, Vertex* v2, Vertex* v3);
     
@@ -101,7 +101,7 @@ struct Triangle {
  */
 struct Polygon {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Ordered list of vertexes that represent the polygon.
     vector<Vertex*> vertexes;
@@ -110,7 +110,7 @@ struct Polygon {
     vector<Polygon*> children;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Polygon();
     explicit Polygon(const vector<Vertex*>& vertexes);
@@ -130,7 +130,7 @@ struct Polygon {
  */
 struct GeometryProblems {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Non-simple sectors found, and their reason for being broken.
     map<Sector*, TRIANGULATION_ERROR> nonSimples;

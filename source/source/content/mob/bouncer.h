@@ -23,13 +23,13 @@ class Bouncer : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of bouncer it is.
     BouncerType* bouType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Bouncer(const Point& pos, BouncerType* type, float angle);
     

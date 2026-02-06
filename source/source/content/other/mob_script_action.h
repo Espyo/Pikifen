@@ -583,7 +583,7 @@ enum MOB_ACTION_PARAM {
  */
 struct MobActionParam {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Name of the parameter.
     string name;
@@ -598,7 +598,7 @@ struct MobActionParam {
     bool isExtras = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     MobActionParam(
         const string& name, const MOB_ACTION_PARAM type,
@@ -613,7 +613,7 @@ struct MobActionParam {
  */
 struct MobActionRunData {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Mob that will run the action.
     Mob* m = nullptr;
@@ -634,7 +634,7 @@ struct MobActionRunData {
     bool returnValue = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     MobActionRunData(Mob* m, MobActionCall* call);
     
@@ -662,7 +662,7 @@ typedef bool (MobActionLoadCode)(MobActionCall& call);
  */
 struct MobAction {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Type of mob action.
     MOB_ACTION type = MOB_ACTION_UNKNOWN;
@@ -688,7 +688,7 @@ struct MobAction {
  */
 struct MobActionCall {
 
-    //--- Members ---
+    //--- Public members ---
     
     //Action to run, if any.
     MobAction* action = nullptr;
@@ -712,7 +712,7 @@ struct MobActionCall {
     MobType* mt = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit MobActionCall(MOB_ACTION type = MOB_ACTION_UNKNOWN);
     explicit MobActionCall(CustomActionCode code);

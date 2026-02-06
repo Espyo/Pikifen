@@ -53,7 +53,7 @@ class BridgeType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Texture used for the main bridge floor.
     ALLEGRO_BITMAP* bmpMainTexture = nullptr;
@@ -77,7 +77,7 @@ public:
     float railWidth = 16.0f;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     BridgeType();
     void loadCatProperties(DataNode* file) override;

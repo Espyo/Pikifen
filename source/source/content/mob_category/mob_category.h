@@ -109,7 +109,7 @@ class MobCategory {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Internal name.
     string internalName;
@@ -130,7 +130,7 @@ public:
     ALLEGRO_COLOR editorColor = COLOR_WHITE;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     MobCategory(
         const MOB_CATEGORY id, const string& internalName,
@@ -159,9 +159,7 @@ public:
  */
 struct CategoryManager {
 
-    public:
-    
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     void registerCategory(MOB_CATEGORY id, MobCategory* category);
     MobType* findMobType(const string& name) const;
@@ -174,7 +172,7 @@ struct CategoryManager {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //List of known mob categories.
     vector<MobCategory*> categories;
@@ -189,7 +187,7 @@ class NoneCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     NoneCategory();
     void getTypeNames(vector<string>& list) const override;

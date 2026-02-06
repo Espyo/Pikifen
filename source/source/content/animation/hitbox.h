@@ -86,13 +86,13 @@ class BodyPart {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The body part's name.
     string name;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit BodyPart(const string& name = "");
     
@@ -106,7 +106,7 @@ class Hitbox {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //The name of the body part to use.
     string bodyPartName;
@@ -155,7 +155,7 @@ public:
     HITBOX_SURFACE_TYPE surfaceType = HITBOX_SURFACE_TYPE_SMOOTH;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     explicit Hitbox(
         const string& bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,

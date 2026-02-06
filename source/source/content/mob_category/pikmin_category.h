@@ -28,7 +28,7 @@ class PikminCategory : public MobCategory {
 
 public:
 
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     PikminCategory();
     void getTypeNames(vector<string>& list) const override;

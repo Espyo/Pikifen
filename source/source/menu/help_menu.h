@@ -56,29 +56,30 @@ enum HELP_CATEGORY {
  * the player.
  */
 class HelpMenu : public Menu {
+
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //GUI manager.
     GuiManager gui;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     void load() override;
     void unload() override;
     
     
 private:
 
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     /**
      * @brief One of the help menu's tidbits.
      */
     struct Tidbit {
     
-        //--- Members ---
+        //--- Public members ---
         
         //Name.
         string name;
@@ -92,7 +93,7 @@ private:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //All tidbits.
     map<HELP_CATEGORY, vector<Tidbit> > tidbits;
@@ -107,7 +108,7 @@ private:
     ListGuiItem* tidbitList = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void drawTidbit(
         const ALLEGRO_FONT* const font, const Point& where,

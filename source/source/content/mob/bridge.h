@@ -32,10 +32,27 @@ extern const float STEP_HEIGHT;
  * existing ones.
  */
 class Bridge : public Mob {
+    
+public:
+
+    //--- Public members ---
+    
+    //What type of bridge it is.
+    BridgeType* briType = nullptr;
+    
+    
+    //--- Public function declarations ---
+    
+    Bridge(const Point& pos, BridgeType* Type, float angle);
+    static void drawComponent(Mob* m);
+    bool checkHealth();
+    Point getStartPoint();
+    void readScriptVars(const ScriptVarReader& svr) override;
+    void setup();
 
 private:
 
-    //--- Members ---
+    //--- Private members ---
     
     //How many chunks are needed to fully build this bridge.
     size_t totalChunksNeeded = 10;
@@ -63,22 +80,5 @@ private:
     
     //How many times did we combine chunks? Cache for convenience.
     size_t prevChunkCombo = 0;
-    
-public:
-
-    //--- Members ---
-    
-    //What type of bridge it is.
-    BridgeType* briType = nullptr;
-    
-    
-    //--- Function declarations ---
-    
-    Bridge(const Point& pos, BridgeType* Type, float angle);
-    static void drawComponent(Mob* m);
-    bool checkHealth();
-    Point getStartPoint();
-    void readScriptVars(const ScriptVarReader& svr) override;
-    void setup();
     
 };

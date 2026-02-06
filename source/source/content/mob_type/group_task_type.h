@@ -60,7 +60,7 @@ class GroupTaskType : public MobType {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Default power requirement in order to reach the goal.
     size_t powerGoal = 10;
@@ -99,7 +99,7 @@ public:
     bool flyingPikminOnly = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GroupTaskType();
     void loadCatProperties(DataNode* file) override;

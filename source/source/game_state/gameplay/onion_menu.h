@@ -53,7 +53,7 @@ enum ONION_TRANSFER_RESULT {
  */
 struct OnionMenuPikminType {
 
-    //--- Members ---
+    //--- Public members ---
     
     //The player wants to add/subtract these many from the group.
     int delta = 0;
@@ -65,7 +65,7 @@ struct OnionMenuPikminType {
     PikminType* pikType = nullptr;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     OnionMenuPikminType(size_t idx, PikminType* pikType);
     
@@ -78,9 +78,7 @@ struct OnionMenuPikminType {
  */
 struct OnionMenu {
 
-    public:
-    
-    //--- Members ---
+    //--- Public members ---
     
     //Pointer to the struct with nest information.
     PikminNest* nestPtr = nullptr;
@@ -161,7 +159,7 @@ struct OnionMenu {
     bool toDelete = false;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     OnionMenu(PikminNest* nPtr, Leader* lPtr);
     ~OnionMenu();
@@ -179,13 +177,13 @@ struct OnionMenu {
     
     private:
     
-    //--- Members ---
+    //--- Private members ---
     
     //Is it currently closing?
     bool closing = false;
     
     
-    //--- Function declarations ---
+    //--- Private function declarations ---
     
     void doButtonLogic(bool toGroup, size_t typeIdx, bool fromSN);
     bool doButtonSNLogic(PLAYER_ACTION_TYPE playerActionId, size_t typeIdx);

@@ -31,13 +31,13 @@ class GuiEditor : public Editor {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //Automatically load this file upon boot-up of the editor, if any.
     string autoLoadFile;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     GuiEditor();
     void doLogic() override;
@@ -51,7 +51,7 @@ public:
     
 private:
 
-    //--- Misc. declarations ---
+    //--- Private misc. declarations ---
     
     //Editor states.
     enum EDITOR_STATE {
@@ -71,7 +71,7 @@ private:
     };
     
     
-    //--- Members ---
+    //--- Private members ---
     
     //Index of the currently selected item, from the list of all items.
     //INVALID for none.
@@ -133,7 +133,7 @@ private:
     } newDialog;
     
     
-    //--- Function declarations ---
+    //--- Private declarations ---
     
     void changeState(const EDITOR_STATE newState);
     void closeLoadDialog();

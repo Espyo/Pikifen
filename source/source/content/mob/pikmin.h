@@ -43,7 +43,7 @@ class Pikmin : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of Pikmin it is.
     PikminType* pikType = nullptr;
@@ -107,7 +107,7 @@ public:
     size_t tempI = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Pikmin(const Point& pos, PikminType* type, float angle);
     void forceCarry(Mob* m);
@@ -128,7 +128,7 @@ public:
     
 protected:
 
-    //--- Function declarations ---
+    //--- Protected function declarations ---
     
     void tickClassSpecifics(float deltaT) override;
 };

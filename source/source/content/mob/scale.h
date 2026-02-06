@@ -23,7 +23,7 @@ class Scale : public Mob {
 
 public:
 
-    //--- Members ---
+    //--- Public members ---
     
     //What type of scale it is.
     ScaleType* scaType = nullptr;
@@ -32,7 +32,7 @@ public:
     size_t goalNumber = 0;
     
     
-    //--- Function declarations ---
+    //--- Public function declarations ---
     
     Scale(const Point& pos, ScaleType* type, float angle);
     float calculateCurWeight() const;
