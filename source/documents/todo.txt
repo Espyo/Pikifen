@@ -19,10 +19,11 @@ Next tasks (roughly sorted most important first)
     Move <direction> player actions have auto-repeat on for some reason
 
     --- 1.2.0 ---
+    Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
-    Puffstool and mushroom Pikmin
+    Mushroom Pikmin
     Ice geysers
     Freezecake
     Swarming jingle
@@ -432,6 +433,7 @@ Next tasks (roughly sorted most important first)
                 Probably too much info shown at once
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
             Show actions written in plain English? Like a "turn_to_target focused_mob" -> "Turn towards the focused mob."
+            set_state actions should have a button to take you to that state
             Revamp the scripting tutorial
                 Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
                 Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
@@ -661,9 +663,11 @@ Misc things (so I don't forget)
             Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
             When you want to pick a song, a dialog should appear listing all of them, separating the area songs from the other ones, and also showing the tags and credits
             A way to toggle the selection transformation widget via a button press (thanks Helodity)
+            A way to change the area type between simple and mission
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
+            The hitbox graphics should be bitmaps with a solid outline and an inner part that quickly fades out. This way they don't discolor what's underneath, especially if there are multiple overlapping
         Refactor the code so that sub-states are a bit more well-managed
             Hitting Esc when on an sub-state that's not the main state won't do anything, for instance, unless it's manually coded to do so
         Pressing Esc on the sprite/whatever rename pop-up should cancel

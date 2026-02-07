@@ -1,0 +1,199 @@
+first_state = idling
+death_state = dying_decide
+states_ignoring_death = dying
+
+init {
+    set_near_reach search
+    set_var threat_timer 0
+    set_var upright true
+}
+
+script {
+    idling {
+        on_enter {
+            stop
+            get_random_float temp 1 3
+            set_timer $temp
+            set_animation idling random_time_on_spawn
+        }
+        on_timer {
+            set_state exploring
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state panicking
+        }
+        on_itch {
+            //Let the itch expire, since we only want it to trip when moving.
+        }
+    }
+
+    exploring {
+        on_enter {
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
+            move_to_relative $x $y
+            set_animation walking normal true
+            get_random_float temp 1.5 2.5
+            set_timer $temp
+        }
+        on_timer {
+            set_state idling
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state panicking
+        }
+        on_itch {
+            set_state tripping
+        }
+        on_far_from_home {
+            set_state returning
+        }
+    }
+
+    panicking {
+        on_enter {
+            set_animation walking normal true
+            set_timer 0.3
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
+            move_to_relative $x $y
+        }
+        on_timer {
+            set_timer 0.3
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
+            move_to_relative $x $y
+            calculate threat_timer $threat_timer + 0.3
+            if $threat_timer >= 5
+                set_state spraying_start
+            end_if
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+        on_itch {
+            set_state tripping
+        }
+        on_far_from_home {
+            set_state returning
+        }
+    }
+
+    returning {
+        on_enter {
+            move_to_target home
+            set_animation walking normal true
+            set_timer 1.5
+        }
+        on_reach_destination {
+            set_state idling
+        }
+        on_timer {
+            set_state idling
+        }
+    }
+
+    spraying_start {
+        on_enter {
+            stop
+            set_var threat_timer 0
+            set_animation spraying_safe
+            set_timer 1.5
+        }
+        on_timer {
+            set_state spraying_hit
+        }
+    }
+
+    spraying_hit {
+        on_enter {
+            start_particles puffstool_spores
+            set_animation spraying_hit
+        }
+        on_animation_end {
+            set_state spraying_end
+        }
+    }
+
+    spraying_end {
+        on_enter {
+            set_animation spraying_end
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    tripping {
+        on_enter {
+            stop
+            set_animation tripping
+        }
+        on_frame_signal {
+            set_radius 50
+            set_var upright false
+        }
+        on_animation_end {
+            set_state upside_down
+        }
+    }
+
+    upside_down {
+        on_enter {
+            set_animation upside_down
+            set_timer 3.5
+        }
+        on_timer {
+            set_state getting_up_01
+        }
+    }
+
+    getting_up_01 {
+        on_enter {
+            set_animation getting_up_01
+        }
+        on_animation_end {
+            set_state getting_up_02
+        }
+    }
+
+    getting_up_02 {
+        on_enter {
+            set_animation getting_up_02
+        }
+        on_frame_signal {
+            set_radius 80
+            set_var upright true
+        }
+        on_animation_end {
+            set_state spraying_start
+        }
+    }
+
+    dying_decide {
+        on_enter {
+            if $upright = true
+                set_animation tripping_dying
+            else
+                set_state dying
+            end_if
+        }
+        on_animation_end {
+            set_state dying
+        }
+    }
+
+    dying {
+        on_enter {
+            start_dying
+            set_radius 90
+            set_height 64
+            set_animation dying
+        }
+        on_animation_end {
+            finish_dying
+        }
+    }
+}

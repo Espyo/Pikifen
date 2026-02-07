@@ -1,0 +1,60 @@
+name = Puffstool
+description = A large fungus-looking beast. As a defense mechanism, it shoots out spores which can turn the Pikmin against you!
+
+acceleration = 90
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
+can_walk_on_others = true
+custom_category_name = Enemy, large and aggressive
+height = 250
+itch_damage = 70
+itch_time = 15
+max_carriers = 24
+max_health = 4000
+move_speed = 85
+pikmin_seeds = 20
+points = 100
+pushable = true
+pushes = true
+pushes_softly = true
+radius = 80
+rotation_speed = 70
+target_type = enemy
+terrain_radius = 130
+territory_radius = 300
+weight = 12
+
+reaches {
+    search = 50 360
+}
+
+sounds {
+    crinkling {
+        sound = creature_misc/crinkling
+        speed_deviation = 5
+    }
+    shaking {
+        sound = creature_misc/shaking_leaf
+        speed_deviation = 5
+    }
+    boing {
+        sound = effects/boing_low_2
+        speed_deviation = 5
+    }
+    spray {
+        sound = misc/spray
+        speed = 50
+        speed_deviation = 5
+    }
+    walking {
+        sound = creature_misc/fat_slosh
+        speed = 75
+        speed_deviation = 10
+        volume = 50
+        volume_deviation = 10
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

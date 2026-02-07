@@ -1,0 +1,1348 @@
+name=Puffstool animations
+description=Animations for the Puffstool.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	dying{
+		loop_frame=20
+		frames{
+			upside_down_01{
+				duration=0.0500
+				interpolate=true
+			}
+			upside_down_big_02{
+				duration=0.1000
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+				sound=crinkling
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_01{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_02{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_01{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_02{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_01{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_02{
+				duration=0.0800
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+				interpolate=true
+			}
+			dying_04{
+				duration=0.1200
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1400
+				interpolate=true
+			}
+			dying_04{
+				duration=0.1600
+				interpolate=true
+			}
+			dying_03{
+				duration=0.6000
+				interpolate=true
+			}
+			dying_05{
+				duration=0.1000
+			}
+		}
+	}
+	getting_up_01{
+		frames{
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+				sound=shaking
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_shake{
+				duration=0.0800
+				interpolate=true
+			}
+		}
+	}
+	getting_up_02{
+		hit_rate=90
+		frames{
+			upside_down_01{
+				duration=0.0800
+				interpolate=true
+			}
+			upside_down_big_01{
+				duration=0.0600
+				interpolate=true
+			}
+			upside_down_big_01{
+				duration=0.0100
+				interpolate=true
+			}
+			tipping_f_04{
+				duration=0.0600
+				sound=boing
+			}
+			tipping_f_03{
+				duration=0.0600
+			}
+			tipping_f_02_h{
+				duration=0.0600
+				signal=0
+			}
+			tipping_f_01{
+				duration=0.0600
+			}
+			idling_big{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.3000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1500
+				interpolate=true
+			}
+			idling_03{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+	spraying_end{
+		frames{
+			spraying_safe_01{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_big{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.5000
+			}
+		}
+	}
+	spraying_hit{
+		loop_frame=2
+		frames{
+			spraying_hit_01{
+				duration=0.0800
+				interpolate=true
+			}
+			spraying_hit_02{
+				duration=0.0800
+				interpolate=true
+				sound=spray
+			}
+			spraying_hit_01{
+				duration=0.0800
+				interpolate=true
+			}
+			spraying_hit_02{
+				duration=0.0800
+				interpolate=true
+			}
+		}
+	}
+	spraying_safe{
+		loop_frame=2
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_big{
+				duration=0.1000
+				interpolate=true
+			}
+			spraying_safe_01{
+				duration=0.0800
+				interpolate=true
+			}
+			spraying_safe_02{
+				duration=0.0800
+				interpolate=true
+			}
+		}
+	}
+	tripping{
+		frames{
+			tipping_b_01{
+				duration=0.1000
+				interpolate=true
+			}
+			tipping_b_02{
+				duration=0.1000
+			}
+			tipping_b_01{
+				duration=0.1000
+				interpolate=true
+			}
+			tipping_f_01{
+				duration=0.1000
+			}
+			tipping_f_02{
+				duration=0.1000
+			}
+			tipping_f_03{
+				duration=0.1000
+			}
+			tipping_f_04{
+				duration=0.1000
+				signal=0
+			}
+		}
+	}
+	tripping_dying{
+		frames{
+			tipping_f_01{
+				duration=0.1000
+				interpolate=true
+			}
+			tipping_f_02{
+				duration=0.1000
+				interpolate=true
+			}
+			tipping_f_03{
+				duration=0.1000
+				interpolate=true
+			}
+			tipping_f_04{
+				duration=0.1000
+				signal=0
+				sound=boing
+			}
+		}
+	}
+	upside_down{
+		loop_frame=4
+		frames{
+			upside_down_big_01{
+				duration=0.0500
+				interpolate=true
+			}
+			upside_down_02{
+				duration=0.1000
+				interpolate=true
+				sound=boing
+			}
+			upside_down_01{
+				duration=0.0300
+			}
+			upside_down_flipped{
+				duration=0.0300
+			}
+			upside_down_flipped{
+				duration=0.1000
+				interpolate=true
+			}
+			upside_down_03{
+				duration=0.1000
+				interpolate=true
+			}
+			upside_down_flipped{
+				duration=0.0300
+			}
+			upside_down_01{
+				duration=0.1000
+				interpolate=true
+			}
+			upside_down_02{
+				duration=0.1000
+				interpolate=true
+			}
+			upside_down_01{
+				duration=0.0300
+			}
+		}
+	}
+	walking{
+		frames{
+			idling_01{
+				duration=0.0700
+				interpolate=true
+			}
+			walking_r_01{
+				duration=0.1000
+				interpolate=true
+				sound=walking
+			}
+			walking_r_02{
+				duration=0.2000
+				interpolate=true
+			}
+			walking_r_01{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.0700
+				interpolate=true
+			}
+			walking_l_01{
+				duration=0.1000
+				interpolate=true
+			}
+			walking_l_02{
+				duration=0.2000
+				interpolate=true
+			}
+			walking_l_01{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	dying_01{
+		file=enemies/puffstool
+		file_pos=773.0000 502.0000
+		file_size=250.0000 250.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=enemies/puffstool
+		file_pos=773.0000 502.0000
+		file_size=250.0000 250.0000
+		offset=4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			cap{
+				coords=4.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=enemies/puffstool
+		file_pos=1024.0000 502.0000
+		file_size=250.0000 250.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_04{
+		file=enemies/puffstool
+		file_pos=1024.0000 502.0000
+		file_size=250.0000 250.0000
+		offset=4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=2
+				value=1.0000
+			}
+			cap{
+				coords=4.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_05{
+		file=enemies/puffstool
+		file_pos=1024.0000 502.0000
+		file_size=250.0000 250.0000
+		scale=0.7500 0.7500
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 150.0000
+				height=100.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+			}
+			cap{
+				coords=4.0000 0.0000 0.0000
+				height=150.0000
+				radius=94.0000
+				type=2
+				value=1.0000
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_01{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_02{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=3.0000 0.0000
+		hitboxes{
+			stem{
+				coords=3.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=3.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_03{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=-3.0000 0.0000
+		hitboxes{
+			stem{
+				coords=-3.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=-3.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_big{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=120.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=110.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spraying_hit_01{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		scale=1.0522 1.1500
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=120.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=110.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=170.0000
+				type=1
+				value=0.0000
+				knockback_type=0
+			}
+		}
+	}
+	spraying_hit_02{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		scale=1.1100 1.0156
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=170.0000
+				type=1
+				value=0.0000
+				knockback_type=0
+			}
+		}
+	}
+	spraying_safe_01{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		scale=1.0522 1.1500
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=120.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=110.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	spraying_safe_02{
+		file=enemies/puffstool
+		file_pos=0.0000 0.0000
+		file_size=250.0000 250.0000
+		scale=1.1100 1.0156
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_b_01{
+		file=enemies/puffstool
+		file_pos=0.0000 251.0000
+		file_size=240.0000 250.0000
+		offset=-4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=-4.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_b_02{
+		file=enemies/puffstool
+		file_pos=241.0000 251.0000
+		file_size=205.0000 250.0000
+		offset=-15.0000 0.0000
+		hitboxes{
+			stem{
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=-15.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_f_01{
+		file=enemies/puffstool
+		file_pos=447.0000 251.0000
+		file_size=205.0000 250.0000
+		offset=4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=4.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_f_02{
+		file=enemies/puffstool
+		file_pos=653.0000 251.0000
+		file_size=314.0000 250.0000
+		hitboxes{
+			stem{
+				coords=-64.0000 0.0000 0.0000
+				height=150.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=29.4000 0.0000 100.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_f_02_h{
+		file=enemies/puffstool
+		file_pos=653.0000 251.0000
+		file_size=314.0000 250.0000
+		hitboxes{
+			stem{
+				coords=-64.0000 0.0000 0.0000
+				height=150.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=29.4000 0.0000 100.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=130.0000
+				type=1
+				value=0.3000
+				knockback_type=1
+				wither_chance=10
+			}
+		}
+	}
+	tipping_f_03{
+		file=enemies/puffstool
+		file_pos=968.0000 251.0000
+		file_size=254.0000 250.0000
+		hitboxes{
+			stem{
+				coords=-48.0000 0.0000 50.0000
+				height=150.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=10.0000 0.0000 0.0000
+				height=250.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	tipping_f_04{
+		file=enemies/puffstool
+		file_pos=0.0000 502.0000
+		file_size=270.0000 250.0000
+		hitboxes{
+			stem{
+				coords=-56.0000 0.0000 100.0000
+				height=150.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=10.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_01{
+		file=enemies/puffstool
+		file_pos=271.0000 502.0000
+		file_size=250.0000 250.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_02{
+		file=enemies/puffstool
+		file_pos=522.0000 502.0000
+		file_size=250.0000 250.0000
+		offset=4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=4.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_03{
+		file=enemies/puffstool
+		file_pos=522.0000 502.0000
+		file_size=250.0000 250.0000
+		offset=-4.0000 0.0000
+		scale=-1.0000 1.0000
+		hitboxes{
+			stem{
+				coords=-4.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=-4.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_big_01{
+		file=enemies/puffstool
+		file_pos=271.0000 502.0000
+		file_size=250.0000 250.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=100.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=150.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_big_02{
+		file=enemies/puffstool
+		file_pos=271.0000 502.0000
+		file_size=250.0000 250.0000
+		scale=1.5000 1.5000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=120.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=188.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_flipped{
+		file=enemies/puffstool
+		file_pos=271.0000 502.0000
+		file_size=250.0000 250.0000
+		scale=-1.0000 1.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upside_down_shake{
+		file=enemies/puffstool
+		file_pos=271.0000 502.0000
+		file_size=250.0000 250.0000
+		offset=4.0000 0.0000
+		hitboxes{
+			stem{
+				coords=4.0000 0.0000 150.0000
+				height=100.0000
+				radius=90.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=4.0000 0.0000 0.0000
+				height=150.0000
+				radius=125.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_l_01{
+		file=enemies/puffstool
+		file_pos=753.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=0.0000 -2.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_l_02{
+		file=enemies/puffstool
+		file_pos=1004.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=0.0000 -5.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_r_01{
+		file=enemies/puffstool
+		file_pos=251.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=0.0000 2.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	walking_r_02{
+		file=enemies/puffstool
+		file_pos=502.0000 0.0000
+		file_size=250.0000 250.0000
+		offset=0.0000 5.0000
+		hitboxes{
+			stem{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			cap{
+				coords=0.0000 0.0000 100.0000
+				height=150.0000
+				radius=100.0000
+				type=0
+				value=0.0000
+				surface_type=2
+			}
+			attack{
+				coords=0.0000 0.0000 0.0000
+				height=250.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	stem
+	cap
+	attack
+}

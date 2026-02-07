@@ -3507,8 +3507,9 @@ void PikminFsm::landOnMob(Mob* m, void* info1, void* info2) {
     ) {
         if(hboxPtr->surfaceType == HITBOX_SURFACE_TYPE_BOUNCY) {
             //No good. Make it bounce back.
-            m->speed.x *= -1.3f;
-            m->speed.y *= -1.3f;
+            float throwAngle = getAngle(m->speed);
+            throwAngle += TAU / 2.0f;
+            m->speed = angleToCoordinates(throwAngle, 200.0f);
         } else {
             //No good. Make it stop.
             m->speed.x = 0.0f;
