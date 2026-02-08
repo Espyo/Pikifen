@@ -519,6 +519,36 @@ void Mob::applyStatusEffects(
         statuses[listIdx].preBetrayalTeam = team;
         if(fromMob) {
             team = fromMob->team;
+        } else {
+            //Try to swap to a different team that makes sense.
+            switch(team) {
+            case MOB_TEAM_PLAYER_1:
+            case MOB_TEAM_PLAYER_2:
+            case MOB_TEAM_PLAYER_3:
+            case MOB_TEAM_PLAYER_4: {
+                team = MOB_TEAM_ENEMY_1;
+                break;
+            } case MOB_TEAM_ENEMY_1:
+            case MOB_TEAM_ENEMY_2:
+            case MOB_TEAM_ENEMY_3:
+            case MOB_TEAM_ENEMY_4: {
+                team = MOB_TEAM_PLAYER_1;
+                break;
+            } default: {
+                break;
+            }
+            }
+        }
+        
+        if(team != statuses[listIdx].preBetrayalTeam) {
+            leaveGroup();
+            if(type->category->id == MOB_CATEGORY_PIKMIN) {
+                fsm.setState(
+                    holding.empty() ?
+                    PIKMIN_STATE_IDLING :
+                    PIKMIN_STATE_IDLING_H
+                );
+            }
         }
     }
 }
@@ -3040,6 +3070,21 @@ bool Mob::isStoredInsideMob() const {
 
 
 /**
+ * @brief Returns whether this mob can serve as a viable leader to the
+ * specified mob.
+ *
+ * @param whom The mob that wants to know if this is a viable leader.
+ * @return Whether it is viable.
+ */
+bool Mob::isViableLeader(Mob* whom) const {
+    if(toDelete) return false;
+    if(health <= 0.0f) return false;
+    if(team != whom->team) return false;
+    return true;
+}
+
+
+/**
  * @brief Removes a mob from its leader's group.
  */
 void Mob::leaveGroup() {
@@ -4492,6 +4537,7 @@ void Mob::tickScript(float deltaT) {
     for(const Player& player : game.states.gameplay->players) {
         if(!player.leaderPtr) continue;
         if(!player.whistle.whistling) continue;
+        if(!player.leaderPtr->isViableLeader(this)) continue;
         if(Distance(pos, player.whistle.center) > player.whistle.radius) {
             continue;
         }
@@ -4539,9 +4585,16 @@ void Mob::tickScript(float deltaT) {
     MobEvent* activeLeaderChangedEv =
         fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
     if(activeLeaderChangedEv) {
-        Leader* curLeader = game.states.gameplay->players[0].leaderPtr;
-        if(curLeader && followingGroup != curLeader) {
-            activeLeaderChangedEv->run(this, (void*) curLeader);
+        for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+            Leader* candidateLeader =
+                game.states.gameplay->players[p].leaderPtr;
+            if(!candidateLeader) continue;
+            if(candidateLeader->team != team) continue;
+            if(followingGroup == candidateLeader) {
+                //This mob is fine with its leader.
+                break;
+            }
+            activeLeaderChangedEv->run(this, (void*) candidateLeader);
         }
     }
     

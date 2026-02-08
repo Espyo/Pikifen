@@ -1013,6 +1013,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=11.0000
+				hazard=pikmin_attack
 				knockback_type=0
 			}
 			body{
@@ -1042,6 +1043,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=11.0000
+				hazard=pikmin_attack
 				knockback_type=0
 			}
 			body{
@@ -2496,6 +2498,7 @@ sprites{
 				radius=10.0000
 				type=1
 				value=8.0000
+				hazard=pikmin_attack
 				knockback_type=1
 			}
 		}

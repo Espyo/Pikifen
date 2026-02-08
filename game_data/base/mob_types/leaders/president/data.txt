@@ -79,9 +79,13 @@ sounds {
 }
 
 vulnerabilities {
-    poison = 0
-    water = 0
     explosion = 8
+    ice_pikmin = 8
+    mushroom_spores = 0
+    pikmin_attack = 8
+    poison = 0
+    rock = 8
+    water = 0
 }
 
 maker = Espyo

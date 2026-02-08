@@ -195,6 +195,7 @@ vulnerabilities {
     electricity_fatal = 0
     ice = 0
     ink = 0
+    mushroom_spores = 0
     water = 0
     water_bubble = 0
     poison = 0

@@ -420,6 +420,7 @@ public:
     bool isStoredInsideMob() const;
     bool isOffCamera(const Viewport& viewport) const;
     bool isPointOn(const Point& p) const;
+    bool isViableLeader(Mob* whom) const;
     void focusOnMob(Mob* m);
     void unfocusFromMob();
     void leaveGroup();

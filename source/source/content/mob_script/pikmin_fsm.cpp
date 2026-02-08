@@ -2476,8 +2476,8 @@ void PikminFsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
  * result in it being added to the group or not.
  *
  * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 If not nullptr, then the Pikmin must be silent.
  */
 void PikminFsm::checkLeaderBump(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
@@ -3594,8 +3594,8 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
         Leader* closestLeader = nullptr;
         for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
-            if(lPtr->team != pikPtr->team) continue;
             if(!lPtr->player) continue;
+            if(!lPtr->isViableLeader(pikPtr)) continue;
             Distance d(pikPtr->pos, lPtr->pos);
             if(!closestLeader || d < closestLeaderDist) {
                 closestLeaderDist = d;
@@ -3645,8 +3645,8 @@ void PikminFsm::landWhileHolding(Mob* m, void* info1, void* info2) {
         Leader* closestLeader = nullptr;
         for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
-            if(lPtr->team != pikPtr->team) continue;
             if(!lPtr->player) continue;
+            if(!lPtr->isViableLeader(pikPtr)) continue;
             Distance d(pikPtr->pos, lPtr->pos);
             if(!closestLeader || d < closestLeaderDist) {
                 closestLeaderDist = d;
@@ -4544,8 +4544,7 @@ void PikminFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
         m->fsm.setState(PIKMIN_STATE_IDLING, nullptr, nullptr);
         if(
             pikPtr->leaderToReturnTo &&
-            !pikPtr->leaderToReturnTo->toDelete &&
-            pikPtr->leaderToReturnTo->health > 0.0f
+            pikPtr->leaderToReturnTo->isViableLeader(pikPtr)
         ) {
             if(
                 !pikPtr->holding.empty() &&

@@ -1,0 +1,8 @@
+name = Pikmin attack
+description = The standard hit of a Pikmin's top.
+
+color = 255 255 255
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

@@ -1868,18 +1868,18 @@ void GameplayState::processMobMiscInteractions(
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
         for(Player& player : players) {
-            if(
-                m2Ptr == player.leaderPtr &&
-                //Small hack. This way,
-                //Pikmin don't get bumped by leaders that are,
-                //for instance, lying down.
-                m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
-                dBetween <= game.options.misc.pikminBumpDist
-            ) {
-                pendingInterMobEvents.push_back(
-                    PendingInterMobEvent(dBetween, touchLeEv, m2Ptr)
-                );
-            }
+            if(!player.leaderPtr) continue;
+            if(m2Ptr != player.leaderPtr) continue;
+            if(!m2Ptr->isViableLeader(mPtr)) continue;
+            //Small hack. This way,
+            //Pikmin don't get bumped by leaders that are,
+            //for instance, lying down.
+            if(m2Ptr->fsm.curState->id != LEADER_STATE_ACTIVE) continue;
+            if(dBetween > game.options.misc.pikminBumpDist) continue;
+            
+            pendingInterMobEvents.push_back(
+                PendingInterMobEvent(dBetween, touchLeEv, m2Ptr)
+            );
         }
     }
 }
