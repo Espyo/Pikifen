@@ -1,0 +1,9 @@
+name = Mushroom spores
+description = Spores spat out by a Puffstool. They can transform Pikmin into a mushroom form.
+
+color = 210 88 140
+effects = mushroom_pikmin
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

@@ -40,7 +40,7 @@ leaders {
     group_member_grab_range = 128
     next_pluck_range = 200
     onion_open_range = 24
-    order = olimar; louie; president; alph; brittany; charlie
+    order = olimar; louie; president; alph; brittany; charlie; rookie
     pluck_range = 32
     standard_height = 46
     standard_radius = 16
@@ -59,7 +59,7 @@ pikmin {
     idle_task_range = 50
     maturity_power_mult = 0.1
     maturity_speed_mult = 0.1
-    order = red_pikmin; yellow_pikmin; blue_pikmin; purple_pikmin; white_pikmin; rock_pikmin; winged_pikmin; bulbmin
+    order = red_pikmin; yellow_pikmin; blue_pikmin; purple_pikmin; white_pikmin; rock_pikmin; winged_pikmin; ice_pikmin; bulbmin; glow_pikmin
     standard_height = 24
     standard_radius = 5
     swarm_task_range = 3

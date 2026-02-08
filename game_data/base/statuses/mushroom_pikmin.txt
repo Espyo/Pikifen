@@ -1,0 +1,14 @@
+name = Mushroom Pikmin
+description = A Pikmin transformed into a mushroom-like form, caused by a Puffstool's spores.
+
+affects = pikmin
+auto_remove_time = 30
+causes_betrayal = true
+color = 210 88 140
+colorize = 140 50 144 192
+removable_with_whistle = false
+top_replacement = pikmin/mushroom_top
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

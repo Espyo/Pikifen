@@ -686,7 +686,8 @@ sprites{
 				radius=170.0000
 				type=1
 				value=0.0000
-				knockback_type=0
+				hazard=mushroom_spores
+				knockback_type=1
 			}
 		}
 	}
@@ -718,7 +719,8 @@ sprites{
 				radius=170.0000
 				type=1
 				value=0.0000
-				knockback_type=0
+				hazard=mushroom_spores
+				knockback_type=1
 			}
 		}
 	}
