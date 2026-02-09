@@ -16,7 +16,7 @@ team = none
 
 vulnerabilities {
     explosion = 100
-    rock = 100
+    rock_pikmin = 100
 }
 
 sounds {

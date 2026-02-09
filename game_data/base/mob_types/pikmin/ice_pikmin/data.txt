@@ -191,8 +191,11 @@ sounds {
 }
 
 vulnerabilities {
-    ice = 0
     fire = 200
+    ice = 0
+    ice_pikmin = 0
+    pikmin_attack = 200
+    rock_pikmin = 200
     water = 0 none false true
 }
 

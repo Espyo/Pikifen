@@ -84,7 +84,7 @@ vulnerabilities {
     mushroom_spores = 0
     pikmin_attack = 8
     poison = 0
-    rock = 8
+    rock_pikmin = 8
     water = 0
 }
 

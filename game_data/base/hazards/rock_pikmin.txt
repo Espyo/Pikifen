@@ -1,0 +1,8 @@
+name = Rock Pikmin
+description = The impact of a thrown Rock Pikmin colliding against something. Effective against crystals.
+
+color = 160 160 160
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0

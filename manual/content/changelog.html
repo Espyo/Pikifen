@@ -62,6 +62,7 @@
       <li><span class="cl-a">Added</span> the <code>chill</code>, <code>frozen_liquid</code>, and <code>frozen_liquid_cracked</code> <a href="system_content_names.html">system content name</a> image properties.</li>
       <li><span class="cl-a">Added</span> the <code>frozen_liquid</code>, <code>frozen_liquid_crack</code>, and <code>frozen_liquid_thaw</code> <a href="system_content_names.html">system content name</a> sound properties.</li>
       <li><span class="cl-a">Added</span> the <code>status_buildup_amount</code> <a href="spike_damage.html">spike damage</a> property.</li>
+      <li><span class="cl-a">Added</span> the <code>health_regen_delay</code> <a href="mob_type.html">mob type</a> property.</li>
       <li><span class="cl-a">Added</span> a sector-blocking-related word to <a href="mob_type.html">mob type</a> vulnerability data entries.</li>
       <li><span class="cl-a">Added</span> the ability for <a href="status.html">status types</a> to have a sound play when the status is applied or removed.</li>
       <li><span class="cl-a">Added</span> the <code>causes_betrayal</code>, <code>particle_generator_end</code>, <code>particle_generator_start</code>, <code>particle_scale_reaches</code>, <code>particle_scale_sizes</code>, <code>top_replacement</code>, and <code>shaking_effect_on_end</code> <a href="status.html">status types</a> properties. Some of these help replace usages of <code>replacement_on_timeout</code>.</li>
@@ -77,6 +78,7 @@
     <ul>
       <li><span class="cl-d">Deprecated</span> the <code>knockback_outward</code> hitbox property in <a href="animation.html">animation sprites</a>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>knockback_type</code>. "Outward" knockback will be directly ported. Other knockback hitboxes will be considered "directional". So if you have attack hitboxes with no knockback, you may want to change them to either the "none" or "flinch" types. While "directional" knockback hitboxes with 0 knockback strength will still work more or less like before, they make less sense than the other two options.</li>
       <li><span class="cl-d">Deprecated</span> the <code>can_pikmin_latch</code> hitbox property in <a href="animation.html">animation sprites</a>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>surface_type</code>. "Latchable" surfaces will be directly ported. Other surfaces will be considered "smooth", where they used to be considered "bouncy", but with a very small bounce factor, hence the decision to make "smooth" the new default. So if you have non-latchable hitboxes you may want to choose between "smooth" and "bouncy" (which is bouncier than before).</li>
+      <li><span class="cl-c">Changed</span> the internal name of the Rock Pikmin's hit hazard from <code>rock</code> to <code>rock_pikmin</code> for the sake of consistency.</li>
     </ul>
 
     <h2 id="1.1.1">1.1.1</h2>

@@ -2113,7 +2113,7 @@ sprites{
 				radius=10.0000
 				type=1
 				value=20.0000
-				hazard=rock
+				hazard=rock_pikmin
 				knockback_outward=true
 				knockback=1.0000
 			}

@@ -12719,7 +12719,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=rock
+		hazard=rock_pikmin
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -12727,7 +12727,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazard=rock
+		hazard=rock_pikmin
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500

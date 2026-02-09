@@ -191,7 +191,9 @@ sounds {
 }
 
 vulnerabilities {
+    pikmin_attack = 200
     poison = 0
+    rock_pikmin = 200
 }
 
 maker = Espyo

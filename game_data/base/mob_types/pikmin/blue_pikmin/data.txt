@@ -189,6 +189,8 @@ sounds {
 }
 
 vulnerabilities {
+    pikmin_attack = 200
+    rock_pikmin = 200
     water = 0
     water_bubble = 0
 }

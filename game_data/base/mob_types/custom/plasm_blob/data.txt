@@ -16,7 +16,7 @@ target_type = weak_plain_obstacle
 team = enemy_1
 
 vulnerabilities {
-    rock = 300
+    rock_pikmin = 300
 }
 
 maker = Helodity

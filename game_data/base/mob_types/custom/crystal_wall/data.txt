@@ -62,7 +62,7 @@ sounds {
 
 vulnerabilities {
     explosion = 1000
-    rock = 100
+    rock_pikmin = 100
 }
 
 maker = Espyo

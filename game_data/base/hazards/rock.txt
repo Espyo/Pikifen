@@ -1,8 +1,0 @@
-name = Rock
-description = The impact of a thrown rock colliding against something, like a Rock Pikmin. Effective against crystals.
-
-color = 160 160 160
-
-maker = Espyo
-version = 1.0.0
-engine_version = 1.0.0

@@ -191,6 +191,11 @@ sounds {
     }
 }
 
+vulnerabilities {
+    pikmin_attack = 200
+    rock_pikmin = 200
+}
+
 maker = Espyo
 version = 1.0.0
 engine_version = 1.0.0

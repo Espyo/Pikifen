@@ -33,7 +33,7 @@ sounds {
 
 default_vulnerability = 0
 vulnerabilities {
-    rock = 100
+    rock_pikmin = 100
 	explosion = 100
 }
 

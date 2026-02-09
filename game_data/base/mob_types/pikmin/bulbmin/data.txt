@@ -190,15 +190,18 @@ sounds {
 }
 
 vulnerabilities {
-    fire = 0
-    electricity_stunning = 0
     electricity_fatal = 0
+    electricity_stunning = 0
+    fire = 0
     ice = 0
+    ice_pikmin = 0
     ink = 0
     mushroom_spores = 0
+    pikmin_attack = 200
+    poison = 0
+    rock_pikmin = 200
     water = 0
     water_bubble = 0
-    poison = 0
 }
 
 maker = Espyo

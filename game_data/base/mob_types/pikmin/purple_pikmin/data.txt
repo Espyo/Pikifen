@@ -198,6 +198,8 @@ sounds {
 }
 
 vulnerabilities {
+    pikmin_attack = 200
+    rock_pikmin = 200
     wind = 0
 }
 
