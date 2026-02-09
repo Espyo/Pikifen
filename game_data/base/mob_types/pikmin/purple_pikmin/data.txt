@@ -5,6 +5,7 @@ can_carry_tools = true
 can_walk_on_others = true
 carry_strength = 10
 health_regen = 10
+health_regen_delay = 2
 height = 24
 icon = pikmin/purple_icon
 icon_bud = pikmin/pink_bud_icon

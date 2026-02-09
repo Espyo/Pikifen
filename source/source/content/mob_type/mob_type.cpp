@@ -264,6 +264,7 @@ void MobType::loadFromDataNode(
     tRS.set("description", description);
     tRS.set("has_group", hasGroup);
     tRS.set("health_regen", healthRegen);
+    tRS.set("health_regen_delay", healthRegenDelay);
     tRS.set("height", height);
     tRS.set("inactive_logic", inactiveLogicStr, &inactiveLogicNode);
     tRS.set("itch_damage", itchDamage);

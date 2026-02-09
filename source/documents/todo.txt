@@ -8,7 +8,7 @@ Current tasks (tasks being worked on, but not yet committed)
             If any Pikmin is latched on, throwing or punching is disabled (and probably whistling too), and it becomes a shaking action. This should come with a dedicated quick animation, and then cause the invulnerability sparks
         If they're latched to a leader and the leader whistles, they get stuck clinging onto nothing - this is because whistling removes the "holding" Pikmin. Maybe add an "in-hand" system that complements the "holding" system
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
-        Pikmin health regeneration should have a timer before it kicks in, otherwise infighting takes too long
+        Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
         HUD logic
         Scoring logic
@@ -16,9 +16,11 @@ Current tasks (tasks being worked on, but not yet committed)
         Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
+    Add a leader swap sound, so swapping to the rookie isn't silent
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
     Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake

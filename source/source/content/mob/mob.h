@@ -229,6 +229,9 @@ public:
     //Maximum health.
     float maxHealth = 0.0f;
     
+    //Health regeneration lockout period.
+    float healthRegenLockout = 0.0f;
+    
     //During this period, the mob cannot be attacked.
     Timer invulnPeriod;
     

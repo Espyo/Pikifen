@@ -8,6 +8,7 @@ can_lose_maturity = false
 can_walk_on_others = true
 carry_strength = 1
 health_regen = 10
+health_regen_delay = 2
 height = 24
 icon = pikmin/glow_icon
 icon_bud = pikmin/pointy_yellow_bud_icon

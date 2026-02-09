@@ -364,6 +364,9 @@ public:
     //Regenerates these many health points per second.
     float healthRegen = 0.0f;
     
+    //Health regeneration only kicks in these many seconds of no hit.
+    float healthRegenDelay = 0.0f;
+    
     //How far its territory reaches from the home point.
     float territoryRadius = 0.0f;
     

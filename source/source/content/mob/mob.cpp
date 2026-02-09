@@ -293,6 +293,7 @@ void Mob::applyAttackDamage(
     
     //Final setup.
     itchDamage += damage;
+    healthRegenLockout = type->healthRegenDelay;
 }
 
 
@@ -1266,6 +1267,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     }
     
     victim->setHealth(true, false, -damage);
+    victim->healthRegenLockout = victim->type->healthRegenDelay;
     
     if(type->spikeDamage->particleGen) {
         ParticleGenerator pg = *(type->spikeDamage->particleGen);
@@ -4219,6 +4221,10 @@ void Mob::tickMiscLogic(float deltaT) {
             );
         }
         
+        if(healthBefore > health) {
+            healthRegenLockout = type->healthRegenDelay;
+        }
+        
         if(health <= 0.0f && healthBefore > 0.0f) {
             if(
                 type->category->id == MOB_CATEGORY_PIKMIN &&
@@ -4529,8 +4535,11 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Health regeneration.
-    if(health > 0) {
-        setHealth(true, false, type->healthRegen * deltaT);
+    if(type->healthRegen != 0.0f && health > 0.0f) {
+        healthRegenLockout -= deltaT;
+        if(healthRegenLockout <= 0.0f) {
+            setHealth(true, false, type->healthRegen * deltaT);
+        }
     }
     
     //Check if it got whistled.
