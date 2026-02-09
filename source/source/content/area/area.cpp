@@ -1465,6 +1465,27 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         mission.hudItems.push_back(newItem);
     }
     
+    //Score criteria.
+    DataNode* scoreCriteriaNode =
+        node->getChildByName("mission_score_criteria");
+    size_t nScoreCriteria = scoreCriteriaNode->getNrOfChildren();
+    for(size_t c = 0; c < nScoreCriteria; c++) {
+        DataNode* criterionNode = scoreCriteriaNode->getChild(c);
+        MissionScoreCriterion newCriterion;
+        
+        ReaderSetter cRS(criterionNode);
+        int typeInt = 0;
+        
+        cRS.set("type", typeInt);
+        cRS.set("param_1", newCriterion.param1);
+        cRS.set("points", newCriterion.points);
+        cRS.set("affects_hud", newCriterion.affectsHud);
+        
+        newCriterion.type = (MISSION_SCORE_CRITERION) typeInt;
+        
+        mission.scoreCriteria.push_back(newCriterion);
+    }
+    
     //Goal.
     missionOld.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
@@ -2047,6 +2068,20 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         iGW.write("amount_type", itemPtr->amountType);
         iGW.write("total_amount", itemPtr->totalAmount);
         iGW.write("idxs_list", idxsList);
+    }
+    
+    //Score criteria.
+    DataNode* scoreCriteriaNode = node->addNew("mission_score_criteria");
+    for(size_t c = 0; c < mission.scoreCriteria.size(); c++) {
+        DataNode* criterionNode = scoreCriteriaNode->addNew("criterion");
+        MissionScoreCriterion* criterionPtr = &mission.scoreCriteria[c];
+        
+        GetterWriter cGW(criterionNode);
+        
+        cGW.write("type", criterionPtr->type);
+        cGW.write("param_1", criterionPtr->param1);
+        cGW.write("points", criterionPtr->points);
+        cGW.write("affects_hud", criterionPtr->affectsHud);
     }
     
     //Goal.

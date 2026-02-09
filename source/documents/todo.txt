@@ -11,6 +11,7 @@ Current tasks (tasks being worked on, but not yet committed)
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
         HUD logic
+            Having multiple HUD items is making the custom HUD items of one of them glitch out
         Scoring logic
         Logic to port old missions to the new format
         Deleting mobs is ruining the list of mobs in a checklist
@@ -986,6 +987,7 @@ Tasks for later on (I might never implement these)
         Hide some of the HUD items? Stuff like a leader's health might not be necessary if it's full
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
             One mission might make getting 1000 points very easy while another might make getting 50 points very hard, so this might not work...
+        If a mission mob checklist enemy is killed, but is later revived, it won't be re-added to the checklist. Maybe it should, maybe it shouldn't
     Possible solutions to known issues
         Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

@@ -99,6 +99,10 @@ void destroyMisc() {
         delete game.missionActionTypes[a];
     }
     game.missionActionTypes.clear();
+    for(size_t c = 0; c < game.missionScoreCriterionTypes.size(); c++) {
+        delete game.missionScoreCriterionTypes[c];
+    }
+    game.missionScoreCriterionTypes.clear();
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
         delete game.missionGoals[g];
     }
@@ -1140,6 +1144,19 @@ void initMiscDatabases() {
         new MissionActionTypeEndClear(),
         new MissionActionTypeEndFail(),
         new MissionActionTypeScriptMessage(),
+    };
+    
+    //Mission score criteria.
+    //Order matters, and should match MISSION_SCORE_CRITERION.
+    game.missionScoreCriterionTypes = {
+        new MissionScoreCriterionTypeMobChecklist(),
+        new MissionScoreCriterionTypePikmin(),
+        new MissionScoreCriterionTypePikminBorn(),
+        new MissionScoreCriterionTypePikminDeaths(),
+        new MissionScoreCriterionTypeSecLeft(),
+        new MissionScoreCriterionTypeSecPassed(),
+        new MissionScoreCriterionTypeCollectionPts(),
+        new MissionScoreCriterionTypeDefeatPts(),
     };
     
     //Mission goals.

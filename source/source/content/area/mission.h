@@ -1138,6 +1138,175 @@ public:
 
 
 #pragma endregion
+#pragma region Score criteria
+
+
+/**
+ * @brief Class interface for a mission score criterion type.
+ */
+class MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    virtual ~MissionScoreCriterionType() = default;
+    virtual string getName() const = 0;
+    virtual size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const = 0;
+    
+};
+
+
+/**
+ * @brief Class representing the "mob checklist mob" mission score criterion.
+ */
+class MissionScoreCriterionTypeMobChecklist : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "Pikmin count" mission score criterion.
+ */
+class MissionScoreCriterionTypePikmin : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "Pikmin born" mission score criterion.
+ */
+class MissionScoreCriterionTypePikminBorn : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "Pikmin deaths" mission score criterion.
+ */
+class MissionScoreCriterionTypePikminDeaths : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "seconds left" mission score criterion.
+ */
+class MissionScoreCriterionTypeSecLeft : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "seconds passed" mission score criterion.
+ */
+class MissionScoreCriterionTypeSecPassed : public MissionScoreCriterionType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "collection points" mission score criterion.
+ */
+class MissionScoreCriterionTypeCollectionPts :
+    public MissionScoreCriterionType {
+    
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "defeat points" mission score criterion.
+ */
+class MissionScoreCriterionTypeDefeatPts :
+    public MissionScoreCriterionType {
+    
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    size_t calculateAmount(
+        MissionScoreCriterion* cri,
+        MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+#pragma endregion
 #pragma region Fail conditions
 
 

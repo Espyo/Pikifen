@@ -3445,6 +3445,221 @@ bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
 
 
 /**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypeCollectionPts::getName() const {
+    return "Collection points";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->treasurePointsObtained;
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypeDefeatPts::getName() const {
+    return "Defeat points";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->enemyPointsObtained;
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypeMobChecklist::getName() const {
+    return "Mob checklist mob";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeMobChecklist::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    MissionMobChecklistStatus* cPtr =
+        &gameplay->missionMobChecklists[cri->param1 - 1];
+    return cPtr->startingAmount - cPtr->remaining.size();
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikmin::getName() const {
+    return "Pikmin total";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypePikmin::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->getAmountOfTotalPikmin();
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminBorn::getName() const {
+    return "Pikmin born";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->pikminBorn;
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminDeaths::getName() const {
+    return "Pikmin deaths";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->pikminDeaths;
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecLeft::getName() const {
+    return "Seconds left";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return
+        mission->timeLimit - floor(gameplay->gameplayTimePassed);
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ * 
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecPassed::getName() const {
+    return "Seconds passed";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ * 
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeSecPassed::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return floor(gameplay->gameplayTimePassed);
+}
+
+
+#pragma endregion
+#pragma region Score criteria (old)
+
+
+/**
  * @brief Returns the mission score criterion's point multiplier.
  *
  * @param mission Mission data to get info from.

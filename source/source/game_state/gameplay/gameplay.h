@@ -528,6 +528,7 @@ private:
     
     //--- Private function declarations ---
     
+    int calculateMissionScore(bool forHud);
     void doAestheticLeaderLogic(Player* player, float deltaT);
     void doAestheticLogic(float deltaT);
     void doGameDrawing(

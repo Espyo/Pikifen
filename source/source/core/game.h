@@ -201,6 +201,9 @@ public:
     //Database of all mission action types.
     vector<MissionActionType*> missionActionTypes;
     
+    //Database of all mission score criteria types.
+    vector<MissionScoreCriterionType*> missionScoreCriterionTypes;
+    
     //Database of all mission fail conditions.
     vector<MissionFail*> missionFailConds;
     
