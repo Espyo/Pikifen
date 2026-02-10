@@ -864,19 +864,23 @@ bool GuiManager::draw() {
             if(!getItemDrawInfo(iPtr->parent, &parentDraw)) {
                 continue;
             }
-            al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
-            al_set_clipping_rectangle(
-                (parentDraw.center.x - parentDraw.size.x / 2.0f) + 1,
-                (parentDraw.center.y - parentDraw.size.y / 2.0f) + 1,
-                parentDraw.size.x - 2,
-                parentDraw.size.y - 2
-            );
+            if(iPtr->parent->clipChildren) {
+                al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
+                al_set_clipping_rectangle(
+                    (parentDraw.center.x - parentDraw.size.x / 2.0f) + 1,
+                    (parentDraw.center.y - parentDraw.size.y / 2.0f) + 1,
+                    parentDraw.size.x - 2,
+                    parentDraw.size.y - 2
+                );
+            }
         }
         
         iPtr->onDraw(draw);
         
         if(iPtr->parent) {
-            al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
+            if(iPtr->parent->clipChildren) {
+                al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
+            }
         }
     }
     

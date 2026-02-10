@@ -336,11 +336,14 @@ public:
     //List of children items, that are placed inside this one.
     vector<GuiItem*> children;
     
-    //Offset (width/height percentage) of the items inside of it, if any.
+    //Offset (width/height percentage) of the children items, if any.
     Point offset;
     
-    //Padding amount, if it has items inside of it.
+    //Padding amount, if it has children items.
     float padding = 0.0f;
+    
+    //Whether to clip the children items' drawing to the confines of the item
+    bool clipChildren = true;
     
     //Drawing layer. The lower the number, the sooner it'll be drawn.
     unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;

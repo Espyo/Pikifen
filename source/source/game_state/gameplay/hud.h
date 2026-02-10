@@ -23,6 +23,7 @@ extern const string GUI_FILE_NAME;
 extern const float HEALTH_SHAKE_MAX_OFFSET;
 extern const float LEADER_SWAP_JUICE_DURATION;
 extern const float MEDAL_GOT_IT_JUICE_DURATION;
+extern const float MEDAL_GOT_IT_SCALE;
 extern const float MEDAL_ICON_SCALE_CUR;
 extern const float MEDAL_ICON_SCALE_MULT;
 extern const float MEDAL_ICON_SCALE_NEXT;
@@ -197,7 +198,6 @@ private:
 
     //--- Private function declarations ---
     
-    void createMissionFailCondItems(bool primary);
     void drawStandbyIcon(BUBBLE_RELATION which);
     void setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item);
     

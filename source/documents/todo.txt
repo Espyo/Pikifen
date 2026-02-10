@@ -10,6 +10,10 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
+        Clock HUD item
+        Bring back the HUD progress bars in some fashion
+        HUD rule explanation for the area selection menu
+        HUD rule explanation for the results menu
         Logic to port old missions to the new format
         Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
@@ -22,7 +26,7 @@ Next tasks (roughly sorted most important first)
     Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
-    Standardize Pikmin climbing sprites
+    Add Ice Pikmin and Glow Pikmin climbing sprites, and make them all better across the board
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
     Move <direction> player actions have auto-repeat on for some reason
 
