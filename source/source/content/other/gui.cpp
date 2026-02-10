@@ -673,11 +673,14 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
 /**
  * @brief Creates any registered custom items.
  *
+ * @param startingIdx Create the items starting at this index.
  * @param customChildrenParent Custom items become children of this parent,
  * if not nullptr.
  */
-void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
-    for(size_t i = 0; i < customItemDefs.size(); i++) {
+void GuiManager::createCustomItems(
+    size_t startingIdx, GuiItem* customChildrenParent
+) {
+    for(size_t i = startingIdx; i < customItemDefs.size(); i++) {
         CustomGuiItemDef* infoPtr = &customItemDefs[i];
         infoPtr->center /= 100.0f;
         infoPtr->size /= 100.0f;
@@ -690,7 +693,8 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
             GUI::DRAWING_LAYER_CUSTOM_AFTER;
         guiItem->onDraw =
-        [infoPtr] (const DrawInfo & draw) {
+        [this, i] (const DrawInfo & draw) {
+            const CustomGuiItemDef& infoRef = customItemDefs[i];
             const auto getDimensions =
             [] (const DrawInfo & draw, bool square) {
                 return
@@ -699,19 +703,19 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
                     draw.size;
             };
             
-            switch(infoPtr->type) {
+            switch(infoRef.type) {
             case CUSTOM_GUI_ITEM_TYPE_BITMAP: {
-                if(infoPtr->bitmap) {
+                if(infoRef.bitmap) {
                     drawBitmap(
-                        infoPtr->bitmap, draw.center, draw.size, 0.0f,
-                        tintColor(infoPtr->color, draw.tint)
+                        infoRef.bitmap, draw.center, draw.size, 0.0f,
+                        tintColor(infoRef.color, draw.tint)
                     );
                 }
                 break;
                 
             } case CUSTOM_GUI_ITEM_TYPE_TEXT: {
                 int textX = draw.center.x;
-                switch(infoPtr->textAlignment) {
+                switch(infoRef.textAlignment) {
                 case ALLEGRO_ALIGN_LEFT: {
                     textX = draw.center.x - draw.size.x / 2.0f;
                     break;
@@ -721,17 +725,17 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
                 }
                 }
                 drawText(
-                    infoPtr->text, infoPtr->font,
+                    infoRef.text, infoRef.font,
                     Point(textX, draw.center.y), draw.size,
-                    tintColor(infoPtr->color, draw.tint)
+                    tintColor(infoRef.color, draw.tint)
                 );
                 break;
                 
             } case CUSTOM_GUI_ITEM_TYPE_9_SLICE: {
-                if(infoPtr->bitmap) {
+                if(infoRef.bitmap) {
                     drawTexturedBox(
-                        draw.center, draw.size, infoPtr->bitmap,
-                        tintColor(infoPtr->color, draw.tint)
+                        draw.center, draw.size, infoRef.bitmap,
+                        tintColor(infoRef.color, draw.tint)
                     );
                 }
                 break;
@@ -740,13 +744,13 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
             case CUSTOM_GUI_ITEM_TYPE_SQUARE: {
                 Point finalSize =
                     getDimensions(
-                        draw, infoPtr->type ==
+                        draw, infoRef.type ==
                         CUSTOM_GUI_ITEM_TYPE_SQUARE
                     );
                 drawRoundedRatioRectangle(
-                    draw.center, finalSize, infoPtr->rectangleRounding,
-                    tintColor(infoPtr->color, draw.tint),
-                    infoPtr->thickness
+                    draw.center, finalSize, infoRef.rectangleRounding,
+                    tintColor(infoRef.color, draw.tint),
+                    infoRef.thickness
                 );
                 break;
                 
@@ -754,12 +758,12 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
             case CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE: {
                 Point finalSize =
                     getDimensions(
-                        draw, infoPtr->type ==
+                        draw, infoRef.type ==
                         CUSTOM_GUI_ITEM_TYPE_FILLED_SQUARE
                     );
                 drawFilledRoundedRatioRectangle(
-                    draw.center, finalSize, infoPtr->rectangleRounding,
-                    tintColor(infoPtr->color, draw.tint)
+                    draw.center, finalSize, infoRef.rectangleRounding,
+                    tintColor(infoRef.color, draw.tint)
                 );
                 break;
                 
@@ -767,13 +771,13 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
             case CUSTOM_GUI_ITEM_TYPE_CIRCLE: {
                 Point finalSize =
                     getDimensions(
-                        draw, infoPtr->type ==
+                        draw, infoRef.type ==
                         CUSTOM_GUI_ITEM_TYPE_CIRCLE
                     );
                 al_draw_ellipse(
                     draw.center.x, draw.center.y, finalSize.x, finalSize.y,
-                    tintColor(infoPtr->color, draw.tint),
-                    infoPtr->thickness
+                    tintColor(infoRef.color, draw.tint),
+                    infoRef.thickness
                 );
                 break;
                 
@@ -781,12 +785,12 @@ void GuiManager::createCustomItems(GuiItem* customChildrenParent) {
             case CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE: {
                 Point finalSize =
                     getDimensions(
-                        draw, infoPtr->type ==
+                        draw, infoRef.type ==
                         CUSTOM_GUI_ITEM_TYPE_FILLED_CIRCLE
                     );
                 al_draw_filled_ellipse(
                     draw.center.x, draw.center.y, finalSize.x, finalSize.y,
-                    tintColor(infoPtr->color, draw.tint)
+                    tintColor(infoRef.color, draw.tint)
                 );
                 break;
                 
@@ -1423,8 +1427,9 @@ bool GuiManager::hideItems() {
  */
 bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
     vector<HardcodedGuiItemDef> hardcodedItemDefs;
+    vector<CustomGuiItemDef> newCustomItemDefs;
     bool success =
-        getItemDefsFromDataFile(node, &hardcodedItemDefs, &customItemDefs);
+        getItemDefsFromDataFile(node, &hardcodedItemDefs, &newCustomItemDefs);
         
     if(!success) return false;
     
@@ -1438,7 +1443,12 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
         );
     }
     
-    createCustomItems(customChildrenParent);
+    size_t newCustomItemDefsIdx = customItemDefs.size();
+    customItemDefs.insert(
+        customItemDefs.end(),
+        newCustomItemDefs.begin(), newCustomItemDefs.end()
+    );
+    createCustomItems(newCustomItemDefsIdx, customChildrenParent);
     
     return true;
 }

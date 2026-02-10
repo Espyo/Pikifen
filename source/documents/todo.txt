@@ -10,9 +10,6 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
-        HUD logic
-            Having multiple HUD items is making the custom HUD items of one of them glitch out
-        Scoring logic
         Logic to port old missions to the new format
         Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports

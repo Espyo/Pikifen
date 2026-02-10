@@ -854,7 +854,9 @@ protected:
     
     //--- Protected function declarations ---
     
-    void createCustomItems(GuiItem* customChildrenParent = nullptr);
+    void createCustomItems(
+        size_t startingIdx, GuiItem* customChildrenParent = nullptr
+    );
     void handleSpatialNavigationAction(const Inpution::Action& action);
     
 };
