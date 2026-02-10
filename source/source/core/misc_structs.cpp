@@ -2258,6 +2258,8 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("checkbox_check", bmpCheckboxCheck);
     graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
     graRS.set("chill", bmpChill);
+    graRS.set("clock", bmpClock);
+    graRS.set("clock_hand", bmpClockHand);
     graRS.set("difficulty", bmpDifficulty);
     graRS.set("discord_icon", bmpDiscordIcon);
     graRS.set("editor_icons", bmpEditorIcons);

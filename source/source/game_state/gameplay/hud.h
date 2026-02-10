@@ -30,6 +30,7 @@ extern const float MEDAL_ICON_SCALE_NEXT;
 extern const float MEDAL_ICON_SCALE_TIME_MULT;
 extern const string MISSION_AMT_ONE_GUI_FILE_NAME;
 extern const string MISSION_AMT_TWO_GUI_FILE_NAME;
+extern const string MISSION_CLOCK_GUI_FILE_NAME;
 extern const string MISSION_SCORE_GUI_FILE_NAME;
 extern const string MISSION_TEXT_GUI_FILE_NAME;
 extern const float SCORE_INDICATOR_SMOOTHNESS_FACTOR;

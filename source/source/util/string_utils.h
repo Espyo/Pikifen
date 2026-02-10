@@ -78,12 +78,12 @@ string strToTitle(string s);
 string strToUpper(string s);
 string timeToStr2(
     size_t units,
-    const string& suffix1, const string& suffix2,
+    const string& suffix1 = ":", const string& suffix2 = "",
     uint8_t flags = 0
 );
 string timeToStr3(
-    size_t units,
-    const string& suffix1, const string& suffix2, const string& suffix3,
+    size_t units, const string& suffix1 = "",
+    const string& suffix2 = "", const string& suffix3 = "",
     uint8_t flags = 0
 );
 string trimSpaces(const string& s, bool leftOnly = false);

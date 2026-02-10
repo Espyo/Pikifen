@@ -241,8 +241,11 @@ enum MISSION_HUD_ITEM_CONTENT {
     //Custom text.
     MISSION_HUD_ITEM_CONTENT_TEXT,
     
-    //The time limit in a clock.
-    MISSION_HUD_ITEM_CONTENT_CLOCK,
+    //The time limit in a clock, ticking down to 0.
+    MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN,
+    
+    //The time spent in a clock, ticking up.
+    MISSION_HUD_ITEM_CONTENT_CLOCK_UP,
     
     //Current score.
     MISSION_HUD_ITEM_CONTENT_SCORE,
@@ -268,7 +271,8 @@ enum MISSION_HUD_ITEM_CONTENT {
 //Mission HUD item content type enum naming.
 buildEnumNames(missionHudItemContentTypeNames, MISSION_HUD_ITEM_CONTENT)({
     { MISSION_HUD_ITEM_CONTENT_TEXT, "Custom text" },
-    { MISSION_HUD_ITEM_CONTENT_CLOCK, "Clock" },
+    { MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN, "Clock ticking down" },
+    { MISSION_HUD_ITEM_CONTENT_CLOCK_UP, "Clock ticking up" },
     { MISSION_HUD_ITEM_CONTENT_SCORE, "Score" },
     { MISSION_HUD_ITEM_CONTENT_CUR_TOT, "Current amount / total" },
     { MISSION_HUD_ITEM_CONTENT_REM_TOT, "Remaining amount / total" },

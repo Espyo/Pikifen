@@ -62,6 +62,9 @@ const string MISSION_AMT_ONE_GUI_FILE_NAME = "gameplay_mission_amount_one";
 //Name of the GUI definition file for the mission amount (two amounts) items.
 const string MISSION_AMT_TWO_GUI_FILE_NAME = "gameplay_mission_amount_two";
 
+//Name of the GUI definition file for the mission clock items.
+const string MISSION_CLOCK_GUI_FILE_NAME = "gameplay_mission_clock";
+
 //Name of the GUI definition file for the mission score items.
 const string MISSION_SCORE_GUI_FILE_NAME = "gameplay_mission_score";
 
@@ -907,10 +910,79 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         break;
         
-    } case MISSION_HUD_ITEM_CONTENT_CLOCK: {
+    } case MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN:
+    case MISSION_HUD_ITEM_CONTENT_CLOCK_UP: {
         //Clock.
         
-        //TODO
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_CLOCK_GUI_FILE_NAME];
+        gui.registerCoords("mission_clock_analog",  22, 50, 36, 92);
+        gui.registerCoords("mission_clock_digital", 70, 50, 52, 92);
+        gui.readDataFile(guiFile, item);
+        
+        //Analog clock.
+        GuiItem* analog = new GuiItem();
+        analog->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            drawBitmap(
+                game.sysContent.bmpClock,
+                draw.center, draw.size, 0.0f, draw.tint
+            );
+            float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
+            if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
+                if(
+                    game.curAreaData->mission.timeLimit > 0.0f &&
+                    game.states.gameplay->gameplayTimePassed <=
+                    game.curAreaData->mission.timeLimit
+                ) {
+                    float timeSpentRatio =
+                        game.states.gameplay->gameplayTimePassed /
+                        game.curAreaData->mission.timeLimit;
+                    clockHandAngle += timeSpentRatio * TAU;
+                }
+            } else {
+                float minuteSpentRatio =
+                    fmod(
+                        game.states.gameplay->gameplayTimePassed, 60.0f
+                    ) / 60.0f;
+                clockHandAngle += minuteSpentRatio * TAU;
+            }
+            drawBitmap(
+                game.sysContent.bmpClockHand,
+                draw.center, draw.size, clockHandAngle, draw.tint
+            );
+        };
+        analog->forceSquare = true;
+        item->addChild(analog);
+        gui.addItem(analog, "mission_clock_analog");
+        
+        
+        //Digital clock.
+        GuiItem* digital = new GuiItem();
+        digital->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            size_t seconds = 0;
+            if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
+                if(
+                    game.curAreaData->mission.timeLimit > 0.0f &&
+                    game.states.gameplay->gameplayTimePassed <=
+                    game.curAreaData->mission.timeLimit
+                ) {
+                    seconds =
+                        game.curAreaData->mission.timeLimit -
+                        game.states.gameplay->gameplayTimePassed;
+                }
+            } else {
+                seconds = game.states.gameplay->gameplayTimePassed;
+            }
+            drawText(
+                timeToStr2(seconds), game.sysContent.fntCounter,
+                draw.center, draw.size, draw.tint
+            );
+        };
+        item->addChild(digital);
+        gui.addItem(digital, "mission_clock_digital");
+        
         break;
         
     } case MISSION_HUD_ITEM_CONTENT_SCORE: {

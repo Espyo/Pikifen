@@ -4568,7 +4568,11 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 
                 break;
                 
-            } case MISSION_HUD_ITEM_CONTENT_CLOCK: {
+            } case MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN: {
+        
+                break;
+                
+            } case MISSION_HUD_ITEM_CONTENT_CLOCK_UP: {
         
                 break;
                 

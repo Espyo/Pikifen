@@ -10,7 +10,6 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
-        Clock HUD item
         Bring back the HUD progress bars in some fashion
         HUD rule explanation for the area selection menu
         HUD rule explanation for the results menu

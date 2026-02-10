@@ -692,6 +692,12 @@ struct SystemContentList {
     //Chill icon.
     ALLEGRO_BITMAP* bmpChill = nullptr;
     
+    //Mission HUD clock.
+    ALLEGRO_BITMAP* bmpClock = nullptr;
+    
+    //Mission HUD clock hand.
+    ALLEGRO_BITMAP* bmpClockHand = nullptr;
+    
     //Mission difficulty.
     ALLEGRO_BITMAP* bmpDifficulty = nullptr;
     
@@ -988,6 +994,12 @@ struct SystemContentNames {
     
     //Chill icon.
     string bmpChill = "gui/chill";
+    
+    //Mission HUD clock.
+    string bmpClock = "gui/clock";
+    
+    //Mission HUD clock hand.
+    string bmpClockHand = "gui/clock_hand";
     
     //Mission difficulty.
     string bmpDifficulty = "gui/difficulty";
