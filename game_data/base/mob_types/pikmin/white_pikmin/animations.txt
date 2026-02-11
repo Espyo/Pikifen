@@ -1,7 +1,7 @@
 name=White Pikmin animations
 description=Animations for the White Pikmin.
 maker=Espyo
-version=1.0.0
+version=1.1.0
 engine_version=1.2.0
 animations{
 	arms_out{
@@ -189,16 +189,20 @@ animations{
 		frames{
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_02{
 				duration=0.1000
+				interpolate=true
 				sound=carrying
 			}
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_03{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -1166,12 +1170,12 @@ sprites{
 		offset=8.5000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=23.0000 -14.0000
+		top_pos=22.0000 -14.0000
 		top_size=5.5000 10.0000
 		top_angle=1.3265
 		hitboxes{
 			top{
-				coords=23.0000 -14.0000 0.0000
+				coords=22.0000 -14.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
@@ -1191,7 +1195,7 @@ sprites{
 		file=pikmin/white
 		file_pos=78.0000 106.0000
 		file_size=60.0000 30.0000
-		offset=8.5000 -5.0000
+		offset=9.0000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=20.0000 -13.0000
@@ -1219,15 +1223,15 @@ sprites{
 		file=pikmin/white
 		file_pos=139.0000 106.0000
 		file_size=60.0000 30.0000
-		offset=8.5000 -5.0000
+		offset=8.0000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=24.0000 -12.0000
+		top_pos=23.0000 -14.0000
 		top_size=5.5000 10.0000
 		top_angle=1.7279
 		hitboxes{
 			top{
-				coords=24.0000 -12.0000 0.0000
+				coords=23.0000 -14.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2

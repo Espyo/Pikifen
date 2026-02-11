@@ -1,7 +1,7 @@
 name=Ice Pikmin animations
 description=Animations for the Ice Pikmin.
 maker=Espyo
-version=1.0.0
+version=1.1.0
 engine_version=1.2.0
 animations{
 	arms_out{
@@ -189,16 +189,20 @@ animations{
 		frames{
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_02{
 				duration=0.1000
+				interpolate=true
 				sound=carrying
 			}
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_03{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -1226,30 +1230,31 @@ sprites{
 	}
 	climbing_01{
 		file=pikmin/ice
-		file_pos=55.0000 47.0000
-		file_size=34.0000 26.0000
+		file_pos=124.0000 160.0000
+		file_size=58.0000 26.0000
+		offset=8.5000 -5.0000
 		scale=0.5000 0.5000
-		top_visible=false
-		top_pos=7.9500 0.0000
+		top_visible=true
+		top_pos=22.0000 -12.0000
 		top_size=5.5000 10.0000
-		top_angle=3.1416
+		top_angle=1.3265
 		hitboxes{
 			ice{
-				coords=0.0000 0.0000 0.0000
+				coords=22.0000 -12.0000 0.0000
 				height=24.0000
-				radius=1.0000
+				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			top{
-				coords=7.0000 0.0000 0.0000
+				coords=23.0000 -14.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=4.0000 -5.0000 0.0000
 				height=24.0000
 				radius=7.0000
 				type=0
@@ -1260,31 +1265,66 @@ sprites{
 	}
 	climbing_02{
 		file=pikmin/ice
-		file_pos=55.0000 47.0000
-		file_size=34.0000 26.0000
-		offset=2.0000 0.0000
+		file_pos=183.0000 160.0000
+		file_size=56.0000 26.0000
+		offset=9.0000 -5.0000
 		scale=0.5000 0.5000
-		top_visible=false
-		top_pos=7.9500 0.0000
+		top_visible=true
+		top_pos=20.0000 -11.0000
 		top_size=5.5000 10.0000
-		top_angle=3.1416
+		top_angle=0.9599
 		hitboxes{
 			ice{
-				coords=0.0000 0.0000 0.0000
+				coords=20.0000 -11.0000 0.0000
 				height=24.0000
-				radius=1.0000
+				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			top{
-				coords=9.0000 0.0000 0.0000
+				coords=21.0000 -13.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=2.0000 0.0000 0.0000
+				coords=4.0000 -5.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	climbing_03{
+		file=pikmin/ice
+		file_pos=242.0000 160.0000
+		file_size=58.0000 26.0000
+		offset=8.0000 -5.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=23.0000 -10.0000
+		top_size=5.5000 10.0000
+		top_angle=1.7279
+		hitboxes{
+			ice{
+				coords=23.0000 -10.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			top{
+				coords=23.0000 -12.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=4.0000 -5.0000 0.0000
 				height=24.0000
 				radius=7.0000
 				type=0

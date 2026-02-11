@@ -25,7 +25,6 @@ Next tasks (roughly sorted most important first)
     Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
-    Add Ice Pikmin and Glow Pikmin climbing sprites, and make them all better across the board
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
     Move <direction> player actions have auto-repeat on for some reason
 

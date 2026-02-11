@@ -1,7 +1,7 @@
 name=Purple Pikmin animations
 description=Animations for the Purple Pikmin.
 maker=Espyo
-version=1.0.0
+version=1.1.0
 engine_version=1.2.0
 animations{
 	arms_out{
@@ -189,16 +189,20 @@ animations{
 		frames{
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_02{
 				duration=0.1000
+				interpolate=true
 				sound=carrying
 			}
 			climbing_01{
 				duration=0.1000
+				interpolate=true
 			}
 			climbing_03{
 				duration=0.1000
+				interpolate=true
 			}
 		}
 	}
@@ -1167,7 +1171,7 @@ sprites{
 	climbing_01{
 		file=pikmin/purple
 		file_pos=25.0000 148.0000
-		file_size=63.0000 30.0000
+		file_size=63.0000 28.0000
 		offset=8.5000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
@@ -1195,8 +1199,8 @@ sprites{
 	climbing_02{
 		file=pikmin/purple
 		file_pos=89.0000 148.0000
-		file_size=63.0000 30.0000
-		offset=8.5000 -5.0000
+		file_size=63.0000 28.0000
+		offset=9.0000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=20.0000 -13.0000
@@ -1223,8 +1227,8 @@ sprites{
 	climbing_03{
 		file=pikmin/purple
 		file_pos=153.0000 148.0000
-		file_size=63.0000 30.0000
-		offset=8.5000 -5.0000
+		file_size=63.0000 28.0000
+		offset=8.0000 -5.0000
 		scale=0.5000 0.5000
 		top_visible=true
 		top_pos=24.0000 -12.0000
