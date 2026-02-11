@@ -219,6 +219,21 @@ enum HOLD_ROTATION_METHOD {
 };
 
 
+//Possible results for a horizontal movement operation.
+enum HORIZ_MOVE_RESULT {
+
+    //Move happened successfully.
+    HORIZ_MOVE_RESULT_OK,
+    
+    //The mob teleported.
+    HORIZ_MOVE_RESULT_TELEPORTED,
+    
+    //Move failed.
+    HORIZ_MOVE_RESULT_FAIL,
+    
+};
+
+
 //Hold rotation method enum naming (internal names, for child-parent use only).
 buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
     { HOLD_ROTATION_METHOD_NEVER, "never" },

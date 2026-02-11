@@ -211,27 +211,27 @@ buildEnumNames(missionScoreCriterionTypeNames, MISSION_SCORE_CRITERION)({
 //Mission HUD item IDs and their typical purposes.
 enum MISSION_HUD_ITEM_ID {
 
-    //Primary item for something related to the goal.
-    MISSION_HUD_ITEM_ID_GOAL_MAIN,
+    //Item used mostly for something related to the goal.
+    MISSION_HUD_ITEM_ID_GOAL,
     
-    //Secondary item for something related to the goal.
-    MISSION_HUD_ITEM_ID_GOAL_SEC,
+    //Item used mostly for the score.
+    MISSION_HUD_ITEM_ID_SCORE,
     
-    //Primary item for something related to failing the mission.
-    MISSION_HUD_ITEM_ID_FAIL_MAIN,
+    //Item used mostly for the clock.
+    MISSION_HUD_ITEM_ID_CLOCK,
     
-    //Secondary item for something related to failing the mission.
-    MISSION_HUD_ITEM_ID_FAIL_SEC,
+    //Item used mostly for misc. things.
+    MISSION_HUD_ITEM_ID_MISC,
     
 };
 
 
 //Mission HUD item ID enum naming.
 buildEnumNames(missionHudItemIdNames, MISSION_HUD_ITEM_ID)({
-    { MISSION_HUD_ITEM_ID_GOAL_MAIN, "Goal, main" },
-    { MISSION_HUD_ITEM_ID_GOAL_SEC, "Goal, secondary" },
-    { MISSION_HUD_ITEM_ID_FAIL_MAIN, "Failure, main" },
-    { MISSION_HUD_ITEM_ID_FAIL_SEC, "Failure, secondary" },
+    { MISSION_HUD_ITEM_ID_GOAL, "Goal" },
+    { MISSION_HUD_ITEM_ID_SCORE, "Score" },
+    { MISSION_HUD_ITEM_ID_CLOCK, "Clock" },
+    { MISSION_HUD_ITEM_ID_MISC, "Misc." },
 });
 
 

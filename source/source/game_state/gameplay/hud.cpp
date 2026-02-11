@@ -721,25 +721,25 @@ Hud::Hud() :
     
     
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
-        //Mission "goal, main" item.
+        //Mission "goal" item.
         GuiItem* missionGoalMainItem = new GuiItem();
         gui.addItem(missionGoalMainItem, "mission_goal_main");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL_MAIN, missionGoalMainItem);
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalMainItem);
         
-        //Mission "goal, secondary" item.
+        //Mission "score" item.
         GuiItem* missionGoalSecItem = new GuiItem();
         gui.addItem(missionGoalSecItem, "mission_goal_sec");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL_SEC, missionGoalSecItem);
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionGoalSecItem);
         
-        //Mission "fail, main" item.
+        //Mission "clock" item.
         GuiItem* missionFailMainItem = new GuiItem();
         gui.addItem(missionFailMainItem, "mission_fail_main");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_FAIL_MAIN, missionFailMainItem);
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionFailMainItem);
         
-        //Mission "fail, secondary" item.
+        //Mission "misc." item.
         GuiItem* missionFailSecItem = new GuiItem();
         gui.addItem(missionFailSecItem, "mission_fail_sec");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_FAIL_SEC, missionFailSecItem);
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionFailSecItem);
     }
     
     
