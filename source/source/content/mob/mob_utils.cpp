@@ -705,6 +705,7 @@ void Group::sort(SubgroupType* leadingType) {
  */
 void HoldInfo::clear() {
     m = nullptr;
+    type = HOLD_TYPE_PURPOSE_GENERAL;
     hitboxIdx = INVALID;
     offsetDist = 0;
     offsetAngle = 0;
@@ -1359,7 +1360,7 @@ Mob* createMob(
         
         if(childInfo->parentHolds) {
             mPtr->hold(
-                newMob,
+                newMob, HOLD_TYPE_PARENT,
                 type->animDb->findBodyPart(childInfo->holdBodyPart),
                 childInfo->holdOffsetDist,
                 childInfo->holdOffsetAngle,

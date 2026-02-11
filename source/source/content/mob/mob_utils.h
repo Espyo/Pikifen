@@ -356,6 +356,9 @@ struct HoldInfo {
     //Points to the mob holding the current one, if any.
     Mob* m = nullptr;
     
+    //Type of hold.
+    HOLD_TYPE type = HOLD_TYPE_PURPOSE_GENERAL;
+    
     //Index of the hitbox the mob is attached to.
     //If INVALID, it's attached to the mob center.
     size_t hitboxIdx = INVALID;

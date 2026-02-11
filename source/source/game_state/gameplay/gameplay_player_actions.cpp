@@ -131,16 +131,13 @@ void GameplayState::doPlayerActionSwitchMaturity(
     if(!isDown) return;
     if(!player->leaderPtr) return;
     
-    if(
-        player->leaderPtr->holding.empty() ||
-        player->leaderPtr->holding[0]->type->category->id !=
-        MOB_CATEGORY_PIKMIN
-    ) {
+    Mob* heldPtr = player->leaderPtr->getMobHeldInHand();
+    
+    if(!heldPtr || heldPtr->type->category->id != MOB_CATEGORY_PIKMIN) {
         return;
     }
     
-    Pikmin* heldPPtr = (Pikmin*) player->leaderPtr->holding[0];
-    
+    Pikmin* heldPik = (Pikmin*) heldPtr;
     Pikmin* closestMembers[N_MATURITIES];
     Distance closestDists[N_MATURITIES];
     for(size_t m = 0; m < N_MATURITIES; m++) {
@@ -149,10 +146,10 @@ void GameplayState::doPlayerActionSwitchMaturity(
     
     for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
         Mob* mPtr = player->leaderPtr->group->members[m];
-        if(mPtr->type != heldPPtr->type) continue;
+        if(mPtr->type != heldPik->type) continue;
         
         Pikmin* pPtr = (Pikmin*) mPtr;
-        if(pPtr->maturity == heldPPtr->maturity) continue;
+        if(pPtr->maturity == heldPik->maturity) continue;
         
         Distance d(player->leaderPtr->pos, pPtr->pos);
         if(
@@ -165,7 +162,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
         
     }
     
-    size_t nextMaturity = heldPPtr->maturity;
+    size_t nextMaturity = heldPik->maturity;
     Mob* newPikmin = nullptr;
     bool finished = false;
     do {
@@ -175,7 +172,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
             );
             
         //Back to the start?
-        if(nextMaturity == heldPPtr->maturity) break;
+        if(nextMaturity == heldPik->maturity) break;
         
         if(!closestMembers[nextMaturity]) continue;
         
@@ -209,8 +206,9 @@ void GameplayState::doPlayerActionSwitchType(
         player->leaderPtr->group->curStandbyType;
         
     bool switchSuccessful;
+    Mob* heldPtr = player->leaderPtr->getMobHeldInHand();
     
-    if(player->leaderPtr->holding.empty()) {
+    if(!heldPtr) {
         //If the leader isn't holding anybody.
         switchSuccessful =
             player->leaderPtr->group->changeStandbyType(!isNext);
@@ -342,7 +340,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         //Now check if the leader should grab a Pikmin.
         if(
             !done &&
-            player->leaderPtr->holding.empty() &&
+            !player->leaderPtr->getMobHeldInHand() &&
             player->leaderPtr->group->curStandbyType &&
             !player->closestGroupMemberDistant
         ) {

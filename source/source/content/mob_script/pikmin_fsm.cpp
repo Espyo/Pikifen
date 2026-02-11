@@ -2485,10 +2485,7 @@ void PikminFsm::checkLeaderBump(Mob* m, void* info1, void* info2) {
         pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
         return;
     }
-    if(
-        !pikPtr->holding.empty() &&
-        pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-    ) {
+    if(pikPtr->getMobHeldInHand()) {
         m->fsm.setState(PIKMIN_STATE_CALLED_H, info1, info2);
     } else {
         m->fsm.setState(PIKMIN_STATE_CALLED, info1, info2);
@@ -2819,6 +2816,7 @@ void PikminFsm::fallDownPit(Mob* m, void* info1, void* info2) {
 void PikminFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
     Mob* leaPtr = pikPtr->focusedMob;
+    bool pikIsHolding = pikPtr->getMobHeldInHand();
     
     if(leaPtr) {
         if(leaPtr->followingGroup) {
@@ -2828,17 +2826,17 @@ void PikminFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
         }
         if(leaPtr->addToGroup(pikPtr)) {
             pikPtr->fsm.setState(
-                pikPtr->holding.empty() ?
-                PIKMIN_STATE_IN_GROUP_CHASING :
-                PIKMIN_STATE_IN_GROUP_CHASING_H,
+                pikIsHolding ?
+                PIKMIN_STATE_IN_GROUP_CHASING_H :
+                PIKMIN_STATE_IN_GROUP_CHASING,
                 info1, info2);
             return;
         }
     }
     pikPtr->fsm.setState(
-        pikPtr->holding.empty() ?
-        PIKMIN_STATE_IDLING :
-        PIKMIN_STATE_IDLING_H,
+        pikIsHolding ?
+        PIKMIN_STATE_IDLING_H :
+        PIKMIN_STATE_IDLING,
         info1, info2
     );
 }
@@ -2994,7 +2992,7 @@ void PikminFsm::finishPickingUp(Mob* m, void* info1, void* info2) {
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focusedMob->type
         );
     m->hold(
-        m->focusedMob, INVALID, 4, 0, 0.5f,
+        m->focusedMob, HOLD_TYPE_PURPOSE_HAND, INVALID, 4, 0, 0.5f,
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     m->unfocusFromMob();
@@ -3123,7 +3121,9 @@ void PikminFsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
     m->setTimer(PIKMIN::DISMISS_TIMEOUT);
     
     m->setAnimation(
-        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING_LIGHT,
+        m->getMobHeldInHand() ?
+        PIKMIN_ANIM_CARRYING_LIGHT :
+        PIKMIN_ANIM_WALKING,
         START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
@@ -3547,14 +3547,12 @@ void PikminFsm::landOnMob(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    engineAssert(!m->holding.empty(), m->printStateHistory());
-    
     Pikmin* pikPtr = (Pikmin*) m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    Tool* tooPtr = (Tool*) (*m->holding.begin());
     Mob* m2Ptr = info->mob2;
+    Tool* tooPtr = (Tool*) m->getMobHeldInHand();
     
+    if(!tooPtr) return;
     if(!m->canHurt(m2Ptr)) return;
     
     MobEvent* m2PikLandEv =
@@ -3584,7 +3582,7 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
                 &hOffsetDist, &hOffsetAngle, &vOffsetDist
             );
             m2Ptr->hold(
-                tooPtr, info->h2->bodyPartIdx,
+                tooPtr, HOLD_TYPE_LATCH, info->h2->bodyPartIdx,
                 hOffsetDist, hOffsetAngle, vOffsetDist,
                 true, HOLD_ROTATION_METHOD_FACE_HOLDER
             );
@@ -3604,10 +3602,7 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
         }
         
         if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
-            if(
-                !pikPtr->holding.empty() &&
-                pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-            ) {
+            if(pikPtr->getMobHeldInHand()) {
                 m->fsm.setState(PIKMIN_STATE_CALLED_H, closestLeader);
             } else {
                 m->fsm.setState(PIKMIN_STATE_CALLED, closestLeader);
@@ -3626,10 +3621,10 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::landWhileHolding(Mob* m, void* info1, void* info2) {
-    engineAssert(!m->holding.empty(), m->printStateHistory());
-    
     Pikmin* pikPtr = (Pikmin*) m;
-    Tool* tooPtr = (Tool*) * (m->holding.begin());
+    Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
+    
+    if(!tooPtr) return;
     
     PikminFsm::standStill(m, nullptr, nullptr);
     
@@ -3655,10 +3650,7 @@ void PikminFsm::landWhileHolding(Mob* m, void* info1, void* info2) {
         }
         
         if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
-            if(
-                !pikPtr->holding.empty() &&
-                pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-            ) {
+            if(pikPtr->getMobHeldInHand()) {
                 m->fsm.setState(PIKMIN_STATE_CALLED_H, closestLeader);
             } else {
                 m->fsm.setState(PIKMIN_STATE_CALLED, closestLeader);
@@ -3892,9 +3884,10 @@ void PikminFsm::rechaseOpponent(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::releaseTool(Mob* m, void* info1, void* info2) {
-    if(m->holding.empty()) return;
     Pikmin* pikPtr = (Pikmin*) m;
-    Mob* tooPtr = *m->holding.begin();
+    Mob* tooPtr = pikPtr->getMobHeldInHand();
+    
+    if(!tooPtr) return;
     
     if(info1) {
         tooPtr->setVar("gentle_release", "true");
@@ -4093,7 +4086,9 @@ void PikminFsm::startChasingLeader(Mob* m, void* info1, void* info2) {
     m->focusOnMob(m->followingGroup);
     PikminFsm::updateInGroupChasing(m, nullptr, nullptr);
     m->setAnimation(
-        m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING_LIGHT,
+        m->getMobHeldInHand() ?
+        PIKMIN_ANIM_CARRYING_LIGHT :
+        PIKMIN_ANIM_WALKING,
         START_ANIM_OPTION_RANDOM_TIME, true, m->type->moveSpeed
     );
 }
@@ -4546,10 +4541,7 @@ void PikminFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
             pikPtr->leaderToReturnTo &&
             pikPtr->leaderToReturnTo->isViableLeader(pikPtr)
         ) {
-            if(
-                !pikPtr->holding.empty() &&
-                pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-            ) {
+            if(pikPtr->getMobHeldInHand()) {
                 m->fsm.setState(
                     PIKMIN_STATE_CALLED_H, pikPtr->leaderToReturnTo, info2
                 );
@@ -4689,9 +4681,9 @@ void PikminFsm::touchedSpray(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::tryHeldItemHotswap(Mob* m, void* info1, void* info2) {
-    assert(!m->holding.empty());
+    Tool* tooPtr = (Tool*) m->getMobHeldInHand();
+    if(!tooPtr) return;
     
-    Tool* tooPtr = (Tool*) * (m->holding.begin());
     if(
         !tooPtr->tooType->canBeHotswapped &&
         hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_ENEMIES)
@@ -4772,7 +4764,9 @@ void PikminFsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
  */
 void PikminFsm::whistledWhileHolding(Mob* m, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) m;
-    Tool* tooPtr = (Tool*) * (m->holding.begin());
+    Tool* tooPtr = (Tool*) m->getMobHeldInHand();
+    
+    if(!tooPtr) return;
     
     if(
         tooPtr->tooType->droppedWhenPikminIsWhistled &&
@@ -4783,10 +4777,7 @@ void PikminFsm::whistledWhileHolding(Mob* m, void* info1, void* info2) {
     
     pikPtr->isToolPrimedForWhistle = false;
     
-    if(
-        !pikPtr->holding.empty() &&
-        pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-    ) {
+    if(pikPtr->getMobHeldInHand()) {
         m->fsm.setState(PIKMIN_STATE_CALLED_H, info1, info2);
     } else {
         m->fsm.setState(PIKMIN_STATE_CALLED, info1, info2);
@@ -4810,10 +4801,7 @@ void PikminFsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
     
     if(traPtr->traType->cancellableWithWhistle) {
         m->stopTrackRide();
-        if(
-            !pikPtr->holding.empty() &&
-            pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
-        ) {
+        if(pikPtr->getMobHeldInHand()) {
             m->fsm.setState(PIKMIN_STATE_CALLED_H, info1, info2);
         } else {
             m->fsm.setState(PIKMIN_STATE_CALLED, info1, info2);

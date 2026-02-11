@@ -4485,7 +4485,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         
         //Item count text.
         ImGui::Text(
-            "Item: %s",
+            "Item: %s (typically)",
             enumGetName(missionHudItemIdNames, curHudItemIdx).c_str()
         );
         

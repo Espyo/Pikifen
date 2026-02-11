@@ -545,7 +545,7 @@ void Mob::applyStatusEffects(
             leaveGroup();
             if(type->category->id == MOB_CATEGORY_PIKMIN) {
                 fsm.setState(
-                    holding.empty() ?
+                    !getMobHeldInHand() ?
                     PIKMIN_STATE_IDLING :
                     PIKMIN_STATE_IDLING_H
                 );
@@ -1416,7 +1416,7 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
         m, hitboxInfo, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
     hold(
-        m, hitboxInfo->bodyPartIdx,
+        m, HOLD_TYPE_PURPOSE_GENERAL, hitboxInfo->bodyPartIdx,
         hOffsetDist, hOffsetAngle, vOffsetDist,
         true, HOLD_ROTATION_METHOD_NEVER
     );
@@ -2339,6 +2339,21 @@ int Mob::getMissionPoints(bool* applicableInThisMission) const {
 
 
 /**
+ * @brief Returns the mob that this mob is holding in its hand, if any.
+ *
+ * @return The mob.
+ */
+Mob* Mob::getMobHeldInHand() const {
+    for(size_t h = 0; h < holding.size(); h++) {
+        if(holding[h]->holder.type == HOLD_TYPE_PURPOSE_HAND) {
+            return holding[h];
+        }
+    }
+    return nullptr;
+}
+
+
+/**
  * @brief If this mob belongs to a player's team, this returns the player team
  * index number (0 for team 1, 1 for team 2, etc.).
  * Otherwise, it returns INVALID.
@@ -2938,6 +2953,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
  * @brief Starts holding the specified mob.
  *
  * @param m  Mob to start holding.
+ * @param type Type of hold.
  * @param hitboxIdx Index of the hitbox to hold on. INVALID for mob center.
  * @param offsetDist Distance from the hitbox/body center. 1 is full radius.
  * @param offsetAngle Hitbox/body angle from which the mob will be held.
@@ -2947,7 +2963,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
  * @param rotationMethod How should the held mob rotate?
  */
 void Mob::hold(
-    Mob* m, size_t hitboxIdx,
+    Mob* m, HOLD_TYPE type, size_t hitboxIdx,
     float offsetDist, float offsetAngle,
     float verticalDist,
     bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
@@ -2965,6 +2981,7 @@ void Mob::hold(
     
     holding.push_back(m);
     m->holder.m = this;
+    m->holder.type = type;
     m->holder.hitboxIdx = hitboxIdx;
     m->holder.offsetDist = offsetDist;
     m->holder.offsetAngle = offsetAngle;
@@ -3814,7 +3831,7 @@ void Mob::storeMobInside(Mob* m) {
     }
     
     hold(
-        m, INVALID, 0.0f, 0.0f, 0.5f,
+        m, HOLD_TYPE_STORED, INVALID, 0.0f, 0.0f, 0.5f,
         false, HOLD_ROTATION_METHOD_NEVER
     );
     m->storedInsideAnother = this;
@@ -4342,7 +4359,7 @@ void Mob::tickMiscLogic(float deltaT) {
         }
         
         Group::MODE oldMode = group->mode;
-        bool isHolding = !holding.empty();
+        bool isHolding = getMobHeldInHand();
         bool isFarFromGroup =
             Distance(group->getAverageMemberPos(), pos) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);

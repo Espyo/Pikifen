@@ -490,8 +490,8 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
         this, h, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
     m->hold(
-        this, h->bodyPartIdx, hOffsetDist, hOffsetAngle, vOffsetDist,
-        true,
+        this, HOLD_TYPE_LATCH, h->bodyPartIdx,
+        hOffsetDist, hOffsetAngle, vOffsetDist, true,
         HOLD_ROTATION_METHOD_NEVER //PikminFsm::prepareToAttack handles it.
     );
     

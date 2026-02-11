@@ -1666,33 +1666,31 @@ void LeaderFsm::dismiss(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::doThrow(Mob* m, void* info1, void* info2) {
-    engineAssert(!m->holding.empty(), m->printStateHistory());
-    
     Leader* leaPtr = (Leader*) m;
-    Mob* holdingPtr = leaPtr->holding[0];
+    Mob* heldPtr = leaPtr->getMobHeldInHand();
     
-    engineAssert(holdingPtr != nullptr, m->printStateHistory());
+    if(!heldPtr) return;
     
-    holdingPtr->fsm.runEvent(MOB_EV_THROWN);
-    holdingPtr->startHeightEffect();
+    heldPtr->fsm.runEvent(MOB_EV_THROWN);
+    heldPtr->startHeightEffect();
     
-    holdingPtr->stopChasing();
-    holdingPtr->pos = leaPtr->pos;
-    holdingPtr->z = leaPtr->z;
+    heldPtr->stopChasing();
+    heldPtr->pos = leaPtr->pos;
+    heldPtr->z = leaPtr->z;
     
-    holdingPtr->zCap = leaPtr->throweeMaxZ;
+    heldPtr->zCap = leaPtr->throweeMaxZ;
     
-    holdingPtr->face(leaPtr->throweeAngle, nullptr, true);
-    holdingPtr->speed = leaPtr->throweeSpeed;
-    holdingPtr->speedZ = leaPtr->throweeSpeedZ;
+    heldPtr->face(leaPtr->throweeAngle, nullptr, true);
+    heldPtr->speed = leaPtr->throweeSpeed;
+    heldPtr->speedZ = leaPtr->throweeSpeedZ;
     
-    enableFlag(holdingPtr->flags, MOB_FLAG_WAS_THROWN);
-    holdingPtr->leaveGroup();
-    leaPtr->release(holdingPtr);
+    enableFlag(heldPtr->flags, MOB_FLAG_WAS_THROWN);
+    heldPtr->leaveGroup();
+    leaPtr->release(heldPtr);
     
     leaPtr->setAnimation(LEADER_ANIM_THROWING);
     
-    if(holdingPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+    if(heldPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
         game.statistics.pikminThrown++;
     }
 }
@@ -2004,7 +2002,7 @@ void LeaderFsm::grabMob(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     Mob* grabbedMob = (Mob*) info1;
     leaPtr->hold(
-        grabbedMob, INVALID,
+        grabbedMob, HOLD_TYPE_PURPOSE_HAND, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
@@ -2149,8 +2147,9 @@ void LeaderFsm::move(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::notifyPikminRelease(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
-    if(leaPtr->holding.empty()) return;
-    leaPtr->holding[0]->fsm.runEvent(MOB_EV_RELEASED);
+    Mob* heldPtr = leaPtr->getMobHeldInHand();
+    if(!heldPtr) return;
+    heldPtr->fsm.runEvent(MOB_EV_RELEASED);
 }
 
 
@@ -2203,13 +2202,15 @@ void LeaderFsm::queueStopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::release(Mob* m, void* info1, void* info2) {
-    if(m->holding.empty()) return;
+    Mob* heldPtr = m->getMobHeldInHand();
+    if(!heldPtr) return;
+
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
-    m->holding[0]->pos = m->pos;
-    m->holding[0]->z = m->z;
-    m->holding[0]->face(m->angle + TAU / 2.0f, nullptr, true);
-    m->release(m->holding[0]);
+    heldPtr->pos = m->pos;
+    heldPtr->z = m->z;
+    heldPtr->face(m->angle + TAU / 2.0f, nullptr, true);
+    m->release(heldPtr);
 }
 
 

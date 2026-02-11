@@ -1408,7 +1408,7 @@ void MobActionRunners::getRandomInt(MobActionRunData& data) {
 void MobActionRunners::holdFocus(MobActionRunData& data) {
     if(data.m->focusedMob) {
         data.m->hold(
-            data.m->focusedMob,
+            data.m->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
             s2i(data.args[0]), 0.0f, 0.0f, 0.5f,
             data.args.size() >= 2 ? s2b(data.args[1]) : false,
             HOLD_ROTATION_METHOD_COPY_HOLDER

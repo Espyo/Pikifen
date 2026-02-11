@@ -405,6 +405,7 @@ public:
     ) const;
     void causeSpikeDamage(Mob* victim, bool isIngestion);
     void chomp(Mob* m, const Hitbox* hitboxInfo);
+    Mob* getMobHeldInHand() const;
     void getSpriteData(
         Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
         float* outInterpolationFactor
@@ -428,7 +429,7 @@ public:
     void unfocusFromMob();
     void leaveGroup();
     void hold(
-        Mob* m, size_t hitboxIdx,
+        Mob* m, HOLD_TYPE type, size_t hitboxIdx,
         float offsetDist, float offsetAngle,
         float verticalDist,
         bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
@@ -557,13 +558,13 @@ protected:
         const unordered_set<PikminType*>& availableTypes
     ) const;
     Mob* getMobToWalkOn() const;
-    H_MOVE_RESULT getMovementEdgeIntersections(
+    HORIZ_MOVE_RESULT getMovementEdgeIntersections(
         const Point& newPos, vector<Edge*>* intersectingEdges
     ) const;
-    H_MOVE_RESULT getPhysicsHorizontalMovement(
+    HORIZ_MOVE_RESULT getPhysicsHorizontalMovement(
         float deltaT, float moveSpeedMult, Point* moveSpeed
     );
-    H_MOVE_RESULT getWallSlideAngle(
+    HORIZ_MOVE_RESULT getWallSlideAngle(
         const Edge* ePtr, unsigned char wallSector, float moveAngle,
         float* slideAngle
     ) const;

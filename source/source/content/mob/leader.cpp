@@ -299,7 +299,8 @@ bool Leader::canReceiveStatus(StatusType* s) const {
  * @return Whether it can throw.
  */
 bool Leader::checkThrowOk() const {
-    if(holding.empty()) {
+    Mob* mobInHand = getMobHeldInHand();
+    if(!mobInHand) {
         return false;
     }
     
@@ -769,14 +770,14 @@ void Leader::drawMob() {
         Point lightSize;
         BitmapEffect lightEff = mobEff;
         ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
-
+        
         for(size_t s = 0; s < statuses.size(); s++) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             if(statuses[s].type->topReplacementBmp) {
                 lightBmp = statuses[s].type->topReplacementBmp;
             }
         }
-
+        
         getSpriteBasicTopEffects(
             curSPtr, nextSPtr, interpolationFactor,
             &lightCoords, &lightAngle, &lightSize
@@ -1178,9 +1179,10 @@ void Leader::stopWhistling() {
  * @param newPik The new Pikmin to hold.
  */
 void Leader::swapHeldPikmin(Mob* newPik) {
-    if(holding.empty()) return;
-    
-    Mob* oldPik = holding[0];
+    Mob* oldPik = getMobHeldInHand();
+    if(!oldPik) {
+        return;
+    }
     
     MobEvent* oldPikEv = oldPik->fsm.getEvent(MOB_EV_RELEASED);
     MobEvent* newPikEv = newPik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
@@ -1189,11 +1191,11 @@ void Leader::swapHeldPikmin(Mob* newPik) {
     
     if(!oldPikEv || !newPikEv) return;
     
-    release(holding[0]);
+    release(oldPik);
     
     newPikEv->run(newPik);
     hold(
-        newPik, INVALID,
+        newPik, HOLD_TYPE_PURPOSE_HAND, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
@@ -1276,8 +1278,9 @@ void Leader::updateThrowVariables() {
     throwee = nullptr;
     if(!player) return;
     
-    if(!holding.empty()) {
-        throwee = holding[0];
+    Mob* heldPik = getMobHeldInHand();
+    if(heldPik) {
+        throwee = heldPik;
     } else {
         throwee = player->closestGroupMember[BUBBLE_RELATION_CURRENT];
     }

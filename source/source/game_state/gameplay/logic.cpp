@@ -570,9 +570,9 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ************************************/
     
     updateClosestGroupMembers(player);
-    if(!player->leaderPtr->holding.empty()) {
-        player->closestGroupMember[BUBBLE_RELATION_CURRENT] =
-            player->leaderPtr->holding[0];
+    Mob* leaderHeldMob = player->leaderPtr->getMobHeldInHand();
+    if(leaderHeldMob) {
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT] = leaderHeldMob;
     }
     
     float oldSwarmMagnitude = player->swarmMagnitude;

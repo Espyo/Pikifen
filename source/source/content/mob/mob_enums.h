@@ -183,17 +183,23 @@ enum FRACTION_NR_VISIBILITY {
 };
 
 
-//Possible results for a horizontal movement operation.
-enum H_MOVE_RESULT {
+//Different types of ways to hold a mob.
+enum HOLD_TYPE {
 
-    //Move happened successfully.
-    H_MOVE_RESULT_OK,
+    //The holder is purposely holding the mob, in a general fashion.
+    HOLD_TYPE_PURPOSE_GENERAL,
     
-    //The mob teleported.
-    H_MOVE_RESULT_TELEPORTED,
+    //The holder is purposely holding the mob, placed in-hand at the ready.
+    HOLD_TYPE_PURPOSE_HAND,
     
-    //Move failed.
-    H_MOVE_RESULT_FAIL,
+    //The holder is purposely holding the mob as a parent holds a child.
+    HOLD_TYPE_PARENT,
+    
+    //The holder is storing the mob inside.
+    HOLD_TYPE_STORED,
+    
+    //The mob latched onto the holder.
+    HOLD_TYPE_LATCH,
     
 };
 
