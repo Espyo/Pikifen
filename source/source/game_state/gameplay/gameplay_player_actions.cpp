@@ -24,6 +24,7 @@
 void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
+    if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     player->leaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
 }
@@ -37,6 +38,8 @@ void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
  */
 void GameplayState::doPlayerActionInventory(Player* player, bool isDown) {
     if(!isDown) return;
+    if(!player->leaderPtr) return;
+    if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     player->leaderPtr->fsm.runEvent(LEADER_EV_INVENTORY);
 }
@@ -53,7 +56,10 @@ void GameplayState::doPlayerActionInventoryShortcut(
     Player* player, bool isDown, unsigned char shortcutIdx
 ) {
     if(!isDown) return;
+    if(!player->leaderPtr) return;
+    if(player->leaderPtr->hasOpponentPikminLatched()) return;
     if(game.options.controls.inventoryShortcuts[0][shortcutIdx].empty()) return;
+    
     player->inventory->useShortcut(
         game.options.controls.inventoryShortcuts[0][shortcutIdx]
     );
@@ -72,6 +78,7 @@ void GameplayState::doPlayerActionInventoryShortcut(
 void GameplayState::doPlayerActionLieDown(Player* player, bool isDown) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
+    if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     player->leaderPtr->fsm.runEvent(LEADER_EV_FALL_ASLEEP);
 }
@@ -199,7 +206,6 @@ void GameplayState::doPlayerActionSwitchType(
 ) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
-    
     if(player->leaderPtr->group->members.empty()) return;
     
     SubgroupType* startingSubgroupType =
@@ -282,6 +288,15 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             done = true;
         }
         
+        //Check if the player wants to shake opponent Pikmin off.
+        if(
+            !done &&
+            player->leaderPtr->hasOpponentPikminLatched()
+        ) {
+            player->leaderPtr->fsm.runEvent(MOB_EV_ITCH);
+            done = true;
+        }
+        
         //Check if the leader should heal themselves on the ship.
         if(
             !done &&
@@ -303,7 +318,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             done = true;
         }
         
-        //Now check if the leader should open an Onion's menu.
+        //Check if the leader should open an Onion's menu.
         if(
             !done &&
             player->closeToNestToOpen
@@ -325,7 +340,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             done = true;
         }
         
-        //Now check if the leader should interact with an interactable.
+        //Check if the leader should interact with an interactable.
         if(
             !done &&
             player->closeToInteractableToUse
@@ -337,7 +352,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             done = true;
         }
         
-        //Now check if the leader should grab a Pikmin.
+        //Check if the leader should grab a Pikmin.
         if(
             !done &&
             !player->leaderPtr->getMobHeldInHand() &&
@@ -360,7 +375,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             }
         }
         
-        //Now check if the leader should punch.
+        //Check if the leader should punch.
         if(!done) {
             MobEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
             if(ev) {
@@ -430,6 +445,7 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
  */
 void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
+    if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     if(isDown) {
         MobEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);

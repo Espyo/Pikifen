@@ -34,7 +34,7 @@
  * @return The score.
  */
 int GameplayState::calculateMissionScore(bool forHud) {
-    int score = game.curAreaData->missionOld.startingPoints;
+    int score = game.curAreaData->mission.startingPoints;
     
     for(
         size_t c = 0;
@@ -364,6 +364,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         );
         leaderPromptDone = true;
     }
+    
     //Auto-throw stop prompt.
     if(
         !leaderPromptDone &&
@@ -414,6 +415,25 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             )
         );
         leaderPromptDone = true;
+    }
+    
+    //Shake prompt.
+    if(
+        !leaderPromptDone &&
+        player->leaderPtr->fsm.getEvent(MOB_EV_ITCH)
+    ) {
+        if(player->leaderPtr->hasOpponentPikminLatched()) {
+            player->leaderPrompt.setEnabled(true);
+            player->leaderPrompt.setContents(
+                PLAYER_ACTION_TYPE_THROW,
+                "Shake",
+                Point(
+                    player->leaderPtr->pos.x,
+                    player->leaderPtr->pos.y - player->leaderPtr->radius
+                )
+            );
+            leaderPromptDone = true;
+        }
     }
     
     if(!player->leaderPtr->autoPlucking) {
@@ -1362,40 +1382,6 @@ void GameplayState::doMenuLogic() {
     
     //Fade.
     game.fadeMgr.tick(game.deltaT);
-}
-
-
-/**
- * @brief Checks if the mission goal has been met.
- *
- * @return Whether the goal is met.
- */
-bool GameplayState::isMissionClearMet() {
-    return game.missionGoals[game.curAreaData->missionOld.goal]->isMet(this);
-}
-
-
-/**
- * @brief Checks if a mission fail condition has been met.
- *
- * @param reason The reason gets returned here, if any.
- * @return Whether a failure condition is met.
- */
-bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
-    for(size_t f = 0; f < game.missionFailConds.size(); f++) {
-        if(
-            hasFlag(
-                game.curAreaData->missionOld.failConditions,
-                getIdxBitmask(f)
-            )
-        ) {
-            if(game.missionFailConds[f]->isMet(this)) {
-                *reason = (MISSION_FAIL_COND) f;
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 

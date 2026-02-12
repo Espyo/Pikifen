@@ -166,6 +166,7 @@ public:
     bool canGrabGroupMember(Mob* m) const;
     void dismiss(bool subtle = false);
     size_t getAmountOfGroupPikmin(const PikminType* filter);
+    bool hasOpponentPikminLatched() const;
     bool orderPikminToOnion(
         const PikminType* type, PikminNest* nPtr, size_t amount
     );

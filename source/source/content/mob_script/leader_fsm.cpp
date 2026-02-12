@@ -178,6 +178,9 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(LEADER_EV_GO_HERE); {
             efc.run(LeaderFsm::startGoHere);
         }
+        efc.newEvent(MOB_EV_ITCH); {
+            efc.changeState("shaking");
+        }
         efc.newEvent(MOB_EV_TOUCHED_HAZARD); {
             efc.run(LeaderFsm::touchedHazard);
         }
@@ -1241,6 +1244,16 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
+    efc.newState("shaking", LEADER_STATE_SHAKING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(LeaderFsm::shake);
+        }
+        efc.newEvent(MOB_EV_ANIMATION_END); {
+            efc.run(LeaderFsm::finishShaking);
+            efc.changeState("active");
+        }
+    }
+    
     typ->states = efc.finish();
     typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
@@ -1314,9 +1327,11 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     m->doAttackEffects(
         info->mob2, info->h2, info->h1, damage, knockbackStrength
     );
-    leaPtr->healthWheelShaker.shake(1.0f);
-    game.states.gameplay->lastHurtLeaderPos = m->pos;
+    if(info->h2->value > 0.0f) {
+        leaPtr->healthWheelShaker.shake(1.0f);
+    }
     if(healthBefore > 0.0f && m->health < healthBefore) {
+        game.states.gameplay->lastHurtLeaderPos = m->pos;
         game.statistics.leaderDamageSuffered += healthBefore - m->health;
     }
     
@@ -1862,6 +1877,18 @@ void LeaderFsm::finishPluck(Mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When the leader finishes the shaking animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::finishShaking(Mob* m, void* info1, void* info2) {
+    m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
+}
+
+
+/**
  * @brief When a leader needs gets knocked back.
  *
  * @param m The mob.
@@ -2343,6 +2370,19 @@ void LeaderFsm::setIsWalkingTrue(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::setPainAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(LEADER_ANIM_PAIN);
+}
+
+
+/**
+ * @brief When the leader must shake latched Pikmin off.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void LeaderFsm::shake(Mob* m, void* info1, void* info2) {
+    LeaderFsm::standStill(m, info1, info2);
+    m->setAnimation(LEADER_ANIM_SHAKING);
 }
 
 

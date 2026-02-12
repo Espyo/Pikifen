@@ -580,8 +580,6 @@ private:
     );
     Mob* getPointMobOnLeaderCursor(Player* player) const;
     void handlePlayerAction(const Inpution::Action& action);
-    bool isMissionClearMet();
-    bool isMissionFailMet(MISSION_FAIL_COND* reason);
     void loadGameContent();
     void markAreaCellsActive(
         const Point& top_left, const Point& bottomRight

@@ -922,6 +922,21 @@ void Leader::getGroupSpotInfo(
 
 
 /**
+ * @brief Returns whether the leader has any opponent Pikmin latched onto them.
+ * 
+ * @return Whether it has any.
+ */
+bool Leader::hasOpponentPikminLatched() const {
+    for(size_t m = 0; m < player->leaderPtr->holding.size(); m++) {
+        if(player->leaderPtr->holding[m]->holder.type == HOLD_TYPE_LATCH) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Orders Pikmin from the group to leave the group, and head for the
  * specified nest, with the goal of being stored inside.
  * This function prioritizes less matured Pikmin, and ones closest to the nest.

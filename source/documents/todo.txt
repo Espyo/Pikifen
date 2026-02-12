@@ -3,9 +3,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Mushroom Pikmin
-        Add a way to shake Pikmin off
-            Punching Pikmin should be allowed still
-            If any Pikmin is latched on, throwing or punching is disabled (and probably whistling too), and it becomes a shaking action. This should come with a dedicated quick animation, and then cause the invulnerability sparks
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
@@ -35,8 +32,6 @@ Next tasks (roughly sorted most important first)
     Ice geysers
     Freezecake
     Swarming jingle
-
-    --- 1.3.0 ---
     [NEEDS BRAINSTORMING] Re-think how missions work
         Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
         I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
@@ -44,8 +39,6 @@ Next tasks (roughly sorted most important first)
         Replace the clear + medal system with just a medal system, per the above
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-        A mission's data should control how each HUD element displays its information
-            Display "current/total", or "remaining/total", or "current", or "total", or "remaining"
         The results menu should show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     Add area editor review checks for the new mission system, like having a time limit but no associated event
     Update the manual's tutorial to cover the new mission system

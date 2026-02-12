@@ -144,6 +144,9 @@ enum LEADER_STATE {
     //Riding a track, inactive.
     LEADER_STATE_INACTIVE_RIDING_TRACK,
     
+    //Shaking latched Pikmin off.
+    LEADER_STATE_SHAKING,
+    
     //Total amount of leader object states.
     N_LEADER_STATES,
     
@@ -204,6 +207,9 @@ enum LEADER_ANIM {
     
     //Sliding.
     LEADER_ANIM_SLIDING,
+    
+    //Shaking latched Pikmin off.
+    LEADER_ANIM_SHAKING,
     
     //KO (dead).
     LEADER_ANIM_KO,

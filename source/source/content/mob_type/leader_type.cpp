@@ -84,6 +84,7 @@ AnimConversionVector LeaderType::getAnimConversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_DRINKING,     "drinking"));
     v.push_back(std::make_pair(LEADER_ANIM_CLIMBING,     "climbing"));
     v.push_back(std::make_pair(LEADER_ANIM_SLIDING,      "sliding"));
+    v.push_back(std::make_pair(LEADER_ANIM_SHAKING,      "shaking"));
     v.push_back(std::make_pair(LEADER_ANIM_KO,           "ko"));
     return v;
 }

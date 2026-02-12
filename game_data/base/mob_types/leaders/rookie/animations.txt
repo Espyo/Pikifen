@@ -337,6 +337,32 @@ animations{
 			}
 		}
 	}
+	shaking{
+		frames{
+			ducking{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_02{
+				duration=0.1000
+				interpolate=true
+			}
+			shaking_01{
+				duration=0.1000
+				interpolate=true
+			}
+			ducking{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
 	sitting{
 		frames{
 			idling{
@@ -1600,6 +1626,68 @@ sprites{
 				type=0
 				value=1.0000
 				surface_type=1
+			}
+		}
+	}
+	shaking_01{
+		file=leaders/rookie
+		file_pos=0.0000 65.0000
+		file_size=56.0000 64.0000
+		offset=6.0000 0.0000
+		scale=0.5000 0.5000
+		angle=0.4189
+		top_visible=true
+		top_pos=15.6641 4.3039
+		top_size=10.0000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=6.0000 0.0000 0.0000
+				height=46.0000
+				radius=18.0000
+				type=1
+				value=1.0000
+				knockback_type=2
+				knockback=1.5000
+				wither_chance=10
+			}
+		}
+	}
+	shaking_02{
+		file=leaders/rookie
+		file_pos=0.0000 65.0000
+		file_size=56.0000 64.0000
+		offset=6.0000 0.0000
+		scale=0.5000 0.5000
+		angle=5.8643
+		top_visible=true
+		top_pos=15.3173 -4.1560
+		top_size=10.0000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=6.0000 0.0000 0.0000
+				height=46.0000
+				radius=18.0000
+				type=1
+				value=1.0000
+				knockback_type=2
+				knockback=1.5000
+				wither_chance=10
 			}
 		}
 	}
