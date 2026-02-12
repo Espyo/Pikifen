@@ -1,6 +1,32 @@
+@font-face {
+  font-family: 'Funnel Sans';
+  src:
+    local('Funnel Sans'),
+    url('../../game_data/base/graphics/fonts/editor_standard.ttf') format('truetype');
+  font-display: swap;
+  size-adjust: 112%;
+}
+
+@font-face {
+  font-family: 'Bai Jamjuree';
+  src:
+    local('Bai Jamjuree'),
+    url('../../game_data/base/graphics/fonts/editor_header.ttf') format('truetype');
+  font-display: swap;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Sono';
+  src:
+    local('Sono'),
+    url('../../game_data/base/graphics/fonts/editor_monospace.ttf') format('truetype');
+  font-display: swap;
+}
+
 body {
   background-color: #f0f8f0;
-  font-family: 'DejaVu Sans', 'Arial', sans-serif;
+  font-family: "Funnel Sans", "DejaVu Sans", "Arial", sans-serif;
   font-size: 13pt;
   line-height: 1.5;
   margin: 0px;
@@ -10,7 +36,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Garamond';
+  font-family: "Bai Jamjuree", "DejaVu Sans", "Arial", sans-serif;
   clear: right;
   padding-top: 30px;
   text-decoration: underline;
@@ -36,7 +62,7 @@ h4 {
 code,
 pre {
   background-color: #d0d0d0;
-  font-family: monospace;
+  font-family: "Sono", monospace;
   overflow-x: scroll;
   padding-left: 2px;
   padding-right: 2px;
