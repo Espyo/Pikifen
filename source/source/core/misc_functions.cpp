@@ -839,7 +839,7 @@ void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
     backInput->onDraw =
     [] (const GuiItem::DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_MENU_BACK, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint

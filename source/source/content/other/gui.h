@@ -671,6 +671,9 @@ public:
     //Wrap long lines. Also enables markup.
     bool lineWrap = false;
     
+    //When using markup, condense the control icons.
+    bool controlCondensed = false;
+    
     
     //--- Public function declarations ---
     

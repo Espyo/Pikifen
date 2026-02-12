@@ -155,7 +155,8 @@ extern const bool DISMISS_ALL;
 extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const bool MAKER_TOOLS_IN_PLAY;
 extern const float PIKMIN_BUMP_DIST;
-extern const bool SHOW_HUD_INPUT_ICONS;
+extern const bool SHOW_CONTROL_GUIDE;
+extern const bool SHOW_GUI_INPUT_ICONS;
 extern const bool SHOW_LEADER_CURSOR_COUNTER;
 }
 
@@ -434,9 +435,12 @@ struct Options {
         //Show a standby type counter on the leader cursor?
         bool showLeaderCursorCounter =
             OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
+        
+        //Show a control guide when idling?
+        bool showControlGuide = OPTIONS::MISC_D::SHOW_CONTROL_GUIDE;
             
-        //Show control bind icons on top of HUD elements?
-        bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;
+        //Show control bind icons on top of GUI elements?
+        bool showGuiInputIcons = OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS;
         
     } misc;
     

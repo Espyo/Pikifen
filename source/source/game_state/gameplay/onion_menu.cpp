@@ -116,7 +116,7 @@ OnionMenu::OnionMenu(
     GuiItem* okInput = new GuiItem();
     okInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_MENU_OK, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint
@@ -198,7 +198,7 @@ OnionMenu::OnionMenu(
     GuiItem* changeTenInput = new GuiItem();
     changeTenInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_ONION_CHANGE_10, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint
@@ -248,7 +248,7 @@ OnionMenu::OnionMenu(
     GuiItem* selectAllInput = new GuiItem();
     selectAllInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_ONION_SELECT_ALL, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint

@@ -147,152 +147,27 @@ hardcoded_items{
 	mission_goal_main{
 		center=18.0000 8.0000
 		size=32.0000 12.0000
-		description=Space for the HUD items that hold mission information, mostly about primary goal things.
+		description=Space for the HUD items that hold mission information, typically about the goal.
 	}
-	mission_goal_sec{
+	mission_goal_score{
 		center=18.0000 20.0000
 		size=32.0000 10.0000
-		description=Space for the HUD items that hold mission information, mostly about secondary goal things.
+		description=Space for the HUD items that hold mission information, typically about the score.
 	}
-	mission_fail_main{
+	mission_fail_clock{
 		center=82.0000 8.0000
 		size=32.0000 12.0000
-		description=Space for the HUD items that hold mission information, mostly about primary failure things.
+		description=Space for the HUD items that hold mission information, typically about the clock.
 	}
-	mission_fail_sec{
+	mission_fail_misc{
 		center=82.0000 20.0000
 		size=32.0000 10.0000
-		description=Space for the HUD items that hold mission information, mostly about secondary failure things.
+		description=Space for the HUD items that hold mission information, typically about miscellaneous things.
 	}
-	mission_goal_bubble{
-		center=18.0000 8.0000
-		size=32.0000 12.0000
-		description=Bubble that holds mission goal information.
-	}
-	mission_goal_cur_label{
-		center=9.5000 11.5000
-		size=13.0000 3.0000
-		description=Label text for the mission goal's current amount of items.
-	}
-	mission_goal_cur{
-		center=9.5000 6.5000
-		size=13.0000 7.0000
-		description=Current amount of items for the mission's goal.
-	}
-	mission_goal_req_label{
-		center=26.5000 11.5000
-		size=13.0000 3.0000
-		description=Label text for the mission goal's required amount of items.
-	}
-	mission_goal_req{
-		center=26.5000 6.5000
-		size=13.0000 7.0000
-		description=Required amount of items for the mission's goal.
-	}
-	mission_goal_slash{
-		center=18.0000 6.5000
-		size=4.0000 7.0000
-		description=Slash between the mission goal's current and required amounts of items.
-	}
-	mission_goal_name{
-		center=18.0000 8.0000
-		size=30.0000 10.0000
-		description=Text describing the mission goal, when amounts of items don't apply.
-	}
-	mission_score_bubble{
-		center=18.0000 20.0000
-		size=32.0000 10.0000
-		description=Bubble that holds mission score information.
-	}
-	mission_score_score_label{
-		center=7.5000 22.0000
-		size=9.0000 4.0000
-		description=Label text for the mission score's "Score:" text.
-	}
-	mission_score_points{
-		center=18.0000 21.5000
-		size=10.0000 5.0000
-		description=Current mission score points.
-	}
-	mission_score_points_label{
-		center=28.5000 22.0000
-		size=9.0000 4.0000
-		description=Label text for the mission score's "pts" text.
-	}
-	mission_score_ruler{
-		center=18.0000 17.0000
-		size=30.0000 2.0000
-		description=Ruler indicating the player's score and medals.
-	}
-	mission_fail_1_bubble{
-		center=82.0000 8.0000
-		size=32.0000 12.0000
-		description=Bubble that holds the primary mission fail condition information.
-	}
-	mission_fail_1_cur_label{
-		center=73.5000 11.5000
-		size=13.0000 3.0000
-		description=Label text for the mission primary fail condition's current amount of items.
-	}
-	mission_fail_1_cur{
-		center=73.5000 6.5000
-		size=13.0000 7.0000
-		description=Current amount of items for the mission's primary fail condition.
-	}
-	mission_fail_1_req_label{
-		center=90.5000 11.5000
-		size=13.0000 3.0000
-		description=Label text for the mission primary fail condition's required amount of items.
-	}
-	mission_fail_1_req{
-		center=90.5000 6.5000
-		size=13.0000 7.0000
-		description=Required amount of items for the mission's primary fail condition.
-	}
-	mission_fail_1_slash{
-		center=82.0000 6.5000
-		size=4.0000 7.0000
-		description=Slash between the mission primary fail condition's current and required amounts of items.
-	}
-	mission_fail_1_name{
-		center=82.0000 8.0000
-		size=30.0000 10.0000
-		description=Text describing the mission primary fail condition, when amounts of items don't apply.
-	}
-	mission_fail_2_bubble{
-		center=82.0000 20.0000
-		size=32.0000 10.0000
-		description=Same as "mission_fail_1_bubble", but for the secondary fail condition.
-	}
-	mission_fail_2_cur_label{
-		center=73.5000 22.5000
-		size=13.0000 3.0000
-		description=Same as "mission_fail_1_cur_label", but for the secondary fail condition.
-	}
-	mission_fail_2_cur{
-		center=73.5000 18.5000
-		size=13.0000 5.0000
-		description=Same as "mission_fail_1_cur", but for the secondary fail condition.
-	}
-	mission_fail_2_req_label{
-		center=90.5000 22.5000
-		size=13.0000 3.0000
-		description=Same as "mission_fail_1_req_label", but for the secondary fail condition.
-	}
-	mission_fail_2_req{
-		center=90.5000 18.5000
-		size=13.0000 5.0000
-		description=Same as "mission_fail_1_req", but for the secondary fail condition.
-	}
-	mission_fail_2_slash{
-		center=82.0000 18.5000
-		size=4.0000 5.0000
-		description=Same as "mission_fail_1_slash", but for the secondary fail condition.
-	}
-	mission_fail_2_name{
-		center=82.0000 20.0000
-		size=30.0000 8.0000
-		description=Same as "mission_fail_1_name", but for the secondary fail condition.
+	control_guide{
+		center=83.0000 55.0000
+		size=30.0000 50.0000
+		description=List of controls, shown when the player has been idling for a bit.
 	}
 	inventory_shortcut_usage{
 		center=50.0000 37.0000

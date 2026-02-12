@@ -933,7 +933,6 @@ Tasks for later on (I might never implement these)
         A way to choose what landing site of the area you want to start the day in [PIKMIN 4]
     Some sort of expo mode?
         The game's logo should always be present on-screen in the corner
-        Show a quick list of controls on-screen when you stop moving
         Don't save statistics, options, or mission records
     Discord rich presence
     [NEEDS BRAINSTORMING] Online play?

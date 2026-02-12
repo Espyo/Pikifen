@@ -18,6 +18,8 @@
 
 
 namespace HUD {
+extern const float CONTROL_GUIDE_DELAY;
+extern const float CONTROL_GUIDE_OPACITY_SPEED;
 extern const float GOAL_INDICATOR_SMOOTHNESS_FACTOR;
 extern const string GUI_FILE_NAME;
 extern const float HEALTH_SHAKE_MAX_OFFSET;
@@ -163,6 +165,12 @@ struct Hud {
     
     //Maturity icon in the previous frame.
     ALLEGRO_BITMAP* prevMaturityIcon = nullptr;
+    
+    //Opacity of the control guide HUD item.
+    float controlGuideOpacity = 0.0f;
+    
+    //Time since the player last moved, for the control guide.
+    float controlGuideActivityTimer = 0.0f;
     
     //Current standby count.
     size_t standbyCountNr = 0;

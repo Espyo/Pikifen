@@ -1256,7 +1256,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.registerCoords("dismiss_all",                50, 33.75, 70, 7.5);
     miscGui.registerCoords("leader_cursor_cam_weight",   50, 43.75, 70, 7.5);
     miscGui.registerCoords("show_leader_cursor_counter", 50, 53.75, 70, 7.5);
-    miscGui.registerCoords("show_hud_input_icons",       50, 63.75, 70, 7.5);
+    miscGui.registerCoords("show_gui_input_icons",       50, 63.75, 70, 7.5);
     miscGui.registerCoords("leaving_confirmation",       50, 73.75, 70, 7.5);
     miscGui.registerCoords("maker_tools_in_play",        50, 83.75, 70, 7.5);
     miscGui.registerCoords("tooltip",                    50,    96, 96,   4);
@@ -1348,19 +1348,33 @@ void OptionsMenu::initGuiMiscPage() {
     };
     miscGui.addItem(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
     
-    //Show HUD player input icons checkbox.
-    CheckGuiItem* showHudInputIconsCheck =
+    //Show control guide when idling checkbox.
+    CheckGuiItem* showControlGuideCheck =
         new CheckGuiItem(
-        &game.options.misc.showHudInputIcons,
-        "Show input icons on HUD", game.sysContent.fntStandard
+        &game.options.misc.showControlGuide,
+        "Show control guide", game.sysContent.fntStandard
     );
-    showHudInputIconsCheck->onGetTooltip =
+    showControlGuideCheck->onGetTooltip =
     [] () {
         return
-            "Show icons of the player inputs near relevant HUD items? "
-            "Default: " + b2s(OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS) + ".";
+            "Show a control guide on-screen when you're idling? "
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_CONTROL_GUIDE) + ".";
     };
-    miscGui.addItem(showHudInputIconsCheck, "show_hud_input_icons");
+    miscGui.addItem(showControlGuideCheck, "show_control_guide");
+    
+    //Show GUI player input icons checkbox.
+    CheckGuiItem* showGuiInputIconsCheck =
+        new CheckGuiItem(
+        &game.options.misc.showGuiInputIcons,
+        "Show input icons on GUI", game.sysContent.fntStandard
+    );
+    showGuiInputIconsCheck->onGetTooltip =
+    [] () {
+        return
+            "Show icons of the player inputs near relevant GUI items? "
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS) + ".";
+    };
+    miscGui.addItem(showGuiInputIconsCheck, "show_gui_input_icons");
     
     //Leaving confirmation mode.
     leavingConfirmationPicker =

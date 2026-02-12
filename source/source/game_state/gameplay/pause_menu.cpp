@@ -730,7 +730,7 @@ void PauseMenu::createPageButtons(
     GuiItem* leftPageInput = new GuiItem();
     leftPageInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint
@@ -747,7 +747,7 @@ void PauseMenu::createPageButtons(
     GuiItem* rightPageInput = new GuiItem();
     rightPageInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
             true, game.sysContent.fntSlim, draw.tint

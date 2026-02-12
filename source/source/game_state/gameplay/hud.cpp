@@ -25,6 +25,12 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace HUD {
 
+//Delay before the control guide is allowed to appear.
+const float CONTROL_GUIDE_DELAY = 1.0f;
+
+//The control guide's opacity changes these many units per second.
+const float CONTROL_GUIDE_OPACITY_SPEED = 2.0f;
+
 //Smoothen the mission goal indicator's movement by this factor.
 const float GOAL_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
 
@@ -133,6 +139,11 @@ Hud::Hud() :
     gui.registerCoords("counters_slash_1",             82,   91,  4,  8);
     gui.registerCoords("counters_slash_2",              0,    0,  0,  0);
     gui.registerCoords("counters_slash_3",              0,    0,  0,  0);
+    gui.registerCoords("mission_goal_main",            50,   37, 12, 10); //TODO
+    gui.registerCoords("mission_goal_score",           50,   37, 12, 10); //TODO
+    gui.registerCoords("mission_goal_clock",           50,   37, 12, 10); //TODO
+    gui.registerCoords("mission_goal_misc",            50,   37, 12, 10); //TODO
+    gui.registerCoords("control_guide",                50,   37, 12, 10); //TODO
     gui.registerCoords("inventory_shortcut_usage",     50,   37, 12, 10);
     gui.readDataFile(hudFileNode);
     
@@ -247,7 +258,7 @@ Hud::Hud() :
     GuiItem* leaderNextInput = new GuiItem();
     leaderNextInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_NEXT_LEADER, draw.center, draw.size,
@@ -412,7 +423,7 @@ Hud::Hud() :
     GuiItem* standbyNextInput = new GuiItem();
     standbyNextInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         if(!player->leaderPtr) return;
         SubgroupType* nextType;
         player->leaderPtr->group->getNextStandbyType(
@@ -447,7 +458,7 @@ Hud::Hud() :
     GuiItem* standbyPrevInput = new GuiItem();
     standbyPrevInput->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showHudInputIcons) return;
+        if(!game.options.misc.showGuiInputIcons) return;
         if(!player->leaderPtr) return;
         SubgroupType* prevType;
         player->leaderPtr->group->getNextStandbyType(
@@ -728,19 +739,56 @@ Hud::Hud() :
         
         //Mission "score" item.
         GuiItem* missionGoalSecItem = new GuiItem();
-        gui.addItem(missionGoalSecItem, "mission_goal_sec");
+        gui.addItem(missionGoalSecItem, "mission_goal_score");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionGoalSecItem);
         
         //Mission "clock" item.
         GuiItem* missionFailMainItem = new GuiItem();
-        gui.addItem(missionFailMainItem, "mission_fail_main");
+        gui.addItem(missionFailMainItem, "mission_fail_clock");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionFailMainItem);
         
         //Mission "misc." item.
         GuiItem* missionFailSecItem = new GuiItem();
-        gui.addItem(missionFailSecItem, "mission_fail_sec");
+        gui.addItem(missionFailSecItem, "mission_fail_misc");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionFailSecItem);
     }
+    
+    
+    //Control guide.
+    const string controlGuideText =
+        "\\k move_up \\k \\k move_left \\k \\k move_down \\k "
+        "\\k move_right \\k Move\n"
+        "\\k throw \\k Throw Pikmin\n"
+        "\\k whistle \\k Whistle Pikmin\n"
+        "\n"
+        "\\k prev_type \\k \\k next_type \\k Swap Pikmin\n"
+        "\\k next_leader \\k Swap leader\n"
+        "\\k swarm_cursor \\k Swarm Pikmin\n"
+        "\\k dismiss \\k Dismiss\n"
+        "\n"
+        "\\k inventory \\k Open inventory\n"
+        "\\k radar \\k Open radar\n"
+        "\n"
+        "Pause (\\k pause \\k) and hit \"Help\" for more!";
+    TextGuiItem* controlGuide =
+        new TextGuiItem(controlGuideText, game.sysContent.fntSlim);
+    controlGuide->flags = ALLEGRO_ALIGN_LEFT;
+    controlGuide->lineWrap = true;
+    controlGuide->controlCondensed = true;
+    controlGuide->onDraw =
+    [this, controlGuide] (const DrawInfo & draw) {
+        if(!game.options.misc.showControlGuide) return;
+        DrawInfo drawWithAlpha = draw;
+        drawWithAlpha.tint.a *= controlGuideOpacity;
+        drawFilledRoundedRectangle(
+            draw.center, draw.size, 8.0f,
+            tintColor(game.config.guiColors.pauseBg, drawWithAlpha.tint)
+        );
+        DrawInfo drawSmaller = drawWithAlpha;
+        drawSmaller.size *= 0.95f;
+        controlGuide->defDrawCode(drawSmaller);
+    };
+    gui.addItem(controlGuide, "control_guide");
     
     
     //Inventory shortcut usage display.
@@ -1627,6 +1675,28 @@ void Hud::tick(float deltaT) {
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * deltaT;
     }
     standbyItemsOpacity = std::clamp(standbyItemsOpacity, 0.0f, 1.0f);
+    
+    //Update the control guide.
+    bool playerIsIdling = false;
+    if(
+        player->leaderPtr &&
+        player->leaderPtr->fsm.curState->id == LEADER_STATE_ACTIVE &&
+        player->leaderPtr->anim.curAnim->name != "walking"
+    ) {
+        playerIsIdling = true;
+    }
+    
+    if(playerIsIdling) {
+        controlGuideActivityTimer += deltaT;
+    } else {
+        controlGuideActivityTimer = 0.0f;
+    }
+    if(controlGuideActivityTimer >= HUD::CONTROL_GUIDE_DELAY) {
+        controlGuideOpacity += HUD::CONTROL_GUIDE_OPACITY_SPEED * deltaT;
+    } else {
+        controlGuideOpacity -= HUD::CONTROL_GUIDE_OPACITY_SPEED * deltaT;
+    }
+    controlGuideOpacity = std::clamp(controlGuideOpacity, 0.0f, 1.0f);
     
     //Tick the GUI items proper.
     gui.tick(game.deltaT);

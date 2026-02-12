@@ -2433,7 +2433,8 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         vector<StringToken> tokens =
             tokenizeString(this->text);
         setStringTokenWidths(
-            tokens, this->font, game.sysContent.fntSlim, lineHeight, false
+            tokens, this->font, game.sysContent.fntSlim,
+            lineHeight, controlCondensed
         );
         vector<vector<StringToken> > tokensPerLine =
             splitLongStringWithTokens(tokens, draw.size.x);
@@ -2441,7 +2442,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         for(size_t l = 0; l < tokensPerLine.size(); l++) {
             drawStringTokens(
                 tokensPerLine[l], this->font, game.sysContent.fntSlim,
-                false,
+                controlCondensed,
                 Point(
                     textX,
                     textY + l * lineHeight

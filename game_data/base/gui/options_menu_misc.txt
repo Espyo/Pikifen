@@ -15,38 +15,43 @@ hardcoded_items{
 		description=Icon of the input bound to the back button.
 	}
 	pikmin_bump{
-		center=50.0000 23.7500
-		size=70.0000 7.5000
+		center=50.0000 18.0000
+		size=70.0000 8.0000
 		description=Idle Pikmin leader bump distance picker.
 	}
 	dismiss_all{
-		center=50.0000 33.7500
-		size=70.0000 7.5000
+		center=50.0000 28.0000
+		size=70.0000 8.0000
 		description=Dismissing dismisses all Pikmin checkbox.
 	}
 	leader_cursor_cam_weight{
-		center=50.0000 43.7500
-		size=70.0000 7.5000
+		center=50.0000 38.0000
+		size=70.0000 8.0000
 		description=Leader cursor camera weight picker.
 	}
 	show_leader_cursor_counter{
-		center=50.0000 53.7500
-		size=70.0000 7.5000
+		center=50.0000 48.0000
+		size=70.0000 8.0000
 		description=Show standby Pikmin counter on leader cursor checkbox.
 	}
-	show_hud_input_icons{
-		center=50.0000 63.7500
-		size=70.0000 7.5000
-		description=Show control input bind icons on HUD checkbox.
+	show_control_guide{
+		center=50.0000 58.0000
+		size=70.0000 8.0000
+		description=Show control guide when idling checkbox.
+	}
+	show_gui_input_icons{
+		center=50.0000 68.0000
+		size=70.0000 8.0000
+		description=Show control bind input icons on GUI checkbox.
 	}
 	leaving_confirmation{
-		center=50.0000 73.7500
-		size=70.0000 7.5000
+		center=50.0000 78.0000
+		size=70.0000 8.0000
 		description=Leaving confirmation mode picker.
 	}
 	maker_tools_in_play{
-		center=50.0000 83.7500
-		size=70.0000 7.5000
+		center=50.0000 88.0000
+		size=70.0000 8.0000
 		description=Allow maker tools in normal gameplay checkbox.
 	}
 	tooltip{
@@ -57,7 +62,7 @@ hardcoded_items{
 }
 custom_items{
 	header{
-		center=50.0000 10.0000
+		center=50.0000 9.0000
 		size=50.0000 6.0000
 		description=Menu header.
 		type=text

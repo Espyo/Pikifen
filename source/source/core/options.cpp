@@ -236,8 +236,11 @@ const bool MAKER_TOOLS_IN_PLAY = false;
 //Default value for the Pikmin bumping distance.
 const float PIKMIN_BUMP_DIST = 50.0f;
 
-//Default value for whether to show player input icons on the HUD.
-const bool SHOW_HUD_INPUT_ICONS = true;
+//Default value for whether to show the control guide when idling.
+const bool SHOW_CONTROL_GUIDE = true;
+
+//Default value for whether to show player input icons on the GUI.
+const bool SHOW_GUI_INPUT_ICONS = true;
 
 //Default value for whether to show the standby type
 //counter on the leader cursor.
@@ -522,6 +525,8 @@ void Options::loadFromDataNode(DataNode* file) {
         mRS.set("cursor_cam_weight", misc.leaderCursorCamWeight);
         //DEPRECATED in 1.1.0 by "show_leader_cursor_counter".
         mRS.set("show_counter_on_cursor", misc.showLeaderCursorCounter);
+        //DEPRECATED in 1.2.0 by "show_gui_input_icons".
+        mRS.set("show_hud_input_icons", misc.showGuiInputIcons);
         
         mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leader_cursor_cam_weight", misc.leaderCursorCamWeight);
@@ -529,7 +534,8 @@ void Options::loadFromDataNode(DataNode* file) {
         mRS.set("maker_tools_in_play", misc.makerToolsInPlay);
         mRS.set("pikmin_bump_dist", misc.pikminBumpDist);
         mRS.set("show_leader_cursor_counter", misc.showLeaderCursorCounter);
-        mRS.set("show_hud_input_icons", misc.showHudInputIcons);
+        mRS.set("show_control_guide", misc.showControlGuide);
+        mRS.set("show_gui_input_icons", misc.showGuiInputIcons);
         
         leavingConfModeChar =
             std::min(
@@ -744,7 +750,8 @@ void Options::saveToDataNode(DataNode* file) const {
         mGW.write("maker_tools_in_play", misc.makerToolsInPlay);
         mGW.write("pikmin_bump_dist", misc.pikminBumpDist);
         mGW.write("show_leader_cursor_counter", misc.showLeaderCursorCounter);
-        mGW.write("show_hud_input_icons", misc.showHudInputIcons);
+        mGW.write("show_control_guide", misc.showControlGuide);
+        mGW.write("show_gui_input_icons", misc.showGuiInputIcons);
     }
     
     //Packs.
