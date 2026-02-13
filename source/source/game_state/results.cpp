@@ -271,7 +271,7 @@ void Results::load() {
     
     DataNode missionRecords;
     missionRecords.loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
     );
     string recordEntryName =
         getMissionRecordEntryName(game.curAreaData);

@@ -2361,12 +2361,13 @@ void AreaEditor::loadCmd(float inputValue) {
  * @brief Loads the reference image data from the reference configuration file.
  */
 void AreaEditor::loadReference() {
+    bool fileWasOpened = false;
     DataNode file(
         game.curAreaData->userDataPath + "/" +
-        FILE_NAMES::AREA_REFERENCE_CONFIG
+        FILE_NAMES::AREA_REFERENCE_CONFIG, &fileWasOpened
     );
     
-    if(file.fileWasOpened) {
+    if(fileWasOpened) {
         ReaderSetter rRS(&file);
         
         rRS.set("file", referenceFilePath);

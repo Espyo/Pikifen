@@ -35,7 +35,7 @@ ALLEGRO_BITMAP* loadBmp(
     bool reportError = true, bool errorBmpOnError = true,
     bool errorBmpOnEmpty = true
 );
-DataNode loadDataFile(const string& filePath);
+DataNode loadDataFile(const string& filePath, bool* outSuccess = nullptr);
 void loadMakerTools();
 ALLEGRO_FONT* loadFont(
     const string& fileName, int n, const int ranges[], int size

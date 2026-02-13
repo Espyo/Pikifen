@@ -270,7 +270,7 @@ void StatsMenu::populateStatsList() {
     
     DataNode missionRecordsFile;
     missionRecordsFile.loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
     );
     
     size_t missionClears = 0;

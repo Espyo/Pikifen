@@ -738,7 +738,7 @@ void MobType::loadFromDataNode(
         animDb->fillSoundIdxCaches(this);
         
         DataNode scriptFile;
-        scriptFile.loadFile(folderPath + "/script.txt", true, true);
+        scriptFile.loadFile(folderPath + "/script.txt", nullptr, true, true);
         size_t oldNStates = states.size();
         
         DataNode* deathStateNameNode =

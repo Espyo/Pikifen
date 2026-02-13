@@ -51,7 +51,6 @@ DataNode::DataNode() {
 DataNode::DataNode(const DataNode& dn2) :
     name(dn2.name),
     value(dn2.value),
-    fileWasOpened(dn2.fileWasOpened),
     filePath(dn2.filePath),
     lineNr(dn2.lineNr) {
     
@@ -68,11 +67,13 @@ DataNode::DataNode(const DataNode& dn2) :
  * @brief Constructs a new data node object from a file, given the file name.
  *
  * @param filePath Name of the file to load.
+ * @param outSuccess If not nullptr, whether the file was successfully
+ * opened or not is returned here.
  */
-DataNode::DataNode(const string& filePath) :
+DataNode::DataNode(const string& filePath, bool* outSuccess) :
     filePath(filePath) {
     
-    loadFile(filePath);
+    loadFile(filePath, outSuccess);
 }
 
 
@@ -130,7 +131,6 @@ DataNode* DataNode::addNew(const string& name, const string& value) {
 void DataNode::clear() {
     name.clear();
     value.clear();
-    fileWasOpened = false;
     filePath.clear();
     lineNr = 0;
     clearChildren();
@@ -163,7 +163,6 @@ DataNode* DataNode::createDummy() {
     DataNode* newDummyChild = new DataNode();
     newDummyChild->lineNr = lineNr;
     newDummyChild->filePath = filePath;
-    newDummyChild->fileWasOpened = fileWasOpened;
     dummyChildren.push_back(newDummyChild);
     return newDummyChild;
 }
@@ -395,6 +394,8 @@ string DataNode::getValueOrDefault(const string& def) const {
  * @brief Loads data from a file.
  *
  * @param filePath Path to the file to load.
+ * @param outSuccess If not nullptr, whether the file was successfully
+ * opened or not is returned here.
  * @param trimValues If true, spaces before and after the value will
  * be trimmed off.
  * @param namesOnlyAfterRoot If true, any nodes that are not in the
@@ -404,18 +405,18 @@ string DataNode::getValueOrDefault(const string& def) const {
  * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
 void DataNode::loadFile(
-    const string& filePath, bool trimValues,
+    const string& filePath, bool* outSuccess, bool trimValues,
     bool namesOnlyAfterRoot, bool encrypted
 ) {
     vector<string> lines;
     
-    fileWasOpened = false;
+    if(outSuccess) *outSuccess = false;
     this->filePath = filePath;
     
     ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "r");
     if(file) {
         bool isFirstLine = true;
-        fileWasOpened = true;
+        if(outSuccess) *outSuccess = true;
         string line;
         while(!al_feof(file)) {
             getline(file, line, encrypted);
@@ -502,7 +503,6 @@ size_t DataNode::loadNode(
             DataNode* newChild = new DataNode();
             newChild->name = trimSpaces(line.substr(0, pos));
             newChild->value.clear();
-            newChild->fileWasOpened = fileWasOpened;
             newChild->filePath = filePath;
             newChild->lineNr = l + 1;
             l =
@@ -533,7 +533,6 @@ size_t DataNode::loadNode(
         DataNode* newChild = new DataNode();
         newChild->name = trimSpaces(n);
         newChild->value = v;
-        newChild->fileWasOpened = fileWasOpened;
         newChild->filePath = filePath;
         newChild->lineNr = l + 1;
         children.push_back(newChild);
@@ -556,7 +555,6 @@ DataNode& DataNode::operator=(const DataNode& dn2) {
         
         name = dn2.name;
         value = dn2.value;
-        fileWasOpened = dn2.fileWasOpened;
         filePath = dn2.filePath;
         lineNr = dn2.lineNr;
         

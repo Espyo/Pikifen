@@ -432,9 +432,10 @@ void GuiEditor::loadGuiDefFile(
     
     //Load.
     manifest.fillFromPath(path);
-    fileNode = DataNode(manifest.path);
+    bool fileWasOpened = false;
+    fileNode = DataNode(manifest.path, &fileWasOpened);
     
-    if(!fileNode.fileWasOpened) {
+    if(!fileWasOpened) {
         openMessageDialog(
             "Load failed!",
             "Could not load the GUI definition file \"" + manifest.path + "\"!",

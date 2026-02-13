@@ -135,12 +135,13 @@ bool AreaContentManager::loadArea(
     string baseFolderPath = fromBackup ? userDataPath : tempManif.path;
     
     string dataFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_MAIN_DATA;
-    DataNode dataFile = loadDataFile(dataFilePath);
-    if(!dataFile.fileWasOpened) return false;
+    bool fileWasOpened = false;
+    DataNode dataFile = loadDataFile(dataFilePath, &fileWasOpened);
+    if(!fileWasOpened) return false;
     
     string geometryFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_GEOMETRY;
-    DataNode geometryFile = loadDataFile(geometryFilePath);
-    if(!geometryFile.fileWasOpened) return false;
+    DataNode geometryFile = loadDataFile(geometryFilePath, &fileWasOpened);
+    if(fileWasOpened) return false;
     
     areaPtr->type = requestedAreaType;
     areaPtr->userDataPath = userDataPath;
@@ -707,8 +708,9 @@ void HazardContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void HazardContentManager::loadHazard(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     Hazard newH;
     newH.manifest = manifest;
@@ -821,8 +823,9 @@ void LiquidContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void LiquidContentManager::loadLiquid(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     LiquidType* newL = new LiquidType();
     newL->manifest = manifest;
@@ -1328,8 +1331,9 @@ void MobTypeContentManager::loadMobTypesOfCategory(
     
     map<string, ContentManifest>& man = manifests[category->id];
     for(auto& t : man) {
-        DataNode file(t.second.path + "/data.txt");
-        if(!file.fileWasOpened) continue;
+        bool fileWasOpened = false;
+        DataNode file(t.second.path + "/data.txt", &fileWasOpened);
+        if(!fileWasOpened) continue;
         
         MobType* mt;
         mt = category->createType();
@@ -1508,8 +1512,9 @@ void ParticleGenContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void ParticleGenContentManager::loadGenerator(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     ParticleGenerator newPg;
     newPg.manifest = manifest;
@@ -1625,8 +1630,9 @@ void SongContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void SongContentManager::loadSong(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     Song newSong;
     newSong.manifest = manifest;
@@ -1951,8 +1957,9 @@ void SpikeDamageTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void SpikeDamageTypeContentManager::loadSpikeDamageType(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     SpikeDamageType newT;
     newT.manifest = manifest;
@@ -2096,8 +2103,9 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void SprayTypeContentManager::loadSprayType(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     SprayType newT;
     newT.manifest = manifest;
@@ -2247,8 +2255,9 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void StatusTypeContentManager::loadStatusType(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     StatusType* newT = new StatusType();
     newT->manifest = manifest;
@@ -2364,8 +2373,9 @@ void WeatherConditionContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 void WeatherConditionContentManager::loadWeatherCondition(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    DataNode file = loadDataFile(manifest->path);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = loadDataFile(manifest->path, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     Weather newW;
     newW.manifest = manifest;

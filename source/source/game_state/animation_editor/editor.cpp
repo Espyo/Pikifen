@@ -775,9 +775,10 @@ void AnimationEditor::loadAnimDbFile(
     
     //Load.
     manifest.fillFromPath(path);
-    DataNode file = DataNode(manifest.path);
+    bool fileWasOpened = false;
+    DataNode file = DataNode(manifest.path, &fileWasOpened);
     
-    if(!file.fileWasOpened) {
+    if(!fileWasOpened) {
         openMessageDialog(
             "Load failed!",
             "Could not load the animation database file \"" +

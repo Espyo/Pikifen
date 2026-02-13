@@ -131,16 +131,20 @@ ALLEGRO_BITMAP* loadBmp(
  * @brief Loads a data file from the game's content.
  *
  * @param filePath Path to the file, relative to the program root folder.
+ * @param outSuccess If not nullptr, whether the file was successfully
+ * opened or not is returned here.
  */
-DataNode loadDataFile(const string& filePath) {
-    DataNode n = DataNode(filePath);
-    if(!n.fileWasOpened) {
+DataNode loadDataFile(const string& filePath, bool* outSuccess) {
+    bool fileWasOpened = false;
+    DataNode node = DataNode(filePath, &fileWasOpened);
+    if(!fileWasOpened) {
         game.errors.report(
             "Could not open data file \"" + filePath + "\"!"
         );
     }
     
-    return n;
+    if(outSuccess) *outSuccess = fileWasOpened;
+    return node;
 }
 
 
@@ -268,8 +272,9 @@ void loadFonts() {
  * @brief Loads the maker tools from the tool config file.
  */
 void loadMakerTools() {
-    DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, &fileWasOpened);
+    if(!fileWasOpened) return;
     game.makerTools.loadFromDataNode(&file);
 }
 
@@ -487,8 +492,9 @@ void loadMiscSounds() {
  * @brief Loads the player's options.
  */
 void loadOptions() {
-    DataNode file = DataNode(FILE_PATHS_FROM_ROOT::OPTIONS);
-    if(!file.fileWasOpened) return;
+    bool fileWasOpened = false;
+    DataNode file = DataNode(FILE_PATHS_FROM_ROOT::OPTIONS, &fileWasOpened);
+    if(!fileWasOpened) return;
     
     //Init game controllers.
     game.hardware.updateControllers(true);
@@ -533,8 +539,11 @@ ALLEGRO_SAMPLE* loadSample(
  */
 void loadStatistics() {
     DataNode statsFile;
-    statsFile.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
-    if(!statsFile.fileWasOpened) return;
+    bool fileWasOpened = false;
+    statsFile.loadFile(
+        FILE_PATHS_FROM_ROOT::STATISTICS, &fileWasOpened, true, false, true
+    );
+    if(!fileWasOpened) return;
     
     Statistics& s = game.statistics;
     

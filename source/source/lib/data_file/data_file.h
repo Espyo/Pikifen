@@ -74,10 +74,6 @@ public:
     //The node's value.
     string value;
     
-    //True if the node or parent(s) was created from a file
-    //that was opened successfully.
-    bool fileWasOpened = false;
-    
     //File path of the file used to open this node or its parent(s), if any.
     string filePath;
     
@@ -88,7 +84,7 @@ public:
     //--- Public function declarations ---
     
     DataNode();
-    explicit DataNode(const string& filePath);
+    explicit DataNode(const string& filePath, bool* outSuccess = nullptr);
     DataNode(const string& name, const string& value);
     DataNode(const DataNode& dn2);
     DataNode& operator=(const DataNode& dn2);
@@ -107,9 +103,8 @@ public:
     DataNode* addNew(const string& name, const string& value = "");
     bool remove(DataNode* nodeToRemove);
     void loadFile(
-        const string& filePath,
-        bool trimValues = true,
-        bool namesOnlyAfterRoot = false,
+        const string& filePath, bool* outSuccess = nullptr,
+        bool trimValues = true, bool namesOnlyAfterRoot = false,
         bool encrypted = false
     );
     size_t loadNode(
