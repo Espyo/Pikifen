@@ -749,7 +749,7 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
 
 
 /**
- * @brief Returns how many Pikmin are in the field in the current area.
+ * @brief Returns how many Pikmin are on the field in the current area.
  * This also checks inside converters.
  *
  * @param filter If not nullptr, only return Pikmin matching this type.
@@ -875,7 +875,7 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
 
 /**
  * @brief Returns the total amount of Pikmin the player has.
- * This includes Pikmin in the field as well as the Onions, and also
+ * This includes Pikmin on the field as well as the Onions, and also
  * Pikmin inside converters.
  *
  * @param filter If not nullptr, only return Pikmin matching this type.
@@ -884,7 +884,7 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
 long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
     long total = 0;
     
-    //Check Pikmin in the field and inside converters.
+    //Check Pikmin on the field and inside converters.
     total += (long) getAmountOfFieldPikmin(filter);
     
     //Check Pikmin inside Onions and ships.
@@ -1241,7 +1241,7 @@ void GameplayState::load() {
         } else if(
             mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
             game.states.gameplay->mobs.pikmin.size() >=
-            game.config.rules.maxPikminInField
+            game.curAreaData->getMaxPikminInField()
         ) {
             valid = false;
         }

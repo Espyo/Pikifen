@@ -350,7 +350,7 @@ void PauseMenu::addPikminStatusLine(
     if(canFocus) {
         idleTextItem->onGetTooltip =
         [tooltipStart] () {
-            return tooltipStart + "idling in the field.";
+            return tooltipStart + "idling on the field.";
         };
     }
     if(idleText == "0") {
@@ -372,7 +372,7 @@ void PauseMenu::addPikminStatusLine(
     if(canFocus) {
         fieldTextItem->onGetTooltip =
         [tooltipStart] () {
-            return tooltipStart + "out in the field.";
+            return tooltipStart + "out on the field.";
         };
     }
     if(fieldText == "0") {

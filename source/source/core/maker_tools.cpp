@@ -224,7 +224,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         if(
             game.states.gameplay->mobs.pikmin.size() <
-            game.config.rules.maxPikminInField
+            game.curAreaData->getMaxPikminInField()
         ) {
             bool mustUseLastType = (mod1 && lastPikminType);
             PikminType* newPikminType = nullptr;

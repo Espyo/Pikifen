@@ -3589,7 +3589,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     if(
         typePtr->category->id == MOB_CATEGORY_PIKMIN &&
         game.states.gameplay->mobs.pikmin.size() >=
-        game.config.rules.maxPikminInField
+        game.curAreaData->getMaxPikminInField()
     ) {
         return nullptr;
     }

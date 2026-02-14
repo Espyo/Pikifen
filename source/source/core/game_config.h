@@ -314,7 +314,8 @@ struct GameConfig {
         //Maximum distance from the leader their cursor can go.
         float leaderCursorMaxDist = RULES_D::LEADER_CURSOR_MAX_DIST;
         
-        //Maximum number of Pikmin that can be out in the field at once.
+        //Maximum number of Pikmin that can be out on the field at once.
+        //Can be overriden by individual areas.
         size_t maxPikminInField = RULES_D::MAX_PIKMIN_IN_FIELD;
         
         //Maximum distance from the leader that a throw can be aimed to.

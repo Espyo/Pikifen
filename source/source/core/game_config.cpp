@@ -175,7 +175,7 @@ const bool CAN_THROW_LEADERS = true;
 //Default value for the leader cursor maximum distance.
 const float LEADER_CURSOR_MAX_DIST = 200.0f;
 
-//Default value for the maximum number of Pikmin in the field.
+//Default value for the maximum number of Pikmin on the field.
 const size_t MAX_PIKMIN_IN_FIELD = 100;
 
 //Default value for the maximum throw distance.

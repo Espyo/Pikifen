@@ -141,7 +141,7 @@ bool AreaContentManager::loadArea(
     
     string geometryFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_GEOMETRY;
     DataNode geometryFile = loadDataFile(geometryFilePath, &fileWasOpened);
-    if(fileWasOpened) return false;
+    if(!fileWasOpened) return false;
     
     areaPtr->type = requestedAreaType;
     areaPtr->userDataPath = userDataPath;
@@ -169,10 +169,8 @@ bool AreaContentManager::loadArea(
         game.loadingSubtextBmp = nullptr;
         drawLoadingScreen(
             areaPtr->name,
-            getSubtitleOrMissionGoal(
-                areaPtr->subtitle,
-                areaPtr->type,
-                areaPtr->missionOld.goal
+            calculateAreaSubtitle(
+                areaPtr->subtitle, areaPtr->type, areaPtr->mission.preset
             ),
             areaPtr->maker,
             1.0f

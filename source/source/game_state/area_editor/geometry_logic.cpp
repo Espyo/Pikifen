@@ -1319,13 +1319,13 @@ void AreaEditor::findProblemsPikminOverLimit() {
         MobGen* mPtr = game.curAreaData->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             nPikminMobs++;
-            if(nPikminMobs > game.config.rules.maxPikminInField) {
+            if(nPikminMobs > game.curAreaData->getMaxPikminInField()) {
                 problemType = EPT_PIKMIN_OVER_LIMIT;
                 problemTitle = "Over the Pikmin limit!";
                 problemDescription =
                     "There are more Pikmin in the area than the limit allows. "
                     "This means some of them will not appear. Current limit: "
-                    + i2s(game.config.rules.maxPikminInField) + ".";
+                    + i2s(game.curAreaData->getMaxPikminInField()) + ".";
                 return;
             }
         }

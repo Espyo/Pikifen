@@ -887,6 +887,21 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
 
 
 /**
+ * @brief Returns the maximum amount of Pikmin that can be out in the
+ * field at once. Uses the game configuration's value, or the area's
+ * override value.
+ * 
+ * @return The limit.
+ */
+size_t Area::getMaxPikminInField() const {
+    return
+        maxPikminInField == INVALID ?
+        game.config.rules.maxPikminInField :
+        maxPikminInField;
+}
+
+
+/**
  * @brief Returns how many path links exist in the area.
  *
  * @return The number of path links.
@@ -1294,6 +1309,9 @@ void Area::loadMainDataFromDataNode(
     aRS.set("bg_color", bgColor);
     aRS.set("bg_dist", bgDist);
     aRS.set("bg_zoom", bgBmpZoom);
+    aRS.set("max_pikmin_in_field", maxPikminInField);
+    aRS.set("onions_auto_eject", onionsAutoEject);
+    aRS.set("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
     
     //Weather.
     if(level > CONTENT_LOAD_LEVEL_BASIC) {
@@ -1991,6 +2009,16 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     aGW.write("day_time_start", dayTimeStart);
     aGW.write("day_time_speed", dayTimeSpeed);
     aGW.write("spray_amounts", sprayAmounts);
+
+    if(maxPikminInField != INVALID) {
+        aGW.write("max_pikmin_in_field", maxPikminInField);
+    }
+    if(onionsAutoEject) {
+        aGW.write("onions_auto_eject", onionsAutoEject);
+    }
+    if(onionsEjectGrownPikmin) {
+        aGW.write("onions_eject_grown_pikmin", onionsEjectGrownPikmin);
+    }
 }
 
 

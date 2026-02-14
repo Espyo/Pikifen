@@ -42,7 +42,7 @@ enum ONION_TRANSFER_RESULT {
     //No more Pikmin in the group to store.
     ONION_TRANSFER_RESULT_NONE_IN_GROUP,
     
-    //No more space in the field.
+    //No more space on the field.
     ONION_TRANSFER_RESULT_FIELD_FULL,
     
 };

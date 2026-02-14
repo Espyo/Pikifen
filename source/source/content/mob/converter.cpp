@@ -106,7 +106,7 @@ void Converter::spit() {
     for(size_t s = 0; s < totalToSpit; s++) {
         if(
             game.states.gameplay->mobs.pikmin.size() ==
-            game.config.rules.maxPikminInField
+            game.curAreaData->getMaxPikminInField()
         ) {
             break;
         }

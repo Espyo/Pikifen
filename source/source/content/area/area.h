@@ -265,6 +265,16 @@ struct Area : public Content {
     
     //Area day time speed, in game-minutes per real-minutes.
     float dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
+
+    //Maximum number of Pikmin that can be out on the field at once.
+    //INVALID = use game config's limit.
+    size_t maxPikminInField = INVALID;
+
+    //If true, Onions automatically eject whenever there is space in the field.
+    bool onionsAutoEject = false;
+
+    //If true, Onions eject fully-grown Pikmin instead of seeds.
+    bool onionsEjectGrownPikmin = false;
     
     //Known geometry problems.
     GeometryProblems problems;
@@ -302,6 +312,7 @@ struct Area : public Content {
     void fixVertexPointers(Vertex* vPtr);
     void generateBlockmap();
     void generateEdgesBlockmap(const vector<Edge*>& edges);
+    size_t getMaxPikminInField() const;
     size_t getNrPathLinks();
     void loadMainDataFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level

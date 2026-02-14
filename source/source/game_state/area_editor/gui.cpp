@@ -2066,6 +2066,78 @@ void AreaEditor::processGuiPanelGameplay() {
             ImGui::TreePop();
         }
         
+        //Rules node.
+        ImGui::Spacer();
+        if(saveableTreeNode("gameplay", "Game rules")) {
+        
+            //Max Pikmin in field override checkbox.
+            bool overrideMaxPik = game.curAreaData->maxPikminInField != INVALID;
+            if(
+                ImGui::Checkbox(
+                    "Override max Pikmin in field", &overrideMaxPik
+                )
+            ) {
+                registerChange("Pikmin maximum override");
+                if(overrideMaxPik) {
+                    game.curAreaData->maxPikminInField =
+                        game.config.rules.maxPikminInField;
+                } else {
+                    game.curAreaData->maxPikminInField = INVALID;
+                }
+            }
+            setTooltip(
+                "Whether to use a custom maximum of Pikmin on the field,\n"
+                "or to use the game configuration default."
+            );
+            
+            if(overrideMaxPik) {
+            
+                //Max Pikmin in field override value.
+                int maxPik = (int) game.curAreaData->maxPikminInField;
+                ImGui::Indent();
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        "Maximum", &maxPik,
+                        0.1, 0, INT_MAX
+                    )
+                ) {
+                    registerChange("Pikmin maximum override");
+                    game.curAreaData->maxPikminInField = maxPik;
+                }
+                ImGui::Unindent();
+                setTooltip(
+                    "Maximum amount of Pikmin that can be out on the field.", "",
+                    WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+            
+            //Onions auto eject override checkbox.
+            bool onionsAutoEject = game.curAreaData->onionsAutoEject;
+            if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
+                registerChange("Onion auto-eject override");
+                game.curAreaData->onionsAutoEject = onionsAutoEject;
+            }
+            setTooltip(
+                "If checked, all Onions will automatically eject Pikmin\n"
+                "whenever there is enough free space in the field."
+            );
+            
+            //Onions eject grown Pikmin override checkbox.
+            bool onionsEjectGrown = game.curAreaData->onionsEjectGrownPikmin;
+            if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
+                registerChange("Onion eject grown Pikmin override");
+                game.curAreaData->onionsEjectGrownPikmin = onionsEjectGrown;
+            }
+            setTooltip(
+                "If checked, all Onions will eject fully-grown Pikmin\n"
+                "instead of seeds."
+            );
+            
+            ImGui::TreePop();
+        }
+        
         ImGui::Spacer();
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
@@ -2225,7 +2297,7 @@ void AreaEditor::processGuiPanelInfo() {
             "Example: \"Beach; Gimmick; Short and sweet\""
         );
         
-        //Difficulty value.
+        //Difficulty combobox.
         int difficulty = game.curAreaData->difficulty;
         vector<string> difficultyOptions = {
             "Not specified", "1", "2", "3", "4", "5"

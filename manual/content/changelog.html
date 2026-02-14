@@ -31,19 +31,36 @@
       <li>
         Ice Pikmin:
         <ul>
-          <li><span class="cl-a">Added</span> new <a href="mob_pikmin.html">Pikmin types</a>: Ice Pikmin and Glow Pikmin.</li>
+          <li><span class="cl-a">Added</span> a new <a href="mob_pikmin.html">Pikmin type</a>: Ice Pikmin.</li>
           <li><span class="cl-a">Added</span> <a href="mob_onion.html">Onions</a>, <a href="mob_converter.html">Candypop Buds</a>, <a href="mob_pellet.html">pellets</a>, and Pellet Posies for Ice Pikmin, and changed existing multi-type ones to include Ice Pikmin.</li>
-          <li><span class="cl-a">Added</span> an ice <a href="hazard.html">hazard</a> that freezes Pikmin.</li>
+          <li><span class="cl-a">Added</span> an ice <a href="hazard.html">hazard</a>. Vulnerable Pikmin immediately freeze on their tracks when touching it.</li>
           <li><span class="cl-a">Added</span> an ice wall obstacle.</li>
-          <li><span class="cl-a">Added</span> the ability to freeze <a href="hazard.html">bodies of water</a>, making them safe to walk on.</li>
+          <li><span class="cl-a">Added</span> the ability to freeze <a href="hazard.html">bodies of water</a>. This makes them safe to walk on.</li>
         </ul>
       </li>
-      <li><span class="cl-a">Added</span> a new enemy: the Puffstool. It can hit Pikmin with its spores to change them into a mushroom form and turn them against the player.</li>
-      <li><span class="cl-a">Added</span> a new leader: the rookie Rescue Officer.</li>
-      <li><span class="cl-a">Added</span> a new obstacle: water spout.</li>
-      <li><span class="cl-a">Added</span> a control guide that shows up when the player has been inactive for a second. This can be disabled in the <a href="options.html">options</a>.</li>
-      <li><span class="cl-c">Changed</span> the electrical wire to use non-lethal electricity. This way all elemental hazard obstacles are non-lethal.</li>
-      <li><span class="cl-c">Changed</span> the ultra-bitter spray, making it last longer (8 seconds) but substantially increase the enemy's defense (20&times;). The Ice Pikmin's freezing ability now takes the role of a short-but-combat-effective stasis effect.</li>
+      <li>
+        Glow Pikmin:
+        <ul>
+          <li><span class="cl-a">Added</span> a new <a href="mob_pikmin.html">Pikmin type</a>: Glow Pikmin.</li>
+        </ul>
+      </li>
+      <li>
+        Mushroom Pikmin:
+        <ul>
+          <li><span class="cl-a">Added</span> a new enemy: the Puffstool.</li>
+          <li><span class="cl-a">Added</span> the "mushroom spores" hazard. This changes a Pikmin's appearance to a mushroom form and makes it attack the player.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> a new leader: the rookie Rescue Officer.</li>
+          <li><span class="cl-a">Added</span> a new obstacle: water spout.</li>
+          <li><span class="cl-a">Added</span> the control guide. This shows up when the player has been inactive for a second to remind them of some crucial controls. This can be disabled in the <a href="options.html">options</a>.</li>
+          <li><span class="cl-c">Changed</span> the electrical wire to use non-lethal electricity. This way all elemental hazard obstacles are non-lethal.</li>
+          <li><span class="cl-c">Changed</span> the ultra-bitter spray's effects. Now it last longer (8 seconds) but substantially increase the enemy's defense (20&times;). The Ice Pikmin's freezing ability now takes the role of a short-but-combat-effective stasis effect.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="1.2.0-making">Content-making changes</h3>
@@ -52,37 +69,63 @@
       <li>
         Mission system rework:
         <ul>
-          <li><span class="cl-a">Added</span> the <code>gameplay_mission_*</code> <a href="gui.html">GUI definitions</a>.</li>
+          <li><span class="cl-a">Added</span> a <a href="gui.html">GUI definition</a>: <code>gameplay_mission_*</code>.</li>
         </ul>
       </li>
-      <li><span class="cl-a">Added</span> the <code>can_freeze</code> <a href="hazard.html">liquid type</a> property.</li>
-      <li><span class="cl-a">Added</span> the <code>auto_eject</code>, <code>delivery_animation</code>, <code>eject_grown_pikmin</code>, and <code>has_nest_menu</code> <a href="mob_onion.html">Onion type</a> properties. These are useful for Lumiknolls.</li>
-      <li><span class="cl-a">Added</span> the <code>has_nest_menu</code> <a href="mob_ship.html">ship type</a> property.</li>
-      <li><span class="cl-a">Added</span> the <code>draw_number</code> <a href="mob_pellet.html">pellet type</a> property.</li>
-      <li><span class="cl-a">Added</span> the <code>auto_maturate_interval</code>, <code>can_lose_maturity</code>, <code>chills_liquids</code> <a href="mob_pikmin.html">Pikmin type</a> property.</li>
-      <li><span class="cl-a">Added</span> the <code>shaking</code> <a href="mob_leader.html">leader type</a> animation.</li>
-      <li><span class="cl-a">Added</span> the <code>chill</code>, <code>clock</code>, <code>clock_hand</code>, <code>frozen_liquid</code>, and <code>frozen_liquid_cracked</code> <a href="system_content_names.html">system content name</a> image properties.</li>
-      <li><span class="cl-a">Added</span> the <code>frozen_liquid</code>, <code>frozen_liquid_crack</code>, and <code>frozen_liquid_thaw</code> <a href="system_content_names.html">system content name</a> sound properties.</li>
-      <li><span class="cl-a">Added</span> the <code>status_buildup_amount</code> <a href="spike_damage.html">spike damage</a> property.</li>
-      <li><span class="cl-a">Added</span> the <code>health_regen_delay</code> <a href="mob_type.html">mob type</a> property.</li>
-      <li><span class="cl-a">Added</span> a sector-blocking-related word to <a href="mob_type.html">mob type</a> vulnerability data entries.</li>
-      <li><span class="cl-a">Added</span> the ability for <a href="status.html">status types</a> to have a sound play when the status is applied or removed.</li>
-      <li><span class="cl-a">Added</span> the <code>causes_betrayal</code>, <code>particle_generator_end</code>, <code>particle_generator_start</code>, <code>particle_scale_reaches</code>, <code>particle_scale_sizes</code>, <code>top_replacement</code>, and <code>shaking_effect_on_end</code> <a href="status.html">status types</a> properties. Some of these help replace usages of <code>replacement_on_timeout</code>.</li>
-      <li><span class="cl-a">Added</span> different types of knockback for <a href="animation.html">animation sprite</a> hitboxes: none, flinch, outward, and directional.</li>
-      <li><span class="cl-a">Added</span> different types of surface for <a href="animation.html">animation sprite</a> hitboxes: smooth, latchable, and bouncy.</li>
-      <li><span class="cl-a">Added</span> the <code>on_active_leader_changed</code> <a href="events_and_actions.html">script event</a>, used for Glow Pikmin.</li>
-      <li><span class="cl-a">Added</span> the <code>follow_mob_as_leader</code> <a href="events_and_actions.html">script action</a>, used for Glow Pikmin.</li>
-      <li><span class="cl-a">Added</span> the <code>onion</code> and <code>ship_no_onion</code> values to the <code>carrying_destination</code> <a href="mob_resource.html">resource type</a> property. These already existed, but were not available for usage in the resource type data files.</li>
+      <li>
+        <a href="mob_type.html">Mob type</a> properties:
+        <ul>
+          <li><span class="cl-a">Added</span> a mob type property: <code>health_regen_delay</code>.</li>
+          <li><span class="cl-a">Added</span> a mob type vulnerability data entry word that controls sector blocking.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_onion.html">Onion type</a> properties: <code>auto_eject</code>, <code>delivery_animation</code>, <code>eject_grown_pikmin</code>, and <code>has_nest_menu</code>. These are useful for Lumiknolls.</li>
+          <li><span class="cl-a">Added</span> a <a href="mob_ship.html">ship type</a> property: <code>has_nest_menu</code>.</li>
+          <li><span class="cl-a">Added</span> a <a href="mob_pellet.html">pellet type</a> property: <code>draw_number</code>.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_pikmin.html">Pikmin type</a> properties: <code>auto_maturate_interval</code>, <code>can_lose_maturity</code>, <code>chills_liquids</code>.</li>
+          <li><span class="cl-a">Added</span> some <a href="mob_resource.html">resource type</a> property values: <code>onion</code> and <code>ship_no_onion</code>, for the <code>carrying_destination</code> property. These already existed, but were not available for usage in the resource type data files.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="status.html">Status type</a> improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability for status types to have a sound play when the status is applied or removed.</li>
+          <li><span class="cl-a">Added</span> some properties: <code>causes_betrayal</code>, <code>particle_generator_end</code>, <code>particle_generator_start</code>, <code>particle_scale_reaches</code>, <code>particle_scale_sizes</code>, <code>top_replacement</code>, and <code>shaking_effect_on_end</code>. Some of these help replace usages of <code>replacement_on_timeout</code>.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="animation.html">Animation sprite</a> hitbox improvements:
+        <ul>
+          <li><span class="cl-a">Added</span> different types of knockback: none, flinch, outward, and directional.</li>
+          <li><span class="cl-a">Added</span> different types of surface: smooth, latchable, and bouncy.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="events_and_actions.html">Script</a> changes:
+        <ul>
+          <li><span class="cl-a">Added</span> an event: <code>on_active_leader_changed</code>. This is used for Glow Pikmin.</li>
+          <li><span class="cl-a">Added</span> an action: <code>follow_mob_as_leader</code>. This is used for Glow Pikmin.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> the ability for <a href="area.html">areas</a> to change some of the game rules: the maximum amount of Pikmin on the field, whether Onions auto-eject, and whether Onions eject fully-grown Pikmin.</li>
+          <li><span class="cl-a">Added</span> <a href="mob_leader.html">leader type</a> animations: <code>shaking</code>.</li>
+          <li><span class="cl-a">Added</span> <a href="system_content_names.html">system content name</a> image properties: <code>chill</code>, <code>clock</code>, <code>clock_hand</code>, <code>frozen_liquid</code>, and <code>frozen_liquid_cracked</code>.</li>
+          <li><span class="cl-a">Added</span> <a href="system_content_names.html">system content name</a> sound properties: <code>frozen_liquid</code>, <code>frozen_liquid_crack</code>, and <code>frozen_liquid_thaw</code>.</li>
+          <li><span class="cl-a">Added</span> <a href="spike_damage.html">spike damage</a> properties: <code>status_buildup_amount</code>.</li>
+          <li><span class="cl-a">Added</span> <a href="hazard.html">liquid type</a> properties: <code>can_freeze</code>.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="1.2.0-compatibility">Compatibility changes</h3>
 
     <ul>
-      <li><span class="cl-d">Deprecated</span> the <code>knockback_outward</code> hitbox property in <a href="animation.html">animation sprites</a>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>knockback_type</code>. "Outward" knockback will be directly ported. Other knockback hitboxes will be considered "directional". So if you have attack hitboxes with no knockback, you may want to change them to either the "none" or "flinch" types. While "directional" knockback hitboxes with 0 knockback strength will still work more or less like before, they make less sense than the other two options.</li>
-      <li><span class="cl-d">Deprecated</span> the <code>can_pikmin_latch</code> hitbox property in <a href="animation.html">animation sprites</a>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>surface_type</code>. "Latchable" surfaces will be directly ported. Other surfaces will be considered "smooth", where they used to be considered "bouncy", but with a very small bounce factor, hence the decision to make "smooth" the new default. So if you have non-latchable hitboxes you may want to choose between "smooth" and "bouncy" (which is bouncier than before).</li>
-      <li><span class="cl-d">Deprecated</span> the <code>misc</code> &gt; <code>show_hud_input_icons</code> <a href="options.html">option</a>. Play 1.2.0 to automatically rename it to the new name <code>show_gui_input_icons</code>.</li>
-      <li><span class="cl-c">Changed</span> the internal name of the Rock Pikmin's hit hazard from <code>rock</code> to <code>rock_pikmin</code> for the sake of consistency.</li>
-      <li><span class="cl-c">Changed</span> the <code>show_hud_input_icons</code> options "misc." menu <a href="gui.html">GUI</a> item's name to <code>show_gui_input_icons</code>.</li>
+      <li><span class="cl-d">Deprecated</span> an <a href="animation.html">animation sprite</a> hitbox property: <code>knockback_outward</code>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>knockback_type</code>. "Outward" knockback will be directly ported. Other knockback hitboxes will be considered "directional". So if you have attack hitboxes with no knockback, you may want to change them to either the "none" or "flinch" types. While "directional" knockback hitboxes with 0 knockback strength will still work more or less like before, they make less sense than the other two options.</li>
+      <li><span class="cl-d">Deprecated</span> an <a href="animation.html">animation sprite</a> hitbox property: <code>can_pikmin_latch</code>. Save an animation database in 1.2.0's editor to automatically port it to the new property <code>surface_type</code>. "Latchable" surfaces will be directly ported. Other surfaces will be considered "smooth", where they used to be considered "bouncy", but with a very small bounce factor, hence the decision to make "smooth" the new default. So if you have non-latchable hitboxes you may want to choose between "smooth" and "bouncy" (which is bouncier than before).</li>
+      <li><span class="cl-d">Deprecated</span> an <a href="options.html">option</a>: <code>misc</code> &gt; <code>show_hud_input_icons</code>. Play 1.2.0 to automatically rename it to the new name <code>show_gui_input_icons</code>.</li>
+      <li><span class="cl-c">Changed</span> a <a href="gui.html">GUI</a> item: <code>options_menu_misc</code> &gt; <code>show_hud_input_icons</code> was renamed to <code>show_gui_input_icons</code>.</li>
+      <li><span class="cl-c">Changed</span> a <a href="hazard.html">hazard</a>: <code>rock</code> (the Rock Pikmin's hit hazard) was renamed to <code>rock_pikmin</code> for the sake of consistency.</li>
     </ul>
 
     <h2 id="1.1.1">1.1.1</h2>

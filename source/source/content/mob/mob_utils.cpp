@@ -871,7 +871,7 @@ PikminNest::PikminNest(
 bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
     if(
         game.states.gameplay->mobs.pikmin.size() >=
-        game.config.rules.maxPikminInField
+        game.curAreaData->getMaxPikminInField()
     ) {
         return false;
     }
