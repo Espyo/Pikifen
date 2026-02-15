@@ -127,9 +127,8 @@ void getNextOffsetEffectEdge(
     float* outBaseShadowAngle,
     bool* outShadowCw
 );
-string getSubtitleOrMissionGoal(
-    const string& subtitle, const AREA_TYPE areaType,
-    const MISSION_GOAL goal
+string calculateAreaSubtitle(
+    const string& subtitle, AREA_TYPE areaType, MISSION_PRESET missionPreset
 );
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,

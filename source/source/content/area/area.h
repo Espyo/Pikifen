@@ -336,5 +336,12 @@ struct Area : public Content {
     void saveMissionDataToDataNode(DataNode* node);
     void saveThumbnail(bool toBackup);
     void clear();
+
     
+protected:
+
+    //--- Protected function declarations ---
+
+    void loadOldMissionSystem(DataNode* node);
+
 };

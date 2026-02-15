@@ -518,9 +518,8 @@ float getLiquidLimitLength(Edge* ePtr) {
 string getMissionRecordEntryName(Area* areaPtr) {
     return
         areaPtr->name + ";" +
-        getSubtitleOrMissionGoal(
-            areaPtr->subtitle, areaPtr->type,
-            areaPtr->missionOld.goal
+        calculateAreaSubtitle(
+            areaPtr->subtitle, areaPtr->type, areaPtr->mission.preset
         ) + ";" +
         areaPtr->maker + ";" +
         areaPtr->version;
@@ -576,19 +575,18 @@ Mob* getNextMobNearCursor(
 
 /**
  * @brief Returns an area's subtitle or, if none is specified,
- * the mission's goal.
+ * the mission's brief description.
  *
  * @param subtitle Area subtitle.
  * @param areaType Type of area.
- * @param goal Mission goal.
- * @return The subtitle or goal.
+ * @param preset Mission preset.
+ * @return The subtitle or description.
  */
-string getSubtitleOrMissionGoal(
-    const string& subtitle, const AREA_TYPE areaType,
-    const MISSION_GOAL goal
+string calculateAreaSubtitle(
+    const string& subtitle, AREA_TYPE areaType, MISSION_PRESET missionPreset
 ) {
     if(subtitle.empty() && areaType == AREA_TYPE_MISSION) {
-        return game.missionGoals[goal]->getName();
+        //TODO return game.missionGoals[goal]->getName();
     }
     
     return subtitle;

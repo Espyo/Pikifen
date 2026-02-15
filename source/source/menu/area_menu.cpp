@@ -152,10 +152,8 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     Area* areaPtr = game.content.areas.list[areaType][areaIdx];
     infoNameText->text = areaPtr->name;
     subtitleText->text =
-        getSubtitleOrMissionGoal(
-            areaPtr->subtitle,
-            areaType,
-            areaPtr->missionOld.goal
+        calculateAreaSubtitle(
+            areaPtr->subtitle, areaType, areaPtr->mission.preset
         );
     descriptionText->text = areaPtr->description;
     tagsText->text =

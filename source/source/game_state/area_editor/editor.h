@@ -1215,7 +1215,6 @@ private:
     void processGuiStatusBar();
     void processGuiToolbar();
     void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
-    void handleLmbDownGameplay(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);
     void handleLmbDownMobs(const ALLEGRO_EVENT& ev);

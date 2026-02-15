@@ -484,11 +484,6 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  */
 void AreaEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     switch(state) {
-    case EDITOR_STATE_GAMEPLAY: {
-        handleLmbDownGameplay(ev);
-        break;
-        
-    }
     case EDITOR_STATE_LAYOUT: {
         handleLmbDownLayout(ev);
         break;
@@ -616,25 +611,6 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         break;
         
     }
-    }
-}
-
-
-/**
- * @brief Handles the left mouse button being pressed in the canvas exclusively,
- * while in the gameplay mode.
- *
- * @param ev Event to handle.
- */
-void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
-    if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
-        curTransformationWidget.handleMouseDown(
-            game.editorsView.mouseCursorWorldPos,
-            &game.curAreaData->missionOld.goalExitCenter,
-            &game.curAreaData->missionOld.goalExitSize,
-            nullptr,
-            1.0f / game.editorsView.cam.zoom
-        );
     }
 }
 
@@ -1538,33 +1514,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     } else {
     
         switch(state) {
-        case EDITOR_STATE_GAMEPLAY: {
-    
-            if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
-                Point exitCenter =
-                    game.curAreaData->missionOld.goalExitCenter;
-                Point exitSize =
-                    game.curAreaData->missionOld.goalExitSize;
-                if(
-                    curTransformationWidget.handleMouseMove(
-                        snapPoint(game.editorsView.mouseCursorWorldPos, true),
-                        &exitCenter, &exitSize,
-                        nullptr,
-                        1.0f / game.editorsView.cam.zoom,
-                        false,
-                        false,
-                        MISSION::EXIT_MIN_SIZE,
-                        isAltPressed
-                    )
-                ) {
-                    registerChange("mission exit change");
-                    game.curAreaData->missionOld.goalExitCenter = exitCenter;
-                    game.curAreaData->missionOld.goalExitSize = exitSize;
-                }
-            }
-            break;
-            
-        }
         case EDITOR_STATE_LAYOUT: {
     
             bool twHandled = false;

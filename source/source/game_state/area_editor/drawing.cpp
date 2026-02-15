@@ -271,16 +271,6 @@ void AreaEditor::drawCanvas() {
     drawTreeShadows(style);
     drawRegions(style);
     
-    //Mission exit region transformation widget.
-    if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
-        curTransformationWidget.draw(
-            &game.curAreaData->missionOld.goalExitCenter,
-            &game.curAreaData->missionOld.goalExitSize,
-            nullptr,
-            1.0f / game.editorsView.cam.zoom
-        );
-    }
-    
     //Cross-section points and line.
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
         for(unsigned char p = 0; p < 2; p++) {

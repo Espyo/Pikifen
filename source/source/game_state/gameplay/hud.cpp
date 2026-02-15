@@ -1439,6 +1439,12 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 totalAmount = itemInfo->totalAmount;
                 break;
                 
+            } case MISSION_HUD_ITEM_AMT_LEADER_KOS: {
+                currentAmount = game.states.gameplay->leadersKod;
+                remainingAmount = itemInfo->totalAmount - currentAmount;
+                totalAmount = itemInfo->totalAmount;
+                break;
+                
             }
             }
             

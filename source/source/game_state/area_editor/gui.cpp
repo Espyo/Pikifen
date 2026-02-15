@@ -380,10 +380,10 @@ void AreaEditor::processGuiGradingModeWidgets(
     int value, const string& widgetLabel, const string& tooltip
 ) {
     //Radio button.
-    int mode = game.curAreaData->missionOld.gradingMode;
+    int mode = game.curAreaData->mission.gradingMode;
     if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
         registerChange("mission grading change");
-        game.curAreaData->missionOld.gradingMode =
+        game.curAreaData->mission.gradingMode =
             (MISSION_GRADING_MODE) mode;
     }
     setTooltip(tooltip);
@@ -1670,6 +1670,8 @@ void AreaEditor::processGuiPanelDetails() {
             ImGui::TreePop();
             
         }
+        
+        ImGui::Spacer();
         
         //Regions node.
         if(saveableTreeNode("details", "Regions")) {
@@ -4804,7 +4806,9 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         itemPtr->amountType ==
                         MISSION_HUD_ITEM_AMT_LEADERS ||
                         itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS
+                        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS ||
+                        itemPtr->amountType ==
+                        MISSION_HUD_ITEM_AMT_LEADER_KOS
                     )
                 ) {
                 

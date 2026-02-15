@@ -300,6 +300,9 @@ enum MISSION_HUD_ITEM_AMT {
     //Amount of Pikmin deaths so far.
     MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS,
     
+    //Amount of leader KOs so far.
+    MISSION_HUD_ITEM_AMT_LEADER_KOS,
+    
 };
 
 
@@ -310,6 +313,7 @@ buildEnumNames(missionHudItemAmountTypeNames, MISSION_HUD_ITEM_AMT)({
     { MISSION_HUD_ITEM_AMT_PIKMIN, "Pikmin count" },
     { MISSION_HUD_ITEM_AMT_LEADERS, "Leader count" },
     { MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS, "Pikmin deaths" },
+    { MISSION_HUD_ITEM_AMT_LEADER_KOS, "Leader KOs" },
 });
 
 
@@ -345,30 +349,6 @@ enum MISSION_GRADING_MODE {
     
     //Based on whether the player played or not.
     MISSION_GRADING_MODE_PARTICIPATION,
-    
-};
-
-
-//Possible criteria for a mission's point scoring.
-enum MISSION_SCORE_CRITERIA {
-
-    //Points per Pikmin born.
-    MISSION_SCORE_CRITERIA_PIKMIN_BORN,
-    
-    //Points per Pikmin death.
-    MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
-    
-    //Points per second left. Only for missions with a time limit.
-    MISSION_SCORE_CRITERIA_SEC_LEFT,
-    
-    //Points per second passed.
-    MISSION_SCORE_CRITERIA_SEC_PASSED,
-    
-    //Points per treasure point.
-    MISSION_SCORE_CRITERIA_TREASURE_POINTS,
-    
-    //Points per enemy defeat point.
-    MISSION_SCORE_CRITERIA_ENEMY_POINTS,
     
 };
 
@@ -425,6 +405,31 @@ enum MISSION_FAIL_COND {
     
     //Ending from the pause menu.
     MISSION_FAIL_COND_PAUSE_MENU,
+    
+};
+
+
+//DEPRECATED in 1.2.0 by MISSION_SCORE_CRITERION.
+//Possible criteria for a mission's point scoring.
+enum MISSION_SCORE_CRITERIA {
+
+    //Points per Pikmin born.
+    MISSION_SCORE_CRITERIA_PIKMIN_BORN,
+    
+    //Points per Pikmin death.
+    MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
+    
+    //Points per second left. Only for missions with a time limit.
+    MISSION_SCORE_CRITERIA_SEC_LEFT,
+    
+    //Points per second passed.
+    MISSION_SCORE_CRITERIA_SEC_PASSED,
+    
+    //Points per treasure point.
+    MISSION_SCORE_CRITERIA_TREASURE_POINTS,
+    
+    //Points per enemy defeat point.
+    MISSION_SCORE_CRITERIA_ENEMY_POINTS,
     
 };
 
@@ -559,7 +564,7 @@ struct MissionData {
     MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
     
     //Time limit in seconds, if any.
-    size_t timeLimit = MISSION::DEF_TIME_LIMIT;
+    size_t timeLimit = 0;
     
     //HUD items.
     vector<MissionHudItem> hudItems;

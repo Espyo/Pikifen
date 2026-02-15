@@ -191,10 +191,10 @@ void GameplayState::doGameDrawing(
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
                 game.curAreaData->name,
-                getSubtitleOrMissionGoal(
+                calculateAreaSubtitle(
                     game.curAreaData->subtitle,
                     game.curAreaData->type,
-                    game.curAreaData->missionOld.goal
+                    game.curAreaData->mission.preset
                 ),
                 game.curAreaData->maker,
                 areaTitleFadeTimer.getRatioLeft()

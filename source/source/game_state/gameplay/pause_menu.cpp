@@ -1820,9 +1820,9 @@ void PauseMenu::initMainPauseMenu() {
     //Area subtitle.
     TextGuiItem* areaSubtitleText =
         new TextGuiItem(
-        getSubtitleOrMissionGoal(
+        calculateAreaSubtitle(
             game.curAreaData->subtitle, game.curAreaData->type,
-            game.curAreaData->missionOld.goal
+            game.curAreaData->mission.preset
         ),
         game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)

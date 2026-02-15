@@ -369,10 +369,10 @@ void Results::load() {
     
     //Area subtitle text.
     string subtitle =
-        getSubtitleOrMissionGoal(
+        calculateAreaSubtitle(
             game.curAreaData->subtitle,
             game.curAreaData->type,
-            game.curAreaData->missionOld.goal
+            game.curAreaData->mission.preset
         );
     if(!subtitle.empty()) {
         TextGuiItem* areaSubtitleText =
