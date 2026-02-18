@@ -950,7 +950,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             drawText(
                 itemInfo->text, game.sysContent.fntStandard,
                 draw.center, draw.size,
-                tintColor(mapAlpha(128), draw.tint)
+                tintColor(mapAlpha(224), draw.tint)
             );
         };
         item->addChild(text);
@@ -1003,7 +1003,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         analog->forceSquare = true;
         item->addChild(analog);
         gui.addItem(analog, "mission_clock_analog");
-        
         
         //Digital clock.
         GuiItem* digital = new GuiItem();
@@ -1058,7 +1057,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(scoreLabel);
         gui.addItem(scoreLabel, "mission_score_label");
         
-        
         //Score points.
         GuiItem* points = new GuiItem();
         points->onDraw =
@@ -1076,7 +1074,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         gui.addItem(points, "mission_score_points");
         game.states.gameplay->missionScoreCurText = points;
         
-        
         //"Points" label.
         GuiItem* pointsLabel = new GuiItem();
         pointsLabel->onDraw =
@@ -1092,7 +1089,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         };
         item->addChild(pointsLabel);
         gui.addItem(pointsLabel, "mission_score_points_label");
-        
         
         //Ruler.
         GuiItem* ruler = new GuiItem();

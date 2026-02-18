@@ -2351,6 +2351,241 @@ bool Editor::processGuiInputPopup(
 
 
 /**
+ * @brief Processes the Dear ImGui list navigation add widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a new item is added.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiListNavAddWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "addItemButton", editorIcons[EDITOR_ICON_ADD],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        if(listSize == 0) {
+            *curItemIdx = 0;
+        } else {
+            (*curItemIdx)++;
+        }
+        pressed = true;
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation count widget.
+ *
+ * @param curItemIdx Index of the current item.
+ * @param listSize Current size of the list.
+ * @param label Label to show before the count.
+ */
+void Editor::processGuiListNavCountWidget(
+    size_t curItemIdx, size_t listSize, const string& label
+) {
+    ImGui::Text(
+        "%s: %s/%u",
+        label.c_str(),
+        (listSize == 0 ? "-" : i2s(curItemIdx + 1)).c_str(),
+        (unsigned int) listSize
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation delete widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item is deleted.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiListNavDelWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    if(listSize == 0) return false;
+    
+    bool pressed = false;
+    
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "delItemButton", editorIcons[EDITOR_ICON_REMOVE],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        pressed = true;
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation move left widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item moved.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button, and it was possible to move
+ * left.
+ */
+bool Editor::processGuiListNavMoveLeftWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    if(listSize < 2) return false;
+    
+    bool pressed = false;
+    
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "moveItemLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        if(*curItemIdx == 0) {
+            setStatus("This is already the first one.");
+        } else {
+            pressed = true;
+        }
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation move right widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item moved.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button, and it was possible to move
+ * right.
+ */
+bool Editor::processGuiListNavMoveRightWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    if(listSize < 2) return false;
+    
+    bool pressed = false;
+    
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "moveItemRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        if(*curItemIdx == listSize - 1) {
+            setStatus("This is already the last one.");
+        } else {
+            pressed = true;
+        }
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation next widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a different item is chosen.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiListNavNextWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    if(listSize < 2) return false;
+    
+    bool pressed = false;
+    
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "nextItemButton", editorIcons[EDITOR_ICON_NEXT],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        *curItemIdx = sumAndWrap(*curItemIdx, +1, listSize);
+        pressed = true;
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation previous widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a different item is chosen.
+ * @param listSize Current size of the list.
+ * @param tooltip Tooltip for the widget.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiListNavPrevWidget(
+    size_t* curItemIdx, size_t listSize, const string& tooltip
+) {
+    if(listSize < 2) return false;
+    
+    bool pressed = false;
+    
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "prevItemButton", editorIcons[EDITOR_ICON_PREVIOUS],
+            Point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        *curItemIdx = sumAndWrap(*curItemIdx, -1, listSize);
+        pressed = true;
+    }
+    setTooltip(tooltip);
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation widgets setup.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly to prevent errors.
+ * @param listSize Current size of the list.
+ */
+void Editor::processGuiListNavSetup(size_t* curItemIdx, size_t listSize) {
+    if(listSize == 0) {
+        *curItemIdx = 0;
+    } else if(*curItemIdx >= listSize) {
+        *curItemIdx = listSize - 1;
+    }
+}
+
+
+/**
  * @brief Processes the Dear ImGui message dialog widgets.
  */
 void Editor::processGuiMessageDialog() {

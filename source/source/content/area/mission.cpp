@@ -402,6 +402,8 @@ MissionEvType::EditorInfo MissionEvTypeLoseLeaders::getEditorInfo() const {
         "Loss amount",
         .param1Description =
         "Number of leader losses to check for.",
+        .param1IsIndex = false,
+        .param1Default = 1,
     };
 }
 
@@ -490,6 +492,8 @@ MissionEvType::EditorInfo MissionEvTypeLosePikmin::getEditorInfo() const {
         "Loss amount",
         .param1Description =
         "Number of Pikmin losses to check for.",
+        .param1IsIndex = false,
+        .param1Default = 1,
     };
 }
 
@@ -579,6 +583,8 @@ MissionEvType::EditorInfo MissionEvTypeMobChecklist::getEditorInfo() const {
         "Mob checklist number",
         .param1Description =
         "Number of the mob checklist to check for.",
+        .param1IsIndex = true,
+        .param1Default = 0,
     };
 }
 
@@ -594,6 +600,10 @@ MissionEvType::EditorInfo MissionEvTypeMobChecklist::getEditorInfo() const {
 MissionEvType::HudInfo MissionEvTypeMobChecklist::getHudInfo(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
+    if(ev->param1 > gameplay->missionMobChecklists.size() - 1) {
+        return {};
+    }
+    
     return
     MissionEvType::HudInfo {
         .description =
@@ -650,16 +660,16 @@ bool MissionEvTypeMobChecklist::getZoomData(
 bool MissionEvTypeMobChecklist::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->param1 == 0 || ev->param1 > gameplay->missionMobChecklists.size()) {
+    if(ev->param1 > gameplay->missionMobChecklists.size() - 1) {
         return false;
     }
     
     size_t requiredAmount =
-        gameplay->missionMobChecklists[ev->param1 - 1].requiredAmount;
+        gameplay->missionMobChecklists[ev->param1].requiredAmount;
     size_t remainingAmount =
-        gameplay->missionMobChecklists[ev->param1 - 1].remaining.size();
+        gameplay->missionMobChecklists[ev->param1].remaining.size();
     size_t startingAmount =
-        gameplay->missionMobChecklists[ev->param1 - 1].startingAmount;
+        gameplay->missionMobChecklists[ev->param1].startingAmount;
     size_t nrCleared =
         startingAmount - remainingAmount;
         
@@ -682,10 +692,14 @@ MissionEvType::EditorInfo MissionEvTypeLeadersInRegion::getEditorInfo() const {
         "Leader amount",
         .param1Description =
         "Number of leaders to check for.",
+        .param1IsIndex = false,
+        .param1Default = 1,
         .param2Name =
         "Region number",
         .param2Description =
         "Number of the region to check for.",
+        .param2IsIndex = true,
+        .param2Default = 0,
     };
 }
 
@@ -733,15 +747,15 @@ bool MissionEvTypeLeadersInRegion::getZoomData(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
-    if(ev->param2 == 0 || ev->param2 > gameplay->areaRegions.size()) {
+    if(ev->param2 > gameplay->areaRegions.size() - 1) {
         return false;
     }
     Point avgPos;
-    for(Leader* lPtr : gameplay->areaRegions[ev->param2 - 1].leadersInside) {
+    for(Leader* lPtr : gameplay->areaRegions[ev->param2].leadersInside) {
         if(lPtr) avgPos += lPtr->pos;
     }
-    avgPos.x /= gameplay->areaRegions[ev->param2 - 1].leadersInside.size();
-    avgPos.y /= gameplay->areaRegions[ev->param2 - 1].leadersInside.size();
+    avgPos.x /= gameplay->areaRegions[ev->param2].leadersInside.size();
+    avgPos.y /= gameplay->areaRegions[ev->param2].leadersInside.size();
     *outCamPos = avgPos;
     return true;
 }
@@ -758,11 +772,11 @@ bool MissionEvTypeLeadersInRegion::getZoomData(
 bool MissionEvTypeLeadersInRegion::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->param2 == 0 || ev->param2 > gameplay->areaRegions.size()) {
+    if(ev->param2 > gameplay->areaRegions.size() - 1) {
         return false;
     }
     return
-        gameplay->areaRegions[ev->param2 - 1].leadersInside.size() >=
+        gameplay->areaRegions[ev->param2].leadersInside.size() >=
         ev->param1;
 }
 
@@ -859,6 +873,8 @@ MissionEvType::EditorInfo MissionEvTypePikminOrFewer::getEditorInfo() const {
         "Pikmin amount",
         .param1Description =
         "Amount of Pikmin to check for.",
+        .param1IsIndex = false,
+        .param1Default = 1,
     };
 }
 
@@ -948,6 +964,8 @@ MissionEvType::EditorInfo MissionEvTypePikminOrMore::getEditorInfo() const {
         "Pikmin amount",
         .param1Description =
         "Amount of Pikmin to check for.",
+        .param1IsIndex = false,
+        .param1Default = 1,
     };
 }
 
@@ -3446,7 +3464,7 @@ bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypeCollectionPts::getName() const {
@@ -3457,7 +3475,7 @@ string MissionScoreCriterionTypeCollectionPts::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3472,7 +3490,7 @@ size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypeDefeatPts::getName() const {
@@ -3483,7 +3501,7 @@ string MissionScoreCriterionTypeDefeatPts::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3498,7 +3516,7 @@ size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypeMobChecklist::getName() const {
@@ -3509,7 +3527,7 @@ string MissionScoreCriterionTypeMobChecklist::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3518,15 +3536,19 @@ string MissionScoreCriterionTypeMobChecklist::getName() const {
 size_t MissionScoreCriterionTypeMobChecklist::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
+    if(cri->param1 > gameplay->missionMobChecklists.size() - 1) {
+        return 0;
+    }
+    
     MissionMobChecklistStatus* cPtr =
-        &gameplay->missionMobChecklists[cri->param1 - 1];
+        &gameplay->missionMobChecklists[cri->param1];
     return cPtr->startingAmount - cPtr->remaining.size();
 }
 
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypePikmin::getName() const {
@@ -3537,7 +3559,7 @@ string MissionScoreCriterionTypePikmin::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3552,7 +3574,7 @@ size_t MissionScoreCriterionTypePikmin::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypePikminBorn::getName() const {
@@ -3563,7 +3585,7 @@ string MissionScoreCriterionTypePikminBorn::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3578,7 +3600,7 @@ size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypePikminDeaths::getName() const {
@@ -3589,7 +3611,7 @@ string MissionScoreCriterionTypePikminDeaths::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3604,7 +3626,7 @@ size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypeSecLeft::getName() const {
@@ -3615,7 +3637,7 @@ string MissionScoreCriterionTypeSecLeft::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
@@ -3631,7 +3653,7 @@ size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
 
 /**
  * @brief Returns the criterion's name.
- * 
+ *
  * @return The name.
  */
 string MissionScoreCriterionTypeSecPassed::getName() const {
@@ -3642,7 +3664,7 @@ string MissionScoreCriterionTypeSecPassed::getName() const {
 /**
  * @brief Calculates the amount relevant to this criterion so the final score
  * can be calculated.
- * 
+ *
  * @param cri Criterion being process.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.

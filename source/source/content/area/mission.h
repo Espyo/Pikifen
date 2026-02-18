@@ -768,11 +768,23 @@ public:
         //The first parameter's description. Empty if not used.
         string param1Description;
         
+        //Whether the first parameter refers to some index.
+        bool param1IsIndex = false;
+        
+        //Default value for the first parameter.
+        size_t param1Default = 0;
+        
         //The second parameter's name. Empty if not used.
         string param2Name;
         
         //The second parameter's description. Empty if not used.
         string param2Description;
+        
+        //Whether the second parameter refers to some index.
+        bool param2IsIndex = false;
+        
+        //Default value for the second parameter.
+        size_t param2Default = 0;
         
     };
     

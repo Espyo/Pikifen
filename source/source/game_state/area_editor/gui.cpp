@@ -3409,148 +3409,90 @@ void AreaEditor::processGuiPanelMissionEv() {
     //Mission events node.
     if(saveableTreeNode("gameplay", "Mission events")) {
     
-        //Event count text.
         static size_t curEventIdx = 0;
-        if(game.curAreaData->mission.events.empty()) {
-            curEventIdx = 0;
-        } else if(curEventIdx >= game.curAreaData->mission.events.size()) {
-            curEventIdx = game.curAreaData->mission.events.size() - 1;
-        }
-        ImGui::Text(
-            "Event: %s/%u",
-            (
-                game.curAreaData->mission.events.empty() ?
-                "-" :
-                i2s(curEventIdx + 1)
-            ).c_str(),
-            (unsigned int) game.curAreaData->mission.events.size()
+        
+        processGuiListNavSetup(
+            &curEventIdx, game.curAreaData->mission.events.size()
         );
         
-        //Add event button.
+        //Navigation count widget.
+        processGuiListNavCountWidget(
+            curEventIdx, game.curAreaData->mission.events.size(), "Event"
+        );
+        
+        //Navigation add widget.
         if(
-            ImGui::ImageButton(
-                "addEvButton", editorIcons[EDITOR_ICON_ADD],
-                Point(EDITOR::ICON_BMP_SIZE)
+            processGuiListNavAddWidget(
+                &curEventIdx, game.curAreaData->mission.events.size(),
+                "Add a new mission event."
             )
         ) {
             registerChange("mission event addition");
-            if(game.curAreaData->mission.events.empty()) {
-                curEventIdx = 0;
-            } else {
-                curEventIdx++;
-            }
             game.curAreaData->mission.events.insert(
                 game.curAreaData->mission.events.begin() +
                 curEventIdx,
                 MissionEvent()
             );
-        }
-        setTooltip("Add a new mission event.");
+        };
         
-        if(!game.curAreaData->mission.events.empty()) {
+        //Navigation delete widget.
+        if(
+            processGuiListNavDelWidget(
+                &curEventIdx, game.curAreaData->mission.events.size(),
+                "Delete the current event."
+            )
+        ) {
+            registerChange("mission event deletion");
+            game.curAreaData->mission.events.erase(
+                game.curAreaData->mission.events.begin() +
+                curEventIdx
+            );
+        };
         
-            //Delete event button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "delEvButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                registerChange("mission event deletion");
-                game.curAreaData->mission.events.erase(
-                    game.curAreaData->mission.events.begin() +
-                    curEventIdx
-                );
-            }
-            setTooltip("Delete the current event.");
-            
-        }
+        //Navigation previous widget.
+        processGuiListNavPrevWidget(
+            &curEventIdx, game.curAreaData->mission.events.size(),
+            "Change to the previous event."
+        );
         
-        if(game.curAreaData->mission.events.size() > 1) {
+        //Navigation next widget.
+        processGuiListNavNextWidget(
+            &curEventIdx, game.curAreaData->mission.events.size(),
+            "Change to the next event."
+        );
         
-            //Previous event button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "prevEvButton", editorIcons[EDITOR_ICON_PREVIOUS],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curEventIdx =
-                    sumAndWrap(
-                        curEventIdx, -1,
-                        game.curAreaData->mission.events.size()
-                    );
-            }
-            setTooltip("Change to the previous event.");
-            
-            //Next event button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "nextEvButton", editorIcons[EDITOR_ICON_NEXT],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curEventIdx =
-                    sumAndWrap(
-                        curEventIdx, +1,
-                        game.curAreaData->mission.events.size()
-                    );
-            }
-            setTooltip("Change to the next event.");
-            
-            //Trigger earlier button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "moveEvLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                if(curEventIdx == 0) {
-                    setStatus("This is already the earliest event.");
-                } else {
-                    registerChange("mission event reorder");
-                    std::swap(
-                        game.curAreaData->mission.events[curEventIdx],
-                        game.curAreaData->mission.events[curEventIdx - 1]
-                    );
-                    curEventIdx--;
-                    setStatus("Made the event trigger earlier.");
-                }
-            }
-            setTooltip(
+        //Navigation trigger earlier widget.
+        if(
+            processGuiListNavMoveLeftWidget(
+                &curEventIdx, game.curAreaData->mission.events.size(),
                 "Make this event trigger earlier.\n"
                 "Events are triggered in the order they're displayed here."
+            )
+        ) {
+            registerChange("mission event reorder");
+            std::swap(
+                game.curAreaData->mission.events[curEventIdx],
+                game.curAreaData->mission.events[curEventIdx - 1]
             );
-            
-            //Trigger later button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "moveEvRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                if(curEventIdx == game.curAreaData->mission.events.size() - 1) {
-                    setStatus("This is already the last event.");
-                } else {
-                    registerChange("mission event reorder");
-                    std::swap(
-                        game.curAreaData->mission.events[curEventIdx],
-                        game.curAreaData->mission.events[curEventIdx + 1]
-                    );
-                    curEventIdx++;
-                    setStatus("Made the event trigger later.");
-                }
-            }
-            setTooltip(
+            curEventIdx--;
+            setStatus("Made the event trigger earlier.");
+        }
+        
+        //Navigation trigger later widget.
+        if(
+            processGuiListNavMoveRightWidget(
+                &curEventIdx, game.curAreaData->mission.events.size(),
                 "Make this event trigger later.\n"
                 "Events are triggered in the order they're displayed here."
+            )
+        ) {
+            registerChange("mission event reorder");
+            std::swap(
+                game.curAreaData->mission.events[curEventIdx],
+                game.curAreaData->mission.events[curEventIdx + 1]
             );
-            
+            curEventIdx++;
+            setStatus("Made the event trigger later.");
         }
         
         if(!game.curAreaData->mission.events.empty()) {
@@ -3570,6 +3512,10 @@ void AreaEditor::processGuiPanelMissionEv() {
             if(ImGui::Combo("Type", &missionEvType, evTypeNames, 15)) {
                 registerChange("mission event type change");
                 evPtr->type = (MISSION_EV) missionEvType;
+                evEditorInfo =
+                    game.missionEvTypes[evPtr->type]->getEditorInfo();
+                evPtr->param1 = evEditorInfo.param1Default;
+                evPtr->param2 = evEditorInfo.param2Default;
             }
             setTooltip("What thing needs to happen for the event to trigger.");
             
@@ -3584,14 +3530,18 @@ void AreaEditor::processGuiPanelMissionEv() {
             
                 //Event param 1 value.
                 int number = (int) evPtr->param1;
+                if(evEditorInfo.param1IsIndex) number++;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
                         (evEditorInfo.param1Name + "##param1").c_str(),
-                        &number, 0.1f, 0, INT_MAX
+                        &number, 0.1f,
+                        evEditorInfo.param1IsIndex ? 1 : 0,
+                        INT_MAX
                     )
                 ) {
                     registerChange("mission event number change");
+                    if(evEditorInfo.param1IsIndex) number--;
                     evPtr->param1 = (size_t) number;
                 }
                 setTooltip(
@@ -3604,14 +3554,18 @@ void AreaEditor::processGuiPanelMissionEv() {
             
                 //Event param 2 value.
                 int number = (int) evPtr->param2;
+                if(evEditorInfo.param2IsIndex) number++;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
                         (evEditorInfo.param2Name + "##param2").c_str(),
-                        &number, 0.1f, 0, INT_MAX
+                        &number, 0.1f,
+                        evEditorInfo.param2IsIndex ? 1 : 0,
+                        INT_MAX
                     )
                 ) {
                     registerChange("mission event number change");
+                    if(evEditorInfo.param2IsIndex) number--;
                     evPtr->param2 = (size_t) number;
                 }
                 setTooltip(
@@ -4716,6 +4670,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         
                         //Number input.
                         int idx = idxs->operator[](i);
+                        idx++;
                         ImGui::SameLine();
                         ImGui::SetNextItemWidth(50);
                         if(
@@ -4727,6 +4682,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                             registerChange(
                                 "mission HUD item " + descriptor + " change"
                             );
+                            idx--;
                             idxs->operator[](i) = (size_t) idx;
                         }
                         setTooltip(

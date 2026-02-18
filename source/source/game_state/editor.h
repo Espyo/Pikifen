@@ -773,6 +773,28 @@ protected:
         const char* label, const char* prompt, string* text,
         bool useMonospace = false
     );
+    void processGuiListNavSetup(size_t* curItemIdx, size_t listSize);
+    void processGuiListNavCountWidget(
+        size_t curItemIdx, size_t listSize, const string& label
+    );
+    bool processGuiListNavAddWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
+    bool processGuiListNavDelWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
+    bool processGuiListNavPrevWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
+    bool processGuiListNavNextWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
+    bool processGuiListNavMoveLeftWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
+    bool processGuiListNavMoveRightWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip
+    );
     void processGuiMessageDialog();
     bool processGuiMobTypeWidgets(
         string* customCatName, MobType** type, const string& packFilter = ""
