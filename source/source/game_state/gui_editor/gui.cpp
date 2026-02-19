@@ -1105,7 +1105,7 @@ void GuiEditor::processGuiPanelItems() {
             setStatus("Created a new custom GUI item.");
         }
         setTooltip(
-            "Add a new custom GUI item."
+            "Create a new custom GUI item."
         );
         
         if(curItemPtr) {

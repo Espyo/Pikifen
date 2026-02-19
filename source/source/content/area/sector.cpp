@@ -32,7 +32,8 @@ Sector::~Sector() {
 
 
 /**
- * @brief Adds an edge to the sector's list of edges, if it's not there already.
+ * @brief Adds an existing edge to the sector's list of edges,
+ * if it's not there already.
  *
  * @param ePtr Edge to add.
  * @param eIdx Index of the edge to add.

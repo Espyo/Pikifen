@@ -68,11 +68,11 @@ MobType* TreasureCategory::createType() {
 
 
 /**
- * @brief Clears a treasure from the list of treasures.
+ * @brief Removes and deletes a treasure from the list of treasures.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void TreasureCategory::eraseMob(Mob* m) {
+void TreasureCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.treasures.erase(
         find(
             game.states.gameplay->mobs.treasures.begin(),

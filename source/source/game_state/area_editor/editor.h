@@ -412,7 +412,7 @@ private:
         //Quick sector height set.
         EDITOR_SUB_STATE_QUICK_HEIGHT_SET,
         
-        //Adding a new mob.
+        //Creating a new mob.
         EDITOR_SUB_STATE_NEW_MOB,
         
         //Duplicating a mob.
@@ -421,8 +421,8 @@ private:
         //Storing a mob inside another.
         EDITOR_SUB_STATE_STORE_MOB_INSIDE,
         
-        //Adding a mob link.
-        EDITOR_SUB_STATE_ADD_MOB_LINK,
+        //Creating a mob link.
+        EDITOR_SUB_STATE_NEW_MOB_LINK,
         
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
@@ -433,7 +433,7 @@ private:
         //Drawing paths.
         EDITOR_SUB_STATE_PATH_DRAWING,
         
-        //Adding a new tree shadow.
+        //Creating a new tree shadow.
         EDITOR_SUB_STATE_NEW_SHADOW,
         
     };
@@ -927,8 +927,8 @@ private:
     void copySectorProperties();
     void createArea(const string& requestedAreaPath);
     void createDrawingVertexes();
-    void createMobUnderCursor();
-    Sector* createSectorForLayoutDrawing(const Sector* copyFrom);
+    void addNewMobUnderCursor();
+    Sector* addNewSectorForLayoutDrawing(const Sector* copyFrom);
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);
     bool deleteEdges(const set<Edge*>& which);

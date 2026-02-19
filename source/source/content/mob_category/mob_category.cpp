@@ -213,11 +213,11 @@ MobType* NoneCategory::createType() { return nullptr; }
 
 
 /**
- * @brief Clears a mob from the list.
+ * @brief Removes and deletes a mob from the list.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void NoneCategory::eraseMob(Mob* m) { }
+void NoneCategory::deleteMob(Mob* m) { }
 
 
 /**

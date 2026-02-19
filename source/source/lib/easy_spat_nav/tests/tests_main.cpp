@@ -198,14 +198,15 @@ void SpatNavTestInterface::fromString(const std::string& s) {
 
 
 /**
- * @brief Recursively adds children interfaces to the EasySpatNav manager.
+ * @brief Recursively creates and adds children interfaces
+ * to the EasySpatNav manager.
  *
  * @param manager The manager.
  * @param interface Interface whose children to add.
  * @param itemNr Current item number.
  * @param interfaceFirstItemNr Item number of the first item in the interface.
  */
-void addChildren(
+void createChildren(
     EasySpatNav::Interface& manager, SpatNavTestInterface* interface,
     size_t& itemNr, size_t interfaceFirstItemNr
 ) {
@@ -213,7 +214,7 @@ void addChildren(
         SpatNavTestInterface* childIf = interface->children[ci];
         size_t childInterfaceFirstItemNr = itemNr;
         for(size_t i = 0; i < childIf->items.size(); i++) {
-            manager.addItem(
+            manager.addNewItem(
                 (EasySpatNav::ItemId) (itemNr),
                 (childIf->items[i].startX + childIf->items[i].endX) / 2.0f,
                 (childIf->items[i].startY + childIf->items[i].endY) / 2.0f,
@@ -227,7 +228,7 @@ void addChildren(
             );
             itemNr++;
         }
-        addChildren(
+        createChildren(
             manager, interface->children[ci], itemNr, childInterfaceFirstItemNr
         );
     }
@@ -306,7 +307,7 @@ void testNav(
     
     size_t itemNr = 1;
     for(size_t i = 0; i < interface.items.size(); i++) {
-        spatNavManager.addItem(
+        spatNavManager.addNewItem(
             (EasySpatNav::ItemId) (itemNr),
             (interface.items[i].startX + interface.items[i].endX) / 2.0f,
             (interface.items[i].startY + interface.items[i].endY) / 2.0f,
@@ -315,7 +316,7 @@ void testNav(
         );
         itemNr++;
     }
-    addChildren(spatNavManager, &interface, itemNr, 1);
+    createChildren(spatNavManager, &interface, itemNr, 1);
     
     size_t targetItemNr =
         (size_t) spatNavManager.navigate(

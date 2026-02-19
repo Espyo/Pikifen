@@ -31,7 +31,7 @@
  * @param z Starting Z coordinate.
  * @param initialSize Initial size.
  * @param duration Total lifespan.
- * @param priority Lower priority particles will be removed in favor
+ * @param priority Lower priority particles will be deleted in favor
  * of higher ones.
  * @param initialColor Initial color.
  */
@@ -374,7 +374,7 @@ void ParticleGenerator::emit(ParticleManager& manager) {
             newP.orbitalSpeed.setKeyframeValue((int) s, kf.second + orbDev);
         }
         
-        manager.add(newP);
+        manager.addParticle(newP);
     }
 }
 
@@ -711,12 +711,12 @@ ParticleManager::~ParticleManager() {
 
 
 /**
- * @brief Adds a new particle to the list. It will fail if there is no slot
- * where it can be added to.
+ * @brief Adds an existing particle to the list.
+ * It will fail if there is no slot where it can be added to.
  *
  * @param p Particle to add.
  */
-void ParticleManager::add(const Particle& p) {
+void ParticleManager::addParticle(const Particle& p) {
     if(maxNr == 0) return;
     
     //The first "count" particles are alive. Add the new one after.
@@ -728,7 +728,7 @@ void ParticleManager::add(const Particle& p) {
         success = false;
         for(size_t i = 0; i < maxNr; i++) {
             if(particles[i].priority < p.priority) {
-                remove(i);
+                deleteParticle(i);
                 success = true;
                 break;
             }
@@ -802,14 +802,14 @@ size_t ParticleManager::getCount() const {
 
 
 /**
- * @brief Removes a particle from the list.
+ * @brief Deletes a particle from the list, freeing up its slot.
  *
  * @param pos Position in the list.
  */
-void ParticleManager::remove(size_t pos) {
+void ParticleManager::deleteParticle(size_t pos) {
     if(pos > count) return;
     
-    //To remove a particle, let's simply move its data to the start of
+    //To delete a particle, let's simply move its data to the start of
     //the "dead" particles. A particle is considered dead if its time is 0.
     particles[pos].time = 0.0f;
     
@@ -841,7 +841,7 @@ void ParticleManager::tickAll(float deltaT) {
     for(size_t c = 0; c < count;) {
         particles[c].tick(deltaT);
         if(particles[c].time == 0.0f) {
-            remove(c);
+            deleteParticle(c);
         } else {
             c++;
         }

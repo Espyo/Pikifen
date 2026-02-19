@@ -318,7 +318,7 @@ void Liquid::tick(float deltaT) {
         if(stateTime >= LIQUID::THAW_DURATION) {
             setState(LIQUID_STATE_NORMAL);
             changeSectorsHazard(hazard);
-            game.audio.createPosSoundSource(
+            game.audio.addNewPosSoundSource(
                 game.sysContent.sndFrozenLiquidThaw,
                 getChillHotspot(), false,
             { .speedDeviation = 0.1f }
@@ -330,7 +330,7 @@ void Liquid::tick(float deltaT) {
                 stateTime - deltaT, stateTime, LIQUID::THAW_CRACKED_DURATION
             )
         ) {
-            game.audio.createPosSoundSource(
+            game.audio.addNewPosSoundSource(
                 game.sysContent.sndFrozenLiquidCrack,
                 getChillHotspot(), false,
             { .speedDeviation = 0.1f }
@@ -448,7 +448,7 @@ void Liquid::updateChill(
     case LIQUID_STATE_NORMAL: {
         if(newAmount >= freezingPoint) {
             setState(LIQUID_STATE_FROZEN);
-            game.audio.createPosSoundSource(
+            game.audio.addNewPosSoundSource(
                 game.sysContent.sndFrozenLiquid,
                 getChillHotspot(), false,
             { .speedDeviation = 0.1f }
@@ -471,7 +471,7 @@ void Liquid::updateChill(
     } case LIQUID_STATE_THAWING: {
         if(newAmount >= freezingPoint) {
             setState(LIQUID_STATE_FROZEN);
-            game.audio.createPosSoundSource(
+            game.audio.addNewPosSoundSource(
                 game.sysContent.sndFrozenLiquid,
                 getChillHotspot(), false,
             { .speedDeviation = 0.1f }

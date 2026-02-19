@@ -259,7 +259,7 @@ void GameplayState::doPlayerActionSwitchType(
     }
     
     if(switchSuccessful) {
-        game.audio.createUiSoundSource(
+        game.audio.addNewUiSoundSource(
             game.sysContent.sndSwitchPikmin
         );
     }
@@ -433,7 +433,7 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
         }
     }
     
-    game.audio.createUiSoundSource(game.sysContent.sndCamera);
+    game.audio.addNewUiSoundSource(game.sysContent.sndCamera);
 }
 
 
@@ -501,7 +501,7 @@ void GameplayState::doPlayerActionZoom(
         player->view.cam.targetZoom = zoomLevels[2];
     }
     
-    game.audio.createUiSoundSource(
+    game.audio.addNewUiSoundSource(
         game.sysContent.sndCamera,
     { .stackMode = SOUND_STACK_MODE_NEVER }
     );

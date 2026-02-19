@@ -69,7 +69,8 @@ const float SONG_SOFTENED_VOLUME = 0.4f;
 
 
 /**
- * @brief Creates an in-world global sound effect source and returns its ID.
+ * @brief Creates an in-world global sound effect source,
+ * adds it to the list, and returns its ID.
  *
  * This is basically how you can get the engine to produce a sound that doesn't
  * involve a position in the game world.
@@ -79,12 +80,12 @@ const float SONG_SOFTENED_VOLUME = 0.4f;
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createGlobalSoundSource(
+size_t AudioManager::addNewGlobalSoundSource(
     ALLEGRO_SAMPLE* sample, bool ambiance,
     const SoundSourceConfig& config
 ) {
     return
-        createSoundSource(
+        addNewSoundSource(
             sample,
             ambiance ? SOUND_TYPE_AMBIANCE_GLOBAL : SOUND_TYPE_GAMEPLAY_GLOBAL,
             config, Point()
@@ -93,9 +94,10 @@ size_t AudioManager::createGlobalSoundSource(
 
 
 /**
- * @brief Creates an in-world mob sound effect source and returns its ID.
+ * @brief Creates an in-world mob sound effect source,
+ * adds it to the list, and returns its ID.
  *
- * This is like createPosSoundSource, but ties the source to the mob,
+ * This is like addNewPosSoundSource, but ties the source to the mob,
  * meaning the audio manager is responsible for updating the source's position
  * every frame to match the mob's.
  *
@@ -105,13 +107,13 @@ size_t AudioManager::createGlobalSoundSource(
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createMobSoundSource(
+size_t AudioManager::addNewMobSoundSource(
     ALLEGRO_SAMPLE* sample,
     Mob* mPtr, bool ambiance,
     const SoundSourceConfig& config
 ) {
     size_t sourceId =
-        createSoundSource(
+        addNewSoundSource(
             sample,
             ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
             config, mPtr->pos
@@ -122,7 +124,8 @@ size_t AudioManager::createMobSoundSource(
 
 
 /**
- * @brief Creates an in-world positional sound effect source and returns its ID.
+ * @brief Creates an in-world positional sound effect source,
+ * adds it to the list, and returns its ID.
  *
  * This is basically how you can get the engine to produce a sound that
  * involves a position in the game world.
@@ -133,12 +136,12 @@ size_t AudioManager::createMobSoundSource(
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createPosSoundSource(
+size_t AudioManager::addNewPosSoundSource(
     ALLEGRO_SAMPLE* sample, const Point& pos, bool ambiance,
     const SoundSourceConfig& config
 ) {
     return
-        createSoundSource(
+        addNewSoundSource(
             sample,
             ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
             config, pos
@@ -147,7 +150,8 @@ size_t AudioManager::createPosSoundSource(
 
 
 /**
- * @brief Creates a sound effect source and returns its ID.
+ * @brief Creates a sound effect source,
+ * adds it to the list, and returns its ID.
  *
  * @param sample Sound sample that this source will emit.
  * @param type Sound type.
@@ -155,7 +159,7 @@ size_t AudioManager::createPosSoundSource(
  * @param pos Position in the game world, if applicable.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createSoundSource(
+size_t AudioManager::addNewSoundSource(
     ALLEGRO_SAMPLE* sample,
     SOUND_TYPE type,
     const SoundSourceConfig& config,
@@ -189,7 +193,8 @@ size_t AudioManager::createSoundSource(
 
 
 /**
- * @brief Creates a global UI sound effect source and returns its ID.
+ * @brief Creates a global UI sound effect source,
+ * adds it to the list, and returns its ID.
  *
  * This is basically how you can get the engine to produce a UI sound.
  *
@@ -197,11 +202,11 @@ size_t AudioManager::createSoundSource(
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
-size_t AudioManager::createUiSoundSource(
+size_t AudioManager::addNewUiSoundSource(
     ALLEGRO_SAMPLE* sample,
     const SoundSourceConfig& config
 ) {
-    return createSoundSource(sample, SOUND_TYPE_UI, config, Point());
+    return addNewSoundSource(sample, SOUND_TYPE_UI, config, Point());
 }
 
 

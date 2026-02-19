@@ -26,7 +26,8 @@ Interface::~Interface() {
 
 
 /**
- * @brief Adds an item to the interface, or to the currently opened parent item.
+ * @brief Creates and adds an item to the interface,
+ * or to the currently opened parent item.
  *
  * @param id Identifier. This can be anything you want, but ensure every item
  * has a unique identifier, and that the value nullptr (0) is not used. You
@@ -37,7 +38,7 @@ Interface::~Interface() {
  * @param h Height.
  * @return Whether it succeeded.
  */
-bool Interface::addItem(ItemId id, float x, float y, float w, float h) {
+bool Interface::addNewItem(ItemId id, float x, float y, float w, float h) {
     if(items.find(id) != items.end()) return false;
     
     Item* newItem = new Item();

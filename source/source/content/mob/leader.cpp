@@ -175,7 +175,7 @@ Leader::Leader(const Point& pos, LeaderType* type, float angle) :
                 LEADER::SWARM_PARTICLE_ALPHA * 255
             );
         p.color = KeyframeInterpolator<ALLEGRO_COLOR>(c);
-        p.color.add(1, changeAlpha(c, 0));
+        p.color.addNew(1, changeAlpha(c, 0));
         p.duration =
             game.rng.f(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
@@ -206,7 +206,7 @@ Leader::Leader(const Point& pos, LeaderType* type, float angle) :
             );
         p.time = p.duration;
         p.z = this->z + this->height / 2.0f;
-        game.states.gameplay->particles.add(p);
+        game.states.gameplay->particles.addParticle(p);
     };
     swarmNextArrowTimer.start();
     
@@ -346,7 +346,7 @@ void Leader::dismissDetails() {
         tidySingleDismissTime > 0.0f ?
         1.03f :
         1.0f;
-    game.audio.createMobSoundSource(sound->sample, this, false, soundConfig);
+    game.audio.addNewMobSoundSource(sound->sample, this, false, soundConfig);
     
     //Particles.
     unsigned char particleAlpha =
@@ -359,7 +359,7 @@ void Leader::dismissDetails() {
         ALLEGRO_COLOR c =
             al_map_rgba(colorIdx[0], colorIdx[1], colorIdx[2], particleAlpha);
         par.color.setKeyframeValue(0, c);
-        par.color.add(1, changeAlpha(c, 0));
+        par.color.addNew(1, changeAlpha(c, 0));
         par.bitmap = game.sysContent.bmpBrightCircle;
         par.duration =
             game.rng.f(
@@ -387,7 +387,7 @@ void Leader::dismissDetails() {
             );
         par.time = par.duration;
         par.z = z + height / 2.0f;
-        game.states.gameplay->particles.add(par);
+        game.states.gameplay->particles.addParticle(par);
     }
 }
 
@@ -1156,7 +1156,7 @@ void Leader::startWhistling() {
         MobType::Sound* whistlingSound =
             &type->sounds[whistlingSoundIdx];
         whistleSoundSourceId =
-            game.audio.createPosSoundSource(
+            game.audio.addNewPosSoundSource(
                 whistlingSound->sample,
                 player->leaderCursorWorld, false,
                 whistlingSound->config

@@ -68,11 +68,11 @@ MobType* DecorationCategory::createType() {
 
 
 /**
- * @brief Clears a decoration from the list of decorations.
+ * @brief Removes and deletes a decoration from the list of decorations.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void DecorationCategory::eraseMob(Mob* m) {
+void DecorationCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.decorations.erase(
         find(
             game.states.gameplay->mobs.decorations.begin(),

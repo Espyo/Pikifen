@@ -38,7 +38,7 @@ public:
     Mob* createMob(
         const Point& pos, MobType* type, float angle
     ) override;
-    void eraseMob(Mob* m) override;
+    void deleteMob(Mob* m) override;
     void clearTypes() override;
     
 };

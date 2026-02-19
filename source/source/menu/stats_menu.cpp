@@ -25,10 +25,10 @@ const string GUI_FILE_NAME = "statistics_menu";
 
 
 /**
- * @brief Adds a new header to the stats list GUI item.
+ * @brief Creates and adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */
-void StatsMenu::addHeader(const string& label) {
+void StatsMenu::addNewHeaderItem(const string& label) {
     float listBottomY = statsList->getChildrenSpan();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
@@ -51,14 +51,14 @@ void StatsMenu::addHeader(const string& label) {
 
 
 /**
- * @brief Adds a new stat to the stats list GUI item.
+ * @brief Creates and adds a new stat to the stats list GUI item.
  *
  * @param label Name of the statistic.
  * @param value Its value.
  * @param description Tooltip description.
  * @return The text GUI item for the value.
  */
-TextGuiItem* StatsMenu::addStat(
+TextGuiItem* StatsMenu::addNewStatItem(
     const string& label, const string& value, const string& description
 ) {
     float listBottomY = statsList->getChildrenSpan();
@@ -124,7 +124,7 @@ void StatsMenu::initGuiMain() {
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&gui);
+    guiCreateBackInputIcon(&gui);
     
     //Statistics list.
     statsList = new ListGuiItem();
@@ -163,7 +163,7 @@ void StatsMenu::load() {
  * @brief Populates the stats menu with bullet points.
  */
 void StatsMenu::populateStatsList() {
-    addHeader(
+    addNewHeaderItem(
         (
             game.config.general.name.empty() ?
             "Pikifen" :
@@ -171,7 +171,7 @@ void StatsMenu::populateStatsList() {
         ) +
         " use"
     );
-    addStat(
+    addNewStatItem(
         "Startups", i2s(game.statistics.startups),
         "Total number of times " +
         (
@@ -182,7 +182,7 @@ void StatsMenu::populateStatsList() {
         " was started."
     );
     runtimeValueText =
-        addStat(
+        addNewStatItem(
             "Runtime", "",
             "Total amount of time " +
             (
@@ -193,77 +193,77 @@ void StatsMenu::populateStatsList() {
             " was running for, in seconds."
         );
     updateRuntimeValueText();
-    addStat(
+    addNewStatItem(
         "Gameplay time",
         timeToStr3(game.statistics.gameplayTime, ":", ":", ""),
         "Total amount of gameplay time, in seconds. Menus, editors, "
         "pause menu, etc. don't count."
     );
-    addStat(
+    addNewStatItem(
         "Area entries", i2s(game.statistics.areaEntries),
         "Total number of times that areas were entered. Includes retries "
         "and area editor tests."
     );
     
-    addHeader("Pikmin life");
-    addStat(
+    addNewHeaderItem("Pikmin life");
+    addNewStatItem(
         "Pikmin births", i2s(game.statistics.pikminBirths),
         "Total number of times Pikmin were born from an Onion."
     );
-    addStat(
+    addNewStatItem(
         "Pikmin deaths", i2s(game.statistics.pikminDeaths),
         "Total number of times Pikmin died in any way."
     );
-    addStat(
+    addNewStatItem(
         "Pikmin eaten", i2s(game.statistics.pikminEaten),
         "Total number of times Pikmin were swallowed by an enemy."
     );
-    addStat(
+    addNewStatItem(
         "Pikmin hazard deaths", i2s(game.statistics.pikminHazardDeaths),
         "Total number of times Pikmin died from a hazard."
     );
-    addStat(
+    addNewStatItem(
         "Pikmin bloom count", i2s(game.statistics.pikminBlooms),
         "Total number of times Pikmin matured (leaf to bud, leaf to flower, "
         "or bud to flower)."
     );
-    addStat(
+    addNewStatItem(
         "Pikmin saved", i2s(game.statistics.pikminSaved),
         "Total number of times the whistle saved Pikmin from a hazard that was "
         "killing them."
     );
-    addStat(
+    addNewStatItem(
         "Enemy defeats", i2s(game.statistics.enemyDefeats),
         "Total number of enemies that were defeated."
     );
     
-    addHeader("Leader control");
-    addStat(
+    addNewHeaderItem("Leader control");
+    addNewStatItem(
         "Pikmin thrown", i2s(game.statistics.pikminThrown),
         "Total number of times Pikmin were thrown. Leaders thrown don't count."
     );
-    addStat(
+    addNewStatItem(
         "Whistle uses", i2s(game.statistics.whistleUses),
         "Total number of times the whistle was used."
     );
-    addStat(
+    addNewStatItem(
         "Distance walked (m)",
         f2s((game.statistics.distanceWalked * CM_PER_PIXEL) / 100.0),
         "Total distance walked by an active leader, in meters."
     );
-    addStat(
+    addNewStatItem(
         "Leader damage suffered", i2s(game.statistics.leaderDamageSuffered),
         "Total amount of damage suffered by leaders."
     );
-    addStat(
+    addNewStatItem(
         "Punch damage caused", i2s(game.statistics.punchDamageCaused),
         "Total amount of damage caused by a leader punching."
     );
-    addStat(
+    addNewStatItem(
         "Leader KOs", i2s(game.statistics.leaderKos),
         "Total amount of times a leader got KO'd."
     );
-    addStat(
+    addNewStatItem(
         "Sprays used", i2s(game.statistics.spraysUsed),
         "Total amount of times a spray was used."
     );
@@ -295,20 +295,20 @@ void StatsMenu::populateStatsList() {
         }
     }
     
-    addHeader("Missions");
-    addStat(
+    addNewHeaderItem("Missions");
+    addNewStatItem(
         "Cleared",
         i2s(missionClears) + "/" +
         i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a goal clear."
     );
-    addStat(
+    addNewStatItem(
         "Platinum medals",
         i2s(missionPlatinums) + "/" +
         i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a platinum medal."
     );
-    addStat(
+    addNewStatItem(
         "Combined score", i2s(missionScores),
         "Total combined score points of the current records of all missions."
     );

@@ -150,12 +150,12 @@
     <dl>
       <dt><b>In the animation panel, the large button at the top lets you choose/create an animation.</b></dt>
       <dd>This is the same case as with the sprite panel. Click on the button (which should be titled "(None)"), and write <code>walk</code> as the name of our new animation, the walking animation.</dd>
-      <dt><b>The frame list contains all sprites used in this animation. You can add one with the "+" button.</b></dt>
-      <dd>The frame list is a list of the frames that this animation is composed of; each one of these makes use of a sprite we created earlier. Add the first frame by pressing the "+" button in the frame list section. In the "Sprite" option, choose our "idle" sprite, making this the first frame of our walking animation.</dd>
+      <dt><b>The frame list contains all sprites used in this animation. You can create one with the "+" button.</b></dt>
+      <dd>The frame list is a list of the frames that this animation is composed of; each one of these makes use of a sprite we created earlier. Create the first frame by pressing the "+" button in the frame list section. In the "Sprite" option, choose our "idle" sprite, making this the first frame of our walking animation.</dd>
       <dt><b>Different frames of animation last for different durations before the next frame shows up.</b></dt>
       <dd>Next, we specify how long this frame exists for until it is replaced by the next one on the list. To make fluid-looking animations, you'll want values like 0.1 or 0.2.</dd>
-      <dt><b>The "+" button that adds a new frame will conveniently copy data from the previous frame.</b></dt>
-      <dd>Let's make the rest of the Bulborb's walking animation. Press "+" once again to add a new frame. Because it's using the same data as the first frame, the duration is already the same, so you don't need to worry. Just pick <code>walkr1</code> as the sprite. Afterwards, create frames with <code>walkr2</code>, then <code>walkr1</code> again, <code>idle</code>, <code>walkl1</code>, <code>walkl2</code>, and finally <code>walkl1</code>.</dd>
+      <dt><b>The "+" button that creates a new frame will conveniently copy data from the previous frame.</b></dt>
+      <dd>Let's make the rest of the Bulborb's walking animation. Press "+" once again to create a new frame. Because it's using the same data as the first frame, the duration is already the same, so you don't need to worry. Just pick <code>walkr1</code> as the sprite. Afterwards, create frames with <code>walkr2</code>, then <code>walkr1</code> again, <code>idle</code>, <code>walkl1</code>, <code>walkl2</code>, and finally <code>walkl1</code>.</dd>
       <dt><b>When the last frame finishes, the animation returns to a previous frame (set in the panel) and loops from there.</b></dt>
       <dd>It would make sense for the animation to loop back to the first "idle" frame so it repeats the same "right foot, left foot" cycle. This is where the "Loop frame" box in the "Animation data" section is used. Luckily, it is already set at 1, which is the first frame, so you don't need to change it this time, but if you wanted the animation to repeat from a specific frame, this is where you'd write the frame's number.</dd>
       <dt><b>Notes:</b></dt>

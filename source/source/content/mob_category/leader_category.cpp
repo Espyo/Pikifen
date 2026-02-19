@@ -70,11 +70,11 @@ MobType* LeaderCategory::createType() {
 
 
 /**
- * @brief Clears a leader from the list of leaders.
+ * @brief Removes and deletes a leader from the list of leaders.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void LeaderCategory::eraseMob(Mob* m) {
+void LeaderCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.leaders.erase(
         find(
             game.states.gameplay->mobs.leaders.begin(),

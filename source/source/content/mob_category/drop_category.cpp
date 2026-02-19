@@ -68,11 +68,11 @@ MobType* DropCategory::createType() {
 
 
 /**
- * @brief Clears a drop from the list of drops.
+ * @brief Removes and deletes a drop from the list of drops.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void DropCategory::eraseMob(Mob* m) {
+void DropCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.drops.erase(
         find(
             game.states.gameplay->mobs.drops.begin(),

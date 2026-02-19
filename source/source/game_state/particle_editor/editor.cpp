@@ -117,7 +117,8 @@ void ParticleEditor::closeOptionsDialog() {
 
 
 /**
- * @brief Creates a new, empty particle generator.
+ * @brief Creates a new empty particle generator to work on.
+ * This does not create it in the disk.
  *
  * @param partGenPath Path to the new particle generator.
  */
@@ -140,7 +141,7 @@ void ParticleEditor::createPartGen(
         KeyframeInterpolator<float>(32);
     loadedGen.baseParticle.color =
         KeyframeInterpolator<ALLEGRO_COLOR>(mapAlpha(255));
-    loadedGen.baseParticle.color.add(1, mapAlpha(0));
+    loadedGen.baseParticle.color.addNew(1, mapAlpha(0));
     
     loadedGen.emission.interval = 0.5f;
     loadedGen.emission.number = 1;

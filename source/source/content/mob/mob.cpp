@@ -503,7 +503,7 @@ void Mob::applyStatusEffects(
     }
     
     if(s->soundStart.sample) {
-        game.audio.createMobSoundSource(
+        game.audio.addNewMobSoundSource(
             s->soundStart.sample, this, false, s->soundStart.config
         );
     }
@@ -1579,7 +1579,7 @@ PikminType* Mob::decideCarryPikminType(
 
 
 /**
- * @brief Deletes all status effects asking to be deleted.
+ * @brief Removes and deletes all status effects asking to be deleted.
  */
 void Mob::deleteOldStatusEffects() {
     vector<std::pair<StatusType*, bool> > newStatusesToApply;
@@ -1592,7 +1592,7 @@ void Mob::deleteOldStatusEffects() {
                 handleStatusEffectLoss(sRef.type);
                 
                 if(sRef.type->particleGen) {
-                    removeParticleGenerator(sRef.type->particleGen->id);
+                    deleteParticleGenerator(sRef.type->particleGen->id);
                 }
                 
                 if(sRef.type->particleGenEnd) {
@@ -1600,7 +1600,7 @@ void Mob::deleteOldStatusEffects() {
                 }
                 
                 if(sRef.type->soundEnd.sample) {
-                    game.audio.createMobSoundSource(
+                    game.audio.addNewMobSoundSource(
                         sRef.type->soundEnd.sample,
                         this, false, sRef.type->soundEnd.config
                     );
@@ -1731,7 +1731,7 @@ void Mob::doAttackEffects(
     
     if(!useless) {
         //Play the sound.
-        game.audio.createPosSoundSource(
+        game.audio.addNewPosSoundSource(
             game.sysContent.sndAttack,
             pos, false, { .volume = 0.6f }
         );
@@ -1742,7 +1742,7 @@ void Mob::doAttackEffects(
         }
     } else {
         //Play the sound.
-        game.audio.createPosSoundSource(
+        game.audio.addNewPosSoundSource(
             game.sysContent.sndDing,
             pos, false, { .volume = 0.3f }
         );
@@ -3183,31 +3183,31 @@ size_t Mob::playSound(size_t soundDataIdx) {
     switch(sound->type) {
     case SOUND_TYPE_GAMEPLAY_GLOBAL: {
         return
-            game.audio.createGlobalSoundSource(
+            game.audio.addNewGlobalSoundSource(
                 sound->sample, false, sound->config
             );
         break;
     } case SOUND_TYPE_GAMEPLAY_POS: {
         return
-            game.audio.createMobSoundSource(
+            game.audio.addNewMobSoundSource(
                 sound->sample, this, false, sound->config
             );
         break;
     } case SOUND_TYPE_AMBIANCE_GLOBAL: {
         return
-            game.audio.createGlobalSoundSource(
+            game.audio.addNewGlobalSoundSource(
                 sound->sample, true, sound->config
             );
         break;
     } case SOUND_TYPE_AMBIANCE_POS: {
         return
-            game.audio.createMobSoundSource(
+            game.audio.addNewMobSoundSource(
                 sound->sample, this, true, sound->config
             );
         break;
     } case SOUND_TYPE_UI: {
         return
-            game.audio.createUiSoundSource(
+            game.audio.addNewUiSoundSource(
                 sound->sample, sound->config
             );
     }
@@ -3343,11 +3343,11 @@ void Mob::releaseStoredMobs() {
 
 
 /**
- * @brief Removes all particle generators with the given ID.
+ * @brief Removes and deletes all particle generators with the given ID.
  *
- * @param id ID of particle generators to remove.
+ * @param id ID of particle generators to delete.
  */
-void Mob::removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
+void Mob::deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
     for(size_t g = 0; g < particleGenerators.size();) {
         if(particleGenerators[g].id == id) {
             particleGenerators.erase(particleGenerators.begin() + g);

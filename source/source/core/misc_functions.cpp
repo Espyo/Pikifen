@@ -828,12 +828,13 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
 
 
 /**
- * @brief Adds a GUI item that shows the input icon for going back in a menu.
+ * @brief Creates and adds a GUI item that shows the input icon
+ * for going back in a menu.
  *
  * @param gui GUI manager to add the item to.
  * @param itemName Internal name of the GUI item.
  */
-void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
+void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
     backInput->onDraw =
     [] (const GuiItem::DrawInfo & draw) {

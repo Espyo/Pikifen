@@ -30,7 +30,7 @@ ContentManager::ContentManager() {
 
 
 /**
- * @brief Creates a new pack and updates the list of packs.
+ * @brief Creates a new pack in the disk and updates the list of packs.
  *
  * @param internalName Internal name of the pack, i.e. the pack's folder name.
  * @param name Proper name of the pack.
@@ -38,7 +38,7 @@ ContentManager::ContentManager() {
  * @param maker Maker(s).
  * @return Whether it succeeded.
  */
-bool ContentManager::createPack(
+bool ContentManager::addNewPack(
     const string& internalName, const string& name,
     const string& description, const string& maker
 ) {

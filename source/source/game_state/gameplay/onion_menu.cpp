@@ -97,7 +97,7 @@ OnionMenu::OnionMenu(
     gui.addItem(gui.backItem, "cancel");
     
     //Cancel input icon.
-    guiAddBackInputIcon(&gui, "cancel_input");
+    guiCreateBackInputIcon(&gui, "cancel_input");
     
     //Ok button.
     okButton =
@@ -692,11 +692,11 @@ void OnionMenu::doButtonLogic(
         }
     } else {
         if(result == ONION_TRANSFER_RESULT_OK) {
-            game.audio.createUiSoundSource(
+            game.audio.addNewUiSoundSource(
                 game.sysContent.sndMenuActivate, { .volume = 0.75f }
             );
         } else {
-            game.audio.createUiSoundSource(
+            game.audio.addNewUiSoundSource(
                 game.sysContent.sndMenuFail, { .volume = 0.75f }
             );
         }

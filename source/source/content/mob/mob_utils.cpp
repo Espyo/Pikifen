@@ -1102,7 +1102,7 @@ void PikminNestType::createColormap() {
         span = 1.0f / (pikTypes.size() - 1);
     }
     for(size_t i = 1; i < pikTypes.size(); i++) {
-        ki.add(span * i, pikTypes[i]->mainColor, EASE_METHOD_IN_OUT);
+        ki.addNew(span * i, pikTypes[i]->mainColor, EASE_METHOD_IN_OUT);
     }
     
     //Add a darker variant for single-type Onions.
@@ -1113,7 +1113,7 @@ void PikminNestType::createColormap() {
                 pikTypes[0]->mainColor.g * 0.4f,
                 pikTypes[0]->mainColor.b * 0.4f
             );
-        ki.add(1.0, c, EASE_METHOD_IN_OUT);
+        ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
     }
     
     //Create the texture.
@@ -1480,7 +1480,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
     
     game.audio.handleMobDeletion(mPtr);
     
-    mPtr->type->category->eraseMob(mPtr);
+    mPtr->type->category->deleteMob(mPtr);
     game.states.gameplay->mobs.all.erase(
         find(
             game.states.gameplay->mobs.all.begin(),

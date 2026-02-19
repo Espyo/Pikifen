@@ -504,7 +504,7 @@ public:
         bool forceReapplyResetTime = false
     );
     void deleteOldStatusEffects();
-    void removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
+    void deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
     ALLEGRO_BITMAP* getStatusBitmap(float* bmpScale) const;
     virtual bool canReceiveStatus(StatusType* s) const;
     virtual void getGroupSpotInfo(

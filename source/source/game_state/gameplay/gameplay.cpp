@@ -319,7 +319,7 @@ void GameplayMessageBox::tick(float deltaT) {
                 curToken =
                     std::min(curToken, tokensInSection + 1);
                 if(prevToken != curToken) {
-                    game.audio.createUiSoundSource(
+                    game.audio.addNewUiSoundSource(
                     game.sysContent.sndGameplayMsgChar, {
                         .stackMinPos = 0.05f,
                         .volume = 0.5f,
@@ -524,7 +524,7 @@ bool GameplayState::endMission(
     }
     
     bigMsg.set(bigMsgToShow);
-    game.audio.createUiSoundSource(sndToPlay);
+    game.audio.addNewUiSoundSource(sndToPlay);
     game.audio.setCurrentSong("");
     
     for(Player& player : players) {
@@ -641,7 +641,7 @@ void GameplayState::enter() {
         player.whistle.nextDotTimer.onEnd = [&player] () {
             player.whistle.nextDotTimer.start();
             unsigned char dot = 255;
-            for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
+            for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to create.
                 if(player.whistle.dotRadius[d] == -1) {
                     dot = d;
                     break;
@@ -666,7 +666,7 @@ void GameplayState::enter() {
         interlude.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
         bigMsg.overrideTime(GAMEPLAY::BIG_MSG_READY_DUR);
     } else {
-        game.audio.createUiSoundSource(game.sysContent.sndReady);
+        game.audio.addNewUiSoundSource(game.sysContent.sndReady);
     }
 }
 
@@ -1578,7 +1578,7 @@ void GameplayState::load() {
     [this] () {
         this->replayTimer.start();
         vector<mob*> obstacles; //TODO
-        gameplayReplay.addState(
+        gameplayReplay.addNewState(
             leaders, pikminList, enemies, treasures, onions, obstacles,
             curLeaderIdx
         );

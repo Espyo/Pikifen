@@ -199,14 +199,14 @@ PauseMenu::~PauseMenu() {
 
 
 /**
- * @brief Adds a new bullet point to either the fail condition list, or the
- * grading explanation list.
+ * @brief Creates and adds a new bullet point to either the fail condition list
+ * or the grading explanation list.
  *
  * @param list List to add to.
  * @param text Text.
  * @param color Text color.
  */
-void PauseMenu::addBullet(
+void PauseMenu::addNewBullet(
     ListGuiItem* list, const string& text,
     const ALLEGRO_COLOR& color
 ) {
@@ -230,7 +230,7 @@ void PauseMenu::addBullet(
 
 
 /**
- * @brief Adds a new line to one of the Pikmin status boxes.
+ * @brief Creates and adds a new line to one of the Pikmin status boxes.
  *
  * @param list List to add to.
  * @param pikType Relevant Pikmin type, if applicable.
@@ -244,7 +244,7 @@ void PauseMenu::addBullet(
  * @param isSingle True if this is a box with a single row.
  * @param isTotals True if this is the totals box.
  */
-void PauseMenu::addPikminStatusLine(
+void PauseMenu::addNewPikminStatusLine(
     ListGuiItem* list,
     PikminType* pikType,
     const string& groupText,
@@ -649,7 +649,7 @@ void PauseMenu::confirmOrLeave() {
 
 /**
  * @brief Creates a button meant for changing to a page either to the left or
- * to the right of the current one.
+ * to the right of the current one, and adds it to the GUI.
  *
  * @param targetPage Which page this button leads to.
  * @param left True if this page is to the left of the current,
@@ -657,7 +657,7 @@ void PauseMenu::confirmOrLeave() {
  * @param curGui Pointer to the current page's GUI manager.
  * @return The button.
  */
-ButtonGuiItem* PauseMenu::createPageButton(
+ButtonGuiItem* PauseMenu::addNewPageItem(
     PAUSE_MENU_PAGE targetPage, bool left,
     GuiManager* curGui
 ) {
@@ -705,12 +705,13 @@ ButtonGuiItem* PauseMenu::createPageButton(
 
 
 /**
- * @brief Creates the buttons and input GUI items that allow switching pages.
+ * @brief Creates the buttons and input GUI items that allow switching pages,
+ * and adds them to the GUI.
  *
  * @param curPage Page that these creations belong to.
  * @param curGui Pointer to the current page's GUI manager.
  */
-void PauseMenu::createPageButtons(
+void PauseMenu::addNewPageItems(
     PAUSE_MENU_PAGE curPage, GuiManager* curGui
 ) {
     size_t curPageIdx =
@@ -723,7 +724,7 @@ void PauseMenu::createPageButtons(
     
     //Left page button.
     ButtonGuiItem* leftPageButton =
-        createPageButton(pages[leftPageIdx], true, curGui);
+        addNewPageItem(pages[leftPageIdx], true, curGui);
     curGui->addItem(leftPageButton, "left_page");
     
     //Left page input icon.
@@ -740,7 +741,7 @@ void PauseMenu::createPageButtons(
     
     //Right page button.
     ButtonGuiItem* rightPageButton =
-        createPageButton(pages[rightPageIdx], false, curGui);
+        addNewPageItem(pages[rightPageIdx], false, curGui);
     curGui->addItem(rightPageButton, "right_page");
     
     //Right page input icon.
@@ -1388,7 +1389,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
             
             string description =
                 cond->getPlayerDescription(&game.curAreaData->missionOld);
-            addBullet(list, description, game.config.guiColors.bad);
+            addNewBullet(list, description, game.config.guiColors.bad);
             
             float percentage = 0.0f;
             int cur =
@@ -1402,12 +1403,12 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
             string status = cond->getStatus(cur, req, percentage);
             
             if(status.empty()) continue;
-            addBullet(list, "    " + status);
+            addNewBullet(list, "    " + status);
         }
     }
     
     if(game.curAreaData->missionOld.failConditions == 0) {
-        addBullet(list, "(None)");
+        addNewBullet(list, "(None)");
     }
 }
 
@@ -1420,29 +1421,29 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
 void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
     switch(game.curAreaData->missionOld.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
-        addBullet(
+        addNewBullet(
             list,
             "Your medal depends on your score:"
         );
-        addBullet(
+        addNewBullet(
             list,
             "    Platinum: " +
             i2s(game.curAreaData->missionOld.platinumReq) + "+ points.",
             game.config.guiColors.gold
         );
-        addBullet(
+        addNewBullet(
             list,
             "    Gold: " +
             i2s(game.curAreaData->missionOld.goldReq) + "+ points.",
             game.config.guiColors.gold
         );
-        addBullet(
+        addNewBullet(
             list,
             "    Silver: " +
             i2s(game.curAreaData->missionOld.silverReq) + "+ points.",
             game.config.guiColors.gold
         );
-        addBullet(
+        addNewBullet(
             list,
             "    Bronze: " +
             i2s(game.curAreaData->missionOld.bronzeReq) + "+ points.",
@@ -1461,15 +1462,15 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
             }
         }
         if(!scoreNotes.empty()) {
-            addBullet(
+            addNewBullet(
                 list,
                 "Your score is calculated like so:"
             );
             for(size_t s = 0; s < scoreNotes.size(); s++) {
-                addBullet(list, scoreNotes[s]);
+                addNewBullet(list, scoreNotes[s]);
             }
         } else {
-            addBullet(
+            addNewBullet(
                 list,
                 "In this mission, your score will always be 0."
             );
@@ -1489,27 +1490,27 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
             }
         }
         if(!lossNotes.empty()) {
-            addBullet(
+            addNewBullet(
                 list,
                 "If you fail, you'll lose your score for:"
             );
             for(size_t l = 0; l < lossNotes.size(); l++) {
-                addBullet(list, lossNotes[l]);
+                addNewBullet(list, lossNotes[l]);
             }
         }
         break;
     } case MISSION_GRADING_MODE_GOAL: {
-        addBullet(
+        addNewBullet(
             list,
             "You get a platinum medal if you clear the goal."
         );
-        addBullet(
+        addNewBullet(
             list,
             "You get no medal if you fail."
         );
         break;
     } case MISSION_GRADING_MODE_PARTICIPATION: {
-        addBullet(
+        addNewBullet(
             list,
             "You get a platinum medal just by playing the mission."
         );
@@ -1644,7 +1645,7 @@ void PauseMenu::handlePlayerAction(const Inpution::Action& action) {
             switch(action.actionTypeId) {
             case PLAYER_ACTION_TYPE_RADAR: {
                 if(action.value >= 0.5f) {
-                    game.audio.createUiSoundSource(
+                    game.audio.addNewUiSoundSource(
                         game.sysContent.sndMenuBack, { .volume = 0.75f }
                     );
                     startClosing(&radarGui);
@@ -1807,7 +1808,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.readDataFile(guiFile);
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_SYSTEM, &gui);
+    addNewPageItems(PAUSE_MENU_PAGE_SYSTEM, &gui);
     
     //Area name.
     TextGuiItem* areaNameText =
@@ -1843,7 +1844,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.addItem(gui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&gui, "continue_input");
+    guiCreateBackInputIcon(&gui, "continue_input");
     
     //Retry button.
     ButtonGuiItem* retryButton =
@@ -2047,7 +2048,7 @@ void PauseMenu::initMissionPage() {
     missionGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_MISSION, &missionGui);
+    addNewPageItems(PAUSE_MENU_PAGE_MISSION, &missionGui);
     
     //Continue button.
     missionGui.backItem =
@@ -2063,7 +2064,7 @@ void PauseMenu::initMissionPage() {
     missionGui.addItem(missionGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&missionGui, "continue_input");
+    guiCreateBackInputIcon(&missionGui, "continue_input");
     
     //Goal header text.
     TextGuiItem* goalHeaderText =
@@ -2191,7 +2192,7 @@ void PauseMenu::initRadarPage() {
     radarGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_RADAR, &radarGui);
+    addNewPageItems(PAUSE_MENU_PAGE_RADAR, &radarGui);
     
     //Continue button.
     radarGui.backItem =
@@ -2207,7 +2208,7 @@ void PauseMenu::initRadarPage() {
     radarGui.addItem(radarGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&radarGui, "continue_input");
+    guiCreateBackInputIcon(&radarGui, "continue_input");
     
     //Radar item.
     radarItem = new GuiItem();
@@ -2431,7 +2432,7 @@ void PauseMenu::initStatusPage() {
     statusGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_STATUS, &statusGui);
+    addNewPageItems(PAUSE_MENU_PAGE_STATUS, &statusGui);
     
     //Continue button.
     statusGui.backItem =
@@ -2447,7 +2448,7 @@ void PauseMenu::initStatusPage() {
     statusGui.addItem(statusGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&statusGui, "continue_input");
+    guiCreateBackInputIcon(&statusGui, "continue_input");
     
     //Pikmin list header box.
     ListGuiItem* listHeader = new ListGuiItem();
@@ -2476,7 +2477,7 @@ void PauseMenu::initStatusPage() {
     statusGui.addItem(tooltipText, "tooltip");
     
     //Setup the list header.
-    addPikminStatusLine(
+    addNewPikminStatusLine(
         listHeader,
         nullptr,
         "Group",
@@ -2527,7 +2528,7 @@ void PauseMenu::initStatusPage() {
         }
         
         if(total + newPiks + lost > 0) {
-            addPikminStatusLine(
+            addNewPikminStatusLine(
                 pikminList,
                 ptPtr,
                 i2s(inGroup),
@@ -2551,7 +2552,7 @@ void PauseMenu::initStatusPage() {
     }
     
     //Setup the list totals.
-    addPikminStatusLine(
+    addNewPikminStatusLine(
         totals,
         nullptr,
         i2s(totalInGroup),

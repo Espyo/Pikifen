@@ -278,7 +278,7 @@ struct ParticleManager {
     ParticleManager(const ParticleManager& pm2);
     ParticleManager& operator=(const ParticleManager& pm2);
     ~ParticleManager();
-    void add(const Particle& p);
+    void addParticle(const Particle& p);
     void clear();
     void fillComponentList(
         vector<WorldComponent>& list,
@@ -310,7 +310,7 @@ struct ParticleManager {
     
     //--- Private function declarations ---
     
-    void remove(size_t pos);
+    void deleteParticle(size_t pos);
     
 };
 

@@ -1157,12 +1157,12 @@ bool Editor::keyframeOrganizer(
         );
     }
     
-    //Add keyframe button.
+    //Create keyframe button.
     ImGui::SameLine();
-    string addLabel = buttonId + "addButton";
+    string createLabel = buttonId + "createButton";
     if(
         ImGui::ImageButton(
-            addLabel, editorIcons[EDITOR_ICON_ADD],
+            createLabel, editorIcons[EDITOR_ICON_ADD],
             Point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
@@ -1173,10 +1173,10 @@ bool Editor::keyframeOrganizer(
             interpolator.getKeyframe(selKeyframeIdx + 1).first;
         float newT = (prevT + nextT) / 2.0f;
         
-        interpolator.add(newT, interpolator.get(newT));
+        interpolator.addNew(newT, interpolator.get(newT));
         selKeyframeIdx++;
         setStatus(
-            "Added keyframe #" + i2s(selKeyframeIdx + 1) + "."
+            "Created keyframe #" + i2s(selKeyframeIdx + 1) + "."
         );
         result = true;
     }
@@ -1188,15 +1188,15 @@ bool Editor::keyframeOrganizer(
     if(interpolator.getKeyframeCount() > 1) {
         //Delete frame button.
         ImGui::SameLine();
-        string removeButton = buttonId + "removeButton";
+        string deleteButton = buttonId + "deleteButton";
         if(
             ImGui::ImageButton(
-                removeButton, editorIcons[EDITOR_ICON_REMOVE],
+                deleteButton, editorIcons[EDITOR_ICON_REMOVE],
                 Point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
             size_t deletedFrameIdx = selKeyframeIdx;
-            interpolator.remove(deletedFrameIdx);
+            interpolator.deleteKeyframe(deletedFrameIdx);
             if(selKeyframeIdx == interpolator.getKeyframeCount()) {
                 selKeyframeIdx--;
             }
@@ -1457,8 +1457,8 @@ void Editor::keyframeVisualizer(
     
     for(size_t s = 1; s < interpolator.getKeyframeCount(); s++) {
         auto kf = interpolator.getKeyframe(s);
-        xInter.add(kf.first, kf.second.x);
-        yInter.add(kf.first, kf.second.y);
+        xInter.addNew(kf.first, kf.second.x);
+        yInter.addNew(kf.first, kf.second.y);
     }
     
     //Draw the two visualizers.
@@ -2351,22 +2351,22 @@ bool Editor::processGuiInputPopup(
 
 
 /**
- * @brief Processes the Dear ImGui list navigation add widget.
+ * @brief Processes the Dear ImGui list navigation create widget.
  *
  * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if a new item is added.
+ * This will be adjusted accordingly if a new item is created.
  * @param listSize Current size of the list.
  * @param tooltip Tooltip for the widget.
  * @return Whether the user pressed the button.
  */
-bool Editor::processGuiListNavAddWidget(
+bool Editor::processGuiListNavCreateWidget(
     size_t* curItemIdx, size_t listSize, const string& tooltip
 ) {
     bool pressed = false;
     
     if(
         ImGui::ImageButton(
-            "addItemButton", editorIcons[EDITOR_ICON_ADD],
+            "createItemButton", editorIcons[EDITOR_ICON_ADD],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -2929,7 +2929,7 @@ void Editor::processGuiNewPackDialog() {
     //Creation logic.
     if(hitCreateButton) {
         if(!problem.empty()) return;
-        game.content.createPack(
+        game.content.addNewPack(
             internalName, name, description, maker
         );
         for(

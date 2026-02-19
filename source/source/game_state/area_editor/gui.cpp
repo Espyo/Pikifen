@@ -2824,7 +2824,7 @@ void AreaEditor::processGuiPanelLayout() {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
-                "newCircleButton", editorIcons[EDITOR_ICON_ADD_CIRCLE_SECTOR],
+                "newCircleButton", editorIcons[EDITOR_ICON_NEW_CIRCLE_SECTOR],
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
@@ -3422,7 +3422,7 @@ void AreaEditor::processGuiPanelMissionEv() {
         
         //Navigation add widget.
         if(
-            processGuiListNavAddWidget(
+            processGuiListNavCreateWidget(
                 &curEventIdx, game.curAreaData->mission.events.size(),
                 "Add a new mission event."
             )
@@ -4830,14 +4830,14 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
             (unsigned int) game.curAreaData->mission.mobChecklists.size()
         );
         
-        //Add checklist button.
+        //Create checklist button.
         if(
             ImGui::ImageButton(
-                "addChecklistButton", editorIcons[EDITOR_ICON_ADD],
+                "createChecklistButton", editorIcons[EDITOR_ICON_ADD],
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            registerChange("mission mob checklist addition");
+            registerChange("mission mob checklist creation");
             if(game.curAreaData->mission.mobChecklists.empty()) {
                 curMobChecklistIdx = 0;
             } else {
@@ -4858,7 +4858,7 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
             }
             );
         }
-        setTooltip("Add a new mission mob checklist.");
+        setTooltip("Create a new mission mob checklist.");
         
         if(!game.curAreaData->mission.mobChecklists.empty()) {
         
@@ -5052,14 +5052,14 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             (unsigned int) game.curAreaData->mission.scoreCriteria.size()
         );
         
-        //Add criterion button.
+        //Create criterion button.
         if(
             ImGui::ImageButton(
-                "addCriterionButton", editorIcons[EDITOR_ICON_ADD],
+                "createCriterionButton", editorIcons[EDITOR_ICON_ADD],
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            registerChange("mission score criterion addition");
+            registerChange("mission score criterion creation");
             if(game.curAreaData->mission.scoreCriteria.empty()) {
                 curCriterionIdx = 0;
             } else {
@@ -5071,7 +5071,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 MissionScoreCriterion()
             );
         }
-        setTooltip("Add a new mission score criterion.");
+        setTooltip("Create a new mission score criterion.");
         
         if(!game.curAreaData->mission.scoreCriteria.empty()) {
         
@@ -5381,10 +5381,10 @@ void AreaEditor::processGuiPanelMob() {
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            if(subState == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+            if(subState == EDITOR_SUB_STATE_NEW_MOB_LINK) {
                 subState = EDITOR_SUB_STATE_NONE;
             } else {
-                subState = EDITOR_SUB_STATE_ADD_MOB_LINK;
+                subState = EDITOR_SUB_STATE_NEW_MOB_LINK;
             }
         }
         setTooltip(
@@ -5488,15 +5488,15 @@ void AreaEditor::processGuiPanelMobs() {
             "Escape"
         );
         
-    } else if(subState == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+    } else if(subState == EDITOR_SUB_STATE_NEW_MOB_LINK) {
     
-        //Link addition explanation text.
+        //Link creation explanation text.
         ImGui::TextWrapped(
             "Use the canvas to link to an object. Click on the object you "
             "want this one to link to."
         );
         
-        //Link addition cancel button.
+        //Link creation cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
             setStatus();
             subState = EDITOR_SUB_STATE_NONE;

@@ -103,7 +103,7 @@ void Area::cleanup(bool* outDeletedSectors) {
     bool deletedSectors = false;
     for(size_t s = 0; s < sectors.size(); ) {
         if(sectors[s]->edges.empty()) {
-            removeSector(s);
+            deleteSector(s);
             deletedSectors = true;
         } else {
             s++;
@@ -2040,7 +2040,7 @@ void Area::loadThumbnail(const string& thumbnailPath) {
 
 
 /**
- * @brief Adds a new edge to the list.
+ * @brief Creates and adds a new edge to the list.
  *
  * @return The new edge's pointer.
  */
@@ -2052,7 +2052,7 @@ Edge* Area::newEdge() {
 
 
 /**
- * @brief Adds a new sector to the list.
+ * @brief Creates and adds a new sector to the list.
  *
  * @return The new sector's pointer.
  */
@@ -2064,7 +2064,7 @@ Sector* Area::newSector() {
 
 
 /**
- * @brief Adds a new vertex to the list.
+ * @brief Creates and adds a new vertex to the list.
  *
  * @return The new vertex's pointer.
  */
@@ -2076,11 +2076,11 @@ Vertex* Area::newVertex() {
 
 
 /**
- * @brief Removes an edge from the list, and updates all indexes after it.
+ * @brief Removes and deletes an edge, and updates all indexes after it.
  *
- * @param eIdx Index number of the edge to remove.
+ * @param eIdx Index number of the edge to delete.
  */
-void Area::removeEdge(size_t eIdx) {
+void Area::deleteEdge(size_t eIdx) {
     edges.erase(edges.begin() + eIdx);
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* vPtr = vertexes[v];
@@ -2120,14 +2120,14 @@ void Area::removeEdge(size_t eIdx) {
 
 
 /**
- * @brief Removes an edge from the list, and updates all indexes after it.
+ * @brief Removes and deletes an edge, and updates all indexes after it.
  *
- * @param ePtr Pointer of the edge to remove.
+ * @param ePtr Pointer of the edge to delete.
  */
-void Area::removeEdge(const Edge* ePtr) {
+void Area::deleteEdge(const Edge* ePtr) {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == ePtr) {
-            removeEdge(e);
+            deleteEdge(e);
             return;
         }
     }
@@ -2135,11 +2135,11 @@ void Area::removeEdge(const Edge* ePtr) {
 
 
 /**
- * @brief Removes a sector from the list, and updates all indexes after it.
+ * @brief Removes and deletes a sector, and updates all indexes after it.
  *
- * @param sIdx Index number of the sector to remove.
+ * @param sIdx Index number of the sector to delete.
  */
-void Area::removeSector(size_t sIdx) {
+void Area::deleteSector(size_t sIdx) {
     sectors.erase(sectors.begin() + sIdx);
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* ePtr = edges[e];
@@ -2162,14 +2162,14 @@ void Area::removeSector(size_t sIdx) {
 
 
 /**
- * @brief Removes a sector from the list, and updates all indexes after it.
+ * @brief Removes and deletes a sector, and updates all indexes after it.
  *
- * @param sPtr Pointer of the sector to remove.
+ * @param sPtr Pointer of the sector to delete.
  */
-void Area::removeSector(const Sector* sPtr) {
+void Area::deleteSector(const Sector* sPtr) {
     for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == sPtr) {
-            removeSector(s);
+            deleteSector(s);
             return;
         }
     }
@@ -2177,11 +2177,11 @@ void Area::removeSector(const Sector* sPtr) {
 
 
 /**
- * @brief Removes a vertex from the list, and updates all indexes after it.
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
  *
- * @param vIdx Index number of the vertex to remove.
+ * @param vIdx Index number of the vertex to delete.
  */
-void Area::removeVertex(size_t vIdx) {
+void Area::deleteVertex(size_t vIdx) {
     vertexes.erase(vertexes.begin() + vIdx);
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* ePtr = edges[e];
@@ -2204,14 +2204,14 @@ void Area::removeVertex(size_t vIdx) {
 
 
 /**
- * @brief Removes a vertex from the list, and updates all indexes after it.
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
  *
- * @param vPtr Pointer of the vertex to remove.
+ * @param vPtr Pointer of the vertex to delete.
  */
-void Area::removeVertex(const Vertex* vPtr) {
+void Area::deleteVertex(const Vertex* vPtr) {
     for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == vPtr) {
-            removeVertex(v);
+            deleteVertex(v);
             return;
         }
     }

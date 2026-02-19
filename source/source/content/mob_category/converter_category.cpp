@@ -69,11 +69,11 @@ MobType* ConverterCategory::createType() {
 
 
 /**
- * @brief Clears a converter from the list of converters.
+ * @brief Removes and deletes a converter from the list of converters.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void ConverterCategory::eraseMob(Mob* m) {
+void ConverterCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.converters.erase(
         find(
             game.states.gameplay->mobs.converters.begin(),

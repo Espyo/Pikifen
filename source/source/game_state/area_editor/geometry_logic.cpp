@@ -439,14 +439,15 @@ void AreaEditor::copySectorProperties() {
 
 
 /**
- * @brief Creates a new sector for use in layout drawing operations.
+ * @brief Creates a new sector for use in layout drawing operations
+ * and adds it to the area.
  * This automatically clones it from another sector, if not nullptr, or gives it
  * a recommended texture if the other sector nullptr.
  *
  * @param copyFrom Sector to copy from.
  * @return The created sector.
  */
-Sector* AreaEditor::createSectorForLayoutDrawing(const Sector* copyFrom) {
+Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
     Sector* newSector = game.curAreaData->newSector();
     
     if(copyFrom) {
@@ -465,41 +466,42 @@ Sector* AreaEditor::createSectorForLayoutDrawing(const Sector* copyFrom) {
 
 
 /**
- * @brief Deletes the specified edge, removing it from all sectors and
- * vertexes that use it, as well as removing any now-useless sectors
- * or vertexes.
+ * @brief Removes and deletes the specified edge, removing it from all
+ * sectors and vertexes that use it, as well as removing and deleting any
+ * now-useless sectors or vertexes.
  *
  * @param ePtr Edge to delete.
  */
 void AreaEditor::deleteEdge(Edge* ePtr) {
-    //Remove sectors first.
+    //Delete sectors first.
     Sector* sectors[2] = { ePtr->sectors[0], ePtr->sectors[1] };
     ePtr->removeFromSectors();
     for(size_t s = 0; s < 2; s++) {
         if(!sectors[s]) continue;
         if(sectors[s]->edges.empty()) {
-            game.curAreaData->removeSector(sectors[s]);
+            game.curAreaData->deleteSector(sectors[s]);
         }
     }
     
-    //Now, remove vertexes.
+    //Now, delete vertexes.
     Vertex* vertexes[2] = { ePtr->vertexes[0], ePtr->vertexes[1] };
     ePtr->removeFromVertexes();
     for(size_t v = 0; v < 2; v++) {
         if(vertexes[v]->edges.empty()) {
-            game.curAreaData->removeVertex(vertexes[v]);
+            game.curAreaData->deleteVertex(vertexes[v]);
         }
     }
     
     //Finally, delete the edge proper.
-    game.curAreaData->removeEdge(ePtr);
+    game.curAreaData->deleteEdge(ePtr);
 }
 
 
 /**
- * @brief Deletes the specified edges. The sectors on each side of the edge
- * are merged, so the smallest sector will be deleted. In addition,
- * this operation will delete any sectors that would end up incomplete.
+ * @brief Removes and deletes the specified edges. The sectors on each side
+ * of the edge are merged, so the smallest sector will be deleted. In addition,
+ * this operation will remove and delete any sectors that would
+ * end up incomplete.
  *
  * @param which Edges to delete.
  * @return Whether all edges were deleted successfully.
@@ -523,7 +525,7 @@ bool AreaEditor::deleteEdges(const set<Edge*>& which) {
 
 
 /**
- * @brief Deletes the specified mobs.
+ * @brief Removes and deletes the specified mobs.
  *
  * @param which Mobs to delete.
  */
@@ -585,19 +587,19 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
 
 
 /**
- * @brief Deletes the specified path links.
+ * @brief Removes and deletes the specified path links.
  *
  * @param which Path links to delete.
  */
 void AreaEditor::deletePathLinks(const set<PathLink*>& which) {
     for(auto& l : which) {
-        l->startPtr->removeLink(l);
+        l->startPtr->deleteLink(l);
     }
 }
 
 
 /**
- * @brief Deletes the specified path stops.
+ * @brief Removes and deletes the specified path stops.
  *
  * @param which Path stops to delete.
  */
@@ -606,7 +608,7 @@ void AreaEditor::deletePathStops(const set<PathStop*>& which) {
         //Check all links that end at this stop.
         for(size_t s2 = 0; s2 < game.curAreaData->pathStops.size(); s2++) {
             PathStop* s2Ptr = game.curAreaData->pathStops[s2];
-            s2Ptr->removeLink(s);
+            s2Ptr->deleteLink(s);
         }
         
         //Finally, delete the stop.
@@ -2083,7 +2085,7 @@ bool AreaEditor::mergeSectors(Sector* s1, Sector* s2) {
     }
     
     //Delete the now-merged sector.
-    game.curAreaData->removeSector(smallSector);
+    game.curAreaData->deleteSector(smallSector);
     
     //Update all affected sectors.
     affectedSectors.erase(smallSector);
@@ -2191,13 +2193,13 @@ void AreaEditor::mergeVertex(
     }
     
     //Delete the old vertex.
-    game.curAreaData->removeVertex(v1);
+    game.curAreaData->deleteVertex(v1);
     
     //If any vertex or sector is out of edges, delete it.
     for(size_t v = 0; v < game.curAreaData->vertexes.size();) {
         Vertex* vPtr = game.curAreaData->vertexes[v];
         if(vPtr->edges.empty()) {
-            game.curAreaData->removeVertex(v);
+            game.curAreaData->deleteVertex(v);
         } else {
             v++;
         }
@@ -2205,7 +2207,7 @@ void AreaEditor::mergeVertex(
     for(size_t s = 0; s < game.curAreaData->sectors.size();) {
         Sector* sPtr = game.curAreaData->sectors[s];
         if(sPtr->edges.empty()) {
-            game.curAreaData->removeSector(s);
+            game.curAreaData->deleteSector(s);
         } else {
             s++;
         }
@@ -2702,14 +2704,14 @@ PathStop* AreaEditor::splitPathLink(
     PathStop* oldStartPtr = l1->startPtr;
     PathStop* oldEndPtr = l1->endPtr;
     PATH_LINK_TYPE oldLinkType = l1->type;
-    l1->startPtr->removeLink(l1->endPtr);
+    l1->startPtr->deleteLink(l1->endPtr);
     if(normalLink) {
-        l2->startPtr->removeLink(l2->endPtr);
+        l2->startPtr->deleteLink(l2->endPtr);
     }
     
     //Create the new links.
-    oldStartPtr->addLink(newStopPtr, normalLink);
-    newStopPtr->addLink(oldEndPtr, normalLink);
+    oldStartPtr->addNewLink(newStopPtr, normalLink);
+    newStopPtr->addNewLink(oldEndPtr, normalLink);
     
     //Fix the dangling path stop numbers in the links, and other properties.
     game.curAreaData->fixPathStopIdxs(oldStartPtr);

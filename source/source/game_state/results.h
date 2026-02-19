@@ -59,8 +59,8 @@ private:
     
     //--- Private function declarations ---
     
-    void addScoreStat(const MISSION_SCORE_CRITERIA criterion);
-    void addStat(
+    void addNewScoreStat(const MISSION_SCORE_CRITERIA criterion);
+    void addNewStat(
         const string& label, const string& value,
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );

@@ -101,7 +101,7 @@ public:
     DataNode* getChildOrAddNew(const string& name);
     size_t add(DataNode* newNode);
     DataNode* addNew(const string& name, const string& value = "");
-    bool remove(DataNode* nodeToRemove);
+    bool deleteChild(DataNode* nodeToDelete);
     void loadFile(
         const string& filePath, bool* outSuccess = nullptr,
         bool trimValues = true, bool namesOnlyAfterRoot = false,

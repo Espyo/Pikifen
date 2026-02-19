@@ -68,11 +68,11 @@ MobType* OnionCategory::createType() {
 
 
 /**
- * @brief Clears an Onion from the list of Onions.
+ * @brief Removes and deletes an Onion from the list of Onions.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void OnionCategory::eraseMob(Mob* m) {
+void OnionCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.onions.erase(
         find(
             game.states.gameplay->mobs.onions.begin(),

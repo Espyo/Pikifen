@@ -41,7 +41,7 @@
       <dd>In the room example, if there's a filing cabinet inside, it would be yet another floor, but it would be higher than the room's floor. The lines surrounding the cabinet's sector would be the walls of the cabinet.</dd>
       <dt><b>Everything is top-down, and there are no ramps or slanted terrain.</b></dt>
       <dd>You won't need to worry about what a wall looks like since you'll never see it, and you'll never need to worry about how a floor is angled.</dd>
-      <dt><b>To manage the layout, you add, delete, or move vertexes.</b></dt>
+      <dt><b>To manage the layout, you create, delete, or move vertexes.</b></dt>
       <dd>To change a sector's appearance or height, you change its properties instead, which can be edited in a specialized panel in the area editor.</dd>
       <dt><b>You populate the area by placing objects.</b></dt>
       <dd>Objects (or "mobs", short for "mobile object") are the Pikmin, leaders, plants, etc. in the area.</dd>
@@ -261,7 +261,7 @@
       <dd>To make your job of placing more Pikmin easier, select the one you placed, and press the duplicate button. Now click on the area to place the copied Pikmin there. You can now select these two, duplicate, and place them in yet another spot, and repeat as you want to get a big number of objects placed! Try placing down 10 Pikmin for this example.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>Select an object and press the "delete" button in the panel to remove it.</li>
+        <li>Select an object and press the "delete" button in the panel to delete it.</li>
         <li>Certain types of objects come with extra tips on how to use them. If the selected one does, some grayed-out text will appear under the category/type selection widgets. To read the tips, place your mouse over the text, and make sure you have tooltips enabled (menu bar, Help menu)!</li>
         <li>Certain types of objects can also have some specific settings, present in the "Script vars" section. Internally, these are "script variables", so you'll see the "Full list" textbox update as you change them. Read more about this <a href="#script-vars">here</a>.</li>
         <li>You can also double-click somewhere empty in the area to quickly create a new object there.</li>
@@ -286,8 +286,8 @@
       <dd>When you select the bridge, the panel's "Advanced" section will say something like "0 links". This means our selected object has no links right now. Simply click the "+" button and click on the dummy object to link to it. You'll see a line pointing from the bridge to the dummy object.</dd>
       <dt><b>Links are one-way only.</b></dt>
       <dd>Although we've linked the bridge to the dummy object, the dummy object is not linked to the bridge. This is not important for a dummy object, since it doesn't do anything anyway, but if you have, for instance, two seesaw-blocks, you must link them to each other individually.</dd>
-      <dt><b>Click the "trash" button to remove a link.</b></dt>
-      <dd>If you no longer want a given link, just select the object that owns the link, click that button, and then click on the object you want to remove the link from. You can also click on the little line that connects the two instead.</dd>
+      <dt><b>Click the "trash" button to delete a link.</b></dt>
+      <dd>If you no longer want a given link, just select the object that owns the link, click that button, and then click on the object you want to delete the link from. You can also click on the little line that connects the two instead.</dd>
     </dl>
 
     <h3 id="water">Adding water</h3>
@@ -376,7 +376,7 @@
       <li>
         <b>Deleting edges and sectors</b>:
         <ol>
-          <li>Crushing: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
+          <li>Crushing: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be deleted, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
           <li>Leaking: You can also select one or more of its edges, then press the "Delete" button in the panel. This will delete that edge, and because sectors &ndash; which are polygons &ndash; can't be left open, the sector that was on the opposite side of the edge will "leak in" and take up the space of the sector you deleted. When this happens, the sector tries to "leak" the larger sector into the smaller one, so if you wanted the opposite, you can make adjustments before deleting or delete it with the other method.</li>
         </ol>
       </li>

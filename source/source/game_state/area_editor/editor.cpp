@@ -499,7 +499,8 @@ void AreaEditor::copyPropertiesCmd(float inputValue) {
 
 
 /**
- * @brief Creates a new area to work on.
+ * @brief Creates a new empty area to work on.
+ * This does not create it in the disk.
  *
  * @param requestedAreaPath Path to the requested area's folder.
  */
@@ -572,7 +573,8 @@ void AreaEditor::createArea(const string& requestedAreaPath) {
 
 
 /**
- * @brief Creates vertexes based on the edge drawing the user has just made.
+ * @brief Creates vertexes based on the edge drawing the user has just made,
+ * and adds them to the area.
  *
  * Drawing nodes that are already on vertexes don't count, but the other ones
  * either create edge splits, or create simple vertexes inside a sector.
@@ -607,9 +609,9 @@ void AreaEditor::createDrawingVertexes() {
 
 
 /**
- * @brief Creates a new mob where the mouse cursor is.
+ * @brief Creates a new mob where the mouse cursor is and adds it to the area.
  */
-void AreaEditor::createMobUnderCursor() {
+void AreaEditor::addNewMobUnderCursor() {
     registerChange("object creation");
     subState = EDITOR_SUB_STATE_NONE;
     Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
@@ -911,7 +913,7 @@ void AreaEditor::deletePathCmd(float inputValue) {
 
 
 /**
- * @brief Code to run for the remove region command.
+ * @brief Code to run for the delete region command.
  *
  * @param inputValue Value of the player input for the command.
  */
@@ -953,7 +955,7 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
 
 
 /**
- * @brief Code to run for the remove tree shadow command.
+ * @brief Code to run for the delete tree shadow command.
  *
  * @param inputValue Value of the player input for the command.
  */
@@ -1132,7 +1134,7 @@ void AreaEditor::doSectorSplit() {
     
     //Create the new sector, empty.
     Sector* newSector =
-        createSectorForLayoutDrawing(sectorSplitInfo.workingSector);
+        addNewSectorForLayoutDrawing(sectorSplitInfo.workingSector);
         
     //Connect the edges to the sectors.
     unsigned char newSectorSide = (isNewClockwise ? 1 : 0);
@@ -1257,7 +1259,7 @@ void AreaEditor::duplicateMobsCmd(float inputValue) {
         subState == EDITOR_SUB_STATE_NEW_MOB ||
         subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
         subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
         subState == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
         return;
@@ -1630,7 +1632,7 @@ void AreaEditor::finishNewSectorDrawing() {
     }
     
     //Create the new sector, empty.
-    Sector* newSector = createSectorForLayoutDrawing(outerSector);
+    Sector* newSector = addNewSectorForLayoutDrawing(outerSector);
     
     //Connect the edges to the sectors.
     bool isClockwise = isPolygonClockwise(drawingVertexes);
@@ -2404,7 +2406,7 @@ void AreaEditor::newMobCmd(float inputValue) {
         subState == EDITOR_SUB_STATE_NEW_MOB ||
         subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
         subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
         subState == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
         return;
@@ -2452,7 +2454,7 @@ void AreaEditor::newRegionCmd(float inputValue) {
     }
     
     clearSelection();
-    registerChange("region addition");
+    registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
     newRegion->size = MISSION::EXIT_MIN_SIZE;
     game.curAreaData->regions.push_back(newRegion);

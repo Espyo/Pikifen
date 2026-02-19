@@ -82,7 +82,7 @@ Animation& Animation::operator=(const Animation& a2) {
 
 
 /**
- * @brief Deletes one of the animation's frames.
+ * @brief Removes and deletes one of the animation's frames.
  *
  * @param idx Frame index.
  */
@@ -282,7 +282,7 @@ void AnimationDatabase::createConversions(
 
 
 /**
- * @brief Deletes a sprite, adjusting any animations that use it.
+ * @brief Removes and deletes a sprite, adjusting any animations that use it.
  *
  * @param idx Sprite index.
  */
@@ -1120,7 +1120,8 @@ Sprite::~Sprite() {
 
 
 /**
- * @brief Creates the hitboxes, based on the body parts.
+ * @brief Creates the hitboxes, based on the body parts,
+ * and adds them to the list.
  *
  * @param adb The animation database the sprites and body parts belong to.
  * @param height The hitboxes's starting height.

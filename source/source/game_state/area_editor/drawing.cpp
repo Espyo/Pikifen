@@ -490,14 +490,14 @@ void AreaEditor::drawCanvas() {
         subState == EDITOR_SUB_STATE_CIRCLE_SECTOR ||
         subState == EDITOR_SUB_STATE_NEW_MOB ||
         subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
         subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
         subState == EDITOR_SUB_STATE_PATH_DRAWING ||
         subState == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
         Point marker = game.editorsView.mouseCursorWorldPos;
         
-        if(subState != EDITOR_SUB_STATE_ADD_MOB_LINK) {
+        if(subState != EDITOR_SUB_STATE_NEW_MOB_LINK) {
             marker = snapPoint(marker);
         }
         

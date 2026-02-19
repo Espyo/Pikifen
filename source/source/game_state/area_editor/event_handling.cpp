@@ -179,7 +179,7 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 subState == EDITOR_SUB_STATE_NEW_MOB ||
                 subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
                 subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-                subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+                subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
                 subState == EDITOR_SUB_STATE_DEL_MOB_LINK
             ) {
                 subState = EDITOR_SUB_STATE_NONE;
@@ -308,10 +308,10 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         switch(state) {
         case EDITOR_STATE_MOBS: {
             if(selectedMobs.size() == 1 || selectionHomogenized) {
-                if(subState == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+                if(subState == EDITOR_SUB_STATE_NEW_MOB_LINK) {
                     subState = EDITOR_SUB_STATE_NONE;
                 } else {
-                    subState = EDITOR_SUB_STATE_ADD_MOB_LINK;
+                    subState = EDITOR_SUB_STATE_NEW_MOB_LINK;
                 }
             }
             break;
@@ -429,7 +429,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
             MobGen* clickedMob =
                 getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
             if(!clickedMob) {
-                createMobUnderCursor();
+                addNewMobUnderCursor();
                 //Quit now, otherwise the code after this will simulate a
                 //regular click, and if the mob is on the grid and the cursor
                 //isn't, this will deselect the mob.
@@ -807,7 +807,7 @@ void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev) {
             finishNewSectorDrawing();
             
         } else {
-            //Add a new node.
+            //Create a new node.
             drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
             
             if(needsReverse) {
@@ -877,7 +877,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     case EDITOR_SUB_STATE_NEW_MOB: {
 
         //Create a mob where the cursor is.
-        createMobUnderCursor();
+        addNewMobUnderCursor();
         
         break;
         
@@ -962,7 +962,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         break;
         
-    } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
+    } case EDITOR_SUB_STATE_NEW_MOB_LINK: {
 
         //Link two mobs.
         MobGen* target = getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
@@ -1184,7 +1184,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
             
             if(nextStop) {
                 registerChange("path stop link");
-                pathDrawingStop1->addLink(
+                pathDrawingStop1->addNewLink(
                     nextStop, pathDrawingNormals
                 );
                 PathLink* l1 = pathDrawingStop1->getLink(nextStop);

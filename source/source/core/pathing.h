@@ -249,10 +249,10 @@ struct PathStop {
     );
     ~PathStop();
     void clone(PathStop* destination) const;
-    void addLink(PathStop* otherstop, bool normal);
+    void addNewLink(PathStop* otherstop, bool normal);
     PathLink* getLink(const PathStop* otherStop) const;
-    void removeLink(const PathLink* linkPtr);
-    void removeLink(const PathStop* otherStop);
+    void deleteLink(const PathLink* linkPtr);
+    void deleteLink(const PathStop* otherStop);
     void calculateDists();
     void calculateDistsPlusNeighbors();
     

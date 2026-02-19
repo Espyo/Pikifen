@@ -350,10 +350,10 @@ struct ControlsMediator {
     
     //--- Public function declarations ---
     
-    void addModifier(
+    void addNewModifier(
         Inpution::ActionTypeId id, const Inpution::InputSource& source
     );
-    void addActionType(
+    void addNewActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,
         const string& name,

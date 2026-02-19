@@ -2281,7 +2281,7 @@ void MobActionRunners::stopHeightEffect(MobActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::stopParticles(MobActionRunData& data) {
-    data.m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
+    data.m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
 }
 
 

@@ -68,11 +68,11 @@ MobType* GroupTaskCategory::createType() {
 
 
 /**
- * @brief Clears a group task from the list of group task.
+ * @brief Removes and deletes a group task from the list of group tasks.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void GroupTaskCategory::eraseMob(Mob* m) {
+void GroupTaskCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.groupTasks.erase(
         find(
             game.states.gameplay->mobs.groupTasks.begin(),

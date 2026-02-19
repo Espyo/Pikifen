@@ -68,11 +68,11 @@ MobType* PileCategory::createType() {
 
 
 /**
- * @brief Clears a pile from the list of piles.
+ * @brief Removes and deletes a pile from the list of piles.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void PileCategory::eraseMob(Mob* m) {
+void PileCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.piles.erase(
         find(
             game.states.gameplay->mobs.piles.begin(),

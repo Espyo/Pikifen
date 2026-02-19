@@ -214,7 +214,8 @@ void AnimationEditor::closeOptionsDialog() {
 
 
 /**
- * @brief Creates a new, empty animation database.
+ * @brief Sets up a new empty animation database to work on.
+ * This does not create it in the disk.
  *
  * @param path Path to the requested animation database's file.
  */
@@ -1070,7 +1071,7 @@ void AnimationEditor::playSound(size_t soundIdx) {
     MobType::Sound* soundData = &loadedMobType->sounds[soundIdx];
     if(!soundData->sample) return;
     size_t id =
-        game.audio.createUiSoundSource(soundData->sample, soundData->config);
+        game.audio.addNewUiSoundSource(soundData->sample, soundData->config);
     animSoundIds.push_back(id);
 }
 
@@ -1925,7 +1926,7 @@ void AnimationEditor::updateHitboxes() {
             }
         }
         
-        //Add missing hitboxes.
+        //Create missing hitboxes.
         for(size_t b = 0; b < db.bodyParts.size(); b++) {
             bool hitboxFound = false;
             const string& name = db.bodyParts[b]->name;

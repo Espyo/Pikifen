@@ -28,8 +28,8 @@ Replay::Replay() {
 
 
 /**
- * @brief Adds a new state to the replay, filling it with data from the supplied
- * mob vectors.
+ * @brief Creates and adds a new state to the replay,
+ * filling it with data from the supplied mob vectors.
  *
  * @param leaderList List of leaders.
  * @param pikminList List of Pikmin.
@@ -39,7 +39,7 @@ Replay::Replay() {
  * @param obstacleList List of mobs that represent obstacles.
  * @param curLeaderIdx Index number of the current leader.
  */
-void Replay::addState(
+void Replay::addNewState(
     const vector<Leader*>& leaderList,
     const vector<Pikmin*>& pikminList,
     const vector<Enemy*>& enemyList,

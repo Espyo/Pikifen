@@ -68,11 +68,11 @@ MobType* BridgeCategory::createType() {
 
 
 /**
- * @brief Clears a bridge from the list of bridges.
+ * @brief Removes and deletes a bridge from the list of bridges.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void BridgeCategory::eraseMob(Mob* m) {
+void BridgeCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.bridges.erase(
         find(
             game.states.gameplay->mobs.bridges.begin(),

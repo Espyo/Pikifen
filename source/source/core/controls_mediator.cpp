@@ -67,7 +67,7 @@ bool ControlsMediator::actionTypesShareInputSource(
 
 
 /**
- * @brief Adds a new player action to the list.
+ * @brief Creates and adds a new player action to the list.
  *
  * @param id Its ID.
  * @param category Its category.
@@ -83,7 +83,7 @@ bool ControlsMediator::actionTypesShareInputSource(
  * @param recommended If true, it's recommended that this action has at least
  * one bind.
  */
-void ControlsMediator::addActionType(
+void ControlsMediator::addNewActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string& name, const string& description, const string& internalName,
     const string& defaultBindStr, Inpution::ACTION_VALUE_TYPE valueType,
@@ -113,7 +113,7 @@ void ControlsMediator::addActionType(
  * @param id ID of the modifier.
  * @param source Input source of the modifier.
  */
-void ControlsMediator::addModifier(
+void ControlsMediator::addNewModifier(
     Inpution::ActionTypeId id, const Inpution::InputSource& source
 ) {
     mgr.modifiers[id] = source;

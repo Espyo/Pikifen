@@ -66,11 +66,11 @@ MobType* CustomCategory::createType() {
 
 
 /**
- * @brief Clears a custom mob from the list of custom mobs.
+ * @brief Removes and deletes a custom mob from the list of custom mobs.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void CustomCategory::eraseMob(Mob* m) { }
+void CustomCategory::deleteMob(Mob* m) { }
 
 
 /**

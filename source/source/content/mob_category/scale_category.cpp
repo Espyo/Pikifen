@@ -68,11 +68,11 @@ MobType* ScaleCategory::createType() {
 
 
 /**
- * @brief Clears a scale from the list of scales.
+ * @brief Removes and deletes a scale from the list of scales.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void ScaleCategory::eraseMob(Mob* m) {
+void ScaleCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.scales.erase(
         find(
             game.states.gameplay->mobs.scales.begin(),

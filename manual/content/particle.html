@@ -78,7 +78,7 @@
       <dt><b>You can rotate the image, and even make it random.</b></dt>
       <dd>If the image you chose doesn't align properly with what you want the particles to do, just rotate it with the "Angle" property. You can also make it so each particle randomly deviates from this rotation.</dd>
       <dt><b>Particles can have a single color, if you want. This also controls their opacity.</b></dt>
-      <dd>To make it so the particles only have one color, remove all keyframes in the "Color" property until only one remains. The keyframe's time does not matter. Then, simply set the color to tint the particle image with, and set the opacity in the alpha component.</dd>
+      <dd>To make it so the particles only have one color, delete all keyframes in the "Color" property until only one remains. The keyframe's time does not matter. Then, simply set the color to tint the particle image with, and set the opacity in the alpha component.</dd>
       <dt><b>Particles can have their color change over their lifespan.</b></dt>
       <dd>To make the color change, you make use of multiple keyframes. The color it has when it spawns is controlled by the color information on the first keyframe. You can then add a new keyframe for later on, to indicate that by this or that point, you want the color to be this or that. As the particles grows older in-game, its color will smoothly transition from one keyframe to the next. You can add as many keyframes as you want. A time of 0 means the moment it's born, a time of 0.5 means halfway through its lifespan, a time of 1 is when it gets deleted, etc.</dd>
       <dt><b>Normal blending works like normal, but additive blending makes particles lighter than what's behind them.</b></dt>

@@ -342,7 +342,7 @@ bool GuiItem::activate(const Point& cursorPos) {
         playFailSound ?
         game.sysContent.sndMenuFail :
         game.sysContent.sndMenuActivate;
-    game.audio.createUiSoundSource(sample, { .volume = 0.75f });
+    game.audio.addNewUiSoundSource(sample, { .volume = 0.75f });
     playFailSound = false;
     
     return true;
@@ -350,7 +350,7 @@ bool GuiItem::activate(const Point& cursorPos) {
 
 
 /**
- * @brief Adds a child item.
+ * @brief Adds an existing item to the list of children items.
  *
  * @param item Item to add as a child item.
  * @return Whether it succeeded.
@@ -644,7 +644,7 @@ GuiManager::GuiManager() :
 
 
 /**
- * @brief Add an item to the list.
+ * @brief Adds an existing item to the manager's list of items.
  *
  * @param item Pointer to the new item.
  * @param id If this item has an associated ID, specify it here.
@@ -671,13 +671,13 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
 
 
 /**
- * @brief Creates any registered custom items.
+ * @brief Creates any registered custom items and adds them to the list.
  *
  * @param startingIdx Create the items starting at this index.
  * @param customChildrenParent Custom items become children of this parent,
  * if not nullptr.
  */
-void GuiManager::createCustomItems(
+void GuiManager::createAndAddCustomItems(
     size_t startingIdx, GuiItem* customChildrenParent
 ) {
     for(size_t i = startingIdx; i < customItemDefs.size(); i++) {
@@ -1364,7 +1364,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         Point center = iPtr->getReferenceCenter();
         Point size = iPtr->getReferenceSize();
         
-        esnInterface.addItem(
+        esnInterface.addNewItem(
             (EasySpatNav::ItemId) iPtr, center.x, center.y, size.x, size.y
         );
         if(iPtr->parent) {
@@ -1452,7 +1452,7 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
         customItemDefs.end(),
         newCustomItemDefs.begin(), newCustomItemDefs.end()
     );
-    createCustomItems(newCustomItemDefsIdx, customChildrenParent);
+    createAndAddCustomItems(newCustomItemDefsIdx, customChildrenParent);
     
     return true;
 }
@@ -1478,7 +1478,7 @@ bool GuiManager::registerCoords(
 
 
 /**
- * @brief Removes an item from the list.
+ * @brief Removes an item from the list, without deleting it.
  *
  * @param item Item to remove.
  * @return Whether it succeeded.
@@ -1536,7 +1536,7 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
     }
     
     if(focusedItem && !silent) {
-        game.audio.createUiSoundSource(
+        game.audio.addNewUiSoundSource(
             game.sysContent.sndMenuFocus,
         { .stackMinPos = 0.01f, .volume = 0.5f, .speedDeviation = 0.1f }
         );

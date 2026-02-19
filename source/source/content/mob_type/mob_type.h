@@ -494,7 +494,7 @@ public:
     virtual void loadCatResources(DataNode* file);
     virtual AnimConversionVector getAnimConversions() const;
     virtual void unloadResources();
-    void addCarryingStates();
+    void createAndAddCarryingStates();
     
 };
 

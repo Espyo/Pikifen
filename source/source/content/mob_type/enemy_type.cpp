@@ -31,7 +31,7 @@ EnemyType::EnemyType() :
     startingTeam = MOB_TEAM_ENEMY_1;
     useDamageSquashAndStretch = true;
     
-    addCarryingStates();
+    createAndAddCarryingStates();
 }
 
 

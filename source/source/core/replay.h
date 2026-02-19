@@ -156,7 +156,7 @@ public:
     //--- Public function declarations ---
     
     Replay();
-    void addState(
+    void addNewState(
         const vector<Leader*>& leaderList,
         const vector<Pikmin*>& pikminList,
         const vector<Enemy*>& enemyList,

@@ -68,11 +68,11 @@ MobType* BouncerCategory::createType() {
 
 
 /**
- * @brief Clears a bouncer from the list of bouncers.
+ * @brief Removes and deletes a bouncer from the list of bouncers.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void BouncerCategory::eraseMob(Mob* m) {
+void BouncerCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.bouncers.erase(
         find(
             game.states.gameplay->mobs.bouncers.begin(),

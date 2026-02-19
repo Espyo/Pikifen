@@ -68,11 +68,11 @@ MobType* EnemyCategory::createType() {
 
 
 /**
- * @brief Clears an enemy from the list of enemies.
+ * @brief Removes and deletes an enemy from the list of enemies.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void EnemyCategory::eraseMob(Mob* m) {
+void EnemyCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.enemies.erase(
         find(
             game.states.gameplay->mobs.enemies.begin(),

@@ -2689,7 +2689,7 @@ void Whistle::tick(
     }
     
     for(size_t r = 0; r < rings.size(); ) {
-        //Erase rings that go beyond the leader's cursor.
+        //Delete rings that go beyond the leader's cursor.
         rings[r] += WHISTLE::RING_SPEED * deltaT;
         if(leaderToCursorDist < rings[r]) {
             rings.erase(rings.begin() + r);

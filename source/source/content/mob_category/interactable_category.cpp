@@ -68,11 +68,11 @@ MobType* InteractableCategory::createType() {
 
 
 /**
- * @brief Clears an interactable from the list of interactables.
+ * @brief Removes and deletes an interactable from the list of interactables.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void InteractableCategory::eraseMob(Mob* m) {
+void InteractableCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.interactables.erase(
         find(
             game.states.gameplay->mobs.interactables.begin(),

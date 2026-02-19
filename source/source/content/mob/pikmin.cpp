@@ -233,11 +233,11 @@ void Pikmin::finishDyingClassSpecifics() {
     par.friction = 0.8;
     Point baseSpeed = Point(game.rng.f(-20, 20), game.rng.f(-70, -30));
     par.linearSpeed = KeyframeInterpolator<Point>(baseSpeed);
-    par.linearSpeed.add(1, Point(Point(baseSpeed.x, baseSpeed.y - 20)));
+    par.linearSpeed.addNew(1, Point(Point(baseSpeed.x, baseSpeed.y - 20)));
     par.color.setKeyframeValue(0, changeAlpha(pikType->mainColor, 0));
-    par.color.add(0.1f, pikType->mainColor);
-    par.color.add(1, changeAlpha(pikType->mainColor, 0));
-    game.states.gameplay->particles.add(par);
+    par.color.addNew(0.1f, pikType->mainColor);
+    par.color.addNew(1, changeAlpha(pikType->mainColor, 0));
+    game.states.gameplay->particles.addParticle(par);
     
     //Sound. Create a positional sound source instead of a mob sound source,
     //since the Pikmin object is now practically deleted.
@@ -246,7 +246,7 @@ void Pikmin::finishDyingClassSpecifics() {
     if(dyingSoundIdx != INVALID) {
         MobType::Sound* dyingSound =
             &type->sounds[dyingSoundIdx];
-        game.audio.createPosSoundSource(
+        game.audio.addNewPosSoundSource(
             dyingSound->sample,
             pos, false, dyingSound->config
         );

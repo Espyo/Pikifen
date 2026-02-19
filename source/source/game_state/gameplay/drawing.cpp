@@ -297,13 +297,13 @@ void GameplayState::drawBigMsg() {
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_READY_DUR;
         
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
-        kiY.add(TEXT_START_T, game.winH * (-0.2f));
-        kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
-        kiY.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
-        kiY.add(TEXT_SHRINK_T, game.winH / 2.0f);
+        kiY.addNew(TEXT_START_T, game.winH * (-0.2f));
+        kiY.addNew(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
+        kiY.addNew(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
+        kiY.addNew(TEXT_SHRINK_T, game.winH / 2.0f);
         KeyframeInterpolator<float> kiH(TEXT_INITIAL_HEIGHT);
-        kiH.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
-        kiH.add(1.0f, 0.0f, EASE_METHOD_IN);
+        kiH.addNew(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
+        kiH.addNew(1.0f, 0.0f, EASE_METHOD_IN);
         
         for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); c++) {
             float charRatio =
@@ -327,11 +327,11 @@ void GameplayState::drawBigMsg() {
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_GO_DUR;
         
         KeyframeInterpolator<float> kiH(0.0f);
-        kiH.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
-        kiH.add(1.0f, 0.22f);
+        kiH.addNew(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
+        kiH.addNew(1.0f, 0.22f);
         KeyframeInterpolator<float> kiA(1.0f);
-        kiA.add(TEXT_GROW_STOP_T, 1.0f);
-        kiA.add(1.0f, 0.0f);
+        kiA.addNew(TEXT_GROW_STOP_T, 1.0f);
+        kiA.addNew(1.0f, 0.0f);
         
         drawText(
             GAMEPLAY::BIG_MSG_GO_TEXT,
@@ -352,9 +352,9 @@ void GameplayState::drawBigMsg() {
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
         
         KeyframeInterpolator<float> kiX(game.winW);
-        kiX.add(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
-        kiX.add(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
-        kiX.add(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
+        kiX.addNew(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
+        kiX.addNew(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
+        kiX.addNew(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
         
         for(size_t c = 0; c < GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT.size(); c++) {
             float charRatio =
@@ -395,13 +395,13 @@ void GameplayState::drawBigMsg() {
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_TIMES_UP_DUR);
             
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
-        kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
-        kiY.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
+        kiY.addNew(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
+        kiY.addNew(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
         KeyframeInterpolator<float> kiH(TEXT_INITIAL_HEIGHT);
-        kiH.add(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
+        kiH.addNew(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
         KeyframeInterpolator<float> kiA(1.0f);
-        kiA.add(TEXT_FADE_T, 1.0f);
-        kiA.add(1.0f, 0.0f);
+        kiA.addNew(TEXT_FADE_T, 1.0f);
+        kiA.addNew(1.0f, 0.0f);
         
         float alpha = kiA.get(t);
         

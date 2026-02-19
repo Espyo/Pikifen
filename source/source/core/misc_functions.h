@@ -145,7 +145,7 @@ string getEngineVersionString(
 ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);
 float getWallShadowLength(Edge* ePtr);
 vector<std::pair<int, string> > getWeatherTable(DataNode* node);
-void guiAddBackInputIcon(
+void guiCreateBackInputIcon(
     GuiManager* gui, const string& itemName = "back_input"
 );
 bool monoCombo(

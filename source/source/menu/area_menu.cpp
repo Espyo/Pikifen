@@ -42,13 +42,13 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 
 /**
- * @brief Adds a new bullet point to either the fail condition list, or the
- * grading explanation list.
+ * @brief Creates and adds a new bullet point to either the fail condition list
+ * or the grading explanation list.
  *
  * @param list List to add to.
  * @param text Text.
  */
-void AreaMenu::addBullet(ListGuiItem* list, const string& text) {
+void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
     size_t bulletIdx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
     const float BULLET_PADDING = 0.01f;
@@ -229,7 +229,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         for(size_t f = 0; f < game.missionFailConds.size(); f++) {
             if(hasFlag(mission.failConditions, getIdxBitmask(f))) {
                 MissionFail* cond = game.missionFailConds[f];
-                addBullet(
+                addNewBullet(
                     failList,
                     cond->getPlayerDescription(&mission)
                 );
@@ -237,28 +237,28 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         }
         
         if(mission.failConditions == 0) {
-            addBullet(failList, "(None)");
+            addNewBullet(failList, "(None)");
         }
         
         switch(mission.gradingMode) {
         case MISSION_GRADING_MODE_POINTS: {
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "Your medal depends on your score:"
             );
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "    Platinum: " + i2s(mission.platinumReq) + "+ points."
             );
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "    Gold: " + i2s(mission.goldReq) + "+ points."
             );
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "    Silver: " + i2s(mission.silverReq) + "+ points."
             );
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "    Bronze: " + i2s(mission.bronzeReq) + "+ points."
             );
@@ -274,15 +274,15 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
             }
             if(!scoreNotes.empty()) {
-                addBullet(
+                addNewBullet(
                     gradingList,
                     "Your score is calculated like so:"
                 );
                 for(size_t s = 0; s < scoreNotes.size(); s++) {
-                    addBullet(gradingList, scoreNotes[s]);
+                    addNewBullet(gradingList, scoreNotes[s]);
                 }
             } else {
-                addBullet(
+                addNewBullet(
                     gradingList,
                     "In this mission, your score will always be 0."
                 );
@@ -301,16 +301,16 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
             }
             if(!lossNotes.empty()) {
-                addBullet(
+                addNewBullet(
                     gradingList,
                     "If you fail, you'll lose your score for:"
                 );
                 for(size_t l = 0; l < lossNotes.size(); l++) {
-                    addBullet(gradingList, lossNotes[l]);
+                    addNewBullet(gradingList, lossNotes[l]);
                 }
             }
             if(!mission.makerRecordDate.empty()) {
-                addBullet(
+                addNewBullet(
                     gradingList,
                     "Maker's record: " + i2s(mission.makerRecord) +
                     " (" + mission.makerRecordDate + ")"
@@ -319,18 +319,18 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             break;
         }
         case MISSION_GRADING_MODE_GOAL: {
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "You get a platinum medal if you clear the goal."
             );
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "You get no medal if you fail."
             );
             break;
         }
         case MISSION_GRADING_MODE_PARTICIPATION: {
-            addBullet(
+            addNewBullet(
                 gradingList,
                 "You get a platinum medal just by playing the mission."
             );
@@ -554,7 +554,7 @@ void AreaMenu::initGuiMain() {
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&gui);
+    guiCreateBackInputIcon(&gui);
     
     if(!game.content.areas.list[areaType].empty()) {
     

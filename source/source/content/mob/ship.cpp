@@ -261,7 +261,7 @@ void Ship::tickClassSpecifics(float deltaT) {
     }
     
     for(size_t r = 0; r < beamRings.size(); ) {
-        //Erase rings that have reached the end of their animation.
+        //Delete rings that have reached the end of their animation.
         beamRings[r] += deltaT;
         if(beamRings[r] > SHIP::BEAM_RING_ANIM_DUR) {
             beamRings.erase(

@@ -1135,10 +1135,10 @@ void AnimationEditor::processGuiPanelBodyPart() {
     static string newPartName;
     static int selectedPart = 0;
     
-    //Add body part button.
+    //Create body part button.
     if(
         ImGui::ImageButton(
-            "addPartButton", editorIcons[EDITOR_ICON_ADD],
+            "createPartButton", editorIcons[EDITOR_ICON_ADD],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -1150,7 +1150,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
         "It will be placed after the currently selected body part."
     );
     
-    //Add body part popup.
+    //Create body part popup.
     if(
         processGuiInputPopup(
             "newPartName", "New body part's name:", &newPartName, true
@@ -1562,10 +1562,10 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
         ImGui::SameLine();
     }
     
-    //Add frame button.
+    //Create frame button.
     if(
         ImGui::ImageButton(
-            "addFrameButton", editorIcons[EDITOR_ICON_ADD],
+            "createFrameButton", editorIcons[EDITOR_ICON_ADD],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -1599,7 +1599,7 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
         changesMgr.markAsChanged();
         setStatus(
-            "Added frame #" + i2s(curAnimInst.curFrameIdx + 1) + "."
+            "Created frame #" + i2s(curAnimInst.curFrameIdx + 1) + "."
         );
     }
     setTooltip(

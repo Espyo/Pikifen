@@ -69,7 +69,8 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
 
 
 /**
- * @brief Adds the GUI items for a control bind entry in the control binds menu.
+ * @brief Creates and adds the GUI items for a control bind entry
+ * in the control binds menu.
  *
  * @param actionType Relevant action type.
  * @param addSectionHeader If true, add items that indicate the start of
@@ -77,7 +78,7 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
  * @param itemToFocus If one of the GUI items should be the focused item,
  * specify it here.
  */
-void OptionsMenu::addBindEntryItems(
+void OptionsMenu::addNewBindEntryItems(
     const PlayerActionType& actionType, bool addSectionHeader,
     GuiItem** itemToFocus
 ) {
@@ -237,32 +238,32 @@ void OptionsMenu::addBindEntryItems(
             bindsGui.addItem(bindButton);
             
             if(showingBindsMore && actionType.id == curActionType) {
-                //Remove bind button.
-                ButtonGuiItem* removeBindButton =
+                //Delete bind button.
+                ButtonGuiItem* deleteBindButton =
                     new ButtonGuiItem("", game.sysContent.fntStandard);
-                removeBindButton->onActivate =
+                deleteBindButton->onActivate =
                 [this, actionType, b] (const Point&) {
                     deleteBind(actionType.id, b);
                 };
-                removeBindButton->onDraw =
-                    [this, removeBindButton]
+                deleteBindButton->onDraw =
+                    [this, deleteBindButton]
                 (const DrawInfo & draw) {
                     drawButton(
                         draw.center, draw.size, "X",
                         game.sysContent.fntStandard, COLOR_WHITE,
-                        removeBindButton->focused,
-                        removeBindButton->getJuiceValue(), draw.tint
+                        deleteBindButton->focused,
+                        deleteBindButton->getJuiceValue(), draw.tint
                     );
                 };
-                removeBindButton->ratioCenter =
+                deleteBindButton->ratioCenter =
                     Point(0.85f, curY);
-                removeBindButton->ratioSize =
+                deleteBindButton->ratioSize =
                     Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-                removeBindButton->onGetTooltip =
-                [] () { return "Remove this input from this action."; };
-                bindsListBox->addChild(removeBindButton);
-                bindsGui.addItem(removeBindButton);
-                removeBindButton->startJuiceAnimation(
+                deleteBindButton->onGetTooltip =
+                [] () { return "Deletes this input bind from this action."; };
+                bindsListBox->addChild(deleteBindButton);
+                bindsGui.addItem(deleteBindButton);
+                deleteBindButton->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
             }
@@ -281,7 +282,7 @@ void OptionsMenu::addBindEntryItems(
         
         if(aBinds.empty()) {
         
-            //Add first bind button.
+            //Create first bind button.
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
@@ -303,7 +304,7 @@ void OptionsMenu::addBindEntryItems(
             bindButton->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bindButton->onGetTooltip =
-            [] () { return "Choose an input for this action."; };
+            [] () { return "Choose a new input to bind to this action."; };
             bindsListBox->addChild(bindButton);
             bindsGui.addItem(bindButton);
             bindButton->startJuiceAnimation(
@@ -316,22 +317,22 @@ void OptionsMenu::addBindEntryItems(
                 
         } else if(showingBindsMore && actionType.id == curActionType) {
         
-            //Add button.
-            ButtonGuiItem* addButton =
-                new ButtonGuiItem("Add...", game.sysContent.fntStandard);
-            addButton->ratioCenter =
+            //Create new bind button.
+            ButtonGuiItem* createButton =
+                new ButtonGuiItem("New...", game.sysContent.fntStandard);
+            createButton->ratioCenter =
                 Point(0.63f, curY);
-            addButton->ratioSize =
+            createButton->ratioSize =
                 Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            addButton->onActivate =
+            createButton->onActivate =
             [this, actionType, aBinds] (const Point&) {
                 chooseInput(actionType.id, aBinds.size());
             };
-            addButton->onGetTooltip =
-            [] () { return "Add another input to this action."; };
-            bindsListBox->addChild(addButton);
-            bindsGui.addItem(addButton);
-            addButton->startJuiceAnimation(
+            createButton->onGetTooltip =
+            [] () { return "Create another input to bind to this action."; };
+            bindsListBox->addChild(createButton);
+            bindsGui.addItem(createButton);
+            createButton->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
             );
             
@@ -429,12 +430,11 @@ void OptionsMenu::addBindEntryItems(
 
 
 /**
- * @brief Adds a new bind from a captured input.
+ * @brief Creates a new bind from a captured input, or updates an existing one.
  *
  * @param input The input.
  */
-void OptionsMenu::addOrUpdateBindFromInput(const Inpution::Input& input) {
-    //Update an existing bind, or add a new one.
+void OptionsMenu::addNewOrUpdateBindFromInput(const Inpution::Input& input) {
     vector<Inpution::Bind>& allBinds = game.controls.binds();
     if(curBindIdx >= allBinds.size()) {
         Inpution::Bind newBind;
@@ -449,7 +449,7 @@ void OptionsMenu::addOrUpdateBindFromInput(const Inpution::Input& input) {
 
 
 /**
- * @brief Adds the GUI items for an inventory shortcut entry in the
+ * @brief Creates and adds the GUI items for an inventory shortcut entry in the
  * shortcuts menu.
  *
  * @param name Display name of the item.
@@ -459,7 +459,7 @@ void OptionsMenu::addOrUpdateBindFromInput(const Inpution::Input& input) {
  * focused.
  * @param textColor Color of the text of the button.
  */
-void OptionsMenu::addShortcutItemItems(
+void OptionsMenu::addNewShortcutItemItems(
     const string& name, const string& internalName, GuiItem** itemToFocus,
     const ALLEGRO_COLOR& textColor
 ) {
@@ -507,12 +507,12 @@ void OptionsMenu::addShortcutItemItems(
 
 
 /**
- * @brief Adds the label and button for a shortcut in the inventory
+ * @brief Creates and adds the label and button for a shortcut in the inventory
  * item shortcuts menu.
  *
  * @param index Index of the shortcut.
  */
-void OptionsMenu::addShortcutItems(unsigned char index) {
+void OptionsMenu::addNewShortcutItems(unsigned char index) {
     string shortcutLetter = string(1, 'a' + index);
     
     //Label text.
@@ -542,7 +542,7 @@ void OptionsMenu::addShortcutItems(unsigned char index) {
 /**
  * @brief Chooses the input for a given action type's bind.
  * If the bind index is greater than the number of existing binds for this
- * action type, then a new one gets added.
+ * action type, then a new one gets created.
  *
  * @param actionType Action type.
  * @param bindIdx Index of that action type's bind.
@@ -669,7 +669,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //Actively capturing.
         Inpution::Input input = game.controls.allegroEventToInput(ev);
         if(input.value >= 0.5f) {
-            addOrUpdateBindFromInput(input);
+            addNewOrUpdateBindFromInput(input);
             capturingInput = 2;
             game.controls.stopIgnoringActions();
             game.controls.startIgnoringInputSource(input.source, true);
@@ -738,7 +738,7 @@ void OptionsMenu::initGuiAudioPage() {
     audioGui.addItem(audioGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&audioGui);
+    guiCreateBackInputIcon(&audioGui);
     
     vector<float> presetVolumeValues = {
         0.00f, 0.05f, 0.10f, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f,
@@ -880,7 +880,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.addItem(bindsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&bindsGui);
+    guiCreateBackInputIcon(&bindsGui);
     
     //Controls list box.
     bindsListBox = new ListGuiItem();
@@ -979,7 +979,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.addItem(controlsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&controlsGui);
+    guiCreateBackInputIcon(&controlsGui);
     
     //Normal control binds button.
     ButtonGuiItem* normalBindsButton =
@@ -1157,7 +1157,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     graphicsGui.addItem(graphicsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&graphicsGui);
+    guiCreateBackInputIcon(&graphicsGui);
     
     //Fullscreen checkbox.
     CheckGuiItem* fullscreenCheck =
@@ -1279,7 +1279,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.addItem(miscGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&miscGui);
+    guiCreateBackInputIcon(&miscGui);
     
     //Pikmin bump mode picker.
     vector<float> presetPikminBumpValues = {
@@ -1465,13 +1465,13 @@ void OptionsMenu::initGuiShortcutsPage() {
     shortcutsGui.addItem(shortcutsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&shortcutsGui);
+    guiCreateBackInputIcon(&shortcutsGui);
     
     //Shortcut items.
-    addShortcutItems(0);
-    addShortcutItems(1);
-    addShortcutItems(2);
-    addShortcutItems(3);
+    addNewShortcutItems(0);
+    addNewShortcutItems(1);
+    addNewShortcutItems(2);
+    addNewShortcutItems(3);
     
     //Items list explanation text.
     shortcutItemsListExplanation =
@@ -1549,7 +1549,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.addItem(topGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&topGui);
+    guiCreateBackInputIcon(&topGui);
     
     //Controls options button.
     ButtonGuiItem* controlsButton =
@@ -1790,7 +1790,7 @@ void OptionsMenu::load() {
     }
     );
     
-    //Remove any duplicates.
+    //Delete any duplicates.
     for(size_t p = 0; p < resolutionPresets.size() - 1;) {
         if(resolutionPresets[p] == resolutionPresets[p + 1]) {
             resolutionPresets.erase(resolutionPresets.begin() + (p + 1));
@@ -1875,7 +1875,7 @@ void OptionsMenu::populateBinds() {
             lastCat = actionType.category;
         }
         
-        addBindEntryItems(actionType, addSectionHeader, &itemToFocus);
+        addNewBindEntryItems(actionType, addSectionHeader, &itemToFocus);
     }
     
     if(itemToFocus) {
@@ -1896,11 +1896,11 @@ void OptionsMenu::populateShortcutItems() {
     
     GuiItem* itemToFocus = nullptr;
     
-    addShortcutItemItems("(None)", "", &itemToFocus, al_map_rgb(255, 192, 192));
+    addNewShortcutItemItems("(None)", "", &itemToFocus, al_map_rgb(255, 192, 192));
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
         InventoryItem* iPtr = game.inventoryItems.getByIndex(i);
-        addShortcutItemItems(
+        addNewShortcutItemItems(
             iPtr->name, iPtr->iName, &itemToFocus
         );
     }

@@ -145,7 +145,7 @@ public:
     virtual Mob* createMob(
         const Point& pos, MobType* type, float angle
     ) = 0;
-    virtual void eraseMob(Mob* m) = 0;
+    virtual void deleteMob(Mob* m) = 0;
     virtual void clearTypes() = 0;
     
 };
@@ -197,7 +197,7 @@ public:
     Mob* createMob(
         const Point& pos, MobType* type, float angle
     ) override;
-    void eraseMob(Mob* m) override;
+    void deleteMob(Mob* m) override;
     void clearTypes() override;
     
 };

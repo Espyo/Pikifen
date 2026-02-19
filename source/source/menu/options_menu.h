@@ -356,16 +356,16 @@ private:
     
     //--- Private function declarations ---
     
-    void addBindEntryItems(
+    void addNewBindEntryItems(
         const PlayerActionType& actionType, bool addSectionHeader,
         GuiItem** itemToFocus
     );
-    void addOrUpdateBindFromInput(const Inpution::Input& input);
-    void addShortcutItemItems(
+    void addNewOrUpdateBindFromInput(const Inpution::Input& input);
+    void addNewShortcutItemItems(
         const string& name, const string& internalName, GuiItem** itemToFocus,
         const ALLEGRO_COLOR& textColor = COLOR_WHITE
     );
-    void addShortcutItems(unsigned char index);
+    void addNewShortcutItems(unsigned char index);
     void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char index);
     void initGuiAudioPage();
     void initGuiControlsPage();

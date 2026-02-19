@@ -165,7 +165,7 @@ void ModalGuiManager::updateItems() {
     buttonItems.push_back(backItem);
     
     //Back input icon.
-    guiAddBackInputIcon(this);
+    guiCreateBackInputIcon(this);
     
     for(size_t b = 0; b < extraButtons.size(); b++) {
         //Extra button.

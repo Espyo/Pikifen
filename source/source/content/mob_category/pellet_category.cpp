@@ -68,11 +68,11 @@ MobType* PelletCategory::createType() {
 
 
 /**
- * @brief Clears a pellet from the list of pellets.
+ * @brief Removes and deletes a pellet from the list of pellets.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void PelletCategory::eraseMob(Mob* m) {
+void PelletCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.pellets.erase(
         find(
             game.states.gameplay->mobs.pellets.begin(),

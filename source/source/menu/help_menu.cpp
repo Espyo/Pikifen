@@ -121,7 +121,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&gui);
+    guiCreateBackInputIcon(&gui);
     
     //Gameplay basics button.
     ButtonGuiItem* gameplay1Button =

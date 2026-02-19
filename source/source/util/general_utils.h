@@ -168,7 +168,7 @@ struct KeyframeInterpolator {
     
     
     /**
-     * @brief Adds a keyframe.
+     * @brief Creates and adds a keyframe.
      *
      * @param t Time [0 - 1].
      * @param value Value at that point.
@@ -176,7 +176,7 @@ struct KeyframeInterpolator {
      * @param outIdx If not nullptr, the index of the newly added keyframe
      * is returned here.
      */
-    void add(
+    void addNew(
         float t, const InterT& value,
         EASE_METHOD easeMethod = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
@@ -191,8 +191,8 @@ struct KeyframeInterpolator {
     
     
     /**
-     * @brief Adds a keyframe, or sets the data of the keyframe at the
-     * specified time.
+     * @brief Creates and adds a keyframe, or sets the data of the keyframe
+     * at the specified time.
      *
      * @param t Time [0 - 1].
      * @param value Value at that point.
@@ -200,7 +200,7 @@ struct KeyframeInterpolator {
      * @param outIdx If not nullptr, the index of the newly added keyframe
      * is returned here.
      */
-    void addOrSet(
+    void addNewOrSet(
         float t, const InterT& value,
         EASE_METHOD easeMethod = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
@@ -212,16 +212,16 @@ struct KeyframeInterpolator {
             }
         }
         
-        add(t, value, easeMethod, outIdx);
+        addNew(t, value, easeMethod, outIdx);
     }
     
     
     /**
-     * @brief Removes a keyframe.
+     * @brief Deletes a keyframe.
      *
      * @param idx Its index.
      */
-    void remove(size_t idx) {
+    void deleteKeyframe(size_t idx) {
         keyframeTimes.erase(keyframeTimes.begin() + idx);
         keyframeValues.erase(keyframeValues.begin() + idx);
         keyframeEases.erase(keyframeEases.begin() + idx);
@@ -316,7 +316,7 @@ struct KeyframeInterpolator {
         for(size_t c = 0; c < node->getNrOfChildren(); c++) {
             DataNode* cNode = node->getChild(c);
             InterT value = fromString<InterT>(cNode->value);
-            add(s2f(cNode->name), value, EASE_METHOD_NONE);
+            addNew(s2f(cNode->name), value, EASE_METHOD_NONE);
         }
     }
     

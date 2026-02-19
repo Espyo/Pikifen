@@ -355,7 +355,7 @@ void MainMenu::initGuiMainPage() {
     mainGui.addItem(mainGui.backItem, "exit");
     
     //Exit input icon.
-    guiAddBackInputIcon(&mainGui, "exit_input");
+    guiCreateBackInputIcon(&mainGui, "exit_input");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
@@ -523,7 +523,7 @@ void MainMenu::initGuiMakePage() {
     makeGui.addItem(makeGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&makeGui);
+    guiCreateBackInputIcon(&makeGui);
     
     //More button.
     ButtonGuiItem* moreButton =
@@ -686,7 +686,7 @@ void MainMenu::initGuiPlayPage() {
     playGui.addItem(playGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&playGui);
+    guiCreateBackInputIcon(&playGui);
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

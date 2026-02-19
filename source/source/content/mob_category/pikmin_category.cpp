@@ -68,11 +68,11 @@ MobType* PikminCategory::createType() {
 
 
 /**
- * @brief Clears a Pikmin from the list of Pikmin.
+ * @brief Removes and deletes a Pikmin from the list of Pikmin.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void PikminCategory::eraseMob(Mob* m) {
+void PikminCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.pikmin.erase(
         find(
             game.states.gameplay->mobs.pikmin.begin(),

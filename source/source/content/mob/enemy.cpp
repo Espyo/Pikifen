@@ -129,17 +129,17 @@ void Enemy::finishDyingClassSpecifics() {
         par.bitmap = game.sysContent.bmpEnemySoul;
         par.friction = 0.5f;
         par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
-        par.linearSpeed.add(0.5f, Point(50, -50));
-        par.linearSpeed.add(1, Point(-50, -50));
+        par.linearSpeed.addNew(0.5f, Point(50, -50));
+        par.linearSpeed.addNew(1, Point(-50, -50));
         
         par.color =
             KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
-        par.color.add(0.1f, al_map_rgb(255, 192, 255));
-        par.color.add(0.6f, al_map_rgb(255, 192, 255));
-        par.color.add(1, al_map_rgba(255, 192, 255, 0));
-        game.states.gameplay->particles.add(par);
+        par.color.addNew(0.1f, al_map_rgb(255, 192, 255));
+        par.color.addNew(0.6f, al_map_rgb(255, 192, 255));
+        par.color.addNew(1, al_map_rgba(255, 192, 255, 0));
+        game.states.gameplay->particles.addParticle(par);
         
-        game.audio.createPosSoundSource(
+        game.audio.addNewPosSoundSource(
             game.sysContent.sndEnemySoul, pos, false,
         { .volume = 0.2f, .speed = soulPitch, .speedDeviation = 0.02f }
         );

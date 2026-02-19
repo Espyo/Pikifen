@@ -251,11 +251,11 @@ private:
     
     //--- Private function declarations ---
     
-    void addBullet(
+    void addNewBullet(
         ListGuiItem* list, const string& text,
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );
-    void addPikminStatusLine(
+    void addNewPikminStatusLine(
         ListGuiItem* list,
         PikminType* pikType,
         const string& groupText,
@@ -269,10 +269,10 @@ private:
     );
     void calculateGoHerePath();
     void confirmOrLeave();
-    ButtonGuiItem* createPageButton(
+    ButtonGuiItem* addNewPageItem(
         PAUSE_MENU_PAGE targetPage, bool left, GuiManager* curGui
     );
-    void createPageButtons(PAUSE_MENU_PAGE curPage, GuiManager* curGui);
+    void addNewPageItems(PAUSE_MENU_PAGE curPage, GuiManager* curGui);
     void drawGoHereSegment(
         const Point& start, const Point& end,
         const ALLEGRO_COLOR& color, float* texturePoint

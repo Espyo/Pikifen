@@ -68,11 +68,11 @@ MobType* TrackCategory::createType() {
 
 
 /**
- * @brief Clears a track from the list of tracks.
+ * @brief Removes and deletes a track from the list of tracks.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void TrackCategory::eraseMob(Mob* m) {
+void TrackCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.tracks.erase(
         find(
             game.states.gameplay->mobs.tracks.begin(),

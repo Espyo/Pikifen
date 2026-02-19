@@ -78,7 +78,7 @@ protected:
         //Save.
         EDITOR_ICON_SAVE,
         
-        //Save.
+        //Save, but with an unsaved warning mark.
         EDITOR_ICON_SAVE_UNSAVED,
         
         //Load.
@@ -99,7 +99,7 @@ protected:
         //Gameplay.
         EDITOR_ICON_GAMEPLAY,
         
-        //Resize.
+        //Resize something.
         EDITOR_ICON_RESIZE,
         
         //Play/pause.
@@ -108,22 +108,22 @@ protected:
         //Stop.
         EDITOR_ICON_STOP,
         
-        //Next.
+        //Next in a list.
         EDITOR_ICON_NEXT,
         
-        //Previous.
+        //Previous in a list.
         EDITOR_ICON_PREVIOUS,
         
-        //Add.
+        //Add or create something.
         EDITOR_ICON_ADD,
         
-        //Remove.
+        //Remove or delete something.
         EDITOR_ICON_REMOVE,
         
-        //Move to the right.
+        //Move something to the right in a list.
         EDITOR_ICON_MOVE_RIGHT,
         
-        //Move to the left.
+        //Move something to the left in a list.
         EDITOR_ICON_MOVE_LEFT,
         
         //Select none.
@@ -132,23 +132,23 @@ protected:
         //Duplicate.
         EDITOR_ICON_DUPLICATE,
         
-        //Add a stop.
-        EDITOR_ICON_ADD_STOP,
+        //Create a path stop.
+        EDITOR_ICON_NEW_PATH_STOP,
         
-        //Add a link.
-        EDITOR_ICON_ADD_LINK,
+        //Create a path link.
+        EDITOR_ICON_NEW_PATH_LINK,
         
-        //Add a one-way link.
-        EDITOR_ICON_ADD_1W_LINK,
+        //Create a one-way link.
+        EDITOR_ICON_NEW_1W_PATH_LINK,
         
-        //Remove a stop.
-        EDITOR_ICON_REMOVE_STOP,
+        //Delete a path stop.
+        EDITOR_ICON_DELETE_PATH_STOP,
         
-        //Remove a link.
-        EDITOR_ICON_REMOVE_LINK,
+        //Delete a path link.
+        EDITOR_ICON_DELETE_PATH_LINK,
         
-        //Add a circular sector.
-        EDITOR_ICON_ADD_CIRCLE_SECTOR,
+        //Create a circular sector.
+        EDITOR_ICON_NEW_CIRCLE_SECTOR,
         
         //Vertexes.
         EDITOR_ICON_VERTEXES,
@@ -777,7 +777,7 @@ protected:
     void processGuiListNavCountWidget(
         size_t curItemIdx, size_t listSize, const string& label
     );
-    bool processGuiListNavAddWidget(
+    bool processGuiListNavCreateWidget(
         size_t* curItemIdx, size_t listSize, const string& tooltip
     );
     bool processGuiListNavDelWidget(

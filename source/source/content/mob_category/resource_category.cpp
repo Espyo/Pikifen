@@ -68,11 +68,11 @@ MobType* ResourceCategory::createType() {
 
 
 /**
- * @brief Clears a resource from the list of resources.
+ * @brief Removes and deletes a resource from the list of resources.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void ResourceCategory::eraseMob(Mob* m) {
+void ResourceCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.resources.erase(
         find(
             game.states.gameplay->mobs.resources.begin(),

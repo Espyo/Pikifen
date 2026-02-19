@@ -172,7 +172,7 @@ public:
     //--- Public function declarations ---
     
     ~Interface();
-    bool addItem(ItemId id, float x, float y, float w, float h);
+    bool addNewItem(ItemId id, float x, float y, float w, float h);
     bool setParentItem(ItemId childId, ItemId parentId);
     ItemId navigate(DIRECTION direction, ItemId focusedItemId);
     ItemId navigate(

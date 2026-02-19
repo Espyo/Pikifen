@@ -394,19 +394,19 @@ public:
     
     //--- Public function declarations ---
     
-    size_t createMobSoundSource(
+    size_t addNewMobSoundSource(
         ALLEGRO_SAMPLE* sample, Mob* mPtr, bool ambiance = false,
         const SoundSourceConfig& config = SoundSourceConfig()
     );
-    size_t createGlobalSoundSource(
+    size_t addNewGlobalSoundSource(
         ALLEGRO_SAMPLE* sample, bool ambiance = false,
         const SoundSourceConfig& config = SoundSourceConfig()
     );
-    size_t createPosSoundSource(
+    size_t addNewPosSoundSource(
         ALLEGRO_SAMPLE* sample, const Point& pos, bool ambiance = false,
         const SoundSourceConfig& config = SoundSourceConfig()
     );
-    size_t createUiSoundSource(
+    size_t addNewUiSoundSource(
         ALLEGRO_SAMPLE* sample,
         const SoundSourceConfig& config = SoundSourceConfig()
     );
@@ -490,7 +490,7 @@ private:
     
     //--- Private function declarations ---
     
-    size_t createSoundSource(
+    size_t addNewSoundSource(
         ALLEGRO_SAMPLE* sample,
         SOUND_TYPE type,
         const SoundSourceConfig& config,

@@ -68,11 +68,11 @@ MobType* ShipCategory::createType() {
 
 
 /**
- * @brief Clears a ship from the list of ships.
+ * @brief Removes and deletes a ship from the list of ships.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void ShipCategory::eraseMob(Mob* m) {
+void ShipCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.ships.erase(
         find(
             game.states.gameplay->mobs.ships.begin(),

@@ -228,10 +228,10 @@ Hud::Hud() :
                     );
                     
                 KeyframeInterpolator<unsigned char> alphaKeyframes(0);
-                alphaKeyframes.add(0.2f, 255);
-                alphaKeyframes.add(0.3f, 255);
-                alphaKeyframes.add(0.8f, 0);
-                alphaKeyframes.add(1.0f, 0);
+                alphaKeyframes.addNew(0.2f, 255);
+                alphaKeyframes.addNew(0.3f, 255);
+                alphaKeyframes.addNew(0.8f, 0);
+                alphaKeyframes.addNew(1.0f, 0);
                 
                 float cautionRingSize =
                     std::min(finalDraw.size.x, finalDraw.size.y) *
@@ -800,13 +800,13 @@ Hud::Hud() :
                 game.options.controls.inventoryShortcuts[player->playerNr]
                 [player->inventoryShortcutDisplayIdx];
             KeyframeInterpolator<float> alphaKI;
-            alphaKI.add(1.0f, 0.0f);
-            alphaKI.add(0.9f, 1.0f);
-            alphaKI.add(0.5f, 1.0f);
-            alphaKI.add(0.0f, 0.0f);
+            alphaKI.addNew(1.0f, 0.0f);
+            alphaKI.addNew(0.9f, 1.0f);
+            alphaKI.addNew(0.5f, 1.0f);
+            alphaKI.addNew(0.0f, 0.0f);
             KeyframeInterpolator<float> yOffsetKI;
-            yOffsetKI.add(1.0f, 15.0f);
-            yOffsetKI.add(0.9f, 0.0f, EASE_METHOD_IN);
+            yOffsetKI.addNew(1.0f, 15.0f);
+            yOffsetKI.addNew(0.9f, 0.0f, EASE_METHOD_IN);
             float timeRatio =
                 player->inventoryShortcutDisplayTimer /
                 DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;

@@ -72,9 +72,9 @@ MobType::~MobType() {
 
 
 /**
- * @brief Adds carrying-related states to the FSM.
+ * @brief Creates and adds carrying-related states to the FSM.
  */
-void MobType::addCarryingStates() {
+void MobType::createAndAddCarryingStates() {
 
     EasyFsmCreator efc;
     

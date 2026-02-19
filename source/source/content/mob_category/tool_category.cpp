@@ -68,11 +68,11 @@ MobType* ToolCategory::createType() {
 
 
 /**
- * @brief Clears a tool from the list of tools.
+ * @brief Removes and deletes a tool from the list of tools.
  *
- * @param m The mob to erase.
+ * @param m The mob to delete.
  */
-void ToolCategory::eraseMob(Mob* m) {
+void ToolCategory::deleteMob(Mob* m) {
     game.states.gameplay->mobs.tools.erase(
         find(
             game.states.gameplay->mobs.tools.begin(),

@@ -102,8 +102,8 @@ void GuiEditor::closeOptionsDialog() {
 
 
 /**
- * @brief Creates a new GUI definition, with the data from an existing
- * one in the base pack.
+ * @brief Creates a new empty GUI definition to work on.
+ * This does not create it in the disk.
  *
  * @param internalName Internal name of the GUI definition.
  * @param pack The existing pack's internal name.

@@ -118,7 +118,7 @@ struct ContentManager {
     //--- Public function declarations ---
     
     ContentManager();
-    bool createPack(
+    bool addNewPack(
         const string& internalName, const string& name,
         const string& description = "", const string& maker = ""
     );

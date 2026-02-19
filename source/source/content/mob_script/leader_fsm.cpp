@@ -1405,7 +1405,7 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
         if(nameCallSoundIdx != INVALID) {
             MobType::Sound* nameCallSound =
                 &m->type->sounds[nameCallSoundIdx];
-            game.audio.createGlobalSoundSource(
+            game.audio.addNewGlobalSoundSource(
                 nameCallSound->sample,
                 false, nameCallSound->config
             );
@@ -2097,7 +2097,7 @@ void LeaderFsm::land(Mob* m, void* info1, void* info2) {
     m->stopChasing();
     m->speed.x = m->speed.y = 0;
     
-    m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
+    m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
     if(leaPtr->player) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
@@ -2119,7 +2119,7 @@ void LeaderFsm::leftHazard(Mob* m, void* info1, void* info2) {
     
     Hazard* h = (Hazard*) info1;
     if(h->associatedLiquid) {
-        m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
+        m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 
@@ -2757,8 +2757,8 @@ void LeaderFsm::stopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
-    //Remove the throw particle generator.
-    m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
+    //Delete the throw particle generator.
+    m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
 
 

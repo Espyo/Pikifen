@@ -133,7 +133,7 @@ void PacksMenu::initGuiMain() {
     gui.addItem(gui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&gui);
+    guiCreateBackInputIcon(&gui);
     
     //Packs list.
     packsList = new ListGuiItem();

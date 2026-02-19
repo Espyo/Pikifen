@@ -2278,7 +2278,7 @@ void PikminFsm::beThrown(Mob* m, void* info1, void* info2) {
     if(throwSoundIdx != INVALID) {
         MobType::Sound* throwSound =
             &pikPtr->type->sounds[throwSoundIdx];
-        game.audio.createMobSoundSource(
+        game.audio.addNewMobSoundSource(
             throwSound->sample,
             m, false, { .stackMode = SOUND_STACK_MODE_OVERRIDE }
         );
@@ -3689,7 +3689,7 @@ void PikminFsm::leftHazard(Mob* m, void* info1, void* info2) {
     
     Hazard* h = (Hazard*) info1;
     if(h->associatedLiquid) {
-        m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
+        m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 
@@ -4401,7 +4401,7 @@ void PikminFsm::stopBeingIdle(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
-    m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
+    m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
 
 

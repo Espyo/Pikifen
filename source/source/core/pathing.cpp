@@ -272,14 +272,15 @@ PathStop::~PathStop() {
 
 
 /**
- * @brief Adds a link between this stop and another, whether it's
- * one-way or not. Also adds the link to the other stop, if applicable.
- * If these two stops already had some link, it gets removed.
+ * @brief Creates and adds a link between this stop and another, whether it's
+ * one-way or not. Also creates and adds the link to the other stop,
+ * if applicable.
+ * If these two stops already had some link, it gets deleted.
  *
  * @param otherStop Pointer to the other stop.
  * @param normal Normal link? False means one-way link.
  */
-void PathStop::addLink(PathStop* otherStop, bool normal) {
+void PathStop::addNewLink(PathStop* otherStop, bool normal) {
     PATH_LINK_TYPE linkType = PATH_LINK_TYPE_NORMAL;
     
     PathLink* oldLinkData = getLink(otherStop);
@@ -290,8 +291,8 @@ void PathStop::addLink(PathStop* otherStop, bool normal) {
         linkType = oldLinkData->type;
     }
     
-    removeLink(oldLinkData);
-    otherStop->removeLink(this);
+    deleteLink(oldLinkData);
+    otherStop->deleteLink(this);
     
     PathLink* newLink = new PathLink(this, otherStop, INVALID);
     newLink->type = linkType;
@@ -365,12 +366,12 @@ PathLink* PathStop::getLink(const PathStop* otherStop) const {
 
 
 /**
- * @brief Removes the specified link.
+ * @brief Removes and deletes the specified link.
  * Does nothing if there is no such link.
  *
- * @param linkPtr Pointer to the link to remove.
+ * @param linkPtr Pointer to the link to delete.
  */
-void PathStop::removeLink(const PathLink* linkPtr) {
+void PathStop::deleteLink(const PathLink* linkPtr) {
     for(size_t l = 0; l < links.size(); l++) {
         if(links[l] == linkPtr) {
             delete links[l];
@@ -382,12 +383,12 @@ void PathStop::removeLink(const PathLink* linkPtr) {
 
 
 /**
- * @brief Removes the link between this stop and the specified one.
+ * @brief Removes and deletes the link between this stop and the specified one.
  * Does nothing if there is no such link.
  *
- * @param otherStop Path stop to remove the link from.
+ * @param otherStop Path stop to delete the link from.
  */
-void PathStop::removeLink(const PathStop* otherStop) {
+void PathStop::deleteLink(const PathStop* otherStop) {
     for(size_t l = 0; l < links.size(); l++) {
         if(links[l]->endPtr == otherStop) {
             delete links[l];
@@ -869,7 +870,7 @@ PATH_RESULT getPath(
     }
     
     //Potential optimization: instead of calculating with this graph, consult
-    //a different one where nodes that only have two links are removed.
+    //a different one where nodes that only have two links are deleted.
     //e.g. A -> B -> C becomes A -> C.
     //This means traversing fewer nodes when figuring out the shortest path.
     

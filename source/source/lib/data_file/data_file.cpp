@@ -100,7 +100,7 @@ DataNode::~DataNode() {
 
 
 /**
- * @brief Adds a new child to the list.
+ * @brief Adds an existing child to the list.
  *
  * @param newNode The node to add.
  * @return The new child's index.
@@ -571,15 +571,15 @@ DataNode& DataNode::operator=(const DataNode& dn2) {
 
 
 /**
- * @brief Removes and destroys a child from the list.
+ * @brief Removes and deletes a child from the list.
  *
- * @param nodeToRemove The node to be removed.
+ * @param nodeToDelete The node to be deleted.
  * @return Whether the node existed.
  */
-bool DataNode::remove(DataNode* nodeToRemove) {
+bool DataNode::deleteChild(DataNode* nodeToDelete) {
     for(size_t c = 0; c < children.size(); c++) {
-        if(children[c] == nodeToRemove) {
-            delete nodeToRemove;
+        if(children[c] == nodeToDelete) {
+            delete nodeToDelete;
             children.erase(children.begin() + c);
             return true;
         }

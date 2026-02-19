@@ -30,12 +30,12 @@ const string GUI_FILE_NAME = "results_menu";
 
 
 /**
- * @brief Adds a new mission score criterion-related stat to the stats list
- * GUI item, if applicable.
+ * @brief Creates an adds a new mission score criterion-related stat to the
+ * stats list GUI item, if applicable.
  *
  * @param criterion Mission score criterion to use.
  */
-void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
+void Results::addNewScoreStat(const MISSION_SCORE_CRITERIA criterion) {
     if(
         game.curAreaData->type != AREA_TYPE_MISSION ||
         game.curAreaData->missionOld.gradingMode != MISSION_GRADING_MODE_POINTS
@@ -60,13 +60,13 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
         !goalWasCleared;
         
     if(lost) {
-        addStat(
+        addNewStat(
             "    x 0 points (mission fail) = ",
             "0",
             game.config.guiColors.gold
         );
     } else {
-        addStat(
+        addNewStat(
             "    x " +
             amountStr(mult, "point") +
             " = ",
@@ -78,13 +78,13 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
 
 
 /**
- * @brief Adds a new stat to the stats list GUI item.
+ * @brief Creates and adds a new stat to the stats list GUI item.
  *
  * @param label Label text of this stat.
  * @param value Value of this stat.
  * @param color Color.
  */
-void Results::addStat(
+void Results::addNewStat(
     const string& label, const string& value,
     const ALLEGRO_COLOR& color
 ) {
@@ -628,7 +628,7 @@ void Results::load() {
     gui.addItem(gui.backItem, "pick_area");
     
     //Pick an area input icon.
-    guiAddBackInputIcon(&gui, "pick_area_input");
+    guiCreateBackInputIcon(&gui, "pick_area_input");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
@@ -654,7 +654,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         game.curAreaData->missionOld.startingPoints != 0
     ) {
         //Starting score bullet.
-        addStat(
+        addNewStat(
             "Starting score: ",
             i2s(game.curAreaData->missionOld.startingPoints),
             game.config.guiColors.gold
@@ -668,29 +668,29 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         fmod(game.states.gameplay->gameplayTimePassed, 60);
     size_t minutes =
         game.states.gameplay->gameplayTimePassed / 60.0f;
-    addStat(
+    addNewStat(
         "Time taken:",
         i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
     );
     
     //Pikmin born bullet.
-    addStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
+    addNewStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
     
     //Pikmin born points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
+    addNewScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
     
     //Pikmin deaths bullet.
-    addStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
+    addNewStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
     
     //Pikmin death points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
+    addNewScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
         game.curAreaData->missionOld.pointsPerSecLeft != 0
     ) {
         //Seconds left bullet.
-        addStat(
+        addNewStat(
             "Seconds left:",
             i2s(
                 game.curAreaData->missionOld.failTimeLimit -
@@ -699,7 +699,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         );
         
         //Seconds left points bullet.
-        addScoreStat(MISSION_SCORE_CRITERIA_SEC_LEFT);
+        addNewScoreStat(MISSION_SCORE_CRITERIA_SEC_LEFT);
     }
     
     if(
@@ -707,62 +707,62 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         game.curAreaData->missionOld.pointsPerSecPassed != 0
     ) {
         //Seconds passed bullet.
-        addStat(
+        addNewStat(
             "Seconds passed:",
             i2s(game.states.gameplay->gameplayTimePassed)
         );
         
         //Seconds passed points bullet.
-        addScoreStat(MISSION_SCORE_CRITERIA_SEC_PASSED);
+        addNewScoreStat(MISSION_SCORE_CRITERIA_SEC_PASSED);
     }
     
     //Treasures bullet.
-    addStat(
+    addNewStat(
         "Treasures:",
         i2s(game.states.gameplay->treasuresCollected) + "/" +
         i2s(game.states.gameplay->treasuresTotal)
     );
     
     //Treasure points bullet.
-    addStat(
+    addNewStat(
         "Treasure points:",
         i2s(game.states.gameplay->treasurePointsObtained) + "/" +
         i2s(game.states.gameplay->treasurePointsTotal)
     );
     
     //Treasure points points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
+    addNewScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
     
     //Enemy defeats bullet.
-    addStat(
+    addNewStat(
         "Enemy defeats:",
         i2s(game.states.gameplay->enemyDefeats) + "/" +
         i2s(game.states.gameplay->enemyTotal)
     );
     
     //Enemy points bullet.
-    addStat(
+    addNewStat(
         "Enemy defeat points:",
         i2s(game.states.gameplay->enemyPointsObtained) + "/" +
         i2s(game.states.gameplay->enemyPointsTotal)
     );
     
     //Enemy points points bullet.
-    addScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
+    addNewScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
     if(
         game.curAreaData->type == AREA_TYPE_MISSION &&
         game.curAreaData->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
     ) {
         //Final score bullet.
-        addStat(
+        addNewStat(
             "Final score:",
             i2s(finalMissionScore),
             game.config.guiColors.gold
         );
         
         //Old record bullet:
-        addStat(
+        addNewStat(
             "Previous record:",
             oldRecord.date.empty() ? "-" : i2s(oldRecord.score),
             COLOR_WHITE
@@ -770,7 +770,7 @@ void Results::populateStatsList(const MissionRecord& oldRecord) {
         
         //Maker's record bullet.
         if(!game.curAreaData->missionOld.makerRecordDate.empty()) {
-            addStat(
+            addNewStat(
                 "Maker's record:",
                 i2s(game.curAreaData->missionOld.makerRecord),
                 COLOR_WHITE

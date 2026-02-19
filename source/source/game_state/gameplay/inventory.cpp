@@ -209,7 +209,7 @@ void Inventory::initGui() {
     gui.addItem(gui.backItem, "close");
     
     //Close input icon.
-    guiAddBackInputIcon(&gui, "close_input");
+    guiCreateBackInputIcon(&gui, "close_input");
     
     //Finishing touches.
     gui.onFocusChanged =
@@ -313,7 +313,7 @@ void Inventory::populateInventoryListGui() {
         nextSlot();
     }
     
-    //Add any missing placeholders.
+    //Create any missing placeholders.
     int colPlaceholdersNeeded = (int) (INVENTORY::ROWS) - rowIdx;
     int placeholderColsNeeded = (int) (INVENTORY::COLUMNS) - (columnIdx + 1);
     int placeholdersNeeded =

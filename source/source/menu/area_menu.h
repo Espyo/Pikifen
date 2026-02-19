@@ -130,7 +130,7 @@ private:
     
     //--- Private function declarations ---
     
-    void addBullet(ListGuiItem* list, const string& text);
+    void addNewBullet(ListGuiItem* list, const string& text);
     void animateInfoAndSpecs();
     void changeInfo(size_t areaIdx);
     void initGuiMain();

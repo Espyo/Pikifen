@@ -64,7 +64,7 @@ void Content::saveMetadataToDataNode(DataNode* node) const {
         }
         if(propNode) {
             if(value.empty()) {
-                node->remove(propNode);
+                node->deleteChild(propNode);
             } else {
                 propNode->value = value;
             }

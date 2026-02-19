@@ -325,12 +325,12 @@ struct Area : public Content {
     Edge* newEdge();
     Sector* newSector();
     Vertex* newVertex();
-    void removeVertex(size_t vIdx);
-    void removeVertex(const Vertex* vPtr);
-    void removeEdge(size_t eIdx);
-    void removeEdge(const Edge* ePtr);
-    void removeSector(size_t sIdx);
-    void removeSector(const Sector* sPtr);
+    void deleteVertex(size_t vIdx);
+    void deleteVertex(const Vertex* vPtr);
+    void deleteEdge(size_t eIdx);
+    void deleteEdge(const Edge* ePtr);
+    void deleteSector(size_t sIdx);
+    void deleteSector(const Sector* sPtr);
     void saveGeometryToDataNode(DataNode* node);
     void saveMainDataToDataNode(DataNode* node);
     void saveMissionDataToDataNode(DataNode* node);

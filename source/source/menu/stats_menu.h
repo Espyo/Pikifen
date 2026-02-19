@@ -60,8 +60,8 @@ private:
     
     //--- Private function declarations ---
     
-    void addHeader(const string& label);
-    TextGuiItem* addStat(
+    void addNewHeaderItem(const string& label);
+    TextGuiItem* addNewStatItem(
         const string& label, const string& value, const string& description
     );
     void initGuiMain();
