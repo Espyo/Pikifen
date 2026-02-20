@@ -85,9 +85,11 @@ void DropFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::land(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->setAnimation(DROP_ANIM_LANDING);
+void DropFsm::land(Fsm* fsm, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) fsm->m;
+    
+    droPtr->stopChasing();
+    droPtr->setAnimation(DROP_ANIM_LANDING);
 }
 
 
@@ -98,9 +100,10 @@ void DropFsm::land(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) m;
+void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) fsm->m;
     Mob* toucher = (Mob*) info1;
+
     bool willDrink = false;
     
     if(droPtr->dosesLeft == 0) return;
@@ -158,7 +161,7 @@ void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
     }
     
     if(willDrink) {
-        ev->run(toucher, (void*) m);
+        ev->run(&toucher->fsm, (void*) droPtr);
         droPtr->dosesLeft--;
     } else {
         //This mob won't drink it. Just a bump.
@@ -166,10 +169,10 @@ void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
             toucher->speed.x != 0 || toucher->speed.y != 0 ||
             toucher->chaseInfo.state == CHASE_STATE_CHASING;
         if(
-            m->fsm.curState->id != DROP_STATE_BUMPED &&
+            droPtr->fsm.curState->id != DROP_STATE_BUMPED &&
             toucherIsMoving
         ) {
-            m->fsm.setState(DROP_STATE_BUMPED, info1, info2);
+            droPtr->fsm.setState(DROP_STATE_BUMPED, info1, info2);
         }
     }
 }
@@ -182,8 +185,10 @@ void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(DROP_ANIM_BUMPED);
+void DropFsm::setBumpedAnim(Fsm* fsm, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) fsm->m;
+    
+    droPtr->setAnimation(DROP_ANIM_BUMPED);
 }
 
 
@@ -194,8 +199,10 @@ void DropFsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setFallingAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void DropFsm::setFallingAnim(Fsm* fsm, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) fsm->m;
+    
+    droPtr->setAnimation(
         DROP_ANIM_FALLING,
         START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -209,8 +216,10 @@ void DropFsm::setFallingAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setIdlingAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(DROP_ANIM_IDLING);
+void DropFsm::setIdlingAnim(Fsm* fsm, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) fsm->m;
+    
+    droPtr->setAnimation(DROP_ANIM_IDLING);
 }
 
 

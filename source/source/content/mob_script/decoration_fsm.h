@@ -19,7 +19,7 @@
 namespace DecorationFsm {
 void createFsm(MobType* typ);
 
-void beBumped(Mob* m, void* info1, void* info2);
-void becomeIdle(Mob* m, void* info1, void* info2);
-void checkBump(Mob* m, void* info1, void* info2);
+void beBumped(Fsm* fsm, void* info1, void* info2);
+void becomeIdle(Fsm* fsm, void* info1, void* info2);
+void checkBump(Fsm* fsm, void* info1, void* info2);
 }

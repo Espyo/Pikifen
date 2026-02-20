@@ -69,11 +69,11 @@ void PileFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PileFsm::beAttacked(Mob* m, void* info1, void* info2) {
-    GenMobFsm::beAttacked(m, info1, info2);
-    
+void PileFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
+    Pile* pilPtr = (Pile*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    Pile* pilPtr = (Pile*) m;
+
+    GenMobFsm::beAttacked(fsm, info1, info2);
     
     size_t amountBefore = pilPtr->amount;
     int intendedAmount =
@@ -142,7 +142,7 @@ void PileFsm::beAttacked(Mob* m, void* info1, void* info2) {
         }
         
         string droppedResourceMsg = "dropped_resource";
-        m->sendScriptMessage(m, droppedResourceMsg);
+        pilPtr->sendScriptMessage(pilPtr, droppedResourceMsg);
     }
     
     if(pikminToStartCarrying) {
@@ -165,8 +165,9 @@ void PileFsm::beAttacked(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PileFsm::becomeIdle(Mob* m, void* info1, void* info2) {
-    Pile* pilPtr = (Pile*) m;
+void PileFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
+    Pile* pilPtr = (Pile*) fsm->m;
+    
     pilPtr->update();
 }
 

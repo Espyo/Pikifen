@@ -19,7 +19,7 @@
 namespace BouncerFsm {
 void createFsm(MobType* typ);
 
-void handleMob(Mob* m, void* info1, void* info2);
-void setBouncingAnimation(Mob* m, void* info1, void* info2);
-void setIdlingAnimation(Mob* m, void* info1, void* info2);
+void handleMob(Fsm* fsm, void* info1, void* info2);
+void setBouncingAnimation(Fsm* fsm, void* info1, void* info2);
+void setIdlingAnimation(Fsm* fsm, void* info1, void* info2);
 }

@@ -64,11 +64,11 @@ void ShipFsm::createFsm(MobType* typ) {
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
-void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
+void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) fsm->m;
     Mob* delivery = (Mob*) info1;
-    Ship* shiPtr = (Ship*) m;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
@@ -84,7 +84,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
         game.states.gameplay->treasuresCollected++;
         game.states.gameplay->treasurePointsObtained +=
             trePtr->treType->points;
-        game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
+        game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
         
         if(game.curAreaData->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
             auto it =
@@ -105,7 +105,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
             game.states.gameplay->treasuresCollected++;
             game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
-            game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
+            game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
             if(
                 game.curAreaData->missionOld.goal ==
                 MISSION_GOAL_COLLECT_TREASURE
@@ -180,8 +180,10 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::setAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void ShipFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) fsm->m;
+    
+    shiPtr->setAnimation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -194,8 +196,9 @@ void ShipFsm::setAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::startDelivery(Mob* m, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) m;
+void ShipFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) fsm->m;
+    
     shiPtr->mobsBeingBeamed++;
     if(shiPtr->mobsBeingBeamed == 1 && shiPtr->soundBeamId == 0) {
         shiPtr->soundBeamId = shiPtr->playSound(shiPtr->shiType->soundBeamIdx);

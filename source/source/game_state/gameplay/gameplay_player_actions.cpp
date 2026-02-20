@@ -379,7 +379,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         if(!done) {
             ScriptEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
             if(ev) {
-                ev->run(player->leaderPtr);
+                ev->run(&player->leaderPtr->fsm);
                 done = true;
             }
         }
@@ -452,7 +452,7 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
         
         if(cancelEv && !player->inventory->isOpen) {
             //Cancel auto-pluck, lying down, etc.
-            cancelEv->run(player->leaderPtr);
+            cancelEv->run(&player->leaderPtr->fsm);
         } else {
             //Start whistling.
             player->leaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);

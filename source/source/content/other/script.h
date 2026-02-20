@@ -35,14 +35,16 @@ class ScriptState;
 #pragma region Constants
 
 
+class Fsm;
+
 /**
  * @brief Function to run custom script actions with.
  *
- * The first parameter is the mob running the action.
+ * The first parameter is the FSM running the action.
  * The second parameter depends on the function.
  * The third parameter depends on the function.
  */
-typedef void (*CustomActionCode)(Mob* m, void* info1, void* info2);
+typedef void (*CustomActionCode)(Fsm* fsm, void* info1, void* info2);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 
@@ -394,7 +396,9 @@ public:
         const SCRIPT_EV t,
         const vector<ScriptActionCall*>& a = vector<ScriptActionCall*>()
     );
-    void run(Mob* m, void* customData1 = nullptr, void* customData2 = nullptr);
+    void run(
+        Fsm* fsm, void* customData1 = nullptr, void* customData2 = nullptr
+    );
     
 };
 
@@ -475,6 +479,7 @@ public:
     bool setState(
         size_t newState, void* info1 = nullptr, void* info2 = nullptr
     );
+    string printStateHistory() const;
     
 };
 

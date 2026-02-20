@@ -19,6 +19,6 @@
 namespace TreasureFsm {
 void createFsm(MobType* typ);
 
-void respawn(Mob* m, void* info1, void* info2);
-void standStill(Mob* m, void* info1, void* info2);
+void respawn(Fsm* fsm, void* info1, void* info2);
+void standStill(Fsm* fsm, void* info1, void* info2);
 }

@@ -73,9 +73,10 @@ void BouncerFsm::createFsm(MobType* typ) {
  * @param info1 Points to the mob that is on top of it.
  * @param info2 Unused.
  */
-void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
-    Bouncer* bouPtr = (Bouncer*) m;
+void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
+    Bouncer* bouPtr = (Bouncer*) fsm->m;
     Mob* toucher = (Mob*) info1;
+
     Mob* targetMob = nullptr;
     
     if(!bouPtr->links.empty()) {
@@ -84,7 +85,7 @@ void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
     
     if(!targetMob) {
         game.errors.report(
-            "The bouncer (" + getErrorMessageMobInfo(m) +
+            "The bouncer (" + getErrorMessageMobInfo(bouPtr) +
             ") has no linked mob to serve as a target!"
         );
         return;
@@ -147,9 +148,9 @@ void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
     
     toucher->face(angle, nullptr, true);
     
-    ev->run(toucher, (void*) m);
+    ev->run(fsm, (void*) bouPtr);
     
-    m->fsm.setState(BOUNCER_STATE_BOUNCING, info1, info2);
+    fsm->setState(BOUNCER_STATE_BOUNCING, info1, info2);
 }
 
 
@@ -160,8 +161,10 @@ void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setBouncingAnimation(Mob* m, void* info1, void* info2) {
-    m->setAnimation(BOUNCER_ANIM_BOUNCING);
+void BouncerFsm::setBouncingAnimation(Fsm* fsm, void* info1, void* info2) {
+    Bouncer* bouPtr = (Bouncer*) fsm->m;
+    
+    bouPtr->setAnimation(BOUNCER_ANIM_BOUNCING);
 }
 
 
@@ -172,8 +175,10 @@ void BouncerFsm::setBouncingAnimation(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setIdlingAnimation(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void BouncerFsm::setIdlingAnimation(Fsm* fsm, void* info1, void* info2) {
+    Bouncer* bouPtr = (Bouncer*) fsm->m;
+    
+    bouPtr->setAnimation(
         BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }

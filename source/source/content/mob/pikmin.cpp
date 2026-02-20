@@ -401,7 +401,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
         setAnimation(PIKMIN_ANIM_SHAKING);
         inShakingAnimation = true;
         setTimer(0); //The boredom animation timeout.
-        PikminFsm::standStill(this, nullptr, nullptr);
+        PikminFsm::standStill(&fsm, nullptr, nullptr);
         invulnPeriod.start();
     }
     
@@ -411,7 +411,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
         fsm.curState->id == PIKMIN_STATE_HELPLESS
     ) {
         fsm.setState(PIKMIN_STATE_IDLING);
-        PikminFsm::standStill(this, nullptr, nullptr);
+        PikminFsm::standStill(&fsm, nullptr, nullptr);
         invulnPeriod.start();
         
     } else if(
@@ -420,7 +420,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
         fsm.curState->id == PIKMIN_STATE_PANICKING
     ) {
         fsm.setState(PIKMIN_STATE_IDLING);
-        PikminFsm::standStill(this, nullptr, nullptr);
+        PikminFsm::standStill(&fsm, nullptr, nullptr);
         invulnPeriod.start();
         
     }

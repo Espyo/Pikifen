@@ -19,8 +19,8 @@
 namespace BridgeFsm {
 void createFsm(MobType* typ);
 
-void checkHealth(Mob* m, void* info1, void* info2);
-void open(Mob* m, void* info1, void* info2);
-void setAnim(Mob* m, void* info1, void* info2);
-void setup(Mob* m, void* info1, void* info2);
+void checkHealth(Fsm* fsm, void* info1, void* info2);
+void open(Fsm* fsm, void* info1, void* info2);
+void setAnim(Fsm* fsm, void* info1, void* info2);
+void setup(Fsm* fsm, void* info1, void* info2);
 }

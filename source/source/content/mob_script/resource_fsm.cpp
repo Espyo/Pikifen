@@ -183,8 +183,9 @@ void ResourceFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDelivery(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::handleDelivery(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
     if(
         resPtr->resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB &&
@@ -207,12 +208,13 @@ void ResourceFsm::handleDelivery(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDropped(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::handleDropped(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
     if(!resPtr->resType->vanishOnDrop) return;
     
     if(resPtr->resType->vanishDelay == 0) {
-        ResourceFsm::vanish(m, info1, info2);
+        ResourceFsm::vanish(fsm, info1, info2);
     } else {
         resPtr->setTimer(resPtr->resType->vanishDelay);
     }
@@ -226,13 +228,14 @@ void ResourceFsm::handleDropped(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleReachDestination(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::handleReachDestination(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
     if(resPtr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
-        m->stopFollowingPath();
-        m->fsm.setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
+        resPtr->stopFollowingPath();
+        fsm->setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
     } else {
-        GenMobFsm::carryReachDestination(m, info1, info2);
+        GenMobFsm::carryReachDestination(fsm, info1, info2);
     }
 }
 
@@ -244,8 +247,9 @@ void ResourceFsm::handleReachDestination(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleStartMoving(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::handleStartMoving(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
     resPtr->setTimer(0);
 }
 
@@ -257,10 +261,12 @@ void ResourceFsm::handleStartMoving(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::loseMomentum(Mob* m, void* info1, void* info2) {
-    m->speed.x = 0;
-    m->speed.y = 0;
-    m->speedZ = 0;
+void ResourceFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
+    resPtr->speed.x = 0;
+    resPtr->speed.y = 0;
+    resPtr->speedZ = 0;
 }
 
 
@@ -271,12 +277,15 @@ void ResourceFsm::loseMomentum(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
+void ResourceFsm::startBeingDelivered(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+
     if(
-        m->carryInfo->intendedMob &&
-        m->carryInfo->intendedMob->type->category->id == MOB_CATEGORY_BRIDGES
+        resPtr->carryInfo->intendedMob &&
+        resPtr->carryInfo->intendedMob->type->category->id ==
+        MOB_CATEGORY_BRIDGES
     ) {
-        m->deliveryInfo->animType = DELIVERY_ANIM_TOSS;
+        resPtr->deliveryInfo->animType = DELIVERY_ANIM_TOSS;
     }
 }
 
@@ -288,8 +297,8 @@ void ResourceFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startWaiting(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::startWaiting(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
     
     if(resPtr->toDelete) return;
     
@@ -318,8 +327,9 @@ void ResourceFsm::startWaiting(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::vanish(Mob* m, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) m;
+void ResourceFsm::vanish(Fsm* fsm, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) fsm->m;
+    
     if(resPtr->resType->returnToPileOnVanish && resPtr->originPile) {
         resPtr->originPile->changeAmount(+1);
         resPtr->becomeUncarriable();

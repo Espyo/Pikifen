@@ -149,9 +149,11 @@ void PelletFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PelletFsm::standStill(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->stopTurning();
+void PelletFsm::standStill(Fsm* fsm, void* info1, void* info2) {
+    Pellet* pelPtr = (Pellet*) fsm->m;
+    
+    pelPtr->stopChasing();
+    pelPtr->stopTurning();
 }
 
 

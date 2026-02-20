@@ -19,5 +19,5 @@
 namespace PelletFsm {
 void createFsm(MobType* typ);
 
-void standStill(Mob* m, void* info1, void* info2);
+void standStill(Fsm* fsm, void* info1, void* info2);
 }

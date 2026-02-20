@@ -180,29 +180,29 @@ bool ScriptActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
 
 
 /**
- * @brief Runs an action.
+ * @brief Runs a script action.
  *
- * @param m The mob.
+ * @param fsm The FSM responsible.
  * @param customData1 Custom argument #1 to pass to the code.
  * @param customData2 Custom argument #2 to pass to the code.
  * @return Evaluation result, used only by the "if" actions.
  */
 bool ScriptActionCall::run(
-    Mob* m, void* customData1, void* customData2
+    Fsm* fsm, void* customData1, void* customData2
 ) {
     //Custom code (i.e. instead of text-based script, use actual C++ code).
     if(code) {
-        code(m, customData1, customData2);
+        code(fsm, customData1, customData2);
         return false;
     }
     
-    ScriptActionRunData data(m, this);
+    ScriptActionRunData data(fsm, this);
     
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
     for(size_t a = 0; a < args.size(); a++) {
         if(argIsVar[a]) {
-            data.args[a] = m->fsm.vars[args[a]];
+            data.args[a] = fsm->vars[args[a]];
         }
     }
     data.customData1 = customData1;
@@ -739,13 +739,13 @@ ScriptActionParam::ScriptActionParam(
 
 
 /**
- * @brief Constructs a new mob action run data object.
+ * @brief Constructs a new script action run data object.
  *
- * @param m The mob responsible.
- * @param call Mob action call that called this.
+ * @param fsm The FSM responsible.
+ * @param call Script action call that called this.
  */
-ScriptActionRunData::ScriptActionRunData(Mob* m, ScriptActionCall* call) :
-    m(m),
+ScriptActionRunData::ScriptActionRunData(Fsm* fsm, ScriptActionCall* call) :
+    m(fsm->m),
     call(call) {
     
 }

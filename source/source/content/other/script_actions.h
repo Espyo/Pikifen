@@ -749,7 +749,7 @@ struct ScriptActionRunData {
     
     //--- Public function declarations ---
     
-    ScriptActionRunData(Mob* m, ScriptActionCall* call);
+    ScriptActionRunData(Fsm* fsm, ScriptActionCall* call);
     
 };
 
@@ -821,7 +821,7 @@ struct ScriptActionCall {
     //Event the action belongs to.
     SCRIPT_EV parentEvent = SCRIPT_EV_UNKNOWN;
     
-    //Mob type that owns these calls.
+    //Mob type that owns these calls, if any.
     MobType* mt = nullptr;
     
     
@@ -830,7 +830,7 @@ struct ScriptActionCall {
     explicit ScriptActionCall(SCRIPT_ACTION type = SCRIPT_ACTION_UNKNOWN);
     explicit ScriptActionCall(CustomActionCode code);
     bool loadFromDataNode(DataNode* dn, MobType* mt);
-    bool run(Mob* m, void* customData1, void* customData2);
+    bool run(Fsm* m, void* customData1, void* customData2);
     
 };
 

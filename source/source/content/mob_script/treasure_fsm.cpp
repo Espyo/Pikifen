@@ -155,10 +155,12 @@ void TreasureFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TreasureFsm::respawn(Mob* m, void* info1, void* info2) {
-    m->becomeUncarriable(); //Force all Pikmin to let go.
-    m->becomeCarriable(CARRY_DESTINATION_SHIP);
-    m->respawn();
+void TreasureFsm::respawn(Fsm* fsm, void* info1, void* info2) {
+    Treasure* trePtr = (Treasure*) fsm->m;
+
+    trePtr->becomeUncarriable(); //Force all Pikmin to let go.
+    trePtr->becomeCarriable(CARRY_DESTINATION_SHIP);
+    trePtr->respawn();
 }
 
 
@@ -169,9 +171,11 @@ void TreasureFsm::respawn(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TreasureFsm::standStill(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->stopTurning();
+void TreasureFsm::standStill(Fsm* fsm, void* info1, void* info2) {
+    Treasure* trePtr = (Treasure*) fsm->m;
+    
+    trePtr->stopChasing();
+    trePtr->stopTurning();
 }
 
 

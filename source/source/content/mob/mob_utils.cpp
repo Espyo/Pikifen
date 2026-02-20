@@ -1269,7 +1269,7 @@ Mob* createMob(
     }
     
     for(size_t a = 0; a < type->initActions.size(); a++) {
-        type->initActions[a]->run(mPtr, nullptr, nullptr);
+        type->initActions[a]->run(&mPtr->fsm, nullptr, nullptr);
     }
     
     if(!vars.empty()) {

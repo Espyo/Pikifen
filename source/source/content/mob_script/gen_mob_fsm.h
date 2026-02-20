@@ -17,20 +17,20 @@
  * @brief Functions about the generic mob's finite-state machine and behavior.
  */
 namespace GenMobFsm {
-void beAttacked(Mob* m, void* info1, void* info2);
-void carryBecomeStuck(Mob* m, void* info1, void* info2);
-void carryBeginMove(Mob* m, void* info1, void* info2);
-void carryGetPath(Mob* m, void* info1, void* info2);
-void carryReachDestination(Mob* m, void* info1, void* info2);
-void carryStopBeingStuck(Mob* m, void* info1, void* info2);
-void carryStopMove(Mob* m, void* info1, void* info2);
-void fallDownPit(Mob* m, void* info1, void* info2);
-void goToDyingState(Mob* m, void* info1, void* info2);
-void handleCarrierAdded(Mob* m, void* info1, void* info2);
-void handleCarrierRemoved(Mob* m, void* info1, void* info2);
-void handleDelivery(Mob* m, void* info1, void* info2);
-void loseMomentum(Mob* m, void* info1, void* info2);
-void startBeingDelivered(Mob* m, void* info1, void* info2);
-void touchHazard(Mob* m, void* info1, void* info2);
-void touchSpray(Mob* m, void* info1, void* info2);
+void beAttacked(Fsm* fsm, void* info1, void* info2);
+void carryBecomeStuck(Fsm* fsm, void* info1, void* info2);
+void carryBeginMove(Fsm* fsm, void* info1, void* info2);
+void carryGetPath(Fsm* fsm, void* info1, void* info2);
+void carryReachDestination(Fsm* fsm, void* info1, void* info2);
+void carryStopBeingStuck(Fsm* fsm, void* info1, void* info2);
+void carryStopMove(Fsm* fsm, void* info1, void* info2);
+void fallDownPit(Fsm* fsm, void* info1, void* info2);
+void goToDyingState(Fsm* fsm, void* info1, void* info2);
+void handleCarrierAdded(Fsm* fsm, void* info1, void* info2);
+void handleCarrierRemoved(Fsm* fsm, void* info1, void* info2);
+void handleDelivery(Fsm* fsm, void* info1, void* info2);
+void loseMomentum(Fsm* fsm, void* info1, void* info2);
+void startBeingDelivered(Fsm* fsm, void* info1, void* info2);
+void touchHazard(Fsm* fsm, void* info1, void* info2);
+void touchSpray(Fsm* fsm, void* info1, void* info2);
 }

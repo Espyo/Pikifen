@@ -521,8 +521,6 @@ public:
         BitmapEffect* info, Bitmask16 effects
     ) const;
     
-    string printStateHistory() const;
-    
 protected:
 
     //--- Protected members ---

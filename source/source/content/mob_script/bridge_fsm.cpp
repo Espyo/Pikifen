@@ -82,10 +82,11 @@ void BridgeFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::checkHealth(Mob* m, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) m;
+void BridgeFsm::checkHealth(Fsm* fsm, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) fsm->m;
+
     if(briPtr->checkHealth()) {
-        m->fsm.setState(BRIDGE_STATE_CREATING_CHUNK);
+        fsm->setState(BRIDGE_STATE_CREATING_CHUNK);
     }
 }
 
@@ -97,8 +98,9 @@ void BridgeFsm::checkHealth(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::open(Mob* m, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) m;
+void BridgeFsm::open(Fsm* fsm, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) fsm->m;
+    
     briPtr->setAnimation(BRIDGE_ANIM_DESTROYED);
     briPtr->startDying();
     briPtr->finishDying();
@@ -113,8 +115,10 @@ void BridgeFsm::open(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::setAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void BridgeFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) fsm->m;
+
+    briPtr->setAnimation(
         BRIDGE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -128,8 +132,9 @@ void BridgeFsm::setAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::setup(Mob* m, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) m;
+void BridgeFsm::setup(Fsm* fsm, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) fsm->m;
+    
     briPtr->setup();
 }
 

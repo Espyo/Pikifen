@@ -1397,7 +1397,7 @@ void GameplayState::doScriptLogic() {
         if(fsm.timer.timeLeft > 0) {
             fsm.timer.tick(game.deltaT);
             if(fsm.timer.timeLeft == 0.0f && timerEv) {
-                //TODO timerEv->run(this);
+                timerEv->run(&fsm);
             }
         }
     }
@@ -1650,7 +1650,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
         }
         if(!pendingInterMobEvents[e].eventPtr) continue;
         pendingInterMobEvents[e].eventPtr->run(
-            mPtr, (void*) pendingInterMobEvents[e].mobPtr
+            &mPtr->fsm, (void*) pendingInterMobEvents[e].mobPtr
         );
         
     }
@@ -2064,10 +2064,10 @@ void GameplayState::processMobTouches(
             xyCollision
         ) {
             if(touchObEv) {
-                touchObEv->run(mPtr, (void*) m2Ptr);
+                touchObEv->run(&mPtr->fsm, (void*) m2Ptr);
             }
             if(touchOpEv && mPtr->canHunt(m2Ptr)) {
-                touchOpEv->run(mPtr, (void*) m2Ptr);
+                touchOpEv->run(&mPtr->fsm, (void*) m2Ptr);
             }
         }
         
@@ -2177,7 +2177,7 @@ void GameplayState::processMobTouches(
                         );
                         
                     hitboxTouchANEv->run(
-                        mPtr, (void*) &evInfo
+                        &mPtr->fsm, (void*) &evInfo
                     );
                     reportedANEv = true;
                     
@@ -2204,7 +2204,7 @@ void GameplayState::processMobTouches(
                         );
                         
                     hitboxTouchNNEv->run(
-                        mPtr, (void*) &evInfo
+                        &mPtr->fsm, (void*) &evInfo
                     );
                     reportedNNEv = true;
                     
@@ -2265,9 +2265,7 @@ void GameplayState::processMobTouches(
                     isInContainer(m2Ptr->chompBodyParts, h2Ptr->bodyPartIdx)
                 ) {
                     hitboxTouchEatEv->run(
-                        mPtr,
-                        (void*) m2Ptr,
-                        (void*) h2Ptr
+                        &mPtr->fsm, (void*) m2Ptr, (void*) h2Ptr
                     );
                     reportedEatEv = true;
                     
@@ -2293,9 +2291,7 @@ void GameplayState::processMobTouches(
                             m2Ptr, h1Ptr, h2Ptr
                         );
                     hitboxTouchHazEv->run(
-                        mPtr,
-                        (void*) h2Ptr->hazard,
-                        (void*) &evInfo
+                        &mPtr->fsm, (void*) h2Ptr->hazard, (void*) &evInfo
                     );
                     reportedHazEv = true;
                     
@@ -2318,7 +2314,7 @@ void GameplayState::processMobTouches(
                             m2Ptr, h1Ptr, h2Ptr
                         );
                     hitboxTouchNAEv->run(
-                        mPtr, (void*) &evInfo
+                        &mPtr->fsm, (void*) &evInfo
                     );
                     reportedNAEv = true;
                     

@@ -179,16 +179,16 @@ ScriptEvent::ScriptEvent(const SCRIPT_EV t, const vector<ScriptActionCall*>& a) 
 
 
 /**
- * @brief Runs a mob event. Basically runs all actions within.
+ * @brief Runs a script event. Basically runs all actions within.
  *
- * @param m The mob.
+ * @param m The FSM responsible.
  * @param customData1 Custom argument #1 to pass to the code.
  * @param customData2 Custom argument #2 to pass to the code.
  */
-void ScriptEvent::run(Mob* m, void* customData1, void* customData2) {
-    if(m->parent && m->parent->relayEvents) {
-        m->parent->m->fsm.runEvent(type, customData1, customData2);
-        if(!m->parent->handleEvents) {
+void ScriptEvent::run(Fsm* fsm, void* customData1, void* customData2) {
+    if(fsm->m && fsm->m->parent && fsm->m->parent->relayEvents) {
+        fsm->m->parent->m->fsm.runEvent(type, customData1, customData2);
+        if(!fsm->m->parent->handleEvents) {
             return;
         }
     }
@@ -238,7 +238,8 @@ void ScriptEvent::run(Mob* m, void* customData1, void* customData2) {
         case FLOW_CODE_CONDITION: {
             //Condition statement. Look out for its return value, and
             //change the flow accordingly.
-            bool conditionValue = actions[a]->run(m, customData1, customData2);
+            bool conditionValue =
+                actions[a]->run(fsm, customData1, customData2);
             
             if(conditionValue) {
                 //Returned true. Execution continues as normal.
@@ -322,7 +323,7 @@ void ScriptEvent::run(Mob* m, void* customData1, void* customData2) {
             
         } case FLOW_CODE_NONE: {
             //Normal action.
-            actions[a]->run(m, customData1, customData2);
+            actions[a]->run(fsm, customData1, customData2);
             //If the state got changed, jump out.
             if(actions[a]->action->type == MOB_ACTION_SET_STATE) return;
             
@@ -378,6 +379,31 @@ size_t Fsm::getStateIdx(const string& name) const {
 
 
 /**
+ * @brief Returns a string containing the FSM state history.
+ * This is used for debugging engine or content problems.
+ *
+ * @return The string.
+ */
+string Fsm::printStateHistory() const {
+    string str = "State history: ";
+    
+    if(curState) {
+        str += curState->name;
+    } else {
+        str += "No current state!";
+        return str;
+    }
+    
+    for(size_t s = 0; s < STATE_HISTORY_SIZE; s++) {
+        str += ", " + prevStateNames[s];
+    }
+    str += ".";
+    
+    return str;
+}
+
+
+/**
  * @brief Runs an event in the current state, if it exists.
  *
  * @param type The event's type.
@@ -389,7 +415,7 @@ void Fsm::runEvent(
 ) {
     ScriptEvent* e = getEvent(type);
     if(e) {
-        e->run(m, customData1, customData2);
+        e->run(this, customData1, customData2);
     }
 }
 

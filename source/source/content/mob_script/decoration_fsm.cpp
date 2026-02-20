@@ -67,8 +67,10 @@ void DecorationFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DecorationFsm::beBumped(Mob* m, void* info1, void* info2) {
-    m->setAnimation(DECORATION_ANIM_BUMPED);
+void DecorationFsm::beBumped(Fsm* fsm, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) fsm->m;
+    
+    decPtr->setAnimation(DECORATION_ANIM_BUMPED);
 }
 
 
@@ -79,18 +81,19 @@ void DecorationFsm::beBumped(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DecorationFsm::becomeIdle(Mob* m, void* info1, void* info2) {
-    Decoration* decPtr = (Decoration*) m;
+void DecorationFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) fsm->m;
+
     if(
         decPtr->decType->randomAnimationDelay &&
         decPtr->individualRandomAnimDelay
     ) {
-        m->setAnimation(
+        decPtr->setAnimation(
             DECORATION_ANIM_IDLING,
             START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
         );
     } else {
-        m->setAnimation(DECORATION_ANIM_IDLING);
+        decPtr->setAnimation(DECORATION_ANIM_IDLING);
     }
 }
 
@@ -102,8 +105,9 @@ void DecorationFsm::becomeIdle(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */
-void DecorationFsm::checkBump(Mob* m, void* info1, void* info2) {
+void DecorationFsm::checkBump(Fsm* fsm, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
+
     if(
         toucher->speed.x == 0 && toucher->speed.y == 0 &&
         toucher->chaseInfo.state != CHASE_STATE_CHASING
@@ -112,7 +116,7 @@ void DecorationFsm::checkBump(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    m->fsm.setState(DECORATION_STATE_BUMPED);
+    fsm->setState(DECORATION_STATE_BUMPED);
 }
 
 

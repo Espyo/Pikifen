@@ -1277,74 +1277,77 @@ void LeaderFsm::createFsm(MobType* typ) {
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
-void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    float healthBefore = m->health;
+    
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
+    float healthBefore = leaPtr->health;
     float offenseMultiplier = 1.0f;
     float defenseMultiplier = 1.0f;
     float damage = 0.0f;
     
     //Initial checks.
-    if(m->invulnPeriod.timeLeft > 0.0f) return;
+    if(leaPtr->invulnPeriod.timeLeft > 0.0f) return;
     if(
         !info->mob2->calculateAttackBasics(
-            m, info->h2, info->h1, &offenseMultiplier, &defenseMultiplier
+            leaPtr, info->h2, info->h1,
+            &offenseMultiplier, &defenseMultiplier
         )
     ) {
         return;
     }
     if(
         !info->mob2->calculateAttackDamage(
-            m, info->h2, info->h1, offenseMultiplier, defenseMultiplier, &damage
+            leaPtr, info->h2, info->h1,
+            offenseMultiplier, defenseMultiplier, &damage
         )
     ) {
         return;
     }
     
     //Behavior changes.
-    m->stopChasing();
-    m->leaveGroup();
+    leaPtr->stopChasing();
+    leaPtr->leaveGroup();
     
     //Damage.
-    m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
+    leaPtr->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
     
     //Knockback.
     bool knockbackExists = false;
     float knockbackStrength = 0.0f;
     float knockbackAngle = 0.0f;
     info->mob2->calculateAttackKnockback(
-        m, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
+        leaPtr, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
         &knockbackExists, &knockbackStrength, &knockbackAngle
     );
     if(knockbackExists) {
-        m->applyKnockback(knockbackStrength, knockbackAngle);
+        leaPtr->applyKnockback(knockbackStrength, knockbackAngle);
     }
     
     //Effects.
-    m->doAttackEffects(
+    leaPtr->doAttackEffects(
         info->mob2, info->h2, info->h1, damage, knockbackStrength
     );
     if(info->h2->value > 0.0f) {
         leaPtr->healthWheelShaker.shake(1.0f);
     }
-    if(healthBefore > 0.0f && m->health < healthBefore) {
-        game.states.gameplay->lastHurtLeaderPos = m->pos;
-        game.statistics.leaderDamageSuffered += healthBefore - m->health;
+    if(healthBefore > 0.0f && leaPtr->health < healthBefore) {
+        game.states.gameplay->lastHurtLeaderPos = leaPtr->pos;
+        game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
     
     //Next state.
     if(knockbackExists) {
         if(knockbackStrength > 0) {
-            m->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
-            if(leaPtr->player) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
-            else m->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+            leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
+            if(leaPtr->player) fsm->setState(LEADER_STATE_KNOCKED_BACK);
+            else fsm->setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
         } else {
-            m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-            if(leaPtr->player) m->fsm.setState(LEADER_STATE_PAIN);
-            else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
+            leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
+            if(leaPtr->player) fsm->setState(LEADER_STATE_PAIN);
+            else fsm->setState(LEADER_STATE_INACTIVE_PAIN);
         }
     }
 }
@@ -1357,8 +1360,8 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the player in charge.
  * @param info2 Unused.
  */
-void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::becomeActive(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Player* player = (Player*) info1;
     
     if(player->leaderPtr) {
@@ -1404,7 +1407,7 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
             leaPtr->leaType->soundDataIdxs[LEADER_SOUND_NAME_CALL];
         if(nameCallSoundIdx != INVALID) {
             MobType::Sound* nameCallSound =
-                &m->type->sounds[nameCallSoundIdx];
+                &leaPtr->type->sounds[nameCallSoundIdx];
             game.audio.addNewGlobalSoundSource(
                 nameCallSound->sample,
                 false, nameCallSound->config
@@ -1421,8 +1424,9 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::becomeInactive(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::becomeInactive(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     leaPtr->player = nullptr;
     leaPtr->stopAutoThrowing();
 }
@@ -1435,9 +1439,11 @@ void LeaderFsm::becomeInactive(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beDismissed(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->setAnimation(LEADER_ANIM_IDLING);
+void LeaderFsm::beDismissed(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopChasing();
+    leaPtr->setAnimation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1448,8 +1454,10 @@ void LeaderFsm::beDismissed(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
-    m->setAnimation(LEADER_ANIM_IDLING);
+void LeaderFsm::beGrabbedByFriend(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->setAnimation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1460,7 +1468,7 @@ void LeaderFsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
+void LeaderFsm::beReleased(Fsm* fsm, void* info1, void* info2) {
 
 }
 
@@ -1472,9 +1480,11 @@ void LeaderFsm::beReleased(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->startThrowTrail();
-    m->setAnimation(LEADER_ANIM_THROWN);
+void LeaderFsm::beThrown(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->startThrowTrail();
+    leaPtr->setAnimation(LEADER_ANIM_THROWN);
 }
 
 
@@ -1485,8 +1495,9 @@ void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
  * @param info1 Points to the bouncer mob.
  * @param info2 Unused.
  */
-void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::beThrownByBouncer(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     leaPtr->startThrowTrail();
     leaPtr->setAnimation(LEADER_ANIM_THROWN);
     if(!leaPtr->player) {
@@ -1502,13 +1513,13 @@ void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::called(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::called(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Mob* caller = (Mob*) info1;
     
-    LeaderFsm::standStill(m, info1, info2);
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
+    LeaderFsm::standStill(fsm, info1, info2);
     
     leaPtr->focusOnMob(caller);
     
@@ -1524,11 +1535,11 @@ void LeaderFsm::called(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::calledWhileKnockedDown(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::calledWhileKnockedDown(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Mob* caller = (Mob*) info1;
+    
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     leaPtr->focusOnMob(caller);
 }
@@ -1542,12 +1553,13 @@ void LeaderFsm::calledWhileKnockedDown(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::checkBoredomAnimEnd(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::checkBoredomAnimEnd(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(!leaPtr->inBoredAnimation) return;
-    m->setAnimation(LEADER_ANIM_IDLING);
+    leaPtr->setAnimation(LEADER_ANIM_IDLING);
     leaPtr->inBoredAnimation = false;
-    m->setTimer(
+    leaPtr->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -1561,22 +1573,23 @@ void LeaderFsm::checkBoredomAnimEnd(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::checkPunchDamage(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
+void LeaderFsm::checkPunchDamage(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
+    
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     float offenseMultiplier = 0;
     float defenseMultiplier = 0;
     float damage = 0;
     if(
         info->mob2->health > 0.0f &&
-        m->canHurt(info->mob2) &&
-        m->calculateAttackBasics(
+        leaPtr->canHurt(info->mob2) &&
+        leaPtr->calculateAttackBasics(
             info->mob2, info->h1, info->h2,
             &offenseMultiplier, &defenseMultiplier
         ) &&
-        m->calculateAttackDamage(
+        leaPtr->calculateAttackDamage(
             info->mob2, info->h1, info->h2,
             offenseMultiplier, defenseMultiplier, &damage
         )
@@ -1593,9 +1606,10 @@ void LeaderFsm::checkPunchDamage(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::clearBoredomData(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    LeaderFsm::clearTimer(m, info1, info2);
+void LeaderFsm::clearBoredomData(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    LeaderFsm::clearTimer(fsm, info1, info2);
     leaPtr->inBoredAnimation = false;
 }
 
@@ -1607,8 +1621,10 @@ void LeaderFsm::clearBoredomData(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::clearTimer(Mob* m, void* info1, void* info2) {
-    m->setTimer(0);
+void LeaderFsm::clearTimer(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->setTimer(0);
 }
 
 
@@ -1619,8 +1635,9 @@ void LeaderFsm::clearTimer(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::closeInventory(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::closeInventory(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(!leaPtr->player) return;
     leaPtr->player->inventory->close();
 }
@@ -1633,8 +1650,8 @@ void LeaderFsm::closeInventory(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::decidePluckAction(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::decidePluckAction(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     Distance d;
     Pikmin* newPikmin = nullptr;
@@ -1648,15 +1665,15 @@ void LeaderFsm::decidePluckAction(Mob* m, void* info1, void* info2) {
         //It should only signal to stop if it wanted to stop.
         //If there are no more sprouts in range, that doesn't mean the leaders
         //following it can't continue with the sprouts in their range.
-        LeaderFsm::signalStopAutoPluck(m, info1, info2);
+        LeaderFsm::signalStopAutoPluck(fsm, info1, info2);
     }
     
     leaPtr->queuedPluckCancel = false;
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-        leaPtr->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+        fsm->runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     } else {
-        leaPtr->fsm.runEvent(LEADER_EV_CANCEL);
+        fsm->runEvent(LEADER_EV_CANCEL);
     }
 }
 
@@ -1668,8 +1685,10 @@ void LeaderFsm::decidePluckAction(Mob* m, void* info1, void* info2) {
  * @param info1 If not nullptr, then the dismiss must be silent.
  * @param info2 Unused.
  */
-void LeaderFsm::dismiss(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->dismiss(info1 != nullptr);
+void LeaderFsm::dismiss(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->dismiss(info1 != nullptr);
 }
 
 
@@ -1680,10 +1699,10 @@ void LeaderFsm::dismiss(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::doThrow(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::doThrow(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     Mob* heldPtr = leaPtr->getMobHeldInHand();
-    
     if(!heldPtr) return;
     
     heldPtr->fsm.runEvent(MOB_EV_THROWN);
@@ -1718,8 +1737,10 @@ void LeaderFsm::doThrow(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::enterActive(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void LeaderFsm::enterActive(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -1732,13 +1753,15 @@ void LeaderFsm::enterActive(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::enterIdle(Mob* m, void* info1, void* info2) {
-    m->unfocusFromMob();
-    m->setAnimation(
+void LeaderFsm::enterIdle(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->unfocusFromMob();
+    leaPtr->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     
-    m->setTimer(
+    leaPtr->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -1751,15 +1774,15 @@ void LeaderFsm::enterIdle(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::fallAsleep(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::fallAsleep(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
-    LeaderFsm::dismiss(m, nullptr, nullptr);
-    m->stopChasing();
+    LeaderFsm::dismiss(fsm, nullptr, nullptr);
+    leaPtr->stopChasing();
     
-    m->setAnimation(LEADER_ANIM_SLEEPING);
+    leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
     if(leaPtr->leaType->sleepingStatus) {
-        m->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
+        leaPtr->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
     }
 }
 
@@ -1772,11 +1795,13 @@ void LeaderFsm::fallAsleep(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::fallDownPit(Mob* m, void* info1, void* info2) {
-    m->leaveGroup();
-    m->setHealth(true, true, -0.2);
-    m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-    m->respawn();
+void LeaderFsm::fallDownPit(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->leaveGroup();
+    leaPtr->setHealth(true, true, -0.2);
+    leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
+    leaPtr->respawn();
 }
 
 
@@ -1787,15 +1812,16 @@ void LeaderFsm::fallDownPit(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::finishCalledAnim(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     Mob* caller = leaPtr->focusedMob;
     
     if(leaPtr) {
-        LeaderFsm::joinGroup(m, (void*) caller, info2);
-        leaPtr->fsm.setState(LEADER_STATE_IN_GROUP_CHASING, info1, info2);
+        LeaderFsm::joinGroup(fsm, (void*) caller, info2);
+        fsm->setState(LEADER_STATE_IN_GROUP_CHASING, info1, info2);
     } else {
-        leaPtr->fsm.setState(LEADER_STATE_IDLING, info1, info2);
+        fsm->setState(LEADER_STATE_IDLING, info1, info2);
     }
 }
 
@@ -1807,10 +1833,11 @@ void LeaderFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
-    Drop* droPtr = (Drop*) m->focusedMob;
+void LeaderFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    engineAssert(leaPtr->focusedMob != nullptr, fsm->printStateHistory());
+    Drop* droPtr = (Drop*) leaPtr->focusedMob;
     
     switch(droPtr->droType->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
@@ -1823,14 +1850,14 @@ void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->applyStatus(droPtr->droType->statusToGive, false, false, droPtr);
+        leaPtr->applyStatus(droPtr->droType->statusToGive, false, false, droPtr);
         break;
     } default: {
         break;
     }
     }
     
-    m->unfocusFromMob();
+    leaPtr->unfocusFromMob();
 }
 
 
@@ -1841,22 +1868,23 @@ void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishGettingUp(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    Mob* prevFocusedMob = m->focusedMob;
+void LeaderFsm::finishGettingUp(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    Mob* prevFocusedMob = leaPtr->focusedMob;
     
     if(leaPtr->player) {
-        m->fsm.setState(LEADER_STATE_ACTIVE);
+        fsm->setState(LEADER_STATE_ACTIVE);
     } else {
-        m->fsm.setState(LEADER_STATE_IDLING);
+        fsm->setState(LEADER_STATE_IDLING);
     }
     
     if(prevFocusedMob) {
         if(
             prevFocusedMob->type->category->id == MOB_CATEGORY_LEADERS &&
-            !m->canHunt(prevFocusedMob)
+            !leaPtr->canHunt(prevFocusedMob)
         ) {
-            m->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
+            fsm->runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
         }
     }
 }
@@ -1869,8 +1897,9 @@ void LeaderFsm::finishGettingUp(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishPluck(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::finishPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     leaPtr->stopChasing();
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
 }
@@ -1883,8 +1912,10 @@ void LeaderFsm::finishPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishShaking(Mob* m, void* info1, void* info2) {
-    m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
+void LeaderFsm::finishShaking(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
 }
 
 
@@ -1895,9 +1926,11 @@ void LeaderFsm::finishShaking(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedBack(Mob* m, void* info1, void* info2) {
-    m->unfocusFromMob();
-    m->setAnimation(LEADER_ANIM_KNOCKED_BACK);
+void LeaderFsm::getKnockedBack(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->unfocusFromMob();
+    leaPtr->setAnimation(LEADER_ANIM_KNOCKED_BACK);
 }
 
 
@@ -1908,8 +1941,8 @@ void LeaderFsm::getKnockedBack(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::getKnockedDown(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     leaPtr->stopTurning();
     
@@ -1917,9 +1950,9 @@ void LeaderFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
     //it already received the getting up timer bonus.
     leaPtr->tempI = 0;
     
-    m->setTimer(leaPtr->leaType->knockedDownDuration);
+    leaPtr->setTimer(leaPtr->leaType->knockedDownDuration);
     
-    m->setAnimation(LEADER_ANIM_SLEEPING);
+    leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
 }
 
 
@@ -1930,27 +1963,27 @@ void LeaderFsm::getKnockedDown(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKod(Mob* m, void* info1, void* info2) {
+void LeaderFsm::getKod(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
     if(game.states.gameplay->unloading) {
         return;
     }
     
-    Leader* leaPtr = (Leader*) m;
-    
-    m->startDying();
-    m->finishDying();
+    leaPtr->startDying();
+    leaPtr->finishDying();
     
     game.states.gameplay->updateAvailableLeaders();
     if(leaPtr->player) {
         changeToNextLeader(leaPtr->player, true, true, true);
     }
     
-    LeaderFsm::release(m, info1, info2);
-    LeaderFsm::dismiss(m, info1, info2);
-    m->becomeUncarriable();
-    m->setAnimation(LEADER_ANIM_KO);
+    LeaderFsm::release(fsm, info1, info2);
+    LeaderFsm::dismiss(fsm, info1, info2);
+    leaPtr->becomeUncarriable();
+    leaPtr->setAnimation(LEADER_ANIM_KO);
     
-    game.states.gameplay->lastHurtLeaderPos = m->pos;
+    game.states.gameplay->lastHurtLeaderPos = leaPtr->pos;
 }
 
 
@@ -1961,17 +1994,17 @@ void LeaderFsm::getKod(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getUpFaster(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::getUpFaster(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
     if(leaPtr->tempI == 1) return;
     
-    leaPtr->fsm.timer.timeLeft =
+    fsm->timer.timeLeft =
         std::max(
             0.01f,
-            leaPtr->fsm.timer.timeLeft -
+            fsm->timer.timeLeft -
             leaPtr->leaType->knockedDownWhistleBonus
         );
     leaPtr->tempI = 1;
@@ -1986,11 +2019,11 @@ void LeaderFsm::getUpFaster(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the Pikmin to be plucked.
  * @param info2 Unused.
  */
-void LeaderFsm::goPluck(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::goPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Pikmin* pikPtr = (Pikmin*) info1;
+    
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     leaPtr->queuedPluckCancel = false;
     
@@ -2012,7 +2045,7 @@ void LeaderFsm::goPluck(Mob* m, void* info1, void* info2) {
         }
     }
     
-    LeaderFsm::setIsWalkingTrue(m, nullptr, nullptr);
+    LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
 }
 
 
@@ -2023,11 +2056,12 @@ void LeaderFsm::goPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob to grab.
  * @param info2 Unused.
  */
-void LeaderFsm::grabMob(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::grabMob(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Mob* grabbedMob = (Mob*) info1;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
     leaPtr->hold(
         grabbedMob, HOLD_TYPE_PURPOSE_HAND, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
@@ -2046,13 +2080,13 @@ void LeaderFsm::grabMob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::idleOrRejoin(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::idleOrRejoin(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     if(leaPtr->followingGroup) {
-        leaPtr->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
+        fsm->setState(LEADER_STATE_IN_GROUP_CHASING);
     } else {
-        leaPtr->fsm.setState(LEADER_STATE_IDLING);
+        fsm->setState(LEADER_STATE_IDLING);
     }
 }
 
@@ -2065,9 +2099,10 @@ void LeaderFsm::idleOrRejoin(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::joinGroup(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::joinGroup(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Leader* caller = (Leader*) info1;
+    
     Mob* topLeader = caller;
     
     if(topLeader->followingGroup) {
@@ -2092,17 +2127,18 @@ void LeaderFsm::joinGroup(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::land(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    m->stopChasing();
-    m->speed.x = m->speed.y = 0;
+void LeaderFsm::land(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
-    m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
+    leaPtr->stopChasing();
+    leaPtr->speed.x = leaPtr->speed.y = 0;
+    
+    leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
     if(leaPtr->player) {
-        m->fsm.setState(LEADER_STATE_ACTIVE);
+        fsm->setState(LEADER_STATE_ACTIVE);
     } else {
-        m->fsm.setState(LEADER_STATE_IDLING);
+        fsm->setState(LEADER_STATE_IDLING);
     }
 }
 
@@ -2114,12 +2150,14 @@ void LeaderFsm::land(Mob* m, void* info1, void* info2) {
  * @param info1 Points to the hazard.
  * @param info2 Unused.
  */
-void LeaderFsm::leftHazard(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
+void LeaderFsm::leftHazard(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Hazard* h = (Hazard*) info1;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
     if(h->associatedLiquid) {
-        m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
+        leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
 
@@ -2131,9 +2169,11 @@ void LeaderFsm::leftHazard(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::loseMomentum(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    m->speed.x = m->speed.y = 0;
+void LeaderFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopChasing();
+    leaPtr->speed.x = leaPtr->speed.y = 0;
 }
 
 
@@ -2144,11 +2184,12 @@ void LeaderFsm::loseMomentum(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the movement info structure.
  * @param info2 Unused.
  */
-void LeaderFsm::move(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::move(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     MovementInfo* mov = (MovementInfo*) info1;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+
     Point finalCoords;
     float dummyAngle;
     float dummyMagnitude;
@@ -2172,8 +2213,9 @@ void LeaderFsm::move(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::notifyPikminRelease(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::notifyPikminRelease(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
     heldPtr->fsm.runEvent(MOB_EV_RELEASED);
@@ -2187,8 +2229,9 @@ void LeaderFsm::notifyPikminRelease(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::openInventory(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::openInventory(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(!leaPtr->player) return;
     leaPtr->player->inventory->open();
 }
@@ -2201,9 +2244,11 @@ void LeaderFsm::openInventory(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::punch(Mob* m, void* info1, void* info2) {
-    m->stopTurning();
-    m->setAnimation(LEADER_ANIM_PUNCHING);
+void LeaderFsm::punch(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopTurning();
+    leaPtr->setAnimation(LEADER_ANIM_PUNCHING);
 }
 
 
@@ -2215,8 +2260,9 @@ void LeaderFsm::punch(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::queueStopAutoPluck(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::queueStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     leaPtr->queuedPluckCancel = true;
 }
 
@@ -2228,16 +2274,18 @@ void LeaderFsm::queueStopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::release(Mob* m, void* info1, void* info2) {
-    Mob* heldPtr = m->getMobHeldInHand();
+void LeaderFsm::release(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
 
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
-    heldPtr->pos = m->pos;
-    heldPtr->z = m->z;
-    heldPtr->face(m->angle + TAU / 2.0f, nullptr, true);
-    m->release(heldPtr);
+    heldPtr->pos = leaPtr->pos;
+    heldPtr->z = leaPtr->z;
+    heldPtr->face(leaPtr->angle + TAU / 2.0f, nullptr, true);
+    leaPtr->release(heldPtr);
 }
 
 
@@ -2249,8 +2297,8 @@ void LeaderFsm::release(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::searchSeed(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::searchSeed(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     Distance d;
     Pikmin* newPikmin = nullptr;
@@ -2260,7 +2308,7 @@ void LeaderFsm::searchSeed(Mob* m, void* info1, void* info2) {
     }
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-        leaPtr->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+        fsm->runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     }
 }
 
@@ -2273,8 +2321,8 @@ void LeaderFsm::searchSeed(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setCorrectStandingAnim(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::setCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
@@ -2304,11 +2352,12 @@ void LeaderFsm::setCorrectStandingAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsTurningFalse(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::setIsTurningFalse(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = false;
-        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
     }
 }
 
@@ -2320,11 +2369,12 @@ void LeaderFsm::setIsTurningFalse(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsTurningTrue(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::setIsTurningTrue(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(!leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = true;
-        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
     }
 }
 
@@ -2336,11 +2386,12 @@ void LeaderFsm::setIsTurningTrue(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsWalkingFalse(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::setIsWalkingFalse(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = false;
-        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
     }
 }
 
@@ -2352,11 +2403,12 @@ void LeaderFsm::setIsWalkingFalse(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsWalkingTrue(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::setIsWalkingTrue(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(!leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = true;
-        LeaderFsm::trySetCorrectStandingAnim(m, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
     }
 }
 
@@ -2368,8 +2420,10 @@ void LeaderFsm::setIsWalkingTrue(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setPainAnim(Mob* m, void* info1, void* info2) {
-    m->setAnimation(LEADER_ANIM_PAIN);
+void LeaderFsm::setPainAnim(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->setAnimation(LEADER_ANIM_PAIN);
 }
 
 
@@ -2380,9 +2434,11 @@ void LeaderFsm::setPainAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::shake(Mob* m, void* info1, void* info2) {
-    LeaderFsm::standStill(m, info1, info2);
-    m->setAnimation(LEADER_ANIM_SHAKING);
+void LeaderFsm::shake(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    LeaderFsm::standStill(fsm, info1, info2);
+    leaPtr->setAnimation(LEADER_ANIM_SHAKING);
 }
 
 
@@ -2394,8 +2450,9 @@ void LeaderFsm::shake(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::signalStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
@@ -2412,26 +2469,28 @@ void LeaderFsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to a size_t with the spray's index.
  * @param info2 Unused.
  */
-void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::spray(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     size_t sprayIdx = *((size_t*) info1);
+
     SprayType& sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
     
     if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
-        m->fsm.setState(LEADER_STATE_ACTIVE);
+        fsm->setState(LEADER_STATE_ACTIVE);
         return;
     }
     
-    float shootAngle = m->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
+    float shootAngle =
+        leaPtr->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
     
     unordered_set<Mob*> affectedMobs;
     if(sprayTypeRef.affectsUser) {
-        affectedMobs.insert(m);
+        affectedMobs.insert(leaPtr);
     }
     
     if(sprayTypeRef.group) {
-        for(size_t gm = 0; gm < m->group->members.size(); gm++) {
-            Mob* gmPtr = m->group->members[gm];
+        for(size_t gm = 0; gm < leaPtr->group->members.size(); gm++) {
+            Mob* gmPtr = leaPtr->group->members[gm];
             if(
                 gmPtr->type->category->id != MOB_CATEGORY_PIKMIN &&
                 sprayTypeRef.groupPikminOnly
@@ -2443,7 +2502,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
         }
         //If there is nothing to get sprayed, better not waste it.
         if(affectedMobs.empty())  {
-            m->fsm.setState(LEADER_STATE_ACTIVE);
+            fsm->setState(LEADER_STATE_ACTIVE);
             return;
         };
         
@@ -2452,10 +2511,10 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
             size_t am = 0; am < game.states.gameplay->mobs.all.size(); am++
         ) {
             Mob* amPtr = game.states.gameplay->mobs.all[am];
-            if(amPtr == m) continue;
+            if(amPtr == leaPtr) continue;
             
             if(
-                Distance(m->pos, amPtr->pos) >
+                Distance(leaPtr->pos, amPtr->pos) >
                 sprayTypeRef.distanceRange + amPtr->radius
             ) {
                 continue;
@@ -2464,7 +2523,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
             float angleDiff =
                 getAngleSmallestDiff(
                     shootAngle,
-                    getAngle(m->pos, amPtr->pos)
+                    getAngle(leaPtr->pos, amPtr->pos)
                 );
             if(angleDiff > sprayTypeRef.angleRange / 2) continue;
             
@@ -2486,7 +2545,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
         );
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sysContentNames.parSpray, m
+            game.sysContentNames.parSpray, leaPtr
         );
     adjustKeyframeInterpolatorValues<Point>(
         pg.baseParticle.linearSpeed,
@@ -2506,12 +2565,12 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
     pg.linearSpeedAngleDeviation = sprayTypeRef.angleRange / 2.0f;
     pg.linearSpeedDeviation.x = sprayTypeRef.distanceRange * 0.4;
     pg.baseParticle.priority = PARTICLE_PRIORITY_HIGH;
-    m->particleGenerators.push_back(pg);
+    leaPtr->particleGenerators.push_back(pg);
     
     game.states.gameplay->changeSprayCount(leaPtr->player->team, sprayIdx, -1);
     
-    m->stopChasing();
-    m->setAnimation(LEADER_ANIM_SPRAYING);
+    leaPtr->stopChasing();
+    leaPtr->setAnimation(LEADER_ANIM_SPRAYING);
     
     game.statistics.spraysUsed++;
 }
@@ -2524,11 +2583,13 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::standStill(Mob* m, void* info1, void* info2) {
-    m->stopCircling();
-    m->stopFollowingPath();
-    m->stopChasing();
-    m->speed.x = m->speed.y = 0;
+void LeaderFsm::standStill(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopCircling();
+    leaPtr->stopFollowingPath();
+    leaPtr->stopChasing();
+    leaPtr->speed.x = leaPtr->speed.y = 0;
 }
 
 
@@ -2539,15 +2600,15 @@ void LeaderFsm::standStill(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::startBoredomAnim(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
     size_t lookingAroundAnimIdx =
-        m->type->animDb->findAnimation("looking_around");
+        leaPtr->type->animDb->findAnimation("looking_around");
     size_t sittingAnimIdx =
-        m->type->animDb->findAnimation("sitting");
+        leaPtr->type->animDb->findAnimation("sitting");
     size_t stretchingAnimIdx =
-        m->type->animDb->findAnimation("stretching");
+        leaPtr->type->animDb->findAnimation("stretching");
     vector<size_t> boredomAnims;
     if(lookingAroundAnimIdx != INVALID) {
         boredomAnims.push_back(lookingAroundAnimIdx);
@@ -2562,7 +2623,7 @@ void LeaderFsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     if(boredomAnims.empty()) return;
     size_t animIdx =
         boredomAnims[game.rng.i(0, (int) (boredomAnims.size() - 1))];
-    m->setAnimation(animIdx, START_ANIM_OPTION_NORMAL, false);
+    leaPtr->setAnimation(animIdx, START_ANIM_OPTION_NORMAL, false);
     leaPtr->inBoredAnimation = true;
 }
 
@@ -2574,9 +2635,11 @@ void LeaderFsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startChasingLeader(Mob* m, void* info1, void* info2) {
-    m->focusOnMob(m->followingGroup);
-    LeaderFsm::updateInGroupChasing(m, nullptr, nullptr);
+void LeaderFsm::startChasingLeader(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->focusOnMob(leaPtr->followingGroup);
+    LeaderFsm::updateInGroupChasing(fsm, nullptr, nullptr);
 }
 
 
@@ -2587,13 +2650,15 @@ void LeaderFsm::startChasingLeader(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the drop mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startDrinking(Mob* m, void* info1, void* info2) {
+void LeaderFsm::startDrinking(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Mob* droPtr = (Mob*) info1;
-    m->leaveGroup();
-    m->stopChasing();
-    m->focusOnMob(droPtr);
-    m->face(getAngle(m->pos, droPtr->pos), nullptr);
-    m->setAnimation(LEADER_ANIM_DRINKING);
+
+    leaPtr->leaveGroup();
+    leaPtr->stopChasing();
+    leaPtr->focusOnMob(droPtr);
+    leaPtr->face(getAngle(leaPtr->pos, droPtr->pos), nullptr);
+    leaPtr->setAnimation(LEADER_ANIM_DRINKING);
 }
 
 
@@ -2604,8 +2669,10 @@ void LeaderFsm::startDrinking(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startGettingUp(Mob* m, void* info1, void* info2) {
-    m->setAnimation(LEADER_ANIM_GETTING_UP);
+void LeaderFsm::startGettingUp(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
 }
 
 
@@ -2616,8 +2683,8 @@ void LeaderFsm::startGettingUp(Mob* m, void* info1, void* info2) {
  * @param info1 Destination point.
  * @param info2 Unused.
  */
-void LeaderFsm::startGoHere(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::startGoHere(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Point destination = *((Point*) info1);
     
     PathFollowSettings settings;
@@ -2635,14 +2702,14 @@ void LeaderFsm::startGoHere(Mob* m, void* info1, void* info2) {
         );
         
     if(success) {
-        leaPtr->fsm.setState(
+        fsm->setState(
             leaPtr->player ?
             LEADER_STATE_MID_GO_HERE :
             LEADER_STATE_INACTIVE_MID_GO_HERE
         );
         leaPtr->midGoHere = true;
-        LeaderFsm::setIsWalkingTrue(m, nullptr, nullptr);
-        LeaderFsm::setCorrectStandingAnim(m, nullptr, nullptr);
+        LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
+        LeaderFsm::setCorrectStandingAnim(fsm, nullptr, nullptr);
     }
 }
 
@@ -2654,15 +2721,16 @@ void LeaderFsm::startGoHere(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startPluck(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    engineAssert(leaPtr->pluckTarget != nullptr, m->printStateHistory());
+void LeaderFsm::startPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    engineAssert(leaPtr->pluckTarget != nullptr, fsm->printStateHistory());
     
     leaPtr->pluckTarget->fsm.runEvent(MOB_EV_PLUCKED, (void*) leaPtr);
     leaPtr->pluckTarget->pluckReserved = false;
     leaPtr->pluckTarget = nullptr;
     leaPtr->setAnimation(LEADER_ANIM_PLUCKING);
-    LeaderFsm::setIsWalkingFalse(m, nullptr, nullptr);
+    LeaderFsm::setIsWalkingFalse(fsm, nullptr, nullptr);
     
 }
 
@@ -2674,33 +2742,34 @@ void LeaderFsm::startPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Points to the track mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
+void LeaderFsm::startRidingTrack(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Track* traPtr = (Track*) info1;
     
-    LeaderFsm::dismiss(m, nullptr, nullptr);
-    m->leaveGroup();
-    m->stopChasing();
-    m->focusOnMob(traPtr);
-    m->startHeightEffect();
+    LeaderFsm::dismiss(fsm, nullptr, nullptr);
+    leaPtr->leaveGroup();
+    leaPtr->stopChasing();
+    leaPtr->focusOnMob(traPtr);
+    leaPtr->startHeightEffect();
     
     vector<size_t> checkpoints;
     for(size_t c = 0; c < traPtr->type->animDb->bodyParts.size(); c++) {
         checkpoints.push_back(c);
     }
-    m->trackInfo =
+    leaPtr->trackInfo =
         new TrackRideInfo(
         traPtr, checkpoints, traPtr->traType->rideSpeed
     );
     
     switch(traPtr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
-        m->setAnimation(LEADER_ANIM_IDLING);
+        leaPtr->setAnimation(LEADER_ANIM_IDLING);
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        m->setAnimation(LEADER_ANIM_CLIMBING);
+        leaPtr->setAnimation(LEADER_ANIM_CLIMBING);
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        m->setAnimation(LEADER_ANIM_SLIDING);
+        leaPtr->setAnimation(LEADER_ANIM_SLIDING);
         break;
     }
     }
@@ -2714,15 +2783,16 @@ void LeaderFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    m->setAnimation(LEADER_ANIM_GETTING_UP);
+void LeaderFsm::startWakingUp(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
     
     if(leaPtr->leaType->sleepingStatus) {
-        for(size_t s = 0; s < m->statuses.size(); s++) {
-            if(m->statuses[s].type == leaPtr->leaType->sleepingStatus) {
-                m->statuses[s].prevState = m->statuses[s].state;
-                m->statuses[s].state = STATUS_STATE_TO_DELETE;
+        for(size_t s = 0; s < leaPtr->statuses.size(); s++) {
+            if(leaPtr->statuses[s].type == leaPtr->leaType->sleepingStatus) {
+                leaPtr->statuses[s].prevState = leaPtr->statuses[s].state;
+                leaPtr->statuses[s].state = STATUS_STATE_TO_DELETE;
             }
         }
     }
@@ -2736,8 +2806,9 @@ void LeaderFsm::startWakingUp(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopAutoPluck(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::stopAutoPluck(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     if(leaPtr->pluckTarget) {
         leaPtr->stopChasing();
         leaPtr->pluckTarget->pluckReserved = false;
@@ -2756,9 +2827,11 @@ void LeaderFsm::stopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
+void LeaderFsm::stopBeingThrown(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
     //Delete the throw particle generator.
-    m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
+    leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
 
 
@@ -2769,8 +2842,9 @@ void LeaderFsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopGoHere(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::stopGoHere(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     leaPtr->stopFollowingPath();
     leaPtr->midGoHere = false;
 }
@@ -2783,10 +2857,12 @@ void LeaderFsm::stopGoHere(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopInGroup(Mob* m, void* info1, void* info2) {
-    m->stopChasing();
-    LeaderFsm::setIsWalkingFalse(m, nullptr, nullptr);
-    m->setTimer(
+void LeaderFsm::stopInGroup(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopChasing();
+    LeaderFsm::setIsWalkingFalse(fsm, nullptr, nullptr);
+    leaPtr->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -2799,8 +2875,10 @@ void LeaderFsm::stopInGroup(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopWhistle(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->stopWhistling();
+void LeaderFsm::stopWhistle(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->stopWhistling();
 }
 
 
@@ -2811,16 +2889,17 @@ void LeaderFsm::stopWhistle(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickActiveState(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
-    m->face(getAngle(m->pos, leaPtr->player->leaderCursorWorld), nullptr);
+void LeaderFsm::tickActiveState(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
+    leaPtr->face(getAngle(leaPtr->pos, leaPtr->player->leaderCursorWorld), nullptr);
     
     bool shouldBeTurning =
-        getAngleSmallestDiff(m->angle, m->intendedTurnAngle) > TAU / 300.0f;
+        getAngleSmallestDiff(leaPtr->angle, leaPtr->intendedTurnAngle) > TAU / 300.0f;
     if(shouldBeTurning) {
-        LeaderFsm::setIsTurningTrue(m, info1, info2);
+        LeaderFsm::setIsTurningTrue(fsm, info1, info2);
     } else {
-        LeaderFsm::setIsTurningFalse(m, info1, info2);
+        LeaderFsm::setIsTurningFalse(fsm, info1, info2);
     }
 }
 
@@ -2832,16 +2911,17 @@ void LeaderFsm::tickActiveState(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
-    engineAssert(m->trackInfo != nullptr, m->printStateHistory());
+void LeaderFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     
-    Leader* leaPtr = (Leader*) m;
-    if(m->tickTrackRide()) {
+    engineAssert(leaPtr->trackInfo != nullptr, fsm->printStateHistory());
+    
+    if(leaPtr->tickTrackRide()) {
         //Finished!
         if(leaPtr->player) {
-            m->fsm.setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
+            fsm->setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
-            m->fsm.setState(LEADER_STATE_IDLING, nullptr, nullptr);
+            fsm->setState(LEADER_STATE_IDLING, nullptr, nullptr);
         }
     }
 }
@@ -2854,13 +2934,14 @@ void LeaderFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the hazard.
  * @param info2 Pointer to the hitbox that caused this, if any.
  */
-void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::touchedHazard(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     Hazard* hazPtr = (Hazard*) info1;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
     HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
-    MobType::Vulnerability vuln = m->getHazardVulnerability(hazPtr);
+    MobType::Vulnerability vuln = leaPtr->getHazardVulnerability(hazPtr);
     Mob* hitboxMob = nullptr;
     if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
@@ -2875,9 +2956,9 @@ void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     
     if(hazPtr->associatedLiquid) {
         bool alreadyGenerating = false;
-        for(size_t g = 0; g < m->particleGenerators.size(); g++) {
+        for(size_t g = 0; g < leaPtr->particleGenerators.size(); g++) {
             if(
-                m->particleGenerators[g].id ==
+                leaPtr->particleGenerators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
             ) {
                 alreadyGenerating = true;
@@ -2888,15 +2969,15 @@ void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
         if(!alreadyGenerating) {
             ParticleGenerator pg =
                 standardParticleGenSetup(
-                    game.sysContentNames.parWaveRing, m
+                    game.sysContentNames.parWaveRing, leaPtr
                 );
             pg.followZOffset = 1.0f;
             adjustKeyframeInterpolatorValues<float>(
                 pg.baseParticle.size,
-            [ = ] (const float & f) { return f * m->radius; }
+            [ = ] (const float & f) { return f * leaPtr->radius; }
             );
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            m->particleGenerators.push_back(pg);
+            leaPtr->particleGenerators.push_back(pg);
         }
     }
 }
@@ -2909,15 +2990,15 @@ void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the spray type.
  * @param info2 Pointer to the mob that sprayed, if any.
  */
-void LeaderFsm::touchedSpray(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
-    Leader* l = (Leader*) m;
+void LeaderFsm::touchedSpray(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        l->applyStatus(s->effects[e], false, false, sprayer);
+        leaPtr->applyStatus(s->effects[e], false, false, sprayer);
     }
 }
 
@@ -2930,8 +3011,9 @@ void LeaderFsm::touchedSpray(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::trySetCorrectStandingAnim(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::trySetCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
     size_t idleAnimIdx =
@@ -2946,7 +3028,7 @@ void LeaderFsm::trySetCorrectStandingAnim(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    LeaderFsm::setCorrectStandingAnim(m, info1, info2);
+    LeaderFsm::setCorrectStandingAnim(fsm, info1, info2);
 }
 
 
@@ -2959,19 +3041,20 @@ void LeaderFsm::trySetCorrectStandingAnim(Mob* m, void* info1, void* info2) {
  *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
-void LeaderFsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) m;
+void LeaderFsm::updateInGroupChasing(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+
     Point targetPos;
     float targetDist;
     
     leaPtr->getGroupSpotInfo(&targetPos, &targetDist);
     
-    m->chase(
+    leaPtr->chase(
         targetPos, leaPtr->followingGroup->z,
         CHASE_FLAG_ANY_ANGLE, targetDist
     );
     
-    LeaderFsm::setIsWalkingTrue(m, nullptr, nullptr);
+    LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
 }
 
 
@@ -2982,8 +3065,10 @@ void LeaderFsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::whistle(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->startWhistling();
+void LeaderFsm::whistle(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    
+    leaPtr->startWhistling();
 }
 
 
@@ -2995,18 +3080,19 @@ void LeaderFsm::whistle(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
-    engineAssert(m->trackInfo, m->printStateHistory());
-    
-    Track* traPtr = (Track*) (m->trackInfo->m);
+void LeaderFsm::whistledWhileRiding(Fsm* fsm, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) fsm->m;
+    Track* traPtr = (Track*) (leaPtr->trackInfo->m);
+
+    engineAssert(leaPtr->trackInfo, fsm->printStateHistory());
     
     if(!traPtr->traType->cancellableWithWhistle) {
         return;
     }
     
-    m->stopTrackRide();
-    LeaderFsm::joinGroup(m, info1, nullptr);
-    m->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
+    leaPtr->stopTrackRide();
+    LeaderFsm::joinGroup(fsm, info1, nullptr);
+    fsm->setState(LEADER_STATE_IN_GROUP_CHASING);
 }
 
 

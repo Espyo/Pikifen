@@ -100,11 +100,11 @@ void OnionFsm::createFsm(MobType* typ) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStartGenerating(Mob* m, void* info1, void* info2) {
+void OnionFsm::checkStartGenerating(Fsm* fsm, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "started_generation") {
-        m->fsm.setState(ONION_STATE_GENERATING);
+        fsm->setState(ONION_STATE_GENERATING);
     }
 }
 
@@ -116,11 +116,11 @@ void OnionFsm::checkStartGenerating(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStopGenerating(Mob* m, void* info1, void* info2) {
+void OnionFsm::checkStopGenerating(Fsm* fsm, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "stopped_generation") {
-        m->fsm.setState(ONION_STATE_STOPPING_GENERATION);
+        fsm->setState(ONION_STATE_STOPPING_GENERATION);
     }
 }
 
@@ -132,11 +132,12 @@ void OnionFsm::checkStopGenerating(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, m->printStateHistory());
-    
+void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) fsm->m;
     Mob* delivery = (Mob*) info1;
-    Onion* oniPtr = (Onion*) m;
+
+    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    
     size_t seeds = 0;
     
     switch(delivery->type->category->id) {
@@ -204,8 +205,9 @@ void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void OnionFsm::startDelivery(Mob* m, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) m;
+void OnionFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) fsm->m;
+    
     oniPtr->mobsBeingBeamed++;
     if(oniPtr->mobsBeingBeamed == 1 && oniPtr->soundBeamId == 0) {
         oniPtr->soundBeamId = oniPtr->playSound(oniPtr->oniType->soundBeamIdx);
@@ -221,8 +223,10 @@ void OnionFsm::startDelivery(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::startGenerating(Mob* m, void* info1, void* info2) {
-    m->setAnimation(ONION_ANIM_GENERATING);
+void OnionFsm::startGenerating(Fsm* fsm, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) fsm->m;
+    
+    oniPtr->setAnimation(ONION_ANIM_GENERATING);
 }
 
 
@@ -233,8 +237,10 @@ void OnionFsm::startGenerating(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void OnionFsm::startIdling(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void OnionFsm::startIdling(Fsm* fsm, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) fsm->m;
+    
+    oniPtr->setAnimation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -247,8 +253,10 @@ void OnionFsm::startIdling(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::stopGenerating(Mob* m, void* info1, void* info2) {
-    m->setAnimation(ONION_ANIM_STOPPING_GENERATION);
+void OnionFsm::stopGenerating(Fsm* fsm, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) fsm->m;
+    
+    oniPtr->setAnimation(ONION_ANIM_STOPPING_GENERATION);
 }
 
 

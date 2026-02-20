@@ -3218,31 +3218,6 @@ size_t Mob::playSound(size_t soundDataIdx) {
 
 
 /**
- * @brief Returns a string containing the FSM state history for this mob.
- * This is used for debugging engine or content problems.
- *
- * @return The string.
- */
-string Mob::printStateHistory() const {
-    string str = "State history: ";
-    
-    if(fsm.curState) {
-        str += fsm.curState->name;
-    } else {
-        str += "No current state!";
-        return str;
-    }
-    
-    for(size_t s = 0; s < STATE_HISTORY_SIZE; s++) {
-        str += ", " + fsm.prevStateNames[s];
-    }
-    str += ".";
-    
-    return str;
-}
-
-
-/**
  * @brief Reads the provided script variables, if any, and does stuff with them.
  *
  * @param svr Script var reader to use.
@@ -3379,7 +3354,7 @@ void Mob::respawn() {
 void Mob::sendScriptMessage(Mob* receiver, string& msg) const {
     ScriptEvent* ev = receiver->fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
-    ev->run(receiver, (void*) &msg, (void*) this);
+    ev->run(&receiver->fsm, (void*) &msg, (void*) this);
 }
 
 
@@ -4495,7 +4470,7 @@ void Mob::tickScript(float deltaT) {
         if(fsm.timer.timeLeft > 0) {
             fsm.timer.tick(deltaT);
             if(fsm.timer.timeLeft == 0.0f && timerEv) {
-                timerEv->run(this);
+                timerEv->run(&fsm);
             }
         }
     }
@@ -4529,7 +4504,7 @@ void Mob::tickScript(float deltaT) {
                         getAngleSmallestDiff(angle, angleToFocus)
                     )
                 ) {
-                    forEv->run(this);
+                    forEv->run(&fsm);
                 }
                 
             }
@@ -4545,7 +4520,7 @@ void Mob::tickScript(float deltaT) {
             itchEv &&
             itchDamage > type->itchDamage && itchTime > type->itchTime
         ) {
-            itchEv->run(this);
+            itchEv->run(&fsm);
             itchDamage = 0;
             itchTime = 0;
         }
@@ -4602,7 +4577,7 @@ void Mob::tickScript(float deltaT) {
             
             Distance d(pos, targetPos);
             if(d > targetDist) {
-                spotFarEv->run(this, (void*) &targetPos);
+                spotFarEv->run(&fsm, (void*) &targetPos);
             }
         }
     }
@@ -4620,7 +4595,7 @@ void Mob::tickScript(float deltaT) {
                 //This mob is fine with its leader.
                 break;
             }
-            activeLeaderChangedEv->run(this, (void*) candidateLeader);
+            activeLeaderChangedEv->run(&fsm, (void*) candidateLeader);
         }
     }
     
@@ -4629,7 +4604,7 @@ void Mob::tickScript(float deltaT) {
     if(farFromHomeEv) {
         Distance d(pos, home);
         if(d >= type->territoryRadius) {
-            farFromHomeEv->run(this);
+            farFromHomeEv->run(&fsm);
         }
     }
     

@@ -995,7 +995,7 @@ bool Leader::orderPikminToOnion(
         ScriptEvent* ev = pikPtr->fsm.getEvent(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
-        ev->run(pikPtr, (void*) nPtr);
+        ev->run(&pikPtr->fsm, (void*) nPtr);
         
         amountOrdered++;
         if(amountOrdered == amount) {
@@ -1208,7 +1208,7 @@ void Leader::swapHeldPikmin(Mob* newPik) {
     
     release(oldPik);
     
-    newPikEv->run(newPik);
+    newPikEv->run(&newPik->fsm);
     hold(
         newPik, HOLD_TYPE_PURPOSE_HAND, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
@@ -1501,11 +1501,11 @@ bool grabClosestGroupMember(Player* player) {
     
     //Run the grabbing logic then.
     grabberEv->run(
-        player->leaderPtr,
+        &player->leaderPtr->fsm,
         (void*) player->closestGroupMember[BUBBLE_RELATION_CURRENT]
     );
     grabbedEv->run(
-        player->closestGroupMember[BUBBLE_RELATION_CURRENT],
+        &player->closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm,
         (void*) player->leaderPtr
     );
     

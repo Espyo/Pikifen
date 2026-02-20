@@ -59,8 +59,8 @@ void TrackFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::onTouched(Mob* m, void* info1, void* info2) {
-    Track* traPtr = (Track*) m;
+void TrackFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
+    Track* traPtr = (Track*) fsm->m;
     Mob* toucher = (Mob*) info1;
     
     ScriptEvent* ev = nullptr;
@@ -86,7 +86,7 @@ void TrackFsm::onTouched(Mob* m, void* info1, void* info2) {
     
     if(!ev) return;
     
-    ev->run(toucher, (void*) m);
+    ev->run(&toucher->fsm, (void*) traPtr);
 }
 
 
@@ -97,8 +97,10 @@ void TrackFsm::onTouched(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::spawn(Mob* m, void* info1, void* info2) {
-    m->setAnimation(
+void TrackFsm::spawn(Fsm* fsm, void* info1, void* info2) {
+    Track* traPtr = (Track*) fsm->m;
+    
+    traPtr->setAnimation(
         TRACK_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
