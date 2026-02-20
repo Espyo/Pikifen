@@ -21,7 +21,7 @@
 #include "../../util/string_utils.h"
 #include "../mob/bridge.h"
 #include "../mob_script/gen_mob_fsm.h"
-#include "../other/mob_script_action.h"
+#include "../other/script_actions.h"
 #include "enemy_type.h"
 #include "leader_type.h"
 #include "onion_type.h"

@@ -21,9 +21,9 @@
 #include "../../util/general_utils.h"
 #include "../animation/animation.h"
 #include "../area/sector.h"
-#include "../other/mob_script_action.h"
-#include "../other/mob_script.h"
 #include "../other/particle.h"
+#include "../other/script.h"
+#include "../other/script_actions.h"
 #include "../other/status.h"
 #include "mob_utils.h"
 

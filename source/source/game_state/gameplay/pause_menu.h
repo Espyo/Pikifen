@@ -14,7 +14,7 @@
 
 #include "../../content/mob/mob_utils.h"
 #include "../../content/other/gui.h"
-#include "../../content/other/mob_script.h"
+#include "../../content/other/script.h"
 #include "../../core/drawing.h"
 #include "../../menu/help_menu.h"
 #include "../../util/drawing_utils.h"

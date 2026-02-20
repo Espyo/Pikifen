@@ -22,9 +22,9 @@
 #include "../../util/general_utils.h"
 #include "../animation/animation.h"
 #include "../content.h"
-#include "../mob_category/mob_category.h"
 #include "../mob/mob_enums.h"
-#include "../other/mob_script.h"
+#include "../mob_category/mob_category.h"
+#include "../other/script.h"
 #include "../other/spike_damage.h"
 #include "../other/status.h"
 

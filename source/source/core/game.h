@@ -16,7 +16,7 @@
 
 #include "../content/area/area.h"
 #include "../content/content_manager.h"
-#include "../content/other/mob_script_action.h"
+#include "../content/other/script_actions.h"
 #include "../game_state/animation_editor/editor.h"
 #include "../game_state/annex_screen.h"
 #include "../game_state/area_editor/editor.h"

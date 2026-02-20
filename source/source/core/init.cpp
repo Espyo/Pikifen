@@ -41,7 +41,7 @@
 #include "../content/mob_category/tool_category.h"
 #include "../content/mob_category/track_category.h"
 #include "../content/mob_category/treasure_category.h"
-#include "../content/other/mob_script.h"
+#include "../content/other/script.h"
 #include "../game_state/game_state.h"
 #include "../game_state/gameplay/gameplay.h"
 #include "../lib/imgui/imgui_impl_allegro5.h"

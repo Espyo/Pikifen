@@ -12,7 +12,7 @@
 
 #include "../mob/decoration.h"
 #include "../mob_script/decoration_fsm.h"
-#include "../other/mob_script.h"
+#include "../other/script.h"
 
 
 /**

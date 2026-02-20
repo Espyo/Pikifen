@@ -12,7 +12,7 @@
 
 #include "../../content/mob/mob_utils.h"
 #include "../../content/other/gui.h"
-#include "../../content/other/mob_script.h"
+#include "../../content/other/script.h"
 #include "../../util/geometry_utils.h"
 
 class Leader;

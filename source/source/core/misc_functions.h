@@ -16,14 +16,14 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "../core/game.h"
 #include "../content/area/area.h"
 #include "../content/area/sector.h"
 #include "../content/mob/leader.h"
 #include "../content/mob/onion.h"
 #include "../content/mob/pikmin.h"
 #include "../content/other/gui.h"
-#include "../content/other/mob_script.h"
+#include "../content/other/script.h"
+#include "../core/game.h"
 #include "../game_state/editor.h"
 #include "../lib/data_file/data_file.h"
 #include "controls_mediator.h"

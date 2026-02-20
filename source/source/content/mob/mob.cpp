@@ -21,7 +21,7 @@
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
-#include "../other/mob_script_action.h"
+#include "../other/script_actions.h"
 #include "pikmin.h"
 #include "ship.h"
 #include "tool.h"

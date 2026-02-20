@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-#include "mob_script_action.h"
+#include "script_actions.h"
 
 #include "../../content/mob/group_task.h"
 #include "../../content/mob/scale.h"

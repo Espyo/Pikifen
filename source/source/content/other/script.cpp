@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-#include "mob_script.h"
+#include "script.h"
 
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
@@ -19,8 +19,8 @@
 #include "../mob/mob.h"
 #include "../mob_script/gen_mob_fsm.h"
 #include "../mob_type/mob_type.h"
-#include "mob_script_action.h"
 #include "particle.h"
+#include "script_actions.h"
 
 
 #pragma region Easy FSM creator

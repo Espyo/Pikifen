@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "mob_script.h"
+#include "script.h"
 
 
 #pragma endregion
