@@ -173,9 +173,10 @@ AreaEditor::AreaEditor() :
     );
     registerCmd(&AreaEditor::layoutDrawingCmd, "layout_drawing");
     registerCmd(&AreaEditor::loadCmd, "load");
-    registerCmd(&AreaEditor::newMobCmd, "new_mob");
-    registerCmd(&AreaEditor::newPathCmd, "new_path");
-    registerCmd(&AreaEditor::newTreeShadowCmd, "new_tree_shadow");
+    registerCmd(&AreaEditor::addNewMobCmd, "add_new_mob");
+    registerCmd(&AreaEditor::addNewPathCmd, "add_new_path");
+    registerCmd(&AreaEditor::addNewRegionCmd, "add_new_region");
+    registerCmd(&AreaEditor::addNewTreeShadowCmd, "add_new_tree_shadow");
     registerCmd(&AreaEditor::pastePropertiesCmd, "paste_properties");
     registerCmd(&AreaEditor::pasteTextureCmd, "paste_texture");
     registerCmd(&AreaEditor::quickPlayCmd, "quick_play");
@@ -416,7 +417,9 @@ void AreaEditor::clearSelection() {
     selectedPathStops.clear();
     selectedPathLinks.clear();
     selectedShadow = nullptr;
+    selectedShadowIdx = INVALID;
     selectedRegion = nullptr;
+    selectedRegionIdx = INVALID;
     selectionHomogenized = false;
     setSelectionStatusText();
 }
@@ -597,7 +600,7 @@ void AreaEditor::createDrawingVertexes() {
                 }
             }
         } else {
-            newVertex = game.curAreaData->newVertex();
+            newVertex = game.curAreaData->addNewVertex();
             newVertex->x = nPtr->snappedSpot.x;
             newVertex->y = nPtr->snappedSpot.y;
             nPtr->isNewVertex = true;
@@ -928,28 +931,21 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         setStatus("You have to select a region to delete!", true);
     } else {
         registerChange("region deletion");
-        size_t regionIdx = 0;
-        for(; regionIdx < game.curAreaData->regions.size(); regionIdx++) {
-            if(game.curAreaData->regions[regionIdx] == selectedRegion) {
-                break;
-            }
-        }
         game.curAreaData->regions.erase(
-            game.curAreaData->regions.begin() + regionIdx
+            game.curAreaData->regions.begin() + selectedRegionIdx
         );
-        delete selectedRegion;
-        selectedRegion = nullptr;
         for(size_t e = 0; e < game.curAreaData->mission.events.size(); e++) {
             MissionEvent* ePtr = &game.curAreaData->mission.events[e];
-            if(ePtr->type == MISSION_EV_LEADERS_IN_REGION) {
-                if(ePtr->param2 == regionIdx) {
-                    ePtr->param2 = 0;
-                } else if(ePtr->param2 > regionIdx) {
-                    ePtr->param2--;
-                }
-            }
+            if(ePtr->type != MISSION_EV_LEADERS_IN_REGION) continue;
+            if(ePtr->indexParam == 0) continue;
+            adjustMisalignedIndex(
+                ePtr->indexParam, selectedRegionIdx, false
+            );
         }
-        setStatus("Deleted region.");
+        setStatus("Deleted region #" + i2s(selectedRegionIdx + 1) + ".");
+        delete selectedRegion;
+        selectedRegion = nullptr;
+        selectedRegionIdx = INVALID;
     }
 }
 
@@ -970,24 +966,13 @@ void AreaEditor::deleteTreeShadowCmd(float inputValue) {
         setStatus("You have to select a shadow to delete!", true);
     } else {
         registerChange("tree shadow deletion");
-        for(
-            size_t s = 0;
-            s < game.curAreaData->treeShadows.size();
-            s++
-        ) {
-            if(
-                game.curAreaData->treeShadows[s] ==
-                selectedShadow
-            ) {
-                game.curAreaData->treeShadows.erase(
-                    game.curAreaData->treeShadows.begin() + s
-                );
-                delete selectedShadow;
-                selectedShadow = nullptr;
-                break;
-            }
-        }
-        setStatus("Deleted tree shadow.");
+        game.curAreaData->treeShadows.erase(
+            game.curAreaData->treeShadows.begin() + selectedShadowIdx
+        );
+        setStatus("Deleted tree shadow #" + i2s(selectedShadowIdx + 1) + ".");
+        delete selectedShadow;
+        selectedShadow = nullptr;
+        selectedShadowIdx = INVALID;
     }
 }
 
@@ -1031,7 +1016,7 @@ void AreaEditor::doSectorSplit() {
         LayoutDrawingNode* nPtr = &drawingNodes[n];
         LayoutDrawingNode* nextNode = &drawingNodes[n + 1];
         
-        Edge* newNodeEdge = game.curAreaData->newEdge();
+        Edge* newNodeEdge = game.curAreaData->addNewEdge();
         
         game.curAreaData->connectEdgeToVertex(
             newNodeEdge, nPtr->onVertex, 0
@@ -1618,7 +1603,7 @@ void AreaEditor::finishNewSectorDrawing() {
             nPtr->onVertex->getEdgeByNeighbor(prevNode->onVertex);
             
         if(!prevNodeEdge) {
-            prevNodeEdge = game.curAreaData->newEdge();
+            prevNodeEdge = game.curAreaData->addNewEdge();
             
             game.curAreaData->connectEdgeToVertex(
                 prevNodeEdge, prevNode->onVertex, 0
@@ -2202,7 +2187,9 @@ void AreaEditor::load() {
     lastMobCustomCatName.clear();
     lastMobType = nullptr;
     selectedShadow = nullptr;
+    selectedShadowIdx = INVALID;
     selectedRegion = nullptr;
+    selectedRegionIdx = INVALID;
     selectionEffect = 0.0;
     selectionHomogenized = false;
     showClosestStop = false;
@@ -2395,7 +2382,7 @@ void AreaEditor::loadReference() {
  *
  * @param inputValue Value of the player input for the command.
  */
-void AreaEditor::newMobCmd(float inputValue) {
+void AreaEditor::addNewMobCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(moving || selecting) {
@@ -2423,7 +2410,7 @@ void AreaEditor::newMobCmd(float inputValue) {
  *
  * @param inputValue Value of the player input for the command.
  */
-void AreaEditor::newPathCmd(float inputValue) {
+void AreaEditor::addNewPathCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(moving || selecting) {
@@ -2446,7 +2433,7 @@ void AreaEditor::newPathCmd(float inputValue) {
  *
  * @param inputValue Value of the player input for the command.
  */
-void AreaEditor::newRegionCmd(float inputValue) {
+void AreaEditor::addNewRegionCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(moving || selecting) {
@@ -2459,7 +2446,7 @@ void AreaEditor::newRegionCmd(float inputValue) {
     newRegion->size = MISSION::EXIT_MIN_SIZE;
     game.curAreaData->regions.push_back(newRegion);
     selectRegion(newRegion);
-    setStatus("Created a new region.");
+    setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
 }
 
 
@@ -2468,7 +2455,7 @@ void AreaEditor::newRegionCmd(float inputValue) {
  *
  * @param inputValue Value of the player input for the command.
  */
-void AreaEditor::newTreeShadowCmd(float inputValue) {
+void AreaEditor::addNewTreeShadowCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(moving || selecting) {
@@ -3164,6 +3151,12 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
  */
 void AreaEditor::selectRegion(AreaRegion* rPtr) {
     selectedRegion = rPtr;
+    selectedRegionIdx = INVALID;
+    for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+        if(game.curAreaData->regions[r] == selectedRegion) {
+            selectedRegionIdx = r;
+        }
+    }
     setSelectionStatusText();
 }
 
@@ -3190,6 +3183,12 @@ void AreaEditor::selectSector(Sector* s) {
  */
 void AreaEditor::selectTreeShadow(TreeShadow* sPtr) {
     selectedShadow = sPtr;
+    selectedShadowIdx = INVALID;
+    for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
+        if(game.curAreaData->treeShadows[s] == selectedShadow) {
+            selectedShadowIdx = s;
+        }
+    }
     setSelectionStatusText();
 }
 

@@ -299,6 +299,7 @@ void AnimationDatabase::deleteSprite(size_t idx) {
         }
     }
     
+    delete sprites[idx];
     sprites.erase(sprites.begin() + idx);
     
     for(size_t a = 0; a < animations.size(); a++) {

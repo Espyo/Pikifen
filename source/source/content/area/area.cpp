@@ -1362,8 +1362,8 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         int actionTypeInt = 0;
         
         eRS.set("type", typeInt);
-        eRS.set("param_1", newEvent.param1);
-        eRS.set("param_2", newEvent.param2);
+        eRS.set("index_param", newEvent.indexParam);
+        eRS.set("amount_param", newEvent.amountParam);
         eRS.set("action_type", actionTypeInt);
         eRS.set("action_message", newEvent.actionMessage);
         eRS.set("zero_time_for_score", newEvent.zeroTimeForScore);
@@ -1445,7 +1445,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         int typeInt = 0;
         
         cRS.set("type", typeInt);
-        cRS.set("param_1", newCriterion.param1);
+        cRS.set("index_param", newCriterion.indexParam);
         cRS.set("points", newCriterion.points);
         cRS.set("affects_hud", newCriterion.affectsHud);
         
@@ -1595,7 +1595,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = goalMobChecklistIdx,
+            .indexParam = goalMobChecklistIdx,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -1616,7 +1616,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = goalMobChecklistIdx,
+            .indexParam = goalMobChecklistIdx,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -1645,10 +1645,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_LEADERS_IN_REGION,
-            .param1 =
+            .indexParam = exitRegionIdx,
+            .amountParam =
             goalAllMobs ? 1 : goalMobIdxs.size(),
-            .param2 = exitRegionIdx,
-            .actionType = MISSION_ACTION_END_CLEAR
+            .actionType = MISSION_ACTION_END_CLEAR,
         }
         );
         break;
@@ -1658,7 +1658,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_PIKMIN_OR_MORE,
-            .param1 = goalAmount,
+            .amountParam = goalAmount,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -1688,7 +1688,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_PIKMIN_OR_FEWER,
-            .param1 = failTooFewPikAmount,
+            .amountParam = failTooFewPikAmount,
             .actionType = MISSION_ACTION_END_FAIL,
         }
         );
@@ -1701,7 +1701,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_PIKMIN_OR_MORE,
-            .param1 = failTooManyPikAmount,
+            .amountParam = failTooManyPikAmount,
             .actionType = MISSION_ACTION_END_FAIL,
         }
         );
@@ -1714,7 +1714,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_PIKMIN,
-            .param1 = failPikKilled,
+            .amountParam = failPikKilled,
             .actionType = MISSION_ACTION_END_FAIL,
         }
         );
@@ -1739,7 +1739,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = failLeadersKod,
+            .amountParam = failLeadersKod,
             .actionType = MISSION_ACTION_END_FAIL,
         }
         );
@@ -1760,7 +1760,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = enemyDefeatFailIdx,
+            .indexParam = enemyDefeatFailIdx,
             .actionType = MISSION_ACTION_END_FAIL,
         }
         );
@@ -2044,7 +2044,7 @@ void Area::loadThumbnail(const string& thumbnailPath) {
  *
  * @return The new edge's pointer.
  */
-Edge* Area::newEdge() {
+Edge* Area::addNewEdge() {
     Edge* ePtr = new Edge();
     edges.push_back(ePtr);
     return ePtr;
@@ -2056,7 +2056,7 @@ Edge* Area::newEdge() {
  *
  * @return The new sector's pointer.
  */
-Sector* Area::newSector() {
+Sector* Area::addNewSector() {
     Sector* sPtr = new Sector();
     sectors.push_back(sPtr);
     return sPtr;
@@ -2068,7 +2068,7 @@ Sector* Area::newSector() {
  *
  * @return The new vertex's pointer.
  */
-Vertex* Area::newVertex() {
+Vertex* Area::addNewVertex() {
     Vertex* vPtr = new Vertex();
     vertexes.push_back(vPtr);
     return vPtr;
@@ -2081,39 +2081,26 @@ Vertex* Area::newVertex() {
  * @param eIdx Index number of the edge to delete.
  */
 void Area::deleteEdge(size_t eIdx) {
+    delete edges[eIdx];
     edges.erase(edges.begin() + eIdx);
+    
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* vPtr = vertexes[v];
         for(size_t e = 0; e < vPtr->edges.size(); e++) {
-            if(
-                vPtr->edgeIdxs[e] != INVALID &&
-                vPtr->edgeIdxs[e] > eIdx
-            ) {
-                vPtr->edgeIdxs[e]--;
-            } else {
-                //This should never happen.
-                engineAssert(
-                    vPtr->edgeIdxs[e] != eIdx,
-                    i2s(vPtr->edgeIdxs[e]) + " " + i2s(eIdx)
-                );
-            }
+            if(vPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                vPtr->edgeIdxs[e], eIdx, false
+            );
         }
     }
+    
     for(size_t s = 0; s < sectors.size(); s++) {
         Sector* sPtr = sectors[s];
         for(size_t e = 0; e < sPtr->edges.size(); e++) {
-            if(
-                sPtr->edgeIdxs[e] != INVALID &&
-                sPtr->edgeIdxs[e] > eIdx
-            ) {
-                sPtr->edgeIdxs[e]--;
-            } else {
-                //This should never happen.
-                engineAssert(
-                    sPtr->edgeIdxs[e] != eIdx,
-                    i2s(sPtr->edgeIdxs[e]) + " " + i2s(eIdx)
-                );
-            }
+            if(sPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                sPtr->edgeIdxs[e], eIdx, false
+            );
         }
     }
 }
@@ -2140,22 +2127,16 @@ void Area::deleteEdge(const Edge* ePtr) {
  * @param sIdx Index number of the sector to delete.
  */
 void Area::deleteSector(size_t sIdx) {
+    delete sectors[sIdx];
     sectors.erase(sectors.begin() + sIdx);
+    
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
-            if(
-                ePtr->sectorIdxs[s] != INVALID &&
-                ePtr->sectorIdxs[s] > sIdx
-            ) {
-                ePtr->sectorIdxs[s]--;
-            } else {
-                //This should never happen.
-                engineAssert(
-                    ePtr->sectorIdxs[s] != sIdx,
-                    i2s(ePtr->sectorIdxs[s]) + " " + i2s(sIdx)
-                );
-            }
+            if(ePtr->sectorIdxs[s] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->sectorIdxs[s], sIdx, false
+            );
         }
     }
 }
@@ -2182,22 +2163,16 @@ void Area::deleteSector(const Sector* sPtr) {
  * @param vIdx Index number of the vertex to delete.
  */
 void Area::deleteVertex(size_t vIdx) {
+    delete vertexes[vIdx];
     vertexes.erase(vertexes.begin() + vIdx);
+    
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
-            if(
-                ePtr->vertexIdxs[v] != INVALID &&
-                ePtr->vertexIdxs[v] > vIdx
-            ) {
-                ePtr->vertexIdxs[v]--;
-            } else {
-                //This should never happen.
-                engineAssert(
-                    ePtr->vertexIdxs[v] != vIdx,
-                    i2s(ePtr->vertexIdxs[v]) + " " + i2s(vIdx)
-                );
-            }
+            if(ePtr->vertexIdxs[v] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->vertexIdxs[v], vIdx, false
+            );
         }
     }
 }
@@ -2509,8 +2484,8 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         GetterWriter eGW(eventNode);
         
         eGW.write("type", eventPtr->type);
-        eGW.write("param_1", eventPtr->param1);
-        eGW.write("param_2", eventPtr->param2);
+        eGW.write("index_param", eventPtr->indexParam);
+        eGW.write("amount_param", eventPtr->amountParam);
         eGW.write("action_type", eventPtr->actionType);
         eGW.write("zero_time_for_score", eventPtr->zeroTimeForScore);
         
@@ -2573,7 +2548,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         GetterWriter cGW(criterionNode);
         
         cGW.write("type", criterionPtr->type);
-        cGW.write("param_1", criterionPtr->param1);
+        cGW.write("index_param", criterionPtr->indexParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
     }

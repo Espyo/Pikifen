@@ -75,7 +75,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = 1,
+            .amountParam = 1,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -99,14 +99,14 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = 0,
+            .indexParam = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = 1,
+            .amountParam = 1,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -130,14 +130,14 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = 0,
+            .indexParam= 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = 1,
+            .amountParam = 1,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -161,14 +161,14 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = 0,
+            .indexParam = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = 1,
+            .amountParam = 1,
             .actionType = MISSION_ACTION_END_FAIL
         }
         );
@@ -192,14 +192,14 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .param1 = 0,
+            .indexParam = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_LOSE_LEADERS,
-            .param1 = 1,
+            .amountParam = 1,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -398,12 +398,10 @@ MissionEvType::EditorInfo MissionEvTypeLoseLeaders::getEditorInfo() const {
     MissionEvType::EditorInfo {
         .description =
         "Triggers when the player loses the given number of leaders.",
-        .param1Name =
+        .amountParamName =
         "Loss amount",
-        .param1Description =
-        "Number of leader losses to check for.",
-        .param1IsIndex = false,
-        .param1Default = 1,
+        .amountParamDescription =
+        "Number of leader losses to check for."
     };
 }
 
@@ -422,7 +420,7 @@ MissionEvType::HudInfo MissionEvTypeLoseLeaders::getHudInfo(
     return
     MissionEvType::HudInfo {
         .description =
-        "Lose " + i2s(ev->param1) + " or more leaders.",
+        "Lose " + i2s(ev->amountParam) + " or more leaders.",
         .reason =
         "Lost " + amountStr((int) gameplay->leadersKod, "leader") + "!",
     };
@@ -473,7 +471,7 @@ bool MissionEvTypeLoseLeaders::getZoomData(
 bool MissionEvTypeLoseLeaders::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->leadersKod >= ev->param1;
+    return gameplay->leadersKod >= ev->amountParam;
 }
 
 
@@ -488,12 +486,10 @@ MissionEvType::EditorInfo MissionEvTypeLosePikmin::getEditorInfo() const {
         .description =
         "Triggers when the player loses the given number of Pikmin. "
         "Only Pikmin deaths count, not things like Candypop Buds.",
-        .param1Name =
+        .amountParamName =
         "Loss amount",
-        .param1Description =
-        "Number of Pikmin losses to check for.",
-        .param1IsIndex = false,
-        .param1Default = 1,
+        .amountParamDescription =
+        "Number of Pikmin losses to check for."
     };
 }
 
@@ -512,7 +508,7 @@ MissionEvType::HudInfo MissionEvTypeLosePikmin::getHudInfo(
     return
     MissionEvType::HudInfo {
         .description =
-        "Lose " + i2s(ev->param1) + " or more Pikmin.",
+        "Lose " + i2s(ev->amountParam) + " or more Pikmin.",
         .reason =
         "Lost " + i2s(gameplay->pikminDeaths) + " Pikmin!",
     };
@@ -563,7 +559,7 @@ bool MissionEvTypeLosePikmin::getZoomData(
 bool MissionEvTypeLosePikmin::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->pikminDeaths >= ev->param1;
+    return gameplay->pikminDeaths >= ev->amountParam;
 }
 
 
@@ -579,12 +575,10 @@ MissionEvType::EditorInfo MissionEvTypeMobChecklist::getEditorInfo() const {
         "Triggers when the given mob checklist has been cleared. "
         "This happens when the required amount of mobs inside of "
         "that list has been collected or defeated.",
-        .param1Name =
+        .indexParamName =
         "Mob checklist number",
-        .param1Description =
-        "Number of the mob checklist to check for.",
-        .param1IsIndex = true,
-        .param1Default = 0,
+        .indexParamDescription =
+        "Number of the mob checklist to check for."
     };
 }
 
@@ -600,7 +594,7 @@ MissionEvType::EditorInfo MissionEvTypeMobChecklist::getEditorInfo() const {
 MissionEvType::HudInfo MissionEvTypeMobChecklist::getHudInfo(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->param1 > gameplay->missionMobChecklists.size() - 1) {
+    if(ev->indexParam > gameplay->missionMobChecklists.size() - 1) {
         return {};
     }
     
@@ -610,7 +604,7 @@ MissionEvType::HudInfo MissionEvTypeMobChecklist::getHudInfo(
         "Clear the required things.",
         .reason =
         "Cleared " +
-        i2s(gameplay->missionMobChecklists[ev->param1].requiredAmount) +
+        i2s(gameplay->missionMobChecklists[ev->indexParam].requiredAmount) +
         " things!",
     };
 }
@@ -660,16 +654,16 @@ bool MissionEvTypeMobChecklist::getZoomData(
 bool MissionEvTypeMobChecklist::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->param1 > gameplay->missionMobChecklists.size() - 1) {
+    if(ev->indexParam > gameplay->missionMobChecklists.size() - 1) {
         return false;
     }
     
     size_t requiredAmount =
-        gameplay->missionMobChecklists[ev->param1].requiredAmount;
+        gameplay->missionMobChecklists[ev->indexParam].requiredAmount;
     size_t remainingAmount =
-        gameplay->missionMobChecklists[ev->param1].remaining.size();
+        gameplay->missionMobChecklists[ev->indexParam].remaining.size();
     size_t startingAmount =
-        gameplay->missionMobChecklists[ev->param1].startingAmount;
+        gameplay->missionMobChecklists[ev->indexParam].startingAmount;
     size_t nrCleared =
         startingAmount - remainingAmount;
         
@@ -688,18 +682,14 @@ MissionEvType::EditorInfo MissionEvTypeLeadersInRegion::getEditorInfo() const {
         .description =
         "Triggers when the given amount of leaders is inside "
         "the given region.",
-        .param1Name =
-        "Leader amount",
-        .param1Description =
-        "Number of leaders to check for.",
-        .param1IsIndex = false,
-        .param1Default = 1,
-        .param2Name =
+        .indexParamName =
         "Region number",
-        .param2Description =
+        .indexParamDescription =
         "Number of the region to check for.",
-        .param2IsIndex = true,
-        .param2Default = 0,
+        .amountParamName =
+        "Leader amount",
+        .amountParamDescription =
+        "Number of leaders to check for.",
     };
 }
 
@@ -747,15 +737,15 @@ bool MissionEvTypeLeadersInRegion::getZoomData(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
-    if(ev->param2 > gameplay->areaRegions.size() - 1) {
+    if(ev->indexParam > gameplay->areaRegions.size() - 1) {
         return false;
     }
     Point avgPos;
-    for(Leader* lPtr : gameplay->areaRegions[ev->param2].leadersInside) {
+    for(Leader* lPtr : gameplay->areaRegions[ev->indexParam].leadersInside) {
         if(lPtr) avgPos += lPtr->pos;
     }
-    avgPos.x /= gameplay->areaRegions[ev->param2].leadersInside.size();
-    avgPos.y /= gameplay->areaRegions[ev->param2].leadersInside.size();
+    avgPos.x /= gameplay->areaRegions[ev->indexParam].leadersInside.size();
+    avgPos.y /= gameplay->areaRegions[ev->indexParam].leadersInside.size();
     *outCamPos = avgPos;
     return true;
 }
@@ -772,12 +762,12 @@ bool MissionEvTypeLeadersInRegion::getZoomData(
 bool MissionEvTypeLeadersInRegion::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->param2 > gameplay->areaRegions.size() - 1) {
+    if(ev->indexParam > gameplay->areaRegions.size() - 1) {
         return false;
     }
     return
-        gameplay->areaRegions[ev->param2].leadersInside.size() >=
-        ev->param1;
+        gameplay->areaRegions[ev->indexParam].leadersInside.size() >=
+        ev->amountParam;
 }
 
 
@@ -869,12 +859,10 @@ MissionEvType::EditorInfo MissionEvTypePikminOrFewer::getEditorInfo() const {
         .description =
         "Triggers when the total Pikmin count reaches the given amount "
         "or fewer.",
-        .param1Name =
+        .amountParamName =
         "Pikmin amount",
-        .param1Description =
+        .amountParamDescription =
         "Amount of Pikmin to check for.",
-        .param1IsIndex = false,
-        .param1Default = 1,
     };
 }
 
@@ -893,7 +881,7 @@ MissionEvType::HudInfo MissionEvTypePikminOrFewer::getHudInfo(
     return
     MissionEvType::HudInfo {
         .description =
-        "Reach " + i2s(ev->param1) + " Pikmin or fewer.",
+        "Reach " + i2s(ev->amountParam) + " Pikmin or fewer.",
         .reason =
         "Reached " +
         i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
@@ -945,7 +933,7 @@ bool MissionEvTypePikminOrFewer::getZoomData(
 bool MissionEvTypePikminOrFewer::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin() <= (long) ev->param1;
+    return gameplay->getAmountOfTotalPikmin() <= (long) ev->amountParam;
 }
 
 
@@ -960,12 +948,10 @@ MissionEvType::EditorInfo MissionEvTypePikminOrMore::getEditorInfo() const {
         .description =
         "Triggers when the total Pikmin count reaches the given amount "
         "or more.",
-        .param1Name =
+        .amountParamName =
         "Pikmin amount",
-        .param1Description =
+        .amountParamDescription =
         "Amount of Pikmin to check for.",
-        .param1IsIndex = false,
-        .param1Default = 1,
     };
 }
 
@@ -984,7 +970,7 @@ MissionEvType::HudInfo MissionEvTypePikminOrMore::getHudInfo(
     return
     MissionEvType::HudInfo {
         .description =
-        "Reach " + i2s(ev->param1) + " Pikmin or more.",
+        "Reach " + i2s(ev->amountParam) + " Pikmin or more.",
         .reason =
         "Reached " +
         i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
@@ -1036,7 +1022,7 @@ bool MissionEvTypePikminOrMore::getZoomData(
 bool MissionEvTypePikminOrMore::isMet(
     MissionEvent* ev, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin() >= (long) ev->param1;
+    return gameplay->getAmountOfTotalPikmin() >= (long) ev->amountParam;
 }
 
 
@@ -3536,12 +3522,12 @@ string MissionScoreCriterionTypeMobChecklist::getName() const {
 size_t MissionScoreCriterionTypeMobChecklist::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(cri->param1 > gameplay->missionMobChecklists.size() - 1) {
+    if(cri->indexParam > gameplay->missionMobChecklists.size() - 1) {
         return 0;
     }
     
     MissionMobChecklistStatus* cPtr =
-        &gameplay->missionMobChecklists[cri->param1];
+        &gameplay->missionMobChecklists[cri->indexParam];
     return cPtr->startingAmount - cPtr->remaining.size();
 }
 

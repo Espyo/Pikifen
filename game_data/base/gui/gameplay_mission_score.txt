@@ -26,6 +26,15 @@ hardcoded_items{
 	}
 }
 custom_items{
+	mission_score_bg{
+		center=50.0000 50.0000
+		size=100.0000 100.0000
+		description=Solid background.
+		type=filled_rectangle
+		color=40 129 56 96
+		draw_before_hardcoded=true
+		rectangle_rounding=0.3000
+	}
 	mission_score_bubble{
 		center=50.0000 50.0000
 		size=100.0000 100.0000

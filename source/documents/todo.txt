@@ -6,10 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
-        Bring back the HUD progress bars in some fashion
         HUD rule explanation for the area selection menu
         HUD rule explanation for the results menu
-        Logic to port old missions to the new format
+        After hours clock HUD logic
         Deleting mobs is ruining the list of mobs in a checklist
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
@@ -18,11 +17,12 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
-    Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned
+    Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned (#90)
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
     Move <direction> player actions have auto-repeat on for some reason
+    You can open the radar and start Go Here! during interludes
 
     --- 1.2.0 ---
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
@@ -44,10 +44,6 @@ Next tasks (roughly sorted most important first)
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
-        Maximum Pikmin in field
-        If Onions work automatically, by ejecting Pikmin whenever the amount on field is no longer at max (a la Bingo Battle)
-        If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
-        If Onions should pop new seeds when an extinction happen or if they should let the extinction happen
     Global script and script variables, which apply to the whole area
         A way for missions to receive mission events, score updates, etc. through scripting
     Floors-over-floors; mostly for bridges
@@ -394,7 +390,7 @@ Next tasks (roughly sorted most important first)
                 Maybe it should use the exact same logic as regular mob scripting. Obviously mob actions won't work, but changing states, ticking events, and performing actions onto mobs works
                     Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Area changes
-            Areas should be able to specify whether they have a "types out in the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
+            Areas should be able to specify whether they have a "types out on the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
             Objects should be able to specify what days they do and don't appear in
             Objects should also be able to specify when they respawn
                 A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet? Used for bosses, for instance
@@ -686,6 +682,7 @@ Misc things (so I don't forget)
             When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Style it after the KopPad? (thanks Helodity)
             Juice
+                https://github.com/soufianekhiat/ImAnim/tree/main
                 Pop sound and pop line particles when something gets created
                 Poof sound and puff of smoke particles when something gets deleted
                 Change the mouse cursor for when you're dragging, drawing, placing something new, etc.
@@ -720,6 +717,7 @@ Misc things (so I don't forget)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
         Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
+    Areas should have an option that controls whether Onions should pop new seeds when an extinction happen or if they should let the extinction happen. But for this to make sense, they have to list which Pikmin type are crucial and which are just bonuses, right?
     The loading screen's elements could be controlled with a GUI definition
     If you change a ship to accept an Onion-only Pikmin type, or vice-versa, the icons on the Onion/ship menu for storing inside will stop making sense
         "Ships could have a single sprite, since they dont change depending on the color, and onions could reuse the radar's method for coloring onions" --Helodity
@@ -794,6 +792,7 @@ Misc things (so I don't forget)
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Maker tools
+        The list of script vars shown with the mob info tool won't fit the screen if it's too long
         A modifier for the mouse cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?

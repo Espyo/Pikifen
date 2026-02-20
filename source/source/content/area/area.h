@@ -322,9 +322,9 @@ struct Area : public Content {
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
     void loadThumbnail(const string& thumbnailPath);
-    Edge* newEdge();
-    Sector* newSector();
-    Vertex* newVertex();
+    Edge* addNewEdge();
+    Sector* addNewSector();
+    Vertex* addNewVertex();
     void deleteVertex(size_t vIdx);
     void deleteVertex(const Vertex* vPtr);
     void deleteEdge(size_t eIdx);

@@ -773,27 +773,43 @@ protected:
         const char* label, const char* prompt, string* text,
         bool useMonospace = false
     );
-    void processGuiListNavSetup(size_t* curItemIdx, size_t listSize);
-    void processGuiListNavCountWidget(
-        size_t curItemIdx, size_t listSize, const string& label
+    void processGuiListNavSetup(
+        size_t* curItemIdx, size_t listSize, bool allowInvalid
     );
-    bool processGuiListNavCreateWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+    void processGuiListNavCurWidget(
+        size_t curItemIdx, size_t listSize, const string& label,
+        const string& name = "",
+        bool sameLine = false
+    );
+    bool processGuiListNavNewWidget(
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     bool processGuiListNavDelWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     bool processGuiListNavPrevWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     bool processGuiListNavNextWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     bool processGuiListNavMoveLeftWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     bool processGuiListNavMoveRightWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip
+        size_t* curItemIdx, size_t listSize, const string& tooltip,
+        bool sameLine = false, const string& customButtonId = "",
+        float buttonScale = 1.0f, const string& tooltipShortcut = ""
     );
     void processGuiMessageDialog();
     bool processGuiMobTypeWidgets(

@@ -448,11 +448,11 @@ struct MissionEvent {
     //Type of event.
     MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
     
-    //First parameter, if applicable.
-    size_t param1 = 1;
+    //Index-related parameter, if applicable. Can be used for other things too.
+    size_t indexParam = 0;
     
-    //Second parameter, if applicable.
-    size_t param2 = 1;
+    //Amount-related parameter, if applicable. Can be used for other things too.
+    size_t amountParam = 1;
     
     //Action to take when the event happens.
     MISSION_ACTION actionType = MISSION_ACTION_END_CLEAR;
@@ -504,8 +504,8 @@ struct MissionScoreCriterion {
     //Type.
     MISSION_SCORE_CRITERION type = MISSION_SCORE_CRITERION_MOB_CHECKLIST;
     
-    //First parameter, if applicable.
-    size_t param1 = 0;
+    //Index-related parameter, if applicable. Can be used for other things too.
+    size_t indexParam = 0;
     
     //Points received per every item in the criterion.
     int points = 1;
@@ -762,29 +762,17 @@ public:
         //Description of the event.
         string description;
         
-        //The first parameter's name. Empty if not used.
-        string param1Name;
+        //The index-related parameter's name. Empty if not used.
+        string indexParamName;
         
-        //The first parameter's description. Empty if not used.
-        string param1Description;
+        //The index-related parameter's description. Empty if not used.
+        string indexParamDescription;
         
-        //Whether the first parameter refers to some index.
-        bool param1IsIndex = false;
+        //The amount-related parameter's name. Empty if not used.
+        string amountParamName;
         
-        //Default value for the first parameter.
-        size_t param1Default = 0;
-        
-        //The second parameter's name. Empty if not used.
-        string param2Name;
-        
-        //The second parameter's description. Empty if not used.
-        string param2Description;
-        
-        //Whether the second parameter refers to some index.
-        bool param2IsIndex = false;
-        
-        //Default value for the second parameter.
-        size_t param2Default = 0;
+        //The amount-related parameter's description. Empty if not used.
+        string amountParamDescription;
         
     };
     

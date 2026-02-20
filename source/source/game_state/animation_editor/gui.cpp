@@ -910,15 +910,15 @@ void AnimationEditor::processGuiPanelAnimationData() {
  * header for this frame.
  */
 void AnimationEditor::processGuiPanelAnimationHeader() {
-    //Current animation text.
+    //Setup.
     size_t curAnimIdx = INVALID;
     if(curAnimInst.curAnim) {
         curAnimIdx = db.findAnimation(curAnimInst.curAnim->name);
     }
-    ImGui::Text(
-        "Current animation: %s / %i",
-        (curAnimIdx == INVALID ? "--" : i2s(curAnimIdx + 1).c_str()),
-        (int) db.animations.size()
+    
+    //Current animation text.
+    processGuiListNavCurWidget(
+        curAnimIdx, db.animations.size(), "Animation"
     );
     
     //Previous animation button.
@@ -945,7 +945,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         }
     }
     setTooltip(
-        "Previous\nanimation."
+        "Select the previous\nanimation."
     );
     
     //Change current animation button.
@@ -1021,7 +1021,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         }
     }
     setTooltip(
-        "Next\nanimation."
+        "Select the next\nanimation."
     );
     
     ImGui::Spacer();
@@ -1037,6 +1037,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         ) {
             string curAnimName = curAnimInst.curAnim->name;
             size_t nr = db.findAnimation(curAnimName);
+            delete db.animations[nr];
             db.animations.erase(db.animations.begin() + nr);
             if(db.animations.empty()) {
                 curAnimInst.clear();
@@ -1471,15 +1472,18 @@ void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
  * @param framePtr Pointer to the current frame.
  */
 void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
-    //Current frame text.
-    ImGui::Text(
-        "Current frame: %s / %i",
-        framePtr ? i2s(curAnimInst.curFrameIdx + 1).c_str() : "--",
-        (int) curAnimInst.curAnim->frames.size()
+    //Setup.
+    processGuiListNavSetup(
+        &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(), false
     );
     
+    //Current frame text.
+    processGuiListNavCurWidget(
+        curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(), "Frame"
+    );
+    
+    //Play/pause button.
     if(framePtr) {
-        //Play/pause button.
         if(
             ImGui::ImageButton(
                 "playButton", editorIcons[EDITOR_ICON_PLAY_PAUSE],
@@ -1507,150 +1511,87 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             "Right click for more options.",
             "Spacebar"
         );
-        
-        //Previous frame button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                "prevFrameButton", editorIcons[EDITOR_ICON_PREVIOUS],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            animPlaying = false;
-            if(!curAnimInst.curAnim->frames.empty()) {
-                if(curAnimInst.curFrameIdx == INVALID) {
-                    curAnimInst.curFrameIdx = 0;
-                } else if(curAnimInst.curFrameIdx == 0) {
-                    curAnimInst.curFrameIdx =
-                        curAnimInst.curAnim->frames.size() - 1;
-                } else {
-                    curAnimInst.curFrameIdx--;
-                }
-                curAnimInst.curFrameTime = 0.0f;
-            }
-        }
-        setTooltip(
-            "Previous frame."
-        );
-        
-        //Next frame button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                "nextFrameButton", editorIcons[EDITOR_ICON_NEXT],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            animPlaying = false;
-            if(!curAnimInst.curAnim->frames.empty()) {
-                if(
-                    curAnimInst.curFrameIdx ==
-                    curAnimInst.curAnim->frames.size() - 1 ||
-                    curAnimInst.curFrameIdx == INVALID
-                ) {
-                    curAnimInst.curFrameIdx = 0;
-                } else {
-                    curAnimInst.curFrameIdx++;
-                }
-                curAnimInst.curFrameTime = 0.0f;
-            }
-        }
-        setTooltip(
-            "Next frame."
-        );
-        
-        ImGui::SameLine();
     }
     
-    //Create frame button.
+    //Add frame button.
+    size_t prevCurFrameIdx = curAnimInst.curFrameIdx;
     if(
-        ImGui::ImageButton(
-            "createFrameButton", editorIcons[EDITOR_ICON_ADD],
-            Point(EDITOR::ICON_BMP_SIZE)
+        processGuiListNavNewWidget(
+            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
+            "Create a new frame after the current one, by copying "
+            "data from the current one.",
+            framePtr
         )
     ) {
-        if(
-            curAnimInst.curFrameIdx <
-            curAnimInst.curAnim->loopFrame
-        ) {
-            //Let the loop frame stay the same.
-            curAnimInst.curAnim->loopFrame++;
-        }
         animPlaying = false;
-        if(curAnimInst.curFrameIdx != INVALID) {
-            curAnimInst.curFrameIdx++;
+        adjustMisalignedIndex(
+            curAnimInst.curAnim->loopFrame, prevCurFrameIdx, true
+        );
+        if(prevCurFrameIdx != INVALID) {
             curAnimInst.curFrameTime = 0.0f;
             curAnimInst.curAnim->frames.insert(
-                curAnimInst.curAnim->frames.begin() +
-                curAnimInst.curFrameIdx,
-                Frame(
-                    curAnimInst.curAnim->frames[
-                        curAnimInst.curFrameIdx - 1
-                    ]
-                )
+                curAnimInst.curAnim->frames.begin() + curAnimInst.curFrameIdx,
+                Frame(curAnimInst.curAnim->frames[prevCurFrameIdx])
             );
         } else {
             curAnimInst.curAnim->frames.push_back(Frame());
-            curAnimInst.curFrameIdx = 0;
             curAnimInst.curFrameTime = 0.0f;
             setBestFrameSprite();
         }
-        framePtr =
-            &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
+        framePtr = &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
         changesMgr.markAsChanged();
         setStatus(
             "Created frame #" + i2s(curAnimInst.curFrameIdx + 1) + "."
         );
     }
-    setTooltip(
-        "Add a new frame after the current one, by copying "
-        "data from the current one."
-    );
     
-    if(framePtr) {
-    
-        //Delete frame button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                "delFrameButton", editorIcons[EDITOR_ICON_REMOVE],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            size_t deletedFrameIdx = curAnimInst.curFrameIdx;
-            if(curAnimInst.curFrameIdx != INVALID) {
-                curAnimInst.curAnim->deleteFrame(
-                    curAnimInst.curFrameIdx
-                );
-            }
-            if(curAnimInst.curAnim->frames.empty()) {
-                curAnimInst.curFrameIdx = INVALID;
-                framePtr = nullptr;
-            } else if(
-                curAnimInst.curFrameIdx >=
-                curAnimInst.curAnim->frames.size()
-            ) {
-                curAnimInst.curFrameIdx =
-                    curAnimInst.curAnim->frames.size() - 1;
-                framePtr =
-                    &(
-                        curAnimInst.curAnim->frames[
-                            curAnimInst.curFrameIdx
-                        ]
-                    );
-            }
-            animPlaying = false;
-            curAnimInst.curFrameTime = 0.0f;
-            changesMgr.markAsChanged();
-            setStatus(
-                "Deleted frame #" + i2s(deletedFrameIdx + 1) + "."
-            );
+    //Delete frame button.
+    prevCurFrameIdx = curAnimInst.curFrameIdx;
+    if(
+        processGuiListNavDelWidget(
+            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
+            "Delete the current frame.", true
+        )
+    ) {
+        curAnimInst.curAnim->deleteFrame(prevCurFrameIdx);
+        if(curAnimInst.curAnim->frames.empty()) {
+            curAnimInst.curFrameIdx = INVALID;
+            framePtr = nullptr;
+        } else {
+            framePtr = &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
         }
-        setTooltip(
-            "Delete the current frame."
+        animPlaying = false;
+        curAnimInst.curFrameTime = 0.0f;
+        changesMgr.markAsChanged();
+        setStatus(
+            "Deleted frame #" + i2s(prevCurFrameIdx + 1) + "."
         );
-        
-        //Misc. frame tools button.
+    }
+    
+    //Previous frame button.
+    if(
+        processGuiListNavPrevWidget(
+            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
+            "Select the previous frame.", true
+        )
+    ) {
+        animPlaying = false;
+        curAnimInst.curFrameTime = 0.0f;
+    }
+    
+    //Next frame button.
+    if(
+        processGuiListNavNextWidget(
+            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
+            "Select the next frame.", true
+        )
+    ) {
+        animPlaying = false;
+        curAnimInst.curFrameTime = 0.0f;
+    }
+    
+    //Misc. frame tools button.
+    if(framePtr) {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
@@ -1661,24 +1602,24 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             ImGui::OpenPopup("frameMisc");
         }
         setTooltip("Miscellaneous frame tools.");
-        
-        //Frame misc. popup.
-        if(ImGui::BeginPopup("frameMisc")) {
-            if(escapeWasPressed) {
-                ImGui::CloseCurrentPopup();
-            }
-            
-            //Go to sprite selectable.
-            if(ImGui::Selectable("Go to sprite")) {
-                curSprite = framePtr->spritePtr;
-                changeState(EDITOR_STATE_SPRITE);
-            }
-            setTooltip(
-                "Go to the sprite used in this frame."
-            );
-            
-            ImGui::EndPopup();
+    }
+    
+    //Frame misc. popup.
+    if(ImGui::BeginPopup("frameMisc")) {
+        if(escapeWasPressed) {
+            ImGui::CloseCurrentPopup();
         }
+        
+        //Go to sprite selectable.
+        if(ImGui::Selectable("Go to sprite")) {
+            curSprite = framePtr->spritePtr;
+            changeState(EDITOR_STATE_SPRITE);
+        }
+        setTooltip(
+            "Go to the sprite used in this frame."
+        );
+        
+        ImGui::EndPopup();
     }
 }
 
@@ -1903,15 +1844,15 @@ void AnimationEditor::processGuiPanelSprite() {
     //Panel title text.
     panelTitle("SPRITES");
     
-    //Current sprite text.
+    //Setup.
     size_t curSpriteIdx = INVALID;
     if(curSprite) {
         curSpriteIdx = db.findSprite(curSprite->name);
     }
-    ImGui::Text(
-        "Current sprite: %s / %i",
-        (curSpriteIdx == INVALID ? "--" : i2s(curSpriteIdx + 1).c_str()),
-        (int) db.sprites.size()
+    
+    //Current sprite text.
+    processGuiListNavCurWidget(
+        curSpriteIdx, db.sprites.size(), "Sprite"
     );
     
     //Previous sprite button.
@@ -1936,7 +1877,7 @@ void AnimationEditor::processGuiPanelSprite() {
         }
     }
     setTooltip(
-        "Previous\nsprite."
+        "Select the previous\nsprite."
     );
     
     //Change current sprite button.
@@ -1998,7 +1939,7 @@ void AnimationEditor::processGuiPanelSprite() {
         }
     }
     setTooltip(
-        "Next\nsprite."
+        "Select the next\nsprite."
     );
     
     ImGui::Spacer();
@@ -2445,66 +2386,31 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     //Panel title text.
     panelTitle("HITBOXES");
     
-    //Hitbox name header text.
-    ImGui::Text("Hitbox: ");
-    
-    //Hitbox name text.
-    ImGui::SameLine();
-    monoText(
-        "%s",
-        curHitbox ? curHitbox->bodyPartName.c_str() : NONE_OPTION.c_str()
+    //Current hitbox text.
+    processGuiListNavCurWidget(
+        curHitboxIdx, curSprite->hitboxes.size(), "Hitbox",
+        curHitbox ? curHitbox->bodyPartName : NONE_OPTION
     );
     
     //Previous hitbox button.
     if(
-        ImGui::ImageButton(
-            "prevHitboxButton", editorIcons[EDITOR_ICON_PREVIOUS],
-            Point(EDITOR::ICON_BMP_SIZE)
+        processGuiListNavPrevWidget(
+            &curHitboxIdx, curSprite->hitboxes.size(),
+            "Select the previous hitbox."
         )
     ) {
-        if(curSprite->hitboxes.size()) {
-            if(!curHitbox) {
-                curHitbox = &curSprite->hitboxes[0];
-                curHitboxIdx = 0;
-            } else {
-                curHitboxIdx =
-                    sumAndWrap(
-                        (int) curHitboxIdx, -1,
-                        (int) curSprite->hitboxes.size()
-                    );
-                curHitbox = &curSprite->hitboxes[curHitboxIdx];
-            }
-        }
+        curHitbox = &curSprite->hitboxes[curHitboxIdx];
     }
-    setTooltip(
-        "Select the previous hitbox."
-    );
     
     //Next hitbox button.
-    ImGui::SameLine();
     if(
-        ImGui::ImageButton(
-            "nextHitboxButton", editorIcons[EDITOR_ICON_NEXT],
-            Point(EDITOR::ICON_BMP_SIZE)
+        processGuiListNavNextWidget(
+            &curHitboxIdx, curSprite->hitboxes.size(),
+            "Select the next hitbox.", true
         )
     ) {
-        if(curSprite->hitboxes.size()) {
-            if(curHitboxIdx == INVALID) {
-                curHitbox = &curSprite->hitboxes[0];
-                curHitboxIdx = 0;
-            } else {
-                curHitboxIdx =
-                    sumAndWrap(
-                        (int) curHitboxIdx, 1,
-                        (int) curSprite->hitboxes.size()
-                    );
-                curHitbox = &curSprite->hitboxes[curHitboxIdx];
-            }
-        }
+        curHitbox = &curSprite->hitboxes[curHitboxIdx];
     }
-    setTooltip(
-        "Select the next hitbox."
-    );
     
     if(curHitbox && db.sprites.size() > 1) {
     

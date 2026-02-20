@@ -324,13 +324,13 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
             layoutDrawingCmd(1.0f);
             break;
         } case EDITOR_STATE_MOBS: {
-            newMobCmd(1.0f);
+            addNewMobCmd(1.0f);
             break;
         } case EDITOR_STATE_PATHS: {
-            newPathCmd(1.0f);
+            addNewPathCmd(1.0f);
             break;
         } case EDITOR_STATE_DETAILS: {
-            newTreeShadowCmd(1.0f);
+            addNewTreeShadowCmd(1.0f);
             break;
         }
         }
@@ -534,6 +534,9 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         game.curAreaData->treeShadows.push_back(newShadow);
         
         selectTreeShadow(newShadow);
+        setStatus(
+            "Created tree shadow #" + i2s(selectedShadowIdx + 1) + "."
+        );
         
         break;
         
@@ -563,6 +566,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         if(!twHandled) {
             //Select a tree shadow.
             selectedShadow = nullptr;
+            selectedShadowIdx = INVALID;
             for(
                 size_t s = 0;
                 s < game.curAreaData->treeShadows.size(); s++
@@ -586,8 +590,9 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
                 }
             }
             
-            //Select a region
+            //Select a region.
             selectedRegion = nullptr;
+            selectedRegionIdx = INVALID;
             for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
             
                 AreaRegion* rPtr = game.curAreaData->regions[r];

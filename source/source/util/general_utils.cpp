@@ -302,6 +302,35 @@ void Timer::tick(float deltaT) {
 
 
 /**
+ * @brief Adjusts an item index number, based on whether an item
+ * in the list that's being indexed got added or removed.
+ *
+ * @param idxToAlign Index number to be aligned, if necessary.
+ * @param changedItemIdx Index number of the item that got added or removed.
+ * @param addition True for a new index addition, false for a removal.
+ * @return Whether the number changed.
+ */
+bool adjustMisalignedIndex(
+    size_t& idxToAlign, size_t changedItemIdx, bool addition
+) {
+    if(addition) {
+        if(idxToAlign > changedItemIdx) {
+            idxToAlign++;
+            return true;
+        }
+    } else {
+        if(idxToAlign == changedItemIdx) {
+            idxToAlign = 0;
+            return true;
+        } else if(idxToAlign > changedItemIdx) {
+            idxToAlign--;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Reads a generic value from a string.
  *
  * @tparam GenericT The generic type.

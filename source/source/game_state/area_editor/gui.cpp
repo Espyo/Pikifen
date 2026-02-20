@@ -1514,36 +1514,61 @@ void AreaEditor::processGuiPanelDetails() {
         //Tree shadows node.
         if(saveableTreeNode("details", "Tree shadows")) {
         
-            //New tree shadow button.
-            if(
-                ImGui::ImageButton(
-                    "newShadowButton", editorIcons[EDITOR_ICON_ADD],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                newTreeShadowCmd(1.0f);
-            }
-            setTooltip(
-                "Start creating a new tree shadow.\n"
-                "Click on the canvas where you want the shadow to be.",
-                "N"
+            //Setup.
+            processGuiListNavSetup(
+                &selectedShadowIdx, game.curAreaData->treeShadows.size(), true
             );
             
+            //Current shadow text.
+            processGuiListNavCurWidget(
+                selectedShadowIdx, game.curAreaData->treeShadows.size(),
+                "Tree shadow"
+            );
+            
+            //New shadow button.
+            if(
+                processGuiListNavNewWidget(
+                    &selectedShadowIdx, game.curAreaData->treeShadows.size(),
+                    "Start creating a new tree shadow.\n"
+                    "Click on the canvas where you want the shadow to be.",
+                    false, "", 1.0f, "N"
+                )
+            ) {
+                addNewTreeShadowCmd(1.0f);
+            }
+            
             //Delete shadow button.
-            if(selectedShadow) {
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "delShadowButton", editorIcons[EDITOR_ICON_REMOVE],
-                        Point(EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    deleteTreeShadowCmd(1.0f);
-                }
-                setTooltip(
-                    "Delete the selected tree shadow.",
-                    "Delete"
-                );
+            size_t prevSelectedShadowIdx = selectedShadowIdx;
+            if(
+                processGuiListNavDelWidget(
+                    &selectedShadowIdx, game.curAreaData->treeShadows.size(),
+                    "Delete the selected tree shadow.", true, "", 1.0f, "Delete"
+                )
+            ) {
+                selectedShadowIdx = prevSelectedShadowIdx;
+                deleteTreeShadowCmd(1.0f);
+            }
+            
+            //Previous shadow button.
+            if(
+                processGuiListNavPrevWidget(
+                    &selectedShadowIdx, game.curAreaData->treeShadows.size(),
+                    "Select the previous tree shadow.", true
+                )
+            ) {
+                selectedShadow =
+                    game.curAreaData->treeShadows[selectedShadowIdx];
+            }
+            
+            //Next shadow button.
+            if(
+                processGuiListNavNextWidget(
+                    &selectedShadowIdx, game.curAreaData->treeShadows.size(),
+                    "Select the next tree shadow.", true
+                )
+            ) {
+                selectedShadow =
+                    game.curAreaData->treeShadows[selectedShadowIdx];
             }
             
             ImGui::Spacer();
@@ -1676,53 +1701,65 @@ void AreaEditor::processGuiPanelDetails() {
         //Regions node.
         if(saveableTreeNode("details", "Regions")) {
         
+            //Setup.
+            processGuiListNavSetup(
+                &selectedRegionIdx, game.curAreaData->regions.size(), true
+            );
+            
+            //Current region text.
+            processGuiListNavCurWidget(
+                selectedRegionIdx, game.curAreaData->regions.size(),
+                "Region"
+            );
+            
             //New region button.
             if(
-                ImGui::ImageButton(
-                    "newRegionButton", editorIcons[EDITOR_ICON_ADD],
-                    Point(EDITOR::ICON_BMP_SIZE)
+                processGuiListNavNewWidget(
+                    &selectedRegionIdx, game.curAreaData->regions.size(),
+                    "Create a new area region."
                 )
             ) {
-                newRegionCmd(1.0f);
+                addNewRegionCmd(1.0f);
             }
-            setTooltip("Create a new area region.", "N");
             
             //Delete region button.
-            if(selectedRegion) {
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "delRegionButton", editorIcons[EDITOR_ICON_REMOVE],
-                        Point(EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    deleteRegionCmd(1.0f);
-                }
-                setTooltip(
-                    "Delete the selected region.",
-                    "Delete"
-                );
+            size_t prevSelectedRegionIdx = selectedRegionIdx;
+            if(
+                processGuiListNavDelWidget(
+                    &selectedRegionIdx, game.curAreaData->regions.size(),
+                    "Delete the selected area region.", true, "", 1.0, "Delete"
+                )
+            ) {
+                selectedRegionIdx = prevSelectedRegionIdx;
+                deleteRegionCmd(1.0f);
+            }
+            
+            //Previous region button.
+            if(
+                processGuiListNavPrevWidget(
+                    &selectedRegionIdx, game.curAreaData->regions.size(),
+                    "Select the previous region.", true
+                )
+            ) {
+                selectedRegion =
+                    game.curAreaData->regions[selectedRegionIdx];
+            }
+            
+            //Next region button.
+            if(
+                processGuiListNavNextWidget(
+                    &selectedRegionIdx, game.curAreaData->regions.size(),
+                    "Select the next tree region.", true
+                )
+            ) {
+                selectedRegion =
+                    game.curAreaData->regions[selectedRegionIdx];
             }
             
             ImGui::Spacer();
             
             if(selectedRegion) {
             
-                //Region number text.
-                size_t curRegionIdx = 0;
-                for(
-                    ; curRegionIdx < game.curAreaData->regions.size();
-                    curRegionIdx++
-                ) {
-                    if(
-                        game.curAreaData->regions[curRegionIdx] ==
-                        selectedRegion
-                    ) {
-                        break;
-                    }
-                }
-                ImGui::Text("Region #%u", (unsigned int) curRegionIdx + 1);
-                
                 //Region center value.
                 Point regionCenter = selectedRegion->center;
                 if(
@@ -3412,53 +3449,60 @@ void AreaEditor::processGuiPanelMissionEv() {
         static size_t curEventIdx = 0;
         
         processGuiListNavSetup(
-            &curEventIdx, game.curAreaData->mission.events.size()
+            &curEventIdx, game.curAreaData->mission.events.size(), false
         );
         
         //Navigation count widget.
-        processGuiListNavCountWidget(
+        processGuiListNavCurWidget(
             curEventIdx, game.curAreaData->mission.events.size(), "Event"
         );
         
         //Navigation add widget.
         if(
-            processGuiListNavCreateWidget(
+            processGuiListNavNewWidget(
                 &curEventIdx, game.curAreaData->mission.events.size(),
                 "Add a new mission event."
             )
         ) {
-            registerChange("mission event addition");
+            registerChange("mission event creation");
             game.curAreaData->mission.events.insert(
                 game.curAreaData->mission.events.begin() +
                 curEventIdx,
                 MissionEvent()
             );
+            setStatus(
+                "Created mission event #" + i2s(curEventIdx + 1) + "."
+            );
         };
         
         //Navigation delete widget.
+        size_t prevCurEventIdx = curEventIdx;
         if(
             processGuiListNavDelWidget(
                 &curEventIdx, game.curAreaData->mission.events.size(),
-                "Delete the current event."
+                "Delete the current event.", true
             )
         ) {
             registerChange("mission event deletion");
             game.curAreaData->mission.events.erase(
                 game.curAreaData->mission.events.begin() +
-                curEventIdx
+                prevCurEventIdx
+            );
+            setStatus(
+                "Deleted mission event #" + i2s(prevCurEventIdx + 1) + "."
             );
         };
         
         //Navigation previous widget.
         processGuiListNavPrevWidget(
             &curEventIdx, game.curAreaData->mission.events.size(),
-            "Change to the previous event."
+            "Change to the previous event.", true
         );
         
         //Navigation next widget.
         processGuiListNavNextWidget(
             &curEventIdx, game.curAreaData->mission.events.size(),
-            "Change to the next event."
+            "Change to the next event.", true
         );
         
         //Navigation trigger earlier widget.
@@ -3466,7 +3510,8 @@ void AreaEditor::processGuiPanelMissionEv() {
             processGuiListNavMoveLeftWidget(
                 &curEventIdx, game.curAreaData->mission.events.size(),
                 "Make this event trigger earlier.\n"
-                "Events are triggered in the order they're displayed here."
+                "Events are triggered in the order they're displayed here.",
+                true
             )
         ) {
             registerChange("mission event reorder");
@@ -3483,7 +3528,8 @@ void AreaEditor::processGuiPanelMissionEv() {
             processGuiListNavMoveRightWidget(
                 &curEventIdx, game.curAreaData->mission.events.size(),
                 "Make this event trigger later.\n"
-                "Events are triggered in the order they're displayed here."
+                "Events are triggered in the order they're displayed here.",
+                true
             )
         ) {
             registerChange("mission event reorder");
@@ -3514,8 +3560,8 @@ void AreaEditor::processGuiPanelMissionEv() {
                 evPtr->type = (MISSION_EV) missionEvType;
                 evEditorInfo =
                     game.missionEvTypes[evPtr->type]->getEditorInfo();
-                evPtr->param1 = evEditorInfo.param1Default;
-                evPtr->param2 = evEditorInfo.param2Default;
+                evPtr->indexParam = 0;
+                evPtr->amountParam = 1;
             }
             setTooltip("What thing needs to happen for the event to trigger.");
             
@@ -3526,50 +3572,46 @@ void AreaEditor::processGuiPanelMissionEv() {
                 
             }
             
-            if(!evEditorInfo.param1Name.empty()) {
+            if(!evEditorInfo.indexParamName.empty()) {
             
-                //Event param 1 value.
-                int number = (int) evPtr->param1;
-                if(evEditorInfo.param1IsIndex) number++;
+                //Event index param value.
+                int number = (int) evPtr->indexParam;
+                number++;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        (evEditorInfo.param1Name + "##param1").c_str(),
-                        &number, 0.1f,
-                        evEditorInfo.param1IsIndex ? 1 : 0,
-                        INT_MAX
+                        (evEditorInfo.indexParamName + "##idxParam").c_str(),
+                        &number, 0.1f, 1, INT_MAX
                     )
                 ) {
                     registerChange("mission event number change");
-                    if(evEditorInfo.param1IsIndex) number--;
-                    evPtr->param1 = (size_t) number;
+                    number--;
+                    evPtr->indexParam = (size_t) number;
                 }
                 setTooltip(
-                    evEditorInfo.param1Description, "", WIDGET_EXPLANATION_DRAG
+                    evEditorInfo.indexParamDescription,
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
             }
             
-            if(!evEditorInfo.param2Name.empty()) {
+            if(!evEditorInfo.amountParamName.empty()) {
             
-                //Event param 2 value.
-                int number = (int) evPtr->param2;
-                if(evEditorInfo.param2IsIndex) number++;
+                //Event amount param value.
+                int number = (int) evPtr->amountParam;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        (evEditorInfo.param2Name + "##param2").c_str(),
-                        &number, 0.1f,
-                        evEditorInfo.param2IsIndex ? 1 : 0,
-                        INT_MAX
+                        (evEditorInfo.amountParamName + "##amtParam").c_str(),
+                        &number, 0.1f, 0, INT_MAX
                     )
                 ) {
                     registerChange("mission event number change");
-                    if(evEditorInfo.param2IsIndex) number--;
-                    evPtr->param2 = (size_t) number;
+                    evPtr->amountParam = (size_t) number;
                 }
                 setTooltip(
-                    evEditorInfo.param2Description, "", WIDGET_EXPLANATION_DRAG
+                    evEditorInfo.amountParamDescription,
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
             }
@@ -4511,42 +4553,28 @@ void AreaEditor::processGuiPanelMissionHudItems() {
     
         static size_t curHudItemIdx = 0;
         
-        //Item count text.
-        ImGui::Text(
-            "Item: %s (typically)",
-            enumGetName(missionHudItemIdNames, curHudItemIdx).c_str()
+        //Setup.
+        processGuiListNavSetup(
+            &curHudItemIdx, enumGetCount(missionHudItemIdNames), false
+        );
+        
+        //Current item text.
+        processGuiListNavCurWidget(
+            curHudItemIdx, enumGetCount(missionHudItemIdNames), "Item",
+            enumGetName(missionHudItemIdNames, curHudItemIdx) + " (typically)"
         );
         
         //Previous item button.
-        if(
-            ImGui::ImageButton(
-                "prevItemButton", editorIcons[EDITOR_ICON_PREVIOUS],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            curHudItemIdx =
-                sumAndWrap(
-                    curHudItemIdx, -1,
-                    enumGetCount(missionHudItemIdNames)
-                );
-        }
-        setTooltip("Change to the previous HUD item.");
+        processGuiListNavPrevWidget(
+            &curHudItemIdx, enumGetCount(missionHudItemIdNames),
+            "Select the previous HUD item."
+        );
         
         //Next item button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                "nextItemButton", editorIcons[EDITOR_ICON_NEXT],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            curHudItemIdx =
-                sumAndWrap(
-                    curHudItemIdx, +1,
-                    enumGetCount(missionHudItemIdNames)
-                );
-        }
-        setTooltip("Change to the next HUD item.");
+        processGuiListNavNextWidget(
+            &curHudItemIdx, enumGetCount(missionHudItemIdNames),
+            "Select the next HUD item.", true
+        );
         
         MissionHudItem* itemPtr =
             &game.curAreaData->mission.hudItems[curHudItemIdx];
@@ -4809,126 +4837,92 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
     //Mission mob checklists node.
     if(saveableTreeNode("gameplay", "Mission mob checklists")) {
     
-        //Checklist count text.
-        if(
-            game.curAreaData->mission.mobChecklists.empty()
-        ) {
-            curMobChecklistIdx = 0;
-        } else if(
-            curMobChecklistIdx >= game.curAreaData->mission.mobChecklists.size()
-        ) {
-            curMobChecklistIdx =
-                game.curAreaData->mission.mobChecklists.size() - 1;
-        }
-        ImGui::Text(
-            "Checklist: %s/%u",
-            (
-                game.curAreaData->mission.mobChecklists.empty() ?
-                "-" :
-                i2s(curMobChecklistIdx + 1)
-            ).c_str(),
-            (unsigned int) game.curAreaData->mission.mobChecklists.size()
+        //Setup.
+        processGuiListNavSetup(
+            &curMobChecklistIdx, game.curAreaData->mission.mobChecklists.size(),
+            false
+        );
+        
+        //Current checklist text.
+        processGuiListNavCurWidget(
+            curMobChecklistIdx, game.curAreaData->mission.mobChecklists.size(),
+            "Checklist"
         );
         
         //Create checklist button.
+        size_t prevCurMobChecklistIdx = curMobChecklistIdx;
         if(
-            ImGui::ImageButton(
-                "createChecklistButton", editorIcons[EDITOR_ICON_ADD],
-                Point(EDITOR::ICON_BMP_SIZE)
+            processGuiListNavNewWidget(
+                &curMobChecklistIdx,
+                game.curAreaData->mission.mobChecklists.size(),
+                "Add a new mission mob checklist."
             )
         ) {
             registerChange("mission mob checklist creation");
-            if(game.curAreaData->mission.mobChecklists.empty()) {
-                curMobChecklistIdx = 0;
-            } else {
-                curMobChecklistIdx++;
-            }
             game.curAreaData->mission.mobChecklists.insert(
                 game.curAreaData->mission.mobChecklists.begin() +
-                curMobChecklistIdx,
+                prevCurMobChecklistIdx,
                 MissionMobChecklist()
             );
-            adjustMisalignedIndexes(
-                game.curAreaData->mission.events,
-                true, curMobChecklistIdx,
-            [] (MissionEvent & ev) -> size_t* {
-                if(ev.type != MISSION_EV_MOB_CHECKLIST) return nullptr;
-                if(ev.param1 == 0) return nullptr;
-                return &ev.param1;
+            for(
+                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
+            ) {
+                MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+                if(ePtr->type != MISSION_EV_MOB_CHECKLIST) continue;
+                if(ePtr->indexParam == 0) continue;
+                adjustMisalignedIndex(
+                    ePtr->indexParam, prevCurMobChecklistIdx, true
+                );
             }
+            setStatus(
+                "Created mission mob checklist #" +
+                i2s(curMobChecklistIdx + 1) + "."
             );
         }
-        setTooltip("Create a new mission mob checklist.");
         
-        if(!game.curAreaData->mission.mobChecklists.empty()) {
-        
-            //Delete checklist button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "delChecklistButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
+        //Delete checklist button.
+        prevCurMobChecklistIdx = curMobChecklistIdx;
+        if(
+            processGuiListNavDelWidget(
+                &curMobChecklistIdx,
+                game.curAreaData->mission.mobChecklists.size(),
+                "Delete the current mission mob checklist.", true
+            )
+        ) {
+            registerChange("mission mob checklist deletion");
+            game.curAreaData->mission.mobChecklists.erase(
+                game.curAreaData->mission.mobChecklists.begin() +
+                prevCurMobChecklistIdx
+            );
+            for(
+                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
             ) {
-                registerChange("mission mob checklist deletion");
-                game.curAreaData->mission.mobChecklists.erase(
-                    game.curAreaData->mission.mobChecklists.begin() +
-                    curMobChecklistIdx
+                MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+                if(ePtr->type != MISSION_EV_MOB_CHECKLIST) continue;
+                if(ePtr->indexParam == 0) continue;
+                adjustMisalignedIndex(
+                    ePtr->indexParam, prevCurMobChecklistIdx, false
                 );
-                
-                for(
-                    size_t e = 0;
-                    e < game.curAreaData->mission.events.size(); e++
-                ) {
-                    MissionEvent* ePtr = &game.curAreaData->mission.events[e];
-                    if(ePtr->type == MISSION_EV_MOB_CHECKLIST) {
-                        if(ePtr->param1 == curMobChecklistIdx + 1) {
-                            ePtr->param1 = 0;
-                        } else if(ePtr->param1 > curMobChecklistIdx + 1) {
-                            ePtr->param1--;
-                        }
-                    }
-                }
             }
-            setTooltip("Delete the current mob checklist.");
-            
+            setStatus(
+                "Deleted mission event #" +
+                i2s(prevCurMobChecklistIdx + 1) + "."
+            );
         }
         
-        if(game.curAreaData->mission.mobChecklists.size() > 1) {
+        //Previous checklist button.
+        processGuiListNavPrevWidget(
+            &curMobChecklistIdx,
+            game.curAreaData->mission.mobChecklists.size(),
+            "Change to the previous mission mob checklist.", true
+        );
         
-            //Previous checklist button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "prevChecklistButton", editorIcons[EDITOR_ICON_PREVIOUS],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curMobChecklistIdx =
-                    sumAndWrap(
-                        curMobChecklistIdx, -1,
-                        game.curAreaData->mission.mobChecklists.size()
-                    );
-            }
-            setTooltip("Change to the previous mob checklist.");
-            
-            //Next checklist button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "nextChecklistButton", editorIcons[EDITOR_ICON_NEXT],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curMobChecklistIdx =
-                    sumAndWrap(
-                        curMobChecklistIdx, +1,
-                        game.curAreaData->mission.mobChecklists.size()
-                    );
-            }
-            setTooltip("Change to the next mob checklist.");
-            
-        }
+        //Next checklist button.
+        processGuiListNavNextWidget(
+            &curMobChecklistIdx,
+            game.curAreaData->mission.mobChecklists.size(),
+            "Change to the next mission mob checklist.", true
+        );
         
         if(!game.curAreaData->mission.mobChecklists.empty()) {
         
@@ -4952,21 +4946,43 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                 "a part of it are determined."
             );
             
-            //Amount value.
-            int amount = (int) checklistPtr->requiredAmount;
-            ImGui::SetNextItemWidth(50);
+            //All checkbox.
+            bool amountIsAll = checklistPtr->requiredAmount == 0;
             if(
-                ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)
+                ImGui::Checkbox("All matching mobs", &amountIsAll)
             ) {
                 registerChange("mission mob checklist amount change");
-                checklistPtr->requiredAmount = (size_t) amount;
+                if(amountIsAll) {
+                    checklistPtr->requiredAmount = 0;
+                } else {
+                    checklistPtr->requiredAmount = 1;
+                }
             }
             setTooltip(
-                "0 means the checklist contains all of the matching objects.\n"
-                "Any other number means the checklist gets cleared if\n"
-                "any X of the maching objects are cleared."
-                , "", WIDGET_EXPLANATION_DRAG
+                "If checked, then the checklist is cleared when all of the\n"
+                "matching objects in the area are cleared. Otherwise,\n"
+                "the checklist is cleared when any X of the matching\n"
+                "objects are cleared."
             );
+            
+            //Amount value.
+            if(!amountIsAll) {
+                int amount = (int) checklistPtr->requiredAmount;
+                ImGui::Indent();
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)
+                ) {
+                    registerChange("mission mob checklist amount change");
+                    checklistPtr->requiredAmount = (size_t) amount;
+                }
+                setTooltip(
+                    "How many matching objects within the checklist need to\n"
+                    "be cleared in order for the checklist to be cleared."
+                    , "", WIDGET_EXPLANATION_DRAG
+                );
+                ImGui::Unindent();
+            }
             
             if(
                 checklistPtr->type == MISSION_MOB_CHECKLIST_CUSTOM ||
@@ -5030,104 +5046,71 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
     //Mission score criteria node.
     if(saveableTreeNode("gameplay", "Mission scoring")) {
     
-        //Criterion count text.
+        //Setup.
         static size_t curCriterionIdx = 0;
-        if(
-            game.curAreaData->mission.scoreCriteria.empty()
-        ) {
-            curCriterionIdx = 0;
-        } else if(
-            curCriterionIdx >= game.curAreaData->mission.scoreCriteria.size()
-        ) {
-            curCriterionIdx =
-                game.curAreaData->mission.scoreCriteria.size() - 1;
-        }
-        ImGui::Text(
-            "Criterion: %s/%u",
-            (
-                game.curAreaData->mission.scoreCriteria.empty() ?
-                "-" :
-                i2s(curCriterionIdx + 1)
-            ).c_str(),
-            (unsigned int) game.curAreaData->mission.scoreCriteria.size()
+        processGuiListNavSetup(
+            &curCriterionIdx, game.curAreaData->mission.scoreCriteria.size(),
+            false
         );
         
-        //Create criterion button.
+        //Current criterion text.
+        processGuiListNavCurWidget(
+            curCriterionIdx, game.curAreaData->mission.scoreCriteria.size(),
+            "Criterion"
+        );
+        
+        //Add criterion button.
+        size_t prevCurCriterionIdx = curCriterionIdx;
         if(
-            ImGui::ImageButton(
-                "createCriterionButton", editorIcons[EDITOR_ICON_ADD],
-                Point(EDITOR::ICON_BMP_SIZE)
+            processGuiListNavNewWidget(
+                &curCriterionIdx,
+                game.curAreaData->mission.scoreCriteria.size(),
+                "Add a new mission score criterion."
             )
         ) {
             registerChange("mission score criterion creation");
-            if(game.curAreaData->mission.scoreCriteria.empty()) {
-                curCriterionIdx = 0;
-            } else {
-                curCriterionIdx++;
-            }
             game.curAreaData->mission.scoreCriteria.insert(
                 game.curAreaData->mission.scoreCriteria.begin() +
-                curCriterionIdx,
+                prevCurCriterionIdx,
                 MissionScoreCriterion()
             );
-        }
-        setTooltip("Create a new mission score criterion.");
-        
-        if(!game.curAreaData->mission.scoreCriteria.empty()) {
-        
-            //Delete criterion button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "delCriterionButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                registerChange("mission score criterion deletion");
-                game.curAreaData->mission.scoreCriteria.erase(
-                    game.curAreaData->mission.scoreCriteria.begin() +
-                    curCriterionIdx
-                );
-            }
-            setTooltip("Delete the current score criterion.");
-            
+            setStatus(
+                "Created mission score criterion #" +
+                i2s(curCriterionIdx + 1) + "."
+            );
         }
         
-        if(game.curAreaData->mission.scoreCriteria.size() > 1) {
-        
-            //Previous criterion button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "prevCriterionButton", editorIcons[EDITOR_ICON_PREVIOUS],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curCriterionIdx =
-                    sumAndWrap(
-                        curCriterionIdx, -1,
-                        game.curAreaData->mission.scoreCriteria.size()
-                    );
-            }
-            setTooltip("Change to the previous score criterion.");
-            
-            //Next criterion button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "nextCriterionButton", editorIcons[EDITOR_ICON_NEXT],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                curCriterionIdx =
-                    sumAndWrap(
-                        curCriterionIdx, +1,
-                        game.curAreaData->mission.scoreCriteria.size()
-                    );
-            }
-            setTooltip("Change to the next score criterion.");
-            
+        //Delete criterion button.
+        prevCurCriterionIdx = curCriterionIdx;
+        if(
+            processGuiListNavDelWidget(
+                &curCriterionIdx,
+                game.curAreaData->mission.scoreCriteria.size(),
+                "Delete the current mission score criterion.", true
+            )
+        ) {
+            registerChange("mission score criterion deletion");
+            game.curAreaData->mission.scoreCriteria.erase(
+                game.curAreaData->mission.scoreCriteria.begin() +
+                prevCurCriterionIdx
+            );
+            setStatus(
+                "Deleted mission score criterion #" +
+                i2s(prevCurCriterionIdx + 1) + "."
+            );
         }
+        
+        //Previous criterion button.
+        processGuiListNavPrevWidget(
+            &curCriterionIdx, game.curAreaData->mission.scoreCriteria.size(),
+            "Select the previous mission score criterion.", true
+        );
+        
+        //Next criterion button.
+        processGuiListNavNextWidget(
+            &curCriterionIdx, game.curAreaData->mission.scoreCriteria.size(),
+            "Select the next mission score criterion.", true
+        );
         
         if(!game.curAreaData->mission.scoreCriteria.empty()) {
         
@@ -5165,7 +5148,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            //Score checkbox.
+            //Applies to HUD checkbox.
             bool hud = criterionPtr->affectsHud;
             if(
                 ImGui::Checkbox(
@@ -5183,12 +5166,10 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            if(
-                criterionPtr->type == MISSION_SCORE_CRITERION_MOB_CHECKLIST
-            ) {
+            if(criterionPtr->type == MISSION_SCORE_CRITERION_MOB_CHECKLIST) {
             
                 //Mob checklist number value.
-                int number = (int) criterionPtr->param1;
+                int number = (int) criterionPtr->indexParam;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
@@ -5197,7 +5178,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                     )
                 ) {
                     registerChange("mission score criterion checklist change");
-                    criterionPtr->param1 = (size_t) number;
+                    criterionPtr->indexParam = (size_t) number;
                 }
                 setTooltip(
                     "Number of the mob checklist to check the mobs of.",
@@ -5564,7 +5545,7 @@ void AreaEditor::processGuiPanelMobs() {
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            newMobCmd(1.0f);
+            addNewMobCmd(1.0f);
         }
         setTooltip(
             "Start creating a new object.\n"
@@ -5800,7 +5781,7 @@ void AreaEditor::processGuiPanelPaths() {
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            newPathCmd(1.0f);
+            addNewPathCmd(1.0f);
         }
         setTooltip(
             "Start drawing a new path.\n"

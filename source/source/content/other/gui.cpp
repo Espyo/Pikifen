@@ -1712,35 +1712,12 @@ bool GuiManager::writeItemDefsToDataFile(
         const CustomGuiItemDef* itemPtr = &customItemDefs[i];
         DataNode* itemNode = customNode->addNew(itemPtr->name);
         
-        vector<string> typeStrs {
-            "bitmap",
-            "9_slice",
-            "text",
-            "rectangle",
-            "filled_rectangle",
-            "square",
-            "filled_square",
-            "ellipse",
-            "filled_ellipse",
-            "circle",
-            "filled_circle",
-        };
-        string typeStr = typeStrs[(size_t) itemPtr->type];
-        vector<string> fontNames {
-            "area_name",
-            "counter",
-            "leader_cursor_counter",
-            "slim",
-            "standard",
-            "value",
-        };
-        string fontStr = fontNames[(size_t) itemPtr->fontType];
-        
         GetterWriter gw(itemNode);
+        
         gw.write("center", itemPtr->center);
         gw.write("size", itemPtr->size);
         gw.write("description", itemPtr->description);
-        gw.write("type", typeStr);
+        gw.write("type", enumGetName(customGuiItemTypeINames, itemPtr->type));
         gw.write("color", itemPtr->color);
         if(itemPtr->drawBeforeHardcoded) {
             gw.write("draw_before_hardcoded", itemPtr->drawBeforeHardcoded);
@@ -1750,7 +1727,7 @@ bool GuiManager::writeItemDefsToDataFile(
         }
         if(!itemPtr->text.empty()) {
             gw.write("text", itemPtr->text);
-            gw.write("font", fontStr);
+            gw.write("font", enumGetName(engineFontINames, itemPtr->fontType));
             gw.write("text_alignment", itemPtr->textAlignment);
         }
         if(itemPtr->thickness != 1.0f) {

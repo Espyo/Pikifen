@@ -448,7 +448,7 @@ void AreaEditor::copySectorProperties() {
  * @return The created sector.
  */
 Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
-    Sector* newSector = game.curAreaData->newSector();
+    Sector* newSector = game.curAreaData->addNewSector();
     
     if(copyFrom) {
         copyFrom->clone(newSector);
@@ -538,30 +538,23 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
         }
         
         //Update links.
-        for(
-            size_t m2 = 0; m2 < game.curAreaData->mobGenerators.size(); m2++
-        ) {
+        for(size_t m2 = 0; m2 < game.curAreaData->mobGenerators.size(); m2++) {
             MobGen* m2Ptr = game.curAreaData->mobGenerators[m2];
-            
             for(size_t l = 0; l < m2Ptr->links.size(); l++) {
-            
-                if(m2Ptr->linkIdxs[l] > mIdx) {
-                    m2Ptr->linkIdxs[l]--;
-                }
-                
                 if(m2Ptr->links[l] == sm) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
                     m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
+                } else {
+                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mIdx, false);
                 }
             }
             
-            if(
-                m2Ptr->storedInside != INVALID &&
-                m2Ptr->storedInside > mIdx
-            ) {
-                m2Ptr->storedInside--;
-            } else if(m2Ptr->storedInside == mIdx) {
-                m2Ptr->storedInside = INVALID;
+            if(m2Ptr->storedInside != INVALID) {
+                if(m2Ptr->storedInside == mIdx) {
+                    m2Ptr->storedInside = INVALID;
+                } else {
+                    adjustMisalignedIndex(m2Ptr->storedInside, mIdx, false);
+                }
             }
         }
         
@@ -2646,10 +2639,10 @@ Vertex* AreaEditor::splitEdge(Edge* ePtr, const Point& where) {
         );
         
     //Create the new vertex and the new edge.
-    Vertex* newVPtr = game.curAreaData->newVertex();
+    Vertex* newVPtr = game.curAreaData->addNewVertex();
     newVPtr->x = newVPos.x;
     newVPtr->y = newVPos.y;
-    Edge* newEPtr = game.curAreaData->newEdge();
+    Edge* newEPtr = game.curAreaData->addNewEdge();
     ePtr->clone(newEPtr);
     
     //Connect the vertexes and edges.

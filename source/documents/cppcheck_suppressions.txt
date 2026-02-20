@@ -29,7 +29,7 @@ duplicateBreak
 constParameterCallback
 
 //Like the FSMs, action runners and loaders are callbacks of all sorts, so some may need the parameters to not be const.
-constParameterReference:mob_script_action.cpp
+constParameterReference:script_action.cpp
 
 
 

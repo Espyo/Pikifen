@@ -772,9 +772,15 @@ private:
     
     //Currently selected tree shadow.
     TreeShadow* selectedShadow = nullptr;
+
+    //Currently selected tree shadow's index.
+    size_t selectedShadowIdx = INVALID;
     
     //Currently selected region.
     AreaRegion* selectedRegion = nullptr;
+
+    //Currently selected region's index.
+    size_t selectedRegionIdx = INVALID;
     
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
@@ -1145,10 +1151,10 @@ private:
     void gridIntervalIncreaseCmd(float inputValue);
     void layoutDrawingCmd(float inputValue);
     void loadCmd(float inputValue);
-    void newMobCmd(float inputValue);
-    void newPathCmd(float inputValue);
-    void newRegionCmd(float inputValue);
-    void newTreeShadowCmd(float inputValue);
+    void addNewMobCmd(float inputValue);
+    void addNewPathCmd(float inputValue);
+    void addNewRegionCmd(float inputValue);
+    void addNewTreeShadowCmd(float inputValue);
     void openExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);
     void pasteTextureCmd(float inputValue);
