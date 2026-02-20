@@ -5,8 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Mob script action classes and
- * related functions.
+ * All script action classes and related functions.
  */
 
 #include <algorithm>
@@ -29,15 +28,15 @@ using std::set;
 
 
 /**
- * @brief Constructs a new mob action call object of a certain type.
+ * @brief Constructs a new script action call object of a certain type.
  *
- * @param type Type of mob action call.
+ * @param type Type of script action call.
  */
-MobActionCall::MobActionCall(MOB_ACTION type) {
+ScriptActionCall::ScriptActionCall(SCRIPT_ACTION type) {
 
-    for(size_t a = 0; a < game.mobActions.size(); a++) {
-        if(game.mobActions[a].type == type) {
-            action = &(game.mobActions[a]);
+    for(size_t a = 0; a < game.scriptActions.size(); a++) {
+        if(game.scriptActions[a].type == type) {
+            action = &(game.scriptActions[a]);
             break;
         }
     }
@@ -45,16 +44,16 @@ MobActionCall::MobActionCall(MOB_ACTION type) {
 
 
 /**
- * @brief Constructs a new mob action call object meant to run custom code.
+ * @brief Constructs a new script action call object meant to run custom code.
  *
  * @param code The function to run.
  */
-MobActionCall::MobActionCall(CustomActionCode code) :
+ScriptActionCall::ScriptActionCall(CustomActionCode code) :
     code(code) {
     
-    for(size_t a = 0; a < game.mobActions.size(); a++) {
-        if(game.mobActions[a].type == MOB_ACTION_UNKNOWN) {
-            action = &(game.mobActions[a]);
+    for(size_t a = 0; a < game.scriptActions.size(); a++) {
+        if(game.scriptActions[a].type == SCRIPT_ACTION_UNKNOWN) {
+            action = &(game.scriptActions[a]);
             break;
         }
     }
@@ -62,13 +61,13 @@ MobActionCall::MobActionCall(CustomActionCode code) :
 
 
 /**
- * @brief Loads a mob action call from a data node.
+ * @brief Loads a script action call from a data node.
  *
  * @param dn The data node.
  * @param mt Mob type this action's fsm belongs to.
  * @return Whether it was successful.
  */
-bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
+bool ScriptActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
 
     action = nullptr;
     this->mt = mt;
@@ -84,10 +83,10 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
     words.erase(words.begin());
     
     //Find the corresponding action.
-    for(size_t a = 0; a < game.mobActions.size(); a++) {
-        if(game.mobActions[a].type == MOB_ACTION_UNKNOWN) continue;
-        if(game.mobActions[a].name == name) {
-            action = &(game.mobActions[a]);
+    for(size_t a = 0; a < game.scriptActions.size(); a++) {
+        if(game.scriptActions[a].type == SCRIPT_ACTION_UNKNOWN) continue;
+        if(game.scriptActions[a].name == name) {
+            action = &(game.scriptActions[a]);
         }
     }
     
@@ -188,7 +187,7 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
  * @param customData2 Custom argument #2 to pass to the code.
  * @return Evaluation result, used only by the "if" actions.
  */
-bool MobActionCall::run(
+bool ScriptActionCall::run(
     Mob* m, void* customData1, void* customData2
 ) {
     //Custom code (i.e. instead of text-based script, use actual C++ code).
@@ -197,7 +196,7 @@ bool MobActionCall::run(
         return false;
     }
     
-    MobActionRunData data(m, this);
+    ScriptActionRunData data(m, this);
     
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
@@ -224,7 +223,7 @@ bool MobActionCall::run(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::arachnorbPlanLogic(MobActionCall& call) {
+bool MobActionLoaders::arachnorbPlanLogic(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
         enumGetValue(
@@ -245,7 +244,7 @@ bool MobActionLoaders::arachnorbPlanLogic(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::calculate(MobActionCall& call) {
+bool MobActionLoaders::calculate(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_CALCULATE_TYPE type =
         enumGetValue(mobActionCalculateTypeINames, call.args[2], &found);
@@ -264,7 +263,7 @@ bool MobActionLoaders::calculate(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::easeNumber(MobActionCall& call) {
+bool MobActionLoaders::easeNumber(ScriptActionCall& call) {
     bool found;
     EASE_METHOD method =
         enumGetValue(easeMethodINames, call.args[2], &found);
@@ -283,7 +282,7 @@ bool MobActionLoaders::easeNumber(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::focus(MobActionCall& call) {
+bool MobActionLoaders::focus(ScriptActionCall& call) {
     return loadMobTargetType(call, 0);
 }
 
@@ -294,7 +293,7 @@ bool MobActionLoaders::focus(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::followMobAsLeader(MobActionCall& call) {
+bool MobActionLoaders::followMobAsLeader(ScriptActionCall& call) {
     return loadMobTargetType(call, 0);
 }
 
@@ -305,7 +304,7 @@ bool MobActionLoaders::followMobAsLeader(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
+bool MobActionLoaders::getAreaInfo(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_GET_AREA_INFO_TYPE type =
         enumGetValue(mobActionGetAreaInfoTypeINames, call.args[1], &found);
@@ -326,7 +325,7 @@ bool MobActionLoaders::getAreaInfo(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::getEventInfo(MobActionCall& call) {
+bool MobActionLoaders::getEventInfo(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_GET_EV_INFO_TYPE type =
         enumGetValue(mobActionGetEvInfoTypeINames, call.args[1], &found);
@@ -347,7 +346,7 @@ bool MobActionLoaders::getEventInfo(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::getMobInfo(MobActionCall& call) {
+bool MobActionLoaders::getMobInfo(ScriptActionCall& call) {
     if(!loadMobTargetType(call, 1)) {
         return false;
     }
@@ -372,7 +371,7 @@ bool MobActionLoaders::getMobInfo(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::holdFocus(MobActionCall& call) {
+bool MobActionLoaders::holdFocus(ScriptActionCall& call) {
     size_t pIdx = call.mt->animDb->findBodyPart(call.args[0]);
     if(pIdx == INVALID) {
         call.customError =
@@ -390,7 +389,7 @@ bool MobActionLoaders::holdFocus(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::ifFunction(MobActionCall& call) {
+bool MobActionLoaders::ifFunction(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_IF_OP op =
         enumGetValue(mobActionIfOpINames, call.args[1], &found);
@@ -410,7 +409,7 @@ bool MobActionLoaders::ifFunction(MobActionCall& call) {
  * @param argIdx Index number of the mob target type argument.
  */
 bool MobActionLoaders::loadMobTargetType(
-    MobActionCall& call, size_t argIdx
+    ScriptActionCall& call, size_t argIdx
 ) {
     bool found;
     MOB_ACTION_MOB_TARGET_TYPE type =
@@ -430,7 +429,7 @@ bool MobActionLoaders::loadMobTargetType(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::moveToTarget(MobActionCall& call) {
+bool MobActionLoaders::moveToTarget(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_MOVE_TYPE type =
         enumGetValue(mobActionMoveTypeINames, call.args[0], &found);
@@ -449,7 +448,7 @@ bool MobActionLoaders::moveToTarget(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::playSound(MobActionCall& call) {
+bool MobActionLoaders::playSound(ScriptActionCall& call) {
     for(size_t s = 0; s < call.mt->sounds.size(); s++) {
         if(call.mt->sounds[s].name == call.args[0]) {
             call.args[0] = i2s(s);
@@ -468,7 +467,7 @@ bool MobActionLoaders::playSound(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::receiveStatus(MobActionCall& call) {
+bool MobActionLoaders::receiveStatus(ScriptActionCall& call) {
     if(!isInMap(game.content.statusTypes.list, call.args[0])) {
         call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
@@ -484,7 +483,7 @@ bool MobActionLoaders::receiveStatus(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::removeStatus(MobActionCall& call) {
+bool MobActionLoaders::removeStatus(ScriptActionCall& call) {
     if(!isInMap(game.content.statusTypes.list, call.args[0])) {
         call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
@@ -501,7 +500,7 @@ bool MobActionLoaders::removeStatus(MobActionCall& call) {
  * @param argIdx Index number of the argument that is an enum.
  */
 void MobActionLoaders::reportEnumError(
-    MobActionCall& call, size_t argIdx
+    ScriptActionCall& call, size_t argIdx
 ) {
     size_t paramIdx = std::min(argIdx, call.action->parameters.size() - 1);
     call.customError =
@@ -517,7 +516,7 @@ void MobActionLoaders::reportEnumError(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::setAnimation(MobActionCall& call) {
+bool MobActionLoaders::setAnimation(ScriptActionCall& call) {
     size_t aPos = call.mt->animDb->findAnimation(call.args[0]);
     if(aPos == INVALID) {
         call.customError =
@@ -548,7 +547,7 @@ bool MobActionLoaders::setAnimation(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::setFarReach(MobActionCall& call) {
+bool MobActionLoaders::setFarReach(ScriptActionCall& call) {
     for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
@@ -566,7 +565,7 @@ bool MobActionLoaders::setFarReach(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::setHoldable(MobActionCall& call) {
+bool MobActionLoaders::setHoldable(ScriptActionCall& call) {
     for(size_t a = 0; a < call.args.size(); a++) {
         bool found;
         HOLDABILITY_FLAG flag =
@@ -587,7 +586,7 @@ bool MobActionLoaders::setHoldable(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::setNearReach(MobActionCall& call) {
+bool MobActionLoaders::setNearReach(ScriptActionCall& call) {
     for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
@@ -605,7 +604,7 @@ bool MobActionLoaders::setNearReach(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::setTeam(MobActionCall& call) {
+bool MobActionLoaders::setTeam(ScriptActionCall& call) {
     bool found;
     MOB_TEAM teamNr = enumGetValue(mobTeamINames, call.args[0], &found);
     if(!found) {
@@ -623,7 +622,7 @@ bool MobActionLoaders::setTeam(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::spawn(MobActionCall& call) {
+bool MobActionLoaders::spawn(ScriptActionCall& call) {
     for(size_t s = 0; s < call.mt->spawns.size(); s++) {
         if(call.mt->spawns[s].name == call.args[0]) {
             call.args[0] = i2s(s);
@@ -642,7 +641,7 @@ bool MobActionLoaders::spawn(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::stabilizeZ(MobActionCall& call) {
+bool MobActionLoaders::stabilizeZ(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_STABILIZE_Z_TYPE type =
         enumGetValue(mobActionStabilizeZTypeINames, call.args[0], &found);
@@ -661,7 +660,7 @@ bool MobActionLoaders::stabilizeZ(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::startChomping(MobActionCall& call) {
+bool MobActionLoaders::startChomping(ScriptActionCall& call) {
     for(size_t s = 1; s < call.args.size(); s++) {
         size_t pNr = call.mt->animDb->findBodyPart(call.args[s]);
         if(pNr == INVALID) {
@@ -681,7 +680,7 @@ bool MobActionLoaders::startChomping(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::startParticles(MobActionCall& call) {
+bool MobActionLoaders::startParticles(ScriptActionCall& call) {
     if(!isInMap(game.content.particleGens.list, call.args[0])) {
         call.customError =
             "Unknown particle generator \"" + call.args[0] + "\"!";
@@ -697,7 +696,7 @@ bool MobActionLoaders::startParticles(MobActionCall& call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool MobActionLoaders::turnToTarget(MobActionCall& call) {
+bool MobActionLoaders::turnToTarget(ScriptActionCall& call) {
     bool found;
     MOB_ACTION_TURN_TYPE type =
         enumGetValue(mobActionTurnTypeINames, call.args[0], &found);
@@ -723,8 +722,8 @@ bool MobActionLoaders::turnToTarget(MobActionCall& call) {
  * If false, it can also be a var.
  * @param isExtras If true, this is an array of them (minimum amount 0).
  */
-MobActionParam::MobActionParam(
-    const string& name, const MOB_ACTION_PARAM type,
+ScriptActionParam::ScriptActionParam(
+    const string& name, const SCRIPT_ACTION_PARAM type,
     bool forceConst, bool isExtras
 ):
     name(name),
@@ -745,7 +744,7 @@ MobActionParam::MobActionParam(
  * @param m The mob responsible.
  * @param call Mob action call that called this.
  */
-MobActionRunData::MobActionRunData(Mob* m, MobActionCall* call) :
+ScriptActionRunData::ScriptActionRunData(Mob* m, ScriptActionCall* call) :
     m(m),
     call(call) {
     
@@ -761,7 +760,7 @@ MobActionRunData::MobActionRunData(Mob* m, MobActionCall* call) :
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::absoluteNumber(MobActionRunData& data) {
+void MobActionRunners::absoluteNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] = f2s(fabs(s2f(data.args[1])));
 }
 
@@ -771,7 +770,7 @@ void MobActionRunners::absoluteNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::addHealth(MobActionRunData& data) {
+void MobActionRunners::addHealth(ScriptActionRunData& data) {
     data.m->setHealth(true, false, s2f(data.args[0]));
 }
 
@@ -781,7 +780,7 @@ void MobActionRunners::addHealth(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::arachnorbPlanLogic(MobActionRunData& data) {
+void MobActionRunners::arachnorbPlanLogic(ScriptActionRunData& data) {
     data.m->arachnorbPlanLogic(
         (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
     );
@@ -793,7 +792,7 @@ void MobActionRunners::arachnorbPlanLogic(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::calculate(MobActionRunData& data) {
+void MobActionRunners::calculate(ScriptActionRunData& data) {
     float lhs = s2f(data.args[1]);
     MOB_ACTION_CALCULATE_TYPE op =
         (MOB_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
@@ -845,7 +844,7 @@ void MobActionRunners::calculate(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::ceilNumber(MobActionRunData& data) {
+void MobActionRunners::ceilNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] = f2s(ceil(s2f(data.args[1])));
 }
 
@@ -855,7 +854,7 @@ void MobActionRunners::ceilNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::deleteFunction(MobActionRunData& data) {
+void MobActionRunners::deleteFunction(ScriptActionRunData& data) {
     data.m->toDelete = true;
 }
 
@@ -865,7 +864,7 @@ void MobActionRunners::deleteFunction(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::drainLiquid(MobActionRunData& data) {
+void MobActionRunners::drainLiquid(ScriptActionRunData& data) {
     Sector* sPtr = getSector(data.m->pos, nullptr, true);
     if(!sPtr) return;
     if(!sPtr->liquid) return;
@@ -878,7 +877,7 @@ void MobActionRunners::drainLiquid(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::easeNumber(MobActionRunData& data) {
+void MobActionRunners::easeNumber(ScriptActionRunData& data) {
     EASE_METHOD method =
         (EASE_METHOD) s2i(data.args[2]);
     data.m->vars[data.args[0]] = f2s(ease(s2f(data.args[1]), method));
@@ -890,7 +889,7 @@ void MobActionRunners::easeNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::finishDying(MobActionRunData& data) {
+void MobActionRunners::finishDying(ScriptActionRunData& data) {
     data.m->finishDying();
 }
 
@@ -900,7 +899,7 @@ void MobActionRunners::finishDying(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::floorNumber(MobActionRunData& data) {
+void MobActionRunners::floorNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] = f2s(floor(s2f(data.args[1])));
 }
 
@@ -910,7 +909,7 @@ void MobActionRunners::floorNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::focus(MobActionRunData& data) {
+void MobActionRunners::focus(ScriptActionRunData& data) {
     MOB_ACTION_MOB_TARGET_TYPE s =
         (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
@@ -926,7 +925,7 @@ void MobActionRunners::focus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::followMobAsLeader(MobActionRunData& data) {
+void MobActionRunners::followMobAsLeader(ScriptActionRunData& data) {
     MOB_ACTION_MOB_TARGET_TYPE s =
         (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
@@ -953,7 +952,7 @@ void MobActionRunners::followMobAsLeader(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::followPathRandomly(MobActionRunData& data) {
+void MobActionRunners::followPathRandomly(ScriptActionRunData& data) {
     string label;
     if(data.args.size() >= 1) {
         label = data.args[0];
@@ -1016,7 +1015,7 @@ void MobActionRunners::followPathRandomly(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::followPathToAbsolute(MobActionRunData& data) {
+void MobActionRunners::followPathToAbsolute(ScriptActionRunData& data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     
@@ -1039,7 +1038,7 @@ void MobActionRunners::followPathToAbsolute(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getAngle(MobActionRunData& data) {
+void MobActionRunners::getAngle(ScriptActionRunData& data) {
     float centerX = s2f(data.args[1]);
     float centerY = s2f(data.args[2]);
     float focusX = s2f(data.args[3]);
@@ -1055,7 +1054,7 @@ void MobActionRunners::getAngle(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getAngleCwDiff(MobActionRunData& data) {
+void MobActionRunners::getAngleCwDiff(ScriptActionRunData& data) {
     float angle1 = degToRad(s2f(data.args[1]));
     float angle2 = degToRad(s2f(data.args[2]));
     float diff = ::getAngleCwDiff(angle1, angle2);
@@ -1069,7 +1068,7 @@ void MobActionRunners::getAngleCwDiff(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getAngleSmallestDiff(MobActionRunData& data) {
+void MobActionRunners::getAngleSmallestDiff(ScriptActionRunData& data) {
     float angle1 = degToRad(s2f(data.args[1]));
     float angle2 = degToRad(s2f(data.args[2]));
     float diff = ::getAngleSmallestDiff(angle1, angle2);
@@ -1084,7 +1083,7 @@ void MobActionRunners::getAngleSmallestDiff(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getAreaInfo(MobActionRunData& data) {
+void MobActionRunners::getAreaInfo(ScriptActionRunData& data) {
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_AREA_INFO_TYPE t =
         (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
@@ -1108,7 +1107,7 @@ void MobActionRunners::getAreaInfo(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getChomped(MobActionRunData& data) {
+void MobActionRunners::getChomped(ScriptActionRunData& data) {
     if(data.call->parentEvent == MOB_EV_HITBOX_TOUCH_EAT) {
         ((Mob*) (data.customData1))->chomp(
             data.m,
@@ -1123,7 +1122,7 @@ void MobActionRunners::getChomped(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getCoordinatesFromAngle(MobActionRunData& data) {
+void MobActionRunners::getCoordinatesFromAngle(ScriptActionRunData& data) {
     float angle = s2f(data.args[2]);
     angle = degToRad(angle);
     float magnitude = s2f(data.args[3]);
@@ -1138,7 +1137,7 @@ void MobActionRunners::getCoordinatesFromAngle(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getDistance(MobActionRunData& data) {
+void MobActionRunners::getDistance(ScriptActionRunData& data) {
     float centerX = s2f(data.args[1]);
     float centerY = s2f(data.args[2]);
     float focusX = s2f(data.args[3]);
@@ -1155,7 +1154,7 @@ void MobActionRunners::getDistance(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getEventInfo(MobActionRunData& data) {
+void MobActionRunners::getEventInfo(ScriptActionRunData& data) {
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_EV_INFO_TYPE t =
         (MOB_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
@@ -1256,7 +1255,7 @@ void MobActionRunners::getEventInfo(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getFloorZ(MobActionRunData& data) {
+void MobActionRunners::getFloorZ(ScriptActionRunData& data) {
     float x = s2f(data.args[1]);
     float y = s2f(data.args[2]);
     Sector* s = getSector(Point(x, y), nullptr, true);
@@ -1269,7 +1268,7 @@ void MobActionRunners::getFloorZ(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getFocusVar(MobActionRunData& data) {
+void MobActionRunners::getFocusVar(ScriptActionRunData& data) {
     if(!data.m->focusedMob) return;
     data.m->vars[data.args[0]] =
         data.m->focusedMob->vars[data.args[1]];
@@ -1281,7 +1280,7 @@ void MobActionRunners::getFocusVar(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getMobInfo(MobActionRunData& data) {
+void MobActionRunners::getMobInfo(ScriptActionRunData& data) {
     MOB_ACTION_MOB_TARGET_TYPE s =
         (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
     Mob* target = getTargetMob(data, s);
@@ -1383,7 +1382,7 @@ void MobActionRunners::getMobInfo(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getRandomFloat(MobActionRunData& data) {
+void MobActionRunners::getRandomFloat(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] =
         f2s(game.rng.f(s2f(data.args[1]), s2f(data.args[2])));
 }
@@ -1394,7 +1393,7 @@ void MobActionRunners::getRandomFloat(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::getRandomInt(MobActionRunData& data) {
+void MobActionRunners::getRandomInt(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] =
         i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
 }
@@ -1405,7 +1404,7 @@ void MobActionRunners::getRandomInt(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::holdFocus(MobActionRunData& data) {
+void MobActionRunners::holdFocus(ScriptActionRunData& data) {
     if(data.m->focusedMob) {
         data.m->hold(
             data.m->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
@@ -1422,7 +1421,7 @@ void MobActionRunners::holdFocus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::ifFunction(MobActionRunData& data) {
+void MobActionRunners::ifFunction(ScriptActionRunData& data) {
     string lhs = data.args[0];
     MOB_ACTION_IF_OP op =
         (MOB_ACTION_IF_OP) s2i(data.args[1]);
@@ -1471,7 +1470,7 @@ void MobActionRunners::ifFunction(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::interpolateNumber(MobActionRunData& data) {
+void MobActionRunners::interpolateNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] =
         f2s(
             ::interpolateNumber(
@@ -1487,7 +1486,7 @@ void MobActionRunners::interpolateNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::linkWithFocus(MobActionRunData& data) {
+void MobActionRunners::linkWithFocus(ScriptActionRunData& data) {
     if(!data.m->focusedMob) {
         return;
     }
@@ -1508,7 +1507,7 @@ void MobActionRunners::linkWithFocus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::loadFocusMemory(MobActionRunData& data) {
+void MobActionRunners::loadFocusMemory(ScriptActionRunData& data) {
     if(data.m->focusedMobMemory.empty()) {
         return;
     }
@@ -1522,7 +1521,7 @@ void MobActionRunners::loadFocusMemory(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::moveToAbsolute(MobActionRunData& data) {
+void MobActionRunners::moveToAbsolute(ScriptActionRunData& data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     float z = data.args.size() > 2 ? s2f(data.args[2]) : data.m->z;
@@ -1538,7 +1537,7 @@ void MobActionRunners::moveToAbsolute(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::moveToRelative(MobActionRunData& data) {
+void MobActionRunners::moveToRelative(ScriptActionRunData& data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
@@ -1555,7 +1554,7 @@ void MobActionRunners::moveToRelative(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::moveToTarget(MobActionRunData& data) {
+void MobActionRunners::moveToTarget(ScriptActionRunData& data) {
     MOB_ACTION_MOVE_TYPE t = (MOB_ACTION_MOVE_TYPE) s2i(data.args[0]);
     
     switch(t) {
@@ -1640,7 +1639,7 @@ void MobActionRunners::moveToTarget(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::orderRelease(MobActionRunData& data) {
+void MobActionRunners::orderRelease(ScriptActionRunData& data) {
     if(data.m->holder.m) {
         data.m->holder.m->fsm.runEvent(MOB_EV_RELEASE_ORDER, nullptr, nullptr);
     }
@@ -1652,7 +1651,7 @@ void MobActionRunners::orderRelease(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::playSound(MobActionRunData& data) {
+void MobActionRunners::playSound(ScriptActionRunData& data) {
     size_t soundId = data.m->playSound(s2i(data.args[0]));
     if(data.args.size() >= 2) {
         data.m->setVar(data.args[1], i2s(soundId));
@@ -1665,7 +1664,7 @@ void MobActionRunners::playSound(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::print(MobActionRunData& data) {
+void MobActionRunners::print(ScriptActionRunData& data) {
     size_t seconds = floor(game.states.gameplay->gameplayTimePassed);
     size_t centiseconds =
         (game.states.gameplay->gameplayTimePassed - seconds) * 100;
@@ -1699,7 +1698,7 @@ void MobActionRunners::print(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::receiveStatus(MobActionRunData& data) {
+void MobActionRunners::receiveStatus(ScriptActionRunData& data) {
     data.m->applyStatus(
         game.content.statusTypes.list[data.args[0]], false, false
     );
@@ -1711,7 +1710,7 @@ void MobActionRunners::receiveStatus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::release(MobActionRunData& data) {
+void MobActionRunners::release(ScriptActionRunData& data) {
     data.m->releaseChompedPikmin();
 }
 
@@ -1721,7 +1720,7 @@ void MobActionRunners::release(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::releaseStoredMobs(MobActionRunData& data) {
+void MobActionRunners::releaseStoredMobs(ScriptActionRunData& data) {
     data.m->releaseStoredMobs();
 }
 
@@ -1731,7 +1730,7 @@ void MobActionRunners::releaseStoredMobs(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::removeStatus(MobActionRunData& data) {
+void MobActionRunners::removeStatus(ScriptActionRunData& data) {
     for(size_t s = 0; s < data.m->statuses.size(); s++) {
         if(data.m->statuses[s].type->manifest->internalName == data.args[0]) {
             data.m->statuses[s].prevState = data.m->statuses[s].state;
@@ -1746,7 +1745,7 @@ void MobActionRunners::removeStatus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::roundNumber(MobActionRunData& data) {
+void MobActionRunners::roundNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] = f2s(round(s2f(data.args[1])));
 }
 
@@ -1756,7 +1755,7 @@ void MobActionRunners::roundNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::saveFocusMemory(MobActionRunData& data) {
+void MobActionRunners::saveFocusMemory(ScriptActionRunData& data) {
     if(!data.m->focusedMob) {
         return;
     }
@@ -1770,7 +1769,7 @@ void MobActionRunners::saveFocusMemory(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::sendMessageToFocus(MobActionRunData& data) {
+void MobActionRunners::sendMessageToFocus(ScriptActionRunData& data) {
     if(!data.m->focusedMob) return;
     data.m->sendScriptMessage(data.m->focusedMob, data.args[0]);
 }
@@ -1781,7 +1780,7 @@ void MobActionRunners::sendMessageToFocus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::sendMessageToLinks(MobActionRunData& data) {
+void MobActionRunners::sendMessageToLinks(ScriptActionRunData& data) {
     for(size_t l = 0; l < data.m->links.size(); l++) {
         if(data.m->links[l] == data.m) continue;
         if(!data.m->links[l]) continue;
@@ -1795,7 +1794,7 @@ void MobActionRunners::sendMessageToLinks(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::sendMessageToNearby(MobActionRunData& data) {
+void MobActionRunners::sendMessageToNearby(ScriptActionRunData& data) {
     float d = s2f(data.args[0]);
     
     for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
@@ -1818,7 +1817,7 @@ void MobActionRunners::sendMessageToNearby(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setAnimation(MobActionRunData& data) {
+void MobActionRunners::setAnimation(ScriptActionRunData& data) {
     START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL;
     float mobSpeedBaseline = 0.0f;
     if(data.args.size() > 1) {
@@ -1841,7 +1840,7 @@ void MobActionRunners::setAnimation(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setCanBlockPaths(MobActionRunData& data) {
+void MobActionRunners::setCanBlockPaths(ScriptActionRunData& data) {
     data.m->setCanBlockPaths(s2b(data.args[0]));
 }
 
@@ -1851,7 +1850,7 @@ void MobActionRunners::setCanBlockPaths(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setFarReach(MobActionRunData& data) {
+void MobActionRunners::setFarReach(ScriptActionRunData& data) {
     data.m->farReach = s2i(data.args[0]);
     data.m->updateInteractionSpan();
 }
@@ -1862,7 +1861,7 @@ void MobActionRunners::setFarReach(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setFlying(MobActionRunData& data) {
+void MobActionRunners::setFlying(ScriptActionRunData& data) {
     if(s2b(data.args[0])) {
         enableFlag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     } else {
@@ -1876,7 +1875,7 @@ void MobActionRunners::setFlying(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setFocusVar(MobActionRunData& data) {
+void MobActionRunners::setFocusVar(ScriptActionRunData& data) {
     if(!data.m->focusedMob) return;
     data.m->focusedMob->vars[data.args[0]] = data.args[1];
 }
@@ -1887,7 +1886,7 @@ void MobActionRunners::setFocusVar(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setGravity(MobActionRunData& data) {
+void MobActionRunners::setGravity(ScriptActionRunData& data) {
     data.m->gravityMult = s2f(data.args[0]);
 }
 
@@ -1897,7 +1896,7 @@ void MobActionRunners::setGravity(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setHealth(MobActionRunData& data) {
+void MobActionRunners::setHealth(ScriptActionRunData& data) {
     data.m->setHealth(false, false, s2f(data.args[0]));
 }
 
@@ -1907,7 +1906,7 @@ void MobActionRunners::setHealth(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setHeight(MobActionRunData& data) {
+void MobActionRunners::setHeight(ScriptActionRunData& data) {
     data.m->height = s2f(data.args[0]);
     
     if(data.m->type->walkable) {
@@ -1927,7 +1926,7 @@ void MobActionRunners::setHeight(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setHiding(MobActionRunData& data) {
+void MobActionRunners::setHiding(ScriptActionRunData& data) {
     if(s2b(data.args[0])) {
         enableFlag(data.m->flags, MOB_FLAG_HIDDEN);
     } else {
@@ -1941,7 +1940,7 @@ void MobActionRunners::setHiding(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setHoldable(MobActionRunData& data) {
+void MobActionRunners::setHoldable(ScriptActionRunData& data) {
     if(typeid(*(data.m)) == typeid(Tool)) {
         unsigned char flags = 0;
         for(size_t i = 0; i < data.args.size(); i++) {
@@ -1957,7 +1956,7 @@ void MobActionRunners::setHoldable(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setHuntable(MobActionRunData& data) {
+void MobActionRunners::setHuntable(ScriptActionRunData& data) {
     if(s2b(data.args[0])) {
         disableFlag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
     } else {
@@ -1971,7 +1970,7 @@ void MobActionRunners::setHuntable(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setLimbAnimation(MobActionRunData& data) {
+void MobActionRunners::setLimbAnimation(ScriptActionRunData& data) {
     if(!data.m->parent) {
         return;
     }
@@ -1996,7 +1995,7 @@ void MobActionRunners::setLimbAnimation(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setNearReach(MobActionRunData& data) {
+void MobActionRunners::setNearReach(ScriptActionRunData& data) {
     data.m->nearReach = s2i(data.args[0]);
     data.m->updateInteractionSpan();
 }
@@ -2007,7 +2006,7 @@ void MobActionRunners::setNearReach(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setRadius(MobActionRunData& data) {
+void MobActionRunners::setRadius(ScriptActionRunData& data) {
     data.m->setRadius(s2f(data.args[0]));
 }
 
@@ -2017,7 +2016,7 @@ void MobActionRunners::setRadius(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setSectorScroll(MobActionRunData& data) {
+void MobActionRunners::setSectorScroll(ScriptActionRunData& data) {
     Sector* sPtr = getSector(data.m->pos, nullptr, true);
     if(!sPtr) return;
     
@@ -2031,7 +2030,7 @@ void MobActionRunners::setSectorScroll(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setShadowVisibility(MobActionRunData& data) {
+void MobActionRunners::setShadowVisibility(ScriptActionRunData& data) {
     if(s2b(data.args[0])) {
         disableFlag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
     } else {
@@ -2045,7 +2044,7 @@ void MobActionRunners::setShadowVisibility(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setState(MobActionRunData& data) {
+void MobActionRunners::setState(ScriptActionRunData& data) {
     data.m->fsm.setState(
         s2i(data.args[0]),
         data.customData1,
@@ -2059,7 +2058,7 @@ void MobActionRunners::setState(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setTangible(MobActionRunData& data) {
+void MobActionRunners::setTangible(ScriptActionRunData& data) {
     if(s2b(data.args[0])) {
         disableFlag(data.m->flags, MOB_FLAG_INTANGIBLE);
     } else {
@@ -2073,7 +2072,7 @@ void MobActionRunners::setTangible(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setTeam(MobActionRunData& data) {
+void MobActionRunners::setTeam(ScriptActionRunData& data) {
     data.m->team = (MOB_TEAM) s2i(data.args[0]);
 }
 
@@ -2083,7 +2082,7 @@ void MobActionRunners::setTeam(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setTimer(MobActionRunData& data) {
+void MobActionRunners::setTimer(ScriptActionRunData& data) {
     data.m->setTimer(s2f(data.args[0]));
 }
 
@@ -2093,7 +2092,7 @@ void MobActionRunners::setTimer(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::setVar(MobActionRunData& data) {
+void MobActionRunners::setVar(ScriptActionRunData& data) {
     data.m->setVar(data.args[0], data.args[1]);
 }
 
@@ -2103,7 +2102,7 @@ void MobActionRunners::setVar(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::shakeCamera(MobActionRunData& data) {
+void MobActionRunners::shakeCamera(ScriptActionRunData& data) {
     for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d = Distance(data.m->pos, pPtr->view.cam.pos).toFloat();
@@ -2121,7 +2120,7 @@ void MobActionRunners::shakeCamera(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::showMessageFromVar(MobActionRunData& data) {
+void MobActionRunners::showMessageFromVar(ScriptActionRunData& data) {
     startGameplayMessage(data.m->vars[data.args[0]], nullptr);
 }
 
@@ -2131,7 +2130,7 @@ void MobActionRunners::showMessageFromVar(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::spawn(MobActionRunData& data) {
+void MobActionRunners::spawn(ScriptActionRunData& data) {
     data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
 }
 
@@ -2141,7 +2140,7 @@ void MobActionRunners::spawn(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::squareRootNumber(MobActionRunData& data) {
+void MobActionRunners::squareRootNumber(ScriptActionRunData& data) {
     data.m->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
 }
 
@@ -2151,7 +2150,7 @@ void MobActionRunners::squareRootNumber(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stabilizeZ(MobActionRunData& data) {
+void MobActionRunners::stabilizeZ(ScriptActionRunData& data) {
     if(data.m->links.empty() || !data.m->links[0]) {
         return;
     }
@@ -2191,7 +2190,7 @@ void MobActionRunners::stabilizeZ(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::startChomping(MobActionRunData& data) {
+void MobActionRunners::startChomping(ScriptActionRunData& data) {
     data.m->chompMax = s2i(data.args[0]);
     data.m->chompBodyParts.clear();
     for(size_t p = 1; p < data.args.size(); p++) {
@@ -2205,7 +2204,7 @@ void MobActionRunners::startChomping(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::startDying(MobActionRunData& data) {
+void MobActionRunners::startDying(ScriptActionRunData& data) {
     data.m->startDying();
 }
 
@@ -2215,7 +2214,7 @@ void MobActionRunners::startDying(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::startHeightEffect(MobActionRunData& data) {
+void MobActionRunners::startHeightEffect(ScriptActionRunData& data) {
     data.m->startHeightEffect();
 }
 
@@ -2225,7 +2224,7 @@ void MobActionRunners::startHeightEffect(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::startParticles(MobActionRunData& data) {
+void MobActionRunners::startParticles(ScriptActionRunData& data) {
     float offsetX = 0;
     float offsetY = 0;
     float offsetZ = 0;
@@ -2247,7 +2246,7 @@ void MobActionRunners::startParticles(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stop(MobActionRunData& data) {
+void MobActionRunners::stop(ScriptActionRunData& data) {
     data.m->stopChasing();
     data.m->stopTurning();
     data.m->stopFollowingPath();
@@ -2259,7 +2258,7 @@ void MobActionRunners::stop(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stopChomping(MobActionRunData& data) {
+void MobActionRunners::stopChomping(ScriptActionRunData& data) {
     data.m->chompMax = 0;
     data.m->chompBodyParts.clear();
 }
@@ -2270,7 +2269,7 @@ void MobActionRunners::stopChomping(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stopHeightEffect(MobActionRunData& data) {
+void MobActionRunners::stopHeightEffect(ScriptActionRunData& data) {
     data.m->stopHeightEffect();
 }
 
@@ -2280,7 +2279,7 @@ void MobActionRunners::stopHeightEffect(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stopParticles(MobActionRunData& data) {
+void MobActionRunners::stopParticles(ScriptActionRunData& data) {
     data.m->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
 }
 
@@ -2290,7 +2289,7 @@ void MobActionRunners::stopParticles(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stopSound(MobActionRunData& data) {
+void MobActionRunners::stopSound(ScriptActionRunData& data) {
     game.audio.destroySoundSource(s2i(data.args[0]));
 }
 
@@ -2300,7 +2299,7 @@ void MobActionRunners::stopSound(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::stopVertically(MobActionRunData& data) {
+void MobActionRunners::stopVertically(ScriptActionRunData& data) {
     data.m->speedZ = 0;
 }
 
@@ -2310,7 +2309,7 @@ void MobActionRunners::stopVertically(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::storeFocusInside(MobActionRunData& data) {
+void MobActionRunners::storeFocusInside(ScriptActionRunData& data) {
     if(data.m->focusedMob && !data.m->focusedMob->isStoredInsideMob()) {
         data.m->storeMobInside(data.m->focusedMob);
     }
@@ -2322,7 +2321,7 @@ void MobActionRunners::storeFocusInside(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::swallow(MobActionRunData& data) {
+void MobActionRunners::swallow(ScriptActionRunData& data) {
     data.m->swallowChompedPikmin(s2i(data.args[0]));
 }
 
@@ -2332,7 +2331,7 @@ void MobActionRunners::swallow(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::swallowAll(MobActionRunData& data) {
+void MobActionRunners::swallowAll(ScriptActionRunData& data) {
     data.m->swallowChompedPikmin(data.m->chompingMobs.size());
 }
 
@@ -2342,7 +2341,7 @@ void MobActionRunners::swallowAll(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::teleportToAbsolute(MobActionRunData& data) {
+void MobActionRunners::teleportToAbsolute(ScriptActionRunData& data) {
     data.m->stopChasing();
     data.m->chase(
         Point(s2f(data.args[0]), s2f(data.args[1])),
@@ -2357,7 +2356,7 @@ void MobActionRunners::teleportToAbsolute(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::teleportToRelative(MobActionRunData& data) {
+void MobActionRunners::teleportToRelative(ScriptActionRunData& data) {
     data.m->stopChasing();
     Point p =
         rotatePoint(
@@ -2377,7 +2376,7 @@ void MobActionRunners::teleportToRelative(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::throwFocus(MobActionRunData& data) {
+void MobActionRunners::throwFocus(ScriptActionRunData& data) {
     if(!data.m->focusedMob) {
         return;
     }
@@ -2410,7 +2409,7 @@ void MobActionRunners::throwFocus(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::turnToAbsolute(MobActionRunData& data) {
+void MobActionRunners::turnToAbsolute(ScriptActionRunData& data) {
     if(data.args.size() == 1) {
         //Turn to an absolute angle.
         data.m->face(degToRad(s2f(data.args[0])), nullptr);
@@ -2428,7 +2427,7 @@ void MobActionRunners::turnToAbsolute(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::turnToRelative(MobActionRunData& data) {
+void MobActionRunners::turnToRelative(ScriptActionRunData& data) {
     if(data.args.size() == 1) {
         //Turn to a relative angle.
         data.m->face(data.m->angle + degToRad(s2f(data.args[0])), nullptr);
@@ -2447,7 +2446,7 @@ void MobActionRunners::turnToRelative(MobActionRunData& data) {
  *
  * @param data Data about the action call.
  */
-void MobActionRunners::turnToTarget(MobActionRunData& data) {
+void MobActionRunners::turnToTarget(ScriptActionRunData& data) {
     MOB_ACTION_TURN_TYPE t = (MOB_ACTION_TURN_TYPE) s2i(data.args[0]);
     
     switch(t) {
@@ -2486,7 +2485,7 @@ void MobActionRunners::turnToTarget(MobActionRunData& data) {
  * @return Whether it succeeded.
  */
 bool assertActions(
-    const vector<MobActionCall*>& actions, const DataNode* dn
+    const vector<ScriptActionCall*>& actions, const DataNode* dn
 ) {
     //Check if the "if"-related actions are okay.
     int depth = 0;
@@ -2619,7 +2618,7 @@ bool assertActions(
  * @param type Type of target.
  */
 Mob* getTargetMob(
-    MobActionRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
+    ScriptActionRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
 ) {
     switch (type) {
     case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
@@ -2654,7 +2653,7 @@ Mob* getTargetMob(
  * @param data Data about the action call.
  * @return The mob.
  */
-Mob* getTriggerMob(MobActionRunData& data) {
+Mob* getTriggerMob(ScriptActionRunData& data) {
     if(
         data.call->parentEvent == MOB_EV_OBJECT_IN_REACH ||
         data.call->parentEvent == MOB_EV_OPPONENT_IN_REACH ||
@@ -2697,9 +2696,9 @@ Mob* getTriggerMob(MobActionRunData& data) {
  * @param atEnd Are the actions inserted at the end?
  */
 void insertEventActions(
-    MobEvent* ev, const vector<MobActionCall*>& actions, bool atEnd
+    ScriptEvent* ev, const vector<ScriptActionCall*>& actions, bool atEnd
 ) {
-    vector<MobActionCall*>::iterator it =
+    vector<ScriptActionCall*>::iterator it =
         atEnd ? ev->actions.end() : ev->actions.begin();
     ev->actions.insert(it, actions.begin(), actions.end());
 }
@@ -2716,7 +2715,7 @@ void insertEventActions(
  */
 void loadActions(
     MobType* mt, DataNode* node,
-    vector<MobActionCall*>* outActions, Bitmask8* outSettings
+    vector<ScriptActionCall*>* outActions, Bitmask8* outSettings
 ) {
     if(outSettings) *outSettings = 0;
     for(size_t a = 0; a < node->getNrOfChildren(); a++) {
@@ -2730,7 +2729,7 @@ void loadActions(
         ) {
             enableFlag(*outSettings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
         } else {
-            MobActionCall* newA = new MobActionCall();
+            ScriptActionCall* newA = new ScriptActionCall();
             if(newA->loadFromDataNode(actionNode, mt)) {
                 outActions->push_back(newA);
             } else {

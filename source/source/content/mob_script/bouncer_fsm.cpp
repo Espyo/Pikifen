@@ -30,7 +30,7 @@
 void BouncerFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BOUNCER_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(BouncerFsm::setIdlingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
@@ -38,7 +38,7 @@ void BouncerFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bouncing", BOUNCER_STATE_BOUNCING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(BouncerFsm::setBouncingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
@@ -90,7 +90,7 @@ void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
         return;
     }
     
-    MobEvent* ev = nullptr;
+    ScriptEvent* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(

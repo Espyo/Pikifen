@@ -38,13 +38,13 @@ using std::unordered_set;
 void LeaderFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", LEADER_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::enterIdle);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::clearBoredomData);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(LeaderFsm::searchSeed);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -94,7 +94,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("called", LEADER_STATE_CALLED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::called);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -118,14 +118,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("active", LEADER_STATE_ACTIVE); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::enterActive);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::setIsWalkingFalse);
             efc.run(LeaderFsm::setIsTurningFalse);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(LeaderFsm::tickActiveState);
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
@@ -206,12 +206,12 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("whistling", LEADER_STATE_WHISTLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::notifyPikminRelease);
             efc.run(LeaderFsm::release);
             efc.run(LeaderFsm::whistle);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopWhistle);
         }
         efc.newEvent(LEADER_EV_STOP_WHISTLE); {
@@ -257,7 +257,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("punching", LEADER_STATE_PUNCHING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::punch);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -303,7 +303,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("holding", LEADER_STATE_HOLDING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
         }
         efc.newEvent(LEADER_EV_THROW); {
@@ -361,7 +361,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("throwing", LEADER_STATE_THROWING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::doThrow);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -405,7 +405,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("dismissing", LEADER_STATE_DISMISSING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::dismiss);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -445,7 +445,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("spraying", LEADER_STATE_SPRAYING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::spray);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -463,7 +463,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("pain", LEADER_STATE_PAIN); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::setPainAnim);
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
@@ -476,7 +476,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::setPainAnim);
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
@@ -490,7 +490,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("knocked_back", LEADER_STATE_KNOCKED_BACK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -516,7 +516,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -607,7 +607,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("getting_up", LEADER_STATE_GETTING_UP); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::startGettingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -630,7 +630,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_getting_up", LEADER_STATE_INACTIVE_GETTING_UP
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::startGettingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -654,13 +654,13 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("ko", LEADER_STATE_KO); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKod);
         }
     }
     
     efc.newState("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::startChasingLeader);
         }
@@ -715,11 +715,11 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::stopInGroup);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::clearBoredomData);
         }
         efc.newEvent(MOB_EV_SPOT_IS_FAR); {
@@ -828,7 +828,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("pluck_deciding", LEADER_STATE_PLUCK_DECIDING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::decidePluckAction);
         }
         efc.newEvent(LEADER_EV_GO_PLUCK); {
@@ -909,7 +909,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         "inactive_pluck_deciding",
         LEADER_STATE_INACTIVE_PLUCK_DECIDING
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::decidePluckAction);
         }
         efc.newEvent(LEADER_EV_GO_PLUCK); {
@@ -1008,11 +1008,11 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_inventory", LEADER_STATE_IN_INVENTORY); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::standStill);
             efc.run(LeaderFsm::openInventory);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::closeInventory);
         }
         efc.newEvent(LEADER_EV_CANCEL); {
@@ -1113,7 +1113,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("held_by_leader", LEADER_STATE_HELD); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::beReleased);
         }
         efc.newEvent(MOB_EV_THROWN); {
@@ -1145,7 +1145,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("thrown", LEADER_STATE_THROWN); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1170,7 +1170,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("inactive_thrown", LEADER_STATE_INACTIVE_THROWN); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1195,10 +1195,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("drinking", LEADER_STATE_DRINKING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::startDrinking);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(LeaderFsm::finishDrinking);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1222,10 +1222,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("riding_track", LEADER_STATE_RIDING_TRACK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::startRidingTrack);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(LeaderFsm::tickTrackRide);
         }
     }
@@ -1233,10 +1233,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_riding_track", LEADER_STATE_INACTIVE_RIDING_TRACK
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::startRidingTrack);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(LeaderFsm::tickTrackRide);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1245,7 +1245,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("shaking", LEADER_STATE_SHAKING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(LeaderFsm::shake);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {

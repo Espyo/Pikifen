@@ -27,7 +27,7 @@
 void ConverterFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", CONVERTER_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ConverterFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_THROWN_PIKMIN_LANDED); {
@@ -39,7 +39,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("bumped", CONVERTER_STATE_BUMPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ConverterFsm::bumped);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -55,7 +55,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("spitting", CONVERTER_STATE_SPITTING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ConverterFsm::spit);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -64,7 +64,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("opening", CONVERTER_STATE_OPENING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ConverterFsm::open);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -73,7 +73,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("dying", CONVERTER_STATE_DYING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ConverterFsm::startDying);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {

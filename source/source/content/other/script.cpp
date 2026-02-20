@@ -5,8 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Mob script classes and
- * related functions.
+ * Scripting classes and related functions.
  */
 
 #include <algorithm>
@@ -33,7 +32,7 @@
  * @param newState State to change to.
  */
 void EasyFsmCreator::changeState(const string& newState) {
-    curEvent->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
+    curEvent->actions.push_back(new ScriptActionCall(MOB_ACTION_SET_STATE));
     curEvent->actions.back()->args.push_back(newState);
     curEvent->actions.back()->argIsVar.push_back(false);
 }
@@ -64,12 +63,12 @@ void EasyFsmCreator::commitState() {
  *
  * @return The states.
  */
-vector<MobState*> EasyFsmCreator::finish() {
+vector<ScriptState*> EasyFsmCreator::finish() {
     commitEvent();
     commitState();
     sort(
         states.begin(), states.end(),
-    [] (const MobState * ms1, const MobState * ms2) -> bool {
+    [] (const ScriptState * ms1, const ScriptState * ms2) -> bool {
         return ms1->id < ms2->id;
     }
     );
@@ -83,9 +82,9 @@ vector<MobState*> EasyFsmCreator::finish() {
  *
  * @param type Type of event.
  */
-void EasyFsmCreator::newEvent(const MOB_EV type) {
+void EasyFsmCreator::newEvent(const SCRIPT_EV type) {
     commitEvent();
-    curEvent = new MobEvent(type);
+    curEvent = new ScriptEvent(type);
     curState->events[type] = curEvent;
 }
 
@@ -99,7 +98,7 @@ void EasyFsmCreator::newEvent(const MOB_EV type) {
  */
 void EasyFsmCreator::newState(const string& name, size_t id) {
     commitState();
-    curState = new MobState(name, id);
+    curState = new ScriptState(name, id);
     states.push_back(curState);
 }
 
@@ -111,7 +110,7 @@ void EasyFsmCreator::newState(const string& name, size_t id) {
  * @param code Function with said code.
  */
 void EasyFsmCreator::run(CustomActionCode code) {
-    curEvent->actions.push_back(new MobActionCall(code));
+    curEvent->actions.push_back(new ScriptActionCall(code));
 }
 
 
@@ -145,23 +144,23 @@ HitboxInteraction::HitboxInteraction(
  * @param node The data node.
  * @param actions Its actions.
  */
-MobEvent::MobEvent(
-    const DataNode* node, const vector<MobActionCall*>& actions
+ScriptEvent::ScriptEvent(
+    const DataNode* node, const vector<ScriptActionCall*>& actions
 ) :
     actions(actions) {
 
     bool typeFound;
-    type = enumGetValue(mobEvScriptFileINames, node->name, &typeFound);
+    type = enumGetValue(scriptEvScriptFileINames, node->name, &typeFound);
     
     if(!typeFound) {
-        type = MOB_EV_UNKNOWN;
+        type = SCRIPT_EV_UNKNOWN;
         game.errors.report(
             "Unknown script event name \"" + node->name + "\"!", node
         );
     }
     
     for(size_t a = 0; a < this->actions.size(); a++) {
-        this->actions[a]->parentEvent = (MOB_EV) type;
+        this->actions[a]->parentEvent = (SCRIPT_EV) type;
     }
 }
 
@@ -172,7 +171,7 @@ MobEvent::MobEvent(
  * @param t The event type.
  * @param a Its actions.
  */
-MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*>& a) :
+ScriptEvent::ScriptEvent(const SCRIPT_EV t, const vector<ScriptActionCall*>& a) :
     type(t),
     actions(a) {
     
@@ -186,7 +185,7 @@ MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*>& a) :
  * @param customData1 Custom argument #1 to pass to the code.
  * @param customData2 Custom argument #2 to pass to the code.
  */
-void MobEvent::run(Mob* m, void* customData1, void* customData2) {
+void ScriptEvent::run(Mob* m, void* customData1, void* customData2) {
     if(m->parent && m->parent->relayEvents) {
         m->parent->m->fsm.runEvent(type, customData1, customData2);
         if(!m->parent->handleEvents) {
@@ -250,7 +249,7 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
                 size_t depth = 0;
                 
                 for(size_t a2 = a + 1; a2 < actions.size(); a2++) {
-                    MOB_ACTION a2Type = actions[a2]->action->type;
+                    SCRIPT_ACTION a2Type = actions[a2]->action->type;
                     if(a2Type == MOB_ACTION_IF) {
                         depth++;
                     } else if(a2Type == MOB_ACTION_ELSE) {
@@ -287,7 +286,7 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
             size_t depth = 0;
             
             for(size_t a2 = a + 1; a2 < actions.size(); a2++) {
-                MOB_ACTION a2Type = actions[a2]->action->type;
+                SCRIPT_ACTION a2Type = actions[a2]->action->type;
                 if(a2Type == MOB_ACTION_IF) {
                     depth++;
                 } else if(a2Type == MOB_ACTION_END_IF) {
@@ -306,7 +305,7 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
             //Find the label that matches.
             size_t nextActionIdx = actions.size();
             for(size_t a2 = 0; a2 < actions.size(); a2++) {
-                MOB_ACTION a2Type = actions[a2]->action->type;
+                SCRIPT_ACTION a2Type = actions[a2]->action->type;
                 if(a2Type == MOB_ACTION_LABEL) {
                     if(actions[a]->args[0] == actions[a2]->args[0]) {
                         nextActionIdx = a2 + 1;
@@ -343,7 +342,7 @@ void MobEvent::run(Mob* m, void* customData1, void* customData2) {
  *
  * @param m The mob this FSM belongs to.
  */
-MobFsm::MobFsm(Mob* m) {
+Fsm::Fsm(Mob* m) {
 
     if(!m) return;
     this->m = m;
@@ -357,7 +356,7 @@ MobFsm::MobFsm(Mob* m) {
  * @param type The event's type.
  * @return The event.
  */
-MobEvent* MobFsm::getEvent(const MOB_EV type) const {
+ScriptEvent* Fsm::getEvent(const SCRIPT_EV type) const {
     return curState->events[type];
 }
 
@@ -368,7 +367,7 @@ MobEvent* MobFsm::getEvent(const MOB_EV type) const {
  * @param name The state's name.
  * @return The index, or INVALID if it doesn't exist.
  */
-size_t MobFsm::getStateIdx(const string& name) const {
+size_t Fsm::getStateIdx(const string& name) const {
     for(size_t s = 0; s < m->type->states.size(); s++) {
         if(m->type->states[s]->name == name) {
             return s;
@@ -385,10 +384,10 @@ size_t MobFsm::getStateIdx(const string& name) const {
  * @param customData1 Custom argument #1 to pass to the code.
  * @param customData2 Custom argument #2 to pass to the code.
  */
-void MobFsm::runEvent(
-    const MOB_EV type, void* customData1, void* customData2
+void Fsm::runEvent(
+    const SCRIPT_EV type, void* customData1, void* customData2
 ) {
-    MobEvent* e = getEvent(type);
+    ScriptEvent* e = getEvent(type);
     if(e) {
         e->run(m, customData1, customData2);
     }
@@ -404,7 +403,7 @@ void MobFsm::runEvent(
  * @param info2 Same as info1, but a second variable.
  * @return Whether it succeeded.
  */
-bool MobFsm::setState(size_t newState, void* info1, void* info2) {
+bool Fsm::setState(size_t newState, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(curState) {
@@ -412,7 +411,7 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
             prevStateNames[p] = prevStateNames[p - 1];
         }
         prevStateNames[0] = curState->name;
-        runEvent(MOB_EV_ON_LEAVE, info1, info2);
+        runEvent(SCRIPT_EV_ON_LEAVE, info1, info2);
     }
     
     if(newState < m->type->states.size() && newState != INVALID) {
@@ -420,7 +419,7 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
         curState = m->type->states[newState];
         
         //Run the code to enter the new state.
-        runEvent(MOB_EV_ON_ENTER, info1, info2);
+        runEvent(SCRIPT_EV_ON_ENTER, info1, info2);
         
         return true;
     }
@@ -439,10 +438,10 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
  *
  * @param name The state's name.
  */
-MobState::MobState(const string& name) :
+ScriptState::ScriptState(const string& name) :
     name(name) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -454,10 +453,10 @@ MobState::MobState(const string& name) :
  * @param name The state's name.
  * @param evs Its events.
  */
-MobState::MobState(const string& name, MobEvent* evs[N_MOB_EVENTS]) :
+ScriptState::ScriptState(const string& name, ScriptEvent* evs[N_SCRIPT_EVENTS]) :
     name(name) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
         events[e] = evs[e];
     }
 }
@@ -469,11 +468,11 @@ MobState::MobState(const string& name, MobEvent* evs[N_MOB_EVENTS]) :
  * @param name The state's name.
  * @param id Its ID, for sorting on the vector of states.
  */
-MobState::MobState(const string& name, size_t id) :
+ScriptState::ScriptState(const string& name, size_t id) :
     name(name),
     id(id) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -486,7 +485,7 @@ MobState::MobState(const string& name, size_t id) :
  * @param type The event's type.
  * @return The event.
  */
-MobEvent* MobState::getEvent(const MOB_EV type) const {
+ScriptEvent* ScriptState::getEvent(const SCRIPT_EV type) const {
     return events[type];
 }
 
@@ -505,21 +504,21 @@ MobEvent* MobState::getEvent(const MOB_EV type) const {
  * @return The index of the starting state.
  */
 size_t fixStates(
-    vector<MobState*>& states, const string& startingState, const MobType* mt
+    vector<ScriptState*>& states, const string& startingState, const MobType* mt
 ) {
     size_t startingStateIdx = INVALID;
     
     //Fix actions that change the state that are using a string.
     for(size_t s = 0; s < states.size(); s++) {
-        MobState* state = states[s];
+        ScriptState* state = states[s];
         if(state->name == startingState) startingStateIdx = s;
         
-        for(size_t e = 0; e < N_MOB_EVENTS; e++) {
-            MobEvent* ev = state->events[e];
+        for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+            ScriptEvent* ev = state->events[e];
             if(!ev) continue;
             
             for(size_t a = 0; a < ev->actions.size(); a++) {
-                MobActionCall* call = ev->actions[a];
+                ScriptActionCall* call = ev->actions[a];
                 
                 if(call->action->type == MOB_ACTION_SET_STATE) {
                     string stateName = call->args[0];
@@ -566,7 +565,7 @@ size_t fixStates(
  */
 void loadScript(
     MobType* mt, DataNode* scriptNode, DataNode* globalNode,
-    vector<MobState*>* outStates
+    vector<ScriptState*>* outStates
 ) {
     size_t nNewStates = scriptNode->getNrOfChildren();
     
@@ -583,12 +582,12 @@ void loadScript(
             }
         }
         if(!skip) {
-            outStates->push_back(new MobState(stateNode->name));
+            outStates->push_back(new ScriptState(stateNode->name));
         }
     }
     
     for(size_t s = 0; s < outStates->size(); s++) {
-        MobState* statePtr = (*outStates)[s];
+        ScriptState* statePtr = (*outStates)[s];
         DataNode* stateNode = scriptNode->getChildByName(statePtr->name);
         loadState(mt, stateNode, globalNode, statePtr);
         statePtr->id = s;
@@ -608,41 +607,41 @@ void loadScript(
  */
 void loadState(
     MobType* mt, DataNode* stateNode, DataNode* globalNode,
-    MobState* statePtr
+    ScriptState* statePtr
 ) {
     size_t nEvents = stateNode->getNrOfChildren();
     size_t nGlobalEvents = globalNode->getNrOfChildren();
     if(nEvents + nGlobalEvents == 0) return;
     
     //Read the events.
-    vector<MobEvent*> newEvents;
+    vector<ScriptEvent*> newEvents;
     vector<Bitmask8> newEventSettings;
     
     for(size_t e = 0; e < nEvents; e++) {
         DataNode* eventNode = stateNode->getChild(e);
-        vector<MobActionCall*> actions;
+        vector<ScriptActionCall*> actions;
         Bitmask8 settings;
         
         loadActions(mt, eventNode, &actions, &settings);
         
-        newEvents.push_back(new MobEvent(eventNode, actions));
+        newEvents.push_back(new ScriptEvent(eventNode, actions));
         newEventSettings.push_back(settings);
         
         assertActions(actions, eventNode);
     }
     
     //Load global events.
-    vector<MobEvent*> globalEvents;
+    vector<ScriptEvent*> globalEvents;
     vector<Bitmask8> globalEventSettings;
     
     for(size_t e = 0; e < nGlobalEvents; e++) {
         DataNode* eventNode = globalNode->getChild(e);
-        vector<MobActionCall*> actions;
+        vector<ScriptActionCall*> actions;
         Bitmask8 settings;
         
         loadActions(mt, eventNode, &actions, &settings);
         
-        globalEvents.push_back(new MobEvent(eventNode, actions));
+        globalEvents.push_back(new ScriptEvent(eventNode, actions));
         globalEventSettings.push_back(settings);
         
         assertActions(actions, eventNode);
@@ -650,12 +649,12 @@ void loadState(
     
     //Insert global events into the state.
     for(size_t e = 0; e < globalEvents.size(); e++) {
-        MobEvent* globalEvent = globalEvents[e];
+        ScriptEvent* globalEvent = globalEvents[e];
         Bitmask8 globalSettings = globalEventSettings[e];
         
         bool merged = false;
         for(size_t ne = 0; ne < nEvents; ne++) {
-            MobEvent* evPtr = newEvents[ne];
+            ScriptEvent* evPtr = newEvents[ne];
             Bitmask8 evSettings = newEventSettings[ne];
             
             if(evPtr->type != globalEvent->type) continue;
@@ -681,12 +680,12 @@ void loadState(
     
     //Inject a damage event.
     if(!statePtr->events[MOB_EV_HITBOX_TOUCH_N_A]) {
-        vector<MobActionCall*> daActions;
+        vector<ScriptActionCall*> daActions;
         daActions.push_back(
-            new MobActionCall(GenMobFsm::beAttacked)
+            new ScriptActionCall(GenMobFsm::beAttacked)
         );
         newEvents.push_back(
-            new MobEvent(MOB_EV_HITBOX_TOUCH_N_A, daActions)
+            new ScriptEvent(MOB_EV_HITBOX_TOUCH_N_A, daActions)
         );
         newEventSettings.push_back(0);
     }
@@ -698,20 +697,20 @@ void loadState(
         !isInContainer(mt->statesIgnoringDeath, stateNode->name) &&
         !mt->dyingStateName.empty()
     ) {
-        vector<MobActionCall*> deActions;
-        deActions.push_back(new MobActionCall(GenMobFsm::goToDyingState));
-        newEvents.push_back(new MobEvent(MOB_EV_ZERO_HEALTH, deActions));
+        vector<ScriptActionCall*> deActions;
+        deActions.push_back(new ScriptActionCall(GenMobFsm::goToDyingState));
+        newEvents.push_back(new ScriptEvent(MOB_EV_ZERO_HEALTH, deActions));
         newEventSettings.push_back(0);
     }
     
     //Inject a bottomless pit event.
     if(!statePtr->events[MOB_EV_BOTTOMLESS_PIT]) {
-        vector<MobActionCall*> bpActions;
+        vector<ScriptActionCall*> bpActions;
         bpActions.push_back(
-            new MobActionCall(GenMobFsm::fallDownPit)
+            new ScriptActionCall(GenMobFsm::fallDownPit)
         );
         newEvents.push_back(
-            new MobEvent(MOB_EV_BOTTOMLESS_PIT, bpActions)
+            new ScriptEvent(MOB_EV_BOTTOMLESS_PIT, bpActions)
         );
         newEventSettings.push_back(0);
     }
@@ -721,12 +720,12 @@ void loadState(
         !statePtr->events[MOB_EV_TOUCHED_SPRAY] &&
         !isInContainer(mt->statesIgnoringSpray, stateNode->name)
     ) {
-        vector<MobActionCall*> sActions;
+        vector<ScriptActionCall*> sActions;
         sActions.push_back(
-            new MobActionCall(GenMobFsm::touchSpray)
+            new ScriptActionCall(GenMobFsm::touchSpray)
         );
         newEvents.push_back(
-            new MobEvent(MOB_EV_TOUCHED_SPRAY, sActions)
+            new ScriptEvent(MOB_EV_TOUCHED_SPRAY, sActions)
         );
         newEventSettings.push_back(0);
     }
@@ -736,19 +735,19 @@ void loadState(
         !statePtr->events[MOB_EV_TOUCHED_HAZARD] &&
         !isInContainer(mt->statesIgnoringHazard, stateNode->name)
     ) {
-        vector<MobActionCall*> hActions;
+        vector<ScriptActionCall*> hActions;
         hActions.push_back(
-            new MobActionCall(GenMobFsm::touchHazard)
+            new ScriptActionCall(GenMobFsm::touchHazard)
         );
         newEvents.push_back(
-            new MobEvent(MOB_EV_TOUCHED_HAZARD, hActions)
+            new ScriptEvent(MOB_EV_TOUCHED_HAZARD, hActions)
         );
         newEventSettings.push_back(0);
     }
     
     //Connect all new events to the state.
     for(size_t e = 0; e < newEvents.size(); e++) {
-        MOB_EV evType = newEvents[e]->type;
+        SCRIPT_EV evType = newEvents[e]->type;
         
         if(statePtr->events[evType]) {
             insertEventActions(
@@ -775,10 +774,10 @@ void loadState(
  */
 void unloadScript(MobType* mt) {
     for(size_t s = 0; s < mt->states.size(); s++) {
-        MobState* sPtr = mt->states[s];
+        ScriptState* sPtr = mt->states[s];
         
-        for(size_t e = 0; e < N_MOB_EVENTS; e++) {
-            MobEvent* ePtr = sPtr->events[e];
+        for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+            ScriptEvent* ePtr = sPtr->events[e];
             if(!ePtr) continue;
             
             for(size_t a = 0; a < ePtr->actions.size(); a++) {

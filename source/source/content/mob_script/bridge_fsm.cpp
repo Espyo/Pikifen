@@ -29,10 +29,10 @@
 void BridgeFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BRIDGE_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(BridgeFsm::setAnim);
         }
-        efc.newEvent(MOB_EV_ON_READY); {
+        efc.newEvent(SCRIPT_EV_ON_READY); {
             efc.run(BridgeFsm::setup);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
@@ -50,7 +50,7 @@ void BridgeFsm::createFsm(MobType* typ) {
     }
     efc.newState("creating_chunk", BRIDGE_STATE_CREATING_CHUNK); {
         //Sort of a dummy state for text file script enhancements.
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.changeState("idling");
         }
     }

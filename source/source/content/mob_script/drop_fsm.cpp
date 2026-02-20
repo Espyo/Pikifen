@@ -26,7 +26,7 @@
 void DropFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("falling", DROP_STATE_FALLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DropFsm::setFallingAnim);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -34,7 +34,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("landing", DROP_STATE_LANDING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DropFsm::land);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -42,7 +42,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("idling", DROP_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DropFsm::setIdlingAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -50,7 +50,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bumped", DROP_STATE_BUMPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DropFsm::setBumpedAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -146,7 +146,7 @@ void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
         
     }
     
-    MobEvent* ev = nullptr;
+    ScriptEvent* ev = nullptr;
     
     if(willDrink) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_DROP);

@@ -30,7 +30,7 @@ void ShipFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", SHIP_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ShipFsm::setAnim);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {

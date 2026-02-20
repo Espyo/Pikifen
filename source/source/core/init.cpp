@@ -1197,14 +1197,14 @@ void initMiscDatabases() {
 
 
 /**
- * @brief Initializes the list of mob actions.
+ * @brief Initializes the list of script actions.
  */
-void initMobActions() {
+void initScriptActions() {
 
 #define regParam(pName, pType, constant, extras) \
-    params.push_back(MobActionParam(pName, pType, constant, extras));
+    params.push_back(ScriptActionParam(pName, pType, constant, extras));
 #define regAction(aType, aName, runCode, loadCode) \
-    a = &(game.mobActions[aType]); \
+    a = &(game.scriptActions[aType]); \
     a->type = aType; \
     a->name = aName; \
     a->code = runCode; \
@@ -1213,21 +1213,21 @@ void initMobActions() {
     params.clear();
 
 
-    game.mobActions.assign(N_MOB_ACTIONS, MobAction());
-    vector<MobActionParam> params;
-    MobAction* a;
+    game.scriptActions.assign(N_SCRIPT_ACTIONS, ScriptAction());
+    vector<ScriptActionParam> params;
+    ScriptAction* a;
     
     //Unknown.
     regAction(
-        MOB_ACTION_UNKNOWN,
+        SCRIPT_ACTION_UNKNOWN,
         "unknown",
         nullptr,
         nullptr
     );
     
     //Absolute number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_ABSOLUTE_NUMBER,
         "absolute_number",
@@ -1236,7 +1236,7 @@ void initMobActions() {
     );
     
     //Add health.
-    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_ADD_HEALTH,
         "add_health",
@@ -1245,7 +1245,7 @@ void initMobActions() {
     );
     
     //Arachnorb plan logic.
-    regParam("goal", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
@@ -1254,10 +1254,10 @@ void initMobActions() {
     );
     
     //Calculate.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("left operand", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("right operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("left operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("right operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_CALCULATE,
         "calculate",
@@ -1266,8 +1266,8 @@ void initMobActions() {
     );
     
     //Ceil number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_CEIL_NUMBER,
         "ceil_number",
@@ -1292,9 +1292,9 @@ void initMobActions() {
     );
     
     //Ease number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("method", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("method", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_EASE_NUMBER,
         "ease_number",
@@ -1311,9 +1311,9 @@ void initMobActions() {
     );
     
     //Else if.
-    regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
-    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("value", MOB_ACTION_PARAM_STRING, false, true);
+    regParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
+    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_ELSE_IF,
         "else_if",
@@ -1338,8 +1338,8 @@ void initMobActions() {
     );
     
     //Floor number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_FLOOR_NUMBER,
         "floor_number",
@@ -1348,7 +1348,7 @@ void initMobActions() {
     );
     
     //Focus.
-    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_FOCUS,
         "focus",
@@ -1357,8 +1357,8 @@ void initMobActions() {
     );
     
     //Follow mob as a leader.
-    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("silent", MOB_ACTION_PARAM_BOOL, false, true);
+    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
     regAction(
         MOB_ACTION_FOLLOW_MOB_AS_LEADER,
         "follow_mob_as_leader",
@@ -1367,7 +1367,7 @@ void initMobActions() {
     );
     
     //Follow path randomly.
-    regParam("label", MOB_ACTION_PARAM_STRING, false, true);
+    regParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_FOLLOW_PATH_RANDOMLY,
         "follow_path_randomly",
@@ -1376,9 +1376,9 @@ void initMobActions() {
     );
     
     //Follow path to absolute.
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("label", MOB_ACTION_PARAM_STRING, false, true);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
         "follow_path_to_absolute",
@@ -1387,11 +1387,11 @@ void initMobActions() {
     );
     
     //Get angle.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("target x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("target y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_ANGLE,
         "get_angle",
@@ -1400,9 +1400,9 @@ void initMobActions() {
     );
     
     //Get angle clockwise difference.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("angle 1", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("angle 2", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_ANGLE_CW_DIFF,
         "get_angle_clockwise_difference",
@@ -1411,9 +1411,9 @@ void initMobActions() {
     );
     
     //Get angle smallest difference.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("angle 1", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("angle 2", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
         "get_angle_smallest_difference",
@@ -1422,8 +1422,8 @@ void initMobActions() {
     );
     
     //Get area info.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GET_AREA_INFO,
         "get_area_info",
@@ -1440,10 +1440,10 @@ void initMobActions() {
     );
     
     //Get coordinates from angle.
-    regParam("x destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("y destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("angle", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("distance", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
@@ -1452,11 +1452,11 @@ void initMobActions() {
     );
     
     //Get distance.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("target x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("target y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_DISTANCE,
         "get_distance",
@@ -1465,8 +1465,8 @@ void initMobActions() {
     );
     
     //Get event info.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GET_EVENT_INFO,
         "get_event_info",
@@ -1475,9 +1475,9 @@ void initMobActions() {
     );
     
     //Get floor Z.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_FLOOR_Z,
         "get_floor_z",
@@ -1486,8 +1486,8 @@ void initMobActions() {
     );
     
     //Get focus var.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
@@ -1496,9 +1496,9 @@ void initMobActions() {
     );
     
     //Get mob info.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("target", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("target", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GET_MOB_INFO,
         "get_mob_info",
@@ -1507,9 +1507,9 @@ void initMobActions() {
     );
     
     //Get random float.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("minimum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("maximum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
@@ -1518,9 +1518,9 @@ void initMobActions() {
     );
     
     //Get random int.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("minimum value", MOB_ACTION_PARAM_INT, false, false);
-    regParam("maximum value", MOB_ACTION_PARAM_INT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("minimum value", SCRIPT_ACTION_PARAM_INT, false, false);
+    regParam("maximum value", SCRIPT_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_GET_RANDOM_INT,
         "get_random_int",
@@ -1529,7 +1529,7 @@ void initMobActions() {
     );
     
     //Goto.
-    regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_GOTO,
         "goto",
@@ -1538,8 +1538,8 @@ void initMobActions() {
     );
     
     //Hold focused mob.
-    regParam("body part name", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("hold above", MOB_ACTION_PARAM_BOOL, false, true);
+    regParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
     regAction(
         MOB_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
@@ -1548,9 +1548,9 @@ void initMobActions() {
     );
     
     //If.
-    regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
-    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("value", MOB_ACTION_PARAM_STRING, false, true);
+    regParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
+    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_IF,
         "if",
@@ -1559,12 +1559,12 @@ void initMobActions() {
     );
     
     //Interpolate number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("input number", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("input start", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("input end", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("output start", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("output end", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("input number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("input start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("input end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("output start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("output end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_INTERPOLATE_NUMBER,
         "interpolate_number",
@@ -1573,7 +1573,7 @@ void initMobActions() {
     );
     
     //Label.
-    regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_LABEL,
         "label",
@@ -1590,7 +1590,7 @@ void initMobActions() {
     );
     
     //Load focused mob memory.
-    regParam("slot", MOB_ACTION_PARAM_INT, false, false);
+    regParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
@@ -1599,9 +1599,9 @@ void initMobActions() {
     );
     
     //Move to absolute.
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     regAction(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
@@ -1610,9 +1610,9 @@ void initMobActions() {
     );
     
     //Move to relative.
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     regAction(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
@@ -1621,7 +1621,7 @@ void initMobActions() {
     );
     
     //Move to target.
-    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_MOVE_TO_TARGET,
         "move_to_target",
@@ -1638,9 +1638,9 @@ void initMobActions() {
     );
     
     //Play sound.
-    regParam("sound data", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("sound data", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regParam(
-        "sound ID destination var name", MOB_ACTION_PARAM_STRING, true, true
+        "sound ID destination var name", SCRIPT_ACTION_PARAM_STRING, true, true
     );
     regAction(
         MOB_ACTION_PLAY_SOUND,
@@ -1650,7 +1650,7 @@ void initMobActions() {
     );
     
     //Print.
-    regParam("text", MOB_ACTION_PARAM_STRING, false, true);
+    regParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_PRINT,
         "print",
@@ -1659,7 +1659,7 @@ void initMobActions() {
     );
     
     //Receive status.
-    regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -1684,7 +1684,7 @@ void initMobActions() {
     );
     
     //Remove status.
-    regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_REMOVE_STATUS,
         "remove_status",
@@ -1693,8 +1693,8 @@ void initMobActions() {
     );
     
     //Round number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_ROUND_NUMBER,
         "round_number",
@@ -1703,7 +1703,7 @@ void initMobActions() {
     );
     
     //Save focused mob memory.
-    regParam("slot", MOB_ACTION_PARAM_INT, false, false);
+    regParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
@@ -1712,7 +1712,7 @@ void initMobActions() {
     );
     
     //Send message to focus.
-    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
         "send_message_to_focus",
@@ -1721,7 +1721,7 @@ void initMobActions() {
     );
     
     //Send message to links.
-    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
@@ -1730,8 +1730,8 @@ void initMobActions() {
     );
     
     //Send message to nearby.
-    regParam("distance", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
@@ -1740,8 +1740,8 @@ void initMobActions() {
     );
     
     //Set animation.
-    regParam("animation name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
+    regParam("animation name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
     regAction(
         MOB_ACTION_SET_ANIMATION,
         "set_animation",
@@ -1750,7 +1750,7 @@ void initMobActions() {
     );
     
     //Set can block paths.
-    regParam("blocks", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("blocks", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
@@ -1759,7 +1759,7 @@ void initMobActions() {
     );
     
     //Set far reach.
-    regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_FAR_REACH,
         "set_far_reach",
@@ -1768,7 +1768,7 @@ void initMobActions() {
     );
     
     //Set flying.
-    regParam("flying", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("flying", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_FLYING,
         "set_flying",
@@ -1779,9 +1779,9 @@ void initMobActions() {
     //Set focus var.
     regParam(
         "focused mob's destination var name",
-        MOB_ACTION_PARAM_STRING, false, false
+        SCRIPT_ACTION_PARAM_STRING, false, false
     );
-    regParam("value", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SET_FOCUS_VAR,
         "set_focus_var",
@@ -1790,7 +1790,7 @@ void initMobActions() {
     );
     
     //Set gravity.
-    regParam("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("multiplier", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_GRAVITY,
         "set_gravity",
@@ -1799,7 +1799,7 @@ void initMobActions() {
     );
     
     //Set health.
-    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_HEALTH,
         "set_health",
@@ -1808,7 +1808,7 @@ void initMobActions() {
     );
     
     //Set height.
-    regParam("height", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_HEIGHT,
         "set_height",
@@ -1817,7 +1817,7 @@ void initMobActions() {
     );
     
     //Set hiding.
-    regParam("hiding", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("hiding", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_HIDING,
         "set_hiding",
@@ -1826,7 +1826,7 @@ void initMobActions() {
     );
     
     //Set huntable.
-    regParam("huntable", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("huntable", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_HUNTABLE,
         "set_huntable",
@@ -1835,7 +1835,7 @@ void initMobActions() {
     );
     
     //Set holdable.
-    regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
+    regParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
     regAction(
         MOB_ACTION_SET_HOLDABLE,
         "set_holdable",
@@ -1844,7 +1844,7 @@ void initMobActions() {
     );
     
     //Set limb animation.
-    regParam("animation name", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("animation name", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
@@ -1853,7 +1853,7 @@ void initMobActions() {
     );
     
     //Set near reach.
-    regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_NEAR_REACH,
         "set_near_reach",
@@ -1862,7 +1862,7 @@ void initMobActions() {
     );
     
     //Set radius.
-    regParam("radius", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("radius", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_RADIUS,
         "set_radius",
@@ -1871,8 +1871,8 @@ void initMobActions() {
     );
     
     //Set sector scroll.
-    regParam("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("x speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
@@ -1881,7 +1881,7 @@ void initMobActions() {
     );
     
     //Set shadow visibility.
-    regParam("visible", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("visible", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
@@ -1890,7 +1890,7 @@ void initMobActions() {
     );
     
     //Set state.
-    regParam("state name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_SET_STATE,
         "set_state",
@@ -1899,7 +1899,7 @@ void initMobActions() {
     );
     
     //Set tangible.
-    regParam("tangible", MOB_ACTION_PARAM_BOOL, false, false);
+    regParam("tangible", SCRIPT_ACTION_PARAM_BOOL, false, false);
     regAction(
         MOB_ACTION_SET_TANGIBLE,
         "set_tangible",
@@ -1908,7 +1908,7 @@ void initMobActions() {
     );
     
     //Set team.
-    regParam("team name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("team name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SET_TEAM,
         "set_team",
@@ -1917,7 +1917,7 @@ void initMobActions() {
     );
     
     //Set timer.
-    regParam("time", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SET_TIMER,
         "set_timer",
@@ -1926,8 +1926,8 @@ void initMobActions() {
     );
     
     //Set var.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("value", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
     regAction(
         MOB_ACTION_SET_VAR,
         "set_var",
@@ -1936,7 +1936,7 @@ void initMobActions() {
     );
     
     //Shake camera.
-    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SHAKE_CAMERA,
         "shake_camera",
@@ -1945,7 +1945,7 @@ void initMobActions() {
     );
     
     //Show message from var.
-    regParam("var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     regAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
@@ -1954,8 +1954,8 @@ void initMobActions() {
     );
     
     //Square root number.
-    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    regParam("number", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_SQUARE_ROOT_NUMBER,
         "square_root_number",
@@ -1964,7 +1964,7 @@ void initMobActions() {
     );
     
     //Spawn.
-    regParam("spawn data", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("spawn data", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_SPAWN,
         "spawn",
@@ -1973,8 +1973,8 @@ void initMobActions() {
     );
     
     //Stabilize Z.
-    regParam("reference", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("offset", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("reference", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("offset", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_STABILIZE_Z,
         "stabilize_z",
@@ -1983,9 +1983,9 @@ void initMobActions() {
     );
     
     //Start chomping.
-    regParam("victim max", MOB_ACTION_PARAM_INT, false, false);
-    regParam("body part", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("more body parts", MOB_ACTION_PARAM_ENUM, true, true);
+    regParam("victim max", SCRIPT_ACTION_PARAM_INT, false, false);
+    regParam("body part", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("more body parts", SCRIPT_ACTION_PARAM_ENUM, true, true);
     regAction(
         MOB_ACTION_START_CHOMPING,
         "start_chomping",
@@ -2010,8 +2010,8 @@ void initMobActions() {
     );
     
     //Start particles.
-    regParam("generator name", MOB_ACTION_PARAM_ENUM, true, false);
-    regParam("offset coordinates", MOB_ACTION_PARAM_FLOAT, false, true);
+    regParam("generator name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    regParam("offset coordinates", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     regAction(
         MOB_ACTION_START_PARTICLES,
         "start_particles",
@@ -2052,7 +2052,7 @@ void initMobActions() {
     );
     
     //Stop sound.
-    regParam("sound ID", MOB_ACTION_PARAM_INT, false, false);
+    regParam("sound ID", SCRIPT_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_STOP_SOUND,
         "stop_sound",
@@ -2077,7 +2077,7 @@ void initMobActions() {
     );
     
     //Swallow.
-    regParam("amount", MOB_ACTION_PARAM_INT, false, false);
+    regParam("amount", SCRIPT_ACTION_PARAM_INT, false, false);
     regAction(
         MOB_ACTION_SWALLOW,
         "swallow",
@@ -2094,9 +2094,9 @@ void initMobActions() {
     );
     
     //Teleport to absolute.
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
@@ -2105,9 +2105,9 @@ void initMobActions() {
     );
     
     //Teleport to relative.
-    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
@@ -2116,10 +2116,10 @@ void initMobActions() {
     );
     
     //Throw focused mob.
-    regParam("x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("z coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("max height", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("z coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("max height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     regAction(
         MOB_ACTION_THROW_FOCUS,
         "throw_focused_mob",
@@ -2128,8 +2128,8 @@ void initMobActions() {
     );
     
     //Turn to absolute.
-    regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
+    regParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     regAction(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
@@ -2138,8 +2138,8 @@ void initMobActions() {
     );
     
     //Turn to relative.
-    regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
+    regParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     regAction(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
@@ -2148,7 +2148,7 @@ void initMobActions() {
     );
     
     //Turn to target.
-    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     regAction(
         MOB_ACTION_TURN_TO_TARGET,
         "turn_to_target",

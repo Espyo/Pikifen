@@ -27,7 +27,7 @@
 void TrackFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", TRACK_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(TrackFsm::spawn);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -63,7 +63,7 @@ void TrackFsm::onTouched(Mob* m, void* info1, void* info2) {
     Track* traPtr = (Track*) m;
     Mob* toucher = (Mob*) info1;
     
-    MobEvent* ev = nullptr;
+    ScriptEvent* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(

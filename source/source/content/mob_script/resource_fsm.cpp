@@ -29,7 +29,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", RESOURCE_STATE_IDLE_WAITING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }
@@ -52,7 +52,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_moving", RESOURCE_STATE_IDLE_MOVING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ResourceFsm::handleStartMoving);
             efc.run(GenMobFsm::carryBeginMove);
         }
@@ -89,7 +89,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_stuck", RESOURCE_STATE_IDLE_STUCK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -124,7 +124,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("being_delivered", RESOURCE_STATE_BEING_DELIVERED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ResourceFsm::startBeingDelivered);
             efc.run(GenMobFsm::startBeingDelivered);
         }
@@ -137,7 +137,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     efc.newState(
         "staying_after_delivery", RESOURCE_STATE_STAYING_AFTER_DELIVERY
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }

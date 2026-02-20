@@ -25,7 +25,7 @@ void initEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
 void initInventoryItems();
 void initMisc();
 void initMiscDatabases();
-void initMobActions();
+void initScriptActions();
 void initMobCategories();
 
 void destroyAllegro();

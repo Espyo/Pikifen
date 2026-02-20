@@ -5,8 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the mob script action classes and
- * related functions.
+ * Header for the all script action classes and related functions.
  */
 
 
@@ -20,10 +19,10 @@
 
 
 //Types of script action.
-enum MOB_ACTION {
+enum SCRIPT_ACTION {
 
     //Unknown.
-    MOB_ACTION_UNKNOWN,
+    SCRIPT_ACTION_UNKNOWN,
     
     //Get the absolute value of a float number.
     MOB_ACTION_ABSOLUTE_NUMBER,
@@ -316,8 +315,8 @@ enum MOB_ACTION {
     //Turn towards a target.
     MOB_ACTION_TURN_TO_TARGET,
     
-    //Total amount of mob actions.
-    N_MOB_ACTIONS,
+    //Total amount of script actions.
+    N_SCRIPT_ACTIONS,
     
 };
 
@@ -668,22 +667,22 @@ buildEnumNames(mobActionStabilizeZTypeINames, MOB_ACTION_STABILIZE_Z_TYPE)({
 
 
 //Types of variables that a parameter can use.
-enum MOB_ACTION_PARAM {
+enum SCRIPT_ACTION_PARAM {
 
     //Signed integer.
-    MOB_ACTION_PARAM_INT,
+    SCRIPT_ACTION_PARAM_INT,
     
     //Float.
-    MOB_ACTION_PARAM_FLOAT,
+    SCRIPT_ACTION_PARAM_FLOAT,
     
     //Boolean.
-    MOB_ACTION_PARAM_BOOL,
+    SCRIPT_ACTION_PARAM_BOOL,
     
     //STL string.
-    MOB_ACTION_PARAM_STRING,
+    SCRIPT_ACTION_PARAM_STRING,
     
     //STL string that gets turned into an int.
-    MOB_ACTION_PARAM_ENUM,
+    SCRIPT_ACTION_PARAM_ENUM,
     
 };
 
@@ -693,9 +692,9 @@ enum MOB_ACTION_PARAM {
 
 
 /**
- * @brief Info about a parameter that a mob action can receive.
+ * @brief Info about a parameter that a script action can receive.
  */
-struct MobActionParam {
+struct ScriptActionParam {
 
     //--- Public members ---
     
@@ -703,7 +702,7 @@ struct MobActionParam {
     string name;
     
     //Type of variable it's meant to hold.
-    MOB_ACTION_PARAM type = MOB_ACTION_PARAM_STRING;
+    SCRIPT_ACTION_PARAM type = SCRIPT_ACTION_PARAM_STRING;
     
     //If true, it must be a constant value. Else, it can also be a var.
     bool forceConst = false;
@@ -714,8 +713,8 @@ struct MobActionParam {
     
     //--- Public function declarations ---
     
-    MobActionParam(
-        const string& name, const MOB_ACTION_PARAM type,
+    ScriptActionParam(
+        const string& name, const SCRIPT_ACTION_PARAM type,
         bool forceConst, bool isExtras
     );
     
@@ -723,9 +722,9 @@ struct MobActionParam {
 
 
 /**
- * @brief Info about how to run a specific instance of a mob action.
+ * @brief Info about how to run a specific instance of a script action.
  */
-struct MobActionRunData {
+struct ScriptActionRunData {
 
     //--- Public members ---
     
@@ -733,7 +732,7 @@ struct MobActionRunData {
     Mob* m = nullptr;
     
     //Action call information.
-    MobActionCall* call = nullptr;
+    ScriptActionCall* call = nullptr;
     
     //Arguments used.
     vector<string> args;
@@ -750,62 +749,62 @@ struct MobActionRunData {
     
     //--- Public function declarations ---
     
-    MobActionRunData(Mob* m, MobActionCall* call);
+    ScriptActionRunData(Mob* m, ScriptActionCall* call);
     
 };
 
 
 /**
- * @brief Function that runs a mob action's logic.
+ * @brief Function that runs a script action's logic.
  *
  * The first parameter is the data to run with.
  */
-typedef void (MobActionCode)(MobActionRunData& data);
+typedef void (ScriptActionCode)(ScriptActionRunData& data);
 
 /**
- * @brief Function to run when a mob action is loaded from a script.
+ * @brief Function to run when a script action is loaded from a script.
  *
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
-typedef bool (MobActionLoadCode)(MobActionCall& call);
+typedef bool (ScriptActionLoadCode)(ScriptActionCall& call);
 
 
 /**
- * @brief Info about a mob action.
+ * @brief Info about a script action.
  */
-struct MobAction {
+struct ScriptAction {
 
     //--- Public members ---
     
-    //Type of mob action.
-    MOB_ACTION type = MOB_ACTION_UNKNOWN;
+    //Type of script action.
+    SCRIPT_ACTION type = SCRIPT_ACTION_UNKNOWN;
     
     //Name.
     string name;
     
     //Code to run.
-    MobActionCode* code = nullptr;
+    ScriptActionCode* code = nullptr;
     
     //Extra logic to run when this action is loaded from a script file.
-    MobActionLoadCode* extraLoadLogic = nullptr;
+    ScriptActionLoadCode* extraLoadLogic = nullptr;
     
     //Parameters that it can take.
-    vector<MobActionParam> parameters;
+    vector<ScriptActionParam> parameters;
     
 };
 
 
 /**
- * @brief Info about how a specific call to a mob action got declared
+ * @brief Info about how a specific call to a script action got declared
  * in the FSM.
  */
-struct MobActionCall {
+struct ScriptActionCall {
 
     //--- Public members ---
     
     //Action to run, if any.
-    MobAction* action = nullptr;
+    ScriptAction* action = nullptr;
     
     //Custom code to run, if any.
     CustomActionCode code = nullptr;
@@ -820,7 +819,7 @@ struct MobActionCall {
     string customError;
     
     //Event the action belongs to.
-    MOB_EV parentEvent = MOB_EV_UNKNOWN;
+    SCRIPT_EV parentEvent = SCRIPT_EV_UNKNOWN;
     
     //Mob type that owns these calls.
     MobType* mt = nullptr;
@@ -828,8 +827,8 @@ struct MobActionCall {
     
     //--- Public function declarations ---
     
-    explicit MobActionCall(MOB_ACTION type = MOB_ACTION_UNKNOWN);
-    explicit MobActionCall(CustomActionCode code);
+    explicit ScriptActionCall(SCRIPT_ACTION type = SCRIPT_ACTION_UNKNOWN);
+    explicit ScriptActionCall(CustomActionCode code);
     bool loadFromDataNode(DataNode* dn, MobType* mt);
     bool run(Mob* m, void* customData1, void* customData2);
     
@@ -841,129 +840,129 @@ struct MobActionCall {
 
 
 namespace MobActionRunners {
-void absoluteNumber(MobActionRunData& data);
-void addHealth(MobActionRunData& data);
-void arachnorbPlanLogic(MobActionRunData& data);
-void calculate(MobActionRunData& data);
-void ceilNumber(MobActionRunData& data);
-void deleteFunction(MobActionRunData& data);
-void drainLiquid(MobActionRunData& data);
-void easeNumber(MobActionRunData& data);
-void finishDying(MobActionRunData& data);
-void floorNumber(MobActionRunData& data);
-void focus(MobActionRunData& data);
-void followMobAsLeader(MobActionRunData& data);
-void followPathRandomly(MobActionRunData& data);
-void followPathToAbsolute(MobActionRunData& data);
-void getAngle(MobActionRunData& data);
-void getAngleCwDiff(MobActionRunData& data);
-void getAngleSmallestDiff(MobActionRunData& data);
-void getChomped(MobActionRunData& data);
-void getCoordinatesFromAngle(MobActionRunData& data);
-void getDistance(MobActionRunData& data);
-void getEventInfo(MobActionRunData& data);
-void getAreaInfo(MobActionRunData& data);
-void getFloorZ(MobActionRunData& data);
-void getMobInfo(MobActionRunData& data);
-void getFocusVar(MobActionRunData& data);
-void getRandomFloat(MobActionRunData& data);
-void getRandomInt(MobActionRunData& data);
-void holdFocus(MobActionRunData& data);
-void ifFunction(MobActionRunData& data);
-void interpolateNumber(MobActionRunData& data);
-void linkWithFocus(MobActionRunData& data);
-void loadFocusMemory(MobActionRunData& data);
-void moveToAbsolute(MobActionRunData& data);
-void moveToRelative(MobActionRunData& data);
-void moveToTarget(MobActionRunData& data);
-void orderRelease(MobActionRunData& data);
-void playSound(MobActionRunData& data);
-void print(MobActionRunData& data);
-void receiveStatus(MobActionRunData& data);
-void release(MobActionRunData& data);
-void releaseStoredMobs(MobActionRunData& data);
-void removeStatus(MobActionRunData& data);
-void roundNumber(MobActionRunData& data);
-void saveFocusMemory(MobActionRunData& data);
-void sendMessageToFocus(MobActionRunData& data);
-void sendMessageToLinks(MobActionRunData& data);
-void sendMessageToNearby(MobActionRunData& data);
-void setAnimation(MobActionRunData& data);
-void setCanBlockPaths(MobActionRunData& data);
-void setFarReach(MobActionRunData& data);
-void setFlying(MobActionRunData& data);
-void setFocusVar(MobActionRunData& data);
-void setGravity(MobActionRunData& data);
-void setHealth(MobActionRunData& data);
-void setHeight(MobActionRunData& data);
-void setHiding(MobActionRunData& data);
-void setHoldable(MobActionRunData& data);
-void setHuntable(MobActionRunData& data);
-void setLimbAnimation(MobActionRunData& data);
-void setNearReach(MobActionRunData& data);
-void setRadius(MobActionRunData& data);
-void setState(MobActionRunData& data);
-void setSectorScroll(MobActionRunData& data);
-void setShadowVisibility(MobActionRunData& data);
-void setTangible(MobActionRunData& data);
-void setTeam(MobActionRunData& data);
-void setTimer(MobActionRunData& data);
-void setVar(MobActionRunData& data);
-void shakeCamera(MobActionRunData& data);
-void showMessageFromVar(MobActionRunData& data);
-void spawn(MobActionRunData& data);
-void squareRootNumber(MobActionRunData& data);
-void stabilizeZ(MobActionRunData& data);
-void startChomping(MobActionRunData& data);
-void startDying(MobActionRunData& data);
-void startHeightEffect(MobActionRunData& data);
-void startParticles(MobActionRunData& data);
-void stop(MobActionRunData& data);
-void stopChomping(MobActionRunData& data);
-void stopHeightEffect(MobActionRunData& data);
-void stopParticles(MobActionRunData& data);
-void stopSound(MobActionRunData& data);
-void stopVertically(MobActionRunData& data);
-void storeFocusInside(MobActionRunData& data);
-void swallow(MobActionRunData& data);
-void swallowAll(MobActionRunData& data);
-void teleportToAbsolute(MobActionRunData& data);
-void teleportToRelative(MobActionRunData& data);
-void throwFocus(MobActionRunData& data);
-void turnToAbsolute(MobActionRunData& data);
-void turnToRelative(MobActionRunData& data);
-void turnToTarget(MobActionRunData& data);
+void absoluteNumber(ScriptActionRunData& data);
+void addHealth(ScriptActionRunData& data);
+void arachnorbPlanLogic(ScriptActionRunData& data);
+void calculate(ScriptActionRunData& data);
+void ceilNumber(ScriptActionRunData& data);
+void deleteFunction(ScriptActionRunData& data);
+void drainLiquid(ScriptActionRunData& data);
+void easeNumber(ScriptActionRunData& data);
+void finishDying(ScriptActionRunData& data);
+void floorNumber(ScriptActionRunData& data);
+void focus(ScriptActionRunData& data);
+void followMobAsLeader(ScriptActionRunData& data);
+void followPathRandomly(ScriptActionRunData& data);
+void followPathToAbsolute(ScriptActionRunData& data);
+void getAngle(ScriptActionRunData& data);
+void getAngleCwDiff(ScriptActionRunData& data);
+void getAngleSmallestDiff(ScriptActionRunData& data);
+void getChomped(ScriptActionRunData& data);
+void getCoordinatesFromAngle(ScriptActionRunData& data);
+void getDistance(ScriptActionRunData& data);
+void getEventInfo(ScriptActionRunData& data);
+void getAreaInfo(ScriptActionRunData& data);
+void getFloorZ(ScriptActionRunData& data);
+void getMobInfo(ScriptActionRunData& data);
+void getFocusVar(ScriptActionRunData& data);
+void getRandomFloat(ScriptActionRunData& data);
+void getRandomInt(ScriptActionRunData& data);
+void holdFocus(ScriptActionRunData& data);
+void ifFunction(ScriptActionRunData& data);
+void interpolateNumber(ScriptActionRunData& data);
+void linkWithFocus(ScriptActionRunData& data);
+void loadFocusMemory(ScriptActionRunData& data);
+void moveToAbsolute(ScriptActionRunData& data);
+void moveToRelative(ScriptActionRunData& data);
+void moveToTarget(ScriptActionRunData& data);
+void orderRelease(ScriptActionRunData& data);
+void playSound(ScriptActionRunData& data);
+void print(ScriptActionRunData& data);
+void receiveStatus(ScriptActionRunData& data);
+void release(ScriptActionRunData& data);
+void releaseStoredMobs(ScriptActionRunData& data);
+void removeStatus(ScriptActionRunData& data);
+void roundNumber(ScriptActionRunData& data);
+void saveFocusMemory(ScriptActionRunData& data);
+void sendMessageToFocus(ScriptActionRunData& data);
+void sendMessageToLinks(ScriptActionRunData& data);
+void sendMessageToNearby(ScriptActionRunData& data);
+void setAnimation(ScriptActionRunData& data);
+void setCanBlockPaths(ScriptActionRunData& data);
+void setFarReach(ScriptActionRunData& data);
+void setFlying(ScriptActionRunData& data);
+void setFocusVar(ScriptActionRunData& data);
+void setGravity(ScriptActionRunData& data);
+void setHealth(ScriptActionRunData& data);
+void setHeight(ScriptActionRunData& data);
+void setHiding(ScriptActionRunData& data);
+void setHoldable(ScriptActionRunData& data);
+void setHuntable(ScriptActionRunData& data);
+void setLimbAnimation(ScriptActionRunData& data);
+void setNearReach(ScriptActionRunData& data);
+void setRadius(ScriptActionRunData& data);
+void setState(ScriptActionRunData& data);
+void setSectorScroll(ScriptActionRunData& data);
+void setShadowVisibility(ScriptActionRunData& data);
+void setTangible(ScriptActionRunData& data);
+void setTeam(ScriptActionRunData& data);
+void setTimer(ScriptActionRunData& data);
+void setVar(ScriptActionRunData& data);
+void shakeCamera(ScriptActionRunData& data);
+void showMessageFromVar(ScriptActionRunData& data);
+void spawn(ScriptActionRunData& data);
+void squareRootNumber(ScriptActionRunData& data);
+void stabilizeZ(ScriptActionRunData& data);
+void startChomping(ScriptActionRunData& data);
+void startDying(ScriptActionRunData& data);
+void startHeightEffect(ScriptActionRunData& data);
+void startParticles(ScriptActionRunData& data);
+void stop(ScriptActionRunData& data);
+void stopChomping(ScriptActionRunData& data);
+void stopHeightEffect(ScriptActionRunData& data);
+void stopParticles(ScriptActionRunData& data);
+void stopSound(ScriptActionRunData& data);
+void stopVertically(ScriptActionRunData& data);
+void storeFocusInside(ScriptActionRunData& data);
+void swallow(ScriptActionRunData& data);
+void swallowAll(ScriptActionRunData& data);
+void teleportToAbsolute(ScriptActionRunData& data);
+void teleportToRelative(ScriptActionRunData& data);
+void throwFocus(ScriptActionRunData& data);
+void turnToAbsolute(ScriptActionRunData& data);
+void turnToRelative(ScriptActionRunData& data);
+void turnToTarget(ScriptActionRunData& data);
 };
 
 
 namespace MobActionLoaders {
-bool arachnorbPlanLogic(MobActionCall& call);
-bool calculate(MobActionCall& call);
-bool easeNumber(MobActionCall& call);
-bool focus(MobActionCall& call);
-bool followMobAsLeader(MobActionCall& call);
-bool getAreaInfo(MobActionCall& call);
-bool getEventInfo(MobActionCall& call);
-bool getMobInfo(MobActionCall& call);
-bool holdFocus(MobActionCall& call);
-bool ifFunction(MobActionCall& call);
-bool moveToTarget(MobActionCall& call);
-bool playSound(MobActionCall& call);
-bool receiveStatus(MobActionCall& call);
-bool removeStatus(MobActionCall& call);
-bool setAnimation(MobActionCall& call);
-bool setFarReach(MobActionCall& call);
-bool setHoldable(MobActionCall& call);
-bool setNearReach(MobActionCall& call);
-bool setTeam(MobActionCall& call);
-bool spawn(MobActionCall& call);
-bool stabilizeZ(MobActionCall& call);
-bool startChomping(MobActionCall& call);
-bool startParticles(MobActionCall& call);
-bool turnToTarget(MobActionCall& call);
+bool arachnorbPlanLogic(ScriptActionCall& call);
+bool calculate(ScriptActionCall& call);
+bool easeNumber(ScriptActionCall& call);
+bool focus(ScriptActionCall& call);
+bool followMobAsLeader(ScriptActionCall& call);
+bool getAreaInfo(ScriptActionCall& call);
+bool getEventInfo(ScriptActionCall& call);
+bool getMobInfo(ScriptActionCall& call);
+bool holdFocus(ScriptActionCall& call);
+bool ifFunction(ScriptActionCall& call);
+bool moveToTarget(ScriptActionCall& call);
+bool playSound(ScriptActionCall& call);
+bool receiveStatus(ScriptActionCall& call);
+bool removeStatus(ScriptActionCall& call);
+bool setAnimation(ScriptActionCall& call);
+bool setFarReach(ScriptActionCall& call);
+bool setHoldable(ScriptActionCall& call);
+bool setNearReach(ScriptActionCall& call);
+bool setTeam(ScriptActionCall& call);
+bool spawn(ScriptActionCall& call);
+bool stabilizeZ(ScriptActionCall& call);
+bool startChomping(ScriptActionCall& call);
+bool startParticles(ScriptActionCall& call);
+bool turnToTarget(ScriptActionCall& call);
 
-void reportEnumError(MobActionCall& call, size_t argIdx);
-bool loadMobTargetType(MobActionCall& call, size_t argIdx);
+void reportEnumError(ScriptActionCall& call, size_t argIdx);
+bool loadMobTargetType(ScriptActionCall& call, size_t argIdx);
 };
 
 
@@ -972,18 +971,18 @@ bool loadMobTargetType(MobActionCall& call, size_t argIdx);
 
 
 bool assertActions(
-    const vector<MobActionCall*>& actions, const DataNode* dn
+    const vector<ScriptActionCall*>& actions, const DataNode* dn
 );
-Mob* getTriggerMob(MobActionRunData& data);
+Mob* getTriggerMob(ScriptActionRunData& data);
 Mob* getTargetMob(
-    MobActionRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
+    ScriptActionRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
 );
 void insertEventActions(
-    MobEvent* ev, const vector<MobActionCall*>& actions, bool atEnd
+    ScriptEvent* ev, const vector<ScriptActionCall*>& actions, bool atEnd
 );
 void loadActions(
     MobType* mt, DataNode* node,
-    vector<MobActionCall*>* outActions, Bitmask8* outSettings = 0
+    vector<ScriptActionCall*>* outActions, Bitmask8* outSettings = 0
 );
 
 

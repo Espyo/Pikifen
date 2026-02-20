@@ -37,7 +37,7 @@
 void PikminFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("seed", PIKMIN_STATE_SEED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::becomeSprout);
             efc.run(PikminFsm::startSeedParticles);
         }
@@ -48,7 +48,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("sprout", PIKMIN_STATE_SPROUT); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::becomeSprout);
             efc.run(PikminFsm::sproutScheduleEvol);
@@ -63,7 +63,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("plucking", PIKMIN_STATE_PLUCKING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::beginPluck);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -72,10 +72,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("plucking_thrown", PIKMIN_STATE_PLUCKING_THROWN); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::beThrownAfterPluck);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -93,25 +93,25 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("leaving_onion", PIKMIN_STATE_LEAVING_ONION); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::leaveOnion);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::tickTrackRide);
         }
     }
     
     efc.newState("entering_onion", PIKMIN_STATE_ENTERING_ONION); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::enterOnion);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::tickEnteringOnion);
         }
     }
     
     efc.newState("in_group_chasing", PIKMIN_STATE_IN_GROUP_CHASING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startChasingLeader);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -168,10 +168,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_group_stopped", PIKMIN_STATE_IN_GROUP_STOPPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::stopInGroup);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::clearBoredomData);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -224,14 +224,14 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("swarm_chasing", PIKMIN_STATE_SWARM_CHASING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::setSwarmReach);
             efc.run(PikminFsm::startChasingLeader);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::setIdleTaskReach);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::updateInGroupChasing);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -297,11 +297,11 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("swarm_stopped", PIKMIN_STATE_SWARM_STOPPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::setSwarmReach);
             efc.run(PikminFsm::stopInGroup);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::setIdleTaskReach);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -399,7 +399,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("thrown", PIKMIN_STATE_THROWN); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -438,7 +438,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("mob_landing", PIKMIN_STATE_MOB_LANDING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startMobLanding);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -473,10 +473,10 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_WHISTLED); {
             efc.changeState("called");
         }
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::goingToDismissSpot);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::clearTimer);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
@@ -538,10 +538,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idling", PIKMIN_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::becomeIdle);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::clearBoredomData);
             efc.run(PikminFsm::stopBeingIdle);
         }
@@ -607,7 +607,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("called", PIKMIN_STATE_CALLED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::called);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -679,7 +679,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("circling_opponent", PIKMIN_STATE_CIRCLING_OPPONENT); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::circleOpponent);
         }
         efc.newEvent(MOB_EV_TIMER); {
@@ -723,7 +723,7 @@ void PikminFsm::createFsm(MobType* typ) {
     efc.newState(
         "going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::goToCarriableObject);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
@@ -861,7 +861,7 @@ void PikminFsm::createFsm(MobType* typ) {
     efc.newState(
         "going_to_onion", PIKMIN_STATE_GOING_TO_ONION
     ); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::goToOnion);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
@@ -897,7 +897,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("sighing", PIKMIN_STATE_SIGHING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::sigh);
         }
@@ -934,11 +934,11 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("carrying", PIKMIN_STATE_CARRYING); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::stopCarrying);
             efc.run(PikminFsm::standStill);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::tickCarrying);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -977,7 +977,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("picking_up", PIKMIN_STATE_PICKING_UP); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startPickingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -993,13 +993,13 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("on_group_task", PIKMIN_STATE_ON_GROUP_TASK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::workOnGroupTask);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::tickGroupTaskWork);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::forgetGroupTask);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1038,10 +1038,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("returning", PIKMIN_STATE_RETURNING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startReturning);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::standStill);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1077,7 +1077,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("attacking_grounded", PIKMIN_STATE_ATTACKING_GROUNDED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::prepareToAttack);
         }
         efc.newEvent(MOB_EV_FOCUS_OFF_REACH); {
@@ -1116,10 +1116,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("attacking_latched", PIKMIN_STATE_ATTACKING_LATCHED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::prepareToAttack);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::unlatch);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1159,7 +1159,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("grabbed_by_enemy", PIKMIN_STATE_GRABBED_BY_ENEMY); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::beGrabbedByEnemy);
         }
         efc.newEvent(MOB_EV_RELEASED); {
@@ -1173,7 +1173,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1198,7 +1198,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("knocked_down", PIKMIN_STATE_KNOCKED_DOWN); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::getKnockedDown);
         }
@@ -1235,7 +1235,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("getting_up", PIKMIN_STATE_GETTING_UP); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startGettingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1271,7 +1271,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("impact_bounce", PIKMIN_STATE_IMPACT_BOUNCE); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::doImpactBounce);
         }
@@ -1296,7 +1296,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("impact_lunge", PIKMIN_STATE_IMPACT_LUNGE); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startImpactLunge);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1326,7 +1326,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("helpless", PIKMIN_STATE_HELPLESS); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::notifyLeaderRelease);
             efc.run(PikminFsm::beReleased);
             efc.run(PikminFsm::releaseTool);
@@ -1351,7 +1351,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("flailing", PIKMIN_STATE_FLAILING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::notifyLeaderRelease);
             efc.run(PikminFsm::beReleased);
@@ -1382,7 +1382,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("panicking", PIKMIN_STATE_PANICKING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::unlatch);
             efc.run(PikminFsm::notifyLeaderRelease);
@@ -1411,10 +1411,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("drinking", PIKMIN_STATE_DRINKING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startDrinking);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::finishDrinking);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1444,7 +1444,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("celebrating", PIKMIN_STATE_CELEBRATING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::celebrate);
         }
@@ -1481,7 +1481,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_group_chasing_h", PIKMIN_STATE_IN_GROUP_CHASING_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startChasingLeader);
         }
         efc.newEvent(MOB_EV_RELEASE_ORDER); {
@@ -1536,7 +1536,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_group_stopped_h", PIKMIN_STATE_IN_GROUP_STOPPED_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::stopInGroup);
         }
         efc.newEvent(MOB_EV_RELEASE_ORDER); {
@@ -1588,7 +1588,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("swarm_chasing_h", PIKMIN_STATE_SWARM_CHASING_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::setSwarmReach);
             efc.run(PikminFsm::startChasingLeader);
         }
@@ -1599,10 +1599,10 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_GO_TO_ONION); {
             efc.changeState("going_to_onion");
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::setIdleTaskReach);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::updateInGroupChasing);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -1647,7 +1647,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("swarm_stopped_h", PIKMIN_STATE_SWARM_STOPPED_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::setSwarmReach);
             efc.run(PikminFsm::stopInGroup);
         }
@@ -1658,7 +1658,7 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_GO_TO_ONION); {
             efc.changeState("going_to_onion");
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::setIdleTaskReach);
         }
         efc.newEvent(MOB_EV_GRABBED_BY_FRIEND); {
@@ -1749,7 +1749,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("thrown_h", PIKMIN_STATE_THROWN_H); {
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_RELEASE_ORDER); {
@@ -1796,10 +1796,10 @@ void PikminFsm::createFsm(MobType* typ) {
             efc.run(PikminFsm::releaseTool);
             efc.changeState("going_to_dismiss_spot");
         }
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::goingToDismissSpot);
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::clearTimer);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
@@ -1839,14 +1839,14 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idling_h", PIKMIN_STATE_IDLING_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_RELEASE_ORDER); {
             efc.run(PikminFsm::releaseTool);
             efc.changeState("idling");
         }
-        efc.newEvent(MOB_EV_ON_LEAVE); {
+        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
             efc.run(PikminFsm::stopBeingIdle);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1883,7 +1883,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("called_h", PIKMIN_STATE_CALLED_H); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::called);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1916,10 +1916,10 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("riding_track", PIKMIN_STATE_RIDING_TRACK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::startRidingTrack);
         }
-        efc.newEvent(MOB_EV_ON_TICK); {
+        efc.newEvent(SCRIPT_EV_ON_TICK); {
             efc.run(PikminFsm::tickTrackRide);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1931,7 +1931,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("crushed", PIKMIN_STATE_CRUSHED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::beCrushed);
         }
@@ -1941,7 +1941,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("knocked_down_dying", PIKMIN_STATE_KNOCKED_DOWN_DYING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::startKnockedDownDying);
         }
@@ -1951,7 +1951,7 @@ void PikminFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("dying", PIKMIN_STATE_DYING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PikminFsm::standStill);
             efc.run(PikminFsm::startDying);
         }
@@ -3487,7 +3487,7 @@ void PikminFsm::landOnMob(Mob* m, void* info1, void* info2) {
     HitboxInteraction* info = (HitboxInteraction*) info1;
     Mob* m2Ptr = info->mob2;
     
-    MobEvent* m2PikLandEv =
+    ScriptEvent* m2PikLandEv =
         m2Ptr->fsm.getEvent(MOB_EV_THROWN_PIKMIN_LANDED);
         
     if(m2PikLandEv && hasFlag(m->flags, MOB_FLAG_WAS_THROWN)) {
@@ -3555,7 +3555,7 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
     if(!tooPtr) return;
     if(!m->canHurt(m2Ptr)) return;
     
-    MobEvent* m2PikLandEv =
+    ScriptEvent* m2PikLandEv =
         m2Ptr->fsm.getEvent(MOB_EV_THROWN_PIKMIN_LANDED);
         
     if(m2PikLandEv && hasFlag(m->flags, MOB_FLAG_WAS_THROWN)) {

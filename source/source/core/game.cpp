@@ -738,14 +738,14 @@ int Game::start() {
     initDearImGui();
     
     //Init and load some engine things.
-    initMobActions();
+    initScriptActions();
     initMobCategories();
     initMiscDatabases();
     initInventoryItems();
     loadMakerTools();
     saveMakerTools();
     
-    dummyMobState = new MobState("dummy");
+    dummyMobState = new ScriptState("dummy");
     
     if(makerTools.usePerfMon) {
         perfMon = new PerformanceMonitor();

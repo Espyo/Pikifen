@@ -29,7 +29,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", TREASURE_STATE_IDLE_WAITING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -48,7 +48,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_moving", TREASURE_STATE_IDLE_MOVING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -86,7 +86,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_stuck", TREASURE_STATE_IDLE_STUCK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -123,7 +123,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("being_delivered", TREASURE_STATE_BEING_DELIVERED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
         efc.newEvent(MOB_EV_TIMER); {

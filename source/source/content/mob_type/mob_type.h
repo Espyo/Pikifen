@@ -405,10 +405,10 @@ public:
     //- Script -
     
     //Actions to run on spawn.
-    vector<MobActionCall*> initActions;
+    vector<ScriptActionCall*> initActions;
     
     //The states, events and actions. Basically, the FSM.
-    vector<MobState*> states;
+    vector<ScriptState*> states;
     
     //Index of the state a mob starts at.
     size_t firstStateIdx = INVALID;

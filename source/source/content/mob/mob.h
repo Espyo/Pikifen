@@ -183,7 +183,7 @@ public:
     //-Scripting-
     
     //Finite-state machine.
-    MobFsm fsm;
+    Fsm fsm;
     
     //The script-controlled timer.
     Timer scriptTimer;

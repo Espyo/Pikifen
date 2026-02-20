@@ -135,7 +135,7 @@ public:
     ALLEGRO_DISPLAY* display = nullptr;
     
     //A dummy mob state for mobs with no state to use.
-    MobState* dummyMobState = nullptr;
+    ScriptState* dummyMobState = nullptr;
     
     //Error manager.
     ErrorManager errors;
@@ -183,8 +183,8 @@ public:
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loadingTextBmp = nullptr;
     
-    //List of mob actions.
-    vector<MobAction> mobActions;
+    //List of script actions.
+    vector<ScriptAction> scriptActions;
     
     //List of mob categories.
     CategoryManager mobCategories;

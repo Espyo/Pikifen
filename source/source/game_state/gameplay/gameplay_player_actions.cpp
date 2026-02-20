@@ -377,7 +377,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         
         //Check if the leader should punch.
         if(!done) {
-            MobEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
+            ScriptEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
             if(ev) {
                 ev->run(player->leaderPtr);
                 done = true;
@@ -448,7 +448,7 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     if(isDown) {
-        MobEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
+        ScriptEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
         
         if(cancelEv && !player->inventory->isOpen) {
             //Cancel auto-pluck, lying down, etc.

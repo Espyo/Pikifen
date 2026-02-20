@@ -36,7 +36,7 @@ void PileFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", PILE_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(PileFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {

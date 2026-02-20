@@ -79,7 +79,7 @@ void MobType::createAndAddCarryingStates() {
     EasyFsmCreator efc;
     
     efc.newState("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -95,7 +95,7 @@ void MobType::createAndAddCarryingStates() {
     }
     
     efc.newState("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -130,7 +130,7 @@ void MobType::createAndAddCarryingStates() {
     }
     
     efc.newState("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -164,7 +164,7 @@ void MobType::createAndAddCarryingStates() {
     }
     
     efc.newState("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
         efc.newEvent(MOB_EV_TIMER); {
@@ -173,7 +173,7 @@ void MobType::createAndAddCarryingStates() {
     }
     
     
-    vector<MobState*> newStates = efc.finish();
+    vector<ScriptState*> newStates = efc.finish();
     
     states.insert(states.end(), newStates.begin(), newStates.end());
     

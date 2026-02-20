@@ -304,7 +304,7 @@ bool Leader::checkThrowOk() const {
         return false;
     }
     
-    MobEvent* ev = fsm.getEvent(LEADER_EV_THROW);
+    ScriptEvent* ev = fsm.getEvent(LEADER_EV_THROW);
     
     if(!ev) {
         return false;
@@ -992,7 +992,7 @@ bool Leader::orderPikminToOnion(
     for(size_t p = 0; p < candidates.size(); p++) {
     
         Pikmin* pikPtr = candidates[p].second;
-        MobEvent* ev = pikPtr->fsm.getEvent(MOB_EV_GO_TO_ONION);
+        ScriptEvent* ev = pikPtr->fsm.getEvent(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
         ev->run(pikPtr, (void*) nPtr);
@@ -1199,8 +1199,8 @@ void Leader::swapHeldPikmin(Mob* newPik) {
         return;
     }
     
-    MobEvent* oldPikEv = oldPik->fsm.getEvent(MOB_EV_RELEASED);
-    MobEvent* newPikEv = newPik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+    ScriptEvent* oldPikEv = oldPik->fsm.getEvent(MOB_EV_RELEASED);
+    ScriptEvent* newPikEv = newPik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(newPik->subgroupTypePtr);
     
@@ -1480,11 +1480,11 @@ bool grabClosestGroupMember(Player* player) {
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
-    MobEvent* grabbedEv =
+    ScriptEvent* grabbedEv =
         player->closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
             MOB_EV_GRABBED_BY_FRIEND
         );
-    MobEvent* grabberEv =
+    ScriptEvent* grabberEv =
         player->leaderPtr->fsm.getEvent(LEADER_EV_HOLDING);
     if(!grabberEv || !grabbedEv) {
         return false;

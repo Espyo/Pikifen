@@ -30,7 +30,7 @@ void OnionFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", ONION_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(OnionFsm::startIdling);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -45,7 +45,7 @@ void OnionFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("generating", ONION_STATE_GENERATING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(OnionFsm::startGenerating);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -60,7 +60,7 @@ void OnionFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(OnionFsm::stopGenerating);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {

@@ -27,7 +27,7 @@
 void DecorationFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", DECORATION_STATE_IDLING); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DecorationFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -35,7 +35,7 @@ void DecorationFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bumped", DECORATION_STATE_BUMPED); {
-        efc.newEvent(MOB_EV_ON_ENTER); {
+        efc.newEvent(SCRIPT_EV_ON_ENTER); {
             efc.run(DecorationFsm::beBumped);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {

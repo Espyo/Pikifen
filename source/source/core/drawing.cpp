@@ -50,7 +50,7 @@ const float PADDING = 4.0f;
 
 namespace DRAWING {
 
-//Distance after which camera shakes from mob actions no longer have
+//Distance after which camera shakes from script actions no longer have
 //an effect.
 const float CAM_SHAKE_DROPOFF_DIST = 1000.0f;
 

@@ -3377,7 +3377,7 @@ void Mob::respawn() {
  * @param msg The message.
  */
 void Mob::sendScriptMessage(Mob* receiver, string& msg) const {
-    MobEvent* ev = receiver->fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
+    ScriptEvent* ev = receiver->fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
 }
@@ -4206,7 +4206,7 @@ void Mob::tickMiscLogic(float deltaT) {
     if(timeAlive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
-        fsm.runEvent(MOB_EV_ON_READY);
+        fsm.runEvent(SCRIPT_EV_ON_READY);
     }
     timeAlive += deltaT;
     
@@ -4490,7 +4490,7 @@ void Mob::tickScript(float deltaT) {
     if(!fsm.curState) return;
     
     //Timer events.
-    MobEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
+    ScriptEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
     if(scriptTimer.duration > 0) {
         if(scriptTimer.timeLeft > 0) {
             scriptTimer.tick(deltaT);
@@ -4518,7 +4518,7 @@ void Mob::tickScript(float deltaT) {
         if(focusedMob) {
         
             Mob* focus = focusedMob;
-            MobEvent* forEv = fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
+            ScriptEvent* forEv = fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
             
             if(farReach != INVALID && forEv) {
                 float angleToFocus = getAngle(pos, focus->pos);
@@ -4540,7 +4540,7 @@ void Mob::tickScript(float deltaT) {
     //Itch event.
     if(type->itchDamage > 0 || type->itchTime > 0) {
         itchTime += deltaT;
-        MobEvent* itchEv = fsm.getEvent(MOB_EV_ITCH);
+        ScriptEvent* itchEv = fsm.getEvent(MOB_EV_ITCH);
         if(
             itchEv &&
             itchDamage > type->itchDamage && itchTime > type->itchTime
@@ -4592,7 +4592,7 @@ void Mob::tickScript(float deltaT) {
     
     //Following a leader.
     if(followingGroup) {
-        MobEvent* spotFarEv =  fsm.getEvent(MOB_EV_SPOT_IS_FAR);
+        ScriptEvent* spotFarEv =  fsm.getEvent(MOB_EV_SPOT_IS_FAR);
         
         if(spotFarEv) {
             Point targetPos;
@@ -4608,7 +4608,7 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Check if the active leader is different from the current leader.
-    MobEvent* activeLeaderChangedEv =
+    ScriptEvent* activeLeaderChangedEv =
         fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
     if(activeLeaderChangedEv) {
         for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
@@ -4625,7 +4625,7 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Far away from home.
-    MobEvent* farFromHomeEv = fsm.getEvent(MOB_EV_FAR_FROM_HOME);
+    ScriptEvent* farFromHomeEv = fsm.getEvent(MOB_EV_FAR_FROM_HOME);
     if(farFromHomeEv) {
         Distance d(pos, home);
         if(d >= type->territoryRadius) {
@@ -4634,7 +4634,7 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Tick event.
-    fsm.runEvent(MOB_EV_ON_TICK);
+    fsm.runEvent(SCRIPT_EV_ON_TICK);
 }
 
 

@@ -1534,7 +1534,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
  */
 void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     vector<PendingInterMobEvent> pendingInterMobEvents;
-    MobState* stateBefore = mPtr->fsm.curState;
+    ScriptState* stateBefore = mPtr->fsm.curState;
     
     size_t nMobs = mobs.all.size();
     for(size_t m2 = 0; m2 < nMobs; m2++) {
@@ -1657,7 +1657,7 @@ void GameplayState::processMobMiscInteractions(
     vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Find a carriable mob to grab.
-    MobEvent* ncoEvent =
+    ScriptEvent* ncoEvent =
         mPtr->fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
     if(
         ncoEvent &&
@@ -1674,7 +1674,7 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //Find a tool mob.
-    MobEvent* ntoEvent =
+    ScriptEvent* ntoEvent =
         mPtr->fsm.getEvent(MOB_EV_NEAR_TOOL);
     if(
         ntoEvent &&
@@ -1695,7 +1695,7 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //Find a group task mob.
-    MobEvent* ngtoEvent =
+    ScriptEvent* ngtoEvent =
         mPtr->fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
     if(
         ngtoEvent &&
@@ -1719,7 +1719,7 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //"Bumped" by an active leader being nearby.
-    MobEvent* touchLeEv =
+    ScriptEvent* touchLeEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
         for(Player& player : players) {
@@ -1756,9 +1756,9 @@ void GameplayState::processMobReaches(
     vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Check reaches.
-    MobEvent* obirEv =
+    ScriptEvent* obirEv =
         mPtr->fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
-    MobEvent* opirEv =
+    ScriptEvent* opirEv =
         mPtr->fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
         
     if(!obirEv && !opirEv) return;
@@ -1984,9 +1984,9 @@ void GameplayState::processMobTouches(
     
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
-    MobEvent* touchOpEv =
+    ScriptEvent* touchOpEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
-    MobEvent* touchObEv =
+    ScriptEvent* touchObEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
     if(touchOpEv || touchObEv) {
     
@@ -2052,15 +2052,15 @@ void GameplayState::processMobTouches(
     }
     
     //Check hitbox touches.
-    MobEvent* hitboxTouchANEv =
+    ScriptEvent* hitboxTouchANEv =
         mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
-    MobEvent* hitboxTouchNAEv =
+    ScriptEvent* hitboxTouchNAEv =
         mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
-    MobEvent* hitboxTouchNNEv =
+    ScriptEvent* hitboxTouchNNEv =
         mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
-    MobEvent* hitboxTouchEatEv =
+    ScriptEvent* hitboxTouchEatEv =
         mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
-    MobEvent* hitboxTouchHazEv =
+    ScriptEvent* hitboxTouchHazEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
         
     Sprite* s1Ptr;
