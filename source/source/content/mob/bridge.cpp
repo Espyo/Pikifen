@@ -243,7 +243,7 @@ void Bridge::drawComponent(Mob* m) {
     );
     
     Bridge* briPtr = (Bridge*) m->links[0];
-    string side = m->vars["side"];
+    string side = m->fsm.vars["side"];
     ALLEGRO_BITMAP* texture =
         side == "left" ?
         briPtr->briType->bmpLeftRailTexture :
@@ -252,7 +252,7 @@ void Bridge::drawComponent(Mob* m) {
         briPtr->briType->bmpMainTexture;
     int textureH = al_get_bitmap_height(texture);
     int textureV0 = textureH / 2.0f - m->rectangularDim.y / 2.0f;
-    float textureOffset = s2f(m->vars["offset"]);
+    float textureOffset = s2f(m->fsm.vars["offset"]);
     
     ALLEGRO_TRANSFORM angleTransform;
     al_identity_transform(&angleTransform);

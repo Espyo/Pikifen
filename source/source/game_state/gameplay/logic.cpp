@@ -1166,12 +1166,12 @@ void GameplayState::doMenuLogic() {
                 23, true, true
             );
         string timerStr =
-            f2s(game.makerTools.infoLock->scriptTimer.timeLeft);
+            f2s(game.makerTools.infoLock->fsm.timer.timeLeft);
         string varsStr;
-        if(!game.makerTools.infoLock->vars.empty()) {
+        if(!game.makerTools.infoLock->fsm.vars.empty()) {
             for(
-                auto v = game.makerTools.infoLock->vars.begin();
-                v != game.makerTools.infoLock->vars.end(); ++v
+                auto v = game.makerTools.infoLock->fsm.vars.begin();
+                v != game.makerTools.infoLock->fsm.vars.end(); ++v
             ) {
                 varsStr += v->first + "=" + v->second + "; ";
             }
@@ -1382,6 +1382,28 @@ void GameplayState::doMenuLogic() {
     
     //Fade.
     game.fadeMgr.tick(game.deltaT);
+}
+
+
+/**
+ * @brief Ticks the logic of the finite-state machine script.
+ */
+void GameplayState::doScriptLogic() {
+    if(!fsm.curState) return;
+    
+    //Timer events.
+    ScriptEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
+    if(fsm.timer.duration > 0) {
+        if(fsm.timer.timeLeft > 0) {
+            fsm.timer.tick(game.deltaT);
+            if(fsm.timer.timeLeft == 0.0f && timerEv) {
+                //TODO timerEv->run(this);
+            }
+        }
+    }
+    
+    //Tick event.
+    fsm.runEvent(SCRIPT_EV_ON_TICK);
 }
 
 

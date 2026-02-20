@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <map>
 #include <vector>
 
 #include "../../core/const.h"
@@ -18,6 +19,7 @@
 #include "../../util/general_utils.h"
 
 
+using std::map;
 using std::size_t;
 using std::string;
 using std::vector;
@@ -438,11 +440,17 @@ public:
 
     //--- Public members ---
     
-    //Mob that this FSM belongs to.
+    //Mob that this FSM belongs to, if any.
     Mob* m = nullptr;
     
     //Current state.
     ScriptState* curState = nullptr;
+    
+    //Custom timer.
+    Timer timer;
+    
+    //Variables.
+    map<string, string> vars;
     
     //Conversion between pre-named states and in-file states.
     vector<size_t> preNamedConversions;

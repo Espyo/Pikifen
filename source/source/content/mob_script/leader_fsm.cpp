@@ -1968,10 +1968,10 @@ void LeaderFsm::getUpFaster(Mob* m, void* info1, void* info2) {
     //it already received the getting up timer bonus.
     if(leaPtr->tempI == 1) return;
     
-    leaPtr->scriptTimer.timeLeft =
+    leaPtr->fsm.timer.timeLeft =
         std::max(
             0.01f,
-            leaPtr->scriptTimer.timeLeft -
+            leaPtr->fsm.timer.timeLeft -
             leaPtr->leaType->knockedDownWhistleBonus
         );
     leaPtr->tempI = 1;

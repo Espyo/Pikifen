@@ -470,6 +470,9 @@ void GameplayState::doLogic() {
         doAestheticLogic(game.deltaT * deltaTMult);
     }
     doMenuLogic();
+
+    //Script.
+    doScriptLogic();
 }
 
 

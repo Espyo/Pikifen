@@ -1279,7 +1279,7 @@ Mob* createMob(
         mPtr->readScriptVars(svr);
         
         for(auto& v : varsMap) {
-            mPtr->vars[v.first] = v.second;
+            mPtr->fsm.vars[v.first] = v.second;
         }
     }
     

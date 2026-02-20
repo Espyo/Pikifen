@@ -180,18 +180,10 @@ public:
     //Current rectangular dimensions.
     Point rectangularDim;
     
-    //-Scripting-
-    
-    //Finite-state machine.
-    Fsm fsm;
-    
-    //The script-controlled timer.
-    Timer scriptTimer;
-    
-    //Variables.
-    map<string, string> vars;
-    
     //-Brain and behavior-
+
+    //Script finite-state machine.
+    Fsm fsm;
     
     //The mob it has focus on.
     Mob* focusedMob = nullptr;

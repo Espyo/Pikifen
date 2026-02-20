@@ -2374,10 +2374,10 @@ void PikminFsm::calledWhileKnockedDown(Mob* m, void* info1, void* info2) {
     
     pikPtr->focusOnMob(caller);
     
-    pikPtr->scriptTimer.timeLeft =
+    pikPtr->fsm.timer.timeLeft =
         std::max(
             0.01f,
-            pikPtr->scriptTimer.timeLeft -
+            pikPtr->fsm.timer.timeLeft -
             pikPtr->pikType->knockedDownWhistleBonus
         );
         

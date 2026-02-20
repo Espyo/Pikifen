@@ -1163,7 +1163,7 @@ void Leader::startWhistling() {
             );
     }
     setAnimation(LEADER_ANIM_WHISTLING);
-    scriptTimer.start(2.5f);
+    fsm.timer.start(2.5f);
     game.statistics.whistleUses++;
 }
 

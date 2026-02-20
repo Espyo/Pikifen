@@ -442,6 +442,9 @@ public:
     
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
+
+    //Script finite-state machine.
+    Fsm fsm;
     
     //Current interlude info.
     InterludeInfo interlude;
@@ -540,6 +543,7 @@ private:
     void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);
     void doMenuLogic();
+    void doScriptLogic();
     void doPlayerActionDismiss(Player* player, bool isDown);
     void doPlayerActionInventory(Player* player, bool isDown);
     void doPlayerActionInventoryShortcut(

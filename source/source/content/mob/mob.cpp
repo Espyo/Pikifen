@@ -600,7 +600,7 @@ void Mob::arachnorbFootMoveLogic() {
         return;
     }
     
-    float feetNormalDist = s2f(parent->m->vars["feet_normal_distance"]);
+    float feetNormalDist = s2f(parent->m->fsm.vars["feet_normal_distance"]);
     if(feetNormalDist == 0) {
         feetNormalDist = 175;
     }
@@ -613,8 +613,8 @@ void Mob::arachnorbFootMoveLogic() {
             )->pos
         );
         
-    Point finalPos = s2p(parent->m->vars["_destination_pos"]);
-    float finalAngle = s2f(parent->m->vars["_destination_angle"]);
+    Point finalPos = s2p(parent->m->fsm.vars["_destination_pos"]);
+    float finalAngle = s2f(parent->m->fsm.vars["_destination_angle"]);
     
     Point offset = Point(feetNormalDist, 0);
     offset = rotatePoint(offset, defaultAngle);
@@ -683,9 +683,9 @@ void Mob::arachnorbHeadTurnLogic() {
 void Mob::arachnorbPlanLogic(
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
-    float maxStepDistance = s2f(vars["max_step_distance"]);
-    float maxTurnAngle = degToRad(s2f(vars["max_turn_angle"]));
-    float minTurnAngle = degToRad(s2f(vars["min_turn_angle"]));
+    float maxStepDistance = s2f(fsm.vars["max_step_distance"]);
+    float maxTurnAngle = degToRad(s2f(fsm.vars["max_turn_angle"]));
+    float minTurnAngle = degToRad(s2f(fsm.vars["min_turn_angle"]));
     if(maxStepDistance == 0) {
         maxStepDistance = 100;
     }
@@ -737,8 +737,8 @@ void Mob::arachnorbPlanLogic(
     
     destinationPos += offset;
     
-    vars["_destination_pos"] = p2s(destinationPos);
-    vars["_destination_angle"] = f2s(destinationAngle);
+    fsm.vars["_destination_pos"] = p2s(destinationPos);
+    fsm.vars["_destination_angle"] = f2s(destinationAngle);
 }
 
 
@@ -1035,7 +1035,7 @@ bool Mob::calculateCarryingDestination(
         for(size_t l = 0; l < links.size(); l++) {
             if(!links[l]) continue;
             string typeName =
-                links[l]->vars["carry_destination_type"];
+                links[l]->fsm.vars["carry_destination_type"];
             MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
                 getType(typeName);
@@ -3546,8 +3546,8 @@ void Mob::setRectangularDim(const Point& rectangularDim) {
  * @param time New time.
  */
 void Mob::setTimer(float time) {
-    scriptTimer.duration = time;
-    scriptTimer.start();
+    fsm.timer.duration = time;
+    fsm.timer.start();
 }
 
 
@@ -3558,7 +3558,7 @@ void Mob::setTimer(float time) {
  * @param value The variable's new value.
  */
 void Mob::setVar(const string& name, const string& value) {
-    vars[name] = value;
+    fsm.vars[name] = value;
 }
 
 
@@ -4476,7 +4476,7 @@ void Mob::tickMiscLogic(float deltaT) {
         deliveryInfo &&
         fsm.curState->id == ENEMY_EXTRA_STATE_BEING_DELIVERED
     ) {
-        deliveryInfo->animTimeRatioLeft = scriptTimer.getRatioLeft();
+        deliveryInfo->animTimeRatioLeft = fsm.timer.getRatioLeft();
     }
 }
 
@@ -4491,10 +4491,10 @@ void Mob::tickScript(float deltaT) {
     
     //Timer events.
     ScriptEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
-    if(scriptTimer.duration > 0) {
-        if(scriptTimer.timeLeft > 0) {
-            scriptTimer.tick(deltaT);
-            if(scriptTimer.timeLeft == 0.0f && timerEv) {
+    if(fsm.timer.duration > 0) {
+        if(fsm.timer.timeLeft > 0) {
+            fsm.timer.tick(deltaT);
+            if(fsm.timer.timeLeft == 0.0f && timerEv) {
                 timerEv->run(this);
             }
         }

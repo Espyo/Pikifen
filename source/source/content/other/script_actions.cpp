@@ -202,7 +202,7 @@ bool ScriptActionCall::run(
     data.args = args;
     for(size_t a = 0; a < args.size(); a++) {
         if(argIsVar[a]) {
-            data.args[a] = m->vars[args[a]];
+            data.args[a] = m->fsm.vars[args[a]];
         }
     }
     data.customData1 = customData1;
@@ -761,7 +761,7 @@ ScriptActionRunData::ScriptActionRunData(Mob* m, ScriptActionCall* call) :
  * @param data Data about the action call.
  */
 void MobActionRunners::absoluteNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s(fabs(s2f(data.args[1])));
+    data.m->fsm.vars[data.args[0]] = f2s(fabs(s2f(data.args[1])));
 }
 
 
@@ -835,7 +835,7 @@ void MobActionRunners::calculate(ScriptActionRunData& data) {
     }
     }
     
-    data.m->vars[data.args[0]] = f2s(result);
+    data.m->fsm.vars[data.args[0]] = f2s(result);
 }
 
 
@@ -845,7 +845,7 @@ void MobActionRunners::calculate(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::ceilNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s(ceil(s2f(data.args[1])));
+    data.m->fsm.vars[data.args[0]] = f2s(ceil(s2f(data.args[1])));
 }
 
 
@@ -880,7 +880,7 @@ void MobActionRunners::drainLiquid(ScriptActionRunData& data) {
 void MobActionRunners::easeNumber(ScriptActionRunData& data) {
     EASE_METHOD method =
         (EASE_METHOD) s2i(data.args[2]);
-    data.m->vars[data.args[0]] = f2s(ease(s2f(data.args[1]), method));
+    data.m->fsm.vars[data.args[0]] = f2s(ease(s2f(data.args[1]), method));
 }
 
 
@@ -900,7 +900,7 @@ void MobActionRunners::finishDying(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::floorNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s(floor(s2f(data.args[1])));
+    data.m->fsm.vars[data.args[0]] = f2s(floor(s2f(data.args[1])));
 }
 
 
@@ -1045,7 +1045,7 @@ void MobActionRunners::getAngle(ScriptActionRunData& data) {
     float focusY = s2f(data.args[4]);
     float angle = getAngle(Point(centerX, centerY), Point(focusX, focusY));
     angle = radToDeg(angle);
-    data.m->vars[data.args[0]] = f2s(angle);
+    data.m->fsm.vars[data.args[0]] = f2s(angle);
 }
 
 
@@ -1059,7 +1059,7 @@ void MobActionRunners::getAngleCwDiff(ScriptActionRunData& data) {
     float angle2 = degToRad(s2f(data.args[2]));
     float diff = ::getAngleCwDiff(angle1, angle2);
     diff = radToDeg(diff);
-    data.m->vars[data.args[0]] = f2s(diff);
+    data.m->fsm.vars[data.args[0]] = f2s(diff);
 }
 
 
@@ -1073,7 +1073,7 @@ void MobActionRunners::getAngleSmallestDiff(ScriptActionRunData& data) {
     float angle2 = degToRad(s2f(data.args[2]));
     float diff = ::getAngleSmallestDiff(angle1, angle2);
     diff = radToDeg(diff);
-    data.m->vars[data.args[0]] = f2s(diff);
+    data.m->fsm.vars[data.args[0]] = f2s(diff);
 }
 
 
@@ -1084,7 +1084,7 @@ void MobActionRunners::getAngleSmallestDiff(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::getAreaInfo(ScriptActionRunData& data) {
-    string* var = &(data.m->vars[data.args[0]]);
+    string* var = &(data.m->fsm.vars[data.args[0]]);
     MOB_ACTION_GET_AREA_INFO_TYPE t =
         (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
         
@@ -1127,8 +1127,8 @@ void MobActionRunners::getCoordinatesFromAngle(ScriptActionRunData& data) {
     angle = degToRad(angle);
     float magnitude = s2f(data.args[3]);
     Point p = angleToCoordinates(angle, magnitude);
-    data.m->vars[data.args[0]] = f2s(p.x);
-    data.m->vars[data.args[1]] = f2s(p.y);
+    data.m->fsm.vars[data.args[0]] = f2s(p.x);
+    data.m->fsm.vars[data.args[1]] = f2s(p.y);
 }
 
 
@@ -1142,7 +1142,7 @@ void MobActionRunners::getDistance(ScriptActionRunData& data) {
     float centerY = s2f(data.args[2]);
     float focusX = s2f(data.args[3]);
     float focusY = s2f(data.args[4]);
-    data.m->vars[data.args[0]] =
+    data.m->fsm.vars[data.args[0]] =
         f2s(
             Distance(Point(centerX, centerY), Point(focusX, focusY)).toFloat()
         );
@@ -1155,7 +1155,7 @@ void MobActionRunners::getDistance(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::getEventInfo(ScriptActionRunData& data) {
-    string* var = &(data.m->vars[data.args[0]]);
+    string* var = &(data.m->fsm.vars[data.args[0]]);
     MOB_ACTION_GET_EV_INFO_TYPE t =
         (MOB_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
         
@@ -1259,7 +1259,7 @@ void MobActionRunners::getFloorZ(ScriptActionRunData& data) {
     float x = s2f(data.args[1]);
     float y = s2f(data.args[2]);
     Sector* s = getSector(Point(x, y), nullptr, true);
-    data.m->vars[data.args[0]] = f2s(s ? s->z : 0);
+    data.m->fsm.vars[data.args[0]] = f2s(s ? s->z : 0);
 }
 
 
@@ -1270,8 +1270,8 @@ void MobActionRunners::getFloorZ(ScriptActionRunData& data) {
  */
 void MobActionRunners::getFocusVar(ScriptActionRunData& data) {
     if(!data.m->focusedMob) return;
-    data.m->vars[data.args[0]] =
-        data.m->focusedMob->vars[data.args[1]];
+    data.m->fsm.vars[data.args[0]] =
+        data.m->focusedMob->fsm.vars[data.args[1]];
 }
 
 
@@ -1287,7 +1287,7 @@ void MobActionRunners::getMobInfo(ScriptActionRunData& data) {
     
     if(!target) return;
     
-    string* var = &(data.m->vars[data.args[0]]);
+    string* var = &(data.m->fsm.vars[data.args[0]]);
     MOB_ACTION_GET_MOB_INFO_TYPE t =
         (MOB_ACTION_GET_MOB_INFO_TYPE) s2i(data.args[2]);
         
@@ -1383,7 +1383,7 @@ void MobActionRunners::getMobInfo(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::getRandomFloat(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] =
+    data.m->fsm.vars[data.args[0]] =
         f2s(game.rng.f(s2f(data.args[1]), s2f(data.args[2])));
 }
 
@@ -1394,7 +1394,7 @@ void MobActionRunners::getRandomFloat(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::getRandomInt(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] =
+    data.m->fsm.vars[data.args[0]] =
         i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
 }
 
@@ -1471,7 +1471,7 @@ void MobActionRunners::ifFunction(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::interpolateNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] =
+    data.m->fsm.vars[data.args[0]] =
         f2s(
             ::interpolateNumber(
                 s2f(data.args[1]), s2f(data.args[2]), s2f(data.args[3]),
@@ -1746,7 +1746,7 @@ void MobActionRunners::removeStatus(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::roundNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s(round(s2f(data.args[1])));
+    data.m->fsm.vars[data.args[0]] = f2s(round(s2f(data.args[1])));
 }
 
 
@@ -1877,7 +1877,7 @@ void MobActionRunners::setFlying(ScriptActionRunData& data) {
  */
 void MobActionRunners::setFocusVar(ScriptActionRunData& data) {
     if(!data.m->focusedMob) return;
-    data.m->focusedMob->vars[data.args[0]] = data.args[1];
+    data.m->focusedMob->fsm.vars[data.args[0]] = data.args[1];
 }
 
 
@@ -2121,7 +2121,7 @@ void MobActionRunners::shakeCamera(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::showMessageFromVar(ScriptActionRunData& data) {
-    startGameplayMessage(data.m->vars[data.args[0]], nullptr);
+    startGameplayMessage(data.m->fsm.vars[data.args[0]], nullptr);
 }
 
 
@@ -2141,7 +2141,7 @@ void MobActionRunners::spawn(ScriptActionRunData& data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::squareRootNumber(ScriptActionRunData& data) {
-    data.m->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
+    data.m->fsm.vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
 }
 
 
