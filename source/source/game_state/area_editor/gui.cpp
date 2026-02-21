@@ -191,6 +191,9 @@ void AreaEditor::processGuiControlPanel() {
     } case EDITOR_STATE_GAMEPLAY: {
         processGuiPanelGameplay();
         break;
+    } case EDITOR_STATE_MISSION: {
+        processGuiPanelMission();
+        break;
     } case EDITOR_STATE_LAYOUT: {
         processGuiPanelLayout();
         break;
@@ -2177,13 +2180,6 @@ void AreaEditor::processGuiPanelGameplay() {
             ImGui::TreePop();
         }
         
-        ImGui::Spacer();
-        
-        if(game.curArea->type == AREA_TYPE_MISSION) {
-            processGuiPanelMission();
-            processGuiPanelMissionOld();
-        }
-        
         break;
     }
     
@@ -3151,6 +3147,22 @@ void AreaEditor::processGuiPanelMain() {
         "Specify how the player's gameplay experience in this area will be."
     );
     
+    //Mission settings button.
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        if(
+            ImGui::ImageButtonAndText(
+                "missionButton", editorIcons[EDITOR_ICON_MISSION],
+                Point(EDITOR::ICON_BMP_SIZE),
+                12.0f, "Mission settings"
+            )
+        ) {
+            changeState(EDITOR_STATE_MISSION);
+        }
+        setTooltip(
+            "Control the way the mission works."
+        );
+    }
+    
     //Review button.
     ImGui::Spacer();
     if(
@@ -3190,51 +3202,17 @@ void AreaEditor::processGuiPanelMain() {
  * @brief Processes the Dear ImGui mission control panel for this frame.
  */
 void AreaEditor::processGuiPanelMission() {
-    float oldTimeLimit = game.curArea->mission.timeLimit;
-    bool dayDurationNeedsUpdate = false;
+    ImGui::BeginChild("mission");
     
-    //Mission essentials node.
-    if(saveableTreeNode("gameplay", "Mission essentials")) {
-    
-        //Preset text.
-        ImGui::Text(
-            "Preset: %s",
-            enumGetName(missionPresetNames, game.curArea->mission.preset)
-            .c_str()
-        );
-        
-        //Change preset button.
-        ImGui::SameLine();
-        if(ImGui::Button("Change...")) {
-            missionPresetDialogPreset = game.curArea->mission.preset;
-            openDialog(
-                "Change mission preset",
-                std::bind(
-                    &AreaEditor::processGuiMissionPresetDialog, this
-                )
-            );
-            dialogs.back()->customSize = Point(400, 0);
-        }
-        setTooltip(
-            "Change the mission's preset.\n"
-            "By using one of the presets you can skip most of the setup,\n"
-            "whereas by picking \"custom\" you can control all the details."
-        );
-        
-        //Time limit values.
-        int seconds = (int) game.curArea->mission.timeLimit;
-        if(ImGui::DragTime2("Time limit", &seconds)) {
-            registerChange("mission time limit change");
-            game.curArea->mission.timeLimit = (size_t) seconds;
-            dayDurationNeedsUpdate = true;
-        }
-        setTooltip(
-            "Time limit for the mission. 0 means no time limit.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::TreePop();
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
     }
+    
+    //Panel title text.
+    panelTitle("MISSION");
+    
+    processGuiPanelMissionEssentials();
     
     ImGui::Spacer();
     
@@ -3245,28 +3223,7 @@ void AreaEditor::processGuiPanelMission() {
         processGuiPanelMissionHudItems();
     }
     
-    if(dayDurationNeedsUpdate) {
-        if(
-            game.curArea->mission.timeLimit == 0 &&
-            oldTimeLimit > 0
-        ) {
-            game.curArea->dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
-        } else {
-            float oldDayStartMin = game.curArea->dayTimeStart;
-            oldDayStartMin = wrapFloat(oldDayStartMin, 0, 60 * 24);
-            float oldDaySpeed = game.curArea->dayTimeSpeed;
-            float oldTimeLimitMin = oldTimeLimit / 60.0f;
-            size_t newTimeLimitSec = game.curArea->mission.timeLimit;
-            float oldDayEndMin = oldDayStartMin + oldTimeLimitMin * oldDaySpeed;
-            oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
-            newTimeLimitSec = std::max(newTimeLimitSec, (size_t) 1);
-            float newTimeLimitMin = newTimeLimitSec / 60.0f;
-            game.curArea->dayTimeSpeed =
-                calculateDaySpeed(
-                    oldDayStartMin, oldDayEndMin, newTimeLimitMin
-                );
-        }
-    }
+    ImGui::EndChild();
 }
 
 
@@ -3439,12 +3396,88 @@ void AreaEditor::processGuiPanelMissionOld() {
 
 
 /**
+ * @brief Processes the Dear ImGui essentials part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionEssentials() {
+    float oldTimeLimit = game.curArea->mission.timeLimit;
+    bool dayDurationNeedsUpdate = false;
+    
+    //Mission essentials node.
+    if(saveableTreeNode("mission", "Essentials")) {
+    
+        //Preset text.
+        ImGui::Text(
+            "Preset: %s",
+            enumGetName(missionPresetNames, game.curArea->mission.preset)
+            .c_str()
+        );
+        
+        //Change preset button.
+        ImGui::SameLine();
+        if(ImGui::Button("Change...")) {
+            missionPresetDialogPreset = game.curArea->mission.preset;
+            openDialog(
+                "Change mission preset",
+                std::bind(
+                    &AreaEditor::processGuiMissionPresetDialog, this
+                )
+            );
+            dialogs.back()->customSize = Point(400, 0);
+        }
+        setTooltip(
+            "Change the mission's preset.\n"
+            "By using one of the presets you can skip most of the setup,\n"
+            "whereas by picking \"custom\" you can control all the details."
+        );
+        
+        //Time limit values.
+        int seconds = (int) game.curArea->mission.timeLimit;
+        if(ImGui::DragTime2("Time limit", &seconds)) {
+            registerChange("mission time limit change");
+            game.curArea->mission.timeLimit = (size_t) seconds;
+            dayDurationNeedsUpdate = true;
+        }
+        setTooltip(
+            "Time limit for the mission. 0 means no time limit.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    if(dayDurationNeedsUpdate) {
+        if(
+            game.curArea->mission.timeLimit == 0 &&
+            oldTimeLimit > 0
+        ) {
+            game.curArea->dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
+        } else {
+            float oldDayStartMin = game.curArea->dayTimeStart;
+            oldDayStartMin = wrapFloat(oldDayStartMin, 0, 60 * 24);
+            float oldDaySpeed = game.curArea->dayTimeSpeed;
+            float oldTimeLimitMin = oldTimeLimit / 60.0f;
+            size_t newTimeLimitSec = game.curArea->mission.timeLimit;
+            float oldDayEndMin = oldDayStartMin + oldTimeLimitMin * oldDaySpeed;
+            oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
+            newTimeLimitSec = std::max(newTimeLimitSec, (size_t) 1);
+            float newTimeLimitMin = newTimeLimitSec / 60.0f;
+            game.curArea->dayTimeSpeed =
+                calculateDaySpeed(
+                    oldDayStartMin, oldDayEndMin, newTimeLimitMin
+                );
+        }
+    }
+}
+
+
+/**
  * @brief Processes the Dear ImGui event part of the
  * mission control panel for this frame.
  */
 void AreaEditor::processGuiPanelMissionEv() {
     //Mission events node.
-    if(saveableTreeNode("gameplay", "Mission events")) {
+    if(saveableTreeNode("mission", "Events")) {
     
         static size_t curEventIdx = 0;
         
@@ -4549,7 +4582,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
  */
 void AreaEditor::processGuiPanelMissionHudItems() {
     //Mission HUD items node.
-    if(saveableTreeNode("gameplay", "Mission HUD items")) {
+    if(saveableTreeNode("mission", "HUD items")) {
     
         static size_t curHudItemIdx = 0;
         
@@ -4835,7 +4868,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
  */
 void AreaEditor::processGuiPanelMissionMobChecklists() {
     //Mission mob checklists node.
-    if(saveableTreeNode("gameplay", "Mission mob checklists")) {
+    if(saveableTreeNode("mission", "Mob checklists")) {
     
         //Setup.
         processGuiListNavSetup(
@@ -5044,7 +5077,7 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
  */
 void AreaEditor::processGuiPanelMissionScoreCriteria() {
     //Mission score criteria node.
-    if(saveableTreeNode("gameplay", "Mission scoring")) {
+    if(saveableTreeNode("mission", "Scoring")) {
     
         //Setup.
         static size_t curCriterionIdx = 0;

@@ -371,6 +371,9 @@ private:
         //Area gameplay settings editing.
         EDITOR_STATE_GAMEPLAY,
         
+        //Mission settings editing.
+        EDITOR_STATE_MISSION,
+        
         //Layout editing.
         EDITOR_STATE_LAYOUT,
         
@@ -772,13 +775,13 @@ private:
     
     //Currently selected tree shadow.
     TreeShadow* selectedShadow = nullptr;
-
+    
     //Currently selected tree shadow's index.
     size_t selectedShadowIdx = INVALID;
     
     //Currently selected region.
     AreaRegion* selectedRegion = nullptr;
-
+    
     //Currently selected region's index.
     size_t selectedRegionIdx = INVALID;
     
@@ -1200,6 +1203,7 @@ private:
     void processGuiPanelMain();
     void processGuiPanelMission();
     void processGuiPanelMissionOld();
+    void processGuiPanelMissionEssentials();
     void processGuiPanelMissionEv();
     void processGuiPanelMissionFail(bool* dayDurationNeedsUpdate);
     void processGuiPanelMissionGoalBe();

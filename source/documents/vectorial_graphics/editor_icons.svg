@@ -2,14 +2,14 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="1174"
+   width="1199"
    height="24.000734"
-   viewBox="0 0 1174 24.000735"
+   viewBox="0 0 1199 24.000735"
    id="svg2"
    version="1.1"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
-   sodipodi:docname="Editor_icons.svg"
-   inkscape:export-filename="../../../Game_data/Graphics/Editor_icons.png"
+   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   sodipodi:docname="editor_icons.svg"
+   inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/gui/editor_icons.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -98,9 +98,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="133.66667"
-     inkscape:cy="-4"
+     inkscape:zoom="1.1042535"
+     inkscape:cx="599.5"
+     inkscape:cy="11.772659"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -136,7 +136,7 @@
        type="xygrid"
        id="grid4136"
        originx="0"
-       originy="0"
+       originy="-8.1212729e-06"
        spacingy="1"
        spacingx="1"
        units="px"
@@ -556,6 +556,14 @@
        transform="translate(250,-7.3348029e-4)"
        width="100%"
        height="100%" />
+    <use
+       height="100%"
+       width="100%"
+       transform="translate(75)"
+       id="use2"
+       xlink:href="#use988"
+       y="0"
+       x="0" />
   </g>
   <g
      inkscape:label="icons"
@@ -1682,5 +1690,33 @@
        height="20.000029"
        x="252"
        y="1100.5199" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="circle2"
+       cx="1187"
+       cy="1112.5194"
+       r="8.5000086" />
+    <path
+       style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:normal"
+       d="m 1182,1106.5194 -5,-8 h 20 l -5,8 -5,-2 z"
+       id="path4" />
+    <path
+       sodipodi:type="star"
+       style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:normal"
+       id="path5"
+       inkscape:flatsided="false"
+       sodipodi:sides="5"
+       sodipodi:cx="1187"
+       sodipodi:cy="1112.5194"
+       sodipodi:r1="6"
+       sodipodi:r2="3"
+       sodipodi:arg1="0"
+       sodipodi:arg2="0.62831853"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 1193,1112.5194 -3.5729,1.7634 -0.573,3.9429 -2.7812,-2.8531 -3.927,0.6735 1.8541,-3.5267 -1.8541,-3.5267 3.927,0.6735 2.7812,-2.8531 0.573,3.943 z"
+       inkscape:transform-center-x="0.080291846"
+       inkscape:transform-center-y="0.1058364"
+       transform="rotate(-90,1187,1112.5194)" />
   </g>
 </svg>

@@ -216,6 +216,9 @@ protected:
         //Search.
         EDITOR_ICON_SEARCH,
         
+        //Mission.
+        EDITOR_ICON_MISSION,
+        
         //Total amount of editor icons.
         N_EDITOR_ICONS
         
