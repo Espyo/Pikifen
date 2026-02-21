@@ -130,7 +130,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         events.push_back(
         MissionEvent {
             .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam= 0,
+            .indexParam = 0,
             .actionType = MISSION_ACTION_END_CLEAR
         }
         );
@@ -1375,7 +1375,7 @@ string MissionFailDefeatEnemies::getPlayerDescription(
 int MissionFailDefeatEnemies::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failEnemiesDefeated;
+    return (int) game.curArea->missionOld.failEnemiesDefeated;
 }
 
 
@@ -1518,7 +1518,7 @@ string MissionFailLoseLeaders::getPlayerDescription(
 int MissionFailLoseLeaders::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failLeadersKod;
+    return (int) game.curArea->missionOld.failLeadersKod;
 }
 
 
@@ -1659,7 +1659,7 @@ string MissionFailLosePikmin::getPlayerDescription(
 int MissionFailLosePikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failPikKilled;
+    return (int) game.curArea->missionOld.failPikKilled;
 }
 
 
@@ -2080,7 +2080,7 @@ string MissionFailTimeLimit::getPlayerDescription(
 int MissionFailTimeLimit::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failTimeLimit;
+    return (int) game.curArea->missionOld.failTimeLimit;
 }
 
 
@@ -2221,7 +2221,7 @@ string MissionFailTooFewPikmin::getPlayerDescription(
 int MissionFailTooFewPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failTooFewPikAmount;
+    return (int) game.curArea->missionOld.failTooFewPikAmount;
 }
 
 
@@ -2364,7 +2364,7 @@ string MissionFailTooManyPikmin::getPlayerDescription(
 int MissionFailTooManyPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.failTooManyPikAmount;
+    return (int) game.curArea->missionOld.failTooManyPikAmount;
 }
 
 
@@ -3138,7 +3138,7 @@ string MissionGoalGrowPikmin::getPlayerDescription(
 int MissionGoalGrowPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.goalAmount;
+    return (int) game.curArea->missionOld.goalAmount;
 }
 
 
@@ -3280,7 +3280,7 @@ string MissionGoalTimedSurvival::getPlayerDescription(
 int MissionGoalTimedSurvival::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->missionOld.goalAmount;
+    return (int) game.curArea->missionOld.goalAmount;
 }
 
 
@@ -3346,8 +3346,8 @@ vector<size_t> MissionMobChecklist::calculateList() const {
     
     vector<size_t> result;
     
-    for(size_t g = 0; g < game.curAreaData->mobGenerators.size(); g++) {
-        MobGen* gPtr = game.curAreaData->mobGenerators[g];
+    for(size_t g = 0; g < game.curArea->mobGenerators.size(); g++) {
+        MobGen* gPtr = game.curArea->mobGenerators[g];
         bool toAdd = false;
         
         const auto checkTreasure = [gPtr] () {

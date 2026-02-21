@@ -92,7 +92,7 @@ FRACTION_NR_VISIBILITY Pile::getFractionNumbersInfo(
 int Pile::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
         *applicableInThisMission =
-            game.curAreaData->missionOld.pointsPerTreasurePoint != 0;
+            game.curArea->missionOld.pointsPerTreasurePoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     if(

@@ -531,7 +531,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         TreeShadow* newShadow = new TreeShadow(hotspot);
         newShadow->bitmap = game.bmpError;
         
-        game.curAreaData->treeShadows.push_back(newShadow);
+        game.curArea->treeShadows.push_back(newShadow);
         
         selectTreeShadow(newShadow);
         setStatus(
@@ -569,10 +569,10 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
             selectedShadowIdx = INVALID;
             for(
                 size_t s = 0;
-                s < game.curAreaData->treeShadows.size(); s++
+                s < game.curArea->treeShadows.size(); s++
             ) {
             
-                TreeShadow* sPtr = game.curAreaData->treeShadows[s];
+                TreeShadow* sPtr = game.curArea->treeShadows[s];
                 Point minCoords, maxCoords;
                 getTransformedRectangleBBox(
                     sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
@@ -593,9 +593,9 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
             //Select a region.
             selectedRegion = nullptr;
             selectedRegionIdx = INVALID;
-            for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+            for(size_t r = 0; r < game.curArea->regions.size(); r++) {
             
-                AreaRegion* rPtr = game.curAreaData->regions[r];
+                AreaRegion* rPtr = game.curArea->regions[r];
                 Point minCoords = rPtr->center - rPtr->size / 2.0f;
                 Point maxCoords = rPtr->center + rPtr->size / 2.0f;
                 
@@ -916,7 +916,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         for(auto const& m : selectedMobs) {
             MobGen* newMg = new MobGen(*m);
             newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
-            game.curAreaData->mobGenerators.push_back(newMg);
+            game.curArea->mobGenerators.push_back(newMg);
             mobsToSelect.insert(newMg);
         }
         
@@ -997,7 +997,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         mPtr->links.push_back(target);
         mPtr->linkIdxs.push_back(
-            game.curAreaData->findMobGenIdx(target)
+            game.curArea->findMobGenIdx(target)
         );
         
         homogenizeSelectedMobs();
@@ -1079,7 +1079,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         if(clickedMobIdx != INVALID) {
             auto& listRef =
-                game.curAreaData->mission.mobChecklists[
+                game.curArea->mission.mobChecklists[
                     curMobChecklistIdx
                 ].mobIdxs;
             registerChange("mission mob checklist choice change");
@@ -1183,7 +1183,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                 nextStop = new PathStop(hotspot);
                 nextStop->flags = pathDrawingFlags;
                 nextStop->label = pathDrawingLabel;
-                game.curAreaData->pathStops.push_back(nextStop);
+                game.curArea->pathStops.push_back(nextStop);
                 setStatus("Created path stop.");
             }
             
@@ -1198,8 +1198,8 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                 if(l2) {
                     l2->type = pathDrawingType;
                 }
-                game.curAreaData->fixPathStopIdxs(pathDrawingStop1);
-                game.curAreaData->fixPathStopIdxs(nextStop);
+                game.curArea->fixPathStopIdxs(pathDrawingStop1);
+                game.curArea->fixPathStopIdxs(nextStop);
                 nextStop->calculateDistsPlusNeighbors();
                 setStatus("Created path link.");
                 
@@ -1219,7 +1219,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                 pathDrawingStop1 = new PathStop(hotspot);
                 pathDrawingStop1->flags = pathDrawingFlags;
                 pathDrawingStop1->label = pathDrawingLabel;
-                game.curAreaData->pathStops.push_back(
+                game.curArea->pathStops.push_back(
                     pathDrawingStop1
                 );
                 setStatus("Created path stop.");
@@ -1373,8 +1373,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             //Selection box around the layout.
             if(!isCtrlPressed) clearSelection();
             
-            for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-                Vertex* vPtr = game.curAreaData->vertexes[v];
+            for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+                Vertex* vPtr = game.curArea->vertexes[v];
                 
                 if(
                     vPtr->x >= selectionTL.x &&
@@ -1388,8 +1388,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             updateVertexSelection();
             
             if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-                for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-                    Edge* ePtr = game.curAreaData->edges[e];
+                for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+                    Edge* ePtr = game.curArea->edges[e];
                     
                     if(
                         ePtr->vertexes[0]->x >= selectionTL.x &&
@@ -1407,8 +1407,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             }
             
             if(selectionFilter == SELECTION_FILTER_SECTORS) {
-                for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-                    Sector* sPtr = game.curAreaData->sectors[s];
+                for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+                    Sector* sPtr = game.curArea->sectors[s];
                     bool validSector = true;
                     
                     for(size_t e = 0; e < sPtr->edges.size(); e++) {
@@ -1447,9 +1447,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             
             for(
                 size_t m = 0;
-                m < game.curAreaData->mobGenerators.size(); m++
+                m < game.curArea->mobGenerators.size(); m++
             ) {
-                MobGen* mPtr = game.curAreaData->mobGenerators[m];
+                MobGen* mPtr = game.curArea->mobGenerators[m];
                 float radius = getMobGenRadius(mPtr);
                 
                 if(
@@ -1472,8 +1472,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             //Selection box around path stops.
             if(!isCtrlPressed) clearSelection();
             
-            for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* sPtr = game.curAreaData->pathStops[s];
+            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+                PathStop* sPtr = game.curArea->pathStops[s];
                 
                 if(
                     sPtr->pos.x -
@@ -1489,8 +1489,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 }
             }
             
-            for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* sPtr = game.curAreaData->pathStops[s];
+            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+                PathStop* sPtr = game.curArea->pathStops[s];
                 for(size_t l = 0; l < sPtr->links.size(); l++) {
                     PathStop* s2Ptr = sPtr->links[l]->endPtr;
                     

@@ -585,9 +585,9 @@ void Game::processSystemInfo() {
         nParticlesStr =
             resizeString(i2s(states.gameplay->particles.getCount()), 7);
         areaVersionStr =
-            curAreaData->version.empty() ? "-" : curAreaData->version;
+            curArea->version.empty() ? "-" : curArea->version;
         areaMakerStr =
-            curAreaData->maker.empty() ? "-" : curAreaData->maker;
+            curArea->maker.empty() ? "-" : curArea->maker;
     }
     
     console.write(

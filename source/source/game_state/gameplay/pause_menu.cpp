@@ -81,7 +81,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
     pages.push_back(PAUSE_MENU_PAGE_STATUS);
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         pages.push_back(PAUSE_MENU_PAGE_MISSION);
     }
     
@@ -95,8 +95,8 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     lowestSectorZ = FLT_MAX;
     highestSectorZ = -FLT_MAX;
     
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
         lowestSectorZ = std::min(lowestSectorZ, sPtr->z);
         highestSectorZ = std::max(highestSectorZ, sPtr->z);
@@ -112,8 +112,8 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     radarMinCoords = Point(FLT_MAX);
     radarMaxCoords = Point(-FLT_MAX);
     
-    for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-        Edge* ePtr = game.curAreaData->edges[e];
+    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        Edge* ePtr = game.curArea->edges[e];
         if(!ePtr->sectors[0] || !ePtr->sectors[1]) continue;
         if(
             ePtr->sectors[0]->type == SECTOR_TYPE_BLOCKING &&
@@ -586,9 +586,9 @@ void PauseMenu::confirmOrLeave() {
             confirmationExplanation =
                 "If you end now, you will stop playing and will go to the "
                 "results menu.";
-            if(game.curAreaData->type == AREA_TYPE_MISSION) {
+            if(game.curArea->type == AREA_TYPE_MISSION) {
                 if(
-                    game.curAreaData->missionOld.goal ==
+                    game.curArea->missionOld.goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
                     confirmationExplanation +=
@@ -599,7 +599,7 @@ void PauseMenu::confirmOrLeave() {
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
-                        game.curAreaData->missionOld.gradingMode ==
+                        game.curArea->missionOld.gradingMode ==
                         MISSION_GRADING_MODE_POINTS
                     ) {
                         confirmationExplanation +=
@@ -861,8 +861,8 @@ void PauseMenu::drawRadar(
     al_clear_to_color(game.config.aestheticRadar.backgroundColor);
     
     //Draw each sector.
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
         ALLEGRO_COLOR color =
@@ -899,8 +899,8 @@ void PauseMenu::drawRadar(
     }
     
     //Draw each edge.
-    for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-        Edge* ePtr = game.curAreaData->edges[e];
+    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        Edge* ePtr = game.curArea->edges[e];
         
         if(!ePtr->sectors[0] || !ePtr->sectors[1]) {
             //The other side is already the void, so no need for an edge.
@@ -927,12 +927,12 @@ void PauseMenu::drawRadar(
     
     //Mission exit region.
     if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
+        game.curArea->type == AREA_TYPE_MISSION &&
+        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         drawHighlightedRectRegion(
-            game.curAreaData->missionOld.goalExitCenter,
-            game.curAreaData->missionOld.goalExitSize,
+            game.curArea->missionOld.goalExitCenter,
+            game.curArea->missionOld.goalExitSize,
             changeAlpha(game.config.guiColors.gold, 192), game.timePassed
         );
     }
@@ -1271,10 +1271,10 @@ void PauseMenu::drawRadar(
                 cellY++
             ) {
                 float startX =
-                    game.curAreaData->bmap.topLeftCorner.x +
+                    game.curArea->bmap.topLeftCorner.x +
                     cellX * GEOMETRY::AREA_CELL_SIZE;
                 float startY =
-                    game.curAreaData->bmap.topLeftCorner.y +
+                    game.curArea->bmap.topLeftCorner.y +
                     cellY * GEOMETRY::AREA_CELL_SIZE;
                 al_draw_rectangle(
                     startX + (1.0f / radarView.cam.zoom),
@@ -1335,7 +1335,7 @@ void PauseMenu::drawRadar(
         0.4f, game.config.aestheticRadar.backgroundColor
     );
     drawText(
-        game.curAreaData->name, game.sysContent.fntStandard,
+        game.curArea->name, game.sysContent.fntStandard,
         areaNameCenter, areaNameSize * 0.60f,
         game.config.aestheticRadar.highestColor
     );
@@ -1381,14 +1381,14 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
     for(size_t f = 0; f < game.missionFailConds.size(); f++) {
         if(
             hasFlag(
-                game.curAreaData->missionOld.failConditions,
+                game.curArea->missionOld.failConditions,
                 getIdxBitmask(f)
             )
         ) {
             MissionFail* cond = game.missionFailConds[f];
             
             string description =
-                cond->getPlayerDescription(&game.curAreaData->missionOld);
+                cond->getPlayerDescription(&game.curArea->missionOld);
             addNewBullet(list, description, game.config.guiColors.bad);
             
             float percentage = 0.0f;
@@ -1407,7 +1407,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
         }
     }
     
-    if(game.curAreaData->missionOld.failConditions == 0) {
+    if(game.curArea->missionOld.failConditions == 0) {
         addNewBullet(list, "(None)");
     }
 }
@@ -1419,7 +1419,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
  * @param list List item to fill.
  */
 void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    switch(game.curAreaData->missionOld.gradingMode) {
+    switch(game.curArea->missionOld.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
         addNewBullet(
             list,
@@ -1428,25 +1428,25 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         addNewBullet(
             list,
             "    Platinum: " +
-            i2s(game.curAreaData->missionOld.platinumReq) + "+ points.",
+            i2s(game.curArea->missionOld.platinumReq) + "+ points.",
             game.config.guiColors.gold
         );
         addNewBullet(
             list,
             "    Gold: " +
-            i2s(game.curAreaData->missionOld.goldReq) + "+ points.",
+            i2s(game.curArea->missionOld.goldReq) + "+ points.",
             game.config.guiColors.gold
         );
         addNewBullet(
             list,
             "    Silver: " +
-            i2s(game.curAreaData->missionOld.silverReq) + "+ points.",
+            i2s(game.curArea->missionOld.silverReq) + "+ points.",
             game.config.guiColors.gold
         );
         addNewBullet(
             list,
             "    Bronze: " +
-            i2s(game.curAreaData->missionOld.bronzeReq) + "+ points.",
+            i2s(game.curArea->missionOld.bronzeReq) + "+ points.",
             game.config.guiColors.gold
         );
         
@@ -1454,7 +1454,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
             MissionScoreCriterionOld* cPtr =
                 game.missionScoreCriteria[c];
-            int mult = cPtr->getMultiplier(&game.curAreaData->missionOld);
+            int mult = cPtr->getMultiplier(&game.curArea->missionOld);
             if(mult != 0) {
                 scoreNotes.push_back(
                     "    " + cPtr->getName() + " x " + i2s(mult) + "."
@@ -1482,7 +1482,7 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
                 game.missionScoreCriteria[c];
             if(
                 hasFlag(
-                    game.curAreaData->missionOld.pointLossData,
+                    game.curArea->missionOld.pointLossData,
                     getIdxBitmask(c)
                 )
             ) {
@@ -1529,17 +1529,17 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
 string PauseMenu::getMissionGoalStatus() {
     float percentage = 0.0f;
     int cur =
-        game.missionGoals[game.curAreaData->missionOld.goal]->
+        game.missionGoals[game.curArea->missionOld.goal]->
         getCurAmount(game.states.gameplay);
     int req =
-        game.missionGoals[game.curAreaData->missionOld.goal]->
+        game.missionGoals[game.curArea->missionOld.goal]->
         getReqAmount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
     return
-        game.missionGoals[game.curAreaData->missionOld.goal]->
+        game.missionGoals[game.curArea->missionOld.goal]->
         getStatus(cur, req, percentage);
 }
 
@@ -1813,7 +1813,7 @@ void PauseMenu::initMainPauseMenu() {
     //Area name.
     TextGuiItem* areaNameText =
         new TextGuiItem(
-        game.curAreaData->name, game.sysContent.fntAreaName,
+        game.curArea->name, game.sysContent.fntAreaName,
         changeAlpha(game.config.guiColors.gold, 192)
     );
     gui.addItem(areaNameText, "area_name");
@@ -1822,8 +1822,8 @@ void PauseMenu::initMainPauseMenu() {
     TextGuiItem* areaSubtitleText =
         new TextGuiItem(
         calculateAreaSubtitle(
-            game.curAreaData->subtitle, game.curAreaData->type,
-            game.curAreaData->mission.preset
+            game.curArea->subtitle, game.curArea->type,
+            game.curArea->mission.preset
         ),
         game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
@@ -1849,7 +1849,7 @@ void PauseMenu::initMainPauseMenu() {
     //Retry button.
     ButtonGuiItem* retryButton =
         new ButtonGuiItem(
-        game.curAreaData->type == AREA_TYPE_SIMPLE ?
+        game.curArea->type == AREA_TYPE_SIMPLE ?
         "Restart exploration" :
         "Retry mission",
         game.sysContent.fntStandard
@@ -1862,7 +1862,7 @@ void PauseMenu::initMainPauseMenu() {
     retryButton->onGetTooltip =
     [] () {
         return
-            game.curAreaData->type == AREA_TYPE_SIMPLE ?
+            game.curArea->type == AREA_TYPE_SIMPLE ?
             "Restart this area's exploration." :
             "Retry the mission from the start.";
     };
@@ -1871,7 +1871,7 @@ void PauseMenu::initMainPauseMenu() {
     //End button.
     ButtonGuiItem* endButton =
         new ButtonGuiItem(
-        game.curAreaData->type == AREA_TYPE_SIMPLE ?
+        game.curArea->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
         "End mission",
         game.sysContent.fntStandard
@@ -1885,11 +1885,11 @@ void PauseMenu::initMainPauseMenu() {
     [] () {
         bool asFail =
             hasFlag(
-                game.curAreaData->missionOld.failConditions,
+                game.curArea->missionOld.failConditions,
                 getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
-            game.curAreaData->type == AREA_TYPE_SIMPLE ?
+            game.curArea->type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
             asFail ?
             "End this mission as a fail." :
@@ -2077,8 +2077,8 @@ void PauseMenu::initMissionPage() {
     //Goal explanation text.
     TextGuiItem* goalText =
         new TextGuiItem(
-        game.missionGoals[game.curAreaData->missionOld.goal]->
-        getPlayerDescription(&game.curAreaData->missionOld),
+        game.missionGoals[game.curArea->missionOld.goal]->
+        getPlayerDescription(&game.curArea->missionOld),
         game.sysContent.fntStandard,
         game.config.guiColors.gold
     );
@@ -2642,11 +2642,11 @@ void PauseMenu::startClosing(GuiManager* curGui) {
 void PauseMenu::startLeavingGameplay() {
     if(
         leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
-        game.curAreaData->type == AREA_TYPE_MISSION
+        game.curArea->type == AREA_TYPE_MISSION
     ) {
         bool missionEndsInClear = false;
-        for(size_t e = 0; e < game.curAreaData->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
+            MissionEvent* ePtr = &game.curArea->mission.events[e];
             if(ePtr->type != MISSION_EV_PAUSE_MENU_END) continue;
             if(ePtr->actionType == MISSION_ACTION_END_CLEAR) {
                 missionEndsInClear = true;

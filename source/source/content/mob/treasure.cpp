@@ -56,7 +56,7 @@ Treasure::Treasure(const Point& pos, TreasureType* type, float angle) :
 int Treasure::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
         *applicableInThisMission =
-            game.curAreaData->missionOld.pointsPerTreasurePoint != 0;
+            game.curArea->missionOld.pointsPerTreasurePoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     return (int) treType->points;

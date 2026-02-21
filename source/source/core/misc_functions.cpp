@@ -58,7 +58,7 @@ bool areaWallsBetween(
     
     set<Edge*> candidateEdges;
     if(
-        !game.curAreaData->bmap.getEdgesInRegion(
+        !game.curArea->bmap.getEdgesInRegion(
             bbTL, bbBR,
             candidateEdges
         )
@@ -117,10 +117,10 @@ bool areaWallsBetween(
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clearAreaTextures() {
-    if(!game.curAreaData) return;
+    if(!game.curArea) return;
     
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         if(
             sPtr->textureInfo.bitmap &&
             sPtr->textureInfo.bitmap != game.bmpError
@@ -179,10 +179,10 @@ void crash(const string& reason, const string& info, int exitStatus) {
         i2s(game.content.bitmaps.list.getTotalUses()) + " total uses).\n" +
         "  Current area: ";
         
-    if(game.curAreaData && !game.curAreaData->name.empty()) {
+    if(game.curArea && !game.curArea->name.empty()) {
         errorStr +=
-            game.curAreaData->name + ", version " +
-            game.curAreaData->version + ".\n";
+            game.curArea->name + ", version " +
+            game.curArea->version + ".\n";
     } else {
         errorStr += "none.\n";
     }
@@ -1313,7 +1313,7 @@ void saveStatistics() {
 
 /**
  * @brief Saves a map of script variables onto a string.
- * 
+ *
  * @param varsMap Map to save.
  * @return The string.
  */

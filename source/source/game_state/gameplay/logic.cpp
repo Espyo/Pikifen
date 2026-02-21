@@ -34,14 +34,14 @@
  * @return The score.
  */
 int GameplayState::calculateMissionScore(bool forHud) {
-    int score = game.curAreaData->mission.startingPoints;
+    int score = game.curArea->mission.startingPoints;
     
     for(
         size_t c = 0;
-        c < game.curAreaData->mission.scoreCriteria.size(); c++
+        c < game.curArea->mission.scoreCriteria.size(); c++
     ) {
         MissionScoreCriterion* criPtr =
-            &game.curAreaData->mission.scoreCriteria[c];
+            &game.curArea->mission.scoreCriteria[c];
         MissionScoreCriterionType* criTypePtr =
             game.missionScoreCriterionTypes[criPtr->type];
             
@@ -49,7 +49,7 @@ int GameplayState::calculateMissionScore(bool forHud) {
         
         size_t amount =
             criTypePtr->calculateAmount(
-                criPtr, &game.curAreaData->mission, this
+                criPtr, &game.curArea->mission, this
             );
         score += amount * criPtr->points;
     }
@@ -174,7 +174,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     
     //Enemy or treasure points.
     int curLeaderCursorMobPoints = 0;
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         Mob* mPtr = getPointMobOnLeaderCursor(player);
         if(mPtr) {
             bool applicable;
@@ -667,7 +667,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         } else {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_PLAYING: {
-                game.audio.setCurrentSong(game.curAreaData->songName, false);
+                game.audio.setCurrentSong(game.curArea->songName, false);
                 bossMusicState = BOSS_MUSIC_STATE_PAUSED;
                 break;
             } default: {
@@ -760,7 +760,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         if(interlude.get() == INTERLUDE_NONE) {
             gameplayTimePassed += deltaT;
             dayMinutes +=
-                (game.curAreaData->dayTimeSpeed * deltaT / 60.0f);
+                (game.curArea->dayTimeSpeed * deltaT / 60.0f);
             if(dayMinutes > 60 * 24) {
                 dayMinutes -= 60 * 24;
             }
@@ -797,8 +797,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
             lPtr->tick(deltaT);
         }
         
-        for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-            Sector* sPtr = game.curAreaData->sectors[s];
+        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+            Sector* sPtr = game.curArea->sectors[s];
             
             if(sPtr->scroll.x != 0 || sPtr->scroll.y != 0) {
                 sPtr->textureInfo.tf.trans += sPtr->scroll * deltaT;
@@ -918,13 +918,13 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
         /*
         if(
-            curAreaData.weatherCondition.precipitationType !=
+            curArea.weatherCondition.precipitationType !=
             PRECIPITATION_TYPE_NONE
         ) {
             precipitationTimer.tick(deltaT);
             if(precipitationTimer.ticked) {
                 precipitationTimer = timer(
-                    curAreaData.weatherCondition.
+                    curArea.weatherCondition.
                     precipitationFrequency.getRandomNumber()
                 );
                 precipitationTimer.start();
@@ -933,7 +933,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
             for(size_t p = 0; p < precipitation.size();) {
                 precipitation[p].y +=
-                    curAreaData.weatherCondition.
+                    curArea.weatherCondition.
                     precipitationSpeed.getRandomNumber() * deltaT;
                 if(precipitation[p].y > scrH) {
                     precipitation.erase(precipitation.begin() + p);
@@ -950,16 +950,16 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *   Mission   \ / *
         *              O  *
         *******************/
-        if(game.curAreaData->type == AREA_TYPE_MISSION) {
+        if(game.curArea->type == AREA_TYPE_MISSION) {
         
             //Mission events.
             for(
-                size_t e = 0; e < game.curAreaData->mission.events.size(); e++
+                size_t e = 0; e < game.curArea->mission.events.size(); e++
             ) {
                 if(missionEventsTriggered[e]) continue;
-                MissionEvent* evPtr = &game.curAreaData->mission.events[e];
+                MissionEvent* evPtr = &game.curArea->mission.events[e];
                 MissionEvType* evTypePtr = game.missionEvTypes[evPtr->type];
-                if(evTypePtr->isMet(evPtr, &game.curAreaData->mission, this)) {
+                if(evTypePtr->isMet(evPtr, &game.curArea->mission, this)) {
                     MissionActionType* actionTypePtr =
                         game.missionActionTypes[evPtr->actionType];
                     if(actionTypePtr->run(evPtr, this)) {
@@ -985,9 +985,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
                 MISSION_MEDAL oldMedal =
-                    game.curAreaData->mission.getScoreMedal(oldMissionScore);
+                    game.curArea->mission.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
-                    game.curAreaData->mission.getScoreMedal(missionScore);
+                    game.curArea->mission.getScoreMedal(missionScore);
                 if(oldMedal < newMedal) {
                     medalGotItJuiceTimer = 0.0f;
                     game.audio.addNewUiSoundSource(
@@ -1009,15 +1009,15 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             //Mission time limit.
             if(
-                game.curAreaData->mission.timeLimit != 0.0f &&
-                game.curAreaData->mission.timeLimit >= 120.0f &&
+                game.curArea->mission.timeLimit != 0.0f &&
+                game.curArea->mission.timeLimit >= 120.0f &&
                 game.states.gameplay->bigMsg.get() == BIG_MESSAGE_NONE
             ) {
                 //It makes sense to only show the warning if the mission
                 //is long enough to the point where the player could lose
                 //track of where the final minute is.
                 float timeLeftCurFrame =
-                    game.curAreaData->mission.timeLimit -
+                    game.curArea->mission.timeLimit -
                     game.states.gameplay->gameplayTimePassed;
                 float timeLeftPrevFrame =
                     timeLeftCurFrame + game.deltaT;
@@ -1031,15 +1031,15 @@ void GameplayState::doGameplayLogic(float deltaT) {
             }
             
             if(
-                game.curAreaData->mission.timeLimit != 0.0f &&
-                game.curAreaData->mission.timeLimit >= 30.0f &&
+                game.curArea->mission.timeLimit != 0.0f &&
+                game.curArea->mission.timeLimit >= 30.0f &&
                 game.states.gameplay->bigMsg.get() == BIG_MESSAGE_NONE
             ) {
                 //It makes sense to only tick the countdown if the
                 //final ten seconds would be exciting, which isn't the case
                 //on short missions.
                 float timeLeftCurFrame =
-                    game.curAreaData->mission.timeLimit -
+                    game.curArea->mission.timeLimit -
                     game.states.gameplay->gameplayTimePassed;
                 float timeLeftPrevFrame =
                     timeLeftCurFrame + game.deltaT;
@@ -1066,7 +1066,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             areaRegions[r].leadersInside.clear();
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
                 Leader* lPtr = mobs.leaders[l];
-                AreaRegion* rPtr = game.curAreaData->regions[r];
+                AreaRegion* rPtr = game.curArea->regions[r];
                 if(
                     fabs(lPtr->pos.x - rPtr->center.x) <=
                     rPtr->size.x / 2.0f &&
@@ -1267,14 +1267,14 @@ void GameplayState::doMenuLogic() {
         string blockmapStr =
             resizeString(
                 i2s(
-                    game.curAreaData->bmap.getCol(
+                    game.curArea->bmap.getCol(
                         players[0].view.mouseCursorWorldPos.x
                     )
                 ),
                 5
             ) +
             i2s(
-                game.curAreaData->bmap.getRow(
+                game.curArea->bmap.getRow(
                     players[0].view.mouseCursorWorldPos.y
                 )
             );
@@ -1364,7 +1364,7 @@ void GameplayState::doMenuLogic() {
                     GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
                 );
             }
-            game.audio.setCurrentSong(game.curAreaData->songName);
+            game.audio.setCurrentSong(game.curArea->songName);
         }
         break;
     } case INTERLUDE_MISSION_END: {
@@ -1458,16 +1458,16 @@ void GameplayState::markAreaCellsActive(
     const Point& topLeft, const Point& bottomRight
 ) {
     int fromX =
-        (topLeft.x - game.curAreaData->bmap.topLeftCorner.x) /
+        (topLeft.x - game.curArea->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int toX =
-        (bottomRight.x - game.curAreaData->bmap.topLeftCorner.x) /
+        (bottomRight.x - game.curArea->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int fromY =
-        (topLeft.y - game.curAreaData->bmap.topLeftCorner.y) /
+        (topLeft.y - game.curArea->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
     int toY =
-        (bottomRight.y - game.curAreaData->bmap.topLeftCorner.y) /
+        (bottomRight.y - game.curArea->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
         
     markAreaCellsActive(fromX, toX, fromY, toY);
@@ -2369,10 +2369,10 @@ void GameplayState::updateMobIsActiveFlag() {
         Mob* mPtr = mobs.all[m];
         
         int cellX =
-            (mPtr->pos.x - game.curAreaData->bmap.topLeftCorner.x) /
+            (mPtr->pos.x - game.curArea->bmap.topLeftCorner.x) /
             GEOMETRY::AREA_CELL_SIZE;
         int cellY =
-            (mPtr->pos.y - game.curAreaData->bmap.topLeftCorner.y) /
+            (mPtr->pos.y - game.curArea->bmap.topLeftCorner.y) /
             GEOMETRY::AREA_CELL_SIZE;
         if(
             cellX < 0 ||

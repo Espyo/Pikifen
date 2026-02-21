@@ -66,7 +66,7 @@ void GameplayState::doGameDrawing(
     
     for(size_t p = 0; p < players.size(); p++) {
         Player& player = players[p];
-        al_clear_to_color(game.curAreaData->bgColor);
+        al_clear_to_color(game.curArea->bgColor);
         
         //Layer 1 -- Background.
         if(game.perfMon) {
@@ -190,13 +190,13 @@ void GameplayState::doGameDrawing(
     if(game.makerTools.hud) {
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
-                game.curAreaData->name,
+                game.curArea->name,
                 calculateAreaSubtitle(
-                    game.curAreaData->subtitle,
-                    game.curAreaData->type,
-                    game.curAreaData->mission.preset
+                    game.curArea->subtitle,
+                    game.curArea->type,
+                    game.curArea->mission.preset
                 ),
-                game.curAreaData->maker,
+                game.curArea->maker,
                 areaTitleFadeTimer.getRatioLeft()
             );
         }
@@ -219,7 +219,7 @@ void GameplayState::doGameDrawing(
 void GameplayState::drawBackground(
     const Viewport& view, ALLEGRO_BITMAP* bmpOutput
 ) {
-    if(!game.curAreaData->bgBmp) return;
+    if(!game.curArea->bgBmp) return;
     
     ALLEGRO_VERTEX bgV[4];
     for(unsigned char v = 0; v < 4; v++) {
@@ -234,8 +234,8 @@ void GameplayState::drawBackground(
     int bmpH = bmpOutput ? al_get_bitmap_height(bmpOutput) : view.size.y;
     float zoomToUse = bmpOutput ? 0.5 : view.cam.zoom;
     Point finalZoom(
-        bmpW * 0.5 * game.curAreaData->bgDist / zoomToUse,
-        bmpH * 0.5 * game.curAreaData->bgDist / zoomToUse
+        bmpW * 0.5 * game.curArea->bgDist / zoomToUse,
+        bmpH * 0.5 * game.curArea->bgDist / zoomToUse
     );
     
     bgV[0].x =
@@ -243,36 +243,36 @@ void GameplayState::drawBackground(
     bgV[0].y =
         0;
     bgV[0].u =
-        (view.cam.pos.x - finalZoom.x) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.x - finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[0].v =
-        (view.cam.pos.y - finalZoom.y) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.y - finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[1].x =
         bmpW;
     bgV[1].y =
         0;
     bgV[1].u =
-        (view.cam.pos.x + finalZoom.x) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.x + finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[1].v =
-        (view.cam.pos.y - finalZoom.y) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.y - finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[2].x =
         bmpW;
     bgV[2].y =
         bmpH;
     bgV[2].u =
-        (view.cam.pos.x + finalZoom.x) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.x + finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[2].v =
-        (view.cam.pos.y + finalZoom.y) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.y + finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[3].x =
         0;
     bgV[3].y =
         bmpH;
     bgV[3].u =
-        (view.cam.pos.x - finalZoom.x) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.x - finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[3].v =
-        (view.cam.pos.y + finalZoom.y) / game.curAreaData->bgBmpZoom;
+        (view.cam.pos.y + finalZoom.y) / game.curArea->bgBmpZoom;
         
     al_draw_prim(
-        bgV, nullptr, game.curAreaData->bgBmp,
+        bgV, nullptr, game.curArea->bgBmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
 }
@@ -1166,12 +1166,12 @@ void GameplayState::drawInGameText(Player* player) {
     
     //Mission exit region.
     if(
-        game.curAreaData->type == AREA_TYPE_MISSION &&
-        game.curAreaData->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
+        game.curArea->type == AREA_TYPE_MISSION &&
+        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         drawHighlightedRectRegion(
-            game.curAreaData->missionOld.goalExitCenter,
-            game.curAreaData->missionOld.goalExitSize,
+            game.curArea->missionOld.goalExitCenter,
+            game.curArea->missionOld.goalExitSize,
             changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
         );
     }
@@ -1389,15 +1389,15 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     al_use_transform(&game.identityTransform);
     
     //Draw the fog effect.
-    ALLEGRO_COLOR fogC = game.curAreaData->weatherCondition.getFogColor();
+    ALLEGRO_COLOR fogC = game.curArea->weatherCondition.getFogColor();
     if(fogC.a > 0) {
         //Start by drawing the central fog fade out effect.
         Point fogTL =
             view.cam.pos -
-            Point(game.curAreaData->weatherCondition.fogFar);
+            Point(game.curArea->weatherCondition.fogFar);
         Point fogBR =
             view.cam.pos +
-            Point(game.curAreaData->weatherCondition.fogFar);
+            Point(game.curArea->weatherCondition.fogFar);
         al_transform_coordinates(
             &view.worldToWindowTransform, &fogTL.x, &fogTL.y
         );
@@ -1431,14 +1431,14 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     
     //Draw the daylight.
     ALLEGRO_COLOR daylightC =
-        game.curAreaData->weatherCondition.getDaylightColor();
+        game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
         al_draw_filled_rectangle(0, 0, view.size.x, view.size.y, daylightC);
     }
     
     //Draw the blackout effect.
     unsigned char blackoutS =
-        game.curAreaData->weatherCondition.getBlackoutStrength();
+        game.curArea->weatherCondition.getBlackoutStrength();
     if(blackoutS > 0) {
         //First, we'll create the lightmap.
         //This is inverted (white = darkness, black = light), because we'll
@@ -1562,7 +1562,7 @@ void GameplayState::drawPauseMenu() {
  */
 void GameplayState::drawPrecipitation() {
     if(
-        game.curAreaData->weatherCondition.precipitationType !=
+        game.curArea->weatherCondition.precipitationType !=
         PRECIPITATION_TYPE_NONE
     ) {
         size_t nPrecipitationParticles = precipitation.size();
@@ -1652,7 +1652,7 @@ void GameplayState::drawThrowPreview(Player* player) {
     //Check which edges exist near the throw.
     set<Edge*> candidateEdges;
     
-    game.curAreaData->bmap.getEdgesInRegion(
+    game.curArea->bmap.getEdgesInRegion(
         Point(
             std::min(player->leaderPtr->pos.x, player->throwDest.x),
             std::min(player->leaderPtr->pos.y, player->throwDest.y)
@@ -1888,8 +1888,8 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     Point minCoords(FLT_MAX, FLT_MAX);
     Point maxCoords(-FLT_MAX, -FLT_MAX);
     
-    for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-        Vertex* vPtr = game.curAreaData->vertexes[v];
+    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+        Vertex* vPtr = game.curArea->vertexes[v];
         updateMinMaxCoords(
             minCoords, maxCoords, v2p(vPtr)
         );
@@ -1933,13 +1933,13 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
  * @brief Draws tree shadows.
  */
 void GameplayState::drawTreeShadows() {
-    for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
-        TreeShadow* sPtr = game.curAreaData->treeShadows[s];
+    for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
+        TreeShadow* sPtr = game.curArea->treeShadows[s];
         
         unsigned char alpha =
             (
                 (sPtr->alpha / 255.0) *
-                game.curAreaData->weatherCondition.getSunStrength()
+                game.curArea->weatherCondition.getSunStrength()
             ) * 255;
             
         drawBitmap(
@@ -2027,15 +2027,15 @@ void GameplayState::drawWorldComponents(
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
     components.reserve(
-        game.curAreaData->sectors.size() + //Sectors.
+        game.curArea->sectors.size() + //Sectors.
         mobs.all.size() + //Mob shadows.
         mobs.all.size() + //Mobs.
         particles.getCount() //Particles.
     );
     
     //Sectors.
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         
         if(
             !bmpOutput &&

@@ -158,7 +158,7 @@ void Enemy::finishDyingClassSpecifics() {
 int Enemy::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
         *applicableInThisMission =
-            game.curAreaData->missionOld.pointsPerEnemyPoint != 0;
+            game.curArea->missionOld.pointsPerEnemyPoint != 0;
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     return (int) eneType->points;
@@ -187,7 +187,7 @@ void Enemy::revive() {
 void Enemy::startDyingClassSpecifics() {
     //Numbers.
     game.states.gameplay->enemyDefeats++;
-    if(!game.curAreaData->missionOld.enemyPointsOnCollection) {
+    if(!game.curArea->missionOld.enemyPointsOnCollection) {
         game.states.gameplay->enemyPointsObtained += eneType->points;
     }
     game.statistics.enemyDefeats++;

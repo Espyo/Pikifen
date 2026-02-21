@@ -126,7 +126,7 @@ public:
     ContentManager content;
     
     //Data about the area that's currently being used.
-    Area* curAreaData = nullptr;
+    Area* curArea = nullptr;
     
     //Time between the previous frame and the current.
     double deltaT = 0.0f;

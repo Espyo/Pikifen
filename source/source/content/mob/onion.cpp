@@ -146,7 +146,7 @@ void Onion::generate() {
         
         size_t totalAfter = game.states.gameplay->mobs.pikmin.size() + 1;
         
-        if(totalAfter > game.curAreaData->getMaxPikminInField()) {
+        if(totalAfter > game.curArea->getMaxPikminInField()) {
             //Can't eject this Pikmin because we're at the limit.
             //Generate inside.
             nest->pikminInside[t][0]++;
@@ -158,14 +158,14 @@ void Onion::generate() {
             pg.baseParticle.priority = PARTICLE_PRIORITY_LOW;
             particleGenerators.push_back(pg);
             
-        } else if(oniType->autoEject || game.curAreaData->onionsAutoEject) {
+        } else if(oniType->autoEject || game.curArea->onionsAutoEject) {
             //Generate inside, and let the Onion's tick logic automatically
             //spit a seed or call it out.
             nest->pikminInside[t][0]++;
             
         } else if(
             oniType->ejectGrownPikmin ||
-            game.curAreaData->onionsEjectGrownPikmin
+            game.curArea->onionsEjectGrownPikmin
         ) {
             //Generate inside and then immediately eject it out.
             nest->pikminInside[t][0]++;
@@ -204,7 +204,7 @@ void Onion::readScriptVars(const ScriptVarReader& svr) {
 void Onion::spitPikminSeed(size_t typeIdx) {
     if(
         game.states.gameplay->mobs.pikmin.size() >=
-        game.curAreaData->getMaxPikminInField()
+        game.curArea->getMaxPikminInField()
     ) {
         return;
     }
@@ -292,22 +292,22 @@ void Onion::tickClassSpecifics(float deltaT) {
     
     //Auto-ejection.
     if(
-        (oniType->autoEject || game.curAreaData->onionsAutoEject) &&
+        (oniType->autoEject || game.curArea->onionsAutoEject) &&
         game.states.gameplay->mobs.pikmin.size() <
-        game.curAreaData->getMaxPikminInField()
+        game.curArea->getMaxPikminInField()
     ) {
         for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
             if(!nest->hasPikminInside(t)) continue;
             if(
                 game.states.gameplay->mobs.pikmin.size() >=
-                game.curAreaData->getMaxPikminInField()
+                game.curArea->getMaxPikminInField()
             ) {
                 break;
             }
             
             if(
                 oniType->ejectGrownPikmin ||
-                game.curAreaData->onionsEjectGrownPikmin
+                game.curArea->onionsEjectGrownPikmin
             ) {
                 if(nest->callQueue[t] == 0) {
                     nest->requestPikmin(t, 1, nullptr);

@@ -38,7 +38,7 @@ void drawEdgeOffsetOnBuffer(
     //Keep the end opacity as a constant, since changing it helps with
     //engine debugging.
     const float END_OPACITY = 0.0f;
-    Edge* ePtr = game.curAreaData->edges[eIdx];
+    Edge* ePtr = game.curArea->edges[eIdx];
     
     //End vertexes. Like in updateOffsetEffectCaches, order is important.
     Vertex* endVertexes[2];
@@ -651,8 +651,8 @@ void updateOffsetEffectBuffer(
 ) {
     unordered_set<size_t> edges;
     
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         
         if(
             !rectanglesIntersect(
@@ -752,7 +752,7 @@ void updateOffsetEffectCaches (
     }
     
     for(size_t e : edgesToUpdate) {
-        Edge* ePtr = game.curAreaData->edges[e];
+        Edge* ePtr = game.curArea->edges[e];
         
         Sector* unaffectedSector = nullptr;
         Sector* affectedSector = nullptr;

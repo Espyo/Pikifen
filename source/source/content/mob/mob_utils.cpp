@@ -871,7 +871,7 @@ PikminNest::PikminNest(
 bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
     if(
         game.states.gameplay->mobs.pikmin.size() >=
-        game.curAreaData->getMaxPikminInField()
+        game.curArea->getMaxPikminInField()
     ) {
         return false;
     }
@@ -1512,7 +1512,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
 string getErrorMessageMobInfo(Mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
-        p2s(m->pos) + ", area \"" + game.curAreaData->name + "\"";
+        p2s(m->pos) + ", area \"" + game.curArea->name + "\"";
 }
 
 

@@ -470,7 +470,7 @@ void GameplayState::doLogic() {
         doAestheticLogic(game.deltaT * deltaTMult);
     }
     doMenuLogic();
-
+    
     //Script.
     doScriptLogic();
 }
@@ -503,7 +503,7 @@ bool GameplayState::endMission(
             MissionEvType* evTypePtr = game.missionEvTypes[ev->type];
             if(
                 evTypePtr->getZoomData(
-                    ev, &game.curAreaData->mission, this,
+                    ev, &game.curArea->mission, this,
                     &newCamPos, &newCamZoom
                 )
             ) {
@@ -1092,7 +1092,7 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.quickPlay.areaPath.empty()) {
             game.states.annexScreen->areaMenuAreaType =
-                game.curAreaData->type;
+                game.curArea->type;
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
             game.changeState(game.states.annexScreen);
@@ -1181,7 +1181,7 @@ void GameplayState::load() {
         if(name == game.sysContentNames.sngBossVictory) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.setCurrentSong(game.curAreaData->songName, false);
+                game.audio.setCurrentSong(game.curArea->songName, false);
                 bossMusicState = BOSS_MUSIC_STATE_PAUSED;
             } default: {
                 break;
@@ -1216,14 +1216,14 @@ void GameplayState::load() {
         return;
     }
     
-    if(!game.curAreaData->weatherCondition.blackoutStrength.empty()) {
+    if(!game.curArea->weatherCondition.blackoutStrength.empty()) {
         lightmapBmp = al_create_bitmap(game.winW, game.winH);
     }
-    if(!game.curAreaData->weatherCondition.fogColor.empty()) {
+    if(!game.curArea->weatherCondition.fogColor.empty()) {
         bmpFog =
             generateFogBitmap(
-                game.curAreaData->weatherCondition.fogNear,
-                game.curAreaData->weatherCondition.fogFar
+                game.curArea->weatherCondition.fogNear,
+                game.curArea->weatherCondition.fogFar
             );
     }
     
@@ -1235,8 +1235,8 @@ void GameplayState::load() {
     
     vector<Mob*> mobsPerGen;
     
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* mPtr = game.curAreaData->mobGenerators[m];
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
         bool valid = true;
         
         if(!mPtr->type) {
@@ -1244,7 +1244,7 @@ void GameplayState::load() {
         } else if(
             mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
             game.states.gameplay->mobs.pikmin.size() >=
-            game.curAreaData->getMaxPikminInField()
+            game.curArea->getMaxPikminInField()
         ) {
             valid = false;
         }
@@ -1262,8 +1262,8 @@ void GameplayState::load() {
     //does not necessarily correspond to mob index X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* genPtr = game.curAreaData->mobGenerators[m];
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* genPtr = game.curArea->mobGenerators[m];
         Mob* mobPtr = mobsPerGen[m];
         if(!mobPtr) continue;
         
@@ -1275,8 +1275,8 @@ void GameplayState::load() {
     }
     
     //Mobs stored inside other. Same logic as mob links.
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* holdeeGenPtr = game.curAreaData->mobGenerators[m];
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* holdeeGenPtr = game.curArea->mobGenerators[m];
         if(holdeeGenPtr->storedInside == INVALID) continue;
         Mob* holdeePtr = mobsPerGen[m];
         Mob* holderMobPtr = mobsPerGen[holdeeGenPtr->storedInside];
@@ -1284,14 +1284,14 @@ void GameplayState::load() {
     }
     
     //Save each path stop's sector.
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        game.curAreaData->pathStops[s]->sectorPtr =
-            getSector(game.curAreaData->pathStops[s]->pos, nullptr, true);
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        game.curArea->pathStops[s]->sectorPtr =
+            getSector(game.curArea->pathStops[s]->pos, nullptr, true);
     }
     
     //Create liquids.
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* sPtr = game.curAreaData->sectors[s];
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        Sector* sPtr = game.curArea->sectors[s];
         if(!sPtr->hazard) continue;
         if(!sPtr->hazard->associatedLiquid) continue;
         if(sPtr->liquid) continue;
@@ -1353,14 +1353,14 @@ void GameplayState::load() {
     }
     
     //Memorize mobs required by the mission.
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         unordered_set<size_t> missionRequiredMobGenIdxs;
         
-        if(game.curAreaData->missionOld.goalAllMobs) {
+        if(game.curArea->missionOld.goalAllMobs) {
             for(size_t m = 0; m < mobsPerGen.size(); m++) {
                 if(
                     mobsPerGen[m] &&
-                    game.missionGoals[game.curAreaData->missionOld.goal]->
+                    game.missionGoals[game.curArea->missionOld.goal]->
                     isMobApplicable(mobsPerGen[m]->type)
                 ) {
                     missionRequiredMobGenIdxs.insert(m);
@@ -1369,7 +1369,7 @@ void GameplayState::load() {
             
         } else {
             missionRequiredMobGenIdxs =
-                game.curAreaData->missionOld.goalMobIdxs;
+                game.curArea->missionOld.goalMobIdxs;
         }
         
         for(size_t i : missionRequiredMobGenIdxs) {
@@ -1380,18 +1380,18 @@ void GameplayState::load() {
         missionEventsTriggered.clear();
         missionEventsTriggered.insert(
             missionEventsTriggered.begin(),
-            game.curAreaData->mission.events.size(),
+            game.curArea->mission.events.size(),
             false
         );
         
         missionMobChecklists.clear();
         for(
             size_t c = 0;
-            c < game.curAreaData->mission.mobChecklists.size(); c++
+            c < game.curArea->mission.mobChecklists.size(); c++
         ) {
             missionMobChecklists.push_back(MissionMobChecklistStatus());
             vector<size_t> idxs =
-                game.curAreaData->mission.mobChecklists[c].calculateList();
+                game.curArea->mission.mobChecklists[c].calculateList();
             missionMobChecklists.back().remaining.reserve(idxs.size());
             for(size_t i = 0; i < idxs.size(); i++) {
                 missionMobChecklists.back().remaining.insert(
@@ -1401,14 +1401,14 @@ void GameplayState::load() {
             missionMobChecklists.back().startingAmount =
                 missionMobChecklists.back().remaining.size();
             missionMobChecklists.back().requiredAmount =
-                game.curAreaData->mission.mobChecklists[c].requiredAmount;
+                game.curArea->mission.mobChecklists[c].requiredAmount;
             if(missionMobChecklists.back().requiredAmount == 0) {
                 missionMobChecklists.back().requiredAmount =
                     missionMobChecklists.back().startingAmount;
             }
         }
         
-        if(game.curAreaData->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : missionRequiredMobGenIdxs) {
@@ -1467,9 +1467,9 @@ void GameplayState::load() {
     
     //Initialize the area's active cells.
     float areaWidth =
-        game.curAreaData->bmap.nCols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.curArea->bmap.nCols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     float areaHeight =
-        game.curAreaData->bmap.nRows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.curArea->bmap.nRows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     size_t nrAreaCellCols =
         ceil(areaWidth / GEOMETRY::AREA_CELL_SIZE) + 1;
     size_t nrAreaCellRows =
@@ -1484,7 +1484,7 @@ void GameplayState::load() {
     areaRegions.clear();
     areaRegions.insert(
         areaRegions.begin(),
-        game.curAreaData->regions.size(), AreaRegionStatus()
+        game.curArea->regions.size(), AreaRegionStatus()
     );
     
     pathMgr.handleAreaLoad();
@@ -1495,10 +1495,10 @@ void GameplayState::load() {
         player.inventory = new Inventory(&player);
     }
     
-    dayMinutes = game.curAreaData->dayTimeStart;
+    dayMinutes = game.curArea->dayTimeStart;
     
     map<string, string> sprayStrs =
-        getVarMap(game.curAreaData->sprayAmounts);
+        getVarMap(game.curArea->sprayAmounts);
         
     for(auto& s : sprayStrs) {
         size_t sprayIdx = 0;
@@ -1514,7 +1514,7 @@ void GameplayState::load() {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
-                "area \"" + game.curAreaData->name + "\"!", nullptr
+                "area \"" + game.curArea->name + "\"!", nullptr
             );
             continue;
         }
@@ -1528,14 +1528,14 @@ void GameplayState::load() {
     game.liquidLimitEffectCaches.clear();
     game.liquidLimitEffectCaches.insert(
         game.liquidLimitEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.liquidLimitEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveLiquidLimit,
         getLiquidLimitLength,
@@ -1544,14 +1544,14 @@ void GameplayState::load() {
     game.wallSmoothingEffectCaches.clear();
     game.wallSmoothingEffectCaches.insert(
         game.wallSmoothingEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.wallSmoothingEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveLedgeSmoothing,
         getLedgeSmoothingLength,
@@ -1560,14 +1560,14 @@ void GameplayState::load() {
     game.wallShadowEffectCaches.clear();
     game.wallShadowEffectCaches.insert(
         game.wallShadowEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.wallShadowEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveWallShadow,
         getWallShadowLength,
@@ -1594,7 +1594,7 @@ void GameplayState::load() {
     game.errors.reportAreaLoadErrors();
     
     if(game.perfMon) {
-        game.perfMon->setAreaName(game.curAreaData->name);
+        game.perfMon->setAreaName(game.curArea->name);
         game.perfMon->leaveState();
         game.console.write(
             "The performance monitor maker tool is running.", 10

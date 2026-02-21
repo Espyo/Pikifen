@@ -107,7 +107,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             );
         string fileName =
             FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-            game.curAreaData->manifest->internalName +
+            game.curArea->manifest->internalName +
             "_" + getCurrentTime(true) + ".png";
             
         if(!al_save_bitmap(fileName.c_str(), bmp)) {
@@ -224,7 +224,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         if(
             game.states.gameplay->mobs.pikmin.size() <
-            game.curAreaData->getMaxPikminInField()
+            game.curArea->getMaxPikminInField()
         ) {
             bool mustUseLastType = (mod1 && lastPikminType);
             PikminType* newPikminType = nullptr;

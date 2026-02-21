@@ -284,8 +284,8 @@ void AreaEditor::circleSectorCmd(float inputValue) {
     }
     
     if(
-        !game.curAreaData->problems.nonSimples.empty() ||
-        !game.curAreaData->problems.loneEdges.empty()
+        !game.curArea->problems.nonSimples.empty() ||
+        !game.curArea->problems.loneEdges.empty()
     ) {
         setStatus(
             "Please fix any broken sectors or edges before trying to make "
@@ -325,10 +325,10 @@ void AreaEditor::clearCurrentArea() {
     
     clearAreaTextures();
     
-    if(game.curAreaData) {
-        for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
+    if(game.curArea) {
+        for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
             game.content.bitmaps.list.free(
-                game.curAreaData->treeShadows[s]->bmpName
+                game.curArea->treeShadows[s]->bmpName
             );
         }
     }
@@ -513,16 +513,16 @@ void AreaEditor::createArea(const string& requestedAreaPath) {
     changesMgr.markAsNonExistent();
     
     //Basic area data.
-    game.curAreaData = new Area();
+    game.curArea = new Area();
     game.content.areas.pathToManifest(
-        requestedAreaPath, &manifest, &game.curAreaData->type
+        requestedAreaPath, &manifest, &game.curArea->type
     );
-    game.curAreaData->manifest = &manifest;
-    game.curAreaData->userDataPath =
+    game.curArea->manifest = &manifest;
+    game.curArea->userDataPath =
         FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
         manifest.pack + "/" +
         (
-            game.curAreaData->type == AREA_TYPE_SIMPLE ?
+            game.curArea->type == AREA_TYPE_SIMPLE ?
             FOLDER_NAMES::SIMPLE_AREAS :
             FOLDER_NAMES::MISSION_AREAS
         ) + "/" +
@@ -556,12 +556,12 @@ void AreaEditor::createArea(const string& requestedAreaPath) {
     //Give a texture to give to this sector.
     string textureToUse = findGoodFirstTexture();
     if(!textureToUse.empty()) {
-        updateSectorTexture(game.curAreaData->sectors[0], textureToUse);
+        updateSectorTexture(game.curArea->sectors[0], textureToUse);
         updateTextureSuggestions(textureToUse);
     }
     
     //Now add a leader. The first available.
-    game.curAreaData->mobGenerators.push_back(
+    game.curArea->mobGenerators.push_back(
         new MobGen(Point(), game.config.leaders.order[0], 0, "")
     );
     
@@ -600,7 +600,7 @@ void AreaEditor::createDrawingVertexes() {
                 }
             }
         } else {
-            newVertex = game.curAreaData->addNewVertex();
+            newVertex = game.curArea->addNewVertex();
             newVertex->x = nPtr->snappedSpot.x;
             newVertex->y = nPtr->snappedSpot.y;
             nPtr->isNewVertex = true;
@@ -626,11 +626,11 @@ void AreaEditor::addNewMobUnderCursor() {
             game.config.pikmin.order[0];
     }
     
-    game.curAreaData->mobGenerators.push_back(
+    game.curArea->mobGenerators.push_back(
         new MobGen(hotspot, lastMobType)
     );
     
-    selectedMobs.insert(game.curAreaData->mobGenerators.back());
+    selectedMobs.insert(game.curArea->mobGenerators.back());
     
     setStatus("Created object.");
 }
@@ -693,7 +693,7 @@ void AreaEditor::deleteCurrentArea() {
     nonImportantFiles.push_back(FILE_NAMES::AREA_GEOMETRY);
     nonImportantFiles.push_back(FILE_NAMES::AREA_REFERENCE_CONFIG);
     wipeFolder(
-        game.curAreaData->userDataPath,
+        game.curArea->userDataPath,
         nonImportantFiles
     );
     
@@ -800,7 +800,7 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
     
     //Prepare everything.
     registerChange("edge deletion");
-    size_t nBefore = game.curAreaData->edges.size();
+    size_t nBefore = game.curArea->edges.size();
     size_t nSelected = selectedEdges.size();
     
     //Delete!
@@ -815,7 +815,7 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
         setStatus(
             "Deleted " +
             amountStr(
-                (int) (nBefore - game.curAreaData->edges.size()),
+                (int) (nBefore - game.curArea->edges.size()),
                 "edge"
             ) +
             " (" + i2s(nSelected) + " were selected)."
@@ -844,7 +844,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     
     //Prepare everything.
     registerChange("object deletion");
-    size_t nBefore = game.curAreaData->mobGenerators.size();
+    size_t nBefore = game.curArea->mobGenerators.size();
     
     //Delete!
     deleteMobs(selectedMobs);
@@ -857,7 +857,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     setStatus(
         "Deleted " +
         amountStr(
-            (int) (nBefore - game.curAreaData->mobGenerators.size()),
+            (int) (nBefore - game.curArea->mobGenerators.size()),
             "object"
         ) +
         "."
@@ -885,8 +885,8 @@ void AreaEditor::deletePathCmd(float inputValue) {
     
     //Prepare everything.
     registerChange("path deletion");
-    size_t nStopsBefore = game.curAreaData->pathStops.size();
-    size_t nLinksBefore = game.curAreaData->getNrPathLinks();
+    size_t nStopsBefore = game.curArea->pathStops.size();
+    size_t nLinksBefore = game.curArea->getNrPathLinks();
     
     //Delete!
     deletePathLinks(selectedPathLinks);
@@ -902,12 +902,12 @@ void AreaEditor::deletePathCmd(float inputValue) {
     setStatus(
         "Deleted " +
         amountStr(
-            (int) (nStopsBefore - game.curAreaData->pathStops.size()),
+            (int) (nStopsBefore - game.curArea->pathStops.size()),
             "path stop"
         ) +
         ", " +
         amountStr(
-            (int) (nLinksBefore - game.curAreaData->getNrPathLinks()),
+            (int) (nLinksBefore - game.curArea->getNrPathLinks()),
             "path link"
         ) +
         "."
@@ -931,11 +931,11 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         setStatus("You have to select a region to delete!", true);
     } else {
         registerChange("region deletion");
-        game.curAreaData->regions.erase(
-            game.curAreaData->regions.begin() + selectedRegionIdx
+        game.curArea->regions.erase(
+            game.curArea->regions.begin() + selectedRegionIdx
         );
-        for(size_t e = 0; e < game.curAreaData->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curAreaData->mission.events[e];
+        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
+            MissionEvent* ePtr = &game.curArea->mission.events[e];
             if(ePtr->type != MISSION_EV_LEADERS_IN_REGION) continue;
             if(ePtr->indexParam == 0) continue;
             adjustMisalignedIndex(
@@ -966,8 +966,8 @@ void AreaEditor::deleteTreeShadowCmd(float inputValue) {
         setStatus("You have to select a shadow to delete!", true);
     } else {
         registerChange("tree shadow deletion");
-        game.curAreaData->treeShadows.erase(
-            game.curAreaData->treeShadows.begin() + selectedShadowIdx
+        game.curArea->treeShadows.erase(
+            game.curArea->treeShadows.begin() + selectedShadowIdx
         );
         setStatus("Deleted tree shadow #" + i2s(selectedShadowIdx + 1) + ".");
         delete selectedShadow;
@@ -993,7 +993,7 @@ void AreaEditor::doLogic() {
     undoSaveLockTimer.tick(game.deltaT);
     
     if(
-        game.curAreaData &&
+        game.curArea &&
         !manifest.internalName.empty() &&
         game.options.areaEd.backupInterval > 0
     ) {
@@ -1016,12 +1016,12 @@ void AreaEditor::doSectorSplit() {
         LayoutDrawingNode* nPtr = &drawingNodes[n];
         LayoutDrawingNode* nextNode = &drawingNodes[n + 1];
         
-        Edge* newNodeEdge = game.curAreaData->addNewEdge();
+        Edge* newNodeEdge = game.curArea->addNewEdge();
         
-        game.curAreaData->connectEdgeToVertex(
+        game.curArea->connectEdgeToVertex(
             newNodeEdge, nPtr->onVertex, 0
         );
-        game.curAreaData->connectEdgeToVertex(
+        game.curArea->connectEdgeToVertex(
             newNodeEdge, nextNode->onVertex, 1
         );
         
@@ -1130,16 +1130,16 @@ void AreaEditor::doSectorSplit() {
         
         if(!ePtr->sectors[0] && !ePtr->sectors[1]) {
             //If it's a new edge, set it up properly.
-            game.curAreaData->connectEdgeToSector(
+            game.curArea->connectEdgeToSector(
                 ePtr, sectorSplitInfo.workingSector, workingSectorSide
             );
-            game.curAreaData->connectEdgeToSector(
+            game.curArea->connectEdgeToSector(
                 ePtr, newSector, newSectorSide
             );
             
         } else {
             //If not, let's transfer from the working sector to the new one.
-            game.curAreaData->connectEdgeToSector(
+            game.curArea->connectEdgeToSector(
                 ePtr, newSector, newSectorSide
             );
             
@@ -1335,7 +1335,7 @@ void AreaEditor::finishLayoutMoving() {
         
         vector<std::pair<Distance, Vertex*> > mergeVertexes =
             getMergeVertexes(
-                p, game.curAreaData->vertexes,
+                p, game.curArea->vertexes,
                 AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
             );
             
@@ -1396,8 +1396,8 @@ void AreaEditor::finishLayoutMoving() {
     }
     
     set<Edge*> movedEdges;
-    for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-        Edge* ePtr = game.curAreaData->edges[e];
+    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        Edge* ePtr = game.curArea->edges[e];
         bool bothSelected = true;
         for(size_t v = 0; v < 2; v++) {
             if(!isInContainer(selectedVertexes, ePtr->vertexes[v])) {
@@ -1412,8 +1412,8 @@ void AreaEditor::finishLayoutMoving() {
     
     //If an edge is moving into a stationary vertex, it needs to be split.
     //Let's find such edges.
-    for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-        Vertex* vPtr = game.curAreaData->vertexes[v];
+    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+        Vertex* vPtr = game.curArea->vertexes[v];
         Point p = v2p(vPtr);
         
         if(isInContainer(selectedVertexes, vPtr)) {
@@ -1521,7 +1521,7 @@ void AreaEditor::finishLayoutMoving() {
         merges[v->first] = splitEdge(v->second, v2p(v->first));
         //This split could've thrown off the edge pointer of a different
         //vertex to merge. Let's re-calculate.
-        Edge* newEdge = game.curAreaData->edges.back();
+        Edge* newEdge = game.curArea->edges.back();
         auto v2 = v;
         ++v2;
         for(; v2 != edgesToSplit.end(); ++v2) {
@@ -1575,8 +1575,8 @@ void AreaEditor::finishNewSectorDrawing() {
     if(outerSector) {
         outerSectorOldEdges = outerSector->edges;
     } else {
-        for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-            Edge* ePtr = game.curAreaData->edges[e];
+        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+            Edge* ePtr = game.curArea->edges[e];
             if(ePtr->sectors[0] == nullptr || ePtr->sectors[1] == nullptr) {
                 outerSectorOldEdges.push_back(ePtr);
             }
@@ -1603,12 +1603,12 @@ void AreaEditor::finishNewSectorDrawing() {
             nPtr->onVertex->getEdgeByNeighbor(prevNode->onVertex);
             
         if(!prevNodeEdge) {
-            prevNodeEdge = game.curAreaData->addNewEdge();
+            prevNodeEdge = game.curArea->addNewEdge();
             
-            game.curAreaData->connectEdgeToVertex(
+            game.curArea->connectEdgeToVertex(
                 prevNodeEdge, prevNode->onVertex, 0
             );
-            game.curAreaData->connectEdgeToVertex(
+            game.curArea->connectEdgeToVertex(
                 prevNodeEdge, nPtr->onVertex, 1
             );
         }
@@ -1627,10 +1627,10 @@ void AreaEditor::finishNewSectorDrawing() {
     for(size_t e = 0; e < drawingEdges.size(); e++) {
         Edge* ePtr = drawingEdges[e];
         
-        game.curAreaData->connectEdgeToSector(
+        game.curArea->connectEdgeToSector(
             ePtr, outerSector, outerSectorSide
         );
-        game.curAreaData->connectEdgeToSector(
+        game.curArea->connectEdgeToSector(
             ePtr, newSector, innerSectorSide
         );
     }
@@ -1744,15 +1744,15 @@ void AreaEditor::getHoveredLayoutElement(
 size_t AreaEditor::getMissionRequiredMobCount() const {
     size_t totalRequired = 0;
     
-    if(game.curAreaData->missionOld.goalAllMobs) {
+    if(game.curArea->missionOld.goalAllMobs) {
         for(
             size_t m = 0;
-            m < game.curAreaData->mobGenerators.size();
+            m < game.curArea->mobGenerators.size();
             m++
         ) {
-            MobGen* g = game.curAreaData->mobGenerators[m];
+            MobGen* g = game.curArea->mobGenerators[m];
             if(
-                game.missionGoals[game.curAreaData->missionOld.goal]->
+                game.missionGoals[game.curArea->missionOld.goal]->
                 isMobApplicable(g->type)
             ) {
                 totalRequired++;
@@ -1760,7 +1760,7 @@ size_t AreaEditor::getMissionRequiredMobCount() const {
         }
     } else {
         totalRequired =
-            game.curAreaData->missionOld.goalMobIdxs.size();
+            game.curArea->missionOld.goalMobIdxs.size();
     }
     
     return totalRequired;
@@ -1785,8 +1785,8 @@ string AreaEditor::getName() const {
  */
 string AreaEditor::getOpenedContentPath() const {
     if(
-        game.curAreaData &&
-        game.curAreaData->manifest &&
+        game.curArea &&
+        game.curArea->manifest &&
         !manifest.internalName.empty()
     ) {
         return manifest.path;
@@ -1905,14 +1905,14 @@ void AreaEditor::goToProblem() {
         
     } case EPT_BAD_SECTOR: {
 
-        if(game.curAreaData->problems.nonSimples.empty()) {
+        if(game.curArea->problems.nonSimples.empty()) {
             //Uh, old information. Try searching for problems again.
             findProblems();
             return;
         }
         
         changeState(EDITOR_STATE_LAYOUT);
-        Sector* sPtr = game.curAreaData->problems.nonSimples.begin()->first;
+        Sector* sPtr = game.curArea->problems.nonSimples.begin()->first;
         selectSector(sPtr);
         centerCamera(sPtr->bbox[0], sPtr->bbox[1]);
         
@@ -1920,13 +1920,13 @@ void AreaEditor::goToProblem() {
         
     } case EPT_LONE_EDGE: {
 
-        if(game.curAreaData->problems.loneEdges.empty()) {
+        if(game.curArea->problems.loneEdges.empty()) {
             //Uh, old information. Try searching for problems again.
             findProblems();
             return;
         }
         
-        Edge* ePtr = *game.curAreaData->problems.loneEdges.begin();
+        Edge* ePtr = *game.curArea->problems.loneEdges.begin();
         Point minCoords = v2p(ePtr->vertexes[0]);
         Point maxCoords = minCoords;
         updateMinMaxCoords(
@@ -2138,8 +2138,8 @@ void AreaEditor::layoutDrawingCmd(float inputValue) {
     }
     
     if(
-        !game.curAreaData->problems.nonSimples.empty() ||
-        !game.curAreaData->problems.loneEdges.empty()
+        !game.curArea->problems.nonSimples.empty() ||
+        !game.curArea->problems.loneEdges.empty()
     ) {
         setStatus(
             "Please fix any broken sectors or edges before trying to make "
@@ -2261,8 +2261,8 @@ void AreaEditor::loadAreaFolder(
     map<string, size_t> textureUsesMap;
     vector<std::pair<string, size_t> > textureUsesVector;
     
-    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        const string& n = game.curAreaData->sectors[s]->textureInfo.bmpName;
+    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        const string& n = game.curArea->sectors[s]->textureInfo.bmpName;
         if(n.empty()) continue;
         textureUsesMap[n]++;
     }
@@ -2295,7 +2295,7 @@ void AreaEditor::loadAreaFolder(
     setupForNewAreaPost();
     if(shouldUpdateHistory) {
         updateHistory(
-            game.options.areaEd.history, manifest, game.curAreaData->name
+            game.options.areaEd.history, manifest, game.curArea->name
         );
     }
     setStatus(
@@ -2352,7 +2352,7 @@ void AreaEditor::loadCmd(float inputValue) {
 void AreaEditor::loadReference() {
     bool fileWasOpened = false;
     DataNode file(
-        game.curAreaData->userDataPath + "/" +
+        game.curArea->userDataPath + "/" +
         FILE_NAMES::AREA_REFERENCE_CONFIG, &fileWasOpened
     );
     
@@ -2444,7 +2444,7 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
     registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
     newRegion->size = MISSION::EXIT_MIN_SIZE;
-    game.curAreaData->regions.push_back(newRegion);
+    game.curArea->regions.push_back(newRegion);
     selectRegion(newRegion);
     setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
 }
@@ -2627,7 +2627,7 @@ void AreaEditor::pickTexture(
  */
 Area* AreaEditor::prepareState() {
     Area* newState = new Area();
-    game.curAreaData->clone(*newState);
+    game.curArea->clone(*newState);
     return newState;
 }
 
@@ -2693,7 +2693,7 @@ void AreaEditor::redo() {
     //Let's first save the state of things right now so we can feed it into
     //the undo history afterwards.
     Area* newState = new Area();
-    game.curAreaData->clone(*newState);
+    game.curArea->clone(*newState);
     string operationName = redoHistory.front().second;
     
     //Change the area state.
@@ -2778,7 +2778,7 @@ void AreaEditor::registerChange(
     Area* newState = prePreparedState;
     if(!prePreparedState) {
         newState = new Area();
-        game.curAreaData->clone(*newState);
+        game.curArea->clone(*newState);
     }
     undoHistory.push_front(make_pair(newState, operationName));
     
@@ -2842,7 +2842,7 @@ void AreaEditor::reloadCmd(float inputValue) {
  * @brief Removes the current area thumbnail, if any.
  */
 void AreaEditor::removeThumbnail() {
-    game.curAreaData->thumbnail = nullptr;
+    game.curArea->thumbnail = nullptr;
 }
 
 
@@ -2868,7 +2868,7 @@ void AreaEditor::resetCamZoom() {
  * @param preparedState Prepared state to return to.
  */
 void AreaEditor::rollbackToPreparedState(Area* preparedState) {
-    preparedState->clone(*(game.curAreaData));
+    preparedState->clone(*(game.curArea));
 }
 
 
@@ -2883,7 +2883,7 @@ bool AreaEditor::saveArea(bool toBackup) {
 
     //First, some cleanup.
     bool deletedSectors;
-    game.curAreaData->cleanup(&deletedSectors);
+    game.curArea->cleanup(&deletedSectors);
     if(deletedSectors && !selectedSectors.empty()) {
         clearSelection();
     }
@@ -2891,10 +2891,10 @@ bool AreaEditor::saveArea(bool toBackup) {
     //Store everything into the relevant data nodes.
     DataNode geometryFile("", "");
     DataNode mainDataFile("", "");
-    game.curAreaData->saveGeometryToDataNode(&geometryFile);
-    game.curAreaData->saveMainDataToDataNode(&mainDataFile);
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
-        game.curAreaData->saveMissionDataToDataNode(&mainDataFile);
+    game.curArea->saveGeometryToDataNode(&geometryFile);
+    game.curArea->saveMainDataToDataNode(&mainDataFile);
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        game.curArea->saveMissionDataToDataNode(&mainDataFile);
     }
     
     //Save the thumbnail, or delete it if none.
@@ -2904,14 +2904,14 @@ bool AreaEditor::saveArea(bool toBackup) {
         (thumbnailNeedsSaving && !toBackup) ||
         (thumbnailBackupNeedsSaving && toBackup)
     ) {
-        game.curAreaData->saveThumbnail(toBackup);
+        game.curArea->saveThumbnail(toBackup);
         (toBackup ? thumbnailBackupNeedsSaving : thumbnailNeedsSaving) =
             false;
     }
     
     //Finally, actually save to the disk.
     string baseFolderPath =
-        toBackup ? game.curAreaData->userDataPath : manifest.path;
+        toBackup ? game.curArea->userDataPath : manifest.path;
     string mainDataFilePath =
         baseFolderPath + "/" + FILE_NAMES::AREA_MAIN_DATA;
     string geometryFilePath =
@@ -2953,7 +2953,7 @@ bool AreaEditor::saveArea(bool toBackup) {
         setStatus("Saved area successfully.");
         
         updateHistory(
-            game.options.areaEd.history, manifest, game.curAreaData->name
+            game.options.areaEd.history, manifest, game.curArea->name
         );
     }
     
@@ -2993,7 +2993,7 @@ void AreaEditor::saveCmd(float inputValue) {
  */
 void AreaEditor::saveReference() {
     string filePath =
-        game.curAreaData->userDataPath + "/" +
+        game.curArea->userDataPath + "/" +
         FILE_NAMES::AREA_REFERENCE_CONFIG;
         
     if(!referenceBitmap) {
@@ -3027,28 +3027,28 @@ void AreaEditor::selectAllCmd(float inputValue) {
     if(subState == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
         if(state == EDITOR_STATE_LAYOUT) {
             selectedEdges.insert(
-                game.curAreaData->edges.begin(),
-                game.curAreaData->edges.end()
+                game.curArea->edges.begin(),
+                game.curArea->edges.end()
             );
             selectedSectors.insert(
-                game.curAreaData->sectors.begin(),
-                game.curAreaData->sectors.end()
+                game.curArea->sectors.begin(),
+                game.curArea->sectors.end()
             );
             selectedVertexes.insert(
-                game.curAreaData->vertexes.begin(),
-                game.curAreaData->vertexes.end()
+                game.curArea->vertexes.begin(),
+                game.curArea->vertexes.end()
             );
             
         } else if(state == EDITOR_STATE_MOBS) {
             selectedMobs.insert(
-                game.curAreaData->mobGenerators.begin(),
-                game.curAreaData->mobGenerators.end()
+                game.curArea->mobGenerators.begin(),
+                game.curArea->mobGenerators.end()
             );
             
         } else if(state == EDITOR_STATE_PATHS) {
             selectedPathStops.insert(
-                game.curAreaData->pathStops.begin(),
-                game.curAreaData->pathStops.end()
+                game.curArea->pathStops.begin(),
+                game.curArea->pathStops.end()
             );
         }
         
@@ -3059,13 +3059,13 @@ void AreaEditor::selectAllCmd(float inputValue) {
         subState == EDITOR_SUB_STATE_MISSION_MOBS
     ) {
         registerChange("mission mob checklist choice change");
-        game.curAreaData->mission.mobChecklists[
+        game.curArea->mission.mobChecklists[
             curMobChecklistIdx
         ].mobIdxs.clear();
         for(
-            size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++
+            size_t m = 0; m < game.curArea->mobGenerators.size(); m++
         ) {
-            game.curAreaData->mission.mobChecklists[
+            game.curArea->mission.mobChecklists[
                 curMobChecklistIdx
             ].mobIdxs.push_back(m);
         }
@@ -3134,8 +3134,8 @@ void AreaEditor::selectionFilterCmd(float inputValue) {
  */
 void AreaEditor::selectPathStopsWithLabel(const string& label) {
     clearSelection();
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         if(sPtr->label == label) {
             selectedPathStops.insert(sPtr);
         }
@@ -3152,8 +3152,8 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
 void AreaEditor::selectRegion(AreaRegion* rPtr) {
     selectedRegion = rPtr;
     selectedRegionIdx = INVALID;
-    for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
-        if(game.curAreaData->regions[r] == selectedRegion) {
+    for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+        if(game.curArea->regions[r] == selectedRegion) {
             selectedRegionIdx = r;
         }
     }
@@ -3184,8 +3184,8 @@ void AreaEditor::selectSector(Sector* s) {
 void AreaEditor::selectTreeShadow(TreeShadow* sPtr) {
     selectedShadow = sPtr;
     selectedShadowIdx = INVALID;
-    for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
-        if(game.curAreaData->treeShadows[s] == selectedShadow) {
+    for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
+        if(game.curArea->treeShadows[s] == selectedShadow) {
             selectedShadowIdx = s;
         }
     }
@@ -3249,8 +3249,8 @@ void AreaEditor::setNewCircleSectorPoints() {
         Point next = getNextInVectorByIdx(newCircleSectorPoints, p);
         bool valid = true;
         
-        for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-            Edge* ePtr = game.curAreaData->edges[e];
+        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+            Edge* ePtr = game.curArea->edges[e];
             
             if(
                 lineSegsIntersect(
@@ -3275,9 +3275,9 @@ void AreaEditor::setNewCircleSectorPoints() {
 void AreaEditor::setSelectionStatusText() {
     setStatus();
     
-    if(game.curAreaData && !game.curAreaData->problems.nonSimples.empty()) {
+    if(game.curArea && !game.curArea->problems.nonSimples.empty()) {
         emitTriangulationErrorStatusBarMessage(
-            game.curAreaData->problems.nonSimples.begin()->second
+            game.curArea->problems.nonSimples.begin()->second
         );
     }
     
@@ -3357,7 +3357,7 @@ void AreaEditor::setSelectionStatusText() {
  * @param state State to load.
  */
 void AreaEditor::setStateFromUndoOrRedoHistory(Area* state) {
-    state->clone(*(game.curAreaData));
+    state->clone(*(game.curArea));
     
     undoSaveLockTimer.stop();
     undoSaveLockOperation.clear();
@@ -3448,8 +3448,8 @@ void AreaEditor::setupSectorSplit() {
         sectorSplitInfo.workingSectorOldEdges =
             sectorSplitInfo.workingSector->edges;
     } else {
-        for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-            Edge* ePtr = game.curAreaData->edges[e];
+        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+            Edge* ePtr = game.curArea->edges[e];
             if(ePtr->sectors[0] == nullptr || ePtr->sectors[1] == nullptr) {
                 sectorSplitInfo.workingSectorOldEdges.push_back(ePtr);
             }
@@ -3688,7 +3688,7 @@ void AreaEditor::undo() {
     //Let's first save the state of things right now so we can feed it into
     //the redo history afterwards.
     Area* newState = new Area();
-    game.curAreaData->clone(*newState);
+    game.curArea->clone(*newState);
     string operationName = undoHistory.front().second;
     
     //Change the area state.
@@ -3794,14 +3794,14 @@ void AreaEditor::updateAllEdgeOffsetCaches() {
     game.wallSmoothingEffectCaches.clear();
     game.wallSmoothingEffectCaches.insert(
         game.wallSmoothingEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.wallSmoothingEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveLedgeSmoothing,
         getLedgeSmoothingLength,
@@ -3810,14 +3810,14 @@ void AreaEditor::updateAllEdgeOffsetCaches() {
     game.wallShadowEffectCaches.clear();
     game.wallShadowEffectCaches.insert(
         game.wallShadowEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.wallShadowEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveWallShadow,
         getWallShadowLength,
@@ -3826,14 +3826,14 @@ void AreaEditor::updateAllEdgeOffsetCaches() {
     game.liquidLimitEffectCaches.clear();
     game.liquidLimitEffectCaches.insert(
         game.liquidLimitEffectCaches.begin(),
-        game.curAreaData->edges.size(),
+        game.curArea->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
         game.liquidLimitEffectCaches,
         unordered_set<Vertex*>(
-            game.curAreaData->vertexes.begin(),
-            game.curAreaData->vertexes.end()
+            game.curArea->vertexes.begin(),
+            game.curArea->vertexes.end()
         ),
         doesEdgeHaveLiquidLimit,
         getLiquidLimitLength,
@@ -4016,8 +4016,8 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
     bool gotSomething = false;
     Point minCoords, maxCoords;
     
-    for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-        Vertex* vPtr = game.curAreaData->vertexes[v];
+    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+        Vertex* vPtr = game.curArea->vertexes[v];
         if(vPtr->x < minCoords.x || !gotSomething) {
             minCoords.x = vPtr->x;
         }
@@ -4033,8 +4033,8 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
         gotSomething = true;
     }
     
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* mPtr = game.curAreaData->mobGenerators[m];
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->pos.x < minCoords.x || !gotSomething) {
             minCoords.x = mPtr->pos.x;
         }
@@ -4050,8 +4050,8 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
         gotSomething = true;
     }
     
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         if(sPtr->pos.x < minCoords.x || !gotSomething) {
             minCoords.x = sPtr->pos.x;
         }
@@ -4121,7 +4121,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
     
     vector<std::pair<Distance, Vertex*> > mergeVertexes =
         getMergeVertexes(
-            mouseClick, game.curAreaData->vertexes,
+            mouseClick, game.curArea->vertexes,
             AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
         );
     if(!mergeVertexes.empty()) {
@@ -4134,7 +4134,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
         }
         );
         onVertex = mergeVertexes[0].second;
-        onVertexIdx = game.curAreaData->findVertexIdx(onVertex);
+        onVertexIdx = game.curArea->findVertexIdx(onVertex);
     }
     
     if(onVertex) {
@@ -4145,7 +4145,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
         onEdge = aePtr->getEdgeUnderPoint(mouseClick);
         
         if(onEdge) {
-            onEdgeIdx = game.curAreaData->findEdgeIdx(onEdge);
+            onEdgeIdx = game.curArea->findEdgeIdx(onEdge);
             snappedSpot =
                 getClosestPointInLineSeg(
                     v2p(onEdge->vertexes[0]), v2p(onEdge->vertexes[1]),

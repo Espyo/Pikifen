@@ -95,14 +95,14 @@ bool PathLink::isOneWay() const {
  * @brief Clears all info.
  */
 void PathManager::clear() {
-    if(!game.curAreaData) return;
+    if(!game.curArea) return;
     
     obstructions.clear();
     
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         for(size_t l = 0; l < sPtr->links.size(); l++) {
-            game.curAreaData->pathStops[s]->links[l]->blockedByObstacle =
+            game.curArea->pathStops[s]->links[l]->blockedByObstacle =
                 false;
         }
     }
@@ -115,8 +115,8 @@ void PathManager::clear() {
  */
 void PathManager::handleAreaLoad() {
     //Go through all path stops and check if they're on hazardous sectors.
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         if(!sPtr->sectorPtr) continue;
         if(!sPtr->sectorPtr->hazard) continue;
         hazardousStops.insert(sPtr);
@@ -135,11 +135,11 @@ void PathManager::handleObstacleAdd(Mob* m) {
     bool pathsChanged = false;
     
     //Go through all path links and check if they have obstacles.
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         
         for(size_t l = 0; l < sPtr->links.size(); l++) {
-            PathLink* lPtr = game.curAreaData->pathStops[s]->links[l];
+            PathLink* lPtr = game.curArea->pathStops[s]->links[l];
             
             if(
                 circleIntersectsLineSeg(
@@ -327,8 +327,8 @@ void PathStop::calculateDistsPlusNeighbors() {
         lPtr->calculateDist(this);
     }
     
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         PathLink* lPtr = sPtr->getLink(this);
         if(lPtr) {
             lPtr->calculateDist(sPtr);
@@ -781,7 +781,7 @@ PATH_RESULT getPath(
 
     fullPath.clear();
     
-    if(game.curAreaData->pathStops.empty()) {
+    if(game.curArea->pathStops.empty()) {
         if(outTotalDist) *outTotalDist = 0.0f;
         return PATH_RESULT_DIRECT_NO_STOPS;
     }
@@ -802,8 +802,8 @@ PATH_RESULT getPath(
     float closestToStartDist = 0.0f;
     float closestToEndDist = 0.0f;
     
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
+    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        PathStop* sPtr = game.curArea->pathStops[s];
         
         float distToStart =
             Distance(startToUse, sPtr->pos).toFloat() - sPtr->radius;

@@ -304,12 +304,12 @@ Sector* getSector(
 
     if(useBlockmap) {
     
-        size_t col = game.curAreaData->bmap.getCol(p.x);
-        size_t row = game.curAreaData->bmap.getRow(p.y);
+        size_t col = game.curArea->bmap.getCol(p.x);
+        size_t row = game.curArea->bmap.getRow(p.y);
         if(col == INVALID || row == INVALID) return nullptr;
         
         unordered_set<Sector*>* sectors =
-            &game.curAreaData->bmap.sectors[col][row];
+            &game.curArea->bmap.sectors[col][row];
             
         if(sectors->size() == 1) return *sectors->begin();
         
@@ -327,8 +327,8 @@ Sector* getSector(
         
     } else {
     
-        for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-            Sector* sPtr = game.curAreaData->sectors[s];
+        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+            Sector* sPtr = game.curArea->sectors[s];
             
             if(
                 p.x < sPtr->bbox[0].x ||

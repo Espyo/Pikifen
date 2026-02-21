@@ -3564,7 +3564,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     if(
         typePtr->category->id == MOB_CATEGORY_PIKMIN &&
         game.states.gameplay->mobs.pikmin.size() >=
-        game.curAreaData->getMaxPikminInField()
+        game.curArea->getMaxPikminInField()
     ) {
         return nullptr;
     }
@@ -3658,13 +3658,13 @@ void Mob::startDying() {
     
     releaseStoredMobs();
     
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         for(
             size_t c = 0;
             c < game.states.gameplay->missionMobChecklists.size(); c++
         ) {
             if(
-                game.curAreaData->mission.mobChecklists[c].
+                game.curArea->mission.mobChecklists[c].
                 enemiesNeedCollection &&
                 type->category->id == MOB_CATEGORY_ENEMIES
             ) {

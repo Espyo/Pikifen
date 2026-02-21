@@ -354,7 +354,7 @@ Hud::Hud() :
             game.config.misc.dayMinutesEnd - game.config.misc.dayMinutesStart;
         float preTickDayMinutes =
             game.states.gameplay->dayMinutes -
-            game.curAreaData->dayTimeSpeed * deltaT / 60.0f;
+            game.curArea->dayTimeSpeed * deltaT / 60.0f;
         float postTickDayMinutes =
             game.states.gameplay->dayMinutes;
         const float checkpoints[3] = {0.25f, 0.50f, 0.75f};
@@ -731,7 +731,7 @@ Hud::Hud() :
     }
     
     
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         //Mission "goal" item.
         GuiItem* missionGoalMainItem = new GuiItem();
         gui.addItem(missionGoalMainItem, "mission_goal_main");
@@ -931,7 +931,7 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
  */
 void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     item->clipChildren = false;
-    MissionHudItem* itemInfo = &game.curAreaData->mission.hudItems[which];
+    MissionHudItem* itemInfo = &game.curArea->mission.hudItems[which];
     if(!itemInfo->enabled) return;
     
     switch(itemInfo->contentType) {
@@ -979,13 +979,13 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
             if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
                 if(
-                    game.curAreaData->mission.timeLimit > 0.0f &&
+                    game.curArea->mission.timeLimit > 0.0f &&
                     game.states.gameplay->gameplayTimePassed <=
-                    game.curAreaData->mission.timeLimit
+                    game.curArea->mission.timeLimit
                 ) {
                     float timeSpentRatio =
                         game.states.gameplay->gameplayTimePassed /
-                        game.curAreaData->mission.timeLimit;
+                        game.curArea->mission.timeLimit;
                     clockHandAngle += timeSpentRatio * TAU;
                 }
             } else {
@@ -1011,12 +1011,12 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             size_t seconds = 0;
             if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
                 if(
-                    game.curAreaData->mission.timeLimit > 0.0f &&
+                    game.curArea->mission.timeLimit > 0.0f &&
                     game.states.gameplay->gameplayTimePassed <=
-                    game.curAreaData->mission.timeLimit
+                    game.curArea->mission.timeLimit
                 ) {
                     seconds =
-                        game.curAreaData->mission.timeLimit -
+                        game.curArea->mission.timeLimit -
                         game.states.gameplay->gameplayTimePassed;
                 }
             } else {
@@ -1096,11 +1096,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         [this] (const DrawInfo & draw) {
             //Setup.
             const float lowestNormalValue =
-                std::min(0, game.curAreaData->mission.bronzeReq);
+                std::min(0, game.curArea->mission.bronzeReq);
             const float highestNormalValue =
                 std::max(
-                    game.curAreaData->mission.startingPoints,
-                    game.curAreaData->mission.platinumReq
+                    game.curArea->mission.startingPoints,
+                    game.curArea->mission.platinumReq
                 );
             const float valueRange =
                 (highestNormalValue - lowestNormalValue) *
@@ -1125,13 +1125,13 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             const float segLimits[] = {
                 std::min(startValue, 0.0f),
                 0,
-                (float) game.curAreaData->mission.bronzeReq,
-                (float) game.curAreaData->mission.silverReq,
-                (float) game.curAreaData->mission.goldReq,
-                (float) game.curAreaData->mission.platinumReq,
+                (float) game.curArea->mission.bronzeReq,
+                (float) game.curArea->mission.silverReq,
+                (float) game.curArea->mission.goldReq,
+                (float) game.curArea->mission.platinumReq,
                 std::max(
                     endValue,
-                    (float) game.curAreaData->mission.platinumReq
+                    (float) game.curArea->mission.platinumReq
                 )
             };
             ALLEGRO_COLOR segColorsTop[] = {

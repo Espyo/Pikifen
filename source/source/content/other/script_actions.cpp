@@ -965,13 +965,13 @@ void MobActionRunners::followPathRandomly(ScriptActionRunData& data) {
         //If there's no label, then any stop is eligible.
         choices.insert(
             choices.end(),
-            game.curAreaData->pathStops.begin(),
-            game.curAreaData->pathStops.end()
+            game.curArea->pathStops.begin(),
+            game.curArea->pathStops.end()
         );
     } else {
         //If there's a label, we should only pick stops that have the label.
-        for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-            PathStop* sPtr = game.curAreaData->pathStops[s];
+        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            PathStop* sPtr = game.curArea->pathStops[s];
             if(sPtr->label == label) {
                 choices.push_back(sPtr);
             }

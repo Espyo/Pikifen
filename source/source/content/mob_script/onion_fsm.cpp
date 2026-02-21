@@ -135,7 +135,7 @@ void OnionFsm::checkStopGenerating(Fsm* fsm, void* info1, void* info2) {
 void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
     Onion* oniPtr = (Onion*) fsm->m;
     Mob* delivery = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, fsm->printStateHistory());
     
     size_t seeds = 0;
@@ -144,7 +144,7 @@ void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
     case MOB_CATEGORY_ENEMIES: {
         seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
         
-        if(game.curAreaData->missionOld.enemyPointsOnCollection) {
+        if(game.curArea->missionOld.enemyPointsOnCollection) {
             game.states.gameplay->enemyPointsObtained +=
                 ((Enemy*) delivery)->eneType->points;
         }

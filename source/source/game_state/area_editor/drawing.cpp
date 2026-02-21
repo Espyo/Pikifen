@@ -109,7 +109,7 @@ void AreaEditor::drawCanvas() {
     
     al_clear_to_color(COLOR_BLACK);
     
-    if(!game.curAreaData) {
+    if(!game.curArea) {
         al_reset_clipping_rectangle();
         return;
     }
@@ -131,16 +131,16 @@ void AreaEditor::drawCanvas() {
     
     if(
         game.options.areaEd.viewMode == VIEW_MODE_HEIGHTMAP &&
-        !game.curAreaData->sectors.empty()
+        !game.curArea->sectors.empty()
     ) {
-        style.lowestSectorZ = game.curAreaData->sectors[0]->z;
+        style.lowestSectorZ = game.curArea->sectors[0]->z;
         style.highestSectorZ = style.lowestSectorZ;
         
-        for(size_t s = 1; s < game.curAreaData->sectors.size(); s++) {
+        for(size_t s = 1; s < game.curArea->sectors.size(); s++) {
             style.lowestSectorZ =
-                std::min(style.lowestSectorZ, game.curAreaData->sectors[s]->z);
+                std::min(style.lowestSectorZ, game.curArea->sectors[s]->z);
             style.highestSectorZ =
-                std::max(style.highestSectorZ, game.curAreaData->sectors[s]->z);
+                std::max(style.highestSectorZ, game.curArea->sectors[s]->z);
         }
     }
     
@@ -623,8 +623,8 @@ void AreaEditor::drawCrossSectionGraph() {
             
         };
         vector<Split> splits;
-        for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-            Edge* ePtr = game.curAreaData->edges[e];
+        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+            Edge* ePtr = game.curArea->edges[e];
             float l1r = 0;
             float l2r = 0;
             if(
@@ -959,9 +959,9 @@ void AreaEditor::drawDebugText(
  * @param style Canvas style.
  */
 void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
-    size_t nEdges = game.curAreaData->edges.size();
+    size_t nEdges = game.curArea->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
-        Edge* ePtr = game.curAreaData->edges[e];
+        Edge* ePtr = game.curArea->edges[e];
         
         if(!ePtr->isValid()) continue;
         
@@ -993,13 +993,13 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             valid = false;
         }
         
-        if(isInContainer(game.curAreaData->problems.loneEdges, ePtr)) {
+        if(isInContainer(game.curArea->problems.loneEdges, ePtr)) {
             valid = false;
         }
         
         if(
-            isInMap(game.curAreaData->problems.nonSimples, ePtr->sectors[0]) ||
-            isInMap(game.curAreaData->problems.nonSimples, ePtr->sectors[1])
+            isInMap(game.curArea->problems.nonSimples, ePtr->sectors[0]) ||
+            isInMap(game.curArea->problems.nonSimples, ePtr->sectors[1])
         ) {
             valid = false;
         }
@@ -1187,8 +1187,8 @@ void AreaEditor::drawLineDist(
 void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     //Linking and containing.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
-        for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-            MobGen* mPtr = game.curAreaData->mobGenerators[m];
+        for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+            MobGen* mPtr = game.curArea->mobGenerators[m];
             MobGen* m2Ptr = nullptr;
             
             if(!mPtr->type) continue;
@@ -1214,7 +1214,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             
             if(mPtr->storedInside != INVALID) {
                 m2Ptr =
-                    game.curAreaData->mobGenerators[mPtr->storedInside];
+                    game.curArea->mobGenerators[mPtr->storedInside];
                 if(!m2Ptr->type) continue;
                 
                 bool showStore =
@@ -1233,8 +1233,8 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     }
     
     //The generators themselves.
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* mPtr = game.curAreaData->mobGenerators[m];
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
         
         float radius = getMobGenRadius(mPtr);
         ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
@@ -1323,7 +1323,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         bool isInMobChecklist =
             subState == EDITOR_SUB_STATE_MISSION_MOBS &&
             isInContainer(
-                game.curAreaData->mission.mobChecklists[
+                game.curArea->mission.mobChecklists[
                     curMobChecklistIdx
                 ].mobIdxs, m
             );
@@ -1388,8 +1388,8 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
 void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
-        for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-            PathStop* sPtr = game.curAreaData->pathStops[s];
+        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            PathStop* sPtr = game.curArea->pathStops[s];
             bool highlighted = highlightedPathStop == sPtr;
             ALLEGRO_COLOR color;
             if(hasFlag(sPtr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
@@ -1437,8 +1437,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         }
         
         //Links.
-        for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-            PathStop* sPtr = game.curAreaData->pathStops[s];
+        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            PathStop* sPtr = game.curArea->pathStops[s];
             for(size_t l = 0; l < sPtr->links.size(); l++) {
                 PathLink* lPtr = sPtr->links[l];
                 PathStop* s2Ptr = lPtr->endPtr;
@@ -1559,8 +1559,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         if(showClosestStop) {
             PathStop* closest = nullptr;
             float closestDist = FLT_MAX;
-            for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* sPtr = game.curAreaData->pathStops[s];
+            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+                PathStop* sPtr = game.curArea->pathStops[s];
                 float d =
                     Distance(
                         game.editorsView.mouseCursorWorldPos, sPtr->pos
@@ -1678,9 +1678,9 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  */
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_DETAILS) {
-        for(size_t r = 0; r < game.curAreaData->regions.size(); r++) {
+        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
         
-            AreaRegion* rPtr = game.curAreaData->regions[r];
+            AreaRegion* rPtr = game.curArea->regions[r];
             
             al_draw_rectangle(
                 rPtr->center.x - rPtr->size.x / 2.0f,
@@ -1733,7 +1733,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
     }
     
     //Draw each one.
-    size_t nSectors = game.curAreaData->sectors.size();
+    size_t nSectors = game.curArea->sectors.size();
     for(size_t s = 0; s < nSectors; s++) {
         Sector* sPtr;
         if(
@@ -1745,7 +1745,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
         ) {
             sPtr = preMoveAreaData->sectors[s];
         } else {
-            sPtr = game.curAreaData->sectors[s];
+            sPtr = game.curArea->sectors[s];
         }
         
         bool viewHeightmap = false;
@@ -1800,7 +1800,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             selectionFilter == SELECTION_FILTER_SECTORS &&
             state == EDITOR_STATE_LAYOUT;
             
-        if(isInMap(game.curAreaData->problems.nonSimples, sPtr)) {
+        if(isInMap(game.curArea->problems.nonSimples, sPtr)) {
             valid = false;
         }
         if(sPtr == problemSectorPtr) {
@@ -1885,9 +1885,9 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
     ) {
-        for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
+        for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
         
-            TreeShadow* sPtr = game.curAreaData->treeShadows[s];
+            TreeShadow* sPtr = game.curArea->treeShadows[s];
             if(
                 !previewMode &&
                 sPtr == selectedShadow
@@ -1954,9 +1954,9 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
  */
 void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_LAYOUT) {
-        size_t nVertexes = game.curAreaData->vertexes.size();
+        size_t nVertexes = game.curArea->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {
-            Vertex* vPtr = game.curAreaData->vertexes[v];
+            Vertex* vPtr = game.curArea->vertexes[v];
             bool selected = isInContainer(selectedVertexes, vPtr);
             bool valid = vPtr != problemVertexPtr;
             bool highlighted =

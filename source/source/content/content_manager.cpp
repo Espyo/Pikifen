@@ -196,20 +196,20 @@ bool ContentManager::loadAreaAsCurrent(
     CONTENT_LOAD_LEVEL level, bool fromBackup
 ) {
     engineAssert(
-        game.curAreaData == nullptr,
+        game.curArea == nullptr,
         "Tried to load area \"" + requestedAreaPath + "\" as the current "
         "one even though there is already a loaded current area, \"" +
         (
-            game.curAreaData->manifest ?
-            game.curAreaData->manifest->path :
+            game.curArea->manifest ?
+            game.curArea->manifest->path :
             "(unsaved)"
         ) + "\"!"
     );
     
-    game.curAreaData = new Area();
+    game.curArea = new Area();
     bool success =
         areas.loadArea(
-            game.curAreaData, requestedAreaPath, manifPtr,
+            game.curArea, requestedAreaPath, manifPtr,
             level, fromBackup
         );
         
@@ -262,10 +262,10 @@ void ContentManager::unloadAll(const vector<CONTENT_TYPE>& types) {
  * @param level Should match the level at which the content got loaded.
  */
 void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
-    if(!game.curAreaData) return;
-    game.curAreaData->clear();
-    delete game.curAreaData;
-    game.curAreaData = nullptr;
+    if(!game.curArea) return;
+    game.curArea->clear();
+    delete game.curArea;
+    game.curArea = nullptr;
 }
 
 

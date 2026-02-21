@@ -607,7 +607,7 @@ ONION_TRANSFER_RESULT OnionMenu::canAddToGroup(size_t typeIdx) {
     }
     if(
         game.states.gameplay->mobs.pikmin.size() + totalDelta >=
-        game.curAreaData->getMaxPikminInField()
+        game.curArea->getMaxPikminInField()
     ) {
         return ONION_TRANSFER_RESULT_FIELD_FULL;
     }
@@ -876,7 +876,7 @@ void OnionMenu::tick(float deltaT) {
     //Make sure the player can't request to have more than the field limit.
     int deltaOverLimit =
         (int) game.states.gameplay->mobs.pikmin.size() +
-        totalDelta - (int) game.curAreaData->getMaxPikminInField();
+        totalDelta - (int) game.curArea->getMaxPikminInField();
         
     while(deltaOverLimit > 0) {
         vector<size_t> candidateTypes;

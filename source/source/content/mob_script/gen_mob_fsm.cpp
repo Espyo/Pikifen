@@ -435,7 +435,7 @@ void GenMobFsm::handleDelivery(Fsm* fsm, void* info1, void* info2) {
         );
     }
     
-    if(game.curAreaData->type == AREA_TYPE_MISSION) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         for(
             size_t c = 0;
             c < game.states.gameplay->missionMobChecklists.size(); c++
