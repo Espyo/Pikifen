@@ -1916,7 +1916,7 @@ void Editor::processGuiBaseContentWarningDialog() {
         closeTopDialog();
     }
     
-    //Continue button.
+    //Continue playing button.
     ImGui::SameLine();
     if(ImGui::Button("Continue", ImVec2(70, 30))) {
         closeTopDialog();

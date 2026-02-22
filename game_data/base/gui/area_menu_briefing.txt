@@ -1,0 +1,53 @@
+name=Area menu -- briefing
+description=GUI for the area selection menu's mission briefing table, the stuff with detailed mission information.
+maker=Espyo
+version=1.1.0
+engine_version=1.2.0
+hardcoded_items{
+	briefing_area_name{
+		center=50.0000 5.0000
+		size=96.0000 6.0000
+		description=Area name (briefing page version).
+	}
+	objective_header{
+		center=50.0000 13.0000
+		size=96.0000 6.0000
+		description=Header text for the mission briefing objective section.
+	}
+	objective{
+		center=50.0000 24.0000
+		size=96.0000 12.0000
+		description=Mission briefing objective explanation.
+	}
+	notes_header{
+		center=50.0000 35.0000
+		size=96.0000 6.0000
+		description=Header text for the mission briefing notes section.
+	}
+	notes_list{
+		center=47.0000 52.0000
+		size=90.0000 24.0000
+		description=List of mission briefing note bullet points.
+	}
+	notes_scroll{
+		center=96.0000 52.0000
+		size=4.0000 24.0000
+		description=Scrollbar for the mission briefing note list.
+	}
+	grading_header{
+		center=50.0000 69.0000
+		size=96.0000 6.0000
+		description=Header text for the mission grading section.
+	}
+	grading_list{
+		center=47.0000 86.0000
+		size=90.0000 24.0000
+		description=List of mission grading explanation bullet points.
+	}
+	grading_scroll{
+		center=96.0000 86.0000
+		size=4.0000 24.0000
+		description=Scrollbar for the mission grading explanation bullet point list.
+	}
+}
+custom_items

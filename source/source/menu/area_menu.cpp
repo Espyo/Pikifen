@@ -26,6 +26,9 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace AREA_MENU {
 
+//Path to the mission briefing GUI definition file.
+const string BRIEFING_GUI_FILE_NAME = "area_menu_briefing";
+
 //Name of the main GUI definition file.
 const string GUI_FILE_NAME = "area_menu";
 
@@ -34,9 +37,6 @@ const string INFO_GUI_FILE_NAME = "area_menu_info";
 
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
-
-//Path to the mission specs GUI definition file.
-const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 }
 
@@ -50,7 +50,7 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
  */
 void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
     size_t bulletIdx = list->children.size();
-    const float BULLET_HEIGHT = 0.18f;
+    const float BULLET_HEIGHT = 0.22f;
     const float BULLET_PADDING = 0.01f;
     const float BULLETS_OFFSET = 0.01f;
     const float bulletCenterY =
@@ -69,9 +69,9 @@ void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
 
 
 /**
- * @brief Animates the GUI items inside of the info and specs pages.
+ * @brief Animates the GUI items inside of the info and briefing pages.
  */
-void AreaMenu::animateInfoAndSpecs() {
+void AreaMenu::animateInfoAndBriefing() {
     infoNameText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
@@ -100,14 +100,14 @@ void AreaMenu::animateInfoAndSpecs() {
         recordDateText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
-        specsNameText->startJuiceAnimation(
+        briefingNameText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
-        goalText->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        objectiveText->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
-        for(size_t c = 0; c < failList->children.size(); c++) {
-            failList->children[c]->startJuiceAnimation(
+        for(size_t c = 0; c < noteList->children.size(); c++) {
+            noteList->children[c]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
@@ -142,9 +142,9 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     if(areaType == AREA_TYPE_MISSION) {
         recordInfoText->text.clear();
         recordDateText->text.clear();
-        goalText->text.clear();
-        specsNameText->text.clear();
-        failList->deleteAllChildren();
+        objectiveText->text.clear();
+        briefingNameText->text.clear();
+        noteList->deleteAllChildren();
         gradingList->deleteAllChildren();
     }
     
@@ -218,128 +218,24 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         recordDateText->text = areaRecords[areaIdx].date;
     }
     
-    //Now fill in the mission specs.
+    //Now fill in the mission briefing page.
     if(areaType == AREA_TYPE_MISSION) {
-        specsNameText->text = areaPtr->name;
-        MissionDataOld& mission = areaPtr->missionOld;
-        goalText->text =
-            game.missionGoals[mission.goal]->
-            getPlayerDescription(&mission);
-            
-        for(size_t f = 0; f < game.missionFailConds.size(); f++) {
-            if(hasFlag(mission.failConditions, getIdxBitmask(f))) {
-                MissionFail* cond = game.missionFailConds[f];
-                addNewBullet(
-                    failList,
-                    cond->getPlayerDescription(&mission)
-                );
-            }
+        briefingNameText->text = areaPtr->name;
+        MissionData& mission = areaPtr->mission;
+        objectiveText->text = mission.getBriefingObjectiveText();
+        
+        vector<string> noteBPStrs = mission.getNoteBulletPoints();
+        for(size_t p = 0; p < noteBPStrs.size(); p++) {
+            addNewBullet(noteList, noteBPStrs[p]);
         }
         
-        if(mission.failConditions == 0) {
-            addNewBullet(failList, "(None)");
-        }
-        
-        switch(mission.gradingMode) {
-        case MISSION_GRADING_MODE_POINTS: {
-            addNewBullet(
-                gradingList,
-                "Your medal depends on your score:"
-            );
-            addNewBullet(
-                gradingList,
-                "    Platinum: " + i2s(mission.platinumReq) + "+ points."
-            );
-            addNewBullet(
-                gradingList,
-                "    Gold: " + i2s(mission.goldReq) + "+ points."
-            );
-            addNewBullet(
-                gradingList,
-                "    Silver: " + i2s(mission.silverReq) + "+ points."
-            );
-            addNewBullet(
-                gradingList,
-                "    Bronze: " + i2s(mission.bronzeReq) + "+ points."
-            );
-            vector<string> scoreNotes;
-            for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterionOld* cPtr =
-                    game.missionScoreCriteria[c];
-                int mult = cPtr->getMultiplier(&mission);
-                if(mult != 0) {
-                    scoreNotes.push_back(
-                        "    " + cPtr->getName() + " x " + i2s(mult) + "."
-                    );
-                }
-            }
-            if(!scoreNotes.empty()) {
-                addNewBullet(
-                    gradingList,
-                    "Your score is calculated like so:"
-                );
-                for(size_t s = 0; s < scoreNotes.size(); s++) {
-                    addNewBullet(gradingList, scoreNotes[s]);
-                }
-            } else {
-                addNewBullet(
-                    gradingList,
-                    "In this mission, your score will always be 0."
-                );
-            }
-            vector<string> lossNotes;
-            for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterionOld* cPtr =
-                    game.missionScoreCriteria[c];
-                if(
-                    hasFlag(
-                        mission.pointLossData,
-                        getIdxBitmask(c)
-                    )
-                ) {
-                    lossNotes.push_back("    " + cPtr->getName());
-                }
-            }
-            if(!lossNotes.empty()) {
-                addNewBullet(
-                    gradingList,
-                    "If you fail, you'll lose your score for:"
-                );
-                for(size_t l = 0; l < lossNotes.size(); l++) {
-                    addNewBullet(gradingList, lossNotes[l]);
-                }
-            }
-            if(!mission.makerRecordDate.empty()) {
-                addNewBullet(
-                    gradingList,
-                    "Maker's record: " + i2s(mission.makerRecord) +
-                    " (" + mission.makerRecordDate + ")"
-                );
-            }
-            break;
-        }
-        case MISSION_GRADING_MODE_GOAL: {
-            addNewBullet(
-                gradingList,
-                "You get a platinum medal if you clear the goal."
-            );
-            addNewBullet(
-                gradingList,
-                "You get no medal if you fail."
-            );
-            break;
-        }
-        case MISSION_GRADING_MODE_PARTICIPATION: {
-            addNewBullet(
-                gradingList,
-                "You get a platinum medal just by playing the mission."
-            );
-            break;
-        }
+        vector<string> gradingBPStrs = mission.getGradingBulletPoints();
+        for(size_t p = 0; p < gradingBPStrs.size(); p++) {
+            addNewBullet(gradingList, gradingBPStrs[p]);
         }
     }
     
-    animateInfoAndSpecs();
+    animateInfoAndBriefing();
 }
 
 
@@ -349,7 +245,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
 void AreaMenu::initGuiInfoPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
-    gui.registerCoords("info_name",    36,  6, 68,  8);
+    gui.registerCoords("name",         36,  6, 68,  8);
     gui.registerCoords("subtitle",     36, 16, 68,  8);
     gui.registerCoords("thumbnail",    85, 14, 26, 24);
     gui.registerCoords("description",  50, 40, 96, 24);
@@ -372,7 +268,7 @@ void AreaMenu::initGuiInfoPage() {
             "", game.sysContent.fntAreaName, game.config.guiColors.gold
         );
         infoBox->addChild(infoNameText);
-        gui.addItem(infoNameText, "info_name");
+        gui.addItem(infoNameText, "name");
         
         //Subtitle text.
         subtitleText = new TextGuiItem("", game.sysContent.fntAreaName);
@@ -534,7 +430,7 @@ void AreaMenu::initGuiMain() {
     gui.registerCoords("list_scroll",   40, 51,  2, 82);
     gui.registerCoords("view_toggle",   74,  5, 32,  6);
     gui.registerCoords("info_box",      70, 51, 56, 82);
-    gui.registerCoords("specs_box",     70, 51, 56, 82);
+    gui.registerCoords("briefing_box",  70, 51, 56, 82);
     gui.registerCoords("random",        95,  5,  6,  6);
     gui.registerCoords("tooltip",       50, 96, 96,  4);
     gui.registerCoords("no_areas_text", 50, 50, 96, 10);
@@ -718,46 +614,48 @@ void AreaMenu::initGuiMain() {
             //View toggle button.
             ButtonGuiItem* viewToggleButton =
                 new ButtonGuiItem(
-                "Show mission specs",
+                "Show mission briefing",
                 game.sysContent.fntStandard
             );
             viewToggleButton->onActivate =
             [this, viewToggleButton] (const Point&) {
                 GuiItem* boxToShow = nullptr;
                 GuiItem* boxToHide = nullptr;
-                if(showMissionSpecs) {
+                if(showMissionBriefing) {
                     boxToShow = infoBox;
-                    boxToHide = specsBox;
-                    showMissionSpecs = false;
-                    viewToggleButton->text = "Show mission specs";
+                    boxToHide = briefingBox;
+                    showMissionBriefing = false;
+                    viewToggleButton->text = "Show mission briefing";
                 } else {
-                    boxToShow = specsBox;
+                    boxToShow = briefingBox;
                     boxToHide = infoBox;
-                    showMissionSpecs = true;
+                    showMissionBriefing = true;
                     viewToggleButton->text = "Show standard info";
                 }
                 boxToShow->visible = true;
                 boxToShow->responsive = true;
                 boxToHide->visible = false;
                 boxToHide->responsive = false;
-                animateInfoAndSpecs();
+                animateInfoAndBriefing();
             };
             viewToggleButton->onGetTooltip =
             [] () {
-                return "Toggles between basic area info and mission specs.";
+                return
+                    "Toggles between showing basic area info"
+                    "and mission briefing info.";
             };
             gui.addItem(viewToggleButton, "view_toggle");
             
-            //Specs box item.
-            specsBox = new GuiItem();
-            specsBox->onDraw =
+            //Briefing box item.
+            briefingBox = new GuiItem();
+            briefingBox->onDraw =
             [] (const DrawInfo & draw) {
                 drawTexturedBox(
                     draw.center, draw.size, game.sysContent.bmpFrameBox,
                     tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
                 );
             };
-            gui.addItem(specsBox, "specs_box");
+            gui.addItem(briefingBox, "briefing_box");
             
         }
         
@@ -781,17 +679,17 @@ void AreaMenu::initGuiMain() {
 
 
 /**
- * @brief Initializes the mission specs page GUI items.
+ * @brief Initializes the mission briefing page GUI items.
  */
-void AreaMenu::initGuiSpecsPage() {
+void AreaMenu::initGuiBriefingPage() {
     DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::SPECS_GUI_FILE_NAME];
-    gui.registerCoords("specs_name",     50,  5, 96,  6);
-    gui.registerCoords("goal_header",    50, 13, 96,  6);
-    gui.registerCoords("goal",           50, 21, 96,  6);
-    gui.registerCoords("fail_header",    50, 29, 96,  6);
-    gui.registerCoords("fail_list",      47, 48, 90, 28);
-    gui.registerCoords("fail_scroll",    96, 48,  4, 28);
+        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
+    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
+    gui.registerCoords("objective_header",    50, 13, 96,  6);
+    gui.registerCoords("objective",           50, 21, 96,  6);
+    gui.registerCoords("notes_header",    50, 29, 96,  6);
+    gui.registerCoords("notes_list",      47, 48, 90, 28);
+    gui.registerCoords("notes_scroll",    96, 48,  4, 28);
     gui.registerCoords("grading_header", 50, 67, 96,  6);
     gui.registerCoords("grading_list",   47, 85, 90, 26);
     gui.registerCoords("grading_scroll", 96, 85,  4, 26);
@@ -800,47 +698,48 @@ void AreaMenu::initGuiSpecsPage() {
     if(!game.content.areas.list[areaType].empty()) {
     
         //Name text.
-        specsNameText =
+        briefingNameText =
             new TextGuiItem(
             "", game.sysContent.fntAreaName, game.config.guiColors.gold
         );
-        specsBox->addChild(specsNameText);
-        gui.addItem(specsNameText, "specs_name");
+        briefingBox->addChild(briefingNameText);
+        gui.addItem(briefingNameText, "briefing_area_name");
         
-        //Goal header text.
-        TextGuiItem* goalHeaderText =
+        //Objective header text.
+        TextGuiItem* objectiveHeaderText =
             new TextGuiItem(
-            "Goal", game.sysContent.fntAreaName,
+            "Objective", game.sysContent.fntAreaName,
             game.config.guiColors.smallHeader
         );
-        specsBox->addChild(goalHeaderText);
-        gui.addItem(goalHeaderText, "goal_header");
+        briefingBox->addChild(objectiveHeaderText);
+        gui.addItem(objectiveHeaderText, "objective_header");
         
-        //Goal explanation text.
-        goalText =
+        //Objective explanation text.
+        objectiveText =
             new TextGuiItem("", game.sysContent.fntStandard);
-        specsBox->addChild(goalText);
-        gui.addItem(goalText, "goal");
+        objectiveText->lineWrap = true;
+        briefingBox->addChild(objectiveText);
+        gui.addItem(objectiveText, "objective");
         
-        //Fail conditions header text.
-        TextGuiItem* failHeaderText =
+        //Notes header text.
+        TextGuiItem* notesHeaderText =
             new TextGuiItem(
-            "Fail conditions", game.sysContent.fntAreaName,
+            "Notes", game.sysContent.fntAreaName,
             game.config.guiColors.smallHeader
         );
-        specsBox->addChild(failHeaderText);
-        gui.addItem(failHeaderText, "fail_header");
+        briefingBox->addChild(notesHeaderText);
+        gui.addItem(notesHeaderText, "notes_header");
         
-        //Fail condition explanation list.
-        failList = new ListGuiItem();
-        specsBox->addChild(failList);
-        gui.addItem(failList, "fail_list");
+        //Notes list.
+        noteList = new ListGuiItem();
+        briefingBox->addChild(noteList);
+        gui.addItem(noteList, "notes_list");
         
-        //Fail condition explanation scrollbar.
-        ScrollGuiItem* failScroll = new ScrollGuiItem();
-        failScroll->listItem = failList;
-        specsBox->addChild(failScroll);
-        gui.addItem(failScroll, "fail_scroll");
+        //Notes scrollbar.
+        ScrollGuiItem* notesScroll = new ScrollGuiItem();
+        notesScroll->listItem = noteList;
+        briefingBox->addChild(notesScroll);
+        gui.addItem(notesScroll, "notes_scroll");
         
         //Grading header text.
         TextGuiItem* gradingHeaderText =
@@ -848,18 +747,18 @@ void AreaMenu::initGuiSpecsPage() {
             "Grading", game.sysContent.fntAreaName,
             game.config.guiColors.smallHeader
         );
-        specsBox->addChild(gradingHeaderText);
+        briefingBox->addChild(gradingHeaderText);
         gui.addItem(gradingHeaderText, "grading_header");
         
         //Grading explanation list.
         gradingList = new ListGuiItem();
-        specsBox->addChild(gradingList);
+        briefingBox->addChild(gradingList);
         gui.addItem(gradingList, "grading_list");
         
         //Grading explanation scrollbar.
         ScrollGuiItem* gradingScroll = new ScrollGuiItem();
         gradingScroll->listItem = gradingList;
-        specsBox->addChild(gradingScroll);
+        briefingBox->addChild(gradingScroll);
         gui.addItem(gradingScroll, "grading_scroll");
     }
 }
@@ -896,9 +795,9 @@ void AreaMenu::load() {
         areaType == AREA_TYPE_MISSION &&
         !game.content.areas.list[AREA_TYPE_MISSION].empty()
     ) {
-        initGuiSpecsPage();
-        specsBox->visible = false;
-        specsBox->responsive = false;
+        initGuiBriefingPage();
+        briefingBox->visible = false;
+        briefingBox->responsive = false;
     }
     if(firstAreaButton) {
         gui.setFocusedItem(firstAreaButton, true);

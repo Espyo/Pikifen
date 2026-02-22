@@ -37,7 +37,7 @@ hardcoded_items{
 	continue{
 		center=13.0000 88.0000
 		size=22.0000 8.0000
-		description=Continue button.
+		description=Continue playing button.
 	}
 	continue_input{
 		center=3.0000 91.0000

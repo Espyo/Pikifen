@@ -6,10 +6,16 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
-        HUD rule explanation for the area selection menu
+        HUD rule explanation for the area selection menu and pause menu
+            area_menu_specs -> area_menu_briefing
+            Have a "mission objective" text input for the area editor where you write down anything involving out to get a medal and the ultimate goal, like "Get as many treasures as you can before time runs out! You'll win a platinum medal if you get them all!"
+            Have a flexible number of "notes" text inputs for the area editor where you write down what causes a failure, how to get bonus points for you score, etc.
+            The area selection menu and the pause menu should list the two things above, the objective as a single text field, and the notes as a scrollable list of bullet points. It should also automatically include, in the notes, the time limit (or no time limit) and the medal requirements. If the objective is empty, show a default "This mission briefing doesn't contain any objective information!", and if the notes are empty, show a default "Nothing to note."
+            Maybe, in the pause menu, it should list some more stats that are important to keep track of, as provided by the mission maker? Like list of Pikmin created so far, because reaching 100 could be an objective for some bonus points
         HUD rule explanation for the results menu
+        Add the presets logic
         After hours clock HUD logic
-        Deleting mobs is ruining the list of mobs in a checklist
+        Mission score records need to be ported over
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Add a leader swap sound, so swapping to the rookie isn't silent
@@ -746,6 +752,7 @@ Misc things (so I don't forget)
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         A tall grass mob
+        A bunch more flowers and vegetation
         A turnstile mob
         Sounds
             Menus

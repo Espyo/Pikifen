@@ -23,10 +23,10 @@ using std::vector;
 
 
 namespace AREA_MENU {
+extern const string BRIEFING_GUI_FILE_NAME;
 extern const string GUI_FILE_NAME;
 extern const string INFO_GUI_FILE_NAME;
 extern const float PAGE_SWAP_DURATION;
-extern const string SPECS_GUI_FILE_NAME;
 }
 
 
@@ -64,8 +64,8 @@ private:
     //Area info GUI item.
     GuiItem* infoBox = nullptr;
     
-    //Mission specs GUI item.
-    GuiItem* specsBox = nullptr;
+    //Mission briefing GUI item.
+    GuiItem* briefingBox = nullptr;
     
     //Currently selected area, or INVALID for none.
     size_t curAreaIdx = INVALID;
@@ -79,8 +79,8 @@ private:
     //Name text item, in the info page.
     TextGuiItem* infoNameText = nullptr;
     
-    //Name text item, in the specs page.
-    TextGuiItem* specsNameText = nullptr;
+    //Name text item, in the briefing page.
+    TextGuiItem* briefingNameText = nullptr;
     
     //Subtitle text item.
     TextGuiItem* subtitleText = nullptr;
@@ -115,26 +115,26 @@ private:
     //Record date text item.
     TextGuiItem* recordDateText = nullptr;
     
-    //Goal text item.
-    TextGuiItem* goalText = nullptr;
+    //Mission objective text item.
+    TextGuiItem* objectiveText = nullptr;
     
-    //Fail explanation list item.
-    ListGuiItem* failList = nullptr;
+    //Mission notes list item.
+    ListGuiItem* noteList = nullptr;
     
-    //Grading explanation list item.
+    //Mission grading explanation list item.
     ListGuiItem* gradingList = nullptr;
     
-    //Show the mission specs?
-    bool showMissionSpecs = false;
+    //Show the mission briefing page?
+    bool showMissionBriefing = false;
     
     
     //--- Private function declarations ---
     
     void addNewBullet(ListGuiItem* list, const string& text);
-    void animateInfoAndSpecs();
+    void animateInfoAndBriefing();
     void changeInfo(size_t areaIdx);
     void initGuiMain();
     void initGuiInfoPage();
-    void initGuiSpecsPage();
+    void initGuiBriefingPage();
     
 };

@@ -27,17 +27,17 @@ hardcoded_items{
 	view_toggle{
 		center=74.0000 5.0000
 		size=32.0000 6.0000
-		description=Button that toggles between the basic info and the mission specs view.
+		description=Button that toggles between the basic info and the mission briefing view.
 	}
 	info_box{
 		center=70.0000 51.0000
 		size=56.0000 82.0000
-		description=Box containing the area's basic info.
+		description=Box containing the area's basic information.
 	}
-	specs_box{
+	briefing_box{
 		center=70.0000 51.0000
 		size=56.0000 82.0000
-		description=Box containing the mission's specs.
+		description=Box containing the mission's briefing information.
 	}
 	random{
 		center=95.0000 5.0000

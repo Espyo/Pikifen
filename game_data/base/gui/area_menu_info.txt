@@ -1,13 +1,13 @@
 name=Area menu -- info
 description=GUI for the area selection menu's area information table, the stuff with basic information on an area.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.1.0
+engine_version=1.2.0
 hardcoded_items{
-	info_name{
+	name{
 		center=36.0000 6.0000
 		size=68.0000 8.0000
-		description=Area name (info page version)
+		description=Area name (info page version).
 	}
 	subtitle{
 		center=36.0000 16.0000

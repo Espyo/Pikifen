@@ -82,7 +82,7 @@ enum PAUSE_MENU_PAGE {
  *
  */
 struct PauseMenu {
-    
+
     //--- Public misc. declarations ---
     
     //Types of spots for each Go Here drawn path segment.
@@ -278,7 +278,7 @@ private:
         const ALLEGRO_COLOR& color, float* texturePoint
     );
     void drawRadar(const Point& center, const Point& size);
-    void fillMissionFailList(ListGuiItem* list);
+    void fillMissionNotesList(ListGuiItem* list);
     void fillMissionGradingList(ListGuiItem* list);
     string getMissionGoalStatus();
     void initRadarPage();

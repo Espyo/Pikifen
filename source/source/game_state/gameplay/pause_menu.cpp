@@ -199,7 +199,7 @@ PauseMenu::~PauseMenu() {
 
 
 /**
- * @brief Creates and adds a new bullet point to either the fail condition list
+ * @brief Creates and adds a new bullet point to either the mission note list
  * or the grading explanation list.
  *
  * @param list List to add to.
@@ -1373,42 +1373,15 @@ void PauseMenu::drawRadar(
 
 
 /**
- * @brief Fills the list of mission fail conditions.
+ * @brief Fills the list of mission briefing notes.
  *
  * @param list List item to fill.
  */
-void PauseMenu::fillMissionFailList(ListGuiItem* list) {
-    for(size_t f = 0; f < game.missionFailConds.size(); f++) {
-        if(
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(f)
-            )
-        ) {
-            MissionFail* cond = game.missionFailConds[f];
-            
-            string description =
-                cond->getPlayerDescription(&game.curArea->missionOld);
-            addNewBullet(list, description, game.config.guiColors.bad);
-            
-            float percentage = 0.0f;
-            int cur =
-                cond->getCurAmount(game.states.gameplay);
-            int req =
-                cond->getReqAmount(game.states.gameplay);
-            if(req != 0.0f) {
-                percentage = cur / (float) req;
-            }
-            percentage *= 100;
-            string status = cond->getStatus(cur, req, percentage);
-            
-            if(status.empty()) continue;
-            addNewBullet(list, "    " + status);
-        }
-    }
-    
-    if(game.curArea->missionOld.failConditions == 0) {
-        addNewBullet(list, "(None)");
+void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
+    vector<string> noteBPStrs =
+        game.curArea->mission.getNoteBulletPoints();
+    for(size_t p = 0; p < noteBPStrs.size(); p++) {
+        addNewBullet(list, noteBPStrs[p]);
     }
 }
 
@@ -1419,103 +1392,10 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
  * @param list List item to fill.
  */
 void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    switch(game.curArea->missionOld.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
-        addNewBullet(
-            list,
-            "Your medal depends on your score:"
-        );
-        addNewBullet(
-            list,
-            "    Platinum: " +
-            i2s(game.curArea->missionOld.platinumReq) + "+ points.",
-            game.config.guiColors.gold
-        );
-        addNewBullet(
-            list,
-            "    Gold: " +
-            i2s(game.curArea->missionOld.goldReq) + "+ points.",
-            game.config.guiColors.gold
-        );
-        addNewBullet(
-            list,
-            "    Silver: " +
-            i2s(game.curArea->missionOld.silverReq) + "+ points.",
-            game.config.guiColors.gold
-        );
-        addNewBullet(
-            list,
-            "    Bronze: " +
-            i2s(game.curArea->missionOld.bronzeReq) + "+ points.",
-            game.config.guiColors.gold
-        );
-        
-        vector<string> scoreNotes;
-        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            MissionScoreCriterionOld* cPtr =
-                game.missionScoreCriteria[c];
-            int mult = cPtr->getMultiplier(&game.curArea->missionOld);
-            if(mult != 0) {
-                scoreNotes.push_back(
-                    "    " + cPtr->getName() + " x " + i2s(mult) + "."
-                );
-            }
-        }
-        if(!scoreNotes.empty()) {
-            addNewBullet(
-                list,
-                "Your score is calculated like so:"
-            );
-            for(size_t s = 0; s < scoreNotes.size(); s++) {
-                addNewBullet(list, scoreNotes[s]);
-            }
-        } else {
-            addNewBullet(
-                list,
-                "In this mission, your score will always be 0."
-            );
-        }
-        
-        vector<string> lossNotes;
-        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            MissionScoreCriterionOld* cPtr =
-                game.missionScoreCriteria[c];
-            if(
-                hasFlag(
-                    game.curArea->missionOld.pointLossData,
-                    getIdxBitmask(c)
-                )
-            ) {
-                lossNotes.push_back("    " + cPtr->getName());
-            }
-        }
-        if(!lossNotes.empty()) {
-            addNewBullet(
-                list,
-                "If you fail, you'll lose your score for:"
-            );
-            for(size_t l = 0; l < lossNotes.size(); l++) {
-                addNewBullet(list, lossNotes[l]);
-            }
-        }
-        break;
-    } case MISSION_GRADING_MODE_GOAL: {
-        addNewBullet(
-            list,
-            "You get a platinum medal if you clear the goal."
-        );
-        addNewBullet(
-            list,
-            "You get no medal if you fail."
-        );
-        break;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
-        addNewBullet(
-            list,
-            "You get a platinum medal just by playing the mission."
-        );
-        break;
-    }
+    vector<string> gradingBPStrs =
+        game.curArea->mission.getGradingBulletPoints();
+    for(size_t p = 0; p < gradingBPStrs.size(); p++) {
+        addNewBullet(list, gradingBPStrs[p]);
     }
 }
 
@@ -1830,7 +1710,7 @@ void PauseMenu::initMainPauseMenu() {
     );
     gui.addItem(areaSubtitleText, "area_subtitle");
     
-    //Continue button.
+    //Continue playing button.
     gui.backItem =
         new ButtonGuiItem(
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
@@ -2035,12 +1915,11 @@ void PauseMenu::initMissionPage() {
     missionGui.registerCoords("right_page_input", 97,  7,  4,  4);
     missionGui.registerCoords("continue",         10, 16, 16,  4);
     missionGui.registerCoords("continue_input",    3, 17,  4,  4);
-    missionGui.registerCoords("goal_header",      50, 16, 60,  4);
-    missionGui.registerCoords("goal",             50, 22, 96,  4);
-    missionGui.registerCoords("goal_status",      50, 26, 96,  4);
-    missionGui.registerCoords("fail_header",      50, 32, 96,  4);
-    missionGui.registerCoords("fail_list",        48, 48, 92, 24);
-    missionGui.registerCoords("fail_scroll",      97, 48,  2, 24);
+    missionGui.registerCoords("objective_header",      50, 16, 60,  4);
+    missionGui.registerCoords("objective",             50, 22, 96,  4);
+    missionGui.registerCoords("notes_header",      50, 32, 96,  4);
+    missionGui.registerCoords("notes_list",        48, 48, 92, 24);
+    missionGui.registerCoords("notes_scroll",      97, 48,  2, 24);
     missionGui.registerCoords("grading_header",   50, 64, 96,  4);
     missionGui.registerCoords("grading_list",     48, 80, 92, 24);
     missionGui.registerCoords("grading_scroll",   97, 80,  2, 24);
@@ -2050,7 +1929,7 @@ void PauseMenu::initMissionPage() {
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_MISSION, &missionGui);
     
-    //Continue button.
+    //Continue playing button.
     missionGui.backItem =
         new ButtonGuiItem(
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
@@ -2066,49 +1945,41 @@ void PauseMenu::initMissionPage() {
     //Continue input icon.
     guiCreateBackInputIcon(&missionGui, "continue_input");
     
-    //Goal header text.
-    TextGuiItem* goalHeaderText =
+    //Objective header text.
+    TextGuiItem* objectiveHeaderText =
         new TextGuiItem(
-        "Goal", game.sysContent.fntAreaName,
+        "Objective", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(goalHeaderText, "goal_header");
+    missionGui.addItem(objectiveHeaderText, "objective_header");
     
-    //Goal explanation text.
-    TextGuiItem* goalText =
+    //Objective explanation text.
+    TextGuiItem* objectiveText =
         new TextGuiItem(
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getPlayerDescription(&game.curArea->missionOld),
+        game.curArea->mission.getBriefingObjectiveText(),
         game.sysContent.fntStandard,
         game.config.guiColors.gold
     );
-    missionGui.addItem(goalText, "goal");
+    objectiveText->lineWrap = true;
+    missionGui.addItem(objectiveText, "objective");
     
-    //Goal status text.
-    TextGuiItem* goalStatusText =
+    //Notes header text.
+    TextGuiItem* notesHeaderText =
         new TextGuiItem(
-        getMissionGoalStatus(),
-        game.sysContent.fntStandard
-    );
-    missionGui.addItem(goalStatusText, "goal_status");
-    
-    //Fail conditions header text.
-    TextGuiItem* failHeaderText =
-        new TextGuiItem(
-        "Fail conditions", game.sysContent.fntAreaName,
+        "Notes", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(failHeaderText, "fail_header");
+    missionGui.addItem(notesHeaderText, "notes_header");
     
-    //Fail condition explanation list.
-    ListGuiItem* missionFailList = new ListGuiItem();
-    missionGui.addItem(missionFailList, "fail_list");
-    fillMissionFailList(missionFailList);
+    //Notes list.
+    ListGuiItem* missionNoteList = new ListGuiItem();
+    missionGui.addItem(missionNoteList, "notes_list");
+    fillMissionNotesList(missionNoteList);
     
-    //Fail condition explanation scrollbar.
-    ScrollGuiItem* failScroll = new ScrollGuiItem();
-    failScroll->listItem = missionFailList;
-    missionGui.addItem(failScroll, "fail_scroll");
+    //Notes scrollbar.
+    ScrollGuiItem* notesScroll = new ScrollGuiItem();
+    notesScroll->listItem = missionNoteList;
+    missionGui.addItem(notesScroll, "notes_scroll");
     
     //Grading header text.
     TextGuiItem* gradingHeaderText =
@@ -2194,7 +2065,7 @@ void PauseMenu::initRadarPage() {
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_RADAR, &radarGui);
     
-    //Continue button.
+    //Continue playing button.
     radarGui.backItem =
         new ButtonGuiItem(
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
@@ -2434,7 +2305,7 @@ void PauseMenu::initStatusPage() {
     //Page buttons and inputs.
     addNewPageItems(PAUSE_MENU_PAGE_STATUS, &statusGui);
     
-    //Continue button.
+    //Continue playing button.
     statusGui.backItem =
         new ButtonGuiItem(
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
