@@ -558,6 +558,18 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
             }
         }
         
+        for(size_t c = 0; c < game.curArea->mission.mobChecklists.size(); c++) {
+            MissionMobChecklist* cPtr = &game.curArea->mission.mobChecklists[c];
+            for(size_t m = 0; m < cPtr->mobIdxs.size();) {
+                if(cPtr->mobIdxs[m] == mIdx) {
+                    cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
+                } else {
+                    adjustMisalignedIndex(cPtr->mobIdxs[m], mIdx, false);
+                    m++;
+                }
+            }
+        }
+        
         //Check the list of mission requirement objects.
         unordered_set<size_t> newMrmi;
         newMrmi.reserve(game.curArea->missionOld.goalMobIdxs.size());

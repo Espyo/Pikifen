@@ -1,3 +1,5 @@
+states_ignoring_hazard = teleporting_to_leader; teleported_to_leader
+
 init {
     set_var follow_focus false
     set_var idling_can_teleport false

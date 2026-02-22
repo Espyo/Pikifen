@@ -1398,7 +1398,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 for(size_t r = 0; r < itemInfo->idxsList.size(); r++) {
                     AreaRegionStatus* rPtr =
                         &game.states.gameplay->areaRegions[
-                            itemInfo->idxsList[r] - 1
+                            itemInfo->idxsList[r]
                         ];
                     leadersInRegions.insert(
                         rPtr->leadersInside.begin(), rPtr->leadersInside.end()

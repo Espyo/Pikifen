@@ -23,7 +23,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
-    Throwing a Glow Pikmin onto the poison sector in DEV Lab, and waiting for it to start teleporting will cause it to be poisoned (#90)
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
