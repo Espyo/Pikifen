@@ -17,7 +17,13 @@
 
 
 namespace RESULTS {
+extern const float FINAL_SCORE_LABEL_SWAY_TIME_OFFSET;
+extern const float FINAL_SCORE_SWAY;
+extern const float FINAL_SCORE_SWAY_TIME_SCALE;
 extern const string GUI_FILE_PATH;
+extern const float MEDAL_SCALE;
+extern const float MEDAL_SHINE_SCALE;
+extern const float MEDAL_SHINE_ROT_TIME_SCALE;
 }
 
 
@@ -59,7 +65,7 @@ private:
     
     //--- Private function declarations ---
     
-    void addNewScoreStat(const MISSION_SCORE_CRITERIA criterion);
+    void addNewScoreStat(size_t criterionIdx);
     void addNewStat(
         const string& label, const string& value,
         const ALLEGRO_COLOR& color = COLOR_WHITE

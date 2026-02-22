@@ -386,8 +386,8 @@ public:
     //Whether the mission ended in a clear or a failure.
     bool missionWasCleared = false;
     
-    //Reason for mission fail, if any. INVALID for none.
-    MISSION_FAIL_COND missionFailReason = (MISSION_FAIL_COND) INVALID;
+    //Mission event that triggered the mission to end. INVALID for none.
+    size_t missionEndEventIdx = INVALID;
     
     //Current mission score, for use in the HUD.
     int missionScore = 0;
@@ -442,7 +442,7 @@ public:
     
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
-
+    
     //Script finite-state machine.
     Fsm fsm;
     
@@ -479,6 +479,7 @@ public:
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
+    int calculateMissionScore(bool forHud);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     bool endMission(
         bool clear, bool showTimesUpMsg = false, MissionEvent* ev = nullptr
@@ -531,7 +532,6 @@ private:
     
     //--- Private function declarations ---
     
-    int calculateMissionScore(bool forHud);
     void doAestheticLeaderLogic(Player* player, float deltaT);
     void doAestheticLogic(float deltaT);
     void doGameDrawing(

@@ -538,6 +538,13 @@ bool GameplayState::endMission(
         player.inventory->close();
     }
     
+    missionEndEventIdx = INVALID;
+    for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
+        if(ev == &game.curArea->mission.events[e]) {
+            missionEndEventIdx = e;
+        }
+    }
+    
     return true;
 }
 
@@ -588,7 +595,7 @@ void GameplayState::enter() {
     lastPikminDeathPos = Point(LARGE_FLOAT);
     lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
     
-    missionFailReason = (MISSION_FAIL_COND) INVALID;
+    missionEndEventIdx = INVALID;
     goalIndicatorRatio = 0.0f;
     fail1IndicatorRatio = 0.0f;
     fail2IndicatorRatio = 0.0f;

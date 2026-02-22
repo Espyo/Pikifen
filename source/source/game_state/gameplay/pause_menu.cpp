@@ -2521,9 +2521,11 @@ void PauseMenu::startLeavingGameplay() {
             if(ePtr->type != MISSION_EV_PAUSE_MENU_END) continue;
             if(ePtr->actionType == MISSION_ACTION_END_CLEAR) {
                 missionEndsInClear = true;
+                game.states.gameplay->missionEndEventIdx = e;
                 break;
             } else if(ePtr->actionType == MISSION_ACTION_END_FAIL) {
                 missionEndsInClear = false;
+                game.states.gameplay->missionEndEventIdx = e;
                 break;
             } else {
                 MissionActionType* actionType =

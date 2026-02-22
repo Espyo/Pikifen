@@ -47,19 +47,20 @@ enum MISSION_PRESET {
     //Medal depends on how many you grew. Matches P1.
     MISSION_PRESET_GROW_PIKMIN,
     
-    //Collect treasures within the time limit.
+    //Collect as many treasures as you can within the time limit.
     //Medal depends on how many got collected, platinum for all. Matches P3.
     MISSION_PRESET_COLLECT_TREASURE,
     
-    //Battle enemies within the time limit.
+    //Defeat as many enemies as you can within the time limit.
     //Medal depends on how many were defeated, platinum for all. Matches P3.
     MISSION_PRESET_BATTLE_ENEMIES,
     
-    //Defeat bosses within the time limit.
+    //Defeat the boss within the time limit.
     //Medal depends on time taken. Matches P3.
     MISSION_PRESET_DEFEAT_BOSSES,
     
-    //Collect treasures and enemies within the time limit. Matches P4.
+    //Collect as many treasures and enemies as you can within the time limit.
+    //Medal depends on amount collected. Matches P4.
     MISSION_PRESET_COLLECT_EVERYTHING,
     
     //Custom rules.
@@ -171,7 +172,7 @@ enum MISSION_SCORE_CRITERION {
     //Amount of mobs from a checklist cleared.
     MISSION_SCORE_CRITERION_MOB_CHECKLIST,
     
-    //Total amount of Pikmin.
+    //Total amount of living Pikmin.
     MISSION_SCORE_CRITERION_PIKMIN,
     
     //Amount of Pikmin born.

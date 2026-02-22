@@ -781,8 +781,8 @@ MissionEvType::HudInfo MissionEvTypeLeadersInRegion::getHudInfo(
 ) const {
     return
     MissionEvType::HudInfo {
-        .description = "Objects in the region.",
-        .reason = "Got the objects to the region!",
+        .description = "Leaders in the region.",
+        .reason = "Got " + i2s(ev->amountParam) + " to the region!",
     };
 }
 
