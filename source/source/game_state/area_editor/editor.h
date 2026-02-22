@@ -1203,6 +1203,7 @@ private:
     void processGuiPanelMain();
     void processGuiPanelMission();
     void processGuiPanelMissionOld();
+    void processGuiPanelMissionBriefing();
     void processGuiPanelMissionEssentials();
     void processGuiPanelMissionEv();
     void processGuiPanelMissionFail(bool* dayDurationNeedsUpdate);

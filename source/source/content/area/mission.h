@@ -587,6 +587,12 @@ struct MissionData {
     //Platinum medal point requirement.
     int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
     
+    //Text briefing the player on the mission's objectives.
+    string briefingObjective;
+    
+    //Text bullet points briefing the player on the mission's misc. notes.
+    vector<string> briefingNotes;
+    
     //The maker's record.
     int makerRecord = 0;
     
@@ -597,6 +603,9 @@ struct MissionData {
     //--- Public function declarations ---
     
     void applyPreset(MISSION_PRESET newPreset);
+    string getBriefingObjectiveText() const;
+    vector<string> getNoteBulletPoints() const;
+    vector<string> getGradingBulletPoints() const;
     MISSION_MEDAL getScoreMedal(int score);
     void reset();
     

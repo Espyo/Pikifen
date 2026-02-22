@@ -1330,6 +1330,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     ReaderSetter mRS(node);
     int presetInt = MISSION_PRESET_CUSTOM;
     int gradingModeInt = MISSION_GRADING_MODE_GOAL;
+    string briefingNotesStr;
     
     //DEPRECATED in 1.2.0 by the new mission system.
     if(node->getNrOfChildrenByName("mission_goal") > 0) {
@@ -1345,10 +1346,13 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_silver_req", mission.silverReq);
     mRS.set("mission_gold_req", mission.goldReq);
     mRS.set("mission_platinum_req", mission.platinumReq);
+    mRS.set("mission_briefing_objective", mission.briefingObjective);
+    mRS.set("mission_briefing_notes", briefingNotesStr);
     mRS.set("mission_maker_record", mission.makerRecord);
     mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
     mission.gradingMode = (MISSION_GRADING_MODE) gradingModeInt;
+    mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
     //Events.
     DataNode* eventsNode = node->getChildByName("mission_events");
@@ -1582,6 +1586,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         break;
         
     } case MISSION_GOAL_COLLECT_TREASURE: {
+        mission.briefingObjective =
+            "Collect treasures!";
         mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
         mission.mobChecklists.push_back(
         MissionMobChecklist {
@@ -1602,6 +1608,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         break;
         
     } case MISSION_GOAL_BATTLE_ENEMIES: {
+        mission.briefingObjective =
+            "Battle enemies!";
         mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
         mission.mobChecklists.push_back(
         MissionMobChecklist {
@@ -1623,6 +1631,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         break;
         
     } case MISSION_GOAL_TIMED_SURVIVAL: {
+        mission.briefingObjective =
+            "Survive until the time limit!";
         mission.events[0].actionType = MISSION_ACTION_END_FAIL;
         mission.events.push_back(
         MissionEvent {
@@ -1634,6 +1644,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         break;
         
     } case MISSION_GOAL_GET_TO_EXIT: {
+        mission.briefingObjective =
+            "Get the leaders to the exit!";
         mission.events[0].actionType = MISSION_ACTION_END_FAIL;
         regions.push_back(
         new AreaRegion {
@@ -1654,6 +1666,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         break;
         
     } case MISSION_GOAL_GROW_PIKMIN: {
+        mission.briefingObjective =
+            "Grow " + i2s(goalAmount) + " Pikmin!";
         mission.events[0].actionType = MISSION_ACTION_END_FAIL;
         mission.events.push_back(
         MissionEvent {
@@ -2464,6 +2478,8 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     //General properties.
     GetterWriter mGW(node);
     
+    string briefingNotesStr =
+        join(mission.briefingNotes, ";");
     mGW.write("mission_preset", mission.preset);
     mGW.write("mission_time_limit", mission.timeLimit);
     mGW.write("mission_grading_mode", mission.gradingMode);
@@ -2472,6 +2488,8 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     mGW.write("mission_silver_req", mission.silverReq);
     mGW.write("mission_gold_req", mission.goldReq);
     mGW.write("mission_platinum_req", mission.platinumReq);
+    mGW.write("mission_briefing_objective", mission.briefingObjective);
+    mGW.write("mission_briefing_notes", briefingNotesStr);
     mGW.write("mission_maker_record", mission.makerRecord);
     mGW.write("mission_maker_record_date", mission.makerRecordDate);
     

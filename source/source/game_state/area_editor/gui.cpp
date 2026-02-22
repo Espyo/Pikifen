@@ -3221,6 +3221,7 @@ void AreaEditor::processGuiPanelMission() {
         processGuiPanelMissionMobChecklists();
         processGuiPanelMissionScoreCriteria();
         processGuiPanelMissionHudItems();
+        processGuiPanelMissionBriefing();
     }
     
     ImGui::EndChild();
@@ -3396,6 +3397,115 @@ void AreaEditor::processGuiPanelMissionOld() {
 
 
 /**
+ * @brief Processes the Dear ImGui briefing part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionBriefing() {
+    //Mission briefing node.
+    if(saveableTreeNode("mission", "Briefing")) {
+    
+        //Objective input.
+        string objective = game.curArea->mission.briefingObjective;
+        if(ImGui::InputText("Objective", &objective)) {
+            registerChange("mission briefing objective change");
+            game.curArea->mission.briefingObjective = objective;
+        }
+        setTooltip(
+            "Briefing to present to the player regarding the mission's\n"
+            "objective. Use this to tell the player what their ultimate\n"
+            "goal in this mission is, as well as how to score even the\n"
+            "most basic medal."
+        );
+        
+        ImGui::Spacer();
+        
+        //Note setup.
+        static size_t curNoteIdx = 0;
+        processGuiListNavSetup(
+            &curNoteIdx, game.curArea->mission.briefingNotes.size(), false
+        );
+        
+        //Current note text.
+        processGuiListNavCurWidget(
+            curNoteIdx, game.curArea->mission.briefingNotes.size(), "Note"
+        );
+        
+        //Note add widget.
+        if(
+            processGuiListNavNewWidget(
+                &curNoteIdx, game.curArea->mission.briefingNotes.size(),
+                "Add a new mission briefing note."
+            )
+        ) {
+            registerChange("mission briefing note creation");
+            game.curArea->mission.briefingNotes.insert(
+                game.curArea->mission.briefingNotes.begin() +
+                curNoteIdx, ""
+            );
+            setStatus(
+                "Created mission briefing note #" + i2s(curNoteIdx + 1) + "."
+            );
+        };
+        
+        //Note delete widget.
+        size_t prevCurNoteIdx = curNoteIdx;
+        if(
+            processGuiListNavDelWidget(
+                &curNoteIdx, game.curArea->mission.briefingNotes.size(),
+                "Delete the current mission briefing note.", true
+            )
+        ) {
+            registerChange("mission briefing note deletion");
+            game.curArea->mission.briefingNotes.erase(
+                game.curArea->mission.briefingNotes.begin() +
+                curNoteIdx
+            );
+            setStatus(
+                "Deleted mission briefing note #" +
+                i2s(prevCurNoteIdx + 1) + "."
+            );
+        };
+        
+        //Note previous widget.
+        processGuiListNavPrevWidget(
+            &curNoteIdx, game.curArea->mission.briefingNotes.size(),
+            "Change to the previous note.", true
+        );
+        
+        //Note next widget.
+        processGuiListNavNextWidget(
+            &curNoteIdx, game.curArea->mission.briefingNotes.size(),
+            "Change to the next note.", true
+        );
+        
+        if(!game.curArea->mission.briefingNotes.empty()) {
+        
+            //Note input.
+            string note = game.curArea->mission.briefingNotes[curNoteIdx];
+            if(ImGui::InputText("Note", &note)) {
+                registerChange("mission briefing note change");
+                game.curArea->mission.briefingNotes[curNoteIdx] = note;
+            }
+            setTooltip(
+                "A briefing note to present to the player regarding the\n"
+                "mission rules' finer details. Use this to tell the player\n"
+                "what can make them fail the mission, how the score is\n"
+                "calculated in general, what happens if they end from\n"
+                "the pause menu, and so on. The mission's time limit\n"
+                "is added here automatically. Don't use semicolons (;)\n"
+                "as that affects how each note is saved in the area's\n"
+                "data file."
+            );
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+}
+
+
+/**
  * @brief Processes the Dear ImGui essentials part of the
  * mission control panel for this frame.
  */
@@ -3485,12 +3595,12 @@ void AreaEditor::processGuiPanelMissionEv() {
             &curEventIdx, game.curArea->mission.events.size(), false
         );
         
-        //Navigation count widget.
+        //Event count widget.
         processGuiListNavCurWidget(
             curEventIdx, game.curArea->mission.events.size(), "Event"
         );
         
-        //Navigation add widget.
+        //Event add widget.
         if(
             processGuiListNavNewWidget(
                 &curEventIdx, game.curArea->mission.events.size(),
@@ -3508,7 +3618,7 @@ void AreaEditor::processGuiPanelMissionEv() {
             );
         };
         
-        //Navigation delete widget.
+        //Event delete widget.
         size_t prevCurEventIdx = curEventIdx;
         if(
             processGuiListNavDelWidget(
@@ -3526,19 +3636,19 @@ void AreaEditor::processGuiPanelMissionEv() {
             );
         };
         
-        //Navigation previous widget.
+        //Event previous widget.
         processGuiListNavPrevWidget(
             &curEventIdx, game.curArea->mission.events.size(),
             "Change to the previous event.", true
         );
         
-        //Navigation next widget.
+        //Event next widget.
         processGuiListNavNextWidget(
             &curEventIdx, game.curArea->mission.events.size(),
             "Change to the next event.", true
         );
         
-        //Navigation trigger earlier widget.
+        //Event trigger earlier widget.
         if(
             processGuiListNavMoveLeftWidget(
                 &curEventIdx, game.curArea->mission.events.size(),
@@ -3556,7 +3666,7 @@ void AreaEditor::processGuiPanelMissionEv() {
             setStatus("Made the event trigger earlier.");
         }
         
-        //Navigation trigger later widget.
+        //Event trigger later widget.
         if(
             processGuiListNavMoveRightWidget(
                 &curEventIdx, game.curArea->mission.events.size(),

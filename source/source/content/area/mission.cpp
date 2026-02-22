@@ -215,6 +215,80 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
 
 
 /**
+ * @brief Returns what text to show in menus for the mission briefing's
+ * objective.
+ *
+ * @return The text.
+ */
+string MissionData::getBriefingObjectiveText() const {
+    return
+        briefingObjective.empty() ?
+        "This mission briefing doesn't contain any objective information!" :
+        briefingObjective;
+}
+
+
+/**
+ * @brief Returns what text to show in menus for each bullet point that explains
+ * the mission grading.
+ *
+ * @return The text.
+ */
+vector<string> MissionData::getGradingBulletPoints() const {
+    vector<string> result;
+    
+    switch(gradingMode) {
+    case MISSION_GRADING_MODE_POINTS: {
+        result.push_back("Platinum medal: " + i2s(platinumReq) + "+ points.");
+        result.push_back("Gold medal: " + i2s(goldReq) + "+ points.");
+        result.push_back("Silver medal: " + i2s(silverReq) + "+ points.");
+        result.push_back("Bronze medal: " + i2s(bronzeReq) + "+ points.");
+        if(!makerRecordDate.empty()) {
+            result.push_back(
+                "Maker's record: " + i2s(makerRecord) +
+                " (" + makerRecordDate + ")"
+            );
+        }
+        break;
+    }
+    case MISSION_GRADING_MODE_GOAL: {
+        result.push_back("Platinum medal: Clear the mission.");
+        break;
+    }
+    case MISSION_GRADING_MODE_PARTICIPATION: {
+        result.push_back("Platinum medal: Just play the mission.");
+        break;
+    }
+    }
+    
+    return result;
+}
+
+
+/**
+ * @brief Returns what text to show in menus for each bullet point that explains
+ * the mission briefing's notes.
+ *
+ * @return The text.
+ */
+vector<string> MissionData::getNoteBulletPoints() const {
+    vector<string> result;
+    
+    result.push_back(
+        timeLimit == 0 ?
+        "There is no time limit." :
+        ("Time limit: " + timeToStr2(timeLimit))
+    );
+    
+    result.insert(
+        result.end(), briefingNotes.begin(), briefingNotes.end()
+    );
+    
+    return result;
+}
+
+
+/**
  * @brief Returns which medal the given score would give.
  *
  * @param score Score to check.
