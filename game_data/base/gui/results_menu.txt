@@ -1,8 +1,8 @@
 name=Results menu
 description=GUI for the results menu.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.1.0
+engine_version=1.2.0
 hardcoded_items{
 	area_name{
 		center=50.0000 7.0000
@@ -14,40 +14,35 @@ hardcoded_items{
 		size=40.0000 10.0000
 		description=Area subtitle or mission goal.
 	}
-	goal_stamp{
-		center=15.0000 15.0000
-		size=22.0000 22.0000
-		description=A stamp indicating whether or not the player reached the mission goal.
-	}
-	end_reason{
-		center=15.0000 28.0000
-		size=26.0000 4.0000
-		description=Reason as to why the mission ended, if any.
-	}
 	medal{
 		center=85.0000 15.0000
 		size=22.0000 22.0000
-		description=Mission medal that the player got, if any.
+		description=Mission medal that the player got, if applicable.
 	}
-	medal_reason{
-		center=85.0000 28.0000
-		size=26.0000 4.0000
-		description=Reason for the medal. If applicable, includes the final score.
+	final_score{
+		center=14.0000 10.0000
+		size=24.0000 8.0000
+		description=Amount for the final score, if applicable.
+	}
+	final_score_label{
+		center=14.0000 18.0000
+		size=24.0000 8.0000
+		description=Label underneath the final score, if applicable.
+	}
+	end_reason{
+		center=50.0000 32.0000
+		size=96.0000 4.0000
+		description=Reason as to why the mission ended, if applicable.
 	}
 	conclusion{
 		center=50.0000 36.0000
 		size=96.0000 4.0000
 		description=Conclusion about what happened and what happens now.
 	}
-	stats{
-		center=50.0000 63.0000
-		size=80.0000 38.0000
-		description=Box with several statistics.
-	}
-	stats_scroll{
-		center=93.0000 63.0000
-		size=2.0000 38.0000
-		description=Scrollbar for the statistics box.
+	stats_page{
+		center=50.0000 61.0000
+		size=96.0000 42.0000
+		description=Statistics page.
 	}
 	retry{
 		center=20.0000 88.0000
@@ -76,17 +71,8 @@ hardcoded_items{
 	}
 }
 custom_items{
-	stats_bg{
-		center=50.0000 63.0000
-		size=80.0000 38.0000
-		description=Background for the statistics list.
-		type=filled_rectangle
-		color=117 0 0 40
-		draw_before_hardcoded=true
-		rectangle_rounding=0.0500
-	}
 	conclusion_label{
-		center=50.0000 32.0000
+		center=50.0000 28.0000
 		size=36.0000 3.0000
 		description=Label for the mission conclusion.
 		type=text
@@ -95,14 +81,20 @@ custom_items{
 		font=standard
 		text_alignment=1
 	}
-	stats_label{
-		center=50.0000 42.0000
-		size=36.0000 3.0000
-		description=Label for the statistics list.
-		type=text
-		color=255 255 255 192
-		text=Stats:
-		font=standard
-		text_alignment=1
+	final_score_bubble{
+		center=15.0000 15.0000
+		size=30.0000 30.0000
+		description=Bubble for the final score.
+		type=bitmap
+		color=255 255 255 32
+		bitmap=effects/bubble
+	}
+	medal_bubble{
+		center=85.0000 15.0000
+		size=30.0000 30.0000
+		description=Medal for the bubble.
+		type=bitmap
+		color=255 255 255 32
+		bitmap=effects/bubble
 	}
 }

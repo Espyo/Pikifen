@@ -873,7 +873,7 @@ MissionEvType::HudInfo MissionEvTypePauseEnd::getHudInfo(
     return
     MissionEvType::HudInfo {
         .description = "End from the pause menu.",
-        .reason = "Ended from pause menu!",
+        .reason = "Ended from the pause menu!",
     };
 }
 

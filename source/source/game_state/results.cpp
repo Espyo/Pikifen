@@ -44,6 +44,15 @@ const float MEDAL_SHINE_SCALE = 1.30f;
 //Time scale for the medal shine's rotation.
 const float MEDAL_SHINE_ROT_TIME_SCALE = 0.7f;
 
+//Name of the GUI definition file for the score chart information.
+const string SCORE_CHART_GUI_FILE_NAME = "results_menu_score_chart";
+
+//Name of the GUI definition file for the scoring information.
+const string SCORING_GUI_FILE_NAME = "results_menu_scoring";
+
+//Name of the GUI definition file for the stats.
+const string STATS_GUI_FILE_NAME = "results_menu_stats";
+
 }
 
 
@@ -238,138 +247,11 @@ void Results::handleAllegroEvent(ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Leaves the results menu and goes to the area menu.
+ * @brief Initializes the main GUI items.
  */
-void Results::leave() {
-    game.fadeMgr.startFade(false, [] () {
-        AREA_TYPE areaType = game.curArea->type;
-        game.unloadLoadedState(game.states.gameplay);
-        if(game.quickPlay.areaPath.empty()) {
-            game.states.annexScreen->areaMenuAreaType =
-                areaType;
-            game.states.annexScreen->menuToLoad =
-                ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annexScreen);
-        } else {
-            game.changeState(game.quickPlay.editor);
-        }
-    });
-}
-
-
-/**
- * @brief Loads the results state into memory.
- */
-void Results::load() {
-    //Some setup.
-    textToAnimate.clear();
-    
-    finalMissionScore = game.states.gameplay->calculateMissionScore(false);
-    
-    MISSION_MEDAL medal = MISSION_MEDAL_NONE;
-    switch(game.curArea->mission.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
-        if(game.states.gameplay->missionWasCleared) {
-            medal = game.curArea->mission.getScoreMedal(finalMissionScore);
-        }
-        break;
-    } case MISSION_GRADING_MODE_GOAL: {
-        medal =
-            game.states.gameplay->missionWasCleared ?
-            MISSION_MEDAL_PLATINUM :
-            MISSION_MEDAL_NONE;
-        break;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
-        medal = MISSION_MEDAL_PLATINUM;
-        break;
-    }
-    }
-    
-    MissionEvent* endEv = nullptr;
-    if(game.states.gameplay->missionEndEventIdx != INVALID) {
-        endEv =
-            &game.curArea->mission.events[
-                game.states.gameplay->missionEndEventIdx
-            ];
-    }
-    
-    //Record loading and saving logic.
-    bool isNewRecord = false;
-    bool savedSuccessfully = true;
-    MissionRecord oldRecord;
-    
-    //TODO
-    /*
-    DataNode missionRecords;
-    missionRecords.loadFile(
-        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
-    );
-    string recordEntryName =
-        getMissionRecordEntryName(game.curArea);
-    DataNode* entryNode;
-    if(missionRecords.getNrOfChildrenByName(recordEntryName) > 0) {
-        entryNode =
-            missionRecords.getChildByName(recordEntryName);
-    } else {
-        entryNode = missionRecords.addNew(recordEntryName, "");
-    }
-    
-    vector<string> oldRecordParts = split(entryNode->value, ";", true);
-    
-    if(oldRecordParts.size() == 3) {
-        oldRecord.clear = oldRecordParts[0] == "1";
-        oldRecord.score = s2i(oldRecordParts[1]);
-        oldRecord.date = s2i(oldRecordParts[2]);
-    }
-    
-    if(!oldRecord.clear && goalWasCleared) {
-        isNewRecord = true;
-    } else if(oldRecord.clear == goalWasCleared) {
-        if(
-            game.curArea->missionOld.gradingMode ==
-            MISSION_GRADING_MODE_POINTS &&
-            oldRecord.score < finalMissionScore
-        ) {
-            isNewRecord = true;
-        }
-    }
-    
-    if(
-        isNewRecord &&
-        game.quickPlay.areaPath.empty() &&
-        !game.makerTools.usedHelpingTools &&
-        !game.states.gameplay->afterHours
-    ) {
-        string clearStr = goalWasCleared ? "1" : "0";
-        string scoreStr = i2s(finalMissionScore);
-        string dateStr = getCurrentTime(false);
-    
-        entryNode->value = clearStr + ";" + scoreStr + ";" + dateStr;
-        savedSuccessfully =
-            missionRecords.saveFile(
-                FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
-            );
-    }
-    
-    if(!savedSuccessfully) {
-        showSystemMessageBox(
-            nullptr, "Save failed!",
-            "Could not save this result!",
-            (
-                "An error occurred while saving the mission record to the "
-                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
-                "\". Make sure that "
-                "the folder it is saving to exists and it is not read-only, "
-                "and try beating the mission again."
-            ).c_str(),
-            nullptr,
-            ALLEGRO_MESSAGEBOX_WARN
-        );
-    }
-    */
-    
-    //Menu items.
-    DataNode* guiFile = &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
+void Results::initGuiMain() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::GUI_FILE_NAME];
     gui.registerCoords("area_name",         50,  7, 45, 10);
     gui.registerCoords("area_subtitle",     50, 18, 40, 10);
     gui.registerCoords("medal",             85, 15, 22, 22);
@@ -377,8 +259,7 @@ void Results::load() {
     gui.registerCoords("final_score_label", 85, 28, 26,  4);
     gui.registerCoords("end_reason",        85, 28, 26,  4);
     gui.registerCoords("conclusion",        50, 36, 96,  4);
-    gui.registerCoords("stats",             50, 63, 80, 38);
-    gui.registerCoords("stats_scroll",      93, 63,  2, 38);
+    gui.registerCoords("stats_page",        50, 63, 80, 38);
     gui.registerCoords("retry",             20, 88, 24,  8);
     gui.registerCoords("continue",          50, 88, 24,  8);
     gui.registerCoords("pick_area",         80, 88, 24,  8);
@@ -459,7 +340,7 @@ void Results::load() {
     if(game.curArea->type == AREA_TYPE_MISSION) {
         GuiItem* medalItem = new GuiItem;
         medalItem->onDraw =
-        [medal] (const DrawInfo & draw) {
+        [this] (const DrawInfo & draw) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
@@ -561,15 +442,9 @@ void Results::load() {
     gui.addItem(conclusionText, "conclusion");
     textToAnimate.push_back(conclusionText);
     
-    //Stats box.
-    statsList = new ListGuiItem();
-    populateStatsList(oldRecord);
-    gui.addItem(statsList, "stats");
-    
-    //Stats list scrollbar.
-    ScrollGuiItem* statsScroll = new ScrollGuiItem();
-    statsScroll->listItem = statsList;
-    gui.addItem(statsScroll, "stats_scroll");
+    //Stats page box.
+    statsPageBox = new GuiItem();
+    gui.addItem(statsPageBox, "stats_page");
     
     //Retry button.
     ButtonGuiItem* retryButton =
@@ -629,19 +504,202 @@ void Results::load() {
     gui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
+    gui.setFocusedItem(gui.backItem, true);
+}
+
+
+/**
+ * @brief Initializes the score chart GUI items.
+ */
+void Results::initGuiScoreChart() {
+    //TODO
+}
+
+
+/**
+ * @brief Initializes the scoring information GUI items.
+ */
+void Results::initGuiScoring() {
+    //TODO
+}
+
+
+/**
+ * @brief Initializes the stats GUI items.
+ */
+void Results::initGuiStats() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
+    gui.registerCoords("stats_page_left",             50, 63, 80, 38);
+    gui.registerCoords("stats_page_left_input",             50, 63, 80, 38);
+    gui.registerCoords("stats_page_right",             50, 63, 80, 38);
+    gui.registerCoords("stats_page_right_input",             50, 63, 80, 38);
+    gui.registerCoords("stats_list",             50, 63, 80, 38);
+    gui.registerCoords("stats_scroll",      93, 63,  2, 38);
+    gui.readDataFile(guiFile, statsPageBox);
+    
+    //Stats list.
+    statsList = new ListGuiItem();
+    statsPageBox->addChild(statsList);
+    gui.addItem(statsList, "stats_list");
+    populateStatsList();
+    
+    //Stats list scrollbar.
+    ScrollGuiItem* statsScroll = new ScrollGuiItem();
+    statsScroll->listItem = statsList;
+    statsPageBox->addChild(statsScroll);
+    gui.addItem(statsScroll, "stats_scroll");
+}
+
+
+/**
+ * @brief Leaves the results menu and goes to the area menu.
+ */
+void Results::leave() {
+    game.fadeMgr.startFade(false, [] () {
+        AREA_TYPE areaType = game.curArea->type;
+        game.unloadLoadedState(game.states.gameplay);
+        if(game.quickPlay.areaPath.empty()) {
+            game.states.annexScreen->areaMenuAreaType =
+                areaType;
+            game.states.annexScreen->menuToLoad =
+                ANNEX_SCREEN_MENU_AREA_SELECTION;
+            game.changeState(game.states.annexScreen);
+        } else {
+            game.changeState(game.quickPlay.editor);
+        }
+    });
+}
+
+
+/**
+ * @brief Loads the results state into memory.
+ */
+void Results::load() {
+    //Some setup.
     game.audio.setCurrentSong(game.sysContentNames.sngResults);
     game.fadeMgr.startFade(true, nullptr);
-    gui.setFocusedItem(gui.backItem, true);
     guiTimeSpent = 0.0f;
+    textToAnimate.clear();
+    
+    finalMissionScore = game.states.gameplay->calculateMissionScore(false);
+    
+    medal = MISSION_MEDAL_NONE;
+    switch(game.curArea->mission.gradingMode) {
+    case MISSION_GRADING_MODE_POINTS: {
+        if(game.states.gameplay->missionWasCleared) {
+            medal = game.curArea->mission.getScoreMedal(finalMissionScore);
+        }
+        break;
+    } case MISSION_GRADING_MODE_GOAL: {
+        medal =
+            game.states.gameplay->missionWasCleared ?
+            MISSION_MEDAL_PLATINUM :
+            MISSION_MEDAL_NONE;
+        break;
+    } case MISSION_GRADING_MODE_PARTICIPATION: {
+        medal = MISSION_MEDAL_PLATINUM;
+        break;
+    }
+    }
+    
+    endEv = nullptr;
+    if(game.states.gameplay->missionEndEventIdx != INVALID) {
+        endEv =
+            &game.curArea->mission.events[
+                game.states.gameplay->missionEndEventIdx
+            ];
+    }
+    
+    //Record loading and saving logic.
+    //TODO
+    /*
+    DataNode missionRecords;
+    missionRecords.loadFile(
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
+    );
+    string recordEntryName =
+        getMissionRecordEntryName(game.curArea);
+    DataNode* entryNode;
+    if(missionRecords.getNrOfChildrenByName(recordEntryName) > 0) {
+        entryNode =
+            missionRecords.getChildByName(recordEntryName);
+    } else {
+        entryNode = missionRecords.addNew(recordEntryName, "");
+    }
+    
+    vector<string> oldRecordParts = split(entryNode->value, ";", true);
+    
+    if(oldRecordParts.size() == 3) {
+        oldRecord.clear = oldRecordParts[0] == "1";
+        oldRecord.score = s2i(oldRecordParts[1]);
+        oldRecord.date = s2i(oldRecordParts[2]);
+    }
+    
+    if(!oldRecord.clear && goalWasCleared) {
+        isNewRecord = true;
+    } else if(oldRecord.clear == goalWasCleared) {
+        if(
+            game.curArea->missionOld.gradingMode ==
+            MISSION_GRADING_MODE_POINTS &&
+            oldRecord.score < finalMissionScore
+        ) {
+            isNewRecord = true;
+        }
+    }
+    
+    if(
+        isNewRecord &&
+        game.quickPlay.areaPath.empty() &&
+        !game.makerTools.usedHelpingTools &&
+        !game.states.gameplay->afterHours
+    ) {
+        string clearStr = goalWasCleared ? "1" : "0";
+        string scoreStr = i2s(finalMissionScore);
+        string dateStr = getCurrentTime(false);
+    
+        entryNode->value = clearStr + ";" + scoreStr + ";" + dateStr;
+        savedSuccessfully =
+            missionRecords.saveFile(
+                FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+            );
+    }
+    
+    if(!savedSuccessfully) {
+        showSystemMessageBox(
+            nullptr, "Save failed!",
+            "Could not save this result!",
+            (
+                "An error occurred while saving the mission record to the "
+                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
+                "\". Make sure that "
+                "the folder it is saving to exists and it is not read-only, "
+                "and try beating the mission again."
+            ).c_str(),
+            nullptr,
+            ALLEGRO_MESSAGEBOX_WARN
+        );
+    }
+    */
+    
+    //Menu items.
+    
+    initGuiMain();
+    initGuiStats();
+    if(
+        game.curArea->type == AREA_TYPE_MISSION &&
+        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+    ) {
+        initGuiScoring();
+        initGuiScoreChart();
+    }
 }
 
 
 /**
  * @brief Populates the list of statistics.
- *
- * @param oldRecord Old record.
  */
-void Results::populateStatsList(const MissionRecord& oldRecord) {
+void Results::populateStatsList() {
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
         game.curArea->missionOld.startingPoints != 0

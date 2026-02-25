@@ -47,7 +47,7 @@ private:
 
     //--- Private members ---
     
-    //GUI manager.
+    //Main GUI manager.
     GuiManager gui;
     
     //Time spent on this state.
@@ -56,11 +56,29 @@ private:
     //GUI items that need to grow during the periodic text animation.
     vector<GuiItem*> textToAnimate;
     
-    //Stats box GUI item.
+    //Stats page box GUI item.
+    GuiItem* statsPageBox = nullptr;
+    
+    //Stats list GUI item.
     ListGuiItem* statsList = nullptr;
+    
+    //Medal obtained. Cache for convenience.
+    MISSION_MEDAL medal = MISSION_MEDAL_NONE;
+    
+    //Mission event that ended the mission, if any. Cache for convenience.
+    MissionEvent* endEv = nullptr;
     
     //Final mission score. Cache for convenience.
     int finalMissionScore = 0;
+    
+    //The player's old record, if any. Cache for convenience.
+    MissionRecord oldRecord;
+    
+    //Whether this was a new record or not. Cache for convenience.
+    bool isNewRecord = false;
+    
+    //Whether the new record was saved successfully. Cache for convenience.
+    bool savedSuccessfully = false;
     
     
     //--- Private function declarations ---
@@ -71,8 +89,12 @@ private:
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     void continuePlaying();
+    void initGuiMain();
+    void initGuiScoreChart();
+    void initGuiScoring();
+    void initGuiStats();
     void leave();
-    void populateStatsList(const MissionRecord& oldRecord);
+    void populateStatsList();
     void retryArea();
     
 };
