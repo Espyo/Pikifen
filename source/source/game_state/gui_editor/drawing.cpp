@@ -74,9 +74,6 @@ void GuiEditor::drawCanvas() {
         &origClipX, &origClipY, &origClipW, &origClipH
     );
     
-    GuiItemDef* curItemPtr = nullptr;
-    if(curItemIdx != INVALID) curItemPtr = allItems[curItemIdx];
-    
     //Sort them by layer.
     vector<pair<GuiItemDef*, unsigned char> > drawingSortedItems;
     for(size_t i = 0; i < allItems.size(); i++) {
@@ -101,6 +98,7 @@ void GuiEditor::drawCanvas() {
     );
     
     for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+        size_t itemIdx = drawingSortedItems[i].second;
         GuiItemDef* item = drawingSortedItems[i].first;
         if(item->size.x == 0.0f) continue;
         bool isCustom =
@@ -141,7 +139,7 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(curItemPtr != item) {
+        if(!selMgr.isSelected(itemIdx)) {
             drawRoundedRectangle(
                 item->center,
                 item->size,
@@ -151,13 +149,15 @@ void GuiEditor::drawCanvas() {
         }
     }
     
-    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
-        curTransformationWidget.draw(
-            &allItems[curItemIdx]->center,
-            &allItems[curItemIdx]->size,
-            nullptr,
-            1.0f / game.editorsView.cam.zoom
-        );
+    if(selMgr.isAnySelected()) {
+        Point selectionCenter, selectionSize;
+        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            curTransformationWidget.draw(
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
+        }
     }
     
     //Finish up.

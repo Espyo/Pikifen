@@ -122,18 +122,23 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     bool twHandled = false;
-    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
-        twHandled =
-            curTransformationWidget.handleMouseDown(
-                game.editorsView.mouseCursorWorldPos,
-                &allItems[curItemIdx]->center,
-                &allItems[curItemIdx]->size,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
-            );
+    if(selMgr.isAnySelected()) {
+        Point selectionCenter, selectionSize;
+        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            twHandled =
+                curTransformationWidget.handleMouseDown(
+                    game.editorsView.mouseCursorWorldPos,
+                    &selectionCenter, &selectionSize,
+                    nullptr,
+                    1.0f / game.editorsView.cam.zoom
+                );
+        }
     }
     
-    if(!twHandled) {
+    if(twHandled) {
+        selMgr.startTransforming();
+    } else {
         vector<size_t> clickedItems;
         for(size_t i = 0; i < allItems.size(); i++) {
             GuiItemDef* itemPtr = allItems[i];
@@ -152,27 +157,12 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         }
         
         if(clickedItems.empty()) {
-            curItemIdx = INVALID;
+            selMgr.clear();
             
         } else {
-            size_t clickedItemsIdx = INVALID;
-            for(size_t i = 0; i < clickedItems.size(); i++) {
-                if(curItemIdx == clickedItems[i]) {
-                    clickedItemsIdx = i;
-                    break;
-                }
-            }
-            
-            if(clickedItemsIdx == INVALID) {
-                clickedItemsIdx = 0;
-            } else {
-                clickedItemsIdx =
-                    sumAndWrap(
-                        (int) clickedItemsIdx, 1,
-                        (int) clickedItems.size()
-                    );
-            }
-            curItemIdx = clickedItems[clickedItemsIdx];
+            size_t prevSelItemIdx = selMgr.getSelectedItemIdx();
+            selMgr.clear();
+            selMgr.select(getNextInVector(clickedItems, prevSelItemIdx));
             mustFocusOnCurItem = true;
         }
     }
@@ -185,21 +175,25 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(curItemIdx != INVALID && allItems[curItemIdx]->size.x != 0.0f) {
-        bool twHandled =
-            curTransformationWidget.handleMouseMove(
-                snapPoint(game.editorsView.mouseCursorWorldPos),
-                &allItems[curItemIdx]->center,
-                &allItems[curItemIdx]->size,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom,
-                false,
-                false,
-                0.10f,
-                isAltPressed
-            );
-        if(twHandled) {
-            changesMgr.markAsChanged();
+    if(selMgr.isAnySelected()) {
+        Point selectionCenter, selectionSize;
+        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            bool twHandled =
+                curTransformationWidget.handleMouseMove(
+                    snapPoint(game.editorsView.mouseCursorWorldPos),
+                    &selectionCenter, &selectionSize,
+                    nullptr,
+                    1.0f / game.editorsView.cam.zoom,
+                    false,
+                    false,
+                    0.10f,
+                    isAltPressed
+                );
+            if(twHandled) {
+                changesMgr.markAsChanged();
+                selMgr.applyTransformation(selectionCenter, selectionSize);
+            }
         }
     }
 }
@@ -212,6 +206,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     curTransformationWidget.handleMouseUp();
+    selMgr.stopTransforming();
 }
 
 

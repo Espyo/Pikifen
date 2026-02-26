@@ -4209,6 +4209,246 @@ Editor::PickerItem::PickerItem(
 
 
 /**
+ * @brief Applies a transformation the user performed on the geometry of
+ * the selected items.
+ *
+ * @return Whether it was able to apply.
+ */
+bool Editor::SelectionManager::applyTransformation(
+    const Point& newCenter, const Point& newSize
+) {
+    if(state != STATE_TRANSFORMING) return false;
+    if(preTransSize.x <= 0.0f || preTransSize.y <= 0.0f) return false;
+    
+    Point preTransTL = preTransCenter - preTransSize / 2.0f;
+    Point newTL = newCenter - newSize / 2.0f;
+    
+    for(size_t i : selectedItems) {
+        if(onGetCenter) {
+            Point* iCenterPtr = onGetCenter(i);
+            if(iCenterPtr) {
+                Point preTransCenterRatio =
+                    (preTransCenters[i] - preTransTL) / preTransSize;
+                (*iCenterPtr) =
+                    newTL + preTransCenterRatio * newSize;
+            }
+        }
+        if(onGetSize) {
+            Point* iSizePtr = onGetSize(i);
+            if(iSizePtr) {
+                Point preTransSizeRatio =
+                    preTransSizes[i] / preTransSize;
+                (*iSizePtr) =
+                    preTransSizeRatio * newSize;
+            }
+        }
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Clears the selection.
+ *
+ * @return Whether there were items to clear.
+ */
+bool Editor::SelectionManager::clear() {
+    if(selectedItems.empty()) return false;
+    selectedItems.clear();
+    return true;
+}
+
+
+/**
+ * @brief Returns the center point of an item, or 0,0 if not possible.
+ *
+ * @param idx The item's index.
+ * @return The center.
+ */
+Point Editor::SelectionManager::getItemCenter(size_t idx) const {
+    if(onGetCenter) {
+        Point* ptr = onGetCenter(idx);
+        if(ptr) {
+            return *ptr;
+        }
+    }
+    return Point();
+}
+
+
+/**
+ * @brief Returns the size of an item, or 0,0 if not possible.
+ *
+ * @param idx The item's index.
+ * @return The size.
+ */
+Point Editor::SelectionManager::getItemSize(size_t idx) const {
+    if(onGetSize) {
+        Point* ptr = onGetSize(idx);
+        if(ptr) {
+            return *ptr;
+        }
+    }
+    return Point();
+}
+
+
+/**
+ * @brief Returns the index of the only selected item, or INVALID if
+ * multiple or none are selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionManager::getSelectedItemIdx() const {
+    if(selectedItems.size() == 1) {
+        return *selectedItems.begin();
+    } else {
+        return INVALID;
+    }
+}
+
+
+/**
+ * @brief Returns the list of all selected items.
+ *
+ * @return The list.
+ */
+const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
+    return selectedItems;
+}
+
+
+/**
+ * @brief Returns the center point and size of the bounding box of the
+ * selected items.
+ *
+ * @param center The center of the box is returned here.
+ * @param size The dimensions of the box are returned here.
+ * @return Whether there are any selected items.
+ */
+bool Editor::SelectionManager::getSelectionBBox(
+    Point* center, Point* size
+) const {
+    *center = Point();
+    *size = Point();
+    if(selectedItems.empty()) return false;
+    
+    Point minCoords(FLT_MAX);
+    Point maxCoords(-FLT_MAX);
+    
+    for(size_t i : selectedItems) {
+        Point iCenter = getItemCenter(i);
+        Point iSize = getItemSize(i);
+        updateMinCoords(
+            minCoords, iCenter - iSize / 2.0f
+        );
+        updateMaxCoords(
+            maxCoords, iCenter + iSize / 2.0f
+        );
+    }
+    
+    *center = (minCoords + maxCoords) / 2.0f;
+    *size = maxCoords - minCoords;
+    
+    return true;
+}
+
+
+/**
+ * @brief Returns whether any items are selected.
+ *
+ * @return Whether any are selected.
+ */
+bool Editor::SelectionManager::isAnySelected() const {
+    return !selectedItems.empty();
+}
+
+
+/**
+ * @brief Returns whether there is only one item selected.
+ *
+ * @return Whether there is one selected
+ */
+bool Editor::SelectionManager::isOneSelected() const {
+    return selectedItems.size() == 1;
+}
+
+
+/**
+ * @brief Returns whether a given items is selected.
+ *
+ * @param idx The item's index.
+ * @return Whether it is selected.
+ */
+bool Editor::SelectionManager::isSelected(size_t idx) const {
+    return selectedItems.contains(idx);
+}
+
+
+/**
+ * @brief Adds an item to the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was unselected.
+ */
+bool Editor::SelectionManager::select(size_t idx) {
+    if(selectedItems.contains(idx)) return false;
+    selectedItems.insert(idx);
+    return true;
+}
+
+
+/**
+ * @brief Starts a transformation of the selection bounding box.
+ *
+ * @return Whether it was idling before this.
+ */
+bool Editor::SelectionManager::startTransforming() {
+    bool wasIdle = state == STATE_IDLING;
+    state = STATE_TRANSFORMING;
+    preTransCenters.clear();
+    preTransSizes.clear();
+    for(size_t i : selectedItems) {
+        preTransCenters[i] = getItemCenter(i);
+        preTransSizes[i] = getItemSize(i);
+    }
+    getSelectionBBox(&preTransCenter, &preTransSize);
+    return wasIdle;
+}
+
+
+/**
+ * @brief Stops a transformation of the selection bounding box.
+ *
+ * @return Whether it was in a transformation before this.
+ */
+bool Editor::SelectionManager::stopTransforming() {
+    if(state != STATE_TRANSFORMING) {
+        return false;
+    }
+    
+    preTransCenters.clear();
+    preTransSizes.clear();
+    state = STATE_IDLING;
+    return true;
+}
+
+
+/**
+ * @brief Removes an item from the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was selected.
+ */
+bool Editor::SelectionManager::unselect(size_t idx) {
+    if(!selectedItems.contains(idx)) return false;
+    selectedItems.erase(idx);
+    return true;
+}
+
+
+/**
  * @brief Draws the widget.
  *
  * @param center Center point.

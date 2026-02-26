@@ -258,24 +258,8 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                     curHitboxIdx = INVALID;
                     
                 } else {
-                    size_t curHitboxIdxIdx = INVALID;
-                    for(size_t i = 0; i < clickedHitboxes.size(); i++) {
-                        if(curHitboxIdx == clickedHitboxes[i]) {
-                            curHitboxIdxIdx = i;
-                            break;
-                        }
-                    }
-                    
-                    if(curHitboxIdxIdx == INVALID) {
-                        curHitboxIdxIdx = 0;
-                    } else {
-                        curHitboxIdxIdx =
-                            sumAndWrap(
-                                (int) curHitboxIdxIdx, 1,
-                                (int) clickedHitboxes.size()
-                            );
-                    }
-                    curHitboxIdx = clickedHitboxes[curHitboxIdxIdx];
+                    curHitboxIdx =
+                        getNextInVector(clickedHitboxes, curHitboxIdx);
                     curHitbox = &curSprite->hitboxes[curHitboxIdx];
                 }
             }

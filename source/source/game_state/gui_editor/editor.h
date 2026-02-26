@@ -72,10 +72,9 @@ private:
     
     
     //--- Private members ---
-    
-    //Index of the currently selected item, from the list of all items.
-    //INVALID for none.
-    size_t curItemIdx = INVALID;
+
+    //Selection manager for all items.
+    Editor::SelectionManager selMgr;
     
     //Data node for the contents of the current GUI definition.
     DataNode fileNode;

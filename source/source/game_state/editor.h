@@ -238,6 +238,95 @@ protected:
         
     };
     
+    /**
+     * @brief Manages selections and selected things. It only knows about
+     * item indexes, and needs a bit of help for more complex operations
+     * like center and size management.
+     */
+    struct SelectionManager {
+    
+        public:
+        
+        //--- Public members ---
+        
+        //Callback for when the center of an item needs to be retrieved.
+        //If nullptr, the center of an item is always considered 0,0.
+        std::function<Point*(size_t)> onGetCenter = nullptr;
+        
+        //Callback for when the size of an item needs to be retrieved.
+        //If nullptr, the size of an item is always considered 0.
+        std::function<Point*(size_t)> onGetSize = nullptr;
+        
+        //--- Public function declarations ---
+        
+        bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool clear();
+        size_t getSelectedItemIdx() const;
+        const set<size_t>& getSelectedItemIdxs() const;
+        bool getSelectionBBox(Point* center, Point* size) const;
+        bool isAnySelected() const;
+        bool isOneSelected() const;
+        bool isSelected(size_t idx) const;
+        bool select(size_t idx);
+        bool startTransforming();
+        bool stopTransforming();
+        bool unselect(size_t idx);
+        
+        
+        private:
+        
+        //--- Private misc. declarations ---
+        
+        //User state, in the selection manager's context.
+        enum STATE {
+        
+            //Idling.
+            STATE_IDLING,
+            
+            //Creating a selection box.
+            STATE_CREATING_BOX,
+            
+            //Transforming the selection.
+            STATE_TRANSFORMING,
+            
+        };
+        
+        
+        //--- Private members ---
+        
+        //List of the indexes of all currently selected items.
+        set<size_t> selectedItems;
+        
+        //Current user state.
+        STATE state = STATE_IDLING;
+        
+        //Selection box starting point.
+        Point boxStart;
+        
+        //Center of each selected item before transformation began.
+        map<size_t, Point> preTransCenters;
+        
+        //Size of each selected item before transformation began.
+        map<size_t, Point> preTransSizes;
+        
+        //Center of the entire selection before transformation began.
+        //Cache for performance.
+        Point preTransCenter;
+        
+        //Size of the entire selection before transformation began.
+        //Cache for performance.
+        Point preTransSize;
+        
+        //Has the user agreed to homogenize the selection?
+        bool selectionHomogenized = false;
+        
+        
+        //--- Private function declarations ---
+        Point getItemCenter(size_t idx) const;
+        Point getItemSize(size_t idx) const;
+        
+    };
+    
     /*
      * A widget that's drawn on the window, and with handles that the user
      * can drag in order to translate, scale, or rotate something.

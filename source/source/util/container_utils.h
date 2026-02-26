@@ -58,29 +58,6 @@ vector<ContentT> filterVectorWithBanList(
 
 /**
  * @brief Returns the cyclically next element in a vector, given the
- * current element. If the element is not in the vector, it returns the
- * first element.
- *
- * @tparam ContentT Type of contents of the vector.
- * @param v The vector.
- * @param e The current element.
- * @return The next element, or a default-constructed element
- * if the vector is empty.
- */
-template<typename ContentT>
-ContentT getNextInVector(const vector<ContentT>& v, const ContentT& e) {
-    if(v.empty()) return ContentT();
-    auto it = std::find(v.begin(), v.end(), e);
-    size_t idx =
-        it != v.end() ?
-        std::distance(v.begin(), it) :
-        v.size() - 1;
-    return getNextInVectorByIdx(v, idx);
-}
-
-
-/**
- * @brief Returns the cyclically next element in a vector, given the
  * current element's index.
  *
  * @tparam ContentT Type of contents of the vector.
@@ -93,6 +70,30 @@ template<typename ContentT>
 ContentT getNextInVectorByIdx(const vector<ContentT>& v, size_t idx) {
     if(v.empty()) return ContentT();
     return v[idx == v.size() - 1 ? 0 : idx + 1];
+}
+
+
+/**
+ * @brief Returns the cyclically next element in a vector, given the
+ * current element. If the element is not in the vector, it returns the
+ * first element.
+ *
+ * @tparam ContentT Type of contents of the vector.
+ * @param v The vector.
+ * @param e The current element.
+ * @return The next element. Returns the first element if the current element
+ * is not found in the vector. Returns a default-constructed element
+ * if the vector is empty.
+ */
+template<typename ContentT>
+ContentT getNextInVector(const vector<ContentT>& v, const ContentT& e) {
+    if(v.empty()) return ContentT();
+    auto it = std::find(v.begin(), v.end(), e);
+    size_t idx =
+        it != v.end() ?
+        std::distance(v.begin(), it) :
+        v.size() - 1;
+    return getNextInVectorByIdx(v, idx);
 }
 
 

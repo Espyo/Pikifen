@@ -64,6 +64,12 @@ GuiEditor::GuiEditor() :
     registerCmd(&GuiEditor::zoomOutCmd, "zoom_out");
     
 #undef registerCmd
+
+    //Setup the selection manager.
+    selMgr.onGetCenter =
+        [this] (size_t idx) { return &allItems[idx]->center; };
+    selMgr.onGetSize =
+        [this] (size_t idx) { return &allItems[idx]->size; };
 }
 
 
@@ -73,7 +79,7 @@ GuiEditor::GuiEditor() :
  * @param newState The new state.
  */
 void GuiEditor::changeState(const EDITOR_STATE newState) {
-    curItemIdx = INVALID;
+    selMgr.clear();
     state = newState;
 }
 
@@ -744,7 +750,7 @@ void GuiEditor::setupForNewGuiDef() {
     hardcodedItems.clear();
     customItems.clear();
     allItems.clear();
-    curItemIdx = INVALID;
+    selMgr.clear();
     
     //We could reset the camera directly, but if the player enters the editor
     //via the auto start maker tool, processGui() won't have a chance
@@ -822,7 +828,7 @@ void GuiEditor::unload() {
     hardcodedItems.clear();
     customItems.clear();
     allItems.clear();
-    curItemIdx = INVALID;
+    selMgr.clear();
     
     game.content.unloadAll(
     vector<CONTENT_TYPE> {
