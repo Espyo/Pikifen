@@ -68,7 +68,7 @@ void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
     Ship* shiPtr = (Ship*) fsm->m;
     Mob* delivery = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {

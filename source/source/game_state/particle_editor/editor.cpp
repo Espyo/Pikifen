@@ -113,6 +113,7 @@ void ParticleEditor::closeLoadDialog() {
  */
 void ParticleEditor::closeOptionsDialog() {
     saveOptions();
+    game.systemNotifications.add("Options saved.", false, false);
 }
 
 

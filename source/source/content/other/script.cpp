@@ -363,6 +363,30 @@ ScriptEvent* Fsm::getEvent(const SCRIPT_EV type) const {
 
 
 /**
+ * @brief Returns a string representing the values of all script vars,
+ * formatted in a way that's friendly for the info maker tool.
+ * 
+ * @return The string.
+ */
+string Fsm::getMakerToolVarsStr() const {
+    string result = "Vars: ";
+
+    if(vars.empty()) {
+        result += "(None)";
+        return result;
+    }
+
+    for(const auto& v : vars) {
+        result += v.first + "=" + v.second + "; ";
+    }
+    result.erase(result.size() - 2, 2);
+    result = wordWrap(result, 98, 2);
+
+    return result;
+}
+
+
+/**
  * @brief Returns the index of the specified state.
  *
  * @param name The state's name.
@@ -384,7 +408,7 @@ size_t Fsm::getStateIdx(const string& name) const {
  *
  * @return The string.
  */
-string Fsm::printStateHistory() const {
+string Fsm::getStateHistoryStr() const {
     string str = "State history: ";
     
     if(curState) {

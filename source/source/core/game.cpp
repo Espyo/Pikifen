@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_opengl.h>
 
 #include "game.h"
 
@@ -559,11 +560,13 @@ void Game::processSystemInfo() {
             std::to_string(1.0f / options.advanced.targetFps), 12
         );
     string nMobsStr = "-";
+    string nActiveMobs = "-";
     string nParticlesStr = "-";
     string nBitmapsLoaded = i2s(content.bitmaps.list.getListSize());
     string nBitmapUses = i2s(content.bitmaps.list.getTotalUses());
     string nSoundsLoaded = i2s(content.sounds.list.getListSize());
     string nSoundUses = i2s(content.sounds.list.getTotalUses());
+    string nSoundSources = i2s(game.audio.getSourceCount());
     string resolutionStr = i2s(winW) + "x" + i2s(winH);
     string areaVersionStr = "-";
     string areaMakerStr = "-";
@@ -577,6 +580,14 @@ void Game::processSystemInfo() {
     string allegroVersionStr =
         i2s(allegroMajor) + "." + i2s(allegroMinor) + "." +
         i2s(allegroRevision) + "." + i2s(allegroRelease);
+    uint32_t openGLVersion = al_get_opengl_version();
+    int openGLMajor = openGLVersion >> 24;
+    int openGLMinor = (openGLVersion >> 16) & 255;
+    int openGLRevision = (openGLVersion >> 8) & 255;
+    int openGLRelease = openGLVersion & 255;
+    string openGLVersionStr =
+        i2s(openGLMajor) + "." + i2s(openGLMinor) + "." +
+        i2s(openGLRevision) + "." + i2s(openGLRelease);
     string dearImGuiVersionStr(ImGui::GetVersion());
     
     if(states.gameplay->loaded) {
@@ -588,6 +599,14 @@ void Game::processSystemInfo() {
             curArea->version.empty() ? "-" : curArea->version;
         areaMakerStr =
             curArea->maker.empty() ? "-" : curArea->maker;
+
+        size_t activeMobCount = 0;
+        for(size_t m = 0; m < states.gameplay->mobs.all.size(); m++) {
+            if(states.gameplay->mobs.all[m]->isActive) {
+                activeMobCount++;
+            }
+        }
+        nActiveMobs = i2s(activeMobCount);
     }
     
     console.write(
@@ -602,20 +621,23 @@ void Game::processSystemInfo() {
         "\n"
         "Area version " + areaVersionStr + ", by " + areaMakerStr +
         "\n"
-        "Mobs: " + nMobsStr + " particles: " + nParticlesStr +
+        "Mobs: " + nMobsStr + " (" + nActiveMobs + " active) | "
+        "Particles: " + nParticlesStr +
         "\n"
         "\n"
-        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses) " +
-        "sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses) " +
+        "Bitmaps: " + nBitmapsLoaded + " (" + nBitmapUses + " uses) | " +
+        "Sounds: " + nSoundsLoaded + " (" + nSoundUses + " uses) | " +
+        "Sound sources: " + nSoundSources +
         "\n"
         "\n"
         "Resolution: " + resolutionStr +
         "\n"
-        "Pikifen version " + getEngineVersionString(true, true) +
-        ", game version " + gameVersionStr +
+        "Pikifen version " + getEngineVersionString(true, true) + " | "
+        "Game version " + gameVersionStr +
         "\n"
-        "Allegro version " + allegroVersionStr +
-        ", Dear ImGui version " + dearImGuiVersionStr,
+        "Allegro version " + allegroVersionStr + " | "
+        "OpenGL version " + openGLVersionStr + " | "
+        "Dear ImGui version " + dearImGuiVersionStr,
         1.0f, 1.0f
     );
 }
@@ -703,7 +725,7 @@ int Game::start() {
     //Controls and options.
     initControls();
     loadOptions();
-    saveOptions();
+    saveOptions(); //This creates the file if it did not exist.
     loadStatistics();
     statistics.startups++;
     saveStatistics();

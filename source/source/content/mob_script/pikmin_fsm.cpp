@@ -2162,7 +2162,7 @@ void PikminFsm::beCrushed(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::beDismissed(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2185,7 +2185,7 @@ void PikminFsm::beginPluck(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* leaPtr = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     pikPtr->focusOnMob(leaPtr);
     disableFlag(pikPtr->flags, MOB_FLAG_NON_HUNTABLE);
@@ -2210,8 +2210,8 @@ void PikminFsm::beGrabbedByEnemy(Fsm* fsm, void* info1, void* info2) {
     Mob* enePtr = (Mob*) info1;
     Hitbox* hboxPtr = (Hitbox*) info2;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
-    engineAssert(info2 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info2 != nullptr, fsm->getStateHistoryStr());
     
     enePtr->chomp(pikPtr, hboxPtr);
     pikPtr->isGrabbedByEnemy = true;
@@ -2353,7 +2353,7 @@ void PikminFsm::called(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* caller = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     pikPtr->wasLastHitDing = false;
     pikPtr->consecutiveDings = 0;
@@ -2380,7 +2380,7 @@ void PikminFsm::calledWhileKnockedDown(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* caller = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     //Let's use the "temp" variable to specify whether or not a leader
     //already whistled it.
@@ -2450,7 +2450,7 @@ void PikminFsm::checkIncomingAttack(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
         //The Pikmin cannot be attacked right now.
@@ -2526,7 +2526,7 @@ void PikminFsm::checkOutgoingAttack(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     float offenseMultiplier = 0;
     float defenseMultiplier = 0;
@@ -2649,7 +2649,7 @@ void PikminFsm::clearTimer(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::decideAttack(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
         //Don't let the Pikmin attack while invulnerable. Otherwise, this can
@@ -2803,7 +2803,7 @@ void PikminFsm::enterOnion(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Onion* oniPtr = (Onion*) pikPtr->focusedMob;
 
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
@@ -2882,7 +2882,7 @@ void PikminFsm::finishCalledAnim(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::finishCarrying(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->carryingMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->carryingMob != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->carryingMob->carryInfo->mustReturn) {
         //The Pikmin should return somewhere (like a pile).
@@ -2907,7 +2907,7 @@ void PikminFsm::finishCarrying(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
 
     Drop* droPtr = (Drop*) pikPtr->focusedMob;
     
@@ -3188,7 +3188,7 @@ void PikminFsm::goToCarriableObject(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* carriableMob = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -3263,7 +3263,7 @@ void PikminFsm::goToGroupTask(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     GroupTask* tasPtr = (GroupTask*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(
         !hasFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
@@ -3317,7 +3317,7 @@ void PikminFsm::goToOnion(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     PikminNest* nestPtr = (PikminNest*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     //Pick a leg at random.
     pikPtr->tempI =
@@ -3363,7 +3363,7 @@ void PikminFsm::goToOpponent(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* otherPtr = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(!pikPtr->pikType->canFly) {
         //Grounded Pikmin.
@@ -3425,7 +3425,7 @@ void PikminFsm::goToTool(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Tool* tooPtr = (Tool*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(tooPtr->reserved && tooPtr->reserved != pikPtr) {
         //Another Pikmin is already going for it. Ignore it.
@@ -3522,7 +3522,7 @@ void PikminFsm::landOnMob(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     Mob* m2Ptr = info->mob2;
     
@@ -3713,7 +3713,7 @@ void PikminFsm::landWhileHolding(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::leaveOnion(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pikPtr->setAnimation(PIKMIN_ANIM_SLIDING, START_ANIM_OPTION_RANDOM_TIME);
@@ -3731,7 +3731,7 @@ void PikminFsm::leftHazard(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Hazard* h = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(h->associatedLiquid) {
         pikPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
@@ -3801,7 +3801,7 @@ void PikminFsm::panicNewChase(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::prepareToAttack(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->focusedMob->rectangularDim.x != 0.0f) {
         bool isInside = false;
@@ -4260,7 +4260,7 @@ void PikminFsm::startGettingUp(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::startImpactLunge(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     pikPtr->chase(&pikPtr->focusedMob->pos, &pikPtr->focusedMob->z);
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
@@ -4346,7 +4346,7 @@ void PikminFsm::startReturning(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Mob* carriedMob = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -4572,8 +4572,8 @@ void PikminFsm::tickCarrying(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::tickEnteringOnion(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->trackInfo != nullptr, fsm->printStateHistory());
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->trackInfo != nullptr, fsm->getStateHistoryStr());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->tickTrackRide()) {
         //Finished!
@@ -4592,7 +4592,7 @@ void PikminFsm::tickEnteringOnion(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::tickGroupTaskWork(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
     Point curSpotPos = tasPtr->getSpotPos(pikPtr);
@@ -4620,7 +4620,7 @@ void PikminFsm::tickGroupTaskWork(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->trackInfo != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->trackInfo != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->tickTrackRide()) {
         //Finished!
@@ -4653,8 +4653,8 @@ void PikminFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::touchedEatHitbox(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
-    engineAssert(info2 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info2 != nullptr, fsm->getStateHistoryStr());
     
     if(pikPtr->invulnPeriod.timeLeft > 0) return;
     if(pikPtr->health <= 0) {
@@ -4683,7 +4683,7 @@ void PikminFsm::touchedHazard(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
     Hazard* hazPtr = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     Mob* hitboxMob = nullptr;
     
@@ -4751,7 +4751,7 @@ void PikminFsm::touchedSpray(Fsm* fsm, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
         pikPtr->applyStatus(s->effects[e], false, false, sprayer);
@@ -4894,7 +4894,7 @@ void PikminFsm::whistledWhileHolding(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::whistledWhileRiding(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->trackInfo, fsm->printStateHistory());
+    engineAssert(pikPtr->trackInfo, fsm->getStateHistoryStr());
     
     Track* traPtr = (Track*) (pikPtr->trackInfo->m);
     
@@ -4919,7 +4919,7 @@ void PikminFsm::whistledWhileRiding(Fsm* fsm, void* info1, void* info2) {
 void PikminFsm::workOnGroupTask(Fsm* fsm, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) fsm->m;
 
-    engineAssert(pikPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(pikPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     
     GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
     

@@ -471,6 +471,7 @@ void AreaEditor::closeLoadDialog() {
  */
 void AreaEditor::closeOptionsDialog() {
     saveOptions();
+    game.systemNotifications.add("Options saved.", false, false);
 }
 
 

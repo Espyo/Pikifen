@@ -632,12 +632,14 @@ string trimWithEllipsis(const string& str, size_t size) {
  * @param s Input string.
  * @param nrCharsPerLine Number of characters that a line cannot exceed,
  * unless it's impossible to split.
+ * @param indent Number of space characters to indent the second+ lines with.
  * @return The wrapped string.
  */
-string wordWrap(const string& s, size_t nrCharsPerLine) {
+string wordWrap(const string& s, size_t nrCharsPerLine, size_t indent) {
     string result;
     string wordInQueue;
     size_t curLineWidth = 0;
+    bool lineHasWords = false;
     for(size_t c = 0; c < s.size() + 1; c++) {
     
         if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
@@ -656,22 +658,27 @@ string wordWrap(const string& s, size_t nrCharsPerLine) {
             if(widthAfterWord > nrCharsPerLine && !result.empty()) {
                 //The current word doesn't fit in the current line. Break.
                 result.push_back('\n');
-                curLineWidth = 0;
+                result.insert(result.end(), indent, ' ');
+                curLineWidth = indent;
                 brokeDueToLength = true;
+                lineHasWords = false;
             }
             
-            if(curLineWidth > 0) {
+            if(lineHasWords) {
                 result.push_back(' ');
                 curLineWidth++;
             }
             result += wordInQueue;
             curLineWidth += wordInQueue.size();
             wordInQueue.clear();
+            lineHasWords = true;
             
             if(s[c] == '\n' && !brokeDueToLength) {
                 //A real line break character. Break.
                 result.push_back('\n');
-                curLineWidth = 0;
+                result.insert(result.end(), indent, ' ');
+                curLineWidth = indent;
+                lineHasWords = false;
             }
         }
     }

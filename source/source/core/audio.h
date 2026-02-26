@@ -413,6 +413,7 @@ public:
     bool destroySoundSource(size_t sourceId);
     void destroy();
     bool emit(size_t sourceId);
+    size_t getSourceCount() const;
     void handleInterludeEnd(bool instant);
     void handleInterludeStart(bool instant);
     void handleMobDeletion(const Mob* mPtr);

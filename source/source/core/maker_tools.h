@@ -168,6 +168,9 @@ struct MakerTools {
     
     //Show the reaches of the currently info-locked mob?
     bool reaches = false;
+
+    //Mouse cursor world coordinates when the geometry info tool was started.
+    Point geometryInfoStartCursor;
     
     //How many times the player has pressed a maker tool button to confirm,
     //when tools are limited in play mode.

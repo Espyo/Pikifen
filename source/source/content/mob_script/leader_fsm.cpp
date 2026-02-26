@@ -1281,7 +1281,7 @@ void LeaderFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     float healthBefore = leaPtr->health;
     float offenseMultiplier = 1.0f;
@@ -1517,7 +1517,7 @@ void LeaderFsm::called(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Mob* caller = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     LeaderFsm::standStill(fsm, info1, info2);
     
@@ -1539,7 +1539,7 @@ void LeaderFsm::calledWhileKnockedDown(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Mob* caller = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     leaPtr->focusOnMob(caller);
 }
@@ -1577,7 +1577,7 @@ void LeaderFsm::checkPunchDamage(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     float offenseMultiplier = 0;
     float defenseMultiplier = 0;
@@ -1836,7 +1836,7 @@ void LeaderFsm::finishCalledAnim(Fsm* fsm, void* info1, void* info2) {
 void LeaderFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
 
-    engineAssert(leaPtr->focusedMob != nullptr, fsm->printStateHistory());
+    engineAssert(leaPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
     Drop* droPtr = (Drop*) leaPtr->focusedMob;
     
     switch(droPtr->droType->effect) {
@@ -2023,7 +2023,7 @@ void LeaderFsm::goPluck(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Pikmin* pikPtr = (Pikmin*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     leaPtr->queuedPluckCancel = false;
     
@@ -2060,7 +2060,7 @@ void LeaderFsm::grabMob(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Mob* grabbedMob = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     leaPtr->hold(
         grabbedMob, HOLD_TYPE_PURPOSE_HAND, INVALID,
@@ -2154,7 +2154,7 @@ void LeaderFsm::leftHazard(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Hazard* h = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     if(h->associatedLiquid) {
         leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
@@ -2188,7 +2188,7 @@ void LeaderFsm::move(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     MovementInfo* mov = (MovementInfo*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
 
     Point finalCoords;
     float dummyAngle;
@@ -2724,7 +2724,7 @@ void LeaderFsm::startGoHere(Fsm* fsm, void* info1, void* info2) {
 void LeaderFsm::startPluck(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
 
-    engineAssert(leaPtr->pluckTarget != nullptr, fsm->printStateHistory());
+    engineAssert(leaPtr->pluckTarget != nullptr, fsm->getStateHistoryStr());
     
     leaPtr->pluckTarget->fsm.runEvent(MOB_EV_PLUCKED, (void*) leaPtr);
     leaPtr->pluckTarget->pluckReserved = false;
@@ -2914,7 +2914,7 @@ void LeaderFsm::tickActiveState(Fsm* fsm, void* info1, void* info2) {
 void LeaderFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     
-    engineAssert(leaPtr->trackInfo != nullptr, fsm->printStateHistory());
+    engineAssert(leaPtr->trackInfo != nullptr, fsm->getStateHistoryStr());
     
     if(leaPtr->tickTrackRide()) {
         //Finished!
@@ -2938,7 +2938,7 @@ void LeaderFsm::touchedHazard(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Hazard* hazPtr = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
     MobType::Vulnerability vuln = leaPtr->getHazardVulnerability(hazPtr);
@@ -2995,7 +2995,7 @@ void LeaderFsm::touchedSpray(Fsm* fsm, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
 
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
         leaPtr->applyStatus(s->effects[e], false, false, sprayer);
@@ -3084,7 +3084,7 @@ void LeaderFsm::whistledWhileRiding(Fsm* fsm, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) fsm->m;
     Track* traPtr = (Track*) (leaPtr->trackInfo->m);
 
-    engineAssert(leaPtr->trackInfo, fsm->printStateHistory());
+    engineAssert(leaPtr->trackInfo, fsm->getStateHistoryStr());
     
     if(!traPtr->traType->cancellableWithWhistle) {
         return;

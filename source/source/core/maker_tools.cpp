@@ -166,8 +166,11 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
 
-        geometryInfo =
-            !geometryInfo;
+        geometryInfo = !geometryInfo;
+        if(geometryInfo) {
+            geometryInfoStartCursor =
+                game.states.gameplay->players[0].view.mouseCursorWorldPos;
+        }
         usedHelpingTools = true;
         break;
         

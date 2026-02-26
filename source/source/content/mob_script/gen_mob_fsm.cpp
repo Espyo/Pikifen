@@ -33,7 +33,7 @@
  * @param info2 Unused.
  */
 void GenMobFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     float offenseMultiplier = 1.0f;
@@ -70,7 +70,7 @@ void GenMobFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void GenMobFsm::carryBecomeStuck(Fsm* fsm, void* info1, void* info2) {
-    engineAssert(fsm->m->carryInfo != nullptr, fsm->printStateHistory());
+    engineAssert(fsm->m->carryInfo != nullptr, fsm->getStateHistoryStr());
     
     fsm->m->circleAround(
         nullptr, fsm->m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
@@ -506,7 +506,7 @@ void GenMobFsm::startBeingDelivered(Fsm* fsm, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void GenMobFsm::touchHazard(Fsm* fsm, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     Hazard* h = (Hazard*) info1;
     
@@ -524,7 +524,7 @@ void GenMobFsm::touchHazard(Fsm* fsm, void* info1, void* info2) {
  * @param info2 Pointer to the mob that sprayed, if any.
  */
 void GenMobFsm::touchSpray(Fsm* fsm, void* info1, void* info2) {
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;

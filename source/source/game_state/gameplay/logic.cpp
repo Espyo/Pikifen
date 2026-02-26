@@ -1144,20 +1144,30 @@ void GameplayState::doMenuLogic() {
                 resizeString(f2s(game.makerTools.infoLock->z), 8),
                 26
             );
-        string stateHStr =
-            (
+        string angleStr =
+            resizeString(f2s(radToDeg(game.makerTools.infoLock->angle)), 8);
+        string stateStr =
+            resizeString(
                 game.makerTools.infoLock->fsm.curState ?
                 game.makerTools.infoLock->fsm.curState->name :
-                "(None!)"
+                "(None!)",
+                20
             );
+        string prevStatesStr;
         for(unsigned char p = 0; p < STATE_HISTORY_SIZE; p++) {
-            stateHStr +=
-                " " + game.makerTools.infoLock->fsm.prevStateNames[p];
+            prevStatesStr +=
+                resizeString(
+                    game.makerTools.infoLock->fsm.prevStateNames[p],
+                    20
+                ) + " ";
         }
         string animStr =
-            game.makerTools.infoLock->anim.curAnim ?
-            game.makerTools.infoLock->anim.curAnim->name :
-            "(None!)";
+            resizeString(
+                game.makerTools.infoLock->anim.curAnim ?
+                game.makerTools.infoLock->anim.curAnim->name :
+                "(None!)",
+                20
+            );
         string healthStr =
             resizeString(
                 resizeString(f2s(game.makerTools.infoLock->health), 6) +
@@ -1167,25 +1177,14 @@ void GameplayState::doMenuLogic() {
             );
         string timerStr =
             f2s(game.makerTools.infoLock->fsm.timer.timeLeft);
-        string varsStr;
-        if(!game.makerTools.infoLock->fsm.vars.empty()) {
-            for(
-                auto v = game.makerTools.infoLock->fsm.vars.begin();
-                v != game.makerTools.infoLock->fsm.vars.end(); ++v
-            ) {
-                varsStr += v->first + "=" + v->second + "; ";
-            }
-            varsStr.erase(varsStr.size() - 2, 2);
-        } else {
-            varsStr = "(None)";
-        }
         
         game.console.write(
-            "Mob: " + nameStr + "Coords: " + coordsStr + "\n"
-            "Last states: " + stateHStr + "\n"
-            "Animation: " + animStr + "\n"
-            "Health: " + healthStr + " Timer: " + timerStr + "\n"
-            "Vars: " + varsStr,
+            "Mob: " + nameStr + "\n"
+            "Coords: " + coordsStr + " | Angle: " + angleStr + "\n"
+            "Health: " + healthStr + "\n"
+            "Animation: " + animStr + " | Timer: " + timerStr + "\n"
+            "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
+            game.makerTools.infoLock->fsm.getMakerToolVarsStr(),
             5.0f, 3.0f
         );
     }
@@ -1256,55 +1255,154 @@ void GameplayState::doMenuLogic() {
         }
     }
     
-    //Print mouse coordinates.
+    //Geometry info.
     if(game.makerTools.geometryInfo) {
         Sector* mouseSector =
-            getSector(players[0].view.mouseCursorWorldPos, nullptr, true);
-            
+            getSector(
+                players[0].view.mouseCursorWorldPos, nullptr, true
+            );
+        size_t mouseSectorIdx = INVALID;
+        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+            if(game.curArea->sectors[s] == mouseSector) {
+                mouseSectorIdx = s;
+                break;
+            }
+        }
+        size_t closestEdgeIdx = INVALID;
+        Distance closestEdgeDist;
+        Point ppp;
+        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+            Edge* ePtr = game.curArea->edges[e];
+            float ratio;
+            Point p = getClosestPointInLineSeg(
+                v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
+                players[0].view.mouseCursorWorldPos, &ratio
+            );
+            if(ratio < 0.0f) p = v2p(ePtr->vertexes[0]);
+            if(ratio > 1.0f) p = v2p(ePtr->vertexes[1]);
+            Distance d(players[0].view.mouseCursorWorldPos, p);
+            if(closestEdgeIdx == INVALID || d < closestEdgeDist) {
+                closestEdgeIdx = e;
+                closestEdgeDist = d;
+                ppp = p;
+            }
+        }
+        size_t closestVertexIdx = INVALID;
+        Distance closestVertexDist;
+        for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+            Vertex* vPtr = game.curArea->vertexes[v];
+            Distance d(players[0].view.mouseCursorWorldPos, v2p(vPtr));
+            if(closestVertexIdx == INVALID || d < closestVertexDist) {
+                closestVertexIdx = v;
+                closestVertexDist = d;
+            }
+        }
+
         string coordsStr =
             resizeString(f2s(players[0].view.mouseCursorWorldPos.x), 6) + " " +
             resizeString(f2s(players[0].view.mouseCursorWorldPos.y), 6);
-        string blockmapStr =
+        string distStr =
             resizeString(
-                i2s(
-                    game.curArea->bmap.getCol(
-                        players[0].view.mouseCursorWorldPos.x
+                f2s(
+                    Distance(
+                        players[0].view.mouseCursorWorldPos,
+                        game.makerTools.geometryInfoStartCursor
+                    ).toFloat()
+                ),
+                8
+            );
+        string deltaXStr =
+            resizeString(
+                f2s(
+                    players[0].view.mouseCursorWorldPos.x -
+                    game.makerTools.geometryInfoStartCursor.x
+                ),
+                8
+            );
+        string deltaYStr =
+            resizeString(
+                f2s(
+                    players[0].view.mouseCursorWorldPos.y -
+                    game.makerTools.geometryInfoStartCursor.y
+                ),
+                8
+            );
+        string angleStr =
+            resizeString(
+                f2s(
+                    radToDeg(
+                        getAngle(
+                            players[0].view.mouseCursorWorldPos.x,
+                            game.makerTools.geometryInfoStartCursor.x
+                        )
                     )
                 ),
-                5
-            ) +
-            i2s(
-                game.curArea->bmap.getRow(
-                    players[0].view.mouseCursorWorldPos.y
-                )
+                8
             );
-        string sectorZStr, sectorLightStr, sectorTexStr;
+        size_t bmapCol =
+            game.curArea->bmap.getCol(
+                players[0].view.mouseCursorWorldPos.x
+            );
+        size_t bmapRow =
+            game.curArea->bmap.getRow(
+                players[0].view.mouseCursorWorldPos.y
+            );
+        string blockmapStr =
+            resizeString(
+                bmapCol == INVALID ? "--" : i2s(bmapCol), 4
+            ) + " " +
+            resizeString(
+                bmapRow == INVALID ? "--" : i2s(bmapRow), 4
+            );
+        string mouseSectorStr;
+        string sectorIdxStr, sectorZStr, sectorLightStr;
+        string sectorHazardStr, sectorTexStr;
         if(mouseSector) {
+            sectorIdxStr =
+                resizeString(i2s(mouseSectorIdx), 5);
             sectorZStr =
-                resizeString(f2s(mouseSector->z), 6);
+                resizeString(f2s(mouseSector->z), 8);
             sectorLightStr =
                 resizeString(i2s(mouseSector->brightness), 3);
+            sectorHazardStr =
+                mouseSector->hazard ?
+                resizeString(mouseSector->hazard->name, 20) :
+                "None";
             sectorTexStr =
                 mouseSector->textureInfo.bmpName;
         }
-        
-        string str =
-            "Mouse coords: " + coordsStr +
-            "\n"
-            "Blockmap under mouse: " + blockmapStr +
-            "\n"
-            "Sector under mouse: ";
-            
         if(mouseSector) {
-            str +=
-                "\n"
-                "  Z: " + sectorZStr + " Light: " + sectorLightStr +
-                "\n"
+            mouseSectorStr +=
+                "  #" + sectorIdxStr + "\n"
+                "  Z: " + sectorZStr + " | Light: " + sectorLightStr + "\n"
+                "  Hazard: " + sectorHazardStr + "\n"
                 "  Texture: " + sectorTexStr;
         } else {
-            str += "None";
+            mouseSectorStr += "None";
+        }
+        string mouseEdgeStr;
+        if(closestEdgeIdx != INVALID) {
+            mouseEdgeStr += "#" + i2s(closestEdgeIdx);
+        } else {
+            mouseEdgeStr += "None";
+        }
+        string mouseVertexStr;
+        if(closestVertexIdx != INVALID) {
+            mouseVertexStr += "#" + i2s(closestVertexIdx);
+        } else {
+            mouseVertexStr += "None";
         }
         
+        string str =
+            "Mouse coords: " + coordsStr + "\n"
+            "Compared to mouse coords when the tool was started:\n"
+            "  Angle: " + angleStr + " | Distance: " + distStr + "\n"
+            "  X distance: " + deltaXStr + " | Y distance: " + deltaYStr + "\n"
+            "Sector under mouse: " + mouseSectorStr + "\n"
+            "Edge closest to mouse: " + mouseEdgeStr + "\n"
+            "Vertex closest to mouse: " + mouseVertexStr + "\n"
+            "Blockmap block under mouse: " + blockmapStr;
+            
         game.console.write(str, 1.0f, 1.0f);
     }
     

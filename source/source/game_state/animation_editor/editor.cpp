@@ -210,6 +210,7 @@ void AnimationEditor::closeLoadDialog() {
  */
 void AnimationEditor::closeOptionsDialog() {
     saveOptions();
+    game.systemNotifications.add("Options saved.", false, false);
 }
 
 

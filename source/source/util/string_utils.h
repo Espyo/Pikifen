@@ -88,7 +88,7 @@ string timeToStr3(
 );
 string trimSpaces(const string& s, bool leftOnly = false);
 string trimWithEllipsis(const string& s, size_t size);
-string wordWrap(const string& s, size_t nCharsPerLine);
+string wordWrap(const string& s, size_t nCharsPerLine, size_t indent = 0);
 
 
 

@@ -450,6 +450,16 @@ SoundSource* AudioManager::getSource(size_t sourceId) {
 
 
 /**
+ * @brief Returns the amount of current sources.
+ *
+ * @return The amount.
+ */
+size_t AudioManager::getSourceCount() const {
+    return sources.size();
+}
+
+
+/**
  * @brief Handles an interlude ending, so the sound effect mixers can
  * stop lowering their volume.
  *

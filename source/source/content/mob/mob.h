@@ -319,10 +319,10 @@ public:
     
     //-Caches-
     
-    //Cached value of the angle's cosine.
+    //Cached value of the angle's cosine. Cache for performance.
     float angleCos = 0.0f;
     
-    //Cached value of the angle's sine.
+    //Cached value of the angle's sine. Cache for performance.
     float angleSin = 0.0f;
     
     //How far its radius or hitboxes reach from the center.

@@ -136,7 +136,7 @@ void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
     Onion* oniPtr = (Onion*) fsm->m;
     Mob* delivery = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->printStateHistory());
+    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
     
     size_t seeds = 0;
     

@@ -98,6 +98,7 @@ void GuiEditor::closeLoadDialog() {
  */
 void GuiEditor::closeOptionsDialog() {
     saveOptions();
+    game.systemNotifications.add("Options saved.", false, false);
 }
 
 

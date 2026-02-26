@@ -479,7 +479,8 @@ public:
     bool setState(
         size_t newState, void* info1 = nullptr, void* info2 = nullptr
     );
-    string printStateHistory() const;
+    string getMakerToolVarsStr() const;
+    string getStateHistoryStr() const;
     
 };
 
