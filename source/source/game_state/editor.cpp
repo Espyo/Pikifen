@@ -2530,9 +2530,11 @@ bool Editor::processGuiListNavMoveRightWidget(
 bool Editor::processGuiListNavNextWidget(
     size_t* curItemIdx, size_t listSize, const string& tooltip,
     bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+    const string& tooltipShortcut, bool alwaysAppear
 ) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
+    if(!alwaysAppear) {
+        if(listSize < 2 || *curItemIdx == INVALID) return false;
+    }
     
     bool pressed = false;
     
@@ -2564,14 +2566,17 @@ bool Editor::processGuiListNavNextWidget(
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
  * @param tooltipShortcut Shortcut to show on the tooltip, if any.
+ * @param alwaysAppear If true, the widget will appear.
  * @return Whether the user pressed the button.
  */
 bool Editor::processGuiListNavPrevWidget(
     size_t* curItemIdx, size_t listSize, const string& tooltip,
     bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+    const string& tooltipShortcut, bool alwaysAppear
 ) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
+    if(!alwaysAppear) {
+        if(listSize < 2 || *curItemIdx == INVALID) return false;
+    }
     
     bool pressed = false;
     
@@ -4225,23 +4230,17 @@ bool Editor::SelectionManager::applyTransformation(
     Point newTL = newCenter - newSize / 2.0f;
     
     for(size_t i : selectedItems) {
-        if(onGetCenter) {
-            Point* iCenterPtr = onGetCenter(i);
-            if(iCenterPtr) {
-                Point preTransCenterRatio =
-                    (preTransCenters[i] - preTransTL) / preTransSize;
-                (*iCenterPtr) =
-                    newTL + preTransCenterRatio * newSize;
-            }
-        }
-        if(onGetSize) {
-            Point* iSizePtr = onGetSize(i);
-            if(iSizePtr) {
-                Point preTransSizeRatio =
-                    preTransSizes[i] / preTransSize;
-                (*iSizePtr) =
-                    preTransSizeRatio * newSize;
-            }
+        Point iCenter, iSize;
+        if(onGetInfo && onSetInfo) {
+            onGetInfo(i, &iCenter, &iSize);
+            Point preTransCenterRatio =
+                (preTransCenters[i] - preTransTL) / preTransSize;
+            Point preTransSizeRatio =
+                preTransSizes[i] / preTransSize;
+            onSetInfo(
+                i, newTL + preTransCenterRatio * newSize,
+                preTransSizeRatio * newSize
+            );
         }
     }
     
@@ -4269,6 +4268,7 @@ bool Editor::SelectionManager::clear() {
 bool Editor::SelectionManager::disable() {
     bool wasEnabled = enabled;
     enabled = false;
+    clear();
     return wasEnabled;
 }
 
@@ -4311,36 +4311,22 @@ bool Editor::SelectionManager::enable() {
 
 
 /**
- * @brief Returns the center point of an item, or 0,0 if not possible.
+ * @brief Returns the info of an item, or 0,0 if not possible.
  *
  * @param idx The item's index.
- * @return The center.
+ * @param outCenter The item's center is returned here.
+ * @param outSize The item's size is returned here.
+ * @return The info.
  */
-Point Editor::SelectionManager::getItemCenter(size_t idx) const {
-    if(onGetCenter) {
-        Point* ptr = onGetCenter(idx);
-        if(ptr) {
-            return *ptr;
-        }
+void Editor::SelectionManager::getItemInfo(
+    size_t idx, Point* outCenter, Point* outSize
+) const {
+    if(onGetInfo) {
+        onGetInfo(idx, outCenter, outSize);
+    } else {
+        *outCenter = Point();
+        *outSize = Point();
     }
-    return Point();
-}
-
-
-/**
- * @brief Returns the size of an item, or 0,0 if not possible.
- *
- * @param idx The item's index.
- * @return The size.
- */
-Point Editor::SelectionManager::getItemSize(size_t idx) const {
-    if(onGetSize) {
-        Point* ptr = onGetSize(idx);
-        if(ptr) {
-            return *ptr;
-        }
-    }
-    return Point();
 }
 
 
@@ -4427,8 +4413,8 @@ bool Editor::SelectionManager::getSelectionBBox(
     Point maxCoords(-FLT_MAX);
     
     for(size_t i : selectedItems) {
-        Point iCenter = getItemCenter(i);
-        Point iSize = getItemSize(i);
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
         updateMinCoords(
             minCoords, iCenter - iSize / 2.0f
         );
@@ -4543,8 +4529,8 @@ bool Editor::SelectionManager::selectViaMouseDown(
     size_t nrTotalItems = getNrTotalItems();
     for(size_t i = 0; i < nrTotalItems; i++) {
         if(!getItemIsEligible(i)) continue;
-        Point iCenter = getItemCenter(i);
-        Point iSize = getItemSize(i);
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
         if(itemsAreRectangular) {
             if(isPointInRectangle(cursorPos, iCenter, iSize)) {
                 clickedItems.push_back(i);
@@ -4606,8 +4592,10 @@ bool Editor::SelectionManager::startTransforming() {
     preTransCenters.clear();
     preTransSizes.clear();
     for(size_t i : selectedItems) {
-        preTransCenters[i] = getItemCenter(i);
-        preTransSizes[i] = getItemSize(i);
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
+        preTransCenters[i] = iCenter;
+        preTransSizes[i] = iSize;
     }
     getSelectionBBox(&preTransCenter, &preTransSize);
     return wasIdle;
@@ -4691,8 +4679,8 @@ bool Editor::SelectionManager::updateRubberBand(
     size_t nrTotalItems = getNrTotalItems();
     for(size_t i = 0; i < nrTotalItems; i++) {
         if(!getItemIsEligible(i)) continue;
-        Point iCenter = getItemCenter(i);
-        Point iSize = getItemSize(i);
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
         Point iTL = iCenter - iSize / 2.0f;
         Point iBR = iCenter + iSize / 2.0f;
         

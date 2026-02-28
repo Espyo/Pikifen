@@ -182,7 +182,7 @@ void AnimationEditor::drawCanvas() {
             if(s->bmpSize.x > 0 && s->bmpSize.y > 0) {
             
                 unsigned char outlineAlpha =
-                    255 * ((sin(curHitboxAlpha) / 2.0) + 0.5);
+                    255 * ((sin(selEffectAlpha) / 2.0) + 0.5);
                 al_draw_rectangle(
                     bmpX + s->bmpPos.x + 0.5,
                     bmpY + s->bmpPos.y + 0.5,
@@ -203,7 +203,7 @@ void AnimationEditor::drawCanvas() {
         
         if(drawHitboxes) {
             unsigned char hitboxOutlineAlpha =
-                63 + 192 * ((sin(curHitboxAlpha) / 2.0) + 0.5);
+                63 + 192 * ((sin(selEffectAlpha) / 2.0) + 0.5);
             size_t nHitboxes = s->hitboxes.size();
             
             for(int h = (int) nHitboxes - 1; h >= 0; --h) {
@@ -232,7 +232,7 @@ void AnimationEditor::drawCanvas() {
                 }
                 
                 if(
-                    curHitboxIdx == (size_t) h &&
+                    hitboxSelection.isSelected(h) &&
                     state == EDITOR_STATE_HITBOXES
                 ) {
                     hitboxOutlineThickness =
@@ -255,6 +255,15 @@ void AnimationEditor::drawCanvas() {
             }
         }
         
+        Point selectionCenter, selectionSize;
+        hitboxSelection.getSelectionBBox(
+            &selectionCenter, &selectionSize
+        );
+        
+        hitboxSelection.draw(
+            game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+        );
+        
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
             Point curSpriteSize =
                 curSprite->tf.scale * curSprite->bmpSize;
@@ -273,32 +282,13 @@ void AnimationEditor::drawCanvas() {
                 1.0f / game.editorsView.cam.zoom
             );
             
-        } else if(state == EDITOR_STATE_HITBOXES && curHitbox) {
-            if(!sideView) {
-                Point hitboxSize(
-                    curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
-                );
-                curTransformationWidget.draw(
-                    &curHitbox->pos,
-                    &hitboxSize,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom
-                );
-            } else if(curHitbox->height != 0.0f) {
-                Point hitboxCenter(
-                    curHitbox->pos.x,
-                    (-(curHitbox->height / 2.0f)) - curHitbox->z
-                );
-                Point hitboxSize(
-                    curHitbox->radius * 2.0f, curHitbox->height
-                );
-                curTransformationWidget.draw(
-                    &hitboxCenter,
-                    &hitboxSize,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom
-                );
-            }
+        } else if(
+            state == EDITOR_STATE_HITBOXES && selectionSize.x != 0.0f
+        ) {
+            curTransformationWidget.draw(
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
             
         }
     }

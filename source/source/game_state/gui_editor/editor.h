@@ -72,9 +72,9 @@ private:
     
     
     //--- Private members ---
-
+    
     //Selection manager for all items.
-    Editor::SelectionManager itemSelection;
+    SelectionManager itemSelection;
     
     //Data node for the contents of the current GUI definition.
     DataNode fileNode;

@@ -173,12 +173,8 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 curTransformationWidget.handleMouseMove(
                     snapPoint(game.editorsView.mouseCursorWorldPos),
                     &selectionCenter, &selectionSize,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom,
-                    false,
-                    false,
-                    0.10f,
-                    isAltPressed
+                    nullptr, 1.0f / game.editorsView.cam.zoom,
+                    false, false, 0.10f, isAltPressed
                 );
             if(twHandled) {
                 changesMgr.markAsChanged();

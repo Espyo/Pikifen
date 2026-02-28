@@ -66,12 +66,20 @@ GuiEditor::GuiEditor() :
 #undef registerCmd
     
     //Setup the selection manager.
-    itemSelection.onGetCenter =
-    [this] (size_t idx) { return &allItems[idx]->center; };
-    itemSelection.onGetSize =
-    [this] (size_t idx) { return &allItems[idx]->size; };
+    itemSelection.onGetInfo =
+    [this] (size_t idx, Point* outCenter, Point* outSize) {
+        *outCenter = allItems[idx]->center;
+        *outSize = allItems[idx]->size;
+    };
+    itemSelection.onSetInfo =
+    [this] (size_t idx, const Point& newCenter, const Point& newSize) {
+        allItems[idx]->center = newCenter;
+        allItems[idx]->size = newSize;
+    };
     itemSelection.onGetTotal =
-    [this] () { return allItems.size(); };
+    [this] () {
+        return allItems.size();
+    };
     itemSelection.onIsEligible =
     [this] (size_t idx) {
         bool isCustom = idx >= hardcodedItems.size();
@@ -90,7 +98,6 @@ GuiEditor::GuiEditor() :
  * @param newState The new state.
  */
 void GuiEditor::changeState(const EDITOR_STATE newState) {
-    itemSelection.clear();
     itemSelection.disable();
     if(newState == EDITOR_STATE_CUSTOM || newState == EDITOR_STATE_HARDCODED) {
         itemSelection.enable();

@@ -111,6 +111,44 @@ AnimationEditor::AnimationEditor() :
     
 #undef registerCmd
     
+    //Setup the selection manager.
+    hitboxSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
+        if(!sideView) {
+            *outCenter = curSprite->hitboxes[idx].pos;
+            *outSize = Point(curSprite->hitboxes[idx].radius * 2.0f);
+        } else {
+            *outCenter =
+                Point(
+                    curSprite->hitboxes[idx].pos.x,
+                    (-(curSprite->hitboxes[idx].height / 2.0f)) -
+                    curSprite->hitboxes[idx].z
+                );
+            *outSize =
+                Point(
+                    curSprite->hitboxes[idx].radius * 2.0f,
+                    curSprite->hitboxes[idx].height
+                );
+        }
+    };
+    hitboxSelection.onSetInfo =
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        if(!sideView) {
+            curSprite->hitboxes[idx].pos = newCenter;
+            curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
+        } else {
+            curSprite->hitboxes[idx].pos.x = newCenter.x;
+            curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
+            curSprite->hitboxes[idx].z = -(newCenter.y + newSize.y / 2.0f);
+            curSprite->hitboxes[idx].height = newSize.y;
+        }
+    };
+    hitboxSelection.onGetTotal =
+    [this] () {
+        if(!curSprite) return (size_t) 0;
+        return curSprite->hitboxes.size();
+    };
+    hitboxSelection.overlapsCycle = true;
 }
 
 
@@ -184,6 +222,11 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
 void AnimationEditor::changeState(const EDITOR_STATE newState) {
     comparison = false;
     comparisonSprite = nullptr;
+    hitboxSelection.disable();
+    if(newState == EDITOR_STATE_HITBOXES) {
+        hitboxSelection.enable();
+        selectPreviousHitboxes();
+    }
     state = newState;
     setStatus();
     stopSounds();
@@ -357,7 +400,7 @@ void AnimationEditor::doLogic() {
         }
     }
     
-    curHitboxAlpha += TAU * 1.5 * game.deltaT;
+    selEffectAlpha += TAU * 1.5 * game.deltaT;
     
     if(comparisonBlink) {
         comparisonBlinkTimer.tick(game.deltaT);
@@ -602,8 +645,6 @@ void AnimationEditor::importSpriteHitboxData(const string& name) {
         }
     }
     
-    updateCurHitbox();
-    
     changesMgr.markAsChanged();
 }
 
@@ -727,6 +768,7 @@ void AnimationEditor::load() {
     loadCustomMobCatTypes(false);
     
     //Misc. setup.
+    hitboxSelection.itemsAreRectangular = false;
     sideView = false;
     
     changeState(EDITOR_STATE_MAIN);
@@ -1031,7 +1073,6 @@ void AnimationEditor::pickSprite(
         }
     }
     curSprite = db.sprites[db.findSprite(name)];
-    updateCurHitbox();
     
     if(isNew) {
         //New sprite. Suggest file name.
@@ -1678,8 +1719,8 @@ void AnimationEditor::setupForNewAnimDbPre() {
     manifest.clear();
     animPlaying = false;
     curSprite = nullptr;
-    curHitbox = nullptr;
-    curHitboxIdx = 0;
+    hitboxSelection.clear();
+    prevHitboxSelection.clear();
     loadedMobType = nullptr;
     
     game.editorsView.cam.setPos(Point());
@@ -1881,20 +1922,22 @@ void AnimationEditor::unload() {
 
 
 /**
- * @brief Updates the current hitbox pointer to match the same body part as
- * before, but on the hitbox of the current sprite. If not applicable,
- * it chooses a valid hitbox.
- *
+ * @brief Selects the same hitboxes that were selected next time, so the user
+ * can keep their hitbox editing flow when editing multiple sprites. If any
+ * index doesn't work out, it's discarded, so it's safe to call even if the
+ * list of hitboxes has since changed.
  */
-void AnimationEditor::updateCurHitbox() {
-    if(curSprite->hitboxes.empty()) {
-        curHitbox = nullptr;
-        curHitboxIdx = INVALID;
-        return;
+void AnimationEditor::selectPreviousHitboxes() {
+    hitboxSelection.clear();
+    
+    for(size_t i : prevHitboxSelection) {
+        if(i >= curSprite->hitboxes.size()) continue;
+        hitboxSelection.select(i);
     }
     
-    curHitboxIdx = std::min(curHitboxIdx, curSprite->hitboxes.size() - 1);
-    curHitbox = &curSprite->hitboxes[curHitboxIdx];
+    if(!hitboxSelection.isAnySelected() && !curSprite->hitboxes.empty()) {
+        hitboxSelection.select(0);
+    }
 }
 
 

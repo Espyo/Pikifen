@@ -185,83 +185,25 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_HITBOXES: {
         if(curSprite) {
             bool twHandled = false;
-            if(curHitbox) {
-                if(!sideView) {
-                    Point hitboxSize(
-                        curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
+            Point selectionCenter, selectionSize;
+            hitboxSelection.getSelectionBBox(&selectionCenter, &selectionSize);
+            if(selectionSize.x != 0.0f) {
+                twHandled =
+                    curTransformationWidget.handleMouseDown(
+                        game.editorsView.mouseCursorWorldPos,
+                        &selectionCenter, &selectionSize,
+                        nullptr, 1.0f / game.editorsView.cam.zoom
                     );
-                    twHandled =
-                        curTransformationWidget.handleMouseDown(
-                            game.editorsView.mouseCursorWorldPos,
-                            &curHitbox->pos,
-                            &hitboxSize,
-                            nullptr,
-                            1.0f / game.editorsView.cam.zoom
-                        );
-                } else {
-                    Point hitboxCenter(
-                        curHitbox->pos.x,
-                        (-(curHitbox->height / 2.0f)) - curHitbox->z
-                    );
-                    Point hitboxSize(
-                        curHitbox->radius * 2.0f, curHitbox->height
-                    );
-                    twHandled =
-                        curTransformationWidget.handleMouseDown(
-                            game.editorsView.mouseCursorWorldPos,
-                            &hitboxCenter,
-                            &hitboxSize,
-                            nullptr,
-                            1.0f / game.editorsView.cam.zoom
-                        );
-                }
             }
             
-            if(!twHandled) {
-                vector<size_t> clickedHitboxes;
-                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
-                    Hitbox* hPtr = &curSprite->hitboxes[h];
-                    
-                    if(sideView) {
-                        Point tl(hPtr->pos.x - hPtr->radius, 0.0f);
-                        Point br(hPtr->pos.x + hPtr->radius, 0.0f);
-                        if(hPtr->height != 0.0f) {
-                            tl.y = -hPtr->z - hPtr->height;
-                            br.y = -hPtr->z;
-                        } else {
-                            tl.y = -FLT_MAX;
-                            br.y = FLT_MAX;
-                        }
-                        if(
-                            bBoxCheck(
-                                tl, br,
-                                game.editorsView.mouseCursorWorldPos,
-                                1.0f / game.editorsView.cam.zoom
-                            )
-                        ) {
-                            clickedHitboxes.push_back(h);
-                        }
-                    } else {
-                        if(
-                            Distance(
-                                game.editorsView.mouseCursorWorldPos, hPtr->pos
-                            ) <=
-                            hPtr->radius
-                        ) {
-                            clickedHitboxes.push_back(h);
-                        }
-                    }
-                }
-                
-                if(clickedHitboxes.empty()) {
-                    curHitbox = nullptr;
-                    curHitboxIdx = INVALID;
-                    
-                } else {
-                    curHitboxIdx =
-                        getNextInVector(clickedHitboxes, curHitboxIdx);
-                    curHitbox = &curSprite->hitboxes[curHitboxIdx];
-                }
+            if(twHandled) {
+                hitboxSelection.startTransforming();
+            } else {
+                hitboxSelection.selectViaMouseDown(
+                    game.editorsView.mouseCursorWorldPos,
+                    isShiftPressed, isCtrlPressed
+                );
+                prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
             }
         }
         break;
@@ -385,53 +327,33 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         break;
         
     } case EDITOR_STATE_HITBOXES: {
-        if(curSprite && curHitbox) {
-            bool twHandled;
-            if(!sideView) {
-                Point hitboxSize(
-                    curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
+        if(curSprite) {
+            if(hitboxSelection.isCreatingRubberBand()) {
+                hitboxSelection.updateRubberBand(
+                    game.editorsView.mouseCursorWorldPos,
+                    isShiftPressed, isCtrlPressed
                 );
-                twHandled =
-                    curTransformationWidget.handleMouseMove(
-                        game.editorsView.mouseCursorWorldPos,
-                        &curHitbox->pos,
-                        &hitboxSize,
-                        nullptr,
-                        1.0f / game.editorsView.cam.zoom,
-                        true,
-                        false,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
-                        isAltPressed
-                    );
-                curHitbox->radius = hitboxSize.x / 2.0f;
+                prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
             } else {
-                Point hitboxCenter(
-                    curHitbox->pos.x,
-                    (-(curHitbox->height / 2.0f)) - curHitbox->z
+                Point selectionCenter, selectionSize;
+                hitboxSelection.getSelectionBBox(
+                    &selectionCenter, &selectionSize
                 );
-                Point hitboxSize(
-                    curHitbox->radius * 2.0f, curHitbox->height
-                );
-                twHandled =
-                    curTransformationWidget.handleMouseMove(
-                        game.editorsView.mouseCursorWorldPos,
-                        &hitboxCenter,
-                        &hitboxSize,
-                        nullptr,
-                        1.0f / game.editorsView.cam.zoom,
-                        false,
-                        false,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
-                        isAltPressed
-                    );
-                curHitbox->pos.x = hitboxCenter.x;
-                curHitbox->radius = hitboxSize.x / 2.0f;
-                curHitbox->z = -(hitboxCenter.y + hitboxSize.y / 2.0f);
-                curHitbox->height = hitboxSize.y;
-            }
-            
-            if(twHandled) {
-                changesMgr.markAsChanged();
+                if(selectionSize.x != 0.0f) {
+                    bool twHandled =
+                        curTransformationWidget.handleMouseMove(
+                            game.editorsView.mouseCursorWorldPos,
+                            &selectionCenter, &selectionSize,
+                            nullptr, 1.0f / game.editorsView.cam.zoom,
+                            !sideView, false, 0.10f, isAltPressed
+                        );
+                    if(twHandled) {
+                        changesMgr.markAsChanged();
+                        hitboxSelection.applyTransformation(
+                            selectionCenter, selectionSize
+                        );
+                    }
+                }
             }
         }
         break;
@@ -497,8 +419,10 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
         break;
         
     } case EDITOR_STATE_HITBOXES: {
-        if(curSprite && curHitbox) {
+        if(curSprite) {
             curTransformationWidget.handleMouseUp();
+            hitboxSelection.stopRubberBand();
+            hitboxSelection.stopTransforming();
         }
         break;
         

@@ -132,14 +132,11 @@ private:
     //Animation instance, for when the user is editing animations.
     AnimationInstance curAnimInst;
     
-    //Current hitbox.
-    Hitbox* curHitbox = nullptr;
+    //selection manager for the hitboxes.
+    SelectionManager hitboxSelection;
     
-    //The alpha is calculated using the sine of this value.
-    float curHitboxAlpha = 0.0f;
-    
-    //Index number of the current hitbox.
-    size_t curHitboxIdx = INVALID;
+    //The selection effect alpha is calculated using the sine of this value.
+    float selEffectAlpha = 0.0f;
     
     //Current maturity to display on the Pikmin's top.
     unsigned char curMaturity = 0;
@@ -205,6 +202,9 @@ private:
     
     //Keep the aspect ratio when resizing the Pikmin top or leader light?
     bool topKeepAspectRatio = true;
+    
+    //Previously-selected hitbox indexes.
+    set<size_t> prevHitboxSelection;
     
     //Animation sounds being played.
     vector<size_t> animSoundIds;
@@ -305,7 +305,7 @@ private:
         ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );
     void stopSounds();
-    void updateCurHitbox();
+    void selectPreviousHitboxes();
     void updateHitboxes();
     static void drawCanvasDearImGuiCallback(
         const ImDrawList* parentList, const ImDrawCmd* cmd

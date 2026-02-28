@@ -284,7 +284,10 @@ void AnimationEditor::processGuiDeleteAnimDbDialog() {
  * as well as the widgets necessary to control it, for this frame.
  */
 void AnimationEditor::processGuiHitboxHazards() {
+    Hitbox* curHitbox =
+        &curSprite->hitboxes[hitboxSelection.getSelectedItemIdx()];
     string hazardIname;
+    
     if(curHitbox->hazard) {
         hazardIname = curHitbox->hazard->manifest->internalName;
     }
@@ -1958,8 +1961,8 @@ void AnimationEditor::processGuiPanelSprite() {
             curAnimInst.curFrameIdx = 0;
             if(db.sprites.empty()) {
                 curSprite = nullptr;
-                curHitbox = nullptr;
-                curHitboxIdx = INVALID;
+                hitboxSelection.clear();
+                prevHitboxSelection.clear();
             } else {
                 nr = std::min(nr, db.sprites.size() - 1);
                 pickSprite(db.sprites[nr]->name, "", "", nullptr, false);
@@ -2166,7 +2169,6 @@ void AnimationEditor::processGuiPanelSprite() {
             //Sprite hitboxes button.
             if(ImGui::Button("Hitboxes", modeButtonsSize)) {
                 if(curSprite && !curSprite->hitboxes.empty()) {
-                    updateCurHitbox();
                     changeState(EDITOR_STATE_HITBOXES);
                 }
             }
@@ -2387,32 +2389,45 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     panelTitle("HITBOXES");
     
     //Current hitbox text.
-    processGuiListNavCurWidget(
-        curHitboxIdx, curSprite->hitboxes.size(), "Hitbox",
-        curHitbox ? curHitbox->bodyPartName : NONE_OPTION
-    );
+    size_t curHitboxIdx = hitboxSelection.getSelectedItemIdx();
+    if(hitboxSelection.isMultipleSelected()) {
+        ImGui::BeginDisabled();
+        ImGui::Text("(Multiple hitboxes selected)");
+        ImGui::EndDisabled();
+    } else {
+        processGuiListNavCurWidget(
+            curHitboxIdx, curSprite->hitboxes.size(), "Hitbox",
+            curHitboxIdx != INVALID ?
+            curSprite->hitboxes[curHitboxIdx].bodyPartName :
+            NONE_OPTION
+        );
+    }
     
     //Previous hitbox button.
     if(
         processGuiListNavPrevWidget(
             &curHitboxIdx, curSprite->hitboxes.size(),
-            "Select the previous hitbox."
+            "Select the previous hitbox.", false, "", 1.0f, "", true
         )
     ) {
-        curHitbox = &curSprite->hitboxes[curHitboxIdx];
+        hitboxSelection.clear();
+        hitboxSelection.select(curHitboxIdx);
+        prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
     }
     
     //Next hitbox button.
     if(
         processGuiListNavNextWidget(
             &curHitboxIdx, curSprite->hitboxes.size(),
-            "Select the next hitbox.", true
+            "Select the next hitbox.", true, "", 1.0f, "", true
         )
     ) {
-        curHitbox = &curSprite->hitboxes[curHitboxIdx];
+        hitboxSelection.clear();
+        hitboxSelection.select(curHitboxIdx);
+        prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
     }
     
-    if(curHitbox && db.sprites.size() > 1) {
+    if(curHitboxIdx != INVALID && db.sprites.size() > 1) {
     
         //Import hitbox data button.
         ImGui::SameLine();
@@ -2555,13 +2570,17 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     
     //Side view checkbox.
     ImGui::Spacer();
-    ImGui::Checkbox("Use side view", &sideView);
+    if(ImGui::Checkbox("Use side view", &sideView)) {
+        hitboxSelection.itemsAreRectangular = sideView;
+    }
     setTooltip(
         "Use a side view of the object, so you can adjust hitboxes "
         "horizontally."
     );
     
-    if(curHitbox) {
+    if(curHitboxIdx != INVALID) {
+        Hitbox* curHitbox = &curSprite->hitboxes[curHitboxIdx];
+        
         //Hitbox center value.
         if(ImGui::DragFloat2("Center", (float*) &curHitbox->pos, 0.05f)) {
             changesMgr.markAsChanged();

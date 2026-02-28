@@ -249,27 +249,30 @@ protected:
         
         //--- Public members ---
         
-        //Callback for when the center of an item needs to be retrieved.
-        //If the function or the return is nullptr,
-        //the center of an item is always considered 0,0.
-        std::function<Point*(size_t)> onGetCenter = nullptr;
-        
-        //Callback for when the size of an item needs to be retrieved.
-        //If the function or the return is nullptr,
-        //the size of an item is always considered 0.
-        std::function<Point*(size_t)> onGetSize = nullptr;
+        //Callback for when the info of an item needs to be retrieved.
+        //The second argument is where the center is returned, the third
+        //is where the size is returned.
+        //The default center and size values are 0,0.
+        std::function<void(size_t, Point*, Point*)> onGetInfo = nullptr;
         
         //Callback for when the total amount of all editor items needs to
         //be retrieved.
-        //If the function is nullptr, the total count is always considered 0.
+        //The default total value is 0.
         std::function<size_t()> onGetTotal = nullptr;
         
         //Callback for when whether a given item is eligible to be selected
         //needs to be figured out.
-        //If the function or the return is nullptr, it's considered eligible.
+        //The default eligibility is true.
         std::function<bool(size_t)> onIsEligible = nullptr;
         
+        //Callback for when the info of an item needs to be set.
+        //The second argument is the new center, the third
+        //is the new size.
+        std::function<void(size_t, const Point&, const Point&)> onSetInfo =
+            nullptr;
+            
         //Whether items are rectangular in shape or circular.
+        //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
         
         //When clicking on overlapping items, cycle selection between a single
@@ -360,9 +363,10 @@ protected:
         
         
         //--- Private function declarations ---
-        Point getItemCenter(size_t idx) const;
+        void getItemInfo(
+            size_t idx, Point* outCenter, Point* outSize
+        ) const;
         bool getItemIsEligible(size_t idx) const;
-        Point getItemSize(size_t idx) const;
         size_t getNrTotalItems() const;
         
     };
@@ -926,12 +930,14 @@ protected:
     bool processGuiListNavPrevWidget(
         size_t* curItemIdx, size_t listSize, const string& tooltip,
         bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+        float buttonScale = 1.0f, const string& tooltipShortcut = "",
+        bool alwaysAppear = false
     );
     bool processGuiListNavNextWidget(
         size_t* curItemIdx, size_t listSize, const string& tooltip,
         bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+        float buttonScale = 1.0f, const string& tooltipShortcut = "",
+        bool alwaysAppear = false
     );
     bool processGuiListNavMoveLeftWidget(
         size_t* curItemIdx, size_t listSize, const string& tooltip,
