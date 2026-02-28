@@ -64,12 +64,23 @@ GuiEditor::GuiEditor() :
     registerCmd(&GuiEditor::zoomOutCmd, "zoom_out");
     
 #undef registerCmd
-
+    
     //Setup the selection manager.
-    selMgr.onGetCenter =
-        [this] (size_t idx) { return &allItems[idx]->center; };
-    selMgr.onGetSize =
-        [this] (size_t idx) { return &allItems[idx]->size; };
+    itemSelection.onGetCenter =
+    [this] (size_t idx) { return &allItems[idx]->center; };
+    itemSelection.onGetSize =
+    [this] (size_t idx) { return &allItems[idx]->size; };
+    itemSelection.onGetTotal =
+    [this] () { return allItems.size(); };
+    itemSelection.onIsEligible =
+    [this] (size_t idx) {
+        bool isCustom = idx >= hardcodedItems.size();
+        if(isCustom && state != EDITOR_STATE_CUSTOM) return false;
+        if(!isCustom && state != EDITOR_STATE_HARDCODED) return false;
+        return true;
+    };
+    itemSelection.itemsAreRectangular = true;
+    itemSelection.overlapsCycle = true;
 }
 
 
@@ -79,7 +90,11 @@ GuiEditor::GuiEditor() :
  * @param newState The new state.
  */
 void GuiEditor::changeState(const EDITOR_STATE newState) {
-    selMgr.clear();
+    itemSelection.clear();
+    itemSelection.disable();
+    if(newState == EDITOR_STATE_CUSTOM || newState == EDITOR_STATE_HARDCODED) {
+        itemSelection.enable();
+    }
     state = newState;
 }
 
@@ -750,7 +765,7 @@ void GuiEditor::setupForNewGuiDef() {
     hardcodedItems.clear();
     customItems.clear();
     allItems.clear();
-    selMgr.clear();
+    itemSelection.clear();
     
     //We could reset the camera directly, but if the player enters the editor
     //via the auto start maker tool, processGui() won't have a chance
@@ -828,7 +843,7 @@ void GuiEditor::unload() {
     hardcodedItems.clear();
     customItems.clear();
     allItems.clear();
-    selMgr.clear();
+    itemSelection.clear();
     
     game.content.unloadAll(
     vector<CONTENT_TYPE> {

@@ -250,27 +250,62 @@ protected:
         //--- Public members ---
         
         //Callback for when the center of an item needs to be retrieved.
-        //If nullptr, the center of an item is always considered 0,0.
+        //If the function or the return is nullptr,
+        //the center of an item is always considered 0,0.
         std::function<Point*(size_t)> onGetCenter = nullptr;
         
         //Callback for when the size of an item needs to be retrieved.
-        //If nullptr, the size of an item is always considered 0.
+        //If the function or the return is nullptr,
+        //the size of an item is always considered 0.
         std::function<Point*(size_t)> onGetSize = nullptr;
+        
+        //Callback for when the total amount of all editor items needs to
+        //be retrieved.
+        //If the function is nullptr, the total count is always considered 0.
+        std::function<size_t()> onGetTotal = nullptr;
+        
+        //Callback for when whether a given item is eligible to be selected
+        //needs to be figured out.
+        //If the function or the return is nullptr, it's considered eligible.
+        std::function<bool(size_t)> onIsEligible = nullptr;
+        
+        //Whether items are rectangular in shape or circular.
+        bool itemsAreRectangular = true;
+        
+        //When clicking on overlapping items, cycle selection between a single
+        //one, or always select the one with the lowest index?
+        bool overlapsCycle = false;
+        
         
         //--- Public function declarations ---
         
         bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool clear();
+        bool disable();
+        void draw(const Point& cursorPos, float zoom) const;
+        bool enable();
         size_t getSelectedItemIdx() const;
         const set<size_t>& getSelectedItemIdxs() const;
+        size_t getSelectionAmount() const;
         bool getSelectionBBox(Point* center, Point* size) const;
         bool isAnySelected() const;
+        bool isCreatingRubberBand() const;
+        bool isMultipleSelected() const;
         bool isOneSelected() const;
         bool isSelected(size_t idx) const;
+        bool isTransforming() const;
         bool select(size_t idx);
+        bool selectViaMouseDown(
+            const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
+        );
+        bool startRubberBand(const Point& cursorPos);
         bool startTransforming();
+        bool stopRubberBand();
         bool stopTransforming();
         bool unselect(size_t idx);
+        bool updateRubberBand(
+            const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
+        );
         
         
         private:
@@ -283,8 +318,8 @@ protected:
             //Idling.
             STATE_IDLING,
             
-            //Creating a selection box.
-            STATE_CREATING_BOX,
+            //Creating a rubber band selection box.
+            STATE_RUBBER_BAND,
             
             //Transforming the selection.
             STATE_TRANSFORMING,
@@ -300,8 +335,11 @@ protected:
         //Current user state.
         STATE state = STATE_IDLING;
         
-        //Selection box starting point.
-        Point boxStart;
+        //Whether it is currently enabled.
+        bool enabled = false;
+        
+        //Rubber band box starting point.
+        Point rubberBandStart;
         
         //Center of each selected item before transformation began.
         map<size_t, Point> preTransCenters;
@@ -323,7 +361,9 @@ protected:
         
         //--- Private function declarations ---
         Point getItemCenter(size_t idx) const;
+        bool getItemIsEligible(size_t idx) const;
         Point getItemSize(size_t idx) const;
+        size_t getNrTotalItems() const;
         
     };
     

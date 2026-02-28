@@ -121,48 +121,33 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
+    //Check if the transformation widget got clicked.
     bool twHandled = false;
-    if(selMgr.isAnySelected()) {
-        Point selectionCenter, selectionSize;
-        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
-        if(selectionSize.x != 0.0f) {
-            twHandled =
-                curTransformationWidget.handleMouseDown(
-                    game.editorsView.mouseCursorWorldPos,
-                    &selectionCenter, &selectionSize,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom
-                );
-        }
+    Point selectionCenter, selectionSize;
+    itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
+    if(selectionSize.x != 0.0f) {
+        twHandled =
+            curTransformationWidget.handleMouseDown(
+                game.editorsView.mouseCursorWorldPos,
+                &selectionCenter, &selectionSize,
+                nullptr,
+                1.0f / game.editorsView.cam.zoom
+            );
     }
     
     if(twHandled) {
-        selMgr.startTransforming();
+        itemSelection.startTransforming();
     } else {
-        vector<size_t> clickedItems;
-        for(size_t i = 0; i < allItems.size(); i++) {
-            GuiItemDef* itemPtr = allItems[i];
-            bool isCustom = i >= hardcodedItems.size();
-            if(isCustom && state != EDITOR_STATE_CUSTOM) continue;
-            if(!isCustom && state != EDITOR_STATE_HARDCODED) continue;
-            if(
-                isPointInRectangle(
-                    game.editorsView.mouseCursorWorldPos,
-                    itemPtr->center,
-                    itemPtr->size
-                )
-            ) {
-                clickedItems.push_back(i);
-            }
-        }
-        
-        if(clickedItems.empty()) {
-            selMgr.clear();
-            
-        } else {
-            size_t prevSelItemIdx = selMgr.getSelectedItemIdx();
-            selMgr.clear();
-            selMgr.select(getNextInVector(clickedItems, prevSelItemIdx));
+        size_t prevSelectedItemIdx = itemSelection.getSelectedItemIdx();
+        itemSelection.selectViaMouseDown(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+        size_t newSelectedItemIdx = itemSelection.getSelectedItemIdx();
+        if(
+            newSelectedItemIdx != INVALID &&
+            newSelectedItemIdx != prevSelectedItemIdx
+        ) {
             mustFocusOnCurItem = true;
         }
     }
@@ -175,9 +160,14 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(selMgr.isAnySelected()) {
+    if(itemSelection.isCreatingRubberBand()) {
+        itemSelection.updateRubberBand(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+    } else {
         Point selectionCenter, selectionSize;
-        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
+        itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
         if(selectionSize.x != 0.0f) {
             bool twHandled =
                 curTransformationWidget.handleMouseMove(
@@ -192,7 +182,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 );
             if(twHandled) {
                 changesMgr.markAsChanged();
-                selMgr.applyTransformation(selectionCenter, selectionSize);
+                itemSelection.applyTransformation(selectionCenter, selectionSize);
             }
         }
     }
@@ -206,7 +196,8 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     curTransformationWidget.handleMouseUp();
-    selMgr.stopTransforming();
+    itemSelection.stopRubberBand();
+    itemSelection.stopTransforming();
 }
 
 

@@ -631,9 +631,25 @@ void GuiEditor::processGuiPanelCustom() {
     
     processGuiPanelItems();
     
-    if(selMgr.isOneSelected()) {
+    size_t nSelectedItems = itemSelection.getSelectionAmount();
+    if(nSelectedItems == 0) {
+        //None selected text.
+        ImGui::Spacer();
+        ImGui::BeginDisabled();
+        ImGui::Text("(No items selected)");
+        ImGui::EndDisabled();
+        
+    } else if(nSelectedItems == 1) {
         processGuiPanelItem();
         processGuiPanelCustomItem();
+        
+    } else {
+        //Multiple selected text.
+        ImGui::Spacer();
+        ImGui::BeginDisabled();
+        ImGui::Text("(Multiple items selected)");
+        ImGui::EndDisabled();
+        
     }
     
     ImGui::EndChild();
@@ -645,8 +661,8 @@ void GuiEditor::processGuiPanelCustom() {
  */
 void GuiEditor::processGuiPanelCustomItem() {
     CustomGuiItemDef* curItemPtr =
-        (CustomGuiItemDef*) allItems[selMgr.getSelectedItemIdx()];
-    
+        (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
+        
     if(curItemPtr->size.x == 0.0f) return;
     
     //Custom data header text.
@@ -856,8 +872,24 @@ void GuiEditor::processGuiPanelHardcoded() {
     
     processGuiPanelItems();
     
-    if(selMgr.isOneSelected()) {
+    size_t nSelectedItems = itemSelection.getSelectionAmount();
+    if(nSelectedItems == 0) {
+        //None selected text.
+        ImGui::Spacer();
+        ImGui::BeginDisabled();
+        ImGui::Text("(No items selected)");
+        ImGui::EndDisabled();
+        
+    } else if(nSelectedItems == 1) {
         processGuiPanelItem();
+        
+    } else if(itemSelection.isMultipleSelected()) {
+        //Multiple selected text.
+        ImGui::Spacer();
+        ImGui::BeginDisabled();
+        ImGui::Text("(Multiple items selected)");
+        ImGui::EndDisabled();
+        
     }
     
     ImGui::EndChild();
@@ -939,7 +971,7 @@ void GuiEditor::processGuiPanelInfo() {
  * @brief Processes the GUI item info panel for this frame.
  */
 void GuiEditor::processGuiPanelItem() {
-    GuiItemDef* curItemPtr = allItems[selMgr.getSelectedItemIdx()];
+    GuiItemDef* curItemPtr = allItems[itemSelection.getSelectedItemIdx()];
     
     if(curItemPtr->size.x == 0.0f) return;
     
@@ -1058,13 +1090,21 @@ void GuiEditor::processGuiPanelItems() {
             ImGui::Text("  ");
             
             //Item selectable.
-            bool selected = selMgr.getSelectedItemIdx() == i;
+            bool selected = itemSelection.isSelected(i);
             ImGui::SameLine();
             if(
                 monoSelectable(item->name.c_str(), &selected)
             ) {
-                selMgr.clear();
-                selMgr.select(i);
+                if(isCtrlPressed) {
+                    if(selected) {
+                        itemSelection.select(i);
+                    } else {
+                        itemSelection.unselect(i);
+                    }
+                } else {
+                    itemSelection.clear();
+                    itemSelection.select(i);
+                }
             }
             if(!item->description.empty()) {
                 setTooltip(wordWrap(item->description, 50));
@@ -1082,8 +1122,8 @@ void GuiEditor::processGuiPanelItems() {
     if(state == EDITOR_STATE_CUSTOM) {
     
         CustomGuiItemDef* curItemPtr = nullptr;
-        if(selMgr.isOneSelected()) {
-            curItemPtr = (CustomGuiItemDef*) allItems[selMgr.getSelectedItemIdx()];
+        if(itemSelection.isOneSelected()) {
+            curItemPtr = (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
         }
         
         //New item button.
@@ -1098,8 +1138,8 @@ void GuiEditor::processGuiPanelItems() {
             setToDefaults(&newItem);
             customItems.push_back(newItem);
             rebuildAllItemsCache();
-            selMgr.clear();
-            selMgr.select(allItems.size() - 1);
+            itemSelection.clear();
+            itemSelection.select(allItems.size() - 1);
             curItemPtr = (CustomGuiItemDef*) allItems[allItems.size() - 1];
             setStatus("Created a new custom GUI item.");
         }
@@ -1118,11 +1158,11 @@ void GuiEditor::processGuiPanelItems() {
             ) {
                 string deletedItemName = curItemPtr->name;
                 size_t customIdx =
-                    selMgr.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
                 curItemPtr->clearBitmap();
                 customItems.erase(customItems.begin() + customIdx);
                 rebuildAllItemsCache();
-                selMgr.clear();
+                itemSelection.clear();
                 changesMgr.markAsChanged();
                 setStatus("Deleted item \"" + deletedItemName + "\".");
             }
@@ -1162,15 +1202,15 @@ void GuiEditor::processGuiPanelItems() {
                 )
             ) {
                 size_t customIdx =
-                    selMgr.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
                 if(customIdx > 0) {
                     std::swap(
                         customItems[customIdx], customItems[customIdx - 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = selMgr.getSelectedItemIdx() - 1;
-                    selMgr.clear();
-                    selMgr.select(newSelItemIdx);
+                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() - 1;
+                    itemSelection.clear();
+                    itemSelection.select(newSelItemIdx);
                     changesMgr.markAsChanged();
                     setStatus("Moved item up.");
                 } else {
@@ -1191,15 +1231,15 @@ void GuiEditor::processGuiPanelItems() {
                 )
             ) {
                 size_t customIdx =
-                    selMgr.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
                 if(customIdx < customItems.size() - 1) {
                     std::swap(
                         customItems[customIdx], customItems[customIdx + 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = selMgr.getSelectedItemIdx() + 1;
-                    selMgr.clear();
-                    selMgr.select(newSelItemIdx);
+                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() + 1;
+                    itemSelection.clear();
+                    itemSelection.select(newSelItemIdx);
                     changesMgr.markAsChanged();
                     setStatus("Moved item down.");
                 } else {

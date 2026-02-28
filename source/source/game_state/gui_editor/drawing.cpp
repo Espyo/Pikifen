@@ -139,7 +139,7 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(!selMgr.isSelected(itemIdx)) {
+        if(!itemSelection.isSelected(itemIdx)) {
             drawRoundedRectangle(
                 item->center,
                 item->size,
@@ -149,9 +149,9 @@ void GuiEditor::drawCanvas() {
         }
     }
     
-    if(selMgr.isAnySelected()) {
+    if(itemSelection.isAnySelected()) {
         Point selectionCenter, selectionSize;
-        selMgr.getSelectionBBox(&selectionCenter, &selectionSize);
+        itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
         if(selectionSize.x != 0.0f) {
             curTransformationWidget.draw(
                 &selectionCenter, &selectionSize,
@@ -159,6 +159,10 @@ void GuiEditor::drawCanvas() {
             );
         }
     }
+    
+    itemSelection.draw(
+        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+    );
     
     //Finish up.
     al_reset_clipping_rectangle();

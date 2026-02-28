@@ -4217,6 +4217,7 @@ Editor::PickerItem::PickerItem(
 bool Editor::SelectionManager::applyTransformation(
     const Point& newCenter, const Point& newSize
 ) {
+    if(!enabled) return false;
     if(state != STATE_TRANSFORMING) return false;
     if(preTransSize.x <= 0.0f || preTransSize.y <= 0.0f) return false;
     
@@ -4261,6 +4262,55 @@ bool Editor::SelectionManager::clear() {
 
 
 /**
+ * @brief Disables the manager.
+ *
+ * @return Whether it was enabled.
+ */
+bool Editor::SelectionManager::disable() {
+    bool wasEnabled = enabled;
+    enabled = false;
+    return wasEnabled;
+}
+
+
+/**
+ * @brief Draws things related to the selection.
+ *
+ * @param cursorPos Position of the mouse cursor.
+ * @param zoom Zoom level to use.
+ */
+void Editor::SelectionManager::draw(const Point& cursorPos, float zoom) const {
+    if(!enabled) return;
+    if(state == STATE_RUBBER_BAND) {
+        al_draw_rectangle(
+            rubberBandStart.x,
+            rubberBandStart.y,
+            cursorPos.x,
+            cursorPos.y,
+            al_map_rgb(
+                AREA_EDITOR::SELECTION_COLOR[0],
+                AREA_EDITOR::SELECTION_COLOR[1],
+                AREA_EDITOR::SELECTION_COLOR[2]
+            ),
+            2.0f / zoom
+        );
+    }
+}
+
+
+/**
+ * @brief Enables the manager.
+ *
+ * @return Whether it was disabled.
+ */
+bool Editor::SelectionManager::enable() {
+    bool wasDisabled = !enabled;
+    enabled = true;
+    return wasDisabled;
+}
+
+
+/**
  * @brief Returns the center point of an item, or 0,0 if not possible.
  *
  * @param idx The item's index.
@@ -4295,6 +4345,35 @@ Point Editor::SelectionManager::getItemSize(size_t idx) const {
 
 
 /**
+ * @brief Returns whether an item is eligible to be selected, or true
+ * if not possible.
+ *
+ * @param idx The item's index.
+ * @return Whether it's eligible.
+ */
+bool Editor::SelectionManager::getItemIsEligible(size_t idx) const {
+    if(onIsEligible) {
+        return onIsEligible(idx);
+    }
+    return true;
+}
+
+
+/**
+ * @brief Returns the total number of items in the editor,
+ * or 0 if not possible.
+ *
+ * @return The number.
+ */
+size_t Editor::SelectionManager::getNrTotalItems() const {
+    if(onGetTotal) {
+        return onGetTotal();
+    }
+    return 0;
+}
+
+
+/**
  * @brief Returns the index of the only selected item, or INVALID if
  * multiple or none are selected.
  *
@@ -4316,6 +4395,16 @@ size_t Editor::SelectionManager::getSelectedItemIdx() const {
  */
 const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
     return selectedItems;
+}
+
+
+/**
+ * @brief Returns how many items are selected.
+ *
+ * @return The amount.
+ */
+size_t Editor::SelectionManager::getSelectionAmount() const {
+    return selectedItems.size();
 }
 
 
@@ -4366,9 +4455,29 @@ bool Editor::SelectionManager::isAnySelected() const {
 
 
 /**
+ * @brief Returns whether the user is currently creating a rubber band.
+ *
+ * @return Whether it is creating.
+ */
+bool Editor::SelectionManager::isCreatingRubberBand() const {
+    return state == STATE_RUBBER_BAND;
+}
+
+
+/**
+ * @brief Returns whether there is are multiple items selected.
+ *
+ * @return Whether there are multiple selected.
+ */
+bool Editor::SelectionManager::isMultipleSelected() const {
+    return selectedItems.size() > 1;
+}
+
+
+/**
  * @brief Returns whether there is only one item selected.
  *
- * @return Whether there is one selected
+ * @return Whether there is one selected.
  */
 bool Editor::SelectionManager::isOneSelected() const {
     return selectedItems.size() == 1;
@@ -4387,15 +4496,101 @@ bool Editor::SelectionManager::isSelected(size_t idx) const {
 
 
 /**
+ * @brief Returns whether the user is currently transforming the selection.
+ *
+ * @return Whether it is transforming.
+ */
+bool Editor::SelectionManager::isTransforming() const {
+    return state == STATE_TRANSFORMING;
+}
+
+
+/**
  * @brief Adds an item to the selection.
  *
  * @param idx The item's index.
  * @return Whether the item was unselected.
  */
 bool Editor::SelectionManager::select(size_t idx) {
+    if(!enabled) return false;
     if(selectedItems.contains(idx)) return false;
     selectedItems.insert(idx);
     return true;
+}
+
+
+/**
+ * @brief Selects an item, or items, based on the left mouse button being
+ * pressed down. This also starts a rubber band selection box if applicable.
+ *
+ * @param cursorPos Mouse cursor position.
+ * @param rubberBandMod Whether a modifier key that forces rubber band
+ * selection box creation was held down.
+ * @param addToSelectionMod Whether a modifier key that adds to the
+ * selection was held down.
+ * @return Whether anything changed.
+ */
+bool Editor::SelectionManager::selectViaMouseDown(
+    const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
+) {
+    if(!enabled) return false;
+    bool madeChanges = false;
+    Point selectionCenter, selectionSize;
+    getSelectionBBox(&selectionCenter, &selectionSize);
+    
+    //Get which items are under the mouse cursor.
+    vector<size_t> clickedItems;
+    size_t nrTotalItems = getNrTotalItems();
+    for(size_t i = 0; i < nrTotalItems; i++) {
+        if(!getItemIsEligible(i)) continue;
+        Point iCenter = getItemCenter(i);
+        Point iSize = getItemSize(i);
+        if(itemsAreRectangular) {
+            if(isPointInRectangle(cursorPos, iCenter, iSize)) {
+                clickedItems.push_back(i);
+            }
+        } else {
+            if(Distance(cursorPos, iCenter) <= iSize.x / 2.0f) {
+                clickedItems.push_back(i);
+            }
+        }
+    }
+    
+    bool mustStartRubberBand = clickedItems.empty() || rubberBandMod;
+    if(mustStartRubberBand) {
+        if(!addToSelectionMod) {
+            clear();
+            startRubberBand(cursorPos);
+            madeChanges = true;
+        }
+    } else {
+        if(overlapsCycle) {
+            size_t prevSelItemIdx = getSelectedItemIdx();
+            clear();
+            select(getNextInVector(clickedItems, prevSelItemIdx));
+        } else {
+            clear();
+            select(clickedItems[0]);
+        }
+        madeChanges = true;
+    }
+    
+    return madeChanges;
+}
+
+
+/**
+ * @brief Starts the creation of a rubber band selection box.
+ *
+ * @param cursorPos Position of the cursor.
+ * @return Whether it was idling before this.
+ */
+bool Editor::SelectionManager::startRubberBand(const Point& cursorPos) {
+    if(!enabled) return false;
+    bool wasIdle = state == STATE_IDLING;
+    state = STATE_RUBBER_BAND;
+    rubberBandStart = cursorPos;
+    return wasIdle;
 }
 
 
@@ -4405,6 +4600,7 @@ bool Editor::SelectionManager::select(size_t idx) {
  * @return Whether it was idling before this.
  */
 bool Editor::SelectionManager::startTransforming() {
+    if(!enabled) return false;
     bool wasIdle = state == STATE_IDLING;
     state = STATE_TRANSFORMING;
     preTransCenters.clear();
@@ -4419,14 +4615,25 @@ bool Editor::SelectionManager::startTransforming() {
 
 
 /**
+ * @brief Finishes the creation of a rubber band selection box.
+ *
+ * @return Whether it was creating a rubber band selection box before this.
+ */
+bool Editor::SelectionManager::stopRubberBand() {
+    if(state != STATE_RUBBER_BAND) return false;
+    
+    state = STATE_IDLING;
+    return true;
+}
+
+
+/**
  * @brief Stops a transformation of the selection bounding box.
  *
  * @return Whether it was in a transformation before this.
  */
 bool Editor::SelectionManager::stopTransforming() {
-    if(state != STATE_TRANSFORMING) {
-        return false;
-    }
+    if(state != STATE_TRANSFORMING) return false;
     
     preTransCenters.clear();
     preTransSizes.clear();
@@ -4442,8 +4649,65 @@ bool Editor::SelectionManager::stopTransforming() {
  * @return Whether the item was selected.
  */
 bool Editor::SelectionManager::unselect(size_t idx) {
+    if(!enabled) return false;
     if(!selectedItems.contains(idx)) return false;
     selectedItems.erase(idx);
+    return true;
+}
+
+
+/**
+ * @brief If creating a rubber band selection box, updates the cursor position.
+ *
+ * @param cursorPos New cursor position.
+ * @param rubberBandMod Whether a modifier key that forces rubber band
+ * selection box creation was held down.
+ * @param addToSelectionMod Whether a modifier key that adds to the
+ * selection was held down.
+ * @return Whether it was creating a rubber band selection box before this.
+ */
+bool Editor::SelectionManager::updateRubberBand(
+    const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
+) {
+    if(!enabled) return false;
+    if(state != STATE_RUBBER_BAND) return false;
+    
+    Point selectionCenter, selectionSize;
+    getSelectionBBox(&selectionCenter, &selectionSize);
+    
+    if(!addToSelectionMod) clear();
+    
+    Point rubberBandTL =
+        Point(
+            std::min(rubberBandStart.x, cursorPos.x),
+            std::min(rubberBandStart.y, cursorPos.y)
+        );
+    Point rubberBandBR =
+        Point(
+            std::max(rubberBandStart.x, cursorPos.x),
+            std::max(rubberBandStart.y, cursorPos.y)
+        );
+        
+    size_t nrTotalItems = getNrTotalItems();
+    for(size_t i = 0; i < nrTotalItems; i++) {
+        if(!getItemIsEligible(i)) continue;
+        Point iCenter = getItemCenter(i);
+        Point iSize = getItemSize(i);
+        Point iTL = iCenter - iSize / 2.0f;
+        Point iBR = iCenter + iSize / 2.0f;
+        
+        if(
+            iTL.x >= rubberBandTL.x &&
+            iTL.y >= rubberBandTL.y &&
+            iBR.x <= rubberBandBR.x &&
+            iBR.y <= rubberBandBR.y
+        ) {
+            select(i);
+        }
+    }
+    
+    selectionHomogenized = false;
+    
     return true;
 }
 

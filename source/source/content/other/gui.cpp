@@ -1198,10 +1198,10 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
 
 
 /**
- * @brief Handle an Allegro event.
+ * @brief Handles an Allegro event.
  * Controls are handled in handlePlayerAction.
  *
- * @param ev Event.
+ * @param ev The event.
  * @return Whether it got handled.
  */
 bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
