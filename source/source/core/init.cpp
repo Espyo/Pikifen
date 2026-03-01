@@ -678,7 +678,7 @@ void initControls() {
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "HUD",
         "Toggle the HUD.",
-        "mt_hud", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -703,6 +703,14 @@ void initControls() {
         "New Pikmin",
         "Create a new Pikmin under the mouse cursor.",
         "mt_new_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "New reminder",
+        "Create a new area maker reminder under the mouse cursor.",
+        "mt_new_reminder", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(

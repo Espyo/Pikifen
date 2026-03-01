@@ -236,6 +236,9 @@ enum PLAYER_ACTION_TYPE {
     
     //New Pikmin.
     PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+
+    //New area maker reminder.
+    PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
     
     //Path info.
     PLAYER_ACTION_TYPE_MT_PATH_INFO,

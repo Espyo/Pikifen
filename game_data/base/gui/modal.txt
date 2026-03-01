@@ -11,8 +11,13 @@ hardcoded_items{
 	}
 	prompt{
 		center=50.0000 50.0000
-		size=92.0000 32.0000
+		size=92.0000 48.0000
 		description=Whatever the modal dialog needs to tell the player.
+	}
+	text_input{
+		center=50.0000 63.0000
+		size=92.0000 10.0000
+		description=Text field that the player can fill in.
 	}
 	button_area{
 		center=50.0000 83.0000

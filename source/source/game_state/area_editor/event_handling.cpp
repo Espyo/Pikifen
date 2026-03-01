@@ -1316,6 +1316,8 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
+    bool crossSectionHandled = false;
+
     if(showCrossSection) {
         movingCrossSectionPoint = -1;
         for(unsigned char p = 0; p < 2; p++) {
@@ -1328,9 +1330,38 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
                 )
             ) {
                 movingCrossSectionPoint = p;
+                crossSectionHandled = true;
                 break;
             }
         }
+    }
+
+    if(!crossSectionHandled) {
+
+        //Check if the transformation widget got clicked.
+        bool twHandled = false;
+        Point selectionCenter, selectionSize;
+        reminderSelection.getSelectionBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            twHandled =
+                curTransformationWidget.handleMouseDown(
+                    game.editorsView.mouseCursorWorldPos,
+                    &selectionCenter, &selectionSize,
+                    nullptr,
+                    1.0f / game.editorsView.cam.zoom
+                );
+        }
+        
+        if(twHandled) {
+            reminderSelection.startTransforming();
+        } else {
+            reminderSelection.selectViaMouseDown(
+                game.editorsView.mouseCursorWorldPos,
+                isShiftPressed, isCtrlPressed
+            );
+        }
+        
+        setSelectionStatusText();
     }
 }
 
@@ -1791,6 +1822,33 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 crossSectionCheckpoints[movingCrossSectionPoint] =
                     snapPoint(game.editorsView.mouseCursorWorldPos);
             }
+
+            if(reminderSelection.isCreatingRubberBand()) {
+                reminderSelection.updateRubberBand(
+                    game.editorsView.mouseCursorWorldPos,
+                    isShiftPressed, isCtrlPressed
+                );
+            } else {
+                Point selectionCenter, selectionSize;
+                reminderSelection.getSelectionBBox(
+                    &selectionCenter, &selectionSize
+                );
+                if(selectionSize.x != 0.0f) {
+                    bool twHandled =
+                        curTransformationWidget.handleMouseMove(
+                            snapPoint(game.editorsView.mouseCursorWorldPos),
+                            &selectionCenter, &selectionSize,
+                            nullptr, 1.0f / game.editorsView.cam.zoom,
+                            false, false, 0.10f, isAltPressed
+                        );
+                    if(twHandled) {
+                        changesMgr.markAsChanged();
+                        reminderSelection.applyTransformation(
+                            selectionCenter, selectionSize
+                        );
+                    }
+                }
+            }
             
             break;
             
@@ -1819,6 +1877,8 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     }
     
     curTransformationWidget.handleMouseUp();
+    reminderSelection.stopRubberBand();
+    reminderSelection.stopTransforming();
     
     movingPathPreviewCheckpoint = -1;
     movingCrossSectionPoint = -1;

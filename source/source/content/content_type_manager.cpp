@@ -187,6 +187,18 @@ bool AreaContentManager::loadArea(
         areaPtr->loadGeometryFromDataNode(&geometryFile, level);
     }
     
+    //Reminders.
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
+        string remindersPath =
+            userDataPath + "/" + FILE_NAMES::AREA_REMINDERS;
+        bool fileExists = false;
+        DataNode remindersFile(remindersPath, &fileExists);
+        if(fileExists) {
+            areaPtr->loadRemindersFromDataNode(&remindersFile);
+        }
+    }
+
+    
     return true;
 }
 
@@ -260,6 +272,26 @@ void AreaContentManager::pathToManifest(
             *outType = AREA_TYPE_SIMPLE;
         }
     }
+}
+
+
+/**
+ * @brief Saves an area's reminders, or deletes the file if there are none.
+ *
+ * @param areaPtr Area whose reminders to save.
+ */
+void AreaContentManager::saveAreaReminders(Area* areaPtr) const {
+    string filePath =
+        areaPtr->userDataPath + "/" + FILE_NAMES::AREA_REMINDERS;
+        
+    if(areaPtr->reminders.empty()) {
+        al_remove_filename(filePath.c_str());
+        return;
+    }
+    
+    DataNode remindersFile;
+    areaPtr->saveRemindersToDataNode(&remindersFile);
+    remindersFile.saveFile(filePath);
 }
 
 

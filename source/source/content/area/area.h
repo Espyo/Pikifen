@@ -188,6 +188,22 @@ struct AreaRegion {
 
 
 /**
+ * @brief A reminder that the area maker jotted down in the area.
+ */
+struct AreaMakerReminder {
+
+    //--- Public members ---
+
+    //Position.
+    Point pos;
+
+    //Text.
+    string text;
+
+};
+
+
+/**
  * @brief Info about an area.
  *
  * This structure is so that the sectors know how to communicate with
@@ -287,6 +303,9 @@ struct Area : public Content {
     
     //Path to the user data folder for this area.
     string userDataPath;
+
+    //Reminders for the area's maker.
+    vector<AreaMakerReminder> reminders;
     
     
     //--- Public function declarations ---
@@ -321,6 +340,7 @@ struct Area : public Content {
     void loadGeometryFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
+    void loadRemindersFromDataNode(DataNode* node);
     void loadThumbnail(const string& thumbnailPath);
     Edge* addNewEdge();
     Sector* addNewSector();
@@ -334,6 +354,7 @@ struct Area : public Content {
     void saveGeometryToDataNode(DataNode* node);
     void saveMainDataToDataNode(DataNode* node);
     void saveMissionDataToDataNode(DataNode* node);
+    void saveRemindersToDataNode(DataNode* node);
     void saveThumbnail(bool toBackup);
     void clear();
 

@@ -178,6 +178,10 @@ void GameplayState::doGameDrawing(
             } else {
                 drawMouseCursor(cursorColor);
             }
+            game.modal.draw();
+            if(game.modal.responsive) {
+                drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+            }
         }
         
         if(game.perfMon) {

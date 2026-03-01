@@ -492,6 +492,7 @@ public:
     long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
     long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
     void isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss);
+    bool isPaused() const;
     void tryPause();
     void updateAvailableLeaders();
     void updateClosestGroupMembers(Player* player);

@@ -168,7 +168,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
 
         geometryInfo = !geometryInfo;
         if(geometryInfo) {
-            geometryInfoStartCursor =
+            toolStartCursor =
                 game.states.gameplay->players[0].view.mouseCursorWorldPos;
         }
         usedHelpingTools = true;
@@ -259,6 +259,50 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             );
             usedHelpingTools = true;
         }
+        break;
+        
+    } case PLAYER_ACTION_TYPE_MT_NEW_REMINDER: {
+        if(!game.states.gameplay->isPaused()) {
+            toolStartCursor =
+                game.states.gameplay->players[0].view.mouseCursorWorldPos;
+            game.modal.reset();
+            game.modal.title = "New reminder";
+            game.modal.prompt =
+                "Creating a new reminder for the area maker at " +
+                i2s(toolStartCursor.x) + "," + i2s(toolStartCursor.y) +
+                ".\n"
+                "What should the reminder say?\n"
+                "\n\n\n\n\n\n";
+            game.modal.back = "Cancel";
+            game.modal.onBack =
+            [] () {
+                game.controls.ignoreMenuCloseActions();
+                game.console.write("Cancelled reminder.", 3.0f);
+            };
+            game.modal.extraButtons.push_back(
+            ModalGuiManager::Button {
+                .text = "Create",
+                .tooltip = "Create the reminder.",
+                .onActivate = [this] (const Point&) {
+                    AreaMakerReminder newReminder;
+                    newReminder.pos = toolStartCursor;
+                    newReminder.text = game.modal.textInput;
+                    game.curArea->reminders.push_back(newReminder);
+                    game.content.areas.saveAreaReminders(game.curArea);
+                    game.modal.close();
+                    game.controls.ignoreMenuCloseActions();
+                    game.console.write("Created reminder!", 3.0f);
+                }
+            }
+            );
+            game.modal.defaultFocusButtonIdx = 1;
+            game.modal.textInputEnterButtonIdx = 1;
+            game.modal.useTextInput = true;
+            game.modal.updateItems();
+            game.modal.open();
+            usedHelpingTools = true;
+        }
+        
         break;
         
     } case PLAYER_ACTION_TYPE_MT_PATH_INFO: {

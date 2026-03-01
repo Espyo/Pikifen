@@ -60,6 +60,9 @@ enum MAKER_TOOL_TYPE {
     //Create a new Pikmin beneath mouse cursor.
     MAKER_TOOL_TYPE_NEW_PIKMIN,
     
+    //Create an area maker reminder beneath the cursor.
+    MAKER_TOOL_TYPE_NEW_REMINDER,
+    
     //Show path info.
     MAKER_TOOL_TYPE_PATH_INFO,
     
@@ -169,8 +172,8 @@ struct MakerTools {
     //Show the reaches of the currently info-locked mob?
     bool reaches = false;
 
-    //Mouse cursor world coordinates when the geometry info tool was started.
-    Point geometryInfoStartCursor;
+    //Mouse cursor world coordinates when the latest maker tool was started.
+    Point toolStartCursor;
     
     //How many times the player has pressed a maker tool button to confirm,
     //when tools are limited in play mode.

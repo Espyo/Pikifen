@@ -1123,6 +1123,7 @@ void GameplayState::doMenuLogic() {
             game.audio.handleWorldUnpause();
         }
     }
+    game.modal.tick(game.deltaT);
     
     for(Player& player : players) {
         player.hud->tick(game.deltaT);
@@ -1177,7 +1178,7 @@ void GameplayState::doMenuLogic() {
             );
         string timerStr =
             f2s(game.makerTools.infoLock->fsm.timer.timeLeft);
-        
+            
         game.console.write(
             "Mob: " + nameStr + "\n"
             "Coords: " + coordsStr + " | Angle: " + angleStr + "\n"
@@ -1275,9 +1276,9 @@ void GameplayState::doMenuLogic() {
             Edge* ePtr = game.curArea->edges[e];
             float ratio;
             Point p = getClosestPointInLineSeg(
-                v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
-                players[0].view.mouseCursorWorldPos, &ratio
-            );
+                          v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
+                          players[0].view.mouseCursorWorldPos, &ratio
+                      );
             if(ratio < 0.0f) p = v2p(ePtr->vertexes[0]);
             if(ratio > 1.0f) p = v2p(ePtr->vertexes[1]);
             Distance d(players[0].view.mouseCursorWorldPos, p);
@@ -1297,7 +1298,7 @@ void GameplayState::doMenuLogic() {
                 closestVertexDist = d;
             }
         }
-
+        
         string coordsStr =
             resizeString(f2s(players[0].view.mouseCursorWorldPos.x), 6) + " " +
             resizeString(f2s(players[0].view.mouseCursorWorldPos.y), 6);
@@ -1306,7 +1307,7 @@ void GameplayState::doMenuLogic() {
                 f2s(
                     Distance(
                         players[0].view.mouseCursorWorldPos,
-                        game.makerTools.geometryInfoStartCursor
+                        game.makerTools.toolStartCursor
                     ).toFloat()
                 ),
                 8
@@ -1315,7 +1316,7 @@ void GameplayState::doMenuLogic() {
             resizeString(
                 f2s(
                     players[0].view.mouseCursorWorldPos.x -
-                    game.makerTools.geometryInfoStartCursor.x
+                    game.makerTools.toolStartCursor.x
                 ),
                 8
             );
@@ -1323,7 +1324,7 @@ void GameplayState::doMenuLogic() {
             resizeString(
                 f2s(
                     players[0].view.mouseCursorWorldPos.y -
-                    game.makerTools.geometryInfoStartCursor.y
+                    game.makerTools.toolStartCursor.y
                 ),
                 8
             );
@@ -1333,7 +1334,7 @@ void GameplayState::doMenuLogic() {
                     radToDeg(
                         getAngle(
                             players[0].view.mouseCursorWorldPos.x,
-                            game.makerTools.geometryInfoStartCursor.x
+                            game.makerTools.toolStartCursor.x
                         )
                     )
                 ),
@@ -1541,6 +1542,17 @@ void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     
     if(nearEnemy) *nearEnemy = foundEnemy;
     if(nearBoss) *nearBoss = foundBoss;
+}
+
+
+/**
+ * @brief Returns whether gameplay is currently paused.
+ */
+bool GameplayState::isPaused() const {
+    if(paused) return true;
+    if(pauseMenu) return true;
+    if(onionMenu) return true;
+    return false;
 }
 
 

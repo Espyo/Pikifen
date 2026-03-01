@@ -100,6 +100,7 @@ public:
         const string& path, ContentManifest* outManifest = nullptr,
         AREA_TYPE* outType = nullptr
     ) const;
+    void saveAreaReminders(Area* areaPtr) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
     

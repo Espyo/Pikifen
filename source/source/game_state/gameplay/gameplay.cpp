@@ -458,13 +458,16 @@ void GameplayState::doLogic() {
         if(pauseMenu) {
             pauseMenu->handlePlayerAction(game.controls.actionQueue[a]);
         }
+        if(game.modal.responsive) {
+            game.modal.handlePlayerAction(game.controls.actionQueue[a]);
+        }
         game.makerTools.handleGameplayPlayerAction(
             game.controls.actionQueue[a]
         );
     }
     
     //Game logic.
-    if(!paused) {
+    if(!paused && !game.modal.responsive) {
         game.statistics.gameplayTime += regularDeltaT;
         doGameplayLogic(game.deltaT * deltaTMult);
         doAestheticLogic(game.deltaT * deltaTMult);
@@ -1056,6 +1059,7 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     } else if(pauseMenu) {
         pauseMenu->handleAllegroEvent(ev);
     }
+    game.modal.handleAllegroEvent(ev);
     
     //Finally, let the HUD handle events.
     for(Player& player : players) {
@@ -1706,6 +1710,7 @@ void GameplayState::tryPause() {
     if(pauseMenu) return;
     if(paused) return;
     if(players.empty()) return;
+    if(game.modal.responsive) return;
     doPlayerActionPause(&players[0], true, false);
 }
 

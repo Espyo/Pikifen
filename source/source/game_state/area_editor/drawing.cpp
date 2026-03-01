@@ -271,6 +271,8 @@ void AreaEditor::drawCanvas() {
     drawTreeShadows(style);
     drawRegions(style);
     
+    drawReminders(style);
+    
     //Cross-section points and line.
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
         for(unsigned char p = 0; p < 2; p++) {
@@ -1700,6 +1702,51 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
                 1.0f / game.editorsView.cam.zoom
             );
         }
+    }
+}
+
+
+/**
+ * @brief Draws the reminders onto the canvas.
+ *
+ * @param style Canvas style.
+ */
+void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
+    if(state == EDITOR_STATE_REVIEW) {
+        for(size_t r = 0; r < game.curArea->reminders.size(); r++) {
+            AreaMakerReminder* rPtr = &game.curArea->reminders[r];
+            
+            drawFilledRoundedRectangle(
+                rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f,
+                reminderSelection.isSelected(r) ?
+                al_map_rgb(
+                    AREA_EDITOR::SELECTION_COLOR[0],
+                    AREA_EDITOR::SELECTION_COLOR[1],
+                    AREA_EDITOR::SELECTION_COLOR[2]
+                ) :
+                al_map_rgb(128, 128, 64)
+            );
+            drawText(
+                "!", game.sysContent.fntAreaName, rPtr->pos,
+                Point(AREA_EDITOR::REMINDER_SIZE)
+            );
+        }
+    }
+    
+    Point selectionCenter, selectionSize;
+    reminderSelection.getSelectionBBox(
+        &selectionCenter, &selectionSize
+    );
+    
+    reminderSelection.draw(
+        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+    );
+    
+    if(selectionSize.x != 0.0f) {
+        curTransformationWidget.draw(
+            &selectionCenter, &selectionSize,
+            nullptr, 1.0f / game.editorsView.cam.zoom
+        );
     }
 }
 

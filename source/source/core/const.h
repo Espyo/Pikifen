@@ -195,6 +195,9 @@ const string AREA_THUMBNAIL = "thumbnail.png";
 //Area reference config file.
 const string AREA_REFERENCE_CONFIG = "reference.txt";
 
+//Area reminders file.
+const string AREA_REMINDERS = "reminders.txt";
+
 //Game configuration file.
 const string GAME_CONFIG = "config.txt";
 

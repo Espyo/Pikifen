@@ -6367,6 +6367,95 @@ void AreaEditor::processGuiPanelReview() {
         
     }
     
+    //Reminders node.
+    ImGui::Spacer();
+    if(saveableTreeNode("review", "Reminders")) {
+    
+        //Current reminder text.
+        size_t curReminderIdx = reminderSelection.getSelectedItemIdx();
+        if(reminderSelection.isMultipleSelected()) {
+            ImGui::BeginDisabled();
+            ImGui::Text("(Multiple reminders selected)");
+            ImGui::EndDisabled();
+        } else {
+            processGuiListNavCurWidget(
+                curReminderIdx, game.curArea->reminders.size(), "Reminder"
+            );
+        }
+        
+        //New reminder button.
+        if(
+            processGuiListNavNewWidget(
+                &curReminderIdx, game.curArea->reminders.size(),
+                "Create a new reminder for yourself.\n"
+                "Reminders are saved in your user data, not in the area."
+            )
+        ) {
+            registerChange("reminder deletion");
+            game.curArea->reminders.push_back(AreaMakerReminder());
+            reminderSelection.clear();
+            reminderSelection.select(curReminderIdx);
+        }
+        
+        //Delete reminder button.
+        if(
+            processGuiListNavDelWidget(
+                &curReminderIdx, game.curArea->reminders.size(),
+                "Delete the current reminder.", true
+            )
+        ) {
+            deleteReminderCmd(1.0f);
+        }
+        
+        //Previous reminder button.
+        if(
+            processGuiListNavPrevWidget(
+                &curReminderIdx, game.curArea->reminders.size(),
+                "Select the previous reminder.", true, "", 1.0f, "", true
+            )
+        ) {
+            reminderSelection.clear();
+            reminderSelection.select(curReminderIdx);
+        }
+        
+        //Next reminder button.
+        if(
+            processGuiListNavNextWidget(
+                &curReminderIdx, game.curArea->reminders.size(),
+                "Select the next reminder.", true, "", 1.0f, "", true
+            )
+        ) {
+            reminderSelection.clear();
+            reminderSelection.select(curReminderIdx);
+        }
+        
+        if(reminderSelection.isOneSelected()) {
+        
+            AreaMakerReminder* curReminder =
+                &game.curArea->reminders[
+                    reminderSelection.getSelectedItemIdx()
+                ];
+                
+            //Reminder position.
+            if(ImGui::DragFloat2("Position", (float*) &curReminder->pos)) {
+                changesMgr.markAsChanged();
+            }
+            setTooltip(
+                "Position of the reminder in the area.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Reminder text.
+            if(ImGui::InputText("Text", &curReminder->text)) {
+                changesMgr.markAsChanged();
+            }
+            setTooltip("Text in the reminder.");
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
     //Preview node.
     ImGui::Spacer();
     if(saveableTreeNode("review", "Preview")) {
@@ -6444,13 +6533,12 @@ void AreaEditor::processGuiPanelReview() {
             ImGui::Unindent();
         }
         
-        ImGui::Spacer();
-        
         ImGui::TreePop();
         
     }
     
     //Tools node.
+    ImGui::Spacer();
     if(saveableTreeNode("review", "Tools")) {
     
         //Show blocking sectors checkbox.
@@ -6471,13 +6559,12 @@ void AreaEditor::processGuiPanelReview() {
             ImGui::Unindent();
         }
         
-        ImGui::Spacer();
-        
         ImGui::TreePop();
         
     }
     
     //Stats node.
+    ImGui::Spacer();
     if(saveableTreeNode("main", "Stats")) {
     
         //Sector amount text.

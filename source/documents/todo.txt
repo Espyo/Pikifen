@@ -6,16 +6,49 @@ Current tasks (tasks being worked on, but not yet committed)
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
     New mission system
-        HUD rule explanation for the area selection menu and pause menu
-            area_menu_specs -> area_menu_briefing
-            Have a "mission objective" text input for the area editor where you write down anything involving out to get a medal and the ultimate goal, like "Get as many treasures as you can before time runs out! You'll win a platinum medal if you get them all!"
-            Have a flexible number of "notes" text inputs for the area editor where you write down what causes a failure, how to get bonus points for you score, etc.
-            The area selection menu and the pause menu should list the two things above, the objective as a single text field, and the notes as a scrollable list of bullet points. It should also automatically include, in the notes, the time limit (or no time limit) and the medal requirements. If the objective is empty, show a default "This mission briefing doesn't contain any objective information!", and if the notes are empty, show a default "Nothing to note."
-            Maybe, in the pause menu, it should list some more stats that are important to keep track of, as provided by the mission maker? Like list of Pikmin created so far, because reaching 100 could be an objective for some bonus points
         HUD rule explanation for the results menu
+            Canon games have:
+                Area name
+                Your score
+                Top 3/5
+                Pikmin chart over the day
+                Number of players that participated
+                Pokos
+                Time bonus
+                Medal
+                New record label
+                Clear time
+            Pikifen 1.1 has:
+                Area name
+                Medal
+                Fail/Clear
+                Score
+                Conclusion text
+                Time taken
+                Pikmin born and deaths
+                Treasure and treasure points
+                Enemy and enemy points
+            Pikifen 1.2 should have:
+                x Area name
+                x Medal
+                x Score
+                x Conclusion text
+                Stats
+                    Time taken
+                    Pikmin count, born, and deaths
+                    Sprays used
+                x Rotating shine behind the medal
         Add the presets logic
         After hours clock HUD logic
         Mission score records need to be ported over
+        Delete all remnants of the old system
+        Check all TODOs in the code
+    New editor selection system
+        Try to lump more code into the manager itself, to reduce copy-paste
+        Status bar should say how many are selected
+            Maybe a selection change callback would be useful for this?
+        Ctrl+A, unselecting with Ctrl, etc.
+        Rubber band selection box should use dashed lines, and ideally be animated
     Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Add a leader swap sound, so swapping to the rookie isn't silent
@@ -797,9 +830,6 @@ Misc things (so I don't forget)
         Custom goal clear conditions and custom fail conditions, via scripting somehow
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
-    Maker tools
-        The list of script vars shown with the mob info tool won't fit the screen if it's too long
-        A modifier for the mouse cursor information tool that pins the cursor's spot, and then the info visualizer also shows the cursor's current distance to that point
     Code cleanup
         Switch angles to vectors?
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
@@ -871,8 +901,6 @@ Tasks for later on (I might never implement these)
             Backups
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
                 If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
-            The ability to add comments to specific spots in an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-                Also, the ability to add them in-game with a maker tool, but they only exist in the area editor anyway
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.?

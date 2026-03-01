@@ -98,6 +98,9 @@ const float QUICK_PREVIEW_DURATION = 4.0f;
 //Minimum width or height that the reference image can have.
 const float REFERENCE_MIN_SIZE = 5.0f;
 
+//Width and height of a reminder icon.
+const float REMINDER_SIZE = 32.0f;
+
 //Color of a selected element, or the selection box.
 const unsigned char SELECTION_COLOR[3] = {255, 255, 0};
 
@@ -195,6 +198,23 @@ AreaEditor::AreaEditor() :
     registerCmd(&AreaEditor::zoomOutCmd, "zoom_out");
     
 #undef registerCmd
+    
+    //Setup the selection managers.
+    reminderSelection.onGetInfo =
+    [] (size_t idx, Point * outCenter, Point * outSize) {
+        *outCenter = game.curArea->reminders[idx].pos;
+        *outSize = AREA_EDITOR::REMINDER_SIZE;
+    };
+    reminderSelection.onSetInfo =
+    [] (size_t idx, const Point & newCenter, const Point & newSize) {
+        game.curArea->reminders[idx].pos = newCenter;
+    };
+    reminderSelection.onGetTotal =
+    [] () {
+        return game.curArea->reminders.size();
+    };
+    reminderSelection.itemsAreRectangular = true;
+    reminderSelection.overlapsCycle = true;
 }
 
 
@@ -261,6 +281,11 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     state = newState;
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
+    
+    reminderSelection.disable();
+    if(newState == EDITOR_STATE_REVIEW) {
+        reminderSelection.enable();
+    }
 }
 
 
@@ -420,6 +445,7 @@ void AreaEditor::clearSelection() {
     selectedShadowIdx = INVALID;
     selectedRegion = nullptr;
     selectedRegionIdx = INVALID;
+    reminderSelection.clear();
     selectionHomogenized = false;
     setSelectionStatusText();
 }
@@ -947,6 +973,43 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         delete selectedRegion;
         selectedRegion = nullptr;
         selectedRegionIdx = INVALID;
+    }
+}
+
+
+/**
+ * @brief Code to run for the delete reminder command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteReminderCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(!reminderSelection.isAnySelected()) {
+        setStatus("You have to select a reminder to delete!", true);
+    } else {
+        registerChange("reminder deletion");
+        size_t deletions = 0;
+        for(size_t i : reminderSelection.getSelectedItemIdxs()) {
+            game.curArea->reminders.erase(
+                game.curArea->reminders.begin() + (i - deletions)
+            );
+        }
+        if(reminderSelection.isOneSelected()) {
+            setStatus(
+                "Deleted reminder #" +
+                i2s(reminderSelection.getSelectedItemIdx() + 1) + "."
+            );
+        } else {
+            setStatus(
+                "Deleted " + i2s(deletions) + " reminders."
+            );
+        }
+        reminderSelection.clear();
     }
 }
 
@@ -2452,6 +2515,28 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
 
 
 /**
+ * @brief Code to run for the new reminder command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewReminderCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("reminder creation");
+    AreaMakerReminder newReminder;
+    game.curArea->reminders.push_back(newReminder);
+    reminderSelection.clear();
+    reminderSelection.select(game.curArea->reminders.size() - 1);
+    setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
+}
+
+
+/**
  * @brief Code to run for the new tree shadow command.
  *
  * @param inputValue Value of the player input for the command.
@@ -2881,7 +2966,6 @@ void AreaEditor::rollbackToPreparedState(Area* preparedState) {
  * @return Whether it succeeded.
  */
 bool AreaEditor::saveArea(bool toBackup) {
-
     //First, some cleanup.
     bool deletedSectors;
     game.curArea->cleanup(&deletedSectors);
@@ -2943,6 +3027,7 @@ bool AreaEditor::saveArea(bool toBackup) {
     backupTimer.start(game.options.areaEd.backupInterval);
     
     saveReference();
+    game.content.areas.saveAreaReminders(game.curArea);
     
     bool saveSuccessful = geoSaveOk && mainDataSaveOk;
     if(saveSuccessful && !toBackup) {

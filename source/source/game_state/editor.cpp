@@ -2546,8 +2546,10 @@ bool Editor::processGuiListNavNextWidget(
             Point(EDITOR::ICON_BMP_SIZE) * buttonScale
         )
     ) {
-        *curItemIdx = sumAndWrap(*curItemIdx, +1, listSize);
-        pressed = true;
+        if(listSize > 0) {
+            *curItemIdx = sumAndWrap(*curItemIdx, +1, listSize);
+            pressed = true;
+        }
     }
     setTooltip(tooltip, tooltipShortcut);
     
@@ -2588,8 +2590,10 @@ bool Editor::processGuiListNavPrevWidget(
             Point(EDITOR::ICON_BMP_SIZE) * buttonScale
         )
     ) {
-        *curItemIdx = sumAndWrap(*curItemIdx, -1, listSize);
-        pressed = true;
+        if(listSize > 0) {
+            *curItemIdx = sumAndWrap(*curItemIdx, -1, listSize);
+            pressed = true;
+        }
     }
     setTooltip(tooltip, tooltipShortcut);
     

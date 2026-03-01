@@ -47,6 +47,7 @@ extern const float PATH_PREVIEW_CHECKPOINT_RADIUS;
 extern const float PATH_PREVIEW_TIMER_DUR;
 extern const float POINT_LETTER_TEXT_SCALE;
 extern const float REFERENCE_MIN_SIZE;
+extern const float REMINDER_SIZE;
 extern const float QUICK_PREVIEW_DURATION;
 extern const unsigned char SELECTION_COLOR[3];
 extern const float SELECTION_EFFECT_SPEED;
@@ -785,6 +786,9 @@ private:
     //Currently selected region's index.
     size_t selectedRegionIdx = INVALID;
     
+    //Selection manager for the reminders.
+    SelectionManager reminderSelection;
+    
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
     
@@ -1126,6 +1130,7 @@ private:
     void drawMobs(const AreaEdCanvasStyle& style);
     void drawPaths(const AreaEdCanvasStyle& style);
     void drawRegions(const AreaEdCanvasStyle& style);
+    void drawReminders(const AreaEdCanvasStyle& style);
     void drawSectors(const AreaEdCanvasStyle& style);
     void drawTreeShadows(const AreaEdCanvasStyle& style);
     void drawVertexes(const AreaEdCanvasStyle& style);
@@ -1148,6 +1153,7 @@ private:
     void deleteMobCmd(float inputValue);
     void deletePathCmd(float inputValue);
     void deleteRegionCmd(float inputValue);
+    void deleteReminderCmd(float inputValue);
     void deleteTreeShadowCmd(float inputValue);
     void duplicateMobsCmd(float inputValue);
     void gridIntervalDecreaseCmd(float inputValue);
@@ -1157,6 +1163,7 @@ private:
     void addNewMobCmd(float inputValue);
     void addNewPathCmd(float inputValue);
     void addNewRegionCmd(float inputValue);
+    void addNewReminderCmd(float inputValue);
     void addNewTreeShadowCmd(float inputValue);
     void openExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);

@@ -1461,6 +1461,28 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
 
 
 /**
+ * @brief Loads the area maker's reminders from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void Area::loadRemindersFromDataNode(DataNode* node) {
+    reminders.clear();
+    size_t nReminders = node->getNrOfChildren();
+    for(size_t r = 0; r < nReminders; r++) {
+        DataNode* reminderNode = node->getChild(r);
+        AreaMakerReminder newReminder;
+        
+        ReaderSetter rRS(reminderNode);
+        
+        rRS.set("pos", newReminder.pos);
+        rRS.set("text", newReminder.text);
+        
+        reminders.push_back(newReminder);
+    }
+}
+
+
+/**
  * @brief Loads deprecated (pre-1.2.0) mission information.
  *
  * @param node Data node to load from.
@@ -2569,6 +2591,24 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         cGW.write("index_param", criterionPtr->indexParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
+    }
+}
+
+
+/**
+ * @brief Saves the area maker's reminders to a data node.
+ *
+ * @param node Data node to save to.
+ */
+void Area::saveRemindersToDataNode(DataNode* node) {
+    for(size_t r = 0; r < reminders.size(); r++) {
+        DataNode* reminderNode = node->addNew("reminder");
+        AreaMakerReminder* reminderPtr = &reminders[r];
+
+        GetterWriter rGW(reminderNode);
+
+        rGW.write("pos", reminderPtr->pos);
+        rGW.write("text", reminderPtr->text);
     }
 }
 
