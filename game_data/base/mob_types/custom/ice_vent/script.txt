@@ -1,0 +1,44 @@
+first_state = safe
+death_state = destroyed
+
+script {
+    safe {
+        on_enter {
+            set_timer 3
+            set_animation safe
+            start_particles ice_vent_idling 0 0 300
+        }
+        on_leave {
+            stop_particles
+        }
+        on_timer {
+            set_state shooting
+        }
+    }
+    
+    shooting {
+        on_enter {
+            set_timer 3
+            set_animation shooting
+            start_particles ice_vent_shooting 0 0 300
+            //play_sound ice sound_id
+        }
+        on_leave {
+            stop_particles
+            stop_sound $sound_id
+        }
+        on_timer {
+            set_state safe
+        }
+    }
+    
+    destroyed {
+        on_enter {
+            set_animation destroyed
+            set_height 1
+            stop_particles
+            start_particles enemy_defeat 0 0 150
+            start_dying
+        }
+    }
+}

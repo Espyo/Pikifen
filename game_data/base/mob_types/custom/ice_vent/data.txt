@@ -1,0 +1,20 @@
+name = Ice vent
+description = A hole that occasionally spits out a column of fire, like a geyser.
+
+can_hurt = player; fragile
+custom_category_name = Obstacle, dangerous
+height = 20
+max_health = 150
+pushable = false
+pushes = false
+radius = 20
+target_type = strong_plain_obstacle
+team = obstacle
+
+sounds {
+    
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

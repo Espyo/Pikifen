@@ -49,12 +49,14 @@ Current tasks (tasks being worked on, but not yet committed)
             Maybe a selection change callback would be useful for this?
         Ctrl+A, unselecting with Ctrl, etc.
         Rubber band selection box should use dashed lines, and ideally be animated
-    Play a sound when a Pikmin or enemy is frozen, and whenever a Glow Pikmin teleports
+    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Add a leader swap sound, so swapping to the rookie isn't silent
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Ice vent is hitting frozen Pikmin multiple times and eventually killing them
+        Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
     Pathing in Olympian Ruins needs work
     If an attack causes 0 damage (like a water spout), a leader's health wheel will still shake
@@ -64,6 +66,7 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
+    Add a destroyed sprite to the gas pipe
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls

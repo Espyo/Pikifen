@@ -1,0 +1,132 @@
+name=Ice vent animations
+description=Animations for the ice vent.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.0000
+			}
+		}
+	}
+	safe{
+		frames{
+			safe{
+				duration=0.0000
+			}
+		}
+	}
+	shooting{
+		frames{
+			shooting_01{
+				duration=0.1000
+				interpolate=true
+			}
+			shooting_02{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=other_mobs/ice_vent
+		file_pos=41.0000 0.0000
+		file_size=40.0000 40.0000
+		hitboxes{
+			ice{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=2
+				value=1.0000
+			}
+			mound{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	safe{
+		file=other_mobs/ice_vent
+		file_pos=0.0000 0.0000
+		file_size=40.0000 40.0000
+		hitboxes{
+			ice{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=2
+				value=1.0000
+			}
+			mound{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	shooting_01{
+		file=other_mobs/ice_vent
+		file_pos=0.0000 0.0000
+		file_size=40.0000 40.0000
+		hitboxes{
+			ice{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=80.0000
+				type=1
+				value=20.0000
+				hazard=ice
+				knockback_type=1
+			}
+			mound{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	shooting_02{
+		file=other_mobs/ice_vent
+		file_pos=0.0000 0.0000
+		file_size=40.0000 40.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			ice{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=80.0000
+				type=1
+				value=20.0000
+				hazard=ice
+				knockback_type=1
+			}
+			mound{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=20.0000
+				type=0
+				value=1.0000
+				surface_type=0
+				hazard=ice
+			}
+		}
+	}
+}
+body_parts{
+	ice
+	mound
+}
