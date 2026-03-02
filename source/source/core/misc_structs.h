@@ -812,6 +812,9 @@ struct SystemContentList {
     //A rock.
     ALLEGRO_BITMAP* bmpRock = nullptr;
     
+    //Editor rubber band selection texture.
+    ALLEGRO_BITMAP* bmpRubberBandSel = nullptr;
+    
     //Mob shadow.
     ALLEGRO_BITMAP* bmpShadow = nullptr;
     
@@ -1117,6 +1120,9 @@ struct SystemContentNames {
     
     //A rock.
     string bmpRock = "effects/rock";
+    
+    //Editor rubber band selection texture.
+    string bmpRubberBandSel = "gui/rubber_band_selection";
     
     //Mob shadow.
     string bmpShadow = "effects/shadow";

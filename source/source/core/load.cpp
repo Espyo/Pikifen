@@ -397,6 +397,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpRandom);
     game.sysContent.bmpRock =
         game.content.bitmaps.list.get(game.sysContentNames.bmpRock);
+    game.sysContent.bmpRubberBandSel =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpRubberBandSel);
     game.sysContent.bmpShadow =
         game.content.bitmaps.list.get(game.sysContentNames.bmpShadow);
     game.sysContent.bmpShadowSquare =
@@ -626,6 +628,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpPlayerInputIcons);
     game.content.bitmaps.list.free(game.sysContent.bmpRandom);
     game.content.bitmaps.list.free(game.sysContent.bmpRock);
+    game.content.bitmaps.list.free(game.sysContent.bmpRubberBandSel);
     game.content.bitmaps.list.free(game.sysContent.bmpShadow);
     game.content.bitmaps.list.free(game.sysContent.bmpShadowSquare);
     game.content.bitmaps.list.free(game.sysContent.bmpSmack);

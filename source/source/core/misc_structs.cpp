@@ -2299,6 +2299,7 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("player_input_icons", bmpPlayerInputIcons);
     graRS.set("random", bmpRandom);
     graRS.set("rock", bmpRock);
+    graRS.set("rubber_band_selection", bmpRubberBandSel);
     graRS.set("shadow", bmpShadow);
     graRS.set("shadow_square", bmpShadowSquare);
     graRS.set("smack", bmpSmack);

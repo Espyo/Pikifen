@@ -69,6 +69,9 @@ const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
 //Picker dialog button size.
 const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 
+//Multiply time by this much for the rubber band texture animation.
+const float RUBBER_BAND_TEXTURE_TIME_MULT = 10.0f;
+
 //Height of the status bar.
 const float STATUS_BAR_HEIGHT = 22.0f;
 
@@ -4286,17 +4289,136 @@ bool Editor::SelectionManager::disable() {
 void Editor::SelectionManager::draw(const Point& cursorPos, float zoom) const {
     if(!enabled) return;
     if(state == STATE_RUBBER_BAND) {
-        al_draw_rectangle(
-            rubberBandStart.x,
-            rubberBandStart.y,
-            cursorPos.x,
-            cursorPos.y,
-            al_map_rgb(
+        //Setup.
+        Point rBTL(
+            std::min(rubberBandStart.x, cursorPos.x),
+            std::min(rubberBandStart.y, cursorPos.y)
+        );
+        Point rBBR(
+            std::max(rubberBandStart.x, cursorPos.x),
+            std::max(rubberBandStart.y, cursorPos.y)
+        );
+        
+        //Interior.
+        al_draw_filled_rectangle(
+            rBTL.x, rBTL.y, rBBR.x, rBBR.y,
+            al_map_rgba(
                 AREA_EDITOR::SELECTION_COLOR[0],
                 AREA_EDITOR::SELECTION_COLOR[1],
-                AREA_EDITOR::SELECTION_COLOR[2]
-            ),
-            2.0f / zoom
+                AREA_EDITOR::SELECTION_COLOR[2],
+                48
+            )
+        );
+        
+        //Marching ants outline.
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[4];
+        const float smallestRSide = std::min(rBBR.x - rBTL.x, rBBR.y - rBTL.y);
+        const float thickness =
+            std::min(
+                smallestRSide,
+                4.0f / game.editorsView.cam.zoom
+            );
+        const float textureSize =
+            al_get_bitmap_width(game.sysContent.bmpRubberBandSel);
+        const float timeOffset =
+            game.timePassed * EDITOR::RUBBER_BAND_TEXTURE_TIME_MULT;
+            
+        for(size_t v = 0; v < 4; v++) {
+            av[v].z = 0;
+            av[v].color =
+                al_map_rgb(
+                    AREA_EDITOR::SELECTION_COLOR[0],
+                    AREA_EDITOR::SELECTION_COLOR[1],
+                    AREA_EDITOR::SELECTION_COLOR[2]
+                );
+        }
+        
+        enum DIR {
+            DIR_RIGHT,
+            DIR_DOWN,
+            DIR_LEFT,
+            DIR_UP,
+        };
+        
+        const auto drawRBLine =
+            [&av, &textureSize, &thickness, &timeOffset]
+        (const Point & p1, const Point & p2, DIR dir) {
+            float dist = 0.0f;
+            float rightTurnX = 0.0f;
+            float rightTurnY = 0.0f;
+            switch(dir) {
+            case DIR_RIGHT: {
+                dist = p2.x - p1.x;
+                rightTurnY = thickness / 2.0f;
+                break;
+            } case DIR_DOWN: {
+                dist = p2.y - p1.y;
+                rightTurnX = -thickness / 2.0f;
+                break;
+            } case DIR_LEFT: {
+                dist = p1.x - p2.x;
+                rightTurnY = -thickness / 2.0f;
+                break;
+            } case DIR_UP: {
+                dist = p1.y - p2.y;
+                rightTurnX = thickness / 2.0f;
+                break;
+            }
+            }
+            
+            av[0].x = p1.x - rightTurnX;
+            av[0].y = p1.y - rightTurnY;
+            av[0].u = 0.0f - timeOffset;
+            av[0].v = dist * game.editorsView.cam.zoom;
+            
+            av[1].x = p1.x + rightTurnX;
+            av[1].y = p1.y + rightTurnY;
+            av[1].u = 0.0f - timeOffset;
+            av[1].v = dist * game.editorsView.cam.zoom;
+            
+            av[2].x = p2.x - rightTurnX;
+            av[2].y = p2.y - rightTurnY;
+            av[2].u = dist * game.editorsView.cam.zoom - timeOffset;
+            av[2].v = thickness;
+            
+            av[3].x = p2.x + rightTurnX;
+            av[3].y = p2.y + rightTurnY;
+            av[3].u = dist * game.editorsView.cam.zoom - timeOffset;
+            av[3].v = -thickness;
+            
+            al_draw_prim(
+                av, nullptr,
+                game.sysContent.bmpRubberBandSel,
+                0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+            );
+        };
+        
+        //Top line (shifted left).
+        drawRBLine(
+            Point(rBTL.x, rBTL.y + thickness / 2.0f),
+            Point(rBBR.x - thickness, rBTL.y + thickness / 2.0f),
+            DIR_RIGHT
+        );
+        
+        //Right line (shifted up).
+        drawRBLine(
+            Point(rBBR.x - thickness / 2.0f, rBTL.y),
+            Point(rBBR.x - thickness / 2.0f, rBBR.y - thickness),
+            DIR_DOWN
+        );
+        
+        //Bottom line (shifted right).
+        drawRBLine(
+            Point(rBBR.x, rBBR.y - thickness / 2.0f),
+            Point(rBTL.x + thickness, rBBR.y - thickness / 2.0f),
+            DIR_LEFT
+        );
+        
+        //Left line (shifted down).
+        drawRBLine(
+            Point(rBTL.x + thickness / 2.0f, rBBR.y),
+            Point(rBTL.x + thickness / 2.0f, rBTL.y + thickness),
+            DIR_UP
         );
     }
 }
