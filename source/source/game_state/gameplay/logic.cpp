@@ -2215,6 +2215,19 @@ void GameplayState::processMobTouches(
         bool reportedEatEv = false;
         bool reportedHazEv = false;
         
+        //Check if m2 is under any status effect
+        //that disables attacks.
+        bool attacksDisabled = false;
+        for (size_t s = 0; s < m2Ptr->statuses.size(); s++) {
+            if (m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
+                continue;
+            }
+            if (m2Ptr->statuses[s].type->disablesAttack) {
+                attacksDisabled = true;
+                break;
+            }
+        }
+
         for(size_t h1 = 0; h1 < s1Ptr->hitboxes.size(); h1++) {
         
             Hitbox* h1Ptr = &s1Ptr->hitboxes[h1];
@@ -2330,6 +2343,8 @@ void GameplayState::processMobTouches(
                         mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
                 }
                 
+
+                bool hazardImmune = false;
                 if(
                     h1Ptr->type == HITBOX_TYPE_NORMAL &&
                     h2Ptr->type == HITBOX_TYPE_ATTACK
@@ -2342,7 +2357,7 @@ void GameplayState::processMobTouches(
                         mPtr->getHazardVulnerability(h2Ptr->hazard).
                         effectMult == 0.0f
                     ) {
-                        continue;
+                        hazardImmune = true;
                     }
                     
                     //Should this mob even attack this other mob?
@@ -2351,24 +2366,12 @@ void GameplayState::processMobTouches(
                     }
                 }
                 
-                //Check if m2 is under any status effect
-                //that disables attacks.
-                bool disableAttackStatus = false;
-                for(size_t s = 0; s < m2Ptr->statuses.size(); s++) {
-                    if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
-                        continue;
-                    }
-                    if(m2Ptr->statuses[s].type->disablesAttack) {
-                        disableAttackStatus = true;
-                        break;
-                    }
-                }
-                
                 //First, the "touched eat hitbox" event.
                 if(
                     hitboxTouchEatEv &&
                     !reportedEatEv &&
-                    !disableAttackStatus &&
+                    !attacksDisabled &&
+                    !hazardImmune &&
                     h1Ptr->type == HITBOX_TYPE_NORMAL &&
                     m2Ptr->chompingMobs.size() <
                     m2Ptr->chompMax &&
@@ -2391,7 +2394,7 @@ void GameplayState::processMobTouches(
                 if(
                     hitboxTouchHazEv &&
                     !reportedHazEv &&
-                    !disableAttackStatus &&
+                    !attacksDisabled &&
                     h1Ptr->type == HITBOX_TYPE_NORMAL &&
                     h2Ptr->type == HITBOX_TYPE_ATTACK &&
                     h2Ptr->hazard
@@ -2415,7 +2418,8 @@ void GameplayState::processMobTouches(
                 if(
                     hitboxTouchNAEv &&
                     !reportedNAEv &&
-                    !disableAttackStatus &&
+                    !attacksDisabled &&
+                    !hazardImmune &&
                     h1Ptr->type == HITBOX_TYPE_NORMAL &&
                     h2Ptr->type == HITBOX_TYPE_ATTACK
                 ) {
