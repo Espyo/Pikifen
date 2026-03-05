@@ -362,9 +362,8 @@ void MobType::loadFromDataNode(
                 hazardVulnerabilities[&(hazardIt->second)];
             vuln.effectMult = percentage / 100.0f;
             if(!statusName.empty()) {
-                vuln.statusToApply = statusIt->second;
+                vuln.overrideStatus = statusIt->second;
             }
-            vuln.statusOverrides = statusOverrides;
             vuln.invulnBlockedBySectors = invulnBlockedBySectors;
         }
     }
@@ -450,7 +449,7 @@ void MobType::loadFromDataNode(
         } else {
             auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
             s.effectMult = percentage / 100.0f;
-            s.statusToApply = statusIt->second;
+            s.overrideStatus = statusIt->second;
             
         }
     }
@@ -495,9 +494,8 @@ void MobType::loadFromDataNode(
             auto& s = statusVulnerabilities[svIt->second];
             s.effectMult = percentage / 100.0f;
             if(statusOverrideIt != game.content.statusTypes.list.end()) {
-                s.statusToApply = statusOverrideIt->second;
+                s.overrideStatus = statusOverrideIt->second;
             }
-            s.statusOverrides = true;
         }
         
     }
