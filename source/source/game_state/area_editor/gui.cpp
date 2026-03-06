@@ -273,7 +273,7 @@ void AreaEditor::processGuiDeleteAreaDialog() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a grading criterion
+ * @brief Processes the Dear ImGui widgets regarding a medal award criterion
  * for this frame.
  *
  * @param valuePtr Points to the value of the points value.
@@ -281,7 +281,7 @@ void AreaEditor::processGuiDeleteAreaDialog() {
  * @param widgetLabel Label for the main value widget.
  * @param tooltip Start of the tooltip for this criterion's value widget.
  */
-void AreaEditor::processGuiGradingCriterionWidgets(
+void AreaEditor::processGuiMedalAwardCriterionWidgets(
     int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
     const string& widgetLabel, const string& tooltip
 ) {
@@ -289,7 +289,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
     ImGui::SetNextItemWidth(50);
     int pointsInt = *valuePtr;
     if(ImGui::DragInt(widgetLabel.c_str(), &pointsInt, 0.1f)) {
-        registerChange("mission grading change");
+        registerChange("mission medal award change");
         *valuePtr = pointsInt;
     }
     setTooltip(
@@ -310,7 +310,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
                 getIdxBitmask(criterionIdx)
             )
         ) {
-            registerChange("mission grading change");
+            registerChange("mission medal award change");
             game.curArea->missionOld.pointLossData = flags;
         }
         setTooltip(
@@ -326,7 +326,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
                 &flags, getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
             )
         ) {
-            registerChange("mission grading change");
+            registerChange("mission medal award change");
             game.curArea->missionOld.pointHudData = flags;
         }
         setTooltip(
@@ -342,8 +342,8 @@ void AreaEditor::processGuiGradingCriterionWidgets(
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a grading medal
- * requirements for this frame.
+ * @brief Processes the Dear ImGui widgets regarding a medal award medal
+ * requirement for this frame.
  *
  * @param requirementPtr Points to the requirement value for this medal.
  * @param widgetLabel Label for the value widget.
@@ -351,7 +351,7 @@ void AreaEditor::processGuiGradingCriterionWidgets(
  * @param widgetMaxValue Maximum value for the value widget.
  * @param tooltip Tooltip for the value widget.
  */
-void AreaEditor::processGuiGradingMedalWidgets(
+void AreaEditor::processGuiMedalAwardMedalWidgets(
     int* requirementPtr, const string& widgetLabel,
     int widgetMinValue, int widgetMaxValue,
     const string& tooltip
@@ -364,7 +364,7 @@ void AreaEditor::processGuiGradingMedalWidgets(
             widgetLabel.c_str(), &req, 1.0f, widgetMinValue, widgetMaxValue
         )
     ) {
-        registerChange("mission grading change");
+        registerChange("mission medal award change");
         *requirementPtr = req;
     }
     setTooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
@@ -372,22 +372,22 @@ void AreaEditor::processGuiGradingMedalWidgets(
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a grading mode
+ * @brief Processes the Dear ImGui widgets regarding a medal award mode
  * for this frame.
  *
  * @param value Internal value for this mode's radio button.
  * @param widgetLabel Label for the radio widget.
  * @param tooltip Tooltip for the radio widget.
  */
-void AreaEditor::processGuiGradingModeWidgets(
+void AreaEditor::processGuiMedalAwardModeWidgets(
     int value, const string& widgetLabel, const string& tooltip
 ) {
     //Radio button.
-    int mode = game.curArea->mission.gradingMode;
+    int mode = game.curArea->mission.medalAwardMode;
     if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
-        registerChange("mission grading change");
-        game.curArea->mission.gradingMode =
-            (MISSION_GRADING_MODE) mode;
+        registerChange("mission medal award change");
+        game.curArea->mission.medalAwardMode =
+            (MISSION_MEDAL_AWARD_MODE) mode;
     }
     setTooltip(tooltip);
 }
@@ -3356,11 +3356,11 @@ void AreaEditor::processGuiPanelMissionOld() {
         ImGui::TreePop();
     }
     
-    //Mission grading node.
+    //Mission medal award node.
     ImGui::Spacer();
-    if(saveableTreeNode("gameplay", "Mission grading")) {
+    if(saveableTreeNode("gameplay", "Mission medal award")) {
     
-        processGuiPanelMissionGrading();
+        processGuiPanelMissionMedalAward();
         ImGui::TreePop();
         
     }
@@ -4491,41 +4491,41 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
 
 
 /**
- * @brief Processes the Dear ImGui mission grading part of the
+ * @brief Processes the Dear ImGui mission medal award part of the
  * mission control panel for this frame.
  */
-void AreaEditor::processGuiPanelMissionGrading() {
-    //Grading mode text.
-    ImGui::Text("Grading mode:");
+void AreaEditor::processGuiPanelMissionMedalAward() {
+    //Medal award mode text.
+    ImGui::Text("Medal award mode:");
     
-    //Grading mode widgets.
-    processGuiGradingModeWidgets(
+    //Medal award mode widgets.
+    processGuiMedalAwardModeWidgets(
         0, "Points",
-        "The player's final grade depends on how many points they\n"
+        "The player's final medal depends on how many points they\n"
         "got in different criteria."
     );
     
     ImGui::SameLine();
-    processGuiGradingModeWidgets(
+    processGuiMedalAwardModeWidgets(
         1, "Goal",
-        "The player's final grade depends on whether they have reached\n"
+        "The player's final medal depends on whether they have reached\n"
         "the mission goal (platinum) or not (nothing)."
     );
     
     ImGui::SameLine();
-    processGuiGradingModeWidgets(
+    processGuiMedalAwardModeWidgets(
         2, "Participation",
-        "The player's final grade depends on whether they have played\n"
+        "The player's final medal depends on whether they have played\n"
         "the mission (platinum) or not (nothing)."
     );
     
-    //Grading criterion widgets.
+    //Medal award criterion widgets.
     if(
-        game.curArea->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->missionOld.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
     
         ImGui::Spacer();
-        processGuiGradingCriterionWidgets(
+        processGuiMedalAwardCriterionWidgets(
             &game.curArea->missionOld.pointsPerPikminBorn,
             MISSION_SCORE_CRITERIA_PIKMIN_BORN,
             "Points per Pikmin born",
@@ -4533,7 +4533,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "Pikmin born."
         );
         
-        processGuiGradingCriterionWidgets(
+        processGuiMedalAwardCriterionWidgets(
             &game.curArea->missionOld.pointsPerPikminDeath,
             MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
             "Points per Pikmin death",
@@ -4547,7 +4547,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
                 getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
-            processGuiGradingCriterionWidgets(
+            processGuiMedalAwardCriterionWidgets(
                 &game.curArea->missionOld.pointsPerSecLeft,
                 MISSION_SCORE_CRITERIA_SEC_LEFT,
                 "Points per second left",
@@ -4556,7 +4556,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             );
         }
         
-        processGuiGradingCriterionWidgets(
+        processGuiMedalAwardCriterionWidgets(
             &game.curArea->missionOld.pointsPerSecPassed,
             MISSION_SCORE_CRITERIA_SEC_PASSED,
             "Points per second passed",
@@ -4564,7 +4564,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "second of time that has passed."
         );
         
-        processGuiGradingCriterionWidgets(
+        processGuiMedalAwardCriterionWidgets(
             &game.curArea->missionOld.pointsPerTreasurePoint,
             MISSION_SCORE_CRITERIA_TREASURE_POINTS,
             "Points per treasure point",
@@ -4573,7 +4573,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "different treasure points."
         );
         
-        processGuiGradingCriterionWidgets(
+        processGuiMedalAwardCriterionWidgets(
             &game.curArea->missionOld.pointsPerEnemyPoint,
             MISSION_SCORE_CRITERIA_ENEMY_POINTS,
             "Points per enemy point",
@@ -4592,7 +4592,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
                     "Award points on collection", &enemyPointsOnCollection
                 )
             ) {
-                registerChange("mission grading change");
+                registerChange("mission medal award change");
                 game.curArea->missionOld.enemyPointsOnCollection =
                     enemyPointsOnCollection;
             }
@@ -4609,7 +4609,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
         int startingPoints = game.curArea->missionOld.startingPoints;
         ImGui::SetNextItemWidth(60);
         if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
-            registerChange("mission grading change");
+            registerChange("mission medal award change");
             game.curArea->missionOld.startingPoints = startingPoints;
         }
         setTooltip(
@@ -4622,14 +4622,14 @@ void AreaEditor::processGuiPanelMissionGrading() {
         ImGui::Text("Medal point requirements:");
         
         //Medal point requirement widgets.
-        processGuiGradingMedalWidgets(
+        processGuiMedalAwardMedalWidgets(
             &game.curArea->missionOld.bronzeReq, "Bronze",
             INT_MIN, game.curArea->missionOld.silverReq - 1,
             "To get a bronze medal, the player needs at least these\n"
             "many points. Fewer than this, and the player gets no medal."
         );
         
-        processGuiGradingMedalWidgets(
+        processGuiMedalAwardMedalWidgets(
             &game.curArea->missionOld.silverReq, "Silver",
             game.curArea->missionOld.bronzeReq + 1,
             game.curArea->missionOld.goldReq - 1,
@@ -4637,7 +4637,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "many points."
         );
         
-        processGuiGradingMedalWidgets(
+        processGuiMedalAwardMedalWidgets(
             &game.curArea->missionOld.goldReq, "Gold",
             game.curArea->missionOld.silverReq + 1,
             game.curArea->missionOld.platinumReq - 1,
@@ -4645,7 +4645,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             "many points."
         );
         
-        processGuiGradingMedalWidgets(
+        processGuiMedalAwardMedalWidgets(
             &game.curArea->missionOld.platinumReq, "Platinum",
             game.curArea->missionOld.goldReq + 1, INT_MAX,
             "To get a platinum medal, the player needs at least these\n"

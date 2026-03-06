@@ -200,7 +200,7 @@ PauseMenu::~PauseMenu() {
 
 /**
  * @brief Creates and adds a new bullet point to either the mission note list
- * or the grading explanation list.
+ * or the medal award explanation list.
  *
  * @param list List to add to.
  * @param text Text.
@@ -599,8 +599,8 @@ void PauseMenu::confirmOrLeave() {
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
-                        game.curArea->missionOld.gradingMode ==
-                        MISSION_GRADING_MODE_POINTS
+                        game.curArea->missionOld.medalAwardMode ==
+                        MISSION_MEDAL_AWARD_MODE_POINTS
                     ) {
                         confirmationExplanation +=
                             " Note that since you fail the mission, you may "
@@ -1387,15 +1387,15 @@ void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
 
 
 /**
- * @brief Fills the list of mission grading information.
+ * @brief Fills the list of mission medal award information.
  *
  * @param list List item to fill.
  */
-void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    vector<string> gradingBPStrs =
-        game.curArea->mission.getGradingBulletPoints();
-    for(size_t p = 0; p < gradingBPStrs.size(); p++) {
-        addNewBullet(list, gradingBPStrs[p]);
+void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
+    vector<string> medalAwardBPStrs =
+        game.curArea->mission.getMedalAwardBulletPoints();
+    for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+        addNewBullet(list, medalAwardBPStrs[p]);
     }
 }
 
@@ -1920,9 +1920,9 @@ void PauseMenu::initMissionPage() {
     missionGui.registerCoords("notes_header",      50, 32, 96,  4);
     missionGui.registerCoords("notes_list",        48, 48, 92, 24);
     missionGui.registerCoords("notes_scroll",      97, 48,  2, 24);
-    missionGui.registerCoords("grading_header",   50, 64, 96,  4);
-    missionGui.registerCoords("grading_list",     48, 80, 92, 24);
-    missionGui.registerCoords("grading_scroll",   97, 80,  2, 24);
+    missionGui.registerCoords("medal_award_header",   50, 64, 96,  4);
+    missionGui.registerCoords("medal_award_list",     48, 80, 92, 24);
+    missionGui.registerCoords("medal_award_scroll",   97, 80,  2, 24);
     missionGui.registerCoords("tooltip",          50, 96, 96,  4);
     missionGui.readDataFile(guiFile);
     
@@ -1981,23 +1981,23 @@ void PauseMenu::initMissionPage() {
     notesScroll->listItem = missionNoteList;
     missionGui.addItem(notesScroll, "notes_scroll");
     
-    //Grading header text.
-    TextGuiItem* gradingHeaderText =
+    //Medal award header text.
+    TextGuiItem* medalAwardHeaderText =
         new TextGuiItem(
-        "Grading", game.sysContent.fntAreaName,
+        "Medal award", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(gradingHeaderText, "grading_header");
+    missionGui.addItem(medalAwardHeaderText, "medal_award_header");
     
-    //Grading explanation list.
-    ListGuiItem* missionGradingList = new ListGuiItem();
-    missionGui.addItem(missionGradingList, "grading_list");
-    fillMissionGradingList(missionGradingList);
+    //Medal award explanation list.
+    ListGuiItem* missionMedalAwardList = new ListGuiItem();
+    missionGui.addItem(missionMedalAwardList, "medal_award_list");
+    fillMissionMedalAwardList(missionMedalAwardList);
     
-    //Grading explanation scrollbar.
-    ScrollGuiItem* gradingScroll = new ScrollGuiItem();
-    gradingScroll->listItem = missionGradingList;
-    missionGui.addItem(gradingScroll, "grading_scroll");
+    //Medal award explanation scrollbar.
+    ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
+    medalAwardScroll->listItem = missionMedalAwardList;
+    missionGui.addItem(medalAwardScroll, "medal_award_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =

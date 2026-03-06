@@ -1185,16 +1185,16 @@ private:
     void processGui();
     void processGuiControlPanel();
     void processGuiDeleteAreaDialog();
-    void processGuiGradingCriterionWidgets(
+    void processGuiMedalAwardCriterionWidgets(
         int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
         const string& widgetLabel, const string& tooltip
     );
-    void processGuiGradingMedalWidgets(
+    void processGuiMedalAwardMedalWidgets(
         int* requirementPtr, const string& widgetLabel,
         int widgetMinValue, int widgetMaxValue,
         const string& tooltip
     );
-    void processGuiGradingModeWidgets(
+    void processGuiMedalAwardModeWidgets(
         int value, const string& widgetLabel, const string& tooltip
     );
     void processGuiLoadDialog();
@@ -1217,7 +1217,7 @@ private:
     void processGuiPanelMissionGoalBe();
     void processGuiPanelMissionGoalCt();
     void processGuiPanelMissionGoalGte();
-    void processGuiPanelMissionGrading();
+    void processGuiPanelMissionMedalAward();
     void processGuiPanelMissionHudItems();
     void processGuiPanelMissionMobChecklists();
     void processGuiPanelMissionScoreCriteria();

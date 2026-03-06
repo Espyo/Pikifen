@@ -34,20 +34,20 @@ hardcoded_items{
 		size=4.0000 24.0000
 		description=Scrollbar for the mission briefing note list.
 	}
-	grading_header{
+	medal_award_header{
 		center=50.0000 69.0000
 		size=96.0000 6.0000
-		description=Header text for the mission grading section.
+		description=Header text for the mission medal award section.
 	}
-	grading_list{
+	medal_award_list{
 		center=47.0000 86.0000
 		size=90.0000 24.0000
-		description=List of mission grading explanation bullet points.
+		description=List of mission medal award explanation bullet points.
 	}
-	grading_scroll{
+	medal_award_scroll{
 		center=96.0000 86.0000
 		size=4.0000 24.0000
-		description=Scrollbar for the mission grading explanation bullet point list.
+		description=Scrollbar for the mission medal award explanation bullet point list.
 	}
 }
 custom_items

@@ -43,7 +43,7 @@ const float PAGE_SWAP_DURATION = 0.5f;
 
 /**
  * @brief Creates and adds a new bullet point to either the fail condition list
- * or the grading explanation list.
+ * or the medal award explanation list.
  *
  * @param list List to add to.
  * @param text Text.
@@ -111,8 +111,8 @@ void AreaMenu::animateInfoAndBriefing() {
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
-        for(size_t c = 0; c < gradingList->children.size(); c++) {
-            gradingList->children[c]->startJuiceAnimation(
+        for(size_t c = 0; c < medalAwardList->children.size(); c++) {
+            medalAwardList->children[c]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
@@ -145,7 +145,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         objectiveText->text.clear();
         briefingNameText->text.clear();
         noteList->deleteAllChildren();
-        gradingList->deleteAllChildren();
+        medalAwardList->deleteAllChildren();
     }
     
     //Fill in the area's info.
@@ -169,8 +169,8 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         recordInfoText->text =
             !recordExists ?
             "(None)" :
-            areaPtr->missionOld.gradingMode ==
-            MISSION_GRADING_MODE_POINTS ?
+            areaPtr->missionOld.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
             amountStr(score, "point") :
             "";
         curStamp =
@@ -182,8 +182,8 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         if(!recordExists) {
             curMedal = nullptr;
         } else {
-            switch(areaPtr->missionOld.gradingMode) {
-            case MISSION_GRADING_MODE_POINTS: {
+            switch(areaPtr->missionOld.medalAwardMode) {
+            case MISSION_MEDAL_AWARD_MODE_POINTS: {
                 MISSION_MEDAL medal = areaPtr->missionOld.getScoreMedal(score);
                 switch(medal) {
                 case MISSION_MEDAL_NONE: {
@@ -204,12 +204,12 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
                 }
                 break;
-            } case MISSION_GRADING_MODE_GOAL: {
+            } case MISSION_MEDAL_AWARD_MODE_GOAL: {
                 if(areaRecords[areaIdx].clear) {
                     curMedal = game.sysContent.bmpMedalPlatinum;
                 }
                 break;
-            } case MISSION_GRADING_MODE_PARTICIPATION: {
+            } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                 curMedal = game.sysContent.bmpMedalPlatinum;
                 break;
             }
@@ -229,9 +229,9 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             addNewBullet(noteList, noteBPStrs[p]);
         }
         
-        vector<string> gradingBPStrs = mission.getGradingBulletPoints();
-        for(size_t p = 0; p < gradingBPStrs.size(); p++) {
-            addNewBullet(gradingList, gradingBPStrs[p]);
+        vector<string> medalAwardBPStrs = mission.getMedalAwardBulletPoints();
+        for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+            addNewBullet(medalAwardList, medalAwardBPStrs[p]);
         }
     }
     
@@ -529,8 +529,8 @@ void AreaMenu::initGuiMain() {
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
-                    switch(areaPtr->missionOld.gradingMode) {
-                    case MISSION_GRADING_MODE_POINTS: {
+                    switch(areaPtr->missionOld.medalAwardMode) {
+                    case MISSION_MEDAL_AWARD_MODE_POINTS: {
                         int score = areaRecords[a].score;
                         MISSION_MEDAL medal =
                             areaPtr->missionOld.getScoreMedal(score);
@@ -552,12 +552,12 @@ void AreaMenu::initGuiMain() {
                         }
                         }
                         break;
-                    } case MISSION_GRADING_MODE_GOAL: {
+                    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
                         if(areaRecords[a].clear) {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                         }
                         break;
-                    } case MISSION_GRADING_MODE_PARTICIPATION: {
+                    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                         medalBmp = game.sysContent.bmpMedalPlatinum;
                     }
                     }
@@ -690,9 +690,9 @@ void AreaMenu::initGuiBriefingPage() {
     gui.registerCoords("notes_header",    50, 29, 96,  6);
     gui.registerCoords("notes_list",      47, 48, 90, 28);
     gui.registerCoords("notes_scroll",    96, 48,  4, 28);
-    gui.registerCoords("grading_header", 50, 67, 96,  6);
-    gui.registerCoords("grading_list",   47, 85, 90, 26);
-    gui.registerCoords("grading_scroll", 96, 85,  4, 26);
+    gui.registerCoords("medal_award_header", 50, 67, 96,  6);
+    gui.registerCoords("medal_award_list",   47, 85, 90, 26);
+    gui.registerCoords("medal_award_scroll", 96, 85,  4, 26);
     gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {
@@ -741,25 +741,25 @@ void AreaMenu::initGuiBriefingPage() {
         briefingBox->addChild(notesScroll);
         gui.addItem(notesScroll, "notes_scroll");
         
-        //Grading header text.
-        TextGuiItem* gradingHeaderText =
+        //Medal award header text.
+        TextGuiItem* medalAwardHeaderText =
             new TextGuiItem(
-            "Grading", game.sysContent.fntAreaName,
+            "Medal award", game.sysContent.fntAreaName,
             game.config.guiColors.smallHeader
         );
-        briefingBox->addChild(gradingHeaderText);
-        gui.addItem(gradingHeaderText, "grading_header");
+        briefingBox->addChild(medalAwardHeaderText);
+        gui.addItem(medalAwardHeaderText, "medal_award_header");
         
-        //Grading explanation list.
-        gradingList = new ListGuiItem();
-        briefingBox->addChild(gradingList);
-        gui.addItem(gradingList, "grading_list");
+        //Medal award explanation list.
+        medalAwardList = new ListGuiItem();
+        briefingBox->addChild(medalAwardList);
+        gui.addItem(medalAwardList, "medal_award_list");
         
-        //Grading explanation scrollbar.
-        ScrollGuiItem* gradingScroll = new ScrollGuiItem();
-        gradingScroll->listItem = gradingList;
-        briefingBox->addChild(gradingScroll);
-        gui.addItem(gradingScroll, "grading_scroll");
+        //Medal award explanation scrollbar.
+        ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
+        medalAwardScroll->listItem = medalAwardList;
+        briefingBox->addChild(medalAwardScroll);
+        gui.addItem(medalAwardScroll, "medal_award_scroll");
     }
 }
 

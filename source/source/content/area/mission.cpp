@@ -230,15 +230,15 @@ string MissionData::getBriefingObjectiveText() const {
 
 /**
  * @brief Returns what text to show in menus for each bullet point that explains
- * the mission grading.
+ * the mission medal award mode.
  *
  * @return The text.
  */
-vector<string> MissionData::getGradingBulletPoints() const {
+vector<string> MissionData::getMedalAwardBulletPoints() const {
     vector<string> result;
     
-    switch(gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+    switch(medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         result.push_back("Platinum medal: " + i2s(platinumReq) + "+ points.");
         result.push_back("Gold medal: " + i2s(goldReq) + "+ points.");
         result.push_back("Silver medal: " + i2s(silverReq) + "+ points.");
@@ -251,11 +251,11 @@ vector<string> MissionData::getGradingBulletPoints() const {
         }
         break;
     }
-    case MISSION_GRADING_MODE_GOAL: {
+    case MISSION_MEDAL_AWARD_MODE_GOAL: {
         result.push_back("Platinum medal: Clear the mission.");
         break;
     }
-    case MISSION_GRADING_MODE_PARTICIPATION: {
+    case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         result.push_back("Platinum medal: Just play the mission.");
         break;
     }
@@ -307,7 +307,7 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
  * @brief Clears the variables.
  */
 void MissionData::reset() {
-    gradingMode = MISSION_GRADING_MODE_GOAL;
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
     startingPoints = 0;
     bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
@@ -3505,12 +3505,12 @@ vector<size_t> MissionMobChecklist::calculateList() const {
  * @return Whether it is platinum.
  */
 bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
-    switch(mission.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+    switch(mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         return score >= mission.platinumReq;
-    } case MISSION_GRADING_MODE_GOAL: {
+    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
         return clear;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         return !date.empty();
     }
     }

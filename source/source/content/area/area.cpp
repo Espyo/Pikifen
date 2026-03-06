@@ -381,7 +381,7 @@ void Area::clone(Area& other) {
     other.mission.events = mission.events;
     other.mission.mobChecklists = mission.mobChecklists;
     other.mission.timeLimit = mission.timeLimit;
-    other.mission.gradingMode = mission.gradingMode;
+    other.mission.medalAwardMode = mission.medalAwardMode;
     other.mission.startingPoints = mission.startingPoints;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
@@ -1329,7 +1329,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     ReaderSetter mRS(node);
     int presetInt = MISSION_PRESET_CUSTOM;
-    int gradingModeInt = MISSION_GRADING_MODE_GOAL;
+    int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_GOAL;
     string briefingNotesStr;
     
     //DEPRECATED in 1.2.0 by the new mission system.
@@ -1340,7 +1340,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     //General properties.
     mRS.set("mission_preset", presetInt);
     mRS.set("mission_time_limit", mission.timeLimit);
-    mRS.set("mission_grading_mode", gradingModeInt);
+    mRS.set("mission_medal_award_mode", medalAwardModeInt);
     mRS.set("mission_starting_points", mission.startingPoints);
     mRS.set("mission_bronze_req", mission.bronzeReq);
     mRS.set("mission_silver_req", mission.silverReq);
@@ -1351,7 +1351,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_maker_record", mission.makerRecord);
     mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
-    mission.gradingMode = (MISSION_GRADING_MODE) gradingModeInt;
+    mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
     mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
     //Events.
@@ -1515,7 +1515,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     bool enemyPointsOnCollection = false;
     Bitmask8 pointLossData = 0;
     Bitmask8 pointHudData = 255;
-    int gradingModeInt = 0;
+    int medalAwardModeInt = 0;
     
     //General properties.
     mRS.set("mission_goal", goalStr);
@@ -1544,7 +1544,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     mRS.set("enemy_points_on_collection", enemyPointsOnCollection);
     mRS.set("mission_point_loss_data", pointLossData);
     mRS.set("mission_point_hud_data", pointHudData);
-    mRS.set("mission_grading_mode", gradingModeInt);
+    mRS.set("mission_grading_mode", medalAwardModeInt);
     
     //Goal.
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
@@ -1879,8 +1879,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     
     if(
-        ((MISSION_GRADING_MODE) gradingModeInt) ==
-        MISSION_GRADING_MODE_POINTS &&
+        ((MISSION_MEDAL_AWARD_MODE) medalAwardModeInt) ==
+        MISSION_MEDAL_AWARD_MODE_POINTS &&
         pointHudData != 0
     ) {
         mission.hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled = true;
@@ -2504,7 +2504,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         join(mission.briefingNotes, ";");
     mGW.write("mission_preset", mission.preset);
     mGW.write("mission_time_limit", mission.timeLimit);
-    mGW.write("mission_grading_mode", mission.gradingMode);
+    mGW.write("mission_medal_award_mode", mission.medalAwardMode);
     mGW.write("mission_starting_points", mission.startingPoints);
     mGW.write("mission_bronze_req", mission.bronzeReq);
     mGW.write("mission_silver_req", mission.silverReq);
@@ -2604,9 +2604,9 @@ void Area::saveRemindersToDataNode(DataNode* node) {
     for(size_t r = 0; r < reminders.size(); r++) {
         DataNode* reminderNode = node->addNew("reminder");
         AreaMakerReminder* reminderPtr = &reminders[r];
-
+        
         GetterWriter rGW(reminderNode);
-
+        
         rGW.write("pos", reminderPtr->pos);
         rGW.write("text", reminderPtr->text);
     }

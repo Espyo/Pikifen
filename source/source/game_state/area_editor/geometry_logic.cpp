@@ -1164,7 +1164,7 @@ void AreaEditor::findProblemsNonSimpleSector() {
 void AreaEditor::findProblemsNoScoreCriteria() {
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->missionOld.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         bool hasAnyCriterion = false;
         for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
@@ -1181,8 +1181,8 @@ void AreaEditor::findProblemsNoScoreCriteria() {
             problemType = EPT_NO_SCORE_CRITERIA;
             problemTitle = "No active score criteria!";
             problemDescription =
-                "In this mission, the player is graded according to their "
-                "score. However, none of the score criteria are active, "
+                "In this mission, the player is given a medal according to "
+                "their score. However, none of the score criteria are active, "
                 "so the player's score will always be 0.";
             return;
         }

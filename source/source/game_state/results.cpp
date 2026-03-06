@@ -65,7 +65,7 @@ const string STATS_GUI_FILE_NAME = "results_menu_stats";
 void Results::addNewScoreStat(size_t criterionIdx) {
     if(
         game.curArea->type != AREA_TYPE_MISSION ||
-        game.curArea->mission.gradingMode != MISSION_GRADING_MODE_POINTS
+        game.curArea->mission.medalAwardMode != MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         return;
     }
@@ -293,7 +293,7 @@ void Results::initGuiMain() {
     //Final score number text.
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         TextGuiItem* finalScoreText =
             new TextGuiItem(
@@ -314,7 +314,7 @@ void Results::initGuiMain() {
     //Final score label text.
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         TextGuiItem* finalScoreLabelText =
             new TextGuiItem("points!", game.sysContent.fntAreaName);
@@ -585,19 +585,19 @@ void Results::load() {
     finalMissionScore = game.states.gameplay->calculateMissionScore(false);
     
     medal = MISSION_MEDAL_NONE;
-    switch(game.curArea->mission.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+    switch(game.curArea->mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         if(game.states.gameplay->missionWasCleared) {
             medal = game.curArea->mission.getScoreMedal(finalMissionScore);
         }
         break;
-    } case MISSION_GRADING_MODE_GOAL: {
+    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
         medal =
             game.states.gameplay->missionWasCleared ?
             MISSION_MEDAL_PLATINUM :
             MISSION_MEDAL_NONE;
         break;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         medal = MISSION_MEDAL_PLATINUM;
         break;
     }
@@ -640,8 +640,8 @@ void Results::load() {
         isNewRecord = true;
     } else if(oldRecord.clear == goalWasCleared) {
         if(
-            game.curArea->missionOld.gradingMode ==
-            MISSION_GRADING_MODE_POINTS &&
+            game.curArea->missionOld.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS &&
             oldRecord.score < finalMissionScore
         ) {
             isNewRecord = true;
@@ -688,7 +688,7 @@ void Results::load() {
     initGuiStats();
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         initGuiScoring();
         initGuiScoreChart();

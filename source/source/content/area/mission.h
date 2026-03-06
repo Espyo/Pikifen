@@ -339,17 +339,17 @@ enum MISSION_MEDAL {
 };
 
 
-//Possible ways of grading the player for a mission.
-enum MISSION_GRADING_MODE {
+//Possible ways of awarding the player a medal for a mission.
+enum MISSION_MEDAL_AWARD_MODE {
 
     //Based on points in different criteria.
-    MISSION_GRADING_MODE_POINTS,
+    MISSION_MEDAL_AWARD_MODE_POINTS,
     
     //Based on whether the player reached the goal or not.
-    MISSION_GRADING_MODE_GOAL,
+    MISSION_MEDAL_AWARD_MODE_GOAL,
     
     //Based on whether the player played or not.
-    MISSION_GRADING_MODE_PARTICIPATION,
+    MISSION_MEDAL_AWARD_MODE_PARTICIPATION,
     
 };
 
@@ -561,8 +561,8 @@ struct MissionData {
     //Mob checklists.
     vector<MissionMobChecklist> mobChecklists;
     
-    //Mission grading mode.
-    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
+    //Mission medal award mode.
+    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
     
     //Time limit in seconds, if any.
     size_t timeLimit = 0;
@@ -606,7 +606,7 @@ struct MissionData {
     void applyPreset(MISSION_PRESET newPreset);
     string getBriefingObjectiveText() const;
     vector<string> getNoteBulletPoints() const;
-    vector<string> getGradingBulletPoints() const;
+    vector<string> getMedalAwardBulletPoints() const;
     MISSION_MEDAL getScoreMedal(int score);
     void reset();
     
@@ -666,8 +666,8 @@ struct MissionDataOld {
     //Secondary HUD element's fail condition. INVALID for none.
     size_t failHudSecondaryCond = INVALID;
     
-    //Mission grading mode.
-    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
+    //Mission medal award mode.
+    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
     
     //Mission point multiplier for each Pikmin born.
     int pointsPerPikminBorn = 0;

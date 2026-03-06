@@ -290,7 +290,7 @@ void StatsMenu::populateStatsList() {
         if(record.isPlatinum(areaPtr->missionOld)) {
             missionPlatinums++;
         }
-        if(areaPtr->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS) {
+        if(areaPtr->missionOld.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS) {
             missionScores += record.score;
         }
     }
