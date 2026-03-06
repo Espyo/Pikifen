@@ -14,7 +14,6 @@
 #include <iostream>
 
 #include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_opengl.h>
 
 #include "game.h"
 
@@ -580,14 +579,6 @@ void Game::processSystemInfo() {
     string allegroVersionStr =
         i2s(allegroMajor) + "." + i2s(allegroMinor) + "." +
         i2s(allegroRevision) + "." + i2s(allegroRelease);
-    uint32_t openGLVersion = al_get_opengl_version();
-    int openGLMajor = openGLVersion >> 24;
-    int openGLMinor = (openGLVersion >> 16) & 255;
-    int openGLRevision = (openGLVersion >> 8) & 255;
-    int openGLRelease = openGLVersion & 255;
-    string openGLVersionStr =
-        i2s(openGLMajor) + "." + i2s(openGLMinor) + "." +
-        i2s(openGLRevision) + "." + i2s(openGLRelease);
     string dearImGuiVersionStr(ImGui::GetVersion());
     
     if(states.gameplay->loaded) {
@@ -636,7 +627,6 @@ void Game::processSystemInfo() {
         "Game version " + gameVersionStr +
         "\n"
         "Allegro version " + allegroVersionStr + " | "
-        "OpenGL version " + openGLVersionStr + " | "
         "Dear ImGui version " + dearImGuiVersionStr,
         1.0f, 1.0f
     );
