@@ -538,11 +538,13 @@ void Results::initGuiMain() {
     gui.registerCoords("area_name",         50,  7, 45, 10);
     gui.registerCoords("area_subtitle",     50, 18, 40, 10);
     gui.registerCoords("medal",             85, 15, 22, 22);
-    gui.registerCoords("final_score",       85, 28, 26,  4);
-    gui.registerCoords("final_score_label", 85, 28, 26,  4);
-    gui.registerCoords("end_reason",        85, 28, 26,  4);
+    gui.registerCoords("final_score",       14, 10, 24,  8);
+    gui.registerCoords("final_score_label", 14, 18, 24,  8);
+    gui.registerCoords("end_reason",        50, 32, 96,  4);
     gui.registerCoords("conclusion",        50, 36, 96,  4);
-    gui.registerCoords("stats_page",        50, 63, 80, 38);
+    gui.registerCoords("stats_page",        50, 61, 96, 42);
+    gui.registerCoords("scoring_page",      50, 61, 96, 42);
+    gui.registerCoords("score_chart_page",  50, 61, 96, 42);
     gui.registerCoords("retry",             20, 88, 24,  8);
     gui.registerCoords("continue",          50, 88, 24,  8);
     gui.registerCoords("pick_area",         80, 88, 24,  8);
@@ -805,12 +807,12 @@ void Results::initGuiMain() {
 void Results::initGuiScoreChart() {
     DataNode* guiFile =
         &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
-    gui.registerCoords("score_chart_left_page",             50, 63, 80, 38);
-    gui.registerCoords("score_chart_left_page_input",             50, 63, 80, 38);
-    gui.registerCoords("score_chart_right_page",             50, 63, 80, 38);
-    gui.registerCoords("score_chart_right_page_input",             50, 63, 80, 38);
-    gui.registerCoords("score_chart_list",             50, 63, 80, 38);
-    gui.registerCoords("score_chart_chart",             50, 63, 80, 38);
+    gui.registerCoords("score_chart_left_page",        13,  7, 18, 14);
+    gui.registerCoords("score_chart_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("score_chart_right_page",       87,  7, 18, 14);
+    gui.registerCoords("score_chart_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("score_chart_chart",            79, 59, 34, 82);
+    gui.registerCoords("score_chart_list",             31, 59, 54, 82);
     gui.readDataFile(guiFile, scoreChartPageBox);
     
     //Score chart item list.
@@ -840,12 +842,12 @@ void Results::initGuiScoreChart() {
 void Results::initGuiScoring() {
     DataNode* guiFile =
         &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
-    gui.registerCoords("scoring_left_page",             50, 63, 80, 38);
-    gui.registerCoords("scoring_left_page_input",             50, 63, 80, 38);
-    gui.registerCoords("scoring_right_page",             50, 63, 80, 38);
-    gui.registerCoords("scoring_right_page_input",             50, 63, 80, 38);
-    gui.registerCoords("scoring_list",             50, 63, 80, 38);
-    gui.registerCoords("scoring_scroll",      93, 63,  2, 38);
+    gui.registerCoords("scoring_left_page",        13,  7, 18, 14);
+    gui.registerCoords("scoring_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("scoring_right_page",       87,  7, 18, 14);
+    gui.registerCoords("scoring_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("scoring_list",             50, 59, 92, 82);
+    gui.registerCoords("scoring_scroll",           99, 59,  2, 82);
     gui.readDataFile(guiFile, scoringPageBox);
     
     //Scoring criteria list.
@@ -870,12 +872,12 @@ void Results::initGuiScoring() {
 void Results::initGuiStats() {
     DataNode* guiFile =
         &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
-    gui.registerCoords("stats_left_page",             50, 63, 80, 38);
-    gui.registerCoords("stats_left_page_input",             50, 63, 80, 38);
-    gui.registerCoords("stats_right_page",             50, 63, 80, 38);
-    gui.registerCoords("stats_right_page_input",             50, 63, 80, 38);
-    gui.registerCoords("stats_list",             50, 63, 80, 38);
-    gui.registerCoords("stats_scroll",      93, 63,  2, 38);
+    gui.registerCoords("stats_left_page",        13,  7, 18, 14);
+    gui.registerCoords("stats_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("stats_right_page",       87,  7, 18, 14);
+    gui.registerCoords("stats_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("stats_list",             50, 59, 92, 82);
+    gui.registerCoords("stats_scroll",           99, 59,  2, 82);
     gui.readDataFile(guiFile, statsPageBox);
     
     //Stats list.

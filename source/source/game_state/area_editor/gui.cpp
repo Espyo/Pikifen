@@ -488,6 +488,15 @@ void AreaEditor::processGuiMenuBar() {
                 "Useful if you need to edit things by hand."
             );
             
+            //Open user data externally item.
+            if(ImGui::MenuItem("Open user data externally")) {
+                openUserDataExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the folder with the area's user data in your "
+                "operative system."
+            );
+            
             //Quick play item.
             if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
                 quickPlayCmd(1.0f);
@@ -5149,7 +5158,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             registerChange("mission score criterion creation");
             game.curArea->mission.scoreCriteria.insert(
                 game.curArea->mission.scoreCriteria.begin() +
-                prevCurCriterionIdx,
+                prevCurCriterionIdx + 1,
                 MissionScoreCriterion()
             );
             setStatus(
@@ -5248,6 +5257,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             
                 //Mob checklist number value.
                 int number = (int) criterionPtr->indexParam;
+                number++;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
@@ -5256,6 +5266,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                     )
                 ) {
                     registerChange("mission score criterion checklist change");
+                    number--;
                     criterionPtr->indexParam = (size_t) number;
                 }
                 setTooltip(

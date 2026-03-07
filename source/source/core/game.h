@@ -295,9 +295,6 @@ public:
     
         //--- Public members ---
         
-        //Show each frame's player actions on the in-game console.
-        bool showPlayerActions = false;
-        
         //Show which area cells are active in the radar.
         bool showAreaActiveCells = false;
         
@@ -309,6 +306,9 @@ public:
         
         //Show visual information about the leader's group.
         bool showGroupInfo = false;
+        
+        //Show each frame's player actions on the in-game console.
+        bool showPlayerActions = false;
         
     } debug;
     

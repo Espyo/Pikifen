@@ -1277,6 +1277,8 @@ void saveScreenshot() {
     );
     
     al_destroy_bitmap(screenshot);
+    
+    game.systemNotifications.add("Screenshot saved.");
 }
 
 

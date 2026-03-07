@@ -685,14 +685,14 @@ void AreaMenu::initGuiBriefingPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
     gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
-    gui.registerCoords("objective_header",    50, 13, 96,  6);
-    gui.registerCoords("objective",           50, 21, 96,  6);
-    gui.registerCoords("notes_header",    50, 29, 96,  6);
-    gui.registerCoords("notes_list",      47, 48, 90, 28);
-    gui.registerCoords("notes_scroll",    96, 48,  4, 28);
-    gui.registerCoords("medal_award_header", 50, 67, 96,  6);
-    gui.registerCoords("medal_award_list",   47, 85, 90, 26);
-    gui.registerCoords("medal_award_scroll", 96, 85,  4, 26);
+    gui.registerCoords("objective_header",   50, 13, 96,  6);
+    gui.registerCoords("objective",          50, 24, 96, 12);
+    gui.registerCoords("notes_header",       50, 35, 96,  6);
+    gui.registerCoords("notes_list",         47, 52, 90, 24);
+    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
+    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
+    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
+    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
     gui.readDataFile(guiFile);
     
     if(!game.content.areas.list[areaType].empty()) {

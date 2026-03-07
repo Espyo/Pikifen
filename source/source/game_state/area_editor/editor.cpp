@@ -2575,6 +2575,22 @@ void AreaEditor::openExternallyCmd(float inputValue) {
 
 
 /**
+ * @brief Code to run for the open user data externally command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::openUserDataExternallyCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus("The area doesn't exist on disk yet!", true);
+        return;
+    }
+    openFileExplorer(game.curArea->userDataPath);
+}
+
+
+/**
  * @brief Pans the camera around.
  *
  * @param ev Event to handle.

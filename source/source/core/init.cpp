@@ -945,11 +945,11 @@ void initDebugConfig() {
             );
     };
     
-    game.debug.showPlayerActions = getProp("show_player_actions");
     game.debug.showAreaActiveCells = getProp("show_area_active_cells");
     game.debug.showControllerEvents = getProp("show_controller_events");
     game.debug.showDearImGuiDemo = getProp("show_dear_imgui_demo");
     game.debug.showGroupInfo = getProp("show_group_info");
+    game.debug.showPlayerActions = getProp("show_player_actions");
 }
 
 

@@ -1909,21 +1909,21 @@ void PauseMenu::initMissionPage() {
         &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
         
     //Menu items.
-    missionGui.registerCoords("left_page",        12,  5, 20,  6);
-    missionGui.registerCoords("left_page_input",   3,  7,  4,  4);
-    missionGui.registerCoords("right_page",       88,  5, 20,  6);
-    missionGui.registerCoords("right_page_input", 97,  7,  4,  4);
-    missionGui.registerCoords("continue",         10, 16, 16,  4);
-    missionGui.registerCoords("continue_input",    3, 17,  4,  4);
-    missionGui.registerCoords("objective_header",      50, 16, 60,  4);
-    missionGui.registerCoords("objective",             50, 22, 96,  4);
-    missionGui.registerCoords("notes_header",      50, 32, 96,  4);
-    missionGui.registerCoords("notes_list",        48, 48, 92, 24);
-    missionGui.registerCoords("notes_scroll",      97, 48,  2, 24);
-    missionGui.registerCoords("medal_award_header",   50, 64, 96,  4);
-    missionGui.registerCoords("medal_award_list",     48, 80, 92, 24);
-    missionGui.registerCoords("medal_award_scroll",   97, 80,  2, 24);
-    missionGui.registerCoords("tooltip",          50, 96, 96,  4);
+    missionGui.registerCoords("left_page",          12,  5, 20,  6);
+    missionGui.registerCoords("left_page_input",     3,  7,  4,  4);
+    missionGui.registerCoords("right_page",         88,  5, 20,  6);
+    missionGui.registerCoords("right_page_input",   97,  7,  4,  4);
+    missionGui.registerCoords("continue",           10, 16, 16,  4);
+    missionGui.registerCoords("continue_input",      3, 17,  4,  4);
+    missionGui.registerCoords("objective_header",   50, 16, 60,  4);
+    missionGui.registerCoords("objective",          50, 24, 96,  8);
+    missionGui.registerCoords("notes_header",       50, 32, 96,  4);
+    missionGui.registerCoords("notes_list",         48, 48, 92, 24);
+    missionGui.registerCoords("notes_scroll",       97, 48,  2, 24);
+    missionGui.registerCoords("medal_award_header", 50, 64, 96,  4);
+    missionGui.registerCoords("medal_award_list",   48, 80, 92, 24);
+    missionGui.registerCoords("medal_award_scroll", 97, 80,  2, 24);
+    missionGui.registerCoords("tooltip",            50, 96, 96,  4);
     missionGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
@@ -2044,22 +2044,22 @@ void PauseMenu::initRadarPage() {
 #undef loader
     
     //Menu items.
-    radarGui.registerCoords("left_page",           12,     5,    20,    6);
-    radarGui.registerCoords("left_page_input",      3,     7,     4,    4);
-    radarGui.registerCoords("right_page",          88,     5,    20,    6);
-    radarGui.registerCoords("right_page_input",    97,     7,     4,    4);
-    radarGui.registerCoords("continue",            10,    16,    16,    4);
-    radarGui.registerCoords("continue_input",       3,    17,     4,    4);
-    radarGui.registerCoords("radar",               37.5,  56.25, 70,   72.5);
-    radarGui.registerCoords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
-    radarGui.registerCoords("group_pikmin_number", 86.25, 85,    22.5,  5);
-    radarGui.registerCoords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
-    radarGui.registerCoords("idle_pikmin_number",  86.25, 70,    22.5,  5);
-    radarGui.registerCoords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
-    radarGui.registerCoords("field_pikmin_number", 86.25, 55,    22.5,  5);
+    radarGui.registerCoords("left_page",              12,     5,   20,    6);
+    radarGui.registerCoords("left_page_input",         3,     7,    4,    4);
+    radarGui.registerCoords("right_page",             88,     5,   20,    6);
+    radarGui.registerCoords("right_page_input",       97,     7,    4,    4);
+    radarGui.registerCoords("continue",               10,    16,   16,    4);
+    radarGui.registerCoords("continue_input",          3,    17,    4,    4);
+    radarGui.registerCoords("radar",                37.5, 56.25,   70, 72.5);
+    radarGui.registerCoords("group_pikmin_label",  86.25,  47.5, 22.5,    5);
+    radarGui.registerCoords("group_pikmin_number", 86.25,    55, 22.5,    5);
+    radarGui.registerCoords("idle_pikmin_label",   86.25,  62.5, 22.5,    5);
+    radarGui.registerCoords("idle_pikmin_number",  86.25,    70, 22.5,    5);
+    radarGui.registerCoords("field_pikmin_label",  86.25,  77.5, 22.5,    5);
+    radarGui.registerCoords("field_pikmin_number", 86.25,    85, 22.5,    5);
     radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
-    radarGui.registerCoords("instructions",        58.75, 16,    77.5,  4);
-    radarGui.registerCoords("tooltip",             50,    96,    96,    4);
+    radarGui.registerCoords("instructions",        58.75,    16, 77.5,    4);
+    radarGui.registerCoords("tooltip",                50,    96,   96,    4);
     radarGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
@@ -2289,17 +2289,17 @@ void PauseMenu::initStatusPage() {
         &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
         
     //Menu items.
-    statusGui.registerCoords("left_page",        12,     5,   20,    6);
-    statusGui.registerCoords("left_page_input",   3,     7,    4,    4);
-    statusGui.registerCoords("right_page",       88,     5,   20,    6);
-    statusGui.registerCoords("right_page_input", 97,     7,    4,    4);
-    statusGui.registerCoords("continue",         10,    16,   16,    4);
-    statusGui.registerCoords("continue_input",    3,    17,    4,    4);
-    statusGui.registerCoords("list_header",      50,    23.5, 88,    7);
-    statusGui.registerCoords("list",             50,    56,   88,   56);
-    statusGui.registerCoords("list_scroll",      97,    56,    2,   56);
-    statusGui.registerCoords("totals",           50,    89,   88,    8);
-    statusGui.registerCoords("tooltip",          50,    96,   96,    4);
+    statusGui.registerCoords("left_page",        12,    5, 20,  6);
+    statusGui.registerCoords("left_page_input",   3,    7,  4,  4);
+    statusGui.registerCoords("right_page",       88,    5, 20,  6);
+    statusGui.registerCoords("right_page_input", 97,    7,  4,  4);
+    statusGui.registerCoords("continue",         10,   16, 16,  4);
+    statusGui.registerCoords("continue_input",    3,   17,  4,  4);
+    statusGui.registerCoords("list_header",      50, 23.5, 88,  7);
+    statusGui.registerCoords("list",             50,   56, 88, 56);
+    statusGui.registerCoords("list_scroll",      97,   56,  2, 56);
+    statusGui.registerCoords("totals",           50,   89, 88,  8);
+    statusGui.registerCoords("tooltip",          50,   96, 96,  4);
     statusGui.readDataFile(guiFile);
     
     //Page buttons and inputs.

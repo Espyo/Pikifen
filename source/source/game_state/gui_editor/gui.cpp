@@ -1121,6 +1121,7 @@ void GuiEditor::processGuiPanelItems() {
     
     if(state == EDITOR_STATE_CUSTOM) {
     
+        static string renameItemName;
         CustomGuiItemDef* curItemPtr = nullptr;
         if(itemSelection.isOneSelected()) {
             curItemPtr = (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
@@ -1141,6 +1142,8 @@ void GuiEditor::processGuiPanelItems() {
             itemSelection.clear();
             itemSelection.select(allItems.size() - 1);
             curItemPtr = (CustomGuiItemDef*) allItems[allItems.size() - 1];
+            duplicateString(curItemPtr->name, renameItemName);
+            openInputPopup("renameItem");
             setStatus("Created a new custom GUI item.");
         }
         setTooltip(
@@ -1169,7 +1172,6 @@ void GuiEditor::processGuiPanelItems() {
             setTooltip("Delete the current item.");
             
             //Rename item button.
-            static string renameItemName;
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(

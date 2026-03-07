@@ -1166,6 +1166,7 @@ private:
     void addNewReminderCmd(float inputValue);
     void addNewTreeShadowCmd(float inputValue);
     void openExternallyCmd(float inputValue);
+    void openUserDataExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);
     void pasteTextureCmd(float inputValue);
     void quickPlayCmd(float inputValue);
