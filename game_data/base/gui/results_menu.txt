@@ -44,6 +44,16 @@ hardcoded_items{
 		size=96.0000 42.0000
 		description=Statistics page.
 	}
+	scoring_page{
+		center=50.0000 61.0000
+		size=96.0000 42.0000
+		description=Scoring page.
+	}
+	score_chart_page{
+		center=50.0000 61.0000
+		size=96.0000 42.0000
+		description=Score chart page.
+	}
 	retry{
 		center=20.0000 88.0000
 		size=24.0000 8.0000

@@ -3219,6 +3219,7 @@ void AreaEditor::processGuiPanelMission() {
     if(game.curArea->mission.preset == MISSION_PRESET_CUSTOM) {
         processGuiPanelMissionEv();
         processGuiPanelMissionMobChecklists();
+        processGuiPanelMissionMedalAward();
         processGuiPanelMissionScoreCriteria();
         processGuiPanelMissionHudItems();
         processGuiPanelMissionBriefing();
@@ -3502,6 +3503,8 @@ void AreaEditor::processGuiPanelMissionBriefing() {
         ImGui::TreePop();
         
     }
+    
+    ImGui::Spacer();
 }
 
 
@@ -4495,194 +4498,126 @@ void AreaEditor::processGuiPanelMissionGoalGte() {
  * mission control panel for this frame.
  */
 void AreaEditor::processGuiPanelMissionMedalAward() {
-    //Medal award mode text.
-    ImGui::Text("Medal award mode:");
+    //Medal award node.
+    if(saveableTreeNode("mission", "Medal award")) {
     
-    //Medal award mode widgets.
-    processGuiMedalAwardModeWidgets(
-        0, "Points",
-        "The player's final medal depends on how many points they\n"
-        "got in different criteria."
-    );
-    
-    ImGui::SameLine();
-    processGuiMedalAwardModeWidgets(
-        1, "Goal",
-        "The player's final medal depends on whether they have reached\n"
-        "the mission goal (platinum) or not (nothing)."
-    );
-    
-    ImGui::SameLine();
-    processGuiMedalAwardModeWidgets(
-        2, "Participation",
-        "The player's final medal depends on whether they have played\n"
-        "the mission (platinum) or not (nothing)."
-    );
-    
-    //Medal award criterion widgets.
-    if(
-        game.curArea->missionOld.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
-    ) {
-    
-        ImGui::Spacer();
-        processGuiMedalAwardCriterionWidgets(
-            &game.curArea->missionOld.pointsPerPikminBorn,
-            MISSION_SCORE_CRITERIA_PIKMIN_BORN,
-            "Points per Pikmin born",
-            "Amount of points that the player receives for each\n"
-            "Pikmin born."
+        //Medal award mode text.
+        ImGui::Text("Medal award mode:");
+        
+        //Medal award mode widgets.
+        processGuiMedalAwardModeWidgets(
+            0, "Points",
+            "The player's final medal depends on how many points they\n"
+            "got in different criteria."
         );
         
-        processGuiMedalAwardCriterionWidgets(
-            &game.curArea->missionOld.pointsPerPikminDeath,
-            MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
-            "Points per Pikmin death",
-            "Amount of points that the player receives for each\n"
-            "Pikmin lost."
+        ImGui::SameLine();
+        processGuiMedalAwardModeWidgets(
+            1, "Goal",
+            "The player's final medal depends on whether they have reached\n"
+            "the mission goal (platinum) or not (nothing)."
         );
         
+        ImGui::SameLine();
+        processGuiMedalAwardModeWidgets(
+            2, "Participation",
+            "The player's final medal depends on whether they have played\n"
+            "the mission (platinum) or not (nothing)."
+        );
+        
+        //Medal award criterion widgets.
         if(
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            )
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS
         ) {
-            processGuiMedalAwardCriterionWidgets(
-                &game.curArea->missionOld.pointsPerSecLeft,
-                MISSION_SCORE_CRITERIA_SEC_LEFT,
-                "Points per second left",
-                "Amount of points that the player receives for each\n"
-                "second of time left, from the mission's time limit."
-            );
-        }
         
-        processGuiMedalAwardCriterionWidgets(
-            &game.curArea->missionOld.pointsPerSecPassed,
-            MISSION_SCORE_CRITERIA_SEC_PASSED,
-            "Points per second passed",
-            "Amount of points that the player receives for each\n"
-            "second of time that has passed."
-        );
-        
-        processGuiMedalAwardCriterionWidgets(
-            &game.curArea->missionOld.pointsPerTreasurePoint,
-            MISSION_SCORE_CRITERIA_TREASURE_POINTS,
-            "Points per treasure point",
-            "Amount of points that the player receives for each\n"
-            "point gathered from treasures. Different treasures are worth\n"
-            "different treasure points."
-        );
-        
-        processGuiMedalAwardCriterionWidgets(
-            &game.curArea->missionOld.pointsPerEnemyPoint,
-            MISSION_SCORE_CRITERIA_ENEMY_POINTS,
-            "Points per enemy point",
-            "Amount of points that the player receives for each\n"
-            "enemy point. Different enemies are worth different\n"
-            "points."
-        );
-        
-        //Award points on collection checkbox.
-        if(game.curArea->missionOld.pointsPerEnemyPoint != 0) {
-            bool enemyPointsOnCollection =
-                game.curArea->missionOld.enemyPointsOnCollection;
-            ImGui::Indent();
-            if(
-                ImGui::Checkbox(
-                    "Award points on collection", &enemyPointsOnCollection
-                )
-            ) {
+            //Starting score value.
+            ImGui::Spacer();
+            int startingPoints = game.curArea->mission.startingPoints;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
                 registerChange("mission medal award change");
-                game.curArea->missionOld.enemyPointsOnCollection =
-                    enemyPointsOnCollection;
+                game.curArea->mission.startingPoints = startingPoints;
             }
             setTooltip(
-                "If checked, enemy points will be awarded on enemy\n"
-                "collection. If unchecked, enemy points will be awarded\n"
-                "on enemy defeat."
+                "Starting amount of points. It can be positive or negative.",
+                "", WIDGET_EXPLANATION_DRAG
             );
-            ImGui::Unindent();
+            
+            //Medal point requirements text.
+            ImGui::Spacer();
+            ImGui::Text("Medal point requirements:");
+            
+            //Medal point requirement widgets.
+            processGuiMedalAwardMedalWidgets(
+                &game.curArea->mission.bronzeReq, "Bronze",
+                INT_MIN, game.curArea->mission.silverReq - 1,
+                "To get a bronze medal, the player needs at least these\n"
+                "many points. Fewer than this, and the player gets no medal."
+            );
+            
+            processGuiMedalAwardMedalWidgets(
+                &game.curArea->mission.silverReq, "Silver",
+                game.curArea->mission.bronzeReq + 1,
+                game.curArea->mission.goldReq - 1,
+                "To get a silver medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiMedalAwardMedalWidgets(
+                &game.curArea->mission.goldReq, "Gold",
+                game.curArea->mission.silverReq + 1,
+                game.curArea->mission.platinumReq - 1,
+                "To get a gold medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiMedalAwardMedalWidgets(
+                &game.curArea->mission.platinumReq, "Platinum",
+                game.curArea->mission.goldReq + 1, INT_MAX,
+                "To get a platinum medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            //Maker record value.
+            ImGui::Spacer();
+            int makerRecord = game.curArea->mission.makerRecord;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecord = makerRecord;
+            }
+            setTooltip(
+                "Specify your best score here, if you want.\n"
+                "You must write a date too in that case.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Maker record date input.
+            string makerRecordDate =
+                game.curArea->mission.makerRecordDate;
+            ImGui::SetNextItemWidth(120);
+            if(
+                monoInputText(
+                    "Date (YYYY/MM/DD)", &makerRecordDate
+                )
+            ) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecordDate = makerRecordDate;
+            }
+            setTooltip(
+                "Specify the date in which you got your best score here,\n"
+                "if you want. Your record will only be saved if you\n"
+                "write a date.\n"
+                "The format must be YYYY/MM/DD."
+            );
         }
         
-        //Starting score value.
-        ImGui::Spacer();
-        int startingPoints = game.curArea->missionOld.startingPoints;
-        ImGui::SetNextItemWidth(60);
-        if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
-            registerChange("mission medal award change");
-            game.curArea->missionOld.startingPoints = startingPoints;
-        }
-        setTooltip(
-            "Starting amount of points. It can be positive or negative.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
+        ImGui::TreePop();
         
-        //Medal point requirements text.
-        ImGui::Spacer();
-        ImGui::Text("Medal point requirements:");
-        
-        //Medal point requirement widgets.
-        processGuiMedalAwardMedalWidgets(
-            &game.curArea->missionOld.bronzeReq, "Bronze",
-            INT_MIN, game.curArea->missionOld.silverReq - 1,
-            "To get a bronze medal, the player needs at least these\n"
-            "many points. Fewer than this, and the player gets no medal."
-        );
-        
-        processGuiMedalAwardMedalWidgets(
-            &game.curArea->missionOld.silverReq, "Silver",
-            game.curArea->missionOld.bronzeReq + 1,
-            game.curArea->missionOld.goldReq - 1,
-            "To get a silver medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        processGuiMedalAwardMedalWidgets(
-            &game.curArea->missionOld.goldReq, "Gold",
-            game.curArea->missionOld.silverReq + 1,
-            game.curArea->missionOld.platinumReq - 1,
-            "To get a gold medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        processGuiMedalAwardMedalWidgets(
-            &game.curArea->missionOld.platinumReq, "Platinum",
-            game.curArea->missionOld.goldReq + 1, INT_MAX,
-            "To get a platinum medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        //Maker record value.
-        ImGui::Spacer();
-        int makerRecord = game.curArea->missionOld.makerRecord;
-        ImGui::SetNextItemWidth(60);
-        if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
-            registerChange("maker record change");
-            game.curArea->missionOld.makerRecord = makerRecord;
-        }
-        setTooltip(
-            "Specify your best score here, if you want.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Maker record date input.
-        string makerRecordDate =
-            game.curArea->missionOld.makerRecordDate;
-        ImGui::SetNextItemWidth(120);
-        if(
-            monoInputText(
-                "Date (YYYY/MM/DD)", &makerRecordDate
-            )
-        ) {
-            registerChange("maker record change");
-            game.curArea->missionOld.makerRecordDate = makerRecordDate;
-        }
-        setTooltip(
-            "Specify the date in which you got your best score here,\n"
-            "if you want. Your record will only be saved if you write a date.\n"
-            "The format must be YYYY/MM/DD."
-        );
     }
+    
+    ImGui::Spacer();
 }
 
 

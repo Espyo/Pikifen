@@ -17,6 +17,8 @@
 
 
 namespace RESULTS {
+extern const float CHART_CIRCLE_TIME_SCALE;
+extern const float CHART_CIRCLE_SIZE_OFFSET;
 extern const float FINAL_SCORE_LABEL_SWAY_TIME_OFFSET;
 extern const float FINAL_SCORE_SWAY;
 extern const float FINAL_SCORE_SWAY_TIME_SCALE;
@@ -25,6 +27,24 @@ extern const float MEDAL_SCALE;
 extern const float MEDAL_SHINE_SCALE;
 extern const float MEDAL_SHINE_ROT_TIME_SCALE;
 }
+
+
+using DrawInfo = GuiItem::DrawInfo;
+
+
+//Pages.
+enum RESULTS_MENU_PAGE {
+
+    //Stats.
+    RESULTS_MENU_PAGE_STATS,
+    
+    //Scoring.
+    RESULTS_MENU_PAGE_SCORING,
+    
+    //Score chart.
+    RESULTS_MENU_PAGE_SCORE_CHART,
+    
+};
 
 
 /**
@@ -45,6 +65,18 @@ public:
     
 private:
 
+    //--- Private misc. declarations ---
+    
+    enum SCORE_MARKER {
+        SCORE_MARKER_BRONZE,
+        SCORE_MARKER_SILVER,
+        SCORE_MARKER_GOLD,
+        SCORE_MARKER_PLATINUM,
+        SCORE_MARKER_SCORE,
+        SCORE_MARKER_OLD_RECORD,
+        SCORE_MARKER_MAKER_RECORD,
+    };
+    
     //--- Private members ---
     
     //Main GUI manager.
@@ -59,8 +91,35 @@ private:
     //Stats page box GUI item.
     GuiItem* statsPageBox = nullptr;
     
+    //Scoring page box GUI item.
+    GuiItem* scoringPageBox = nullptr;
+    
+    //Score chart page box GUI item.
+    GuiItem* scoreChartPageBox = nullptr;
+    
     //Stats list GUI item.
     ListGuiItem* statsList = nullptr;
+    
+    //Scoring list GUI item.
+    ListGuiItem* scoringList = nullptr;
+    
+    //Score chart items list GUI item.
+    ListGuiItem* scoreChartList = nullptr;
+    
+    //Score chart graphic GUI item.
+    ListGuiItem* scoreChartChart = nullptr;
+    
+    //Score amount at the bottom of the score chart.
+    int scoreChartBottom = 0;
+    
+    //Score amount at the top of the score chart.
+    int scoreChartTop = 0;
+    
+    //Relevant score markers, sorted. Cache for convenience.
+    vector<std::pair<SCORE_MARKER, int> > scoreMarkers;
+    
+    //Bullet point GUI item for each score marker. Cache for convenience.
+    vector<GuiItem*> scoreMarkerGuiItems;
     
     //Medal obtained. Cache for convenience.
     MISSION_MEDAL medal = MISSION_MEDAL_NONE;
@@ -83,18 +142,33 @@ private:
     
     //--- Private function declarations ---
     
-    void addNewScoreStat(size_t criterionIdx);
-    void addNewStat(
-        const string& label, const string& value,
+    ButtonGuiItem* addNewPageItem(
+        RESULTS_MENU_PAGE targetPage, bool left, GuiItem* curBox
+    );
+    void addNewPageItems(
+        RESULTS_MENU_PAGE curPage, GuiItem* curBox, const string& itemNamePrefix
+    );
+    void addNewBulletPoint(
+        GuiItem* list, const string& label, const string& value,
         const ALLEGRO_COLOR& color = COLOR_WHITE
     );
+    void addNewScoreMarkerBulletPoint(
+        const string& label, const string& value,
+        const size_t totalBulletPoints, const ALLEGRO_COLOR& color = COLOR_WHITE
+    );
     void continuePlaying();
+    void drawScoreChartConnections();
+    void drawScoreChartGraphic(const DrawInfo& draw);
+    float getScoreChartY(int score) const;
     void initGuiMain();
     void initGuiScoreChart();
     void initGuiScoring();
     void initGuiStats();
     void leave();
+    void populateScoreChart();
+    void populateScoringList();
     void populateStatsList();
+    void switchPage(RESULTS_MENU_PAGE newPage);
     void retryArea();
     
 };

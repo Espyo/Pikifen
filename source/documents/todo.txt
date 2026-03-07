@@ -5,39 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
     Mushroom Pikmin
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
+        Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New mission system
-        HUD rule explanation for the results menu
-            Canon games have:
-                Area name
-                Your score
-                Top 3/5
-                Pikmin chart over the day
-                Number of players that participated
-                Pokos
-                Time bonus
-                Medal
-                New record label
-                Clear time
-            Pikifen 1.1 has:
-                Area name
-                Medal
-                Fail/Clear
-                Score
-                Conclusion text
-                Time taken
-                Pikmin born and deaths
-                Treasure and treasure points
-                Enemy and enemy points
-            Pikifen 1.2 should have:
-                x Area name
-                x Medal
-                x Score
-                x Conclusion text
-                Stats
-                    Time taken
-                    Pikmin count, born, and deaths
-                    Sprays used
-                x Rotating shine behind the medal
         Add the presets logic
         After hours clock HUD logic
         Mission score records need to be ported over
@@ -48,10 +17,15 @@ Current tasks (tasks being worked on, but not yet committed)
         Status bar should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, unselecting with Ctrl, etc.
-        Rubber band selection box should use dashed lines, and ideally be animated
+        The area editor should show the index of the selected sector, edge, vertex, mob
     Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Add a leader swap sound, so swapping to the rookie isn't silent
+    Results menu improvements
+        Somehow draw the score chart connection lines underneath the score marker circles
+        Some juice when swapping pages
+        When animating the different numbers in that waterfall look, skip over numbers that aren't in the current page
+        Add the page left/right player input detection
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -67,6 +41,7 @@ Next tasks (roughly sorted most important first)
     --- 1.2.0 ---
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Add a destroyed sprite to the gas pipe
+    Add a glowing orange top graphic, and make it replace the top of Pikmin under the effects of a spicy spray
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
@@ -629,6 +604,7 @@ Misc things (so I don't forget)
             String splitting, joining, getting the size of, etc.
         Add some infinite loop protection logic
             I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
+        A way to obtain the frame's deltaT
         Mobs could reference other mobs via their ID numbers (Mob::id)
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
@@ -827,7 +803,7 @@ Misc things (so I don't forget)
         A goal where you have to construct a wonder
         A fail condition for an enemy/enemy type dying (thanks Neo)
         A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
-        A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
+        A way for something to give bonus points to the score (in score medal mode) (thanks Helodity)
             From the script?
             As a parameter in every single mob generator?
         Custom goal clear conditions and custom fail conditions, via scripting somehow
@@ -955,6 +931,7 @@ Tasks for later on (I might never implement these)
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
+    Save all (or up to 20 or something) the previous scores on a mission, and in the results screen, show a graph with your evolution over time (thanks Helodity)
     Observation spot
         An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey

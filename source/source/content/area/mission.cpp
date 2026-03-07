@@ -3523,12 +3523,23 @@ bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
 
 
 /**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeCollectionPts::getFriendlyName() const {
+    return "";
+}
+
+
+/**
  * @brief Returns the criterion's name.
  *
  * @return The name.
  */
 string MissionScoreCriterionTypeCollectionPts::getName() const {
-    return "Collection points";
+    return "Object collection points";
 }
 
 
@@ -3549,12 +3560,23 @@ size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
 
 
 /**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeDefeatPts::getFriendlyName() const {
+    return "";
+}
+
+
+/**
  * @brief Returns the criterion's name.
  *
  * @return The name.
  */
 string MissionScoreCriterionTypeDefeatPts::getName() const {
-    return "Defeat points";
+    return "Enemy defeat points";
 }
 
 
@@ -3571,6 +3593,17 @@ size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
     return gameplay->enemyPointsObtained;
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeMobChecklist::getFriendlyName() const {
+    return "Target objects";
 }
 
 
@@ -3607,6 +3640,17 @@ size_t MissionScoreCriterionTypeMobChecklist::calculateAmount(
 
 
 /**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikmin::getFriendlyName() const {
+    return "";
+}
+
+
+/**
  * @brief Returns the criterion's name.
  *
  * @return The name.
@@ -3629,6 +3673,17 @@ size_t MissionScoreCriterionTypePikmin::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
     return gameplay->getAmountOfTotalPikmin();
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminBorn::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3659,6 +3714,17 @@ size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
 
 
 /**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminDeaths::getFriendlyName() const {
+    return "";
+}
+
+
+/**
  * @brief Returns the criterion's name.
  *
  * @return The name.
@@ -3681,6 +3747,17 @@ size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
     return gameplay->pikminDeaths;
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecLeft::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3708,6 +3785,17 @@ size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
 ) const {
     return
         mission->timeLimit - floor(gameplay->gameplayTimePassed);
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecPassed::getFriendlyName() const {
+    return "";
 }
 
 

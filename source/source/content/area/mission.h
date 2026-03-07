@@ -1171,6 +1171,7 @@ public:
     
     virtual ~MissionScoreCriterionType() = default;
     virtual string getName() const = 0;
+    virtual string getFriendlyName() const = 0;
     virtual size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1189,6 +1190,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1207,6 +1209,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1225,6 +1228,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1243,6 +1247,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1261,6 +1266,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1279,6 +1285,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1298,6 +1305,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
@@ -1317,6 +1325,7 @@ public:
     //--- Public function declarations ---
     
     string getName() const override;
+    string getFriendlyName() const override;
     size_t calculateAmount(
         MissionScoreCriterion* cri,
         MissionData* mission, GameplayState* gameplay
