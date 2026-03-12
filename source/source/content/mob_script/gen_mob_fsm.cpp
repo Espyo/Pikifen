@@ -510,9 +510,7 @@ void GenMobFsm::touchHazard(Fsm* fsm, void* info1, void* info2) {
     
     Hazard* h = (Hazard*) info1;
     
-    for(size_t e = 0; e < h->effects.size(); e++) {
-        fsm->m->applyStatus(h->effects[e], false, true);
-    }
+    fsm->m->applyHazard(h);
 }
 
 

@@ -236,11 +236,9 @@ public:
         //Multiply the effects (damage taken, speed reduction, etc.) by this.
         float effectMult = 1.0f;
         
-        //When affected by the source, receive this status effect.
-        StatusType* statusToApply = nullptr;
-        
-        //If "statusToApply" overrides any status effect that'd be received.
-        bool statusOverrides = true;
+        //When affected by the source, instead apply this status.
+        //If nullptr, apply the source's original effect
+        StatusType* overrideStatus = nullptr;
         
         //If true and the mob is invulnerable to this hazard, then sectors
         //with the hazard will still be blocked in terms of carrying or
