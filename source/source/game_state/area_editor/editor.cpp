@@ -998,6 +998,7 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
             game.curArea->reminders.erase(
                 game.curArea->reminders.begin() + (i - deletions)
             );
+            deletions++;
         }
         if(reminderSelection.isOneSelected()) {
             setStatus(

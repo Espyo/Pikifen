@@ -201,27 +201,32 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
             "If you delete, you will lose all unsaved progress, and the\n"
             "particle generator's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current particle generator?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -236,6 +241,7 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
         deleteCurrentPartGen();
     }
     ImGui::PopStyleColor(3);
+    ImGui::EndAlign();
 }
 
 
@@ -498,7 +504,8 @@ void ParticleEditor::processGuiNewDialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({200});
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
@@ -528,6 +535,7 @@ void ParticleEditor::processGuiNewDialog() {
             reallyCreate();
         }
     }
+    ImGui::EndAlign();
 }
 
 
@@ -1491,7 +1499,6 @@ void ParticleEditor::processGuiPanelGenerator() {
             );
             
             //Angle deviation value.
-            ImGui::Spacer();
             ImGui::SetNextItemWidth(75);
             if(
                 ImGui::SliderAngle(

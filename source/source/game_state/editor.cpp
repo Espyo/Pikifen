@@ -960,11 +960,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1008,11 +1012,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<float>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1056,11 +1064,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<Point>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1112,22 +1124,60 @@ bool Editor::keyframeOrganizer(
     if(interpolator.getKeyframeCount() == 1) {
         interpolator.setKeyframeTime(0, 0.0f);
     }
-    processGuiListNavSetup(
+    processGuiNavSetup(
         &selKeyframeIdx, interpolator.getKeyframeCount(), false
     );
     
+    ImGui::BeginAlign();
+    
+    //Previous keyframe button.
+    if(interpolator.getKeyframeCount() > 1) {
+        processGuiNavWidgetPrev(
+            &selKeyframeIdx, interpolator.getKeyframeCount(),
+            buttonId + "prevButton", 0.75f
+        );
+        setTooltip("Select the previous keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
+    }
+    
     //Current keyframe text.
-    processGuiListNavCurWidget(
-        selKeyframeIdx, interpolator.getKeyframeCount(), "Keyframe"
+    string curKeyframeStr;
+    bool curKeyframeDisabled;
+    getGuiNavCurText(
+        selKeyframeIdx, interpolator.getKeyframeCount(), 1,
+        "Keyframe", true, "", false,
+        &curKeyframeStr, &curKeyframeDisabled, nullptr, nullptr
     );
+    ImGui::SameLine();
+    ImGui::AlignNextText(curKeyframeStr.c_str());
+    curKeyframeDisabled ?
+    ImGui::TextDisabled("%s", curKeyframeStr.c_str()) :
+    ImGui::Text("%s", curKeyframeStr.c_str());
+    
+    //Next keyframe button.
+    ImGui::SameLine();
+    if(interpolator.getKeyframeCount() > 1) {
+        ImGui::AlignNextItems({24}, 1.0f);
+        processGuiNavWidgetNext(
+            &selKeyframeIdx, interpolator.getKeyframeCount(),
+            buttonId + "nextButton", 0.75f
+        );
+        setTooltip("Select the next keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
+    }
+    
+    ImGui::EndAlign();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({24, 24});
     
     //Create keyframe button.
     size_t prevSelKeyframeIdx = selKeyframeIdx;
     if(
-        processGuiListNavNewWidget(
+        processGuiNavWidgetNew(
             &selKeyframeIdx, interpolator.getKeyframeCount(),
-            "Add a new keyframe after the currently selected one.",
-            false, buttonId + "createButton", 0.5f
+            buttonId + "createButton", 0.75f
         )
     ) {
         float prevT = interpolator.getKeyframe(prevSelKeyframeIdx).first;
@@ -1143,36 +1193,28 @@ bool Editor::keyframeOrganizer(
         );
         result = true;
     }
+    setTooltip("Add a new keyframe after the currently selected one.");
     
     //Delete keyframe button.
+    ImGui::SameLine();
     if(interpolator.getKeyframeCount() > 1) {
         prevSelKeyframeIdx = selKeyframeIdx;
         if(
-            processGuiListNavDelWidget(
+            processGuiNavWidgetDel(
                 &selKeyframeIdx, interpolator.getKeyframeCount(),
-                "Delete the currently selected keyframe.",
-                true, buttonId + "deleteButton", 0.5f
+                buttonId + "deleteButton", 0.75f
             )
         ) {
             interpolator.deleteKeyframe(prevSelKeyframeIdx);
             setStatus("Deleted keyframe #" + i2s(prevSelKeyframeIdx + 1) + ".");
             result = true;
         }
+        setTooltip("Delete the currently selected keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
     }
     
-    //Previous keyframe button.
-    processGuiListNavPrevWidget(
-        &selKeyframeIdx, interpolator.getKeyframeCount(),
-        "Select the previous keyframe.",
-        true, buttonId + "prevButton", 0.5f
-    );
-    
-    //Next keyframe button.
-    processGuiListNavNextWidget(
-        &selKeyframeIdx, interpolator.getKeyframeCount(),
-        "Select the next keyframe.",
-        true, buttonId + "nextButton", 0.5f
-    );
+    ImGui::EndAlign();
     
     return result;
 }
@@ -1843,11 +1885,11 @@ void Editor::openPickerDialog(
  * @param title Title to write.
  */
 void Editor::panelTitle(const char* title) {
-    ImGui::SameLine(
-        ImGui::GetContentRegionAvail().x -
-        (ImGui::CalcTextSize(title).x + 1)
-    );
+    ImGui::SameLine();
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(title, 1.0f);
     ImGui::TextDisabled("%s", title);
+    ImGui::EndAlign();
 }
 
 
@@ -1914,7 +1956,8 @@ void Editor::processGuiBaseContentWarningDialog() {
     
     //Go back button.
     ImGui::Spacer();
-    ImGui::SetupCentering(148);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({70, 70});
     if(ImGui::Button("Go back", ImVec2(70, 30))) {
         closeTopDialog();
     }
@@ -1926,12 +1969,15 @@ void Editor::processGuiBaseContentWarningDialog() {
         baseContentWarningDoPickCallback();
         baseContentWarningDoPickCallback = nullptr;
     }
+    ImGui::EndAlign();
     
     //Open manual button.
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(ImGui::Button("Open manual", ImVec2(100, 25))) {
         openManual("making.html#packs");
     }
+    ImGui::EndAlign();
 }
 
 
@@ -1981,7 +2027,8 @@ void Editor::processGuiBitmapDialog() {
     ImGui::BeginChild("butOk");
     
     //Ok button.
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({200});
     if(!bitmapDialogCurBmpPtr) {
         ImGui::BeginDisabled();
     }
@@ -1994,6 +2041,7 @@ void Editor::processGuiBitmapDialog() {
     if(!bitmapDialogCurBmpPtr) {
         ImGui::EndDisabled();
     }
+    ImGui::EndAlign();
     
     //Recommended folder text.
     string folderStr =
@@ -2178,16 +2226,19 @@ bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
  */
 void Editor::processGuiHelpDialog() {
     //Text.
+    ImGui::BeginAlign();
     static int textWidth = 0;
     if(textWidth != 0) {
-        ImGui::SetupCentering(textWidth);
+        ImGui::AlignNextItems({textWidth});
     }
     ImGui::TextWrapped("%s", helpDialogMessage.c_str());
     textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
     
     //Open manual button.
     ImGui::Spacer();
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Open manual", ImVec2(100, 40))) {
         openManual(helpDialogPage);
     }
@@ -2197,6 +2248,7 @@ void Editor::processGuiHelpDialog() {
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
         closeTopDialog();
     }
+    ImGui::EndAlign();
 }
 
 
@@ -2321,21 +2373,16 @@ bool Editor::processGuiInputPopup(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if a new item is created.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
  * @return Whether the user pressed the button.
  */
-bool Editor::processGuiListNavNewWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+bool Editor::processGuiNavWidgetNew(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "createItemButton", editorIcons[EDITOR_ICON_ADD],
@@ -2349,44 +2396,238 @@ bool Editor::processGuiListNavNewWidget(
         }
         pressed = true;
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
 
 
 /**
- * @brief Processes the Dear ImGui list navigation count widget.
+ * @brief Returns the text that should be displayed on the Dear ImGui list
+ * navigation count text widget.
  *
  * @param curItemIdx Index of the current item.
  * @param listSize Current size of the list.
- * @param label Label to show before the count.
- * @param name If this item has a name, specify it here.
- * @param sameLine Whether this widget is in the same line as the previous.
+ * @param selectionSize How many items are currently selected.
+ * @param itemTerm Term that designates what an item is, in singular.
+ * @param showTermNormally If false, the term won't show up when showing
+ * the usual text, but will show up when grammatically needed.
+ * @param curItemName If this item has a name, specify it here.
+ * @param curItemNameMono Whether the current item name's text widget should
+ * use a monospace font.
+ * @param outText1 The first text widget's contents are returned here.
+ * @param outText1Disabled Whether the first text widget is disabled is
+ * returned here.
+ * @param outText2 If not nullptr, the second text widget's contents are
+ * returned here, if any.
+ * @param outText2Mono If not nullptr, whether the second text widget uses
+ * a monospace font is returned here.
  */
-void Editor::processGuiListNavCurWidget(
-    size_t curItemIdx, size_t listSize, const string& label, const string& name,
-    bool sameLine
+void Editor::getGuiNavCurText(
+    size_t curItemIdx, size_t listSize, size_t selectionSize,
+    const string& itemTerm, bool showTermNormally, const string& curItemName,
+    bool curItemNameMono,
+    string* outText1, bool* outText1Disabled,
+    string* outText2, bool* outText2Mono
 ) {
-    const char* curCStr =
-        (
-            listSize == 0 || curItemIdx == INVALID ?
-            "--" :
-            i2s(curItemIdx + 1)
-        ).c_str();
-        
-    if(sameLine) ImGui::SameLine();
-    if(name.empty()) {
-        ImGui::Text(
-            "%s: %s / %u",
-            label.c_str(), curCStr, (unsigned int) listSize
-        );
-    } else {
-        ImGui::Text(
-            "%s: %s (%s / %u)",
-            label.c_str(), name.c_str(), curCStr, (unsigned int) listSize
+    const string termLowerSingular = strToLower(itemTerm);
+    const string termLowerPlural = strToLower(itemTerm) + "s";
+    const string termUpperSingular = strToSentence(itemTerm);
+    
+    *outText1 = "";
+    *outText1Disabled = false;
+    if(outText2) *outText2 = "";
+    if(outText2Mono) *outText2Mono = false;
+    
+    if(listSize == 0) {
+        *outText1 = "(No " + termLowerPlural + ")";
+        *outText1Disabled = true;
+        return;
+    }
+    
+    if(selectionSize != 1) {
+        *outText1 =
+            i2s(selectionSize) + " / " + i2s(listSize) + " " +
+            termLowerPlural + " selected";
+        *outText1Disabled = selectionSize == 0;
+        return;
+    }
+    
+    const string curIdxStr =
+        listSize == 0 || selectionSize == 0 || curItemIdx == INVALID ?
+        "--" :
+        ("#" + i2s(curItemIdx + 1));
+    *outText1 = showTermNormally ? (termUpperSingular + " ") : "";
+    (*outText1) += curIdxStr + " / " + i2s(listSize);
+    
+    if(!curItemName.empty()) {
+        (*outText1) += ":";
+        if(outText2) *outText2 = curItemName;
+        if(outText2Mono) *outText2Mono = curItemNameMono;
+    }
+}
+
+
+/**
+ * @brief Processes the current item Dear ImGui widget for a typical
+ * navigation box. This does not alter the list in any way.
+ * This is expected to go in-between the previous item button and the
+ * next button item, centered.
+ *
+ * @param curItemName If this item has a name, specify it here.
+ * @param curItemNameMono If true, use a monospaced font for the item name.
+ * @param showTermNormally If false, the term won't show up when showing
+ * the usual text, but will show up when grammatically needed.
+ */
+void Editor::processGuiNavBoxCur(
+    const string& curItemName, bool curItemNameMono, bool showTermNormally
+) {
+    string text;
+    bool textDisabled;
+    string itemNameText;
+    bool itemNameTextMono;
+    getGuiNavCurText(
+        *curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+        curNavBoxOnGetSelSize(), curNavBoxItemTerm, showTermNormally,
+        curItemName, curItemNameMono,
+        &text, &textDisabled, &itemNameText, &itemNameTextMono
+    );
+    
+    int textW = ImGui::CalcTextSize(text.c_str()).x;
+    if(itemNameTextMono) {
+        ImGui::PushFont(
+            game.sysContent.fntDearImGuiMonospace,
+            game.sysContent.fntDearImGuiMonospace->LegacySize
         );
     }
+    int nameTextW = ImGui::CalcTextSize(itemNameText.c_str()).x;
+    if(itemNameTextMono) {
+        ImGui::PopFont();
+    }
+    
+    ImGui::SameLine();
+    ImGui::AlignTextToFramePadding();
+    ImGui::AlignNextItems({textW, nameTextW});
+    textDisabled ?
+    ImGui::TextDisabled("%s", text.c_str()) :
+    ImGui::Text("%s", text.c_str());
+    if(!itemNameText.empty()) {
+        ImGui::SameLine();
+        itemNameTextMono ?
+        monoText("%s", itemNameText.c_str()) :
+        ImGui::Text("%s", itemNameText.c_str());
+    }
+}
+
+
+/**
+ * @brief Processes the end of a typical navigation box.
+ */
+void Editor::processGuiNavBoxEnd() {
+    ImGui::EndAlign();
+    ImGui::EndFrameBox();
+}
+
+
+/**
+ * @brief Processes the next item Dear ImGui widget for a typical
+ * navigation box.
+ *
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavBoxNext() {
+    bool pressed = false;
+    ImGui::SameLine();
+    ImGui::AlignNextItems({32}, 1.0f);
+    if(curNavBoxOnGetSize() > 0) {
+        if(
+            processGuiNavWidgetNext(
+                curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+                curNavBoxItemPrefix + "nextButton"
+            )
+        ) {
+            pressed = true;
+        }
+        setTooltip(
+            "Select the next " + strToLower(curNavBoxItemTerm) + "."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    return pressed;
+}
+
+
+/**
+ * @brief Processes a placeholder button-sized Dear ImGui dummy widget for
+ * a typical navigation box.
+ */
+void Editor::processGuiNavBoxPlaceholder() {
+    ImGui::Dummy(ImVec2(32, 32));
+}
+
+
+/**
+ * @brief Processes the previous item Dear ImGui widget for a typical
+ * navigation box.
+ *
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavBoxPrev() {
+    bool pressed = false;
+    if(curNavBoxOnGetSize() > 0) {
+        if(
+            processGuiNavWidgetPrev(
+                curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+                curNavBoxItemPrefix + "prevButton"
+            )
+        ) {
+            pressed = true;
+        }
+        setTooltip(
+            "Select the previous " + strToLower(curNavBoxItemTerm) + "."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the start of the second line of a typical navigation box.
+ *
+ * @param nrItems Number of items the second line will contain
+ */
+void Editor::processGuiNavBoxSecondLine(size_t nrItems) {
+    ImGui::EndAlign();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems(vector<int>(nrItems, 32));
+}
+
+
+/**
+ * @brief Processes the start of a typical navigation box.
+ *
+ * @param widgetsPrefix Prefix to place before any widgets relevant
+ * to the nav box.
+ * @param itemsTerm Term that designates the items of the list.
+ * @param selIdxPtr Pointer to the selected item's index.
+ * @param onGetSize Callback for when the list size needs to be retrieved.
+ * @param onGetSelSize Callback for when the selection size needs
+ * to be retrieved.
+ */
+void Editor::processGuiNavBoxStart(
+    const string& widgetsPrefix, const string& itemsTerm,
+    size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+    const std::function<size_t()>& onGetSelSize
+) {
+    curNavBoxItemPrefix = widgetsPrefix;
+    curNavBoxItemTerm = itemsTerm;
+    curNavBoxSelIdxPtr = selIdxPtr;
+    curNavBoxOnGetSize = onGetSize;
+    curNavBoxOnGetSelSize = onGetSelSize;
+    ImGui::BeginFrameBox(widgetsPrefix + "NavBox");
+    ImGui::BeginAlign();
 }
 
 
@@ -2397,23 +2638,16 @@ void Editor::processGuiListNavCurWidget(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if the item is deleted.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
  * @return Whether the user pressed the button.
  */
-bool Editor::processGuiListNavDelWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+bool Editor::processGuiNavWidgetDel(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
-    if(listSize == 0 || *curItemIdx == INVALID) return false;
-    
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "delItemButton", editorIcons[EDITOR_ICON_REMOVE],
@@ -2427,7 +2661,6 @@ bool Editor::processGuiListNavDelWidget(
         }
         pressed = true;
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
@@ -2439,24 +2672,17 @@ bool Editor::processGuiListNavDelWidget(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if the item moved.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
  * @return Whether the user pressed the button, and it was possible to move
  * left.
  */
-bool Editor::processGuiListNavMoveLeftWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+bool Editor::processGuiNavWidgetMoveLeft(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
-    
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "moveItemLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
@@ -2469,7 +2695,6 @@ bool Editor::processGuiListNavMoveLeftWidget(
             pressed = true;
         }
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
@@ -2481,24 +2706,17 @@ bool Editor::processGuiListNavMoveLeftWidget(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if the item moved.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
  * @return Whether the user pressed the button, and it was possible to move
  * right.
  */
-bool Editor::processGuiListNavMoveRightWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
+bool Editor::processGuiNavWidgetMoveRight(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
-    
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "moveItemRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
@@ -2511,7 +2729,6 @@ bool Editor::processGuiListNavMoveRightWidget(
             pressed = true;
         }
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
@@ -2523,25 +2740,16 @@ bool Editor::processGuiListNavMoveRightWidget(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if a different item is chosen.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
  * @return Whether the user pressed the button.
  */
-bool Editor::processGuiListNavNextWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut, bool alwaysAppear
+bool Editor::processGuiNavWidgetNext(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
-    if(!alwaysAppear) {
-        if(listSize < 2 || *curItemIdx == INVALID) return false;
-    }
-    
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             customButtonId.empty() ? "nextItemButton" : customButtonId,
@@ -2554,7 +2762,6 @@ bool Editor::processGuiListNavNextWidget(
             pressed = true;
         }
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
@@ -2566,26 +2773,16 @@ bool Editor::processGuiListNavNextWidget(
  * @param curItemIdx Pointer to the index of the current item.
  * This will be adjusted accordingly if a different item is chosen.
  * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
  * @param customButtonId If not empty, use this ID for the button.
  * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @param alwaysAppear If true, the widget will appear.
  * @return Whether the user pressed the button.
  */
-bool Editor::processGuiListNavPrevWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut, bool alwaysAppear
+bool Editor::processGuiNavWidgetPrev(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
 ) {
-    if(!alwaysAppear) {
-        if(listSize < 2 || *curItemIdx == INVALID) return false;
-    }
-    
     bool pressed = false;
     
-    if(sameLine) ImGui::SameLine();
     if(
         ImGui::ImageButton(
             customButtonId.empty() ? "prevItemButton" : customButtonId,
@@ -2598,7 +2795,6 @@ bool Editor::processGuiListNavPrevWidget(
             pressed = true;
         }
     }
-    setTooltip(tooltip, tooltipShortcut);
     
     return pressed;
 }
@@ -2613,7 +2809,7 @@ bool Editor::processGuiListNavPrevWidget(
  * @param allowInvalid If true, INVALID becomes a possible value for the index.
  * If false, INVALID becomes 0.
  */
-void Editor::processGuiListNavSetup(
+void Editor::processGuiNavSetup(
     size_t* curItemIdx, size_t listSize, bool allowInvalid
 ) {
     if(*curItemIdx == INVALID) {
@@ -2638,18 +2834,22 @@ void Editor::processGuiListNavSetup(
 void Editor::processGuiMessageDialog() {
     //Text.
     static int textWidth = 0;
+    ImGui::BeginAlign();
     if(textWidth != 0) {
-        ImGui::SetupCentering(textWidth);
+        ImGui::AlignNextItems({textWidth});
     }
     ImGui::TextWrapped("%s", messageDialogMessage.c_str());
     textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
     
     //Ok button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
         closeTopDialog();
     }
+    ImGui::EndAlign();
 }
 
 
@@ -2959,7 +3159,8 @@ void Editor::processGuiNewPackDialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
@@ -2972,6 +3173,7 @@ void Editor::processGuiNewPackDialog() {
     setTooltip(
         problem.empty() ? "Create the pack!" : problem
     );
+    ImGui::EndAlign();
     
     //Creation logic.
     if(hitCreateButton) {
@@ -3136,25 +3338,30 @@ void Editor::processGuiUnsavedChangesDialog() {
             TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
         ) +
         ".";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation1Str.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation1Str.c_str());
     ImGui::Text("%s", explanation1Str.c_str());
+    ImGui::EndAlign();
     
     //Explanation 3 text.
     string explanation2Str =
         "Do you want to save before " +
         changesMgr.getUnsavedWarningActionLong() + "?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation2Str.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation2Str.c_str());
     ImGui::Text("%s", explanation2Str.c_str());
+    ImGui::EndAlign();
     
     //Cancel button.
-    ImGui::SetupCentering(180 + 180 + 180 + 20);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({180, 180, 180});
     if(ImGui::Button("Cancel", ImVec2(180, 30))) {
         closeTopDialog();
     }
     setTooltip("Never mind and go back.", "Esc");
     
     //Save and then perform the action.
-    ImGui::SameLine(0.0f, 10);
+    ImGui::SameLine();
     if(ImGui::Button("Save", ImVec2(180, 30))) {
         closeTopDialog();
         const std::function<bool()>& saveCallback =
@@ -3172,7 +3379,7 @@ void Editor::processGuiUnsavedChangesDialog() {
     );
     
     //Perform the action without saving button.
-    ImGui::SameLine(0.0f, 10);
+    ImGui::SameLine();
     if(ImGui::Button("Don't save", ImVec2(180, 30))) {
         closeTopDialog();
         const std::function<void()> actionCallback =
@@ -3184,6 +3391,7 @@ void Editor::processGuiUnsavedChangesDialog() {
         " without saving.";
     dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
     setTooltip(dontSaveTooltip, "Ctrl + D");
+    ImGui::EndAlign();
 }
 
 

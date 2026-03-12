@@ -824,6 +824,23 @@ protected:
     //Minimum zoom level allowed.
     float zoomMinLevel = 0.0f;
     
+    //Prefix for the widget internal names in the current nav box.
+    string curNavBoxItemPrefix;
+    
+    //Term for the items of the current nav box.
+    string curNavBoxItemTerm;
+    
+    //Pointer to the selected item's index in the current nav box.
+    size_t* curNavBoxSelIdxPtr = nullptr;
+    
+    //Callback for when the list size needs to be retrieved
+    //for the current nav box.
+    std::function<size_t()> curNavBoxOnGetSize = nullptr;
+    
+    //Callback for when the selection size needs to be retrieved
+    //for the current nav box.
+    std::function<size_t()> curNavBoxOnGetSelSize = nullptr;
+    
     
     //--- Private function declarations ---
     
@@ -910,46 +927,54 @@ protected:
         const char* label, const char* prompt, string* text,
         bool useMonospace = false
     );
-    void processGuiListNavSetup(
+    void processGuiNavSetup(
         size_t* curItemIdx, size_t listSize, bool allowInvalid
     );
-    void processGuiListNavCurWidget(
-        size_t curItemIdx, size_t listSize, const string& label,
-        const string& name = "",
-        bool sameLine = false
+    void getGuiNavCurText(
+        size_t curItemIdx, size_t listSize, size_t selectionSize,
+        const string& itemTerm, bool showTermNormally,
+        const string& curItemName, bool curItemNameMono,
+        string* outText1, bool* outText1Disabled,
+        string* outText2, bool* outText2Mono
     );
-    bool processGuiListNavNewWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+    bool processGuiNavWidgetNew(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
-    bool processGuiListNavDelWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+    bool processGuiNavWidgetDel(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
-    bool processGuiListNavPrevWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = "",
-        bool alwaysAppear = false
+    bool processGuiNavWidgetPrev(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
-    bool processGuiListNavNextWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = "",
-        bool alwaysAppear = false
+    bool processGuiNavWidgetNext(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
-    bool processGuiListNavMoveLeftWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+    bool processGuiNavWidgetMoveLeft(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
-    bool processGuiListNavMoveRightWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
+    bool processGuiNavWidgetMoveRight(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
     );
+    void processGuiNavBoxStart(
+        const string& widgetsPrefix, const string& itemsTerm,
+        size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+        const std::function<size_t()>& onGetSelSize
+    );
+    bool processGuiNavBoxPrev();
+    void processGuiNavBoxCur(
+        const string& curItemName = "", bool curItemNameMono = false,
+        bool showTermNormally = true
+    );
+    bool processGuiNavBoxNext();
+    void processGuiNavBoxPlaceholder();
+    void processGuiNavBoxSecondLine(size_t nrItems);
+    void processGuiNavBoxEnd();
     void processGuiMessageDialog();
     bool processGuiMobTypeWidgets(
         string* customCatName, MobType** type, const string& packFilter = ""

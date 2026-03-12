@@ -241,27 +241,32 @@ void AnimationEditor::processGuiDeleteAnimDbDialog() {
             "If you delete, you will lose all unsaved progress, and the\n"
             "animation database's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current animation database?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -276,6 +281,7 @@ void AnimationEditor::processGuiDeleteAnimDbDialog() {
         deleteCurrentAnimDb();
     }
     ImGui::PopStyleColor(3);
+    ImGui::EndAlign();
 }
 
 
@@ -618,7 +624,8 @@ void AnimationEditor::processGuiNewDialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({200});
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
@@ -629,6 +636,7 @@ void AnimationEditor::processGuiNewDialog() {
         ImGui::EndDisabled();
     }
     setTooltip(problem.empty() ? "Create the animation database!" : problem);
+    ImGui::EndAlign();
     
     //Creation logic.
     if(hitCreateButton) {
@@ -919,123 +927,117 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         curAnimIdx = db.findAnimation(curAnimInst.curAnim->name);
     }
     
-    //Current animation text.
-    processGuiListNavCurWidget(
-        curAnimIdx, db.animations.size(), "Animation"
+    //Nav box start.
+    processGuiNavBoxStart(
+        "animation", "Animation", &curAnimIdx,
+    [this] () { return db.animations.size(); },
+    [this] () { return 1; }
     );
     
     //Previous animation button.
-    if(
-        ImGui::ImageButton(
-            "prevAnimButton", editorIcons[EDITOR_ICON_PREVIOUS],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        if(!db.animations.empty()) {
-            if(!curAnimInst.curAnim) {
-                pickAnimation(db.animations[0]->name, "", "", nullptr, false);
-            } else {
-                size_t newIdx =
-                    sumAndWrap(
-                        (int) db.findAnimation(curAnimInst.curAnim->name),
-                        -1,
-                        (int) db.animations.size()
-                    );
-                pickAnimation(
-                    db.animations[newIdx]->name, "", "", nullptr, false
-                );
-            }
-        }
-    }
-    setTooltip(
-        "Select the previous\nanimation."
-    );
-    
-    //Change current animation button.
-    string animButtonName =
-        (
-            curAnimInst.curAnim ?
-            curAnimInst.curAnim->name :
-            NONE_OPTION
-        ) + "##anim";
-    ImVec2 animButtonSize(
-        -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
-    );
-    ImGui::SameLine();
-    if(monoButton(animButtonName.c_str(), animButtonSize)) {
-        vector<PickerItem> animNames;
-        for(size_t a = 0; a < db.animations.size(); a++) {
-            ALLEGRO_BITMAP* animFrame1 = nullptr;
-            if(!db.animations[a]->frames.empty()) {
-                size_t sPos =
-                    db.findSprite(
-                        db.animations[a]->frames[0].spriteName
-                    );
-                if(sPos != INVALID) {
-                    animFrame1 = db.sprites[sPos]->bitmap;
-                }
-            }
-            animNames.push_back(
-                PickerItem(
-                    db.animations[a]->name, "", "", nullptr, "", animFrame1
-                )
-            );
-        }
-        openPickerDialog(
-            "Pick an animation, or create a new one",
-            animNames,
-            std::bind(
-                &AnimationEditor::pickAnimation, this,
-                std::placeholders::_1,
-                std::placeholders::_2,
-                std::placeholders::_3,
-                std::placeholders::_4,
-                std::placeholders::_5
-            ),
-            "", true, true
+    if(processGuiNavBoxPrev()) {
+        pickAnimation(
+            db.animations[curAnimIdx]->name, "", "", nullptr, false
         );
     }
-    setTooltip(
-        "Pick an animation, or create a new one."
+    
+    //Current animation text.
+    processGuiNavBoxCur(
+        curAnimInst.curAnim ? curAnimInst.curAnim->name : NONE_OPTION,
+        true, false
     );
     
     //Next animation button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "nextAnimButton", editorIcons[EDITOR_ICON_NEXT],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        if(!db.animations.empty()) {
-            if(!curAnimInst.curAnim) {
-                pickAnimation(db.animations[0]->name, "", "", nullptr, false);
-            } else {
-                size_t newIdx =
-                    sumAndWrap(
-                        (int) db.findAnimation(curAnimInst.curAnim->name),
-                        1,
-                        (int) db.animations.size()
-                    );
-                pickAnimation(
-                    db.animations[newIdx]->name, "", "", nullptr, false
-                );
-            }
-        }
+    if(processGuiNavBoxNext()) {
+        pickAnimation(
+            db.animations[curAnimIdx]->name, "", "", nullptr, false
+        );
     }
-    setTooltip(
-        "Select the next\nanimation."
-    );
     
-    ImGui::Spacer();
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(5);
     
-    if(curAnimInst.curAnim) {
-    
-        //Delete animation button.
+    //Search animation button.
+    if(!db.animations.empty()) {
         if(
             ImGui::ImageButton(
-                "delAnimButton", editorIcons[EDITOR_ICON_REMOVE],
+                "searchAnimButton", editorIcons[EDITOR_ICON_SEARCH],
                 Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            vector<PickerItem> animNames;
+            for(size_t a = 0; a < db.animations.size(); a++) {
+                ALLEGRO_BITMAP* animFrame1 = nullptr;
+                if(!db.animations[a]->frames.empty()) {
+                    size_t sPos =
+                        db.findSprite(
+                            db.animations[a]->frames[0].spriteName
+                        );
+                    if(sPos != INVALID) {
+                        animFrame1 = db.sprites[sPos]->bitmap;
+                    }
+                }
+                animNames.push_back(
+                    PickerItem(
+                        db.animations[a]->name, "", "", nullptr, "", animFrame1
+                    )
+                );
+            }
+            openPickerDialog(
+                "Pick an animation",
+                animNames,
+                std::bind(
+                    &AnimationEditor::pickAnimation, this,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3,
+                    std::placeholders::_4,
+                    std::placeholders::_5
+                ),
+                "", false, true
+            );
+        }
+        setTooltip("Pick an animation from the full list, or search for one.");
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Create animation button.
+    ImGui::SameLine();
+    static string newAnimName;
+    if(processGuiNavWidgetNew(&curAnimIdx, db.animations.size())) {
+        newAnimName.clear();
+        openInputPopup("createAnim");
+    }
+    setTooltip("Create a new animation.");
+    
+    //Create animation popup.
+    if(
+        processGuiInputPopup(
+            "createAnim", "New animation's name:", &newAnimName, true
+        )
+    ) {
+        if(newAnimName.empty()) {
+            setStatus(
+                "You must specify the new animation's name!",
+                true
+            );
+        } else if(db.findAnimation(newAnimName) != INVALID) {
+            setStatus(
+                "An animation called \"" + newAnimName + "\" already exists!",
+                true
+            );
+        } else {
+            pickAnimation(newAnimName, "", "", nullptr, true);
+        }
+    }
+    
+    //Delete animation button.
+    ImGui::SameLine();
+    if(curAnimInst.curAnim) {
+        if(
+            processGuiNavWidgetDel(
+                &curAnimIdx, db.animations.size()
             )
         ) {
             string curAnimName = curAnimInst.curAnim->name;
@@ -1055,48 +1057,48 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         setTooltip(
             "Delete the current animation."
         );
-        
+    } else {
+        processGuiNavBoxPlaceholder();
     }
     
-    if(curAnimInst.curAnim) {
-    
-        if(db.animations.size() > 1) {
-        
-            //Import animation button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "importAnimButton", editorIcons[EDITOR_ICON_DUPLICATE],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                ImGui::OpenPopup("importAnim");
-            }
-            setTooltip(
-                "Import the data from another animation."
-            );
-            
-            //Import animation popup.
-            vector<string> importAnimNames;
-            for(size_t a = 0; a < db.animations.size(); a++) {
-                if(db.animations[a] == curAnimInst.curAnim) continue;
-                importAnimNames.push_back(db.animations[a]->name);
-            }
-            string pickedAnim;
-            if(
-                listPopup("importAnim", importAnimNames, &pickedAnim, true)
-            ) {
-                importAnimationData(pickedAnim);
-                setStatus(
-                    "Imported animation data from \"" + pickedAnim + "\"."
-                );
-            }
-            
+    //Import animation button.
+    ImGui::SameLine();
+    if(curAnimInst.curAnim && db.animations.size() > 1) {
+        if(
+            ImGui::ImageButton(
+                "importAnimButton", editorIcons[EDITOR_ICON_DUPLICATE],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importAnim");
         }
-        
-        //Rename animation button.
-        static string renameAnimName;
-        ImGui::SameLine();
+        setTooltip(
+            "Import the data from another animation."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Import animation popup.
+    vector<string> importAnimNames;
+    for(size_t a = 0; a < db.animations.size(); a++) {
+        if(db.animations[a] == curAnimInst.curAnim) continue;
+        importAnimNames.push_back(db.animations[a]->name);
+    }
+    string pickedAnim;
+    if(
+        listPopup("importAnim", importAnimNames, &pickedAnim, true)
+    ) {
+        importAnimationData(pickedAnim);
+        setStatus(
+            "Imported animation data from \"" + pickedAnim + "\"."
+        );
+    }
+    
+    //Rename animation button.
+    ImGui::SameLine();
+    static string renameAnimName;
+    if(curAnimInst.curAnim) {
         if(
             ImGui::ImageButton(
                 "renameAnimButton", editorIcons[EDITOR_ICON_INFO],
@@ -1109,16 +1111,21 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         setTooltip(
             "Rename the current animation."
         );
-        
-        //Rename animation popup.
-        if(
-            processGuiInputPopup(
-                "renameAnim", "New name:", &renameAnimName, true
-            )
-        ) {
-            renameAnimation(curAnimInst.curAnim, renameAnimName);
-        }
+    } else {
+        processGuiNavBoxPlaceholder();
     }
+    
+    //Rename animation popup.
+    if(
+        processGuiInputPopup(
+            "renameAnim", "New name:", &renameAnimName, true
+        )
+    ) {
+        renameAnimation(curAnimInst.curAnim, renameAnimName);
+    }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
 }
 
 
@@ -1476,14 +1483,34 @@ void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
  */
 void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
     //Setup.
-    processGuiListNavSetup(
+    processGuiNavSetup(
         &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(), false
     );
     
-    //Current frame text.
-    processGuiListNavCurWidget(
-        curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(), "Frame"
+    //Nav box start.
+    processGuiNavBoxStart(
+        "frame", "Frame", &curAnimInst.curFrameIdx,
+    [this] () { return curAnimInst.curAnim->frames.size(); },
+    [this] () { return 1; }
     );
+    
+    //Previous frame button.
+    if(processGuiNavBoxPrev()) {
+        animPlaying = false;
+        curAnimInst.curFrameTime = 0.0f;
+    }
+    
+    //Current frame text.
+    processGuiNavBoxCur();
+    
+    //Next frame button.
+    if(processGuiNavBoxNext()) {
+        animPlaying = false;
+        curAnimInst.curFrameTime = 0.0f;
+    }
+    
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(4);
     
     //Play/pause button.
     if(framePtr) {
@@ -1514,23 +1541,23 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             "Right click for more options.",
             "Spacebar"
         );
+    } else {
+        processGuiNavBoxPlaceholder();
     }
     
     //Add frame button.
     size_t prevCurFrameIdx = curAnimInst.curFrameIdx;
+    ImGui::SameLine();
     if(
-        processGuiListNavNewWidget(
-            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
-            "Create a new frame after the current one, by copying "
-            "data from the current one.",
-            framePtr
+        processGuiNavWidgetNew(
+            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size()
         )
     ) {
         animPlaying = false;
         adjustMisalignedIndex(
             curAnimInst.curAnim->loopFrame, prevCurFrameIdx, true
         );
-        if(prevCurFrameIdx != INVALID) {
+        if(prevCurFrameIdx != INVALID && !curAnimInst.curAnim->frames.empty()) {
             curAnimInst.curFrameTime = 0.0f;
             curAnimInst.curAnim->frames.insert(
                 curAnimInst.curAnim->frames.begin() + curAnimInst.curFrameIdx,
@@ -1547,55 +1574,43 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             "Created frame #" + i2s(curAnimInst.curFrameIdx + 1) + "."
         );
     }
+    setTooltip(
+        "Create a new frame after the current one, by copying "
+        "data from the current one."
+    );
     
     //Delete frame button.
-    prevCurFrameIdx = curAnimInst.curFrameIdx;
-    if(
-        processGuiListNavDelWidget(
-            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
-            "Delete the current frame.", true
-        )
-    ) {
-        curAnimInst.curAnim->deleteFrame(prevCurFrameIdx);
-        if(curAnimInst.curAnim->frames.empty()) {
-            curAnimInst.curFrameIdx = INVALID;
-            framePtr = nullptr;
-        } else {
-            framePtr = &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
+    ImGui::SameLine();
+    if(!curAnimInst.curAnim->frames.empty()) {
+        prevCurFrameIdx = curAnimInst.curFrameIdx;
+        if(
+            processGuiNavWidgetDel(
+                &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size()
+            )
+        ) {
+            curAnimInst.curAnim->deleteFrame(prevCurFrameIdx);
+            if(curAnimInst.curAnim->frames.empty()) {
+                curAnimInst.curFrameIdx = INVALID;
+                framePtr = nullptr;
+            } else {
+                framePtr =
+                    &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
+            }
+            animPlaying = false;
+            curAnimInst.curFrameTime = 0.0f;
+            changesMgr.markAsChanged();
+            setStatus(
+                "Deleted frame #" + i2s(prevCurFrameIdx + 1) + "."
+            );
         }
-        animPlaying = false;
-        curAnimInst.curFrameTime = 0.0f;
-        changesMgr.markAsChanged();
-        setStatus(
-            "Deleted frame #" + i2s(prevCurFrameIdx + 1) + "."
-        );
-    }
-    
-    //Previous frame button.
-    if(
-        processGuiListNavPrevWidget(
-            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
-            "Select the previous frame.", true
-        )
-    ) {
-        animPlaying = false;
-        curAnimInst.curFrameTime = 0.0f;
-    }
-    
-    //Next frame button.
-    if(
-        processGuiListNavNextWidget(
-            &curAnimInst.curFrameIdx, curAnimInst.curAnim->frames.size(),
-            "Select the next frame.", true
-        )
-    ) {
-        animPlaying = false;
-        curAnimInst.curFrameTime = 0.0f;
+        setTooltip("Delete the current frame.");
+    } else {
+        processGuiNavBoxPlaceholder();
     }
     
     //Misc. frame tools button.
+    ImGui::SameLine();
     if(framePtr) {
-        ImGui::SameLine();
         if(
             ImGui::ImageButton(
                 "frameMiscButton", editorIcons[EDITOR_ICON_TOOLS],
@@ -1605,6 +1620,8 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
             ImGui::OpenPopup("frameMisc");
         }
         setTooltip("Miscellaneous frame tools.");
+    } else {
+        processGuiNavBoxPlaceholder();
     }
     
     //Frame misc. popup.
@@ -1624,6 +1641,9 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
         
         ImGui::EndPopup();
     }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
 }
 
 
@@ -1853,108 +1873,102 @@ void AnimationEditor::processGuiPanelSprite() {
         curSpriteIdx = db.findSprite(curSprite->name);
     }
     
-    //Current sprite text.
-    processGuiListNavCurWidget(
-        curSpriteIdx, db.sprites.size(), "Sprite"
+    //Nav box start.
+    processGuiNavBoxStart(
+        "sprite", "Sprite", &curSpriteIdx,
+    [this] () { return db.sprites.size(); },
+    [this] () { return 1; }
     );
     
     //Previous sprite button.
-    if(
-        ImGui::ImageButton(
-            "prevSpriteButton", editorIcons[EDITOR_ICON_PREVIOUS],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        if(!db.sprites.empty()) {
-            if(!curSprite) {
-                pickSprite(db.sprites[0]->name, "", "", nullptr, false);
-            } else {
-                size_t newIdx =
-                    sumAndWrap(
-                        (int) db.findSprite(curSprite->name),
-                        -1,
-                        (int) db.sprites.size()
-                    );
-                pickSprite(db.sprites[newIdx]->name, "", "", nullptr, false);
-            }
-        }
+    if(processGuiNavBoxPrev()) {
+        pickSprite(db.sprites[curSpriteIdx]->name, "", "", nullptr, false);
     }
-    setTooltip(
-        "Select the previous\nsprite."
-    );
     
-    //Change current sprite button.
-    string spriteButtonName =
-        (curSprite ? curSprite->name : NONE_OPTION) + "##sprite";
-    ImVec2 spriteButtonSize(
-        -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
-    );
-    ImGui::SameLine();
-    if(monoButton(spriteButtonName.c_str(), spriteButtonSize)) {
-        vector<PickerItem> spriteNames;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
-            spriteNames.push_back(
-                PickerItem(
-                    db.sprites[s]->name,
-                    "", "", nullptr, "",
-                    db.sprites[s]->bitmap
-                )
-            );
-        }
-        openPickerDialog(
-            "Pick a sprite, or create a new one",
-            spriteNames,
-            std::bind(
-                &AnimationEditor::pickSprite, this,
-                std::placeholders::_1,
-                std::placeholders::_2,
-                std::placeholders::_3,
-                std::placeholders::_4,
-                std::placeholders::_5
-            ),
-            "", true, true
-        );
-    }
-    setTooltip(
-        "Pick a sprite, or create a new one."
+    //Current sprite text.
+    processGuiNavBoxCur(
+        curSprite ? curSprite->name : NONE_OPTION, true, false
     );
     
     //Next sprite button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "nextSpriteButton", editorIcons[EDITOR_ICON_NEXT],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        if(!db.sprites.empty()) {
-            if(!curSprite) {
-                pickSprite(db.sprites[0]->name, "", "", nullptr, false);
-            } else {
-                size_t newIdx =
-                    sumAndWrap(
-                        (int) db.findSprite(curSprite->name),
-                        1,
-                        (int) db.sprites.size()
-                    );
-                pickSprite(db.sprites[newIdx]->name, "", "", nullptr, false);
-            }
-        }
+    if(processGuiNavBoxNext()) {
+        pickSprite(db.sprites[curSpriteIdx]->name, "", "", nullptr, false);
     }
-    setTooltip(
-        "Select the next\nsprite."
-    );
     
-    ImGui::Spacer();
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(6);
     
-    if(curSprite) {
-        //Delete sprite button.
+    //Search sprite button.
+    if(!db.sprites.empty()) {
         if(
             ImGui::ImageButton(
-                "delSpriteButton", editorIcons[EDITOR_ICON_REMOVE],
+                "searchSpriteButton", editorIcons[EDITOR_ICON_SEARCH],
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
+            vector<PickerItem> spriteNames;
+            for(size_t s = 0; s < db.sprites.size(); s++) {
+                spriteNames.push_back(
+                    PickerItem(
+                        db.sprites[s]->name,
+                        "", "", nullptr, "",
+                        db.sprites[s]->bitmap
+                    )
+                );
+            }
+            openPickerDialog(
+                "Pick a sprite",
+                spriteNames,
+                std::bind(
+                    &AnimationEditor::pickSprite, this,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3,
+                    std::placeholders::_4,
+                    std::placeholders::_5
+                ),
+                "", false, true
+            );
+        }
+        setTooltip("Pick a sprite from the full list, or search for one.");
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Create sprite button.
+    ImGui::SameLine();
+    static string newSpriteName;
+    if(processGuiNavWidgetNew(&curSpriteIdx, db.sprites.size())) {
+        newSpriteName.clear();
+        openInputPopup("createSprite");
+    }
+    setTooltip("Create a new sprite.");
+    
+    //Create sprite popup.
+    if(
+        processGuiInputPopup(
+            "createSprite", "New sprite's name:", &newSpriteName, true
+        )
+    ) {
+        if(newSpriteName.empty()) {
+            setStatus(
+                "You must specify the new sprite's name!",
+                true
+            );
+        } else if(db.findSprite(newSpriteName) != INVALID) {
+            setStatus(
+                "A sprite called \"" + newSpriteName + "\" already exists!",
+                true
+            );
+        } else {
+            pickSprite(newSpriteName, "", "", nullptr, true);
+        }
+    }
+    
+    //Delete sprite button.
+    ImGui::SameLine();
+    if(curSprite) {
+        if(processGuiNavWidgetDel(&curSpriteIdx, db.sprites.size())) {
             string deletedSpriteName = curSprite->name;
             size_t nr = db.findSprite(deletedSpriteName);
             db.deleteSprite(nr);
@@ -1975,52 +1989,53 @@ void AnimationEditor::processGuiPanelSprite() {
             "Any frame that makes use of this sprite\n"
             "will be deleted from its animation."
         );
+    } else {
+        processGuiNavBoxPlaceholder();
     }
     
-    if(curSprite) {
-    
-        if(db.sprites.size() > 1) {
-        
-            //Import sprite button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "importSpriteButton", editorIcons[EDITOR_ICON_DUPLICATE],
-                    Point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                ImGui::OpenPopup("importSprite");
-            }
-            setTooltip(
-                "Import the data from another sprite."
-            );
-            
-            //Import sprite popup.
-            vector<string> importSpriteNames;
-            for(size_t s = 0; s < db.sprites.size(); s++) {
-                if(db.sprites[s] == curSprite) continue;
-                importSpriteNames.push_back(db.sprites[s]->name);
-            }
-            string pickedSprite;
-            if(
-                listPopup(
-                    "importSprite", importSpriteNames, &pickedSprite, true
-                )
-            ) {
-                importSpriteBmpData(pickedSprite);
-                importSpriteTransformationData(pickedSprite);
-                importSpriteHitboxData(pickedSprite);
-                importSpriteTopData(pickedSprite);
-                setStatus(
-                    "Imported all sprite data from \"" + pickedSprite + "\"."
-                );
-            }
-            
+    //Import sprite button.
+    ImGui::SameLine();
+    if(curSprite && db.sprites.size() > 1) {
+        if(
+            ImGui::ImageButton(
+                "importSpriteButton", editorIcons[EDITOR_ICON_DUPLICATE],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSprite");
         }
-        
-        //Rename sprite button.
-        static string renameSpriteName;
-        ImGui::SameLine();
+        setTooltip(
+            "Import the data from another sprite."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Import sprite popup.
+    vector<string> importSpriteNames;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        if(db.sprites[s] == curSprite) continue;
+        importSpriteNames.push_back(db.sprites[s]->name);
+    }
+    string pickedSprite;
+    if(
+        listPopup(
+            "importSprite", importSpriteNames, &pickedSprite, true
+        )
+    ) {
+        importSpriteBmpData(pickedSprite);
+        importSpriteTransformationData(pickedSprite);
+        importSpriteHitboxData(pickedSprite);
+        importSpriteTopData(pickedSprite);
+        setStatus(
+            "Imported all sprite data from \"" + pickedSprite + "\"."
+        );
+    }
+    
+    //Rename sprite button.
+    static string renameSpriteName;
+    ImGui::SameLine();
+    if(curSprite) {
         if(
             ImGui::ImageButton(
                 "renameSpriteButton", editorIcons[EDITOR_ICON_INFO],
@@ -2033,18 +2048,22 @@ void AnimationEditor::processGuiPanelSprite() {
         setTooltip(
             "Rename the current sprite."
         );
-        
-        //Rename sprite popup.
-        if(
-            processGuiInputPopup(
-                "renameSprite", "New name:", &renameSpriteName, true
-            )
-        ) {
-            renameSprite(curSprite, renameSpriteName);
-        }
-        
-        //Misc. sprite tools button.
-        ImGui::SameLine();
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Rename sprite popup.
+    if(
+        processGuiInputPopup(
+            "renameSprite", "New name:", &renameSpriteName, true
+        )
+    ) {
+        renameSprite(curSprite, renameSpriteName);
+    }
+    
+    //Misc. sprite tools button.
+    ImGui::SameLine();
+    if(curSprite) {
         if(
             ImGui::ImageButton(
                 "spriteMiscButton", editorIcons[EDITOR_ICON_TOOLS],
@@ -2054,156 +2073,158 @@ void AnimationEditor::processGuiPanelSprite() {
             ImGui::OpenPopup("spriteMisc");
         }
         setTooltip("Miscellaneous sprite tools.");
-        
-        //Sprite misc. popup.
-        bool mustOpenResizePopup = false;
-        if(ImGui::BeginPopup("spriteMisc")) {
-            if(escapeWasPressed) {
-                ImGui::CloseCurrentPopup();
-            }
-            
-            //Resize sprite selectable.
-            if(ImGui::Selectable("Resize sprite")) {
-                mustOpenResizePopup = true;
-            }
-            setTooltip(
-                "Resize the current sprite."
-            );
-            
-            //Uses in animations menu.
-            if(ImGui::BeginMenu("Uses in animations")) {
-            
-                map<string, vector<size_t> > entries;
-                for(size_t a = 0; a < db.animations.size(); a++) {
-                    Animation* aPtr = db.animations[a];
-                    for(size_t f = 0; f < aPtr->frames.size(); f++) {
-                        if(aPtr->frames[f].spritePtr == curSprite) {
-                            entries[aPtr->name].push_back(f);
-                        }
-                    }
-                }
-                
-                if(entries.empty()) {
-                    ImGui::BeginDisabled();
-                    ImGui::Selectable("No uses.");
-                    ImGui::EndDisabled();
-                    setTooltip(
-                        "The sprite is not used in any animation."
-                    );
-                }
-                
-                for(const auto& e : entries) {
-                
-                    //Entry selectable.
-                    ImGui::PushFont(
-                        game.sysContent.fntDearImGuiMonospace,
-                        game.sysContent.fntDearImGuiMonospace->LegacySize
-                    );
-                    if(ImGui::Selectable(e.first.c_str())) {
-                        pickAnimation(e.first, "", "", nullptr, false);
-                        changeState(EDITOR_STATE_ANIMATION);
-                        animPlaying = false;
-                        curAnimInst.curFrameIdx = e.second[0];
-                        curAnimInst.curFrameTime = 0.0f;
-                    }
-                    ImGui::PopFont();
-                    setTooltip(
-                        "The sprite is used in this animation " +
-                        amountStr((int) e.second.size(), "time") + ".\n"
-                        "Click to go to this animation."
-                    );
-                    
-                }
-                
-                ImGui::EndMenu();
-                
-            }
-            setTooltip(
-                "Check in what animations this sprite gets used as a frame."
-            );
-            
-            ImGui::EndPopup();
+    }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
+    
+    //Sprite misc. popup.
+    bool mustOpenResizePopup = false;
+    if(ImGui::BeginPopup("spriteMisc")) {
+        if(escapeWasPressed) {
+            ImGui::CloseCurrentPopup();
         }
         
-        static string resizeSpriteMult;
-        if(mustOpenResizePopup) {
-            resizeSpriteMult = "1.0";
-            openInputPopup("resizeSprite");
-        }
-        
-        //Resize sprite popup.
-        if(
-            processGuiInputPopup(
-                "resizeSprite", "Resize sprite by:", &resizeSpriteMult
-            )
-        ) {
-            resizeSprite(curSprite, s2f(resizeSpriteMult));
-        }
-        
-        ImVec2 modeButtonsSize(-1.0f, 24.0f);
-        
-        //Sprite bitmap button.
-        if(ImGui::Button("Bitmap", modeButtonsSize)) {
-            preSpriteBmpCamPos = game.editorsView.cam.targetPos;
-            preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
-            matchingSpriteBmpPos = curSprite->bmpPos;
-            matchingSpriteBmpSize = curSprite->bmpSize;
-            centerCameraOnSpriteBitmap(true);
-            changeState(EDITOR_STATE_SPRITE_BITMAP);
+        //Resize sprite selectable.
+        if(ImGui::Selectable("Resize sprite")) {
+            mustOpenResizePopup = true;
         }
         setTooltip(
-            "Pick what part of an image makes up this sprite."
+            "Resize the current sprite."
         );
         
-        if(curSprite->bitmap) {
-            //Sprite transformation button.
-            if(ImGui::Button("Transformation", modeButtonsSize)) {
-                changeState(EDITOR_STATE_SPRITE_TRANSFORM);
-            }
-            setTooltip(
-                "Offset, scale, or rotate the sprite's image."
-            );
-        }
+        //Uses in animations menu.
+        if(ImGui::BeginMenu("Uses in animations")) {
         
-        if(!db.bodyParts.empty()) {
-            //Sprite hitboxes button.
-            if(ImGui::Button("Hitboxes", modeButtonsSize)) {
-                if(curSprite && !curSprite->hitboxes.empty()) {
-                    changeState(EDITOR_STATE_HITBOXES);
+            map<string, vector<size_t> > entries;
+            for(size_t a = 0; a < db.animations.size(); a++) {
+                Animation* aPtr = db.animations[a];
+                for(size_t f = 0; f < aPtr->frames.size(); f++) {
+                    if(aPtr->frames[f].spritePtr == curSprite) {
+                        entries[aPtr->name].push_back(f);
+                    }
                 }
             }
-            setTooltip(
-                "Edit this sprite's hitboxes."
-            );
-        }
-        
-        if(
-            loadedMobType &&
-            loadedMobType->category->id == MOB_CATEGORY_PIKMIN
-        ) {
-        
-            //Sprite Pikmin top button.
-            if(ImGui::Button("Pikmin top", modeButtonsSize)) {
-                changeState(EDITOR_STATE_TOP);
-            }
-            setTooltip(
-                "Edit the Pikmin's top (maturity) for this sprite."
-            );
             
-        } else if(
-            loadedMobType &&
-            loadedMobType->category->id == MOB_CATEGORY_LEADERS
-        ) {
-        
-            //Sprite leader light button.
-            if(ImGui::Button("Leader light", modeButtonsSize)) {
-                changeState(EDITOR_STATE_TOP);
+            if(entries.empty()) {
+                ImGui::BeginDisabled();
+                ImGui::Selectable("No uses.");
+                ImGui::EndDisabled();
+                setTooltip(
+                    "The sprite is not used in any animation."
+                );
             }
-            setTooltip(
-                "Edit the leader's antenna light for this sprite."
-            );
+            
+            for(const auto& e : entries) {
+            
+                //Entry selectable.
+                ImGui::PushFont(
+                    game.sysContent.fntDearImGuiMonospace,
+                    game.sysContent.fntDearImGuiMonospace->LegacySize
+                );
+                if(ImGui::Selectable(e.first.c_str())) {
+                    pickAnimation(e.first, "", "", nullptr, false);
+                    changeState(EDITOR_STATE_ANIMATION);
+                    animPlaying = false;
+                    curAnimInst.curFrameIdx = e.second[0];
+                    curAnimInst.curFrameTime = 0.0f;
+                }
+                ImGui::PopFont();
+                setTooltip(
+                    "The sprite is used in this animation " +
+                    amountStr((int) e.second.size(), "time") + ".\n"
+                    "Click to go to this animation."
+                );
+                
+            }
+            
+            ImGui::EndMenu();
             
         }
+        setTooltip(
+            "Check in what animations this sprite gets used as a frame."
+        );
+        
+        ImGui::EndPopup();
+    }
+    
+    static string resizeSpriteMult;
+    if(mustOpenResizePopup) {
+        resizeSpriteMult = "1.0";
+        openInputPopup("resizeSprite");
+    }
+    
+    //Resize sprite popup.
+    if(
+        processGuiInputPopup(
+            "resizeSprite", "Resize sprite by:", &resizeSpriteMult
+        )
+    ) {
+        resizeSprite(curSprite, s2f(resizeSpriteMult));
+    }
+    
+    ImVec2 modeButtonsSize(-1.0f, 24.0f);
+    
+    //Sprite bitmap button.
+    if(ImGui::Button("Bitmap", modeButtonsSize)) {
+        preSpriteBmpCamPos = game.editorsView.cam.targetPos;
+        preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
+        matchingSpriteBmpPos = curSprite->bmpPos;
+        matchingSpriteBmpSize = curSprite->bmpSize;
+        centerCameraOnSpriteBitmap(true);
+        changeState(EDITOR_STATE_SPRITE_BITMAP);
+    }
+    setTooltip(
+        "Pick what part of an image makes up this sprite."
+    );
+    
+    if(curSprite && curSprite->bitmap) {
+        //Sprite transformation button.
+        if(ImGui::Button("Transformation", modeButtonsSize)) {
+            changeState(EDITOR_STATE_SPRITE_TRANSFORM);
+        }
+        setTooltip(
+            "Offset, scale, or rotate the sprite's image."
+        );
+    }
+    
+    if(!db.bodyParts.empty()) {
+        //Sprite hitboxes button.
+        if(ImGui::Button("Hitboxes", modeButtonsSize)) {
+            if(curSprite && !curSprite->hitboxes.empty()) {
+                changeState(EDITOR_STATE_HITBOXES);
+            }
+        }
+        setTooltip(
+            "Edit this sprite's hitboxes."
+        );
+    }
+    
+    if(
+        loadedMobType &&
+        loadedMobType->category->id == MOB_CATEGORY_PIKMIN
+    ) {
+    
+        //Sprite Pikmin top button.
+        if(ImGui::Button("Pikmin top", modeButtonsSize)) {
+            changeState(EDITOR_STATE_TOP);
+        }
+        setTooltip(
+            "Edit the Pikmin's top (maturity) for this sprite."
+        );
+        
+    } else if(
+        loadedMobType &&
+        loadedMobType->category->id == MOB_CATEGORY_LEADERS
+    ) {
+    
+        //Sprite leader light button.
+        if(ImGui::Button("Leader light", modeButtonsSize)) {
+            changeState(EDITOR_STATE_TOP);
+        }
+        setTooltip(
+            "Edit the leader's antenna light for this sprite."
+        );
         
     }
     
@@ -2388,49 +2409,41 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     //Panel title text.
     panelTitle("HITBOXES");
     
-    //Current hitbox text.
+    //Nav box start.
     size_t curHitboxIdx = hitboxSelection.getSelectedItemIdx();
-    if(hitboxSelection.isMultipleSelected()) {
-        ImGui::BeginDisabled();
-        ImGui::Text("(Multiple hitboxes selected)");
-        ImGui::EndDisabled();
-    } else {
-        processGuiListNavCurWidget(
-            curHitboxIdx, curSprite->hitboxes.size(), "Hitbox",
-            curHitboxIdx != INVALID ?
-            curSprite->hitboxes[curHitboxIdx].bodyPartName :
-            NONE_OPTION
-        );
-    }
+    processGuiNavBoxStart(
+        "hitbox", "Hitbox", &curHitboxIdx,
+    [this] () { return curSprite->hitboxes.size(); },
+    [this] () { return 1; }
+    );
     
     //Previous hitbox button.
-    if(
-        processGuiListNavPrevWidget(
-            &curHitboxIdx, curSprite->hitboxes.size(),
-            "Select the previous hitbox.", false, "", 1.0f, "", true
-        )
-    ) {
+    if(processGuiNavBoxPrev()) {
         hitboxSelection.clear();
         hitboxSelection.select(curHitboxIdx);
         prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
     }
+    
+    //Current hitbox text.
+    processGuiNavBoxCur(
+        curHitboxIdx != INVALID ?
+        curSprite->hitboxes[curHitboxIdx].bodyPartName :
+        NONE_OPTION,
+        true
+    );
     
     //Next hitbox button.
-    if(
-        processGuiListNavNextWidget(
-            &curHitboxIdx, curSprite->hitboxes.size(),
-            "Select the next hitbox.", true, "", 1.0f, "", true
-        )
-    ) {
+    if(processGuiNavBoxNext()) {
         hitboxSelection.clear();
         hitboxSelection.select(curHitboxIdx);
         prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
     }
     
-    if(curHitboxIdx != INVALID && db.sprites.size() > 1) {
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(2);
     
-        //Import hitbox data button.
-        ImGui::SameLine();
+    //Import hitbox data button.
+    if(curHitboxIdx != INVALID && db.sprites.size() > 1) {
         if(
             ImGui::ImageButton(
                 "importDataButton", editorIcons[EDITOR_ICON_DUPLICATE],
@@ -2442,39 +2455,44 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
         setTooltip(
             "Import the hitbox data from another sprite."
         );
-        
-        //Import sprite popup.
-        vector<string> importSpriteNames;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
-            if(db.sprites[s] == curSprite) continue;
-            importSpriteNames.push_back(db.sprites[s]->name);
-        }
-        string pickedSprite;
-        if(
-            listPopup(
-                "importSpriteHitboxes", importSpriteNames,
-                &pickedSprite, true
-            )
-        ) {
-            importSpriteHitboxData(pickedSprite);
-            setStatus(
-                "Imported hitbox data from \"" + pickedSprite + "\"."
-            );
-        }
-        
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //Import sprite popup.
+    vector<string> importSpriteNames;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        if(db.sprites[s] == curSprite) continue;
+        importSpriteNames.push_back(db.sprites[s]->name);
+    }
+    string pickedSprite;
+    if(
+        listPopup(
+            "importSpriteHitboxes", importSpriteNames,
+            &pickedSprite, true
+        )
+    ) {
+        importSpriteHitboxData(pickedSprite);
+        setStatus(
+            "Imported hitbox data from \"" + pickedSprite + "\"."
+        );
     }
     
     //Misc. hitbox tools button.
     ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "hitboxMiscButton", editorIcons[EDITOR_ICON_TOOLS],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        ImGui::OpenPopup("hitboxMisc");
+    if(curHitboxIdx != INVALID) {
+        if(
+            ImGui::ImageButton(
+                "hitboxMiscButton", editorIcons[EDITOR_ICON_TOOLS],
+                Point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("hitboxMisc");
+        }
+        setTooltip("Miscellaneous hitbox tools.");
+    } else {
+        processGuiNavBoxPlaceholder();
     }
-    setTooltip("Miscellaneous hitbox tools.");
     
     //Hitbox misc. popup.
     if(ImGui::BeginPopup("hitboxMisc")) {
@@ -2568,8 +2586,10 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
         ImGui::EndPopup();
     }
     
+    //End the nav box.
+    processGuiNavBoxEnd();
+    
     //Side view checkbox.
-    ImGui::Spacer();
     if(ImGui::Checkbox("Use side view", &sideView)) {
         hitboxSelection.itemsAreRectangular = sideView;
     }

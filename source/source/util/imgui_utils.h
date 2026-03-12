@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -20,6 +21,7 @@
 #include "geometry_utils.h"
 
 
+using std::stack;
 using std::string;
 using std::vector;
 
@@ -27,6 +29,14 @@ using std::vector;
 namespace ImGui {
 
 void AdjustColorHSV(ImVec4& color, float hDelta, float sDelta, float vDelta);
+void AlignNextItems(
+    const vector<int>& itemWidths, float alignment = 0.5f, int extraPadding = 0
+);
+void AlignNextText(
+    const char* textStr, float alignment = 0.5f, int extraPadding = 0
+);
+void BeginAlign();
+void BeginFrameBox(const string& id);
 bool Combo(
     const string& label, int* currentItem, const vector<string>& items,
     int popupMaxHeightInItems = -1
@@ -46,7 +56,10 @@ bool DragTime2(
     const string& format1 = "m", const string& format2 = "s",
     int limit1 = INT_MAX, int limit2 = 59
 );
+void EndAlign();
+void EndFrameBox();
 void FocusOnInputText(bool& condition);
+int GetItemsTotalWidth(const vector<int>& itemWidths);
 void Image(
     ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
     const Point& uv0 = Point(), const Point& uv1 = Point(1.0f),
@@ -76,12 +89,14 @@ void Reset();
 void SetupButtonWrapping(
     int nextButtonWidth, int nextButtonIdx, int totalNButtons
 );
-void SetupCentering(int upcomingItemsWidth);
 bool SliderAngleWithContext(
     const char* label, float* vRad, float vDegreesMin = -360.0f,
     float vDegreesMax = +360.0f, const char* format = "%.0f deg",
     ImGuiSliderFlags flags = 0
 );
 void Spacer();
+
+extern stack<int> alignmentCursorStarts;
+extern stack<int> alignmentContentRegions;
 
 };

@@ -197,27 +197,32 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
             "If you delete, you will lose all unsaved progress, and the\n"
             "GUI definition's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current GUI definition?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -232,6 +237,7 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
         deleteCurrentGuiDef();
     }
     ImGui::PopStyleColor(3);
+    ImGui::EndAlign();
 }
 
 
@@ -495,7 +501,8 @@ void GuiEditor::processGuiNewDialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(180);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({180});
     if(!newDialog.problem.empty()) {
         ImGui::BeginDisabled();
     }
@@ -523,6 +530,7 @@ void GuiEditor::processGuiNewDialog() {
         "Create the GUI definition!" :
         newDialog.problem
     );
+    ImGui::EndAlign();
 }
 
 
