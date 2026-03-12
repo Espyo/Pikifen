@@ -672,7 +672,7 @@ void Game::shutdown() {
     }
     );
     
-    delete dummyMobState;
+    delete dummyScriptState;
     
     unloadMiscResources();
     destroyMobCategories();
@@ -757,7 +757,7 @@ int Game::start() {
     loadMakerTools();
     saveMakerTools();
     
-    dummyMobState = new ScriptState("dummy");
+    dummyScriptState = new ScriptState("dummy");
     
     if(makerTools.usePerfMon) {
         perfMon = new PerformanceMonitor();

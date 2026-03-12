@@ -176,7 +176,7 @@ void Enemy::revive() {
     if(type->reviveStateIdx != INVALID) {
         fsm.setState(type->reviveStateIdx);
     } else {
-        fsm.setState(type->firstStateIdx);
+        fsm.setState(type->fsm.firstStateIdx);
     }
 }
 

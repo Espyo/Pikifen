@@ -404,8 +404,8 @@ public:
 
 
 /**
- * @brief A state in an FSM. A script can only be in one state at any given
- * time. Multiple mobs can share these states.
+ * @brief A state in an FSM database. An FSM can only be in one state at any
+ * given time. Multiple FSMs can share these states.
  */
 class ScriptState {
 
@@ -486,9 +486,30 @@ public:
 
 
 /**
- * @brief The easy fsm creator makes it easy to create mob FSMs in C++ code.
+ * @brief Contains information about how an FSM instance should run.
+ */
+class FsmDatabase {
 
- * For mobs created by the game maker, the state machine is simpler,
+public:
+
+    //--- Public members ---
+
+    //Actions to run on startup.
+    vector<ScriptActionCall*> initActions;
+    
+    //The full list of states, events and actions.
+    vector<ScriptState*> states;
+    
+    //Index of the state the FSM starts at.
+    size_t firstStateIdx = INVALID;
+
+};
+
+
+/**
+ * @brief The easy fsm creator makes it easy to create FSMs in C++ code.
+
+ * For FSMs created by the game maker, the state machine is simpler,
  * and written in plain text using a data file. But for the engine and
  * some preset FSMs, like the Pikmin and leader logic, there's no good way
  * to create a finite-state machine with something as simple as plain text
@@ -529,33 +550,6 @@ private:
     
     void commitState();
     void commitEvent();
-    
-};
-
-
-/**
- * @brief Info about how two hitboxes interacted.
- */
-struct HitboxInteraction {
-
-    //--- Public members ---
-    
-    //Mob that touched our mob.
-    Mob* mob2 = nullptr;
-    
-    //Hitbox of our mob that got touched.
-    Hitbox* h1 = nullptr;
-    
-    //Hitbox of the other mob.
-    Hitbox* h2 = nullptr;
-    
-    
-    //--- Public function declarations ---
-    
-    explicit HitboxInteraction(
-        Mob* mob2 = nullptr,
-        Hitbox* h1 = nullptr, Hitbox* h2 = nullptr
-    );
     
 };
 

@@ -697,6 +697,26 @@ void Group::sort(SubgroupType* leadingType) {
 
 
 #pragma endregion
+#pragma region Hitbox interaction
+
+
+/**
+ * @brief Constructs a new hitbox interaction object.
+ *
+ * @param mob2 The other mob.
+ * @param h1 The current mob's hitbox.
+ * @param h2 The other mob's hitbox.
+ */
+HitboxInteraction::HitboxInteraction(
+    Mob* mob2, Hitbox* h1, Hitbox* h2
+) {
+    this->mob2 = mob2;
+    this->h1 = h1;
+    this->h2 = h2;
+}
+
+
+#pragma endregion
 #pragma region Hold info
 
 
@@ -1268,8 +1288,8 @@ Mob* createMob(
         codeAfterCreation(mPtr);
     }
     
-    for(size_t a = 0; a < type->initActions.size(); a++) {
-        type->initActions[a]->run(&mPtr->fsm, nullptr, nullptr);
+    for(size_t a = 0; a < type->fsm.initActions.size(); a++) {
+        type->fsm.initActions[a]->run(&mPtr->fsm, nullptr, nullptr);
     }
     
     if(!vars.empty()) {
@@ -1289,11 +1309,11 @@ Mob* createMob(
             firstStateOverride :
             mPtr->fsm.firstStateOverride != INVALID ?
             mPtr->fsm.firstStateOverride :
-            type->firstStateIdx
+            type->fsm.firstStateIdx
         )
     ) {
         //If something went wrong, give it some dummy state.
-        mPtr->fsm.curState = game.dummyMobState;
+        mPtr->fsm.curState = game.dummyScriptState;
     };
     
     for(size_t c = 0; c < type->children.size(); c++) {

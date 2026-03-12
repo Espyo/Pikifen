@@ -404,14 +404,8 @@ public:
     
     //- Script -
     
-    //Actions to run on spawn.
-    vector<ScriptActionCall*> initActions;
-    
-    //The states, events and actions. Basically, the FSM.
-    vector<ScriptState*> states;
-    
-    //Index of the state a mob starts at.
-    size_t firstStateIdx = INVALID;
+    //FSM database.
+    FsmDatabase fsm;
     
     //Name of the state to go to when it's dying.
     string dyingStateName;

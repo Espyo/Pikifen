@@ -134,8 +134,8 @@ public:
     //Allegro display that represents the program window.
     ALLEGRO_DISPLAY* display = nullptr;
     
-    //A dummy mob state for mobs with no state to use.
-    ScriptState* dummyMobState = nullptr;
+    //A dummy script state for FSMs with no state to use.
+    ScriptState* dummyScriptState = nullptr;
     
     //Error manager.
     ErrorManager errors;

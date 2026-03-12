@@ -36,13 +36,13 @@ void TrackFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->fsm.states = efc.finish();
+    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_TRACK_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->fsm.states.size() == N_TRACK_STATES,
+        i2s(typ->fsm.states.size()) + " registered, " +
         i2s(N_TRACK_STATES) + " in enum."
     );
 }

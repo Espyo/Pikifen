@@ -63,11 +63,11 @@ MobType::MobType(MOB_CATEGORY categoryId) :
  * @brief Destroys the mob type object.
  */
 MobType::~MobType() {
-    states.clear();
-    for(size_t a = 0; a < initActions.size(); a++) {
-        delete initActions[a];
+    fsm.states.clear();
+    for(size_t a = 0; a < fsm.initActions.size(); a++) {
+        delete fsm.initActions[a];
     }
-    initActions.clear();
+    fsm.initActions.clear();
 }
 
 
@@ -75,7 +75,6 @@ MobType::~MobType() {
  * @brief Creates and adds carrying-related states to the FSM.
  */
 void MobType::createAndAddCarryingStates() {
-
     EasyFsmCreator efc;
     
     efc.newState("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
@@ -175,7 +174,7 @@ void MobType::createAndAddCarryingStates() {
     
     vector<ScriptState*> newStates = efc.finish();
     
-    states.insert(states.end(), newStates.begin(), newStates.end());
+    fsm.states.insert(fsm.states.end(), newStates.begin(), newStates.end());
     
 }
 
@@ -739,7 +738,7 @@ void MobType::loadFromDataNode(
         
         DataNode scriptFile;
         scriptFile.loadFile(folderPath + "/script.txt", nullptr, true, true);
-        size_t oldNStates = states.size();
+        size_t oldNStates = fsm.states.size();
         
         DataNode* deathStateNameNode =
             scriptFile.getChildByName("death_state");
@@ -763,29 +762,30 @@ void MobType::loadFromDataNode(
         //Load init actions.
         loadActions(
             this,
-            scriptFile.getChildByName("init"), &initActions, nullptr
+            scriptFile.getChildByName("init"), &fsm.initActions, nullptr
         );
+
         //Load the rest of the script.
         loadScript(
             this,
             scriptFile.getChildByName("script"),
             scriptFile.getChildByName("global"),
-            &states
+            &fsm.states
         );
         
-        if(states.size() > oldNStates) {
+        if(fsm.states.size() > oldNStates) {
         
             DataNode* firstStateNameNode =
                 scriptFile.getChildByName("first_state");
             string firstStateName = firstStateNameNode->value;
             
-            for(size_t s = 0; s < states.size(); s++) {
-                if(states[s]->name == firstStateName) {
-                    firstStateIdx = s;
+            for(size_t s = 0; s < fsm.states.size(); s++) {
+                if(fsm.states[s]->name == firstStateName) {
+                    fsm.firstStateIdx = s;
                     break;
                 }
             }
-            if(firstStateIdx == INVALID) {
+            if(fsm.firstStateIdx == INVALID) {
                 game.errors.report(
                     "Unknown state \"" + firstStateName + "\" "
                     "to set as the first state!",
@@ -794,8 +794,8 @@ void MobType::loadFromDataNode(
             }
             
             if(!dyingStateName.empty()) {
-                for(size_t s = 0; s < states.size(); s++) {
-                    if(states[s]->name == dyingStateName) {
+                for(size_t s = 0; s < fsm.states.size(); s++) {
+                    if(fsm.states[s]->name == dyingStateName) {
                         dyingStateIdx = s;
                         break;
                     }
@@ -815,8 +815,8 @@ void MobType::loadFromDataNode(
                 string reviveStateName = reviveStateNameNode->value;
                 
                 if(!reviveStateName.empty()) {
-                    for(size_t s = 0; s < states.size(); s++) {
-                        if(states[s]->name == reviveStateName) {
+                    for(size_t s = 0; s < fsm.states.size(); s++) {
+                        if(fsm.states[s]->name == reviveStateName) {
                             reviveStateIdx = s;
                             break;
                         }
@@ -829,7 +829,7 @@ void MobType::loadFromDataNode(
                         );
                     }
                 } else {
-                    reviveStateIdx = firstStateIdx;
+                    reviveStateIdx = fsm.firstStateIdx;
                 }
             }
         }

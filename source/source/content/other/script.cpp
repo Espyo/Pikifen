@@ -27,7 +27,7 @@
 
 /**
  * @brief Creates a new action call for the current event, one that changes
- * the mob's state to something else.
+ * the FSM's state to something else.
  *
  * @param newState State to change to.
  */
@@ -115,31 +115,11 @@ void EasyFsmCreator::run(CustomActionCode code) {
 
 
 #pragma endregion
-#pragma region Hitbox interaction
+#pragma region Script event
 
 
 /**
- * @brief Constructs a new hitbox interaction object.
- *
- * @param mob2 The other mob.
- * @param h1 The current mob's hitbox.
- * @param h2 The other mob's hitbox.
- */
-HitboxInteraction::HitboxInteraction(
-    Mob* mob2, Hitbox* h1, Hitbox* h2
-) {
-    this->mob2 = mob2;
-    this->h1 = h1;
-    this->h2 = h2;
-}
-
-
-#pragma endregion
-#pragma region Mob event
-
-
-/**
- * @brief Constructs a new mob event object given a data node.
+ * @brief Constructs a new script event object given a data node.
  *
  * @param node The data node.
  * @param actions Its actions.
@@ -166,7 +146,7 @@ ScriptEvent::ScriptEvent(
 
 
 /**
- * @brief Constructs a new mob event object.
+ * @brief Constructs a new script event object.
  *
  * @param t The event type.
  * @param a Its actions.
@@ -335,11 +315,11 @@ void ScriptEvent::run(Fsm* fsm, void* customData1, void* customData2) {
 
 
 #pragma endregion
-#pragma region Mob FSM
+#pragma region FSM
 
 
 /**
- * @brief Constructs a new mob FSM object.
+ * @brief Constructs a new FSM object.
  *
  * @param m The mob this FSM belongs to.
  */
@@ -393,8 +373,8 @@ string Fsm::getMakerToolVarsStr() const {
  * @return The index, or INVALID if it doesn't exist.
  */
 size_t Fsm::getStateIdx(const string& name) const {
-    for(size_t s = 0; s < m->type->states.size(); s++) {
-        if(m->type->states[s]->name == name) {
+    for(size_t s = 0; s < m->type->fsm.states.size(); s++) {
+        if(m->type->fsm.states[s]->name == name) {
             return s;
         }
     }
@@ -464,9 +444,9 @@ bool Fsm::setState(size_t newState, void* info1, void* info2) {
         runEvent(SCRIPT_EV_ON_LEAVE, info1, info2);
     }
     
-    if(newState < m->type->states.size() && newState != INVALID) {
+    if(newState < m->type->fsm.states.size() && newState != INVALID) {
         //Switch states.
-        curState = m->type->states[newState];
+        curState = m->type->fsm.states[newState];
         
         //Run the code to enter the new state.
         runEvent(SCRIPT_EV_ON_ENTER, info1, info2);
@@ -480,11 +460,11 @@ bool Fsm::setState(size_t newState, void* info1, void* info2) {
 
 
 #pragma endregion
-#pragma region Mob state
+#pragma region Script state
 
 
 /**
- * @brief Constructs a new mob state object.
+ * @brief Constructs a new script state object.
  *
  * @param name The state's name.
  */
@@ -498,7 +478,7 @@ ScriptState::ScriptState(const string& name) :
 
 
 /**
- * @brief Constructs a new mob state object.
+ * @brief Constructs a new script state object.
  *
  * @param name The state's name.
  * @param evs Its events.
@@ -513,7 +493,7 @@ ScriptState::ScriptState(const string& name, ScriptEvent* evs[N_SCRIPT_EVENTS]) 
 
 
 /**
- * @brief Constructs a new mob state object.
+ * @brief Constructs a new script state object.
  *
  * @param name The state's name.
  * @param id Its ID, for sorting on the vector of states.
@@ -549,7 +529,7 @@ ScriptEvent* ScriptState::getEvent(const SCRIPT_EV type) const {
  * For instance, state-switching actions that use a name instead of an index.
  *
  * @param states The vector of states.
- * @param startingState Name of the starting state for the mob.
+ * @param startingState Name of the starting state for the FSM.
  * @param mt Mob type these states belong to.
  * @return The index of the starting state.
  */
@@ -609,7 +589,7 @@ size_t fixStates(
  * @brief Loads the states from the script and global events data nodes.
  *
  * @param mt The type of mob the states are going to.
- * @param scriptNode The data node containing the mob's script.
+ * @param scriptNode The data node containing the script.
  * @param globalNode The data node containing global events.
  * @param outStates The loaded states are returned into this vector.
  */
@@ -823,8 +803,8 @@ void loadState(
  * @param mt The type of mob.
  */
 void unloadScript(MobType* mt) {
-    for(size_t s = 0; s < mt->states.size(); s++) {
-        ScriptState* sPtr = mt->states[s];
+    for(size_t s = 0; s < mt->fsm.states.size(); s++) {
+        ScriptState* sPtr = mt->fsm.states[s];
         
         for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
             ScriptEvent* ePtr = sPtr->events[e];
@@ -842,7 +822,7 @@ void unloadScript(MobType* mt) {
         delete sPtr;
         
     }
-    mt->states.clear();
+    mt->fsm.states.clear();
 }
 
 

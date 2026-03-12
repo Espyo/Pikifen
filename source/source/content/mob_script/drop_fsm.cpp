@@ -62,13 +62,13 @@ void DropFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "falling", typ);
+    typ->fsm.states = efc.finish();
+    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "falling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_DROP_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->fsm.states.size() == N_DROP_STATES,
+        i2s(typ->fsm.states.size()) + " registered, " +
         i2s(N_DROP_STATES) + " in enum."
     );
 }
