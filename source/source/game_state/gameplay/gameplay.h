@@ -206,9 +206,9 @@ struct AreaRegionStatus {
 
 
 /**
- * @brief Information about how a mission mob checklist is doing.
+ * @brief Information about how a mission mob group is doing.
  */
-struct MissionMobChecklistStatus {
+struct MissionMobGroupStatus {
 
     //--- Public members ---
     
@@ -218,12 +218,10 @@ struct MissionMobChecklistStatus {
     //The list's starting amount.
     size_t startingAmount = 0;
     
-    //The list's required number.
-    size_t requiredAmount = 0;
-    
     
     //--- Public function declarations ---
     
+    size_t getNrCleared() const;
     bool remove(Mob* m);
     
 };
@@ -335,11 +333,8 @@ public:
     //Status of each area region.
     vector<AreaRegionStatus> areaRegions;
     
-    //Whether each mission event got triggered already.
-    vector<bool> missionEventsTriggered;
-    
-    //Status of each mission mob checklist.
-    vector<MissionMobChecklistStatus> missionMobChecklists;
+    //Status of each mission mob group.
+    vector<MissionMobGroupStatus> missionMobGroups;
     
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> missionRemainingMobIds;
@@ -386,8 +381,11 @@ public:
     //Whether the mission ended in a clear or a failure.
     bool missionWasCleared = false;
     
-    //Mission event that triggered the mission to end. INVALID for none.
-    size_t missionEndEventIdx = INVALID;
+    //Whether to consider the time remaining as 0, for mission scoring.
+    bool missionConsiderZeroTime = false;
+    
+    //End condition that triggered the mission to end. INVALID for none.
+    size_t missionEndCondIdx = INVALID;
     
     //Current mission score, for use in the HUD.
     int missionScore = 0;
@@ -483,7 +481,9 @@ public:
     int calculateMissionScore(bool forHud);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     bool endMission(
-        bool clear, bool showTimesUpMsg = false, MissionEvent* ev = nullptr
+        bool clear, bool zeroTime,
+        bool showTimesUpMsg = false, MissionEndCond* cond = nullptr,
+        bool silent = false
     );
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
     size_t getAmountOfGroupPikmin(

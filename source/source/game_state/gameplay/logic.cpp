@@ -952,19 +952,21 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *******************/
         if(game.curArea->type == AREA_TYPE_MISSION) {
         
-            //Mission events.
+            //Mission end conditions.
             for(
-                size_t e = 0; e < game.curArea->mission.events.size(); e++
+                size_t c = 0; c < game.curArea->mission.endConds.size(); c++
             ) {
-                if(missionEventsTriggered[e]) continue;
-                MissionEvent* evPtr = &game.curArea->mission.events[e];
-                MissionEvType* evTypePtr = game.missionEvTypes[evPtr->type];
-                if(evTypePtr->isMet(evPtr, &game.curArea->mission, this)) {
-                    MissionActionType* actionTypePtr =
-                        game.missionActionTypes[evPtr->actionType];
-                    if(actionTypePtr->run(evPtr, this)) {
-                        missionEventsTriggered[e] = true;
-                    }
+                MissionEndCond* condPtr =
+                    &game.curArea->mission.endConds[c];
+                MissionEndCondType* condTypePtr =
+                    game.missionEndCondTypes[condPtr->type];
+
+                if(condTypePtr->isMet(condPtr, &game.curArea->mission, this)) {
+                    endMission(
+                        condPtr->canGiveMedal, condPtr->zeroTimeForScore,
+                        condPtr->type == MISSION_END_COND_TIME_LIMIT,
+                        condPtr
+                    );
                 }
             }
             

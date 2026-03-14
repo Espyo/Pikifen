@@ -273,7 +273,7 @@ void Results::addNewScoreMarkerBulletPoint(
 void Results::continuePlaying() {
     game.fadeMgr.startFade(false, [] () {
         game.states.gameplay->afterHours = true;
-        game.states.gameplay->missionEndEventIdx = INVALID;
+        game.states.gameplay->missionEndCondIdx = INVALID;
         game.audio.setCurrentSong("");
         game.changeState(game.states.gameplay, true, false);
         game.states.gameplay->enter();
@@ -666,7 +666,7 @@ void Results::initGuiMain() {
         string endReason;
         if(endEv) {
             endReason =
-                game.missionEvTypes[endEv->type]->getHudInfo(
+                game.missionEndCondTypes[endEv->type]->getHudInfo(
                     endEv, &game.curArea->mission, game.states.gameplay
                 ).reason;
         }
@@ -751,7 +751,7 @@ void Results::initGuiMain() {
     gui.addItem(retryButton, "retry");
     
     //Keep playing button.
-    if(endEv && endEv->type == MISSION_EV_TIME_LIMIT) {
+    if(endEv && endEv->type == MISSION_END_COND_TIME_LIMIT) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
@@ -953,10 +953,10 @@ void Results::load() {
     }
     
     endEv = nullptr;
-    if(game.states.gameplay->missionEndEventIdx != INVALID) {
+    if(game.states.gameplay->missionEndCondIdx != INVALID) {
         endEv =
-            &game.curArea->mission.events[
-                game.states.gameplay->missionEndEventIdx
+            &game.curArea->mission.endConds[
+                game.states.gameplay->missionEndCondIdx
             ];
     }
     

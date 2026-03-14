@@ -1079,10 +1079,10 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         if(clickedMobIdx != INVALID) {
             auto& listRef =
-                game.curArea->mission.mobChecklists[
-                    curMobChecklistIdx
+                game.curArea->mission.mobGroups[
+                    curMobGroupIdx
                 ].mobIdxs;
-            registerChange("mission mob checklist choice change");
+            registerChange("mission mob group choice change");
             auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
             if(it == listRef.end()) {
                 listRef.push_back(clickedMobIdx);

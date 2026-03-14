@@ -45,7 +45,7 @@ enum MISSION_PRESET {
 
     //Grow as many Pikmin as you can within the time limit.
     //Medal depends on how many you grew. Matches P1.
-    MISSION_PRESET_GROW_PIKMIN,
+    MISSION_PRESET_GROW_MANY_PIKMIN,
     
     //Collect as many treasures as you can within the time limit.
     //Medal depends on how many got collected, platinum for all. Matches P3.
@@ -71,7 +71,7 @@ enum MISSION_PRESET {
 
 //Mission preset enum naming.
 buildEnumNames(missionPresetNames, MISSION_PRESET)({
-    { MISSION_PRESET_GROW_PIKMIN, "Grow Pikmin" },
+    { MISSION_PRESET_GROW_MANY_PIKMIN, "Grow Many Pikmin" },
     { MISSION_PRESET_COLLECT_TREASURE, "Collect Treasure" },
     { MISSION_PRESET_BATTLE_ENEMIES, "Battle Enemies" },
     { MISSION_PRESET_DEFEAT_BOSSES, "Defeat Bosses" },
@@ -80,97 +80,79 @@ buildEnumNames(missionPresetNames, MISSION_PRESET)({
 });
 
 
-//Possible events that can happen in missions.
-enum MISSION_EV {
+//Possible non-script end conditions for missions.
+enum MISSION_END_COND {
 
-    //Mission was ended from the pause menu.
-    MISSION_EV_PAUSE_MENU_END,
+    //Ended through the pause menu.
+    MISSION_END_COND_PAUSE_MENU,
     
-    //Specified mob checklist was cleared.
-    MISSION_EV_MOB_CHECKLIST,
+    //Specified amount of target mobs were cleared.
+    MISSION_END_COND_MOB_GROUP,
     
     //Time limit was reached.
-    MISSION_EV_TIME_LIMIT,
+    MISSION_END_COND_TIME_LIMIT,
     
     //Specified amount of leaders entered the specified in-area region.
-    MISSION_EV_LEADERS_IN_REGION,
+    MISSION_END_COND_LEADERS_IN_REGION,
     
     //Pikmin count reached specified amount or more.
-    MISSION_EV_PIKMIN_OR_MORE,
+    MISSION_END_COND_PIKMIN_OR_MORE,
     
     //Pikmin count reached specified amount or fewer.
-    MISSION_EV_PIKMIN_OR_FEWER,
+    MISSION_END_COND_PIKMIN_OR_FEWER,
     
     //Specified amount of Pikmin was lost.
-    MISSION_EV_LOSE_PIKMIN,
+    MISSION_END_COND_LOSE_PIKMIN,
     
     //Specified amount of leaders were lost.
-    MISSION_EV_LOSE_LEADERS,
+    MISSION_END_COND_LOSE_LEADERS,
     
     //A leader took damage.
-    MISSION_EV_TAKE_DAMAGE,
-    
-    //Triggered via scripting.
-    MISSION_EV_SCRIPT,
+    MISSION_END_COND_TAKE_DAMAGE,
     
 };
 
 
-//Possible actions to take when a mission event happens.
-enum MISSION_ACTION {
-
-    //End the mission as a clear. A medal can be awarded.
-    MISSION_ACTION_END_CLEAR,
-    
-    //End the mission as a failure. A medal cannot be awarded.
-    MISSION_ACTION_END_FAIL,
-    
-    //Send a message to the script.
-    MISSION_ACTION_SEND_MESSAGE,
-    
-};
-
-
-//Types of mission mob checklists.
-enum MISSION_MOB_CHECKLIST {
+//Types of mission mob groups.
+enum MISSION_MOB_GROUP {
 
     //Mobs from the given list.
-    MISSION_MOB_CHECKLIST_CUSTOM,
+    MISSION_MOB_GROUP_CUSTOM,
     
     //Treasures and treasure-like objects.
-    MISSION_MOB_CHECKLIST_TREASURES,
+    MISSION_MOB_GROUP_TREASURES,
     
     //Enemies and enemy-like objects.
-    MISSION_MOB_CHECKLIST_ENEMIES,
+    MISSION_MOB_GROUP_ENEMIES,
     
     //Treasures, treasure-like objects, enemies, and enemy-like objects.
-    MISSION_MOB_CHECKLIST_TREASURES_ENEMIES,
+    MISSION_MOB_GROUP_TREASURES_ENEMIES,
     
     //Leader objects.
-    MISSION_MOB_CHECKLIST_LEADERS,
+    MISSION_MOB_GROUP_LEADERS,
     
     //Pikmin objects.
-    MISSION_MOB_CHECKLIST_PIKMIN,
+    MISSION_MOB_GROUP_PIKMIN,
     
 };
 
 
-//Mission mob checklist type enum naming.
-buildEnumNames(missionMobChecklistTypeNames, MISSION_MOB_CHECKLIST)({
-    { MISSION_MOB_CHECKLIST_CUSTOM, "Custom" },
-    { MISSION_MOB_CHECKLIST_TREASURES, "Treasures" },
-    { MISSION_MOB_CHECKLIST_ENEMIES, "Enemies" },
-    { MISSION_MOB_CHECKLIST_TREASURES_ENEMIES, "Treasures and enemies" },
-    { MISSION_MOB_CHECKLIST_LEADERS, "Leaders" },
-    { MISSION_MOB_CHECKLIST_PIKMIN, "Pikmin" },
+//Mission mob GROUP type enum naming.
+buildEnumNames(missionMobGroupTypeNames, MISSION_MOB_GROUP)({
+    { MISSION_MOB_GROUP_CUSTOM, "Custom" },
+    { MISSION_MOB_GROUP_TREASURES, "Treasures" },
+    { MISSION_MOB_GROUP_ENEMIES, "Enemies" },
+    { MISSION_MOB_GROUP_TREASURES_ENEMIES, "Treasures and enemies" },
+    { MISSION_MOB_GROUP_LEADERS, "Leaders" },
+    { MISSION_MOB_GROUP_PIKMIN, "Pikmin" },
 });
 
 
 //Scoring criterion types for score-based missions.
 enum MISSION_SCORE_CRITERION {
 
-    //Amount of mobs from a checklist cleared.
-    MISSION_SCORE_CRITERION_MOB_CHECKLIST,
+    //Amount of mobs from a group cleared.
+    MISSION_SCORE_CRITERION_MOB_GROUP,
     
     //Total amount of living Pikmin.
     MISSION_SCORE_CRITERION_PIKMIN,
@@ -198,7 +180,7 @@ enum MISSION_SCORE_CRITERION {
 
 //Mission score criterion type enum naming.
 buildEnumNames(missionScoreCriterionTypeNames, MISSION_SCORE_CRITERION)({
-    { MISSION_SCORE_CRITERION_MOB_CHECKLIST, "Mob checklist item" },
+    { MISSION_SCORE_CRITERION_MOB_GROUP, "Mob group target" },
     { MISSION_SCORE_CRITERION_PIKMIN, "Total Pikmin" },
     { MISSION_SCORE_CRITERION_PIKMIN_BORN, "Pikmin born" },
     { MISSION_SCORE_CRITERION_PIKMIN_DEATHS, "Pikmin deaths" },
@@ -286,8 +268,8 @@ buildEnumNames(missionHudItemContentTypeNames, MISSION_HUD_ITEM_CONTENT)({
 //Types of things a mission HUD item can show amounts of.
 enum MISSION_HUD_ITEM_AMT {
 
-    //Amounts in one or more mob checklist.
-    MISSION_HUD_ITEM_AMT_MOB_CHECKLIST,
+    //Amounts in one or more mob groups.
+    MISSION_HUD_ITEM_AMT_MOB_GROUP,
     
     //Amount of leaders inside one or more regions.
     MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION,
@@ -309,8 +291,8 @@ enum MISSION_HUD_ITEM_AMT {
 
 //Mission HUD item amount type enum naming.
 buildEnumNames(missionHudItemAmountTypeNames, MISSION_HUD_ITEM_AMT)({
-    { MISSION_HUD_ITEM_AMT_MOB_CHECKLIST, "Mob checklist" },
-    { MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION, "Leaders in region" },
+    { MISSION_HUD_ITEM_AMT_MOB_GROUP, "Mobs from groups" },
+    { MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION, "Leaders in regions" },
     { MISSION_HUD_ITEM_AMT_PIKMIN, "Pikmin count" },
     { MISSION_HUD_ITEM_AMT_LEADERS, "Leader count" },
     { MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS, "Pikmin deaths" },
@@ -354,7 +336,7 @@ enum MISSION_MEDAL_AWARD_MODE {
 };
 
 
-//DEPRECATED by MISSION_EV in 1.2.0.
+//DEPRECATED by MISSION_END_COND in 1.2.0.
 //Possible goals in a mission.
 enum MISSION_GOAL {
 
@@ -379,7 +361,7 @@ enum MISSION_GOAL {
 };
 
 
-//DEPRECATED by MISSION_EV in 1.2.0.
+//DEPRECATED by MISSION_END_COND in 1.2.0.
 //Possible ways to fail at a mission.
 enum MISSION_FAIL_COND {
 
@@ -440,14 +422,14 @@ enum MISSION_SCORE_CRITERIA {
 
 
 /**
- * @brief Represents an event in the mission.
+ * @brief Represents a non-script end condition in the mission.
  */
-struct MissionEvent {
+struct MissionEndCond {
 
     //--- Public members ---
     
-    //Type of event.
-    MISSION_EV type = MISSION_EV_PAUSE_MENU_END;
+    //Type of condition.
+    MISSION_END_COND type = MISSION_END_COND_MOB_GROUP;
     
     //Index-related parameter, if applicable. Can be used for other things too.
     size_t indexParam = 0;
@@ -455,11 +437,8 @@ struct MissionEvent {
     //Amount-related parameter, if applicable. Can be used for other things too.
     size_t amountParam = 1;
     
-    //Action to take when the event happens.
-    MISSION_ACTION actionType = MISSION_ACTION_END_CLEAR;
-    
-    //Action script message to send, if applicable.
-    string actionMessage;
+    //Whether a medal can be obtained when the mission ends.
+    bool canGiveMedal = true;
     
     //Whether the time remaining becomes 0 for scoring purposes, if applicable.
     bool zeroTimeForScore = false;
@@ -468,17 +447,14 @@ struct MissionEvent {
 
 
 /**
- * @brief A checklist of mobs that is relevant to a mission.
+ * @brief A group of mobs that is relevant to a mission.
  */
-struct MissionMobChecklist {
+struct MissionMobGroup {
 
     //--- Public members ---
     
     //Type.
-    MISSION_MOB_CHECKLIST type = MISSION_MOB_CHECKLIST_CUSTOM;
-    
-    //Amount, if any. 0 means all.
-    size_t requiredAmount = 0;
+    MISSION_MOB_GROUP type = MISSION_MOB_GROUP_CUSTOM;
     
     //For enemies, do they need to be collected, or is it enough for them
     //to be defeated?
@@ -503,7 +479,7 @@ struct MissionScoreCriterion {
     //--- Public members ---
     
     //Type.
-    MISSION_SCORE_CRITERION type = MISSION_SCORE_CRITERION_MOB_CHECKLIST;
+    MISSION_SCORE_CRITERION type = MISSION_SCORE_CRITERION_MOB_GROUP;
     
     //Index-related parameter, if applicable. Can be used for other things too.
     size_t indexParam = 0;
@@ -539,7 +515,7 @@ struct MissionHudItem {
     //Fixed number for the total amount, if applicable.
     size_t totalAmount = 0;
     
-    //List of mob checklists or regions to account for, if applicable.
+    //List of mob groups or regions to account for, if applicable.
     vector<size_t> idxsList;
     
 };
@@ -555,11 +531,11 @@ struct MissionData {
     //Preset. Only really used for the editor's GUI.
     MISSION_PRESET preset = MISSION_PRESET_CUSTOM;
     
-    //Mission events.
-    vector<MissionEvent> events;
+    //Mission end conditions.
+    vector<MissionEndCond> endConds;
     
-    //Mob checklists.
-    vector<MissionMobChecklist> mobChecklists;
+    //Mob groups.
+    vector<MissionMobGroup> mobGroups;
     
     //Mission medal award mode.
     MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
@@ -750,13 +726,13 @@ struct MissionRecord {
 
 
 #pragma endregion
-#pragma region Event types
+#pragma region End condition types
 
 
 /**
- * @brief Class interface for a mission event type.
+ * @brief Class interface for a mission end condition type.
  */
-class MissionEvType {
+class MissionEndCondType {
 
 public:
 
@@ -769,7 +745,7 @@ public:
     
         //--- Public members ---
         
-        //Description of the event.
+        //Description of the condition.
         string description;
         
         //The index-related parameter's name. Empty if not used.
@@ -794,10 +770,11 @@ public:
     
         //--- Public members ---
         
-        //A description of the event. Empty if not used.
+        //A description of the condition. Empty if not used.
         string description;
         
-        //The reason of what happened to trigger the event. Empty if not used.
+        //The reason of what happened to trigger the condition.
+        //Empty if not used.
         string reason;
         
     };
@@ -805,27 +782,27 @@ public:
     
     //--- Public function declarations ---
     
-    virtual ~MissionEvType() = default;
+    virtual ~MissionEndCondType() = default;
     virtual string getName() const = 0;
     virtual EditorInfo getEditorInfo() const = 0;
     virtual HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const = 0;
     virtual bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const = 0;
     virtual bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const = 0;
     
 };
 
 
 /**
- * @brief Class representing the "pause menu end" mission event.
+ * @brief Class representing the "pause menu" mission end condition.
  */
-class MissionEvTypePauseEnd : public MissionEvType {
+class MissionEndCondTypePauseMenu : public MissionEndCondType {
 
 public:
 
@@ -834,23 +811,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "mob clear" mission event.
+ * @brief Class representing the "mob group" mission end condition.
  */
-class MissionEvTypeMobChecklist : public MissionEvType {
+class MissionEndCondTypeMobGroup : public MissionEndCondType {
 
 public:
 
@@ -859,23 +836,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "time limit" mission event.
+ * @brief Class representing the "time limit" mission end condition.
  */
-class MissionEvTypeTimeLimit : public MissionEvType {
+class MissionEndCondTypeTimeLimit : public MissionEndCondType {
 
 public:
 
@@ -884,23 +861,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "leaders in region" mission event.
+ * @brief Class representing the "leaders in region" mission end condition.
  */
-class MissionEvTypeLeadersInRegion : public MissionEvType {
+class MissionEndCondTypeLeadersInRegion : public MissionEndCondType {
 
 public:
 
@@ -909,23 +886,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "Pikmin or more" mission event.
+ * @brief Class representing the "Pikmin or more" mission end condition.
  */
-class MissionEvTypePikminOrMore : public MissionEvType {
+class MissionEndCondTypePikminOrMore : public MissionEndCondType {
 
 public:
 
@@ -934,23 +911,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "Pikmin or fewer" mission event.
+ * @brief Class representing the "Pikmin or fewer" mission end condition
  */
-class MissionEvTypePikminOrFewer : public MissionEvType {
+class MissionEndCondTypePikminOrFewer : public MissionEndCondType {
 
 public:
 
@@ -959,23 +936,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "lose Pikmin" mission event.
+ * @brief Class representing the "lose Pikmin" mission end condition.
  */
-class MissionEvTypeLosePikmin : public MissionEvType {
+class MissionEndCondTypeLosePikmin : public MissionEndCondType {
 
 public:
 
@@ -984,23 +961,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "lose leaders" mission event.
+ * @brief Class representing the "lose leaders" mission end condition.
  */
-class MissionEvTypeLoseLeaders : public MissionEvType {
+class MissionEndCondTypeLoseLeaders : public MissionEndCondType {
 
 public:
 
@@ -1009,23 +986,23 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     
 };
 
 
 /**
- * @brief Class representing the "take damage" mission event.
+ * @brief Class representing the "take damage" mission end condition.
  */
-class MissionEvTypeTakeDamage : public MissionEvType {
+class MissionEndCondTypeTakeDamage : public MissionEndCondType {
 
 public:
 
@@ -1034,124 +1011,15 @@ public:
     string getName() const override;
     EditorInfo getEditorInfo() const override;
     HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
     bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
         Point* outCamPos, float* outCamZoom
     ) const override;
     bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
     ) const override;
-    
-};
-
-
-/**
- * @brief Class representing the "script" mission event.
- */
-class MissionEvTypeScriptTrigger : public MissionEvType {
-
-public:
-
-    //--- Public function declarations ---
-    
-    string getName() const override;
-    EditorInfo getEditorInfo() const override;
-    HudInfo getHudInfo(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-    ) const override;
-    bool getZoomData(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
-        Point* outCamPos, float* outCamZoom
-    ) const override;
-    bool isMet(
-        MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-    ) const override;
-    
-};
-
-
-#pragma endregion
-#pragma region Action types
-
-
-/**
- * @brief Class interface for a mission action type.
- */
-class MissionActionType {
-
-public:
-
-    //--- Public misc. definitions ---
-    
-    /**
-     * @brief Information that's only useful for the editor.
-     */
-    struct EditorInfo {
-    
-        //--- Public members ---
-        
-        //Description of the event.
-        string description;
-        
-    };
-    
-    
-    //--- Public function declarations ---
-    
-    virtual ~MissionActionType() = default;
-    virtual string getName() const = 0;
-    virtual EditorInfo getEditorInfo() const = 0;
-    virtual bool run(MissionEvent* ev, GameplayState* gameplay) const = 0;
-    
-};
-
-
-/**
- * @brief Class representing the "mission end, clear" mission event.
- */
-class MissionActionTypeEndClear : public MissionActionType {
-
-public:
-
-    //--- Public function declarations ---
-    
-    string getName() const override;
-    EditorInfo getEditorInfo() const override;
-    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
-    
-};
-
-
-/**
- * @brief Class representing the "mission end, fail" mission event.
- */
-class MissionActionTypeEndFail : public MissionActionType {
-
-public:
-
-    //--- Public function declarations ---
-    
-    string getName() const override;
-    EditorInfo getEditorInfo() const override;
-    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
-    
-};
-
-
-/**
- * @brief Class representing the "send script message" mission event.
- */
-class MissionActionTypeScriptMessage : public MissionActionType {
-
-public:
-
-    //--- Public function declarations ---
-    
-    string getName() const override;
-    EditorInfo getEditorInfo() const override;
-    bool run(MissionEvent* ev, GameplayState* gameplay) const override;
     
 };
 
@@ -1181,9 +1049,9 @@ public:
 
 
 /**
- * @brief Class representing the "mob checklist mob" mission score criterion.
+ * @brief Class representing the "mob group mob" mission score criterion.
  */
-class MissionScoreCriterionTypeMobChecklist : public MissionScoreCriterionType {
+class MissionScoreCriterionTypeMobGroup : public MissionScoreCriterionType {
 
 public:
 

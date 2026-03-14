@@ -195,11 +195,8 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
-    //Database of all mission event types.
-    vector<MissionEvType*> missionEvTypes;
-    
-    //Database of all mission action types.
-    vector<MissionActionType*> missionActionTypes;
+    //Database of all mission end conditions.
+    vector<MissionEndCondType*> missionEndCondTypes;
     
     //Database of all mission score criteria types.
     vector<MissionScoreCriterionType*> missionScoreCriterionTypes;

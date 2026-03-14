@@ -2515,25 +2515,21 @@ void PauseMenu::startLeavingGameplay() {
         leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
         game.curArea->type == AREA_TYPE_MISSION
     ) {
-        bool missionEndsInClear = false;
-        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curArea->mission.events[e];
-            if(ePtr->type != MISSION_EV_PAUSE_MENU_END) continue;
-            if(ePtr->actionType == MISSION_ACTION_END_CLEAR) {
-                missionEndsInClear = true;
-                game.states.gameplay->missionEndEventIdx = e;
+        MissionEndCond* cPtr = nullptr;
+        for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+            if(
+                game.curArea->mission.endConds[c].type ==
+                MISSION_END_COND_PAUSE_MENU
+            ) {
+                cPtr = &game.curArea->mission.endConds[c];
                 break;
-            } else if(ePtr->actionType == MISSION_ACTION_END_FAIL) {
-                missionEndsInClear = false;
-                game.states.gameplay->missionEndEventIdx = e;
-                break;
-            } else {
-                MissionActionType* actionType =
-                    game.missionActionTypes[ePtr->actionType];
-                actionType->run(ePtr, game.states.gameplay);
             }
         }
-        game.states.gameplay->missionWasCleared = missionEndsInClear;
+        game.states.gameplay->endMission(
+            cPtr ? cPtr->canGiveMedal : false,
+            cPtr ? cPtr->zeroTimeForScore : true,
+            false, cPtr, true
+        );
     }
     game.states.gameplay->startLeaving(leaveTarget);
 }

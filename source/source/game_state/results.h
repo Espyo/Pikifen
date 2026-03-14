@@ -124,8 +124,8 @@ private:
     //Medal obtained. Cache for convenience.
     MISSION_MEDAL medal = MISSION_MEDAL_NONE;
     
-    //Mission event that ended the mission, if any. Cache for convenience.
-    MissionEvent* endEv = nullptr;
+    //End condition that ended the mission, if any. Cache for convenience.
+    MissionEndCond* endEv = nullptr;
     
     //Final mission score. Cache for convenience.
     int finalMissionScore = 0;

@@ -4767,7 +4767,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 const auto processIdxsListWidgets =
                     [this] (
                         vector<size_t>* idxs,
-                        const string& label, const string& descriptor
+                        const string& label, const string& term
                 ) {
                 
                     if(idxs->empty()) idxs->push_back(0);
@@ -4777,17 +4777,18 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         //Add button.
                         if(
                             ImGui::ImageButton(
-                                "addIdxButton",
+                                "add" + label + "IdxButton" + i2s(i),
                                 editorIcons[EDITOR_ICON_ADD],
-                                Point(EDITOR::ICON_BMP_SIZE)
+                                Point(EDITOR::ICON_BMP_SIZE) * 0.75f
                             )
                         ) {
                             registerChange(
-                                "mission HUD item " + descriptor +
+                                "mission HUD item " + term +
                                 " addition"
                             );
                             idxs->insert(idxs->begin() + i, 0);
                         }
+                        setTooltip("Add a new " + term + ".");
                         
                         //Remove button.
                         ImGui::SameLine();
@@ -4795,17 +4796,18 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         
                             if(
                                 ImGui::ImageButton(
-                                    "remIdxButton",
+                                    "rem" + label + "IdxButton" + i2s(i),
                                     editorIcons[EDITOR_ICON_REMOVE],
-                                    Point(EDITOR::ICON_BMP_SIZE)
+                                    Point(EDITOR::ICON_BMP_SIZE) * 0.75f
                                 )
                             ) {
                                 registerChange(
-                                    "mission HUD item " + descriptor +
+                                    "mission HUD item " + term +
                                     " removal"
                                 );
                                 idxs->erase(idxs->begin() + i);
                             }
+                            setTooltip("Remove this " + term + ".");
                             
                         } else {
                         
@@ -4830,13 +4832,13 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                             )
                         ) {
                             registerChange(
-                                "mission HUD item " + descriptor + " change"
+                                "mission HUD item " + term + " change"
                             );
                             idx--;
                             idxs->operator[](i) = (size_t) idx;
                         }
                         setTooltip(
-                            "Number of the " + descriptor + " to get the\n"
+                            "Number of the " + term + " to get the\n"
                             "amounts from. If you specify multiple ones,\n"
                             "it combines all of them."
                         );
@@ -4881,8 +4883,6 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         &itemPtr->idxsList, "Mob group number", "mob group"
                     );
                     
-                    break;
-                    
                 }
                 
                 if(
@@ -4896,26 +4896,9 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         "Region number", "region"
                     );
                     
-                    break;
-                    
                 }
                 
-                if(
-                    itemPtr->contentType !=
-                    MISSION_HUD_ITEM_CONTENT_CUR_AMT &&
-                    (
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_PIKMIN ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADERS ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADER_KOS
-                    )
-                ) {
+                if(itemPtr->contentType != MISSION_HUD_ITEM_CONTENT_CUR_AMT) {
                 
                     //Total amount value.
                     int total = itemPtr->totalAmount;

@@ -378,8 +378,8 @@ void Area::clone(Area& other) {
     other.thumbnail = thumbnail;
     
     other.mission.preset = mission.preset;
-    other.mission.events = mission.events;
-    other.mission.mobChecklists = mission.mobChecklists;
+    other.mission.endConds = mission.endConds;
+    other.mission.mobGroups = mission.mobGroups;
     other.mission.timeLimit = mission.timeLimit;
     other.mission.medalAwardMode = mission.medalAwardMode;
     other.mission.startingPoints = mission.startingPoints;
@@ -1354,56 +1354,52 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
     mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
-    //Events.
-    DataNode* eventsNode = node->getChildByName("mission_events");
-    size_t nEvents = eventsNode->getNrOfChildren();
-    for(size_t e = 0; e < nEvents; e++) {
-        DataNode* eventNode = eventsNode->getChild(e);
-        MissionEvent newEvent;
+    //End conditions.
+    DataNode* condsNode = node->getChildByName("mission_end_conditions");
+    size_t nConds = condsNode->getNrOfChildren();
+    for(size_t c = 0; c < nConds; c++) {
+        DataNode* condNode = condsNode->getChild(c);
+        MissionEndCond newCond;
         
-        ReaderSetter eRS(eventNode);
+        ReaderSetter cRS(condNode);
         int typeInt = 0;
-        int actionTypeInt = 0;
         
-        eRS.set("type", typeInt);
-        eRS.set("index_param", newEvent.indexParam);
-        eRS.set("amount_param", newEvent.amountParam);
-        eRS.set("action_type", actionTypeInt);
-        eRS.set("action_message", newEvent.actionMessage);
-        eRS.set("zero_time_for_score", newEvent.zeroTimeForScore);
+        cRS.set("type", typeInt);
+        cRS.set("index_param", newCond.indexParam);
+        cRS.set("amount_param", newCond.amountParam);
+        cRS.set("can_give_medal", newCond.canGiveMedal);
+        cRS.set("zero_time_for_score", newCond.zeroTimeForScore);
         
-        newEvent.type = (MISSION_EV) typeInt;
-        newEvent.actionType = (MISSION_ACTION) actionTypeInt;
+        newCond.type = (MISSION_END_COND) typeInt;
         
-        mission.events.push_back(newEvent);
+        mission.endConds.push_back(newCond);
     }
     
-    //Mob checklists.
-    DataNode* mobChecklistsNode =
-        node->getChildByName("mission_mob_checklists");
-    size_t nMobChecklists = mobChecklistsNode->getNrOfChildren();
-    for(size_t c = 0; c < nMobChecklists; c++) {
-        DataNode* checklistNode = mobChecklistsNode->getChild(c);
-        MissionMobChecklist newChecklist;
+    //Mob groups.
+    DataNode* mobGroupsNode =
+        node->getChildByName("mission_mob_groups");
+    size_t nMobGroups = mobGroupsNode->getNrOfChildren();
+    for(size_t g = 0; g < nMobGroups; g++) {
+        DataNode* groupNode = mobGroupsNode->getChild(g);
+        MissionMobGroup newGroup;
         
-        ReaderSetter cRS(checklistNode);
+        ReaderSetter cRS(groupNode);
         int typeInt = 0;
         string mobIdxsStr;
         
         cRS.set("type", typeInt);
-        cRS.set("amount", newChecklist.requiredAmount);
-        cRS.set("enemies_need_collection", newChecklist.enemiesNeedCollection);
+        cRS.set("enemies_need_collection", newGroup.enemiesNeedCollection);
         cRS.set("mob_idxs", mobIdxsStr);
         
-        newChecklist.type = (MISSION_MOB_CHECKLIST) typeInt;
+        newGroup.type = (MISSION_MOB_GROUP) typeInt;
         
         vector<string> mobIdxsStrVec = semicolonListToVector(mobIdxsStr);
-        newChecklist.mobIdxs.reserve(mobIdxsStrVec.size());
+        newGroup.mobIdxs.reserve(mobIdxsStrVec.size());
         for(size_t m = 0; m < mobIdxsStrVec.size(); m++) {
-            newChecklist.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
+            newGroup.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
         }
         
-        mission.mobChecklists.push_back(newChecklist);
+        mission.mobGroups.push_back(newGroup);
     }
     
     //HUD items.
@@ -1593,15 +1589,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
     }
     
-    //Port the goal to events + mob checklists.
-    size_t goalMobChecklistIdx = 0;
+    //Port the goal to end conditions + mob groups.
+    size_t goalMobGroupIdx = 0;
     size_t exitRegionIdx = 0;
-    mission.events.push_back(
-    MissionEvent {
-        .type = MISSION_EV_PAUSE_MENU_END,
-        .actionType = MISSION_ACTION_END_FAIL,
-    }
-    );
     
     switch(goal) {
     case MISSION_GOAL_END_MANUALLY: {
@@ -1610,21 +1600,27 @@ void Area::loadOldMissionSystem(DataNode* node) {
     } case MISSION_GOAL_COLLECT_TREASURE: {
         mission.briefingObjective =
             "Collect treasures!";
-        mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_TREASURES,
-            .requiredAmount = 0,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_TREASURES,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
-        goalMobChecklistIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = goalMobChecklistIdx,
-            .actionType = MISSION_ACTION_END_CLEAR
+        goalMobGroupIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .canGiveMedal = true,
+            .zeroTimeForScore = true
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
+            .indexParam = goalMobGroupIdx,
+            .amountParam = goalAllMobs ? 0 : goalAmount,
+            .canGiveMedal = true
         }
         );
         break;
@@ -1632,22 +1628,27 @@ void Area::loadOldMissionSystem(DataNode* node) {
     } case MISSION_GOAL_BATTLE_ENEMIES: {
         mission.briefingObjective =
             "Battle enemies!";
-        mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_ENEMIES,
-            .requiredAmount = 0,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_ENEMIES,
             .enemiesNeedCollection = enemyPointsOnCollection,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
-        goalMobChecklistIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = goalMobChecklistIdx,
-            .actionType = MISSION_ACTION_END_CLEAR
+        goalMobGroupIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .canGiveMedal = true,
+            .zeroTimeForScore = true
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
+            .indexParam = goalMobGroupIdx,
+            .canGiveMedal = true,
         }
         );
         break;
@@ -1655,11 +1656,17 @@ void Area::loadOldMissionSystem(DataNode* node) {
     } case MISSION_GOAL_TIMED_SURVIVAL: {
         mission.briefingObjective =
             "Survive until the time limit!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .canGiveMedal = false,
+            .zeroTimeForScore = false
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TIME_LIMIT,
+            .canGiveMedal = true
         }
         );
         mission.timeLimit = goalAmount;
@@ -1668,7 +1675,6 @@ void Area::loadOldMissionSystem(DataNode* node) {
     } case MISSION_GOAL_GET_TO_EXIT: {
         mission.briefingObjective =
             "Get the leaders to the exit!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
         regions.push_back(
         new AreaRegion {
             .center = goalExitCenter,
@@ -1676,13 +1682,20 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         exitRegionIdx = regions.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LEADERS_IN_REGION,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .canGiveMedal = false,
+            .zeroTimeForScore = true
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LEADERS_IN_REGION,
             .indexParam = exitRegionIdx,
             .amountParam =
             goalAllMobs ? 1 : goalMobIdxs.size(),
-            .actionType = MISSION_ACTION_END_CLEAR,
+            .canGiveMedal = true,
         }
         );
         break;
@@ -1690,28 +1703,34 @@ void Area::loadOldMissionSystem(DataNode* node) {
     } case MISSION_GOAL_GROW_PIKMIN: {
         mission.briefingObjective =
             "Grow " + i2s(goalAmount) + " Pikmin!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_MORE,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .canGiveMedal = false,
+            .zeroTimeForScore = true
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = goalAmount,
-            .actionType = MISSION_ACTION_END_CLEAR
+            .canGiveMedal = true
         }
         );
         break;
     }
     }
     
-    //Port the fail conditions to events.
+    //Port the fail conditions to end conditions.
     if(
         hasFlag(
             failConditions, getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_FAIL,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TIME_LIMIT,
+            .canGiveMedal = false,
         }
         );
         mission.timeLimit = failTimeLimit;
@@ -1721,11 +1740,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_FEWER,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_FEWER,
             .amountParam = failTooFewPikAmount,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1734,11 +1753,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_MORE,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = failTooManyPikAmount,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1747,11 +1766,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_PIKMIN,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LOSE_PIKMIN,
             .amountParam = failPikKilled,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1760,10 +1779,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TAKE_DAMAGE,
-            .actionType = MISSION_ACTION_END_FAIL,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TAKE_DAMAGE,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1772,11 +1791,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = failLeadersKod,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1786,18 +1805,18 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         )
     ) {
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_ENEMIES,
-            .requiredAmount = failEnemiesDefeated,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_ENEMIES,
         }
         );
-        enemyDefeatFailIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
+        enemyDefeatFailIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = enemyDefeatFailIdx,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .amountParam = failEnemiesDefeated,
+            .canGiveMedal = false,
         }
         );
     }
@@ -1806,7 +1825,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
+        mission.endConds[0].canGiveMedal = false;
     }
     
     //Port the goal HUD items.
@@ -1824,9 +1843,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+            MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobChecklistIdx };
+        { goalMobGroupIdx };
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
         
@@ -1835,9 +1854,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+            MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobChecklistIdx };
+        { goalMobGroupIdx };
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
         
@@ -1967,7 +1986,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
         mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[id].idxsList = { enemyDefeatFailIdx };
         mission.hudItems[id].text = "Enemies:";
     }
@@ -2515,41 +2534,34 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     mGW.write("mission_maker_record", mission.makerRecord);
     mGW.write("mission_maker_record_date", mission.makerRecordDate);
     
-    //Events.
-    DataNode* eventsNode = node->addNew("mission_events");
-    for(size_t e = 0; e < mission.events.size(); e++) {
-        DataNode* eventNode = eventsNode->addNew("event");
-        MissionEvent* eventPtr = &mission.events[e];
+    //End conditions.
+    DataNode* condsNode = node->addNew("mission_end_conditions");
+    for(size_t c = 0; c < mission.endConds.size(); c++) {
+        DataNode* condNode = condsNode->addNew("end_condition");
+        MissionEndCond* condPtr = &mission.endConds[c];
         
-        GetterWriter eGW(eventNode);
+        GetterWriter cGW(condNode);
         
-        eGW.write("type", eventPtr->type);
-        eGW.write("index_param", eventPtr->indexParam);
-        eGW.write("amount_param", eventPtr->amountParam);
-        eGW.write("action_type", eventPtr->actionType);
-        eGW.write("zero_time_for_score", eventPtr->zeroTimeForScore);
-        
-        if(!eventPtr->actionMessage.empty()) {
-            eGW.write("action_message", eventPtr->actionMessage);
-        }
+        cGW.write("type", condPtr->type);
+        cGW.write("index_param", condPtr->indexParam);
+        cGW.write("amount_param", condPtr->amountParam);
+        cGW.write("can_give_medal", condPtr->canGiveMedal);
+        cGW.write("zero_time_for_score", condPtr->zeroTimeForScore);
     }
     
-    //Mob checklists.
-    DataNode* checklistsNode = node->addNew("mission_mob_checklists");
-    for(size_t c = 0; c < mission.mobChecklists.size(); c++) {
-        DataNode* checklistNode = checklistsNode->addNew("checklist");
-        MissionMobChecklist* checklistPtr = &mission.mobChecklists[c];
+    //Mob groups.
+    DataNode* groupsNode = node->addNew("mission_mob_groups");
+    for(size_t g = 0; g < mission.mobGroups.size(); g++) {
+        DataNode* groupNode = groupsNode->addNew("group");
+        MissionMobGroup* groupPtr = &mission.mobGroups[g];
         
-        GetterWriter cGW(checklistNode);
+        GetterWriter cGW(groupNode);
         
-        cGW.write("type", checklistPtr->type);
-        cGW.write("amount", checklistPtr->requiredAmount);
-        cGW.write(
-            "enemies_need_collection", checklistPtr->enemiesNeedCollection
-        );
+        cGW.write("type", groupPtr->type);
+        cGW.write("enemies_need_collection", groupPtr->enemiesNeedCollection);
         
         vector<string> mobIdxsStrVec;
-        for(auto m : checklistPtr->mobIdxs) {
+        for(auto m : groupPtr->mobIdxs) {
             mobIdxsStrVec.push_back(i2s(m));
         }
         string mobIdxsStr = join(mobIdxsStrVec, ";");

@@ -431,7 +431,7 @@ private:
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
         
-        //Picking mobs for the mission mob checklist.
+        //Picking mobs for a mission mob group.
         EDITOR_SUB_STATE_MISSION_MOBS,
         
         //Drawing paths.
@@ -520,8 +520,8 @@ private:
     //When showing a hazard in the list, this is the index of the current one.
     size_t curHazardIdx = INVALID;
     
-    //Mission mob checklist index currently being edited.
-    size_t curMobChecklistIdx = INVALID;
+    //Mission mob group index currently being edited.
+    size_t curMobGroupIdx = INVALID;
     
     //The current transformation widget.
     TransformationWidget curTransformationWidget;
@@ -1213,14 +1213,14 @@ private:
     void processGuiPanelMissionOld();
     void processGuiPanelMissionBriefing();
     void processGuiPanelMissionEssentials();
-    void processGuiPanelMissionEv();
+    void processGuiPanelMissionEndCond();
     void processGuiPanelMissionFail(bool* dayDurationNeedsUpdate);
     void processGuiPanelMissionGoalBe();
     void processGuiPanelMissionGoalCt();
     void processGuiPanelMissionGoalGte();
     void processGuiPanelMissionMedalAward();
     void processGuiPanelMissionHudItems();
-    void processGuiPanelMissionMobChecklists();
+    void processGuiPanelMissionMobGroups();
     void processGuiPanelMissionScoreCriteria();
     void processGuiPanelMob();
     void processGuiPanelMobs();

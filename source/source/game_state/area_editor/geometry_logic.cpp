@@ -558,8 +558,8 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
             }
         }
         
-        for(size_t c = 0; c < game.curArea->mission.mobChecklists.size(); c++) {
-            MissionMobChecklist* cPtr = &game.curArea->mission.mobChecklists[c];
+        for(size_t c = 0; c < game.curArea->mission.mobGroups.size(); c++) {
+            MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
                 if(cPtr->mobIdxs[m] == mIdx) {
                     cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);

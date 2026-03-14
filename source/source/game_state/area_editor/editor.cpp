@@ -961,9 +961,9 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         game.curArea->regions.erase(
             game.curArea->regions.begin() + selectedRegionIdx
         );
-        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curArea->mission.events[e];
-            if(ePtr->type != MISSION_EV_LEADERS_IN_REGION) continue;
+        for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
+            MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+            if(ePtr->type != MISSION_END_COND_LEADERS_IN_REGION) continue;
             if(ePtr->indexParam == 0) continue;
             adjustMisalignedIndex(
                 ePtr->indexParam, selectedRegionIdx, false
@@ -3161,15 +3161,13 @@ void AreaEditor::selectAllCmd(float inputValue) {
     } else if(
         subState == EDITOR_SUB_STATE_MISSION_MOBS
     ) {
-        registerChange("mission mob checklist choice change");
-        game.curArea->mission.mobChecklists[
-            curMobChecklistIdx
+        registerChange("mission mob group choice change");
+        game.curArea->mission.mobGroups[
+            curMobGroupIdx
         ].mobIdxs.clear();
-        for(
-            size_t m = 0; m < game.curArea->mobGenerators.size(); m++
-        ) {
-            game.curArea->mission.mobChecklists[
-                curMobChecklistIdx
+        for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+            game.curArea->mission.mobGroups[
+                curMobGroupIdx
             ].mobIdxs.push_back(m);
         }
     }

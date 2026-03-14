@@ -387,7 +387,7 @@ void GameplayMessageBox::tick(float deltaT) {
  */
 GameplayState::GameplayState() :
     scriptVM(nullptr) {
-
+    
 }
 
 
@@ -492,70 +492,80 @@ void GameplayState::doLogic() {
  * @brief Ends the currently ongoing mission.
  *
  * @param clear Is it a clear or a failure?
+ * @param zeroTime Consider the time left as 0?
  * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
  * normal mission end messages.
- * @param ev Mission event responsible for this end, if any.
+ * @param cond Mission end condition responsible for this end, if any.
+ * @param silent Whether it can play a jingle and such.
  * @return Whether it was able to end the mission.
  */
 bool GameplayState::endMission(
-    bool clear, bool showTimesUpMsg, MissionEvent* ev
+    bool clear, bool zeroTime,
+    bool showTimesUpMsg, MissionEndCond* cond, bool silent
 ) {
     if(interlude.get() != INTERLUDE_NONE) return false;
     
     interlude.set(INTERLUDE_MISSION_END, false);
     deltaTMult = 0.5f;
     stopAllLeaders();
-    
-    //Zoom in on the reason, if possible.
     for(Player& player : players) {
-        Point newCamPos = player.view.cam.targetPos;
-        float newCamZoom = player.view.cam.targetZoom;
-        
-        if(ev) {
-            MissionEvType* evTypePtr = game.missionEvTypes[ev->type];
-            if(
-                evTypePtr->getZoomData(
-                    ev, &game.curArea->mission, this,
-                    &newCamPos, &newCamZoom
-                )
-            ) {
-                player.view.cam.targetPos = newCamPos;
-                player.view.cam.targetZoom = newCamZoom;
-            }
-        }
-    }
-    
-    BIG_MESSAGE bigMsgToShow;
-    ALLEGRO_SAMPLE* sndToPlay;
-    if(clear) {
-        bigMsgToShow = BIG_MESSAGE_MISSION_CLEAR;
-        sndToPlay = game.sysContent.sndMissionClear;
-    } else {
-        bigMsgToShow = BIG_MESSAGE_MISSION_FAILED;
-        sndToPlay = game.sysContent.sndMissionFailed;
-    }
-    if(showTimesUpMsg) {
-        bigMsgToShow = BIG_MESSAGE_TIMES_UP;
-    }
-    
-    bigMsg.set(bigMsgToShow);
-    game.audio.addNewUiSoundSource(sndToPlay);
-    game.audio.setCurrentSong("");
-    
-    for(Player& player : players) {
-        player.hud->gui.startAnimation(
-            GUI_MANAGER_ANIM_IN_TO_OUT,
-            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-        );
         player.inventory->close();
     }
     
-    missionEndEventIdx = INVALID;
-    for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
-        if(ev == &game.curArea->mission.events[e]) {
-            missionEndEventIdx = e;
+    if(!silent) {
+        //Zoom in on the reason, if possible.
+        for(Player& player : players) {
+            Point newCamPos = player.view.cam.targetPos;
+            float newCamZoom = player.view.cam.targetZoom;
+            
+            if(cond) {
+                MissionEndCondType* condTypePtr =
+                    game.missionEndCondTypes[cond->type];
+                if(
+                    condTypePtr->getZoomData(
+                        cond, &game.curArea->mission, this,
+                        &newCamPos, &newCamZoom
+                    )
+                ) {
+                    player.view.cam.targetPos = newCamPos;
+                    player.view.cam.targetZoom = newCamZoom;
+                }
+            }
+        }
+        
+        BIG_MESSAGE bigMsgToShow;
+        ALLEGRO_SAMPLE* sndToPlay;
+        if(clear) {
+            bigMsgToShow = BIG_MESSAGE_MISSION_CLEAR;
+            sndToPlay = game.sysContent.sndMissionClear;
+        } else {
+            bigMsgToShow = BIG_MESSAGE_MISSION_FAILED;
+            sndToPlay = game.sysContent.sndMissionFailed;
+        }
+        if(showTimesUpMsg) {
+            bigMsgToShow = BIG_MESSAGE_TIMES_UP;
+        }
+        
+        for(Player& player : players) {
+            player.hud->gui.startAnimation(
+                GUI_MANAGER_ANIM_IN_TO_OUT,
+                GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+            );
+        }
+        
+        bigMsg.set(bigMsgToShow);
+        game.audio.addNewUiSoundSource(sndToPlay);
+        game.audio.setCurrentSong("");
+    }
+    
+    missionEndCondIdx = INVALID;
+    for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
+        if(cond == &game.curArea->mission.endConds[e]) {
+            missionEndCondIdx = e;
         }
     }
+    game.states.gameplay->missionWasCleared = clear;
+    game.states.gameplay->missionConsiderZeroTime = zeroTime;
     
     return true;
 }
@@ -607,7 +617,7 @@ void GameplayState::enter() {
     lastPikminDeathPos = Point(LARGE_FLOAT);
     lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
     
-    missionEndEventIdx = INVALID;
+    missionEndCondIdx = INVALID;
     goalIndicatorRatio = 0.0f;
     fail1IndicatorRatio = 0.0f;
     fail2IndicatorRatio = 0.0f;
@@ -1397,35 +1407,22 @@ void GameplayState::load() {
         }
         missionRequiredMobAmount = missionRemainingMobIds.size();
         
-        missionEventsTriggered.clear();
-        missionEventsTriggered.insert(
-            missionEventsTriggered.begin(),
-            game.curArea->mission.events.size(),
-            false
-        );
-        
-        missionMobChecklists.clear();
+        missionMobGroups.clear();
         for(
             size_t c = 0;
-            c < game.curArea->mission.mobChecklists.size(); c++
+            c < game.curArea->mission.mobGroups.size(); c++
         ) {
-            missionMobChecklists.push_back(MissionMobChecklistStatus());
+            missionMobGroups.push_back(MissionMobGroupStatus());
             vector<size_t> idxs =
-                game.curArea->mission.mobChecklists[c].calculateList();
-            missionMobChecklists.back().remaining.reserve(idxs.size());
+                game.curArea->mission.mobGroups[c].calculateList();
+            missionMobGroups.back().remaining.reserve(idxs.size());
             for(size_t i = 0; i < idxs.size(); i++) {
-                missionMobChecklists.back().remaining.insert(
+                missionMobGroups.back().remaining.insert(
                     mobsPerGen[idxs[i]]
                 );
             }
-            missionMobChecklists.back().startingAmount =
-                missionMobChecklists.back().remaining.size();
-            missionMobChecklists.back().requiredAmount =
-                game.curArea->mission.mobChecklists[c].requiredAmount;
-            if(missionMobChecklists.back().requiredAmount == 0) {
-                missionMobChecklists.back().requiredAmount =
-                    missionMobChecklists.back().startingAmount;
-            }
+            missionMobGroups.back().startingAmount =
+                missionMobGroups.back().remaining.size();
         }
         
         if(game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
@@ -1763,7 +1760,7 @@ void GameplayState::unload() {
         lightmapBmp = nullptr;
     }
     
-    missionMobChecklists.clear();
+    missionMobGroups.clear();
     missionRemainingMobIds.clear();
     pathMgr.clear();
     particles.clear();
@@ -2006,7 +2003,17 @@ void InterludeInfo::tick(float deltaT) {
 
 
 #pragma endregion
-#pragma region Mission mob checklist status
+#pragma region Mission mob group status
+
+
+/**
+ * @brief Returns how many mobs have been cleared.
+ *
+ * @return The amount.
+ */
+size_t MissionMobGroupStatus::getNrCleared() const {
+    return startingAmount - remaining.size();
+}
 
 
 /**
@@ -2015,7 +2022,7 @@ void InterludeInfo::tick(float deltaT) {
  * @param m The mob.
  * @return Whether the mob is in the list.
  */
-bool MissionMobChecklistStatus::remove(Mob* m) {
+bool MissionMobGroupStatus::remove(Mob* m) {
     auto it = std::find(remaining.begin(), remaining.end(), m);
     if(it == remaining.end()) {
         return false;

@@ -1376,43 +1376,37 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         const auto getAmounts =
         [itemInfo] (int* amt1, int* amt2) {
             int currentAmount = 0;
-            int remainingAmount = 0;
-            int totalAmount = 0;
-            
             switch(itemInfo->amountType) {
-            case MISSION_HUD_ITEM_AMT_MOB_CHECKLIST: {
-                for(size_t c = 0; c < itemInfo->idxsList.size(); c++) {
-                    MissionMobChecklistStatus* cPtr =
-                        &game.states.gameplay->missionMobChecklists[
-                            itemInfo->idxsList[c] - 1
-                        ];
-                    currentAmount +=
-                        cPtr->startingAmount - cPtr->remaining.size();
-                    remainingAmount += cPtr->remaining.size();
-                    totalAmount += cPtr->requiredAmount;
+            case MISSION_HUD_ITEM_AMT_MOB_GROUP: {
+                for(size_t g = 0; g < itemInfo->idxsList.size(); g++) {
+                    size_t idx = itemInfo->idxsList[g];
+                    if(idx >= game.states.gameplay->missionMobGroups.size()) {
+                        continue;
+                    }
+                    MissionMobGroupStatus* gPtr =
+                        &game.states.gameplay->missionMobGroups[idx];
+                    currentAmount += gPtr->getNrCleared();
                 }
                 break;
                 
             } case MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION: {
                 unordered_set<Leader*> leadersInRegions;
                 for(size_t r = 0; r < itemInfo->idxsList.size(); r++) {
+                    size_t idx = itemInfo->idxsList[r];
+                    if(idx >= game.states.gameplay->areaRegions.size()) {
+                        continue;
+                    }
                     AreaRegionStatus* rPtr =
-                        &game.states.gameplay->areaRegions[
-                            itemInfo->idxsList[r]
-                        ];
+                        &game.states.gameplay->areaRegions[idx];
                     leadersInRegions.insert(
                         rPtr->leadersInside.begin(), rPtr->leadersInside.end()
                     );
                 }
                 currentAmount = leadersInRegions.size();
-                remainingAmount = itemInfo->totalAmount - currentAmount;
-                totalAmount = itemInfo->totalAmount;
                 break;
                 
             } case MISSION_HUD_ITEM_AMT_PIKMIN: {
                 currentAmount = game.states.gameplay->getAmountOfTotalPikmin();
-                remainingAmount = itemInfo->totalAmount - currentAmount;
-                totalAmount = itemInfo->totalAmount;
                 break;
                 
             } case MISSION_HUD_ITEM_AMT_LEADERS: {
@@ -1425,24 +1419,21 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                         currentAmount++;
                     }
                 }
-                remainingAmount = itemInfo->totalAmount - currentAmount;
-                totalAmount = itemInfo->totalAmount;
                 break;
                 
             } case MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS: {
                 currentAmount = game.states.gameplay->pikminDeaths;
-                remainingAmount = itemInfo->totalAmount - currentAmount;
-                totalAmount = itemInfo->totalAmount;
                 break;
                 
             } case MISSION_HUD_ITEM_AMT_LEADER_KOS: {
                 currentAmount = game.states.gameplay->leadersKod;
-                remainingAmount = itemInfo->totalAmount - currentAmount;
-                totalAmount = itemInfo->totalAmount;
                 break;
                 
             }
             }
+            
+            int remainingAmount = itemInfo->totalAmount - currentAmount;
+            int totalAmount = itemInfo->totalAmount;
             
             switch(itemInfo->contentType) {
             case MISSION_HUD_ITEM_CONTENT_CUR_TOT: {
