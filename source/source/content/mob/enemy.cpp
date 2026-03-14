@@ -106,7 +106,7 @@ void Enemy::finishDyingClassSpecifics() {
     //Corpse.
     enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
     becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
-    fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+    scriptVM.fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     
     if(reviveTimer.duration > 0.0f) {
         //Revival.
@@ -174,9 +174,9 @@ void Enemy::revive() {
     becomeUncarriable();
     
     if(type->reviveStateIdx != INVALID) {
-        fsm.setState(type->reviveStateIdx);
+        scriptVM.fsm.setState(type->reviveStateIdx);
     } else {
-        fsm.setState(type->fsm.firstStateIdx);
+        scriptVM.fsm.setState(type->scriptDef.fsm.firstStateIdx);
     }
 }
 

@@ -519,7 +519,7 @@ void PauseMenu::calculateGoHerePath() {
         return;
     }
     
-    if(!radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)) {
+    if(!radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)) {
         goHerePath.clear();
         goHerePathResult = PATH_RESULT_ERROR;
         return;
@@ -2221,7 +2221,7 @@ void PauseMenu::initRadarPage() {
                 ) + radarCursorLeader->type->name;
         } else if(
             radarSelectedLeader &&
-            !radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)
+            !radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)
         ) {
             cursorInfoText->text =
                 "Can't go here... Leader is busy!";
@@ -2476,7 +2476,7 @@ void PauseMenu::radarConfirm() {
         goHerePathResult == PATH_RESULT_PATH_WITH_SINGLE_STOP
     ) {
         //Start Go Here.
-        radarSelectedLeader->fsm.runEvent(
+        radarSelectedLeader->scriptVM.fsm.runEvent(
             LEADER_EV_GO_HERE, (void*) &radarCursor
         );
         startClosing(&radarGui);

@@ -27,7 +27,7 @@
 void ConverterFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", CONVERTER_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_THROWN_PIKMIN_LANDED); {
@@ -39,7 +39,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("bumped", CONVERTER_STATE_BUMPED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::bumped);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -55,7 +55,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("spitting", CONVERTER_STATE_SPITTING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::spit);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -64,7 +64,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("opening", CONVERTER_STATE_OPENING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::open);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -73,7 +73,7 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("dying", CONVERTER_STATE_DYING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::startDying);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -82,13 +82,14 @@ void ConverterFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_CONVERTER_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_CONVERTER_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_CONVERTER_STATES) + " in enum."
     );
 }
@@ -105,8 +106,8 @@ void ConverterFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(
@@ -126,8 +127,8 @@ void ConverterFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::bumped(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::bumped(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(
@@ -147,8 +148,8 @@ void ConverterFsm::bumped(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::finishBeingBumped(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::finishBeingBumped(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
 
     conPtr->close();
 }
@@ -161,8 +162,8 @@ void ConverterFsm::finishBeingBumped(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::finishDying(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->toDelete = true;
 }
@@ -175,11 +176,11 @@ void ConverterFsm::finishDying(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::handleObjectTouch(Fsm* fsm, void* info1, void* info2) {
+void ConverterFsm::handleObjectTouch(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* bumper = (Mob*) info1;
 
     if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
-        fsm->setState(CONVERTER_STATE_BUMPED);
+        scriptVM->fsm.setState(CONVERTER_STATE_BUMPED);
     }
 }
 
@@ -191,8 +192,8 @@ void ConverterFsm::handleObjectTouch(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::handlePikmin(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     Pikmin* pikPtr = (Pikmin*) info1;
     
     if(conPtr->amountInBuffer == conPtr->conType->bufferSize) {
@@ -235,8 +236,8 @@ void ConverterFsm::handlePikmin(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::open(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
 
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(
@@ -255,13 +256,13 @@ void ConverterFsm::open(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::openOrDie(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::openOrDie(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     if(conPtr->inputPikminLeft == 0) {
-        conPtr->fsm.setState(CONVERTER_STATE_DYING);
+        conPtr->scriptVM.fsm.setState(CONVERTER_STATE_DYING);
     } else {
-        conPtr->fsm.setState(CONVERTER_STATE_OPENING);
+        conPtr->scriptVM.fsm.setState(CONVERTER_STATE_OPENING);
     }
 }
 
@@ -274,13 +275,13 @@ void ConverterFsm::openOrDie(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::openOrSpit(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::openOrSpit(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     if(conPtr->amountInBuffer == 0) {
-        conPtr->fsm.setState(CONVERTER_STATE_OPENING);
+        conPtr->scriptVM.fsm.setState(CONVERTER_STATE_OPENING);
     } else {
-        conPtr->fsm.setState(CONVERTER_STATE_SPITTING);
+        conPtr->scriptVM.fsm.setState(CONVERTER_STATE_SPITTING);
     }
 }
 
@@ -292,8 +293,8 @@ void ConverterFsm::openOrSpit(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::spit(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::spit(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(
@@ -312,8 +313,8 @@ void ConverterFsm::spit(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::startDying(Fsm* fsm, void* info1, void* info2) {
-    Converter* conPtr = (Converter*) fsm->m;
+void ConverterFsm::startDying(ScriptVM* scriptVM, void* info1, void* info2) {
+    Converter* conPtr = (Converter*) scriptVM->mob;
     
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(

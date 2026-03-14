@@ -46,6 +46,10 @@ public:
     //--- Public function declarations ---
     
     EnemyType();
+    void createAndAddCarryingStates();
+    void handleLoadedScriptState(FsmStateDef* state) override;
     void loadCatProperties(DataNode* file) override;
+    void loadCatScriptDataPre(DataNode* file) override;
+    void loadCatScriptDataPos(DataNode* file) override;
     
 };

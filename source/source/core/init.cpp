@@ -41,7 +41,7 @@
 #include "../content/mob_category/tool_category.h"
 #include "../content/mob_category/track_category.h"
 #include "../content/mob_category/treasure_category.h"
-#include "../content/other/script.h"
+#include "../content/script/script.h"
 #include "../game_state/game_state.h"
 #include "../game_state/gameplay/gameplay.h"
 #include "../lib/imgui/imgui_impl_allegro5.h"
@@ -1205,14 +1205,14 @@ void initMiscDatabases() {
 
 
 /**
- * @brief Initializes the list of script actions.
+ * @brief Initializes the list of script action types.
  */
-void initScriptActions() {
+void initScriptActionTypes() {
 
-#define regParam(pName, pType, constant, extras) \
-    params.push_back(ScriptActionParam(pName, pType, constant, extras));
-#define regAction(aType, aName, runCode, loadCode) \
-    a = &(game.scriptActions[aType]); \
+#define queueParam(pName, pType, constant, extras) \
+    params.push_back(ScriptActionTypeParam(pName, pType, constant, extras));
+#define commitAction(aType, aName, runCode, loadCode) \
+    a = &(game.scriptActionTypes[aType]); \
     a->type = aType; \
     a->name = aName; \
     a->code = runCode; \
@@ -1221,12 +1221,12 @@ void initScriptActions() {
     params.clear();
 
 
-    game.scriptActions.assign(N_SCRIPT_ACTIONS, ScriptAction());
-    vector<ScriptActionParam> params;
-    ScriptAction* a;
+    game.scriptActionTypes.assign(N_SCRIPT_ACTIONS, ScriptActionType());
+    vector<ScriptActionTypeParam> params;
+    ScriptActionType* a;
     
     //Unknown.
-    regAction(
+    commitAction(
         SCRIPT_ACTION_UNKNOWN,
         "unknown",
         nullptr,
@@ -1234,84 +1234,84 @@ void initScriptActions() {
     );
     
     //Absolute number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_ABSOLUTE_NUMBER,
         "absolute_number",
-        MobActionRunners::absoluteNumber,
+        ScriptActionRunners::absoluteNumber,
         nullptr
     );
     
     //Add health.
-    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_ADD_HEALTH,
         "add_health",
-        MobActionRunners::addHealth,
+        ScriptActionRunners::addHealth,
         nullptr
     );
     
     //Arachnorb plan logic.
-    regParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
-        MobActionRunners::arachnorbPlanLogic,
-        MobActionLoaders::arachnorbPlanLogic
+        ScriptActionRunners::arachnorbPlanLogic,
+        ScriptActionLoaders::arachnorbPlanLogic
     );
     
     //Calculate.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("left operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("right operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("left operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("right operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_CALCULATE,
         "calculate",
-        MobActionRunners::calculate,
-        MobActionLoaders::calculate
+        ScriptActionRunners::calculate,
+        ScriptActionLoaders::calculate
     );
     
     //Ceil number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_CEIL_NUMBER,
         "ceil_number",
-        MobActionRunners::ceilNumber,
+        ScriptActionRunners::ceilNumber,
         nullptr
     );
     
     //Delete.
-    regAction(
+    commitAction(
         MOB_ACTION_DELETE,
         "delete",
-        MobActionRunners::deleteFunction,
+        ScriptActionRunners::deleteFunction,
         nullptr
     );
     
     //Drain liquid.
-    regAction(
+    commitAction(
         MOB_ACTION_DRAIN_LIQUID,
         "drain_liquid",
-        MobActionRunners::drainLiquid,
+        ScriptActionRunners::drainLiquid,
         nullptr
     );
     
     //Ease number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("method", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("method", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_EASE_NUMBER,
         "ease_number",
-        MobActionRunners::easeNumber,
-        MobActionLoaders::easeNumber
+        ScriptActionRunners::easeNumber,
+        ScriptActionLoaders::easeNumber
     );
     
     //Else.
-    regAction(
+    commitAction(
         MOB_ACTION_ELSE,
         "else",
         nullptr,
@@ -1319,18 +1319,18 @@ void initScriptActions() {
     );
     
     //Else if.
-    regParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
-    regAction(
+    queueParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
         MOB_ACTION_ELSE_IF,
         "else_if",
-        MobActionRunners::ifFunction,
-        MobActionLoaders::ifFunction
+        ScriptActionRunners::ifFunction,
+        ScriptActionLoaders::ifFunction
     );
     
     //End if.
-    regAction(
+    commitAction(
         MOB_ACTION_END_IF,
         "end_if",
         nullptr,
@@ -1338,207 +1338,207 @@ void initScriptActions() {
     );
     
     //Finish dying.
-    regAction(
+    commitAction(
         MOB_ACTION_FINISH_DYING,
         "finish_dying",
-        MobActionRunners::finishDying,
+        ScriptActionRunners::finishDying,
         nullptr
     );
     
     //Floor number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_FLOOR_NUMBER,
         "floor_number",
-        MobActionRunners::floorNumber,
+        ScriptActionRunners::floorNumber,
         nullptr
     );
     
     //Focus.
-    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_FOCUS,
         "focus",
-        MobActionRunners::focus,
-        MobActionLoaders::focus
+        ScriptActionRunners::focus,
+        ScriptActionLoaders::focus
     );
     
     //Follow mob as a leader.
-    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
-    regAction(
+    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    commitAction(
         MOB_ACTION_FOLLOW_MOB_AS_LEADER,
         "follow_mob_as_leader",
-        MobActionRunners::followMobAsLeader,
-        MobActionLoaders::followMobAsLeader
+        ScriptActionRunners::followMobAsLeader,
+        ScriptActionLoaders::followMobAsLeader
     );
     
     //Follow path randomly.
-    regParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
-    regAction(
+    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
         MOB_ACTION_FOLLOW_PATH_RANDOMLY,
         "follow_path_randomly",
-        MobActionRunners::followPathRandomly,
+        ScriptActionRunners::followPathRandomly,
         nullptr
     );
     
     //Follow path to absolute.
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
-    regAction(
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
         MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
         "follow_path_to_absolute",
-        MobActionRunners::followPathToAbsolute,
+        ScriptActionRunners::followPathToAbsolute,
         nullptr
     );
     
     //Get angle.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_ANGLE,
         "get_angle",
-        MobActionRunners::getAngle,
+        ScriptActionRunners::getAngle,
         nullptr
     );
     
     //Get angle clockwise difference.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_ANGLE_CW_DIFF,
         "get_angle_clockwise_difference",
-        MobActionRunners::getAngleCwDiff,
+        ScriptActionRunners::getAngleCwDiff,
         nullptr
     );
     
     //Get angle smallest difference.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
         "get_angle_smallest_difference",
-        MobActionRunners::getAngleSmallestDiff,
+        ScriptActionRunners::getAngleSmallestDiff,
         nullptr
     );
     
     //Get area info.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_GET_AREA_INFO,
         "get_area_info",
-        MobActionRunners::getAreaInfo,
-        MobActionLoaders::getAreaInfo
+        ScriptActionRunners::getAreaInfo,
+        ScriptActionLoaders::getAreaInfo
     );
     
     //Get chomped.
-    regAction(
+    commitAction(
         MOB_ACTION_GET_CHOMPED,
         "get_chomped",
-        MobActionRunners::getChomped,
+        ScriptActionRunners::getChomped,
         nullptr
     );
     
     //Get coordinates from angle.
-    regParam("x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
-        MobActionRunners::getCoordinatesFromAngle,
+        ScriptActionRunners::getCoordinatesFromAngle,
         nullptr
     );
     
     //Get distance.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_DISTANCE,
         "get_distance",
-        MobActionRunners::getDistance,
+        ScriptActionRunners::getDistance,
         nullptr
     );
     
     //Get event info.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_GET_EVENT_INFO,
         "get_event_info",
-        MobActionRunners::getEventInfo,
-        MobActionLoaders::getEventInfo
+        ScriptActionRunners::getEventInfo,
+        ScriptActionLoaders::getEventInfo
     );
     
     //Get floor Z.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_FLOOR_Z,
         "get_floor_z",
-        MobActionRunners::getFloorZ,
+        ScriptActionRunners::getFloorZ,
         nullptr
     );
     
     //Get focus var.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
-        MobActionRunners::getFocusVar,
+        ScriptActionRunners::getFocusVar,
         nullptr
     );
     
     //Get mob info.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("target", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("target", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_GET_MOB_INFO,
         "get_mob_info",
-        MobActionRunners::getMobInfo,
-        MobActionLoaders::getMobInfo
+        ScriptActionRunners::getMobInfo,
+        ScriptActionLoaders::getMobInfo
     );
     
     //Get random float.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("minimum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("maximum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("minimum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("maximum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
-        MobActionRunners::getRandomFloat,
+        ScriptActionRunners::getRandomFloat,
         nullptr
     );
     
     //Get random int.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("minimum value", SCRIPT_ACTION_PARAM_INT, false, false);
-    regParam("maximum value", SCRIPT_ACTION_PARAM_INT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("minimum value", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("maximum value", SCRIPT_ACTION_PARAM_INT, false, false);
+    commitAction(
         MOB_ACTION_GET_RANDOM_INT,
         "get_random_int",
-        MobActionRunners::getRandomInt,
+        ScriptActionRunners::getRandomInt,
         nullptr
     );
     
     //Goto.
-    regParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_GOTO,
         "goto",
         nullptr,
@@ -1546,43 +1546,43 @@ void initScriptActions() {
     );
     
     //Hold focused mob.
-    regParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
-    regAction(
+    queueParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    commitAction(
         MOB_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
-        MobActionRunners::holdFocus,
-        MobActionLoaders::holdFocus
+        ScriptActionRunners::holdFocus,
+        ScriptActionLoaders::holdFocus
     );
     
     //If.
-    regParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
-    regAction(
+    queueParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
         MOB_ACTION_IF,
         "if",
-        MobActionRunners::ifFunction,
-        MobActionLoaders::ifFunction
+        ScriptActionRunners::ifFunction,
+        ScriptActionLoaders::ifFunction
     );
     
     //Interpolate number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("input number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("input start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("input end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("output start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("output end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("input number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("input start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("input end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("output start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("output end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_INTERPOLATE_NUMBER,
         "interpolate_number",
-        MobActionRunners::interpolateNumber,
+        ScriptActionRunners::interpolateNumber,
         nullptr
     );
     
     //Label.
-    regParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_LABEL,
         "label",
         nullptr,
@@ -1590,583 +1590,583 @@ void initScriptActions() {
     );
     
     //Link with focused mob.
-    regAction(
+    commitAction(
         MOB_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
-        MobActionRunners::linkWithFocus,
+        ScriptActionRunners::linkWithFocus,
         nullptr
     );
     
     //Load focused mob memory.
-    regParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
-    regAction(
+    queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
+    commitAction(
         MOB_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        MobActionRunners::loadFocusMemory,
+        ScriptActionRunners::loadFocusMemory,
         nullptr
     );
     
     //Move to absolute.
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
-    regAction(
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    commitAction(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
-        MobActionRunners::moveToAbsolute,
+        ScriptActionRunners::moveToAbsolute,
         nullptr
     );
     
     //Move to relative.
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
-    regAction(
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    commitAction(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
-        MobActionRunners::moveToRelative,
+        ScriptActionRunners::moveToRelative,
         nullptr
     );
     
     //Move to target.
-    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_MOVE_TO_TARGET,
         "move_to_target",
-        MobActionRunners::moveToTarget,
-        MobActionLoaders::moveToTarget
+        ScriptActionRunners::moveToTarget,
+        ScriptActionLoaders::moveToTarget
     );
     
     //Order release.
-    regAction(
+    commitAction(
         MOB_ACTION_ORDER_RELEASE,
         "order_release",
-        MobActionRunners::orderRelease,
+        ScriptActionRunners::orderRelease,
         nullptr
     );
     
     //Play sound.
-    regParam("sound data", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam(
+    queueParam("sound data", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam(
         "sound ID destination var name", SCRIPT_ACTION_PARAM_STRING, true, true
     );
-    regAction(
+    commitAction(
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
-        MobActionRunners::playSound,
-        MobActionLoaders::playSound
+        ScriptActionRunners::playSound,
+        ScriptActionLoaders::playSound
     );
     
     //Print.
-    regParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
-    regAction(
+    queueParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
         MOB_ACTION_PRINT,
         "print",
-        MobActionRunners::print,
+        ScriptActionRunners::print,
         nullptr
     );
     
     //Receive status.
-    regParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_RECEIVE_STATUS,
         "receive_status",
-        MobActionRunners::receiveStatus,
-        MobActionLoaders::receiveStatus
+        ScriptActionRunners::receiveStatus,
+        ScriptActionLoaders::receiveStatus
     );
     
     //Release.
-    regAction(
+    commitAction(
         MOB_ACTION_RELEASE,
         "release",
-        MobActionRunners::release,
+        ScriptActionRunners::release,
         nullptr
     );
     
     //Release stored mobs.
-    regAction(
+    commitAction(
         MOB_ACTION_RELEASE_STORED_MOBS,
         "release_stored_mobs",
-        MobActionRunners::releaseStoredMobs,
+        ScriptActionRunners::releaseStoredMobs,
         nullptr
     );
     
     //Remove status.
-    regParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_REMOVE_STATUS,
         "remove_status",
-        MobActionRunners::removeStatus,
-        MobActionLoaders::removeStatus
+        ScriptActionRunners::removeStatus,
+        ScriptActionLoaders::removeStatus
     );
     
     //Round number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_ROUND_NUMBER,
         "round_number",
-        MobActionRunners::roundNumber,
+        ScriptActionRunners::roundNumber,
         nullptr
     );
     
     //Save focused mob memory.
-    regParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
-    regAction(
+    queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
+    commitAction(
         MOB_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        MobActionRunners::saveFocusMemory,
+        ScriptActionRunners::saveFocusMemory,
         nullptr
     );
     
     //Send message to focus.
-    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
         "send_message_to_focus",
-        MobActionRunners::sendMessageToFocus,
+        ScriptActionRunners::sendMessageToFocus,
         nullptr
     );
     
     //Send message to links.
-    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
-        MobActionRunners::sendMessageToLinks,
+        ScriptActionRunners::sendMessageToLinks,
         nullptr
     );
     
     //Send message to nearby.
-    regParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
-        MobActionRunners::sendMessageToNearby,
+        ScriptActionRunners::sendMessageToNearby,
         nullptr
     );
     
     //Set animation.
-    regParam("animation name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
-    regAction(
+    queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
         MOB_ACTION_SET_ANIMATION,
         "set_animation",
-        MobActionRunners::setAnimation,
-        MobActionLoaders::setAnimation
+        ScriptActionRunners::setAnimation,
+        ScriptActionLoaders::setAnimation
     );
     
     //Set can block paths.
-    regParam("blocks", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("blocks", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
-        MobActionRunners::setCanBlockPaths,
+        ScriptActionRunners::setCanBlockPaths,
         nullptr
     );
     
     //Set far reach.
-    regParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_SET_FAR_REACH,
         "set_far_reach",
-        MobActionRunners::setFarReach,
-        MobActionLoaders::setFarReach
+        ScriptActionRunners::setFarReach,
+        ScriptActionLoaders::setFarReach
     );
     
     //Set flying.
-    regParam("flying", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("flying", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_FLYING,
         "set_flying",
-        MobActionRunners::setFlying,
+        ScriptActionRunners::setFlying,
         nullptr
     );
     
     //Set focus var.
-    regParam(
+    queueParam(
         "focused mob's destination var name",
         SCRIPT_ACTION_PARAM_STRING, false, false
     );
-    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SET_FOCUS_VAR,
         "set_focus_var",
-        MobActionRunners::setFocusVar,
+        ScriptActionRunners::setFocusVar,
         nullptr
     );
     
     //Set gravity.
-    regParam("multiplier", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("multiplier", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_GRAVITY,
         "set_gravity",
-        MobActionRunners::setGravity,
+        ScriptActionRunners::setGravity,
         nullptr
     );
     
     //Set health.
-    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_HEALTH,
         "set_health",
-        MobActionRunners::setHealth,
+        ScriptActionRunners::setHealth,
         nullptr
     );
     
     //Set height.
-    regParam("height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_HEIGHT,
         "set_height",
-        MobActionRunners::setHeight,
+        ScriptActionRunners::setHeight,
         nullptr
     );
     
     //Set hiding.
-    regParam("hiding", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("hiding", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_HIDING,
         "set_hiding",
-        MobActionRunners::setHiding,
+        ScriptActionRunners::setHiding,
         nullptr
     );
     
     //Set huntable.
-    regParam("huntable", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("huntable", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_HUNTABLE,
         "set_huntable",
-        MobActionRunners::setHuntable,
+        ScriptActionRunners::setHuntable,
         nullptr
     );
     
     //Set holdable.
-    regParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
-    regAction(
+    queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
         MOB_ACTION_SET_HOLDABLE,
         "set_holdable",
-        MobActionRunners::setHoldable,
-        MobActionLoaders::setHoldable
+        ScriptActionRunners::setHoldable,
+        ScriptActionLoaders::setHoldable
     );
     
     //Set limb animation.
-    regParam("animation name", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
-        MobActionRunners::setLimbAnimation,
+        ScriptActionRunners::setLimbAnimation,
         nullptr
     );
     
     //Set near reach.
-    regParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_SET_NEAR_REACH,
         "set_near_reach",
-        MobActionRunners::setNearReach,
-        MobActionLoaders::setNearReach
+        ScriptActionRunners::setNearReach,
+        ScriptActionLoaders::setNearReach
     );
     
     //Set radius.
-    regParam("radius", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("radius", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_RADIUS,
         "set_radius",
-        MobActionRunners::setRadius,
+        ScriptActionRunners::setRadius,
         nullptr
     );
     
     //Set sector scroll.
-    regParam("x speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("x speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
-        MobActionRunners::setSectorScroll,
+        ScriptActionRunners::setSectorScroll,
         nullptr
     );
     
     //Set shadow visibility.
-    regParam("visible", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("visible", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
-        MobActionRunners::setShadowVisibility,
+        ScriptActionRunners::setShadowVisibility,
         nullptr
     );
     
     //Set state.
-    regParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_SET_STATE,
         "set_state",
-        MobActionRunners::setState,
+        ScriptActionRunners::setState,
         nullptr
     );
     
     //Set tangible.
-    regParam("tangible", SCRIPT_ACTION_PARAM_BOOL, false, false);
-    regAction(
+    queueParam("tangible", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    commitAction(
         MOB_ACTION_SET_TANGIBLE,
         "set_tangible",
-        MobActionRunners::setTangible,
+        ScriptActionRunners::setTangible,
         nullptr
     );
     
     //Set team.
-    regParam("team name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("team name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_SET_TEAM,
         "set_team",
-        MobActionRunners::setTeam,
-        MobActionLoaders::setTeam
+        ScriptActionRunners::setTeam,
+        ScriptActionLoaders::setTeam
     );
     
     //Set timer.
-    regParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SET_TIMER,
         "set_timer",
-        MobActionRunners::setTimer,
+        ScriptActionRunners::setTimer,
         nullptr
     );
     
     //Set var.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
         MOB_ACTION_SET_VAR,
         "set_var",
-        MobActionRunners::setVar,
+        ScriptActionRunners::setVar,
         nullptr
     );
     
     //Shake camera.
-    regParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SHAKE_CAMERA,
         "shake_camera",
-        MobActionRunners::shakeCamera,
+        ScriptActionRunners::shakeCamera,
         nullptr
     );
     
     //Show message from var.
-    regParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regAction(
+    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        MobActionRunners::showMessageFromVar,
+        ScriptActionRunners::showMessageFromVar,
         nullptr
     );
     
     //Square root number.
-    regParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    regParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_SQUARE_ROOT_NUMBER,
         "square_root_number",
-        MobActionRunners::squareRootNumber,
+        ScriptActionRunners::squareRootNumber,
         nullptr
     );
     
     //Spawn.
-    regParam("spawn data", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("spawn data", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_SPAWN,
         "spawn",
-        MobActionRunners::spawn,
-        MobActionLoaders::spawn
+        ScriptActionRunners::spawn,
+        ScriptActionLoaders::spawn
     );
     
     //Stabilize Z.
-    regParam("reference", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("offset", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("reference", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("offset", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_STABILIZE_Z,
         "stabilize_z",
-        MobActionRunners::stabilizeZ,
-        MobActionLoaders::stabilizeZ
+        ScriptActionRunners::stabilizeZ,
+        ScriptActionLoaders::stabilizeZ
     );
     
     //Start chomping.
-    regParam("victim max", SCRIPT_ACTION_PARAM_INT, false, false);
-    regParam("body part", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("more body parts", SCRIPT_ACTION_PARAM_ENUM, true, true);
-    regAction(
+    queueParam("victim max", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("body part", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("more body parts", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
         MOB_ACTION_START_CHOMPING,
         "start_chomping",
-        MobActionRunners::startChomping,
-        MobActionLoaders::startChomping
+        ScriptActionRunners::startChomping,
+        ScriptActionLoaders::startChomping
     );
     
     //Start dying.
-    regAction(
+    commitAction(
         MOB_ACTION_START_DYING,
         "start_dying",
-        MobActionRunners::startDying,
+        ScriptActionRunners::startDying,
         nullptr
     );
     
     //Start height effect.
-    regAction(
+    commitAction(
         MOB_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
-        MobActionRunners::startHeightEffect,
+        ScriptActionRunners::startHeightEffect,
         nullptr
     );
     
     //Start particles.
-    regParam("generator name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regParam("offset coordinates", SCRIPT_ACTION_PARAM_FLOAT, false, true);
-    regAction(
+    queueParam("generator name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("offset coordinates", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    commitAction(
         MOB_ACTION_START_PARTICLES,
         "start_particles",
-        MobActionRunners::startParticles,
-        MobActionLoaders::startParticles
+        ScriptActionRunners::startParticles,
+        ScriptActionLoaders::startParticles
     );
     
     //Stop.
-    regAction(
+    commitAction(
         MOB_ACTION_STOP,
         "stop",
-        MobActionRunners::stop,
+        ScriptActionRunners::stop,
         nullptr
     );
     
     //Stop chomping.
-    regAction(
+    commitAction(
         MOB_ACTION_STOP_CHOMPING,
         "stop_chomping",
-        MobActionRunners::stopChomping,
+        ScriptActionRunners::stopChomping,
         nullptr
     );
     
     //Stop height effect.
-    regAction(
+    commitAction(
         MOB_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
-        MobActionRunners::stopHeightEffect,
+        ScriptActionRunners::stopHeightEffect,
         nullptr
     );
     
     //Stop particles.
-    regAction(
+    commitAction(
         MOB_ACTION_STOP_PARTICLES,
         "stop_particles",
-        MobActionRunners::stopParticles,
+        ScriptActionRunners::stopParticles,
         nullptr
     );
     
     //Stop sound.
-    regParam("sound ID", SCRIPT_ACTION_PARAM_INT, false, false);
-    regAction(
+    queueParam("sound ID", SCRIPT_ACTION_PARAM_INT, false, false);
+    commitAction(
         MOB_ACTION_STOP_SOUND,
         "stop_sound",
-        MobActionRunners::stopSound,
+        ScriptActionRunners::stopSound,
         nullptr
     );
     
     //Stop vertically.
-    regAction(
+    commitAction(
         MOB_ACTION_STOP_VERTICALLY,
         "stop_vertically",
-        MobActionRunners::stopVertically,
+        ScriptActionRunners::stopVertically,
         nullptr
     );
     
     //Store focus inside.
-    regAction(
+    commitAction(
         MOB_ACTION_STORE_FOCUS_INSIDE,
         "store_focus_inside",
-        MobActionRunners::storeFocusInside,
+        ScriptActionRunners::storeFocusInside,
         nullptr
     );
     
     //Swallow.
-    regParam("amount", SCRIPT_ACTION_PARAM_INT, false, false);
-    regAction(
+    queueParam("amount", SCRIPT_ACTION_PARAM_INT, false, false);
+    commitAction(
         MOB_ACTION_SWALLOW,
         "swallow",
-        MobActionRunners::swallow,
+        ScriptActionRunners::swallow,
         nullptr
     );
     
     //Swallow all.
-    regAction(
+    commitAction(
         MOB_ACTION_SWALLOW_ALL,
         "swallow_all",
-        MobActionRunners::swallowAll,
+        ScriptActionRunners::swallowAll,
         nullptr
     );
     
     //Teleport to absolute.
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
-        MobActionRunners::teleportToAbsolute,
+        ScriptActionRunners::teleportToAbsolute,
         nullptr
     );
     
     //Teleport to relative.
-    regParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
-        MobActionRunners::teleportToRelative,
+        ScriptActionRunners::teleportToRelative,
         nullptr
     );
     
     //Throw focused mob.
-    regParam("x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("z coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("max height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regAction(
+    queueParam("x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("z coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("max height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
         MOB_ACTION_THROW_FOCUS,
         "throw_focused_mob",
-        MobActionRunners::throwFocus,
+        ScriptActionRunners::throwFocus,
         nullptr
     );
     
     //Turn to absolute.
-    regParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
-    regAction(
+    queueParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    commitAction(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
-        MobActionRunners::turnToAbsolute,
+        ScriptActionRunners::turnToAbsolute,
         nullptr
     );
     
     //Turn to relative.
-    regParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    regParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
-    regAction(
+    queueParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    commitAction(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
-        MobActionRunners::turnToRelative,
+        ScriptActionRunners::turnToRelative,
         nullptr
     );
     
     //Turn to target.
-    regParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    regAction(
+    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
         MOB_ACTION_TURN_TO_TARGET,
         "turn_to_target",
-        MobActionRunners::turnToTarget,
-        MobActionLoaders::turnToTarget
+        ScriptActionRunners::turnToTarget,
+        ScriptActionLoaders::turnToTarget
     );
     
     
-#undef regParam
-#undef regAction
+#undef queueParam
+#undef commitAction
 }
 
 

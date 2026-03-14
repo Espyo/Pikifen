@@ -13,7 +13,7 @@
 #include "../../core/game.h"
 #include "../mob/bridge.h"
 #include "../mob_script/bridge_fsm.h"
-#include "../other/script.h"
+#include "../script/script.h"
 
 
 /**

@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "../../content/script/script.h"
 #include "../../core/pathing.h"
 #include "../../util/drawing_utils.h"
 #include "../../util/general_utils.h"
@@ -177,10 +178,10 @@ struct TreeShadow {
 struct AreaRegion {
 
     //--- Public members ---
-
+    
     //Center.
     Point center;
-
+    
     //Size.
     Point size;
     
@@ -193,13 +194,13 @@ struct AreaRegion {
 struct AreaMakerReminder {
 
     //--- Public members ---
-
+    
     //Position.
     Point pos;
-
+    
     //Text.
     string text;
-
+    
 };
 
 
@@ -236,7 +237,7 @@ struct Area : public Content {
     
     //List of tree shadows.
     vector<TreeShadow*> treeShadows;
-
+    
     //List of regions.
     vector<AreaRegion*> regions;
     
@@ -281,16 +282,19 @@ struct Area : public Content {
     
     //Area day time speed, in game-minutes per real-minutes.
     float dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
-
+    
     //Maximum number of Pikmin that can be out on the field at once.
     //INVALID = use game config's limit.
     size_t maxPikminInField = INVALID;
-
+    
     //If true, Onions automatically eject whenever there is space in the field.
     bool onionsAutoEject = false;
-
+    
     //If true, Onions eject fully-grown Pikmin instead of seeds.
     bool onionsEjectGrownPikmin = false;
+    
+    //Script FSM database.
+    ScriptDef fsm;
     
     //Known geometry problems.
     GeometryProblems problems;
@@ -303,7 +307,7 @@ struct Area : public Content {
     
     //Path to the user data folder for this area.
     string userDataPath;
-
+    
     //Reminders for the area's maker.
     vector<AreaMakerReminder> reminders;
     
@@ -357,12 +361,12 @@ struct Area : public Content {
     void saveRemindersToDataNode(DataNode* node);
     void saveThumbnail(bool toBackup);
     void clear();
-
     
-protected:
-
+    
+    protected:
+    
     //--- Protected function declarations ---
-
+    
     void loadOldMissionSystem(DataNode* node);
-
+    
 };

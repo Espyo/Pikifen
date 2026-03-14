@@ -197,13 +197,8 @@ void crash(const string& reason, const string& info, int exitStatus) {
             game.states.gameplay->players[0].leaderPtr->type->name + ", at " +
             p2s(game.states.gameplay->players[0].leaderPtr->pos) +
             ", state history: " +
-            game.states.gameplay->players[0].leaderPtr->fsm.curState->name;
-        for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-            errorStr +=
-                " " +
-                game.states.gameplay->players[0].leaderPtr->
-                fsm.prevStateNames[h];
-        }
+            game.states.gameplay->players[0].leaderPtr->
+            scriptVM.fsm.getStateHistoryStr();
         errorStr += "\n  10 closest Pikmin to that leader:\n";
         
         vector<Pikmin*> closestPikmin =
@@ -228,10 +223,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
             errorStr +=
                 "    " + closestPikmin[p]->type->name + ", at " +
                 p2s(closestPikmin[p]->pos) + ", history: " +
-                closestPikmin[p]->fsm.curState->name;
-            for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-                errorStr += " " + closestPikmin[p]->fsm.prevStateNames[h];
-            }
+                closestPikmin[p]->scriptVM.fsm.getStateHistoryStr();
             errorStr += "\n";
         }
     } else {
@@ -410,7 +402,7 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
         if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->fsm.curState) continue;
+        if(!mPtr->scriptVM.fsm.curState) continue;
         
         Distance d = Distance(view.mouseCursorWorldPos, mPtr->pos);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
@@ -550,7 +542,7 @@ Mob* getNextMobNearCursor(
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
         if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->fsm.curState) continue;
+        if(!mPtr->scriptVM.fsm.curState) continue;
         
         Distance d(view.mouseCursorWorldPos, mPtr->pos);
         if(d < 8.0f) {

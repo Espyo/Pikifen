@@ -29,7 +29,7 @@ void PelletFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", PELLET_STATE_IDLE_WAITING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -48,7 +48,7 @@ void PelletFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_moving", PELLET_STATE_IDLE_MOVING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -83,7 +83,7 @@ void PelletFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_stuck", PELLET_STATE_IDLE_STUCK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -117,7 +117,7 @@ void PelletFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("being_delivered", PELLET_STATE_BEING_DELIVERED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
         efc.newEvent(MOB_EV_TIMER); {
@@ -126,13 +126,14 @@ void PelletFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idle_waiting", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_PELLET_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_PELLET_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_PELLET_STATES) + " in enum."
     );
 }
@@ -149,8 +150,8 @@ void PelletFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PelletFsm::standStill(Fsm* fsm, void* info1, void* info2) {
-    Pellet* pelPtr = (Pellet*) fsm->m;
+void PelletFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
+    Pellet* pelPtr = (Pellet*) scriptVM->mob;
     
     pelPtr->stopChasing();
     pelPtr->stopTurning();

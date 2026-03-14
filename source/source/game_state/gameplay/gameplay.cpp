@@ -383,6 +383,15 @@ void GameplayMessageBox::tick(float deltaT) {
 
 
 /**
+ * @brief Constructs a new gameplay state object.
+ */
+GameplayState::GameplayState() :
+    scriptVM(nullptr) {
+
+}
+
+
+/**
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
@@ -827,8 +836,8 @@ size_t GameplayState::getAmountOfIdlePikmin(const PikminType* filter) {
         Pikmin* pPtr = mobs.pikmin[p];
         if(filter && pPtr->type != filter) continue;
         if(
-            pPtr->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            pPtr->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            pPtr->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING ||
+            pPtr->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING_H
         ) {
             total++;
         }
@@ -1026,7 +1035,7 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
         Mob* mPtr = mobs.all[m];
         
         if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->fsm.curState) continue;
+        if(!mPtr->scriptVM.fsm.curState) continue;
         
         Distance d(player->leaderCursorWorld, mPtr->pos);
         if(d > mPtr->radius) continue;

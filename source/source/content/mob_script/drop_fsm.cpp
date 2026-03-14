@@ -26,7 +26,7 @@
 void DropFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("falling", DROP_STATE_FALLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DropFsm::setFallingAnim);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -34,7 +34,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("landing", DROP_STATE_LANDING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DropFsm::land);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -42,7 +42,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("idling", DROP_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DropFsm::setIdlingAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -50,7 +50,7 @@ void DropFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bumped", DROP_STATE_BUMPED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DropFsm::setBumpedAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -62,13 +62,14 @@ void DropFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "falling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("falling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_DROP_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_DROP_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_DROP_STATES) + " in enum."
     );
 }
@@ -85,8 +86,8 @@ void DropFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::land(Fsm* fsm, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) fsm->m;
+void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
     
     droPtr->stopChasing();
     droPtr->setAnimation(DROP_ANIM_LANDING);
@@ -100,8 +101,8 @@ void DropFsm::land(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) fsm->m;
+void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
 
     bool willDrink = false;
@@ -149,10 +150,10 @@ void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
         
     }
     
-    ScriptEvent* ev = nullptr;
+    FsmEventDef* ev = nullptr;
     
     if(willDrink) {
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_DROP);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_DROP);
     }
     
     if(!ev) {
@@ -161,7 +162,7 @@ void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
     }
     
     if(willDrink) {
-        ev->run(&toucher->fsm, (void*) droPtr);
+        ev->run(&toucher->scriptVM, (void*) droPtr);
         droPtr->dosesLeft--;
     } else {
         //This mob won't drink it. Just a bump.
@@ -169,10 +170,10 @@ void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
             toucher->speed.x != 0 || toucher->speed.y != 0 ||
             toucher->chaseInfo.state == CHASE_STATE_CHASING;
         if(
-            droPtr->fsm.curState->id != DROP_STATE_BUMPED &&
+            droPtr->scriptVM.fsm.curState->id != DROP_STATE_BUMPED &&
             toucherIsMoving
         ) {
-            droPtr->fsm.setState(DROP_STATE_BUMPED, info1, info2);
+            droPtr->scriptVM.fsm.setState(DROP_STATE_BUMPED, info1, info2);
         }
     }
 }
@@ -185,8 +186,8 @@ void DropFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setBumpedAnim(Fsm* fsm, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) fsm->m;
+void DropFsm::setBumpedAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
     
     droPtr->setAnimation(DROP_ANIM_BUMPED);
 }
@@ -199,8 +200,8 @@ void DropFsm::setBumpedAnim(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setFallingAnim(Fsm* fsm, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) fsm->m;
+void DropFsm::setFallingAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
     
     droPtr->setAnimation(
         DROP_ANIM_FALLING,
@@ -216,8 +217,8 @@ void DropFsm::setFallingAnim(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::setIdlingAnim(Fsm* fsm, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) fsm->m;
+void DropFsm::setIdlingAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
     
     droPtr->setAnimation(DROP_ANIM_IDLING);
 }

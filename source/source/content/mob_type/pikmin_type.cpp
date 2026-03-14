@@ -16,7 +16,7 @@
 #include "../../util/string_utils.h"
 #include "../mob/leader.h"
 #include "../mob_script/pikmin_fsm.h"
-#include "../other/script.h"
+#include "../script/script.h"
 
 
 namespace PIKMIN_TYPE {

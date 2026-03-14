@@ -19,7 +19,7 @@
 namespace ShipFsm {
 void createFsm(MobType* typ);
 
-void receiveMob(Fsm* fsm, void* info1, void* info2);
-void setAnim(Fsm* fsm, void* info1, void* info2);
-void startDelivery(Fsm* fsm, void* info1, void* info2);
+void receiveMob(ScriptVM* scriptVM, void* info1, void* info2);
+void setAnim(ScriptVM* scriptVM, void* info1, void* info2);
+void startDelivery(ScriptVM* scriptVM, void* info1, void* info2);
 }

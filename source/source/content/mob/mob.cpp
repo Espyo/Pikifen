@@ -12,6 +12,7 @@
 
 #include "mob.h"
 
+#include "../../content/script/action_types.h"
 #include "../../core/const.h"
 #include "../../core/drawing.h"
 #include "../../core/game.h"
@@ -21,7 +22,6 @@
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
-#include "../other/script_actions.h"
 #include "pikmin.h"
 #include "ship.h"
 #include "tool.h"
@@ -167,7 +167,7 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     radius(type->radius),
     height(type->height),
     rectangularDim(type->rectangularDim),
-    fsm(this),
+    scriptVM(&type->scriptDef),
     intendedTurnAngle(angle),
     home(pos),
     id(game.states.gameplay->nextMobId),
@@ -199,6 +199,8 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     }
     
     updateInteractionSpan();
+
+    scriptVM.mob = this;
 }
 
 
@@ -286,7 +288,7 @@ void Mob::applyAttackDamage(
         setHealth(true, false, -damage);
         
         HitboxInteraction evInfo(this, victimH, attackH);
-        fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
+        scriptVM.fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
         
         attacker->causeSpikeDamage(this, false);
     }
@@ -544,7 +546,7 @@ void Mob::applyStatusEffects(
         if(team != statuses[listIdx].preBetrayalTeam) {
             leaveGroup();
             if(type->category->id == MOB_CATEGORY_PIKMIN) {
-                fsm.setState(
+                scriptVM.fsm.setState(
                     !getMobHeldInHand() ?
                     PIKMIN_STATE_IDLING :
                     PIKMIN_STATE_IDLING_H
@@ -600,7 +602,7 @@ void Mob::arachnorbFootMoveLogic() {
         return;
     }
     
-    float feetNormalDist = s2f(parent->m->fsm.vars["feet_normal_distance"]);
+    float feetNormalDist = s2f(parent->m->scriptVM.vars["feet_normal_distance"]);
     if(feetNormalDist == 0) {
         feetNormalDist = 175;
     }
@@ -613,8 +615,8 @@ void Mob::arachnorbFootMoveLogic() {
             )->pos
         );
         
-    Point finalPos = s2p(parent->m->fsm.vars["_destination_pos"]);
-    float finalAngle = s2f(parent->m->fsm.vars["_destination_angle"]);
+    Point finalPos = s2p(parent->m->scriptVM.vars["_destination_pos"]);
+    float finalAngle = s2f(parent->m->scriptVM.vars["_destination_angle"]);
     
     Point offset = Point(feetNormalDist, 0);
     offset = rotatePoint(offset, defaultAngle);
@@ -683,9 +685,9 @@ void Mob::arachnorbHeadTurnLogic() {
 void Mob::arachnorbPlanLogic(
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
-    float maxStepDistance = s2f(fsm.vars["max_step_distance"]);
-    float maxTurnAngle = degToRad(s2f(fsm.vars["max_turn_angle"]));
-    float minTurnAngle = degToRad(s2f(fsm.vars["min_turn_angle"]));
+    float maxStepDistance = s2f(scriptVM.vars["max_step_distance"]);
+    float maxTurnAngle = degToRad(s2f(scriptVM.vars["max_turn_angle"]));
+    float minTurnAngle = degToRad(s2f(scriptVM.vars["min_turn_angle"]));
     if(maxStepDistance == 0) {
         maxStepDistance = 100;
     }
@@ -737,8 +739,8 @@ void Mob::arachnorbPlanLogic(
     
     destinationPos += offset;
     
-    fsm.vars["_destination_pos"] = p2s(destinationPos);
-    fsm.vars["_destination_angle"] = f2s(destinationAngle);
+    scriptVM.vars["_destination_pos"] = p2s(destinationPos);
+    scriptVM.vars["_destination_angle"] = f2s(destinationAngle);
 }
 
 
@@ -760,7 +762,7 @@ void Mob::becomeUncarriable() {
     
     for(size_t p = 0; p < carryInfo->spotInfo.size(); p++) {
         if(carryInfo->spotInfo[p].state != CARRY_SPOT_STATE_FREE) {
-            carryInfo->spotInfo[p].pikPtr->fsm.runEvent(
+            carryInfo->spotInfo[p].pikPtr->scriptVM.fsm.runEvent(
                 MOB_EV_FOCUSED_MOB_UNAVAILABLE
             );
         }
@@ -1035,7 +1037,7 @@ bool Mob::calculateCarryingDestination(
         for(size_t l = 0; l < links.size(); l++) {
             if(!links[l]) continue;
             string typeName =
-                links[l]->fsm.vars["carry_destination_type"];
+                links[l]->scriptVM.vars["carry_destination_type"];
             MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
                 getType(typeName);
@@ -1996,7 +1998,7 @@ bool Mob::followPath(
     
     if(pathInfo->path.size() >= 2 && pathInfo->curPathStopIdx > 0) {
         if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
-            fsm.runEvent(MOB_EV_PATH_BLOCKED);
+            scriptVM.fsm.runEvent(MOB_EV_PATH_BLOCKED);
         }
     }
     
@@ -2839,9 +2841,9 @@ ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
  */
 void Mob::handleStatusEffectGain(StatusType* staType) {
     if(staType->stateChangeType == STATUS_STATE_CHANGE_CUSTOM) {
-        size_t nr = fsm.getStateIdx(staType->stateChangeName);
+        size_t nr = scriptVM.fsm.getStateIdx(staType->stateChangeName);
         if(nr != INVALID) {
-            fsm.setState(nr);
+            scriptVM.fsm.setState(nr);
         }
     }
 }
@@ -2988,12 +2990,12 @@ void Mob::hold(
     m->holder.verticalDist = verticalDist;
     m->holder.forceAboveHolder = forceAboveHolder;
     m->holder.rotationMethod = rotationMethod;
-    m->fsm.runEvent(MOB_EV_HELD, (void*) this);
+    m->scriptVM.fsm.runEvent(MOB_EV_HELD, (void*) this);
     
     if(standingOnMob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that extra weight has been added.
-            standingOnMob->fsm.runEvent(MOB_EV_WEIGHT_ADDED, (void*) m);
+            standingOnMob->scriptVM.fsm.runEvent(MOB_EV_WEIGHT_ADDED, (void*) m);
         }
     }
 }
@@ -3267,14 +3269,14 @@ void Mob::release(Mob* m) {
         return;
     }
     
-    m->fsm.runEvent(MOB_EV_RELEASED, (void*) this);
+    m->scriptVM.fsm.runEvent(MOB_EV_RELEASED, (void*) this);
     holding.erase(holding.begin() + idx);
     m->holder.clear();
     
     if(standingOnMob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that weight has been removed.
-            standingOnMob->fsm.runEvent(MOB_EV_WEIGHT_REMOVED, (void*) m);
+            standingOnMob->scriptVM.fsm.runEvent(MOB_EV_WEIGHT_REMOVED, (void*) m);
         }
     }
 }
@@ -3352,9 +3354,9 @@ void Mob::respawn() {
  * @param msg The message.
  */
 void Mob::sendScriptMessage(Mob* receiver, string& msg) const {
-    ScriptEvent* ev = receiver->fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
+    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
-    ev->run(&receiver->fsm, (void*) &msg, (void*) this);
+    ev->run(&receiver->scriptVM, (void*) &msg, (void*) this);
 }
 
 
@@ -3521,8 +3523,8 @@ void Mob::setRectangularDim(const Point& rectangularDim) {
  * @param time New time.
  */
 void Mob::setTimer(float time) {
-    fsm.timer.duration = time;
-    fsm.timer.start();
+    scriptVM.timer.duration = time;
+    scriptVM.timer.start();
 }
 
 
@@ -3533,7 +3535,7 @@ void Mob::setTimer(float time) {
  * @param value The variable's new value.
  */
 void Mob::setVar(const string& name, const string& value) {
-    fsm.vars[name] = value;
+    scriptVM.vars[name] = value;
 }
 
 
@@ -3641,7 +3643,7 @@ void Mob::startDying() {
     if(group) {
         while(!group->members.empty()) {
             Mob* member = group->members[0];
-            member->fsm.runEvent(
+            member->scriptVM.fsm.runEvent(
                 MOB_EV_DISMISSED,
                 (void*) & (member->pos)
             );
@@ -3855,7 +3857,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
         return;
     }
     
-    mPtr->fsm.runEvent(MOB_EV_SWALLOWED);
+    mPtr->scriptVM.fsm.runEvent(MOB_EV_SWALLOWED);
     mPtr->causeSpikeDamage(this, true);
     mPtr->setHealth(false, false, 0.0f);
     release(mPtr);
@@ -3983,10 +3985,10 @@ void Mob::tickAnimation(float deltaT) {
         anim.tick(deltaT * mult, &frameSignals, &frameSounds);
         
     if(finishedAnim) {
-        fsm.runEvent(MOB_EV_ANIMATION_END);
+        scriptVM.fsm.runEvent(MOB_EV_ANIMATION_END);
     }
     for(size_t s = 0; s < frameSignals.size(); s++) {
-        fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frameSignals[s]);
+        scriptVM.fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frameSignals[s]);
     }
     for(size_t s = 0; s < frameSounds.size(); s++) {
         playSound(frameSounds[s]);
@@ -4053,7 +4055,7 @@ void Mob::tickBrain(float deltaT) {
                     &carryInfo->intendedPikType,
                     &carryInfo->intendedMob, &carryInfo->intendedPoint
                 );
-            fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
+            scriptVM.fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
             carryInfo->mustRecalculate = false;
         }
     }
@@ -4125,7 +4127,7 @@ void Mob::tickBrain(float deltaT) {
                     //Think about going to the next, if possible.
                     if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
                         //Oop, there's an obstacle! Or some other blockage.
-                        fsm.runEvent(MOB_EV_PATH_BLOCKED);
+                        scriptVM.fsm.runEvent(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
                         chaseNextPathStop(chaseInfo.maxSpeed);
@@ -4154,7 +4156,7 @@ void Mob::tickBrain(float deltaT) {
             
             if(chaseInfo.state == CHASE_STATE_FINISHED) {
                 //Reached the final destination.
-                fsm.runEvent(MOB_EV_REACHED_DESTINATION);
+                scriptVM.fsm.runEvent(MOB_EV_REACHED_DESTINATION);
             }
         }
         
@@ -4181,7 +4183,7 @@ void Mob::tickMiscLogic(float deltaT) {
     if(timeAlive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
-        fsm.runEvent(SCRIPT_EV_ON_READY);
+        scriptVM.fsm.runEvent(FSM_EV_ON_READY);
     }
     timeAlive += deltaT;
     
@@ -4449,9 +4451,9 @@ void Mob::tickMiscLogic(float deltaT) {
     //Delivery stuff.
     if(
         deliveryInfo &&
-        fsm.curState->id == ENEMY_EXTRA_STATE_BEING_DELIVERED
+        scriptVM.fsm.curState->id == ENEMY_EXTRA_STATE_BEING_DELIVERED
     ) {
-        deliveryInfo->animTimeRatioLeft = fsm.timer.getRatioLeft();
+        deliveryInfo->animTimeRatioLeft = scriptVM.timer.getRatioLeft();
     }
 }
 
@@ -4462,30 +4464,30 @@ void Mob::tickMiscLogic(float deltaT) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Mob::tickScript(float deltaT) {
-    if(!fsm.curState) return;
+    if(!scriptVM.fsm.curState) return;
     
     //Timer events.
-    ScriptEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
-    if(fsm.timer.duration > 0) {
-        if(fsm.timer.timeLeft > 0) {
-            fsm.timer.tick(deltaT);
-            if(fsm.timer.timeLeft == 0.0f && timerEv) {
-                timerEv->run(&fsm);
+    FsmEventDef* timerEv = scriptVM.fsm.getEvent(MOB_EV_TIMER);
+    if(scriptVM.timer.duration > 0) {
+        if(scriptVM.timer.timeLeft > 0) {
+            scriptVM.timer.tick(deltaT);
+            if(scriptVM.timer.timeLeft == 0.0f && timerEv) {
+                timerEv->run(&scriptVM);
             }
         }
     }
     
     //Has it reached 0 health?
     if(health <= 0 && maxHealth != 0) {
-        fsm.runEvent(MOB_EV_ZERO_HEALTH, this);
+        scriptVM.fsm.runEvent(MOB_EV_ZERO_HEALTH, this);
     }
     
     //Check the focused mob.
     if(focusedMob) {
     
         if(focusedMob->health <= 0) {
-            fsm.runEvent(MOB_EV_FOCUS_DIED);
-            fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
+            scriptVM.fsm.runEvent(MOB_EV_FOCUS_DIED);
+            scriptVM.fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
         }
         
         //We have to recheck if the focused mob is not nullptr, because
@@ -4493,7 +4495,7 @@ void Mob::tickScript(float deltaT) {
         if(focusedMob) {
         
             Mob* focus = focusedMob;
-            ScriptEvent* forEv = fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
+            FsmEventDef* forEv = scriptVM.fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
             
             if(farReach != INVALID && forEv) {
                 float angleToFocus = getAngle(pos, focus->pos);
@@ -4504,7 +4506,7 @@ void Mob::tickScript(float deltaT) {
                         getAngleSmallestDiff(angle, angleToFocus)
                     )
                 ) {
-                    forEv->run(&fsm);
+                    forEv->run(&scriptVM);
                 }
                 
             }
@@ -4515,12 +4517,12 @@ void Mob::tickScript(float deltaT) {
     //Itch event.
     if(type->itchDamage > 0 || type->itchTime > 0) {
         itchTime += deltaT;
-        ScriptEvent* itchEv = fsm.getEvent(MOB_EV_ITCH);
+        FsmEventDef* itchEv = scriptVM.fsm.getEvent(MOB_EV_ITCH);
         if(
             itchEv &&
             itchDamage > type->itchDamage && itchTime > type->itchTime
         ) {
-            itchEv->run(&fsm);
+            itchEv->run(&scriptVM);
             itchDamage = 0;
             itchTime = 0;
         }
@@ -4543,7 +4545,7 @@ void Mob::tickScript(float deltaT) {
             continue;
         }
         
-        fsm.runEvent(MOB_EV_WHISTLED, (void*) player.leaderPtr);
+        scriptVM.fsm.runEvent(MOB_EV_WHISTLED, (void*) player.leaderPtr);
         
         bool savedByWhistle = false;
         for(size_t s = 0; s < statuses.size(); s++) {
@@ -4567,7 +4569,7 @@ void Mob::tickScript(float deltaT) {
     
     //Following a leader.
     if(followingGroup) {
-        ScriptEvent* spotFarEv =  fsm.getEvent(MOB_EV_SPOT_IS_FAR);
+        FsmEventDef* spotFarEv =  scriptVM.fsm.getEvent(MOB_EV_SPOT_IS_FAR);
         
         if(spotFarEv) {
             Point targetPos;
@@ -4577,14 +4579,14 @@ void Mob::tickScript(float deltaT) {
             
             Distance d(pos, targetPos);
             if(d > targetDist) {
-                spotFarEv->run(&fsm, (void*) &targetPos);
+                spotFarEv->run(&scriptVM, (void*) &targetPos);
             }
         }
     }
     
     //Check if the active leader is different from the current leader.
-    ScriptEvent* activeLeaderChangedEv =
-        fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
+    FsmEventDef* activeLeaderChangedEv =
+        scriptVM.fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
     if(activeLeaderChangedEv) {
         for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
             Leader* candidateLeader =
@@ -4595,21 +4597,21 @@ void Mob::tickScript(float deltaT) {
                 //This mob is fine with its leader.
                 break;
             }
-            activeLeaderChangedEv->run(&fsm, (void*) candidateLeader);
+            activeLeaderChangedEv->run(&scriptVM, (void*) candidateLeader);
         }
     }
     
     //Far away from home.
-    ScriptEvent* farFromHomeEv = fsm.getEvent(MOB_EV_FAR_FROM_HOME);
+    FsmEventDef* farFromHomeEv = scriptVM.fsm.getEvent(MOB_EV_FAR_FROM_HOME);
     if(farFromHomeEv) {
         Distance d(pos, home);
         if(d >= type->territoryRadius) {
-            farFromHomeEv->run(&fsm);
+            farFromHomeEv->run(&scriptVM);
         }
     }
     
     //Tick event.
-    fsm.runEvent(SCRIPT_EV_ON_TICK);
+    scriptVM.fsm.runEvent(FSM_EV_ON_TICK);
 }
 
 

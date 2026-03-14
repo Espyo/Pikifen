@@ -29,7 +29,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", RESOURCE_STATE_IDLE_WAITING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }
@@ -52,7 +52,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_moving", RESOURCE_STATE_IDLE_MOVING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ResourceFsm::handleStartMoving);
             efc.run(GenMobFsm::carryBeginMove);
         }
@@ -89,7 +89,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_stuck", RESOURCE_STATE_IDLE_STUCK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -124,7 +124,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("being_delivered", RESOURCE_STATE_BEING_DELIVERED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ResourceFsm::startBeingDelivered);
             efc.run(GenMobFsm::startBeingDelivered);
         }
@@ -137,7 +137,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     efc.newState(
         "staying_after_delivery", RESOURCE_STATE_STAYING_AFTER_DELIVERY
     ); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }
@@ -159,13 +159,14 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idle_waiting", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_RESOURCE_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_RESOURCE_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_RESOURCE_STATES) + " in enum."
     );
 }
@@ -183,8 +184,8 @@ void ResourceFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDelivery(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(
         resPtr->resType->deliveryResult ==
@@ -196,7 +197,7 @@ void ResourceFsm::handleDelivery(Fsm* fsm, void* info1, void* info2) {
         );
         
         HitboxInteraction evInfo(resPtr, nullptr, nullptr);
-        resPtr->fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
+        resPtr->scriptVM.fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
     }
 }
 
@@ -208,13 +209,13 @@ void ResourceFsm::handleDelivery(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleDropped(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(!resPtr->resType->vanishOnDrop) return;
     
     if(resPtr->resType->vanishDelay == 0) {
-        ResourceFsm::vanish(fsm, info1, info2);
+        ResourceFsm::vanish(scriptVM, info1, info2);
     } else {
         resPtr->setTimer(resPtr->resType->vanishDelay);
     }
@@ -228,14 +229,14 @@ void ResourceFsm::handleDropped(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleReachDestination(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::handleReachDestination(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(resPtr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
         resPtr->stopFollowingPath();
-        fsm->setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
+        scriptVM->fsm.setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
     } else {
-        GenMobFsm::carryReachDestination(fsm, info1, info2);
+        GenMobFsm::carryReachDestination(scriptVM, info1, info2);
     }
 }
 
@@ -247,8 +248,8 @@ void ResourceFsm::handleReachDestination(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleStartMoving(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::handleStartMoving(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     resPtr->setTimer(0);
 }
@@ -261,8 +262,8 @@ void ResourceFsm::handleStartMoving(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     resPtr->speed.x = 0;
     resPtr->speed.y = 0;
@@ -277,8 +278,8 @@ void ResourceFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startBeingDelivered(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(
         resPtr->carryInfo->intendedMob &&
@@ -297,8 +298,8 @@ void ResourceFsm::startBeingDelivered(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startWaiting(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
     
     if(resPtr->toDelete) return;
     
@@ -327,8 +328,8 @@ void ResourceFsm::startWaiting(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::vanish(Fsm* fsm, void* info1, void* info2) {
-    Resource* resPtr = (Resource*) fsm->m;
+void ResourceFsm::vanish(ScriptVM* scriptVM, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) scriptVM->mob;
     
     if(resPtr->resType->returnToPileOnVanish && resPtr->originPile) {
         resPtr->originPile->changeAmount(+1);

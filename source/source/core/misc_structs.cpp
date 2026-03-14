@@ -966,7 +966,7 @@ void InventoryItemDatabase::init() {
         item.onUse =
         [this, s] (Player * player) {
             if(!player->leaderPtr) return;
-            player->leaderPtr->fsm.runEvent(
+            player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_SPRAY, (void*) &s, (void*) player->leaderPtr
             );
         };
@@ -991,7 +991,7 @@ void InventoryItemDatabase::init() {
         item.name = "Napsack";
         item.onUse =
         [this] (Player * player) {
-            player->leaderPtr->fsm.runEvent(
+            player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_FALL_ASLEEP
             );
         };

@@ -750,14 +750,14 @@ int Game::start() {
     initDearImGui();
     
     //Init and load some engine things.
-    initScriptActions();
+    initScriptActionTypes();
     initMobCategories();
     initMiscDatabases();
     initInventoryItems();
     loadMakerTools();
     saveMakerTools();
     
-    dummyScriptState = new ScriptState("dummy");
+    dummyScriptState = new FsmStateDef("dummy");
     
     if(makerTools.usePerfMon) {
         perfMon = new PerformanceMonitor();

@@ -16,7 +16,7 @@
 
 #include "../content/area/area.h"
 #include "../content/content_manager.h"
-#include "../content/other/script_actions.h"
+#include "../content/script/action_types.h"
 #include "../game_state/animation_editor/editor.h"
 #include "../game_state/annex_screen.h"
 #include "../game_state/area_editor/editor.h"
@@ -135,7 +135,7 @@ public:
     ALLEGRO_DISPLAY* display = nullptr;
     
     //A dummy script state for FSMs with no state to use.
-    ScriptState* dummyScriptState = nullptr;
+    FsmStateDef* dummyScriptState = nullptr;
     
     //Error manager.
     ErrorManager errors;
@@ -183,8 +183,8 @@ public:
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loadingTextBmp = nullptr;
     
-    //List of script actions.
-    vector<ScriptAction> scriptActions;
+    //List of script actions types.
+    vector<ScriptActionType> scriptActionTypes;
     
     //List of mob categories.
     CategoryManager mobCategories;

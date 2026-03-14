@@ -12,6 +12,7 @@
 
 #include "mob_type.h"
 
+#include "../../content/script/action_types.h"
 #include "../../core/const.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
@@ -21,7 +22,6 @@
 #include "../../util/string_utils.h"
 #include "../mob/bridge.h"
 #include "../mob_script/gen_mob_fsm.h"
-#include "../other/script_actions.h"
 #include "enemy_type.h"
 #include "leader_type.h"
 #include "onion_type.h"
@@ -56,6 +56,7 @@ MobType::MobType(MOB_CATEGORY categoryId) :
     category(game.mobCategories.get(categoryId)),
     customCategoryName(category->name) {
     
+    scriptDef.mobType = this;
 }
 
 
@@ -63,120 +64,14 @@ MobType::MobType(MOB_CATEGORY categoryId) :
  * @brief Destroys the mob type object.
  */
 MobType::~MobType() {
-    fsm.states.clear();
-    for(size_t a = 0; a < fsm.initActions.size(); a++) {
-        delete fsm.initActions[a];
-    }
-    fsm.initActions.clear();
+    scriptDef.unload();
 }
 
 
 /**
- * @brief Creates and adds carrying-related states to the FSM.
+ * @brief Does extra processing to a loaded FSM state, if needed.
  */
-void MobType::createAndAddCarryingStates() {
-    EasyFsmCreator efc;
-    
-    efc.newState("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryStopMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("carriable_moving");
-        }
-    }
-    
-    efc.newState("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.changeState("carriable_waiting");
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
-            efc.run(GenMobFsm::carryReachDestination);
-        }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
-            efc.changeState("carriable_stuck");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryGetPath);
-            efc.run(GenMobFsm::carryBeginMove);
-        }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
-            efc.changeState("being_delivered");
-        }
-        efc.newEvent(MOB_EV_TOUCHED_BOUNCER); {
-            efc.changeState("carriable_thrown");
-        }
-    }
-    
-    efc.newState("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
-            efc.run(GenMobFsm::carryBecomeStuck);
-        }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(GenMobFsm::handleCarrierAdded);
-        }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(GenMobFsm::handleCarrierRemoved);
-        }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("carriable_moving");
-        }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.changeState("carriable_waiting");
-        }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(GenMobFsm::carryStopBeingStuck);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("carriable_moving");
-        }
-    }
-    
-    efc.newState("carriable_thrown", ENEMY_EXTRA_STATE_CARRIABLE_THROWN); {
-        efc.newEvent(MOB_EV_LANDED); {
-            efc.run(GenMobFsm::loseMomentum);
-            efc.run(GenMobFsm::carryGetPath);
-            efc.changeState("carriable_moving");
-        }
-    }
-    
-    efc.newState("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
-            efc.run(GenMobFsm::startBeingDelivered);
-        }
-        efc.newEvent(MOB_EV_TIMER); {
-            efc.run(GenMobFsm::handleDelivery);
-        }
-    }
-    
-    
-    vector<ScriptState*> newStates = efc.finish();
-    
-    fsm.states.insert(fsm.states.end(), newStates.begin(), newStates.end());
-    
-}
+void MobType::handleLoadedScriptState(FsmStateDef*) { }
 
 
 /**
@@ -732,107 +627,23 @@ void MobType::loadFromDataNode(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
+        //Animation database.
         animDb =
             &game.content.mobAnimDbs.list[category->id][manifest->internalName];
         animDb->fillSoundIdxCaches(this);
         
+        //Script.
         DataNode scriptFile;
-        scriptFile.loadFile(folderPath + "/script.txt", nullptr, true, true);
-        size_t oldNStates = fsm.states.size();
-        
-        DataNode* deathStateNameNode =
-            scriptFile.getChildByName("death_state");
-        dyingStateName = deathStateNameNode->value;
-        
-        statesIgnoringDeath =
-            semicolonListToVector(
-                scriptFile.getChildByName("states_ignoring_death")->value
-            );
-            
-        statesIgnoringSpray =
-            semicolonListToVector(
-                scriptFile.getChildByName("states_ignoring_spray")->value
-            );
-            
-        statesIgnoringHazard =
-            semicolonListToVector(
-                scriptFile.getChildByName("states_ignoring_hazard")->value
-            );
-            
-        //Load init actions.
-        loadActions(
-            this,
-            scriptFile.getChildByName("init"), &fsm.initActions, nullptr
-        );
-
-        //Load the rest of the script.
-        loadScript(
-            this,
-            scriptFile.getChildByName("script"),
-            scriptFile.getChildByName("global"),
-            &fsm.states
+        bool scriptFileExists = false;
+        scriptFile.loadFile(
+            folderPath + "/script.txt", &scriptFileExists, true, true
         );
         
-        if(fsm.states.size() > oldNStates) {
+        loadCatScriptDataPre(&scriptFile);
         
-            DataNode* firstStateNameNode =
-                scriptFile.getChildByName("first_state");
-            string firstStateName = firstStateNameNode->value;
-            
-            for(size_t s = 0; s < fsm.states.size(); s++) {
-                if(fsm.states[s]->name == firstStateName) {
-                    fsm.firstStateIdx = s;
-                    break;
-                }
-            }
-            if(fsm.firstStateIdx == INVALID) {
-                game.errors.report(
-                    "Unknown state \"" + firstStateName + "\" "
-                    "to set as the first state!",
-                    firstStateNameNode
-                );
-            }
-            
-            if(!dyingStateName.empty()) {
-                for(size_t s = 0; s < fsm.states.size(); s++) {
-                    if(fsm.states[s]->name == dyingStateName) {
-                        dyingStateIdx = s;
-                        break;
-                    }
-                }
-                if(dyingStateIdx == INVALID) {
-                    game.errors.report(
-                        "Unknown state \"" + dyingStateName + "\" "
-                        "to set as the death state!",
-                        deathStateNameNode
-                    );
-                }
-            }
-            
-            if(category->id == MOB_CATEGORY_ENEMIES) {
-                DataNode* reviveStateNameNode =
-                    scriptFile.getChildByName("revive_state");
-                string reviveStateName = reviveStateNameNode->value;
-                
-                if(!reviveStateName.empty()) {
-                    for(size_t s = 0; s < fsm.states.size(); s++) {
-                        if(fsm.states[s]->name == reviveStateName) {
-                            reviveStateIdx = s;
-                            break;
-                        }
-                    }
-                    if(reviveStateIdx == INVALID) {
-                        game.errors.report(
-                            "Unknown state \"" + reviveStateName + "\" "
-                            "to set as the revive state!",
-                            reviveStateNameNode
-                        );
-                    }
-                } else {
-                    reviveStateIdx = fsm.firstStateIdx;
-                }
-            }
-        }
+        if(scriptFileExists) scriptDef.loadFromDataNode(&scriptFile);
+        
+        loadCatScriptDataPos(&scriptFile);
     }
     
     //Category-specific properties.
@@ -855,6 +666,20 @@ void MobType::loadFromDataNode(
         customCategoryName = category->name;
     }
 }
+
+
+/**
+ * @brief Loads script data from the script's data file, before the script
+ * proper is loaded.
+ */
+void MobType::loadCatScriptDataPre(DataNode*) { }
+
+
+/**
+ * @brief Loads script data from the script's data file, after the script
+ * proper is loaded.
+ */
+void MobType::loadCatScriptDataPos(DataNode*) { }
 
 
 /**

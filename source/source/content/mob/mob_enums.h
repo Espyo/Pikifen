@@ -148,6 +148,8 @@ buildEnumNames(deliveryAnimINames, DELIVERY_ANIM)({
 
 
 //Extra states for enemies to apply to their FSM.
+//Because these indexes are hardcoded and start at 0, the mob type's natural
+//states should come after these.
 enum ENEMY_EXTRA_STATE {
 
     //Carriable, waiting.

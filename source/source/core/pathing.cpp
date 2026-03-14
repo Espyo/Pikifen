@@ -160,7 +160,7 @@ void PathManager::handleObstacleAdd(Mob* m) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
-            m2Ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            m2Ptr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -198,7 +198,7 @@ void PathManager::handleObstacleRemove(Mob* m) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
-            m2Ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            m2Ptr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -237,7 +237,7 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
             Mob* mPtr = game.states.gameplay->mobs.all[m];
             if(!mPtr->pathInfo) continue;
             
-            mPtr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            mPtr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }

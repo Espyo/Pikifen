@@ -13,11 +13,11 @@
 
 #include "mob_utils.h"
 
+#include "../../content/script/action_types.h"
 #include "../../core/game.h"
 #include "../../core/misc_functions.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
-#include "../other/script_actions.h"
 #include "mob.h"
 
 
@@ -934,7 +934,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             );
             
         //Set its data to start sliding.
-        newPikmin->fsm.setState(PIKMIN_STATE_LEAVING_ONION, (void*) this);
+        newPikmin->scriptVM.fsm.setState(PIKMIN_STATE_LEAVING_ONION, (void*) this);
         vector<size_t> checkpoints;
         checkpoints.push_back(legHoleBPIdx);
         checkpoints.push_back(legFootBPIdx);
@@ -1288,9 +1288,8 @@ Mob* createMob(
         codeAfterCreation(mPtr);
     }
     
-    for(size_t a = 0; a < type->fsm.initActions.size(); a++) {
-        type->fsm.initActions[a]->run(&mPtr->fsm, nullptr, nullptr);
-    }
+    mPtr->scriptVM.mob = mPtr;
+    type->scriptDef.initActions.run(&mPtr->scriptVM);
     
     if(!vars.empty()) {
         map<string, string> varsMap = getVarMap(vars);
@@ -1299,22 +1298,11 @@ Mob* createMob(
         mPtr->readScriptVars(svr);
         
         for(auto& v : varsMap) {
-            mPtr->fsm.vars[v.first] = v.second;
+            mPtr->scriptVM.vars[v.first] = v.second;
         }
     }
     
-    if(
-        !mPtr->fsm.setState(
-            firstStateOverride != INVALID ?
-            firstStateOverride :
-            mPtr->fsm.firstStateOverride != INVALID ?
-            mPtr->fsm.firstStateOverride :
-            type->fsm.firstStateIdx
-        )
-    ) {
-        //If something went wrong, give it some dummy state.
-        mPtr->fsm.curState = game.dummyScriptState;
-    };
+    mPtr->scriptVM.fsm.init();
     
     for(size_t c = 0; c < type->children.size(); c++) {
         MobType::Child* childInfo =
@@ -1438,9 +1426,9 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->focusedMob == mPtr) {
-                m2Ptr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-                m2Ptr->fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
-                m2Ptr->fsm.runEvent(MOB_EV_FOCUS_DIED);
+                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
+                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUS_DIED);
                 m2Ptr->focusedMob = nullptr;
             }
             if(m2Ptr->parent && m2Ptr->parent->m == mPtr) {
@@ -1495,7 +1483,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
         
         mPtr->setCanBlockPaths(false);
         
-        mPtr->fsm.setState(INVALID);
+        mPtr->scriptVM.fsm.setState(INVALID);
     }
     
     game.audio.handleMobDeletion(mPtr);

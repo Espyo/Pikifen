@@ -30,7 +30,7 @@ void ShipFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", SHIP_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ShipFsm::setAnim);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -41,13 +41,14 @@ void ShipFsm::createFsm(MobType* typ) {
         }
     }
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_SHIP_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_SHIP_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_SHIP_STATES) + " in enum."
     );
 }
@@ -64,11 +65,11 @@ void ShipFsm::createFsm(MobType* typ) {
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
-void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     Mob* delivery = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
@@ -180,8 +181,8 @@ void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     
     shiPtr->setAnimation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -196,8 +197,8 @@ void ShipFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     
     shiPtr->mobsBeingBeamed++;
     if(shiPtr->mobsBeingBeamed == 1 && shiPtr->soundBeamId == 0) {

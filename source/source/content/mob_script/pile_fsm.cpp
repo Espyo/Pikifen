@@ -36,7 +36,7 @@ void PileFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", PILE_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(PileFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
@@ -45,13 +45,14 @@ void PileFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->fsm.states = efc.finish();
-    typ->fsm.firstStateIdx = fixStates(typ->fsm.states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->fsm.states.size() == N_PILE_STATES,
-        i2s(typ->fsm.states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_PILE_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_PILE_STATES) + " in enum."
     );
 }
@@ -69,11 +70,11 @@ void PileFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PileFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
-    Pile* pilPtr = (Pile*) fsm->m;
+void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
+    Pile* pilPtr = (Pile*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
-    GenMobFsm::beAttacked(fsm, info1, info2);
+    GenMobFsm::beAttacked(scriptVM, info1, info2);
     
     size_t amountBefore = pilPtr->amount;
     int intendedAmount =
@@ -165,8 +166,8 @@ void PileFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PileFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
-    Pile* pilPtr = (Pile*) fsm->m;
+void PileFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Pile* pilPtr = (Pile*) scriptVM->mob;
     
     pilPtr->update();
 }

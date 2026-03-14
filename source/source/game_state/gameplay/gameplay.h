@@ -443,8 +443,8 @@ public:
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
     
-    //Script finite-state machine.
-    Fsm fsm;
+    //Script VM for the area.
+    ScriptVM scriptVM;
     
     //Current interlude info.
     InterludeInfo interlude;
@@ -473,6 +473,7 @@ public:
     
     //--- Public function declarations ---
     
+    GameplayState();
     ALLEGRO_BITMAP* drawToBitmap(
         const MakerTools::AreaImageSettings& settings
     );

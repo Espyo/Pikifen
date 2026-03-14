@@ -1682,7 +1682,7 @@ void Hud::tick(float deltaT) {
     bool playerIsIdling = false;
     if(
         player->leaderPtr &&
-        player->leaderPtr->fsm.curState->id == LEADER_STATE_ACTIVE &&
+        player->leaderPtr->scriptVM.fsm.curState->id == LEADER_STATE_ACTIVE &&
         player->leaderPtr->anim.curAnim->name != "walking"
     ) {
         playerIsIdling = true;

@@ -193,9 +193,9 @@ void Pikmin::drawMob() {
     
     //Idle glow.
     if(
-        fsm.curState->id == PIKMIN_STATE_IDLING ||
-        fsm.curState->id == PIKMIN_STATE_IDLING_H ||
-        fsm.curState->id == PIKMIN_STATE_SPROUT
+        scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING ||
+        scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING_H ||
+        scriptVM.fsm.curState->id == PIKMIN_STATE_SPROUT
     ) {
         BitmapEffect idleEff = pikSpriteEff;
         Point glowBmpSize =
@@ -263,8 +263,8 @@ void Pikmin::finishDyingClassSpecifics() {
  * @param m The mob to carry.
  */
 void Pikmin::forceCarry(Mob* m) {
-    fsm.setState(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr);
-    fsm.runEvent(MOB_EV_REACHED_DESTINATION);
+    scriptVM.fsm.setState(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr);
+    scriptVM.fsm.runEvent(MOB_EV_REACHED_DESTINATION);
 }
 
 
@@ -336,15 +336,15 @@ void Pikmin::handleStatusEffectGain(StatusType* staType) {
     
     switch(staType->stateChangeType) {
     case STATUS_STATE_CHANGE_FLAILING: {
-        fsm.setState(PIKMIN_STATE_FLAILING);
+        scriptVM.fsm.setState(PIKMIN_STATE_FLAILING);
         break;
     }
     case STATUS_STATE_CHANGE_HELPLESS: {
-        fsm.setState(PIKMIN_STATE_HELPLESS);
+        scriptVM.fsm.setState(PIKMIN_STATE_HELPLESS);
         break;
     }
     case STATUS_STATE_CHANGE_PANIC: {
-        fsm.setState(PIKMIN_STATE_PANICKING);
+        scriptVM.fsm.setState(PIKMIN_STATE_PANICKING);
         break;
     }
     default: {
@@ -395,32 +395,32 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
     if(
         staType->stateChangeType == STATUS_STATE_CHANGE_FLAILING &&
         !stillHasFlailing &&
-        fsm.curState->id == PIKMIN_STATE_FLAILING
+        scriptVM.fsm.curState->id == PIKMIN_STATE_FLAILING
     ) {
-        fsm.setState(PIKMIN_STATE_IDLING);
+        scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
         setAnimation(PIKMIN_ANIM_SHAKING);
         inShakingAnimation = true;
         setTimer(0); //The boredom animation timeout.
-        PikminFsm::standStill(&fsm, nullptr, nullptr);
+        PikminFsm::standStill(&scriptVM, nullptr, nullptr);
         invulnPeriod.start();
     }
     
     if(
         staType->stateChangeType == STATUS_STATE_CHANGE_HELPLESS &&
         !stillHasHelplessness &&
-        fsm.curState->id == PIKMIN_STATE_HELPLESS
+        scriptVM.fsm.curState->id == PIKMIN_STATE_HELPLESS
     ) {
-        fsm.setState(PIKMIN_STATE_IDLING);
-        PikminFsm::standStill(&fsm, nullptr, nullptr);
+        scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
+        PikminFsm::standStill(&scriptVM, nullptr, nullptr);
         invulnPeriod.start();
         
     } else if(
         staType->stateChangeType == STATUS_STATE_CHANGE_PANIC &&
         !stillHasPanic &&
-        fsm.curState->id == PIKMIN_STATE_PANICKING
+        scriptVM.fsm.curState->id == PIKMIN_STATE_PANICKING
     ) {
-        fsm.setState(PIKMIN_STATE_IDLING);
-        PikminFsm::standStill(&fsm, nullptr, nullptr);
+        scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
+        PikminFsm::standStill(&scriptVM, nullptr, nullptr);
         invulnPeriod.start();
         
     }
@@ -567,7 +567,7 @@ void Pikmin::readScriptVars(const ScriptVarReader& svr) {
     }
     if(svr.get("sprout", sproutVar)) {
         if(sproutVar) {
-            fsm.firstStateOverride = PIKMIN_STATE_SPROUT;
+            scriptVM.fsm.firstStateOverride = PIKMIN_STATE_SPROUT;
         }
     }
     if(svr.get("follow_link_as_leader", followLinkVar)) {
@@ -630,7 +630,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     //Carrying object.
     if(carryingMob) {
         if(!carryingMob->carryInfo) {
-            fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
     
@@ -642,7 +642,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     //Forcefully follow another mob as a leader.
     if(mustFollowLinkAsLeader && !links.empty()) {
         Mob* leader = links[0];
-        fsm.runEvent(
+        scriptVM.fsm.runEvent(
             MOB_EV_TOUCHED_ACTIVE_LEADER,
             (void*) (leader),
             (void*) 1 //Be silent.
@@ -677,7 +677,7 @@ Pikmin* getClosestSprout(
     size_t nPikmin = game.states.gameplay->mobs.pikmin.size();
     for(size_t p = 0; p < nPikmin; p++) {
         if(
-            game.states.gameplay->mobs.pikmin[p]->fsm.curState->id !=
+            game.states.gameplay->mobs.pikmin[p]->scriptVM.fsm.curState->id !=
             PIKMIN_STATE_SPROUT
         ) {
             continue;

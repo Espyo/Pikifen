@@ -1450,7 +1450,7 @@ void MobTypeContentManager::unloadMobType(
         if(!s) continue;
         game.content.sounds.list.free(sPtr);
     }
-    unloadScript(mt);
+    mt->scriptDef.unload();
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         mt->unloadResources();
     }
