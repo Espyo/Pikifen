@@ -39,22 +39,8 @@ using std::set;
 void loadAreaMissionRecord(
     DataNode* file, Area* areaPtr, MissionRecord& record
 ) {
-    string missionRecordEntryName =
-        getMissionRecordEntryName(areaPtr);
-        
-    vector<string> recordParts =
-        split(
-            file->getChildByName(
-                missionRecordEntryName
-            )->value,
-            ";", true
-        );
-        
-    if(recordParts.size() == 3) {
-        record.clear = recordParts[0] == "1";
-        record.score = s2i(recordParts[1]);
-        record.date = recordParts[2];
-    }
+    string missionRecordEntryName = getMissionRecordEntryName(areaPtr);
+    record.loadFromDataNode(file->getChildByName(missionRecordEntryName));
 }
 
 

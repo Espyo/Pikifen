@@ -1731,6 +1731,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
             .canGiveMedal = false,
+            .zeroTimeForScore =
+            hasFlag(pointLossData, MISSION_FAIL_COND_TIME_LIMIT)
         }
         );
         mission.timeLimit = failTimeLimit;
@@ -2067,7 +2069,30 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
     }
     
-    //TODO pointLossData
+    //Port the subtitle, since it's used in mission score records.
+    if(subtitle.empty()) {
+        switch(goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            subtitle = "End whenever you want";
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE: {
+            subtitle = "Collect treasures";
+            break;
+        } case MISSION_GOAL_BATTLE_ENEMIES: {
+            subtitle = "Battle enemies";
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            subtitle = "Survive";
+            break;
+        } case MISSION_GOAL_GET_TO_EXIT: {
+            subtitle = "Get to the exit";
+            break;
+        } case MISSION_GOAL_GROW_PIKMIN: {
+            subtitle = "Grow Pikmin";
+            break;
+        }
+        }
+    }
 }
 
 

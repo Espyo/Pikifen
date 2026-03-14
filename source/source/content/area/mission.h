@@ -708,9 +708,6 @@ struct MissionRecord {
 
     //--- Public members ---
     
-    //Has the mission's goal been cleared?
-    bool clear = false;
-    
     //Score obtained.
     int score = 0;
     
@@ -720,7 +717,10 @@ struct MissionRecord {
     
     //--- Public function declarations ---
     
-    bool isPlatinum(const MissionDataOld& mission);
+    void clear();
+    bool loadFromDataNode(DataNode* node);
+    bool saveToDataNode(DataNode* node);
+    bool isPlatinum(const MissionData& mission);
     
 };
 

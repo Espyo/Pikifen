@@ -137,7 +137,6 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     tagsText->text.clear();
     makerText->text.clear();
     versionText->text.clear();
-    curStamp = nullptr;
     curMedal = nullptr;
     if(areaType == AREA_TYPE_MISSION) {
         recordInfoText->text.clear();
@@ -151,10 +150,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     //Fill in the area's info.
     Area* areaPtr = game.content.areas.list[areaType][areaIdx];
     infoNameText->text = areaPtr->name;
-    subtitleText->text =
-        calculateAreaSubtitle(
-            areaPtr->subtitle, areaType, areaPtr->mission.preset
-        );
+    subtitleText->text = areaPtr->subtitle;
     descriptionText->text = areaPtr->description;
     tagsText->text =
         (areaPtr->tags.empty() ? "" : "Tags: " + areaPtr->tags);
@@ -169,22 +165,16 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         recordInfoText->text =
             !recordExists ?
             "(None)" :
-            areaPtr->missionOld.medalAwardMode ==
+            areaPtr->mission.medalAwardMode ==
             MISSION_MEDAL_AWARD_MODE_POINTS ?
             amountStr(score, "point") :
             "";
-        curStamp =
-            !recordExists ?
-            nullptr :
-            areaRecords[areaIdx].clear ?
-            game.sysContent.bmpMissionClear :
-            game.sysContent.bmpMissionFail;
         if(!recordExists) {
             curMedal = nullptr;
         } else {
-            switch(areaPtr->missionOld.medalAwardMode) {
+            switch(areaPtr->mission.medalAwardMode) {
             case MISSION_MEDAL_AWARD_MODE_POINTS: {
-                MISSION_MEDAL medal = areaPtr->missionOld.getScoreMedal(score);
+                MISSION_MEDAL medal = areaPtr->mission.getScoreMedal(score);
                 switch(medal) {
                 case MISSION_MEDAL_NONE: {
                     curMedal = game.sysContent.bmpMedalNone;
@@ -205,9 +195,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
                 break;
             } case MISSION_MEDAL_AWARD_MODE_GOAL: {
-                if(areaRecords[areaIdx].clear) {
-                    curMedal = game.sysContent.bmpMedalPlatinum;
-                }
+                curMedal = game.sysContent.bmpMedalPlatinum;
                 break;
             } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                 curMedal = game.sysContent.bmpMedalPlatinum;
@@ -251,7 +239,6 @@ void AreaMenu::initGuiInfoPage() {
     gui.registerCoords("description",  50, 40, 96, 24);
     gui.registerCoords("record_label", 50, 56, 96,  4);
     gui.registerCoords("record_info",  50, 62, 36,  4);
-    gui.registerCoords("record_stamp", 20, 65, 20, 14);
     gui.registerCoords("record_medal", 80, 65, 20, 14);
     gui.registerCoords("record_date",  50, 66, 28,  4);
     gui.registerCoords("difficulty",   50, 79, 96,  6);
@@ -319,19 +306,6 @@ void AreaMenu::initGuiInfoPage() {
                 new TextGuiItem("", game.sysContent.fntStandard);
             infoBox->addChild(recordInfoText);
             gui.addItem(recordInfoText, "record_info");
-            
-            //Record stamp.
-            GuiItem* recordStampItem = new GuiItem();
-            recordStampItem->onDraw =
-            [this] (const DrawInfo & draw) {
-                if(curStamp) {
-                    drawBitmapInBox(
-                        curStamp, draw.center, draw.size, true, 0.0f, draw.tint
-                    );
-                }
-            };
-            infoBox->addChild(recordStampItem);
-            gui.addItem(recordStampItem, "record_stamp");
             
             //Record medal.
             GuiItem* recordMedalItem = new GuiItem();
@@ -502,64 +476,46 @@ void AreaMenu::initGuiMain() {
             }
             
             if(areaType == AREA_TYPE_MISSION) {
-                //Stamp item.
-                GuiItem* stampItem = new GuiItem();
-                stampItem->ratioCenter =
-                    Point(0.85f, centerY - (BUTTON_HEIGHT * 0.15f));
-                stampItem->ratioSize =
-                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
-                stampItem->onDraw =
-                [this, a] (const DrawInfo & draw) {
-                    if(areaRecords[a].clear) {
-                        drawBitmapInBox(
-                            game.sysContent.bmpMissionClear,
-                            draw.center, draw.size, true, 0.0f, draw.tint
-                        );
-                    }
-                };
-                listBox->addChild(stampItem);
-                gui.addItem(stampItem);
-                
                 //Medal item.
                 GuiItem* medalItem = new GuiItem();
                 medalItem->ratioCenter =
-                    Point(0.95f, centerY + (BUTTON_HEIGHT * 0.15f));
+                    Point(0.92f, centerY);
                 medalItem->ratioSize =
-                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
+                    Point(0.15f, BUTTON_HEIGHT * 0.80f);
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
-                    switch(areaPtr->missionOld.medalAwardMode) {
-                    case MISSION_MEDAL_AWARD_MODE_POINTS: {
-                        int score = areaRecords[a].score;
-                        MISSION_MEDAL medal =
-                            areaPtr->missionOld.getScoreMedal(score);
-                        switch(medal) {
-                        case MISSION_MEDAL_NONE: {
+                    if(!areaRecords[a].date.empty()) {
+                        switch(areaPtr->mission.medalAwardMode) {
+                        case MISSION_MEDAL_AWARD_MODE_POINTS: {
+                            int score = areaRecords[a].score;
+                            MISSION_MEDAL medal =
+                                areaPtr->mission.getScoreMedal(score);
+                            switch(medal) {
+                            case MISSION_MEDAL_NONE: {
+                                break;
+                            } case MISSION_MEDAL_BRONZE: {
+                                medalBmp = game.sysContent.bmpMedalBronze;
+                                break;
+                            } case MISSION_MEDAL_SILVER: {
+                                medalBmp = game.sysContent.bmpMedalSilver;
+                                break;
+                            } case MISSION_MEDAL_GOLD: {
+                                medalBmp = game.sysContent.bmpMedalGold;
+                                break;
+                            } case MISSION_MEDAL_PLATINUM: {
+                                medalBmp = game.sysContent.bmpMedalPlatinum;
+                                break;
+                            }
+                            }
                             break;
-                        } case MISSION_MEDAL_BRONZE: {
-                            medalBmp = game.sysContent.bmpMedalBronze;
-                            break;
-                        } case MISSION_MEDAL_SILVER: {
-                            medalBmp = game.sysContent.bmpMedalSilver;
-                            break;
-                        } case MISSION_MEDAL_GOLD: {
-                            medalBmp = game.sysContent.bmpMedalGold;
-                            break;
-                        } case MISSION_MEDAL_PLATINUM: {
+                        } case MISSION_MEDAL_AWARD_MODE_GOAL: {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                             break;
-                        }
-                        }
-                        break;
-                    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
-                        if(areaRecords[a].clear) {
+                        } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                         }
-                        break;
-                    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
-                        medalBmp = game.sysContent.bmpMedalPlatinum;
-                    }
+                        }
                     }
                     
                     if(medalBmp) {

@@ -168,10 +168,7 @@ bool AreaContentManager::loadArea(
         game.loadingTextBmp = nullptr;
         game.loadingSubtextBmp = nullptr;
         drawLoadingScreen(
-            areaPtr->name,
-            calculateAreaSubtitle(
-                areaPtr->subtitle, areaPtr->type, areaPtr->mission.preset
-            ),
+            areaPtr->name, areaPtr->subtitle,
             areaPtr->maker,
             1.0f
         );
@@ -197,7 +194,6 @@ bool AreaContentManager::loadArea(
             areaPtr->loadRemindersFromDataNode(&remindersFile);
         }
     }
-
     
     return true;
 }

@@ -471,8 +471,7 @@ void Results::drawScoreChartGraphic(const DrawInfo& draw) {
     );
     
     //Circle for the old record.
-    //TODO add the player's previous record.
-    if(true) {
+    if(!oldRecord.date.empty()) {
         al_draw_filled_circle(
             draw.center.x,
             getScoreChartY(oldRecord.score),
@@ -562,15 +561,11 @@ void Results::initGuiMain() {
     textToAnimate.push_back(areaNameText);
     
     //Area subtitle text.
-    string subtitle =
-        calculateAreaSubtitle(
-            game.curArea->subtitle,
-            game.curArea->type,
-            game.curArea->mission.preset
-        );
-    if(!subtitle.empty()) {
+    if(!game.curArea->subtitle.empty()) {
         TextGuiItem* areaSubtitleText =
-            new TextGuiItem(subtitle, game.sysContent.fntAreaName);
+            new TextGuiItem(
+            game.curArea->subtitle, game.sysContent.fntAreaName
+        );
         gui.addItem(areaSubtitleText, "area_subtitle");
         textToAnimate.push_back(areaSubtitleText);
     }
@@ -930,6 +925,8 @@ void Results::load() {
     game.fadeMgr.startFade(true, nullptr);
     guiTimeSpent = 0.0f;
     textToAnimate.clear();
+    oldRecord.clear();
+    isNewRecord = false;
     
     finalMissionScore = game.states.gameplay->calculateMissionScore(false);
     
@@ -961,38 +958,28 @@ void Results::load() {
     }
     
     //Record loading and saving logic.
-    //TODO
-    /*
     DataNode missionRecords;
     missionRecords.loadFile(
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
     );
-    string recordEntryName =
-        getMissionRecordEntryName(game.curArea);
+    string recordEntryName = getMissionRecordEntryName(game.curArea);
     DataNode* entryNode;
     if(missionRecords.getNrOfChildrenByName(recordEntryName) > 0) {
-        entryNode =
-            missionRecords.getChildByName(recordEntryName);
+        entryNode = missionRecords.getChildByName(recordEntryName);
+        oldRecord.loadFromDataNode(entryNode);
     } else {
         entryNode = missionRecords.addNew(recordEntryName, "");
     }
     
-    vector<string> oldRecordParts = split(entryNode->value, ";", true);
-    
-    if(oldRecordParts.size() == 3) {
-        oldRecord.clear = oldRecordParts[0] == "1";
-        oldRecord.score = s2i(oldRecordParts[1]);
-        oldRecord.date = s2i(oldRecordParts[2]);
-    }
-    
-    if(!oldRecord.clear && goalWasCleared) {
+    if(
+        oldRecord.date.empty() && game.states.gameplay->missionWasCleared
+    ) {
         isNewRecord = true;
-    } else if(oldRecord.clear == goalWasCleared) {
-        if(
-            game.curArea->missionOld.medalAwardMode ==
-            MISSION_MEDAL_AWARD_MODE_POINTS &&
-            oldRecord.score < finalMissionScore
-        ) {
+    } else if(
+        !oldRecord.date.empty() && game.states.gameplay->missionWasCleared &&
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
+    ) {
+        if(oldRecord.score < finalMissionScore) {
             isNewRecord = true;
         }
     }
@@ -1003,36 +990,34 @@ void Results::load() {
         !game.makerTools.usedHelpingTools &&
         !game.states.gameplay->afterHours
     ) {
-        string clearStr = goalWasCleared ? "1" : "0";
-        string scoreStr = i2s(finalMissionScore);
-        string dateStr = getCurrentTime(false);
-    
-        entryNode->value = clearStr + ";" + scoreStr + ";" + dateStr;
+        MissionRecord newRecord;
+        newRecord.score = finalMissionScore;
+        newRecord.date = getCurrentTime(false);
+        
+        newRecord.saveToDataNode(entryNode);
         savedSuccessfully =
             missionRecords.saveFile(
                 FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
             );
+            
+        if(!savedSuccessfully) {
+            showSystemMessageBox(
+                nullptr, "Save failed!",
+                "Could not save this result!",
+                (
+                    "An error occurred while saving the mission record to the "
+                    "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
+                    "\". Make sure that "
+                    "the folder it is saving to exists and it is not "
+                    "read-only, and try beating the mission again."
+                ).c_str(),
+                nullptr,
+                ALLEGRO_MESSAGEBOX_WARN
+            );
+        }
     }
-    
-    if(!savedSuccessfully) {
-        showSystemMessageBox(
-            nullptr, "Save failed!",
-            "Could not save this result!",
-            (
-                "An error occurred while saving the mission record to the "
-                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
-                "\". Make sure that "
-                "the folder it is saving to exists and it is not read-only, "
-                "and try beating the mission again."
-            ).c_str(),
-            nullptr,
-            ALLEGRO_MESSAGEBOX_WARN
-        );
-    }
-    */
     
     //Menu items.
-    
     initGuiMain();
     initGuiStats();
     if(
@@ -1068,9 +1053,7 @@ void Results::populateScoreChart() {
     scoreMarkers.push_back(
         std::make_pair(SCORE_MARKER_SCORE, finalMissionScore)
     );
-    //TODO add the player's previous record.
-    oldRecord.clear = true; oldRecord.score = 39;
-    if(oldRecord.clear) {
+    if(!oldRecord.date.empty()) {
         scoreMarkers.push_back(
             std::make_pair(SCORE_MARKER_OLD_RECORD, oldRecord.score)
         );

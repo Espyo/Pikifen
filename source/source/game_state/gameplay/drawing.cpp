@@ -194,14 +194,8 @@ void GameplayState::doGameDrawing(
     if(game.makerTools.hud) {
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
-                game.curArea->name,
-                calculateAreaSubtitle(
-                    game.curArea->subtitle,
-                    game.curArea->type,
-                    game.curArea->mission.preset
-                ),
-                game.curArea->maker,
-                areaTitleFadeTimer.getRatioLeft()
+                game.curArea->name, game.curArea->subtitle,
+                game.curArea->maker, areaTitleFadeTimer.getRatioLeft()
             );
         }
         

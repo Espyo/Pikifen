@@ -1701,11 +1701,7 @@ void PauseMenu::initMainPauseMenu() {
     //Area subtitle.
     TextGuiItem* areaSubtitleText =
         new TextGuiItem(
-        calculateAreaSubtitle(
-            game.curArea->subtitle, game.curArea->type,
-            game.curArea->mission.preset
-        ),
-        game.sysContent.fntAreaName,
+        game.curArea->subtitle, game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
     );
     gui.addItem(areaSubtitleText, "area_subtitle");

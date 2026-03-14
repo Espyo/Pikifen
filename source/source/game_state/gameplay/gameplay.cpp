@@ -1190,6 +1190,9 @@ void GameplayState::load() {
     curLeadersInMissionExit = 0;
     missionRequiredMobAmount = 0;
     missionScore = 0;
+    missionConsiderZeroTime = false;
+    missionEndCondIdx = INVALID;
+    missionWasCleared = false;
     oldMissionScore = 0;
     oldMissionGoalCur = 0;
     oldMissionFail1Cur = 0;

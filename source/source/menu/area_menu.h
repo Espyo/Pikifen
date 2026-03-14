@@ -106,9 +106,6 @@ private:
     //Record info text item.
     TextGuiItem* recordInfoText = nullptr;
     
-    //Record stamp of the currently selected area.
-    ALLEGRO_BITMAP* curStamp = nullptr;
-    
     //Record medal of the currently selected area.
     ALLEGRO_BITMAP* curMedal = nullptr;
     

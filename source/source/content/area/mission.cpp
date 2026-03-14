@@ -3322,19 +3322,68 @@ vector<size_t> MissionMobGroup::calculateList() const {
 
 
 /**
+ * @brief Clears the data inside.
+ */
+void MissionRecord::clear() {
+    score = 0;
+    date.clear();
+}
+
+/**
+ * @brief Loads a record from a data node.
+ *
+ * @param node The record's node.
+ * @return Whether it succeeded.
+ */
+bool MissionRecord::loadFromDataNode(DataNode* node) {
+    vector<string> parts = split(node->value, ";", true);
+    
+    if(parts.size() == 3) {
+        //DEPRECATED by the medal-only system in 1.2.0.
+        bool clear = parts[0] == "1";
+        if(clear) {
+            score = s2i(parts[1]);
+            date = parts[2];
+        }
+    } else if(parts.size() == 2) {
+        score = s2i(parts[0]);
+        date = parts[1];
+    } else {
+        return false;
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Saves a record onto a data node.
+ *
+ * @param node The record's node.
+ * @return Whether it succeeded.
+ */
+bool MissionRecord::saveToDataNode(DataNode* node) {
+    node->value = i2s(score) + ";" + date;
+    return true;
+}
+
+
+/**
  * @brief Returns whether or not this record is a platinum medal.
  *
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
+bool MissionRecord::isPlatinum(const MissionData& mission) {
+    if(date.empty()) return false;
+    
     switch(mission.medalAwardMode) {
     case MISSION_MEDAL_AWARD_MODE_POINTS: {
         return score >= mission.platinumReq;
     } case MISSION_MEDAL_AWARD_MODE_GOAL: {
-        return clear;
+        return true;
     } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
-        return !date.empty();
+        return true;
     }
     }
     return false;
