@@ -8,7 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New mission system
         Add the presets logic
-        Health bar HUD logic, for Lumiknolls
         Automatically port all mission score records if they're detected to be from an old version
         Mission score records need to be ported over
         Delete all remnants of the old system
@@ -502,7 +501,7 @@ Misc things (so I don't forget)
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animate the mission results screen. Basically, reveal one thing at a time
-            Add sounds for an item's run-up ticking, an item's run-up finishing, a ka-ching for getting a medal, and a puff for the complete/failed stamp
+            Add sounds for an item's run-up ticking, an item's run-up finishing, and a ka-ching for getting a medal
             Add particles to the medal
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens
@@ -785,7 +784,6 @@ Misc things (so I don't forget)
                 Item run-up ticking
                 Item run-up finished
                 Ka-ching for getting a medal
-                Puff for the complete/failed stamp
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty

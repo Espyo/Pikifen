@@ -3790,6 +3790,89 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 "What sort of content will be shown inside."
             );
             
+            const auto processIdxsListWidgets =
+                [this] (
+                    vector<size_t>* idxs,
+                    const string& label, const string& term
+            ) {
+            
+                if(idxs->empty()) idxs->push_back(0);
+                
+                for(size_t i = 0; i < idxs->size(); i++) {
+                
+                    //Add button.
+                    if(
+                        ImGui::ImageButton(
+                            "add" + label + "IdxButton" + i2s(i),
+                            editorIcons[EDITOR_ICON_ADD],
+                            Point(EDITOR::ICON_BMP_SIZE) * 0.75f
+                        )
+                    ) {
+                        registerChange(
+                            "mission HUD item " + term +
+                            " addition"
+                        );
+                        idxs->insert(idxs->begin() + i, 0);
+                    }
+                    setTooltip("Add a new " + term + ".");
+                    
+                    //Remove button.
+                    ImGui::SameLine();
+                    if(idxs->size() != 1) {
+                    
+                        if(
+                            ImGui::ImageButton(
+                                "rem" + label + "IdxButton" + i2s(i),
+                                editorIcons[EDITOR_ICON_REMOVE],
+                                Point(EDITOR::ICON_BMP_SIZE) * 0.75f
+                            )
+                        ) {
+                            registerChange(
+                                "mission HUD item " + term +
+                                " removal"
+                            );
+                            idxs->erase(idxs->begin() + i);
+                        }
+                        setTooltip("Remove this " + term + ".");
+                        
+                    } else {
+                    
+                        ImGui::Dummy(
+                            ImVec2(
+                                EDITOR::ICON_BMP_SIZE,
+                                EDITOR::ICON_BMP_SIZE
+                            )
+                        );
+                        
+                    }
+                    
+                    //Number input.
+                    int idx = idxs->operator[](i);
+                    idx++;
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(50);
+                    if(
+                        ImGui::DragInt(
+                            (label + "##idx" + i2s(i)).c_str(),
+                            &idx, 0.1f, 1, INT_MAX
+                        )
+                    ) {
+                        registerChange(
+                            "mission HUD item " + term + " change"
+                        );
+                        idx--;
+                        idxs->operator[](i) = (size_t) idx;
+                    }
+                    setTooltip(
+                        "Number of the " + term + " to get the\n"
+                        "amounts from. If you specify multiple ones,\n"
+                        "it combines all of them."
+                    );
+                    
+                }
+                
+            };
+            
             switch(itemPtr->contentType) {
             case MISSION_HUD_ITEM_CONTENT_TEXT: {
         
@@ -3819,6 +3902,21 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 
             } case MISSION_HUD_ITEM_CONTENT_HEALTH: {
         
+                //Label input.
+                string text = itemPtr->text;
+                if(ImGui::InputText("Label", &text)) {
+                    registerChange("mission HUD item text change");
+                    itemPtr->text = text;
+                }
+                setTooltip(
+                    "Text to label the bar with, if any."
+                );
+                
+                //Mob group number widgets.
+                processIdxsListWidgets(
+                    &itemPtr->idxsList, "Mob group number", "mob group"
+                );
+                
                 break;
                 
             } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
@@ -3827,89 +3925,6 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             case MISSION_HUD_ITEM_CONTENT_REM_AMT:
             case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
         
-                const auto processIdxsListWidgets =
-                    [this] (
-                        vector<size_t>* idxs,
-                        const string& label, const string& term
-                ) {
-                
-                    if(idxs->empty()) idxs->push_back(0);
-                    
-                    for(size_t i = 0; i < idxs->size(); i++) {
-                    
-                        //Add button.
-                        if(
-                            ImGui::ImageButton(
-                                "add" + label + "IdxButton" + i2s(i),
-                                editorIcons[EDITOR_ICON_ADD],
-                                Point(EDITOR::ICON_BMP_SIZE) * 0.75f
-                            )
-                        ) {
-                            registerChange(
-                                "mission HUD item " + term +
-                                " addition"
-                            );
-                            idxs->insert(idxs->begin() + i, 0);
-                        }
-                        setTooltip("Add a new " + term + ".");
-                        
-                        //Remove button.
-                        ImGui::SameLine();
-                        if(idxs->size() != 1) {
-                        
-                            if(
-                                ImGui::ImageButton(
-                                    "rem" + label + "IdxButton" + i2s(i),
-                                    editorIcons[EDITOR_ICON_REMOVE],
-                                    Point(EDITOR::ICON_BMP_SIZE) * 0.75f
-                                )
-                            ) {
-                                registerChange(
-                                    "mission HUD item " + term +
-                                    " removal"
-                                );
-                                idxs->erase(idxs->begin() + i);
-                            }
-                            setTooltip("Remove this " + term + ".");
-                            
-                        } else {
-                        
-                            ImGui::Dummy(
-                                ImVec2(
-                                    EDITOR::ICON_BMP_SIZE,
-                                    EDITOR::ICON_BMP_SIZE
-                                )
-                            );
-                            
-                        }
-                        
-                        //Number input.
-                        int idx = idxs->operator[](i);
-                        idx++;
-                        ImGui::SameLine();
-                        ImGui::SetNextItemWidth(50);
-                        if(
-                            ImGui::DragInt(
-                                (label + "##idx" + i2s(i)).c_str(),
-                                &idx, 0.1f, 1, INT_MAX
-                            )
-                        ) {
-                            registerChange(
-                                "mission HUD item " + term + " change"
-                            );
-                            idx--;
-                            idxs->operator[](i) = (size_t) idx;
-                        }
-                        setTooltip(
-                            "Number of the " + term + " to get the\n"
-                            "amounts from. If you specify multiple ones,\n"
-                            "it combines all of them."
-                        );
-                        
-                    }
-                    
-                };
-                
                 //Label input.
                 string text = itemPtr->text;
                 if(ImGui::InputText("Label", &text)) {

@@ -233,6 +233,9 @@ enum MISSION_HUD_ITEM_CONTENT {
     //Current score.
     MISSION_HUD_ITEM_CONTENT_SCORE,
     
+    //Health bar.
+    MISSION_HUD_ITEM_CONTENT_HEALTH,
+    
     //Current amount of something, out of a total.
     MISSION_HUD_ITEM_CONTENT_CUR_TOT,
     
@@ -257,6 +260,7 @@ buildEnumNames(missionHudItemContentTypeNames, MISSION_HUD_ITEM_CONTENT)({
     { MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN, "Clock ticking down" },
     { MISSION_HUD_ITEM_CONTENT_CLOCK_UP, "Clock ticking up" },
     { MISSION_HUD_ITEM_CONTENT_SCORE, "Score" },
+    { MISSION_HUD_ITEM_CONTENT_HEALTH, "Health bar" },
     { MISSION_HUD_ITEM_CONTENT_CUR_TOT, "Current amount / total" },
     { MISSION_HUD_ITEM_CONTENT_REM_TOT, "Remaining amount / total" },
     { MISSION_HUD_ITEM_CONTENT_CUR_AMT, "Current amount" },

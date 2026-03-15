@@ -71,6 +71,9 @@ const string MISSION_AMT_TWO_GUI_FILE_NAME = "gameplay_mission_amount_two";
 //Name of the GUI definition file for the mission clock items.
 const string MISSION_CLOCK_GUI_FILE_NAME = "gameplay_mission_clock";
 
+//Name of the GUI definition file for the mission health items.
+const string MISSION_HEALTH_GUI_FILE_NAME = "gameplay_mission_health";
+
 //Name of the GUI definition file for the mission score items.
 const string MISSION_SCORE_GUI_FILE_NAME = "gameplay_mission_score";
 
@@ -1023,13 +1026,12 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN
             ) {
                 if(
-                    game.curArea->mission.timeLimit > 0.0f &&
-                    game.states.gameplay->gameplayTimePassed <=
-                    game.curArea->mission.timeLimit
+                    game.curArea->mission.timeLimit > 0.0f
                 ) {
-                    size_t seconds =
+                    int seconds =
                         game.curArea->mission.timeLimit -
                         game.states.gameplay->gameplayTimePassed;
+                    seconds = std::max(seconds, 0);
                     text = timeToStr2(seconds);
                 }
             } else {
@@ -1354,6 +1356,72 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         };
         item->addChild(ruler);
         gui.addItem(ruler, "mission_score_ruler");
+        
+        break;
+        
+    } case MISSION_HUD_ITEM_CONTENT_HEALTH: {
+        //Health bar.
+        
+        DataNode* guiFile =
+            &game.content.guiDefs.list[HUD::MISSION_HEALTH_GUI_FILE_NAME];
+        gui.registerCoords("mission_health_label",  22, 50, 36, 92);
+        gui.registerCoords("mission_health_bar",  22, 50, 36, 92);
+        gui.readDataFile(guiFile, item);
+        
+        //Label.
+        GuiItem* text = new GuiItem();
+        text->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            drawText(
+                itemInfo->text, game.sysContent.fntStandard,
+                draw.center, draw.size,
+                tintColor(mapAlpha(224), draw.tint)
+            );
+        };
+        item->addChild(text);
+        gui.addItem(text, "mission_health_label");
+        
+        //Bar proper.
+        GuiItem* bar = new GuiItem();
+        bar->onDraw =
+        [itemInfo, this] (const DrawInfo & draw) {
+            float health = 0.0f;
+            float maxHealth = 0.0f;
+            for(size_t g = 0; g < itemInfo->idxsList.size(); g++) {
+                size_t idx = itemInfo->idxsList[g];
+                if(idx >= game.states.gameplay->missionMobGroups.size()) {
+                    continue;
+                }
+                MissionMobGroupStatus* gPtr =
+                    &game.states.gameplay->missionMobGroups[idx];
+                health = (*gPtr->remaining.begin())->health;
+                maxHealth = (*gPtr->remaining.begin())->maxHealth;
+            }
+            
+            if(health == 0.0f && maxHealth == 0.0f) {
+                return;
+            }
+            
+            float healthRatio = health / maxHealth;
+            Point barRatio(5.0f, 1.0f);
+            Point outerSize =
+                resizeToBoxKeepingAspectRatio(barRatio, draw.size);
+            float innerX1 = draw.center.x - outerSize.x / 2.0f;
+            float innerX2 = innerX1 + outerSize.x * healthRatio;
+            drawFilledRoundedRatioRectangle(
+                draw.center,
+                outerSize, 0.15f, COLOR_BLACK
+            );
+            if(health > 0.0f) {
+                drawFilledRoundedRatioRectangle(
+                    Point((innerX2 + innerX1) / 2.0f, draw.center.y),
+                    Point(innerX2 - innerX1, outerSize.y) - 4.0f,
+                    0.15f, game.config.guiColors.good
+                );
+            }
+        };
+        item->addChild(bar);
+        gui.addItem(bar, "mission_health_bar");
         
         break;
         
