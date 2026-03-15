@@ -2510,8 +2510,9 @@ void PauseMenu::startLeavingGameplay() {
             }
         }
         game.states.gameplay->endMission(
-            cPtr ? cPtr->canGiveMedal : false,
+            cPtr ? cPtr->clear : false,
             cPtr ? cPtr->zeroTimeForScore : true,
+            cPtr ? cPtr->neutralMood : false,
             false, cPtr, true
         );
     }

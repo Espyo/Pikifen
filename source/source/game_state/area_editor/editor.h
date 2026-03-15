@@ -352,12 +352,6 @@ private:
         //Unknown tree shadow image.
         EPT_UNKNOWN_SHADOW,
         
-        //No active score criteria for this mission.
-        EPT_NO_SCORE_CRITERIA,
-        
-        //No mission goal mobs.
-        EPT_NO_GOAL_MOBS,
-        
     };
     
     //Editor states.

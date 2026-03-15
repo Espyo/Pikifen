@@ -662,11 +662,8 @@ void Results::initGuiMain() {
     //End reason text, if any.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         string endReason;
-        if(endEv) {
-            endReason =
-                game.missionEndCondTypes[endEv->type]->getHudInfo(
-                    endEv, &game.curArea->mission, game.states.gameplay
-                ).reason;
+        if(endCond) {
+            endReason = endCond->reason;
         }
         
         if(!endReason.empty()) {
@@ -749,7 +746,7 @@ void Results::initGuiMain() {
     gui.addItem(retryButton, "retry");
     
     //Keep playing button.
-    if(endEv && endEv->type == MISSION_END_COND_TIME_LIMIT) {
+    if(endCond && endCond->type == MISSION_END_COND_TIME_LIMIT) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
@@ -940,7 +937,7 @@ void Results::load() {
             medal = game.curArea->mission.getScoreMedal(finalMissionScore);
         }
         break;
-    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
         medal =
             game.states.gameplay->missionWasCleared ?
             MISSION_MEDAL_PLATINUM :
@@ -952,9 +949,9 @@ void Results::load() {
     }
     }
     
-    endEv = nullptr;
+    endCond = nullptr;
     if(game.states.gameplay->missionEndCondIdx != INVALID) {
-        endEv =
+        endCond =
             &game.curArea->mission.endConds[
                 game.states.gameplay->missionEndCondIdx
             ];

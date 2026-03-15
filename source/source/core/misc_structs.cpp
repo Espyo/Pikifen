@@ -305,7 +305,7 @@ Console::Console() {
 
 /**
  * @brief Adds a log entry to the log buffer.
- * 
+ *
  * @param text Text to add.
  */
 void Console::addToLog(const string& text) {
@@ -2350,6 +2350,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("menu_focus", sndMenuFocus);
     sndRS.set("mission_clear", sndMissionClear);
     sndRS.set("mission_failed", sndMissionFailed);
+    sndRS.set("mission_over", sndMissionOver);
     sndRS.set("one_minute_left", sndOneMinuteLeft);
     sndRS.set("ready", sndReady);
     sndRS.set("switch_pikmin", sndSwitchPikmin);

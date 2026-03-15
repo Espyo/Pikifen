@@ -42,6 +42,8 @@ extern const float BIG_MSG_MISSION_CLEAR_DUR;
 extern const string BIG_MSG_MISSION_CLEAR_TEXT;
 extern const float BIG_MSG_MISSION_FAILED_DUR;
 extern const string BIG_MSG_MISSION_FAILED_TEXT;
+extern const float BIG_MSG_MISSION_OVER_DUR;
+extern const string BIG_MSG_MISSION_OVER_TEXT;
 extern const float BIG_MSG_ONE_MIN_LEFT_DUR;
 extern const string BIG_MSG_ONE_MIN_LEFT_TEXT;
 extern const float BIG_MSG_READY_DUR;
@@ -110,6 +112,9 @@ enum BIG_MESSAGE {
     
     //Mission failed...
     BIG_MESSAGE_MISSION_FAILED,
+    
+    //Mission over!
+    BIG_MESSAGE_MISSION_OVER,
     
 };
 
@@ -469,7 +474,7 @@ public:
     int calculateMissionScore(bool forHud);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     bool endMission(
-        bool clear, bool zeroTime,
+        bool clear, bool zeroTime, bool neutralMood = false,
         bool showTimesUpMsg = false, MissionEndCond* cond = nullptr,
         bool silent = false
     );

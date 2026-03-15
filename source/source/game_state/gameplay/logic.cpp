@@ -960,10 +960,11 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     &game.curArea->mission.endConds[c];
                 MissionEndCondType* condTypePtr =
                     game.missionEndCondTypes[condPtr->type];
-
+                    
                 if(condTypePtr->isMet(condPtr, &game.curArea->mission, this)) {
                     endMission(
-                        condPtr->canGiveMedal, condPtr->zeroTimeForScore,
+                        condPtr->clear, condPtr->zeroTimeForScore,
+                        condPtr->neutralMood,
                         condPtr->type == MISSION_END_COND_TIME_LIMIT,
                         condPtr
                     );
@@ -1443,6 +1444,11 @@ void GameplayState::doMenuLogic() {
         break;
     } case BIG_MESSAGE_MISSION_FAILED: {
         if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
+        }
+        break;
+    } case BIG_MESSAGE_MISSION_OVER: {
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_MISSION_OVER_DUR) {
             bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;

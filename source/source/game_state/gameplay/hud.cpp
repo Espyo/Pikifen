@@ -142,7 +142,7 @@ Hud::Hud() :
     gui.registerCoords("counters_slash_1",         82,   91,  4,  8);
     gui.registerCoords("counters_slash_2",          0,    0,  0,  0);
     gui.registerCoords("counters_slash_3",          0,    0,  0,  0);
-    gui.registerCoords("mission_main",             18,    8, 32, 12);
+    gui.registerCoords("mission_goal",             18,    8, 32, 12);
     gui.registerCoords("mission_score",            18,   20, 32, 10);
     gui.registerCoords("mission_clock",            82,    8, 32, 12);
     gui.registerCoords("mission_misc",             82,   20, 32, 10);
@@ -736,24 +736,24 @@ Hud::Hud() :
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
         //Mission "goal" item.
-        GuiItem* missionGoalMainItem = new GuiItem();
-        gui.addItem(missionGoalMainItem, "mission_main");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalMainItem);
+        GuiItem* missionGoalItem = new GuiItem();
+        gui.addItem(missionGoalItem, "mission_goal");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalItem);
         
         //Mission "score" item.
-        GuiItem* missionGoalSecItem = new GuiItem();
-        gui.addItem(missionGoalSecItem, "mission_score");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionGoalSecItem);
+        GuiItem* missionScoreItem = new GuiItem();
+        gui.addItem(missionScoreItem, "mission_score");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionScoreItem);
         
         //Mission "clock" item.
-        GuiItem* missionFailMainItem = new GuiItem();
-        gui.addItem(missionFailMainItem, "mission_clock");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionFailMainItem);
+        GuiItem* missionClockItem = new GuiItem();
+        gui.addItem(missionClockItem, "mission_clock");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionClockItem);
         
         //Mission "misc." item.
-        GuiItem* missionFailSecItem = new GuiItem();
-        gui.addItem(missionFailSecItem, "mission_misc");
-        setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionFailSecItem);
+        GuiItem* missionMiscItem = new GuiItem();
+        gui.addItem(missionMiscItem, "mission_misc");
+        setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionMiscItem);
     }
     
     
@@ -1394,6 +1394,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 }
                 MissionMobGroupStatus* gPtr =
                     &game.states.gameplay->missionMobGroups[idx];
+                if(gPtr->remaining.empty()) continue;
                 health = (*gPtr->remaining.begin())->health;
                 maxHealth = (*gPtr->remaining.begin())->maxHealth;
             }

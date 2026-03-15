@@ -300,7 +300,7 @@ void StatsMenu::populateStatsList() {
         "Cleared",
         i2s(missionClears) + "/" +
         i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
-        "Total amount of missions where the current record is a goal clear."
+        "Total amount of missions where the current record is a clear."
     );
     addNewStatItem(
         "Platinum medals",

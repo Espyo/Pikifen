@@ -372,12 +372,15 @@ void GameplayState::drawBigMsg() {
         
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED:
+    case BIG_MESSAGE_MISSION_OVER:
     case BIG_MESSAGE_TIMES_UP: {
         const string& TEXT =
             bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT :
+            bigMsg.get() == BIG_MESSAGE_MISSION_OVER ?
+            GAMEPLAY::BIG_MSG_MISSION_OVER_TEXT :
             GAMEPLAY::BIG_MSG_TIMES_UP_TEXT;
         const float TEXT_W = game.winW * 0.80f;
         const float TEXT_INITIAL_HEIGHT = 0.05f;
@@ -390,6 +393,8 @@ void GameplayState::drawBigMsg() {
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
             bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) :
+            bigMsg.get() == BIG_MESSAGE_MISSION_OVER ?
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_OVER_DUR) :
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_TIMES_UP_DUR);
             
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));

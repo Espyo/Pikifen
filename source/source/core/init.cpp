@@ -1113,7 +1113,7 @@ void initMisc() {
 
 
 /**
- * @brief Initializes the list of sector types, mission goals, etc.
+ * @brief Initializes the list of sector types, mission end conditions, etc.
  */
 void initMiscDatabases() {
     //Mission end conditions.
@@ -1128,6 +1128,7 @@ void initMiscDatabases() {
         new MissionEndCondTypeLosePikmin(),
         new MissionEndCondTypeLoseLeaders(),
         new MissionEndCondTypeTakeDamage(),
+        new MissionEndCondTypeScript(),
     };
     
     //Mission score criteria.

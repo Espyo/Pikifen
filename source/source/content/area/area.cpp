@@ -1329,7 +1329,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     ReaderSetter mRS(node);
     int presetInt = MISSION_PRESET_CUSTOM;
-    int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_GOAL;
+    int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_CLEAR;
     string briefingNotesStr;
     
     //DEPRECATED in 1.2.0 by the new mission system.
@@ -1367,8 +1367,10 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         cRS.set("type", typeInt);
         cRS.set("index_param", newCond.indexParam);
         cRS.set("amount_param", newCond.amountParam);
-        cRS.set("can_give_medal", newCond.canGiveMedal);
+        cRS.set("clear", newCond.clear);
         cRS.set("zero_time_for_score", newCond.zeroTimeForScore);
+        cRS.set("neutral_mood", newCond.neutralMood);
+        cRS.set("reason", newCond.reason);
         
         newCond.type = (MISSION_END_COND) typeInt;
         
@@ -1606,8 +1608,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
-            .zeroTimeForScore = true
+            .clear = true,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         mission.endConds.push_back(
@@ -1615,7 +1619,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = goalMobGroupIdx,
             .amountParam = goalAllMobs ? 0 : goalAmount,
-            .canGiveMedal = true
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all treasures!",
         }
         );
         break;
@@ -1635,15 +1641,19 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
-            .zeroTimeForScore = true
+            .clear = true,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = goalMobGroupIdx,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all enemies!",
         }
         );
         break;
@@ -1654,14 +1664,18 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = false,
-            .zeroTimeForScore = false
+            .clear = false,
+            .zeroTimeForScore = false,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Survived!",
         }
         );
         mission.timeLimit = goalAmount;
@@ -1680,17 +1694,20 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = false,
-            .zeroTimeForScore = true
+            .clear = false,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LEADERS_IN_REGION,
             .indexParam = exitRegionIdx,
-            .amountParam =
-            goalAllMobs ? 1 : goalMobIdxs.size(),
-            .canGiveMedal = true,
+            .amountParam = goalAllMobs ? 1 : goalMobIdxs.size(),
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got to the exit!",
         }
         );
         break;
@@ -1701,15 +1718,19 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = false,
-            .zeroTimeForScore = true
+            .clear = false,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = goalAmount,
-            .canGiveMedal = true
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Grew " + i2s(goalAmount) + " Pikmin!",
         }
         );
         break;
@@ -1725,9 +1746,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = false,
+            .clear = false,
             .zeroTimeForScore =
-            hasFlag(pointLossData, MISSION_FAIL_COND_TIME_LIMIT)
+            hasFlag(pointLossData, MISSION_FAIL_COND_OLD_TIME_LIMIT),
+            .neutralMood = false,
+            .reason = "Time's up!",
         }
         );
         mission.timeLimit = failTimeLimit;
@@ -1741,7 +1764,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionEndCond {
             .type = MISSION_END_COND_PIKMIN_OR_FEWER,
             .amountParam = failTooFewPikAmount,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Reached " + i2s(failTooFewPikAmount) + " Pikmin!",
         }
         );
     }
@@ -1754,7 +1779,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionEndCond {
             .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = failTooManyPikAmount,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Reached " + i2s(failTooManyPikAmount) + " Pikmin!",
         }
         );
     }
@@ -1767,7 +1794,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_PIKMIN,
             .amountParam = failPikKilled,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Lost " + i2s(failPikKilled) + " Pikmin!",
         }
         );
     }
@@ -1779,7 +1808,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TAKE_DAMAGE,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Took damage!",
         }
         );
     }
@@ -1792,7 +1823,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = failLeadersKod,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Lost " + i2s(failLeadersKod) + " leaders!",
         }
         );
     }
@@ -1813,7 +1846,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = enemyDefeatFailIdx,
             .amountParam = failEnemiesDefeated,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Defeated " + i2s(failEnemiesDefeated) + " enemies!",
         }
         );
     }
@@ -1822,7 +1857,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             failConditions, getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
-        mission.endConds[0].canGiveMedal = false;
+        mission.endConds[0].clear = false;
     }
     
     //Port the goal HUD items.
@@ -2545,8 +2580,10 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         cGW.write("type", condPtr->type);
         cGW.write("index_param", condPtr->indexParam);
         cGW.write("amount_param", condPtr->amountParam);
-        cGW.write("can_give_medal", condPtr->canGiveMedal);
+        cGW.write("clear", condPtr->clear);
         cGW.write("zero_time_for_score", condPtr->zeroTimeForScore);
+        cGW.write("neutral_mood", condPtr->neutralMood);
+        cGW.write("reason", condPtr->reason);
     }
     
     //Mob groups.

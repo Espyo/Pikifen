@@ -110,6 +110,9 @@ enum MISSION_END_COND {
     //A leader took damage.
     MISSION_END_COND_TAKE_DAMAGE,
     
+    //Reserved for script use.
+    MISSION_END_COND_SCRIPT,
+    
 };
 
 
@@ -331,8 +334,8 @@ enum MISSION_MEDAL_AWARD_MODE {
     //Based on points in different criteria.
     MISSION_MEDAL_AWARD_MODE_POINTS,
     
-    //Based on whether the player reached the goal or not.
-    MISSION_MEDAL_AWARD_MODE_GOAL,
+    //Based on whether the player cleared the mission or not.
+    MISSION_MEDAL_AWARD_MODE_CLEAR,
     
     //Based on whether the player played or not.
     MISSION_MEDAL_AWARD_MODE_PARTICIPATION,
@@ -444,7 +447,7 @@ struct MissionEndCond {
     //--- Public members ---
     
     //Type of condition.
-    MISSION_END_COND type = MISSION_END_COND_MOB_GROUP;
+    MISSION_END_COND type = MISSION_END_COND_PAUSE_MENU;
     
     //Index-related parameter, if applicable. Can be used for other things too.
     size_t indexParam = 0;
@@ -453,10 +456,18 @@ struct MissionEndCond {
     size_t amountParam = 1;
     
     //Whether a medal can be obtained when the mission ends.
-    bool canGiveMedal = true;
+    bool clear = false;
     
     //Whether the time remaining becomes 0 for scoring purposes, if applicable.
     bool zeroTimeForScore = false;
+    
+    //Whether to use a neutral "Mission over!" big message and a neutral
+    //jingle, or to use a message and jingle that depend on clear/failure.
+    bool neutralMood = false;
+    
+    //Text explaining the reason behind the mission ending,
+    //to show in the results menu.
+    string reason;
     
 };
 
@@ -553,7 +564,7 @@ struct MissionData {
     vector<MissionMobGroup> mobGroups;
     
     //Mission medal award mode.
-    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
+    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     
     //Time limit in seconds, if any.
     size_t timeLimit = 0;
@@ -658,7 +669,7 @@ struct MissionDataOld {
     size_t failHudSecondaryCond = INVALID;
     
     //Mission medal award mode.
-    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
+    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     
     //Mission point multiplier for each Pikmin born.
     int pointsPerPikminBorn = 0;
@@ -787,10 +798,6 @@ public:
         
         //A description of the condition. Empty if not used.
         string description;
-        
-        //The reason of what happened to trigger the condition.
-        //Empty if not used.
-        string reason;
         
     };
     
@@ -1018,6 +1025,31 @@ public:
  * @brief Class representing the "take damage" mission end condition.
  */
 class MissionEndCondTypeTakeDamage : public MissionEndCondType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    string getName() const override;
+    EditorInfo getEditorInfo() const override;
+    HudInfo getHudInfo(
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    bool getZoomData(
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+        Point* outCamPos, float* outCamZoom
+    ) const override;
+    bool isMet(
+        MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+    ) const override;
+    
+};
+
+
+/**
+ * @brief Class representing the "script" mission end condition.
+ */
+class MissionEndCondTypeScript : public MissionEndCondType {
 
 public:
 

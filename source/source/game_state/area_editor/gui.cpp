@@ -3554,19 +3554,20 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                 
             }
             
-            //Can give medal checkbox.
+            //Clear checkbox.
             
-            bool condCanGiveMedal = condPtr->canGiveMedal;
+            bool condClear = condPtr->clear;
             ImGui::Spacer();
             if(
-                ImGui::Checkbox("End can give medal", &condCanGiveMedal)
+                ImGui::Checkbox("Mission clear", &condClear)
             ) {
                 registerChange("mission end condition change");
-                condPtr->canGiveMedal = condCanGiveMedal;
+                condPtr->clear = condClear;
             }
             setTooltip(
                 "When this condition is met and the mission ends,\n"
-                "can the player receive a medal?"
+                "is it a clear (player receive a medal),\n"
+                "or is it a fail (player can't receive a medal)?"
             );
             
             //Zero time for scoring checkbox.
@@ -3576,12 +3577,48 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                     "Zero time for score", &zeroTime
                 )
             ) {
-                registerChange("mission end condition action time rule change");
+                registerChange("mission end condition time rule change");
                 condPtr->zeroTimeForScore = zeroTime;
             }
             setTooltip(
                 "When this condition is met and the mission ends,\n"
                 "should the scoring system consider the time remaining was 0?"
+            );
+            
+            //Neutral mood checkbox.
+            bool neutralMood = condPtr->neutralMood;
+            if(
+                ImGui::Checkbox(
+                    "Neutral mood", &neutralMood
+                )
+            ) {
+                registerChange("mission end condition mood change");
+                condPtr->neutralMood = neutralMood;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "should the big message and jingle use a  neutral mood?\n"
+                "This is useful for situations that are neither good nor bad,\n"
+                "it's simply something that ends the mission sooner, and then\n"
+                "the player is going to find out if they got a medal or not.\n"
+                "If unchecked, the big message and jingle will depend on\n"
+                "whether the mission was cleared."
+            );
+            
+            //Reason input.
+            string reason = condPtr->reason;
+            if(
+                ImGui::InputText(
+                    "Reason", &reason
+                )
+            ) {
+                registerChange("mission end condition reason change");
+                condPtr->reason = reason;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "what should the results menu show as the reason for\n"
+                "the mission being over?"
             );
             
         }
@@ -3613,9 +3650,9 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
         
         ImGui::SameLine();
         processGuiMedalAwardModeWidgets(
-            1, "Goal",
-            "The player's final medal depends on whether they have reached\n"
-            "the mission goal (platinum) or not (nothing)."
+            1, "Clear",
+            "The player's final medal depends on whether they have\n"
+            "cleared the mission (platinum) or failed (nothing)."
         );
         
         ImGui::SameLine();

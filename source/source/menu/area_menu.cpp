@@ -194,7 +194,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
                 }
                 break;
-            } case MISSION_MEDAL_AWARD_MODE_GOAL: {
+            } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
                 curMedal = game.sysContent.bmpMedalPlatinum;
                 break;
             } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
@@ -512,7 +512,7 @@ void AreaMenu::initGuiMain() {
                             }
                             }
                             break;
-                        } case MISSION_MEDAL_AWARD_MODE_GOAL: {
+                        } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                             break;
                         } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {

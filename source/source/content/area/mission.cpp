@@ -59,25 +59,31 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
     
     switch(newPreset) {
     case MISSION_PRESET_GROW_MANY_PIKMIN: {
-        //Grow Pikmin -- end conditions.
+        //Grow Many Pikmin -- end conditions.
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
+            .clear = true,
             .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Time's up!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = 1,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Lost a leader!",
         }
         );
         
@@ -88,28 +94,36 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
+            .clear = true,
             .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Time's up!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = 0,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all treasures!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = 1,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Lost a leader!",
         }
         );
         
@@ -120,28 +134,36 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
+            .clear = true,
             .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Time's up!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = 0,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all enemies!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = 1,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Lost a leader!",
         }
         );
         
@@ -152,28 +174,36 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = false,
+            .clear = false,
             .zeroTimeForScore = false,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Time's up!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = 0,
-            .canGiveMedal = false,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Defeated the boss!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = 1,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Lost a leader!",
         }
         );
         
@@ -184,28 +214,36 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_PAUSE_MENU,
-            .canGiveMedal = true,
+            .clear = true,
             .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended from the pause menu!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_TIME_LIMIT,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Time's up!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = 0,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got everything!",
         }
         );
         endConds.push_back(
         MissionEndCond {
             .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = 1,
-            .canGiveMedal = true,
+            .clear = true,
+            .neutralMood = true,
+            .reason = "Lost a leader!",
         }
         );
         
@@ -256,7 +294,7 @@ vector<string> MissionData::getMedalAwardBulletPoints() const {
         }
         break;
     }
-    case MISSION_MEDAL_AWARD_MODE_GOAL: {
+    case MISSION_MEDAL_AWARD_MODE_CLEAR: {
         result.push_back("Platinum medal: Clear the mission.");
         break;
     }
@@ -312,7 +350,7 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
  * @brief Clears the variables.
  */
 void MissionData::reset() {
-    medalAwardMode = MISSION_MEDAL_AWARD_MODE_GOAL;
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     startingPoints = 0;
     bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
@@ -379,8 +417,6 @@ MissionEndCondType::HudInfo MissionEndCondTypeLoseLeaders::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "Lose " + i2s(cond->amountParam) + " or more leaders.",
-        .reason =
-        "Lost " + amountStr((int) gameplay->leadersKod, "leader") + "!",
     };
 }
 
@@ -468,8 +504,6 @@ MissionEndCondType::HudInfo MissionEndCondTypeLosePikmin::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "Lose " + i2s(cond->amountParam) + " or more Pikmin.",
-        .reason =
-        "Lost " + i2s(gameplay->pikminDeaths) + " Pikmin!",
     };
 }
 
@@ -565,8 +599,6 @@ MissionEndCondType::HudInfo MissionEndCondTypeMobGroup::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "Clear the required targets.",
-        .reason =
-        "Cleared " + amountStr(cond->amountParam, "target") + "!",
     };
 }
 
@@ -668,8 +700,6 @@ MissionEndCondType::HudInfo MissionEndCondTypeLeadersInRegion::getHudInfo(
     return
     MissionEndCondType::HudInfo {
         .description = "Leaders in the region.",
-        .reason =
-        "Got " + amountStr(cond->amountParam, "leader") + " to the region!",
     };
 }
 
@@ -762,8 +792,6 @@ MissionEndCondType::HudInfo MissionEndCondTypePauseMenu::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "End from the pause menu.",
-        .reason =
-        "Ended from the pause menu!",
     };
 }
 
@@ -847,9 +875,6 @@ MissionEndCondType::HudInfo MissionEndCondTypePikminOrFewer::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "Reach " + i2s(cond->amountParam) + " Pikmin or fewer.",
-        .reason =
-        "Reached " +
-        i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
     };
 }
 
@@ -937,9 +962,6 @@ MissionEndCondType::HudInfo MissionEndCondTypePikminOrMore::getHudInfo(
     MissionEndCondType::HudInfo {
         .description =
         "Reach " + i2s(cond->amountParam) + " Pikmin or more.",
-        .reason =
-        "Reached " +
-        i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
     };
 }
 
@@ -1015,13 +1037,88 @@ MissionEndCondType::EditorInfo MissionEndCondTypeTakeDamage::getEditorInfo() con
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
+MissionEndCondType::HudInfo MissionEndCondTypeScript::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return
+    MissionEndCondType::HudInfo {
+        .description = "Script.",
+    };
+}
+
+
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
+ */
+string MissionEndCondTypeScript::getName() const {
+    return "Script";
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypeScript::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+    Point* outCamPos, float* outCamZoom
+) const {
+    return false;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypeScript::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return false;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::EditorInfo MissionEndCondTypeScript::getEditorInfo() const {
+    return
+    MissionEndCondType::EditorInfo {
+        .description =
+        "Triggers exclusively when the area script calls it.",
+    };
+}
+
+
+/**
+ * @brief Retrieves HUD information about the mission end condition type.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The information.
+ */
 MissionEndCondType::HudInfo MissionEndCondTypeTakeDamage::getHudInfo(
     MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
     MissionEndCondType::HudInfo {
         .description = "Take damage.",
-        .reason = "Took damage!",
     };
 }
 
@@ -1116,7 +1213,6 @@ MissionEndCondType::HudInfo MissionEndCondTypeTimeLimit::getHudInfo(
     return
     MissionEndCondType::HudInfo {
         .description = "Reach the time limit.",
-        .reason = "Time's up!",
     };
 }
 
@@ -1322,7 +1418,7 @@ bool MissionRecord::isPlatinum(const MissionData& mission) {
     switch(mission.medalAwardMode) {
     case MISSION_MEDAL_AWARD_MODE_POINTS: {
         return score >= mission.platinumReq;
-    } case MISSION_MEDAL_AWARD_MODE_GOAL: {
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
         return true;
     } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         return true;

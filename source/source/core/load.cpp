@@ -461,6 +461,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndMissionClear);
     game.sysContent.sndMissionFailed =
         game.content.sounds.list.get(game.sysContentNames.sndMissionFailed);
+    game.sysContent.sndMissionOver =
+        game.content.sounds.list.get(game.sysContentNames.sndMissionOver);
     game.sysContent.sndOneMinuteLeft =
         game.content.sounds.list.get(game.sysContentNames.sndOneMinuteLeft);
     game.sysContent.sndReady =
@@ -649,6 +651,7 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndMenuFocus);
     game.content.sounds.list.free(game.sysContent.sndMissionClear);
     game.content.sounds.list.free(game.sysContent.sndMissionFailed);
+    game.content.sounds.list.free(game.sysContent.sndMissionOver);
     game.content.sounds.list.free(game.sysContent.sndOneMinuteLeft);
     game.content.sounds.list.free(game.sysContent.sndReady);
     game.content.sounds.list.free(game.sysContent.sndSwitchPikmin);

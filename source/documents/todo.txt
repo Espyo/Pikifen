@@ -801,15 +801,14 @@ Misc things (so I don't forget)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     Boss music logic for attack jingles
     Missions
-        A goal where you reach X sprays of type Y
-        A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-        A goal where you have to construct a wonder
-        A fail condition for an enemy/enemy type dying (thanks Neo)
-        A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
+        An end event where you reach X sprays of type Y
+        An end event where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
+        An end event where you have to construct a wonder
+        An end event for an enemy/enemy type dying (thanks Neo)
+        An end event for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
         A way for something to give bonus points to the score (in score medal mode) (thanks Helodity)
             From the script?
             As a parameter in every single mob generator?
-        Custom goal clear conditions and custom fail conditions, via scripting somehow
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Code cleanup
@@ -886,8 +885,8 @@ Tasks for later on (I might never implement these)
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.?
-            A button next to the medal point requirement widgets to set it to the combined amount of the goal
-                This is tricky to do because some goal amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
+            A button next to the medal point requirement widgets to set it to the combined amount of some mob groups
+                This is tricky to do because some amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
@@ -930,7 +929,7 @@ Tasks for later on (I might never implement these)
         Water should reflect clouds and the sun... and maybe other things like an aurora borealis?
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
-        When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
+        When something contributes to something in the mission that's reflected in a HUD item, it should fly into said item
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)

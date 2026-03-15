@@ -268,7 +268,7 @@ struct Console {
     
     //How long its fade period lasts.
     float fadeDuration = 3.0f;
-
+    
     //Log buffer, if any.
     vector<string> log;
     
@@ -935,6 +935,9 @@ struct SystemContentList {
     //"Mission failed..." big message.
     ALLEGRO_SAMPLE* sndMissionFailed = nullptr;
     
+    //"Mission over!" big message.
+    ALLEGRO_SAMPLE* sndMissionOver = nullptr;
+    
     //"1 minute left!" big message.
     ALLEGRO_SAMPLE* sndOneMinuteLeft = nullptr;
     
@@ -1235,6 +1238,9 @@ struct SystemContentNames {
     
     //"Mission failed..." big message.
     string sndMissionFailed = "gui/mission_failed";
+    
+    //"Mission over!" big message.
+    string sndMissionOver = "gui/mission_over";
     
     //"1 minute left!" big message.
     string sndOneMinuteLeft = "gui/one_minute_left";

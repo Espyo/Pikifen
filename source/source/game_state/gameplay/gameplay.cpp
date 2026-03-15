@@ -57,6 +57,12 @@ const float BIG_MSG_MISSION_FAILED_DUR = 4.5f;
 //What text to show in the "Mission failed..." big message.
 const string BIG_MSG_MISSION_FAILED_TEXT = "MISSION FAILED...";
 
+//How long the "Mission over!" big message lasts for.
+const float BIG_MSG_MISSION_OVER_DUR = 4.5f;
+
+//What text to show in the "Mission over!" big message.
+const string BIG_MSG_MISSION_OVER_TEXT = "MISSION OVER!";
+
 //How long the "1 minute left!" big message lasts for.
 const float BIG_MSG_ONE_MIN_LEFT_DUR = 4.0f;
 
@@ -493,6 +499,8 @@ void GameplayState::doLogic() {
  *
  * @param clear Is it a clear or a failure?
  * @param zeroTime Consider the time left as 0?
+ * @param showTimesUpMsg Whether to use neutral mood messages and jingles,
+ * or to pick based on the clear status.
  * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
  * normal mission end messages.
  * @param cond Mission end condition responsible for this end, if any.
@@ -500,7 +508,7 @@ void GameplayState::doLogic() {
  * @return Whether it was able to end the mission.
  */
 bool GameplayState::endMission(
-    bool clear, bool zeroTime,
+    bool clear, bool zeroTime, bool neutralMood,
     bool showTimesUpMsg, MissionEndCond* cond, bool silent
 ) {
     if(interlude.get() != INTERLUDE_NONE) return false;
@@ -534,16 +542,24 @@ bool GameplayState::endMission(
         }
         
         BIG_MESSAGE bigMsgToShow;
-        ALLEGRO_SAMPLE* sndToPlay;
-        if(clear) {
-            bigMsgToShow = BIG_MESSAGE_MISSION_CLEAR;
-            sndToPlay = game.sysContent.sndMissionClear;
-        } else {
-            bigMsgToShow = BIG_MESSAGE_MISSION_FAILED;
-            sndToPlay = game.sysContent.sndMissionFailed;
-        }
+        
         if(showTimesUpMsg) {
             bigMsgToShow = BIG_MESSAGE_TIMES_UP;
+        } else if(neutralMood) {
+            bigMsgToShow = BIG_MESSAGE_MISSION_OVER;
+        } else if(clear) {
+            bigMsgToShow = BIG_MESSAGE_MISSION_CLEAR;
+        } else {
+            bigMsgToShow = BIG_MESSAGE_MISSION_FAILED;
+        }
+        
+        ALLEGRO_SAMPLE* sndToPlay;
+        if(neutralMood) {
+            sndToPlay = game.sysContent.sndMissionOver;
+        } else if(clear) {
+            sndToPlay = game.sysContent.sndMissionClear;
+        } else {
+            sndToPlay = game.sysContent.sndMissionFailed;
         }
         
         for(Player& player : players) {
