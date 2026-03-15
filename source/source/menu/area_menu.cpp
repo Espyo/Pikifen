@@ -237,10 +237,10 @@ void AreaMenu::initGuiInfoPage() {
     gui.registerCoords("subtitle",     36, 16, 68,  8);
     gui.registerCoords("thumbnail",    85, 14, 26, 24);
     gui.registerCoords("description",  50, 40, 96, 24);
-    gui.registerCoords("record_label", 50, 56, 96,  4);
-    gui.registerCoords("record_info",  50, 62, 36,  4);
-    gui.registerCoords("record_medal", 80, 65, 20, 14);
-    gui.registerCoords("record_date",  50, 66, 28,  4);
+    gui.registerCoords("record_label", 16, 64, 24,  4);
+    gui.registerCoords("record_info",  50, 64, 36,  4);
+    gui.registerCoords("record_medal", 84, 64, 16, 12);
+    gui.registerCoords("record_date",  50, 68, 28,  4);
     gui.registerCoords("difficulty",   50, 79, 96,  6);
     gui.registerCoords("tags",         50, 87, 96,  6);
     gui.registerCoords("maker",        28, 95, 52,  6);
@@ -297,7 +297,10 @@ void AreaMenu::initGuiInfoPage() {
         if(areaType == AREA_TYPE_MISSION) {
             //Record label.
             TextGuiItem* recordLabelText =
-                new TextGuiItem("Record:", game.sysContent.fntStandard);
+                new TextGuiItem(
+                "Record:", game.sysContent.fntStandard,
+                game.config.guiColors.smallHeader
+            );
             infoBox->addChild(recordLabelText);
             gui.addItem(recordLabelText, "record_label");
             

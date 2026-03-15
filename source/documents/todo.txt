@@ -8,19 +8,18 @@ Current tasks (tasks being worked on, but not yet committed)
         Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New mission system
         Add the presets logic
-        After hours clock HUD logic
+        Health bar HUD logic, for Lumiknolls
+        Automatically port all mission score records if they're detected to be from an old version
         Mission score records need to be ported over
         Delete all remnants of the old system
         Check all TODOs in the code
     New editor selection system
+        Add it to the layout, mobs, and paths area editor states
         Try to lump more code into the manager itself, to reduce copy-paste
-        Status bar should say how many are selected
+        Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, unselecting with Ctrl, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob
-    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
-    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
-    Add a leader swap sound, so swapping to the rookie isn't silent
     Results menu improvements
         Somehow draw the score chart connection lines underneath the score marker circles
         Some juice when swapping pages
@@ -29,6 +28,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Leaders aren't following the bounce arc when bounced by a geyser
     Ice vent is hitting frozen Pikmin multiple times and eventually killing them
         Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
@@ -39,6 +39,9 @@ Next tasks (roughly sorted most important first)
     You can open the radar and start Go Here! during interludes
 
     --- 1.2.0 ---
+    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
+    Add a leader swap sound, so swapping to the rookie isn't silent
+    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Add a destroyed sprite to the gas pipe
     Add a glowing orange top graphic, and make it replace the top of Pikmin under the effects of a spicy spray
@@ -55,13 +58,15 @@ Next tasks (roughly sorted most important first)
         Replace the clear + medal system with just a medal system, per the above
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-        The results menu should show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
     Add area editor review checks for the new mission system, like having a time limit but no associated event
+        Mission has a mob group with 0 mobs
+        Mission has a HUD item, end condition, etc. that calls an invalid mob group or region
+        Mission awards medals based on score criteria, but there are none
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
-        A way for missions to receive mission events, score updates, etc. through scripting
+        A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all

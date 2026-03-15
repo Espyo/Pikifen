@@ -25,27 +25,22 @@ hardcoded_items{
 		description=Area description.
 	}
 	record_label{
-		center=50.0000 56.0000
-		size=96.0000 4.0000
+		center=16.0000 64.0000
+		size=24.0000 4.0000
 		description=Label for the mission record field.
 	}
 	record_info{
-		center=50.0000 62.0000
+		center=50.0000 64.0000
 		size=36.0000 4.0000
 		description=Mission record score.
 	}
-	record_stamp{
-		center=20.0000 65.0000
-		size=20.0000 14.0000
-		description=Mission record stamp.
-	}
 	record_medal{
-		center=80.0000 65.0000
-		size=20.0000 14.0000
+		center=84.0000 64.0000
+		size=16.0000 12.0000
 		description=Mission record medal.
 	}
 	record_date{
-		center=50.0000 66.0000
+		center=50.0000 68.0000
 		size=28.0000 4.0000
 		description=Mission record date.
 	}

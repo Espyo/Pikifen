@@ -355,10 +355,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalSilver);
     game.sysContent.bmpMenuIcons =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
-    game.sysContent.bmpMissionClear =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpMissionClear);
-    game.sysContent.bmpMissionFail =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpMissionFail);
     game.sysContent.bmpMissionMob =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMissionMob);
     game.sysContent.bmpMore =
@@ -600,8 +596,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMedalPlatinum);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalSilver);
     game.content.bitmaps.list.free(game.sysContent.bmpMenuIcons);
-    game.content.bitmaps.list.free(game.sysContent.bmpMissionClear);
-    game.content.bitmaps.list.free(game.sysContent.bmpMissionFail);
     game.content.bitmaps.list.free(game.sysContent.bmpMissionMob);
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);

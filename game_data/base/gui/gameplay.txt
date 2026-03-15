@@ -144,22 +144,22 @@ hardcoded_items{
 		size=0.0000 0.0000
 		description=See "counters_slash_1".
 	}
-	mission_goal_main{
+	mission_main{
 		center=18.0000 8.0000
 		size=32.0000 12.0000
-		description=Space for the HUD items that hold mission information, typically about the goal.
+		description=Space for the HUD items that hold mission information, typically about the main aspect.
 	}
-	mission_goal_score{
+	mission_score{
 		center=18.0000 20.0000
 		size=32.0000 10.0000
 		description=Space for the HUD items that hold mission information, typically about the score.
 	}
-	mission_fail_clock{
+	mission_clock{
 		center=82.0000 8.0000
 		size=32.0000 12.0000
 		description=Space for the HUD items that hold mission information, typically about the clock.
 	}
-	mission_fail_misc{
+	mission_misc{
 		center=82.0000 20.0000
 		size=32.0000 10.0000
 		description=Space for the HUD items that hold mission information, typically about miscellaneous things.

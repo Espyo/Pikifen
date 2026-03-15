@@ -111,40 +111,40 @@ Hud::Hud() :
     
     DataNode* hudFileNode = &game.content.guiDefs.list[HUD::GUI_FILE_NAME];
     
-    gui.registerCoords("time",                          0,    0,  0,  0);
-    gui.registerCoords("day_bubble",                    0,    0,  0,  0);
-    gui.registerCoords("day_number",                    0,    0,  0,  0);
-    gui.registerCoords("leader_1_icon",                 7,   90,  8, 10);
-    gui.registerCoords("leader_2_icon",                 6,   80,  5,  9);
-    gui.registerCoords("leader_3_icon",                 6, 71.5,  5,  7);
-    gui.registerCoords("leader_1_health",              16,   90,  8, 10);
-    gui.registerCoords("leader_2_health",              12,   80,  5,  9);
-    gui.registerCoords("leader_3_health",              12, 71.5,  5,  7);
-    gui.registerCoords("leader_next_input",            4,   83,  3,  3);
-    gui.registerCoords("standby_icon",                 50,   91,  8, 10);
-    gui.registerCoords("standby_amount",               50,   97,  8,  4);
-    gui.registerCoords("standby_bubble",                0,    0,  0,  0);
-    gui.registerCoords("standby_maturity_icon",        54,   88,  4,  8);
-    gui.registerCoords("standby_next_icon",            58,   93,  6,  8);
-    gui.registerCoords("standby_next_input",           60,   96,  3,  3);
-    gui.registerCoords("standby_prev_icon",            42,   93,  6,  8);
-    gui.registerCoords("standby_prev_input",           40,   96,  3,  3);
-    gui.registerCoords("group_amount",                 73,   91, 15, 14);
-    gui.registerCoords("group_bubble",                 73,   91, 15, 14);
-    gui.registerCoords("field_amount",                 91,   91, 15, 14);
-    gui.registerCoords("field_bubble",                 91,   91, 15, 14);
-    gui.registerCoords("total_amount",                  0,    0,  0,  0);
-    gui.registerCoords("total_bubble",                  0,    0,  0,  0);
-    gui.registerCoords("counters_x",                    0,    0,  0,  0);
-    gui.registerCoords("counters_slash_1",             82,   91,  4,  8);
-    gui.registerCoords("counters_slash_2",              0,    0,  0,  0);
-    gui.registerCoords("counters_slash_3",              0,    0,  0,  0);
-    gui.registerCoords("mission_goal_main",            50,   37, 12, 10); //TODO
-    gui.registerCoords("mission_goal_score",           50,   37, 12, 10); //TODO
-    gui.registerCoords("mission_goal_clock",           50,   37, 12, 10); //TODO
-    gui.registerCoords("mission_goal_misc",            50,   37, 12, 10); //TODO
-    gui.registerCoords("control_guide",                50,   37, 12, 10); //TODO
-    gui.registerCoords("inventory_shortcut_usage",     50,   37, 12, 10);
+    gui.registerCoords("time",                      0,    0,  0,  0);
+    gui.registerCoords("day_bubble",                0,    0,  0,  0);
+    gui.registerCoords("day_number",                0,    0,  0,  0);
+    gui.registerCoords("leader_1_icon",             7,   90,  8, 10);
+    gui.registerCoords("leader_2_icon",             6,   80,  5,  9);
+    gui.registerCoords("leader_3_icon",             6, 71.5,  5,  7);
+    gui.registerCoords("leader_1_health",          16,   90,  8, 10);
+    gui.registerCoords("leader_2_health",          12,   80,  5,  9);
+    gui.registerCoords("leader_3_health",          12, 71.5,  5,  7);
+    gui.registerCoords("leader_next_input",         4,   83,  3,  3);
+    gui.registerCoords("standby_icon",             50,   91,  8, 10);
+    gui.registerCoords("standby_amount",           50,   97,  8,  4);
+    gui.registerCoords("standby_bubble",            0,    0,  0,  0);
+    gui.registerCoords("standby_maturity_icon",    54,   88,  4,  8);
+    gui.registerCoords("standby_next_icon",        58,   93,  6,  8);
+    gui.registerCoords("standby_next_input",       60,   96,  3,  3);
+    gui.registerCoords("standby_prev_icon",        42,   93,  6,  8);
+    gui.registerCoords("standby_prev_input",       40,   96,  3,  3);
+    gui.registerCoords("group_amount",             73,   91, 15, 14);
+    gui.registerCoords("group_bubble",             73,   91, 15, 14);
+    gui.registerCoords("field_amount",             91,   91, 15, 14);
+    gui.registerCoords("field_bubble",             91,   91, 15, 14);
+    gui.registerCoords("total_amount",              0,    0,  0,  0);
+    gui.registerCoords("total_bubble",              0,    0,  0,  0);
+    gui.registerCoords("counters_x",                0,    0,  0,  0);
+    gui.registerCoords("counters_slash_1",         82,   91,  4,  8);
+    gui.registerCoords("counters_slash_2",          0,    0,  0,  0);
+    gui.registerCoords("counters_slash_3",          0,    0,  0,  0);
+    gui.registerCoords("mission_main",             18,    8, 32, 12);
+    gui.registerCoords("mission_score",            18,   20, 32, 10);
+    gui.registerCoords("mission_clock",            82,    8, 32, 12);
+    gui.registerCoords("mission_misc",             82,   20, 32, 10);
+    gui.registerCoords("control_guide",            83,   55, 30, 50);
+    gui.registerCoords("inventory_shortcut_usage", 50,   37, 12, 10);
     gui.readDataFile(hudFileNode);
     
     //Leader health and icons.
@@ -734,22 +734,22 @@ Hud::Hud() :
     if(game.curArea->type == AREA_TYPE_MISSION) {
         //Mission "goal" item.
         GuiItem* missionGoalMainItem = new GuiItem();
-        gui.addItem(missionGoalMainItem, "mission_goal_main");
+        gui.addItem(missionGoalMainItem, "mission_main");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalMainItem);
         
         //Mission "score" item.
         GuiItem* missionGoalSecItem = new GuiItem();
-        gui.addItem(missionGoalSecItem, "mission_goal_score");
+        gui.addItem(missionGoalSecItem, "mission_score");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionGoalSecItem);
         
         //Mission "clock" item.
         GuiItem* missionFailMainItem = new GuiItem();
-        gui.addItem(missionFailMainItem, "mission_fail_clock");
+        gui.addItem(missionFailMainItem, "mission_clock");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionFailMainItem);
         
         //Mission "misc." item.
         GuiItem* missionFailSecItem = new GuiItem();
-        gui.addItem(missionFailSecItem, "mission_fail_misc");
+        gui.addItem(missionFailSecItem, "mission_misc");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionFailSecItem);
     }
     
@@ -977,7 +977,12 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 draw.center, draw.size, 0.0f, draw.tint
             );
             float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
-            if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
+            float clockHandOpacity = 1.0f;
+            if(game.states.gameplay->afterHours) {
+                clockHandOpacity = 0.3f;
+            } else if(
+                itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN
+            ) {
                 if(
                     game.curArea->mission.timeLimit > 0.0f &&
                     game.states.gameplay->gameplayTimePassed <=
@@ -997,7 +1002,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             }
             drawBitmap(
                 game.sysContent.bmpClockHand,
-                draw.center, draw.size, clockHandAngle, draw.tint
+                draw.center, draw.size, clockHandAngle,
+                multAlpha(draw.tint, clockHandOpacity)
             );
         };
         analog->forceSquare = true;
@@ -1008,23 +1014,30 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         GuiItem* digital = new GuiItem();
         digital->onDraw =
         [itemInfo, this] (const DrawInfo & draw) {
-            size_t seconds = 0;
-            if(itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN) {
+            string text;
+            ALLEGRO_FONT* font = game.sysContent.fntCounter;
+            if(game.states.gameplay->afterHours) {
+                text = "After hours";
+                font = game.sysContent.fntStandard;
+            } else if(
+                itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN
+            ) {
                 if(
                     game.curArea->mission.timeLimit > 0.0f &&
                     game.states.gameplay->gameplayTimePassed <=
                     game.curArea->mission.timeLimit
                 ) {
-                    seconds =
+                    size_t seconds =
                         game.curArea->mission.timeLimit -
                         game.states.gameplay->gameplayTimePassed;
+                    text = timeToStr2(seconds);
                 }
             } else {
-                seconds = game.states.gameplay->gameplayTimePassed;
+                size_t seconds = game.states.gameplay->gameplayTimePassed;
+                text = timeToStr2(seconds);
             }
             drawText(
-                timeToStr2(seconds), game.sysContent.fntCounter,
-                draw.center, draw.size, draw.tint
+                text, font, draw.center, draw.size, draw.tint
             );
         };
         item->addChild(digital);

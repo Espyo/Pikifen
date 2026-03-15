@@ -9,7 +9,7 @@ emission{
 	interval=0.3000
 	interval_deviation=0.1000
 	shape=0
-	circle_outer_dist=20.0000
+	circle_outer_dist=0.0000
 	circle_inner_dist=0.0000
 	circle_arc=6.2832
 	circle_arc_rot=0.0000

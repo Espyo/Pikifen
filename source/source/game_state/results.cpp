@@ -597,7 +597,10 @@ void Results::initGuiMain() {
         game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         TextGuiItem* finalScoreLabelText =
-            new TextGuiItem("points!", game.sysContent.fntAreaName);
+            new TextGuiItem(
+            amountStr(finalMissionScore, "point", "", true) + "!",
+            game.sysContent.fntAreaName
+        );
         finalScoreLabelText->onDraw =
         
         [finalScoreLabelText] (const DrawInfo & draw) {
@@ -1143,6 +1146,15 @@ void Results::populateScoringList() {
         
         string name = typePtr->getFriendlyName();
         if(name.empty()) name = typePtr->getName();
+        bool red = false;
+        if(
+            (
+                cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT ||
+                cPtr->type == MISSION_SCORE_CRITERION_SEC_PASSED
+            ) && game.states.gameplay->missionConsiderZeroTime
+        ) {
+            red = true;
+        }
         addNewBulletPoint(
             scoringList,
             name + " x" + i2s(cPtr->points),
@@ -1150,7 +1162,8 @@ void Results::populateScoringList() {
                 typePtr->calculateAmount(
                     cPtr, &game.curArea->mission, game.states.gameplay
                 ) * cPtr->points
-            )
+            ),
+            red ? game.config.guiColors.bad : COLOR_WHITE
         );
     }
     
