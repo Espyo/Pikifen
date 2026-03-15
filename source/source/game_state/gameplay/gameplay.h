@@ -336,12 +336,6 @@ public:
     //Status of each mission mob group.
     vector<MissionMobGroupStatus> missionMobGroups;
     
-    //IDs of mobs remaining for the current mission goal, if applicable.
-    unordered_set<size_t> missionRemainingMobIds;
-    
-    //How many mobs are required for the mission goal. Cache for convenience.
-    size_t missionRequiredMobAmount = 0;
-    
     //How many Pikmin were born so far.
     size_t pikminBorn = 0;
     
@@ -353,12 +347,6 @@ public:
     
     //How many treasures exist in total.
     size_t treasuresTotal = 0;
-    
-    //How many mission goal treasures were collected so far.
-    size_t goalTreasuresCollected = 0;
-    
-    //How many mission goal treasures exist in total.
-    size_t goalTreasuresTotal = 0;
     
     //How many treasure points collected so far.
     size_t treasurePointsObtained = 0;

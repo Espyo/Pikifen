@@ -201,15 +201,6 @@ public:
     //Database of all mission score criteria types.
     vector<MissionScoreCriterionType*> missionScoreCriterionTypes;
     
-    //Database of all mission fail conditions.
-    vector<MissionFail*> missionFailConds;
-    
-    //Database of all mission goals.
-    vector<MissionGoal*> missionGoals;
-    
-    //Database of all mission score criteria.
-    vector<MissionScoreCriterionOld*> missionScoreCriteria;
-    
     //User options.
     Options options;
     

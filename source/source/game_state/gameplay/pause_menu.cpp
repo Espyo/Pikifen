@@ -926,15 +926,14 @@ void PauseMenu::drawRadar(
     }
     
     //Mission exit region.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-    ) {
-        drawHighlightedRectRegion(
-            game.curArea->missionOld.goalExitCenter,
-            game.curArea->missionOld.goalExitSize,
-            changeAlpha(game.config.guiColors.gold, 192), game.timePassed
-        );
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+            AreaRegion* rPtr = game.curArea->regions[r];
+            drawHighlightedRectRegion(
+                rPtr->center, rPtr->size,
+                changeAlpha(game.config.guiColors.gold, 192), game.timePassed
+            );
+        }
     }
     
     //Onion icons.
@@ -1111,14 +1110,27 @@ void PauseMenu::drawRadar(
     }
     
     //Mission mob markers.
-    if(!game.states.gameplay->missionRemainingMobIds.empty()) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             Mob* mPtr = game.states.gameplay->mobs.all[m];
-            if(
-                !isInContainer(
-                    game.states.gameplay->missionRemainingMobIds, mPtr->id
-                )
-            ) continue;
+            bool addMarker = false;
+            for(
+                size_t g = 0;
+                g < game.states.gameplay->missionMobGroups.size(); g++
+            ) {
+                auto it =
+                    game.states.gameplay->missionMobGroups[g].remaining.find(
+                        mPtr
+                    );
+                if(
+                    it !=
+                    game.states.gameplay->missionMobGroups[g].remaining.end()
+                ) {
+                    addMarker = true;
+                    break;
+                }
+            }
+            if(!addMarker) continue;
             
             float alpha =
                 (
@@ -1397,30 +1409,6 @@ void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
     for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
         addNewBullet(list, medalAwardBPStrs[p]);
     }
-}
-
-
-/**
- * @brief Returns a string representing the player's status towards the
- * mission goal.
- *
- * @return The status.
- */
-string PauseMenu::getMissionGoalStatus() {
-    float percentage = 0.0f;
-    int cur =
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getCurAmount(game.states.gameplay);
-    int req =
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getReqAmount(game.states.gameplay);
-    if(req != 0.0f) {
-        percentage = cur / (float) req;
-    }
-    percentage *= 100;
-    return
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getStatus(cur, req, percentage);
 }
 
 

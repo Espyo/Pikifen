@@ -86,17 +86,6 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->treasurePointsObtained +=
             trePtr->treType->points;
         game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
-        
-        if(game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
-            auto it =
-                game.states.gameplay->missionRemainingMobIds.find(
-                    delivery->id
-                );
-            if(it != game.states.gameplay->missionRemainingMobIds.end()) {
-                game.states.gameplay->missionRemainingMobIds.erase(it);
-                game.states.gameplay->goalTreasuresCollected++;
-            }
-        }
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
@@ -107,23 +96,6 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
             game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
             game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
-            if(
-                game.curArea->missionOld.goal ==
-                MISSION_GOAL_COLLECT_TREASURE
-            ) {
-                unordered_set<size_t>& goalMobs =
-                    game.states.gameplay->missionRemainingMobIds;
-                auto it = goalMobs.find(delivery->id);
-                if(it != goalMobs.end()) {
-                    goalMobs.erase(it);
-                    game.states.gameplay->goalTreasuresCollected++;
-                } else if(resPtr->originPile) {
-                    it = goalMobs.find(resPtr->originPile->id);
-                    if(it != goalMobs.end()) {
-                        game.states.gameplay->goalTreasuresCollected++;
-                    }
-                }
-            }
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
             if(resPtr->deliveryInfo->playerTeamIdx != INVALID) {

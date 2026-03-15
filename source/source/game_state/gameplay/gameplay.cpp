@@ -1179,8 +1179,6 @@ void GameplayState::load() {
     pikminDeaths = 0;
     treasuresCollected = 0;
     treasuresTotal = 0;
-    goalTreasuresCollected = 0;
-    goalTreasuresTotal = 0;
     treasurePointsObtained = 0;
     treasurePointsTotal = 0;
     enemyDefeats = 0;
@@ -1188,7 +1186,6 @@ void GameplayState::load() {
     enemyPointsObtained = 0;
     enemyPointsTotal = 0;
     curLeadersInMissionExit = 0;
-    missionRequiredMobAmount = 0;
     missionScore = 0;
     missionConsiderZeroTime = false;
     missionEndCondIdx = INVALID;
@@ -1385,31 +1382,8 @@ void GameplayState::load() {
         player.whistle.nextRingTimer.start();
     }
     
-    //Memorize mobs required by the mission.
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        unordered_set<size_t> missionRequiredMobGenIdxs;
-        
-        if(game.curArea->missionOld.goalAllMobs) {
-            for(size_t m = 0; m < mobsPerGen.size(); m++) {
-                if(
-                    mobsPerGen[m] &&
-                    game.missionGoals[game.curArea->missionOld.goal]->
-                    isMobApplicable(mobsPerGen[m]->type)
-                ) {
-                    missionRequiredMobGenIdxs.insert(m);
-                }
-            }
-            
-        } else {
-            missionRequiredMobGenIdxs =
-                game.curArea->missionOld.goalMobIdxs;
-        }
-        
-        for(size_t i : missionRequiredMobGenIdxs) {
-            missionRemainingMobIds.insert(mobsPerGen[i]->id);
-        }
-        missionRequiredMobAmount = missionRemainingMobIds.size();
-        
+        //Organize mob groups.
         missionMobGroups.clear();
         for(
             size_t c = 0;
@@ -1426,22 +1400,6 @@ void GameplayState::load() {
             }
             missionMobGroups.back().startingAmount =
                 missionMobGroups.back().remaining.size();
-        }
-        
-        if(game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
-            //Since the collect treasure goal can accept piles and resources
-            //meant to add treasure points, we'll need some special treatment.
-            for(size_t i : missionRequiredMobGenIdxs) {
-                if(
-                    mobsPerGen[i]->type->category->id ==
-                    MOB_CATEGORY_PILES
-                ) {
-                    Pile* pilPtr = (Pile*) mobsPerGen[i];
-                    goalTreasuresTotal += pilPtr->amount;
-                } else {
-                    goalTreasuresTotal++;
-                }
-            }
         }
     }
     
@@ -1764,7 +1722,6 @@ void GameplayState::unload() {
     }
     
     missionMobGroups.clear();
-    missionRemainingMobIds.clear();
     pathMgr.clear();
     particles.clear();
     

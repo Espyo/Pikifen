@@ -1162,16 +1162,15 @@ void GameplayState::drawInGameText(Player* player) {
     //Leader prompt.
     player->leaderPrompt.draw(player->view);
     
-    //Mission exit region.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-    ) {
-        drawHighlightedRectRegion(
-            game.curArea->missionOld.goalExitCenter,
-            game.curArea->missionOld.goalExitSize,
-            changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
-        );
+    //Area regions.
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+            AreaRegion* rPtr = game.curArea->regions[r];
+            drawHighlightedRectRegion(
+                rPtr->center, rPtr->size,
+                changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
+            );
+        }
     }
 }
 

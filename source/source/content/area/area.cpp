@@ -1543,12 +1543,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     mRS.set("mission_grading_mode", medalAwardModeInt);
     
     //Goal.
-    for(size_t g = 0; g < game.missionGoals.size(); g++) {
-        if(game.missionGoals[g]->getName() == goalStr) {
-            goal = (MISSION_GOAL) g;
-            break;
-        }
-    }
+    goal = enumGetValue(missionGoalNames, goalStr);
     vector<string> missionRequiredMobsStr =
         semicolonListToVector(requiredMobsStr);
     goalMobIdxs.reserve(missionRequiredMobsStr.size());
@@ -2071,27 +2066,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Port the subtitle, since it's used in mission score records.
     if(subtitle.empty()) {
-        switch(goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            subtitle = "End whenever you want";
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE: {
-            subtitle = "Collect treasures";
-            break;
-        } case MISSION_GOAL_BATTLE_ENEMIES: {
-            subtitle = "Battle enemies";
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            subtitle = "Survive";
-            break;
-        } case MISSION_GOAL_GET_TO_EXIT: {
-            subtitle = "Get to the exit";
-            break;
-        } case MISSION_GOAL_GROW_PIKMIN: {
-            subtitle = "Grow Pikmin";
-            break;
-        }
-        }
+        subtitle = enumGetName(missionGoalNames, goal);
     }
 }
 

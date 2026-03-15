@@ -401,9 +401,6 @@ private:
         //None.
         EDITOR_SUB_STATE_NONE,
         
-        //Picking a mission exit region.
-        EDITOR_SUB_STATE_MISSION_EXIT,
-        
         //Drawing the layout.
         EDITOR_SUB_STATE_DRAWING,
         
@@ -963,8 +960,6 @@ private:
     void findProblemsMobInsideWalls();
     void findProblemsMobLinksToSelf();
     void findProblemsMobStoredInLoop();
-    void findProblemsNoGoalMob();
-    void findProblemsNoScoreCriteria();
     void findProblemsNonSimpleSector();
     void findProblemsOobMob();
     void findProblemsOobPathStop();
@@ -1009,7 +1004,6 @@ private:
         const string& path, const string& userDataPath
     ) const;
     vector<EdgeIntersection> getIntersectingEdges() const;
-    size_t getMissionRequiredMobCount() const;
     float getMobGenRadius(MobGen* m) const;
     bool getMobLinkUnderPoint(
         const Point& p,
@@ -1210,14 +1204,9 @@ private:
     void processGuiPanelLayout();
     void processGuiPanelMain();
     void processGuiPanelMission();
-    void processGuiPanelMissionOld();
     void processGuiPanelMissionBriefing();
     void processGuiPanelMissionEssentials();
     void processGuiPanelMissionEndCond();
-    void processGuiPanelMissionFail(bool* dayDurationNeedsUpdate);
-    void processGuiPanelMissionGoalBe();
-    void processGuiPanelMissionGoalCt();
-    void processGuiPanelMissionGoalGte();
     void processGuiPanelMissionMedalAward();
     void processGuiPanelMissionHudItems();
     void processGuiPanelMissionMobGroups();

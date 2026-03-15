@@ -1802,37 +1802,6 @@ void AreaEditor::getHoveredLayoutElement(
 
 
 /**
- * @brief Returns the number of required mobs for this mission.
- *
- * @return The number.
- */
-size_t AreaEditor::getMissionRequiredMobCount() const {
-    size_t totalRequired = 0;
-    
-    if(game.curArea->missionOld.goalAllMobs) {
-        for(
-            size_t m = 0;
-            m < game.curArea->mobGenerators.size();
-            m++
-        ) {
-            MobGen* g = game.curArea->mobGenerators[m];
-            if(
-                game.missionGoals[game.curArea->missionOld.goal]->
-                isMobApplicable(g->type)
-            ) {
-                totalRequired++;
-            }
-        }
-    } else {
-        totalRequired =
-            game.curArea->missionOld.goalMobIdxs.size();
-    }
-    
-    return totalRequired;
-}
-
-
-/**
  * @brief Returns the name of this state.
  *
  * @return The name.

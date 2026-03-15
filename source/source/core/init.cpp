@@ -99,18 +99,6 @@ void destroyMisc() {
         delete game.missionScoreCriterionTypes[c];
     }
     game.missionScoreCriterionTypes.clear();
-    for(size_t g = 0; g < game.missionGoals.size(); g++) {
-        delete game.missionGoals[g];
-    }
-    game.missionGoals.clear();
-    for(size_t c = 0; c < game.missionFailConds.size(); c++) {
-        delete game.missionFailConds[c];
-    }
-    game.missionFailConds.clear();
-    for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-        delete game.missionScoreCriteria[c];
-    }
-    game.missionScoreCriteria.clear();
 }
 
 
@@ -1153,41 +1141,6 @@ void initMiscDatabases() {
         new MissionScoreCriterionTypeSecPassed(),
         new MissionScoreCriterionTypeCollectionPts(),
         new MissionScoreCriterionTypeDefeatPts(),
-    };
-    
-    //Mission goals.
-    //Order matters, and should match MISSION_GOAL.
-    game.missionGoals = {
-        new MissionGoalEndManually(),
-        new MissionGoalCollectTreasures(),
-        new MissionGoalBattleEnemies(),
-        new MissionGoalTimedSurvival(),
-        new MissionGoalGetToExit(),
-        new MissionGoalGrowPikmin(),
-    };
-    
-    //Mission fail conditions.
-    //Order matters, and should match MISSION_FAIL_COND.
-    game.missionFailConds = {
-        new MissionFailTimeLimit(),
-        new MissionFailTooFewPikmin(),
-        new MissionFailTooManyPikmin(),
-        new MissionFailLosePikmin(),
-        new MissionFailTakeDamage(),
-        new MissionFailLoseLeaders(),
-        new MissionFailDefeatEnemies(),
-        new MissionFailPauseMenu(),
-    };
-    
-    //Mission score criteria.
-    //Order matters, and should match MISSION_SCORE_CRITERIA.
-    game.missionScoreCriteria = {
-        new MissionScoreCriterionPikminBorn(),
-        new MissionScoreCriterionPikminDeath(),
-        new MissionScoreCriterionSecLeft(),
-        new MissionScoreCriterionSecPassed(),
-        new MissionScoreCriterionTreasurePoints(),
-        new MissionScoreCriterionEnemyPoints(),
     };
 }
 

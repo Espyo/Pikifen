@@ -570,18 +570,6 @@ void AreaEditor::deleteMobs(const set<MobGen*>& which) {
             }
         }
         
-        //Check the list of mission requirement objects.
-        unordered_set<size_t> newMrmi;
-        newMrmi.reserve(game.curArea->missionOld.goalMobIdxs.size());
-        for(size_t m2 : game.curArea->missionOld.goalMobIdxs) {
-            if(m2 > mIdx) {
-                newMrmi.insert(m2 - 1);
-            } else if(m2 != mIdx) {
-                newMrmi.insert(m2);
-            }
-        }
-        game.curArea->missionOld.goalMobIdxs = newMrmi;
-        
         //Finally, delete it.
         game.curArea->mobGenerators.erase(
             game.curArea->mobGenerators.begin() + mIdx
@@ -741,13 +729,7 @@ void AreaEditor::findProblems() {
     
     findProblemsUnknownTreeShadow();
     if(problemType != EPT_NONE_YET) return;
-    
-    findProblemsNoGoalMob();
-    if(problemType != EPT_NONE_YET) return;
-    
-    findProblemsNoScoreCriteria();
-    if(problemType != EPT_NONE_YET) return;
-    
+        
     //All good!
     problemType = EPT_NONE;
     problemTitle = "None!";
@@ -1096,30 +1078,6 @@ void AreaEditor::findProblemsMobStoredInLoop() {
 
 
 /**
- * @brief Checks for any missing mission goal mob in the area, and fills the
- * problem info if so.
- */
-void AreaEditor::findProblemsNoGoalMob() {
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        (
-            game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.curArea->missionOld.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-        )
-    ) {
-        if(getMissionRequiredMobCount() == 0) {
-            problemType = EPT_NO_GOAL_MOBS;
-            problemTitle = "No mission goal mobs!";
-            problemDescription =
-                "This mission's goal requires some mobs, yet there are none.";
-            return;
-        }
-    }
-}
-
-
-/**
  * @brief Checks for any non-simple sectors in the area, and fills the problem
  * info if so.
  */
@@ -1152,39 +1110,6 @@ void AreaEditor::findProblemsNonSimpleSector() {
             problemDescription.clear();
             break;
         }
-        }
-    }
-}
-
-
-/**
- * @brief Checks for any missing mission score criterion in the area, and
- * fills the problem info if so.
- */
-void AreaEditor::findProblemsNoScoreCriteria() {
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
-    ) {
-        bool hasAnyCriterion = false;
-        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            if(
-                game.missionScoreCriteria[c]->getMultiplier(
-                    &game.curArea->missionOld
-                ) != 0
-            ) {
-                hasAnyCriterion = true;
-                break;
-            }
-        }
-        if(!hasAnyCriterion) {
-            problemType = EPT_NO_SCORE_CRITERIA;
-            problemTitle = "No active score criteria!";
-            problemDescription =
-                "In this mission, the player is given a medal according to "
-                "their score. However, none of the score criteria are active, "
-                "so the player's score will always be 0.";
-            return;
         }
     }
 }
@@ -2445,11 +2370,6 @@ void AreaEditor::resizeEverything(float mults[2]) {
         rPtr->size.x *= mults[0];
         rPtr->size.y *= mults[1];
     }
-    
-    game.curArea->missionOld.goalExitCenter.x *= mults[0];
-    game.curArea->missionOld.goalExitCenter.y *= mults[1];
-    game.curArea->missionOld.goalExitSize.x *= mults[0];
-    game.curArea->missionOld.goalExitSize.y *= mults[1];
 }
 
 

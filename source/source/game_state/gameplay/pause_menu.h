@@ -280,7 +280,6 @@ private:
     void drawRadar(const Point& center, const Point& size);
     void fillMissionNotesList(ListGuiItem* list);
     void fillMissionMedalAwardList(ListGuiItem* list);
-    string getMissionGoalStatus();
     void initRadarPage();
     void initMainPauseMenu();
     void initMissionPage();

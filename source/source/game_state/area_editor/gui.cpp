@@ -279,75 +279,6 @@ void AreaEditor::processGuiDeleteAreaDialog() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a medal award criterion
- * for this frame.
- *
- * @param valuePtr Points to the value of the points value.
- * @param criterionIdx Criterion index.
- * @param widgetLabel Label for the main value widget.
- * @param tooltip Start of the tooltip for this criterion's value widget.
- */
-void AreaEditor::processGuiMedalAwardCriterionWidgets(
-    int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-    const string& widgetLabel, const string& tooltip
-) {
-    //Main value.
-    ImGui::SetNextItemWidth(50);
-    int pointsInt = *valuePtr;
-    if(ImGui::DragInt(widgetLabel.c_str(), &pointsInt, 0.1f)) {
-        registerChange("mission medal award change");
-        *valuePtr = pointsInt;
-    }
-    setTooltip(
-        tooltip + "\n"
-        "Negative numbers means the player loses points.\n"
-        "0 means this criterion doesn't count.",
-        "", WIDGET_EXPLANATION_DRAG
-    );
-    if(*valuePtr != 0) {
-        ImGui::Indent();
-        
-        //Loss on fail checkbox.
-        int flags = game.curArea->missionOld.pointLossData;
-        if(
-            ImGui::CheckboxFlags(
-                ("0 points on fail##zpof" + i2s(criterionIdx)).c_str(),
-                &flags,
-                getIdxBitmask(criterionIdx)
-            )
-        ) {
-            registerChange("mission medal award change");
-            game.curArea->missionOld.pointLossData = flags;
-        }
-        setTooltip(
-            "If checked, the player will receive 0 points for\n"
-            "this criterion if they fail the mission."
-        );
-        
-        //Use in HUD checkbox.
-        flags = game.curArea->missionOld.pointHudData;
-        if(
-            ImGui::CheckboxFlags(
-                ("Use in HUD counter##uihc" + i2s(criterionIdx)).c_str(),
-                &flags, getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
-            )
-        ) {
-            registerChange("mission medal award change");
-            game.curArea->missionOld.pointHudData = flags;
-        }
-        setTooltip(
-            "If checked, the HUD item for the score counter will\n"
-            "use this criterion in its calculation. If none of\n"
-            "the criteria are used for the HUD item, then it\n"
-            "won't even show up."
-        );
-        
-        ImGui::Unindent();
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui widgets regarding a medal award medal
  * requirement for this frame.
  *
@@ -2060,157 +1991,119 @@ void AreaEditor::processGuiPanelEdge() {
 void AreaEditor::processGuiPanelGameplay() {
     ImGui::BeginChild("gameplay");
     
-    switch(subState) {
-    case EDITOR_SUB_STATE_MISSION_EXIT: {
-
-        //Instructions text.
-        ImGui::TextWrapped(
-            "Use the handles on the canvas to control where the exit region is."
-        );
-        
-        //Region center text.
-        ImGui::Text(
-            "Exit region center: %s,%s",
-            f2s(game.curArea->missionOld.goalExitCenter.x).c_str(),
-            f2s(game.curArea->missionOld.goalExitCenter.y).c_str()
-        );
-        
-        //Region center text.
-        ImGui::Text(
-            "Exit region size: %s x %s",
-            f2s(game.curArea->missionOld.goalExitSize.x).c_str(),
-            f2s(game.curArea->missionOld.goalExitSize.y).c_str()
-        );
-        
-        //Finish button.
-        if(ImGui::Button("Finish")) {
-            subState = EDITOR_SUB_STATE_NONE;
-        }
-        setTooltip("Click here to finish.");
-        
-        break;
-        
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
     }
-    default: {
-
-        //Back button.
-        if(ImGui::Button("Back")) {
-            changeState(EDITOR_STATE_MAIN);
-        }
-        
-        //Panel title text.
-        panelTitle("GAMEPLAY");
-        
-        //Sprays node.
-        ImGui::Spacer();
-        if(saveableTreeNode("gameplay", "Starting sprays")) {
-        
-            map<string, string> sprayStrs =
-                getVarMap(game.curArea->sprayAmounts);
-            for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
-                string sprayInternalName =
-                    game.config.misc.sprayOrder[s]->manifest->internalName;
-                int amount = s2i(sprayStrs[sprayInternalName]);
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        game.config.misc.sprayOrder[s]->name.c_str(), &amount,
-                        0.1, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("area spray amounts change");
-                    sprayStrs[sprayInternalName] = i2s(amount);
-                    game.curArea->sprayAmounts.clear();
-                    for(auto const& v : sprayStrs) {
-                        game.curArea->sprayAmounts +=
-                            v.first + "=" + v.second + ";";
-                    }
-                }
-                setTooltip(
-                    "Starting amount of spray dosages to give the player.", "",
-                    WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            ImGui::TreePop();
-        }
-        
-        //Rules node.
-        ImGui::Spacer();
-        if(saveableTreeNode("gameplay", "Game rules")) {
-        
-            //Max Pikmin in field override checkbox.
-            bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
+    
+    //Panel title text.
+    panelTitle("GAMEPLAY");
+    
+    //Sprays node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Starting sprays")) {
+    
+        map<string, string> sprayStrs =
+            getVarMap(game.curArea->sprayAmounts);
+        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+            string sprayInternalName =
+                game.config.misc.sprayOrder[s]->manifest->internalName;
+            int amount = s2i(sprayStrs[sprayInternalName]);
+            ImGui::SetNextItemWidth(50);
             if(
-                ImGui::Checkbox(
-                    "Override max Pikmin in field", &overrideMaxPik
+                ImGui::DragInt(
+                    game.config.misc.sprayOrder[s]->name.c_str(), &amount,
+                    0.1, 0, INT_MAX
+                )
+            ) {
+                registerChange("area spray amounts change");
+                sprayStrs[sprayInternalName] = i2s(amount);
+                game.curArea->sprayAmounts.clear();
+                for(auto const& v : sprayStrs) {
+                    game.curArea->sprayAmounts +=
+                        v.first + "=" + v.second + ";";
+                }
+            }
+            setTooltip(
+                "Starting amount of spray dosages to give the player.", "",
+                WIDGET_EXPLANATION_DRAG
+            );
+            
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    //Rules node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Game rules")) {
+    
+        //Max Pikmin in field override checkbox.
+        bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
+        if(
+            ImGui::Checkbox(
+                "Override max Pikmin in field", &overrideMaxPik
+            )
+        ) {
+            registerChange("Pikmin maximum override");
+            if(overrideMaxPik) {
+                game.curArea->maxPikminInField =
+                    game.config.rules.maxPikminInField;
+            } else {
+                game.curArea->maxPikminInField = INVALID;
+            }
+        }
+        setTooltip(
+            "Whether to use a custom maximum of Pikmin on the field,\n"
+            "or to use the game configuration default."
+        );
+        
+        if(overrideMaxPik) {
+        
+            //Max Pikmin in field override value.
+            int maxPik = (int) game.curArea->maxPikminInField;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(
+                ImGui::DragInt(
+                    "Maximum", &maxPik,
+                    0.1, 0, INT_MAX
                 )
             ) {
                 registerChange("Pikmin maximum override");
-                if(overrideMaxPik) {
-                    game.curArea->maxPikminInField =
-                        game.config.rules.maxPikminInField;
-                } else {
-                    game.curArea->maxPikminInField = INVALID;
-                }
+                game.curArea->maxPikminInField = maxPik;
             }
+            ImGui::Unindent();
             setTooltip(
-                "Whether to use a custom maximum of Pikmin on the field,\n"
-                "or to use the game configuration default."
+                "Maximum amount of Pikmin that can be out on the field.", "",
+                WIDGET_EXPLANATION_DRAG
             );
             
-            if(overrideMaxPik) {
-            
-                //Max Pikmin in field override value.
-                int maxPik = (int) game.curArea->maxPikminInField;
-                ImGui::Indent();
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        "Maximum", &maxPik,
-                        0.1, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("Pikmin maximum override");
-                    game.curArea->maxPikminInField = maxPik;
-                }
-                ImGui::Unindent();
-                setTooltip(
-                    "Maximum amount of Pikmin that can be out on the field.", "",
-                    WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            //Onions auto eject override checkbox.
-            bool onionsAutoEject = game.curArea->onionsAutoEject;
-            if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
-                registerChange("Onion auto-eject override");
-                game.curArea->onionsAutoEject = onionsAutoEject;
-            }
-            setTooltip(
-                "If checked, all Onions will automatically eject Pikmin\n"
-                "whenever there is enough free space in the field."
-            );
-            
-            //Onions eject grown Pikmin override checkbox.
-            bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
-            if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
-                registerChange("Onion eject grown Pikmin override");
-                game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
-            }
-            setTooltip(
-                "If checked, all Onions will eject fully-grown Pikmin\n"
-                "instead of seeds."
-            );
-            
-            ImGui::TreePop();
         }
         
-        break;
-    }
-    
+        //Onions auto eject override checkbox.
+        bool onionsAutoEject = game.curArea->onionsAutoEject;
+        if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
+            registerChange("Onion auto-eject override");
+            game.curArea->onionsAutoEject = onionsAutoEject;
+        }
+        setTooltip(
+            "If checked, all Onions will automatically eject Pikmin\n"
+            "whenever there is enough free space in the field."
+        );
+        
+        //Onions eject grown Pikmin override checkbox.
+        bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
+        if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
+            registerChange("Onion eject grown Pikmin override");
+            game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
+        }
+        setTooltip(
+            "If checked, all Onions will eject fully-grown Pikmin\n"
+            "instead of seeds."
+        );
+        
+        ImGui::TreePop();
     }
     
     ImGui::EndChild();
@@ -3258,174 +3151,6 @@ void AreaEditor::processGuiPanelMission() {
 
 
 /**
- * @brief Processes the Dear ImGui mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionOld() {
-    float oldMissionSurvivalMin =
-        game.curArea->missionOld.goalAmount / 60.0f;
-    float oldMissionTimeLimitMin =
-        game.curArea->missionOld.failTimeLimit / 60.0f;
-    bool dayDurationNeedsUpdate = false;
-    
-    //Mission goal node.
-    if(saveableTreeNode("gameplay", "Mission goal")) {
-    
-        //Goal combobox.
-        vector<string> goalsList;
-        for(size_t g = 0; g < game.missionGoals.size(); g++) {
-            goalsList.push_back(game.missionGoals[g]->getName());
-        }
-        int missionGoal = game.curArea->missionOld.goal;
-        if(ImGui::Combo("Goal", &missionGoal, goalsList, 15)) {
-            registerChange("mission requirements change");
-            game.curArea->missionOld.goalMobIdxs.clear();
-            game.curArea->missionOld.goalAmount = 1;
-            game.curArea->missionOld.goal = (MISSION_GOAL) missionGoal;
-            if(
-                game.curArea->missionOld.goal ==
-                MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                dayDurationNeedsUpdate = true;
-            }
-        }
-        
-        switch(game.curArea->missionOld.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player has no real goal. They just play until they have "
-                "had enough, at which point they must end from the pause menu."
-            );
-            
-            break;
-            
-        }
-        case MISSION_GOAL_COLLECT_TREASURE: {
-    
-            processGuiPanelMissionGoalCt();
-            break;
-            
-        }
-        case MISSION_GOAL_BATTLE_ENEMIES: {
-    
-            processGuiPanelMissionGoalBe();
-            break;
-            
-        }
-        case MISSION_GOAL_TIMED_SURVIVAL: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must survive for a certain amount of time."
-            );
-            
-            //Time values.
-            ImGui::Spacer();
-            int totalSeconds =
-                (int) game.curArea->missionOld.goalAmount;
-            if(ImGui::DragTime2("Time", &totalSeconds)) {
-                registerChange("mission requirements change");
-                totalSeconds = std::max(totalSeconds, 1);
-                game.curArea->missionOld.goalAmount =
-                    (size_t) totalSeconds;
-                dayDurationNeedsUpdate = true;
-            }
-            setTooltip(
-                "The total survival time.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            break;
-            
-        }
-        case MISSION_GOAL_GET_TO_EXIT: {
-    
-            processGuiPanelMissionGoalGte();
-            break;
-            
-        }
-        case MISSION_GOAL_GROW_PIKMIN: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must reach or surpass a certain number of "
-                "total Pikmin."
-            );
-            
-            //Pikmin amount value.
-            ImGui::Spacer();
-            int amount =
-                (int) game.curArea->missionOld.goalAmount;
-            ImGui::SetNextItemWidth(80);
-            if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
-                registerChange("mission requirements change");
-                game.curArea->missionOld.goalAmount =
-                    (size_t) amount;
-            }
-            setTooltip(
-                "The total Pikmin amount requirement.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            break;
-            
-        }
-        }
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Mission fail conditions node.
-    ImGui::Spacer();
-    if(saveableTreeNode("gameplay", "Mission fail conditions")) {
-    
-        processGuiPanelMissionFail(&dayDurationNeedsUpdate);
-        ImGui::TreePop();
-    }
-    
-    //Mission medal award node.
-    ImGui::Spacer();
-    if(saveableTreeNode("gameplay", "Mission medal award")) {
-    
-        processGuiPanelMissionMedalAward();
-        ImGui::TreePop();
-        
-    }
-    
-    if(dayDurationNeedsUpdate) {
-        float dayStartMin = game.curArea->dayTimeStart;
-        dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
-        float daySpeed = game.curArea->dayTimeSpeed;
-        float oldMissionMin = 0;
-        size_t missionSeconds = 0;
-        if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-            oldMissionMin = oldMissionSurvivalMin;
-            missionSeconds = game.curArea->missionOld.goalAmount;
-            game.curArea->missionOld.failTimeLimit = 0.0f;
-            disableFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-        } else {
-            oldMissionMin = oldMissionTimeLimitMin;
-            missionSeconds = game.curArea->missionOld.failTimeLimit;
-        }
-        float oldDayEndMin = dayStartMin + oldMissionMin * daySpeed;
-        oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
-        missionSeconds = std::max(missionSeconds, (size_t) 1);
-        float newMissionMin = missionSeconds / 60.0f;
-        game.curArea->dayTimeSpeed =
-            calculateDaySpeed(
-                dayStartMin, oldDayEndMin, newMissionMin
-            );
-    }
-    
-}
-
-
-/**
  * @brief Processes the Dear ImGui briefing part of the
  * mission control panel for this frame.
  */
@@ -3865,668 +3590,6 @@ void AreaEditor::processGuiPanelMissionEndCond() {
     }
     
     ImGui::Spacer();
-}
-
-
-/**
- * @brief Processes the Dear ImGui fail conditions part of the
- * mission control panel for this frame.
- *
- * @param dayDurationNeedsUpdate The variable that dictates whether the
- * day duration widget data later in the panel needs to be updated.
- */
-void AreaEditor::processGuiPanelMissionFail(
-    bool* dayDurationNeedsUpdate
-) {
-    unsigned int failFlags =
-        (unsigned int) game.curArea->missionOld.failConditions;
-    bool failFlagsChanged = false;
-    
-    //Pause menu end checkbox.
-    bool pauseMenuEndIsFail =
-        game.curArea->missionOld.goal != MISSION_GOAL_END_MANUALLY;
-    ImGui::BeginDisabled();
-    ImGui::CheckboxFlags(
-        "End from pause menu",
-        &failFlags,
-        getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-    );
-    ImGui::EndDisabled();
-    if(pauseMenuEndIsFail) {
-        enableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-        setTooltip(
-            "Since reaching the mission goal automatically ends the\n"
-            "mission as a clear, if the player can go to the pause menu\n"
-            "and end there, then naturally they haven't reached the\n"
-            "goal yet. So this method of ending has to always be a fail."
-        );
-    } else {
-        disableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-        setTooltip(
-            "The current mission goal is \"end whenever you want\", so\n"
-            "ending from the pause menu is the goal, not a fail condition."
-        );
-    }
-    
-    //Time limit checkbox.
-    if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-        disableFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-        disableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-        ImGui::BeginDisabled();
-    }
-    bool timeLimitChanged =
-        ImGui::CheckboxFlags(
-            "Reach the time limit",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-    failFlagsChanged |= timeLimitChanged;
-    if(
-        timeLimitChanged &&
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        *dayDurationNeedsUpdate = true;
-    }
-    if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-        ImGui::EndDisabled();
-        setTooltip(
-            "The mission's goal is to survive for a certain amount of\n"
-            "time, so it doesn't make sense to have a time limit to\n"
-            "fail with."
-        );
-    } else {
-        setTooltip(
-            "The mission ends as a fail if the player spends a certain\n"
-            "amount of time in the mission."
-        );
-    }
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        //Time limit values.
-        int seconds =
-            (int) game.curArea->missionOld.failTimeLimit;
-        ImGui::Indent();
-        if(ImGui::DragTime2("Time limit", &seconds)) {
-            registerChange("mission fail conditions change");
-            seconds = std::max(seconds, 1);
-            game.curArea->missionOld.failTimeLimit = (size_t) seconds;
-            *dayDurationNeedsUpdate = true;
-        }
-        setTooltip(
-            "Time limit that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Reaching too few Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Reach too few Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if the total Pikmin count reaches\n"
-        "a certain amount or lower. 0 means this only happens with a\n"
-        "total Pikmin extinction. This fail condition isn't forced\n"
-        "because the player might still be able to reach the mission\n"
-        "goal using leaders. Or because you may want to make a mission\n"
-        "with no Pikmin in the first place (like a puzzle stage)."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-        )
-    ) {
-        ImGui::Indent();
-        
-        //Pikmin amount value.
-        int amount =
-            (int) game.curArea->missionOld.failTooFewPikAmount;
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failTooFewPikAmount =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Unindent();
-    }
-    
-    //Reaching too many Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Reach too many Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if the total Pikmin count reaches\n"
-        "a certain amount or higher."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-        )
-    ) {
-        ImGui::Indent();
-        
-        //Pikmin amount value.
-        int amount =
-            (int) game.curArea->missionOld.failTooManyPikAmount;
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failTooManyPikAmount =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Unindent();
-    }
-    
-    //Losing Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Lose Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of Pikmin die."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-        )
-    ) {
-        //Pikmin deaths value.
-        int amount =
-            (int) game.curArea->missionOld.failPikKilled;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failPikKilled =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin death amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Taking damage checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Take damage",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
-        );
-    setTooltip(
-        "The mission ends as a fail if any leader loses any health."
-    );
-    
-    //Lose leaders checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Lose leaders",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of leaders get\n"
-        "KO'd. This fail condition isn't forced because the\n"
-        "player might still be able to reach the mission goal with the\n"
-        "Pikmin. Or because you may want to make a really gimmicky\n"
-        "automatic mission with no leaders."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(
-                MISSION_FAIL_COND_LOSE_LEADERS
-            )
-        )
-    ) {
-        //Leader KOs value.
-        int amount =
-            (int) game.curArea->missionOld.failLeadersKod;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failLeadersKod =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Leader KO amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Defeat enemies checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Defeat enemies",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of\n"
-        "enemies get defeated."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
-        )
-    ) {
-        //Enemy defeats value.
-        int amount =
-            (int) game.curArea->missionOld.failEnemiesDefeated;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Defeats", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failEnemiesDefeated =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Enemy defeat amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    if(failFlagsChanged) {
-        registerChange("mission fail conditions change");
-        game.curArea->missionOld.failConditions =
-            (Bitmask8) failFlags;
-    }
-    
-    vector<MISSION_FAIL_COND> activeConditions;
-    for(size_t c = 0; c < game.missionFailConds.size(); c++) {
-        if(
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(c)
-            )
-        ) {
-            activeConditions.push_back((MISSION_FAIL_COND) c);
-        }
-    }
-    
-    if(!activeConditions.empty()) {
-    
-        //Primary HUD condition checkbox.
-        ImGui::Spacer();
-        bool showPrimary =
-            game.curArea->missionOld.failHudPrimaryCond != INVALID;
-        if(ImGui::Checkbox("Show primary HUD element", &showPrimary)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failHudPrimaryCond =
-                showPrimary ?
-                (size_t) activeConditions[0] :
-                INVALID;
-        }
-        setTooltip(
-            "If checked, a large HUD element will appear showing\n"
-            "the most important fail condition's information."
-        );
-        
-        if(showPrimary) {
-            //Primary HUD condition combobox.
-            int selected = 0;
-            bool found = false;
-            vector<string> condStrings;
-            for(size_t c = 0; c < activeConditions.size(); c++) {
-                size_t condId = activeConditions[c];
-                condStrings.push_back(
-                    game.missionFailConds[condId]->getName()
-                );
-                if(
-                    condId ==
-                    game.curArea->missionOld.failHudPrimaryCond
-                ) {
-                    found = true;
-                    selected = (int) c;
-                }
-            }
-            if(!found) {
-                game.curArea->missionOld.failHudSecondaryCond = 0;
-            }
-            ImGui::Indent();
-            if(
-                ImGui::Combo(
-                    "Primary condition", &selected, condStrings, 15
-                )
-            ) {
-                registerChange("mission fail conditions change");
-                game.curArea->missionOld.failHudPrimaryCond =
-                    activeConditions[selected];
-            }
-            setTooltip(
-                "Failure condition to show in the primary HUD element."
-            );
-            ImGui::Unindent();
-        }
-        
-        //Secondary HUD condition checkbox.
-        bool showSecondary =
-            game.curArea->missionOld.failHudSecondaryCond != INVALID;
-        if(ImGui::Checkbox("Show secondary HUD element", &showSecondary)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failHudSecondaryCond =
-                showSecondary ?
-                (size_t) activeConditions[0] :
-                INVALID;
-        }
-        setTooltip(
-            "If checked, a smaller HUD element will appear showing\n"
-            "some other fail condition's information."
-        );
-        
-        if(showSecondary) {
-            //Secondary HUD condition combobox.
-            bool found = false;
-            int selected = 0;
-            vector<string> condStrings;
-            for(size_t c = 0; c < activeConditions.size(); c++) {
-                size_t condId = activeConditions[c];
-                condStrings.push_back(
-                    game.missionFailConds[condId]->getName()
-                );
-                if(
-                    condId ==
-                    game.curArea->missionOld.failHudSecondaryCond
-                ) {
-                    found = true;
-                    selected = (int) c;
-                }
-            }
-            if(!found) {
-                game.curArea->missionOld.failHudSecondaryCond = 0;
-            }
-            ImGui::Indent();
-            if(
-                ImGui::Combo(
-                    "Secondary condition", &selected, condStrings, 15
-                )
-            ) {
-                registerChange("mission fail conditions change");
-                game.curArea->missionOld.failHudSecondaryCond =
-                    activeConditions[selected];
-            }
-            setTooltip(
-                "Failure condition to show in the secondary HUD element."
-            );
-            ImGui::Unindent();
-        }
-        
-    } else {
-        game.curArea->missionOld.failHudPrimaryCond = INVALID;
-        game.curArea->missionOld.failHudSecondaryCond = INVALID;
-        
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui battle enemies goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalBe() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must defeat certain enemies, or all of them."
-    );
-    
-    //Enemy requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Enemy requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All enemies requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to defeat all enemies "
-        "in order to reach the goal."
-    );
-    
-    //Specific enemies requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to defeat specific enemies "
-        "in order to reach the goal.\n"
-        "You must specify which enemies these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick enemies...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which enemies do and\n"
-            "do not belong to the required enemy list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
-}
-
-
-/**
- * @brief Processes the Dear ImGui collect treasures goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalCt() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must collect certain treasures, or all of them."
-    );
-    
-    //Treasure requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Treasure requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All treasures requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to collect all treasures "
-        "in order to reach the goal."
-    );
-    
-    //Specific treasures requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to collect specific treasures "
-        "in order to reach the goal.\n"
-        "You must specify which treasures these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick treasures...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which treasures, piles, and\n"
-            "resources do and do not belong to the required\n"
-            "treasure list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
-}
-
-
-/**
- * @brief Processes the Dear ImGui get to exit goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalGte() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must get a leader or all of them "
-        "to the exit point."
-    );
-    
-    //Start exit region selector mode button.
-    ImGui::Spacer();
-    if(ImGui::Button("Pick region...")) {
-        subState = EDITOR_SUB_STATE_MISSION_EXIT;
-    }
-    setTooltip(
-        "Click here to start picking where the exit region is.\n"
-    );
-    
-    //Region center text.
-    ImGui::Text(
-        "Exit region center: %s,%s",
-        f2s(game.curArea->missionOld.goalExitCenter.x).c_str(),
-        f2s(game.curArea->missionOld.goalExitCenter.y).c_str()
-    );
-    
-    //Region center text.
-    ImGui::Text(
-        "Exit region size: %s x %s",
-        f2s(game.curArea->missionOld.goalExitSize.x).c_str(),
-        f2s(game.curArea->missionOld.goalExitSize.y).c_str()
-    );
-    
-    //Leader requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Leader requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All leaders requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to bring all leaders to the exit\n"
-        "region in order to reach the mission's goal."
-    );
-    
-    //Specific leaders requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to bring specific leaders to the exit\n"
-        "region in order to reach the mission's goal.\n"
-        "You must specify which leaders these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick leaders...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which leaders do and\n"
-            "do not belong to the required leader list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
 }
 
 
