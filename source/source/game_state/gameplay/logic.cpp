@@ -1478,7 +1478,7 @@ void GameplayState::doMenuLogic() {
         if(interlude.getTime() >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             interlude.set(INTERLUDE_NONE, false);
             deltaTMult = 1.0f;
-            leave(GAMEPLAY_LEAVE_TARGET_END);
+            leave(GAMEPLAY_LEAVE_TARGET_END_EARLY);
         }
         break;
     }

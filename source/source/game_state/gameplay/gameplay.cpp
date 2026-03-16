@@ -1129,7 +1129,7 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     case GAMEPLAY_LEAVE_TARGET_RETRY: {
         game.changeState(game.states.gameplay);
         break;
-    } case GAMEPLAY_LEAVE_TARGET_END: {
+    } case GAMEPLAY_LEAVE_TARGET_END_EARLY: {
         wentToResults = true;
         //Change state, but don't unload this one, since the player
         //may pick the "keep playing" option in the results screen.

@@ -83,7 +83,7 @@ buildEnumNames(missionPresetNames, MISSION_PRESET)({
 //Possible non-script end conditions for missions.
 enum MISSION_END_COND {
 
-    //Ended through the pause menu.
+    //Ended early through the pause menu.
     MISSION_END_COND_PAUSE_MENU,
     
     //Specified amount of target mobs were cleared.
@@ -610,6 +610,7 @@ struct MissionData {
     vector<string> getNoteBulletPoints() const;
     vector<string> getMedalAwardBulletPoints() const;
     MISSION_MEDAL getScoreMedal(int score);
+    bool isPauseMenuEndClear() const;
     void reset();
     
 };

@@ -1611,7 +1611,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         mission.endConds.push_back(
@@ -1644,7 +1644,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         mission.endConds.push_back(
@@ -1667,7 +1667,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .clear = false,
             .zeroTimeForScore = false,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         mission.endConds.push_back(
@@ -1697,7 +1697,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .clear = false,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         mission.endConds.push_back(
@@ -1721,7 +1721,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .clear = false,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         mission.endConds.push_back(

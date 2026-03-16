@@ -576,47 +576,60 @@ void PauseMenu::confirmOrLeave() {
     }
     
     if(doConfirmation) {
+        string activityType =
+            game.curArea->type == AREA_TYPE_SIMPLE ?
+            "exploration" :
+            "mission";
+        string targetMenu =
+            game.quickPlay.areaPath.empty() ?
+            game.curArea->type == AREA_TYPE_SIMPLE ?
+            "area selection menu" :
+            "mission selection menu" :
+            "editor";
+            
         switch(leaveTarget) {
         case GAMEPLAY_LEAVE_TARGET_RETRY: {
             confirmationExplanation =
-                "If you retry, you will LOSE all of your progress "
-                "and start over. Are you sure you want to retry?";
+                "If you retry, you will LOSE all of the progress on your " +
+                activityType + " and start over.\n"
+                "\n"
+                "Are you sure you want to retry?";
             break;
-        } case GAMEPLAY_LEAVE_TARGET_END: {
-            confirmationExplanation =
-                "If you end now, you will stop playing and will go to the "
-                "results menu.";
-            if(game.curArea->type == AREA_TYPE_MISSION) {
-                if(
-                    game.curArea->missionOld.goal ==
-                    MISSION_GOAL_END_MANUALLY
-                ) {
+        } case GAMEPLAY_LEAVE_TARGET_END_EARLY: {
+            if(game.curArea->type == AREA_TYPE_SIMPLE) {
+                confirmationExplanation =
+                    "If you end this exploration, you will "
+                    "be taken to the results menu and receive some stats.\n"
+                    "\n"
+                    "Are you sure you want to end here?";
+            } else {
+                confirmationExplanation =
+                    "If you end this mission early, you will "
+                    "be taken to the results menu and be evaluated.";
+                if(game.curArea->mission.isPauseMenuEndClear()) {
                     confirmationExplanation +=
-                        " The goal of this mission is to end through here, so "
-                        "make sure you've done everything you need first.";
+                        "\n"
+                        "Note that in this mission you can still receive a "
+                        "medal by ending early.";
                 } else {
                     confirmationExplanation +=
-                        " This will end the mission as a fail, "
-                        "even though you may still get a medal from it.";
-                    if(
-                        game.curArea->missionOld.medalAwardMode ==
-                        MISSION_MEDAL_AWARD_MODE_POINTS
-                    ) {
-                        confirmationExplanation +=
-                            " Note that since you fail the mission, you may "
-                            "lose out on some points. You should check the "
-                            "pause menu's mission page for more information.";
-                    }
-                    
+                        "\n"
+                        "Note that in this mission you cannot receive a "
+                        "medal by ending early! You will FAIL the mission!";
                 }
+                confirmationExplanation +=
+                    "\n"
+                    "\n"
+                    "Are you sure you want to end the mission early?";
             }
-            confirmationExplanation +=
-                " Are you sure you want to end?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
             confirmationExplanation =
-                "If you quit, you will LOSE all of your progress and instantly "
-                "stop playing. Are you sure you want to quit?";
+                "If you quit, you will LOSE all of the progress on your " +
+                activityType + " and immediately return to the " +
+                targetMenu + ".\n"
+                "\n"
+                "Are you sure you want to quit?";
             break;
         }
         }
@@ -624,9 +637,8 @@ void PauseMenu::confirmOrLeave() {
         game.modal.reset();
         game.modal.title = "Are you sure?";
         game.modal.prompt =
-            confirmationExplanation + "\n\n"
-            "(You can customize this confirmation question in the "
-            "options menu.)";
+            confirmationExplanation + "\n\n\n\n"
+            "(Customize this question in the options menu.)";
         game.modal.extraButtons.push_back(
         ModalGuiManager::Button {
             .text = "Confirm",
@@ -1737,27 +1749,24 @@ void PauseMenu::initMainPauseMenu() {
         new ButtonGuiItem(
         game.curArea->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
-        "End mission",
+        "End mission early",
         game.sysContent.fntStandard
     );
     endButton->onActivate =
     [this] (const Point&) {
-        leaveTarget = GAMEPLAY_LEAVE_TARGET_END;
+        leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
         confirmOrLeave();
     };
     endButton->onGetTooltip =
     [] () {
-        bool asFail =
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-            );
         return
             game.curArea->type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
-            asFail ?
-            "End this mission as a fail." :
-            "End this mission successfully.";
+            game.curArea->mission.isPauseMenuEndClear() ?
+            "End the mission early. "
+            "This mission still lets you receive a medal this way." :
+            "End the mission early. "
+            "This mission doesn't let you receive a medal this way!";
     };
     gui.addItem(endButton, "end");
     
@@ -1864,10 +1873,12 @@ void PauseMenu::initMainPauseMenu() {
     quitButton->onGetTooltip =
     [] () {
         return
-            "Lose your progress and return to the " +
+            "Lose your progress and immediately return to the " +
             string(
                 game.quickPlay.areaPath.empty() ?
+                game.curArea->type == AREA_TYPE_SIMPLE ?
                 "area selection menu" :
+                "mission selection menu" :
                 "editor"
             ) + ".";
     };
@@ -2496,7 +2507,7 @@ void PauseMenu::startClosing(GuiManager* curGui) {
  */
 void PauseMenu::startLeavingGameplay() {
     if(
-        leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
+        leaveTarget == GAMEPLAY_LEAVE_TARGET_END_EARLY &&
         game.curArea->type == AREA_TYPE_MISSION
     ) {
         MissionEndCond* cPtr = nullptr;

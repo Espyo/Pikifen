@@ -50,7 +50,7 @@ enum GAMEPLAY_LEAVE_TARGET {
     GAMEPLAY_LEAVE_TARGET_RETRY,
     
     //Leave in order to end the exploration/mission.
-    GAMEPLAY_LEAVE_TARGET_END,
+    GAMEPLAY_LEAVE_TARGET_END_EARLY,
     
     //Leave in order to go to the area selection menu.
     GAMEPLAY_LEAVE_TARGET_AREA_SELECT,

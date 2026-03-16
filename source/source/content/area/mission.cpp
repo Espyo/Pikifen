@@ -66,7 +66,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         endConds.push_back(
@@ -97,7 +97,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         endConds.push_back(
@@ -137,7 +137,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         endConds.push_back(
@@ -177,7 +177,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
             .clear = false,
             .zeroTimeForScore = false,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         endConds.push_back(
@@ -217,7 +217,7 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
             .clear = true,
             .zeroTimeForScore = true,
             .neutralMood = false,
-            .reason = "Ended from the pause menu!",
+            .reason = "Ended early from the pause menu!",
         }
         );
         endConds.push_back(
@@ -343,6 +343,25 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
     if(score >= silverReq) return MISSION_MEDAL_SILVER;
     if(score >= bronzeReq) return MISSION_MEDAL_BRONZE;
     return MISSION_MEDAL_NONE;
+}
+
+
+/**
+ * @brief Returns whether ending early through the pause menu
+ * results in a clear.
+ *
+ * @return Whether it is a clear.
+ */
+bool MissionData::isPauseMenuEndClear() const {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        if(
+            game.curArea->mission.endConds[c].type ==
+            MISSION_END_COND_PAUSE_MENU
+        ) {
+            return game.curArea->mission.endConds[c].clear;
+        }
+    }
+    return false;
 }
 
 
@@ -772,7 +791,7 @@ MissionEndCondType::EditorInfo MissionEndCondTypePauseMenu::getEditorInfo() cons
     return
     MissionEndCondType::EditorInfo {
         .description =
-        "Triggers when the player ends the mission from the pause menu.",
+        "Triggers when the player ends the mission early from the pause menu.",
     };
 }
 
@@ -791,7 +810,7 @@ MissionEndCondType::HudInfo MissionEndCondTypePauseMenu::getHudInfo(
     return
     MissionEndCondType::HudInfo {
         .description =
-        "End from the pause menu.",
+        "End early from the pause menu.",
     };
 }
 
