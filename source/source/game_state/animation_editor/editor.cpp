@@ -288,7 +288,7 @@ void AnimationEditor::deleteAnimDbCmd(float inputValue) {
     
     openDialog(
         "Delete animation database?",
-        std::bind(&AnimationEditor::processGuiDeleteAnimDbDialog, this)
+        std::bind(&AnimationEditor::processGuiDialogDeleteAnimDb, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }

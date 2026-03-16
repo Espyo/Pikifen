@@ -384,21 +384,6 @@ void MissionData::reset() {
 }
 
 
-/**
- * @brief Returns which medal the given score would give.
- *
- * @param score Score to check.
- * @return The medal, if any.
- */
-MISSION_MEDAL MissionDataOld::getScoreMedal(int score) {
-    if(score >= platinumReq) return MISSION_MEDAL_PLATINUM;
-    if(score >= goldReq) return MISSION_MEDAL_GOLD;
-    if(score >= silverReq) return MISSION_MEDAL_SILVER;
-    if(score >= bronzeReq) return MISSION_MEDAL_BRONZE;
-    return MISSION_MEDAL_NONE;
-}
-
-
 #pragma endregion
 #pragma region End condition types
 

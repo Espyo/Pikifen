@@ -1697,7 +1697,7 @@ void Editor::openBaseContentWarningDialog(
     
     openDialog(
         "Base pack warning",
-        std::bind(&Editor::processGuiBaseContentWarningDialog, this)
+        std::bind(&Editor::processGuiDialogBaseContent, this)
     );
     dialogs.back()->customSize = Point(320, 0);
     baseContentWarningDoPickCallback = doPickCallback;
@@ -1729,7 +1729,7 @@ void Editor::openBitmapDialog(
     
     openDialog(
         "Choose a bitmap",
-        std::bind(&Editor::processGuiBitmapDialog, this)
+        std::bind(&Editor::processGuiDialogBitmap, this)
     );
     dialogs.back()->closeCallback = [this] () {
         if(!bitmapDialogCurBmpName.empty()) {
@@ -1778,14 +1778,14 @@ void Editor::openHelpDialog(
 ) {
     helpDialogMessage = message;
     helpDialogPage = page;
-    openDialog("Help", std::bind(&Editor::processGuiHelpDialog, this));
+    openDialog("Help", std::bind(&Editor::processGuiDialogHelp, this));
     dialogs.back()->customSize = Point(400, 0);
 }
 
 
 /**
  * @brief Opens an input popup with a given name. Its logic must be run with
- * a call to processGuiInputPopup().
+ * a call to processGuiPopupInput().
  *
  * @param label Name of the popup.
  */
@@ -1807,7 +1807,7 @@ void Editor::openMessageDialog(
     const std::function<void()>& closeCallback
 ) {
     messageDialogMessage = message;
-    openDialog(title, std::bind(&Editor::processGuiMessageDialog, this));
+    openDialog(title, std::bind(&Editor::processGuiDialogMessage, this));
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = closeCallback;
 }
@@ -1820,7 +1820,7 @@ void Editor::openNewPackDialog() {
     needsNewPackTextFocus = true;
     openDialog(
         "Create a new pack",
-        std::bind(&Editor::processGuiNewPackDialog, this)
+        std::bind(&Editor::processGuiDialogNewPack, this)
     );
     dialogs.back()->customSize = Point(520, 0);
 }
@@ -1941,7 +1941,7 @@ void Editor::processDialogs() {
 /**
  * @brief Processes the base content editing warning dialog for this frame.
  */
-void Editor::processGuiBaseContentWarningDialog() {
+void Editor::processGuiDialogBaseContent() {
     //Explanation text.
     ImGui::TextWrapped(
         "You're editing content in the base pack! The base pack is meant to "
@@ -1984,7 +1984,7 @@ void Editor::processGuiBaseContentWarningDialog() {
 /**
  * @brief Processes the bitmap picker dialog for this frame.
  */
-void Editor::processGuiBitmapDialog() {
+void Editor::processGuiDialogBitmap() {
     static bool filterWithRecommendedFolder = true;
     
     //Fill the picker's items.
@@ -2197,7 +2197,7 @@ void Editor::processGuiEditorStyle() {
  * @param selectedHazardIname Internal name of the currently selected hazard.
  * @return Whether the hazard was changed.
  */
-bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
+bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
     //Hazard combo.
     int selectedHazardIdx = -1;
     vector<string> allHazardINames = {""};
@@ -2224,7 +2224,7 @@ bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
 /**
  * @brief Processes the help dialog widgets.
  */
-void Editor::processGuiHelpDialog() {
+void Editor::processGuiDialogHelp() {
     //Text.
     ImGui::BeginAlign();
     static int textWidth = 0;
@@ -2322,7 +2322,7 @@ void Editor::processGuiHistory(
  * @param useMonospace Whether to use a monospace font.
  * @return Whether the user pressed Return or the Ok button.
  */
-bool Editor::processGuiInputPopup(
+bool Editor::processGuiPopupInput(
     const char* label, const char* prompt, string* text, bool useMonospace
 ) {
     bool ret = false;
@@ -2831,7 +2831,7 @@ void Editor::processGuiNavSetup(
 /**
  * @brief Processes the Dear ImGui message dialog widgets.
  */
-void Editor::processGuiMessageDialog() {
+void Editor::processGuiDialogMessage() {
     //Text.
     static int textWidth = 0;
     ImGui::BeginAlign();
@@ -2863,7 +2863,7 @@ void Editor::processGuiMessageDialog() {
  * @param packFilter If not empty, only show mob types from this pack.
  * @return Whether the user changed the category/type.
  */
-bool Editor::processGuiMobTypeWidgets(
+bool Editor::processGuiWidgetsMobType(
     string* customCatName, MobType** type, const string& packFilter
 ) {
     bool result = false;
@@ -2933,7 +2933,7 @@ bool Editor::processGuiMobTypeWidgets(
                 const string& n, const string& tc, const string& sc, void*, bool
         ) {
             //For clarity, this code will NOT be run within the context
-            //of editor::processGuiMobTypeWidgets, but will instead
+            //of editor::processGuiWidgetsMobType, but will instead
             //be run wherever dialogs are processed.
             internalChangedByDialog = true;
             internalCustomCatName = tc;
@@ -3026,7 +3026,7 @@ bool Editor::processGuiMobTypeWidgets(
  *
  * @param pack Pointer to the internal name of the pack in the combobox.
  */
-bool Editor::processGuiNewDialogPackWidgets(string* pack) {
+bool Editor::processGuiWidgetsNewDialogPack(string* pack) {
     bool changed = false;
     
     //Pack combo.
@@ -3058,7 +3058,7 @@ bool Editor::processGuiNewDialogPackWidgets(string* pack) {
 /**
  * @brief Processes the dialog for creating a new pack.
  */
-void Editor::processGuiNewPackDialog() {
+void Editor::processGuiDialogNewPack() {
     static string internalName = "my_pack";
     static string name = "My pack!";
     static string description;
@@ -3214,7 +3214,7 @@ void Editor::processGuiNewPackDialog() {
  * to have. Use -FLT_MAX for none.
  * @return Whether the user changed one of the values.
  */
-bool Editor::processGuiSizeWidgets(
+bool Editor::processGuiWidgetsSize(
     const char* label, Point& size, float vSpeed,
     bool keepAspectRatio,
     bool keepArea,
@@ -3324,7 +3324,7 @@ void Editor::processGuiStatusBarText() {
  * @brief Processes the Dear ImGui unsaved changes confirmation dialog
  * for this frame.
  */
-void Editor::processGuiUnsavedChangesDialog() {
+void Editor::processGuiDialogUnsavedChanges() {
     //Explanation 1 text.
     size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
     string explanation1Str =
@@ -3850,7 +3850,7 @@ bool Editor::ChangesManager::askIfUnsaved(
         
         ed->openDialog(
             "Unsaved changes!",
-            std::bind(&Editor::processGuiUnsavedChangesDialog, ed)
+            std::bind(&Editor::processGuiDialogUnsavedChanges, ed)
         );
         ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);

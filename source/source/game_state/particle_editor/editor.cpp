@@ -249,7 +249,7 @@ void ParticleEditor::deletePartGenCmd(float inputValue) {
     
     openDialog(
         "Delete particle generator?",
-        std::bind(&ParticleEditor::processGuiDeletePartGenDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogDeletePartGen, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }

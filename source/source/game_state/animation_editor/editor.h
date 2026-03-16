@@ -355,11 +355,12 @@ private:
     void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
-    void processGuiDeleteAnimDbDialog();
+    void processGuiDialogDeleteAnimDb();
+    void processGuiDialogLoad();
+    void processGuiDialogNew();
+    void processGuiDialogOptions();
     void processGuiHitboxHazards();
-    void processGuiLoadDialog();
-    void processGuiNewDialog();
-    void processGuiOptionsDialog();
+    void processGuiMenuBar();
     void processGuiPanelAnimation();
     void processGuiPanelAnimationData();
     void processGuiPanelAnimationHeader();
@@ -374,7 +375,6 @@ private:
     void processGuiPanelSpriteTop();
     void processGuiPanelSpriteTransform();
     void processGuiPanelTools();
-    void processGuiMenuBar();
     void processGuiStatusBar();
     void processGuiToolbar();
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;

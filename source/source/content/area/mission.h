@@ -80,7 +80,7 @@ buildEnumNames(missionPresetNames, MISSION_PRESET)({
 });
 
 
-//Possible non-script end conditions for missions.
+//Possible end conditions for missions.
 enum MISSION_END_COND {
 
     //Ended early through the pause menu.
@@ -140,7 +140,7 @@ enum MISSION_MOB_GROUP {
 };
 
 
-//Mission mob GROUP type enum naming.
+//Mission mob group type enum naming.
 buildEnumNames(missionMobGroupTypeNames, MISSION_MOB_GROUP)({
     { MISSION_MOB_GROUP_CUSTOM, "Custom" },
     { MISSION_MOB_GROUP_TREASURES, "Treasures" },
@@ -345,92 +345,92 @@ enum MISSION_MEDAL_AWARD_MODE {
 
 //DEPRECATED by MISSION_END_COND in 1.2.0.
 //Possible goals in a mission.
-enum MISSION_GOAL {
+enum MISSION_GOAL_OLD {
 
     //The player plays until they end from the pause menu.
-    MISSION_GOAL_END_MANUALLY,
+    MISSION_GOAL_OLD_END_MANUALLY,
     
     //The player must collect certain treasures, or all of them.
-    MISSION_GOAL_COLLECT_TREASURE,
+    MISSION_GOAL_OLD_COLLECT_TREASURE,
     
     //The player must defeat certain enemies, or all of them.
-    MISSION_GOAL_BATTLE_ENEMIES,
+    MISSION_GOAL_OLD_BATTLE_ENEMIES,
     
     //The player must survive for a certain amount of time.
-    MISSION_GOAL_TIMED_SURVIVAL,
+    MISSION_GOAL_OLD_TIMED_SURVIVAL,
     
     //The player must get a leader or all of them to the exit point.
-    MISSION_GOAL_GET_TO_EXIT,
+    MISSION_GOAL_OLD_GET_TO_EXIT,
     
     //The player must grow enough Pikmin to reach a certain total.
-    MISSION_GOAL_GROW_PIKMIN,
+    MISSION_GOAL_OLD_GROW_PIKMIN,
     
 };
 
 
 //Mission goal enum naming.
-buildEnumNames(missionGoalNames, MISSION_GOAL)({
-    { MISSION_GOAL_END_MANUALLY, "End whenever you want" },
-    { MISSION_GOAL_COLLECT_TREASURE, "Collect treasures" },
-    { MISSION_GOAL_BATTLE_ENEMIES, "Battle enemies" },
-    { MISSION_GOAL_TIMED_SURVIVAL, "Survive" },
-    { MISSION_GOAL_GET_TO_EXIT, "Get to the exit" },
-    { MISSION_GOAL_GROW_PIKMIN, "Grow Pikmin" },
+buildEnumNames(missionGoalNames, MISSION_GOAL_OLD)({
+    { MISSION_GOAL_OLD_END_MANUALLY, "End whenever you want" },
+    { MISSION_GOAL_OLD_COLLECT_TREASURE, "Collect treasures" },
+    { MISSION_GOAL_OLD_BATTLE_ENEMIES, "Battle enemies" },
+    { MISSION_GOAL_OLD_TIMED_SURVIVAL, "Survive" },
+    { MISSION_GOAL_OLD_GET_TO_EXIT, "Get to the exit" },
+    { MISSION_GOAL_OLD_GROW_PIKMIN, "Grow Pikmin" },
 });
 
 
 //DEPRECATED by MISSION_END_COND in 1.2.0.
 //Possible ways to fail at a mission.
-enum MISSION_FAIL_COND {
+enum MISSION_FAIL_COND_OLD {
 
     //Reaching the time limit.
-    MISSION_FAIL_COND_TIME_LIMIT,
+    MISSION_FAIL_COND_OLD_TIME_LIMIT,
     
     //Reaching a certain Pikmin amount or fewer. 0 = total extinction.
-    MISSION_FAIL_COND_TOO_FEW_PIKMIN,
+    MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN,
     
     //Reaching a certain Pikmin amount or more.
-    MISSION_FAIL_COND_TOO_MANY_PIKMIN,
+    MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN,
     
     //Losing a certain amount of Pikmin.
-    MISSION_FAIL_COND_LOSE_PIKMIN,
+    MISSION_FAIL_COND_OLD_LOSE_PIKMIN,
     
     //A leader takes damage.
-    MISSION_FAIL_COND_TAKE_DAMAGE,
+    MISSION_FAIL_COND_OLD_TAKE_DAMAGE,
     
     //Losing a certain amount of leaders.
-    MISSION_FAIL_COND_LOSE_LEADERS,
+    MISSION_FAIL_COND_OLD_LOSE_LEADERS,
     
     //Defeating a certain amount of enemies.
-    MISSION_FAIL_COND_DEFEAT_ENEMIES,
+    MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES,
     
     //Ending from the pause menu.
-    MISSION_FAIL_COND_PAUSE_MENU,
+    MISSION_FAIL_COND_OLD_PAUSE_MENU,
     
 };
 
 
 //DEPRECATED in 1.2.0 by MISSION_SCORE_CRITERION.
 //Possible criteria for a mission's point scoring.
-enum MISSION_SCORE_CRITERIA {
+enum MISSION_SCORE_CRITERIA_OLD {
 
     //Points per Pikmin born.
-    MISSION_SCORE_CRITERIA_PIKMIN_BORN,
+    MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN,
     
     //Points per Pikmin death.
-    MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
+    MISSION_SCORE_CRITERIA_OLD_PIKMIN_DEATH,
     
     //Points per second left. Only for missions with a time limit.
-    MISSION_SCORE_CRITERIA_SEC_LEFT,
+    MISSION_SCORE_CRITERIA_OLD_SEC_LEFT,
     
     //Points per second passed.
-    MISSION_SCORE_CRITERIA_SEC_PASSED,
+    MISSION_SCORE_CRITERIA_OLD_SEC_PASSED,
     
     //Points per treasure point.
-    MISSION_SCORE_CRITERIA_TREASURE_POINTS,
+    MISSION_SCORE_CRITERIA_OLD_TREASURE_POINTS,
     
     //Points per enemy defeat point.
-    MISSION_SCORE_CRITERIA_ENEMY_POINTS,
+    MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS,
     
 };
 
@@ -440,7 +440,7 @@ enum MISSION_SCORE_CRITERIA {
 
 
 /**
- * @brief Represents a non-script end condition in the mission.
+ * @brief Represents an end condition definition in the mission.
  */
 struct MissionEndCond {
 
@@ -473,7 +473,7 @@ struct MissionEndCond {
 
 
 /**
- * @brief A group of mobs that is relevant to a mission.
+ * @brief Definition of a group of mobs that is relevant to a mission.
  */
 struct MissionMobGroup {
 
@@ -498,7 +498,7 @@ struct MissionMobGroup {
 
 
 /**
- * @brief One rule for how the score is determined.
+ * @brief One rule definition for how the score is determined.
  */
 struct MissionScoreCriterion {
 
@@ -616,120 +616,8 @@ struct MissionData {
 };
 
 
-//DEPRECATED by MissionData in 1.2.0.
 /**
- * @brief Info about a given area's mission.
- */
-struct MissionDataOld {
-
-    //--- Public members ---
-    
-    //Mission goal.
-    MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
-    
-    //Does the mission goal require all relevant items, or just specific ones?
-    bool goalAllMobs = true;
-    
-    //If the mission goal requires specific items, their mob indexes go here.
-    unordered_set<size_t> goalMobIdxs;
-    
-    //Total amount of something required for the current mission goal.
-    size_t goalAmount = 1;
-    
-    //Mission exit region center coordinates.
-    Point goalExitCenter;
-    
-    //Mission exit region dimensions.
-    Point goalExitSize = Point(MISSION::EXIT_MIN_SIZE);
-    
-    //Mission fail conditions bitmask. Use MISSION_FAIL_COND's indexes.
-    Bitmask8 failConditions = 0;
-    
-    //Amount for the "reach too few Pikmin" mission fail condition.
-    size_t failTooFewPikAmount = 0;
-    
-    //Amount for the "reach too many Pikmin" mission fail condition.
-    size_t failTooManyPikAmount = 1;
-    
-    //Amount for the "lose Pikmin" mission fail condition.
-    size_t failPikKilled = 1;
-    
-    //Amount for the "lose leaders" mission fail condition.
-    size_t failLeadersKod = 1;
-    
-    //Amount for the "defeat enemies" mission fail condition.
-    size_t failEnemiesDefeated = 1;
-    
-    //Seconds amount for the "time limit" mission fail condition.
-    size_t failTimeLimit = MISSION::DEF_TIME_LIMIT;
-    
-    //Primary HUD element's fail condition. INVALID for none.
-    size_t failHudPrimaryCond = INVALID;
-    
-    //Secondary HUD element's fail condition. INVALID for none.
-    size_t failHudSecondaryCond = INVALID;
-    
-    //Mission medal award mode.
-    MISSION_MEDAL_AWARD_MODE medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
-    
-    //Mission point multiplier for each Pikmin born.
-    int pointsPerPikminBorn = 0;
-    
-    //Mission point multiplier for each Pikmin lost.
-    int pointsPerPikminDeath = 0;
-    
-    //Mission point multiplier for each second left (only if time limit is on).
-    int pointsPerSecLeft = 0;
-    
-    //Mission point multiplier for each second passed.
-    int pointsPerSecPassed = 0;
-    
-    //Mission point multiplier for each treasure point obtained.
-    int pointsPerTreasurePoint = 0;
-    
-    //Mission point multiplier for each enemy point obtained.
-    int pointsPerEnemyPoint = 0;
-    
-    //If true, award points on enemy collection rather than on defeat.
-    bool enemyPointsOnCollection = false;
-    
-    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    Bitmask8 pointLossData = 0;
-    
-    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    Bitmask8 pointHudData = 255;
-    
-    //Starting number of points.
-    int startingPoints = 0;
-    
-    //Bronze medal point requirement.
-    int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
-    
-    //Silver medal point requirement.
-    int silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
-    
-    //Gold medal point requirement.
-    int goldReq = MISSION::DEF_MEDAL_REQ_GOLD;
-    
-    //Platinum medal point requirement.
-    int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
-    
-    //The maker's record.
-    int makerRecord = 0;
-    
-    //The date of the maker's record, or empty for no record.
-    string makerRecordDate = "";
-    
-    
-    //--- Public function declarations ---
-    
-    MISSION_MEDAL getScoreMedal(int score);
-    
-};
-
-
-/**
- * @brief Info about a given mission's record.
+ * @brief Info about a given mission's best attempt record.
  */
 struct MissionRecord {
 

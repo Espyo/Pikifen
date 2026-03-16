@@ -1487,7 +1487,7 @@ void Area::loadRemindersFromDataNode(DataNode* node) {
  */
 void Area::loadOldMissionSystem(DataNode* node) {
     ReaderSetter mRS(node);
-    MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
+    MISSION_GOAL_OLD goal = MISSION_GOAL_OLD_END_MANUALLY;
     string goalStr;
     string requiredMobsStr;
     unordered_set<size_t> goalMobIdxs;
@@ -1556,15 +1556,15 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     
     //Automatically turn the pause menu fail condition on/off for convenience.
-    if(goal == MISSION_GOAL_END_MANUALLY) {
+    if(goal == MISSION_GOAL_OLD_END_MANUALLY) {
         disableFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         );
     } else {
         enableFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         );
     }
     
@@ -1572,17 +1572,17 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(
         !hasFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_TIME_LIMIT)
         )
     ) {
         pointsPerSecLeft = 0;
         disableFlag(
             pointHudData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
         );
         disableFlag(
             pointLossData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
         );
     }
     
@@ -1591,10 +1591,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
     size_t exitRegionIdx = 0;
     
     switch(goal) {
-    case MISSION_GOAL_END_MANUALLY: {
+    case MISSION_GOAL_OLD_END_MANUALLY: {
         break;
         
-    } case MISSION_GOAL_COLLECT_TREASURE: {
+    } case MISSION_GOAL_OLD_COLLECT_TREASURE: {
         mission.briefingObjective =
             "Collect treasures!";
         mission.mobGroups.push_back(
@@ -1626,7 +1626,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         break;
         
-    } case MISSION_GOAL_BATTLE_ENEMIES: {
+    } case MISSION_GOAL_OLD_BATTLE_ENEMIES: {
         mission.briefingObjective =
             "Battle enemies!";
         mission.mobGroups.push_back(
@@ -1658,7 +1658,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         break;
         
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
+    } case MISSION_GOAL_OLD_TIMED_SURVIVAL: {
         mission.briefingObjective =
             "Survive until the time limit!";
         mission.endConds.push_back(
@@ -1681,7 +1681,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.timeLimit = goalAmount;
         break;
         
-    } case MISSION_GOAL_GET_TO_EXIT: {
+    } case MISSION_GOAL_OLD_GET_TO_EXIT: {
         mission.briefingObjective =
             "Get the leaders to the exit!";
         regions.push_back(
@@ -1712,7 +1712,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         break;
         
-    } case MISSION_GOAL_GROW_PIKMIN: {
+    } case MISSION_GOAL_OLD_GROW_PIKMIN: {
         mission.briefingObjective =
             "Grow " + i2s(goalAmount) + " Pikmin!";
         mission.endConds.push_back(
@@ -1740,7 +1740,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     //Port the fail conditions to end conditions.
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TIME_LIMIT)
         )
     ) {
         mission.endConds.push_back(
@@ -1757,7 +1757,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN)
         )
     ) {
         mission.endConds.push_back(
@@ -1772,7 +1772,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN)
         )
     ) {
         mission.endConds.push_back(
@@ -1787,7 +1787,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_LOSE_PIKMIN)
         )
     ) {
         mission.endConds.push_back(
@@ -1802,7 +1802,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TAKE_DAMAGE)
         )
     ) {
         mission.endConds.push_back(
@@ -1816,7 +1816,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_LOSE_LEADERS)
         )
     ) {
         mission.endConds.push_back(
@@ -1832,7 +1832,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     size_t enemyDefeatFailIdx = 0;
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES)
         )
     ) {
         mission.mobGroups.push_back(
@@ -1854,7 +1854,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         )
     ) {
         mission.endConds[0].clear = false;
@@ -1862,7 +1862,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Port the goal HUD items.
     switch(goal) {
-    case MISSION_GOAL_END_MANUALLY: {
+    case MISSION_GOAL_OLD_END_MANUALLY: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_TEXT;
@@ -1870,7 +1870,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "End whenever you want";
         break;
         
-    } case MISSION_GOAL_COLLECT_TREASURE: {
+    } case MISSION_GOAL_OLD_COLLECT_TREASURE: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1881,7 +1881,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
         
-    } case MISSION_GOAL_BATTLE_ENEMIES: {
+    } case MISSION_GOAL_OLD_BATTLE_ENEMIES: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1892,7 +1892,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
         
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
+    } case MISSION_GOAL_OLD_TIMED_SURVIVAL: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_TEXT;
@@ -1904,7 +1904,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].text = "Time:";
         break;
         
-    } case MISSION_GOAL_GET_TO_EXIT: {
+    } case MISSION_GOAL_OLD_GET_TO_EXIT: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1915,7 +1915,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "In exit:";
         break;
         
-    } case MISSION_GOAL_GROW_PIKMIN: {
+    } case MISSION_GOAL_OLD_GROW_PIKMIN: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1941,11 +1941,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Port the failure HUD items.
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TIME_LIMIT ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TIME_LIMIT
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TIME_LIMIT ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1953,11 +1953,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Time:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1967,11 +1967,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1981,11 +1981,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_LOSE_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_LOSE_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_LOSE_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1995,11 +1995,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin lost:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_LOSE_LEADERS ||
-        failHudSecondaryCond == MISSION_FAIL_COND_LOSE_LEADERS
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_LOSE_LEADERS ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -2009,11 +2009,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Leaders lost:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES ||
-        failHudSecondaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -2031,7 +2031,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerPikminBorn,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
+                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
             ),
         }
         );
@@ -2044,7 +2044,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .affectsHud =
             hasFlag(
                 pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_DEATH)
             ),
         }
         );
@@ -2056,7 +2056,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecLeft,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
             ),
         }
         );
@@ -2068,7 +2068,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecPassed,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
+                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
             ),
         }
         );
@@ -2081,7 +2081,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .affectsHud =
             hasFlag(
                 pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_TREASURE_POINTS)
             ),
         }
         );
@@ -2093,7 +2093,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerEnemyPoint,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
             ),
         }
         );

@@ -177,11 +177,11 @@ private:
     void partMgrPlaybackToggleCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
-    void processGuiDeletePartGenDialog();
-    void processGuiLoadDialog();
+    void processGuiDialogDeletePartGen();
+    void processGuiDialogLoad();
+    void processGuiDialogNew();
+    void processGuiDialogOptions();
     void processGuiMenuBar();
-    void processGuiNewDialog();
-    void processGuiOptionsDialog();
     void processGuiPanelGenerator();
     void processGuiStatusBar();
     void processGuiToolbar();

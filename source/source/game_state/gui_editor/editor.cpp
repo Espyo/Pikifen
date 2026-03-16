@@ -67,12 +67,12 @@ GuiEditor::GuiEditor() :
     
     //Setup the selection manager.
     itemSelection.onGetInfo =
-    [this] (size_t idx, Point* outCenter, Point* outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
         *outCenter = allItems[idx]->center;
         *outSize = allItems[idx]->size;
     };
     itemSelection.onSetInfo =
-    [this] (size_t idx, const Point& newCenter, const Point& newSize) {
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
         allItems[idx]->center = newCenter;
         allItems[idx]->size = newSize;
     };
@@ -261,7 +261,7 @@ void GuiEditor::deleteGuiDefCmd(float inputValue) {
     
     openDialog(
         "Delete GUI definition?",
-        std::bind(&GuiEditor::processGuiDeleteGuiDefDialog, this)
+        std::bind(&GuiEditor::processGuiDialogDeleteGuiDef, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }

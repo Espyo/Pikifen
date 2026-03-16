@@ -268,7 +268,7 @@ struct Area : public Content {
     //String representing the starting amounts of each spray.
     string sprayAmounts;
     
-    //Song to play.
+    //Name of the song to play.
     string songName;
     
     //Weather condition to use.
@@ -302,14 +302,11 @@ struct Area : public Content {
     //Mission data.
     MissionData mission;
     
-    //Mission data.
-    MissionDataOld missionOld;
-    
-    //Path to the user data folder for this area.
-    string userDataPath;
-    
     //Reminders for the area's maker.
     vector<AreaMakerReminder> reminders;
+    
+    //Path to the user data folder for this area. Cache for convenience.
+    string userDataPath;
     
     
     //--- Public function declarations ---

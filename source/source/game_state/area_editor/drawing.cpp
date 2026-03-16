@@ -1865,7 +1865,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                     } else if(showBlockingSectors) {
                         av[v].color =
                             sPtr->type == SECTOR_TYPE_BLOCKING ?
-                            AREA_EDITOR::BLOCKING_COLOR :
+                            AREA_EDITOR::BLOCKING_SECTOR_COLOR :
                             AREA_EDITOR::NON_BLOCKING_COLOR;
                     } else if(viewBrightness) {
                         av[v].color =

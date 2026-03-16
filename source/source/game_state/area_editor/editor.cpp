@@ -33,7 +33,7 @@ using std::vector;
 namespace AREA_EDITOR {
 
 //Color for blocking sectors in the "show blocking sectors" mode.
-const ALLEGRO_COLOR BLOCKING_COLOR = al_map_rgba(100, 32, 32, 192);
+const ALLEGRO_COLOR BLOCKING_SECTOR_COLOR = al_map_rgba(100, 32, 32, 192);
 
 //A comfortable distance, useful for many scenarios.
 const float COMFY_DIST = 32.0f;
@@ -673,7 +673,7 @@ void AreaEditor::deleteAreaCmd(float inputValue) {
     
     openDialog(
         "Delete area?",
-        std::bind(&AreaEditor::processGuiDeleteAreaDialog, this)
+        std::bind(&AreaEditor::processGuiDialogDeleteArea, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }

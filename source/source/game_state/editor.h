@@ -911,31 +911,37 @@ protected:
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
     void processDialogs();
-    void processGuiBaseContentWarningDialog();
-    void processGuiBitmapDialog();
     void processGuiCanvas();
+    void processGuiDialogBaseContent();
+    void processGuiDialogBitmap();
+    void processGuiDialogHelp();
+    void processGuiDialogMessage();
+    void processGuiDialogNewPack();
+    void processGuiDialogUnsavedChanges();
     void processGuiEditorStyle();
-    bool processGuiHazardManagementWidgets(string& selectedHazardIname);
-    void processGuiHelpDialog();
     void processGuiHistory(
         const vector<pair<string, string> >& history,
         const std::function<string(const string&)>& nameDisplayCallback,
         const std::function<void(const string&)>& pickCallback,
         const std::function<string(const string&)>& tooltipCallback
     );
-    bool processGuiInputPopup(
+    bool processGuiPopupInput(
         const char* label, const char* prompt, string* text,
         bool useMonospace = false
     );
+    void processGuiStatusBarText();
+    bool processGuiWidgetsHazardManagement(string& selectedHazardIname);
+    bool processGuiWidgetsMobType(
+        string* customCatName, MobType** type, const string& packFilter = ""
+    );
+    bool processGuiWidgetsNewDialogPack(string* pack);
+    bool processGuiWidgetsSize(
+        const char* label, Point& size, float vSpeed,
+        bool keepAspectRatio, bool keepArea,
+        float minSize
+    );
     void processGuiNavSetup(
         size_t* curItemIdx, size_t listSize, bool allowInvalid
-    );
-    void getGuiNavCurText(
-        size_t curItemIdx, size_t listSize, size_t selectionSize,
-        const string& itemTerm, bool showTermNormally,
-        const string& curItemName, bool curItemNameMono,
-        string* outText1, bool* outText1Disabled,
-        string* outText2, bool* outText2Mono
     );
     bool processGuiNavWidgetNew(
         size_t* curItemIdx, size_t listSize,
@@ -975,19 +981,13 @@ protected:
     void processGuiNavBoxPlaceholder();
     void processGuiNavBoxSecondLine(size_t nrItems);
     void processGuiNavBoxEnd();
-    void processGuiMessageDialog();
-    bool processGuiMobTypeWidgets(
-        string* customCatName, MobType** type, const string& packFilter = ""
+    void getGuiNavCurText(
+        size_t curItemIdx, size_t listSize, size_t selectionSize,
+        const string& itemTerm, bool showTermNormally,
+        const string& curItemName, bool curItemNameMono,
+        string* outText1, bool* outText1Disabled,
+        string* outText2, bool* outText2Mono
     );
-    bool processGuiNewDialogPackWidgets(string* pack);
-    void processGuiNewPackDialog();
-    bool processGuiSizeWidgets(
-        const char* label, Point& size, float vSpeed,
-        bool keepAspectRatio, bool keepArea,
-        float minSize
-    );
-    void processGuiStatusBarText();
-    void processGuiUnsavedChangesDialog();
     void panelTitle(const char* title);
     
     void angleVisualizer(float angle);

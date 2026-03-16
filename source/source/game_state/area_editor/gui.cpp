@@ -78,7 +78,7 @@ void AreaEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load an area or create a new one",
-        std::bind(&AreaEditor::processGuiLoadDialog, this)
+        std::bind(&AreaEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AreaEditor::closeLoadDialog, this);
@@ -91,7 +91,7 @@ void AreaEditor::openLoadDialog() {
 void AreaEditor::openNewDialog() {
     openDialog(
         "Create a new area",
-        std::bind(&AreaEditor::processGuiNewDialog, this)
+        std::bind(&AreaEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -111,7 +111,7 @@ void AreaEditor::openNewDialog() {
 void AreaEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&AreaEditor::processGuiOptionsDialog, this)
+        std::bind(&AreaEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AreaEditor::closeOptionsDialog, this);
@@ -222,7 +222,7 @@ void AreaEditor::processGuiControlPanel() {
 /**
  * @brief Processes the Dear ImGui area deletion dialog for this frame.
  */
-void AreaEditor::processGuiDeleteAreaDialog() {
+void AreaEditor::processGuiDialogDeleteArea() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -288,7 +288,7 @@ void AreaEditor::processGuiDeleteAreaDialog() {
  * @param widgetMaxValue Maximum value for the value widget.
  * @param tooltip Tooltip for the value widget.
  */
-void AreaEditor::processGuiMedalAwardMedalWidgets(
+void AreaEditor::processGuiWidgetsMedalAwardMedal(
     int* requirementPtr, const string& widgetLabel,
     int widgetMinValue, int widgetMaxValue,
     const string& tooltip
@@ -316,7 +316,7 @@ void AreaEditor::processGuiMedalAwardMedalWidgets(
  * @param widgetLabel Label for the radio widget.
  * @param tooltip Tooltip for the radio widget.
  */
-void AreaEditor::processGuiMedalAwardModeWidgets(
+void AreaEditor::processGuiWidgetsMedalAwardMode(
     int value, const string& widgetLabel, const string& tooltip
 ) {
     //Radio button.
@@ -333,7 +333,7 @@ void AreaEditor::processGuiMedalAwardModeWidgets(
 /**
  * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
-void AreaEditor::processGuiLoadDialog() {
+void AreaEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.areaEd.history,
@@ -756,7 +756,7 @@ void AreaEditor::processGuiMenuBar() {
  * @brief Processes the Dear ImGui "change mission preset" dialog
  * for this frame.
  */
-void AreaEditor::processGuiMissionPresetDialog() {
+void AreaEditor::processGuiDialogMissionPreset() {
     //Explanation text.
     string explanationStr =
         "If you change the preset, whatever mission data\n"
@@ -1041,12 +1041,12 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void AreaEditor::processGuiNewDialog() {
+void AreaEditor::processGuiDialogNew() {
     string problem;
     bool hitCreateButton = false;
     
     //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
+    processGuiWidgetsNewDialogPack(&newDialog.pack);
     
     //Internal name input.
     ImGui::Spacer();
@@ -1141,7 +1141,7 @@ void AreaEditor::processGuiNewDialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void AreaEditor::processGuiOptionsDialog() {
+void AreaEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
     
@@ -1584,7 +1584,7 @@ void AreaEditor::processGuiPanelDetails() {
                 //Tree shadow size value.
                 Point shadowSize = selectedShadow->pose.size;
                 if(
-                    processGuiSizeWidgets(
+                    processGuiWidgetsSize(
                         "Size", shadowSize,
                         1.0f, selectedShadowKeepAspectRatio, false,
                         -FLT_MAX
@@ -2438,7 +2438,7 @@ void AreaEditor::processGuiPanelInfo() {
             }
             setTooltip(
                 "Point of the (game world) day at which gameplay ends.\n"
-                "Only applicable in missions with some sort of time limits.\n"
+                "Only applicable in missions with time limits.\n"
                 "Set this to the same as the area start time to make\n"
                 "the day time frozen.",
                 "", WIDGET_EXPLANATION_DRAG
@@ -3284,7 +3284,7 @@ void AreaEditor::processGuiPanelMissionEssentials() {
             openDialog(
                 "Change mission preset",
                 std::bind(
-                    &AreaEditor::processGuiMissionPresetDialog, this
+                    &AreaEditor::processGuiDialogMissionPreset, this
                 )
             );
             dialogs.back()->customSize = Point(400, 0);
@@ -3630,21 +3630,21 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
         ImGui::Text("Medal award mode:");
         
         //Medal award mode widgets.
-        processGuiMedalAwardModeWidgets(
+        processGuiWidgetsMedalAwardMode(
             0, "Points",
             "The player's final medal depends on how many points they\n"
             "got in different criteria."
         );
         
         ImGui::SameLine();
-        processGuiMedalAwardModeWidgets(
+        processGuiWidgetsMedalAwardMode(
             1, "Clear",
             "The player's final medal depends on whether they have\n"
             "cleared the mission (platinum) or failed (nothing)."
         );
         
         ImGui::SameLine();
-        processGuiMedalAwardModeWidgets(
+        processGuiWidgetsMedalAwardMode(
             2, "Participation",
             "The player's final medal depends on whether they have played\n"
             "the mission (platinum) or not (nothing)."
@@ -3674,14 +3674,14 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
             ImGui::Text("Medal point requirements:");
             
             //Medal point requirement widgets.
-            processGuiMedalAwardMedalWidgets(
+            processGuiWidgetsMedalAwardMedal(
                 &game.curArea->mission.bronzeReq, "Bronze",
                 INT_MIN, game.curArea->mission.silverReq - 1,
                 "To get a bronze medal, the player needs at least these\n"
                 "many points. Fewer than this, and the player gets no medal."
             );
             
-            processGuiMedalAwardMedalWidgets(
+            processGuiWidgetsMedalAwardMedal(
                 &game.curArea->mission.silverReq, "Silver",
                 game.curArea->mission.bronzeReq + 1,
                 game.curArea->mission.goldReq - 1,
@@ -3689,7 +3689,7 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
                 "many points."
             );
             
-            processGuiMedalAwardMedalWidgets(
+            processGuiWidgetsMedalAwardMedal(
                 &game.curArea->mission.goldReq, "Gold",
                 game.curArea->mission.silverReq + 1,
                 game.curArea->mission.platinumReq - 1,
@@ -3697,7 +3697,7 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
                 "many points."
             );
             
-            processGuiMedalAwardMedalWidgets(
+            processGuiWidgetsMedalAwardMedal(
                 &game.curArea->mission.platinumReq, "Platinum",
                 game.curArea->mission.goldReq + 1, INT_MAX,
                 "To get a platinum medal, the player needs at least these\n"
@@ -4393,7 +4393,7 @@ void AreaEditor::processGuiPanelMob() {
     if(mPtr->type) customCatName = mPtr->type->customCategoryName;
     MobType* type = mPtr->type;
     
-    if(processGuiMobTypeWidgets(&customCatName, &type)) {
+    if(processGuiWidgetsMobType(&customCatName, &type)) {
         registerChange("object type change");
         mPtr->type = type;
         lastMobCustomCatName = "";
@@ -5260,7 +5260,7 @@ void AreaEditor::processGuiPanelPaths() {
             //Select stops with label popup.
             static string labelName;
             if(
-                processGuiInputPopup("selectStops", "Label:", &labelName, true)
+                processGuiPopupInput("selectStops", "Label:", &labelName, true)
             ) {
                 selectPathStopsWithLabel(labelName);
             }
@@ -5702,7 +5702,7 @@ void AreaEditor::processGuiPanelSector() {
             if(sPtr->hazard) {
                 hazardIname = sPtr->hazard->manifest->internalName;
             }
-            if(processGuiHazardManagementWidgets(hazardIname)) {
+            if(processGuiWidgetsHazardManagement(hazardIname)) {
                 registerChange("sector hazard changes");
                 sPtr->hazard =
                     hazardIname.empty() ?
@@ -6112,7 +6112,7 @@ void AreaEditor::processGuiPanelTools() {
         );
         
         //Reference size value.
-        processGuiSizeWidgets(
+        processGuiWidgetsSize(
             "Size", referenceSize, 1.0f,
             referenceKeepAspectRatio, false,
             AREA_EDITOR::REFERENCE_MIN_SIZE

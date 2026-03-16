@@ -25,7 +25,7 @@ using std::string;
 
 
 namespace AREA_EDITOR {
-extern const ALLEGRO_COLOR BLOCKING_COLOR;
+extern const ALLEGRO_COLOR BLOCKING_SECTOR_COLOR;
 extern const float COMFY_DIST;
 extern const float CROSS_SECTION_POINT_RADIUS;
 extern const float CURSOR_SNAP_DISTANCE;
@@ -508,19 +508,16 @@ private:
     //Cross-section Z legend window's end coordinates.
     Point crossSectionZWindowEnd;
     
-    //When showing a hazard in the list, this is the index of the current one.
-    size_t curHazardIdx = INVALID;
-    
     //Mission mob group index currently being edited.
     size_t curMobGroupIdx = INVALID;
     
     //The current transformation widget.
     TransformationWidget curTransformationWidget;
     
-    //Last known cursor snap position for heavy snap modes.
+    //Last known cursor snap position for performance-heavy snap modes.
     Point cursorSnapCache;
     
-    //Time left to update the cursor snap position for heavy snap modes.
+    //Timer for cursor snap position updates for performance-heavy snap modes.
     Timer cursorSnapTimer = Timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL);
     
     //Debug tool -- show the edge indexes?
@@ -1015,7 +1012,6 @@ private:
     SECTOR_SPLIT_RESULT getSectorSplitEvaluation();
     Sector* getSectorUnderPoint(const Point& p) const;
     Vertex* getVertexUnderPoint(const Point& p) const;
-    void goToUndoHistoryPoint(size_t p);
     void goToProblem();
     void handleLineError();
     void homogenizeSelectedEdges();
@@ -1173,23 +1169,12 @@ private:
     void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
-    void processGuiDeleteAreaDialog();
-    void processGuiMedalAwardCriterionWidgets(
-        int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-        const string& widgetLabel, const string& tooltip
-    );
-    void processGuiMedalAwardMedalWidgets(
-        int* requirementPtr, const string& widgetLabel,
-        int widgetMinValue, int widgetMaxValue,
-        const string& tooltip
-    );
-    void processGuiMedalAwardModeWidgets(
-        int value, const string& widgetLabel, const string& tooltip
-    );
-    void processGuiLoadDialog();
-    void processGuiNewDialog();
+    void processGuiDialogDeleteArea();
+    void processGuiDialogLoad();
+    void processGuiDialogMissionPreset();
+    void processGuiDialogNew();
+    void processGuiDialogOptions();
     void processGuiMenuBar();
-    void processGuiMissionPresetDialog();
     void processGuiMobScriptVars(MobGen* gen);
     void processGuiPanelDetails();
     void processGuiPanelEdge();
@@ -1199,10 +1184,10 @@ private:
     void processGuiPanelMain();
     void processGuiPanelMission();
     void processGuiPanelMissionBriefing();
-    void processGuiPanelMissionEssentials();
     void processGuiPanelMissionEndCond();
-    void processGuiPanelMissionMedalAward();
+    void processGuiPanelMissionEssentials();
     void processGuiPanelMissionHudItems();
+    void processGuiPanelMissionMedalAward();
     void processGuiPanelMissionMobGroups();
     void processGuiPanelMissionScoreCriteria();
     void processGuiPanelMob();
@@ -1213,9 +1198,16 @@ private:
     void processGuiPanelReview();
     void processGuiPanelSector();
     void processGuiPanelTools();
-    void processGuiOptionsDialog();
     void processGuiStatusBar();
     void processGuiToolbar();
+    void processGuiWidgetsMedalAwardMedal(
+        int* requirementPtr, const string& widgetLabel,
+        int widgetMinValue, int widgetMaxValue,
+        const string& tooltip
+    );
+    void processGuiWidgetsMedalAwardMode(
+        int value, const string& widgetLabel, const string& tooltip
+    );
     void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);

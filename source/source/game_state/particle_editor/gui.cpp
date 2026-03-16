@@ -54,7 +54,7 @@ void ParticleEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load a particle generator",
-        std::bind(&ParticleEditor::processGuiLoadDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeLoadDialog, this);
@@ -67,7 +67,7 @@ void ParticleEditor::openLoadDialog() {
 void ParticleEditor::openNewDialog() {
     openDialog(
         "Create a new particle generator",
-        std::bind(&ParticleEditor::processGuiNewDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -87,7 +87,7 @@ void ParticleEditor::openNewDialog() {
 void ParticleEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&ParticleEditor::processGuiOptionsDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeOptionsDialog, this);
@@ -189,7 +189,7 @@ void ParticleEditor::processGuiControlPanel() {
  * @brief Processes the Dear ImGui particle generator deletion dialog
  * for this frame.
  */
-void ParticleEditor::processGuiDeletePartGenDialog() {
+void ParticleEditor::processGuiDialogDeletePartGen() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -248,7 +248,7 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void ParticleEditor::processGuiLoadDialog() {
+void ParticleEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.partEd.history,
@@ -453,12 +453,12 @@ void ParticleEditor::processGuiMenuBar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void ParticleEditor::processGuiNewDialog() {
+void ParticleEditor::processGuiDialogNew() {
     string problem;
     bool hitCreateButton = false;
     
     //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
+    processGuiWidgetsNewDialogPack(&newDialog.pack);
     
     //Internal name input.
     ImGui::Spacer();
@@ -542,7 +542,7 @@ void ParticleEditor::processGuiNewDialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void ParticleEditor::processGuiOptionsDialog() {
+void ParticleEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
     

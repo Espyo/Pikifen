@@ -81,7 +81,7 @@ void AnimationEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load an animation database or create a new one",
-        std::bind(&AnimationEditor::processGuiLoadDialog, this)
+        std::bind(&AnimationEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AnimationEditor::closeLoadDialog, this);
@@ -94,7 +94,7 @@ void AnimationEditor::openLoadDialog() {
 void AnimationEditor::openNewDialog() {
     openDialog(
         "Create a new animation database",
-        std::bind(&AnimationEditor::processGuiNewDialog, this)
+        std::bind(&AnimationEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -117,7 +117,7 @@ void AnimationEditor::openNewDialog() {
 void AnimationEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&AnimationEditor::processGuiOptionsDialog, this)
+        std::bind(&AnimationEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AnimationEditor::closeOptionsDialog, this);
@@ -229,7 +229,7 @@ void AnimationEditor::processGuiControlPanel() {
  * @brief Processes the Dear ImGui animation database deletion dialog
  * for this frame.
  */
-void AnimationEditor::processGuiDeleteAnimDbDialog() {
+void AnimationEditor::processGuiDialogDeleteAnimDb() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -297,7 +297,7 @@ void AnimationEditor::processGuiHitboxHazards() {
     if(curHitbox->hazard) {
         hazardIname = curHitbox->hazard->manifest->internalName;
     }
-    if(processGuiHazardManagementWidgets(hazardIname)) {
+    if(processGuiWidgetsHazardManagement(hazardIname)) {
         changesMgr.markAsChanged();
         curHitbox->hazard =
             hazardIname.empty() ?
@@ -311,7 +311,7 @@ void AnimationEditor::processGuiHitboxHazards() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void AnimationEditor::processGuiLoadDialog() {
+void AnimationEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.animEd.history,
@@ -525,12 +525,12 @@ void AnimationEditor::processGuiMenuBar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void AnimationEditor::processGuiNewDialog() {
+void AnimationEditor::processGuiDialogNew() {
     string problem;
     bool hitCreateButton = false;
     
     //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
+    processGuiWidgetsNewDialogPack(&newDialog.pack);
     
     //Global animation radio.
     ImGui::Spacer();
@@ -564,7 +564,7 @@ void AnimationEditor::processGuiNewDialog() {
         
     } else {
         //Mob type widgets.
-        processGuiMobTypeWidgets(
+        processGuiWidgetsMobType(
             &newDialog.customMobCat, &newDialog.mobTypePtr,
             newDialog.pack
         );
@@ -662,7 +662,7 @@ void AnimationEditor::processGuiNewDialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void AnimationEditor::processGuiOptionsDialog() {
+void AnimationEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
     
@@ -1013,7 +1013,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
     
     //Create animation popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "createAnim", "New animation's name:", &newAnimName, true
         )
     ) {
@@ -1117,7 +1117,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
     
     //Rename animation popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "renameAnim", "New name:", &renameAnimName, true
         )
     ) {
@@ -1163,7 +1163,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
     
     //Create body part popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "newPartName", "New body part's name:", &newPartName, true
         )
     ) {
@@ -1254,7 +1254,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
         
         //Rename body part popup.
         if(
-            processGuiInputPopup(
+            processGuiPopupInput(
                 "renamePart", "New name:", &renamePartName, true
             )
         ) {
@@ -1946,7 +1946,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Create sprite popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "createSprite", "New sprite's name:", &newSpriteName, true
         )
     ) {
@@ -2054,7 +2054,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Rename sprite popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "renameSprite", "New name:", &renameSpriteName, true
         )
     ) {
@@ -2156,7 +2156,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Resize sprite popup.
     if(
-        processGuiInputPopup(
+        processGuiPopupInput(
             "resizeSprite", "Resize sprite by:", &resizeSpriteMult
         )
     ) {
@@ -2911,7 +2911,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         
         //Size value.
         if(
-            processGuiSizeWidgets(
+            processGuiWidgetsSize(
                 "Size", curSprite->topPose.size, 0.01f,
                 topKeepAspectRatio, false, ANIM_EDITOR::TOP_MIN_SIZE
             )
@@ -3026,7 +3026,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
     
     //Sprite scale value.
     if(
-        processGuiSizeWidgets(
+        processGuiWidgetsSize(
             "Scale", curSprite->tf.scale,
             0.005f, curSpriteKeepAspectRatio, curSpriteKeepArea,
             -FLT_MAX

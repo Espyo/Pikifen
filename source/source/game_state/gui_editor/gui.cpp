@@ -52,7 +52,7 @@ void GuiEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load a GUI definition",
-        std::bind(&GuiEditor::processGuiLoadDialog, this)
+        std::bind(&GuiEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeLoadDialog, this);
@@ -66,7 +66,7 @@ void GuiEditor::openNewDialog() {
     newDialog.mustUpdate = true;
     openDialog(
         "Create a new GUI definition",
-        std::bind(&GuiEditor::processGuiNewDialog, this)
+        std::bind(&GuiEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -85,7 +85,7 @@ void GuiEditor::openNewDialog() {
 void GuiEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&GuiEditor::processGuiOptionsDialog, this)
+        std::bind(&GuiEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeOptionsDialog, this);
@@ -185,7 +185,7 @@ void GuiEditor::processGuiControlPanel() {
  * @brief Processes the Dear ImGui GUI definition deletion dialog
  * for this frame.
  */
-void GuiEditor::processGuiDeleteGuiDefDialog() {
+void GuiEditor::processGuiDialogDeleteGuiDef() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -244,7 +244,7 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void GuiEditor::processGuiLoadDialog() {
+void GuiEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.guiEd.history,
@@ -455,10 +455,10 @@ void GuiEditor::processGuiMenuBar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void GuiEditor::processGuiNewDialog() {
+void GuiEditor::processGuiDialogNew() {
     //Pack widgets.
     newDialog.mustUpdate |=
-        processGuiNewDialogPackWidgets(&newDialog.pack);
+        processGuiWidgetsNewDialogPack(&newDialog.pack);
         
     //GUI definition combo.
     vector<string> guiFiles;
@@ -537,7 +537,7 @@ void GuiEditor::processGuiNewDialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void GuiEditor::processGuiOptionsDialog() {
+void GuiEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
     
@@ -1002,7 +1002,7 @@ void GuiEditor::processGuiPanelItem() {
     
     //Size values.
     if(
-        processGuiSizeWidgets(
+        processGuiWidgetsSize(
             "Size", curItemPtr->size, 0.10f, false, false, 0.10f
         )
     ) {
@@ -1196,7 +1196,7 @@ void GuiEditor::processGuiPanelItems() {
             
             //Rename item popup.
             if(
-                processGuiInputPopup(
+                processGuiPopupInput(
                     "renameItem", "New name:", &renameItemName, true
                 )
             ) {
