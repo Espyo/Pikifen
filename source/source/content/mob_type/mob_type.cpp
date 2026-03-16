@@ -324,7 +324,7 @@ void MobType::loadFromDataNode(
         vector<string> words = split(vulnNode->value);
         float percentage = defaultVulnerability;
         string statusName;
-        bool statusOverrides = false;
+        bool applyOriginalStatus = false;
         bool invulnBlockedBySectors = false;
         if(!words.empty()) {
             percentage = s2f(words[0]);
@@ -335,7 +335,7 @@ void MobType::loadFromDataNode(
             }
         }
         if(words.size() >= 3) {
-            statusOverrides = s2b(words[2]);
+            applyOriginalStatus = s2b(words[2]);
         }
         if(words.size() >= 4) {
             invulnBlockedBySectors = s2b(words[3]);
@@ -362,8 +362,9 @@ void MobType::loadFromDataNode(
                 hazardVulnerabilities[&(hazardIt->second)];
             vuln.effectMult = percentage / 100.0f;
             if(!statusName.empty()) {
-                vuln.overrideStatus = statusIt->second;
+                vuln.additionalStatus = statusIt->second;
             }
+            vuln.applyOriginalStatus = applyOriginalStatus;
             vuln.invulnBlockedBySectors = invulnBlockedBySectors;
         }
     }
@@ -449,7 +450,7 @@ void MobType::loadFromDataNode(
         } else {
             auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
             s.effectMult = percentage / 100.0f;
-            s.overrideStatus = statusIt->second;
+            s.additionalStatus = statusIt->second;
             
         }
     }
@@ -494,8 +495,9 @@ void MobType::loadFromDataNode(
             auto& s = statusVulnerabilities[svIt->second];
             s.effectMult = percentage / 100.0f;
             if(statusOverrideIt != game.content.statusTypes.list.end()) {
-                s.overrideStatus = statusOverrideIt->second;
+                s.additionalStatus = statusOverrideIt->second;
             }
+            s.applyOriginalStatus = true;
         }
         
     }

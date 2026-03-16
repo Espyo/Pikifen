@@ -324,10 +324,10 @@ void Mob::applyHazard(Hazard* hazPtr, Mob* fromMob) {
     MobType::Vulnerability vuln = getHazardVulnerability(hazPtr);
 
     //If the status should be overridden, apply it instead.
-    if (vuln.overrideStatus) {
-        applyStatus(vuln.overrideStatus, false, true, fromMob);
+    if (vuln.additionalStatus) {
+        applyStatus(vuln.additionalStatus, false, true, fromMob);
     }
-    else if (vuln.effectMult != 0.0f) {
+    else if (vuln.effectMult != 0.0f && vuln.applyOriginalStatus) {
         //Otherwise, apply the status as long as we are not immune to it.
         for (size_t e = 0; e < hazPtr->effects.size(); e++) {
             applyStatus(hazPtr->effects[e], false, true, fromMob);
@@ -450,10 +450,10 @@ void Mob::applyStatusEffects(
     //Get the vulnerabilities to this status.
     auto vulnIt = type->statusVulnerabilities.find(s);
     if(vulnIt != type->statusVulnerabilities.end()) {
-        if(vulnIt->second.overrideStatus) {
+        if(vulnIt->second.additionalStatus) {
             //It must instead receive this status.
             applyStatus(
-                vulnIt->second.overrideStatus, givenByParent, fromHazard,
+                vulnIt->second.additionalStatus, givenByParent, fromHazard,
                 fromMob, false, forceReapplyResetTime
             );
             return;
@@ -1302,10 +1302,10 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     
     if(
         v != victim->type->spikeDamageVulnerabilities.end() &&
-        v->second.overrideStatus
+        v->second.additionalStatus
     ) {
         victim->applyStatus(
-            v->second.overrideStatus, false, false, this
+            v->second.additionalStatus, false, false, this
         );
     }
 }
