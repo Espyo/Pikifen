@@ -365,10 +365,13 @@ public:
     //How many enemies exist in total.
     size_t enemyTotal = 0;
     
-    //How many enemy points collected so far.
-    size_t enemyPointsObtained = 0;
+    //How many enemy defeat points collected so far.
+    size_t enemyDefeatPointsObtained = 0;
     
-    //How many enemy points exist in total.
+    //How many enemy collection points collected so far.
+    size_t enemyCollectionPointsObtained = 0;
+    
+    //How many enemy defeat/collection points exist in total.
     size_t enemyPointsTotal = 0;
     
     //Whether the mission ended in a clear or a failure.

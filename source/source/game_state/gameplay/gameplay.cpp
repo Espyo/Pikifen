@@ -1199,7 +1199,8 @@ void GameplayState::load() {
     treasurePointsTotal = 0;
     enemyDefeats = 0;
     enemyTotal = 0;
-    enemyPointsObtained = 0;
+    enemyDefeatPointsObtained = 0;
+    enemyCollectionPointsObtained = 0;
     enemyPointsTotal = 0;
     curLeadersInMissionExit = 0;
     missionScore = 0;

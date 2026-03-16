@@ -1521,7 +1521,7 @@ string MissionScoreCriterionTypeDefeatPts::getName() const {
 size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->enemyPointsObtained;
+    return gameplay->enemyDefeatPointsObtained;
 }
 
 

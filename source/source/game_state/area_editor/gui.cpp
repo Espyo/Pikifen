@@ -2390,21 +2390,9 @@ void AreaEditor::processGuiPanelInfo() {
         bool hasTimeLimit = false;
         float missionMin = 0;
         if(game.curArea->type == AREA_TYPE_MISSION) {
-            if(
-                game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                hasTimeLimit = true;
-                missionMin =
-                    game.curArea->missionOld.goalAmount / 60.0f;
-            } else if(
-                hasFlag(
-                    game.curArea->missionOld.failConditions,
-                    getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-                )
-            ) {
-                hasTimeLimit = true;
-                missionMin =
-                    game.curArea->missionOld.failTimeLimit / 60.0f;
+            hasTimeLimit = game.curArea->mission.timeLimit != 0;
+            if(hasTimeLimit) {
+                missionMin = game.curArea->mission.timeLimit / 60.0f;
             }
         }
         int dayStartMin = (int) game.curArea->dayTimeStart;

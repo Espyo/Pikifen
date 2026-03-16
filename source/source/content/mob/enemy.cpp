@@ -157,8 +157,17 @@ void Enemy::finishDyingClassSpecifics() {
  */
 int Enemy::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
-        *applicableInThisMission =
-            game.curArea->missionOld.pointsPerEnemyPoint != 0;
+        *applicableInThisMission = false;
+        for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+            MissionScoreCriterion* cPtr =
+                &game.curArea->mission.scoreCriteria[c];
+            if(
+                cPtr->type == MISSION_SCORE_CRITERION_COLLECTION_PTS ||
+                cPtr->type == MISSION_SCORE_CRITERION_DEFEAT_PTS
+            ) {
+                *applicableInThisMission = true;
+            }
+        }
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     return (int) eneType->points;
@@ -187,9 +196,7 @@ void Enemy::revive() {
 void Enemy::startDyingClassSpecifics() {
     //Numbers.
     game.states.gameplay->enemyDefeats++;
-    if(!game.curArea->missionOld.enemyPointsOnCollection) {
-        game.states.gameplay->enemyPointsObtained += eneType->points;
-    }
+    game.states.gameplay->enemyDefeatPointsObtained += eneType->points;
     game.statistics.enemyDefeats++;
     
     //Music.
