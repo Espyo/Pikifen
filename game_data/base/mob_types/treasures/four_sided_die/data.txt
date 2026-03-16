@@ -1,0 +1,21 @@
+name = Four Sided Die
+description = Some sort of pyramid with many engravings on it.
+
+can_walk_on_others = true
+height = 32
+max_carriers = 4
+points = 75
+pushable = false
+pushes = true
+radius = 24
+weight = 2
+
+area_editor_properties {
+    Color {
+        var = color
+        type = list
+        def_value = Random
+        list = Red; Yellow; Blue; Purple; Random
+        tooltip = Which color the die should be.
+    }
+}

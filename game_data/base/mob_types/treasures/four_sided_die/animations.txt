@@ -1,0 +1,62 @@
+name=Four Sided Die animations
+description=Animations for the Four Sided Die.
+maker=Helodity
+version=1.1.0
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling_red{
+				duration=0.1000
+			}
+		}
+	}
+	idling_blue{
+		frames{
+			idling_blue{
+				duration=0.1000
+			}
+		}
+	}
+	idling_purple{
+		frames{
+			idling_purple{
+				duration=0.1000
+			}
+		}
+	}
+	idling_yellow{
+		frames{
+			idling_yellow{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_blue{
+		file=treasures/four_sided_die
+		file_pos=0.0000 0.0000
+		file_size=56.0000 48.0000
+		offset=0.0000 -9.0000
+	}
+	idling_purple{
+		file=treasures/four_sided_die
+		file_pos=0.0000 50.0000
+		file_size=56.0000 48.0000
+		offset=0.0000 -9.0000
+	}
+	idling_red{
+		file=treasures/four_sided_die
+		file_pos=57.0000 0.0000
+		file_size=56.0000 48.0000
+		offset=0.0000 -9.0000
+	}
+	idling_yellow{
+		file=treasures/four_sided_die
+		file_pos=57.0000 50.0000
+		file_size=56.0000 48.0000
+		offset=0.0000 -9.0000
+	}
+}
+body_parts

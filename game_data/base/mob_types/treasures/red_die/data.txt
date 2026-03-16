@@ -1,0 +1,23 @@
+name = Red Die
+description = Some sort of red cube filled with dots.
+
+can_walk_on_others = true
+height = 49
+max_carriers = 4
+points = 50
+pushable = false
+pushes = true
+radius = 25
+rectangular_dimensions = 50 50
+weight = 2
+
+area_editor_properties {
+    Top value {
+        var = side
+        type = int
+        def_value = 0
+        min_value = 0
+        max_value = 6
+        tooltip = Which number is face up. 0 for random.
+    }
+}

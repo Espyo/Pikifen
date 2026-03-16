@@ -1,0 +1,26 @@
+init {
+    set_var side 0
+}
+
+script {
+    idle_waiting {
+        on_enter {
+            if $side = 0
+                get_random_int side 1 6
+            end_if
+            if $side = 1
+                set_animation idling
+            else_if $side = 2
+                set_animation idling_02
+            else_if $side = 3
+                set_animation idling_03
+            else_if $side = 4
+                set_animation idling_04
+            else_if $side = 5
+                set_animation idling_05
+            else_if $side = 6
+                set_animation idling_06
+            end_if
+        }
+    }
+}
