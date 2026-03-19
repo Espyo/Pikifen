@@ -740,8 +740,17 @@ void AreaMenu::load() {
         ) {
             Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
             MissionRecord record;
-            
-            loadAreaMissionRecord(&missionRecords, areaPtr, record);
+            bool ported;
+            loadAreaMissionRecord(&missionRecords, areaPtr, record, &ported);
+
+            if(ported) {
+                string missionRecordEntryName =
+                    getMissionRecordEntryName(areaPtr);
+                record.saveToDataNode(
+                    missionRecords.getChildByName(missionRecordEntryName)
+                );
+                saveMissionRecords(&missionRecords);
+            }
             
             areaRecords.push_back(record);
         }

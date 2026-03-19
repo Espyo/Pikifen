@@ -186,6 +186,7 @@ bool monoSelectable(
 bool openManual(const string& page);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
+bool saveMissionRecords(DataNode* fileNode);
 void saveOptions();
 void saveScreenshot();
 void saveStatistics();

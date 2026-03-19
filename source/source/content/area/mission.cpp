@@ -1408,9 +1408,14 @@ bool MissionRecord::isPlatinum(const MissionData& mission) {
  * @brief Loads a record from a data node.
  *
  * @param node The record's node.
+ * @param ported If not nullptr, whether the record needed to be ported from
+ * an older version's format is returned here.
  * @return Whether it succeeded.
  */
-bool MissionRecord::loadFromDataNode(DataNode* node) {
+bool MissionRecord::loadFromDataNode(
+    DataNode* node, bool* ported
+) {
+    if(ported) *ported = false;
     vector<string> parts = split(node->value, ";", true);
     
     if(parts.size() == 3) {
@@ -1420,6 +1425,7 @@ bool MissionRecord::loadFromDataNode(DataNode* node) {
             score = s2i(parts[1]);
             date = parts[2];
         }
+        if(ported) *ported = true;
     } else if(parts.size() == 2) {
         score = s2i(parts[0]);
         date = parts[1];

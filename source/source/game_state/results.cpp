@@ -1000,10 +1000,7 @@ void Results::load() {
         newRecord.date = getCurrentTime(false);
         
         newRecord.saveToDataNode(entryNode);
-        savedSuccessfully =
-            missionRecords.saveFile(
-                FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
-            );
+        savedSuccessfully = saveMissionRecords(&missionRecords);
             
         if(!savedSuccessfully) {
             showSystemMessageBox(

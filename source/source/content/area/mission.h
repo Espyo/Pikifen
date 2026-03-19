@@ -633,7 +633,7 @@ struct MissionRecord {
     //--- Public function declarations ---
     
     void clear();
-    bool loadFromDataNode(DataNode* node);
+    bool loadFromDataNode(DataNode* node, bool* ported = nullptr);
     bool saveToDataNode(DataNode* node);
     bool isPlatinum(const MissionData& mission);
     

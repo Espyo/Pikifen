@@ -283,7 +283,7 @@ void StatsMenu::populateStatsList() {
     ) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
-        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record);
+        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record, nullptr);
         if(!record.date.empty()) {
             missionClears++;
         }

@@ -1171,7 +1171,25 @@ void reportFatalError(const string& s, const DataNode* dn) {
 void saveMakerTools() {
     DataNode file("", "");
     game.makerTools.saveToDataNode(&file);
+    file.getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
+}
+
+
+/**
+ * @brief Saves the mission records file.
+ *
+ * @param fileNode Data node representing the file to save.
+ * @return Whether it succeeded.
+ */
+bool saveMissionRecords(DataNode* fileNode) {
+    fileNode->getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
+    return
+        fileNode->saveFile(
+            FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        );
 }
 
 
@@ -1181,6 +1199,8 @@ void saveMakerTools() {
 void saveOptions() {
     DataNode file("", "");
     game.options.saveToDataNode(&file);
+    file.getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
 }
 
@@ -1258,6 +1278,7 @@ void saveStatistics() {
     const Statistics& s = game.statistics;
     GetterWriter sGW(&statsFile);
     
+    sGW.write("engine_version", getEngineVersionString());
     sGW.write("startups", s.startups);
     sGW.write("runtime", s.runtime);
     sGW.write("gameplay_time", s.gameplayTime);
