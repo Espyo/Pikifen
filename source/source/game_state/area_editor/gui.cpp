@@ -4131,6 +4131,19 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 );
                 
             }
+
+            //Highlight on radar checkbox.
+            bool highlightOnRadar = groupPtr->highlightOnRadar;
+            if(
+                ImGui::Checkbox("Highlight on radar", &highlightOnRadar)
+            ) {
+                registerChange("mission mob group highlight change");
+                groupPtr->highlightOnRadar = highlightOnRadar;
+            }
+            setTooltip(
+                "Whether mobs in this group should appear with a glowing\n"
+                "icon on top of them on the radar."
+            );
             
             if(groupPtr->type == MISSION_MOB_GROUP_CUSTOM) {
             

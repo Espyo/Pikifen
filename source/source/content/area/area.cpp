@@ -1545,6 +1545,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         
         cRS.set("type", typeInt);
         cRS.set("enemies_need_collection", newGroup.enemiesNeedCollection);
+        cRS.set("highlight_on_radar", newGroup.highlightOnRadar);
         cRS.set("mob_idxs", mobIdxsStr);
         
         newGroup.type = (MISSION_MOB_GROUP) typeInt;
@@ -1732,6 +1733,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.mobGroups.push_back(
         MissionMobGroup {
             .type = MISSION_MOB_GROUP_TREASURES,
+            .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
@@ -1765,6 +1767,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         MissionMobGroup {
             .type = MISSION_MOB_GROUP_ENEMIES,
             .enemiesNeedCollection = enemyPointsOnCollection,
+            .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
@@ -2600,6 +2603,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         
         cGW.write("type", groupPtr->type);
         cGW.write("enemies_need_collection", groupPtr->enemiesNeedCollection);
+        cGW.write("highlight_on_radar", groupPtr->highlightOnRadar);
         
         vector<string> mobIdxsStrVec;
         for(auto m : groupPtr->mobIdxs) {

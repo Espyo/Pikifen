@@ -485,6 +485,9 @@ struct MissionMobGroup {
     //For enemies, do they need to be collected, or is it enough for them
     //to be defeated?
     bool enemiesNeedCollection = false;
+
+    //Whether it should be highlighted on the radar.
+    bool highlightOnRadar = true;
     
     //List of mob indexes, if applicable.
     vector<size_t> mobIdxs;

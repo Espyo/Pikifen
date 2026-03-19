@@ -1123,40 +1123,28 @@ void PauseMenu::drawRadar(
     
     //Mission mob markers.
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            Mob* mPtr = game.states.gameplay->mobs.all[m];
-            bool addMarker = false;
-            for(
-                size_t g = 0;
-                g < game.states.gameplay->missionMobGroups.size(); g++
-            ) {
-                auto it =
-                    game.states.gameplay->missionMobGroups[g].remaining.find(
-                        mPtr
-                    );
-                if(
-                    it !=
-                    game.states.gameplay->missionMobGroups[g].remaining.end()
-                ) {
-                    addMarker = true;
-                    break;
-                }
+        for(
+            size_t g = 0; g < game.states.gameplay->missionMobGroups.size(); g++
+        ) {
+            MissionMobGroupStatus* gPtr =
+                &game.states.gameplay->missionMobGroups[g];
+            if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
+            for(Mob* mPtr : gPtr->remaining) {
+                float alpha =
+                    (
+                        sin(
+                            game.timePassed *
+                            PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
+                        )
+                    ) + 0.5f;
+                alpha = std::clamp(alpha, 0.0f, 1.0f);
+                drawBitmap(
+                    game.sysContent.bmpMissionMob, mPtr->pos,
+                    Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) /
+                    radarView.cam.zoom,
+                    0.0f, multAlpha(game.config.guiColors.gold, alpha)
+                );
             }
-            if(!addMarker) continue;
-            
-            float alpha =
-                (
-                    sin(
-                        game.timePassed *
-                        PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
-                    )
-                ) + 0.5f;
-            alpha = std::clamp(alpha, 0.0f, 1.0f);
-            drawBitmap(
-                game.sysContent.bmpMissionMob, mPtr->pos,
-                Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) / radarView.cam.zoom,
-                0.0f, multAlpha(game.config.guiColors.gold, alpha)
-            );
         };
     }
     
