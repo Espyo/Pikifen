@@ -285,22 +285,6 @@ FsmEventDef* FsmInst::getEvent(const FSM_EV type) const {
 
 
 /**
- * @brief Returns the index of the specified state.
- *
- * @param name The state's name.
- * @return The index, or INVALID if it doesn't exist.
- */
-size_t FsmInst::getStateIdx(const string& name) const {
-    for(size_t s = 0; s < script->scriptDef->fsm.states.size(); s++) {
-        if(script->scriptDef->fsm.states[s]->name == name) {
-            return s;
-        }
-    }
-    return INVALID;
-}
-
-
-/**
  * @brief Returns a string containing the FSM state history.
  * This is used for debugging engine or content problems.
  *
@@ -326,6 +310,22 @@ string FsmInst::getStateHistoryStr() const {
 
 
 /**
+ * @brief Returns the index of the specified state.
+ *
+ * @param name The state's name.
+ * @return The index, or INVALID if it doesn't exist.
+ */
+size_t FsmInst::getStateIdx(const string& name) const {
+    for(size_t s = 0; s < script->scriptDef->fsm.states.size(); s++) {
+        if(script->scriptDef->fsm.states[s]->name == name) {
+            return s;
+        }
+    }
+    return INVALID;
+}
+
+
+/**
  * @brief Initializes the FSM.
  */
 void FsmInst::init() {
@@ -343,6 +343,7 @@ void FsmInst::init() {
         curState = game.dummyScriptState;
     };
 }
+
 
 /**
  * @brief Runs an event in the current state, if it exists.

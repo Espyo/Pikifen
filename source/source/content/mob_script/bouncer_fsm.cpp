@@ -70,7 +70,7 @@ void BouncerFsm::createFsm(MobType* typ) {
 /**
  * @brief When something is on top of the bouncer.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the mob that is on top of it.
  * @param info2 Unused.
  */
@@ -158,11 +158,13 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When it must change to the bouncing animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setBouncingAnimation(ScriptVM* scriptVM, void* info1, void* info2) {
+void BouncerFsm::setBouncingAnimation(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     
     bouPtr->setAnimation(BOUNCER_ANIM_BOUNCING);
@@ -172,11 +174,13 @@ void BouncerFsm::setBouncingAnimation(ScriptVM* scriptVM, void* info1, void* inf
 /**
  * @brief When it must change to the idling animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setIdlingAnimation(ScriptVM* scriptVM, void* info1, void* info2) {
+void BouncerFsm::setIdlingAnimation(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     
     bouPtr->setAnimation(

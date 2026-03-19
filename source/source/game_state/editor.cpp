@@ -371,6 +371,72 @@ void Editor::drawOpErrorCursor() {
 
 
 /**
+ * @brief Returns the text that should be displayed on the Dear ImGui list
+ * navigation count text widget.
+ *
+ * @param curItemIdx Index of the current item.
+ * @param listSize Current size of the list.
+ * @param selectionSize How many items are currently selected.
+ * @param itemTerm Term that designates what an item is, in singular.
+ * @param showTermNormally If false, the term won't show up when showing
+ * the usual text, but will show up when grammatically needed.
+ * @param curItemName If this item has a name, specify it here.
+ * @param curItemNameMono Whether the current item name's text widget should
+ * use a monospace font.
+ * @param outText1 The first text widget's contents are returned here.
+ * @param outText1Disabled Whether the first text widget is disabled is
+ * returned here.
+ * @param outText2 If not nullptr, the second text widget's contents are
+ * returned here, if any.
+ * @param outText2Mono If not nullptr, whether the second text widget uses
+ * a monospace font is returned here.
+ */
+void Editor::getGuiNavCurText(
+    size_t curItemIdx, size_t listSize, size_t selectionSize,
+    const string& itemTerm, bool showTermNormally, const string& curItemName,
+    bool curItemNameMono,
+    string* outText1, bool* outText1Disabled,
+    string* outText2, bool* outText2Mono
+) {
+    const string termLowerSingular = strToLower(itemTerm);
+    const string termLowerPlural = strToLower(itemTerm) + "s";
+    const string termUpperSingular = strToSentence(itemTerm);
+    
+    *outText1 = "";
+    *outText1Disabled = false;
+    if(outText2) *outText2 = "";
+    if(outText2Mono) *outText2Mono = false;
+    
+    if(listSize == 0) {
+        *outText1 = "(No " + termLowerPlural + ")";
+        *outText1Disabled = true;
+        return;
+    }
+    
+    if(selectionSize != 1) {
+        *outText1 =
+            i2s(selectionSize) + " / " + i2s(listSize) + " " +
+            termLowerPlural + " selected";
+        *outText1Disabled = selectionSize == 0;
+        return;
+    }
+    
+    const string curIdxStr =
+        listSize == 0 || selectionSize == 0 || curItemIdx == INVALID ?
+        "--" :
+        ("#" + i2s(curItemIdx + 1));
+    *outText1 = showTermNormally ? (termUpperSingular + " ") : "";
+    (*outText1) += curIdxStr + " / " + i2s(listSize);
+    
+    if(!curItemName.empty()) {
+        (*outText1) += ":";
+        if(outText2) *outText2 = curItemName;
+        if(outText2Mono) *outText2Mono = curItemNameMono;
+    }
+}
+
+
+/**
  * @brief Returns the maximum number of history entries for this editor.
  *
  * @return The size.
@@ -1939,6 +2005,31 @@ void Editor::processDialogs() {
 
 
 /**
+ * @brief Processes the setup for the "widget" that controls the canvas.
+ */
+void Editor::processGuiCanvas() {
+    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
+    ImGui::EndChild();
+    isMouseInGui =
+        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+    ImVec2 itemSize = ImGui::GetItemRectSize();
+    ImVec2 itemTL = ImGui::GetItemRectMin();
+    
+    Point curTL(itemTL.x, itemTL.y);
+    Point curSize(itemSize.x, itemSize.y);
+    Point curCenter = curTL + curSize / 2.0f;
+    if(
+        curCenter != game.editorsView.center ||
+        curSize != game.editorsView.size
+    ) {
+        game.editorsView.center = curCenter;
+        game.editorsView.size = curSize;
+        game.editorsView.updateTransformations();
+    }
+}
+
+
+/**
  * @brief Processes the base content editing warning dialog for this frame.
  */
 void Editor::processGuiDialogBaseContent() {
@@ -2089,27 +2180,276 @@ void Editor::processGuiDialogBitmap() {
 
 
 /**
- * @brief Processes the setup for the "widget" that controls the canvas.
+ * @brief Processes the help dialog widgets.
  */
-void Editor::processGuiCanvas() {
-    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
-    ImGui::EndChild();
-    isMouseInGui =
-        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-    ImVec2 itemSize = ImGui::GetItemRectSize();
-    ImVec2 itemTL = ImGui::GetItemRectMin();
-    
-    Point curTL(itemTL.x, itemTL.y);
-    Point curSize(itemSize.x, itemSize.y);
-    Point curCenter = curTL + curSize / 2.0f;
-    if(
-        curCenter != game.editorsView.center ||
-        curSize != game.editorsView.size
-    ) {
-        game.editorsView.center = curCenter;
-        game.editorsView.size = curSize;
-        game.editorsView.updateTransformations();
+void Editor::processGuiDialogHelp() {
+    //Text.
+    ImGui::BeginAlign();
+    static int textWidth = 0;
+    if(textWidth != 0) {
+        ImGui::AlignNextItems({textWidth});
     }
+    ImGui::TextWrapped("%s", helpDialogMessage.c_str());
+    textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
+    
+    //Open manual button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
+    if(ImGui::Button("Open manual", ImVec2(100, 40))) {
+        openManual(helpDialogPage);
+    }
+    
+    //Ok button.
+    ImGui::SameLine();
+    if(ImGui::Button("Ok", ImVec2(100, 40))) {
+        closeTopDialog();
+    }
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui message dialog widgets.
+ */
+void Editor::processGuiDialogMessage() {
+    //Text.
+    static int textWidth = 0;
+    ImGui::BeginAlign();
+    if(textWidth != 0) {
+        ImGui::AlignNextItems({textWidth});
+    }
+    ImGui::TextWrapped("%s", messageDialogMessage.c_str());
+    textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
+    
+    //Ok button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
+    if(ImGui::Button("Ok", ImVec2(100, 40))) {
+        closeTopDialog();
+    }
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the dialog for creating a new pack.
+ */
+void Editor::processGuiDialogNewPack() {
+    static string internalName = "my_pack";
+    static string name = "My pack!";
+    static string description;
+    static string maker;
+    string problem;
+    bool hitCreateButton = false;
+    
+    //Internal name input.
+    ImGui::FocusOnInputText(needsNewPackTextFocus);
+    if(
+        monoInputText(
+            "Internal name", &internalName,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Internal name of the new pack.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Name input.
+    ImGui::Spacer();
+    if(
+        ImGui::InputText(
+            "Name", &name,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip("Proper name of the new pack.");
+    
+    //Description input.
+    if(
+        ImGui::InputText(
+            "Description", &description,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip("A description of the pack.");
+    
+    //Maker input.
+    if(
+        ImGui::InputText(
+            "Maker", &maker,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip("Who made the pack. So really, type your name or nickname.");
+    
+    //File explanation text.
+    string explanation =
+        "These properties can be changed later by editing the "
+        "pack's data file.\n"
+        "There are also more properties; check the manual "
+        "for more information!\n"
+        "Pack data file path: ";
+    ImGui::TextWrapped("%s", explanation.c_str());
+    
+    //Path text.
+    string pathToShow =
+        internalName.empty() ?
+        "" :
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        internalName + "/" +
+        FILE_NAMES::PACK_DATA;
+    monoText("%s", pathToShow.c_str());
+    
+    //Open manual button.
+    if(ImGui::Button("Open manual")) {
+        openManual("making.html#packs");
+    }
+    
+    //Check if everything's ok.
+    if(internalName.empty()) {
+        problem = "You have to type an internal name first!";
+    } else if(!isInternalNameGood(internalName)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
+    } else {
+        for(const auto& p : game.content.packs.manifestsWithBase) {
+            if(internalName == p) {
+                problem = "There is already a pack with that internal name!";
+                break;
+            }
+        }
+    }
+    if(name.empty()) {
+        problem = "You have to type a name first!";
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create pack", ImVec2(100, 40))) {
+        hitCreateButton = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    setTooltip(
+        problem.empty() ? "Create the pack!" : problem
+    );
+    ImGui::EndAlign();
+    
+    //Creation logic.
+    if(hitCreateButton) {
+        if(!problem.empty()) return;
+        game.content.addNewPack(
+            internalName, name, description, maker
+        );
+        for(
+            size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++
+        ) {
+            if(game.content.packs.manifestsWithBase[p] == internalName) {
+                newContentDialogPackIdx = (int) p;
+                break;
+            }
+        }
+        internalName.clear();
+        name.clear();
+        description.clear();
+        maker.clear();
+        closeTopDialog();
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui unsaved changes confirmation dialog
+ * for this frame.
+ */
+void Editor::processGuiDialogUnsavedChanges() {
+    //Explanation 1 text.
+    size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
+    string explanation1Str =
+        "You have " +
+        amountStr((int) nrUnsavedChanges, "unsaved change") +
+        ", made in the last " +
+        timeToStr3(
+            changesMgr.getUnsavedTimeDelta(),
+            "h", "m", "s",
+            TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
+            TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
+        ) +
+        ".";
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation1Str.c_str());
+    ImGui::Text("%s", explanation1Str.c_str());
+    ImGui::EndAlign();
+    
+    //Explanation 3 text.
+    string explanation2Str =
+        "Do you want to save before " +
+        changesMgr.getUnsavedWarningActionLong() + "?";
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation2Str.c_str());
+    ImGui::Text("%s", explanation2Str.c_str());
+    ImGui::EndAlign();
+    
+    //Cancel button.
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({180, 180, 180});
+    if(ImGui::Button("Cancel", ImVec2(180, 30))) {
+        closeTopDialog();
+    }
+    setTooltip("Never mind and go back.", "Esc");
+    
+    //Save and then perform the action.
+    ImGui::SameLine();
+    if(ImGui::Button("Save", ImVec2(180, 30))) {
+        closeTopDialog();
+        const std::function<bool()>& saveCallback =
+            changesMgr.getUnsavedWarningSaveCallback();
+        const std::function<void()>& actionCallback =
+            changesMgr.getUnsavedWarningActionCallback();
+        if(saveCallback()) {
+            actionCallback();
+        }
+    }
+    setTooltip(
+        "Save first, then " +
+        changesMgr.getUnsavedWarningActionShort() + ".",
+        "Ctrl + S"
+    );
+    
+    //Perform the action without saving button.
+    ImGui::SameLine();
+    if(ImGui::Button("Don't save", ImVec2(180, 30))) {
+        closeTopDialog();
+        const std::function<void()> actionCallback =
+            changesMgr.getUnsavedWarningActionCallback();
+        actionCallback();
+    }
+    string dontSaveTooltip =
+        changesMgr.getUnsavedWarningActionShort() +
+        " without saving.";
+    dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
+    setTooltip(dontSaveTooltip, "Ctrl + D");
+    ImGui::EndAlign();
 }
 
 
@@ -2192,67 +2532,6 @@ void Editor::processGuiEditorStyle() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets that let users select a hazard.
- *
- * @param selectedHazardIname Internal name of the currently selected hazard.
- * @return Whether the hazard was changed.
- */
-bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
-    //Hazard combo.
-    int selectedHazardIdx = -1;
-    vector<string> allHazardINames = {""};
-    vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
-    for(auto& h : game.content.hazards.list) {
-        allHazardINames.push_back(h.first);
-        allHazardLabels.push_back(h.second.name + "##" + h.first);
-        if(selectedHazardIname == h.first) {
-            selectedHazardIdx = (int) allHazardLabels.size() - 1;
-        }
-    }
-    
-    if(selectedHazardIdx == -1) selectedHazardIdx = 0;
-    
-    bool result =
-        ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
-        
-    selectedHazardIname = allHazardINames[selectedHazardIdx];
-    
-    return result;
-}
-
-
-/**
- * @brief Processes the help dialog widgets.
- */
-void Editor::processGuiDialogHelp() {
-    //Text.
-    ImGui::BeginAlign();
-    static int textWidth = 0;
-    if(textWidth != 0) {
-        ImGui::AlignNextItems({textWidth});
-    }
-    ImGui::TextWrapped("%s", helpDialogMessage.c_str());
-    textWidth = ImGui::GetItemRectSize().x;
-    ImGui::EndAlign();
-    
-    //Open manual button.
-    ImGui::Spacer();
-    ImGui::BeginAlign();
-    ImGui::AlignNextItems({100, 100});
-    if(ImGui::Button("Open manual", ImVec2(100, 40))) {
-        openManual(helpDialogPage);
-    }
-    
-    //Ok button.
-    ImGui::SameLine();
-    if(ImGui::Button("Ok", ImVec2(100, 40))) {
-        closeTopDialog();
-    }
-    ImGui::EndAlign();
-}
-
-
-/**
  * @brief Processes the widgets that show the editor's history.
  *
  * @param history History data to use.
@@ -2308,161 +2587,6 @@ void Editor::processGuiHistory(
         
         ImGui::TreePop();
         
-    }
-}
-
-
-/**
- * @brief Processes a popup, if applicable, opened via openInputPopup(),
- * filling it with a text input for the user to type something in.
- *
- * @param label Name of the popup.
- * @param prompt What to prompt to the user. e.g.: "New name:"
- * @param text Pointer to the starting text, as well as the user's final text.
- * @param useMonospace Whether to use a monospace font.
- * @return Whether the user pressed Return or the Ok button.
- */
-bool Editor::processGuiPopupInput(
-    const char* label, const char* prompt, string* text, bool useMonospace
-) {
-    bool ret = false;
-    if(ImGui::BeginPopup(label)) {
-        if(escapeWasPressed) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::Text("%s", prompt);
-        ImGui::FocusOnInputText(needsInputPopupTextFocus);
-        bool hitEnter = false;
-        if(useMonospace) {
-            hitEnter =
-                monoInputText(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        } else {
-            hitEnter =
-                ImGui::InputText(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        }
-        if(hitEnter) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        if(ImGui::Button("Cancel")) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::SameLine();
-        if(ImGui::Button("Ok")) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-    return ret;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation create widget. This does not
- * alter the list in any way.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if a new item is created.
- * @param listSize Current size of the list.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @return Whether the user pressed the button.
- */
-bool Editor::processGuiNavWidgetNew(
-    size_t* curItemIdx, size_t listSize,
-    const string& customButtonId, float buttonScale
-) {
-    bool pressed = false;
-    
-    if(
-        ImGui::ImageButton(
-            "createItemButton", editorIcons[EDITOR_ICON_ADD],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(listSize == 0 || *curItemIdx == INVALID) {
-            *curItemIdx = 0;
-        } else {
-            (*curItemIdx)++;
-        }
-        pressed = true;
-    }
-    
-    return pressed;
-}
-
-
-/**
- * @brief Returns the text that should be displayed on the Dear ImGui list
- * navigation count text widget.
- *
- * @param curItemIdx Index of the current item.
- * @param listSize Current size of the list.
- * @param selectionSize How many items are currently selected.
- * @param itemTerm Term that designates what an item is, in singular.
- * @param showTermNormally If false, the term won't show up when showing
- * the usual text, but will show up when grammatically needed.
- * @param curItemName If this item has a name, specify it here.
- * @param curItemNameMono Whether the current item name's text widget should
- * use a monospace font.
- * @param outText1 The first text widget's contents are returned here.
- * @param outText1Disabled Whether the first text widget is disabled is
- * returned here.
- * @param outText2 If not nullptr, the second text widget's contents are
- * returned here, if any.
- * @param outText2Mono If not nullptr, whether the second text widget uses
- * a monospace font is returned here.
- */
-void Editor::getGuiNavCurText(
-    size_t curItemIdx, size_t listSize, size_t selectionSize,
-    const string& itemTerm, bool showTermNormally, const string& curItemName,
-    bool curItemNameMono,
-    string* outText1, bool* outText1Disabled,
-    string* outText2, bool* outText2Mono
-) {
-    const string termLowerSingular = strToLower(itemTerm);
-    const string termLowerPlural = strToLower(itemTerm) + "s";
-    const string termUpperSingular = strToSentence(itemTerm);
-    
-    *outText1 = "";
-    *outText1Disabled = false;
-    if(outText2) *outText2 = "";
-    if(outText2Mono) *outText2Mono = false;
-    
-    if(listSize == 0) {
-        *outText1 = "(No " + termLowerPlural + ")";
-        *outText1Disabled = true;
-        return;
-    }
-    
-    if(selectionSize != 1) {
-        *outText1 =
-            i2s(selectionSize) + " / " + i2s(listSize) + " " +
-            termLowerPlural + " selected";
-        *outText1Disabled = selectionSize == 0;
-        return;
-    }
-    
-    const string curIdxStr =
-        listSize == 0 || selectionSize == 0 || curItemIdx == INVALID ?
-        "--" :
-        ("#" + i2s(curItemIdx + 1));
-    *outText1 = showTermNormally ? (termUpperSingular + " ") : "";
-    (*outText1) += curIdxStr + " / " + i2s(listSize);
-    
-    if(!curItemName.empty()) {
-        (*outText1) += ":";
-        if(outText2) *outText2 = curItemName;
-        if(outText2Mono) *outText2Mono = curItemNameMono;
     }
 }
 
@@ -2632,6 +2756,34 @@ void Editor::processGuiNavBoxStart(
 
 
 /**
+ * @brief Processes the Dear ImGui list navigation widgets setup.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly to prevent errors.
+ * @param listSize Current size of the list.
+ * @param allowInvalid If true, INVALID becomes a possible value for the index.
+ * If false, INVALID becomes 0.
+ */
+void Editor::processGuiNavSetup(
+    size_t* curItemIdx, size_t listSize, bool allowInvalid
+) {
+    if(*curItemIdx == INVALID) {
+        if(allowInvalid) {
+            return;
+        } else {
+            *curItemIdx = 0;
+        }
+    }
+    
+    if(listSize == 0) {
+        *curItemIdx = allowInvalid ? INVALID : 0;
+    } else if(*curItemIdx >= listSize) {
+        *curItemIdx = listSize - 1;
+    }
+}
+
+
+/**
  * @brief Processes the Dear ImGui list navigation delete widget. This
  * does not alter the list in any way.
  *
@@ -2735,6 +2887,41 @@ bool Editor::processGuiNavWidgetMoveRight(
 
 
 /**
+ * @brief Processes the Dear ImGui list navigation create widget. This does not
+ * alter the list in any way.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a new item is created.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavWidgetNew(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "createItemButton", editorIcons[EDITOR_ICON_ADD],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(listSize == 0 || *curItemIdx == INVALID) {
+            *curItemIdx = 0;
+        } else {
+            (*curItemIdx)++;
+        }
+        pressed = true;
+    }
+    
+    return pressed;
+}
+
+
+/**
  * @brief Processes the Dear ImGui list navigation next widget.
  *
  * @param curItemIdx Pointer to the index of the current item.
@@ -2801,56 +2988,124 @@ bool Editor::processGuiNavWidgetPrev(
 
 
 /**
- * @brief Processes the Dear ImGui list navigation widgets setup.
+ * @brief Processes a popup, if applicable, opened via openInputPopup(),
+ * filling it with a text input for the user to type something in.
  *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly to prevent errors.
- * @param listSize Current size of the list.
- * @param allowInvalid If true, INVALID becomes a possible value for the index.
- * If false, INVALID becomes 0.
+ * @param label Name of the popup.
+ * @param prompt What to prompt to the user. e.g.: "New name:"
+ * @param text Pointer to the starting text, as well as the user's final text.
+ * @param useMonospace Whether to use a monospace font.
+ * @return Whether the user pressed Return or the Ok button.
  */
-void Editor::processGuiNavSetup(
-    size_t* curItemIdx, size_t listSize, bool allowInvalid
+bool Editor::processGuiPopupInput(
+    const char* label, const char* prompt, string* text, bool useMonospace
 ) {
-    if(*curItemIdx == INVALID) {
-        if(allowInvalid) {
-            return;
-        } else {
-            *curItemIdx = 0;
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        if(escapeWasPressed) {
+            ImGui::CloseCurrentPopup();
         }
+        ImGui::Text("%s", prompt);
+        ImGui::FocusOnInputText(needsInputPopupTextFocus);
+        bool hitEnter = false;
+        if(useMonospace) {
+            hitEnter =
+                monoInputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        } else {
+            hitEnter =
+                ImGui::InputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        }
+        if(hitEnter) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if(ImGui::Button("Cancel")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Ok")) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
-    
-    if(listSize == 0) {
-        *curItemIdx = allowInvalid ? INVALID : 0;
-    } else if(*curItemIdx >= listSize) {
-        *curItemIdx = listSize - 1;
+    return ret;
+}
+
+
+/**
+ * @brief Process the text widget in the status bar.
+ *
+ * This is responsible for showing the text if there's anything to say,
+ * showing "Ready." if there's nothing to say,
+ * and coloring the text in case it's an error that needs to be flashed red.
+ */
+void Editor::processGuiStatusBarText() {
+    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
+    if(errorFlashTimeRatio > 0.0f) {
+        ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
+        ALLEGRO_COLOR normalColor;
+        normalColor.r = normalColorV.x;
+        normalColor.g = normalColorV.y;
+        normalColor.b = normalColorV.z;
+        normalColor.a = normalColorV.w;
+        ALLEGRO_COLOR errorFlashColor =
+            interpolateColor(
+                errorFlashTimeRatio,
+                0.0f, 1.0f,
+                normalColor, al_map_rgb(255, 0, 0)
+            );
+        ImVec4 errorFlashColorV;
+        errorFlashColorV.x = errorFlashColor.r;
+        errorFlashColorV.y = errorFlashColor.g;
+        errorFlashColorV.z = errorFlashColor.b;
+        errorFlashColorV.w = errorFlashColor.a;
+        ImGui::PushStyleColor(ImGuiCol_Text, errorFlashColorV);
+    }
+    ImGui::Text("%s", (statusText.empty() ? "Ready." : statusText.c_str()));
+    if(errorFlashTimeRatio) {
+        ImGui::PopStyleColor();
     }
 }
 
 
 /**
- * @brief Processes the Dear ImGui message dialog widgets.
+ * @brief Processes the Dear ImGui widgets that let users select a hazard.
+ *
+ * @param selectedHazardIname Internal name of the currently selected hazard.
+ * @return Whether the hazard was changed.
  */
-void Editor::processGuiDialogMessage() {
-    //Text.
-    static int textWidth = 0;
-    ImGui::BeginAlign();
-    if(textWidth != 0) {
-        ImGui::AlignNextItems({textWidth});
+bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
+    //Hazard combo.
+    int selectedHazardIdx = -1;
+    vector<string> allHazardINames = {""};
+    vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
+    for(auto& h : game.content.hazards.list) {
+        allHazardINames.push_back(h.first);
+        allHazardLabels.push_back(h.second.name + "##" + h.first);
+        if(selectedHazardIname == h.first) {
+            selectedHazardIdx = (int) allHazardLabels.size() - 1;
+        }
     }
-    ImGui::TextWrapped("%s", messageDialogMessage.c_str());
-    textWidth = ImGui::GetItemRectSize().x;
-    ImGui::EndAlign();
     
-    //Ok button.
-    ImGui::Spacer();
-    ImGui::BeginAlign();
-    ImGui::AlignNextItems({100});
-    if(ImGui::Button("Ok", ImVec2(100, 40))) {
-        closeTopDialog();
-    }
-    ImGui::EndAlign();
+    if(selectedHazardIdx == -1) selectedHazardIdx = 0;
+    
+    bool result =
+        ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
+        
+    selectedHazardIname = allHazardINames[selectedHazardIdx];
+    
+    return result;
 }
+
 
 
 /**
@@ -3056,149 +3311,6 @@ bool Editor::processGuiWidgetsNewDialogPack(string* pack) {
 
 
 /**
- * @brief Processes the dialog for creating a new pack.
- */
-void Editor::processGuiDialogNewPack() {
-    static string internalName = "my_pack";
-    static string name = "My pack!";
-    static string description;
-    static string maker;
-    string problem;
-    bool hitCreateButton = false;
-    
-    //Internal name input.
-    ImGui::FocusOnInputText(needsNewPackTextFocus);
-    if(
-        monoInputText(
-            "Internal name", &internalName,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip(
-        "Internal name of the new pack.\n"
-        "Remember to keep it simple, type in lowercase, and use underscores!"
-    );
-    
-    //Name input.
-    ImGui::Spacer();
-    if(
-        ImGui::InputText(
-            "Name", &name,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip("Proper name of the new pack.");
-    
-    //Description input.
-    if(
-        ImGui::InputText(
-            "Description", &description,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip("A description of the pack.");
-    
-    //Maker input.
-    if(
-        ImGui::InputText(
-            "Maker", &maker,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip("Who made the pack. So really, type your name or nickname.");
-    
-    //File explanation text.
-    string explanation =
-        "These properties can be changed later by editing the "
-        "pack's data file.\n"
-        "There are also more properties; check the manual "
-        "for more information!\n"
-        "Pack data file path: ";
-    ImGui::TextWrapped("%s", explanation.c_str());
-    
-    //Path text.
-    string pathToShow =
-        internalName.empty() ?
-        "" :
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        internalName + "/" +
-        FILE_NAMES::PACK_DATA;
-    monoText("%s", pathToShow.c_str());
-    
-    //Open manual button.
-    if(ImGui::Button("Open manual")) {
-        openManual("making.html#packs");
-    }
-    
-    //Check if everything's ok.
-    if(internalName.empty()) {
-        problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(internalName)) {
-        problem =
-            "The internal name should only have lowercase letters,\n"
-            "numbers, and underscores!";
-    } else {
-        for(const auto& p : game.content.packs.manifestsWithBase) {
-            if(internalName == p) {
-                problem = "There is already a pack with that internal name!";
-                break;
-            }
-        }
-    }
-    if(name.empty()) {
-        problem = "You have to type a name first!";
-    }
-    
-    //Create button.
-    ImGui::Spacer();
-    ImGui::BeginAlign();
-    ImGui::AlignNextItems({100});
-    if(!problem.empty()) {
-        ImGui::BeginDisabled();
-    }
-    if(ImGui::Button("Create pack", ImVec2(100, 40))) {
-        hitCreateButton = true;
-    }
-    if(!problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    setTooltip(
-        problem.empty() ? "Create the pack!" : problem
-    );
-    ImGui::EndAlign();
-    
-    //Creation logic.
-    if(hitCreateButton) {
-        if(!problem.empty()) return;
-        game.content.addNewPack(
-            internalName, name, description, maker
-        );
-        for(
-            size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++
-        ) {
-            if(game.content.packs.manifestsWithBase[p] == internalName) {
-                newContentDialogPackIdx = (int) p;
-                break;
-            }
-        }
-        internalName.clear();
-        name.clear();
-        description.clear();
-        maker.clear();
-        closeTopDialog();
-    }
-}
-
-
-/**
  * @brief Process the width and height widgets that allow a user to
  * specify the size of something.
  *
@@ -3281,117 +3393,6 @@ bool Editor::processGuiWidgetsSize(
     }
     
     return ret;
-}
-
-
-/**
- * @brief Process the text widget in the status bar.
- *
- * This is responsible for showing the text if there's anything to say,
- * showing "Ready." if there's nothing to say,
- * and coloring the text in case it's an error that needs to be flashed red.
- */
-void Editor::processGuiStatusBarText() {
-    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
-    if(errorFlashTimeRatio > 0.0f) {
-        ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
-        ALLEGRO_COLOR normalColor;
-        normalColor.r = normalColorV.x;
-        normalColor.g = normalColorV.y;
-        normalColor.b = normalColorV.z;
-        normalColor.a = normalColorV.w;
-        ALLEGRO_COLOR errorFlashColor =
-            interpolateColor(
-                errorFlashTimeRatio,
-                0.0f, 1.0f,
-                normalColor, al_map_rgb(255, 0, 0)
-            );
-        ImVec4 errorFlashColorV;
-        errorFlashColorV.x = errorFlashColor.r;
-        errorFlashColorV.y = errorFlashColor.g;
-        errorFlashColorV.z = errorFlashColor.b;
-        errorFlashColorV.w = errorFlashColor.a;
-        ImGui::PushStyleColor(ImGuiCol_Text, errorFlashColorV);
-    }
-    ImGui::Text("%s", (statusText.empty() ? "Ready." : statusText.c_str()));
-    if(errorFlashTimeRatio) {
-        ImGui::PopStyleColor();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui unsaved changes confirmation dialog
- * for this frame.
- */
-void Editor::processGuiDialogUnsavedChanges() {
-    //Explanation 1 text.
-    size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
-    string explanation1Str =
-        "You have " +
-        amountStr((int) nrUnsavedChanges, "unsaved change") +
-        ", made in the last " +
-        timeToStr3(
-            changesMgr.getUnsavedTimeDelta(),
-            "h", "m", "s",
-            TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
-            TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
-        ) +
-        ".";
-    ImGui::BeginAlign();
-    ImGui::AlignNextText(explanation1Str.c_str());
-    ImGui::Text("%s", explanation1Str.c_str());
-    ImGui::EndAlign();
-    
-    //Explanation 3 text.
-    string explanation2Str =
-        "Do you want to save before " +
-        changesMgr.getUnsavedWarningActionLong() + "?";
-    ImGui::BeginAlign();
-    ImGui::AlignNextText(explanation2Str.c_str());
-    ImGui::Text("%s", explanation2Str.c_str());
-    ImGui::EndAlign();
-    
-    //Cancel button.
-    ImGui::BeginAlign();
-    ImGui::AlignNextItems({180, 180, 180});
-    if(ImGui::Button("Cancel", ImVec2(180, 30))) {
-        closeTopDialog();
-    }
-    setTooltip("Never mind and go back.", "Esc");
-    
-    //Save and then perform the action.
-    ImGui::SameLine();
-    if(ImGui::Button("Save", ImVec2(180, 30))) {
-        closeTopDialog();
-        const std::function<bool()>& saveCallback =
-            changesMgr.getUnsavedWarningSaveCallback();
-        const std::function<void()>& actionCallback =
-            changesMgr.getUnsavedWarningActionCallback();
-        if(saveCallback()) {
-            actionCallback();
-        }
-    }
-    setTooltip(
-        "Save first, then " +
-        changesMgr.getUnsavedWarningActionShort() + ".",
-        "Ctrl + S"
-    );
-    
-    //Perform the action without saving button.
-    ImGui::SameLine();
-    if(ImGui::Button("Don't save", ImVec2(180, 30))) {
-        closeTopDialog();
-        const std::function<void()> actionCallback =
-            changesMgr.getUnsavedWarningActionCallback();
-        actionCallback();
-    }
-    string dontSaveTooltip =
-        changesMgr.getUnsavedWarningActionShort() +
-        " without saving.";
-    dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
-    setTooltip(dontSaveTooltip, "Ctrl + D");
-    ImGui::EndAlign();
 }
 
 
@@ -4432,6 +4433,8 @@ Editor::PickerItem::PickerItem(
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
+ * @param newCenter The new selection center.
+ * @param newSize The new selection size.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyTransformation(

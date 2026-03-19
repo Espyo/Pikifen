@@ -934,7 +934,9 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             );
             
         //Set its data to start sliding.
-        newPikmin->scriptVM.fsm.setState(PIKMIN_STATE_LEAVING_ONION, (void*) this);
+        newPikmin->scriptVM.fsm.setState(
+            PIKMIN_STATE_LEAVING_ONION, (void*) this
+        );
         vector<size_t> checkpoints;
         checkpoints.push_back(legHoleBPIdx);
         checkpoints.push_back(legFootBPIdx);

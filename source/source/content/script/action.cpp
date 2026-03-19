@@ -347,6 +347,7 @@ void ScriptActionBlockDef::unload() {
     list.clear();
 }
 
+
 #pragma endregion
 #pragma region Script action definition
 
@@ -412,7 +413,9 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     }
     
     if(!actionType) {
-        game.errors.report("Unknown script action name \"" + name + "\"!", node);
+        game.errors.report(
+            "Unknown script action name \"" + name + "\"!", node
+        );
         return false;
     }
     
@@ -440,8 +443,8 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         if(words.size() > actionType->parameters.size()) {
             game.errors.report(
                 "The \"" + actionType->name + "\" action only needs " +
-                i2s(actionType->parameters.size()) + " arguments, but this call "
-                "has " + i2s(words.size()) + "!",
+                i2s(actionType->parameters.size()) + " arguments, "
+                "but this call has " + i2s(words.size()) + "!",
                 node
             );
             return false;

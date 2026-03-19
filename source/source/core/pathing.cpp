@@ -350,22 +350,6 @@ void PathStop::clone(PathStop* destination) const {
 
 
 /**
- * @brief Returns the pointer of the link between this stop and another.
- * The links in memory are one-way, meaning that if the only link
- * is from the other stop to this one, it will not count.
- *
- * @param otherStop Path stop to check against.
- * @return The link, or nullptr if it does not link to that stop.
- */
-PathLink* PathStop::getLink(const PathStop* otherStop) const {
-    for(size_t l = 0; l < links.size(); l++) {
-        if(links[l]->endPtr == otherStop) return links[l];
-    }
-    return nullptr;
-}
-
-
-/**
  * @brief Removes and deletes the specified link.
  * Does nothing if there is no such link.
  *
@@ -396,6 +380,22 @@ void PathStop::deleteLink(const PathStop* otherStop) {
             return;
         }
     }
+}
+
+
+/**
+ * @brief Returns the pointer of the link between this stop and another.
+ * The links in memory are one-way, meaning that if the only link
+ * is from the other stop to this one, it will not count.
+ *
+ * @param otherStop Path stop to check against.
+ * @return The link, or nullptr if it does not link to that stop.
+ */
+PathLink* PathStop::getLink(const PathStop* otherStop) const {
+    for(size_t l = 0; l < links.size(); l++) {
+        if(links[l]->endPtr == otherStop) return links[l];
+    }
+    return nullptr;
 }
 
 

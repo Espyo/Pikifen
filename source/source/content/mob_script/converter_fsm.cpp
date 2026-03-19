@@ -102,7 +102,7 @@ void ConverterFsm::createFsm(MobType* typ) {
 /**
  * @brief Enters the idle state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -123,7 +123,7 @@ void ConverterFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Does a little bumpy animation after a leader touches it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -144,11 +144,13 @@ void ConverterFsm::bumped(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Makes the converter close after it gets bumped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::finishBeingBumped(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::finishBeingBumped(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Converter* conPtr = (Converter*) scriptVM->mob;
 
     conPtr->close();
@@ -158,7 +160,7 @@ void ConverterFsm::finishBeingBumped(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief Makes the converter vanish.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -172,11 +174,13 @@ void ConverterFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Handles an object bumping against it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ConverterFsm::handleObjectTouch(ScriptVM* scriptVM, void* info1, void* info2) {
+void ConverterFsm::handleObjectTouch(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Mob* bumper = (Mob*) info1;
 
     if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
@@ -188,7 +192,7 @@ void ConverterFsm::handleObjectTouch(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief Code to handle a Pikmin having been thrown inside.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -232,7 +236,7 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Makes the converter open up.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -252,7 +256,7 @@ void ConverterFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief Changes to the opening state or the dying state, depending
  * on whether it can still output Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -271,7 +275,7 @@ void ConverterFsm::openOrDie(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief Changes to the opening state or the spitting state, depending
  * on whether it has Pikmin in the buffer or not.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -289,7 +293,7 @@ void ConverterFsm::openOrSpit(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Spits out the converted seeds.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -309,7 +313,7 @@ void ConverterFsm::spit(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Makes the converter start dying.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

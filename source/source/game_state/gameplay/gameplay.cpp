@@ -499,7 +499,7 @@ void GameplayState::doLogic() {
  *
  * @param clear Is it a clear or a failure?
  * @param zeroTime Consider the time left as 0?
- * @param showTimesUpMsg Whether to use neutral mood messages and jingles,
+ * @param neutralMood Whether to use neutral mood messages and jingles,
  * or to pick based on the clear status.
  * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
  * normal mission end messages.

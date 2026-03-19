@@ -56,7 +56,7 @@ void TrackFsm::createFsm(MobType* typ) {
 /**
  * @brief What to do when the track is touched.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -94,7 +94,7 @@ void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the track spawns.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

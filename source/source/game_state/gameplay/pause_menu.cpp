@@ -230,6 +230,120 @@ void PauseMenu::addNewBullet(
 
 
 /**
+ * @brief Creates a button meant for changing to a page either to the left or
+ * to the right of the current one, and adds it to the GUI.
+ *
+ * @param targetPage Which page this button leads to.
+ * @param left True if this page is to the left of the current,
+ * false if to the right.
+ * @param curGui Pointer to the current page's GUI manager.
+ * @return The button.
+ */
+ButtonGuiItem* PauseMenu::addNewPageItem(
+    PAUSE_MENU_PAGE targetPage, bool left,
+    GuiManager* curGui
+) {
+    string pageName;
+    string tooltipName;
+    switch(targetPage) {
+    case PAUSE_MENU_PAGE_SYSTEM: {
+        pageName = "System";
+        tooltipName = "system";
+        break;
+    } case PAUSE_MENU_PAGE_RADAR: {
+        pageName = "Radar";
+        tooltipName = "radar";
+        break;
+    } case PAUSE_MENU_PAGE_STATUS: {
+        pageName = "Status";
+        tooltipName = "status";
+        break;
+    } case PAUSE_MENU_PAGE_MISSION: {
+        pageName = "Mission";
+        tooltipName = "mission";
+        break;
+    }
+    }
+    
+    ButtonGuiItem* newButton =
+        new ButtonGuiItem(
+        left ?
+        "< " + pageName :
+        pageName + " >",
+        game.sysContent.fntStandard,
+        game.config.guiColors.pageChange
+    );
+    newButton->onActivate =
+    [this, curGui, targetPage, left] (const Point&) {
+        switchPage(curGui, targetPage, left);
+    };
+    newButton->onGetTooltip =
+    [tooltipName] () {
+        return "Go to the pause menu's " + tooltipName + " page.";
+    };
+    
+    return newButton;
+}
+
+
+/**
+ * @brief Creates the buttons and input GUI items that allow switching pages,
+ * and adds them to the GUI.
+ *
+ * @param curPage Page that these creations belong to.
+ * @param curGui Pointer to the current page's GUI manager.
+ */
+void PauseMenu::addNewPageItems(
+    PAUSE_MENU_PAGE curPage, GuiManager* curGui
+) {
+    size_t curPageIdx =
+        std::distance(
+            pages.begin(),
+            std::find(pages.begin(), pages.end(), curPage)
+        );
+    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
+    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
+    
+    //Left page button.
+    ButtonGuiItem* leftPageButton =
+        addNewPageItem(pages[leftPageIdx], true, curGui);
+    curGui->addItem(leftPageButton, "left_page");
+    
+    //Left page input icon.
+    GuiItem* leftPageInput = new GuiItem();
+    leftPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curGui->addItem(leftPageInput, "left_page_input");
+    
+    //Right page button.
+    ButtonGuiItem* rightPageButton =
+        addNewPageItem(pages[rightPageIdx], false, curGui);
+    curGui->addItem(rightPageButton, "right_page");
+    
+    //Right page input icon.
+    GuiItem* rightPageInput = new GuiItem();
+    rightPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curGui->addItem(rightPageInput, "right_page_input");
+    
+    leftPageButtons[curGui] = leftPageButton;
+    rightPageButtons[curGui] = rightPageButton;
+}
+
+
+/**
  * @brief Creates and adds a new line to one of the Pikmin status boxes.
  *
  * @param list List to add to.
@@ -656,120 +770,6 @@ void PauseMenu::confirmOrLeave() {
     } else {
         startLeavingGameplay();
     }
-}
-
-
-/**
- * @brief Creates a button meant for changing to a page either to the left or
- * to the right of the current one, and adds it to the GUI.
- *
- * @param targetPage Which page this button leads to.
- * @param left True if this page is to the left of the current,
- * false if to the right.
- * @param curGui Pointer to the current page's GUI manager.
- * @return The button.
- */
-ButtonGuiItem* PauseMenu::addNewPageItem(
-    PAUSE_MENU_PAGE targetPage, bool left,
-    GuiManager* curGui
-) {
-    string pageName;
-    string tooltipName;
-    switch(targetPage) {
-    case PAUSE_MENU_PAGE_SYSTEM: {
-        pageName = "System";
-        tooltipName = "system";
-        break;
-    } case PAUSE_MENU_PAGE_RADAR: {
-        pageName = "Radar";
-        tooltipName = "radar";
-        break;
-    } case PAUSE_MENU_PAGE_STATUS: {
-        pageName = "Status";
-        tooltipName = "status";
-        break;
-    } case PAUSE_MENU_PAGE_MISSION: {
-        pageName = "Mission";
-        tooltipName = "mission";
-        break;
-    }
-    }
-    
-    ButtonGuiItem* newButton =
-        new ButtonGuiItem(
-        left ?
-        "< " + pageName :
-        pageName + " >",
-        game.sysContent.fntStandard,
-        game.config.guiColors.pageChange
-    );
-    newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point&) {
-        switchPage(curGui, targetPage, left);
-    };
-    newButton->onGetTooltip =
-    [tooltipName] () {
-        return "Go to the pause menu's " + tooltipName + " page.";
-    };
-    
-    return newButton;
-}
-
-
-/**
- * @brief Creates the buttons and input GUI items that allow switching pages,
- * and adds them to the GUI.
- *
- * @param curPage Page that these creations belong to.
- * @param curGui Pointer to the current page's GUI manager.
- */
-void PauseMenu::addNewPageItems(
-    PAUSE_MENU_PAGE curPage, GuiManager* curGui
-) {
-    size_t curPageIdx =
-        std::distance(
-            pages.begin(),
-            std::find(pages.begin(), pages.end(), curPage)
-        );
-    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
-    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
-    
-    //Left page button.
-    ButtonGuiItem* leftPageButton =
-        addNewPageItem(pages[leftPageIdx], true, curGui);
-    curGui->addItem(leftPageButton, "left_page");
-    
-    //Left page input icon.
-    GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
-    curGui->addItem(leftPageInput, "left_page_input");
-    
-    //Right page button.
-    ButtonGuiItem* rightPageButton =
-        addNewPageItem(pages[rightPageIdx], false, curGui);
-    curGui->addItem(rightPageButton, "right_page");
-    
-    //Right page input icon.
-    GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
-    curGui->addItem(rightPageInput, "right_page_input");
-    
-    leftPageButtons[curGui] = leftPageButton;
-    rightPageButtons[curGui] = rightPageButton;
 }
 
 
@@ -1397,20 +1397,6 @@ void PauseMenu::drawRadar(
 
 
 /**
- * @brief Fills the list of mission briefing notes.
- *
- * @param list List item to fill.
- */
-void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
-    vector<string> noteBPStrs =
-        game.curArea->mission.getNoteBulletPoints();
-    for(size_t p = 0; p < noteBPStrs.size(); p++) {
-        addNewBullet(list, noteBPStrs[p]);
-    }
-}
-
-
-/**
  * @brief Fills the list of mission medal award information.
  *
  * @param list List item to fill.
@@ -1420,6 +1406,20 @@ void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
         game.curArea->mission.getMedalAwardBulletPoints();
     for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
         addNewBullet(list, medalAwardBPStrs[p]);
+    }
+}
+
+
+/**
+ * @brief Fills the list of mission briefing notes.
+ *
+ * @param list List item to fill.
+ */
+void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
+    vector<string> noteBPStrs =
+        game.curArea->mission.getNoteBulletPoints();
+    for(size_t p = 0; p < noteBPStrs.size(); p++) {
+        addNewBullet(list, noteBPStrs[p]);
     }
 }
 

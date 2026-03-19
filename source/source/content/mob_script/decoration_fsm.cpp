@@ -64,7 +64,7 @@ void DecorationFsm::createFsm(MobType* typ) {
 /**
  * @brief When the decoration gets bumped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -78,7 +78,7 @@ void DecorationFsm::beBumped(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the decoration becomes idle.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -102,7 +102,7 @@ void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Check if the decoration should really get bumped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */

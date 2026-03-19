@@ -23,11 +23,11 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace RESULTS {
 
-//Time scale for the player's score circle in the score chart.
-const float CHART_CIRCLE_TIME_SCALE = 4.0f;
-
 //The player's score circle in the score chart grows and shrinks by this amount.
 const float CHART_CIRCLE_SIZE_OFFSET = 3.0f;
+
+//Time scale for the player's score circle in the score chart.
+const float CHART_CIRCLE_TIME_SCALE = 4.0f;
 
 //The final score label sways with this much of a time offset.
 const float FINAL_SCORE_LABEL_SWAY_TIME_OFFSET = -0.4f;
@@ -44,11 +44,11 @@ const string GUI_FILE_NAME = "results_menu";
 //Multiply the medal size by this.
 const float MEDAL_SCALE = 0.9f;
 
-//Multiply the medal shine size by this.
-const float MEDAL_SHINE_SCALE = 1.30f;
-
 //Time scale for the medal shine's rotation.
 const float MEDAL_SHINE_ROT_TIME_SCALE = 0.7f;
+
+//Multiply the medal shine size by this.
+const float MEDAL_SHINE_SCALE = 1.30f;
 
 //Name of the GUI definition file for the score chart information.
 const string SCORE_CHART_GUI_FILE_NAME = "results_menu_score_chart";
@@ -59,6 +59,51 @@ const string SCORING_GUI_FILE_NAME = "results_menu_scoring";
 //Name of the GUI definition file for the stats.
 const string STATS_GUI_FILE_NAME = "results_menu_stats";
 
+}
+
+
+/**
+ * @brief Creates and adds a new bullet point to one of the list GUI items.
+ *
+ * @param list What list item to add to.
+ * @param label Label text of this bullet point.
+ * @param value Value of this bullet point.
+ * @param color Color.
+ */
+void Results::addNewBulletPoint(
+    GuiItem* list, const string& label, const string& value,
+    const ALLEGRO_COLOR& color
+) {
+    size_t idx = list->children.size() / 2.0f;
+    const float BP_HEIGHT = 0.12f;
+    const float BP_PADDING = 0.02f;
+    const float BP_OFFSET = 0.01f;
+    const float centerY =
+        (BP_OFFSET + BP_HEIGHT / 2.0f) +
+        ((BP_HEIGHT + BP_PADDING) * idx);
+        
+    BulletGuiItem* labelBullet =
+        new BulletGuiItem(
+        label, game.sysContent.fntStandard, color
+    );
+    labelBullet->ratioCenter =
+        Point(0.50f, centerY);
+    labelBullet->ratioSize =
+        Point(0.96f, BP_HEIGHT);
+    list->addChild(labelBullet);
+    gui.addItem(labelBullet);
+    
+    TextGuiItem* valueText =
+        new TextGuiItem(
+        value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
+    );
+    valueText->ratioCenter =
+        Point(0.75f, centerY);
+    valueText->ratioSize =
+        Point(0.44f, BP_HEIGHT);
+    list->addChild(valueText);
+    gui.addItem(valueText);
+    textToAnimate.push_back(valueText);
 }
 
 
@@ -172,55 +217,11 @@ void Results::addNewPageItems(
 
 
 /**
- * @brief Creates and adds a new bullet point to one of the list GUI items.
- *
- * @param list What list item to add to.
- * @param label Label text of this bullet point.
- * @param value Value of this bullet point.
- * @param color Color.
- */
-void Results::addNewBulletPoint(
-    GuiItem* list, const string& label, const string& value,
-    const ALLEGRO_COLOR& color
-) {
-    size_t idx = list->children.size() / 2.0f;
-    const float BP_HEIGHT = 0.12f;
-    const float BP_PADDING = 0.02f;
-    const float BP_OFFSET = 0.01f;
-    const float centerY =
-        (BP_OFFSET + BP_HEIGHT / 2.0f) +
-        ((BP_HEIGHT + BP_PADDING) * idx);
-        
-    BulletGuiItem* labelBullet =
-        new BulletGuiItem(
-        label, game.sysContent.fntStandard, color
-    );
-    labelBullet->ratioCenter =
-        Point(0.50f, centerY);
-    labelBullet->ratioSize =
-        Point(0.96f, BP_HEIGHT);
-    list->addChild(labelBullet);
-    gui.addItem(labelBullet);
-    
-    TextGuiItem* valueText =
-        new TextGuiItem(
-        value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
-    );
-    valueText->ratioCenter =
-        Point(0.75f, centerY);
-    valueText->ratioSize =
-        Point(0.44f, BP_HEIGHT);
-    list->addChild(valueText);
-    gui.addItem(valueText);
-    textToAnimate.push_back(valueText);
-}
-
-
-/**
  * @brief Creates and adds a new score marker bullet point to the list GUI item.
  *
  * @param label Label text of this bullet point.
  * @param value Value of this bullet point.
+ * @param totalBulletPoints How many bullet points will exist in total.
  * @param color Color.
  */
 void Results::addNewScoreMarkerBulletPoint(
@@ -512,7 +513,9 @@ float Results::getScoreChartY(int score) const {
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     const int chartRange = scoreChartTop - scoreChartBottom;
     const float chartBottomY = chartDraw.center.y + chartDraw.size.y / 2.0f;
-    return chartBottomY - chartDraw.size.y * ((score - scoreChartBottom) / (float) chartRange);
+    return
+        chartBottomY - chartDraw.size.y *
+        ((score - scoreChartBottom) / (float) chartRange);
 }
 
 
@@ -827,7 +830,9 @@ void Results::initGuiScoreChart() {
     
     populateScoreChart();
     
-    addNewPageItems(RESULTS_MENU_PAGE_SCORE_CHART, scoreChartPageBox, "score_chart");
+    addNewPageItems(
+        RESULTS_MENU_PAGE_SCORE_CHART, scoreChartPageBox, "score_chart"
+    );
 }
 
 

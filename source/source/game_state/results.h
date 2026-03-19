@@ -17,15 +17,15 @@
 
 
 namespace RESULTS {
-extern const float CHART_CIRCLE_TIME_SCALE;
 extern const float CHART_CIRCLE_SIZE_OFFSET;
+extern const float CHART_CIRCLE_TIME_SCALE;
 extern const float FINAL_SCORE_LABEL_SWAY_TIME_OFFSET;
 extern const float FINAL_SCORE_SWAY;
 extern const float FINAL_SCORE_SWAY_TIME_SCALE;
 extern const string GUI_FILE_PATH;
 extern const float MEDAL_SCALE;
-extern const float MEDAL_SHINE_SCALE;
 extern const float MEDAL_SHINE_ROT_TIME_SCALE;
+extern const float MEDAL_SHINE_SCALE;
 }
 
 

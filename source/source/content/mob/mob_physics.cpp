@@ -209,9 +209,10 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
  * @param deltaT How long the frame's tick is, in seconds.
  * @param moveSpeedMult Movement speed is multiplied by this.
  * @param moveSpeed The calculated move speed is placed in this struct.
- * @return HORIZ_MOVE_RESULT_OK on normal movement, HORIZ_MOVE_RESULT_TELEPORTED if
- * the mob's X and Y have been set and movement logic can be skipped,
- * and HORIZ_MOVE_RESULT_FAIL if movement is entirely impossible this frame.
+ * @return HORIZ_MOVE_RESULT_OK on normal movement,
+ * HORIZ_MOVE_RESULT_TELEPORTED if the mob's X and Y have been set
+ * and movement logic can be skipped, and HORIZ_MOVE_RESULT_FAIL
+ * if movement is entirely impossible this frame.
  */
 HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
     float deltaT, float moveSpeedMult, Point* moveSpeed
@@ -327,8 +328,8 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
  * (i.e. the highest).
  * @param moveAngle Angle at which the mob is going to move.
  * @param slideAngle Holds the calculated slide angle.
- * @return HORIZ_MOVE_RESULT_OK on success, HORIZ_MOVE_RESULT_FAIL if the mob can't
- * slide against this wall.
+ * @return HORIZ_MOVE_RESULT_OK on success, HORIZ_MOVE_RESULT_FAIL
+ * if the mob can't slide against this wall.
  */
 HORIZ_MOVE_RESULT Mob::getWallSlideAngle(
     const Edge* ePtr, unsigned char wallSector, float moveAngle,

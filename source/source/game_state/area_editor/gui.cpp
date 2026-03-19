@@ -279,58 +279,6 @@ void AreaEditor::processGuiDialogDeleteArea() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets regarding a medal award medal
- * requirement for this frame.
- *
- * @param requirementPtr Points to the requirement value for this medal.
- * @param widgetLabel Label for the value widget.
- * @param widgetMinValue Minimum value for the value widget.
- * @param widgetMaxValue Maximum value for the value widget.
- * @param tooltip Tooltip for the value widget.
- */
-void AreaEditor::processGuiWidgetsMedalAwardMedal(
-    int* requirementPtr, const string& widgetLabel,
-    int widgetMinValue, int widgetMaxValue,
-    const string& tooltip
-) {
-    //Requirement value.
-    int req = *requirementPtr;
-    ImGui::SetNextItemWidth(90);
-    if(
-        ImGui::DragInt(
-            widgetLabel.c_str(), &req, 1.0f, widgetMinValue, widgetMaxValue
-        )
-    ) {
-        registerChange("mission medal award change");
-        *requirementPtr = req;
-    }
-    setTooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
-}
-
-
-/**
- * @brief Processes the Dear ImGui widgets regarding a medal award mode
- * for this frame.
- *
- * @param value Internal value for this mode's radio button.
- * @param widgetLabel Label for the radio widget.
- * @param tooltip Tooltip for the radio widget.
- */
-void AreaEditor::processGuiWidgetsMedalAwardMode(
-    int value, const string& widgetLabel, const string& tooltip
-) {
-    //Radio button.
-    int mode = game.curArea->mission.medalAwardMode;
-    if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
-        registerChange("mission medal award change");
-        game.curArea->mission.medalAwardMode =
-            (MISSION_MEDAL_AWARD_MODE) mode;
-    }
-    setTooltip(tooltip);
-}
-
-
-/**
  * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
 void AreaEditor::processGuiDialogLoad() {
@@ -366,388 +314,6 @@ void AreaEditor::processGuiDialogLoad() {
         loadDialogPicker.process();
         
         ImGui::TreePop();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui menu bar for this frame.
- */
-void AreaEditor::processGuiMenuBar() {
-    if(ImGui::BeginMenuBar()) {
-    
-        //Editor menu.
-        if(ImGui::BeginMenu("Editor")) {
-        
-            //Load or create area item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick an area to load, or create a new one.",
-                "Ctrl + L"
-            );
-            
-            //Reload current area item.
-            if(ImGui::MenuItem("Reload current area")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current area from your disk."
-            );
-            
-            //Save current area item.
-            if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the GUI definition to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current area item.
-            if(ImGui::MenuItem("Delete current area")) {
-                deleteAreaCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current area from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the folder with the area's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Open user data externally item.
-            if(ImGui::MenuItem("Open user data externally")) {
-                openUserDataExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the folder with the area's user data in your "
-                "operative system."
-            );
-            
-            //Quick play item.
-            if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
-                quickPlayCmd(1.0f);
-            }
-            setTooltip(
-                "Save, quit, and start playing the area. Leaving will return "
-                "to the editor.",
-                "Ctrl + P"
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Debug menu.
-            if(ImGui::BeginMenu("Debug")) {
-            
-                //Show edge indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show edge indexes", "F2", &debugEdgeIdxs
-                    )
-                ) {
-                    if(debugEdgeIdxs) {
-                        setStatus("Enabled debug edge index display.");
-                    } else {
-                        setStatus("Disabled debug edge index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each edge is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show sector indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show sector indexes", "F3", &debugSectorIdxs
-                    )
-                ) {
-                    if(debugSectorIdxs) {
-                        setStatus("Enabled debug sector index display.");
-                    } else {
-                        setStatus("Disabled debug sector index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows the sector index on either side of an edge.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show vertex indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show vertex indexes", "F4", &debugVertexIdxs
-                    )
-                ) {
-                    if(debugVertexIdxs) {
-                        setStatus("Enabled debug vertex index display.");
-                    } else {
-                        setStatus("Disabled debug vertex index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each vertex is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show sector triangulation item.
-                if(
-                    ImGui::MenuItem(
-                        "Show sector triangulation", "F5", &debugTriangulation
-                    )
-                ) {
-                    if(debugTriangulation) {
-                        setStatus("Enabled debug triangulation display.");
-                    } else {
-                        setStatus("Disabled debug triangulation display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what triangles make up the selected sector.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show path indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show path indexes", "F6", &debugPathIdxs
-                    )
-                ) {
-                    if(debugPathIdxs) {
-                        setStatus("Enabled debug path index display.");
-                    } else {
-                        setStatus("Disabled debug path index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each path stop is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                ImGui::EndMenu();
-                
-            }
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the area editor.",
-                "Ctrl + Q"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //Edit menu.
-        if(ImGui::BeginMenu("Edit")) {
-        
-            //Undo item.
-            if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
-                undoCmd(1.0f);
-            }
-            string undoText;
-            if(undoHistory.empty()) {
-                undoText = "Nothing to undo.";
-            } else {
-                undoText = "Undo: " + undoHistory.front().second + ".";
-            }
-            setTooltip(
-                undoText,
-                "Ctrl + Z"
-            );
-            
-            //Redo item.
-            if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
-                redoCmd(1.0f);
-            }
-            string redoText;
-            if(redoHistory.empty()) {
-                redoText =
-                    "Nothing to redo.";
-            } else {
-                redoText =
-                    "Redo: " + redoHistory.front().second + ".";
-            }
-            setTooltip(
-                redoText,
-                "Ctrl + Y"
-            );
-            
-            //Separator.
-            ImGui::Separator();
-            
-            //Copy properties item.
-            if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
-                copyPropertiesCmd(1.0f);
-            }
-            setTooltip(
-                "Copies the properties of what you selected, if applicable.",
-                "Ctrl + C"
-            );
-            
-            //Paste properties item.
-            if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
-                pastePropertiesCmd(1.0f);
-            }
-            setTooltip(
-                "Pastes previously-copied properties onto what you selected, "
-                "if applicable.",
-                "Ctrl + V"
-            );
-            
-            if(
-                state == EDITOR_STATE_LAYOUT &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Paste texture item.
-                if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
-                    pasteTextureCmd(1.0f);
-                }
-                setTooltip(
-                    "Pastes a previously-copied sector's texture onto "
-                    "the sector you selected.",
-                    "Ctrl + T"
-                );
-            }
-            
-            //Separator.
-            ImGui::Separator();
-            
-            //Select all item.
-            if(ImGui::MenuItem("Select all", "Ctrl+A")) {
-                selectAllCmd(1.0f);
-            }
-            setTooltip(
-                "Selects everything in the current mode, if applicable.",
-                "Ctrl + A"
-            );
-            
-            //Delete item.
-            if(ImGui::MenuItem("Delete", "Delete")) {
-                deleteCmd(1.0f);
-            }
-            setTooltip(
-                "Deletes the selected things, if applicable.",
-                "Delete"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //View menu.
-        if(ImGui::BeginMenu("View")) {
-        
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level, and if pressed again,\n"
-                "reset the camera position.",
-                "0"
-            );
-            
-            //Zoom everything item.
-            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                zoomEverythingCmd(1.0f);
-            }
-            setTooltip(
-                "Move and zoom the camera so that everything in the area\n"
-                "fits nicely into view.",
-                "Home"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //Help menu.
-        if(ImGui::BeginMenu("Help")) {
-        
-            //Show tooltips item.
-            if(
-                ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.showTooltips
-                )
-            ) {
-                string stateStr =
-                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(stateStr + " tooltips.");
-                saveOptions();
-            }
-            setTooltip(
-                "Whether tooltips should appear when you place your mouse on\n"
-                "top of something in the GUI. Like the tooltip you are\n"
-                "reading right now."
-            );
-            
-            //General help item.
-            if(ImGui::MenuItem("Help...")) {
-                string helpStr =
-                    "To create an area, start by drawing its layout. "
-                    "For this, you draw the polygons that make up the "
-                    "geometry of the area. These polygons cannot overlap, "
-                    "and a polygon whose floor is higher than its neighbor's "
-                    "makes a wall. After that, place objects where you want, "
-                    "specify the carrying paths, add details, and try it out."
-                    "\n\n"
-                    "If you need more help on how to use the area editor, "
-                    "check out the tutorial in the manual, located "
-                    "in the engine's folder.";
-                openHelpDialog(helpStr, "area.html");
-            }
-            setTooltip(
-                "Opens a general help message for this editor."
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        ImGui::EndMenuBar();
-        
     }
 }
 
@@ -797,244 +363,6 @@ void AreaEditor::processGuiDialogMissionPreset() {
     }
     setTooltip("Apply the new preset.");
     ImGui::EndAlign();
-}
-
-
-/**
- * @brief Processes the Dear ImGui mob script vars for this frame.
- *
- * @param mPtr Mob to process.
- */
-void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
-    if(!mPtr->type) return;
-    
-    map<string, string> varsMap = getVarMap(mPtr->vars);
-    map<string, string> newVarsMap;
-    map<string, bool> varsInWidgets;
-    
-    //Start with the properties that apply to all objects.
-    
-    //Team property.
-    string teamVar;
-    if(isInMap(varsMap, "team")) {
-        teamVar = varsMap["team"];
-    }
-    
-    vector<string> teamNames = enumGetNames(mobTeamNames);
-    teamNames.insert(teamNames.begin(), "(Default)");
-    
-    int teamNr;
-    if(teamVar.empty()) {
-        teamNr = 0;
-    } else {
-        bool found;
-        MOB_TEAM team = enumGetValue(mobTeamINames, teamVar, &found);
-        if(!found) {
-            teamNr = 0;
-        } else {
-            //0 is reserved in this widget for "default".
-            //Increase it by one to get the widget's team index number.
-            teamNr = ((int) team) + 1;
-        }
-    }
-    
-    if(ImGui::Combo("Team", &teamNr, teamNames, 15)) {
-        registerChange("object script vars change");
-        if(teamNr > 0) {
-            //0 is reserved in this widget for "default".
-            //Decrease it by one to get the real team index number.
-            teamNr--;
-            teamVar = enumGetName(mobTeamINames, teamNr);
-        } else {
-            teamVar.clear();
-        }
-    }
-    setTooltip(
-        "What sort of team this object belongs to.\n"
-        "(Variable name: \"team\".)"
-    );
-    
-    if(!teamVar.empty()) newVarsMap["team"] = teamVar;
-    varsInWidgets["team"] = true;
-    
-    //Health property.
-    float maxHealth = mPtr->type->maxHealth;
-    if(isInMap(varsMap, "max_health")) {
-        maxHealth = s2f(varsMap["max_health"]);
-    }
-    float health = maxHealth;
-    if(isInMap(varsMap, "health")) {
-        health = s2f(varsMap["health"]);
-    }
-    
-    if(ImGui::DragFloat("Health", &health, 0.25f, 0.0f, maxHealth)) {
-        registerChange("object script vars change");
-    }
-    setTooltip(
-        "Starting health for this specific object.\n"
-        "(Variable name: \"health\".)",
-        "",
-        WIDGET_EXPLANATION_DRAG
-    );
-    
-    if(health != maxHealth) {
-        newVarsMap["health"] = f2s(health);
-    }
-    varsInWidgets["health"] = true;
-    
-    //Max health property.
-    if(ImGui::DragFloat("Max health", &maxHealth, 0.25f, 0.0f, FLT_MAX)) {
-        registerChange("object script vars change");
-    }
-    setTooltip(
-        "Maximum health for this specific object.\n"
-        "The object type's default is " + f2s(mPtr->type->maxHealth) + ".\n"
-        "(Variable name: \"max_health\".)",
-        "",
-        WIDGET_EXPLANATION_DRAG
-    );
-    
-    if(maxHealth != mPtr->type->maxHealth) {
-        newVarsMap["max_health"] = f2s(maxHealth);
-    }
-    varsInWidgets["max_health"] = true;
-    
-    //Now, dynamically create widgets for all properties this mob type has.
-    
-    for(size_t p = 0; p < mPtr->type->areaEditorProps.size(); p++) {
-    
-        MobType::AreaEditorProp* pPtr =
-            &mPtr->type->areaEditorProps[p];
-            
-        string value;
-        if(!isInMap(varsMap, pPtr->var)) {
-            value = pPtr->defValue;
-        } else {
-            value = varsMap[pPtr->var];
-        }
-        
-        switch(pPtr->type) {
-        case AEMP_TYPE_TEXT: {
-    
-            string valueS = value;
-            if(ImGui::InputText(pPtr->name.c_str(), &valueS)) {
-                registerChange("object script vars change");
-                value = valueS;
-            }
-            
-            break;
-            
-        } case AEMP_TYPE_INT: {
-    
-            int valueI = s2i(value);
-            if(
-                ImGui::DragInt(
-                    pPtr->name.c_str(), &valueI, 0.02f,
-                    pPtr->minValue, pPtr->maxValue
-                )
-            ) {
-                registerChange("object script vars change");
-                value = i2s(valueI);
-            }
-            
-            break;
-            
-        } case AEMP_TYPE_FLOAT: {
-    
-            float valueF = s2f(value);
-            if(
-                ImGui::DragFloat(
-                    pPtr->name.c_str(), &valueF, 0.1f,
-                    pPtr->minValue, pPtr->maxValue
-                )
-            ) {
-                registerChange("object script vars change");
-                value = f2s(valueF);
-            }
-            
-            break;
-            
-        } case AEMP_TYPE_BOOL: {
-    
-            bool valueB = s2b(value);
-            if(ImGui::Checkbox(pPtr->name.c_str(), &valueB)) {
-                registerChange("object script vars change");
-                value = b2s(valueB);
-            }
-            
-            break;
-            
-        } case AEMP_TYPE_LIST: {
-    
-            string valueS = value;
-            if(ImGui::Combo(pPtr->name, &valueS, pPtr->valueList, 15)) {
-                registerChange("object script vars change");
-                value = valueS;
-            }
-            
-            break;
-            
-        } case AEMP_TYPE_NR_LIST: {
-    
-            int itemIdx = s2i(value);
-            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->valueList, 15)) {
-                registerChange("object script vars change");
-                value = i2s(itemIdx);
-            }
-            
-            break;
-            
-        }
-        }
-        
-        setTooltip(
-            wordWrap(pPtr->tooltip, 50) +
-            (pPtr->tooltip.empty() ? "" : "\n") +
-            "(Variable name: \"" + pPtr->var + "\".)",
-            "",
-            (pPtr->type == AEMP_TYPE_INT || pPtr->type == AEMP_TYPE_FLOAT) ?
-            WIDGET_EXPLANATION_DRAG :
-            WIDGET_EXPLANATION_NONE
-        );
-        
-        if(value != pPtr->defValue) {
-            newVarsMap[pPtr->var] = value;
-        }
-        
-        varsInWidgets[pPtr->var] = true;
-        
-    }
-    
-    string otherVarsStr;
-    for(auto const& v : varsMap) {
-        if(!varsInWidgets[v.first]) {
-            otherVarsStr += v.first + "=" + v.second + ";";
-        }
-    }
-    
-    mPtr->vars.clear();
-    for(auto const& v : newVarsMap) {
-        mPtr->vars += v.first + "=" + v.second + ";";
-    }
-    mPtr->vars += otherVarsStr;
-    
-    if(!mPtr->vars.empty() && mPtr->vars[mPtr->vars.size() - 1] == ';') {
-        mPtr->vars.pop_back();
-    }
-    
-    //Finally, a widget for the entire list.
-    string mobVars = mPtr->vars;
-    ImGui::Spacer();
-    if(monoInputText("Full list", &mobVars)) {
-        registerChange("object script vars change");
-        mPtr->vars = mobVars;
-    }
-    setTooltip(
-        "This is the full list of script variables to use.\n"
-        "You can add variables here, though variables in the "
-        "wrong format will be removed.\n"
-        "Format example: \"sleep=y;jumping=n\"."
-    );
 }
 
 
@@ -1429,6 +757,626 @@ void AreaEditor::processGuiDialogOptions() {
         ImGui::TreePop();
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
+ */
+void AreaEditor::processGuiMenuBar() {
+    if(ImGui::BeginMenuBar()) {
+    
+        //Editor menu.
+        if(ImGui::BeginMenu("Editor")) {
+        
+            //Load or create area item.
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+                loadWidgetPos = getLastWidgetPost();
+                loadCmd(1.0f);
+            }
+            setTooltip(
+                "Pick an area to load, or create a new one.",
+                "Ctrl + L"
+            );
+            
+            //Reload current area item.
+            if(ImGui::MenuItem("Reload current area")) {
+                reloadWidgetPos = getLastWidgetPost();
+                reloadCmd(1.0f);
+            }
+            setTooltip(
+                "Lose all changes and reload the current area from your disk."
+            );
+            
+            //Save current area item.
+            if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
+                saveCmd(1.0f);
+            }
+            setTooltip(
+                "Save the GUI definition to your disk.",
+                "Ctrl + S"
+            );
+            
+            //Delete current area item.
+            if(ImGui::MenuItem("Delete current area")) {
+                deleteAreaCmd(1.0f);
+            }
+            setTooltip(
+                "Delete the current area from your disk."
+            );
+            
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the folder with the area's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
+            
+            //Open user data externally item.
+            if(ImGui::MenuItem("Open user data externally")) {
+                openUserDataExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the folder with the area's user data in your "
+                "operative system."
+            );
+            
+            //Quick play item.
+            if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
+                quickPlayCmd(1.0f);
+            }
+            setTooltip(
+                "Save, quit, and start playing the area. Leaving will return "
+                "to the editor.",
+                "Ctrl + P"
+            );
+            
+            //Separator item.
+            ImGui::Separator();
+            
+            //Options menu item.
+            if(ImGui::MenuItem("Options...")) {
+                openOptionsDialog();
+            }
+            setTooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
+            
+            //Debug menu.
+            if(ImGui::BeginMenu("Debug")) {
+            
+                //Show edge indexes item.
+                if(
+                    ImGui::MenuItem(
+                        "Show edge indexes", "F2", &debugEdgeIdxs
+                    )
+                ) {
+                    if(debugEdgeIdxs) {
+                        setStatus("Enabled debug edge index display.");
+                    } else {
+                        setStatus("Disabled debug edge index display.");
+                    }
+                }
+                setTooltip(
+                    "Shows what index each edge is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show sector indexes item.
+                if(
+                    ImGui::MenuItem(
+                        "Show sector indexes", "F3", &debugSectorIdxs
+                    )
+                ) {
+                    if(debugSectorIdxs) {
+                        setStatus("Enabled debug sector index display.");
+                    } else {
+                        setStatus("Disabled debug sector index display.");
+                    }
+                }
+                setTooltip(
+                    "Shows the sector index on either side of an edge.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show vertex indexes item.
+                if(
+                    ImGui::MenuItem(
+                        "Show vertex indexes", "F4", &debugVertexIdxs
+                    )
+                ) {
+                    if(debugVertexIdxs) {
+                        setStatus("Enabled debug vertex index display.");
+                    } else {
+                        setStatus("Disabled debug vertex index display.");
+                    }
+                }
+                setTooltip(
+                    "Shows what index each vertex is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show sector triangulation item.
+                if(
+                    ImGui::MenuItem(
+                        "Show sector triangulation", "F5", &debugTriangulation
+                    )
+                ) {
+                    if(debugTriangulation) {
+                        setStatus("Enabled debug triangulation display.");
+                    } else {
+                        setStatus("Disabled debug triangulation display.");
+                    }
+                }
+                setTooltip(
+                    "Shows what triangles make up the selected sector.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show path indexes item.
+                if(
+                    ImGui::MenuItem(
+                        "Show path indexes", "F6", &debugPathIdxs
+                    )
+                ) {
+                    if(debugPathIdxs) {
+                        setStatus("Enabled debug path index display.");
+                    } else {
+                        setStatus("Disabled debug path index display.");
+                    }
+                }
+                setTooltip(
+                    "Shows what index each path stop is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                ImGui::EndMenu();
+                
+            }
+            
+            //Quit editor item.
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+                quitWidgetPos = getLastWidgetPost();
+                quitCmd(1.0f);
+            }
+            setTooltip(
+                "Quit the area editor.",
+                "Ctrl + Q"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //Edit menu.
+        if(ImGui::BeginMenu("Edit")) {
+        
+            //Undo item.
+            if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
+                undoCmd(1.0f);
+            }
+            string undoText;
+            if(undoHistory.empty()) {
+                undoText = "Nothing to undo.";
+            } else {
+                undoText = "Undo: " + undoHistory.front().second + ".";
+            }
+            setTooltip(
+                undoText,
+                "Ctrl + Z"
+            );
+            
+            //Redo item.
+            if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
+                redoCmd(1.0f);
+            }
+            string redoText;
+            if(redoHistory.empty()) {
+                redoText =
+                    "Nothing to redo.";
+            } else {
+                redoText =
+                    "Redo: " + redoHistory.front().second + ".";
+            }
+            setTooltip(
+                redoText,
+                "Ctrl + Y"
+            );
+            
+            //Separator.
+            ImGui::Separator();
+            
+            //Copy properties item.
+            if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
+                copyPropertiesCmd(1.0f);
+            }
+            setTooltip(
+                "Copies the properties of what you selected, if applicable.",
+                "Ctrl + C"
+            );
+            
+            //Paste properties item.
+            if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
+                pastePropertiesCmd(1.0f);
+            }
+            setTooltip(
+                "Pastes previously-copied properties onto what you selected, "
+                "if applicable.",
+                "Ctrl + V"
+            );
+            
+            if(
+                state == EDITOR_STATE_LAYOUT &&
+                subState == EDITOR_SUB_STATE_NONE
+            ) {
+                //Paste texture item.
+                if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
+                    pasteTextureCmd(1.0f);
+                }
+                setTooltip(
+                    "Pastes a previously-copied sector's texture onto "
+                    "the sector you selected.",
+                    "Ctrl + T"
+                );
+            }
+            
+            //Separator.
+            ImGui::Separator();
+            
+            //Select all item.
+            if(ImGui::MenuItem("Select all", "Ctrl+A")) {
+                selectAllCmd(1.0f);
+            }
+            setTooltip(
+                "Selects everything in the current mode, if applicable.",
+                "Ctrl + A"
+            );
+            
+            //Delete item.
+            if(ImGui::MenuItem("Delete", "Delete")) {
+                deleteCmd(1.0f);
+            }
+            setTooltip(
+                "Deletes the selected things, if applicable.",
+                "Delete"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                zoomInCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                zoomOutCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Zoom/position reset", "0")) {
+                zoomAndPosResetCmd(1.0f);
+            }
+            setTooltip(
+                "Reset the zoom level, and if pressed again,\n"
+                "reset the camera position.",
+                "0"
+            );
+            
+            //Zoom everything item.
+            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+                zoomEverythingCmd(1.0f);
+            }
+            setTooltip(
+                "Move and zoom the camera so that everything in the area\n"
+                "fits nicely into view.",
+                "Home"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //Help menu.
+        if(ImGui::BeginMenu("Help")) {
+        
+            //Show tooltips item.
+            if(
+                ImGui::MenuItem(
+                    "Show tooltips", "", &game.options.editors.showTooltips
+                )
+            ) {
+                string stateStr =
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
+                setStatus(stateStr + " tooltips.");
+                saveOptions();
+            }
+            setTooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
+            
+            //General help item.
+            if(ImGui::MenuItem("Help...")) {
+                string helpStr =
+                    "To create an area, start by drawing its layout. "
+                    "For this, you draw the polygons that make up the "
+                    "geometry of the area. These polygons cannot overlap, "
+                    "and a polygon whose floor is higher than its neighbor's "
+                    "makes a wall. After that, place objects where you want, "
+                    "specify the carrying paths, add details, and try it out."
+                    "\n\n"
+                    "If you need more help on how to use the area editor, "
+                    "check out the tutorial in the manual, located "
+                    "in the engine's folder.";
+                openHelpDialog(helpStr, "area.html");
+            }
+            setTooltip(
+                "Opens a general help message for this editor."
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        ImGui::EndMenuBar();
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui mob script vars for this frame.
+ *
+ * @param mPtr Mob to process.
+ */
+void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
+    if(!mPtr->type) return;
+    
+    map<string, string> varsMap = getVarMap(mPtr->vars);
+    map<string, string> newVarsMap;
+    map<string, bool> varsInWidgets;
+    
+    //Start with the properties that apply to all objects.
+    
+    //Team property.
+    string teamVar;
+    if(isInMap(varsMap, "team")) {
+        teamVar = varsMap["team"];
+    }
+    
+    vector<string> teamNames = enumGetNames(mobTeamNames);
+    teamNames.insert(teamNames.begin(), "(Default)");
+    
+    int teamNr;
+    if(teamVar.empty()) {
+        teamNr = 0;
+    } else {
+        bool found;
+        MOB_TEAM team = enumGetValue(mobTeamINames, teamVar, &found);
+        if(!found) {
+            teamNr = 0;
+        } else {
+            //0 is reserved in this widget for "default".
+            //Increase it by one to get the widget's team index number.
+            teamNr = ((int) team) + 1;
+        }
+    }
+    
+    if(ImGui::Combo("Team", &teamNr, teamNames, 15)) {
+        registerChange("object script vars change");
+        if(teamNr > 0) {
+            //0 is reserved in this widget for "default".
+            //Decrease it by one to get the real team index number.
+            teamNr--;
+            teamVar = enumGetName(mobTeamINames, teamNr);
+        } else {
+            teamVar.clear();
+        }
+    }
+    setTooltip(
+        "What sort of team this object belongs to.\n"
+        "(Variable name: \"team\".)"
+    );
+    
+    if(!teamVar.empty()) newVarsMap["team"] = teamVar;
+    varsInWidgets["team"] = true;
+    
+    //Health property.
+    float maxHealth = mPtr->type->maxHealth;
+    if(isInMap(varsMap, "max_health")) {
+        maxHealth = s2f(varsMap["max_health"]);
+    }
+    float health = maxHealth;
+    if(isInMap(varsMap, "health")) {
+        health = s2f(varsMap["health"]);
+    }
+    
+    if(ImGui::DragFloat("Health", &health, 0.25f, 0.0f, maxHealth)) {
+        registerChange("object script vars change");
+    }
+    setTooltip(
+        "Starting health for this specific object.\n"
+        "(Variable name: \"health\".)",
+        "",
+        WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(health != maxHealth) {
+        newVarsMap["health"] = f2s(health);
+    }
+    varsInWidgets["health"] = true;
+    
+    //Max health property.
+    if(ImGui::DragFloat("Max health", &maxHealth, 0.25f, 0.0f, FLT_MAX)) {
+        registerChange("object script vars change");
+    }
+    setTooltip(
+        "Maximum health for this specific object.\n"
+        "The object type's default is " + f2s(mPtr->type->maxHealth) + ".\n"
+        "(Variable name: \"max_health\".)",
+        "",
+        WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(maxHealth != mPtr->type->maxHealth) {
+        newVarsMap["max_health"] = f2s(maxHealth);
+    }
+    varsInWidgets["max_health"] = true;
+    
+    //Now, dynamically create widgets for all properties this mob type has.
+    
+    for(size_t p = 0; p < mPtr->type->areaEditorProps.size(); p++) {
+    
+        MobType::AreaEditorProp* pPtr =
+            &mPtr->type->areaEditorProps[p];
+            
+        string value;
+        if(!isInMap(varsMap, pPtr->var)) {
+            value = pPtr->defValue;
+        } else {
+            value = varsMap[pPtr->var];
+        }
+        
+        switch(pPtr->type) {
+        case AEMP_TYPE_TEXT: {
+    
+            string valueS = value;
+            if(ImGui::InputText(pPtr->name.c_str(), &valueS)) {
+                registerChange("object script vars change");
+                value = valueS;
+            }
+            
+            break;
+            
+        } case AEMP_TYPE_INT: {
+    
+            int valueI = s2i(value);
+            if(
+                ImGui::DragInt(
+                    pPtr->name.c_str(), &valueI, 0.02f,
+                    pPtr->minValue, pPtr->maxValue
+                )
+            ) {
+                registerChange("object script vars change");
+                value = i2s(valueI);
+            }
+            
+            break;
+            
+        } case AEMP_TYPE_FLOAT: {
+    
+            float valueF = s2f(value);
+            if(
+                ImGui::DragFloat(
+                    pPtr->name.c_str(), &valueF, 0.1f,
+                    pPtr->minValue, pPtr->maxValue
+                )
+            ) {
+                registerChange("object script vars change");
+                value = f2s(valueF);
+            }
+            
+            break;
+            
+        } case AEMP_TYPE_BOOL: {
+    
+            bool valueB = s2b(value);
+            if(ImGui::Checkbox(pPtr->name.c_str(), &valueB)) {
+                registerChange("object script vars change");
+                value = b2s(valueB);
+            }
+            
+            break;
+            
+        } case AEMP_TYPE_LIST: {
+    
+            string valueS = value;
+            if(ImGui::Combo(pPtr->name, &valueS, pPtr->valueList, 15)) {
+                registerChange("object script vars change");
+                value = valueS;
+            }
+            
+            break;
+            
+        } case AEMP_TYPE_NR_LIST: {
+    
+            int itemIdx = s2i(value);
+            if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->valueList, 15)) {
+                registerChange("object script vars change");
+                value = i2s(itemIdx);
+            }
+            
+            break;
+            
+        }
+        }
+        
+        setTooltip(
+            wordWrap(pPtr->tooltip, 50) +
+            (pPtr->tooltip.empty() ? "" : "\n") +
+            "(Variable name: \"" + pPtr->var + "\".)",
+            "",
+            (pPtr->type == AEMP_TYPE_INT || pPtr->type == AEMP_TYPE_FLOAT) ?
+            WIDGET_EXPLANATION_DRAG :
+            WIDGET_EXPLANATION_NONE
+        );
+        
+        if(value != pPtr->defValue) {
+            newVarsMap[pPtr->var] = value;
+        }
+        
+        varsInWidgets[pPtr->var] = true;
+        
+    }
+    
+    string otherVarsStr;
+    for(auto const& v : varsMap) {
+        if(!varsInWidgets[v.first]) {
+            otherVarsStr += v.first + "=" + v.second + ";";
+        }
+    }
+    
+    mPtr->vars.clear();
+    for(auto const& v : newVarsMap) {
+        mPtr->vars += v.first + "=" + v.second + ";";
+    }
+    mPtr->vars += otherVarsStr;
+    
+    if(!mPtr->vars.empty() && mPtr->vars[mPtr->vars.size() - 1] == ';') {
+        mPtr->vars.pop_back();
+    }
+    
+    //Finally, a widget for the entire list.
+    string mobVars = mPtr->vars;
+    ImGui::Spacer();
+    if(monoInputText("Full list", &mobVars)) {
+        registerChange("object script vars change");
+        mPtr->vars = mobVars;
+    }
+    setTooltip(
+        "This is the full list of script variables to use.\n"
+        "You can add variables here, though variables in the "
+        "wrong format will be removed.\n"
+        "Format example: \"sleep=y;jumping=n\"."
+    );
 }
 
 
@@ -3260,82 +3208,6 @@ void AreaEditor::processGuiPanelMissionBriefing() {
 
 
 /**
- * @brief Processes the Dear ImGui essentials part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionEssentials() {
-    float oldTimeLimit = game.curArea->mission.timeLimit;
-    bool dayDurationNeedsUpdate = false;
-    
-    //Mission essentials node.
-    if(saveableTreeNode("mission", "Essentials")) {
-    
-        //Preset text.
-        ImGui::Text(
-            "Preset: %s",
-            enumGetName(missionPresetNames, game.curArea->mission.preset)
-            .c_str()
-        );
-        
-        //Change preset button.
-        ImGui::SameLine();
-        if(ImGui::Button("Change...")) {
-            missionPresetDialogPreset = game.curArea->mission.preset;
-            openDialog(
-                "Change mission preset",
-                std::bind(
-                    &AreaEditor::processGuiDialogMissionPreset, this
-                )
-            );
-            dialogs.back()->customSize = Point(400, 0);
-        }
-        setTooltip(
-            "Change the mission's preset.\n"
-            "By using one of the presets you can skip most of the setup,\n"
-            "whereas by picking \"custom\" you can control all the details."
-        );
-        
-        //Time limit values.
-        int seconds = (int) game.curArea->mission.timeLimit;
-        if(ImGui::DragTime2("Time limit", &seconds)) {
-            registerChange("mission time limit change");
-            game.curArea->mission.timeLimit = (size_t) seconds;
-            dayDurationNeedsUpdate = true;
-        }
-        setTooltip(
-            "Time limit for the mission. 0 means no time limit.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::TreePop();
-    }
-    
-    if(dayDurationNeedsUpdate) {
-        if(
-            game.curArea->mission.timeLimit == 0 &&
-            oldTimeLimit > 0
-        ) {
-            game.curArea->dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
-        } else {
-            float oldDayStartMin = game.curArea->dayTimeStart;
-            oldDayStartMin = wrapFloat(oldDayStartMin, 0, 60 * 24);
-            float oldDaySpeed = game.curArea->dayTimeSpeed;
-            float oldTimeLimitMin = oldTimeLimit / 60.0f;
-            size_t newTimeLimitSec = game.curArea->mission.timeLimit;
-            float oldDayEndMin = oldDayStartMin + oldTimeLimitMin * oldDaySpeed;
-            oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
-            newTimeLimitSec = std::max(newTimeLimitSec, (size_t) 1);
-            float newTimeLimitMin = newTimeLimitSec / 60.0f;
-            game.curArea->dayTimeSpeed =
-                calculateDaySpeed(
-                    oldDayStartMin, oldDayEndMin, newTimeLimitMin
-                );
-        }
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui end condition part of the
  * mission control panel for this frame.
  */
@@ -3619,130 +3491,78 @@ void AreaEditor::processGuiPanelMissionEndCond() {
 
 
 /**
- * @brief Processes the Dear ImGui mission medal award part of the
+ * @brief Processes the Dear ImGui essentials part of the
  * mission control panel for this frame.
  */
-void AreaEditor::processGuiPanelMissionMedalAward() {
-    //Medal award node.
-    if(saveableTreeNode("mission", "Medal award")) {
+void AreaEditor::processGuiPanelMissionEssentials() {
+    float oldTimeLimit = game.curArea->mission.timeLimit;
+    bool dayDurationNeedsUpdate = false;
     
-        //Medal award mode text.
-        ImGui::Text("Medal award mode:");
-        
-        //Medal award mode widgets.
-        processGuiWidgetsMedalAwardMode(
-            0, "Points",
-            "The player's final medal depends on how many points they\n"
-            "got in different criteria."
+    //Mission essentials node.
+    if(saveableTreeNode("mission", "Essentials")) {
+    
+        //Preset text.
+        ImGui::Text(
+            "Preset: %s",
+            enumGetName(missionPresetNames, game.curArea->mission.preset)
+            .c_str()
         );
         
+        //Change preset button.
         ImGui::SameLine();
-        processGuiWidgetsMedalAwardMode(
-            1, "Clear",
-            "The player's final medal depends on whether they have\n"
-            "cleared the mission (platinum) or failed (nothing)."
-        );
-        
-        ImGui::SameLine();
-        processGuiWidgetsMedalAwardMode(
-            2, "Participation",
-            "The player's final medal depends on whether they have played\n"
-            "the mission (platinum) or not (nothing)."
-        );
-        
-        //Medal award criterion widgets.
-        if(
-            game.curArea->mission.medalAwardMode ==
-            MISSION_MEDAL_AWARD_MODE_POINTS
-        ) {
-        
-            //Starting score value.
-            ImGui::Spacer();
-            int startingPoints = game.curArea->mission.startingPoints;
-            ImGui::SetNextItemWidth(60);
-            if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
-                registerChange("mission medal award change");
-                game.curArea->mission.startingPoints = startingPoints;
-            }
-            setTooltip(
-                "Starting amount of points. It can be positive or negative.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Medal point requirements text.
-            ImGui::Spacer();
-            ImGui::Text("Medal point requirements:");
-            
-            //Medal point requirement widgets.
-            processGuiWidgetsMedalAwardMedal(
-                &game.curArea->mission.bronzeReq, "Bronze",
-                INT_MIN, game.curArea->mission.silverReq - 1,
-                "To get a bronze medal, the player needs at least these\n"
-                "many points. Fewer than this, and the player gets no medal."
-            );
-            
-            processGuiWidgetsMedalAwardMedal(
-                &game.curArea->mission.silverReq, "Silver",
-                game.curArea->mission.bronzeReq + 1,
-                game.curArea->mission.goldReq - 1,
-                "To get a silver medal, the player needs at least these\n"
-                "many points."
-            );
-            
-            processGuiWidgetsMedalAwardMedal(
-                &game.curArea->mission.goldReq, "Gold",
-                game.curArea->mission.silverReq + 1,
-                game.curArea->mission.platinumReq - 1,
-                "To get a gold medal, the player needs at least these\n"
-                "many points."
-            );
-            
-            processGuiWidgetsMedalAwardMedal(
-                &game.curArea->mission.platinumReq, "Platinum",
-                game.curArea->mission.goldReq + 1, INT_MAX,
-                "To get a platinum medal, the player needs at least these\n"
-                "many points."
-            );
-            
-            //Maker record value.
-            ImGui::Spacer();
-            int makerRecord = game.curArea->mission.makerRecord;
-            ImGui::SetNextItemWidth(60);
-            if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
-                registerChange("maker record change");
-                game.curArea->mission.makerRecord = makerRecord;
-            }
-            setTooltip(
-                "Specify your best score here, if you want.\n"
-                "You must write a date too in that case.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Maker record date input.
-            string makerRecordDate =
-                game.curArea->mission.makerRecordDate;
-            ImGui::SetNextItemWidth(120);
-            if(
-                monoInputText(
-                    "Date (YYYY/MM/DD)", &makerRecordDate
+        if(ImGui::Button("Change...")) {
+            missionPresetDialogPreset = game.curArea->mission.preset;
+            openDialog(
+                "Change mission preset",
+                std::bind(
+                    &AreaEditor::processGuiDialogMissionPreset, this
                 )
-            ) {
-                registerChange("maker record change");
-                game.curArea->mission.makerRecordDate = makerRecordDate;
-            }
-            setTooltip(
-                "Specify the date in which you got your best score here,\n"
-                "if you want. Your record will only be saved if you\n"
-                "write a date.\n"
-                "The format must be YYYY/MM/DD."
             );
+            dialogs.back()->customSize = Point(400, 0);
         }
+        setTooltip(
+            "Change the mission's preset.\n"
+            "By using one of the presets you can skip most of the setup,\n"
+            "whereas by picking \"custom\" you can control all the details."
+        );
+        
+        //Time limit values.
+        int seconds = (int) game.curArea->mission.timeLimit;
+        if(ImGui::DragTime2("Time limit", &seconds)) {
+            registerChange("mission time limit change");
+            game.curArea->mission.timeLimit = (size_t) seconds;
+            dayDurationNeedsUpdate = true;
+        }
+        setTooltip(
+            "Time limit for the mission. 0 means no time limit.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         ImGui::TreePop();
-        
     }
     
-    ImGui::Spacer();
+    if(dayDurationNeedsUpdate) {
+        if(
+            game.curArea->mission.timeLimit == 0 &&
+            oldTimeLimit > 0
+        ) {
+            game.curArea->dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
+        } else {
+            float oldDayStartMin = game.curArea->dayTimeStart;
+            oldDayStartMin = wrapFloat(oldDayStartMin, 0, 60 * 24);
+            float oldDaySpeed = game.curArea->dayTimeSpeed;
+            float oldTimeLimitMin = oldTimeLimit / 60.0f;
+            size_t newTimeLimitSec = game.curArea->mission.timeLimit;
+            float oldDayEndMin = oldDayStartMin + oldTimeLimitMin * oldDaySpeed;
+            oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
+            newTimeLimitSec = std::max(newTimeLimitSec, (size_t) 1);
+            float newTimeLimitMin = newTimeLimitSec / 60.0f;
+            game.curArea->dayTimeSpeed =
+                calculateDaySpeed(
+                    oldDayStartMin, oldDayEndMin, newTimeLimitMin
+                );
+        }
+    }
 }
 
 
@@ -4026,6 +3846,134 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             }
             }
             
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::Spacer();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui mission medal award part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionMedalAward() {
+    //Medal award node.
+    if(saveableTreeNode("mission", "Medal award")) {
+    
+        //Medal award mode text.
+        ImGui::Text("Medal award mode:");
+        
+        //Medal award mode widgets.
+        processGuiWidgetsMedalAwardMode(
+            0, "Points",
+            "The player's final medal depends on how many points they\n"
+            "got in different criteria."
+        );
+        
+        ImGui::SameLine();
+        processGuiWidgetsMedalAwardMode(
+            1, "Clear",
+            "The player's final medal depends on whether they have\n"
+            "cleared the mission (platinum) or failed (nothing)."
+        );
+        
+        ImGui::SameLine();
+        processGuiWidgetsMedalAwardMode(
+            2, "Participation",
+            "The player's final medal depends on whether they have played\n"
+            "the mission (platinum) or not (nothing)."
+        );
+        
+        //Medal award criterion widgets.
+        if(
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS
+        ) {
+        
+            //Starting score value.
+            ImGui::Spacer();
+            int startingPoints = game.curArea->mission.startingPoints;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
+                registerChange("mission medal award change");
+                game.curArea->mission.startingPoints = startingPoints;
+            }
+            setTooltip(
+                "Starting amount of points. It can be positive or negative.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Medal point requirements text.
+            ImGui::Spacer();
+            ImGui::Text("Medal point requirements:");
+            
+            //Medal point requirement widgets.
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.bronzeReq, "Bronze",
+                INT_MIN, game.curArea->mission.silverReq - 1,
+                "To get a bronze medal, the player needs at least these\n"
+                "many points. Fewer than this, and the player gets no medal."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.silverReq, "Silver",
+                game.curArea->mission.bronzeReq + 1,
+                game.curArea->mission.goldReq - 1,
+                "To get a silver medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.goldReq, "Gold",
+                game.curArea->mission.silverReq + 1,
+                game.curArea->mission.platinumReq - 1,
+                "To get a gold medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.platinumReq, "Platinum",
+                game.curArea->mission.goldReq + 1, INT_MAX,
+                "To get a platinum medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            //Maker record value.
+            ImGui::Spacer();
+            int makerRecord = game.curArea->mission.makerRecord;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecord = makerRecord;
+            }
+            setTooltip(
+                "Specify your best score here, if you want.\n"
+                "You must write a date too in that case.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Maker record date input.
+            string makerRecordDate =
+                game.curArea->mission.makerRecordDate;
+            ImGui::SetNextItemWidth(120);
+            if(
+                monoInputText(
+                    "Date (YYYY/MM/DD)", &makerRecordDate
+                )
+            ) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecordDate = makerRecordDate;
+            }
+            setTooltip(
+                "Specify the date in which you got your best score here,\n"
+                "if you want. Your record will only be saved if you\n"
+                "write a date.\n"
+                "The format must be YYYY/MM/DD."
+            );
         }
         
         ImGui::TreePop();
@@ -6541,4 +6489,56 @@ void AreaEditor::processGuiToolbar() {
         );
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a medal award medal
+ * requirement for this frame.
+ *
+ * @param requirementPtr Points to the requirement value for this medal.
+ * @param widgetLabel Label for the value widget.
+ * @param widgetMinValue Minimum value for the value widget.
+ * @param widgetMaxValue Maximum value for the value widget.
+ * @param tooltip Tooltip for the value widget.
+ */
+void AreaEditor::processGuiWidgetsMedalAwardMedal(
+    int* requirementPtr, const string& widgetLabel,
+    int widgetMinValue, int widgetMaxValue,
+    const string& tooltip
+) {
+    //Requirement value.
+    int req = *requirementPtr;
+    ImGui::SetNextItemWidth(90);
+    if(
+        ImGui::DragInt(
+            widgetLabel.c_str(), &req, 1.0f, widgetMinValue, widgetMaxValue
+        )
+    ) {
+        registerChange("mission medal award change");
+        *requirementPtr = req;
+    }
+    setTooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a medal award mode
+ * for this frame.
+ *
+ * @param value Internal value for this mode's radio button.
+ * @param widgetLabel Label for the radio widget.
+ * @param tooltip Tooltip for the radio widget.
+ */
+void AreaEditor::processGuiWidgetsMedalAwardMode(
+    int value, const string& widgetLabel, const string& tooltip
+) {
+    //Radio button.
+    int mode = game.curArea->mission.medalAwardMode;
+    if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
+        registerChange("mission medal award change");
+        game.curArea->mission.medalAwardMode =
+            (MISSION_MEDAL_AWARD_MODE) mode;
+    }
+    setTooltip(tooltip);
 }

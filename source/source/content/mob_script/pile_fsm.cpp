@@ -66,7 +66,7 @@ void PileFsm::createFsm(MobType* typ) {
  * @brief Handles being attacked, and checks if it must drop another
  * resource or not.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -162,7 +162,7 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a pile starts idling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

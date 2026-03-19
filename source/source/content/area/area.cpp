@@ -41,6 +41,42 @@ const unsigned char DEF_DIFFICULTY = 0;
 
 
 /**
+ * @brief Creates and adds a new edge to the list.
+ *
+ * @return The new edge's pointer.
+ */
+Edge* Area::addNewEdge() {
+    Edge* ePtr = new Edge();
+    edges.push_back(ePtr);
+    return ePtr;
+}
+
+
+/**
+ * @brief Creates and adds a new sector to the list.
+ *
+ * @return The new sector's pointer.
+ */
+Sector* Area::addNewSector() {
+    Sector* sPtr = new Sector();
+    sectors.push_back(sPtr);
+    return sPtr;
+}
+
+
+/**
+ * @brief Creates and adds a new vertex to the list.
+ *
+ * @return The new vertex's pointer.
+ */
+Vertex* Area::addNewVertex() {
+    Vertex* vPtr = new Vertex();
+    vertexes.push_back(vPtr);
+    return vPtr;
+}
+
+
+/**
  * @brief Checks to see if all indexes match their pointers,
  * for the various edges, vertexes, etc.
  *
@@ -483,6 +519,124 @@ void Area::connectVertexEdges(Vertex* vPtr) {
         }
     }
     fixVertexPointers(vPtr);
+}
+
+
+/**
+ * @brief Removes and deletes an edge, and updates all indexes after it.
+ *
+ * @param eIdx Index number of the edge to delete.
+ */
+void Area::deleteEdge(size_t eIdx) {
+    delete edges[eIdx];
+    edges.erase(edges.begin() + eIdx);
+    
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        Vertex* vPtr = vertexes[v];
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+            if(vPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                vPtr->edgeIdxs[e], eIdx, false
+            );
+        }
+    }
+    
+    for(size_t s = 0; s < sectors.size(); s++) {
+        Sector* sPtr = sectors[s];
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+            if(sPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                sPtr->edgeIdxs[e], eIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes an edge, and updates all indexes after it.
+ *
+ * @param ePtr Pointer of the edge to delete.
+ */
+void Area::deleteEdge(const Edge* ePtr) {
+    for(size_t e = 0; e < edges.size(); e++) {
+        if(edges[e] == ePtr) {
+            deleteEdge(e);
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a sector, and updates all indexes after it.
+ *
+ * @param sIdx Index number of the sector to delete.
+ */
+void Area::deleteSector(size_t sIdx) {
+    delete sectors[sIdx];
+    sectors.erase(sectors.begin() + sIdx);
+    
+    for(size_t e = 0; e < edges.size(); e++) {
+        Edge* ePtr = edges[e];
+        for(size_t s = 0; s < 2; s++) {
+            if(ePtr->sectorIdxs[s] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->sectorIdxs[s], sIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a sector, and updates all indexes after it.
+ *
+ * @param sPtr Pointer of the sector to delete.
+ */
+void Area::deleteSector(const Sector* sPtr) {
+    for(size_t s = 0; s < sectors.size(); s++) {
+        if(sectors[s] == sPtr) {
+            deleteSector(s);
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
+ *
+ * @param vIdx Index number of the vertex to delete.
+ */
+void Area::deleteVertex(size_t vIdx) {
+    delete vertexes[vIdx];
+    vertexes.erase(vertexes.begin() + vIdx);
+    
+    for(size_t e = 0; e < edges.size(); e++) {
+        Edge* ePtr = edges[e];
+        for(size_t v = 0; v < 2; v++) {
+            if(ePtr->vertexIdxs[v] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->vertexIdxs[v], vIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
+ *
+ * @param vPtr Pointer of the vertex to delete.
+ */
+void Area::deleteVertex(const Vertex* vPtr) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        if(vertexes[v] == vPtr) {
+            deleteVertex(v);
+            return;
+        }
+    }
 }
 
 
@@ -1459,28 +1613,6 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
 
 
 /**
- * @brief Loads the area maker's reminders from a data node.
- *
- * @param node Data node to load from.
- */
-void Area::loadRemindersFromDataNode(DataNode* node) {
-    reminders.clear();
-    size_t nReminders = node->getNrOfChildren();
-    for(size_t r = 0; r < nReminders; r++) {
-        DataNode* reminderNode = node->getChild(r);
-        AreaMakerReminder newReminder;
-        
-        ReaderSetter rRS(reminderNode);
-        
-        rRS.set("pos", newReminder.pos);
-        rRS.set("text", newReminder.text);
-        
-        reminders.push_back(newReminder);
-    }
-}
-
-
-/**
  * @brief Loads deprecated (pre-1.2.0) mission information.
  *
  * @param node Data node to load from.
@@ -2031,7 +2163,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerPikminBorn,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
             ),
         }
         );
@@ -2056,7 +2189,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecLeft,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
             ),
         }
         );
@@ -2068,7 +2202,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecPassed,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
             ),
         }
         );
@@ -2093,7 +2228,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerEnemyPoint,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
             ),
         }
         );
@@ -2102,6 +2238,28 @@ void Area::loadOldMissionSystem(DataNode* node) {
     //Port the subtitle, since it's used in mission score records.
     if(subtitle.empty()) {
         subtitle = enumGetName(missionGoalNames, goal);
+    }
+}
+
+
+/**
+ * @brief Loads the area maker's reminders from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void Area::loadRemindersFromDataNode(DataNode* node) {
+    reminders.clear();
+    size_t nReminders = node->getNrOfChildren();
+    for(size_t r = 0; r < nReminders; r++) {
+        DataNode* reminderNode = node->getChild(r);
+        AreaMakerReminder newReminder;
+        
+        ReaderSetter rRS(reminderNode);
+        
+        rRS.set("pos", newReminder.pos);
+        rRS.set("text", newReminder.text);
+        
+        reminders.push_back(newReminder);
     }
 }
 
@@ -2125,160 +2283,6 @@ void Area::loadThumbnail(const string& thumbnailPath) {
             al_destroy_bitmap(b);
         }
             );
-    }
-}
-
-
-/**
- * @brief Creates and adds a new edge to the list.
- *
- * @return The new edge's pointer.
- */
-Edge* Area::addNewEdge() {
-    Edge* ePtr = new Edge();
-    edges.push_back(ePtr);
-    return ePtr;
-}
-
-
-/**
- * @brief Creates and adds a new sector to the list.
- *
- * @return The new sector's pointer.
- */
-Sector* Area::addNewSector() {
-    Sector* sPtr = new Sector();
-    sectors.push_back(sPtr);
-    return sPtr;
-}
-
-
-/**
- * @brief Creates and adds a new vertex to the list.
- *
- * @return The new vertex's pointer.
- */
-Vertex* Area::addNewVertex() {
-    Vertex* vPtr = new Vertex();
-    vertexes.push_back(vPtr);
-    return vPtr;
-}
-
-
-/**
- * @brief Removes and deletes an edge, and updates all indexes after it.
- *
- * @param eIdx Index number of the edge to delete.
- */
-void Area::deleteEdge(size_t eIdx) {
-    delete edges[eIdx];
-    edges.erase(edges.begin() + eIdx);
-    
-    for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* vPtr = vertexes[v];
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
-            if(vPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
-                vPtr->edgeIdxs[e], eIdx, false
-            );
-        }
-    }
-    
-    for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* sPtr = sectors[s];
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
-            if(sPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
-                sPtr->edgeIdxs[e], eIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes an edge, and updates all indexes after it.
- *
- * @param ePtr Pointer of the edge to delete.
- */
-void Area::deleteEdge(const Edge* ePtr) {
-    for(size_t e = 0; e < edges.size(); e++) {
-        if(edges[e] == ePtr) {
-            deleteEdge(e);
-            return;
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a sector, and updates all indexes after it.
- *
- * @param sIdx Index number of the sector to delete.
- */
-void Area::deleteSector(size_t sIdx) {
-    delete sectors[sIdx];
-    sectors.erase(sectors.begin() + sIdx);
-    
-    for(size_t e = 0; e < edges.size(); e++) {
-        Edge* ePtr = edges[e];
-        for(size_t s = 0; s < 2; s++) {
-            if(ePtr->sectorIdxs[s] == INVALID) continue;
-            adjustMisalignedIndex(
-                ePtr->sectorIdxs[s], sIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a sector, and updates all indexes after it.
- *
- * @param sPtr Pointer of the sector to delete.
- */
-void Area::deleteSector(const Sector* sPtr) {
-    for(size_t s = 0; s < sectors.size(); s++) {
-        if(sectors[s] == sPtr) {
-            deleteSector(s);
-            return;
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a vertex, and updates all indexes after it.
- *
- * @param vIdx Index number of the vertex to delete.
- */
-void Area::deleteVertex(size_t vIdx) {
-    delete vertexes[vIdx];
-    vertexes.erase(vertexes.begin() + vIdx);
-    
-    for(size_t e = 0; e < edges.size(); e++) {
-        Edge* ePtr = edges[e];
-        for(size_t v = 0; v < 2; v++) {
-            if(ePtr->vertexIdxs[v] == INVALID) continue;
-            adjustMisalignedIndex(
-                ePtr->vertexIdxs[v], vIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a vertex, and updates all indexes after it.
- *
- * @param vPtr Pointer of the vertex to delete.
- */
-void Area::deleteVertex(const Vertex* vPtr) {
-    for(size_t v = 0; v < vertexes.size(); v++) {
-        if(vertexes[v] == vPtr) {
-            deleteVertex(v);
-            return;
-        }
     }
 }
 

@@ -82,7 +82,7 @@ void DropFsm::createFsm(MobType* typ) {
 /**
  * @brief When the drop lands on the floor.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -97,7 +97,7 @@ void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief What to do when the drop is touched.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -182,7 +182,7 @@ void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Sets the animation to the "bumped" one.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -196,7 +196,7 @@ void DropFsm::setBumpedAnim(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Sets the animation to the "falling" one.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -213,7 +213,7 @@ void DropFsm::setFallingAnim(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Sets the standard "idling" animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

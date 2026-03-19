@@ -180,7 +180,7 @@ void ResourceFsm::createFsm(MobType* typ) {
  * @brief When the resource is fully delivered. This should only run
  * code that cannot be handled by ships or Onions.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -205,7 +205,7 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the resource is dropped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -225,11 +225,13 @@ void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the resource reaches its carry destination.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleReachDestination(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::handleReachDestination(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(resPtr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
@@ -244,11 +246,13 @@ void ResourceFsm::handleReachDestination(ScriptVM* scriptVM, void* info1, void* 
 /**
  * @brief When the resource starts moving.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::handleStartMoving(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::handleStartMoving(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Resource* resPtr = (Resource*) scriptVM->mob;
 
     resPtr->setTimer(0);
@@ -258,7 +262,7 @@ void ResourceFsm::handleStartMoving(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When the resource lands from being launched in the air.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -274,11 +278,13 @@ void ResourceFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a resource starts being delivered.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ResourceFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2) {
+void ResourceFsm::startBeingDelivered(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Resource* resPtr = (Resource*) scriptVM->mob;
 
     if(
@@ -294,7 +300,7 @@ void ResourceFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* inf
 /**
  * @brief When a resource starts idling, waiting to be carried.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -324,7 +330,7 @@ void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief Vanishes, either disappearing for good, or returning to
  * its origin pile.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

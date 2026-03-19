@@ -263,7 +263,9 @@ void Pikmin::finishDyingClassSpecifics() {
  * @param m The mob to carry.
  */
 void Pikmin::forceCarry(Mob* m) {
-    scriptVM.fsm.setState(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr);
+    scriptVM.fsm.setState(
+        PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr
+    );
     scriptVM.fsm.runEvent(MOB_EV_REACHED_DESTINATION);
 }
 

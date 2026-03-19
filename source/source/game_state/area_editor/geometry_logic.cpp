@@ -22,6 +22,33 @@
 
 
 /**
+ * @brief Creates a new sector for use in layout drawing operations
+ * and adds it to the area.
+ * This automatically clones it from another sector, if not nullptr, or gives it
+ * a recommended texture if the other sector nullptr.
+ *
+ * @param copyFrom Sector to copy from.
+ * @return The created sector.
+ */
+Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
+    Sector* newSector = game.curArea->addNewSector();
+    
+    if(copyFrom) {
+        copyFrom->clone(newSector);
+        updateSectorTexture(newSector, copyFrom->textureInfo.bmpName);
+    } else {
+        if(!textureSuggestions.empty()) {
+            updateSectorTexture(newSector, textureSuggestions[0].name);
+        } else {
+            updateSectorTexture(newSector, "");
+        }
+    }
+    
+    return newSector;
+}
+
+
+/**
  * @brief Checks whether it's possible to traverse from drawing node n1 to n2
  * with the existing edges and vertexes. In other words, if you draw a line
  * between n1 and n2, it will not go inside a sector.
@@ -435,33 +462,6 @@ void AreaEditor::copySectorProperties() {
     copyBufferSector->textureInfo = sourceSector->textureInfo;
     setStatus("Successfully copied the sector's properties.");
     return;
-}
-
-
-/**
- * @brief Creates a new sector for use in layout drawing operations
- * and adds it to the area.
- * This automatically clones it from another sector, if not nullptr, or gives it
- * a recommended texture if the other sector nullptr.
- *
- * @param copyFrom Sector to copy from.
- * @return The created sector.
- */
-Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
-    Sector* newSector = game.curArea->addNewSector();
-    
-    if(copyFrom) {
-        copyFrom->clone(newSector);
-        updateSectorTexture(newSector, copyFrom->textureInfo.bmpName);
-    } else {
-        if(!textureSuggestions.empty()) {
-            updateSectorTexture(newSector, textureSuggestions[0].name);
-        } else {
-            updateSectorTexture(newSector, "");
-        }
-    }
-    
-    return newSector;
 }
 
 

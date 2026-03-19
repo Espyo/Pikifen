@@ -18,8 +18,8 @@
 
 #ifdef _WIN32
 #include <filesystem>
-#include <windows.h>
 #include <shellapi.h> //For ShellExecuteA().
+#include <windows.h>
 #endif
 
 #include "os_utils.h"

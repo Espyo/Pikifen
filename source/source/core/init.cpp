@@ -1147,6 +1147,77 @@ void initMiscDatabases() {
 
 
 /**
+ * @brief Initializes the list of mob categories.
+ */
+void initMobCategories() {
+
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_NONE, new NoneCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_PIKMIN, new PikminCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_ONIONS, new OnionCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_LEADERS, new LeaderCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_ENEMIES, new EnemyCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_TREASURES, new TreasureCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_PELLETS, new PelletCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_CONVERTERS, new ConverterCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_DROPS, new DropCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_RESOURCES, new ResourceCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_PILES, new PileCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_TOOLS, new ToolCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_SHIPS, new ShipCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_BRIDGES, new BridgeCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_GROUP_TASKS, new GroupTaskCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_SCALES, new ScaleCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_TRACKS, new TrackCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_BOUNCERS, new BouncerCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_DECORATIONS, new DecorationCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_INTERACTABLES, new InteractableCategory()
+    );
+    game.mobCategories.registerCategory(
+        MOB_CATEGORY_CUSTOM, new CustomCategory()
+    );
+}
+
+
+/**
  * @brief Initializes the list of script action types.
  */
 void initScriptActionTypes() {
@@ -1390,8 +1461,12 @@ void initScriptActionTypes() {
     );
     
     //Get coordinates from angle.
-    queueParam("x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam(
+        "x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
+    );
+    queueParam(
+        "y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
+    );
     queueParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
@@ -1436,8 +1511,12 @@ void initScriptActionTypes() {
     );
     
     //Get focus var.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam(
+        "destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
+    );
+    queueParam(
+        "focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false
+    );
     commitAction(
         MOB_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
@@ -2078,8 +2157,12 @@ void initScriptActionTypes() {
     );
     
     //Turn to absolute.
-    queueParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam(
+        "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
+    );
+    queueParam(
+        "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
+    );
     commitAction(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
@@ -2088,8 +2171,12 @@ void initScriptActionTypes() {
     );
     
     //Turn to relative.
-    queueParam("angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam(
+        "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
+    );
+    queueParam(
+        "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
+    );
     commitAction(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
@@ -2109,77 +2196,6 @@ void initScriptActionTypes() {
     
 #undef queueParam
 #undef commitAction
-}
-
-
-/**
- * @brief Initializes the list of mob categories.
- */
-void initMobCategories() {
-
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_NONE, new NoneCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_PIKMIN, new PikminCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_ONIONS, new OnionCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_LEADERS, new LeaderCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_ENEMIES, new EnemyCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_TREASURES, new TreasureCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_PELLETS, new PelletCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_CONVERTERS, new ConverterCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_DROPS, new DropCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_RESOURCES, new ResourceCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_PILES, new PileCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_TOOLS, new ToolCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_SHIPS, new ShipCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_BRIDGES, new BridgeCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_GROUP_TASKS, new GroupTaskCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_SCALES, new ScaleCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_TRACKS, new TrackCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_BOUNCERS, new BouncerCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_DECORATIONS, new DecorationCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_INTERACTABLES, new InteractableCategory()
-    );
-    game.mobCategories.registerCategory(
-        MOB_CATEGORY_CUSTOM, new CustomCategory()
-    );
 }
 
 

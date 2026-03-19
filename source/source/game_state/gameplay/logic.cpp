@@ -351,7 +351,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Get up prompt.
     if(
         !leaderPromptDone &&
-        player->leaderPtr->scriptVM.fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
+        player->leaderPtr->scriptVM.fsm.curState->id ==
+        LEADER_STATE_KNOCKED_DOWN
     ) {
         player->leaderPrompt.setEnabled(true);
         player->leaderPrompt.setContents(
@@ -1869,7 +1870,9 @@ void GameplayState::processMobMiscInteractions(
             //Small hack. This way,
             //Pikmin don't get bumped by leaders that are,
             //for instance, lying down.
-            if(m2Ptr->scriptVM.fsm.curState->id != LEADER_STATE_ACTIVE) continue;
+            if(m2Ptr->scriptVM.fsm.curState->id != LEADER_STATE_ACTIVE) {
+                continue;
+            }
             if(dBetween > game.options.misc.pikminBumpDist) continue;
             
             pendingInterMobEvents.push_back(
@@ -1947,11 +1950,15 @@ void GameplayState::processMobTouches(
         mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
         m2Ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
         (
-            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING ||
+            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING_H
         ) && (
-            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING ||
+            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING_H
         );
     bool okToPush = true;
     if(

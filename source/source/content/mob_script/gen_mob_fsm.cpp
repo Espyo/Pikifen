@@ -28,7 +28,7 @@
  * @brief Event handler that makes a mob lose health by being damaged
  * by another.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -58,23 +58,28 @@ void GenMobFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     scriptVM->mob->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
-    scriptVM->mob->doAttackEffects(info->mob2, info->h2, info->h1, damage, 0.0f);
+    scriptVM->mob->doAttackEffects(
+        info->mob2, info->h2, info->h1, damage, 0.0f
+    );
 }
 
 
 /**
  * @brief When it's time to become stuck and move in circles.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
-    engineAssert(scriptVM->mob->carryInfo != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        scriptVM->mob->carryInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     scriptVM->mob->circleAround(
         nullptr, scriptVM->mob->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
-        scriptVM->mob->carryInfo->getSpeed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
+        scriptVM->mob->carryInfo->getSpeed() *
+        MOB::CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
 }
@@ -84,14 +89,19 @@ void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When it's time to check if a carried object should begin moving,
  * or update its path.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
     scriptVM->mob->carryInfo->isMoving = true;
+
+    bool canFly =
+        hasFlag(
+            scriptVM->mob->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE
+        );
     
-    hasFlag(scriptVM->mob->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) ?
+    canFly ?
     enableFlag(scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
     disableFlag(scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
@@ -109,7 +119,7 @@ void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a mob wants a new path.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -133,7 +143,9 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
                 );
         }
         
-    } else if(scriptVM->mob->carryInfo->destination == CARRY_DESTINATION_ONION) {
+    } else if(
+        scriptVM->mob->carryInfo->destination == CARRY_DESTINATION_ONION
+    ) {
         //Special case: Onions.
         //Like ships, Onions can have their delivery area larger than a
         //single point.
@@ -145,7 +157,9 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
             }
         }
         
-    } else if(scriptVM->mob->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB) {
+    } else if(
+        scriptVM->mob->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB
+    ) {
         //Special case: bridges.
         //Pikmin are meant to carry to the current tip of the bridge,
         //but whereas the start of the bridge is on firm ground, the tip may
@@ -169,7 +183,8 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
     settings.targetMob = scriptVM->mob->carryInfo->intendedMob;
     
     scriptVM->mob->followPath(
-        settings, scriptVM->mob->carryInfo->getSpeed(), scriptVM->mob->chaseInfo.acceleration
+        settings, scriptVM->mob->carryInfo->getSpeed(),
+        scriptVM->mob->chaseInfo.acceleration
     );
     
     if(!scriptVM->mob->carryInfo->destinationExists) {
@@ -185,11 +200,13 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a mob reaches the destination or an obstacle when being carried.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::carryReachDestination(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::carryReachDestination(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     scriptVM->mob->stopFollowingPath();
     
     if(scriptVM->mob->deliveryInfo) {
@@ -197,11 +214,15 @@ void GenMobFsm::carryReachDestination(ScriptVM* scriptVM, void* info1, void* inf
     }
     scriptVM->mob->deliveryInfo = new DeliveryInfo();
     if(scriptVM->mob->carryInfo->intendedPikType) {
-        scriptVM->mob->deliveryInfo->color = scriptVM->mob->carryInfo->intendedPikType->mainColor;
-        scriptVM->mob->deliveryInfo->intendedPikType = scriptVM->mob->carryInfo->intendedPikType;
+        scriptVM->mob->deliveryInfo->color =
+            scriptVM->mob->carryInfo->intendedPikType->mainColor;
+        scriptVM->mob->deliveryInfo->intendedPikType =
+            scriptVM->mob->carryInfo->intendedPikType;
     }
-    scriptVM->mob->deliveryInfo->playerTeamIdx = scriptVM->mob->carryInfo->getPlayerTeamIdx();
-    scriptVM->mob->deliveryInfo->finalPoint = scriptVM->mob->carryInfo->intendedPoint;
+    scriptVM->mob->deliveryInfo->playerTeamIdx =
+        scriptVM->mob->carryInfo->getPlayerTeamIdx();
+    scriptVM->mob->deliveryInfo->finalPoint =
+        scriptVM->mob->carryInfo->intendedPoint;
     
         scriptVM->fsm.runEvent(MOB_EV_CARRY_DELIVERED);
 }
@@ -210,11 +231,13 @@ void GenMobFsm::carryReachDestination(ScriptVM* scriptVM, void* info1, void* inf
 /**
  * @brief When a mob is no longer stuck waiting to be carried.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::carryStopBeingStuck(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::carryStopBeingStuck(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     scriptVM->mob->stopCircling();
 }
 
@@ -222,7 +245,7 @@ void GenMobFsm::carryStopBeingStuck(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When a carried object stops moving.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -238,7 +261,7 @@ void GenMobFsm::carryStopMove(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Event handler that makes a mob fall into a pit and vanish.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -253,7 +276,7 @@ void GenMobFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Event handler that makes a mob die.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -266,27 +289,35 @@ void GenMobFsm::goToDyingState(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Event handler for a Pikmin being added as a carrier.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::handleCarrierAdded(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) info1;
     
     //Save some data before changing anything.
-    bool couldMove = scriptVM->mob->carryInfo->curCarryingStrength >= scriptVM->mob->type->weight;
+    bool couldMove =
+        scriptVM->mob->carryInfo->curCarryingStrength >=
+        scriptVM->mob->type->weight;
     Mob* prevDestination = scriptVM->mob->carryInfo->intendedMob;
     
     //Update the numbers and such.
     scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].pikPtr = pikPtr;
-    scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].state = CARRY_SPOT_STATE_USED;
-    scriptVM->mob->carryInfo->curCarryingStrength += pikPtr->pikType->carryStrength;
+    scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].state =
+        CARRY_SPOT_STATE_USED;
+    scriptVM->mob->carryInfo->curCarryingStrength +=
+        pikPtr->pikType->carryStrength;
     scriptVM->mob->carryInfo->curNCarriers++;
     
     scriptVM->mob->chaseInfo.maxSpeed = scriptVM->mob->carryInfo->getSpeed();
     scriptVM->mob->chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
-    bool canMove = scriptVM->mob->carryInfo->curCarryingStrength >= scriptVM->mob->type->weight;
+    bool canMove =
+        scriptVM->mob->carryInfo->curCarryingStrength >=
+        scriptVM->mob->type->weight;
     
     if(!canMove) {
         return;
@@ -295,7 +326,8 @@ void GenMobFsm::handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2)
     scriptVM->mob->carryInfo->destinationExists =
         scriptVM->mob->calculateCarryingDestination(
             &scriptVM->mob->carryInfo->intendedPikType,
-            &scriptVM->mob->carryInfo->intendedMob, &scriptVM->mob->carryInfo->intendedPoint
+            &scriptVM->mob->carryInfo->intendedMob,
+            &scriptVM->mob->carryInfo->intendedPoint
         );
         
     //Check if we need to update the path.
@@ -315,7 +347,10 @@ void GenMobFsm::handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2)
     //Now, check if the fact that it can fly or not changed.
     if(!mustUpdate && scriptVM->mob->pathInfo) {
         bool oldIsAirborne =
-            hasFlag(scriptVM->mob->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            hasFlag(
+                scriptVM->mob->pathInfo->settings.flags,
+                PATH_FOLLOW_FLAG_AIRBORNE
+            );
         bool newIsAirborne = scriptVM->mob->carryInfo->canFly();
         mustUpdate = oldIsAirborne != newIsAirborne;
     }
@@ -346,27 +381,35 @@ void GenMobFsm::handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief Event handler for a carrier Pikmin being removed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::handleCarrierRemoved(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) info1;
     
     //Save some data before changing anything.
-    bool couldMove = scriptVM->mob->carryInfo->curCarryingStrength >= scriptVM->mob->type->weight;
+    bool couldMove =
+        scriptVM->mob->carryInfo->curCarryingStrength >=
+        scriptVM->mob->type->weight;
     Mob* prevDestination = scriptVM->mob->carryInfo->intendedMob;
     
     //Update the numbers and such.
     scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].pikPtr = nullptr;
-    scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].state = CARRY_SPOT_STATE_FREE;
-    scriptVM->mob->carryInfo->curCarryingStrength -= pikPtr->pikType->carryStrength;
+    scriptVM->mob->carryInfo->spotInfo[pikPtr->tempI].state =
+        CARRY_SPOT_STATE_FREE;
+    scriptVM->mob->carryInfo->curCarryingStrength -=
+        pikPtr->pikType->carryStrength;
     scriptVM->mob->carryInfo->curNCarriers--;
     
     scriptVM->mob->chaseInfo.maxSpeed = scriptVM->mob->carryInfo->getSpeed();
     scriptVM->mob->chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
-    bool canMove = scriptVM->mob->carryInfo->curCarryingStrength >= scriptVM->mob->type->weight;
+    bool canMove =
+        scriptVM->mob->carryInfo->curCarryingStrength >=
+        scriptVM->mob->type->weight;
     
     if(!canMove) {
         if(couldMove) {
@@ -379,7 +422,8 @@ void GenMobFsm::handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info
     
     scriptVM->mob->calculateCarryingDestination(
         &scriptVM->mob->carryInfo->intendedPikType,
-        &scriptVM->mob->carryInfo->intendedMob, &scriptVM->mob->carryInfo->intendedPoint
+        &scriptVM->mob->carryInfo->intendedMob,
+        &scriptVM->mob->carryInfo->intendedPoint
     );
     
     //Check if we need to update the path.
@@ -393,7 +437,10 @@ void GenMobFsm::handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info
     //Now, check if the fact that it can fly or not changed.
     if(!mustUpdate && scriptVM->mob->pathInfo) {
         bool oldIsAirborne =
-            hasFlag(scriptVM->mob->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            hasFlag(
+                scriptVM->mob->pathInfo->settings.flags,
+                PATH_FOLLOW_FLAG_AIRBORNE
+            );
         bool newIsAirborne = scriptVM->mob->carryInfo->canFly();
         mustUpdate = oldIsAirborne != newIsAirborne;
     }
@@ -424,7 +471,7 @@ void GenMobFsm::handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief Generic handler for when a mob was delivered to an Onion/ship.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -449,7 +496,7 @@ void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a mob has to lose its momentum.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -461,11 +508,13 @@ void GenMobFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a mob starts the process of being delivered to an Onion/ship.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void GenMobFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2) {
+void GenMobFsm::startBeingDelivered(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     for(size_t p = 0; p < scriptVM->mob->carryInfo->spotInfo.size(); p++) {
         Mob* pikPtr = scriptVM->mob->carryInfo->spotInfo[p].pikPtr;
         if(pikPtr) {
@@ -473,7 +522,10 @@ void GenMobFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2
         }
     }
     
-    if(scriptVM->mob->carryInfo->intendedMob->type->category->id == MOB_CATEGORY_ONIONS) {
+    if(
+        scriptVM->mob->carryInfo->intendedMob->type->category->id ==
+        MOB_CATEGORY_ONIONS
+    ) {
         Onion* oniPtr = (Onion*) scriptVM->mob->carryInfo->intendedMob;
         scriptVM->mob->deliveryInfo->animType = oniPtr->oniType->deliveryAnim;
     }
@@ -482,7 +534,9 @@ void GenMobFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2
     enableFlag(scriptVM->mob->flags, MOB_FLAG_INTANGIBLE);
     scriptVM->mob->becomeUncarriable();
     
-    scriptVM->mob->focusedMob->scriptVM.fsm.runEvent(MOB_EV_STARTED_RECEIVING_DELIVERY, scriptVM->mob);
+    scriptVM->mob->focusedMob->scriptVM.fsm.runEvent(
+        MOB_EV_STARTED_RECEIVING_DELIVERY, scriptVM->mob
+    );
     
     switch(scriptVM->mob->deliveryInfo->animType) {
     case DELIVERY_ANIM_SUCK: {
@@ -500,7 +554,7 @@ void GenMobFsm::startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief Generic handler for a mob touching a hazard.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -518,7 +572,7 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Generic handler for a mob touching a spray.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the spray type.
  * @param info2 Pointer to the mob that sprayed, if any.
  */

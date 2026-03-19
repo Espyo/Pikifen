@@ -79,7 +79,7 @@ void BridgeFsm::createFsm(MobType* typ) {
 /**
  * @brief Makes the bridge check its health and update its chunks, if needed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -95,7 +95,7 @@ void BridgeFsm::checkHealth(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Opens up the bridge.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -112,7 +112,7 @@ void BridgeFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Sets the standard "idling" animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -129,7 +129,7 @@ void BridgeFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief Sets up the bridge with the data surrounding it,
  * like its linked destination object.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

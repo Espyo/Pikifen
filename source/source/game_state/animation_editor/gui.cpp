@@ -286,29 +286,6 @@ void AnimationEditor::processGuiDialogDeleteAnimDb() {
 
 
 /**
- * @brief Processes the list of the current hitbox's hazards,
- * as well as the widgets necessary to control it, for this frame.
- */
-void AnimationEditor::processGuiHitboxHazards() {
-    Hitbox* curHitbox =
-        &curSprite->hitboxes[hitboxSelection.getSelectedItemIdx()];
-    string hazardIname;
-    
-    if(curHitbox->hazard) {
-        hazardIname = curHitbox->hazard->manifest->internalName;
-    }
-    if(processGuiWidgetsHazardManagement(hazardIname)) {
-        changesMgr.markAsChanged();
-        curHitbox->hazard =
-            hazardIname.empty() ?
-            nullptr :
-            &game.content.hazards.list[hazardIname];
-    }
-    setTooltip("Hazard, if any.");
-}
-
-
-/**
  * @brief Processes the "load" dialog for this frame.
  */
 void AnimationEditor::processGuiDialogLoad() {
@@ -344,180 +321,6 @@ void AnimationEditor::processGuiDialogLoad() {
         loadDialogPicker.process();
         
         ImGui::TreePop();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui menu bar for this frame.
- */
-void AnimationEditor::processGuiMenuBar() {
-    if(ImGui::BeginMenuBar()) {
-    
-        //Editor menu.
-        if(ImGui::BeginMenu("Editor")) {
-        
-            //Load file item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick a database to load.",
-                "Ctrl + L"
-            );
-            
-            //Reload current file item.
-            if(ImGui::MenuItem("Reload current animation database")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current "
-                "database from your disk."
-            );
-            
-            //Save current file item.
-            if(ImGui::MenuItem("Save current animation database", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the animation database to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current animation database item.
-            if(ImGui::MenuItem("Delete current animation database")) {
-                deleteAnimDbCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current animation database from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the file with the animation database's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the animation editor.",
-                "Ctrl + Q"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //View menu.
-        if(ImGui::BeginMenu("View")) {
-        
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level, and if pressed again,\n"
-                "reset the camera position.",
-                "0"
-            );
-            
-            //Zoom everything item.
-            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                zoomEverythingCmd(1.0f);
-            }
-            setTooltip(
-                "Move and zoom the camera so that everything in the animation\n"
-                "fits nicely into view.",
-                "Home"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //Help menu.
-        if(ImGui::BeginMenu("Help")) {
-        
-            //Show tooltips item.
-            if(
-                ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.showTooltips
-                )
-            ) {
-                string stateStr =
-                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(stateStr + " tooltips.");
-                saveOptions();
-            }
-            setTooltip(
-                "Whether tooltips should appear when you place your mouse on\n"
-                "top of something in the GUI. Like the tooltip you are\n"
-                "reading right now."
-            );
-            
-            //General help item.
-            if(ImGui::MenuItem("Help...")) {
-                string helpStr =
-                    "To create an animation, first you need some image file "
-                    "to get the animation frames from, featuring the object "
-                    "you want to edit in the different poses. After that, "
-                    "you define what sprites exist (what parts of the image "
-                    "match what poses), and then create animations, populating "
-                    "their frames with the sprites.\n\n"
-                    "If you need more help on how to use the animation editor, "
-                    "check out the tutorial in the manual, located "
-                    "in the engine's folder.";
-                openHelpDialog(helpStr, "animation.html");
-            }
-            setTooltip(
-                "Opens a general help message for this editor."
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        ImGui::EndMenuBar();
-        
     }
 }
 
@@ -800,6 +603,203 @@ void AnimationEditor::processGuiDialogOptions() {
         setTooltip("Area to play on when choosing the quick play feature.");
         
         ImGui::TreePop();
+        
+    }
+}
+
+
+/**
+ * @brief Processes the list of the current hitbox's hazards,
+ * as well as the widgets necessary to control it, for this frame.
+ */
+void AnimationEditor::processGuiHitboxHazards() {
+    Hitbox* curHitbox =
+        &curSprite->hitboxes[hitboxSelection.getSelectedItemIdx()];
+    string hazardIname;
+    
+    if(curHitbox->hazard) {
+        hazardIname = curHitbox->hazard->manifest->internalName;
+    }
+    if(processGuiWidgetsHazardManagement(hazardIname)) {
+        changesMgr.markAsChanged();
+        curHitbox->hazard =
+            hazardIname.empty() ?
+            nullptr :
+            &game.content.hazards.list[hazardIname];
+    }
+    setTooltip("Hazard, if any.");
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
+ */
+void AnimationEditor::processGuiMenuBar() {
+    if(ImGui::BeginMenuBar()) {
+    
+        //Editor menu.
+        if(ImGui::BeginMenu("Editor")) {
+        
+            //Load file item.
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+                loadWidgetPos = getLastWidgetPost();
+                loadCmd(1.0f);
+            }
+            setTooltip(
+                "Pick a database to load.",
+                "Ctrl + L"
+            );
+            
+            //Reload current file item.
+            if(ImGui::MenuItem("Reload current animation database")) {
+                reloadWidgetPos = getLastWidgetPost();
+                reloadCmd(1.0f);
+            }
+            setTooltip(
+                "Lose all changes and reload the current "
+                "database from your disk."
+            );
+            
+            //Save current file item.
+            if(ImGui::MenuItem("Save current animation database", "Ctrl+S")) {
+                saveCmd(1.0f);
+            }
+            setTooltip(
+                "Save the animation database to your disk.",
+                "Ctrl + S"
+            );
+            
+            //Delete current animation database item.
+            if(ImGui::MenuItem("Delete current animation database")) {
+                deleteAnimDbCmd(1.0f);
+            }
+            setTooltip(
+                "Delete the current animation database from your disk."
+            );
+            
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the file with the animation database's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
+            
+            //Separator item.
+            ImGui::Separator();
+            
+            //Options menu item.
+            if(ImGui::MenuItem("Options...")) {
+                openOptionsDialog();
+            }
+            setTooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
+            
+            //Quit editor item.
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+                quitWidgetPos = getLastWidgetPost();
+                quitCmd(1.0f);
+            }
+            setTooltip(
+                "Quit the animation editor.",
+                "Ctrl + Q"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                zoomInCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                zoomOutCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Zoom/position reset", "0")) {
+                zoomAndPosResetCmd(1.0f);
+            }
+            setTooltip(
+                "Reset the zoom level, and if pressed again,\n"
+                "reset the camera position.",
+                "0"
+            );
+            
+            //Zoom everything item.
+            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+                zoomEverythingCmd(1.0f);
+            }
+            setTooltip(
+                "Move and zoom the camera so that everything in the animation\n"
+                "fits nicely into view.",
+                "Home"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //Help menu.
+        if(ImGui::BeginMenu("Help")) {
+        
+            //Show tooltips item.
+            if(
+                ImGui::MenuItem(
+                    "Show tooltips", "", &game.options.editors.showTooltips
+                )
+            ) {
+                string stateStr =
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
+                setStatus(stateStr + " tooltips.");
+                saveOptions();
+            }
+            setTooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
+            
+            //General help item.
+            if(ImGui::MenuItem("Help...")) {
+                string helpStr =
+                    "To create an animation, first you need some image file "
+                    "to get the animation frames from, featuring the object "
+                    "you want to edit in the different poses. After that, "
+                    "you define what sprites exist (what parts of the image "
+                    "match what poses), and then create animations, populating "
+                    "their frames with the sprites.\n\n"
+                    "If you need more help on how to use the animation editor, "
+                    "check out the tutorial in the manual, located "
+                    "in the engine's folder.";
+                openHelpDialog(helpStr, "animation.html");
+            }
+            setTooltip(
+                "Opens a general help message for this editor."
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        ImGui::EndMenuBar();
         
     }
 }

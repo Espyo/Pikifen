@@ -150,6 +150,8 @@ void EnemyType::createAndAddCarryingStates() {
 /**
  * @brief Does extra processing to a loaded FSM state.
  * This creates and adds convenient events to it.
+ * 
+ * @param state The state.
  */
 void EnemyType::handleLoadedScriptState(FsmStateDef* state) {
     vector<FsmEventDef*> newEvents;
@@ -238,31 +240,6 @@ void EnemyType::loadCatProperties(DataNode* file) {
 
 
 /**
- * @brief Loads script data from the script's data file, before the script
- * proper is loaded.
- *
- * @param file File to read from.
- */
-void EnemyType::loadCatScriptDataPre(DataNode* file) {
-    ReaderSetter sRS(file);
-    string statesIgnoringDeathStr;
-    string statesIgnoringSprayStr;
-    string statesIgnoringHazardStr;
-    
-    sRS.set("death_state", dyingStateName);
-    sRS.set("states_ignoring_death", statesIgnoringDeathStr);
-    sRS.set("states_ignoring_spray", statesIgnoringSprayStr);
-    sRS.set("states_ignoring_hazard", statesIgnoringHazardStr);
-    
-    statesIgnoringDeath = semicolonListToVector(statesIgnoringDeathStr);
-    statesIgnoringSpray = semicolonListToVector(statesIgnoringSprayStr);
-    statesIgnoringHazard = semicolonListToVector(statesIgnoringHazardStr);
-    
-    createAndAddCarryingStates();
-}
-
-
-/**
  * @brief Loads script data from the script's data file, after the script
  * proper is loaded.
  *
@@ -306,4 +283,29 @@ void EnemyType::loadCatScriptDataPos(DataNode* file) {
     } else {
         reviveStateIdx = scriptDef.fsm.firstStateIdx;
     }
+}
+
+
+/**
+ * @brief Loads script data from the script's data file, before the script
+ * proper is loaded.
+ *
+ * @param file File to read from.
+ */
+void EnemyType::loadCatScriptDataPre(DataNode* file) {
+    ReaderSetter sRS(file);
+    string statesIgnoringDeathStr;
+    string statesIgnoringSprayStr;
+    string statesIgnoringHazardStr;
+    
+    sRS.set("death_state", dyingStateName);
+    sRS.set("states_ignoring_death", statesIgnoringDeathStr);
+    sRS.set("states_ignoring_spray", statesIgnoringSprayStr);
+    sRS.set("states_ignoring_hazard", statesIgnoringHazardStr);
+    
+    statesIgnoringDeath = semicolonListToVector(statesIgnoringDeathStr);
+    statesIgnoringSpray = semicolonListToVector(statesIgnoringSprayStr);
+    statesIgnoringHazard = semicolonListToVector(statesIgnoringHazardStr);
+    
+    createAndAddCarryingStates();
 }

@@ -228,6 +228,92 @@ void AreaMenu::changeInfo(size_t areaIdx) {
 
 
 /**
+ * @brief Initializes the mission briefing page GUI items.
+ */
+void AreaMenu::initGuiBriefingPage() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
+    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
+    gui.registerCoords("objective_header",   50, 13, 96,  6);
+    gui.registerCoords("objective",          50, 24, 96, 12);
+    gui.registerCoords("notes_header",       50, 35, 96,  6);
+    gui.registerCoords("notes_list",         47, 52, 90, 24);
+    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
+    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
+    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
+    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
+    gui.readDataFile(guiFile);
+    
+    if(!game.content.areas.list[areaType].empty()) {
+    
+        //Name text.
+        briefingNameText =
+            new TextGuiItem(
+            "", game.sysContent.fntAreaName, game.config.guiColors.gold
+        );
+        briefingBox->addChild(briefingNameText);
+        gui.addItem(briefingNameText, "briefing_area_name");
+        
+        //Objective header text.
+        TextGuiItem* objectiveHeaderText =
+            new TextGuiItem(
+            "Objective", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(objectiveHeaderText);
+        gui.addItem(objectiveHeaderText, "objective_header");
+        
+        //Objective explanation text.
+        objectiveText =
+            new TextGuiItem("", game.sysContent.fntStandard);
+        objectiveText->lineWrap = true;
+        briefingBox->addChild(objectiveText);
+        gui.addItem(objectiveText, "objective");
+        
+        //Notes header text.
+        TextGuiItem* notesHeaderText =
+            new TextGuiItem(
+            "Notes", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(notesHeaderText);
+        gui.addItem(notesHeaderText, "notes_header");
+        
+        //Notes list.
+        noteList = new ListGuiItem();
+        briefingBox->addChild(noteList);
+        gui.addItem(noteList, "notes_list");
+        
+        //Notes scrollbar.
+        ScrollGuiItem* notesScroll = new ScrollGuiItem();
+        notesScroll->listItem = noteList;
+        briefingBox->addChild(notesScroll);
+        gui.addItem(notesScroll, "notes_scroll");
+        
+        //Medal award header text.
+        TextGuiItem* medalAwardHeaderText =
+            new TextGuiItem(
+            "Medal award", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(medalAwardHeaderText);
+        gui.addItem(medalAwardHeaderText, "medal_award_header");
+        
+        //Medal award explanation list.
+        medalAwardList = new ListGuiItem();
+        briefingBox->addChild(medalAwardList);
+        gui.addItem(medalAwardList, "medal_award_list");
+        
+        //Medal award explanation scrollbar.
+        ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
+        medalAwardScroll->listItem = medalAwardList;
+        briefingBox->addChild(medalAwardScroll);
+        gui.addItem(medalAwardScroll, "medal_award_scroll");
+    }
+}
+
+
+/**
  * @brief Initializes the area info page GUI items.
  */
 void AreaMenu::initGuiInfoPage() {
@@ -634,92 +720,6 @@ void AreaMenu::initGuiMain() {
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
     gui.addItem(tooltipText, "tooltip");
-}
-
-
-/**
- * @brief Initializes the mission briefing page GUI items.
- */
-void AreaMenu::initGuiBriefingPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
-    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
-    gui.registerCoords("objective_header",   50, 13, 96,  6);
-    gui.registerCoords("objective",          50, 24, 96, 12);
-    gui.registerCoords("notes_header",       50, 35, 96,  6);
-    gui.registerCoords("notes_list",         47, 52, 90, 24);
-    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
-    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
-    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
-    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
-    gui.readDataFile(guiFile);
-    
-    if(!game.content.areas.list[areaType].empty()) {
-    
-        //Name text.
-        briefingNameText =
-            new TextGuiItem(
-            "", game.sysContent.fntAreaName, game.config.guiColors.gold
-        );
-        briefingBox->addChild(briefingNameText);
-        gui.addItem(briefingNameText, "briefing_area_name");
-        
-        //Objective header text.
-        TextGuiItem* objectiveHeaderText =
-            new TextGuiItem(
-            "Objective", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(objectiveHeaderText);
-        gui.addItem(objectiveHeaderText, "objective_header");
-        
-        //Objective explanation text.
-        objectiveText =
-            new TextGuiItem("", game.sysContent.fntStandard);
-        objectiveText->lineWrap = true;
-        briefingBox->addChild(objectiveText);
-        gui.addItem(objectiveText, "objective");
-        
-        //Notes header text.
-        TextGuiItem* notesHeaderText =
-            new TextGuiItem(
-            "Notes", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(notesHeaderText);
-        gui.addItem(notesHeaderText, "notes_header");
-        
-        //Notes list.
-        noteList = new ListGuiItem();
-        briefingBox->addChild(noteList);
-        gui.addItem(noteList, "notes_list");
-        
-        //Notes scrollbar.
-        ScrollGuiItem* notesScroll = new ScrollGuiItem();
-        notesScroll->listItem = noteList;
-        briefingBox->addChild(notesScroll);
-        gui.addItem(notesScroll, "notes_scroll");
-        
-        //Medal award header text.
-        TextGuiItem* medalAwardHeaderText =
-            new TextGuiItem(
-            "Medal award", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(medalAwardHeaderText);
-        gui.addItem(medalAwardHeaderText, "medal_award_header");
-        
-        //Medal award explanation list.
-        medalAwardList = new ListGuiItem();
-        briefingBox->addChild(medalAwardList);
-        gui.addItem(medalAwardList, "medal_award_list");
-        
-        //Medal award explanation scrollbar.
-        ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
-        medalAwardScroll->listItem = medalAwardList;
-        briefingBox->addChild(medalAwardScroll);
-        gui.addItem(medalAwardScroll, "medal_award_scroll");
-    }
 }
 
 

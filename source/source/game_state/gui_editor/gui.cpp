@@ -285,174 +285,6 @@ void GuiEditor::processGuiDialogLoad() {
 
 
 /**
- * @brief Processes the Dear ImGui menu bar for this frame.
- */
-void GuiEditor::processGuiMenuBar() {
-    if(ImGui::BeginMenuBar()) {
-    
-        //Editor menu.
-        if(ImGui::BeginMenu("Editor")) {
-        
-            //Load file item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick a GUI definition to load.",
-                "Ctrl + L"
-            );
-            
-            //Reload current file item.
-            if(ImGui::MenuItem("Reload current GUI definition")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current definition "
-                "from your disk."
-            );
-            
-            //Save file item.
-            if(ImGui::MenuItem("Save current GUI definition", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the GUI definition to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current GUI definition item.
-            if(ImGui::MenuItem("Delete current GUI definition")) {
-                deleteGuiDefCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current GUI definition from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the file with the GUI definition's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the GUI editor.",
-                "Ctrl + Q"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //View menu.
-        if(ImGui::BeginMenu("View")) {
-        
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level and camera position.",
-                "0"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //Help menu.
-        if(ImGui::BeginMenu("Help")) {
-        
-            //Show tooltips item.
-            if(
-                ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.showTooltips
-                )
-            ) {
-                string stateStr =
-                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(stateStr + " tooltips.");
-                saveOptions();
-            }
-            setTooltip(
-                "Whether tooltips should appear when you place your mouse on\n"
-                "top of something in the GUI. Like the tooltip you are\n"
-                "reading right now."
-            );
-            
-            //General help item.
-            if(ImGui::MenuItem("Help...")) {
-                string helpStr =
-                    "This editor allows you to change where each item "
-                    "in a graphical user interface is, and how big it is. "
-                    "It works both for the gameplay HUD and any menu's items. "
-                    "In the canvas you can find the \"game window\", but in "
-                    "reality, it's just some square. This is because the "
-                    "coordinates you work in go from 0% to 100%, instead of "
-                    "using a real window size, since the player can choose "
-                    "whatever window size they want. In addition, for the sake "
-                    "of simplicity, the editor won't show what each GUI item "
-                    "looks like. So you will have to use your imagination to "
-                    "visualize how everything will really look in-game."
-                    "\n\n"
-                    "If you need more help on how to use the GUI editor, "
-                    "check out the tutorial in the manual, located "
-                    "in the engine's folder.";
-                openHelpDialog(helpStr, "gui.html");
-            }
-            setTooltip(
-                "Opens a general help message for this editor."
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        ImGui::EndMenuBar();
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void GuiEditor::processGuiDialogNew() {
@@ -620,6 +452,174 @@ void GuiEditor::processGuiDialogOptions() {
     ImGui::Spacer();
     
     processGuiEditorStyle();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
+ */
+void GuiEditor::processGuiMenuBar() {
+    if(ImGui::BeginMenuBar()) {
+    
+        //Editor menu.
+        if(ImGui::BeginMenu("Editor")) {
+        
+            //Load file item.
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+                loadWidgetPos = getLastWidgetPost();
+                loadCmd(1.0f);
+            }
+            setTooltip(
+                "Pick a GUI definition to load.",
+                "Ctrl + L"
+            );
+            
+            //Reload current file item.
+            if(ImGui::MenuItem("Reload current GUI definition")) {
+                reloadWidgetPos = getLastWidgetPost();
+                reloadCmd(1.0f);
+            }
+            setTooltip(
+                "Lose all changes and reload the current definition "
+                "from your disk."
+            );
+            
+            //Save file item.
+            if(ImGui::MenuItem("Save current GUI definition", "Ctrl+S")) {
+                saveCmd(1.0f);
+            }
+            setTooltip(
+                "Save the GUI definition to your disk.",
+                "Ctrl + S"
+            );
+            
+            //Delete current GUI definition item.
+            if(ImGui::MenuItem("Delete current GUI definition")) {
+                deleteGuiDefCmd(1.0f);
+            }
+            setTooltip(
+                "Delete the current GUI definition from your disk."
+            );
+            
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the file with the GUI definition's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
+            
+            //Separator item.
+            ImGui::Separator();
+            
+            //Options menu item.
+            if(ImGui::MenuItem("Options...")) {
+                openOptionsDialog();
+            }
+            setTooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
+            
+            //Quit editor item.
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+                quitWidgetPos = getLastWidgetPost();
+                quitCmd(1.0f);
+            }
+            setTooltip(
+                "Quit the GUI editor.",
+                "Ctrl + Q"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                zoomInCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                zoomOutCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Reset", "0")) {
+                zoomAndPosResetCmd(1.0f);
+            }
+            setTooltip(
+                "Reset the zoom level and camera position.",
+                "0"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //Help menu.
+        if(ImGui::BeginMenu("Help")) {
+        
+            //Show tooltips item.
+            if(
+                ImGui::MenuItem(
+                    "Show tooltips", "", &game.options.editors.showTooltips
+                )
+            ) {
+                string stateStr =
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
+                setStatus(stateStr + " tooltips.");
+                saveOptions();
+            }
+            setTooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
+            
+            //General help item.
+            if(ImGui::MenuItem("Help...")) {
+                string helpStr =
+                    "This editor allows you to change where each item "
+                    "in a graphical user interface is, and how big it is. "
+                    "It works both for the gameplay HUD and any menu's items. "
+                    "In the canvas you can find the \"game window\", but in "
+                    "reality, it's just some square. This is because the "
+                    "coordinates you work in go from 0% to 100%, instead of "
+                    "using a real window size, since the player can choose "
+                    "whatever window size they want. In addition, for the sake "
+                    "of simplicity, the editor won't show what each GUI item "
+                    "looks like. So you will have to use your imagination to "
+                    "visualize how everything will really look in-game."
+                    "\n\n"
+                    "If you need more help on how to use the GUI editor, "
+                    "check out the tutorial in the manual, located "
+                    "in the engine's folder.";
+                openHelpDialog(helpStr, "gui.html");
+            }
+            setTooltip(
+                "Opens a general help message for this editor."
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        ImGui::EndMenuBar();
+    }
 }
 
 
@@ -1132,7 +1132,9 @@ void GuiEditor::processGuiPanelItems() {
         static string renameItemName;
         CustomGuiItemDef* curItemPtr = nullptr;
         if(itemSelection.isOneSelected()) {
-            curItemPtr = (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
+            curItemPtr =
+                (CustomGuiItemDef*)
+                allItems[itemSelection.getSelectedItemIdx()];
         }
         
         //New item button.
@@ -1218,7 +1220,8 @@ void GuiEditor::processGuiPanelItems() {
                         customItems[customIdx], customItems[customIdx - 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() - 1;
+                    size_t newSelItemIdx =
+                        itemSelection.getSelectedItemIdx() - 1;
                     itemSelection.clear();
                     itemSelection.select(newSelItemIdx);
                     changesMgr.markAsChanged();
@@ -1247,7 +1250,8 @@ void GuiEditor::processGuiPanelItems() {
                         customItems[customIdx], customItems[customIdx + 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() + 1;
+                    size_t newSelItemIdx =
+                        itemSelection.getSelectedItemIdx() + 1;
                     itemSelection.clear();
                     itemSelection.select(newSelItemIdx);
                     changesMgr.markAsChanged();

@@ -350,7 +350,9 @@ void GameplayState::drawBigMsg() {
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
         
         KeyframeInterpolator<float> kiX(game.winW);
-        kiX.addNew(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
+        kiX.addNew(
+            TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK
+        );
         kiX.addNew(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
         kiX.addNew(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
         

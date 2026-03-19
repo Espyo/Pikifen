@@ -152,7 +152,7 @@ void TreasureFsm::createFsm(MobType* typ) {
 /**
  * @brief When a treasure falls into a bottomless pit and should respawn.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -168,7 +168,7 @@ void TreasureFsm::respawn(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the treasure should lose its momentum and stand still.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

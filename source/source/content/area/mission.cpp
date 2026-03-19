@@ -393,7 +393,109 @@ void MissionData::reset() {
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeLoseLeaders::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLeadersInRegion::getEditorInfo() const {
+    return
+    MissionEndCondType::EditorInfo {
+        .description =
+        "Triggers when the given amount of leaders is inside "
+        "the given region.",
+        .indexParamName =
+        "Region number",
+        .indexParamDescription =
+        "Number of the region to check for.",
+        .amountParamName =
+        "Leader amount",
+        .amountParamDescription =
+        "Number of leaders to check for.",
+    };
+}
+
+
+/**
+ * @brief Retrieves HUD information about the mission end condition type.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The information.
+ */
+MissionEndCondType::HudInfo MissionEndCondTypeLeadersInRegion::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return
+    MissionEndCondType::HudInfo {
+        .description = "Leaders in the region.",
+    };
+}
+
+
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
+ */
+string MissionEndCondTypeLeadersInRegion::getName() const {
+    return "Leaders in region";
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypeLeadersInRegion::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+    Point* outCamPos, float* outCamZoom
+) const {
+    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
+        return false;
+    }
+    Point avgPos;
+    for(Leader* lPtr : gameplay->areaRegions[cond->indexParam].leadersInside) {
+        if(lPtr) avgPos += lPtr->pos;
+    }
+    avgPos.x /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
+    avgPos.y /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
+    *outCamPos = avgPos;
+    return true;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypeLeadersInRegion::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
+        return false;
+    }
+    return
+        gameplay->areaRegions[cond->indexParam].leadersInside.size() >=
+        cond->amountParam;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLoseLeaders::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -479,7 +581,8 @@ bool MissionEndCondTypeLoseLeaders::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeLosePikmin::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLosePikmin::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -566,7 +669,8 @@ bool MissionEndCondTypeLosePikmin::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeMobGroup::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeMobGroup::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -672,107 +776,8 @@ bool MissionEndCondTypeMobGroup::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeLeadersInRegion::getEditorInfo() const {
-    return
-    MissionEndCondType::EditorInfo {
-        .description =
-        "Triggers when the given amount of leaders is inside "
-        "the given region.",
-        .indexParamName =
-        "Region number",
-        .indexParamDescription =
-        "Number of the region to check for.",
-        .amountParamName =
-        "Leader amount",
-        .amountParamDescription =
-        "Number of leaders to check for.",
-    };
-}
-
-
-/**
- * @brief Retrieves HUD information about the mission end condition type.
- *
- * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The information.
- */
-MissionEndCondType::HudInfo MissionEndCondTypeLeadersInRegion::getHudInfo(
-    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
-) const {
-    return
-    MissionEndCondType::HudInfo {
-        .description = "Leaders in the region.",
-    };
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionEndCondTypeLeadersInRegion::getName() const {
-    return "Leaders in region";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom
- * when the condition triggers.
- *
- * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionEndCondTypeLeadersInRegion::getZoomData(
-    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
-    Point* outCamPos, float* outCamZoom
-) const {
-    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
-        return false;
-    }
-    Point avgPos;
-    for(Leader* lPtr : gameplay->areaRegions[cond->indexParam].leadersInside) {
-        if(lPtr) avgPos += lPtr->pos;
-    }
-    avgPos.x /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
-    avgPos.y /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
-    *outCamPos = avgPos;
-    return true;
-}
-
-
-/**
- * @brief Checks if the condition has been met.
- *
- * @param cond Condition being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionEndCondTypeLeadersInRegion::isMet(
-    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
-) const {
-    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
-        return false;
-    }
-    return
-        gameplay->areaRegions[cond->indexParam].leadersInside.size() >=
-        cond->amountParam;
-}
-
-
-/**
- * @brief Retrieves editor information about the mission end condition type.
- *
- * @return The information.
- */
-MissionEndCondType::EditorInfo MissionEndCondTypePauseMenu::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypePauseMenu::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -850,7 +855,8 @@ bool MissionEndCondTypePauseMenu::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypePikminOrFewer::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypePikminOrFewer::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -937,7 +943,8 @@ bool MissionEndCondTypePikminOrFewer::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypePikminOrMore::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypePikminOrMore::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -1024,11 +1031,12 @@ bool MissionEndCondTypePikminOrMore::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeTakeDamage::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeScript::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
-        "Triggers when any leader takes any damage.",
+        "Triggers exclusively when the area script calls it.",
     };
 }
 
@@ -1100,11 +1108,12 @@ bool MissionEndCondTypeScript::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeScript::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeTakeDamage::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
-        "Triggers exclusively when the area script calls it.",
+        "Triggers when any leader takes any damage.",
     };
 }
 
@@ -1194,7 +1203,8 @@ bool MissionEndCondTypeTakeDamage::isMet(
  *
  * @return The information.
  */
-MissionEndCondType::EditorInfo MissionEndCondTypeTimeLimit::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeTimeLimit::getEditorInfo() const {
     return
     MissionEndCondType::EditorInfo {
         .description =
@@ -1371,6 +1381,29 @@ void MissionRecord::clear() {
     date.clear();
 }
 
+
+/**
+ * @brief Returns whether or not this record is a platinum medal.
+ *
+ * @param mission Mission data to get info from.
+ * @return Whether it is platinum.
+ */
+bool MissionRecord::isPlatinum(const MissionData& mission) {
+    if(date.empty()) return false;
+    
+    switch(mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
+        return score >= mission.platinumReq;
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
+        return true;
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
+        return true;
+    }
+    }
+    return false;
+}
+
+
 /**
  * @brief Loads a record from a data node.
  *
@@ -1410,30 +1443,24 @@ bool MissionRecord::saveToDataNode(DataNode* node) {
 }
 
 
-/**
- * @brief Returns whether or not this record is a platinum medal.
- *
- * @param mission Mission data to get info from.
- * @return Whether it is platinum.
- */
-bool MissionRecord::isPlatinum(const MissionData& mission) {
-    if(date.empty()) return false;
-    
-    switch(mission.medalAwardMode) {
-    case MISSION_MEDAL_AWARD_MODE_POINTS: {
-        return score >= mission.platinumReq;
-    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
-        return true;
-    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
-        return true;
-    }
-    }
-    return false;
-}
-
-
 #pragma endregion
 #pragma region Score criteria
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ *
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->treasurePointsObtained;
+}
 
 
 /**
@@ -1466,10 +1493,10 @@ string MissionScoreCriterionTypeCollectionPts::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
+size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->treasurePointsObtained;
+    return gameplay->enemyDefeatPointsObtained;
 }
 
 
@@ -1503,10 +1530,14 @@ string MissionScoreCriterionTypeDefeatPts::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
+size_t MissionScoreCriterionTypeMobGroup::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->enemyDefeatPointsObtained;
+    if(cri->indexParam > gameplay->missionMobGroups.size() - 1) {
+        return 0;
+    }
+    
+    return gameplay->missionMobGroups[cri->indexParam].getNrCleared();
 }
 
 
@@ -1540,14 +1571,10 @@ string MissionScoreCriterionTypeMobGroup::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeMobGroup::calculateAmount(
+size_t MissionScoreCriterionTypePikmin::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(cri->indexParam > gameplay->missionMobGroups.size() - 1) {
-        return 0;
-    }
-    
-    return gameplay->missionMobGroups[cri->indexParam].getNrCleared();
+    return gameplay->getAmountOfTotalPikmin();
 }
 
 
@@ -1581,10 +1608,10 @@ string MissionScoreCriterionTypePikmin::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikmin::calculateAmount(
+size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin();
+    return gameplay->pikminBorn;
 }
 
 
@@ -1618,10 +1645,10 @@ string MissionScoreCriterionTypePikminBorn::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
+size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->pikminBorn;
+    return gameplay->pikminDeaths;
 }
 
 
@@ -1655,10 +1682,13 @@ string MissionScoreCriterionTypePikminDeaths::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
+size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->pikminDeaths;
+    return
+        gameplay->missionConsiderZeroTime ?
+        0 :
+        mission->timeLimit - floor(gameplay->gameplayTimePassed);
 }
 
 
@@ -1692,13 +1722,13 @@ string MissionScoreCriterionTypeSecLeft::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
+size_t MissionScoreCriterionTypeSecPassed::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
     return
         gameplay->missionConsiderZeroTime ?
         0 :
-        mission->timeLimit - floor(gameplay->gameplayTimePassed);
+        floor(gameplay->gameplayTimePassed);
 }
 
 
@@ -1720,25 +1750,6 @@ string MissionScoreCriterionTypeSecPassed::getFriendlyName() const {
  */
 string MissionScoreCriterionTypeSecPassed::getName() const {
     return "Seconds passed";
-}
-
-
-/**
- * @brief Calculates the amount relevant to this criterion so the final score
- * can be calculated.
- *
- * @param cri Criterion being process.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount of points.
- */
-size_t MissionScoreCriterionTypeSecPassed::calculateAmount(
-    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
-) const {
-    return
-        gameplay->missionConsiderZeroTime ?
-        0 :
-        floor(gameplay->gameplayTimePassed);
 }
 
 

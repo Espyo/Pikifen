@@ -33,7 +33,7 @@ FsmEventDef::FsmEventDef(FSM_EV type, const vector<ScriptActionDef*>& actions) :
 /**
  * @brief Add a vector of actions onto the event.
  *
- * @param actions Vector of actions to insert.
+ * @param newActions Vector of actions to insert.
  * @param atEnd Are the actions inserted at the end?
  */
 void FsmEventDef::insertActions(

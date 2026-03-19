@@ -288,169 +288,6 @@ void ParticleEditor::processGuiDialogLoad() {
 
 
 /**
- * @brief Processes the Dear ImGui menu bar for this frame.
- */
-void ParticleEditor::processGuiMenuBar() {
-    if(ImGui::BeginMenuBar()) {
-    
-        //Editor menu.
-        if(ImGui::BeginMenu("Editor")) {
-        
-            //Load file item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick a particle generator to load.",
-                "Ctrl + L"
-            );
-            
-            //Reload current file item.
-            if(ImGui::MenuItem("Reload current particle generator")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current generator "
-                "from your disk."
-            );
-            
-            //Save file item.
-            if(ImGui::MenuItem("Save current particle generator", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the particle generator to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current particle generator item.
-            if(ImGui::MenuItem("Delete current particle generator")) {
-                deletePartGenCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current particle generator from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the file with the particle generator's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the particle editor.",
-                "Ctrl + Q"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //View menu.
-        if(ImGui::BeginMenu("View")) {
-        
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level and camera position.",
-                "0"
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        //Help menu.
-        if(ImGui::BeginMenu("Help")) {
-        
-            //Show tooltips item.
-            if(
-                ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.showTooltips
-                )
-            ) {
-                string stateStr =
-                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(stateStr + " tooltips.");
-                saveOptions();
-            }
-            setTooltip(
-                "Whether tooltips should appear when you place your mouse on\n"
-                "top of something in the GUI. Like the tooltip you are\n"
-                "reading right now."
-            );
-            
-            //General help item.
-            if(ImGui::MenuItem("Help...")) {
-                string helpStr =
-                    "The particle editor allows you to change how each "
-                    "particle generator works. In-game, particle generators "
-                    "are responsible for generating particles, and each one "
-                    "emits particles differently. Each generator also has "
-                    "information about its particles' sizes, colors, movement, "
-                    "etc."
-                    "\n\n"
-                    "If you need more help on how to use the particle editor, "
-                    "check out the tutorial in the manual, located "
-                    "in the engine's folder.";
-                openHelpDialog(helpStr, "particle.html");
-            }
-            setTooltip(
-                "Opens a general help message for this editor."
-            );
-            
-            ImGui::EndMenu();
-            
-        }
-        
-        ImGui::EndMenuBar();
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void ParticleEditor::processGuiDialogNew() {
@@ -704,6 +541,169 @@ void ParticleEditor::processGuiDialogOptions() {
         
         ImGui::TreePop();
         
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar for this frame.
+ */
+void ParticleEditor::processGuiMenuBar() {
+    if(ImGui::BeginMenuBar()) {
+    
+        //Editor menu.
+        if(ImGui::BeginMenu("Editor")) {
+        
+            //Load file item.
+            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+                loadWidgetPos = getLastWidgetPost();
+                loadCmd(1.0f);
+            }
+            setTooltip(
+                "Pick a particle generator to load.",
+                "Ctrl + L"
+            );
+            
+            //Reload current file item.
+            if(ImGui::MenuItem("Reload current particle generator")) {
+                reloadWidgetPos = getLastWidgetPost();
+                reloadCmd(1.0f);
+            }
+            setTooltip(
+                "Lose all changes and reload the current generator "
+                "from your disk."
+            );
+            
+            //Save file item.
+            if(ImGui::MenuItem("Save current particle generator", "Ctrl+S")) {
+                saveCmd(1.0f);
+            }
+            setTooltip(
+                "Save the particle generator to your disk.",
+                "Ctrl + S"
+            );
+            
+            //Delete current particle generator item.
+            if(ImGui::MenuItem("Delete current particle generator")) {
+                deletePartGenCmd(1.0f);
+            }
+            setTooltip(
+                "Delete the current particle generator from your disk."
+            );
+            
+            //Open externally item.
+            if(ImGui::MenuItem("Open externally")) {
+                openExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the file with the particle generator's data in your "
+                "operative system.\n"
+                "Useful if you need to edit things by hand."
+            );
+            
+            //Separator item.
+            ImGui::Separator();
+            
+            //Options menu item.
+            if(ImGui::MenuItem("Options...")) {
+                openOptionsDialog();
+            }
+            setTooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
+            
+            //Quit editor item.
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+                quitWidgetPos = getLastWidgetPost();
+                quitCmd(1.0f);
+            }
+            setTooltip(
+                "Quit the particle editor.",
+                "Ctrl + Q"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                zoomInCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                zoomOutCmd(1.0f);
+            }
+            setTooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Reset", "0")) {
+                zoomAndPosResetCmd(1.0f);
+            }
+            setTooltip(
+                "Reset the zoom level and camera position.",
+                "0"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //Help menu.
+        if(ImGui::BeginMenu("Help")) {
+        
+            //Show tooltips item.
+            if(
+                ImGui::MenuItem(
+                    "Show tooltips", "", &game.options.editors.showTooltips
+                )
+            ) {
+                string stateStr =
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
+                setStatus(stateStr + " tooltips.");
+                saveOptions();
+            }
+            setTooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
+            
+            //General help item.
+            if(ImGui::MenuItem("Help...")) {
+                string helpStr =
+                    "The particle editor allows you to change how each "
+                    "particle generator works. In-game, particle generators "
+                    "are responsible for generating particles, and each one "
+                    "emits particles differently. Each generator also has "
+                    "information about its particles' sizes, colors, movement, "
+                    "etc."
+                    "\n\n"
+                    "If you need more help on how to use the particle editor, "
+                    "check out the tutorial in the manual, located "
+                    "in the engine's folder.";
+                openHelpDialog(helpStr, "particle.html");
+            }
+            setTooltip(
+                "Opens a general help message for this editor."
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        ImGui::EndMenuBar();
     }
 }
 

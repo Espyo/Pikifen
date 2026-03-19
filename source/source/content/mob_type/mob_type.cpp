@@ -69,12 +69,6 @@ MobType::~MobType() {
 
 
 /**
- * @brief Does extra processing to a loaded FSM state, if needed.
- */
-void MobType::handleLoadedScriptState(FsmStateDef*) { }
-
-
-/**
  * @brief Specifies what animation conversions there are, if any.
  *
  * @return The animation conversions.
@@ -82,6 +76,12 @@ void MobType::handleLoadedScriptState(FsmStateDef*) { }
 AnimConversionVector MobType::getAnimConversions() const {
     return AnimConversionVector();
 }
+
+
+/**
+ * @brief Does extra processing to a loaded FSM state, if needed.
+ */
+void MobType::handleLoadedScriptState(FsmStateDef*) { }
 
 
 /**
@@ -94,6 +94,20 @@ void MobType::loadCatProperties(DataNode*) { }
  * @brief Loads any resources into memory, if any.
  */
 void MobType::loadCatResources(DataNode*) { }
+
+
+/**
+ * @brief Loads script data from the script's data file, after the script
+ * proper is loaded.
+ */
+void MobType::loadCatScriptDataPos(DataNode*) { }
+
+
+/**
+ * @brief Loads script data from the script's data file, before the script
+ * proper is loaded.
+ */
+void MobType::loadCatScriptDataPre(DataNode*) { }
 
 
 /**
@@ -666,20 +680,6 @@ void MobType::loadFromDataNode(
         customCategoryName = category->name;
     }
 }
-
-
-/**
- * @brief Loads script data from the script's data file, before the script
- * proper is loaded.
- */
-void MobType::loadCatScriptDataPre(DataNode*) { }
-
-
-/**
- * @brief Loads script data from the script's data file, after the script
- * proper is loaded.
- */
-void MobType::loadCatScriptDataPos(DataNode*) { }
 
 
 /**

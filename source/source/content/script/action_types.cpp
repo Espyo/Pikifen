@@ -24,6 +24,25 @@
 using std::set;
 
 
+#pragma region Action instance run data
+
+
+/**
+ * @brief Constructs a new script action run data object.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param actionDef The action's definition.
+ */
+ScriptActionInstRunData::ScriptActionInstRunData(
+    ScriptVM* scriptVM, ScriptActionDef* actionDef
+) :
+    scriptVM(scriptVM),
+    actionDef(actionDef) {
+    
+}
+
+
+#pragma endregion
 #pragma region Action loaders
 
 
@@ -31,9 +50,12 @@ using std::set;
  * @brief Loading code for the arachnorb logic plan script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
-bool ScriptActionLoaders::arachnorbPlanLogic(ScriptActionDef& def, MobType* mt) {
+bool ScriptActionLoaders::arachnorbPlanLogic(
+    ScriptActionDef& def, MobType* mt
+) {
     bool found;
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
         enumGetValue(
@@ -52,6 +74,7 @@ bool ScriptActionLoaders::arachnorbPlanLogic(ScriptActionDef& def, MobType* mt) 
  * @brief Loading code for the calculation script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::calculate(ScriptActionDef& def, MobType* mt) {
@@ -71,6 +94,7 @@ bool ScriptActionLoaders::calculate(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the ease number script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::easeNumber(ScriptActionDef& def, MobType* mt) {
@@ -90,6 +114,7 @@ bool ScriptActionLoaders::easeNumber(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the focus script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::focus(ScriptActionDef& def, MobType* mt) {
@@ -101,6 +126,7 @@ bool ScriptActionLoaders::focus(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the follow mob as leader script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
@@ -112,6 +138,7 @@ bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the info getting script actions.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
@@ -133,6 +160,7 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the info getting script actions.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
@@ -154,6 +182,7 @@ bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the info getting script actions.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
@@ -179,6 +208,7 @@ bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the hold focused mob script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::holdFocus(ScriptActionDef& def, MobType* mt) {
@@ -197,6 +227,7 @@ bool ScriptActionLoaders::holdFocus(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the "if" script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::ifFunction(ScriptActionDef& def, MobType* mt) {
@@ -237,6 +268,7 @@ bool ScriptActionLoaders::loadMobTargetType(
  * @brief Loading code for the move to target script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
@@ -256,6 +288,7 @@ bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the sound playing script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::playSound(ScriptActionDef& def, MobType* mt) {
@@ -275,6 +308,7 @@ bool ScriptActionLoaders::playSound(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the status reception script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::receiveStatus(ScriptActionDef& def, MobType* mt) {
@@ -291,6 +325,7 @@ bool ScriptActionLoaders::receiveStatus(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the status removal script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::removeStatus(ScriptActionDef& def, MobType* mt) {
@@ -324,6 +359,7 @@ void ScriptActionLoaders::reportEnumError(
  * @brief Loading code for the animation setting script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setAnimation(ScriptActionDef& def, MobType* mt) {
@@ -355,6 +391,7 @@ bool ScriptActionLoaders::setAnimation(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the far reach setting script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
@@ -373,6 +410,7 @@ bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the holdable setting script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
@@ -394,6 +432,7 @@ bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the near reach setting script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setNearReach(ScriptActionDef& def, MobType* mt) {
@@ -412,6 +451,7 @@ bool ScriptActionLoaders::setNearReach(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the team setting script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setTeam(ScriptActionDef& def, MobType* mt) {
@@ -430,6 +470,7 @@ bool ScriptActionLoaders::setTeam(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the spawning script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
@@ -449,6 +490,7 @@ bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the z stabilization script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::stabilizeZ(ScriptActionDef& def, MobType* mt) {
@@ -468,6 +510,7 @@ bool ScriptActionLoaders::stabilizeZ(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the chomping start script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::startChomping(ScriptActionDef& def, MobType* mt) {
@@ -488,6 +531,7 @@ bool ScriptActionLoaders::startChomping(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the particle start script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::startParticles(ScriptActionDef& def, MobType* mt) {
@@ -504,6 +548,7 @@ bool ScriptActionLoaders::startParticles(ScriptActionDef& def, MobType* mt) {
  * @brief Loading code for the turn to target script action type.
  *
  * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::turnToTarget(ScriptActionDef& def, MobType* mt) {
@@ -516,50 +561,6 @@ bool ScriptActionLoaders::turnToTarget(ScriptActionDef& def, MobType* mt) {
     }
     def.args[0] = i2s(type);
     return true;
-}
-
-
-#pragma endregion
-#pragma region Action param
-
-
-/**
- * @brief Constructs a new script action type parameter object.
- *
- * @param name Name of the parameter.
- * @param type Type of parameter.
- * @param forceConst If true, this must be a constant value.
- * If false, it can also be a var.
- * @param isExtras If true, this is an array of them (minimum amount 0).
- */
-ScriptActionTypeParam::ScriptActionTypeParam(
-    const string& name, const SCRIPT_ACTION_PARAM type,
-    bool forceConst, bool isExtras
-):
-    name(name),
-    type(type),
-    forceConst(forceConst),
-    isExtras(isExtras) {
-    
-}
-
-
-#pragma endregion
-#pragma region Action instance run data
-
-
-/**
- * @brief Constructs a new script action run data object.
- *
- * @param scriptVM The script VM responsible.
- * @param actionDef The action's definition.
- */
-ScriptActionInstRunData::ScriptActionInstRunData(
-    ScriptVM* scriptVM, ScriptActionDef* actionDef
-) :
-    scriptVM(scriptVM),
-    actionDef(actionDef) {
-    
 }
 
 
@@ -819,7 +820,8 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     settings.label = label;
     data.scriptVM->mob->followPath(
-        settings, data.scriptVM->mob->getBaseSpeed(), data.scriptVM->mob->type->acceleration
+        settings, data.scriptVM->mob->getBaseSpeed(),
+        data.scriptVM->mob->type->acceleration
     );
 }
 
@@ -842,7 +844,8 @@ void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
     }
     
     data.scriptVM->mob->followPath(
-        settings, data.scriptVM->mob->getBaseSpeed(), data.scriptVM->mob->type->acceleration
+        settings, data.scriptVM->mob->getBaseSpeed(),
+        data.scriptVM->mob->type->acceleration
     );
 }
 
@@ -936,7 +939,9 @@ void ScriptActionRunners::getChomped(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::getCoordinatesFromAngle(ScriptActionInstRunData& data) {
+void ScriptActionRunners::getCoordinatesFromAngle(
+    ScriptActionInstRunData& data
+) {
     float angle = s2f(data.args[2]);
     angle = degToRad(angle);
     float magnitude = s2f(data.args[3]);
@@ -1326,7 +1331,9 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->mob->focusOnMob(data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])]);
+    data.scriptVM->mob->focusOnMob(
+        data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])]
+    );
 }
 
 
@@ -1374,7 +1381,11 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     switch(t) {
     case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
         if(data.scriptVM->mob->focusedMob) {
-            float a = getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->focusedMob->pos);
+            float a =
+                getAngle(
+                    data.scriptVM->mob->pos,
+                    data.scriptVM->mob->focusedMob->pos
+                );
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
             data.scriptVM->mob->chase(
@@ -1489,7 +1500,8 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
         
     string scriptText = vectorTailToString(data.args, 0);
     game.states.gameplay->printActionLogLines.push_back(
-        "[@" + timestamp + "s " + data.scriptVM->mob->type->name + " said:] " + scriptText
+        "[@" + timestamp + "s " +
+        data.scriptVM->mob->type->name + " said:] " + scriptText
     );
     if(game.states.gameplay->printActionLogLines.size() > 10) {
         game.states.gameplay->printActionLogLines.erase(
@@ -1547,8 +1559,12 @@ void ScriptActionRunners::releaseStoredMobs(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
     for(size_t s = 0; s < data.scriptVM->mob->statuses.size(); s++) {
-        if(data.scriptVM->mob->statuses[s].type->manifest->internalName == data.args[0]) {
-            data.scriptVM->mob->statuses[s].prevState = data.scriptVM->mob->statuses[s].state;
+        if(
+            data.scriptVM->mob->statuses[s].type->manifest->internalName ==
+            data.args[0]
+        ) {
+            data.scriptVM->mob->statuses[s].prevState =
+                data.scriptVM->mob->statuses[s].state;
             data.scriptVM->mob->statuses[s].state = STATUS_STATE_TO_DELETE;
         }
     }
@@ -1575,7 +1591,8 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])] = data.scriptVM->mob->focusedMob;
+    data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])] =
+        data.scriptVM->mob->focusedMob;
 }
 
 
@@ -1586,7 +1603,9 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
     if(!data.scriptVM->mob->focusedMob) return;
-    data.scriptVM->mob->sendScriptMessage(data.scriptVM->mob->focusedMob, data.args[0]);
+    data.scriptVM->mob->sendScriptMessage(
+        data.scriptVM->mob->focusedMob, data.args[0]
+    );
 }
 
 
@@ -1599,7 +1618,9 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
     for(size_t l = 0; l < data.scriptVM->mob->links.size(); l++) {
         if(data.scriptVM->mob->links[l] == data.scriptVM->mob) continue;
         if(!data.scriptVM->mob->links[l]) continue;
-        data.scriptVM->mob->sendScriptMessage(data.scriptVM->mob->links[l], data.args[0]);
+        data.scriptVM->mob->sendScriptMessage(
+            data.scriptVM->mob->links[l], data.args[0]
+        );
     }
 }
 
@@ -1616,7 +1637,12 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
         if(game.states.gameplay->mobs.all[m2] == data.scriptVM->mob) {
             continue;
         }
-        if(Distance(data.scriptVM->mob->pos, game.states.gameplay->mobs.all[m2]->pos) > d) {
+        if(
+            Distance(
+                data.scriptVM->mob->pos,
+                game.states.gameplay->mobs.all[m2]->pos
+            ) > d
+        ) {
             continue;
         }
         
@@ -1793,7 +1819,10 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
         return;
     }
     
-    size_t a = data.scriptVM->mob->parent->limbAnim.animDb->findAnimation(data.args[0]);
+    size_t a =
+        data.scriptVM->mob->parent->limbAnim.animDb->findAnimation(
+            data.args[0]
+        );
     if(a == INVALID) {
         return;
     }
@@ -1918,7 +1947,8 @@ void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
 void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
     for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
         Player* pPtr = &game.states.gameplay->players[p];
-        float d = Distance(data.scriptVM->mob->pos, pPtr->view.cam.pos).toFloat();
+        float d =
+            Distance(data.scriptVM->mob->pos, pPtr->view.cam.pos).toFloat();
         float strengthMult =
             ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
@@ -1944,7 +1974,9 @@ void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::spawn(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->spawn(&data.scriptVM->mob->type->spawns[s2i(data.args[0])]);
+    data.scriptVM->mob->spawn(
+        &data.scriptVM->mob->type->spawns[s2i(data.args[0])]
+    );
 }
 
 
@@ -2093,7 +2125,9 @@ void ScriptActionRunners::stopHeightEffect(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopParticles(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
+    data.scriptVM->mob->deleteParticleGenerator(
+        MOB_PARTICLE_GENERATOR_ID_SCRIPT
+    );
 }
 
 
@@ -2123,7 +2157,10 @@ void ScriptActionRunners::stopVertically(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
-    if(data.scriptVM->mob->focusedMob && !data.scriptVM->mob->focusedMob->isStoredInsideMob()) {
+    if(
+        data.scriptVM->mob->focusedMob &&
+        !data.scriptVM->mob->focusedMob->isStoredInsideMob()
+    ) {
         data.scriptVM->mob->storeMobInside(data.scriptVM->mob->focusedMob);
     }
 }
@@ -2145,7 +2182,9 @@ void ScriptActionRunners::swallow(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::swallowAll(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->swallowChompedPikmin(data.scriptVM->mob->chompingMobs.size());
+    data.scriptVM->mob->swallowChompedPikmin(
+        data.scriptVM->mob->chompingMobs.size()
+    );
 }
 
 
@@ -2230,7 +2269,9 @@ void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
         //Turn to some absolute coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
-        data.scriptVM->mob->face(getAngle(data.scriptVM->mob->pos, Point(x, y)), nullptr);
+        data.scriptVM->mob->face(
+            getAngle(data.scriptVM->mob->pos, Point(x, y)), nullptr
+        );
     }
 }
 
@@ -2243,13 +2284,19 @@ void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
 void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
     if(data.args.size() == 1) {
         //Turn to a relative angle.
-        data.scriptVM->mob->face(data.scriptVM->mob->angle + degToRad(s2f(data.args[0])), nullptr);
+        data.scriptVM->mob->face(
+            data.scriptVM->mob->angle + degToRad(s2f(data.args[0])),
+            nullptr
+        );
     } else {
         //Turn to some relative coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
         Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
-        data.scriptVM->mob->face(getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->pos + p), nullptr);
+        data.scriptVM->mob->face(
+            getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->pos + p),
+            nullptr
+        );
     }
 }
 
@@ -2274,11 +2321,39 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         break;
         
     } case MOB_ACTION_TURN_TYPE_HOME: {
-        data.scriptVM->mob->face(getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->home), nullptr);
+        data.scriptVM->mob->face(
+            getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->home),
+            nullptr
+        );
         break;
         
     }
     }
+}
+
+
+#pragma endregion
+#pragma region Action type param
+
+
+/**
+ * @brief Constructs a new script action type parameter object.
+ *
+ * @param name Name of the parameter.
+ * @param type Type of parameter.
+ * @param forceConst If true, this must be a constant value.
+ * If false, it can also be a var.
+ * @param isExtras If true, this is an array of them (minimum amount 0).
+ */
+ScriptActionTypeParam::ScriptActionTypeParam(
+    const string& name, const SCRIPT_ACTION_PARAM type,
+    bool forceConst, bool isExtras
+):
+    name(name),
+    type(type),
+    forceConst(forceConst),
+    isExtras(isExtras) {
+    
 }
 
 

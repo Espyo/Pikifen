@@ -178,7 +178,9 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 );
             if(twHandled) {
                 changesMgr.markAsChanged();
-                itemSelection.applyTransformation(selectionCenter, selectionSize);
+                itemSelection.applyTransformation(
+                    selectionCenter, selectionSize
+                );
             }
         }
     }

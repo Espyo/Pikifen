@@ -61,7 +61,7 @@ void ShipFsm::createFsm(MobType* typ) {
 /**
  * @brief When a ship finishes receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
@@ -147,7 +147,7 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a ship needs to enter its default "idling" animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -163,7 +163,7 @@ void ShipFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a ship starts receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

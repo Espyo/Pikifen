@@ -13,47 +13,6 @@
 #include "script.h"
 
 
-#pragma endregion
-#pragma region Script VM
-
-
-/**
- * @brief Constructs a new script VM object.
- *
- * @param scriptDef Its script definition.
- */
-ScriptVM::ScriptVM(ScriptDef* scriptDef) :
-    scriptDef(scriptDef) {
-    
-    fsm.script = this;
-}
-
-
-/**
- * @brief Returns a string representing the values of all script vars,
- * formatted in a way that's friendly for the info maker tool.
- *
- * @return The string.
- */
-string ScriptVM::getMakerToolVarsStr() const {
-    string result = "Vars: ";
-    
-    if(vars.empty()) {
-        result += "(None)";
-        return result;
-    }
-    
-    for(const auto& v : vars) {
-        result += v.first + "=" + v.second + "; ";
-    }
-    result.erase(result.size() - 2, 2);
-    result = wordWrap(result, 98, 2);
-    
-    return result;
-}
-
-
-#pragma endregion
 #pragma region Script definition
 
 
@@ -99,6 +58,46 @@ bool ScriptDef::loadFromDataNode(DataNode* node) {
 void ScriptDef::unload() {
     initActions.unload();
     fsm.unload();
+}
+
+
+#pragma endregion
+#pragma region Script VM
+
+
+/**
+ * @brief Constructs a new script VM object.
+ *
+ * @param scriptDef Its script definition.
+ */
+ScriptVM::ScriptVM(ScriptDef* scriptDef) :
+    scriptDef(scriptDef) {
+    
+    fsm.script = this;
+}
+
+
+/**
+ * @brief Returns a string representing the values of all script vars,
+ * formatted in a way that's friendly for the info maker tool.
+ *
+ * @return The string.
+ */
+string ScriptVM::getMakerToolVarsStr() const {
+    string result = "Vars: ";
+    
+    if(vars.empty()) {
+        result += "(None)";
+        return result;
+    }
+    
+    for(const auto& v : vars) {
+        result += v.first + "=" + v.second + "; ";
+    }
+    result.erase(result.size() - 2, 2);
+    result = wordWrap(result, 98, 2);
+    
+    return result;
 }
 
 

@@ -97,11 +97,13 @@ void OnionFsm::createFsm(MobType* typ) {
 /**
  * @brief When an Onion has to check if it started generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStartGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+void OnionFsm::checkStartGenerating(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "started_generation") {
@@ -113,11 +115,13 @@ void OnionFsm::checkStartGenerating(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When an Onion has to check if it stopped generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStopGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+void OnionFsm::checkStopGenerating(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "stopped_generation") {
@@ -129,7 +133,7 @@ void OnionFsm::checkStopGenerating(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When an Onion finishes receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
@@ -200,7 +204,7 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When an Onion starts receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -218,7 +222,7 @@ void OnionFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When an Onion starts generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
@@ -232,7 +236,7 @@ void OnionFsm::startGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When an Onion enters the idle state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -248,7 +252,7 @@ void OnionFsm::startIdling(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When an Onion stops generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */

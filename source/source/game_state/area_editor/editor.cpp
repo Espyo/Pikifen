@@ -219,6 +219,148 @@ AreaEditor::AreaEditor() :
 
 
 /**
+ * @brief Code to run for the new mob command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewMobCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        subState == EDITOR_SUB_STATE_NEW_MOB ||
+        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
+        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new object.");
+    subState = EDITOR_SUB_STATE_NEW_MOB;
+}
+
+
+/**
+ * @brief Creates a new mob where the mouse cursor is and adds it to the area.
+ */
+void AreaEditor::addNewMobUnderCursor() {
+    registerChange("object creation");
+    subState = EDITOR_SUB_STATE_NONE;
+    Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
+    
+    if(lastMobCustomCatName.empty()) {
+        lastMobCustomCatName =
+            game.config.pikmin.order[0]->customCategoryName;
+        lastMobType =
+            game.config.pikmin.order[0];
+    }
+    
+    game.curArea->mobGenerators.push_back(
+        new MobGen(hotspot, lastMobType)
+    );
+    
+    selectedMobs.insert(game.curArea->mobGenerators.back());
+    
+    setStatus("Created object.");
+}
+
+
+/**
+ * @brief Code to run for the new path command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewPathCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
+        return;
+    }
+    
+    clearSelection();
+    pathDrawingStop1 = nullptr;
+    setStatus("Use the canvas to draw a path.");
+    subState = EDITOR_SUB_STATE_PATH_DRAWING;
+}
+
+
+/**
+ * @brief Code to run for the new region command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewRegionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("region creation");
+    AreaRegion* newRegion = new AreaRegion();
+    newRegion->size = MISSION::EXIT_MIN_SIZE;
+    game.curArea->regions.push_back(newRegion);
+    selectRegion(newRegion);
+    setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
+}
+
+
+/**
+ * @brief Code to run for the new reminder command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewReminderCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("reminder creation");
+    AreaMakerReminder newReminder;
+    game.curArea->reminders.push_back(newReminder);
+    reminderSelection.clear();
+    reminderSelection.select(game.curArea->reminders.size() - 1);
+    setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
+}
+
+
+/**
+ * @brief Code to run for the new tree shadow command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewTreeShadowCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new tree shadow.");
+    subState = EDITOR_SUB_STATE_NEW_SHADOW;
+}
+
+
+/**
  * @brief Calculates what the day speed should be, taking into account
  * the specified start day time, end day time, and mission duration.
  *
@@ -635,31 +777,6 @@ void AreaEditor::createDrawingVertexes() {
         
         nPtr->onVertex = newVertex;
     }
-}
-
-
-/**
- * @brief Creates a new mob where the mouse cursor is and adds it to the area.
- */
-void AreaEditor::addNewMobUnderCursor() {
-    registerChange("object creation");
-    subState = EDITOR_SUB_STATE_NONE;
-    Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
-    
-    if(lastMobCustomCatName.empty()) {
-        lastMobCustomCatName =
-            game.config.pikmin.order[0]->customCategoryName;
-        lastMobType =
-            game.config.pikmin.order[0];
-    }
-    
-    game.curArea->mobGenerators.push_back(
-        new MobGen(hotspot, lastMobType)
-    );
-    
-    selectedMobs.insert(game.curArea->mobGenerators.back());
-    
-    setStatus("Created object.");
 }
 
 
@@ -2408,123 +2525,6 @@ void AreaEditor::loadReference() {
     }
     
     updateReference();
-}
-
-
-/**
- * @brief Code to run for the new mob command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewMobCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        subState == EDITOR_SUB_STATE_NEW_MOB ||
-        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
-        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
-    ) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new object.");
-    subState = EDITOR_SUB_STATE_NEW_MOB;
-}
-
-
-/**
- * @brief Code to run for the new path command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewPathCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
-        return;
-    }
-    
-    clearSelection();
-    pathDrawingStop1 = nullptr;
-    setStatus("Use the canvas to draw a path.");
-    subState = EDITOR_SUB_STATE_PATH_DRAWING;
-}
-
-
-/**
- * @brief Code to run for the new region command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewRegionCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    clearSelection();
-    registerChange("region creation");
-    AreaRegion* newRegion = new AreaRegion();
-    newRegion->size = MISSION::EXIT_MIN_SIZE;
-    game.curArea->regions.push_back(newRegion);
-    selectRegion(newRegion);
-    setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
-}
-
-
-/**
- * @brief Code to run for the new reminder command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewReminderCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    clearSelection();
-    registerChange("reminder creation");
-    AreaMakerReminder newReminder;
-    game.curArea->reminders.push_back(newReminder);
-    reminderSelection.clear();
-    reminderSelection.select(game.curArea->reminders.size() - 1);
-    setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
-}
-
-
-/**
- * @brief Code to run for the new tree shadow command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewTreeShadowCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new tree shadow.");
-    subState = EDITOR_SUB_STATE_NEW_SHADOW;
 }
 
 

@@ -602,7 +602,8 @@ void Mob::arachnorbFootMoveLogic() {
         return;
     }
     
-    float feetNormalDist = s2f(parent->m->scriptVM.vars["feet_normal_distance"]);
+    float feetNormalDist =
+        s2f(parent->m->scriptVM.vars["feet_normal_distance"]);
     if(feetNormalDist == 0) {
         feetNormalDist = 175;
     }
@@ -1663,6 +1664,22 @@ void Mob::deleteOldStatusEffects() {
         ) {
             hasInvisibilityStatus = true;
             break;
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes all particle generators with the given ID.
+ *
+ * @param id ID of particle generators to delete.
+ */
+void Mob::deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
+    for(size_t g = 0; g < particleGenerators.size();) {
+        if(particleGenerators[g].id == id) {
+            particleGenerators.erase(particleGenerators.begin() + g);
+        } else {
+            g++;
         }
     }
 }
@@ -2995,7 +3012,9 @@ void Mob::hold(
     if(standingOnMob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that extra weight has been added.
-            standingOnMob->scriptVM.fsm.runEvent(MOB_EV_WEIGHT_ADDED, (void*) m);
+            standingOnMob->scriptVM.fsm.runEvent(
+                MOB_EV_WEIGHT_ADDED, (void*) m
+            );
         }
     }
 }
@@ -3276,7 +3295,9 @@ void Mob::release(Mob* m) {
     if(standingOnMob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that weight has been removed.
-            standingOnMob->scriptVM.fsm.runEvent(MOB_EV_WEIGHT_REMOVED, (void*) m);
+            standingOnMob->scriptVM.fsm.runEvent(
+                MOB_EV_WEIGHT_REMOVED, (void*) m
+            );
         }
     }
 }
@@ -3314,22 +3335,6 @@ void Mob::releaseStoredMobs() {
                 //A new leader is accessible.
                 game.states.gameplay->updateAvailableLeaders();
             }
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes all particle generators with the given ID.
- *
- * @param id ID of particle generators to delete.
- */
-void Mob::deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id) {
-    for(size_t g = 0; g < particleGenerators.size();) {
-        if(particleGenerators[g].id == id) {
-            particleGenerators.erase(particleGenerators.begin() + g);
-        } else {
-            g++;
         }
     }
 }

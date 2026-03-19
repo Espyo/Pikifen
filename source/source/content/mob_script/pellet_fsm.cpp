@@ -146,7 +146,7 @@ void PelletFsm::createFsm(MobType* typ) {
 /**
  * @brief When the pellet should lose its momentum and stand still.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */

@@ -1199,8 +1199,10 @@ void Leader::swapHeldPikmin(Mob* newPik) {
         return;
     }
     
-    FsmEventDef* oldPikEv = oldPik->scriptVM.fsm.getEvent(MOB_EV_RELEASED);
-    FsmEventDef* newPikEv = newPik->scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+    FsmEventDef* oldPikEv =
+        oldPik->scriptVM.fsm.getEvent(MOB_EV_RELEASED);
+    FsmEventDef* newPikEv =
+        newPik->scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(newPik->subgroupTypePtr);
     
@@ -1430,7 +1432,9 @@ void changeToNextLeader(
             searching = false;
         }
         
-        newLeaderPtr->scriptVM.fsm.runEvent(LEADER_EV_ACTIVATED, (void*) player);
+        newLeaderPtr->scriptVM.fsm.runEvent(
+            LEADER_EV_ACTIVATED, (void*) player
+        );
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
@@ -1481,9 +1485,8 @@ bool grabClosestGroupMember(Player* player) {
     
     //Check if the leader can grab, and the group member can be grabbed.
     FsmEventDef* grabbedEv =
-        player->closestGroupMember[BUBBLE_RELATION_CURRENT]->scriptVM.fsm.getEvent(
-            MOB_EV_GRABBED_BY_FRIEND
-        );
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT]->
+        scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     FsmEventDef* grabberEv =
         player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_HOLDING);
     if(!grabberEv || !grabbedEv) {

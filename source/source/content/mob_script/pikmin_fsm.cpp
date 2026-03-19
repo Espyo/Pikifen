@@ -1980,7 +1980,7 @@ void PikminFsm::createFsm(MobType* typ) {
 /**
  * @brief When a Pikmin is hit by an attack and gets knocked back.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
@@ -2071,7 +2071,7 @@ void PikminFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin becomes "helpless".
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2087,7 +2087,7 @@ void PikminFsm::becomeHelpless(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin becomes idling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2118,7 +2118,7 @@ void PikminFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin becomes a seed or a sprout.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2140,7 +2140,7 @@ void PikminFsm::becomeSprout(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is crushed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2156,7 +2156,7 @@ void PikminFsm::beCrushed(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is dismissed by its leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the world coordinates to go to.
  * @param info2 Unused.
  */
@@ -2178,7 +2178,7 @@ void PikminFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Makes a Pikmin begin its plucking process.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that is plucking.
  * @param info2 Unused.
  */
@@ -2193,7 +2193,9 @@ void PikminFsm::beginPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     disableFlag(pikPtr->flags, MOB_FLAG_NON_HURTABLE);
     disableFlag(pikPtr->flags, MOB_FLAG_INTANGIBLE);
     pikPtr->isSeedOrSprout = false;
-    PikminFsm::clearTimer(scriptVM, info1, info2); //Clear sprout evolution timer.
+    
+    //Clear sprout evolution timer.
+    PikminFsm::clearTimer(scriptVM, info1, info2);
     
     pikPtr->setAnimation(PIKMIN_ANIM_PLUCKING);
 }
@@ -2202,7 +2204,7 @@ void PikminFsm::beginPluck(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is grabbed by an enemy.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the enemy.
  * @param info2 Pointer to the hitbox that grabbed.
  */
@@ -2227,11 +2229,13 @@ void PikminFsm::beGrabbedByEnemy(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is grabbed by a leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::beGrabbedByFriend(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::beGrabbedByFriend(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2243,7 +2247,7 @@ void PikminFsm::beGrabbedByFriend(ScriptVM* scriptVM, void* info1, void* info2) 
 /**
  * @brief When a Pikmin is gently released by a leader or enemy.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2265,7 +2269,7 @@ void PikminFsm::beReleased(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is thrown by a leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2302,11 +2306,13 @@ void PikminFsm::beThrown(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is thrown after being plucked.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the bouncer mob.
  * @param info2 Unused.
  */
-void PikminFsm::beThrownAfterPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::beThrownAfterPluck(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     float throwAngle = getAngle(pikPtr->pos, pikPtr->focusedMob->pos);
@@ -2328,11 +2334,13 @@ void PikminFsm::beThrownAfterPluck(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When a Pikmin is thrown by a bouncer mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the bouncer mob.
  * @param info2 Unused.
  */
-void PikminFsm::beThrownByBouncer(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::beThrownByBouncer(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2346,7 +2354,7 @@ void PikminFsm::beThrownByBouncer(ScriptVM* scriptVM, void* info1, void* info2) 
  * @brief When a Pikmin is called over by a leader, either by being whistled,
  * or touched when idling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 If not nullptr, then the Pikmin must be silent.
  */
@@ -2373,11 +2381,13 @@ void PikminFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin that is knocked down is called over by a leader,
  * either by being whistled, or touched when idling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void PikminFsm::calledWhileKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::calledWhileKnockedDown(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
 
@@ -2403,7 +2413,7 @@ void PikminFsm::calledWhileKnockedDown(ScriptVM* scriptVM, void* info1, void* in
 /**
  * @brief When a Pikmin should celebrate.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2422,11 +2432,13 @@ void PikminFsm::celebrate(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin should check if the animation that ended is a boredom
  * animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::checkBoredomAnimEnd(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::checkBoredomAnimEnd(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     if(!pikPtr->inBoredAnimation) return;
@@ -2443,11 +2455,13 @@ void PikminFsm::checkBoredomAnimEnd(ScriptVM* scriptVM, void* info1, void* info2
  * If the attack is successful, another event is triggered. Otherwise
  * nothing happens.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
-void PikminFsm::checkIncomingAttack(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::checkIncomingAttack(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
@@ -2495,7 +2509,7 @@ void PikminFsm::checkIncomingAttack(ScriptVM* scriptVM, void* info1, void* info2
  * @brief When a Pikmin should check if the leader bumping it should
  * result in it being added to the group or not.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 If not nullptr, then the Pikmin must be silent.
  */
@@ -2519,11 +2533,13 @@ void PikminFsm::checkLeaderBump(ScriptVM* scriptVM, void* info1, void* info2) {
  * If it realizes it's doing no damage, it should start considering
  * sighing and giving up.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the opponent.
  * @param info2 Unused.
  */
-void PikminFsm::checkOutgoingAttack(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::checkOutgoingAttack(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
@@ -2559,11 +2575,13 @@ void PikminFsm::checkOutgoingAttack(ScriptVM* scriptVM, void* info1, void* info2
  * @brief When a Pikmin should check if the animation that ended is a shaking
  * animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::checkShakingAnimEnd(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::checkShakingAnimEnd(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     if(!pikPtr->inShakingAnimation) return;
@@ -2578,7 +2596,7 @@ void PikminFsm::checkShakingAnimEnd(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When a Pikmin has to circle around its opponent.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2613,7 +2631,7 @@ void PikminFsm::circleOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to clear any data about being bored.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2628,7 +2646,7 @@ void PikminFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to clear any timer set.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2643,14 +2661,16 @@ void PikminFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When the Pikmin reaches an opponent that it was chasing after,
  * and should now decide how to attack it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
         //Don't let the Pikmin attack while invulnerable. Otherwise, this can
@@ -2751,7 +2771,7 @@ void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to bounce back from an impact attack.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2796,7 +2816,7 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin must start climbing up an Onion's leg.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2804,7 +2824,9 @@ void PikminFsm::enterOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Onion* oniPtr = (Onion*) pikPtr->focusedMob;
 
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
@@ -2824,7 +2846,7 @@ void PikminFsm::enterOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin falls down a bottomless pit.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2839,7 +2861,7 @@ void PikminFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finished the animation for when it's called.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2876,14 +2898,16 @@ void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin successfully finishes carrying an object.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::finishCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
-    engineAssert(pikPtr->carryingMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->carryingMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(pikPtr->carryingMob->carryInfo->mustReturn) {
         //The Pikmin should return somewhere (like a pile).
@@ -2901,14 +2925,16 @@ void PikminFsm::finishCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finishes drinking the drop it was drinking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
 
     Drop* droPtr = (Drop*) pikPtr->focusedMob;
     
@@ -2933,7 +2959,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finishes dying.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2947,7 +2973,7 @@ void PikminFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finishes getting up from being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -2980,7 +3006,7 @@ void PikminFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finishes its sequence of landing on another mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3012,7 +3038,7 @@ void PikminFsm::finishMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin finishes picking some object up to hold it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3041,7 +3067,7 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the Pikmin must move towards the whistle.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
@@ -3057,11 +3083,13 @@ void PikminFsm::flailToLeader(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin is meant to drop the object it's carrying, or
  * stop chasing the object if it's not carrying it yet, but wants to.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::forgetCarriableObject(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::forgetCarriableObject(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     if(!pikPtr->carryingMob) return;
@@ -3078,7 +3106,7 @@ void PikminFsm::forgetCarriableObject(ScriptVM* scriptVM, void* info1, void* inf
 /**
  * @brief When a Pikmin is meant to forget a group task object it was going for.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3099,7 +3127,7 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to forget a tool object it was going for.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3117,7 +3145,7 @@ void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin gets knocked back.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3132,7 +3160,7 @@ void PikminFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin gets knocked back and lands on the floor.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3156,11 +3184,13 @@ void PikminFsm::getKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin needs to get going to its dismiss spot.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::goingToDismissSpot(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::goingToDismissSpot(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     if(pikPtr->pikType->canFly) {
@@ -3181,11 +3211,13 @@ void PikminFsm::goingToDismissSpot(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When a Pikmin needs to go towards its spot on a carriable object.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob to carry.
  * @param info2 Unused.
  */
-void PikminFsm::goToCarriableObject(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::goToCarriableObject(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* carriableMob = (Mob*) info1;
 
@@ -3256,7 +3288,7 @@ void PikminFsm::goToCarriableObject(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When a Pikmin needs to go towards a group task mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the group task.
  * @param info2 Unused.
  */
@@ -3310,7 +3342,7 @@ void PikminFsm::goToGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin needs to walk towards an Onion to climb inside.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the Onion.
  * @param info2 Unused.
  */
@@ -3356,7 +3388,7 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin needs to walk towards an opponent.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the opponent.
  * @param info2 Unused.
  */
@@ -3418,7 +3450,7 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin needs to go towards a tool mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the tool.
  * @param info2 Unused.
  */
@@ -3472,7 +3504,7 @@ void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a thrown Pikmin lands.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3487,7 +3519,7 @@ void PikminFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin lands after being thrown from a pluck.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
@@ -3515,7 +3547,7 @@ void PikminFsm::landAfterPluck(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a thrown Pikmin lands on a mob, to latch on to it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
@@ -3582,11 +3614,13 @@ void PikminFsm::landOnMob(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a thrown Pikmin lands on a mob, whilst holding something.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
-void PikminFsm::landOnMobWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::landOnMobWhileHolding(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
 
@@ -3657,7 +3691,7 @@ void PikminFsm::landOnMobWhileHolding(ScriptVM* scriptVM, void* info1, void* inf
  * @brief When a thrown Pikmin lands while holding something.
  * Depending on what it is, it might drop it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3707,7 +3741,7 @@ void PikminFsm::landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin leaves its Onion because it got called out.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the Onion.
  * @param info2 Unused.
  */
@@ -3724,7 +3758,7 @@ void PikminFsm::leaveOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin leaves a hazardous sector.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the hazard.
  * @param info2 Unused.
  */
@@ -3743,7 +3777,7 @@ void PikminFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the mob the Pikmin is latched on to disappears.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3757,11 +3791,13 @@ void PikminFsm::loseLatchedMob(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin notifies the leader that it must gently release it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::notifyLeaderRelease(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::notifyLeaderRelease(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     if(!pikPtr->followingGroup) return;
@@ -3774,7 +3810,7 @@ void PikminFsm::notifyLeaderRelease(ScriptVM* scriptVM, void* info1, void* info2
  * @brief When a Pikmin needs to decide a new spot to run off to whilst
  * in panicking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3795,14 +3831,16 @@ void PikminFsm::panicNewChase(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to reel back to unleash an attack.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(pikPtr->focusedMob->rectangularDim.x != 0.0f) {
         bool isInside = false;
@@ -3828,11 +3866,13 @@ void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin reaches its spot on a carriable object.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::reachCarriableObject(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::reachCarriableObject(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     Mob* carriableMob = pikPtr->carryingMob;
@@ -3869,7 +3909,7 @@ void PikminFsm::reachCarriableObject(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief When a Pikmin reaches its dismissal spot.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3885,7 +3925,7 @@ void PikminFsm::reachDismissSpot(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin that just attacked an opponent needs to walk
  * towards it again.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3908,7 +3948,10 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
         pikPtr->focusedMob &&
         pikPtr->focusedMob->health > 0 &&
         Distance(pikPtr->pos, pikPtr->focusedMob->pos) <=
-        (pikPtr->radius + pikPtr->focusedMob->radius + PIKMIN::GROUNDED_ATTACK_DIST);
+        (
+            pikPtr->radius + pikPtr->focusedMob->radius +
+            PIKMIN::GROUNDED_ATTACK_DIST
+        );
         
     if(!canContinueAttacking) {
         //The opponent cannot be chased down. Become idle.
@@ -3932,7 +3975,7 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to release the tool it is currently holding.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 If nullptr, release as normal.
  * Otherwise, this is a "gentle" release.
  * @param info2 Unused.
@@ -3972,7 +4015,7 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin seed lands on the ground.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -3990,14 +4033,16 @@ void PikminFsm::seedLanded(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->particleGenerators.push_back(pg);
     
     //Play the sound.
-    pikPtr->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SEED_LANDING]);
+    pikPtr->playSound(
+        pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SEED_LANDING]
+    );
 }
 
 
 /**
  * @brief When a Pikmin is meant to set its timer for the bump lock.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4011,7 +4056,7 @@ void PikminFsm::setBumpLock(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to change "reach" to the idle task reach.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4026,7 +4071,7 @@ void PikminFsm::setIdleTaskReach(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to change "reach" to the swarm reach.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4041,7 +4086,7 @@ void PikminFsm::setSwarmReach(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to sigh.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4055,7 +4100,7 @@ void PikminFsm::sigh(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Causes a sprout to evolve.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4075,11 +4120,13 @@ void PikminFsm::sproutEvolve(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief Schedules the next evolution for a sprout.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::sproutScheduleEvol(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::sproutScheduleEvol(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     pikPtr->setTimer(pikPtr->pikType->sproutEvolutionTime[pikPtr->maturity]);
@@ -4089,7 +4136,7 @@ void PikminFsm::sproutScheduleEvol(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When a Pikmin is meant to stand still in place.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4107,7 +4154,7 @@ void PikminFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin should start a random boredom animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4143,12 +4190,14 @@ void PikminFsm::startBoredomAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin needs to start chasing after its leader
  * (or the group spot belonging to the leader).
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the position struct with the final destination.
  *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
-void PikminFsm::startChasingLeader(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::startChasingLeader(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     pikPtr->focusOnMob(pikPtr->followingGroup);
@@ -4165,7 +4214,7 @@ void PikminFsm::startChasingLeader(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When a Pikmin starts drinking the drop it touched.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the drop mob.
  * @param info2 Unused.
  */
@@ -4184,7 +4233,7 @@ void PikminFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts dying.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4204,7 +4253,7 @@ void PikminFsm::startDying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts flailing.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4236,7 +4285,7 @@ void PikminFsm::startFlailing(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts getting up from being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4254,14 +4303,16 @@ void PikminFsm::startGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts lunging forward for an impact attack.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     pikPtr->chase(&pikPtr->focusedMob->pos, &pikPtr->focusedMob->z);
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
@@ -4271,11 +4322,13 @@ void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is killed after being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::startKnockedDownDying(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::startKnockedDownDying(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     PikminFsm::startDying(scriptVM, info1, info2);
@@ -4286,7 +4339,7 @@ void PikminFsm::startKnockedDownDying(ScriptVM* scriptVM, void* info1, void* inf
 /**
  * @brief When a Pikmin lands on a mob and needs to start its landing animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4300,7 +4353,7 @@ void PikminFsm::startMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts panicking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4323,7 +4376,7 @@ void PikminFsm::startPanicking(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts picking some object up to hold it.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4339,7 +4392,7 @@ void PikminFsm::startPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When a Pikmin must start returning to the carried object's
  * return point.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob that used to be carried.
  * @param info2 Unused.
  */
@@ -4393,7 +4446,7 @@ void PikminFsm::startReturning(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin starts riding on a track.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the track mob.
  * @param info2 Unused.
  */
@@ -4418,13 +4471,19 @@ void PikminFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
     
     switch(traPtr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
-        pikPtr->setAnimation(PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
     } case TRACK_RIDING_POSE_CLIMBING: {
-        pikPtr->setAnimation(PIKMIN_ANIM_CLIMBING, START_ANIM_OPTION_RANDOM_TIME);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_CLIMBING, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        pikPtr->setAnimation(PIKMIN_ANIM_SLIDING, START_ANIM_OPTION_RANDOM_TIME);
+        pikPtr->setAnimation(
+            PIKMIN_ANIM_SLIDING, START_ANIM_OPTION_RANDOM_TIME
+        );
         break;
     }
     }
@@ -4434,11 +4493,13 @@ void PikminFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin must start emitting seed particles.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::startSeedParticles(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::startSeedParticles(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     ParticleGenerator pg =
@@ -4463,7 +4524,7 @@ void PikminFsm::startSeedParticles(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When a Pikmin must no longer be idling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4478,7 +4539,7 @@ void PikminFsm::stopBeingIdle(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is no longer in the thrown state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4492,7 +4553,7 @@ void PikminFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is meant to release an object it is carrying.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4501,7 +4562,9 @@ void PikminFsm::stopCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
 
     if(!pikPtr->carryingMob) return;
     
-    pikPtr->carryingMob->scriptVM.fsm.runEvent(MOB_EV_CARRIER_REMOVED, (void*) pikPtr);
+    pikPtr->carryingMob->scriptVM.fsm.runEvent(
+        MOB_EV_CARRIER_REMOVED, (void*) pikPtr
+    );
     
     pikPtr->carryingMob = nullptr;
     pikPtr->setTimer(0);
@@ -4511,7 +4574,7 @@ void PikminFsm::stopCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin stands still while in a leader's group.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4535,7 +4598,7 @@ void PikminFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to choose its carrying animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4566,15 +4629,21 @@ void PikminFsm::tickCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to teleport to its spot in the Onion leg.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::tickEnteringOnion(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::tickEnteringOnion(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
-    engineAssert(pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr());
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(pikPtr->tickTrackRide()) {
         //Finished!
@@ -4586,14 +4655,18 @@ void PikminFsm::tickEnteringOnion(ScriptVM* scriptVM, void* info1, void* info2) 
 /**
  * @brief When a Pikmin has to teleport to its spot in a group task.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::tickGroupTaskWork(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::tickGroupTaskWork(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
     Point curSpotPos = tasPtr->getSpotPos(pikPtr);
@@ -4614,14 +4687,16 @@ void PikminFsm::tickGroupTaskWork(ScriptVM* scriptVM, void* info1, void* info2) 
 /**
  * @brief When a Pikmin has to teleport to its spot in a track it is riding.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
-    engineAssert(pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(pikPtr->tickTrackRide()) {
         //Finished!
@@ -4647,7 +4722,7 @@ void PikminFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin touches a "eat" hitbox.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4676,7 +4751,7 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin touches a hazard.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hazard type.
  * @param info2 Pointer to the hitbox that caused this, if any.
  */
@@ -4743,7 +4818,7 @@ void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When a Pikmin is sprayed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the spray type.
  * @param info2 Pointer to the mob that sprayed, if any.
  */
@@ -4769,11 +4844,13 @@ void PikminFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
  * with the object that it is holding, instead, if possible.
  * If not, it should drop the object and get grabbed like normal.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void PikminFsm::tryHeldItemHotswap(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::tryHeldItemHotswap(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
@@ -4805,7 +4882,7 @@ void PikminFsm::tryHeldItemHotswap(ScriptVM* scriptVM, void* info1, void* info2)
 /**
  * @brief When the Pikmin stops latching on to an enemy.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
@@ -4822,12 +4899,14 @@ void PikminFsm::unlatch(ScriptVM* scriptVM, void* info1, void* info2) {
 /**
  * @brief When the Pikmin should update its destination when chasing the leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the position struct with the final destination.
  *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
-void PikminFsm::updateInGroupChasing(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::updateInGroupChasing(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     Point targetPos;
@@ -4856,11 +4935,13 @@ void PikminFsm::updateInGroupChasing(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief When a Pikmin is whistled over by a leader while holding a tool.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void PikminFsm::whistledWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::whistledWhileHolding(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
@@ -4888,11 +4969,13 @@ void PikminFsm::whistledWhileHolding(ScriptVM* scriptVM, void* info1, void* info
 /**
  * @brief When a Pikmin is whistled over by a leader while riding on a track.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void PikminFsm::whistledWhileRiding(ScriptVM* scriptVM, void* info1, void* info2) {
+void PikminFsm::whistledWhileRiding(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
     engineAssert(pikPtr->trackInfo, scriptVM->fsm.getStateHistoryStr());
@@ -4913,14 +4996,16 @@ void PikminFsm::whistledWhileRiding(ScriptVM* scriptVM, void* info1, void* info2
 /**
  * @brief When the Pikmin should start working on a group task.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
 void PikminFsm::workOnGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
 
-    engineAssert(pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(
+        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
     
