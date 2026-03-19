@@ -92,6 +92,7 @@ void Results::addNewBulletPoint(
         Point(0.96f, BP_HEIGHT);
     list->addChild(labelBullet);
     gui.addItem(labelBullet);
+    pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
@@ -103,6 +104,7 @@ void Results::addNewBulletPoint(
         Point(0.44f, BP_HEIGHT);
     list->addChild(valueText);
     gui.addItem(valueText);
+    pageTextToAnimate.push_back(valueText);
     textToAnimate.push_back(valueText);
 }
 
@@ -181,6 +183,8 @@ void Results::addNewPageItems(
         addNewPageItem(leftPage, true, curBox);
     curBox->addChild(leftPageButton);
     gui.addItem(leftPageButton, itemNamePrefix + "_left_page");
+    pageTextToAnimate.push_back(leftPageButton);
+    leftPageButtons.push_back(leftPageButton);
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
@@ -200,6 +204,8 @@ void Results::addNewPageItems(
         addNewPageItem(rightPage, false, curBox);
     curBox->addChild(rightPageButton);
     gui.addItem(rightPageButton, itemNamePrefix + "_right_page");
+    pageTextToAnimate.push_back(rightPageButton);
+    rightPageButtons.push_back(rightPageButton);
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
@@ -250,6 +256,7 @@ void Results::addNewScoreMarkerBulletPoint(
         Point(0.96f, bPHeight);
     scoreChartList->addChild(labelBullet);
     gui.addItem(labelBullet);
+    pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
@@ -262,6 +269,7 @@ void Results::addNewScoreMarkerBulletPoint(
     scoreChartList->addChild(valueText);
     gui.addItem(valueText);
     textToAnimate.push_back(valueText);
+    pageTextToAnimate.push_back(valueText);
     
     scoreMarkerGuiItems.push_back(labelBullet);
 }
@@ -312,28 +320,52 @@ void Results::doLogic() {
     if(!game.fadeMgr.isFading()) {
         for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
             gui.handlePlayerAction(game.controls.actionQueue[a]);
+            switch(game.controls.actionQueue[a].actionTypeId) {
+            case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT: {
+                if(game.controls.actionQueue[a].value < 0.5f) continue;
+                for(size_t b = 0; b < leftPageButtons.size(); b++) {
+                    if(leftPageButtons[b]->isResponsive()) {
+                        leftPageButtons[b]->activate();
+                        break;
+                    }
+                }
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
+                if(game.controls.actionQueue[a].value < 0.5f) continue;
+                for(size_t b = 0; b < rightPageButtons.size(); b++) {
+                    if(rightPageButtons[b]->isResponsive()) {
+                        rightPageButtons[b]->activate();
+                        break;
+                    }
+                }
+                break;
+            }
+            }
         }
     }
     
     guiTimeSpent += game.deltaT;
     
     //Make the different texts grow every two or so seconds.
-    const float TEXT_ANIM_ALL_DURATION = 1.5f;
+    const float TEXT_ANIM_FALL_DURATION = 1.5f;
     const float TEXT_ANIM_PAUSE_DURATION = 1.0f;
-    const float animTime =
-        fmod(guiTimeSpent, TEXT_ANIM_ALL_DURATION + TEXT_ANIM_PAUSE_DURATION);
-    const float timePerItem = TEXT_ANIM_ALL_DURATION / textToAnimate.size();
-    const int oldTimeCp = (animTime - game.deltaT) / timePerItem;
-    const int newTimeCp = animTime / timePerItem;
+    const float TEXT_ANIM_TOTAL_DURATION =
+        TEXT_ANIM_FALL_DURATION + TEXT_ANIM_PAUSE_DURATION;
+    const float newAnimTime = fmod(guiTimeSpent, TEXT_ANIM_TOTAL_DURATION);
+    const float newTimeRatio = newAnimTime / TEXT_ANIM_FALL_DURATION;
+    const float oldAnimTime = newAnimTime - game.deltaT;
+    const float oldTimeRatio = oldAnimTime / TEXT_ANIM_FALL_DURATION;
     
-    if(
-        oldTimeCp != newTimeCp &&
-        oldTimeCp >= 0 &&
-        oldTimeCp <= (int) textToAnimate.size() - 1
-    ) {
-        textToAnimate[oldTimeCp]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
+    for(size_t t = 0; t < textToAnimate.size(); t++) {
+        DrawInfo itemDrawInfo;
+        bool itemVisible = gui.getItemDrawInfo(textToAnimate[t], &itemDrawInfo);
+        if(!itemVisible) continue;
+        const float itemRatioY = itemDrawInfo.center.y / game.winH;
+        if(passedBy(oldTimeRatio, newTimeRatio, itemRatioY)) {
+            textToAnimate[t]->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            );
+        }
     }
     
     gui.tick(game.deltaT);
@@ -349,6 +381,7 @@ void Results::drawScoreChartConnections() {
     DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     
+    //The connector lines.
     for(size_t i = 0; i < scoreMarkerGuiItems.size(); i++) {
         GuiItem* iPtr =
             scoreMarkerGuiItems[scoreMarkerGuiItems.size() - (1 + i)];
@@ -368,6 +401,33 @@ void Results::drawScoreChartConnections() {
         al_draw_line(x1, y1, x2, y1, color, thickness);
         al_draw_line(x2, y1, x3, y2, color, thickness);
         al_draw_line(x3, y2, x4, y2, color, thickness);
+    }
+    
+    //Circle for the player's score.
+    al_draw_filled_circle(
+        chartDraw.center.x, getScoreChartY(finalMissionScore),
+        16.0f +
+        sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
+        RESULTS::CHART_CIRCLE_SIZE_OFFSET,
+        al_map_rgb(96, 96, 192)
+    );
+    
+    //Circle for the old record.
+    if(!oldRecord.date.empty()) {
+        al_draw_filled_circle(
+            chartDraw.center.x,
+            getScoreChartY(oldRecord.score),
+            12.0f, al_map_rgb(0, 0, 96)
+        );
+    }
+    
+    //Circle for the maker's record.
+    if(!game.curArea->mission.makerRecordDate.empty()) {
+        al_draw_filled_circle(
+            chartDraw.center.x,
+            getScoreChartY(game.curArea->mission.makerRecord),
+            12.0f, al_map_rgb(0, 0, 96)
+        );
     }
 }
 
@@ -461,33 +521,6 @@ void Results::drawScoreChartGraphic(const DrawInfo& draw) {
         Point(draw.center.x, draw.center.y - draw.size.y / 2.0f + 8),
         8.0f, -TAU / 4.0f, al_map_rgb(0, 0, 96)
     );
-    
-    //Circle for the player's score.
-    al_draw_filled_circle(
-        draw.center.x, getScoreChartY(finalMissionScore),
-        16.0f +
-        sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
-        RESULTS::CHART_CIRCLE_SIZE_OFFSET,
-        al_map_rgb(96, 96, 192)
-    );
-    
-    //Circle for the old record.
-    if(!oldRecord.date.empty()) {
-        al_draw_filled_circle(
-            draw.center.x,
-            getScoreChartY(oldRecord.score),
-            12.0f, al_map_rgb(0, 0, 96)
-        );
-    }
-    
-    //Circle for the maker's record.
-    if(!game.curArea->mission.makerRecordDate.empty()) {
-        al_draw_filled_circle(
-            draw.center.x,
-            getScoreChartY(game.curArea->mission.makerRecord),
-            12.0f, al_map_rgb(0, 0, 96)
-        );
-    }
 }
 
 
@@ -574,14 +607,24 @@ void Results::initGuiMain() {
     }
     
     //Final score number text.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
-    ) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        ALLEGRO_COLOR finalScoreTextColor =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            game.config.guiColors.smallHeader :
+            COLOR_WHITE;
+        string finalScoreTextStr =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            i2s(finalMissionScore) :
+            medal == MISSION_MEDAL_NONE ?
+            "No" :
+            "Got a";
+            
         TextGuiItem* finalScoreText =
             new TextGuiItem(
-            i2s(finalMissionScore), game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
+            finalScoreTextStr, game.sysContent.fntAreaName,
+            finalScoreTextColor
         );
         finalScoreText->onDraw =
         [finalScoreText] (const DrawInfo & draw) {
@@ -595,14 +638,15 @@ void Results::initGuiMain() {
     }
     
     //Final score label text.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
-    ) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        string finalScoreLabelStr =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            amountStr(finalMissionScore, "point", "", true) + "!" :
+            "medal!";
         TextGuiItem* finalScoreLabelText =
             new TextGuiItem(
-            amountStr(finalMissionScore, "point", "", true) + "!",
-            game.sysContent.fntAreaName
+            finalScoreLabelStr, game.sysContent.fntAreaName
         );
         finalScoreLabelText->onDraw =
         
@@ -667,11 +711,18 @@ void Results::initGuiMain() {
         string endReason;
         if(endCond) {
             endReason = endCond->reason;
+        } else if(game.states.gameplay->missionEndFromPauseMenu) {
+            endReason = "Ended from the pause menu!";
         }
         
         if(!endReason.empty()) {
             TextGuiItem* endReasonText =
-                new TextGuiItem(endReason, game.sysContent.fntStandard);
+                new TextGuiItem(
+                endReason, game.sysContent.fntStandard,
+                game.states.gameplay->missionWasCleared ?
+                game.config.guiColors.good :
+                game.config.guiColors.bad
+            );
             gui.addItem(endReasonText, "end_reason");
             textToAnimate.push_back(endReasonText);
         }
@@ -705,6 +756,10 @@ void Results::initGuiMain() {
             conclusion =
                 "Maker tools were used, "
                 "so the result won't be saved.";
+        } else if(!game.states.gameplay->missionWasCleared) {
+            conclusion =
+                "Failed the mission, so the result "
+                "won't be saved.";
         } else if(!isNewRecord) {
             conclusion =
                 "This result is not a new record, so "
@@ -929,6 +984,9 @@ void Results::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngResults);
     game.fadeMgr.startFade(true, nullptr);
     guiTimeSpent = 0.0f;
+    pageTextToAnimate.clear();
+    leftPageButtons.clear();
+    rightPageButtons.clear();
     textToAnimate.clear();
     oldRecord.clear();
     isNewRecord = false;
@@ -1001,7 +1059,7 @@ void Results::load() {
         
         newRecord.saveToDataNode(entryNode);
         savedSuccessfully = saveMissionRecords(&missionRecords);
-            
+        
         if(!savedSuccessfully) {
             showSystemMessageBox(
                 nullptr, "Save failed!",
@@ -1258,6 +1316,14 @@ void Results::switchPage(RESULTS_MENU_PAGE newPage) {
         scoreChartPageBox->visible = true;
         break;
     }
+    }
+    
+    //Animate them all indiscriminately. The ones that don't belong to the
+    //new page won't show up anyway.
+    for(size_t i = 0; i < pageTextToAnimate.size(); i++) {
+        pageTextToAnimate[i]->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
     }
 }
 

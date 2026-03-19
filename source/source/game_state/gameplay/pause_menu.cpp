@@ -2514,6 +2514,7 @@ void PauseMenu::startLeavingGameplay() {
             cPtr ? cPtr->neutralMood : false,
             false, cPtr, true
         );
+        game.states.gameplay->missionEndFromPauseMenu = true;
     }
     game.states.gameplay->startLeaving(leaveTarget);
 }

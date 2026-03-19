@@ -383,6 +383,9 @@ public:
     //End condition that triggered the mission to end. INVALID for none.
     size_t missionEndCondIdx = INVALID;
     
+    //Whether the mission ended early from the pause menu.
+    bool missionEndFromPauseMenu = false;
+    
     //Current mission score, for use in the HUD.
     int missionScore = 0;
     

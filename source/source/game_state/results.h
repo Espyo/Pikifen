@@ -121,6 +121,15 @@ private:
     //Bullet point GUI item for each score marker. Cache for convenience.
     vector<GuiItem*> scoreMarkerGuiItems;
     
+    //Items that can be animated inside of pages. Cache for convenience.
+    vector<GuiItem*> pageTextToAnimate;
+    
+    //Which "left page" buttons exist. Cache for convenience.
+    vector<ButtonGuiItem*> leftPageButtons;
+    
+    //Which "right page" buttons exist. Cache for convenience.
+    vector<ButtonGuiItem*> rightPageButtons;
+    
     //Medal obtained. Cache for convenience.
     MISSION_MEDAL medal = MISSION_MEDAL_NONE;
     

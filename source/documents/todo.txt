@@ -7,23 +7,14 @@ Current tasks (tasks being worked on, but not yet committed)
         Two Pikmin fighting one another may occasionally stop and sigh
         Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New mission system
-        Mob groups should specify if they're mission-critical, for the sake of showing up on the radar with the exclamation mark
         Add the presets logic
-        Automatically port all mission score records if they're detected to be from an old version
     New editor selection system
-        Add it to the layout, mobs, and paths area editor states
+        Add it to the layout, mobs, paths, and details area editor states
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, unselecting with Ctrl, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob
-    Results menu improvements
-        Add something to the top-left corner when the mission does not involve points, so it's not empty
-        Does it make sense to let the player enter after hours if they clear the mission?
-        Somehow draw the score chart connection lines underneath the score marker circles
-        Some juice when swapping pages
-        When animating the different numbers in that waterfall look, skip over numbers that aren't in the current page
-        Add the page left/right player input detection
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -50,17 +41,17 @@ Next tasks (roughly sorted most important first)
     Ice geysers
     Freezecake
     Swarming jingle
-    [NEEDS BRAINSTORMING] Re-think how missions work
-        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
-        I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
-        If not using a preset, the mission should control all of the things that make the mission end, be they positive (grab all things, reach the exit, etc.), negative (lose all Pikmin, run out of time, etc.), or neutral (quit from the pause menu). Then, it must specify what happens for each one (you get graded with a medal or you get a fail)
-        Replace the clear + medal system with just a medal system, per the above
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     Add area editor review checks for the new mission system, like having a time limit but no associated event
         Mission has a mob group with 0 mobs
-        Mission has a HUD item, end condition, etc. that calls an invalid mob group or region
+        Mission has no end condition
+        Mission has multiple pause menu end conditions
+        Mission has a HUD item, end condition, or score criterion that calls an invalid mob group or region
+        Mission has a score criterion worth 0
         Mission awards medals based on score criteria, but there are none
+        Mission has a time limit end condition, scoring criterion, or HUD item, but no time limit set
+    All editors should have a button to load content, and a button to create content, instead of it all being bundled into one dialog
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on

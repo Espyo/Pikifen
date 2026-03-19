@@ -1206,6 +1206,7 @@ void GameplayState::load() {
     missionScore = 0;
     missionConsiderZeroTime = false;
     missionEndCondIdx = INVALID;
+    missionEndFromPauseMenu = false;
     missionWasCleared = false;
     oldMissionScore = 0;
     oldMissionGoalCur = 0;
