@@ -186,7 +186,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         if(curSprite) {
             bool twHandled = false;
             Point selectionCenter, selectionSize;
-            hitboxSelection.getSelectionBBox(&selectionCenter, &selectionSize);
+            hitboxSelection.getBBox(&selectionCenter, &selectionSize);
             if(selectionSize.x != 0.0f) {
                 twHandled =
                     curTransformationWidget.handleMouseDown(
@@ -199,11 +199,11 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
             if(twHandled) {
                 hitboxSelection.startTransforming();
             } else {
-                hitboxSelection.selectViaMouseDown(
+                hitboxSelection.chooseViaMouseDown(
                     game.editorsView.mouseCursorWorldPos,
                     isShiftPressed, isCtrlPressed
                 );
-                prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
+                prevHitboxSelection = hitboxSelection.getItemIdxs();
             }
         }
         break;
@@ -333,10 +333,10 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     game.editorsView.mouseCursorWorldPos,
                     isShiftPressed, isCtrlPressed
                 );
-                prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
+                prevHitboxSelection = hitboxSelection.getItemIdxs();
             } else {
                 Point selectionCenter, selectionSize;
-                hitboxSelection.getSelectionBBox(
+                hitboxSelection.getBBox(
                     &selectionCenter, &selectionSize
                 );
                 if(selectionSize.x != 0.0f) {
@@ -421,8 +421,7 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_HITBOXES: {
         if(curSprite) {
             curTransformationWidget.handleMouseUp();
-            hitboxSelection.stopRubberBand();
-            hitboxSelection.stopTransforming();
+            hitboxSelection.handleMouseUp();
         }
         break;
         

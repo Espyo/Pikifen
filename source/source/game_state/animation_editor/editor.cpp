@@ -1538,11 +1538,11 @@ void AnimationEditor::selectPreviousHitboxes() {
     
     for(size_t i : prevHitboxSelection) {
         if(i >= curSprite->hitboxes.size()) continue;
-        hitboxSelection.select(i);
+        hitboxSelection.add(i);
     }
     
-    if(!hitboxSelection.isAnySelected() && !curSprite->hitboxes.empty()) {
-        hitboxSelection.select(0);
+    if(!hitboxSelection.hasAny() && !curSprite->hitboxes.empty()) {
+        hitboxSelection.add(0);
     }
 }
 

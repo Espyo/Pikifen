@@ -200,6 +200,26 @@ AreaEditor::AreaEditor() :
 #undef registerCmd
     
     //Setup the selection managers.
+    mobSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
+        *outCenter = game.curArea->mobGenerators[idx]->pos;
+        *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
+    };
+    mobSelection.onSetInfo =
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        game.curArea->mobGenerators[idx]->pos = newCenter;
+    };
+    mobSelection.onGetTotal =
+    [this] () {
+        return game.curArea->mobGenerators.size();
+    };
+    mobSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_MOBS;
+    };
+    mobSelection.itemsAreRectangular = false;
+    mobSelection.overlapsCycle = true;
+    
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize) {
         *outCenter = game.curArea->reminders[idx].pos;
@@ -265,7 +285,7 @@ void AreaEditor::addNewMobUnderCursor() {
         new MobGen(hotspot, lastMobType)
     );
     
-    selectedMobs.insert(game.curArea->mobGenerators.back());
+    mobSelection.setSingle(game.curArea->mobGenerators.size() - 1);
     
     setStatus("Created object.");
 }
@@ -332,8 +352,7 @@ void AreaEditor::addNewReminderCmd(float inputValue) {
     registerChange("reminder creation");
     AreaMakerReminder newReminder;
     game.curArea->reminders.push_back(newReminder);
-    reminderSelection.clear();
-    reminderSelection.select(game.curArea->reminders.size() - 1);
+    reminderSelection.setSingle(game.curArea->reminders.size() - 1);
     setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
 }
 
@@ -424,9 +443,19 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
     
+    mobSelection.disable();
     reminderSelection.disable();
-    if(newState == EDITOR_STATE_REVIEW) {
+    
+    switch(newState) {
+    case EDITOR_STATE_MOBS: {
+        mobSelection.enable();
+        break;
+    } case EDITOR_STATE_REVIEW: {
         reminderSelection.enable();
+        break;
+    } default: {
+        break;
+    }
     }
 }
 
@@ -580,7 +609,7 @@ void AreaEditor::clearSelection() {
     selectedVertexes.clear();
     selectedEdges.clear();
     selectedSectors.clear();
-    selectedMobs.clear();
+    mobSelection.clear();
     selectedPathStops.clear();
     selectedPathLinks.clear();
     selectedShadow = nullptr;
@@ -981,7 +1010,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus("You have to select mobs to delete!", true);
         return;
     }
@@ -991,7 +1020,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     size_t nBefore = game.curArea->mobGenerators.size();
     
     //Delete!
-    deleteMobs(selectedMobs);
+    deleteMobs();
     
     //Cleanup.
     clearSelection();
@@ -1106,21 +1135,21 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
         return;
     }
     
-    if(!reminderSelection.isAnySelected()) {
+    if(!reminderSelection.hasAny()) {
         setStatus("You have to select a reminder to delete!", true);
     } else {
         registerChange("reminder deletion");
         size_t deletions = 0;
-        for(size_t i : reminderSelection.getSelectedItemIdxs()) {
+        for(size_t i : reminderSelection.getItemIdxs()) {
             game.curArea->reminders.erase(
                 game.curArea->reminders.begin() + (i - deletions)
             );
             deletions++;
         }
-        if(reminderSelection.isOneSelected()) {
+        if(reminderSelection.hasOne()) {
             setStatus(
                 "Deleted reminder #" +
-                i2s(reminderSelection.getSelectedItemIdx() + 1) + "."
+                i2s(reminderSelection.getSingleItemIdx() + 1) + "."
             );
         } else {
             setStatus(
@@ -1432,7 +1461,7 @@ void AreaEditor::duplicateMobsCmd(float inputValue) {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus("You have to select mobs to duplicate!", true);
     } else {
         setStatus("Use the canvas to place the duplicated objects.");
@@ -2142,7 +2171,7 @@ void AreaEditor::goToProblem() {
         }
         
         changeState(EDITOR_STATE_MOBS);
-        selectedMobs.insert(problemMobPtr);
+        mobSelection.setSingle(game.curArea->findMobGenIdx(problemMobPtr));
         centerCamera(problemMobPtr->pos - 64, problemMobPtr->pos + 64);
         
         break;
@@ -3112,10 +3141,7 @@ void AreaEditor::selectAllCmd(float inputValue) {
             );
             
         } else if(state == EDITOR_STATE_MOBS) {
-            selectedMobs.insert(
-                game.curArea->mobGenerators.begin(),
-                game.curArea->mobGenerators.end()
-            );
+            mobSelection.addAll(game.curArea->mobGenerators.size());
             
         } else if(state == EDITOR_STATE_PATHS) {
             selectedPathStops.insert(
@@ -3373,10 +3399,10 @@ void AreaEditor::setSelectionStatusText() {
         break;
         
     } case EDITOR_STATE_MOBS: {
-        if(!selectedMobs.empty()) {
+        if(mobSelection.hasAny()) {
             setStatus(
                 "Selected " +
-                amountStr((int) selectedMobs.size(), "object") +
+                amountStr((int) mobSelection.getCount(), "object") +
                 "."
             );
         }
@@ -3569,30 +3595,6 @@ void AreaEditor::snapModeCmd(float inputValue) {
     }
     finalStatusText += ".";
     setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Procedure to start moving the selected mobs.
- */
-void AreaEditor::startMobMove() {
-    registerChange("object movement");
-    
-    moveClosestMob = nullptr;
-    Distance moveClosestMobDist;
-    for(auto const& m : selectedMobs) {
-        preMoveMobCoords[m] = m->pos;
-        
-        Distance d(game.editorsView.mouseCursorWorldPos, m->pos);
-        if(!moveClosestMob || d < moveClosestMobDist) {
-            moveClosestMob = m;
-            moveClosestMobDist = d;
-            moveStartPos = m->pos;
-        }
-    }
-    
-    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
-    moving = true;
 }
 
 

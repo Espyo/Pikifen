@@ -4346,8 +4346,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
  * @brief Processes the Dear ImGui mob control panel for this frame.
  */
 void AreaEditor::processGuiPanelMob() {
-
-    MobGen* mPtr = *selectedMobs.begin();
+    MobGen* mPtr = game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
     
     //Category and type comboboxes.
     string customCatName = "";
@@ -4521,7 +4520,7 @@ void AreaEditor::processGuiPanelMob() {
         );
         
         //Object delete link button.
-        if(!(*selectedMobs.begin())->links.empty()) {
+        if(!mPtr->links.empty()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -4529,8 +4528,8 @@ void AreaEditor::processGuiPanelMob() {
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                if((*selectedMobs.begin())->links.size() == 1) {
-                    registerChange("Object link deletion");
+                if(mPtr->links.size() == 1) {
+                    registerChange("object link deletion");
                     mPtr->links.erase(mPtr->links.begin());
                     mPtr->linkIdxs.erase(mPtr->linkIdxs.begin());
                     homogenizeSelectedMobs();
@@ -4699,7 +4698,7 @@ void AreaEditor::processGuiPanelMobs() {
             "N"
         );
         
-        if(!selectedMobs.empty()) {
+        if(mobSelection.hasAny()) {
         
             //Delete object button.
             ImGui::SameLine();
@@ -4736,11 +4735,11 @@ void AreaEditor::processGuiPanelMobs() {
         
         ImGui::Spacer();
         
-        if(selectedMobs.size() == 1 || selectionHomogenized) {
+        if(mobSelection.hasOne() || mobSelection.homogenized) {
         
             processGuiPanelMob();
             
-        } else if(selectedMobs.empty()) {
+        } else if(!mobSelection.hasAny()) {
         
             //"No object selected" text.
             ImGui::TextDisabled("(No object selected)");
@@ -4756,7 +4755,7 @@ void AreaEditor::processGuiPanelMobs() {
             //Homogenize objects button.
             if(ImGui::Button("Edit all together")) {
                 registerChange("object combining");
-                selectionHomogenized = true;
+                mobSelection.homogenized = true;
                 homogenizeSelectedMobs();
             }
         }
@@ -5375,17 +5374,16 @@ void AreaEditor::processGuiPanelReview() {
     if(saveableTreeNode("review", "Reminders")) {
     
         //Nav box start.
-        size_t curReminderIdx = reminderSelection.getSelectedItemIdx();
+        size_t curReminderIdx = reminderSelection.getSingleItemIdx();
         processGuiNavBoxStart(
             "reminder", "Reminder", &curReminderIdx,
         [this] () { return game.curArea->reminders.size(); },
-        [this] () { return reminderSelection.getSelectionAmount(); }
+        [this] () { return reminderSelection.getCount(); }
         );
         
         //Previous reminder button.
         if(processGuiNavBoxPrev()) {
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
+            reminderSelection.setSingle(curReminderIdx);
         }
         
         //Current reminder text.
@@ -5393,8 +5391,7 @@ void AreaEditor::processGuiPanelReview() {
         
         //Next reminder button.
         if(processGuiNavBoxNext()) {
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
+            reminderSelection.setSingle(curReminderIdx);
         }
         
         //Nav box second line setup.
@@ -5408,8 +5405,7 @@ void AreaEditor::processGuiPanelReview() {
         ) {
             registerChange("reminder deletion");
             game.curArea->reminders.push_back(AreaMakerReminder());
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
+            reminderSelection.setSingle(curReminderIdx);
         }
         setTooltip(
             "Create a new reminder for yourself.\n"
@@ -5418,7 +5414,7 @@ void AreaEditor::processGuiPanelReview() {
         
         //Delete reminder button.
         ImGui::SameLine();
-        if(reminderSelection.getSelectionAmount() > 0) {
+        if(reminderSelection.getCount() > 0) {
             if(
                 processGuiNavWidgetDel(
                     &curReminderIdx, game.curArea->reminders.size()
@@ -5434,11 +5430,11 @@ void AreaEditor::processGuiPanelReview() {
         //End the nav box.
         processGuiNavBoxEnd();
         
-        if(reminderSelection.isOneSelected()) {
+        if(reminderSelection.hasOne()) {
         
             AreaMakerReminder* curReminder =
                 &game.curArea->reminders[
-                    reminderSelection.getSelectedItemIdx()
+                    reminderSelection.getSingleItemIdx()
                 ];
                 
             //Reminder position.

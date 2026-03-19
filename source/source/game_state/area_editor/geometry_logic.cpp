@@ -360,7 +360,7 @@ void AreaEditor::copyEdgeProperties() {
  * so they can be then pasted onto another mob.
  */
 void AreaEditor::copyMobProperties() {
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To copy an object's properties, you must first select an object "
             "to copy from!",
@@ -369,7 +369,7 @@ void AreaEditor::copyMobProperties() {
         return;
     }
     
-    if(selectedMobs.size() > 1) {
+    if(!mobSelection.hasOne()) {
         setStatus(
             "To copy an object's properties, you can only select 1 object!",
             true
@@ -377,7 +377,8 @@ void AreaEditor::copyMobProperties() {
         return;
     }
     
-    MobGen* sourceMob = *selectedMobs.begin();
+    MobGen* sourceMob =
+        game.curArea->mobGenerators[mobSelection.getSingleItemIdx()];
     if(!copyBufferMob) {
         copyBufferMob = new MobGen();
     }
@@ -525,56 +526,53 @@ bool AreaEditor::deleteEdges(const set<Edge*>& which) {
 
 
 /**
- * @brief Removes and deletes the specified mobs.
- *
- * @param which Mobs to delete.
+ * @brief Removes and deletes the selected mobs.
  */
-void AreaEditor::deleteMobs(const set<MobGen*>& which) {
-    for(auto const& sm : which) {
-        //Get its index.
-        size_t mIdx = 0;
-        for(; mIdx < game.curArea->mobGenerators.size(); mIdx++) {
-            if(game.curArea->mobGenerators[mIdx] == sm) break;
-        }
-        
+void AreaEditor::deleteMobs() {
+    const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
+    size_t deletions = 0;
+    
+    for(auto const& mobIdx : selectedMobs) {
         //Update links.
         for(size_t m2 = 0; m2 < game.curArea->mobGenerators.size(); m2++) {
             MobGen* m2Ptr = game.curArea->mobGenerators[m2];
             for(size_t l = 0; l < m2Ptr->links.size(); l++) {
-                if(m2Ptr->links[l] == sm) {
+                if(m2Ptr->linkIdxs[l] == mobIdx) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
                     m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
                 } else {
-                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mIdx, false);
+                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mobIdx, false);
                 }
             }
             
             if(m2Ptr->storedInside != INVALID) {
-                if(m2Ptr->storedInside == mIdx) {
+                if(m2Ptr->storedInside == mobIdx) {
                     m2Ptr->storedInside = INVALID;
                 } else {
-                    adjustMisalignedIndex(m2Ptr->storedInside, mIdx, false);
+                    adjustMisalignedIndex(m2Ptr->storedInside, mobIdx, false);
                 }
             }
         }
         
+        //Update mob groups.
         for(size_t c = 0; c < game.curArea->mission.mobGroups.size(); c++) {
             MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
-                if(cPtr->mobIdxs[m] == mIdx) {
+                if(cPtr->mobIdxs[m] == mobIdx) {
                     cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
                 } else {
-                    adjustMisalignedIndex(cPtr->mobIdxs[m], mIdx, false);
+                    adjustMisalignedIndex(cPtr->mobIdxs[m], mobIdx, false);
                     m++;
                 }
             }
         }
         
         //Finally, delete it.
+        delete game.curArea->mobGenerators[mobIdx];
         game.curArea->mobGenerators.erase(
-            game.curArea->mobGenerators.begin() + mIdx
+            game.curArea->mobGenerators.begin() + (mobIdx - deletions)
         );
-        delete sm;
+        deletions++;
     }
 }
 
@@ -1876,12 +1874,14 @@ void AreaEditor::homogenizeSelectedEdges() {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedMobs() {
-    if(selectedMobs.size() < 2) return;
+    if(mobSelection.getCount() < 2) return;
     
-    MobGen* base = *selectedMobs.begin();
-    for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
-        if(m == selectedMobs.begin()) continue;
-        base->clone(*m, false);
+    const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
+    MobGen* base = game.curArea->mobGenerators[*selectedMobs.begin()];
+    for(size_t mobIdx : selectedMobs) {
+        MobGen* mob = game.curArea->mobGenerators[mobIdx];
+        if(mob == base) continue;
+        base->clone(mob, false);
     }
 }
 
@@ -2194,7 +2194,7 @@ void AreaEditor::pasteMobProperties() {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To paste object properties, you must first select which object "
             "to paste to!",
@@ -2205,8 +2205,8 @@ void AreaEditor::pasteMobProperties() {
     
     registerChange("object property paste");
     
-    for(MobGen* m : selectedMobs) {
-        copyBufferMob->clone(m, false);
+    for(size_t mobIdx : mobSelection.getItemIdxs()) {
+        copyBufferMob->clone(game.curArea->mobGenerators[mobIdx], false);
     }
     
     setStatus("Successfully pasted object properties.");
@@ -2380,7 +2380,7 @@ void AreaEditor::resizeEverything(float mults[2]) {
  * @param pos Point that the mobs must face.
  */
 void AreaEditor::rotateMobGensToPoint(const Point& pos) {
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To rotate objects, you must first select some objects!",
             true
@@ -2389,9 +2389,10 @@ void AreaEditor::rotateMobGensToPoint(const Point& pos) {
     }
     
     registerChange("object rotation");
-    selectionHomogenized = false;
-    for(auto const& m : selectedMobs) {
-        m->angle = getAngle(m->pos, pos);
+    mobSelection.homogenized = false;
+    for(size_t mobIdx : mobSelection.getItemIdxs()) {
+        MobGen* mPtr = game.curArea->mobGenerators[mobIdx];
+        mPtr->angle = getAngle(mPtr->pos, pos);
     }
     setStatus("Rotated objects to face " + p2s(pos) + ".");
 }

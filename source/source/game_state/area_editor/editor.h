@@ -671,9 +671,6 @@ private:
     //Area data before vertex movement.
     Area* preMoveAreaData = nullptr;
     
-    //Position of the selected mobs before movement.
-    map<MobGen*, Point> preMoveMobCoords;
-    
     //Position of the selected path stops before movement.
     map<PathStop*, Point> preMoveStopCoords;
     
@@ -750,9 +747,6 @@ private:
     //Currently selected edges.
     set<Edge*> selectedEdges;
     
-    //Currently selected mobs.
-    set<MobGen*> selectedMobs;
-    
     //Currently selected path links.
     set<PathLink*> selectedPathLinks;
     
@@ -773,6 +767,9 @@ private:
     
     //Currently selected region's index.
     size_t selectedRegionIdx = INVALID;
+    
+    //Selection manager for the mob generators.
+    SelectionManager mobSelection;
     
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
@@ -933,7 +930,7 @@ private:
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);
     bool deleteEdges(const set<Edge*>& which);
-    void deleteMobs(const set<MobGen*>& which);
+    void deleteMobs();
     void deletePathLinks(const set<PathLink*>& which);
     void deletePathStops(const set<PathStop*>& which);
     void doSectorSplit();
@@ -1066,7 +1063,6 @@ private:
         PathLink* l1, PathLink* l2,
         const Point& where
     );
-    void startMobMove();
     void startPathStopMove();
     void startVertexMove();
     void traverseSectorForSplit(

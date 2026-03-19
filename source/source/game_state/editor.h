@@ -280,36 +280,45 @@ protected:
         //one, or always select the one with the lowest index?
         bool overlapsCycle = false;
         
+        //Has the user agreed to homogenize the selection?
+        bool homogenized = false;
+        
         
         //--- Public function declarations ---
         
-        bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool add(size_t idx);
+        bool addAll(size_t totalAmount);
+        bool remove(size_t idx);
         bool clear();
-        bool disable();
+        bool setSingle(size_t idx);
+        
+        bool contains(size_t idx) const;
+        bool hasMultiple() const;
+        bool hasOne() const;
+        bool hasAny() const;
+        size_t getFirstItemIdx() const;
+        size_t getSingleItemIdx() const;
+        const set<size_t>& getItemIdxs() const;
+        size_t getCount() const;
+        
         void draw(const Point& cursorPos, float zoom) const;
+        bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool enable();
-        size_t getSelectedItemIdx() const;
-        const set<size_t>& getSelectedItemIdxs() const;
-        size_t getSelectionAmount() const;
-        bool getSelectionBBox(Point* center, Point* size) const;
-        bool isAnySelected() const;
-        bool isCreatingRubberBand() const;
-        bool isMultipleSelected() const;
-        bool isOneSelected() const;
-        bool isSelected(size_t idx) const;
-        bool isTransforming() const;
-        bool select(size_t idx);
-        bool selectViaMouseDown(
+        bool disable();
+        bool getBBox(Point* center, Point* size) const;
+        bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
-        bool startRubberBand(const Point& cursorPos);
         bool startTransforming();
-        bool stopRubberBand();
+        bool isTransforming() const;
         bool stopTransforming();
-        bool unselect(size_t idx);
+        bool startRubberBand(const Point& cursorPos);
+        bool isCreatingRubberBand() const;
         bool updateRubberBand(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
+        bool stopRubberBand();
+        bool handleMouseUp();
         
         
         private:
@@ -359,11 +368,9 @@ protected:
         //Cache for performance.
         Point preTransSize;
         
-        //Has the user agreed to homogenize the selection?
-        bool selectionHomogenized = false;
-        
         
         //--- Private function declarations ---
+        
         void getItemInfo(
             size_t idx, Point* outCenter, Point* outSize
         ) const;
@@ -856,6 +863,10 @@ protected:
         const ALLEGRO_COLOR& majorColor, const ALLEGRO_COLOR& minorColor
     );
     void drawOpErrorCursor();
+    void drawSelectionAndTransformationThings(
+        const SelectionManager& selMgr,
+        const TransformationWidget& traWid
+    );
     Point getLastWidgetPost();
     void getQuickPlayAreaList(
         string selectedAreaPath,
@@ -1058,4 +1069,14 @@ protected:
     virtual void handleRmbDown(const ALLEGRO_EVENT& ev);
     virtual void handleRmbDrag(const ALLEGRO_EVENT& ev);
     virtual void handleRmbUp(const ALLEGRO_EVENT& ev);
+    void handleSelectionAndTransformationLmbDown(
+        SelectionManager& selMgr, TransformationWidget& traWid
+    );
+    bool handleSelectionAndTransformationLmbDrag(
+        SelectionManager& selMgr, TransformationWidget& traWid,
+        const Point& mouseCursor, std::function<void()> onPreTransform = nullptr
+    );
+    void handleSelectionAndTransformationLmbUp(
+        SelectionManager& selMgr, TransformationWidget& traWid
+    );
 };

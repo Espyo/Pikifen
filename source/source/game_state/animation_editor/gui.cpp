@@ -614,7 +614,7 @@ void AnimationEditor::processGuiDialogOptions() {
  */
 void AnimationEditor::processGuiHitboxHazards() {
     Hitbox* curHitbox =
-        &curSprite->hitboxes[hitboxSelection.getSelectedItemIdx()];
+        &curSprite->hitboxes[hitboxSelection.getSingleItemIdx()];
     string hazardIname;
     
     if(curHitbox->hazard) {
@@ -2410,7 +2410,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     panelTitle("HITBOXES");
     
     //Nav box start.
-    size_t curHitboxIdx = hitboxSelection.getSelectedItemIdx();
+    size_t curHitboxIdx = hitboxSelection.getSingleItemIdx();
     processGuiNavBoxStart(
         "hitbox", "Hitbox", &curHitboxIdx,
     [this] () { return curSprite->hitboxes.size(); },
@@ -2419,9 +2419,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     
     //Previous hitbox button.
     if(processGuiNavBoxPrev()) {
-        hitboxSelection.clear();
-        hitboxSelection.select(curHitboxIdx);
-        prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
+        hitboxSelection.setSingle(curHitboxIdx);
+        prevHitboxSelection = hitboxSelection.getItemIdxs();
     }
     
     //Current hitbox text.
@@ -2434,9 +2433,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     
     //Next hitbox button.
     if(processGuiNavBoxNext()) {
-        hitboxSelection.clear();
-        hitboxSelection.select(curHitboxIdx);
-        prevHitboxSelection = hitboxSelection.getSelectedItemIdxs();
+        hitboxSelection.setSingle(curHitboxIdx);
+        prevHitboxSelection = hitboxSelection.getItemIdxs();
     }
     
     //Nav box second line setup.

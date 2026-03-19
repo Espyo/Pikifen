@@ -371,6 +371,34 @@ void Editor::drawOpErrorCursor() {
 
 
 /**
+ * @brief Draws things related to the current selection and its transformation
+ * widget.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::drawSelectionAndTransformationThings(
+    const SelectionManager& selMgr,
+    const TransformationWidget& traWid
+) {
+    if(selMgr.hasAny()) {
+        Point selectionCenter, selectionSize;
+        selMgr.getBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            traWid.draw(
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
+        }
+    }
+    
+    selMgr.draw(
+        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+    );
+}
+
+
+/**
  * @brief Returns the text that should be displayed on the Dear ImGui list
  * navigation count text widget.
  *
@@ -964,6 +992,98 @@ void Editor::handleRmbDrag(const ALLEGRO_EVENT& ev) {}
  * @param ev Event to process.
  */
 void Editor::handleRmbUp(const ALLEGRO_EVENT& ev) {}
+
+
+/**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is pressed down.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::handleSelectionAndTransformationLmbDown(
+    SelectionManager& selMgr, TransformationWidget& traWid
+) {
+    bool twHandled = false;
+    Point selectionCenter, selectionSize;
+    selMgr.getBBox(&selectionCenter, &selectionSize);
+    if(selectionSize.x != 0.0f) {
+        twHandled =
+            traWid.handleMouseDown(
+                game.editorsView.mouseCursorWorldPos,
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
+    }
+    
+    if(twHandled) {
+        selMgr.startTransforming();
+    } else {
+        selMgr.chooseViaMouseDown(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+    }
+}
+
+
+/**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is dragged around.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ * @param mouseCursor Mouse cursor coordinates to use.
+ * @param onPreTransform Code to run before any transformation is made, if any.
+ * @return Whether the selection's data changed.
+ */
+bool Editor::handleSelectionAndTransformationLmbDrag(
+    SelectionManager& selMgr, TransformationWidget& traWid,
+    const Point& mouseCursor, std::function<void()> onPreTransform
+) {
+    bool changesMade = false;
+    if(selMgr.isCreatingRubberBand()) {
+        selMgr.updateRubberBand(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+    } else {
+        Point selectionCenter, selectionSize;
+        selMgr.getBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            bool twHandled =
+                traWid.handleMouseMove(
+                    mouseCursor,
+                    &selectionCenter, &selectionSize,
+                    nullptr, 1.0f / game.editorsView.cam.zoom,
+                    false, false, 0.10f, isAltPressed
+                );
+            if(twHandled) {
+                changesMade = true;
+                if(onPreTransform) onPreTransform();
+                selMgr.applyTransformation(
+                    selectionCenter, selectionSize
+                );
+            }
+        }
+    }
+    return changesMade;
+}
+
+
+/**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is released.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::handleSelectionAndTransformationLmbUp(
+    SelectionManager& selMgr, TransformationWidget& traWid
+) {
+    selMgr.handleMouseUp();
+    traWid.handleMouseUp();
+}
 
 
 /**
@@ -4474,9 +4594,23 @@ bool Editor::SelectionManager::applyTransformation(
 bool Editor::SelectionManager::clear() {
     if(selectedItems.empty()) return false;
     selectedItems.clear();
+    homogenized = false;
     return true;
 }
 
+
+/**
+ * @brief Sets the selection to be a single item only.
+ *
+ * @param idx The item to select.
+ * @return Whether that item wasn't already selected.
+ */
+bool Editor::SelectionManager::setSingle(size_t idx) {
+    if(getSingleItemIdx() == idx) return false;
+    clear();
+    add(idx);
+    return true;
+}
 
 /**
  * @brief Disables the manager.
@@ -4648,6 +4782,20 @@ bool Editor::SelectionManager::enable() {
 
 
 /**
+ * @brief Returns the index of the first selected item, or INVALID if
+ * none is selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionManager::getFirstItemIdx() const {
+    if(selectedItems.size() == 0) {
+        return INVALID;
+    }
+    return *selectedItems.begin();
+}
+
+
+/**
  * @brief Returns the info of an item, or 0,0 if not possible.
  *
  * @param idx The item's index.
@@ -4702,7 +4850,7 @@ size_t Editor::SelectionManager::getNrTotalItems() const {
  *
  * @return The index or INVALID.
  */
-size_t Editor::SelectionManager::getSelectedItemIdx() const {
+size_t Editor::SelectionManager::getSingleItemIdx() const {
     if(selectedItems.size() == 1) {
         return *selectedItems.begin();
     } else {
@@ -4716,7 +4864,7 @@ size_t Editor::SelectionManager::getSelectedItemIdx() const {
  *
  * @return The list.
  */
-const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
+const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
     return selectedItems;
 }
 
@@ -4726,7 +4874,7 @@ const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
  *
  * @return The amount.
  */
-size_t Editor::SelectionManager::getSelectionAmount() const {
+size_t Editor::SelectionManager::getCount() const {
     return selectedItems.size();
 }
 
@@ -4739,7 +4887,7 @@ size_t Editor::SelectionManager::getSelectionAmount() const {
  * @param size The dimensions of the box are returned here.
  * @return Whether there are any selected items.
  */
-bool Editor::SelectionManager::getSelectionBBox(
+bool Editor::SelectionManager::getBBox(
     Point* center, Point* size
 ) const {
     *center = Point();
@@ -4772,7 +4920,7 @@ bool Editor::SelectionManager::getSelectionBBox(
  *
  * @return Whether any are selected.
  */
-bool Editor::SelectionManager::isAnySelected() const {
+bool Editor::SelectionManager::hasAny() const {
     return !selectedItems.empty();
 }
 
@@ -4792,7 +4940,7 @@ bool Editor::SelectionManager::isCreatingRubberBand() const {
  *
  * @return Whether there are multiple selected.
  */
-bool Editor::SelectionManager::isMultipleSelected() const {
+bool Editor::SelectionManager::hasMultiple() const {
     return selectedItems.size() > 1;
 }
 
@@ -4802,7 +4950,7 @@ bool Editor::SelectionManager::isMultipleSelected() const {
  *
  * @return Whether there is one selected.
  */
-bool Editor::SelectionManager::isOneSelected() const {
+bool Editor::SelectionManager::hasOne() const {
     return selectedItems.size() == 1;
 }
 
@@ -4813,7 +4961,7 @@ bool Editor::SelectionManager::isOneSelected() const {
  * @param idx The item's index.
  * @return Whether it is selected.
  */
-bool Editor::SelectionManager::isSelected(size_t idx) const {
+bool Editor::SelectionManager::contains(size_t idx) const {
     return selectedItems.contains(idx);
 }
 
@@ -4834,11 +4982,29 @@ bool Editor::SelectionManager::isTransforming() const {
  * @param idx The item's index.
  * @return Whether the item was unselected.
  */
-bool Editor::SelectionManager::select(size_t idx) {
+bool Editor::SelectionManager::add(size_t idx) {
     if(!enabled) return false;
     if(selectedItems.contains(idx)) return false;
     selectedItems.insert(idx);
+    homogenized = false;
     return true;
+}
+
+
+/**
+ * @brief Selects all items available.
+ *
+ * @param totalAmount How many items there are in total.
+ * @return Whether we didn't already have all selected.
+ */
+bool Editor::SelectionManager::addAll(size_t totalAmount) {
+    if(!enabled) return false;
+    size_t prevSelSize = selectedItems.size();
+    clear();
+    for(size_t i = 0; i < totalAmount; i++) {
+        add(i);
+    }
+    return selectedItems.size() > prevSelSize;
 }
 
 
@@ -4853,13 +5019,13 @@ bool Editor::SelectionManager::select(size_t idx) {
  * selection was held down.
  * @return Whether anything changed.
  */
-bool Editor::SelectionManager::selectViaMouseDown(
+bool Editor::SelectionManager::chooseViaMouseDown(
     const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
 ) {
     if(!enabled) return false;
     bool madeChanges = false;
     Point selectionCenter, selectionSize;
-    getSelectionBBox(&selectionCenter, &selectionSize);
+    getBBox(&selectionCenter, &selectionSize);
     
     //Get which items are under the mouse cursor.
     vector<size_t> clickedItems;
@@ -4883,17 +5049,18 @@ bool Editor::SelectionManager::selectViaMouseDown(
     if(mustStartRubberBand) {
         if(!addToSelectionMod) {
             clear();
-            startRubberBand(cursorPos);
-            madeChanges = true;
         }
+        startRubberBand(cursorPos);
+        madeChanges = true;
     } else {
-        if(overlapsCycle) {
-            size_t prevSelItemIdx = getSelectedItemIdx();
-            clear();
-            select(getNextInVector(clickedItems, prevSelItemIdx));
+        if(overlapsCycle && !addToSelectionMod) {
+            size_t prevSelItemIdx = getSingleItemIdx();
+            setSingle(getNextInVector(clickedItems, prevSelItemIdx));
         } else {
-            clear();
-            select(clickedItems[0]);
+            if(!addToSelectionMod) {
+                clear();
+            }
+            add(clickedItems[0]);
         }
         madeChanges = true;
     }
@@ -4934,7 +5101,7 @@ bool Editor::SelectionManager::startTransforming() {
         preTransCenters[i] = iCenter;
         preTransSizes[i] = iSize;
     }
-    getSelectionBBox(&preTransCenter, &preTransSize);
+    getBBox(&preTransCenter, &preTransSize);
     return wasIdle;
 }
 
@@ -4949,6 +5116,20 @@ bool Editor::SelectionManager::stopRubberBand() {
     
     state = STATE_IDLING;
     return true;
+}
+
+
+/**
+ * @brief A shorthand for handling things to do when the left mouse
+ * is released.
+ *
+ * @return Whether it succeeded.
+ */
+bool Editor::SelectionManager::handleMouseUp() {
+    bool success = true;
+    success &= stopRubberBand();
+    success &= stopTransforming();
+    return success;
 }
 
 
@@ -4973,7 +5154,7 @@ bool Editor::SelectionManager::stopTransforming() {
  * @param idx The item's index.
  * @return Whether the item was selected.
  */
-bool Editor::SelectionManager::unselect(size_t idx) {
+bool Editor::SelectionManager::remove(size_t idx) {
     if(!enabled) return false;
     if(!selectedItems.contains(idx)) return false;
     selectedItems.erase(idx);
@@ -4998,7 +5179,7 @@ bool Editor::SelectionManager::updateRubberBand(
     if(state != STATE_RUBBER_BAND) return false;
     
     Point selectionCenter, selectionSize;
-    getSelectionBBox(&selectionCenter, &selectionSize);
+    getBBox(&selectionCenter, &selectionSize);
     
     if(!addToSelectionMod) clear();
     
@@ -5027,11 +5208,9 @@ bool Editor::SelectionManager::updateRubberBand(
             iBR.x <= rubberBandBR.x &&
             iBR.y <= rubberBandBR.y
         ) {
-            select(i);
+            add(i);
         }
     }
-    
-    selectionHomogenized = false;
     
     return true;
 }
