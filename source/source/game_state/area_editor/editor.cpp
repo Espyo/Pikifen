@@ -1139,13 +1139,9 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
         setStatus("You have to select a reminder to delete!", true);
     } else {
         registerChange("reminder deletion");
-        size_t deletions = 0;
-        for(size_t i : reminderSelection.getItemIdxs()) {
-            game.curArea->reminders.erase(
-                game.curArea->reminders.begin() + (i - deletions)
-            );
-            deletions++;
-        }
+        eraseIndexesInVector(
+            reminderSelection.getItemIdxs(), game.curArea->reminders
+        );
         if(reminderSelection.hasOne()) {
             setStatus(
                 "Deleted reminder #" +
@@ -1153,7 +1149,7 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
             );
         } else {
             setStatus(
-                "Deleted " + i2s(deletions) + " reminders."
+                "Deleted " + i2s(reminderSelection.getCount()) + " reminders."
             );
         }
         reminderSelection.clear();

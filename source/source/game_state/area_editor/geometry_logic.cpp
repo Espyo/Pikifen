@@ -530,7 +530,6 @@ bool AreaEditor::deleteEdges(const set<Edge*>& which) {
  */
 void AreaEditor::deleteMobs() {
     const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
-    size_t deletions = 0;
     
     for(auto const& mobIdx : selectedMobs) {
         //Update links.
@@ -567,13 +566,12 @@ void AreaEditor::deleteMobs() {
             }
         }
         
-        //Finally, delete it.
+        //Delete it.
         delete game.curArea->mobGenerators[mobIdx];
-        game.curArea->mobGenerators.erase(
-            game.curArea->mobGenerators.begin() + (mobIdx - deletions)
-        );
-        deletions++;
     }
+    
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedMobs, game.curArea->mobGenerators);
 }
 
 

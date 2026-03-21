@@ -33,6 +33,35 @@ bool isInContainer(const ContainerT& cont, const ContentT& item) {
 
 
 /**
+ * @brief Removes the items at the given indexes of a vector. This takes
+ * re-indexation into account.
+ *
+ * @tparam IdxContainerT Type of container of the indexes.
+ * @tparam ContentT Type of contents of the vector.
+ * @param idxs The indexes.
+ * @param v The vector.
+ */
+template<typename IdxContainerT, typename ContentT>
+void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
+    //First, get the list of indexes in vector format.
+    vector<size_t> idxsV;
+    for(auto i : idxs) {
+        idxsV.push_back(i);
+    }
+    
+    //Sort the indexes so we can traverse them in inverse order,
+    //bypassing any re-indexation problems.
+    std::sort(idxsV.begin(), idxsV.end());
+    
+    //Go one by one and delete them.
+    for(size_t i = 0; i < idxsV.size(); i++) {
+        size_t iToUse = idxsV.size() - i - 1;
+        v.erase(v.begin() + idxsV[iToUse]);
+    }
+}
+
+
+/**
  * @brief Removes elements from a vector if they show up in the ban list.
  *
  * @tparam ContentT Type of contents of the vector and ban list.

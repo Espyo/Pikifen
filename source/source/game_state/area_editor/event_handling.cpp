@@ -895,9 +895,10 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         Point selectionCenter, selectionSize;
         mobSelection.getBBox(&selectionCenter, &selectionSize);
         Point newSelectionCenter = selectionCenter;
+        set<size_t> origSelection = mobSelection.getItemIdxs();
         mobSelection.clear();
         
-        for(size_t mobIdx : mobSelection.getItemIdxs()) {
+        for(size_t mobIdx : origSelection) {
             MobGen* selMg = game.curArea->mobGenerators[mobIdx];
             MobGen* newMg = new MobGen(*selMg);
             newMg->pos = Point(hotspot + (selMg->pos) - newSelectionCenter);
@@ -907,7 +908,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         setStatus(
             "Duplicated " +
-            amountStr((int) mobSelection.getCount(), "object") + "."
+            amountStr((int) origSelection.size(), "object") + "."
         );
         
         break;
