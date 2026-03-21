@@ -138,6 +138,46 @@ ContentT getPrevInVectorByIdx(const vector<ContentT>& v, size_t idx) {
 
 
 /**
+ * @brief Inserts something in the given position of a vector, but
+ * safely places it in the most appropriate position in case that index is out
+ * of bounds. The inserted item is a copy of the item at the previous position.
+ * If the vector is empty, an empty item is created.
+ *
+ * @tparam ContentT Type of contents of the vector.
+ * @param v The vector.
+ * @param idx The index to insert into.
+ */
+template<typename ContentT>
+void insertCopyInVector(vector<ContentT>& v, size_t idx) {
+    idx = std::min(idx, v.size());
+    if(idx == 0) {
+        v.push_back(ContentT());
+    } else {
+        v.insert(v.begin() + idx, v[idx - 1]);
+    }
+}
+
+
+/**
+ * @brief Inserts something in the given position of a vector, but
+ * safely places it in the most appropriate position in case that index is out
+ * of bounds.
+ *
+ * @tparam ContentT Type of contents of the vector.
+ * @param v The vector.
+ * @param idx The index to insert into.
+ * @param item The item to insert.
+ */
+template<typename ContentT>
+void insertInVector(
+    vector<ContentT>& v, size_t idx, const ContentT& item = ContentT()
+) {
+    idx = std::min(idx, v.size());
+    v.insert(v.begin() + idx, item);
+}
+
+
+/**
  * @brief Shorthand for figuring out if a given key is in a map.
  *
  * @tparam MapT Type of map.

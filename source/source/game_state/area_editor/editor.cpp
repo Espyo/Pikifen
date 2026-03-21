@@ -330,7 +330,7 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
     registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
     newRegion->size = MISSION::EXIT_MIN_SIZE;
-    game.curArea->regions.push_back(newRegion);
+    insertInVector(game.curArea->regions, selectedRegionIdx, newRegion);
     selectRegion(newRegion);
     setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
 }

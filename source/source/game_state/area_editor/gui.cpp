@@ -3142,10 +3142,7 @@ void AreaEditor::processGuiPanelMissionBriefing() {
             )
         ) {
             registerChange("mission briefing note creation");
-            game.curArea->mission.briefingNotes.insert(
-                game.curArea->mission.briefingNotes.begin() +
-                curNoteIdx, ""
-            );
+            insertInVector(game.curArea->mission.briefingNotes, curNoteIdx);
             setStatus(
                 "Created mission briefing note #" + i2s(curNoteIdx + 1) + "."
             );
@@ -3249,11 +3246,7 @@ void AreaEditor::processGuiPanelMissionEndCond() {
             )
         ) {
             registerChange("mission end condition creation");
-            game.curArea->mission.endConds.insert(
-                game.curArea->mission.endConds.begin() +
-                curCondIdx,
-                MissionEndCond()
-            );
+            insertInVector(game.curArea->mission.endConds, curCondIdx);
             setStatus(
                 "Created mission end condition #" + i2s(curCondIdx + 1) + "."
             );
@@ -4027,11 +4020,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
             )
         ) {
             registerChange("mission mob group creation");
-            game.curArea->mission.mobGroups.insert(
-                game.curArea->mission.mobGroups.begin() +
-                prevCurMobGroupIdx,
-                MissionMobGroup()
-            );
+            insertInVector(game.curArea->mission.mobGroups, curMobGroupIdx);
             for(
                 size_t e = 0; e < game.curArea->mission.endConds.size(); e++
             ) {
@@ -4218,10 +4207,8 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             )
         ) {
             registerChange("mission score criterion creation");
-            game.curArea->mission.scoreCriteria.insert(
-                game.curArea->mission.scoreCriteria.begin() +
-                prevCurCriterionIdx + 1,
-                MissionScoreCriterion()
+            insertInVector(
+                game.curArea->mission.scoreCriteria, curCriterionIdx
             );
             setStatus(
                 "Created mission score criterion #" +

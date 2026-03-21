@@ -531,7 +531,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         TreeShadow* newShadow = new TreeShadow(hotspot);
         newShadow->bitmap = game.bmpError;
         
-        game.curArea->treeShadows.push_back(newShadow);
+        insertInVector(game.curArea->treeShadows, selectedShadowIdx, newShadow);
         
         selectTreeShadow(newShadow);
         setStatus(

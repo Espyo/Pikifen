@@ -1557,18 +1557,14 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
         adjustMisalignedIndex(
             curAnimInst.curAnim->loopFrame, prevCurFrameIdx, true
         );
-        if(prevCurFrameIdx != INVALID && !curAnimInst.curAnim->frames.empty()) {
-            curAnimInst.curFrameTime = 0.0f;
-            curAnimInst.curAnim->frames.insert(
-                curAnimInst.curAnim->frames.begin() + curAnimInst.curFrameIdx,
-                Frame(curAnimInst.curAnim->frames[prevCurFrameIdx])
-            );
-        } else {
-            curAnimInst.curAnim->frames.push_back(Frame());
-            curAnimInst.curFrameTime = 0.0f;
+        insertCopyInVector(
+            curAnimInst.curAnim->frames, curAnimInst.curFrameIdx
+        );
+        curAnimInst.curFrameTime = 0.0f;
+        framePtr = &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
+        if(curAnimInst.curAnim->frames.size() == 1) {
             setBestFrameSprite();
         }
-        framePtr = &(curAnimInst.curAnim->frames[curAnimInst.curFrameIdx]);
         changesMgr.markAsChanged();
         setStatus(
             "Created frame #" + i2s(curAnimInst.curFrameIdx + 1) + "."
