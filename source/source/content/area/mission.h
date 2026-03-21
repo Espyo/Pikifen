@@ -43,9 +43,9 @@ extern const float EXIT_MIN_SIZE;
 //Available presets for missions.
 enum MISSION_PRESET {
 
-    //Grow as many Pikmin as you can within the time limit.
+    //Collect as many Pikmin as you can within the time limit.
     //Medal depends on how many you grew. Matches P1.
-    MISSION_PRESET_GROW_MANY_PIKMIN,
+    MISSION_PRESET_COLLECT_PIKMIN,
     
     //Collect as many treasures as you can within the time limit.
     //Medal depends on how many got collected, platinum for all. Matches P3.
@@ -71,7 +71,7 @@ enum MISSION_PRESET {
 
 //Mission preset enum naming.
 buildEnumNames(missionPresetNames, MISSION_PRESET)({
-    { MISSION_PRESET_GROW_MANY_PIKMIN, "Grow Many Pikmin" },
+    { MISSION_PRESET_COLLECT_PIKMIN, "Collect Pikmin" },
     { MISSION_PRESET_COLLECT_TREASURE, "Collect Treasure" },
     { MISSION_PRESET_BATTLE_ENEMIES, "Battle Enemies" },
     { MISSION_PRESET_DEFEAT_BOSSES, "Defeat Bosses" },
@@ -609,6 +609,11 @@ struct MissionData {
     //--- Public function declarations ---
     
     void applyPreset(MISSION_PRESET newPreset);
+    void applyPresetBattleEnemies();
+    void applyPresetCollectEverything();
+    void applyPresetCollectPikmin();
+    void applyPresetCollectTreasure();
+    void applyPresetDefeatBosses();
     string getBriefingObjectiveText() const;
     vector<string> getNoteBulletPoints() const;
     vector<string> getMedalAwardBulletPoints() const;

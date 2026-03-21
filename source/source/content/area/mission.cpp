@@ -58,202 +58,465 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
     reset();
     
     switch(newPreset) {
-    case MISSION_PRESET_GROW_MANY_PIKMIN: {
-        //Grow Many Pikmin -- end conditions.
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_PAUSE_MENU,
-            .clear = true,
-            .zeroTimeForScore = true,
-            .neutralMood = false,
-            .reason = "Ended early from the pause menu!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Time's up!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = 1,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Lost a leader!",
-        }
-        );
-        
+    case MISSION_PRESET_COLLECT_PIKMIN: {
+        applyPresetCollectPikmin();
         break;
-        
     } case MISSION_PRESET_COLLECT_TREASURE: {
-        //Collect Treasure -- end conditions.
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_PAUSE_MENU,
-            .clear = true,
-            .zeroTimeForScore = true,
-            .neutralMood = false,
-            .reason = "Ended early from the pause menu!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Time's up!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = 0,
-            .clear = true,
-            .neutralMood = false,
-            .reason = "Got all treasures!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = 1,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Lost a leader!",
-        }
-        );
-        
+        applyPresetCollectTreasure();
         break;
-        
     } case MISSION_PRESET_BATTLE_ENEMIES: {
-        //Battle Enemies -- end conditions.
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_PAUSE_MENU,
-            .clear = true,
-            .zeroTimeForScore = true,
-            .neutralMood = false,
-            .reason = "Ended early from the pause menu!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Time's up!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = 0,
-            .clear = true,
-            .neutralMood = false,
-            .reason = "Got all enemies!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = 1,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Lost a leader!",
-        }
-        );
-        
+        applyPresetBattleEnemies();
         break;
-        
     } case MISSION_PRESET_DEFEAT_BOSSES: {
-        //Defeat Bosses -- end conditions.
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_PAUSE_MENU,
-            .clear = false,
-            .zeroTimeForScore = false,
-            .neutralMood = false,
-            .reason = "Ended early from the pause menu!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
-            .clear = true,
-            .neutralMood = false,
-            .reason = "Time's up!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = 0,
-            .clear = false,
-            .neutralMood = false,
-            .reason = "Defeated the boss!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = 1,
-            .clear = true,
-            .neutralMood = false,
-            .reason = "Lost a leader!",
-        }
-        );
-        
+        applyPresetDefeatBosses();
         break;
-        
     } case MISSION_PRESET_COLLECT_EVERYTHING: {
-        //Collect Everything -- end conditions.
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_PAUSE_MENU,
-            .clear = true,
-            .zeroTimeForScore = true,
-            .neutralMood = false,
-            .reason = "Ended early from the pause menu!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Time's up!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = 0,
-            .clear = true,
-            .neutralMood = false,
-            .reason = "Got everything!",
-        }
-        );
-        endConds.push_back(
-        MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = 1,
-            .clear = true,
-            .neutralMood = true,
-            .reason = "Lost a leader!",
-        }
-        );
-        
+        applyPresetCollectEverything();
         break;
-        
     } case MISSION_PRESET_CUSTOM: {
         break;
+    }
+    }
+}
+
+
+/**
+ * @brief Applies the Battle Enemies mission preset.
+ */
+void MissionData::applyPresetBattleEnemies() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got all enemies!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_ENEMIES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Enemies left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
         
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_DEFEAT_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
     }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Defeat as many enemies as you can within the time limit!";
+    briefingNotes = {
+        "Defeat them all for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Everything mission preset.
+ */
+void MissionData::applyPresetCollectEverything() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
     }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got everything!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_TREASURES_ENEMIES,
+        .enemiesNeedCollection = true,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Things left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_COLLECTION_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many treasures and enemies as you can within "
+        "the time limit!";
+    briefingNotes = {
+        "Collect everything for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Pikmin mission preset.
+ */
+void MissionData::applyPresetCollectPikmin() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_CUR_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Total Pikmin";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_PIKMIN;
+        
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion{
+        .type = MISSION_SCORE_CRITERION_PIKMIN,
+        .points = 10,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many Pikmin as you can within the time limit!";
+    briefingNotes = {
+        "The more you have, the better your medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Treasure mission preset.
+ */
+void MissionData::applyPresetCollectTreasure() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got all treasures!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_TREASURES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Treasures left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_COLLECTION_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many treasures as you can within the time limit!";
+    briefingNotes = {
+        "Collect everything for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Defeat Bosses mission preset.
+ */
+void MissionData::applyPresetDefeatBosses() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = false,
+        .zeroTimeForScore = true,
+        .neutralMood = false,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = false,
+        .neutralMood = false,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Defeated the boss!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = false,
+        .neutralMood = false,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_ENEMIES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_SEC_LEFT,
+        .indexParam = 0,
+        .points = 10,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Defeat the boss enemy within the time limit!";
+    briefingNotes = {
+        "The faster you are, the better your medal!",
+        "If a leader loses all their health, you'll fail the mission!"
+    };
+    startingPoints = 0;
 }
 
 
@@ -378,6 +641,7 @@ void MissionData::reset() {
     makerRecord = 0;
     makerRecordDate.clear();
     endConds.clear();
+    mobGroups.clear();
     hudItems.clear();
     hudItems.insert(hudItems.begin(), 4, MissionHudItem());
     scoreCriteria.clear();

@@ -326,7 +326,7 @@ void AreaEditor::processGuiDialogMissionPreset() {
     //Explanation text.
     string explanationStr =
         "If you change the preset, whatever mission data\n"
-        "the area had before will be LOST.\n"
+        "the area had before will be overwritten.\n"
         "If you choose \"custom\", whatever was there before\n"
         "will be kept, and you can then customize the mission in depth.";
     ImGui::BeginAlign();
@@ -3073,10 +3073,11 @@ void AreaEditor::processGuiPanelMission() {
     
     ImGui::Spacer();
     
+    processGuiPanelMissionMedalAward();
+    
     if(game.curArea->mission.preset == MISSION_PRESET_CUSTOM) {
         processGuiPanelMissionEndCond();
         processGuiPanelMissionMobGroups();
-        processGuiPanelMissionMedalAward();
         processGuiPanelMissionScoreCriteria();
         processGuiPanelMissionHudItems();
         processGuiPanelMissionBriefing();
@@ -4131,7 +4132,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 );
                 
             }
-
+            
             //Highlight on radar checkbox.
             bool highlightOnRadar = groupPtr->highlightOnRadar;
             if(
