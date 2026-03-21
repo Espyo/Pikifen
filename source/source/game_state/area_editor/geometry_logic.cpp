@@ -727,7 +727,40 @@ void AreaEditor::findProblems() {
     
     findProblemsUnknownTreeShadow();
     if(problemType != EPT_NONE_YET) return;
-        
+    
+    findProblemsEmptyMissionMobGroup();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsMissionNoEnd();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsMissionMultiplePauseEnds();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionEndCond();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionHudItem();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionEndCond();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionHudItem();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsZeroPointMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
     //All good!
     problemType = EPT_NONE;
     problemTitle = "None!";
@@ -792,6 +825,27 @@ void AreaEditor::findProblemsBridgePath() {
 
 
 /**
+ * @brief Checks for any empty mission mob groups,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsEmptyMissionMobGroup() {
+    for(size_t g = 0; g < game.curArea->mission.mobGroups.size(); g++) {
+        MissionMobGroup* gPtr = &game.curArea->mission.mobGroups[g];
+        if(gPtr->calculateList().empty()) {
+            problemType = EPT_EMPTY_MISSION_MOB_GROUP;
+            problemTitle =
+                "Empty mission mob group!";
+            problemDescription =
+                "Mission mob group #" + i2s(g + 1) + " has no "
+                "mobs, making it pointless. Either assign some "
+                "or delete the group.";
+            return;
+        }
+    }
+}
+
+
+/**
  * @brief Checks for any intersecting edges in the area, and fills the problem
  * info if so.
  */
@@ -826,6 +880,123 @@ void AreaEditor::findProblemsIntersectingEdge() {
                 floor(eiPtr->e1->vertexes[0]->y + sin(a) * r *
                       d.toFloat())
             ) + "). Edges should never cross each other.";
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission end conditions,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionEndCond() {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        MissionEndCondType* cTypePtr = game.missionEndCondTypes[cPtr->type];
+        if(cTypePtr->getEditorInfo().indexParamDescription.empty()) continue;
+        bool idxInBounds = true;
+        switch(cPtr->type) {
+        case MISSION_END_COND_LEADERS_IN_REGION: {
+            idxInBounds =
+                cPtr->indexParam < game.curArea->regions.size();
+            break;
+        } default: {
+            idxInBounds =
+                cPtr->indexParam < game.curArea->mission.mobGroups.size();
+            break;
+        }
+        }
+        if(!idxInBounds) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_END_COND;
+            problemTitle =
+                "Invalid number in mission end condition!";
+            problemDescription =
+                "Mission end condition #" + i2s(c + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission HUD items,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionHudItem() {
+    for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+        MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
+        if(!iPtr->enabled) continue;
+        bool mustCheckMobs = false;
+        bool mustCheckRegions = false;
+        if(iPtr->contentType == MISSION_HUD_ITEM_CONTENT_HEALTH) {
+            mustCheckMobs = true;
+        }
+        if(
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_TOT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_TOT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_AMT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_AMT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_TOT_AMT
+        ) {
+            if(iPtr->amountType == MISSION_HUD_ITEM_AMT_MOB_GROUP) {
+                mustCheckMobs = true;
+            } else if(
+                iPtr->amountType == MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION
+            ) {
+                mustCheckRegions = true;
+            }
+        }
+        bool idxInBounds = true;
+        if(mustCheckMobs) {
+            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
+                if(
+                    iPtr->idxsList[i2] >= game.curArea->mission.mobGroups.size()
+                ) {
+                    idxInBounds = false;
+                }
+            }
+        } else if(mustCheckRegions) {
+            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
+                if(
+                    iPtr->idxsList[i2] >= game.curArea->regions.size()
+                ) {
+                    idxInBounds = false;
+                }
+            }
+        }
+        if(!idxInBounds) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_HUD_ITEM;
+            problemTitle =
+                "Invalid number in mission HUD item!";
+            problemDescription =
+                "Mission HUD item #" + i2s(i + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission score criteria,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(cPtr->type != MISSION_SCORE_CRITERION_MOB_GROUP) continue;
+        if(cPtr->indexParam >= game.curArea->regions.size()) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_SCORE_CRI;
+            problemTitle =
+                "Invalid number in mission score criterion!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
     }
 }
 
@@ -925,6 +1096,51 @@ void AreaEditor::findProblemsMissingTexture() {
                 "Give it a valid texture.";
             return;
         }
+    }
+}
+
+
+/**
+ * @brief Checks for the existence of multiple pause menu mission end
+ * conditions, and fills the problem info if so.
+ */
+void AreaEditor::findProblemsMissionMultiplePauseEnds() {
+    bool foundOne = false;
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        if(cPtr->type != MISSION_END_COND_PAUSE_MENU) continue;
+        if(!foundOne) {
+            foundOne = true;
+        } else {
+            problemType = EPT_MISSION_MULTIPLE_PAUSE_ENDS;
+            problemTitle =
+                "Multiple pause menu mission end conditions!";
+            problemDescription =
+                "There are multiple mission end conditions of the "
+                "\"pause menu end\" type. Only the first one will "
+                "be triggered, making any others pointless.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for the mission having no end conditions,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsMissionNoEnd() {
+    if(game.curArea->type != AREA_TYPE_MISSION) return;
+    if(game.curArea->mission.endConds.empty()) {
+        problemType = EPT_MISSION_NO_END;
+        problemTitle =
+            "Mission has no end conditions!";
+        problemDescription =
+            "This mission does not have any end condition. "
+            "This means the only thing the player can do is end "
+            "the mission early from the pause menu as a fail. If that "
+            "is what you intend, please add an end condition for that.";
+        return;
     }
 }
 
@@ -1070,6 +1286,103 @@ void AreaEditor::findProblemsMobStoredInLoop() {
             }
             visitedMobs.insert(nextPtr);
             nextIdx = nextPtr->storedInside;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for the mission having no scoring criteria when it should,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoMissionScoreCri() {
+    if(
+        game.curArea->type != AREA_TYPE_MISSION ||
+        game.curArea->mission.medalAwardMode != MISSION_MEDAL_AWARD_MODE_POINTS
+    ) {
+        return;
+    }
+    if(game.curArea->mission.scoreCriteria.empty()) {
+        problemType = EPT_NO_MISSION_SCORE_CRI;
+        problemTitle =
+            "Mission has no score criteria!";
+        problemDescription =
+            "This mission award a medal based on points, but has "
+            "no scoring criteria, meaning the player can't get points. "
+            "Please add some scoring criteria.";
+        return;
+    }
+}
+
+
+/**
+ * @brief Checks for mission end conditions that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionEndCond() {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        if(
+            cPtr->type == MISSION_END_COND_TIME_LIMIT &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_END_COND;
+            problemTitle =
+                "Mission end condition needs a time limit that isn't set!";
+            problemDescription =
+                "Mission end condition #" + i2s(c + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the end condition.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission HUD items that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionHudItem() {
+    for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+        MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
+        if(
+            iPtr->enabled &&
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_HUD_ITEM;
+            problemTitle =
+                "Mission HUD item needs a time limit that isn't set!";
+            problemDescription =
+                "Mission HUD item #" + i2s(i + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the HUD item.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission score criteria that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(
+            cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_SCORE_CRI;
+            problemTitle =
+                "Mission score criterion needs a time limit that isn't set!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the criterion.";
+            return;
         }
     }
 }
@@ -1321,6 +1634,27 @@ void AreaEditor::findProblemsUnknownTreeShadow() {
             problemDescription =
                 "Texture name: \"" +
                 game.curArea->treeShadows[s]->bmpName + "\".";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission score criteria that have a zero point multipler,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsZeroPointMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(cPtr->points == 0) {
+            problemType = EPT_ZERO_POINT_MISSION_SCORE_CRI;
+            problemTitle =
+                "Mission score criterion with zero points!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " gives 0 "
+                "points, making it useless. Either make it give the player "
+                "some points or remove it.";
             return;
         }
     }

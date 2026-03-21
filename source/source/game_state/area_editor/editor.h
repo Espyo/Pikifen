@@ -352,6 +352,39 @@ private:
         //Unknown tree shadow image.
         EPT_UNKNOWN_SHADOW,
         
+        //Empty mission mob group.
+        EPT_EMPTY_MISSION_MOB_GROUP,
+        
+        //Mission with no end condition.
+        EPT_MISSION_NO_END,
+        
+        //Mission has multiple pause menu end conditions.
+        EPT_MISSION_MULTIPLE_PAUSE_ENDS,
+        
+        //Mission end condition calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_END_COND,
+        
+        //Mission HUD item calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_HUD_ITEM,
+        
+        //Mission scoring criterion calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_SCORE_CRI,
+        
+        //Mission end condition uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_END_COND,
+        
+        //Mission HUD item uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_HUD_ITEM,
+        
+        //Mission score criterion item uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_SCORE_CRI,
+        
+        //Mission scoring criterion awards no points.
+        EPT_ZERO_POINT_MISSION_SCORE_CRI,
+        
+        //No mission score criteria, but there should be some.
+        EPT_NO_MISSION_SCORE_CRI,
+        
     };
     
     //Editor states.
@@ -940,14 +973,24 @@ private:
     string findGoodFirstTexture();
     void findProblems();
     void findProblemsBridgePath();
+    void findProblemsEmptyMissionMobGroup();
     void findProblemsIntersectingEdge();
+    void findProblemsInvalidIdxParamMissionEndCond();
+    void findProblemsInvalidIdxParamMissionHudItem();
+    void findProblemsInvalidIdxParamMissionScoreCri();
     void findProblemsLoneEdge();
     void findProblemsLonePathStop();
     void findProblemsMissingLeader();
     void findProblemsMissingTexture();
+    void findProblemsMissionMultiplePauseEnds();
+    void findProblemsMissionNoEnd();
     void findProblemsMobInsideWalls();
     void findProblemsMobLinksToSelf();
     void findProblemsMobStoredInLoop();
+    void findProblemsNoMissionScoreCri();
+    void findProblemsNoTimeLimitMissionEndCond();
+    void findProblemsNoTimeLimitMissionHudItem();
+    void findProblemsNoTimeLimitMissionScoreCri();
     void findProblemsNonSimpleSector();
     void findProblemsOobMob();
     void findProblemsOobPathStop();
@@ -958,6 +1001,7 @@ private:
     void findProblemsTypelessMob();
     void findProblemsUnknownTexture();
     void findProblemsUnknownTreeShadow();
+    void findProblemsZeroPointMissionScoreCri();
     void finishCircleSector();
     void finishLayoutMoving();
     void finishNewSectorDrawing();

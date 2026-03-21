@@ -5341,7 +5341,6 @@ void AreaEditor::processGuiPanelReview() {
         
             ImGui::Indent();
             ImGui::TextWrapped("%s", problemDescription.c_str());
-            ImGui::Unindent();
             
             //Go to problem button.
             if(ImGui::Button("Go to problem")) {
@@ -5350,6 +5349,7 @@ void AreaEditor::processGuiPanelReview() {
             setTooltip(
                 "Focus the camera on the problem found, if applicable."
             );
+            ImGui::Unindent();
             
         }
         
