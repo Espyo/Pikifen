@@ -304,7 +304,7 @@ bool Leader::checkThrowOk() const {
         return false;
     }
     
-    ScriptEvent* ev = fsm.getEvent(LEADER_EV_THROW);
+    FsmEventDef* ev = scriptVM.fsm.getEvent(LEADER_EV_THROW);
     
     if(!ev) {
         return false;
@@ -711,7 +711,7 @@ void Leader::dismissLogic() {
     //Dismiss leaders now.
     for(size_t m = 0; m < group->members.size(); m++) {
         if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
-            group->members[m]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
+            group->members[m]->scriptVM.fsm.runEvent(MOB_EV_DISMISSED, nullptr);
             group->members[m]->leaveGroup();
             m--;
         }
@@ -992,10 +992,10 @@ bool Leader::orderPikminToOnion(
     for(size_t p = 0; p < candidates.size(); p++) {
     
         Pikmin* pikPtr = candidates[p].second;
-        ScriptEvent* ev = pikPtr->fsm.getEvent(MOB_EV_GO_TO_ONION);
+        FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
-        ev->run(&pikPtr->fsm, (void*) nPtr);
+        ev->run(&pikPtr->scriptVM, (void*) nPtr);
         
         amountOrdered++;
         if(amountOrdered == amount) {
@@ -1027,7 +1027,7 @@ void Leader::queueThrow() {
  */
 void Leader::signalSwarmEnd() const {
     for(size_t m = 0; m < group->members.size(); m++) {
-        group->members[m]->fsm.runEvent(MOB_EV_SWARM_ENDED);
+        group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_ENDED);
     }
 }
 
@@ -1037,7 +1037,7 @@ void Leader::signalSwarmEnd() const {
  */
 void Leader::signalSwarmStart() const {
     for(size_t m = 0; m < group->members.size(); m++) {
-        group->members[m]->fsm.runEvent(MOB_EV_SWARM_STARTED);
+        group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_STARTED);
     }
 }
 
@@ -1093,7 +1093,7 @@ void Leader::specificDismiss(
         
         //Remove it from the group and order it to go to that spot.
         members[m]->leaveGroup();
-        members[m]->fsm.runEvent(
+        members[m]->scriptVM.fsm.runEvent(
             MOB_EV_DISMISSED, (void*) &destination
         );
         
@@ -1163,7 +1163,7 @@ void Leader::startWhistling() {
             );
     }
     setAnimation(LEADER_ANIM_WHISTLING);
-    fsm.timer.start(2.5f);
+    scriptVM.timer.start(2.5f);
     game.statistics.whistleUses++;
 }
 
@@ -1199,8 +1199,10 @@ void Leader::swapHeldPikmin(Mob* newPik) {
         return;
     }
     
-    ScriptEvent* oldPikEv = oldPik->fsm.getEvent(MOB_EV_RELEASED);
-    ScriptEvent* newPikEv = newPik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+    FsmEventDef* oldPikEv =
+        oldPik->scriptVM.fsm.getEvent(MOB_EV_RELEASED);
+    FsmEventDef* newPikEv =
+        newPik->scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(newPik->subgroupTypePtr);
     
@@ -1208,7 +1210,7 @@ void Leader::swapHeldPikmin(Mob* newPik) {
     
     release(oldPik);
     
-    newPikEv->run(&newPik->fsm);
+    newPikEv->run(&newPik->scriptVM);
     hold(
         newPik, HOLD_TYPE_PURPOSE_HAND, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
@@ -1242,7 +1244,7 @@ void Leader::tickClassSpecifics(float deltaT) {
         throwCooldown <= 0.0f &&
         checkThrowOk()
     ) {
-        fsm.runEvent(LEADER_EV_THROW);
+        scriptVM.fsm.runEvent(LEADER_EV_THROW);
         updateThrowVariables();
         throwCooldown = LEADER::THROW_COOLDOWN_DURATION;
         throwQueued = false;
@@ -1391,7 +1393,7 @@ void changeToNextLeader(
     if(
         (
             player->leaderPtr &&
-            !player->leaderPtr->fsm.getEvent(LEADER_EV_INACTIVATED)
+            !player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_INACTIVATED)
         ) &&
         !forceSuccess
     ) {
@@ -1430,7 +1432,9 @@ void changeToNextLeader(
             searching = false;
         }
         
-        newLeaderPtr->fsm.runEvent(LEADER_EV_ACTIVATED, (void*) player);
+        newLeaderPtr->scriptVM.fsm.runEvent(
+            LEADER_EV_ACTIVATED, (void*) player
+        );
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
@@ -1452,7 +1456,7 @@ void changeToNextLeader(
         player->leaderPtr =
             game.states.gameplay->availableLeaders[player->leaderIdx];
             
-        player->leaderPtr->fsm.setState(LEADER_STATE_ACTIVE);
+        player->leaderPtr->scriptVM.fsm.setState(LEADER_STATE_ACTIVE);
         success = true;
     }
     
@@ -1480,12 +1484,11 @@ bool grabClosestGroupMember(Player* player) {
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
-    ScriptEvent* grabbedEv =
-        player->closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
-            MOB_EV_GRABBED_BY_FRIEND
-        );
-    ScriptEvent* grabberEv =
-        player->leaderPtr->fsm.getEvent(LEADER_EV_HOLDING);
+    FsmEventDef* grabbedEv =
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT]->
+        scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+    FsmEventDef* grabberEv =
+        player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_HOLDING);
     if(!grabberEv || !grabbedEv) {
         return false;
     }
@@ -1501,11 +1504,11 @@ bool grabClosestGroupMember(Player* player) {
     
     //Run the grabbing logic then.
     grabberEv->run(
-        &player->leaderPtr->fsm,
+        &player->leaderPtr->scriptVM,
         (void*) player->closestGroupMember[BUBBLE_RELATION_CURRENT]
     );
     grabbedEv->run(
-        &player->closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm,
+        &player->closestGroupMember[BUBBLE_RELATION_CURRENT]->scriptVM,
         (void*) player->leaderPtr
     );
     

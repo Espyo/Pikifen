@@ -194,14 +194,8 @@ void GameplayState::doGameDrawing(
     if(game.makerTools.hud) {
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
-                game.curArea->name,
-                calculateAreaSubtitle(
-                    game.curArea->subtitle,
-                    game.curArea->type,
-                    game.curArea->mission.preset
-                ),
-                game.curArea->maker,
-                areaTitleFadeTimer.getRatioLeft()
+                game.curArea->name, game.curArea->subtitle,
+                game.curArea->maker, areaTitleFadeTimer.getRatioLeft()
             );
         }
         
@@ -356,7 +350,9 @@ void GameplayState::drawBigMsg() {
         const float t = bigMsg.getTime() / GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_DUR;
         
         KeyframeInterpolator<float> kiX(game.winW);
-        kiX.addNew(TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK);
+        kiX.addNew(
+            TEXT_MOVE_STOP_T, TEXT_DRIFT_START_X, EASE_METHOD_IN_OUT_BACK
+        );
         kiX.addNew(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
         kiX.addNew(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
         
@@ -378,12 +374,15 @@ void GameplayState::drawBigMsg() {
         
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED:
+    case BIG_MESSAGE_MISSION_OVER:
     case BIG_MESSAGE_TIMES_UP: {
         const string& TEXT =
             bigMsg.get() == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT :
+            bigMsg.get() == BIG_MESSAGE_MISSION_OVER ?
+            GAMEPLAY::BIG_MSG_MISSION_OVER_TEXT :
             GAMEPLAY::BIG_MSG_TIMES_UP_TEXT;
         const float TEXT_W = game.winW * 0.80f;
         const float TEXT_INITIAL_HEIGHT = 0.05f;
@@ -396,6 +395,8 @@ void GameplayState::drawBigMsg() {
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
             bigMsg.get() == BIG_MESSAGE_MISSION_FAILED ?
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) :
+            bigMsg.get() == BIG_MESSAGE_MISSION_OVER ?
+            (bigMsg.getTime() / GAMEPLAY::BIG_MSG_MISSION_OVER_DUR) :
             (bigMsg.getTime() / GAMEPLAY::BIG_MSG_TIMES_UP_DUR);
             
         KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
@@ -1168,16 +1169,15 @@ void GameplayState::drawInGameText(Player* player) {
     //Leader prompt.
     player->leaderPrompt.draw(player->view);
     
-    //Mission exit region.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-    ) {
-        drawHighlightedRectRegion(
-            game.curArea->missionOld.goalExitCenter,
-            game.curArea->missionOld.goalExitSize,
-            changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
-        );
+    //Area regions.
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+            AreaRegion* rPtr = game.curArea->regions[r];
+            drawHighlightedRectRegion(
+                rPtr->center, rPtr->size,
+                changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
+            );
+        }
     }
 }
 

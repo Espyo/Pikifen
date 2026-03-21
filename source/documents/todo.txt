@@ -5,56 +5,20 @@ Current tasks (tasks being worked on, but not yet committed)
     Mushroom Pikmin
         If a Mushroom Pikmin attacks another Pikmin and it too becomes a Mushroom, the first will keep attacking indefinitely
         Two Pikmin fighting one another may occasionally stop and sigh
-    New mission system
-        HUD rule explanation for the results menu
-            Canon games have:
-                Area name
-                Your score
-                Top 3/5
-                Pikmin chart over the day
-                Number of players that participated
-                Pokos
-                Time bonus
-                Medal
-                New record label
-                Clear time
-            Pikifen 1.1 has:
-                Area name
-                Medal
-                Fail/Clear
-                Score
-                Conclusion text
-                Time taken
-                Pikmin born and deaths
-                Treasure and treasure points
-                Enemy and enemy points
-            Pikifen 1.2 should have:
-                x Area name
-                x Medal
-                x Score
-                x Conclusion text
-                Stats
-                    Time taken
-                    Pikmin count, born, and deaths
-                    Sprays used
-                x Rotating shine behind the medal
-        Add the presets logic
-        After hours clock HUD logic
-        Mission score records need to be ported over
-        Delete all remnants of the old system
-        Check all TODOs in the code
+        Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New editor selection system
+        Add logic to allow moving by dragging anywhere on the item, not just the transformation widget's center bubble
+        Add it to the layout, mobs, paths, and details area editor states
         Try to lump more code into the manager itself, to reduce copy-paste
-        Status bar should say how many are selected
+        Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, unselecting with Ctrl, etc.
-        Rubber band selection box should use dashed lines, and ideally be animated
-    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
-    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
-    Add a leader swap sound, so swapping to the rookie isn't silent
+        The area editor should show the index of the selected sector, edge, vertex, mob
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Using the transformation widget's resizing on selected items that can't change size (reminders, mobs) makes it behave weirdly
+    Leaders aren't following the bounce arc when bounced by a geyser
     Ice vent is hitting frozen Pikmin multiple times and eventually killing them
         Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
@@ -65,28 +29,26 @@ Next tasks (roughly sorted most important first)
     You can open the radar and start Go Here! during interludes
 
     --- 1.2.0 ---
+    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
+    Add a leader swap sound, so swapping to the rookie isn't silent
+    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Add a destroyed sprite to the gas pipe
+    Add a glowing orange top graphic, and make it replace the top of Pikmin under the effects of a spicy spray
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Ice geysers
     Freezecake
     Swarming jingle
-    [NEEDS BRAINSTORMING] Re-think how missions work
-        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
-        I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
-        If not using a preset, the mission should control all of the things that make the mission end, be they positive (grab all things, reach the exit, etc.), negative (lose all Pikmin, run out of time, etc.), or neutral (quit from the pause menu). Then, it must specify what happens for each one (you get graded with a medal or you get a fail)
-        Replace the clear + medal system with just a medal system, per the above
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-        The results menu should show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
-    Add area editor review checks for the new mission system, like having a time limit but no associated event
+    All editors should have a button to load content, and a button to create content, instead of it all being bundled into one dialog
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
-        A way for missions to receive mission events, score updates, etc. through scripting
+        A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
@@ -522,7 +484,7 @@ Misc things (so I don't forget)
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         Animate the mission results screen. Basically, reveal one thing at a time
-            Add sounds for an item's run-up ticking, an item's run-up finishing, a ka-ching for getting a medal, and a puff for the complete/failed stamp
+            Add sounds for an item's run-up ticking, an item's run-up finishing, and a ka-ching for getting a medal
             Add particles to the medal
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens
@@ -629,6 +591,7 @@ Misc things (so I don't forget)
             String splitting, joining, getting the size of, etc.
         Add some infinite loop protection logic
             I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
+        A way to obtain the frame's deltaT
         Mobs could reference other mobs via their ID numbers (Mob::id)
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
@@ -804,7 +767,6 @@ Misc things (so I don't forget)
                 Item run-up ticking
                 Item run-up finished
                 Ka-ching for getting a medal
-                Puff for the complete/failed stamp
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty
@@ -822,15 +784,14 @@ Misc things (so I don't forget)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     Boss music logic for attack jingles
     Missions
-        A goal where you reach X sprays of type Y
-        A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-        A goal where you have to construct a wonder
-        A fail condition for an enemy/enemy type dying (thanks Neo)
-        A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
-        A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
+        An end event where you reach X sprays of type Y
+        An end event where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
+        An end event where you have to construct a wonder
+        An end event for an enemy/enemy type dying (thanks Neo)
+        An end event for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
+        A way for something to give bonus points to the score (in score medal mode) (thanks Helodity)
             From the script?
             As a parameter in every single mob generator?
-        Custom goal clear conditions and custom fail conditions, via scripting somehow
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Code cleanup
@@ -907,8 +868,8 @@ Tasks for later on (I might never implement these)
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.?
-            A button next to the medal point requirement widgets to set it to the combined amount of the goal
-                This is tricky to do because some goal amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
+            A button next to the medal point requirement widgets to set it to the combined amount of some mob groups
+                This is tricky to do because some amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
@@ -951,10 +912,11 @@ Tasks for later on (I might never implement these)
         Water should reflect clouds and the sun... and maybe other things like an aurora borealis?
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
-        When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
+        When something contributes to something in the mission that's reflected in a HUD item, it should fly into said item
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
+    Save all (or up to 20 or something) the previous scores on a mission, and in the results screen, show a graph with your evolution over time (thanks Helodity)
     Observation spot
         An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey

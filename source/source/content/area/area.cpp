@@ -41,6 +41,42 @@ const unsigned char DEF_DIFFICULTY = 0;
 
 
 /**
+ * @brief Creates and adds a new edge to the list.
+ *
+ * @return The new edge's pointer.
+ */
+Edge* Area::addNewEdge() {
+    Edge* ePtr = new Edge();
+    edges.push_back(ePtr);
+    return ePtr;
+}
+
+
+/**
+ * @brief Creates and adds a new sector to the list.
+ *
+ * @return The new sector's pointer.
+ */
+Sector* Area::addNewSector() {
+    Sector* sPtr = new Sector();
+    sectors.push_back(sPtr);
+    return sPtr;
+}
+
+
+/**
+ * @brief Creates and adds a new vertex to the list.
+ *
+ * @return The new vertex's pointer.
+ */
+Vertex* Area::addNewVertex() {
+    Vertex* vPtr = new Vertex();
+    vertexes.push_back(vPtr);
+    return vPtr;
+}
+
+
+/**
  * @brief Checks to see if all indexes match their pointers,
  * for the various edges, vertexes, etc.
  *
@@ -378,10 +414,10 @@ void Area::clone(Area& other) {
     other.thumbnail = thumbnail;
     
     other.mission.preset = mission.preset;
-    other.mission.events = mission.events;
-    other.mission.mobChecklists = mission.mobChecklists;
+    other.mission.endConds = mission.endConds;
+    other.mission.mobGroups = mission.mobGroups;
     other.mission.timeLimit = mission.timeLimit;
-    other.mission.gradingMode = mission.gradingMode;
+    other.mission.medalAwardMode = mission.medalAwardMode;
     other.mission.startingPoints = mission.startingPoints;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
@@ -483,6 +519,124 @@ void Area::connectVertexEdges(Vertex* vPtr) {
         }
     }
     fixVertexPointers(vPtr);
+}
+
+
+/**
+ * @brief Removes and deletes an edge, and updates all indexes after it.
+ *
+ * @param eIdx Index number of the edge to delete.
+ */
+void Area::deleteEdge(size_t eIdx) {
+    delete edges[eIdx];
+    edges.erase(edges.begin() + eIdx);
+    
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        Vertex* vPtr = vertexes[v];
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+            if(vPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                vPtr->edgeIdxs[e], eIdx, false
+            );
+        }
+    }
+    
+    for(size_t s = 0; s < sectors.size(); s++) {
+        Sector* sPtr = sectors[s];
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+            if(sPtr->edgeIdxs[e] == INVALID) continue;
+            adjustMisalignedIndex(
+                sPtr->edgeIdxs[e], eIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes an edge, and updates all indexes after it.
+ *
+ * @param ePtr Pointer of the edge to delete.
+ */
+void Area::deleteEdge(const Edge* ePtr) {
+    for(size_t e = 0; e < edges.size(); e++) {
+        if(edges[e] == ePtr) {
+            deleteEdge(e);
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a sector, and updates all indexes after it.
+ *
+ * @param sIdx Index number of the sector to delete.
+ */
+void Area::deleteSector(size_t sIdx) {
+    delete sectors[sIdx];
+    sectors.erase(sectors.begin() + sIdx);
+    
+    for(size_t e = 0; e < edges.size(); e++) {
+        Edge* ePtr = edges[e];
+        for(size_t s = 0; s < 2; s++) {
+            if(ePtr->sectorIdxs[s] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->sectorIdxs[s], sIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a sector, and updates all indexes after it.
+ *
+ * @param sPtr Pointer of the sector to delete.
+ */
+void Area::deleteSector(const Sector* sPtr) {
+    for(size_t s = 0; s < sectors.size(); s++) {
+        if(sectors[s] == sPtr) {
+            deleteSector(s);
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
+ *
+ * @param vIdx Index number of the vertex to delete.
+ */
+void Area::deleteVertex(size_t vIdx) {
+    delete vertexes[vIdx];
+    vertexes.erase(vertexes.begin() + vIdx);
+    
+    for(size_t e = 0; e < edges.size(); e++) {
+        Edge* ePtr = edges[e];
+        for(size_t v = 0; v < 2; v++) {
+            if(ePtr->vertexIdxs[v] == INVALID) continue;
+            adjustMisalignedIndex(
+                ePtr->vertexIdxs[v], vIdx, false
+            );
+        }
+    }
+}
+
+
+/**
+ * @brief Removes and deletes a vertex, and updates all indexes after it.
+ *
+ * @param vPtr Pointer of the vertex to delete.
+ */
+void Area::deleteVertex(const Vertex* vPtr) {
+    for(size_t v = 0; v < vertexes.size(); v++) {
+        if(vertexes[v] == vPtr) {
+            deleteVertex(v);
+            return;
+        }
+    }
 }
 
 
@@ -1329,7 +1483,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     ReaderSetter mRS(node);
     int presetInt = MISSION_PRESET_CUSTOM;
-    int gradingModeInt = MISSION_GRADING_MODE_GOAL;
+    int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_CLEAR;
     string briefingNotesStr;
     
     //DEPRECATED in 1.2.0 by the new mission system.
@@ -1340,7 +1494,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     //General properties.
     mRS.set("mission_preset", presetInt);
     mRS.set("mission_time_limit", mission.timeLimit);
-    mRS.set("mission_grading_mode", gradingModeInt);
+    mRS.set("mission_medal_award_mode", medalAwardModeInt);
     mRS.set("mission_starting_points", mission.startingPoints);
     mRS.set("mission_bronze_req", mission.bronzeReq);
     mRS.set("mission_silver_req", mission.silverReq);
@@ -1351,59 +1505,58 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_maker_record", mission.makerRecord);
     mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
-    mission.gradingMode = (MISSION_GRADING_MODE) gradingModeInt;
+    mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
     mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
-    //Events.
-    DataNode* eventsNode = node->getChildByName("mission_events");
-    size_t nEvents = eventsNode->getNrOfChildren();
-    for(size_t e = 0; e < nEvents; e++) {
-        DataNode* eventNode = eventsNode->getChild(e);
-        MissionEvent newEvent;
+    //End conditions.
+    DataNode* condsNode = node->getChildByName("mission_end_conditions");
+    size_t nConds = condsNode->getNrOfChildren();
+    for(size_t c = 0; c < nConds; c++) {
+        DataNode* condNode = condsNode->getChild(c);
+        MissionEndCond newCond;
         
-        ReaderSetter eRS(eventNode);
+        ReaderSetter cRS(condNode);
         int typeInt = 0;
-        int actionTypeInt = 0;
         
-        eRS.set("type", typeInt);
-        eRS.set("index_param", newEvent.indexParam);
-        eRS.set("amount_param", newEvent.amountParam);
-        eRS.set("action_type", actionTypeInt);
-        eRS.set("action_message", newEvent.actionMessage);
-        eRS.set("zero_time_for_score", newEvent.zeroTimeForScore);
+        cRS.set("type", typeInt);
+        cRS.set("index_param", newCond.indexParam);
+        cRS.set("amount_param", newCond.amountParam);
+        cRS.set("clear", newCond.clear);
+        cRS.set("zero_time_for_score", newCond.zeroTimeForScore);
+        cRS.set("neutral_mood", newCond.neutralMood);
+        cRS.set("reason", newCond.reason);
         
-        newEvent.type = (MISSION_EV) typeInt;
-        newEvent.actionType = (MISSION_ACTION) actionTypeInt;
+        newCond.type = (MISSION_END_COND) typeInt;
         
-        mission.events.push_back(newEvent);
+        mission.endConds.push_back(newCond);
     }
     
-    //Mob checklists.
-    DataNode* mobChecklistsNode =
-        node->getChildByName("mission_mob_checklists");
-    size_t nMobChecklists = mobChecklistsNode->getNrOfChildren();
-    for(size_t c = 0; c < nMobChecklists; c++) {
-        DataNode* checklistNode = mobChecklistsNode->getChild(c);
-        MissionMobChecklist newChecklist;
+    //Mob groups.
+    DataNode* mobGroupsNode =
+        node->getChildByName("mission_mob_groups");
+    size_t nMobGroups = mobGroupsNode->getNrOfChildren();
+    for(size_t g = 0; g < nMobGroups; g++) {
+        DataNode* groupNode = mobGroupsNode->getChild(g);
+        MissionMobGroup newGroup;
         
-        ReaderSetter cRS(checklistNode);
+        ReaderSetter cRS(groupNode);
         int typeInt = 0;
         string mobIdxsStr;
         
         cRS.set("type", typeInt);
-        cRS.set("amount", newChecklist.requiredAmount);
-        cRS.set("enemies_need_collection", newChecklist.enemiesNeedCollection);
+        cRS.set("enemies_need_collection", newGroup.enemiesNeedCollection);
+        cRS.set("highlight_on_radar", newGroup.highlightOnRadar);
         cRS.set("mob_idxs", mobIdxsStr);
         
-        newChecklist.type = (MISSION_MOB_CHECKLIST) typeInt;
+        newGroup.type = (MISSION_MOB_GROUP) typeInt;
         
         vector<string> mobIdxsStrVec = semicolonListToVector(mobIdxsStr);
-        newChecklist.mobIdxs.reserve(mobIdxsStrVec.size());
+        newGroup.mobIdxs.reserve(mobIdxsStrVec.size());
         for(size_t m = 0; m < mobIdxsStrVec.size(); m++) {
-            newChecklist.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
+            newGroup.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
         }
         
-        mission.mobChecklists.push_back(newChecklist);
+        mission.mobGroups.push_back(newGroup);
     }
     
     //HUD items.
@@ -1461,35 +1614,13 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
 
 
 /**
- * @brief Loads the area maker's reminders from a data node.
- *
- * @param node Data node to load from.
- */
-void Area::loadRemindersFromDataNode(DataNode* node) {
-    reminders.clear();
-    size_t nReminders = node->getNrOfChildren();
-    for(size_t r = 0; r < nReminders; r++) {
-        DataNode* reminderNode = node->getChild(r);
-        AreaMakerReminder newReminder;
-        
-        ReaderSetter rRS(reminderNode);
-        
-        rRS.set("pos", newReminder.pos);
-        rRS.set("text", newReminder.text);
-        
-        reminders.push_back(newReminder);
-    }
-}
-
-
-/**
  * @brief Loads deprecated (pre-1.2.0) mission information.
  *
  * @param node Data node to load from.
  */
 void Area::loadOldMissionSystem(DataNode* node) {
     ReaderSetter mRS(node);
-    MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
+    MISSION_GOAL_OLD goal = MISSION_GOAL_OLD_END_MANUALLY;
     string goalStr;
     string requiredMobsStr;
     unordered_set<size_t> goalMobIdxs;
@@ -1515,7 +1646,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     bool enemyPointsOnCollection = false;
     Bitmask8 pointLossData = 0;
     Bitmask8 pointHudData = 255;
-    int gradingModeInt = 0;
+    int medalAwardModeInt = 0;
     
     //General properties.
     mRS.set("mission_goal", goalStr);
@@ -1544,15 +1675,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
     mRS.set("enemy_points_on_collection", enemyPointsOnCollection);
     mRS.set("mission_point_loss_data", pointLossData);
     mRS.set("mission_point_hud_data", pointHudData);
-    mRS.set("mission_grading_mode", gradingModeInt);
+    mRS.set("mission_grading_mode", medalAwardModeInt);
     
     //Goal.
-    for(size_t g = 0; g < game.missionGoals.size(); g++) {
-        if(game.missionGoals[g]->getName() == goalStr) {
-            goal = (MISSION_GOAL) g;
-            break;
-        }
-    }
+    goal = enumGetValue(missionGoalNames, goalStr);
     vector<string> missionRequiredMobsStr =
         semicolonListToVector(requiredMobsStr);
     goalMobIdxs.reserve(missionRequiredMobsStr.size());
@@ -1563,15 +1689,15 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     
     //Automatically turn the pause menu fail condition on/off for convenience.
-    if(goal == MISSION_GOAL_END_MANUALLY) {
+    if(goal == MISSION_GOAL_OLD_END_MANUALLY) {
         disableFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         );
     } else {
         enableFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         );
     }
     
@@ -1579,96 +1705,120 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(
         !hasFlag(
             failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            getIdxBitmask(MISSION_FAIL_COND_OLD_TIME_LIMIT)
         )
     ) {
         pointsPerSecLeft = 0;
         disableFlag(
             pointHudData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
         );
         disableFlag(
             pointLossData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
         );
     }
     
-    //Port the goal to events + mob checklists.
-    size_t goalMobChecklistIdx = 0;
+    //Port the goal to end conditions + mob groups.
+    size_t goalMobGroupIdx = 0;
     size_t exitRegionIdx = 0;
-    mission.events.push_back(
-    MissionEvent {
-        .type = MISSION_EV_PAUSE_MENU_END,
-        .actionType = MISSION_ACTION_END_FAIL,
-    }
-    );
     
     switch(goal) {
-    case MISSION_GOAL_END_MANUALLY: {
+    case MISSION_GOAL_OLD_END_MANUALLY: {
         break;
         
-    } case MISSION_GOAL_COLLECT_TREASURE: {
+    } case MISSION_GOAL_OLD_COLLECT_TREASURE: {
         mission.briefingObjective =
             "Collect treasures!";
-        mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_TREASURES,
-            .requiredAmount = 0,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_TREASURES,
+            .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
-        goalMobChecklistIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = goalMobChecklistIdx,
-            .actionType = MISSION_ACTION_END_CLEAR
+        goalMobGroupIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .clear = true,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended early from the pause menu!",
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
+            .indexParam = goalMobGroupIdx,
+            .amountParam = goalAllMobs ? 0 : goalAmount,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all treasures!",
         }
         );
         break;
         
-    } case MISSION_GOAL_BATTLE_ENEMIES: {
+    } case MISSION_GOAL_OLD_BATTLE_ENEMIES: {
         mission.briefingObjective =
             "Battle enemies!";
-        mission.events[0].actionType = MISSION_ACTION_END_CLEAR;
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_ENEMIES,
-            .requiredAmount = 0,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_ENEMIES,
             .enemiesNeedCollection = enemyPointsOnCollection,
+            .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
         }
         );
-        goalMobChecklistIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = goalMobChecklistIdx,
-            .actionType = MISSION_ACTION_END_CLEAR
+        goalMobGroupIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .clear = true,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended early from the pause menu!",
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
+            .indexParam = goalMobGroupIdx,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got all enemies!",
         }
         );
         break;
         
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
+    } case MISSION_GOAL_OLD_TIMED_SURVIVAL: {
         mission.briefingObjective =
             "Survive until the time limit!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .clear = false,
+            .zeroTimeForScore = false,
+            .neutralMood = false,
+            .reason = "Ended early from the pause menu!",
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TIME_LIMIT,
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Survived!",
         }
         );
         mission.timeLimit = goalAmount;
         break;
         
-    } case MISSION_GOAL_GET_TO_EXIT: {
+    } case MISSION_GOAL_OLD_GET_TO_EXIT: {
         mission.briefingObjective =
             "Get the leaders to the exit!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
         regions.push_back(
         new AreaRegion {
             .center = goalExitCenter,
@@ -1676,142 +1826,178 @@ void Area::loadOldMissionSystem(DataNode* node) {
         }
         );
         exitRegionIdx = regions.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LEADERS_IN_REGION,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .clear = false,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended early from the pause menu!",
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LEADERS_IN_REGION,
             .indexParam = exitRegionIdx,
-            .amountParam =
-            goalAllMobs ? 1 : goalMobIdxs.size(),
-            .actionType = MISSION_ACTION_END_CLEAR,
+            .amountParam = goalAllMobs ? 1 : goalMobIdxs.size(),
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Got to the exit!",
         }
         );
         break;
         
-    } case MISSION_GOAL_GROW_PIKMIN: {
+    } case MISSION_GOAL_OLD_GROW_PIKMIN: {
         mission.briefingObjective =
             "Grow " + i2s(goalAmount) + " Pikmin!";
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_MORE,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PAUSE_MENU,
+            .clear = false,
+            .zeroTimeForScore = true,
+            .neutralMood = false,
+            .reason = "Ended early from the pause menu!",
+        }
+        );
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = goalAmount,
-            .actionType = MISSION_ACTION_END_CLEAR
+            .clear = true,
+            .neutralMood = false,
+            .reason = "Grew " + i2s(goalAmount) + " Pikmin!",
         }
         );
         break;
     }
     }
     
-    //Port the fail conditions to events.
+    //Port the fail conditions to end conditions.
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TIME_LIMIT)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_FAIL,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TIME_LIMIT,
+            .clear = false,
+            .zeroTimeForScore =
+            hasFlag(pointLossData, MISSION_FAIL_COND_OLD_TIME_LIMIT),
+            .neutralMood = false,
+            .reason = "Time's up!",
         }
         );
         mission.timeLimit = failTimeLimit;
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_FEWER,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_FEWER,
             .amountParam = failTooFewPikAmount,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Reached " + i2s(failTooFewPikAmount) + " Pikmin!",
         }
         );
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PIKMIN_OR_MORE,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_PIKMIN_OR_MORE,
             .amountParam = failTooManyPikAmount,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Reached " + i2s(failTooManyPikAmount) + " Pikmin!",
         }
         );
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_LOSE_PIKMIN)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_PIKMIN,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LOSE_PIKMIN,
             .amountParam = failPikKilled,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Lost " + i2s(failPikKilled) + " Pikmin!",
         }
         );
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_TAKE_DAMAGE)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TAKE_DAMAGE,
-            .actionType = MISSION_ACTION_END_FAIL,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_TAKE_DAMAGE,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Took damage!",
         }
         );
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_LOSE_LEADERS)
         )
     ) {
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_LOSE_LEADERS,
             .amountParam = failLeadersKod,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Lost " + i2s(failLeadersKod) + " leaders!",
         }
         );
     }
     size_t enemyDefeatFailIdx = 0;
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES)
         )
     ) {
-        mission.mobChecklists.push_back(
-        MissionMobChecklist {
-            .type = MISSION_MOB_CHECKLIST_ENEMIES,
-            .requiredAmount = failEnemiesDefeated,
+        mission.mobGroups.push_back(
+        MissionMobGroup {
+            .type = MISSION_MOB_GROUP_ENEMIES,
         }
         );
-        enemyDefeatFailIdx = mission.mobChecklists.size() - 1;
-        mission.events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
+        enemyDefeatFailIdx = mission.mobGroups.size() - 1;
+        mission.endConds.push_back(
+        MissionEndCond {
+            .type = MISSION_END_COND_MOB_GROUP,
             .indexParam = enemyDefeatFailIdx,
-            .actionType = MISSION_ACTION_END_FAIL,
+            .amountParam = failEnemiesDefeated,
+            .clear = false,
+            .neutralMood = false,
+            .reason = "Defeated " + i2s(failEnemiesDefeated) + " enemies!",
         }
         );
     }
     if(
         hasFlag(
-            failConditions, getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            failConditions, getIdxBitmask(MISSION_FAIL_COND_OLD_PAUSE_MENU)
         )
     ) {
-        mission.events[0].actionType = MISSION_ACTION_END_FAIL;
+        mission.endConds[0].clear = false;
     }
     
     //Port the goal HUD items.
     switch(goal) {
-    case MISSION_GOAL_END_MANUALLY: {
+    case MISSION_GOAL_OLD_END_MANUALLY: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_TEXT;
@@ -1819,29 +2005,29 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "End whenever you want";
         break;
         
-    } case MISSION_GOAL_COLLECT_TREASURE: {
+    } case MISSION_GOAL_OLD_COLLECT_TREASURE: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+            MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobChecklistIdx };
+        { goalMobGroupIdx };
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
         
-    } case MISSION_GOAL_BATTLE_ENEMIES: {
+    } case MISSION_GOAL_OLD_BATTLE_ENEMIES: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+            MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobChecklistIdx };
+        { goalMobGroupIdx };
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
         
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
+    } case MISSION_GOAL_OLD_TIMED_SURVIVAL: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_TEXT;
@@ -1853,7 +2039,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].text = "Time:";
         break;
         
-    } case MISSION_GOAL_GET_TO_EXIT: {
+    } case MISSION_GOAL_OLD_GET_TO_EXIT: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1864,7 +2050,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "In exit:";
         break;
         
-    } case MISSION_GOAL_GROW_PIKMIN: {
+    } case MISSION_GOAL_OLD_GROW_PIKMIN: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
             MISSION_HUD_ITEM_CONTENT_CUR_TOT;
@@ -1879,8 +2065,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
     }
     
     if(
-        ((MISSION_GRADING_MODE) gradingModeInt) ==
-        MISSION_GRADING_MODE_POINTS &&
+        ((MISSION_MEDAL_AWARD_MODE) medalAwardModeInt) ==
+        MISSION_MEDAL_AWARD_MODE_POINTS &&
         pointHudData != 0
     ) {
         mission.hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled = true;
@@ -1890,11 +2076,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Port the failure HUD items.
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TIME_LIMIT ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TIME_LIMIT
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TIME_LIMIT ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TIME_LIMIT ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1902,11 +2088,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Time:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TOO_FEW_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_FEW_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1916,11 +2102,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_TOO_MANY_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_TOO_MANY_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1930,11 +2116,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_LOSE_PIKMIN ||
-        failHudSecondaryCond == MISSION_FAIL_COND_LOSE_PIKMIN
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_LOSE_PIKMIN ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_PIKMIN ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1944,11 +2130,11 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Pikmin lost:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_LOSE_LEADERS ||
-        failHudSecondaryCond == MISSION_FAIL_COND_LOSE_LEADERS
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_LOSE_LEADERS ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_LOSE_LEADERS ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
@@ -1958,16 +2144,16 @@ void Area::loadOldMissionSystem(DataNode* node) {
         mission.hudItems[id].text = "Leaders lost:";
     }
     if(
-        failHudPrimaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES ||
-        failHudSecondaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES
+        failHudPrimaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES ||
+        failHudSecondaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES
     ) {
         MISSION_HUD_ITEM_ID id =
-            failHudPrimaryCond == MISSION_FAIL_COND_DEFEAT_ENEMIES ?
+            failHudPrimaryCond == MISSION_FAIL_COND_OLD_DEFEAT_ENEMIES ?
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
         mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_MOB_CHECKLIST;
+        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_MOB_GROUP;
         mission.hudItems[id].idxsList = { enemyDefeatFailIdx };
         mission.hudItems[id].text = "Enemies:";
     }
@@ -1980,7 +2166,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerPikminBorn,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_BORN)
             ),
         }
         );
@@ -1993,7 +2180,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .affectsHud =
             hasFlag(
                 pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_PIKMIN_DEATH)
             ),
         }
         );
@@ -2005,7 +2192,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecLeft,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_LEFT)
             ),
         }
         );
@@ -2017,7 +2205,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerSecPassed,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_SEC_PASSED)
             ),
         }
         );
@@ -2030,7 +2219,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .affectsHud =
             hasFlag(
                 pointHudData,
-                getIdxBitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_TREASURE_POINTS)
             ),
         }
         );
@@ -2042,13 +2231,39 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .points = pointsPerEnemyPoint,
             .affectsHud =
             hasFlag(
-                pointHudData, getIdxBitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
+                pointHudData,
+                getIdxBitmask(MISSION_SCORE_CRITERIA_OLD_ENEMY_POINTS)
             ),
         }
         );
     }
     
-    //TODO pointLossData
+    //Port the subtitle, since it's used in mission score records.
+    if(subtitle.empty()) {
+        subtitle = enumGetName(missionGoalNames, goal);
+    }
+}
+
+
+/**
+ * @brief Loads the area maker's reminders from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void Area::loadRemindersFromDataNode(DataNode* node) {
+    reminders.clear();
+    size_t nReminders = node->getNrOfChildren();
+    for(size_t r = 0; r < nReminders; r++) {
+        DataNode* reminderNode = node->getChild(r);
+        AreaMakerReminder newReminder;
+        
+        ReaderSetter rRS(reminderNode);
+        
+        rRS.set("pos", newReminder.pos);
+        rRS.set("text", newReminder.text);
+        
+        reminders.push_back(newReminder);
+    }
 }
 
 
@@ -2071,160 +2286,6 @@ void Area::loadThumbnail(const string& thumbnailPath) {
             al_destroy_bitmap(b);
         }
             );
-    }
-}
-
-
-/**
- * @brief Creates and adds a new edge to the list.
- *
- * @return The new edge's pointer.
- */
-Edge* Area::addNewEdge() {
-    Edge* ePtr = new Edge();
-    edges.push_back(ePtr);
-    return ePtr;
-}
-
-
-/**
- * @brief Creates and adds a new sector to the list.
- *
- * @return The new sector's pointer.
- */
-Sector* Area::addNewSector() {
-    Sector* sPtr = new Sector();
-    sectors.push_back(sPtr);
-    return sPtr;
-}
-
-
-/**
- * @brief Creates and adds a new vertex to the list.
- *
- * @return The new vertex's pointer.
- */
-Vertex* Area::addNewVertex() {
-    Vertex* vPtr = new Vertex();
-    vertexes.push_back(vPtr);
-    return vPtr;
-}
-
-
-/**
- * @brief Removes and deletes an edge, and updates all indexes after it.
- *
- * @param eIdx Index number of the edge to delete.
- */
-void Area::deleteEdge(size_t eIdx) {
-    delete edges[eIdx];
-    edges.erase(edges.begin() + eIdx);
-    
-    for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* vPtr = vertexes[v];
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
-            if(vPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
-                vPtr->edgeIdxs[e], eIdx, false
-            );
-        }
-    }
-    
-    for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* sPtr = sectors[s];
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
-            if(sPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
-                sPtr->edgeIdxs[e], eIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes an edge, and updates all indexes after it.
- *
- * @param ePtr Pointer of the edge to delete.
- */
-void Area::deleteEdge(const Edge* ePtr) {
-    for(size_t e = 0; e < edges.size(); e++) {
-        if(edges[e] == ePtr) {
-            deleteEdge(e);
-            return;
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a sector, and updates all indexes after it.
- *
- * @param sIdx Index number of the sector to delete.
- */
-void Area::deleteSector(size_t sIdx) {
-    delete sectors[sIdx];
-    sectors.erase(sectors.begin() + sIdx);
-    
-    for(size_t e = 0; e < edges.size(); e++) {
-        Edge* ePtr = edges[e];
-        for(size_t s = 0; s < 2; s++) {
-            if(ePtr->sectorIdxs[s] == INVALID) continue;
-            adjustMisalignedIndex(
-                ePtr->sectorIdxs[s], sIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a sector, and updates all indexes after it.
- *
- * @param sPtr Pointer of the sector to delete.
- */
-void Area::deleteSector(const Sector* sPtr) {
-    for(size_t s = 0; s < sectors.size(); s++) {
-        if(sectors[s] == sPtr) {
-            deleteSector(s);
-            return;
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a vertex, and updates all indexes after it.
- *
- * @param vIdx Index number of the vertex to delete.
- */
-void Area::deleteVertex(size_t vIdx) {
-    delete vertexes[vIdx];
-    vertexes.erase(vertexes.begin() + vIdx);
-    
-    for(size_t e = 0; e < edges.size(); e++) {
-        Edge* ePtr = edges[e];
-        for(size_t v = 0; v < 2; v++) {
-            if(ePtr->vertexIdxs[v] == INVALID) continue;
-            adjustMisalignedIndex(
-                ePtr->vertexIdxs[v], vIdx, false
-            );
-        }
-    }
-}
-
-
-/**
- * @brief Removes and deletes a vertex, and updates all indexes after it.
- *
- * @param vPtr Pointer of the vertex to delete.
- */
-void Area::deleteVertex(const Vertex* vPtr) {
-    for(size_t v = 0; v < vertexes.size(); v++) {
-        if(vertexes[v] == vPtr) {
-            deleteVertex(v);
-            return;
-        }
     }
 }
 
@@ -2504,7 +2565,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         join(mission.briefingNotes, ";");
     mGW.write("mission_preset", mission.preset);
     mGW.write("mission_time_limit", mission.timeLimit);
-    mGW.write("mission_grading_mode", mission.gradingMode);
+    mGW.write("mission_medal_award_mode", mission.medalAwardMode);
     mGW.write("mission_starting_points", mission.startingPoints);
     mGW.write("mission_bronze_req", mission.bronzeReq);
     mGW.write("mission_silver_req", mission.silverReq);
@@ -2515,41 +2576,37 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     mGW.write("mission_maker_record", mission.makerRecord);
     mGW.write("mission_maker_record_date", mission.makerRecordDate);
     
-    //Events.
-    DataNode* eventsNode = node->addNew("mission_events");
-    for(size_t e = 0; e < mission.events.size(); e++) {
-        DataNode* eventNode = eventsNode->addNew("event");
-        MissionEvent* eventPtr = &mission.events[e];
+    //End conditions.
+    DataNode* condsNode = node->addNew("mission_end_conditions");
+    for(size_t c = 0; c < mission.endConds.size(); c++) {
+        DataNode* condNode = condsNode->addNew("end_condition");
+        MissionEndCond* condPtr = &mission.endConds[c];
         
-        GetterWriter eGW(eventNode);
+        GetterWriter cGW(condNode);
         
-        eGW.write("type", eventPtr->type);
-        eGW.write("index_param", eventPtr->indexParam);
-        eGW.write("amount_param", eventPtr->amountParam);
-        eGW.write("action_type", eventPtr->actionType);
-        eGW.write("zero_time_for_score", eventPtr->zeroTimeForScore);
-        
-        if(!eventPtr->actionMessage.empty()) {
-            eGW.write("action_message", eventPtr->actionMessage);
-        }
+        cGW.write("type", condPtr->type);
+        cGW.write("index_param", condPtr->indexParam);
+        cGW.write("amount_param", condPtr->amountParam);
+        cGW.write("clear", condPtr->clear);
+        cGW.write("zero_time_for_score", condPtr->zeroTimeForScore);
+        cGW.write("neutral_mood", condPtr->neutralMood);
+        cGW.write("reason", condPtr->reason);
     }
     
-    //Mob checklists.
-    DataNode* checklistsNode = node->addNew("mission_mob_checklists");
-    for(size_t c = 0; c < mission.mobChecklists.size(); c++) {
-        DataNode* checklistNode = checklistsNode->addNew("checklist");
-        MissionMobChecklist* checklistPtr = &mission.mobChecklists[c];
+    //Mob groups.
+    DataNode* groupsNode = node->addNew("mission_mob_groups");
+    for(size_t g = 0; g < mission.mobGroups.size(); g++) {
+        DataNode* groupNode = groupsNode->addNew("group");
+        MissionMobGroup* groupPtr = &mission.mobGroups[g];
         
-        GetterWriter cGW(checklistNode);
+        GetterWriter cGW(groupNode);
         
-        cGW.write("type", checklistPtr->type);
-        cGW.write("amount", checklistPtr->requiredAmount);
-        cGW.write(
-            "enemies_need_collection", checklistPtr->enemiesNeedCollection
-        );
+        cGW.write("type", groupPtr->type);
+        cGW.write("enemies_need_collection", groupPtr->enemiesNeedCollection);
+        cGW.write("highlight_on_radar", groupPtr->highlightOnRadar);
         
         vector<string> mobIdxsStrVec;
-        for(auto m : checklistPtr->mobIdxs) {
+        for(auto m : groupPtr->mobIdxs) {
             mobIdxsStrVec.push_back(i2s(m));
         }
         string mobIdxsStr = join(mobIdxsStrVec, ";");
@@ -2604,9 +2661,9 @@ void Area::saveRemindersToDataNode(DataNode* node) {
     for(size_t r = 0; r < reminders.size(); r++) {
         DataNode* reminderNode = node->addNew("reminder");
         AreaMakerReminder* reminderPtr = &reminders[r];
-
+        
         GetterWriter rGW(reminderNode);
-
+        
         rGW.write("pos", reminderPtr->pos);
         rGW.write("text", reminderPtr->text);
     }

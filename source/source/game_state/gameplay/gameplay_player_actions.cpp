@@ -26,7 +26,7 @@ void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
-    player->leaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
+    player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_DISMISS);
 }
 
 
@@ -41,7 +41,7 @@ void GameplayState::doPlayerActionInventory(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
-    player->leaderPtr->fsm.runEvent(LEADER_EV_INVENTORY);
+    player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_INVENTORY);
 }
 
 
@@ -80,7 +80,7 @@ void GameplayState::doPlayerActionLieDown(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
-    player->leaderPtr->fsm.runEvent(LEADER_EV_FALL_ASLEEP);
+    player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_FALL_ASLEEP);
 }
 
 
@@ -293,7 +293,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             !done &&
             player->leaderPtr->hasOpponentPikminLatched()
         ) {
-            player->leaderPtr->fsm.runEvent(MOB_EV_ITCH);
+            player->leaderPtr->scriptVM.fsm.runEvent(MOB_EV_ITCH);
             done = true;
         }
         
@@ -311,7 +311,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             !done &&
             player->closeToPikminToPluck
         ) {
-            player->leaderPtr->fsm.runEvent(
+            player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_GO_PLUCK,
                 (void*) player->closeToPikminToPluck
             );
@@ -377,9 +377,10 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
         
         //Check if the leader should punch.
         if(!done) {
-            ScriptEvent* ev = player->leaderPtr->fsm.getEvent(LEADER_EV_PUNCH);
+            FsmEventDef* ev =
+                player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_PUNCH);
             if(ev) {
-                ev->run(&player->leaderPtr->fsm);
+                ev->run(&player->leaderPtr->scriptVM);
                 done = true;
             }
         }
@@ -448,19 +449,20 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
     
     if(isDown) {
-        ScriptEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
+        FsmEventDef* cancelEv =
+            player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_CANCEL);
         
         if(cancelEv && !player->inventory->isOpen) {
             //Cancel auto-pluck, lying down, etc.
-            cancelEv->run(&player->leaderPtr->fsm);
+            cancelEv->run(&player->leaderPtr->scriptVM);
         } else {
             //Start whistling.
-            player->leaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
+            player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_START_WHISTLE);
         }
         
     } else {
         //Stop whistling.
-        player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+        player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_STOP_WHISTLE);
         
     }
 }
@@ -522,7 +524,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     //Before we do the actions, we'll tell the leader object
     //it's received an input, which will trigger an event.
     if(player->leaderPtr) {
-        player->leaderPtr->fsm.runEvent(
+        player->leaderPtr->scriptVM.fsm.runEvent(
             MOB_EV_INPUT_RECEIVED,
             (void*) &action
         );

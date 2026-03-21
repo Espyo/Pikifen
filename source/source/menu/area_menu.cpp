@@ -43,7 +43,7 @@ const float PAGE_SWAP_DURATION = 0.5f;
 
 /**
  * @brief Creates and adds a new bullet point to either the fail condition list
- * or the grading explanation list.
+ * or the medal award explanation list.
  *
  * @param list List to add to.
  * @param text Text.
@@ -111,8 +111,8 @@ void AreaMenu::animateInfoAndBriefing() {
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
-        for(size_t c = 0; c < gradingList->children.size(); c++) {
-            gradingList->children[c]->startJuiceAnimation(
+        for(size_t c = 0; c < medalAwardList->children.size(); c++) {
+            medalAwardList->children[c]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
@@ -137,7 +137,6 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     tagsText->text.clear();
     makerText->text.clear();
     versionText->text.clear();
-    curStamp = nullptr;
     curMedal = nullptr;
     if(areaType == AREA_TYPE_MISSION) {
         recordInfoText->text.clear();
@@ -145,16 +144,13 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         objectiveText->text.clear();
         briefingNameText->text.clear();
         noteList->deleteAllChildren();
-        gradingList->deleteAllChildren();
+        medalAwardList->deleteAllChildren();
     }
     
     //Fill in the area's info.
     Area* areaPtr = game.content.areas.list[areaType][areaIdx];
     infoNameText->text = areaPtr->name;
-    subtitleText->text =
-        calculateAreaSubtitle(
-            areaPtr->subtitle, areaType, areaPtr->mission.preset
-        );
+    subtitleText->text = areaPtr->subtitle;
     descriptionText->text = areaPtr->description;
     tagsText->text =
         (areaPtr->tags.empty() ? "" : "Tags: " + areaPtr->tags);
@@ -169,22 +165,16 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         recordInfoText->text =
             !recordExists ?
             "(None)" :
-            areaPtr->missionOld.gradingMode ==
-            MISSION_GRADING_MODE_POINTS ?
+            areaPtr->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
             amountStr(score, "point") :
             "";
-        curStamp =
-            !recordExists ?
-            nullptr :
-            areaRecords[areaIdx].clear ?
-            game.sysContent.bmpMissionClear :
-            game.sysContent.bmpMissionFail;
         if(!recordExists) {
             curMedal = nullptr;
         } else {
-            switch(areaPtr->missionOld.gradingMode) {
-            case MISSION_GRADING_MODE_POINTS: {
-                MISSION_MEDAL medal = areaPtr->missionOld.getScoreMedal(score);
+            switch(areaPtr->mission.medalAwardMode) {
+            case MISSION_MEDAL_AWARD_MODE_POINTS: {
+                MISSION_MEDAL medal = areaPtr->mission.getScoreMedal(score);
                 switch(medal) {
                 case MISSION_MEDAL_NONE: {
                     curMedal = game.sysContent.bmpMedalNone;
@@ -204,12 +194,10 @@ void AreaMenu::changeInfo(size_t areaIdx) {
                 }
                 }
                 break;
-            } case MISSION_GRADING_MODE_GOAL: {
-                if(areaRecords[areaIdx].clear) {
-                    curMedal = game.sysContent.bmpMedalPlatinum;
-                }
+            } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
+                curMedal = game.sysContent.bmpMedalPlatinum;
                 break;
-            } case MISSION_GRADING_MODE_PARTICIPATION: {
+            } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                 curMedal = game.sysContent.bmpMedalPlatinum;
                 break;
             }
@@ -229,13 +217,99 @@ void AreaMenu::changeInfo(size_t areaIdx) {
             addNewBullet(noteList, noteBPStrs[p]);
         }
         
-        vector<string> gradingBPStrs = mission.getGradingBulletPoints();
-        for(size_t p = 0; p < gradingBPStrs.size(); p++) {
-            addNewBullet(gradingList, gradingBPStrs[p]);
+        vector<string> medalAwardBPStrs = mission.getMedalAwardBulletPoints();
+        for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+            addNewBullet(medalAwardList, medalAwardBPStrs[p]);
         }
     }
     
     animateInfoAndBriefing();
+}
+
+
+/**
+ * @brief Initializes the mission briefing page GUI items.
+ */
+void AreaMenu::initGuiBriefingPage() {
+    DataNode* guiFile =
+        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
+    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
+    gui.registerCoords("objective_header",   50, 13, 96,  6);
+    gui.registerCoords("objective",          50, 24, 96, 12);
+    gui.registerCoords("notes_header",       50, 35, 96,  6);
+    gui.registerCoords("notes_list",         47, 52, 90, 24);
+    gui.registerCoords("notes_scroll",       96, 52,  4, 24);
+    gui.registerCoords("medal_award_header", 50, 69, 96,  6);
+    gui.registerCoords("medal_award_list",   47, 86, 90, 24);
+    gui.registerCoords("medal_award_scroll", 96, 86,  4, 24);
+    gui.readDataFile(guiFile);
+    
+    if(!game.content.areas.list[areaType].empty()) {
+    
+        //Name text.
+        briefingNameText =
+            new TextGuiItem(
+            "", game.sysContent.fntAreaName, game.config.guiColors.gold
+        );
+        briefingBox->addChild(briefingNameText);
+        gui.addItem(briefingNameText, "briefing_area_name");
+        
+        //Objective header text.
+        TextGuiItem* objectiveHeaderText =
+            new TextGuiItem(
+            "Objective", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(objectiveHeaderText);
+        gui.addItem(objectiveHeaderText, "objective_header");
+        
+        //Objective explanation text.
+        objectiveText =
+            new TextGuiItem("", game.sysContent.fntStandard);
+        objectiveText->lineWrap = true;
+        briefingBox->addChild(objectiveText);
+        gui.addItem(objectiveText, "objective");
+        
+        //Notes header text.
+        TextGuiItem* notesHeaderText =
+            new TextGuiItem(
+            "Notes", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(notesHeaderText);
+        gui.addItem(notesHeaderText, "notes_header");
+        
+        //Notes list.
+        noteList = new ListGuiItem();
+        briefingBox->addChild(noteList);
+        gui.addItem(noteList, "notes_list");
+        
+        //Notes scrollbar.
+        ScrollGuiItem* notesScroll = new ScrollGuiItem();
+        notesScroll->listItem = noteList;
+        briefingBox->addChild(notesScroll);
+        gui.addItem(notesScroll, "notes_scroll");
+        
+        //Medal award header text.
+        TextGuiItem* medalAwardHeaderText =
+            new TextGuiItem(
+            "Medal award", game.sysContent.fntAreaName,
+            game.config.guiColors.smallHeader
+        );
+        briefingBox->addChild(medalAwardHeaderText);
+        gui.addItem(medalAwardHeaderText, "medal_award_header");
+        
+        //Medal award explanation list.
+        medalAwardList = new ListGuiItem();
+        briefingBox->addChild(medalAwardList);
+        gui.addItem(medalAwardList, "medal_award_list");
+        
+        //Medal award explanation scrollbar.
+        ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
+        medalAwardScroll->listItem = medalAwardList;
+        briefingBox->addChild(medalAwardScroll);
+        gui.addItem(medalAwardScroll, "medal_award_scroll");
+    }
 }
 
 
@@ -249,11 +323,10 @@ void AreaMenu::initGuiInfoPage() {
     gui.registerCoords("subtitle",     36, 16, 68,  8);
     gui.registerCoords("thumbnail",    85, 14, 26, 24);
     gui.registerCoords("description",  50, 40, 96, 24);
-    gui.registerCoords("record_label", 50, 56, 96,  4);
-    gui.registerCoords("record_info",  50, 62, 36,  4);
-    gui.registerCoords("record_stamp", 20, 65, 20, 14);
-    gui.registerCoords("record_medal", 80, 65, 20, 14);
-    gui.registerCoords("record_date",  50, 66, 28,  4);
+    gui.registerCoords("record_label", 16, 64, 24,  4);
+    gui.registerCoords("record_info",  50, 64, 36,  4);
+    gui.registerCoords("record_medal", 84, 64, 16, 12);
+    gui.registerCoords("record_date",  50, 68, 28,  4);
     gui.registerCoords("difficulty",   50, 79, 96,  6);
     gui.registerCoords("tags",         50, 87, 96,  6);
     gui.registerCoords("maker",        28, 95, 52,  6);
@@ -310,7 +383,10 @@ void AreaMenu::initGuiInfoPage() {
         if(areaType == AREA_TYPE_MISSION) {
             //Record label.
             TextGuiItem* recordLabelText =
-                new TextGuiItem("Record:", game.sysContent.fntStandard);
+                new TextGuiItem(
+                "Record:", game.sysContent.fntStandard,
+                game.config.guiColors.smallHeader
+            );
             infoBox->addChild(recordLabelText);
             gui.addItem(recordLabelText, "record_label");
             
@@ -319,19 +395,6 @@ void AreaMenu::initGuiInfoPage() {
                 new TextGuiItem("", game.sysContent.fntStandard);
             infoBox->addChild(recordInfoText);
             gui.addItem(recordInfoText, "record_info");
-            
-            //Record stamp.
-            GuiItem* recordStampItem = new GuiItem();
-            recordStampItem->onDraw =
-            [this] (const DrawInfo & draw) {
-                if(curStamp) {
-                    drawBitmapInBox(
-                        curStamp, draw.center, draw.size, true, 0.0f, draw.tint
-                    );
-                }
-            };
-            infoBox->addChild(recordStampItem);
-            gui.addItem(recordStampItem, "record_stamp");
             
             //Record medal.
             GuiItem* recordMedalItem = new GuiItem();
@@ -502,64 +565,46 @@ void AreaMenu::initGuiMain() {
             }
             
             if(areaType == AREA_TYPE_MISSION) {
-                //Stamp item.
-                GuiItem* stampItem = new GuiItem();
-                stampItem->ratioCenter =
-                    Point(0.85f, centerY - (BUTTON_HEIGHT * 0.15f));
-                stampItem->ratioSize =
-                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
-                stampItem->onDraw =
-                [this, a] (const DrawInfo & draw) {
-                    if(areaRecords[a].clear) {
-                        drawBitmapInBox(
-                            game.sysContent.bmpMissionClear,
-                            draw.center, draw.size, true, 0.0f, draw.tint
-                        );
-                    }
-                };
-                listBox->addChild(stampItem);
-                gui.addItem(stampItem);
-                
                 //Medal item.
                 GuiItem* medalItem = new GuiItem();
                 medalItem->ratioCenter =
-                    Point(0.95f, centerY + (BUTTON_HEIGHT * 0.15f));
+                    Point(0.92f, centerY);
                 medalItem->ratioSize =
-                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
+                    Point(0.15f, BUTTON_HEIGHT * 0.80f);
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
-                    switch(areaPtr->missionOld.gradingMode) {
-                    case MISSION_GRADING_MODE_POINTS: {
-                        int score = areaRecords[a].score;
-                        MISSION_MEDAL medal =
-                            areaPtr->missionOld.getScoreMedal(score);
-                        switch(medal) {
-                        case MISSION_MEDAL_NONE: {
+                    if(!areaRecords[a].date.empty()) {
+                        switch(areaPtr->mission.medalAwardMode) {
+                        case MISSION_MEDAL_AWARD_MODE_POINTS: {
+                            int score = areaRecords[a].score;
+                            MISSION_MEDAL medal =
+                                areaPtr->mission.getScoreMedal(score);
+                            switch(medal) {
+                            case MISSION_MEDAL_NONE: {
+                                break;
+                            } case MISSION_MEDAL_BRONZE: {
+                                medalBmp = game.sysContent.bmpMedalBronze;
+                                break;
+                            } case MISSION_MEDAL_SILVER: {
+                                medalBmp = game.sysContent.bmpMedalSilver;
+                                break;
+                            } case MISSION_MEDAL_GOLD: {
+                                medalBmp = game.sysContent.bmpMedalGold;
+                                break;
+                            } case MISSION_MEDAL_PLATINUM: {
+                                medalBmp = game.sysContent.bmpMedalPlatinum;
+                                break;
+                            }
+                            }
                             break;
-                        } case MISSION_MEDAL_BRONZE: {
-                            medalBmp = game.sysContent.bmpMedalBronze;
-                            break;
-                        } case MISSION_MEDAL_SILVER: {
-                            medalBmp = game.sysContent.bmpMedalSilver;
-                            break;
-                        } case MISSION_MEDAL_GOLD: {
-                            medalBmp = game.sysContent.bmpMedalGold;
-                            break;
-                        } case MISSION_MEDAL_PLATINUM: {
+                        } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                             break;
-                        }
-                        }
-                        break;
-                    } case MISSION_GRADING_MODE_GOAL: {
-                        if(areaRecords[a].clear) {
+                        } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
                             medalBmp = game.sysContent.bmpMedalPlatinum;
                         }
-                        break;
-                    } case MISSION_GRADING_MODE_PARTICIPATION: {
-                        medalBmp = game.sysContent.bmpMedalPlatinum;
-                    }
+                        }
                     }
                     
                     if(medalBmp) {
@@ -679,92 +724,6 @@ void AreaMenu::initGuiMain() {
 
 
 /**
- * @brief Initializes the mission briefing page GUI items.
- */
-void AreaMenu::initGuiBriefingPage() {
-    DataNode* guiFile =
-        &game.content.guiDefs.list[AREA_MENU::BRIEFING_GUI_FILE_NAME];
-    gui.registerCoords("briefing_area_name", 50,  5, 96,  6);
-    gui.registerCoords("objective_header",    50, 13, 96,  6);
-    gui.registerCoords("objective",           50, 21, 96,  6);
-    gui.registerCoords("notes_header",    50, 29, 96,  6);
-    gui.registerCoords("notes_list",      47, 48, 90, 28);
-    gui.registerCoords("notes_scroll",    96, 48,  4, 28);
-    gui.registerCoords("grading_header", 50, 67, 96,  6);
-    gui.registerCoords("grading_list",   47, 85, 90, 26);
-    gui.registerCoords("grading_scroll", 96, 85,  4, 26);
-    gui.readDataFile(guiFile);
-    
-    if(!game.content.areas.list[areaType].empty()) {
-    
-        //Name text.
-        briefingNameText =
-            new TextGuiItem(
-            "", game.sysContent.fntAreaName, game.config.guiColors.gold
-        );
-        briefingBox->addChild(briefingNameText);
-        gui.addItem(briefingNameText, "briefing_area_name");
-        
-        //Objective header text.
-        TextGuiItem* objectiveHeaderText =
-            new TextGuiItem(
-            "Objective", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(objectiveHeaderText);
-        gui.addItem(objectiveHeaderText, "objective_header");
-        
-        //Objective explanation text.
-        objectiveText =
-            new TextGuiItem("", game.sysContent.fntStandard);
-        objectiveText->lineWrap = true;
-        briefingBox->addChild(objectiveText);
-        gui.addItem(objectiveText, "objective");
-        
-        //Notes header text.
-        TextGuiItem* notesHeaderText =
-            new TextGuiItem(
-            "Notes", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(notesHeaderText);
-        gui.addItem(notesHeaderText, "notes_header");
-        
-        //Notes list.
-        noteList = new ListGuiItem();
-        briefingBox->addChild(noteList);
-        gui.addItem(noteList, "notes_list");
-        
-        //Notes scrollbar.
-        ScrollGuiItem* notesScroll = new ScrollGuiItem();
-        notesScroll->listItem = noteList;
-        briefingBox->addChild(notesScroll);
-        gui.addItem(notesScroll, "notes_scroll");
-        
-        //Grading header text.
-        TextGuiItem* gradingHeaderText =
-            new TextGuiItem(
-            "Grading", game.sysContent.fntAreaName,
-            game.config.guiColors.smallHeader
-        );
-        briefingBox->addChild(gradingHeaderText);
-        gui.addItem(gradingHeaderText, "grading_header");
-        
-        //Grading explanation list.
-        gradingList = new ListGuiItem();
-        briefingBox->addChild(gradingList);
-        gui.addItem(gradingList, "grading_list");
-        
-        //Grading explanation scrollbar.
-        ScrollGuiItem* gradingScroll = new ScrollGuiItem();
-        gradingScroll->listItem = gradingList;
-        briefingBox->addChild(gradingScroll);
-        gui.addItem(gradingScroll, "grading_scroll");
-    }
-}
-
-
-/**
  * @brief Loads the menu.
  */
 void AreaMenu::load() {
@@ -781,8 +740,17 @@ void AreaMenu::load() {
         ) {
             Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
             MissionRecord record;
-            
-            loadAreaMissionRecord(&missionRecords, areaPtr, record);
+            bool ported;
+            loadAreaMissionRecord(&missionRecords, areaPtr, record, &ported);
+
+            if(ported) {
+                string missionRecordEntryName =
+                    getMissionRecordEntryName(areaPtr);
+                record.saveToDataNode(
+                    missionRecords.getChildByName(missionRecordEntryName)
+                );
+                saveMissionRecords(&missionRecords);
+            }
             
             areaRecords.push_back(record);
         }

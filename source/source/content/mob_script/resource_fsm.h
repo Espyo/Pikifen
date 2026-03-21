@@ -19,12 +19,12 @@
 namespace ResourceFsm {
 void createFsm(MobType* typ);
 
-void handleDelivery(Fsm* fsm, void* info1, void* info2);
-void handleDropped(Fsm* fsm, void* info1, void* info2);
-void handleReachDestination(Fsm* fsm, void* info1, void* info2);
-void handleStartMoving(Fsm* fsm, void* info1, void* info2);
-void loseMomentum(Fsm* fsm, void* info1, void* info2);
-void startBeingDelivered(Fsm* fsm, void* info1, void* info2);
-void startWaiting(Fsm* fsm, void* info1, void* info2);
-void vanish(Fsm* fsm, void* info1, void* info2);
+void handleDelivery(ScriptVM* scriptVM, void* info1, void* info2);
+void handleDropped(ScriptVM* scriptVM, void* info1, void* info2);
+void handleReachDestination(ScriptVM* scriptVM, void* info1, void* info2);
+void handleStartMoving(ScriptVM* scriptVM, void* info1, void* info2);
+void loseMomentum(ScriptVM* scriptVM, void* info1, void* info2);
+void startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2);
+void startWaiting(ScriptVM* scriptVM, void* info1, void* info2);
+void vanish(ScriptVM* scriptVM, void* info1, void* info2);
 }

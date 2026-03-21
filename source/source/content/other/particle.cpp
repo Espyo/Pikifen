@@ -756,6 +756,37 @@ void ParticleManager::clear() {
 
 
 /**
+ * @brief Deletes a particle from the list, freeing up its slot.
+ *
+ * @param pos Position in the list.
+ */
+void ParticleManager::deleteParticle(size_t pos) {
+    if(pos > count) return;
+    
+    //To delete a particle, let's simply move its data to the start of
+    //the "dead" particles. A particle is considered dead if its time is 0.
+    particles[pos].time = 0.0f;
+    
+    //Because the first "count" members are alive, we'll swap this dead
+    //particle with the last living one. This means this particle
+    //will represent the new start of the dead ones.
+    
+    //But hey, if we only had one particle, we can just skip this!
+    if(count == 1) {
+        count = 0;
+        return;
+    }
+    
+    //Place the last live particle on this now-unused position.
+    particles[pos] = particles[count - 1];
+    //And this new "dead" particle should be marked as such.
+    particles[count - 1].time = 0.0f;
+    
+    count--;
+}
+
+
+/**
  * @brief Adds the particle pointers to the provided list of world components,
  * so that the particles can be drawn, after being Z-sorted.
  *
@@ -798,37 +829,6 @@ void ParticleManager::fillComponentList(
  */
 size_t ParticleManager::getCount() const {
     return count;
-}
-
-
-/**
- * @brief Deletes a particle from the list, freeing up its slot.
- *
- * @param pos Position in the list.
- */
-void ParticleManager::deleteParticle(size_t pos) {
-    if(pos > count) return;
-    
-    //To delete a particle, let's simply move its data to the start of
-    //the "dead" particles. A particle is considered dead if its time is 0.
-    particles[pos].time = 0.0f;
-    
-    //Because the first "count" members are alive, we'll swap this dead
-    //particle with the last living one. This means this particle
-    //will represent the new start of the dead ones.
-    
-    //But hey, if we only had one particle, we can just skip this!
-    if(count == 1) {
-        count = 0;
-        return;
-    }
-    
-    //Place the last live particle on this now-unused position.
-    particles[pos] = particles[count - 1];
-    //And this new "dead" particle should be marked as such.
-    particles[count - 1].time = 0.0f;
-    
-    count--;
 }
 
 

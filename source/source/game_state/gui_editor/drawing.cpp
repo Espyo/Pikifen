@@ -139,7 +139,7 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(!itemSelection.isSelected(itemIdx)) {
+        if(!itemSelection.contains(itemIdx)) {
             drawRoundedRectangle(
                 item->center,
                 item->size,
@@ -149,19 +149,8 @@ void GuiEditor::drawCanvas() {
         }
     }
     
-    if(itemSelection.isAnySelected()) {
-        Point selectionCenter, selectionSize;
-        itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
-        if(selectionSize.x != 0.0f) {
-            curTransformationWidget.draw(
-                &selectionCenter, &selectionSize,
-                nullptr, 1.0f / game.editorsView.cam.zoom
-            );
-        }
-    }
-    
-    itemSelection.draw(
-        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+    drawSelectionAndTransformationThings(
+        itemSelection, curTransformationWidget
     );
     
     //Finish up.

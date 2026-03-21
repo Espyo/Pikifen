@@ -30,7 +30,7 @@ void OnionFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", ONION_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::startIdling);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -45,7 +45,7 @@ void OnionFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("generating", ONION_STATE_GENERATING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::startGenerating);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -60,7 +60,7 @@ void OnionFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::stopGenerating);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -77,13 +77,14 @@ void OnionFsm::createFsm(MobType* typ) {
         }
     }
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_ONION_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_ONION_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_ONION_STATES) + " in enum."
     );
 }
@@ -96,15 +97,17 @@ void OnionFsm::createFsm(MobType* typ) {
 /**
  * @brief When an Onion has to check if it started generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStartGenerating(Fsm* fsm, void* info1, void* info2) {
+void OnionFsm::checkStartGenerating(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "started_generation") {
-        fsm->setState(ONION_STATE_GENERATING);
+        scriptVM->fsm.setState(ONION_STATE_GENERATING);
     }
 }
 
@@ -112,15 +115,17 @@ void OnionFsm::checkStartGenerating(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion has to check if it stopped generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void OnionFsm::checkStopGenerating(Fsm* fsm, void* info1, void* info2) {
+void OnionFsm::checkStopGenerating(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "stopped_generation") {
-        fsm->setState(ONION_STATE_STOPPING_GENERATION);
+        scriptVM->fsm.setState(ONION_STATE_STOPPING_GENERATION);
     }
 }
 
@@ -128,15 +133,15 @@ void OnionFsm::checkStopGenerating(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion finishes receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) fsm->m;
+void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
     Mob* delivery = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     size_t seeds = 0;
     
@@ -144,11 +149,9 @@ void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
     case MOB_CATEGORY_ENEMIES: {
         seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
         
-        if(game.curArea->missionOld.enemyPointsOnCollection) {
-            game.states.gameplay->enemyPointsObtained +=
-                ((Enemy*) delivery)->eneType->points;
-        }
-        
+        game.states.gameplay->enemyCollectionPointsObtained +=
+            ((Enemy*) delivery)->eneType->points;
+            
         break;
     } case MOB_CATEGORY_PELLETS: {
         Pellet* pelPtr = (Pellet*) delivery;
@@ -201,12 +204,12 @@ void OnionFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion starts receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void OnionFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) fsm->m;
+void OnionFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->mobsBeingBeamed++;
     if(oniPtr->mobsBeingBeamed == 1 && oniPtr->soundBeamId == 0) {
@@ -219,12 +222,12 @@ void OnionFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion starts generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::startGenerating(Fsm* fsm, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) fsm->m;
+void OnionFsm::startGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->setAnimation(ONION_ANIM_GENERATING);
 }
@@ -233,12 +236,12 @@ void OnionFsm::startGenerating(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion enters the idle state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void OnionFsm::startIdling(Fsm* fsm, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) fsm->m;
+void OnionFsm::startIdling(ScriptVM* scriptVM, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->setAnimation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -249,12 +252,12 @@ void OnionFsm::startIdling(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When an Onion stops generating Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void OnionFsm::stopGenerating(Fsm* fsm, void* info1, void* info2) {
-    Onion* oniPtr = (Onion*) fsm->m;
+void OnionFsm::stopGenerating(ScriptVM* scriptVM, void* info1, void* info2) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
     
     oniPtr->setAnimation(ONION_ANIM_STOPPING_GENERATION);
 }

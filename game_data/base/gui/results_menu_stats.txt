@@ -1,45 +1,45 @@
-name=Results menu
+name=Results menu -- stats
 description=GUI for the statistics page of the results menu.
 maker=Espyo
 version=1.1.0
 engine_version=1.2.0
 hardcoded_items{
-	stats_page_left{
-		center=11.0000 4.0000
-		size=18.0000 8.0000
+	stats_left_page{
+		center=13.0000 7.0000
+		size=18.0000 14.0000
 		description=Button to navigate to the page to the left, if any.
 	}
-	stats_page_left_input{
-		center=2.0000 8.0000
-		size=4.0000 4.0000
+	stats_left_page_input{
+		center=4.0000 12.0000
+		size=8.0000 8.0000
 		description=Icon of the input bound to the left page.
 	}
-	stats_page_right{
-		center=89.0000 4.0000
-		size=18.0000 8.0000
+	stats_right_page{
+		center=87.0000 7.0000
+		size=18.0000 14.0000
 		description=Button to navigate to the page to the right, if any.
 	}
-	stats_page_right_input{
-		center=98.0000 8.0000
-		size=4.0000 4.0000
+	stats_right_page_input{
+		center=96.0000 12.0000
+		size=8.0000 8.0000
 		description=Icon of the input bound to the right page.
 	}
 	stats_list{
-		center=50.0000 56.0000
-		size=84.0000 88.0000
+		center=50.0000 59.0000
+		size=92.0000 82.0000
 		description=List containing the statistics.
 	}
 	stats_scroll{
-		center=96.0000 55.0000
-		size=4.0000 86.0000
+		center=99.0000 59.0000
+		size=2.0000 82.0000
 		description=Scrollbar for the statistics list.
 	}
 }
 custom_items{
 	stats_label{
-		center=50.0000 4.0000
-		size=56.0000 8.0000
-		description=Label for the statistics list.
+		center=50.0000 6.0000
+		size=52.0000 8.0000
+		description=Label for the statistics page.
 		type=text
 		color=255 255 255 192
 		text=Stats:
@@ -47,8 +47,8 @@ custom_items{
 		text_alignment=1
 	}
 	stats_bg{
-		center=50.0000 56.0000
-		size=84.0000 88.0000
+		center=50.0000 59.0000
+		size=92.0000 82.0000
 		description=Background for the statistics list.
 		type=filled_rectangle
 		color=117 0 0 40

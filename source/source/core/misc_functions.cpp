@@ -197,13 +197,8 @@ void crash(const string& reason, const string& info, int exitStatus) {
             game.states.gameplay->players[0].leaderPtr->type->name + ", at " +
             p2s(game.states.gameplay->players[0].leaderPtr->pos) +
             ", state history: " +
-            game.states.gameplay->players[0].leaderPtr->fsm.curState->name;
-        for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-            errorStr +=
-                " " +
-                game.states.gameplay->players[0].leaderPtr->
-                fsm.prevStateNames[h];
-        }
+            game.states.gameplay->players[0].leaderPtr->
+            scriptVM.fsm.getStateHistoryStr();
         errorStr += "\n  10 closest Pikmin to that leader:\n";
         
         vector<Pikmin*> closestPikmin =
@@ -228,10 +223,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
             errorStr +=
                 "    " + closestPikmin[p]->type->name + ", at " +
                 p2s(closestPikmin[p]->pos) + ", history: " +
-                closestPikmin[p]->fsm.curState->name;
-            for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-                errorStr += " " + closestPikmin[p]->fsm.prevStateNames[h];
-            }
+                closestPikmin[p]->scriptVM.fsm.getStateHistoryStr();
             errorStr += "\n";
         }
     } else {
@@ -410,7 +402,7 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
         if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->fsm.curState) continue;
+        if(!mPtr->scriptVM.fsm.curState) continue;
         
         Distance d = Distance(view.mouseCursorWorldPos, mPtr->pos);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
@@ -517,12 +509,8 @@ float getLiquidLimitLength(Edge* ePtr) {
  */
 string getMissionRecordEntryName(Area* areaPtr) {
     return
-        areaPtr->name + ";" +
-        calculateAreaSubtitle(
-            areaPtr->subtitle, areaPtr->type, areaPtr->mission.preset
-        ) + ";" +
-        areaPtr->maker + ";" +
-        areaPtr->version;
+        areaPtr->name + ";" + areaPtr->subtitle + ";" +
+        areaPtr->maker + ";" + areaPtr->version;
 }
 
 
@@ -550,7 +538,7 @@ Mob* getNextMobNearCursor(
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
         if(mustHaveHealth && !hasHealth) continue;
         if(mPtr->isStoredInsideMob()) continue;
-        if(!mPtr->fsm.curState) continue;
+        if(!mPtr->scriptVM.fsm.curState) continue;
         
         Distance d(view.mouseCursorWorldPos, mPtr->pos);
         if(d < 8.0f) {
@@ -570,26 +558,6 @@ Mob* getNextMobNearCursor(
     
     //Now get the next one.
     return getNextInVector(mobsNearCursor, pivot);
-}
-
-
-/**
- * @brief Returns an area's subtitle or, if none is specified,
- * the mission's brief description.
- *
- * @param subtitle Area subtitle.
- * @param areaType Type of area.
- * @param preset Mission preset.
- * @return The subtitle or description.
- */
-string calculateAreaSubtitle(
-    const string& subtitle, AREA_TYPE areaType, MISSION_PRESET missionPreset
-) {
-    if(subtitle.empty() && areaType == AREA_TYPE_MISSION) {
-        //TODO return game.missionGoals[goal]->getName();
-    }
-    
-    return subtitle;
 }
 
 
@@ -1203,7 +1171,25 @@ void reportFatalError(const string& s, const DataNode* dn) {
 void saveMakerTools() {
     DataNode file("", "");
     game.makerTools.saveToDataNode(&file);
+    file.getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
+}
+
+
+/**
+ * @brief Saves the mission records file.
+ *
+ * @param fileNode Data node representing the file to save.
+ * @return Whether it succeeded.
+ */
+bool saveMissionRecords(DataNode* fileNode) {
+    fileNode->getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
+    return
+        fileNode->saveFile(
+            FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        );
 }
 
 
@@ -1213,6 +1199,8 @@ void saveMakerTools() {
 void saveOptions() {
     DataNode file("", "");
     game.options.saveToDataNode(&file);
+    file.getChildOrAddNew("engine_version")->value =
+        getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
 }
 
@@ -1277,6 +1265,8 @@ void saveScreenshot() {
     );
     
     al_destroy_bitmap(screenshot);
+    
+    game.systemNotifications.add("Screenshot saved.");
 }
 
 
@@ -1288,6 +1278,7 @@ void saveStatistics() {
     const Statistics& s = game.statistics;
     GetterWriter sGW(&statsFile);
     
+    sGW.write("engine_version", getEngineVersionString());
     sGW.write("startups", s.startups);
     sGW.write("runtime", s.runtime);
     sGW.write("gameplay_time", s.gameplayTime);

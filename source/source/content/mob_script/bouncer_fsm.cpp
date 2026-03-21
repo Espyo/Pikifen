@@ -30,7 +30,7 @@
 void BouncerFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BOUNCER_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BouncerFsm::setIdlingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
@@ -38,7 +38,7 @@ void BouncerFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bouncing", BOUNCER_STATE_BOUNCING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BouncerFsm::setBouncingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
@@ -50,13 +50,14 @@ void BouncerFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_BOUNCER_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_BOUNCER_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_BOUNCER_STATES) + " in enum."
     );
 }
@@ -69,12 +70,12 @@ void BouncerFsm::createFsm(MobType* typ) {
 /**
  * @brief When something is on top of the bouncer.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the mob that is on top of it.
  * @param info2 Unused.
  */
-void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
-    Bouncer* bouPtr = (Bouncer*) fsm->m;
+void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
+    Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
 
     Mob* targetMob = nullptr;
@@ -91,7 +92,7 @@ void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
         return;
     }
     
-    ScriptEvent* ev = nullptr;
+    FsmEventDef* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(
@@ -100,7 +101,7 @@ void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to be bounced.
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
@@ -108,7 +109,7 @@ void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
     ) {
     
         //Leader is about to be bounced.
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
@@ -120,7 +121,7 @@ void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
     ) {
     
         //Pikmin carrying light load is about to be bounced.
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
     }
     
     if(!ev) return;
@@ -148,21 +149,23 @@ void BouncerFsm::handleMob(Fsm* fsm, void* info1, void* info2) {
     
     toucher->face(angle, nullptr, true);
     
-    ev->run(fsm, (void*) bouPtr);
+    ev->run(scriptVM, (void*) bouPtr);
     
-    fsm->setState(BOUNCER_STATE_BOUNCING, info1, info2);
+    scriptVM->fsm.setState(BOUNCER_STATE_BOUNCING, info1, info2);
 }
 
 
 /**
  * @brief When it must change to the bouncing animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setBouncingAnimation(Fsm* fsm, void* info1, void* info2) {
-    Bouncer* bouPtr = (Bouncer*) fsm->m;
+void BouncerFsm::setBouncingAnimation(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     
     bouPtr->setAnimation(BOUNCER_ANIM_BOUNCING);
 }
@@ -171,12 +174,14 @@ void BouncerFsm::setBouncingAnimation(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When it must change to the idling animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BouncerFsm::setIdlingAnimation(Fsm* fsm, void* info1, void* info2) {
-    Bouncer* bouPtr = (Bouncer*) fsm->m;
+void BouncerFsm::setIdlingAnimation(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     
     bouPtr->setAnimation(
         BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true

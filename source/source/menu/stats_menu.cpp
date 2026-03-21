@@ -283,14 +283,14 @@ void StatsMenu::populateStatsList() {
     ) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
-        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record);
-        if(record.clear) {
+        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record, nullptr);
+        if(!record.date.empty()) {
             missionClears++;
         }
-        if(record.isPlatinum(areaPtr->missionOld)) {
+        if(record.isPlatinum(areaPtr->mission)) {
             missionPlatinums++;
         }
-        if(areaPtr->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS) {
+        if(areaPtr->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS) {
             missionScores += record.score;
         }
     }
@@ -300,7 +300,7 @@ void StatsMenu::populateStatsList() {
         "Cleared",
         i2s(missionClears) + "/" +
         i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
-        "Total amount of missions where the current record is a goal clear."
+        "Total amount of missions where the current record is a clear."
     );
     addNewStatItem(
         "Platinum medals",

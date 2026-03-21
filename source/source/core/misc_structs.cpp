@@ -305,7 +305,7 @@ Console::Console() {
 
 /**
  * @brief Adds a log entry to the log buffer.
- * 
+ *
  * @param text Text to add.
  */
 void Console::addToLog(const string& text) {
@@ -966,7 +966,7 @@ void InventoryItemDatabase::init() {
         item.onUse =
         [this, s] (Player * player) {
             if(!player->leaderPtr) return;
-            player->leaderPtr->fsm.runEvent(
+            player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_SPRAY, (void*) &s, (void*) player->leaderPtr
             );
         };
@@ -991,7 +991,7 @@ void InventoryItemDatabase::init() {
         item.name = "Napsack";
         item.onUse =
         [this] (Player * player) {
-            player->leaderPtr->fsm.runEvent(
+            player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_FALL_ASLEEP
             );
         };
@@ -2285,8 +2285,6 @@ void SystemContentNames::load(DataNode* file) {
     graRS.set("medal_platinum", bmpMedalPlatinum);
     graRS.set("medal_silver", bmpMedalSilver);
     graRS.set("menu_icons", bmpMenuIcons);
-    graRS.set("mission_clear", bmpMissionClear);
-    graRS.set("mission_fail", bmpMissionFail);
     graRS.set("mission_mob", bmpMissionMob);
     graRS.set("more", bmpMore);
     graRS.set("mouse_cursor", bmpMouseCursor);
@@ -2352,6 +2350,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("menu_focus", sndMenuFocus);
     sndRS.set("mission_clear", sndMissionClear);
     sndRS.set("mission_failed", sndMissionFailed);
+    sndRS.set("mission_over", sndMissionOver);
     sndRS.set("one_minute_left", sndOneMinuteLeft);
     sndRS.set("ready", sndReady);
     sndRS.set("switch_pikmin", sndSwitchPikmin);

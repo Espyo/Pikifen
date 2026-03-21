@@ -52,7 +52,7 @@ void GuiEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load a GUI definition",
-        std::bind(&GuiEditor::processGuiLoadDialog, this)
+        std::bind(&GuiEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeLoadDialog, this);
@@ -66,7 +66,7 @@ void GuiEditor::openNewDialog() {
     newDialog.mustUpdate = true;
     openDialog(
         "Create a new GUI definition",
-        std::bind(&GuiEditor::processGuiNewDialog, this)
+        std::bind(&GuiEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -85,7 +85,7 @@ void GuiEditor::openNewDialog() {
 void GuiEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&GuiEditor::processGuiOptionsDialog, this)
+        std::bind(&GuiEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeOptionsDialog, this);
@@ -185,7 +185,7 @@ void GuiEditor::processGuiControlPanel() {
  * @brief Processes the Dear ImGui GUI definition deletion dialog
  * for this frame.
  */
-void GuiEditor::processGuiDeleteGuiDefDialog() {
+void GuiEditor::processGuiDialogDeleteGuiDef() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -197,27 +197,32 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
             "If you delete, you will lose all unsaved progress, and the\n"
             "GUI definition's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current GUI definition?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -232,13 +237,14 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
         deleteCurrentGuiDef();
     }
     ImGui::PopStyleColor(3);
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void GuiEditor::processGuiLoadDialog() {
+void GuiEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.guiEd.history,
@@ -275,6 +281,177 @@ void GuiEditor::processGuiLoadDialog() {
         
         ImGui::TreePop();
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void GuiEditor::processGuiDialogNew() {
+    //Pack widgets.
+    newDialog.mustUpdate |=
+        processGuiWidgetsNewDialogPack(&newDialog.pack);
+        
+    //GUI definition combo.
+    vector<string> guiFiles;
+    for(const auto& g : game.content.guiDefs.manifests) {
+        guiFiles.push_back(g.first);
+    }
+    ImGui::Spacer();
+    newDialog.mustUpdate |=
+        monoCombo("Definition", &newDialog.internalName, guiFiles);
+        
+    //Check if everything's ok.
+    if(newDialog.mustUpdate) {
+        newDialog.problem.clear();
+        if(newDialog.internalName.empty()) {
+            newDialog.problem =
+                "You have to select a definition!";
+        } else if(!isInternalNameGood(newDialog.internalName)) {
+            newDialog.problem =
+                "The internal name should only have lowercase letters,\n"
+                "numbers, and underscores!";
+        } else if(newDialog.pack == FOLDER_NAMES::BASE_PACK) {
+            newDialog.problem =
+                "All the GUI definitions already live in the\n"
+                "base pack! The idea is you pick one of those so it'll\n"
+                "be copied onto a different pack for you to edit.";
+        } else {
+            ContentManifest tempMan;
+            tempMan.internalName = newDialog.internalName;
+            tempMan.pack = newDialog.pack;
+            newDialog.defPath =
+                game.content.guiDefs.manifestToPath(tempMan);
+            if(fileExists(newDialog.defPath)) {
+                newDialog.problem =
+                    "There is already a GUI definition\n"
+                    "for that GUI in that pack!";
+            }
+        }
+        newDialog.mustUpdate = false;
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({180});
+    if(!newDialog.problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
+        auto reallyCreate = [this] () {
+            createGuiDef(string(newDialog.internalName), newDialog.pack);
+            closeTopDialog();
+            closeTopDialog(); //Close the load dialog.
+        };
+        
+        if(
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
+        ) {
+            openBaseContentWarningDialog(reallyCreate);
+        } else {
+            reallyCreate();
+        }
+    }
+    if(!newDialog.problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    setTooltip(
+        newDialog.problem.empty() ?
+        "Create the GUI definition!" :
+        newDialog.problem
+    );
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the options dialog for this frame.
+ */
+void GuiEditor::processGuiDialogOptions() {
+    //Controls node.
+    if(saveableTreeNode("options", "Controls")) {
+    
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+        setTooltip(
+            "Use the middle mouse button to pan the camera\n"
+            "(and RMB to reset camera/zoom).\n"
+            "Default: " +
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+        );
+        
+        //Grid interval text.
+        ImGui::Text(
+            "Grid interval: %f", game.options.guiEd.gridInterval
+        );
+        
+        //Increase grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalIncreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Increase the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Plus"
+        );
+        
+        //Decrease grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalDecreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Decrease the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Minus"
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Misc. node.
+    if(saveableTreeNode("options", "Misc.")) {
+    
+        //Quick play area combo.
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.guiEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+            if(selectedAreaIdx == -1) {
+                game.options.guiEd.quickPlayAreaPath.clear();
+            } else {
+                game.options.guiEd.quickPlayAreaPath =
+                    areaPaths[selectedAreaIdx];
+            }
+        }
+        setTooltip("Area to play on when choosing the quick play feature.");
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
+    
+    processGuiEditorStyle();
 }
 
 
@@ -447,175 +624,6 @@ void GuiEditor::processGuiMenuBar() {
 
 
 /**
- * @brief Processes the Dear ImGui "new" dialog for this frame.
- */
-void GuiEditor::processGuiNewDialog() {
-    //Pack widgets.
-    newDialog.mustUpdate |=
-        processGuiNewDialogPackWidgets(&newDialog.pack);
-        
-    //GUI definition combo.
-    vector<string> guiFiles;
-    for(const auto& g : game.content.guiDefs.manifests) {
-        guiFiles.push_back(g.first);
-    }
-    ImGui::Spacer();
-    newDialog.mustUpdate |=
-        monoCombo("Definition", &newDialog.internalName, guiFiles);
-        
-    //Check if everything's ok.
-    if(newDialog.mustUpdate) {
-        newDialog.problem.clear();
-        if(newDialog.internalName.empty()) {
-            newDialog.problem =
-                "You have to select a definition!";
-        } else if(!isInternalNameGood(newDialog.internalName)) {
-            newDialog.problem =
-                "The internal name should only have lowercase letters,\n"
-                "numbers, and underscores!";
-        } else if(newDialog.pack == FOLDER_NAMES::BASE_PACK) {
-            newDialog.problem =
-                "All the GUI definitions already live in the\n"
-                "base pack! The idea is you pick one of those so it'll\n"
-                "be copied onto a different pack for you to edit.";
-        } else {
-            ContentManifest tempMan;
-            tempMan.internalName = newDialog.internalName;
-            tempMan.pack = newDialog.pack;
-            newDialog.defPath =
-                game.content.guiDefs.manifestToPath(tempMan);
-            if(fileExists(newDialog.defPath)) {
-                newDialog.problem =
-                    "There is already a GUI definition\n"
-                    "for that GUI in that pack!";
-            }
-        }
-        newDialog.mustUpdate = false;
-    }
-    
-    //Create button.
-    ImGui::Spacer();
-    ImGui::SetupCentering(180);
-    if(!newDialog.problem.empty()) {
-        ImGui::BeginDisabled();
-    }
-    if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
-        auto reallyCreate = [this] () {
-            createGuiDef(string(newDialog.internalName), newDialog.pack);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
-        
-        if(
-            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engineDev
-        ) {
-            openBaseContentWarningDialog(reallyCreate);
-        } else {
-            reallyCreate();
-        }
-    }
-    if(!newDialog.problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    setTooltip(
-        newDialog.problem.empty() ?
-        "Create the GUI definition!" :
-        newDialog.problem
-    );
-}
-
-
-/**
- * @brief Processes the options dialog for this frame.
- */
-void GuiEditor::processGuiOptionsDialog() {
-    //Controls node.
-    if(saveableTreeNode("options", "Controls")) {
-    
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %f", game.options.guiEd.gridInterval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "+",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalIncreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Plus"
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "-",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalDecreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Minus"
-        );
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Misc. node.
-    if(saveableTreeNode("options", "Misc.")) {
-    
-        //Quick play area combo.
-        vector<string> areaNames;
-        vector<string> areaPaths;
-        int selectedAreaIdx = -1;
-        getQuickPlayAreaList(
-            game.options.guiEd.quickPlayAreaPath,
-            &areaNames, &areaPaths, &selectedAreaIdx
-        );
-        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
-            if(selectedAreaIdx == -1) {
-                game.options.guiEd.quickPlayAreaPath.clear();
-            } else {
-                game.options.guiEd.quickPlayAreaPath =
-                    areaPaths[selectedAreaIdx];
-            }
-        }
-        setTooltip("Area to play on when choosing the quick play feature.");
-        
-        ImGui::TreePop();
-    }
-    
-    ImGui::Spacer();
-    
-    processGuiEditorStyle();
-}
-
-
-/**
  * @brief Processes the custom items panel for this frame.
  */
 void GuiEditor::processGuiPanelCustom() {
@@ -631,7 +639,7 @@ void GuiEditor::processGuiPanelCustom() {
     
     processGuiPanelItems();
     
-    size_t nSelectedItems = itemSelection.getSelectionAmount();
+    size_t nSelectedItems = itemSelection.getCount();
     if(nSelectedItems == 0) {
         //None selected text.
         ImGui::Spacer();
@@ -661,7 +669,7 @@ void GuiEditor::processGuiPanelCustom() {
  */
 void GuiEditor::processGuiPanelCustomItem() {
     CustomGuiItemDef* curItemPtr =
-        (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
+        (CustomGuiItemDef*) allItems[itemSelection.getSingleItemIdx()];
         
     if(curItemPtr->size.x == 0.0f) return;
     
@@ -872,7 +880,7 @@ void GuiEditor::processGuiPanelHardcoded() {
     
     processGuiPanelItems();
     
-    size_t nSelectedItems = itemSelection.getSelectionAmount();
+    size_t nSelectedItems = itemSelection.getCount();
     if(nSelectedItems == 0) {
         //None selected text.
         ImGui::Spacer();
@@ -883,7 +891,7 @@ void GuiEditor::processGuiPanelHardcoded() {
     } else if(nSelectedItems == 1) {
         processGuiPanelItem();
         
-    } else if(itemSelection.isMultipleSelected()) {
+    } else if(itemSelection.hasMultiple()) {
         //Multiple selected text.
         ImGui::Spacer();
         ImGui::BeginDisabled();
@@ -971,7 +979,7 @@ void GuiEditor::processGuiPanelInfo() {
  * @brief Processes the GUI item info panel for this frame.
  */
 void GuiEditor::processGuiPanelItem() {
-    GuiItemDef* curItemPtr = allItems[itemSelection.getSelectedItemIdx()];
+    GuiItemDef* curItemPtr = allItems[itemSelection.getSingleItemIdx()];
     
     if(curItemPtr->size.x == 0.0f) return;
     
@@ -994,7 +1002,7 @@ void GuiEditor::processGuiPanelItem() {
     
     //Size values.
     if(
-        processGuiSizeWidgets(
+        processGuiWidgetsSize(
             "Size", curItemPtr->size, 0.10f, false, false, 0.10f
         )
     ) {
@@ -1090,20 +1098,19 @@ void GuiEditor::processGuiPanelItems() {
             ImGui::Text("  ");
             
             //Item selectable.
-            bool selected = itemSelection.isSelected(i);
+            bool selected = itemSelection.contains(i);
             ImGui::SameLine();
             if(
                 monoSelectable(item->name.c_str(), &selected)
             ) {
                 if(isCtrlPressed) {
                     if(selected) {
-                        itemSelection.select(i);
+                        itemSelection.add(i);
                     } else {
-                        itemSelection.unselect(i);
+                        itemSelection.remove(i);
                     }
                 } else {
-                    itemSelection.clear();
-                    itemSelection.select(i);
+                    itemSelection.setSingle(i);
                 }
             }
             if(!item->description.empty()) {
@@ -1121,9 +1128,12 @@ void GuiEditor::processGuiPanelItems() {
     
     if(state == EDITOR_STATE_CUSTOM) {
     
+        static string renameItemName;
         CustomGuiItemDef* curItemPtr = nullptr;
-        if(itemSelection.isOneSelected()) {
-            curItemPtr = (CustomGuiItemDef*) allItems[itemSelection.getSelectedItemIdx()];
+        if(itemSelection.hasOne()) {
+            curItemPtr =
+                (CustomGuiItemDef*)
+                allItems[itemSelection.getSingleItemIdx()];
         }
         
         //New item button.
@@ -1138,9 +1148,10 @@ void GuiEditor::processGuiPanelItems() {
             setToDefaults(&newItem);
             customItems.push_back(newItem);
             rebuildAllItemsCache();
-            itemSelection.clear();
-            itemSelection.select(allItems.size() - 1);
+            itemSelection.setSingle(allItems.size() - 1);
             curItemPtr = (CustomGuiItemDef*) allItems[allItems.size() - 1];
+            duplicateString(curItemPtr->name, renameItemName);
+            openInputPopup("renameItem");
             setStatus("Created a new custom GUI item.");
         }
         setTooltip(
@@ -1158,7 +1169,7 @@ void GuiEditor::processGuiPanelItems() {
             ) {
                 string deletedItemName = curItemPtr->name;
                 size_t customIdx =
-                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSingleItemIdx() - hardcodedItems.size();
                 curItemPtr->clearBitmap();
                 customItems.erase(customItems.begin() + customIdx);
                 rebuildAllItemsCache();
@@ -1169,7 +1180,6 @@ void GuiEditor::processGuiPanelItems() {
             setTooltip("Delete the current item.");
             
             //Rename item button.
-            static string renameItemName;
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -1186,7 +1196,7 @@ void GuiEditor::processGuiPanelItems() {
             
             //Rename item popup.
             if(
-                processGuiInputPopup(
+                processGuiPopupInput(
                     "renameItem", "New name:", &renameItemName, true
                 )
             ) {
@@ -1202,15 +1212,15 @@ void GuiEditor::processGuiPanelItems() {
                 )
             ) {
                 size_t customIdx =
-                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSingleItemIdx() - hardcodedItems.size();
                 if(customIdx > 0) {
                     std::swap(
                         customItems[customIdx], customItems[customIdx - 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() - 1;
-                    itemSelection.clear();
-                    itemSelection.select(newSelItemIdx);
+                    size_t newSelItemIdx =
+                        itemSelection.getSingleItemIdx() - 1;
+                    itemSelection.setSingle(newSelItemIdx);
                     changesMgr.markAsChanged();
                     setStatus("Moved item up.");
                 } else {
@@ -1231,15 +1241,15 @@ void GuiEditor::processGuiPanelItems() {
                 )
             ) {
                 size_t customIdx =
-                    itemSelection.getSelectedItemIdx() - hardcodedItems.size();
+                    itemSelection.getSingleItemIdx() - hardcodedItems.size();
                 if(customIdx < customItems.size() - 1) {
                     std::swap(
                         customItems[customIdx], customItems[customIdx + 1]
                     );
                     rebuildAllItemsCache();
-                    size_t newSelItemIdx = itemSelection.getSelectedItemIdx() + 1;
-                    itemSelection.clear();
-                    itemSelection.select(newSelItemIdx);
+                    size_t newSelItemIdx =
+                        itemSelection.getSingleItemIdx() + 1;
+                    itemSelection.setSingle(newSelItemIdx);
                     changesMgr.markAsChanged();
                     setStatus("Moved item down.");
                 } else {

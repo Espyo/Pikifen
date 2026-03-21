@@ -160,7 +160,7 @@ void PathManager::handleObstacleAdd(Mob* m) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
-            m2Ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            m2Ptr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -198,7 +198,7 @@ void PathManager::handleObstacleRemove(Mob* m) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
-            m2Ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            m2Ptr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -237,7 +237,7 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
             Mob* mPtr = game.states.gameplay->mobs.all[m];
             if(!mPtr->pathInfo) continue;
             
-            mPtr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
+            mPtr->scriptVM.fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -350,22 +350,6 @@ void PathStop::clone(PathStop* destination) const {
 
 
 /**
- * @brief Returns the pointer of the link between this stop and another.
- * The links in memory are one-way, meaning that if the only link
- * is from the other stop to this one, it will not count.
- *
- * @param otherStop Path stop to check against.
- * @return The link, or nullptr if it does not link to that stop.
- */
-PathLink* PathStop::getLink(const PathStop* otherStop) const {
-    for(size_t l = 0; l < links.size(); l++) {
-        if(links[l]->endPtr == otherStop) return links[l];
-    }
-    return nullptr;
-}
-
-
-/**
  * @brief Removes and deletes the specified link.
  * Does nothing if there is no such link.
  *
@@ -396,6 +380,22 @@ void PathStop::deleteLink(const PathStop* otherStop) {
             return;
         }
     }
+}
+
+
+/**
+ * @brief Returns the pointer of the link between this stop and another.
+ * The links in memory are one-way, meaning that if the only link
+ * is from the other stop to this one, it will not count.
+ *
+ * @param otherStop Path stop to check against.
+ * @return The link, or nullptr if it does not link to that stop.
+ */
+PathLink* PathStop::getLink(const PathStop* otherStop) const {
+    for(size_t l = 0; l < links.size(); l++) {
+        if(links[l]->endPtr == otherStop) return links[l];
+    }
+    return nullptr;
 }
 
 

@@ -1,0 +1,21 @@
+name = Poker Chip
+description = Some sort of disk with a peculiar star at the center.
+
+can_walk_on_others = true
+height = 16
+max_carriers = 16
+points = 75
+pushable = false
+pushes = true
+radius = 64
+weight = 8
+
+area_editor_properties {
+    Color {
+        var = color
+        type = list
+        def_value = Random
+        list = Red; Yellow; Green; Blue; White; Black; Random
+        tooltip = Which color the poker chip should be.
+    }
+}

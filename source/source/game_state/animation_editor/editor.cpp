@@ -288,7 +288,7 @@ void AnimationEditor::deleteAnimDbCmd(float inputValue) {
     
     openDialog(
         "Delete animation database?",
-        std::bind(&AnimationEditor::processGuiDeleteAnimDbDialog, this)
+        std::bind(&AnimationEditor::processGuiDialogDeleteAnimDb, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }
@@ -1528,6 +1528,26 @@ void AnimationEditor::saveCmd(float inputValue) {
 
 
 /**
+ * @brief Selects the same hitboxes that were selected next time, so the user
+ * can keep their hitbox editing flow when editing multiple sprites. If any
+ * index doesn't work out, it's discarded, so it's safe to call even if the
+ * list of hitboxes has since changed.
+ */
+void AnimationEditor::selectPreviousHitboxes() {
+    hitboxSelection.clear();
+    
+    for(size_t i : prevHitboxSelection) {
+        if(i >= curSprite->hitboxes.size()) continue;
+        hitboxSelection.add(i);
+    }
+    
+    if(!hitboxSelection.hasAny() && !curSprite->hitboxes.empty()) {
+        hitboxSelection.add(0);
+    }
+}
+
+
+/**
  * @brief Sets all sprite scales to the value specified in the textbox.
  *
  * @param scale Value to set the scales to.
@@ -1917,26 +1937,6 @@ void AnimationEditor::unload() {
     if(bg) {
         al_destroy_bitmap(bg);
         bg = nullptr;
-    }
-}
-
-
-/**
- * @brief Selects the same hitboxes that were selected next time, so the user
- * can keep their hitbox editing flow when editing multiple sprites. If any
- * index doesn't work out, it's discarded, so it's safe to call even if the
- * list of hitboxes has since changed.
- */
-void AnimationEditor::selectPreviousHitboxes() {
-    hitboxSelection.clear();
-    
-    for(size_t i : prevHitboxSelection) {
-        if(i >= curSprite->hitboxes.size()) continue;
-        hitboxSelection.select(i);
-    }
-    
-    if(!hitboxSelection.isAnySelected() && !curSprite->hitboxes.empty()) {
-        hitboxSelection.select(0);
     }
 }
 

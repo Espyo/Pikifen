@@ -23,6 +23,12 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace RESULTS {
 
+//The player's score circle in the score chart grows and shrinks by this amount.
+const float CHART_CIRCLE_SIZE_OFFSET = 3.0f;
+
+//Time scale for the player's score circle in the score chart.
+const float CHART_CIRCLE_TIME_SCALE = 4.0f;
+
 //The final score label sways with this much of a time offset.
 const float FINAL_SCORE_LABEL_SWAY_TIME_OFFSET = -0.4f;
 
@@ -38,16 +44,16 @@ const string GUI_FILE_NAME = "results_menu";
 //Multiply the medal size by this.
 const float MEDAL_SCALE = 0.9f;
 
-//Multiply the medal shine size by this.
-const float MEDAL_SHINE_SCALE = 1.30f;
-
 //Time scale for the medal shine's rotation.
 const float MEDAL_SHINE_ROT_TIME_SCALE = 0.7f;
+
+//Multiply the medal shine size by this.
+const float MEDAL_SHINE_SCALE = 1.30f;
 
 //Name of the GUI definition file for the score chart information.
 const string SCORE_CHART_GUI_FILE_NAME = "results_menu_score_chart";
 
-//Name of the GUI definition file for the scoring information.
+//Name of the GUI definition file for the scoring criteria.
 const string SCORING_GUI_FILE_NAME = "results_menu_scoring";
 
 //Name of the GUI definition file for the stats.
@@ -57,96 +63,215 @@ const string STATS_GUI_FILE_NAME = "results_menu_stats";
 
 
 /**
- * @brief Creates and adds a new mission score criterion-related stat to the
- * stats list GUI item, if applicable.
+ * @brief Creates and adds a new bullet point to one of the list GUI items.
  *
- * @param criterionIdx Index of the mission score criterion to use.
- */
-void Results::addNewScoreStat(size_t criterionIdx) {
-    if(
-        game.curArea->type != AREA_TYPE_MISSION ||
-        game.curArea->mission.gradingMode != MISSION_GRADING_MODE_POINTS
-    ) {
-        return;
-    }
-    
-    MissionData* mission = &game.curArea->mission;
-    MissionScoreCriterion* cPtr = &mission->scoreCriteria[criterionIdx];
-    
-    if(cPtr->points == 0) return;
-    
-    //TODO
-    /*
-    bool goalWasCleared =
-        game.states.gameplay->missionFailReason ==
-        (MISSION_FAIL_COND) INVALID;
-    bool lost =
-        hasFlag(
-            game.curArea->missionOld.pointLossData,
-            getIdxBitmask(criterion)
-        ) &&
-        !goalWasCleared;
-    
-    if(lost) {
-        addNewStat(
-            "    x 0 points (mission fail) = ",
-            "0",
-            game.config.guiColors.gold
-        );
-    } else {
-        addNewStat(
-            "    x " +
-            amountStr(mult, "point") +
-            " = ",
-            i2s(cPtr->getScore(game.states.gameplay, mission)),
-            game.config.guiColors.gold
-        );
-    }
-    */
-}
-
-
-/**
- * @brief Creates and adds a new stat to the stats list GUI item.
- *
- * @param label Label text of this stat.
- * @param value Value of this stat.
+ * @param list What list item to add to.
+ * @param label Label text of this bullet point.
+ * @param value Value of this bullet point.
  * @param color Color.
  */
-void Results::addNewStat(
-    const string& label, const string& value,
+void Results::addNewBulletPoint(
+    GuiItem* list, const string& label, const string& value,
     const ALLEGRO_COLOR& color
 ) {
-    size_t statIdx = statsList->children.size() / 2.0f;
-    const float STAT_HEIGHT = 0.12f;
-    const float STAT_PADDING = 0.02f;
-    const float STATS_OFFSET = 0.01f;
-    const float statCenterY =
-        (STATS_OFFSET + STAT_HEIGHT / 2.0f) +
-        ((STAT_HEIGHT + STAT_PADDING) * statIdx);
+    size_t idx = list->children.size() / 2.0f;
+    const float BP_HEIGHT = 0.12f;
+    const float BP_PADDING = 0.02f;
+    const float BP_OFFSET = 0.01f;
+    const float centerY =
+        (BP_OFFSET + BP_HEIGHT / 2.0f) +
+        ((BP_HEIGHT + BP_PADDING) * idx);
         
     BulletGuiItem* labelBullet =
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
     labelBullet->ratioCenter =
-        Point(0.50f, statCenterY);
+        Point(0.50f, centerY);
     labelBullet->ratioSize =
-        Point(0.96f, STAT_HEIGHT);
-    statsList->addChild(labelBullet);
+        Point(0.96f, BP_HEIGHT);
+    list->addChild(labelBullet);
     gui.addItem(labelBullet);
+    pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
     valueText->ratioCenter =
-        Point(0.75f, statCenterY);
+        Point(0.75f, centerY);
     valueText->ratioSize =
-        Point(0.44f, STAT_HEIGHT);
-    statsList->addChild(valueText);
+        Point(0.44f, BP_HEIGHT);
+    list->addChild(valueText);
+    gui.addItem(valueText);
+    pageTextToAnimate.push_back(valueText);
+    textToAnimate.push_back(valueText);
+}
+
+
+/**
+ * @brief Creates a button meant for changing to a page either to the left or
+ * to the right of the current one, and adds it to the GUI.
+ *
+ * @param targetPage Which page this button leads to.
+ * @param left True if this page is to the left of the current,
+ * false if to the right.
+ * @param curBox The box GUI item of the current page.
+ * @return The button.
+ */
+ButtonGuiItem* Results::addNewPageItem(
+    RESULTS_MENU_PAGE targetPage, bool left, GuiItem* curBox
+) {
+    string pageName;
+    string tooltipName;
+    switch(targetPage) {
+    case RESULTS_MENU_PAGE_STATS: {
+        pageName = "Stats";
+        tooltipName = "stats";
+        break;
+    } case RESULTS_MENU_PAGE_SCORING: {
+        pageName = "Scoring";
+        tooltipName = "scoring";
+        break;
+    } case RESULTS_MENU_PAGE_SCORE_CHART: {
+        pageName = "Chart";
+        tooltipName = "score chart";
+        break;
+    }
+    }
+    
+    ButtonGuiItem* newButton =
+        new ButtonGuiItem(
+        left ?
+        "< " + pageName :
+        pageName + " >",
+        game.sysContent.fntStandard,
+        game.config.guiColors.pageChange
+    );
+    newButton->onActivate =
+    [this, targetPage] (const Point&) {
+        switchPage(targetPage);
+    };
+    newButton->onGetTooltip =
+    [tooltipName] () {
+        return "Go to the " + tooltipName + " page.";
+    };
+    
+    return newButton;
+}
+
+
+/**
+ * @brief Creates the buttons and input GUI items that allow switching pages,
+ * and adds them to the GUI.
+ *
+ * @param curPage The current page.
+ * @param curBox The box GUI item of the current page.
+ * @param itemNamePrefix Prefix for the names of the GUI items.
+ */
+void Results::addNewPageItems(
+    RESULTS_MENU_PAGE curPage, GuiItem* curBox, const string& itemNamePrefix
+) {
+    int curPageIdx = (int) curPage;
+    RESULTS_MENU_PAGE leftPage =
+        (RESULTS_MENU_PAGE) sumAndWrap(curPageIdx, -1, 3);
+    RESULTS_MENU_PAGE rightPage =
+        (RESULTS_MENU_PAGE) sumAndWrap(curPageIdx, 1, 3);
+        
+    //Left page button.
+    ButtonGuiItem* leftPageButton =
+        addNewPageItem(leftPage, true, curBox);
+    curBox->addChild(leftPageButton);
+    gui.addItem(leftPageButton, itemNamePrefix + "_left_page");
+    pageTextToAnimate.push_back(leftPageButton);
+    leftPageButtons.push_back(leftPageButton);
+    
+    //Left page input icon.
+    GuiItem* leftPageInput = new GuiItem();
+    leftPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curBox->addChild(leftPageInput);
+    gui.addItem(leftPageInput, itemNamePrefix + "_left_page_input");
+    
+    //Right page button.
+    ButtonGuiItem* rightPageButton =
+        addNewPageItem(rightPage, false, curBox);
+    curBox->addChild(rightPageButton);
+    gui.addItem(rightPageButton, itemNamePrefix + "_right_page");
+    pageTextToAnimate.push_back(rightPageButton);
+    rightPageButtons.push_back(rightPageButton);
+    
+    //Right page input icon.
+    GuiItem* rightPageInput = new GuiItem();
+    rightPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curBox->addChild(rightPageInput);
+    gui.addItem(rightPageInput, itemNamePrefix + "_right_page_input");
+}
+
+
+/**
+ * @brief Creates and adds a new score marker bullet point to the list GUI item.
+ *
+ * @param label Label text of this bullet point.
+ * @param value Value of this bullet point.
+ * @param totalBulletPoints How many bullet points will exist in total.
+ * @param color Color.
+ */
+void Results::addNewScoreMarkerBulletPoint(
+    const string& label, const string& value,
+    const size_t totalBulletPoints, const ALLEGRO_COLOR& color
+) {
+    size_t idx = scoreChartList->children.size() / 2.0f;
+    const float offset = 0.01f;
+    const float workingArea = 1.0f - offset * 2.0f;
+    const float bPPadding = 0.03f;
+    const float totalPaddingSpace = bPPadding * (totalBulletPoints - 1);
+    const float totalItemSpace = workingArea - totalPaddingSpace;
+    const float bPHeight = totalItemSpace / totalBulletPoints;
+    
+    const float bPCenterY =
+        (offset + bPHeight / 2.0f) +
+        ((bPHeight + bPPadding) * idx);
+        
+    BulletGuiItem* labelBullet =
+        new BulletGuiItem(
+        label, game.sysContent.fntStandard, color
+    );
+    labelBullet->ratioCenter =
+        Point(0.50f, bPCenterY);
+    labelBullet->ratioSize =
+        Point(0.96f, bPHeight);
+    scoreChartList->addChild(labelBullet);
+    gui.addItem(labelBullet);
+    pageTextToAnimate.push_back(labelBullet);
+    
+    TextGuiItem* valueText =
+        new TextGuiItem(
+        value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
+    );
+    valueText->ratioCenter =
+        Point(0.75f, bPCenterY);
+    valueText->ratioSize =
+        Point(0.44f, bPHeight);
+    scoreChartList->addChild(valueText);
     gui.addItem(valueText);
     textToAnimate.push_back(valueText);
+    pageTextToAnimate.push_back(valueText);
+    
+    scoreMarkerGuiItems.push_back(labelBullet);
 }
 
 
@@ -157,7 +282,7 @@ void Results::addNewStat(
 void Results::continuePlaying() {
     game.fadeMgr.startFade(false, [] () {
         game.states.gameplay->afterHours = true;
-        game.states.gameplay->missionEndEventIdx = INVALID;
+        game.states.gameplay->missionEndCondIdx = INVALID;
         game.audio.setCurrentSong("");
         game.changeState(game.states.gameplay, true, false);
         game.states.gameplay->enter();
@@ -182,6 +307,7 @@ void Results::doDrawing() {
     );
     
     gui.draw();
+    if(scoreChartPageBox->visible) drawScoreChartConnections();
     
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -194,33 +320,207 @@ void Results::doLogic() {
     if(!game.fadeMgr.isFading()) {
         for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
             gui.handlePlayerAction(game.controls.actionQueue[a]);
+            switch(game.controls.actionQueue[a].actionTypeId) {
+            case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT: {
+                if(game.controls.actionQueue[a].value < 0.5f) continue;
+                for(size_t b = 0; b < leftPageButtons.size(); b++) {
+                    if(leftPageButtons[b]->isResponsive()) {
+                        leftPageButtons[b]->activate();
+                        break;
+                    }
+                }
+                break;
+            } case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
+                if(game.controls.actionQueue[a].value < 0.5f) continue;
+                for(size_t b = 0; b < rightPageButtons.size(); b++) {
+                    if(rightPageButtons[b]->isResponsive()) {
+                        rightPageButtons[b]->activate();
+                        break;
+                    }
+                }
+                break;
+            }
+            }
         }
     }
     
     guiTimeSpent += game.deltaT;
     
     //Make the different texts grow every two or so seconds.
-    const float TEXT_ANIM_ALL_DURATION = 1.5f;
+    const float TEXT_ANIM_FALL_DURATION = 1.5f;
     const float TEXT_ANIM_PAUSE_DURATION = 1.0f;
-    const float animTime =
-        fmod(guiTimeSpent, TEXT_ANIM_ALL_DURATION + TEXT_ANIM_PAUSE_DURATION);
-    const float timePerItem = TEXT_ANIM_ALL_DURATION / textToAnimate.size();
-    const int oldTimeCp = (animTime - game.deltaT) / timePerItem;
-    const int newTimeCp = animTime / timePerItem;
+    const float TEXT_ANIM_TOTAL_DURATION =
+        TEXT_ANIM_FALL_DURATION + TEXT_ANIM_PAUSE_DURATION;
+    const float newAnimTime = fmod(guiTimeSpent, TEXT_ANIM_TOTAL_DURATION);
+    const float newTimeRatio = newAnimTime / TEXT_ANIM_FALL_DURATION;
+    const float oldAnimTime = newAnimTime - game.deltaT;
+    const float oldTimeRatio = oldAnimTime / TEXT_ANIM_FALL_DURATION;
     
-    if(
-        oldTimeCp != newTimeCp &&
-        oldTimeCp >= 0 &&
-        oldTimeCp <= (int) textToAnimate.size() - 1
-    ) {
-        textToAnimate[oldTimeCp]->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
+    for(size_t t = 0; t < textToAnimate.size(); t++) {
+        DrawInfo itemDrawInfo;
+        bool itemVisible = gui.getItemDrawInfo(textToAnimate[t], &itemDrawInfo);
+        if(!itemVisible) continue;
+        const float itemRatioY = itemDrawInfo.center.y / game.winH;
+        if(passedBy(oldTimeRatio, newTimeRatio, itemRatioY)) {
+            textToAnimate[t]->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            );
+        }
     }
     
     gui.tick(game.deltaT);
     
     game.fadeMgr.tick(game.deltaT);
+}
+
+
+/**
+ * @brief Draws the score chart's connection lines.
+ */
+void Results::drawScoreChartConnections() {
+    DrawInfo chartDraw;
+    gui.getItemDrawInfo(scoreChartChart, &chartDraw);
+    
+    //The connector lines.
+    for(size_t i = 0; i < scoreMarkerGuiItems.size(); i++) {
+        GuiItem* iPtr =
+            scoreMarkerGuiItems[scoreMarkerGuiItems.size() - (1 + i)];
+        DrawInfo itemDraw;
+        gui.getItemDrawInfo(iPtr, &itemDraw);
+        
+        const float x1 = itemDraw.center.x + itemDraw.size.x / 2.0f;
+        const float x2 = x1 + 24.0f;
+        const float x3 = chartDraw.center.x - 24.0f;
+        const float x4 = chartDraw.center.x;
+        const float y1 = itemDraw.center.y;
+        const float y2 = getScoreChartY(scoreMarkers[i].second) - 1.0f;
+        const ALLEGRO_COLOR color =
+            al_map_rgba(0, 0, 0, iPtr->focused ? 192 : 48);
+        const float thickness = iPtr->focused ? 2.0f : 1.0f;
+        
+        al_draw_line(x1, y1, x2, y1, color, thickness);
+        al_draw_line(x2, y1, x3, y2, color, thickness);
+        al_draw_line(x3, y2, x4, y2, color, thickness);
+    }
+    
+    //Circle for the player's score.
+    al_draw_filled_circle(
+        chartDraw.center.x, getScoreChartY(finalMissionScore),
+        16.0f +
+        sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
+        RESULTS::CHART_CIRCLE_SIZE_OFFSET,
+        al_map_rgb(96, 96, 192)
+    );
+    
+    //Circle for the old record.
+    if(!oldRecord.date.empty()) {
+        al_draw_filled_circle(
+            chartDraw.center.x,
+            getScoreChartY(oldRecord.score),
+            12.0f, al_map_rgb(0, 0, 96)
+        );
+    }
+    
+    //Circle for the maker's record.
+    if(!game.curArea->mission.makerRecordDate.empty()) {
+        al_draw_filled_circle(
+            chartDraw.center.x,
+            getScoreChartY(game.curArea->mission.makerRecord),
+            12.0f, al_map_rgb(0, 0, 96)
+        );
+    }
+}
+
+
+/**
+ * @brief Draws the graphic representing the score chart.
+ *
+ * @param draw Draw info.
+ */
+void Results::drawScoreChartGraphic(const DrawInfo& draw) {
+    const auto drawRegion =
+    [&draw] (float startY, float endY, ALLEGRO_COLOR color, bool endFades) {
+        ALLEGRO_VERTEX av[4];
+        for(size_t v = 0; v < 4; v++) {
+            av[v].u = 0.0f;
+            av[v].v = 0.0f;
+            av[v].z = 0.0f;
+        }
+        
+        av[0].x = draw.center.x;
+        av[0].y = startY;
+        av[0].color = color;
+        av[1].x = draw.center.x;
+        av[1].y = endY;
+        av[1].color = endFades ? changeAlpha(color, 0) : color;
+        av[2].x = draw.center.x - draw.size.x / 2.0f;
+        av[2].y = endY;
+        av[2].color = changeAlpha(color, 0);
+        av[3].x = draw.center.x - draw.size.x / 2.0f;
+        av[3].y = startY;
+        av[3].color = changeAlpha(color, 0);
+        
+        al_draw_prim(
+            av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+        );
+        
+        av[2].x = draw.center.x + draw.size.x / 2.0f;
+        av[3].x = draw.center.x + draw.size.x / 2.0f;
+        
+        al_draw_prim(
+            av, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+        );
+        
+    };
+    
+    //Bronze region.
+    drawRegion(
+        getScoreChartY(game.curArea->mission.bronzeReq),
+        getScoreChartY(game.curArea->mission.silverReq),
+        al_map_rgb(229, 175, 126), false
+    );
+    
+    //Silver region.
+    drawRegion(
+        getScoreChartY(game.curArea->mission.silverReq),
+        getScoreChartY(game.curArea->mission.goldReq),
+        al_map_rgb(190, 224, 229), false
+    );
+    
+    //Gold region.
+    drawRegion(
+        getScoreChartY(game.curArea->mission.goldReq),
+        getScoreChartY(game.curArea->mission.platinumReq),
+        al_map_rgb(229, 212, 110), false
+    );
+    
+    //Platinum region.
+    drawRegion(
+        getScoreChartY(game.curArea->mission.platinumReq),
+        getScoreChartY(scoreChartTop),
+        al_map_rgb(110, 229, 193), true
+    );
+    
+    //Line down the middle.
+    al_draw_line(
+        draw.center.x, draw.center.y - draw.size.y / 2.0f + 8.0f,
+        draw.center.x, draw.center.y + draw.size.y / 2.0f,
+        al_map_rgb(0, 0, 96), 4.0f
+    );
+    
+    //Line for 0.
+    float zeroY = getScoreChartY(0) - 2.0f;
+    al_draw_line(
+        draw.center.x - 16.0f, zeroY,
+        draw.center.x + 16.0f, zeroY,
+        al_map_rgb(0, 0, 96), 2.0f
+    );
+    
+    //Triangle at the top.
+    drawFilledEquilateralTriangle(
+        Point(draw.center.x, draw.center.y - draw.size.y / 2.0f + 8),
+        8.0f, -TAU / 4.0f, al_map_rgb(0, 0, 96)
+    );
 }
 
 
@@ -231,6 +531,24 @@ void Results::doLogic() {
  */
 string Results::getName() const {
     return "results";
+}
+
+
+/**
+ * @brief Returns the Y coordinate of the game window at which a given
+ * score is represented in the score chart.
+ *
+ * @param score The score.
+ * @return The Y coordinate.
+ */
+float Results::getScoreChartY(int score) const {
+    DrawInfo chartDraw;
+    gui.getItemDrawInfo(scoreChartChart, &chartDraw);
+    const int chartRange = scoreChartTop - scoreChartBottom;
+    const float chartBottomY = chartDraw.center.y + chartDraw.size.y / 2.0f;
+    return
+        chartBottomY - chartDraw.size.y *
+        ((score - scoreChartBottom) / (float) chartRange);
 }
 
 
@@ -255,11 +573,13 @@ void Results::initGuiMain() {
     gui.registerCoords("area_name",         50,  7, 45, 10);
     gui.registerCoords("area_subtitle",     50, 18, 40, 10);
     gui.registerCoords("medal",             85, 15, 22, 22);
-    gui.registerCoords("final_score",       85, 28, 26,  4);
-    gui.registerCoords("final_score_label", 85, 28, 26,  4);
-    gui.registerCoords("end_reason",        85, 28, 26,  4);
+    gui.registerCoords("final_score",       14, 10, 24,  8);
+    gui.registerCoords("final_score_label", 14, 18, 24,  8);
+    gui.registerCoords("end_reason",        50, 32, 96,  4);
     gui.registerCoords("conclusion",        50, 36, 96,  4);
-    gui.registerCoords("stats_page",        50, 63, 80, 38);
+    gui.registerCoords("stats_page",        50, 61, 96, 42);
+    gui.registerCoords("scoring_page",      50, 61, 96, 42);
+    gui.registerCoords("score_chart_page",  50, 61, 96, 42);
     gui.registerCoords("retry",             20, 88, 24,  8);
     gui.registerCoords("continue",          50, 88, 24,  8);
     gui.registerCoords("pick_area",         80, 88, 24,  8);
@@ -277,28 +597,34 @@ void Results::initGuiMain() {
     textToAnimate.push_back(areaNameText);
     
     //Area subtitle text.
-    string subtitle =
-        calculateAreaSubtitle(
-            game.curArea->subtitle,
-            game.curArea->type,
-            game.curArea->mission.preset
-        );
-    if(!subtitle.empty()) {
+    if(!game.curArea->subtitle.empty()) {
         TextGuiItem* areaSubtitleText =
-            new TextGuiItem(subtitle, game.sysContent.fntAreaName);
+            new TextGuiItem(
+            game.curArea->subtitle, game.sysContent.fntAreaName
+        );
         gui.addItem(areaSubtitleText, "area_subtitle");
         textToAnimate.push_back(areaSubtitleText);
     }
     
     //Final score number text.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        ALLEGRO_COLOR finalScoreTextColor =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            game.config.guiColors.smallHeader :
+            COLOR_WHITE;
+        string finalScoreTextStr =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            i2s(finalMissionScore) :
+            medal == MISSION_MEDAL_NONE ?
+            "No" :
+            "Got a";
+            
         TextGuiItem* finalScoreText =
             new TextGuiItem(
-            i2s(finalMissionScore), game.sysContent.fntAreaName,
-            game.config.guiColors.gold
+            finalScoreTextStr, game.sysContent.fntAreaName,
+            finalScoreTextColor
         );
         finalScoreText->onDraw =
         [finalScoreText] (const DrawInfo & draw) {
@@ -312,12 +638,16 @@ void Results::initGuiMain() {
     }
     
     //Final score label text.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        string finalScoreLabelStr =
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS ?
+            amountStr(finalMissionScore, "point", "", true) + "!" :
+            "medal!";
         TextGuiItem* finalScoreLabelText =
-            new TextGuiItem("points!", game.sysContent.fntAreaName);
+            new TextGuiItem(
+            finalScoreLabelStr, game.sysContent.fntAreaName
+        );
         finalScoreLabelText->onDraw =
         
         [finalScoreLabelText] (const DrawInfo & draw) {
@@ -379,16 +709,20 @@ void Results::initGuiMain() {
     //End reason text, if any.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         string endReason;
-        if(endEv) {
-            endReason =
-                game.missionEvTypes[endEv->type]->getHudInfo(
-                    endEv, &game.curArea->mission, game.states.gameplay
-                ).reason;
+        if(endCond) {
+            endReason = endCond->reason;
+        } else if(game.states.gameplay->missionEndFromPauseMenu) {
+            endReason = "Ended from the pause menu!";
         }
         
         if(!endReason.empty()) {
             TextGuiItem* endReasonText =
-                new TextGuiItem(endReason, game.sysContent.fntStandard);
+                new TextGuiItem(
+                endReason, game.sysContent.fntStandard,
+                game.states.gameplay->missionWasCleared ?
+                game.config.guiColors.good :
+                game.config.guiColors.bad
+            );
             gui.addItem(endReasonText, "end_reason");
             textToAnimate.push_back(endReasonText);
         }
@@ -422,6 +756,10 @@ void Results::initGuiMain() {
             conclusion =
                 "Maker tools were used, "
                 "so the result won't be saved.";
+        } else if(!game.states.gameplay->missionWasCleared) {
+            conclusion =
+                "Failed the mission, so the result "
+                "won't be saved.";
         } else if(!isNewRecord) {
             conclusion =
                 "This result is not a new record, so "
@@ -446,6 +784,14 @@ void Results::initGuiMain() {
     statsPageBox = new GuiItem();
     gui.addItem(statsPageBox, "stats_page");
     
+    //Scoring page box.
+    scoringPageBox = new GuiItem();
+    gui.addItem(scoringPageBox, "scoring_page");
+    
+    //Score chart page box.
+    scoreChartPageBox = new GuiItem();
+    gui.addItem(scoreChartPageBox, "score_chart_page");
+    
     //Retry button.
     ButtonGuiItem* retryButton =
         new ButtonGuiItem("Retry", game.sysContent.fntStandard);
@@ -458,7 +804,7 @@ void Results::initGuiMain() {
     gui.addItem(retryButton, "retry");
     
     //Keep playing button.
-    if(endEv && endEv->type == MISSION_EV_TIME_LIMIT) {
+    if(endCond && endCond->type == MISSION_END_COND_TIME_LIMIT) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
@@ -512,15 +858,66 @@ void Results::initGuiMain() {
  * @brief Initializes the score chart GUI items.
  */
 void Results::initGuiScoreChart() {
-    //TODO
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORE_CHART_GUI_FILE_NAME];
+    gui.registerCoords("score_chart_left_page",        13,  7, 18, 14);
+    gui.registerCoords("score_chart_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("score_chart_right_page",       87,  7, 18, 14);
+    gui.registerCoords("score_chart_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("score_chart_chart",            79, 59, 34, 82);
+    gui.registerCoords("score_chart_list",             31, 59, 54, 82);
+    gui.readDataFile(guiFile, scoreChartPageBox);
+    
+    //Score chart item list.
+    scoreChartList = new ListGuiItem();
+    scoreChartPageBox->addChild(scoreChartList);
+    gui.addItem(scoreChartList, "score_chart_list");
+    
+    //Score chart graphic.
+    scoreChartChart = new ListGuiItem();
+    scoreChartPageBox->addChild(scoreChartChart);
+    scoreChartChart->onDraw =
+    [this] (const DrawInfo & draw) {
+        drawScoreChartGraphic(draw);
+        scoreChartChart->defDrawCode(draw);
+    };
+    gui.addItem(scoreChartChart, "score_chart_chart");
+    
+    populateScoreChart();
+    
+    addNewPageItems(
+        RESULTS_MENU_PAGE_SCORE_CHART, scoreChartPageBox, "score_chart"
+    );
 }
 
 
 /**
- * @brief Initializes the scoring information GUI items.
+ * @brief Initializes the scoring criteria GUI items.
  */
 void Results::initGuiScoring() {
-    //TODO
+    DataNode* guiFile =
+        &game.content.guiDefs.list[RESULTS::SCORING_GUI_FILE_NAME];
+    gui.registerCoords("scoring_left_page",        13,  7, 18, 14);
+    gui.registerCoords("scoring_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("scoring_right_page",       87,  7, 18, 14);
+    gui.registerCoords("scoring_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("scoring_list",             50, 59, 92, 82);
+    gui.registerCoords("scoring_scroll",           99, 59,  2, 82);
+    gui.readDataFile(guiFile, scoringPageBox);
+    
+    //Scoring criteria list.
+    scoringList = new ListGuiItem();
+    scoringPageBox->addChild(scoringList);
+    gui.addItem(scoringList, "scoring_list");
+    populateScoringList();
+    
+    //Scoring criteria list scrollbar.
+    ScrollGuiItem* scoringScroll = new ScrollGuiItem();
+    scoringScroll->listItem = scoringList;
+    scoringPageBox->addChild(scoringScroll);
+    gui.addItem(scoringScroll, "scoring_scroll");
+    
+    addNewPageItems(RESULTS_MENU_PAGE_SCORING, scoringPageBox, "scoring");
 }
 
 
@@ -530,12 +927,12 @@ void Results::initGuiScoring() {
 void Results::initGuiStats() {
     DataNode* guiFile =
         &game.content.guiDefs.list[RESULTS::STATS_GUI_FILE_NAME];
-    gui.registerCoords("stats_page_left",             50, 63, 80, 38);
-    gui.registerCoords("stats_page_left_input",             50, 63, 80, 38);
-    gui.registerCoords("stats_page_right",             50, 63, 80, 38);
-    gui.registerCoords("stats_page_right_input",             50, 63, 80, 38);
-    gui.registerCoords("stats_list",             50, 63, 80, 38);
-    gui.registerCoords("stats_scroll",      93, 63,  2, 38);
+    gui.registerCoords("stats_left_page",        13,  7, 18, 14);
+    gui.registerCoords("stats_left_page_input",   4, 12,  8,  8);
+    gui.registerCoords("stats_right_page",       87,  7, 18, 14);
+    gui.registerCoords("stats_right_page_input", 96, 12,  8,  8);
+    gui.registerCoords("stats_list",             50, 59, 92, 82);
+    gui.registerCoords("stats_scroll",           99, 59,  2, 82);
     gui.readDataFile(guiFile, statsPageBox);
     
     //Stats list.
@@ -549,6 +946,13 @@ void Results::initGuiStats() {
     statsScroll->listItem = statsList;
     statsPageBox->addChild(statsScroll);
     gui.addItem(statsScroll, "stats_scroll");
+    
+    if(
+        game.curArea->type == AREA_TYPE_MISSION &&
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
+    ) {
+        addNewPageItems(RESULTS_MENU_PAGE_STATS, statsPageBox, "stats");
+    }
 }
 
 
@@ -580,70 +984,65 @@ void Results::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngResults);
     game.fadeMgr.startFade(true, nullptr);
     guiTimeSpent = 0.0f;
+    pageTextToAnimate.clear();
+    leftPageButtons.clear();
+    rightPageButtons.clear();
     textToAnimate.clear();
+    oldRecord.clear();
+    isNewRecord = false;
     
     finalMissionScore = game.states.gameplay->calculateMissionScore(false);
     
     medal = MISSION_MEDAL_NONE;
-    switch(game.curArea->mission.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+    switch(game.curArea->mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         if(game.states.gameplay->missionWasCleared) {
             medal = game.curArea->mission.getScoreMedal(finalMissionScore);
         }
         break;
-    } case MISSION_GRADING_MODE_GOAL: {
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
         medal =
             game.states.gameplay->missionWasCleared ?
             MISSION_MEDAL_PLATINUM :
             MISSION_MEDAL_NONE;
         break;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         medal = MISSION_MEDAL_PLATINUM;
         break;
     }
     }
     
-    endEv = nullptr;
-    if(game.states.gameplay->missionEndEventIdx != INVALID) {
-        endEv =
-            &game.curArea->mission.events[
-                game.states.gameplay->missionEndEventIdx
+    endCond = nullptr;
+    if(game.states.gameplay->missionEndCondIdx != INVALID) {
+        endCond =
+            &game.curArea->mission.endConds[
+                game.states.gameplay->missionEndCondIdx
             ];
     }
     
     //Record loading and saving logic.
-    //TODO
-    /*
     DataNode missionRecords;
     missionRecords.loadFile(
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
     );
-    string recordEntryName =
-        getMissionRecordEntryName(game.curArea);
+    string recordEntryName = getMissionRecordEntryName(game.curArea);
     DataNode* entryNode;
     if(missionRecords.getNrOfChildrenByName(recordEntryName) > 0) {
-        entryNode =
-            missionRecords.getChildByName(recordEntryName);
+        entryNode = missionRecords.getChildByName(recordEntryName);
+        oldRecord.loadFromDataNode(entryNode);
     } else {
         entryNode = missionRecords.addNew(recordEntryName, "");
     }
     
-    vector<string> oldRecordParts = split(entryNode->value, ";", true);
-    
-    if(oldRecordParts.size() == 3) {
-        oldRecord.clear = oldRecordParts[0] == "1";
-        oldRecord.score = s2i(oldRecordParts[1]);
-        oldRecord.date = s2i(oldRecordParts[2]);
-    }
-    
-    if(!oldRecord.clear && goalWasCleared) {
+    if(
+        oldRecord.date.empty() && game.states.gameplay->missionWasCleared
+    ) {
         isNewRecord = true;
-    } else if(oldRecord.clear == goalWasCleared) {
-        if(
-            game.curArea->missionOld.gradingMode ==
-            MISSION_GRADING_MODE_POINTS &&
-            oldRecord.score < finalMissionScore
-        ) {
+    } else if(
+        !oldRecord.date.empty() && game.states.gameplay->missionWasCleared &&
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
+    ) {
+        if(oldRecord.score < finalMissionScore) {
             isNewRecord = true;
         }
     }
@@ -654,45 +1053,180 @@ void Results::load() {
         !game.makerTools.usedHelpingTools &&
         !game.states.gameplay->afterHours
     ) {
-        string clearStr = goalWasCleared ? "1" : "0";
-        string scoreStr = i2s(finalMissionScore);
-        string dateStr = getCurrentTime(false);
-    
-        entryNode->value = clearStr + ";" + scoreStr + ";" + dateStr;
-        savedSuccessfully =
-            missionRecords.saveFile(
-                FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        MissionRecord newRecord;
+        newRecord.score = finalMissionScore;
+        newRecord.date = getCurrentTime(false);
+        
+        newRecord.saveToDataNode(entryNode);
+        savedSuccessfully = saveMissionRecords(&missionRecords);
+        
+        if(!savedSuccessfully) {
+            showSystemMessageBox(
+                nullptr, "Save failed!",
+                "Could not save this result!",
+                (
+                    "An error occurred while saving the mission record to the "
+                    "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
+                    "\". Make sure that "
+                    "the folder it is saving to exists and it is not "
+                    "read-only, and try beating the mission again."
+                ).c_str(),
+                nullptr,
+                ALLEGRO_MESSAGEBOX_WARN
             );
+        }
     }
-    
-    if(!savedSuccessfully) {
-        showSystemMessageBox(
-            nullptr, "Save failed!",
-            "Could not save this result!",
-            (
-                "An error occurred while saving the mission record to the "
-                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
-                "\". Make sure that "
-                "the folder it is saving to exists and it is not read-only, "
-                "and try beating the mission again."
-            ).c_str(),
-            nullptr,
-            ALLEGRO_MESSAGEBOX_WARN
-        );
-    }
-    */
     
     //Menu items.
-    
     initGuiMain();
     initGuiStats();
     if(
         game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->mission.gradingMode == MISSION_GRADING_MODE_POINTS
+        game.curArea->mission.medalAwardMode == MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
         initGuiScoring();
         initGuiScoreChart();
     }
+    switchPage(RESULTS_MENU_PAGE_STATS);
+}
+
+
+/**
+ * @brief Populates the list of score chart and the items.
+ */
+void Results::populateScoreChart() {
+    //Create all score markers.
+    scoreMarkers.clear();
+    scoreMarkerGuiItems.clear();
+    scoreMarkers.push_back(
+        std::make_pair(SCORE_MARKER_BRONZE, game.curArea->mission.bronzeReq)
+    );
+    scoreMarkers.push_back(
+        std::make_pair(SCORE_MARKER_SILVER, game.curArea->mission.silverReq)
+    );
+    scoreMarkers.push_back(
+        std::make_pair(SCORE_MARKER_GOLD, game.curArea->mission.goldReq)
+    );
+    scoreMarkers.push_back(
+        std::make_pair(SCORE_MARKER_PLATINUM, game.curArea->mission.platinumReq)
+    );
+    scoreMarkers.push_back(
+        std::make_pair(SCORE_MARKER_SCORE, finalMissionScore)
+    );
+    if(!oldRecord.date.empty()) {
+        scoreMarkers.push_back(
+            std::make_pair(SCORE_MARKER_OLD_RECORD, oldRecord.score)
+        );
+    }
+    if(!game.curArea->mission.makerRecordDate.empty()) {
+        scoreMarkers.push_back(
+            std::make_pair(
+                SCORE_MARKER_MAKER_RECORD, game.curArea->mission.makerRecord
+            )
+        );
+    }
+    
+    //Sort the markers.
+    std::stable_sort(
+        scoreMarkers.begin(), scoreMarkers.end(),
+    [] (const auto & i1, const auto & i2) {
+        return i1.second < i2.second;
+    }
+    );
+    
+    //Set the score chart's basic limits.
+    scoreChartBottom = std::min(0, scoreMarkers[0].second);
+    scoreChartTop = scoreMarkers.back().second;
+    
+    //Add a bit of padding so the arrow and 0 marker can breathe
+    //and so that the platinum region can be more than a few pixels.
+    const float range = scoreChartTop - scoreChartBottom;
+    DrawInfo chartDraw;
+    gui.getItemDrawInfo(scoreChartChart, &chartDraw);
+    const float topPaddingHeightRatio = 32.0f / chartDraw.size.y;
+    const float bottomPaddingHeightRatio = 4.0f / chartDraw.size.y;
+    scoreChartTop += std::max(range * topPaddingHeightRatio, 1.0f);
+    scoreChartBottom -= std::max(range * bottomPaddingHeightRatio, 1.0f);
+    
+    //Add score marker items to the list.
+    for(int m = scoreMarkers.size() - 1; m >= 0; m--) {
+        string name;
+        bool highlight = false;
+        switch(scoreMarkers[m].first) {
+        case SCORE_MARKER_BRONZE: {
+            name = "Bronze";
+            break;
+        } case SCORE_MARKER_SILVER: {
+            name = "Silver";
+            break;
+        } case SCORE_MARKER_GOLD: {
+            name = "Gold";
+            break;
+        } case SCORE_MARKER_PLATINUM: {
+            name = "Platinum";
+            break;
+        } case SCORE_MARKER_SCORE: {
+            name = "Your score";
+            highlight = true;
+            break;
+        } case SCORE_MARKER_OLD_RECORD: {
+            name = "Old record";
+            break;
+        } case SCORE_MARKER_MAKER_RECORD: {
+            name = "Maker's record";
+            break;
+        }
+        }
+        
+        addNewScoreMarkerBulletPoint(
+            name, i2s(scoreMarkers[m].second), scoreMarkers.size(),
+            highlight ? game.config.guiColors.gold : COLOR_WHITE
+        );
+    }
+}
+
+
+/**
+ * @brief Populates the list of scoring criteria.
+ */
+void Results::populateScoringList() {
+    addNewBulletPoint(
+        scoringList, "Starting score", i2s(game.curArea->mission.startingPoints)
+    );
+    
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        MissionScoreCriterionType* typePtr =
+            game.missionScoreCriterionTypes[cPtr->type];
+            
+        if(cPtr->points == 0) continue;
+        
+        string name = typePtr->getFriendlyName();
+        if(name.empty()) name = typePtr->getName();
+        bool red = false;
+        if(
+            (
+                cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT ||
+                cPtr->type == MISSION_SCORE_CRITERION_SEC_PASSED
+            ) && game.states.gameplay->missionConsiderZeroTime
+        ) {
+            red = true;
+        }
+        addNewBulletPoint(
+            scoringList,
+            name + " x" + i2s(cPtr->points),
+            i2s(
+                typePtr->calculateAmount(
+                    cPtr, &game.curArea->mission, game.states.gameplay
+                ) * cPtr->points
+            ),
+            red ? game.config.guiColors.bad : COLOR_WHITE
+        );
+    }
+    
+    addNewBulletPoint(
+        scoringList, "Total", i2s(finalMissionScore)
+    );
 }
 
 
@@ -700,18 +1234,6 @@ void Results::load() {
  * @brief Populates the list of statistics.
  */
 void Results::populateStatsList() {
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.startingPoints != 0
-    ) {
-        //Starting score bullet.
-        addNewStat(
-            "Starting score: ",
-            i2s(game.curArea->missionOld.startingPoints),
-            game.config.guiColors.gold
-        );
-    }
-    
     //Time taken bullet.
     unsigned int ds =
         fmod(game.states.gameplay->gameplayTimePassed * 10, 10);
@@ -719,115 +1241,39 @@ void Results::populateStatsList() {
         fmod(game.states.gameplay->gameplayTimePassed, 60);
     size_t minutes =
         game.states.gameplay->gameplayTimePassed / 60.0f;
-    addNewStat(
+    addNewBulletPoint(
+        statsList,
         "Time taken:",
         i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
     );
     
     //Pikmin born bullet.
-    addNewStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
-    
-    //Pikmin born points bullet.
-    addNewScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
+    addNewBulletPoint(
+        statsList,
+        "Pikmin born:", i2s(game.states.gameplay->pikminBorn)
+    );
     
     //Pikmin deaths bullet.
-    addNewStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
-    
-    //Pikmin death points bullet.
-    addNewScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
-    
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.pointsPerSecLeft != 0
-    ) {
-        //Seconds left bullet.
-        addNewStat(
-            "Seconds left:",
-            i2s(
-                game.curArea->missionOld.failTimeLimit -
-                floor(game.states.gameplay->gameplayTimePassed)
-            )
-        );
-        
-        //Seconds left points bullet.
-        addNewScoreStat(MISSION_SCORE_CRITERIA_SEC_LEFT);
-    }
-    
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.pointsPerSecPassed != 0
-    ) {
-        //Seconds passed bullet.
-        addNewStat(
-            "Seconds passed:",
-            i2s(game.states.gameplay->gameplayTimePassed)
-        );
-        
-        //Seconds passed points bullet.
-        addNewScoreStat(MISSION_SCORE_CRITERIA_SEC_PASSED);
-    }
+    addNewBulletPoint(
+        statsList,
+        "Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths)
+    );
     
     //Treasures bullet.
-    addNewStat(
-        "Treasures:",
+    addNewBulletPoint(
+        statsList,
+        "Treasures collected:",
         i2s(game.states.gameplay->treasuresCollected) + "/" +
         i2s(game.states.gameplay->treasuresTotal)
     );
     
-    //Treasure points bullet.
-    addNewStat(
-        "Treasure points:",
-        i2s(game.states.gameplay->treasurePointsObtained) + "/" +
-        i2s(game.states.gameplay->treasurePointsTotal)
-    );
-    
-    //Treasure points points bullet.
-    addNewScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
-    
     //Enemy defeats bullet.
-    addNewStat(
-        "Enemy defeats:",
+    addNewBulletPoint(
+        statsList,
+        "Enemies defeated:",
         i2s(game.states.gameplay->enemyDefeats) + "/" +
         i2s(game.states.gameplay->enemyTotal)
     );
-    
-    //Enemy points bullet.
-    addNewStat(
-        "Enemy defeat points:",
-        i2s(game.states.gameplay->enemyPointsObtained) + "/" +
-        i2s(game.states.gameplay->enemyPointsTotal)
-    );
-    
-    //Enemy points points bullet.
-    addNewScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
-    
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
-        //Final score bullet.
-        addNewStat(
-            "Final score:",
-            i2s(finalMissionScore),
-            game.config.guiColors.gold
-        );
-        
-        //Old record bullet:
-        addNewStat(
-            "Previous record:",
-            oldRecord.date.empty() ? "-" : i2s(oldRecord.score),
-            COLOR_WHITE
-        );
-        
-        //Maker's record bullet.
-        if(!game.curArea->missionOld.makerRecordDate.empty()) {
-            addNewStat(
-                "Maker's record:",
-                i2s(game.curArea->missionOld.makerRecord),
-                COLOR_WHITE
-            );
-        }
-    }
 }
 
 
@@ -840,6 +1286,45 @@ void Results::retryArea() {
         game.unloadLoadedState(game.states.gameplay);
         game.changeState(game.states.gameplay);
     });
+}
+
+
+/**
+ * @brief Switches pages.
+ *
+ * @param newPage The new page to switch to.
+ */
+void Results::switchPage(RESULTS_MENU_PAGE newPage) {
+    statsPageBox->responsive = false;
+    statsPageBox->visible = false;
+    scoringPageBox->responsive = false;
+    scoringPageBox->visible = false;
+    scoreChartPageBox->responsive = false;
+    scoreChartPageBox->visible = false;
+    
+    switch(newPage) {
+    case RESULTS_MENU_PAGE_STATS: {
+        statsPageBox->responsive = true;
+        statsPageBox->visible = true;
+        break;
+    } case RESULTS_MENU_PAGE_SCORING: {
+        scoringPageBox->responsive = true;
+        scoringPageBox->visible = true;
+        break;
+    } case RESULTS_MENU_PAGE_SCORE_CHART: {
+        scoreChartPageBox->responsive = true;
+        scoreChartPageBox->visible = true;
+        break;
+    }
+    }
+    
+    //Animate them all indiscriminately. The ones that don't belong to the
+    //new page won't show up anyway.
+    for(size_t i = 0; i < pageTextToAnimate.size(); i++) {
+        pageTextToAnimate[i]->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
+    }
 }
 
 

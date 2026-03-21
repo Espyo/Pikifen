@@ -30,7 +30,7 @@ void ShipFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", SHIP_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ShipFsm::setAnim);
         }
         efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
@@ -41,13 +41,14 @@ void ShipFsm::createFsm(MobType* typ) {
         }
     }
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_SHIP_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_SHIP_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_SHIP_STATES) + " in enum."
     );
 }
@@ -60,22 +61,20 @@ void ShipFsm::createFsm(MobType* typ) {
 /**
  * @brief When a ship finishes receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
-void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     Mob* delivery = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        if(game.curArea->missionOld.enemyPointsOnCollection) {
-            game.states.gameplay->enemyPointsObtained +=
-                ((Enemy*) delivery)->eneType->points;
-        }
+        game.states.gameplay->enemyCollectionPointsObtained +=
+            ((Enemy*) delivery)->eneType->points;
         break;
         
     }
@@ -85,17 +84,6 @@ void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
         game.states.gameplay->treasurePointsObtained +=
             trePtr->treType->points;
         game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
-        
-        if(game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE) {
-            auto it =
-                game.states.gameplay->missionRemainingMobIds.find(
-                    delivery->id
-                );
-            if(it != game.states.gameplay->missionRemainingMobIds.end()) {
-                game.states.gameplay->missionRemainingMobIds.erase(it);
-                game.states.gameplay->goalTreasuresCollected++;
-            }
-        }
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
@@ -106,23 +94,6 @@ void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
             game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
             game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
-            if(
-                game.curArea->missionOld.goal ==
-                MISSION_GOAL_COLLECT_TREASURE
-            ) {
-                unordered_set<size_t>& goalMobs =
-                    game.states.gameplay->missionRemainingMobIds;
-                auto it = goalMobs.find(delivery->id);
-                if(it != goalMobs.end()) {
-                    goalMobs.erase(it);
-                    game.states.gameplay->goalTreasuresCollected++;
-                } else if(resPtr->originPile) {
-                    it = goalMobs.find(resPtr->originPile->id);
-                    if(it != goalMobs.end()) {
-                        game.states.gameplay->goalTreasuresCollected++;
-                    }
-                }
-            }
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
             if(resPtr->deliveryInfo->playerTeamIdx != INVALID) {
@@ -176,12 +147,12 @@ void ShipFsm::receiveMob(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a ship needs to enter its default "idling" animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     
     shiPtr->setAnimation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -192,12 +163,12 @@ void ShipFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a ship starts receiving a mob carried by Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ShipFsm::startDelivery(Fsm* fsm, void* info1, void* info2) {
-    Ship* shiPtr = (Ship*) fsm->m;
+void ShipFsm::startDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
+    Ship* shiPtr = (Ship*) scriptVM->mob;
     
     shiPtr->mobsBeingBeamed++;
     if(shiPtr->mobsBeingBeamed == 1 && shiPtr->soundBeamId == 0) {

@@ -15,6 +15,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "../../content/script/script.h"
 #include "../../core/audio.h"
 #include "../../core/const.h"
 #include "../../core/misc_structs.h"
@@ -24,7 +25,6 @@
 #include "../content.h"
 #include "../mob/mob_enums.h"
 #include "../mob_category/mob_category.h"
-#include "../other/script.h"
 #include "../other/spike_damage.h"
 #include "../other/status.h"
 
@@ -404,14 +404,8 @@ public:
     
     //- Script -
     
-    //Actions to run on spawn.
-    vector<ScriptActionCall*> initActions;
-    
-    //The states, events and actions. Basically, the FSM.
-    vector<ScriptState*> states;
-    
-    //Index of the state a mob starts at.
-    size_t firstStateIdx = INVALID;
+    //Script definition.
+    ScriptDef scriptDef;
     
     //Name of the state to go to when it's dying.
     string dyingStateName;
@@ -490,11 +484,13 @@ public:
     void loadFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level, const string& folder
     );
+    virtual void handleLoadedScriptState(FsmStateDef* state);
     virtual void loadCatProperties(DataNode* file);
     virtual void loadCatResources(DataNode* file);
+    virtual void loadCatScriptDataPre(DataNode* file);
+    virtual void loadCatScriptDataPos(DataNode* file);
     virtual AnimConversionVector getAnimConversions() const;
     virtual void unloadResources();
-    void createAndAddCarryingStates();
     
 };
 

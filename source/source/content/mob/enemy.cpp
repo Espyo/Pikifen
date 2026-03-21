@@ -106,7 +106,7 @@ void Enemy::finishDyingClassSpecifics() {
     //Corpse.
     enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
     becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
-    fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+    scriptVM.fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     
     if(reviveTimer.duration > 0.0f) {
         //Revival.
@@ -157,8 +157,17 @@ void Enemy::finishDyingClassSpecifics() {
  */
 int Enemy::getMissionPoints(bool* applicableInThisMission) const {
     if(applicableInThisMission) {
-        *applicableInThisMission =
-            game.curArea->missionOld.pointsPerEnemyPoint != 0;
+        *applicableInThisMission = false;
+        for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+            MissionScoreCriterion* cPtr =
+                &game.curArea->mission.scoreCriteria[c];
+            if(
+                cPtr->type == MISSION_SCORE_CRITERION_COLLECTION_PTS ||
+                cPtr->type == MISSION_SCORE_CRITERION_DEFEAT_PTS
+            ) {
+                *applicableInThisMission = true;
+            }
+        }
     }
     if(parent) return parent->m->getMissionPoints(applicableInThisMission);
     return (int) eneType->points;
@@ -174,9 +183,9 @@ void Enemy::revive() {
     becomeUncarriable();
     
     if(type->reviveStateIdx != INVALID) {
-        fsm.setState(type->reviveStateIdx);
+        scriptVM.fsm.setState(type->reviveStateIdx);
     } else {
-        fsm.setState(type->firstStateIdx);
+        scriptVM.fsm.setState(type->scriptDef.fsm.firstStateIdx);
     }
 }
 
@@ -187,9 +196,7 @@ void Enemy::revive() {
 void Enemy::startDyingClassSpecifics() {
     //Numbers.
     game.states.gameplay->enemyDefeats++;
-    if(!game.curArea->missionOld.enemyPointsOnCollection) {
-        game.states.gameplay->enemyPointsObtained += eneType->points;
-    }
+    game.states.gameplay->enemyDefeatPointsObtained += eneType->points;
     game.statistics.enemyDefeats++;
     
     //Music.

@@ -1,0 +1,96 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the finite-state machine event classes and related functions.
+ */
+
+
+#pragma once
+
+#include <map>
+#include <string>
+#include <vector>
+
+#include "fsm.h"
+
+using std::map;
+using std::string;
+using std::vector;
+
+
+class Area;
+class MobType;
+
+
+/**
+ * @brief Contains a definition about how a script should run. It also contains
+ * a definition of an FSM.
+ */
+class ScriptDef {
+
+public:
+
+    //--- Public members ---
+    
+    //Mob type it belongs to, if any.
+    MobType* mobType = nullptr;
+    
+    //Area it belongs to, if any.
+    Area* area = nullptr;
+    
+    //Actions to run on script startup.
+    ScriptActionBlockDef initActions;
+    
+    //Definition of the finite-state machine.
+    FsmDef fsm;
+    
+    
+    //--- Public function declarations ---
+    
+    ScriptDef();
+    bool loadFromDataNode(DataNode* node);
+    void unload();
+    
+};
+
+
+class Mob;
+class Area;
+
+
+/**
+ * @brief A script's virtual machine. It contains an instance of a
+ * script, relevant data, and an instance of a finite-state machine.
+ */
+class ScriptVM {
+
+public:
+
+    //--- Public members ---
+    
+    //Script definition that defines it.
+    ScriptDef* scriptDef = nullptr;
+    
+    //Mob that this VM belongs to, if any.
+    Mob* mob = nullptr;
+    
+    //The finite-state machine.
+    FsmInst fsm;
+    
+    //Custom timer.
+    Timer timer;
+    
+    //Variables.
+    map<string, string> vars;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit ScriptVM(ScriptDef* scriptDef);
+    string getMakerToolVarsStr() const;
+    
+};

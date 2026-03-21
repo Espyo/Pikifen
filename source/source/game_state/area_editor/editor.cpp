@@ -33,7 +33,7 @@ using std::vector;
 namespace AREA_EDITOR {
 
 //Color for blocking sectors in the "show blocking sectors" mode.
-const ALLEGRO_COLOR BLOCKING_COLOR = al_map_rgba(100, 32, 32, 192);
+const ALLEGRO_COLOR BLOCKING_SECTOR_COLOR = al_map_rgba(100, 32, 32, 192);
 
 //A comfortable distance, useful for many scenarios.
 const float COMFY_DIST = 32.0f;
@@ -200,6 +200,26 @@ AreaEditor::AreaEditor() :
 #undef registerCmd
     
     //Setup the selection managers.
+    mobSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
+        *outCenter = game.curArea->mobGenerators[idx]->pos;
+        *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
+    };
+    mobSelection.onSetInfo =
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        game.curArea->mobGenerators[idx]->pos = newCenter;
+    };
+    mobSelection.onGetTotal =
+    [this] () {
+        return game.curArea->mobGenerators.size();
+    };
+    mobSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_MOBS;
+    };
+    mobSelection.itemsAreRectangular = false;
+    mobSelection.overlapsCycle = true;
+    
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize) {
         *outCenter = game.curArea->reminders[idx].pos;
@@ -215,6 +235,147 @@ AreaEditor::AreaEditor() :
     };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.overlapsCycle = true;
+}
+
+
+/**
+ * @brief Code to run for the new mob command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewMobCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        subState == EDITOR_SUB_STATE_NEW_MOB ||
+        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
+        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new object.");
+    subState = EDITOR_SUB_STATE_NEW_MOB;
+}
+
+
+/**
+ * @brief Creates a new mob where the mouse cursor is and adds it to the area.
+ */
+void AreaEditor::addNewMobUnderCursor() {
+    registerChange("object creation");
+    subState = EDITOR_SUB_STATE_NONE;
+    Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
+    
+    if(lastMobCustomCatName.empty()) {
+        lastMobCustomCatName =
+            game.config.pikmin.order[0]->customCategoryName;
+        lastMobType =
+            game.config.pikmin.order[0];
+    }
+    
+    game.curArea->mobGenerators.push_back(
+        new MobGen(hotspot, lastMobType)
+    );
+    
+    mobSelection.setSingle(game.curArea->mobGenerators.size() - 1);
+    
+    setStatus("Created object.");
+}
+
+
+/**
+ * @brief Code to run for the new path command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewPathCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
+        return;
+    }
+    
+    clearSelection();
+    pathDrawingStop1 = nullptr;
+    setStatus("Use the canvas to draw a path.");
+    subState = EDITOR_SUB_STATE_PATH_DRAWING;
+}
+
+
+/**
+ * @brief Code to run for the new region command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewRegionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("region creation");
+    AreaRegion* newRegion = new AreaRegion();
+    newRegion->size = MISSION::EXIT_MIN_SIZE;
+    insertInVector(game.curArea->regions, selectedRegionIdx, newRegion);
+    selectRegion(newRegion);
+    setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
+}
+
+
+/**
+ * @brief Code to run for the new reminder command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewReminderCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    clearSelection();
+    registerChange("reminder creation");
+    AreaMakerReminder newReminder;
+    game.curArea->reminders.push_back(newReminder);
+    reminderSelection.setSingle(game.curArea->reminders.size() - 1);
+    setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
+}
+
+
+/**
+ * @brief Code to run for the new tree shadow command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::addNewTreeShadowCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new tree shadow.");
+    subState = EDITOR_SUB_STATE_NEW_SHADOW;
 }
 
 
@@ -282,9 +443,19 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
     
+    mobSelection.disable();
     reminderSelection.disable();
-    if(newState == EDITOR_STATE_REVIEW) {
+    
+    switch(newState) {
+    case EDITOR_STATE_MOBS: {
+        mobSelection.enable();
+        break;
+    } case EDITOR_STATE_REVIEW: {
         reminderSelection.enable();
+        break;
+    } default: {
+        break;
+    }
     }
 }
 
@@ -438,7 +609,7 @@ void AreaEditor::clearSelection() {
     selectedVertexes.clear();
     selectedEdges.clear();
     selectedSectors.clear();
-    selectedMobs.clear();
+    mobSelection.clear();
     selectedPathStops.clear();
     selectedPathLinks.clear();
     selectedShadow = nullptr;
@@ -639,31 +810,6 @@ void AreaEditor::createDrawingVertexes() {
 
 
 /**
- * @brief Creates a new mob where the mouse cursor is and adds it to the area.
- */
-void AreaEditor::addNewMobUnderCursor() {
-    registerChange("object creation");
-    subState = EDITOR_SUB_STATE_NONE;
-    Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
-    
-    if(lastMobCustomCatName.empty()) {
-        lastMobCustomCatName =
-            game.config.pikmin.order[0]->customCategoryName;
-        lastMobType =
-            game.config.pikmin.order[0];
-    }
-    
-    game.curArea->mobGenerators.push_back(
-        new MobGen(hotspot, lastMobType)
-    );
-    
-    selectedMobs.insert(game.curArea->mobGenerators.back());
-    
-    setStatus("Created object.");
-}
-
-
-/**
  * @brief Code to run for the delete current area command.
  *
  * @param inputValue Value of the player input for the command.
@@ -673,7 +819,7 @@ void AreaEditor::deleteAreaCmd(float inputValue) {
     
     openDialog(
         "Delete area?",
-        std::bind(&AreaEditor::processGuiDeleteAreaDialog, this)
+        std::bind(&AreaEditor::processGuiDialogDeleteArea, this)
     );
     dialogs.back()->customSize = Point(600, 0);
 }
@@ -864,7 +1010,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus("You have to select mobs to delete!", true);
         return;
     }
@@ -874,7 +1020,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     size_t nBefore = game.curArea->mobGenerators.size();
     
     //Delete!
-    deleteMobs(selectedMobs);
+    deleteMobs();
     
     //Cleanup.
     clearSelection();
@@ -961,9 +1107,9 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         game.curArea->regions.erase(
             game.curArea->regions.begin() + selectedRegionIdx
         );
-        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curArea->mission.events[e];
-            if(ePtr->type != MISSION_EV_LEADERS_IN_REGION) continue;
+        for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
+            MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+            if(ePtr->type != MISSION_END_COND_LEADERS_IN_REGION) continue;
             if(ePtr->indexParam == 0) continue;
             adjustMisalignedIndex(
                 ePtr->indexParam, selectedRegionIdx, false
@@ -989,24 +1135,21 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
         return;
     }
     
-    if(!reminderSelection.isAnySelected()) {
+    if(!reminderSelection.hasAny()) {
         setStatus("You have to select a reminder to delete!", true);
     } else {
         registerChange("reminder deletion");
-        size_t deletions = 0;
-        for(size_t i : reminderSelection.getSelectedItemIdxs()) {
-            game.curArea->reminders.erase(
-                game.curArea->reminders.begin() + (i - deletions)
-            );
-        }
-        if(reminderSelection.isOneSelected()) {
+        eraseIndexesInVector(
+            reminderSelection.getItemIdxs(), game.curArea->reminders
+        );
+        if(reminderSelection.hasOne()) {
             setStatus(
                 "Deleted reminder #" +
-                i2s(reminderSelection.getSelectedItemIdx() + 1) + "."
+                i2s(reminderSelection.getSingleItemIdx() + 1) + "."
             );
         } else {
             setStatus(
-                "Deleted " + i2s(deletions) + " reminders."
+                "Deleted " + i2s(reminderSelection.getCount()) + " reminders."
             );
         }
         reminderSelection.clear();
@@ -1314,7 +1457,7 @@ void AreaEditor::duplicateMobsCmd(float inputValue) {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus("You have to select mobs to duplicate!", true);
     } else {
         setStatus("Use the canvas to place the duplicated objects.");
@@ -1801,37 +1944,6 @@ void AreaEditor::getHoveredLayoutElement(
 
 
 /**
- * @brief Returns the number of required mobs for this mission.
- *
- * @return The number.
- */
-size_t AreaEditor::getMissionRequiredMobCount() const {
-    size_t totalRequired = 0;
-    
-    if(game.curArea->missionOld.goalAllMobs) {
-        for(
-            size_t m = 0;
-            m < game.curArea->mobGenerators.size();
-            m++
-        ) {
-            MobGen* g = game.curArea->mobGenerators[m];
-            if(
-                game.missionGoals[game.curArea->missionOld.goal]->
-                isMobApplicable(g->type)
-            ) {
-                totalRequired++;
-            }
-        }
-    } else {
-        totalRequired =
-            game.curArea->missionOld.goalMobIdxs.size();
-    }
-    
-    return totalRequired;
-}
-
-
-/**
  * @brief Returns the name of this state.
  *
  * @return The name.
@@ -2055,7 +2167,7 @@ void AreaEditor::goToProblem() {
         }
         
         changeState(EDITOR_STATE_MOBS);
-        selectedMobs.insert(problemMobPtr);
+        mobSelection.setSingle(game.curArea->findMobGenIdx(problemMobPtr));
         centerCamera(problemMobPtr->pos - 64, problemMobPtr->pos + 64);
         
         break;
@@ -2442,123 +2554,6 @@ void AreaEditor::loadReference() {
 
 
 /**
- * @brief Code to run for the new mob command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewMobCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        subState == EDITOR_SUB_STATE_NEW_MOB ||
-        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_NEW_MOB_LINK ||
-        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
-    ) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new object.");
-    subState = EDITOR_SUB_STATE_NEW_MOB;
-}
-
-
-/**
- * @brief Code to run for the new path command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewPathCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
-        return;
-    }
-    
-    clearSelection();
-    pathDrawingStop1 = nullptr;
-    setStatus("Use the canvas to draw a path.");
-    subState = EDITOR_SUB_STATE_PATH_DRAWING;
-}
-
-
-/**
- * @brief Code to run for the new region command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewRegionCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    clearSelection();
-    registerChange("region creation");
-    AreaRegion* newRegion = new AreaRegion();
-    newRegion->size = MISSION::EXIT_MIN_SIZE;
-    game.curArea->regions.push_back(newRegion);
-    selectRegion(newRegion);
-    setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
-}
-
-
-/**
- * @brief Code to run for the new reminder command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewReminderCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    clearSelection();
-    registerChange("reminder creation");
-    AreaMakerReminder newReminder;
-    game.curArea->reminders.push_back(newReminder);
-    reminderSelection.clear();
-    reminderSelection.select(game.curArea->reminders.size() - 1);
-    setStatus("Created reminder #" + i2s(game.curArea->reminders.size()) + ".");
-}
-
-
-/**
- * @brief Code to run for the new tree shadow command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::addNewTreeShadowCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new tree shadow.");
-    subState = EDITOR_SUB_STATE_NEW_SHADOW;
-}
-
-
-/**
  * @brief Code to run for the open externally command.
  *
  * @param inputValue Value of the player input for the command.
@@ -2571,6 +2566,22 @@ void AreaEditor::openExternallyCmd(float inputValue) {
         return;
     }
     openFileExplorer(manifest.path);
+}
+
+
+/**
+ * @brief Code to run for the open user data externally command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::openUserDataExternallyCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus("The area doesn't exist on disk yet!", true);
+        return;
+    }
+    openFileExplorer(game.curArea->userDataPath);
 }
 
 
@@ -3126,10 +3137,7 @@ void AreaEditor::selectAllCmd(float inputValue) {
             );
             
         } else if(state == EDITOR_STATE_MOBS) {
-            selectedMobs.insert(
-                game.curArea->mobGenerators.begin(),
-                game.curArea->mobGenerators.end()
-            );
+            mobSelection.addAll(game.curArea->mobGenerators.size());
             
         } else if(state == EDITOR_STATE_PATHS) {
             selectedPathStops.insert(
@@ -3144,15 +3152,13 @@ void AreaEditor::selectAllCmd(float inputValue) {
     } else if(
         subState == EDITOR_SUB_STATE_MISSION_MOBS
     ) {
-        registerChange("mission mob checklist choice change");
-        game.curArea->mission.mobChecklists[
-            curMobChecklistIdx
+        registerChange("mission mob group choice change");
+        game.curArea->mission.mobGroups[
+            curMobGroupIdx
         ].mobIdxs.clear();
-        for(
-            size_t m = 0; m < game.curArea->mobGenerators.size(); m++
-        ) {
-            game.curArea->mission.mobChecklists[
-                curMobChecklistIdx
+        for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+            game.curArea->mission.mobGroups[
+                curMobGroupIdx
             ].mobIdxs.push_back(m);
         }
     }
@@ -3389,10 +3395,10 @@ void AreaEditor::setSelectionStatusText() {
         break;
         
     } case EDITOR_STATE_MOBS: {
-        if(!selectedMobs.empty()) {
+        if(mobSelection.hasAny()) {
             setStatus(
                 "Selected " +
-                amountStr((int) selectedMobs.size(), "object") +
+                amountStr((int) mobSelection.getCount(), "object") +
                 "."
             );
         }
@@ -3585,30 +3591,6 @@ void AreaEditor::snapModeCmd(float inputValue) {
     }
     finalStatusText += ".";
     setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Procedure to start moving the selected mobs.
- */
-void AreaEditor::startMobMove() {
-    registerChange("object movement");
-    
-    moveClosestMob = nullptr;
-    Distance moveClosestMobDist;
-    for(auto const& m : selectedMobs) {
-        preMoveMobCoords[m] = m->pos;
-        
-        Distance d(game.editorsView.mouseCursorWorldPos, m->pos);
-        if(!moveClosestMob || d < moveClosestMobDist) {
-            moveClosestMob = m;
-            moveClosestMobDist = d;
-            moveStartPos = m->pos;
-        }
-    }
-    
-    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
-    moving = true;
 }
 
 

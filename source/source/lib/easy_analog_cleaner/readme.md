@@ -87,10 +87,14 @@ The library mostly implements the solutions encountered in these blog posts:
 ## Future plans
 
 * Axis deadzones.
+* Snapback reduction.
+  * [Awesomenauts's approach](https://joostdevblog.blogspot.com/2011/10/bouncy-stick-problem.html): If the change in the stick's position is greater than 1.05, ignore it for one frame.
+    * Suggested in the comments by Ben Hymers: If the change in the stick's position is larger than a threshold and X or Y changed signs, ignore it for one frame.
+  * [PhobGCC's approach](https://github.com/PhobGCC/PhobGCC-doc/blob/main/General_Info/Snapback_Filter.md): Use a Kalman-inspired filter.
 
 
 ## Misc.
 
 * Project license: MIT license.
 * Project developer: Espyo.
-* Project keywords for searches: analog stick, analog button, joystick, axis, deadzone, interpolation, low-pass filter, wiggle, sensitivity, magnitude, circle, square, raw, clean
+* Project keywords for searches: analog stick, analog button, joystick, axis, deadzone, interpolation, low-pass filter, wiggle, sensitivity, magnitude, circle, square, raw, clean, snapback, bouncy stick

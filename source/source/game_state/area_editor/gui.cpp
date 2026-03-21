@@ -78,7 +78,7 @@ void AreaEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load an area or create a new one",
-        std::bind(&AreaEditor::processGuiLoadDialog, this)
+        std::bind(&AreaEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AreaEditor::closeLoadDialog, this);
@@ -91,7 +91,7 @@ void AreaEditor::openLoadDialog() {
 void AreaEditor::openNewDialog() {
     openDialog(
         "Create a new area",
-        std::bind(&AreaEditor::processGuiNewDialog, this)
+        std::bind(&AreaEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -111,7 +111,7 @@ void AreaEditor::openNewDialog() {
 void AreaEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&AreaEditor::processGuiOptionsDialog, this)
+        std::bind(&AreaEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&AreaEditor::closeOptionsDialog, this);
@@ -222,7 +222,7 @@ void AreaEditor::processGuiControlPanel() {
 /**
  * @brief Processes the Dear ImGui area deletion dialog for this frame.
  */
-void AreaEditor::processGuiDeleteAreaDialog() {
+void AreaEditor::processGuiDialogDeleteArea() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -234,27 +234,32 @@ void AreaEditor::processGuiDeleteAreaDialog() {
             "If you delete, you will lose all unsaved progress,\n"
             "and the area's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current area?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -269,134 +274,14 @@ void AreaEditor::processGuiDeleteAreaDialog() {
         deleteCurrentArea();
     }
     ImGui::PopStyleColor(3);
-}
-
-
-/**
- * @brief Processes the Dear ImGui widgets regarding a grading criterion
- * for this frame.
- *
- * @param valuePtr Points to the value of the points value.
- * @param criterionIdx Criterion index.
- * @param widgetLabel Label for the main value widget.
- * @param tooltip Start of the tooltip for this criterion's value widget.
- */
-void AreaEditor::processGuiGradingCriterionWidgets(
-    int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-    const string& widgetLabel, const string& tooltip
-) {
-    //Main value.
-    ImGui::SetNextItemWidth(50);
-    int pointsInt = *valuePtr;
-    if(ImGui::DragInt(widgetLabel.c_str(), &pointsInt, 0.1f)) {
-        registerChange("mission grading change");
-        *valuePtr = pointsInt;
-    }
-    setTooltip(
-        tooltip + "\n"
-        "Negative numbers means the player loses points.\n"
-        "0 means this criterion doesn't count.",
-        "", WIDGET_EXPLANATION_DRAG
-    );
-    if(*valuePtr != 0) {
-        ImGui::Indent();
-        
-        //Loss on fail checkbox.
-        int flags = game.curArea->missionOld.pointLossData;
-        if(
-            ImGui::CheckboxFlags(
-                ("0 points on fail##zpof" + i2s(criterionIdx)).c_str(),
-                &flags,
-                getIdxBitmask(criterionIdx)
-            )
-        ) {
-            registerChange("mission grading change");
-            game.curArea->missionOld.pointLossData = flags;
-        }
-        setTooltip(
-            "If checked, the player will receive 0 points for\n"
-            "this criterion if they fail the mission."
-        );
-        
-        //Use in HUD checkbox.
-        flags = game.curArea->missionOld.pointHudData;
-        if(
-            ImGui::CheckboxFlags(
-                ("Use in HUD counter##uihc" + i2s(criterionIdx)).c_str(),
-                &flags, getIdxBitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
-            )
-        ) {
-            registerChange("mission grading change");
-            game.curArea->missionOld.pointHudData = flags;
-        }
-        setTooltip(
-            "If checked, the HUD item for the score counter will\n"
-            "use this criterion in its calculation. If none of\n"
-            "the criteria are used for the HUD item, then it\n"
-            "won't even show up."
-        );
-        
-        ImGui::Unindent();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui widgets regarding a grading medal
- * requirements for this frame.
- *
- * @param requirementPtr Points to the requirement value for this medal.
- * @param widgetLabel Label for the value widget.
- * @param widgetMinValue Minimum value for the value widget.
- * @param widgetMaxValue Maximum value for the value widget.
- * @param tooltip Tooltip for the value widget.
- */
-void AreaEditor::processGuiGradingMedalWidgets(
-    int* requirementPtr, const string& widgetLabel,
-    int widgetMinValue, int widgetMaxValue,
-    const string& tooltip
-) {
-    //Requirement value.
-    int req = *requirementPtr;
-    ImGui::SetNextItemWidth(90);
-    if(
-        ImGui::DragInt(
-            widgetLabel.c_str(), &req, 1.0f, widgetMinValue, widgetMaxValue
-        )
-    ) {
-        registerChange("mission grading change");
-        *requirementPtr = req;
-    }
-    setTooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
-}
-
-
-/**
- * @brief Processes the Dear ImGui widgets regarding a grading mode
- * for this frame.
- *
- * @param value Internal value for this mode's radio button.
- * @param widgetLabel Label for the radio widget.
- * @param tooltip Tooltip for the radio widget.
- */
-void AreaEditor::processGuiGradingModeWidgets(
-    int value, const string& widgetLabel, const string& tooltip
-) {
-    //Radio button.
-    int mode = game.curArea->mission.gradingMode;
-    if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
-        registerChange("mission grading change");
-        game.curArea->mission.gradingMode =
-            (MISSION_GRADING_MODE) mode;
-    }
-    setTooltip(tooltip);
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
-void AreaEditor::processGuiLoadDialog() {
+void AreaEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.areaEd.history,
@@ -429,6 +314,448 @@ void AreaEditor::processGuiLoadDialog() {
         loadDialogPicker.process();
         
         ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "change mission preset" dialog
+ * for this frame.
+ */
+void AreaEditor::processGuiDialogMissionPreset() {
+    //Explanation text.
+    string explanationStr =
+        "If you change the preset, whatever mission data\n"
+        "the area had before will be overwritten.\n"
+        "If you choose \"custom\", whatever was there before\n"
+        "will be kept, and you can then customize the mission in depth.";
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
+    ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
+    
+    //New preset combobox.
+    int presetInt = missionPresetDialogPreset;
+    if(
+        ImGui::Combo(
+            "New preset", &presetInt, enumGetNames(missionPresetNames), 15
+        )
+    ) {
+        missionPresetDialogPreset = (MISSION_PRESET) presetInt;
+    }
+    setTooltip("The new preset.");
+    
+    //Cancel button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
+    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
+        closeTopDialog();
+    }
+    setTooltip("Cancel.");
+    
+    //Change button.
+    ImGui::SameLine();
+    if(ImGui::Button("Change", ImVec2(100, 40))) {
+        registerChange("mission preset change");
+        game.curArea->mission.applyPreset(missionPresetDialogPreset);
+        closeTopDialog();
+    }
+    setTooltip("Apply the new preset.");
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void AreaEditor::processGuiDialogNew() {
+    string problem;
+    bool hitCreateButton = false;
+    
+    //Pack widgets.
+    processGuiWidgetsNewDialogPack(&newDialog.pack);
+    
+    //Internal name input.
+    ImGui::Spacer();
+    ImGui::FocusOnInputText(newDialog.needsTextFocus);
+    if(
+        monoInputText(
+            "Internal name", &newDialog.internalName,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Internal name of the new area.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Simple area radio.
+    ImGui::Spacer();
+    ImGui::RadioButton("Simple area", &newDialog.type, AREA_TYPE_SIMPLE);
+    setTooltip("Choose this to make your area a simple area.");
+    
+    //Mission area radio.
+    ImGui::SameLine();
+    ImGui::RadioButton("Mission", &newDialog.type, AREA_TYPE_MISSION);
+    setTooltip("Choose this to make your area a mission area.");
+    
+    //Check if everything's ok.
+    ContentManifest tempMan;
+    tempMan.pack = newDialog.pack;
+    tempMan.internalName = newDialog.internalName;
+    newDialog.areaPath =
+        game.content.areas.manifestToPath(
+            tempMan, (AREA_TYPE) newDialog.type
+        );
+    if(newDialog.lastCheckedAreaPath != newDialog.areaPath) {
+        newDialog.areaPathExists = folderExists(newDialog.areaPath);
+        newDialog.lastCheckedAreaPath = newDialog.areaPath;
+    }
+    
+    if(newDialog.internalName.empty()) {
+        problem = "You have to type an internal name first!";
+    } else if(!isInternalNameGood(newDialog.internalName)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
+    } else if(newDialog.areaPathExists) {
+        problem =
+            "There is already an area of that type with\n"
+            "that internal name in that pack!";
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create area", ImVec2(100, 40))) {
+        hitCreateButton = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    setTooltip(
+        problem.empty() ? "Create the area!" : problem
+    );
+    ImGui::EndAlign();
+    
+    //Creation logic.
+    if(hitCreateButton) {
+        if(!problem.empty()) return;
+        auto reallyCreate = [this] () {
+            createArea(newDialog.areaPath);
+            closeTopDialog();
+            closeTopDialog(); //Close the load dialog.
+        };
+        
+        if(
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
+        ) {
+            openBaseContentWarningDialog(reallyCreate);
+        } else {
+            reallyCreate();
+        }
+    }
+}
+
+
+/**
+ * @brief Processes the options dialog for this frame.
+ */
+void AreaEditor::processGuiDialogOptions() {
+    //Controls node.
+    if(saveableTreeNode("options", "Controls")) {
+    
+        //Snap threshold value.
+        int snapThreshold = (int) game.options.areaEd.snapThreshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Snap threshold", &snapThreshold,
+            0.1f, 0, INT_MAX
+        );
+        setTooltip(
+            "Mouse cursor must be these many pixels close\n"
+            "to a vertex/edge in order to snap there.\n"
+            "Default: " +
+            i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        game.options.areaEd.snapThreshold = snapThreshold;
+        
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+        setTooltip(
+            "Use the middle mouse button to pan the camera\n"
+            "(and RMB to reset camera/zoom).\n"
+            "Default: " +
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+        );
+        
+        //Drag threshold value.
+        int dragThreshold = (int) game.options.editors.mouseDragThreshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Drag threshold", &dragThreshold,
+            0.1f, 0, INT_MAX
+        );
+        setTooltip(
+            "Mouse cursor must move these many pixels "
+            "to be considered a drag.\n"
+            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
+            ".",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        game.options.editors.mouseDragThreshold = dragThreshold;
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //View node.
+    ImGui::Spacer();
+    if(saveableTreeNode("options", "View")) {
+    
+        //Show edge length checkbox.
+        ImGui::Checkbox(
+            "Show edge length", &game.options.areaEd.showEdgeLength
+        );
+        setTooltip(
+            "Show the length of nearby edges when drawing or moving vertexes.\n"
+            "Default: " +
+            b2s(OPTIONS::AREA_ED_D::SHOW_EDGE_LENGTH) + "."
+        );
+        
+        //Show circular sector info checkbox.
+        ImGui::Checkbox(
+            "Show circular sector info",
+            &game.options.areaEd.showCircularInfo
+        );
+        setTooltip(
+            "Show the radius and number of vertexes of a circular sector\n"
+            "when drawing one.\n"
+            "Default: " +
+            b2s(OPTIONS::AREA_ED_D::SHOW_CIRCULAR_INFO) + "."
+        );
+        
+        //Show path link length checkbox.
+        ImGui::Checkbox(
+            "Show path link length",
+            &game.options.areaEd.showPathLinkLength
+        );
+        setTooltip(
+            "Show the length of nearby path links when drawing or\n"
+            "moving path stops.\n"
+            "Default: " +
+            b2s(OPTIONS::AREA_ED_D::SHOW_PATH_LINK_LENGTH) + "."
+        );
+        
+        //Show territory checkbox.
+        ImGui::Checkbox(
+            "Show territory/terrain radius",
+            &game.options.areaEd.showTerritory
+        );
+        setTooltip(
+            "Show the territory radius and terrain radius\n"
+            "of the selected objects, when applicable.\n"
+            "Default: " + b2s(OPTIONS::AREA_ED_D::SHOW_TERRITORY) +
+            "."
+        );
+        
+        //View mode text.
+        int viewMode = game.options.areaEd.viewMode;
+        ImGui::Text("View mode:");
+        
+        ImGui::Indent();
+        
+        //Textures view mode radio button.
+        ImGui::RadioButton("Textures", &viewMode, VIEW_MODE_TEXTURES);
+        setTooltip(
+            "Draw textures on the sectors." +
+            (string) (
+                (
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
+                    VIEW_MODE_TEXTURES
+                ) ?
+                "\nThis is the default." :
+                ""
+            )
+        );
+        
+        //Wireframe view mode radio button.
+        ImGui::RadioButton("Wireframe", &viewMode, VIEW_MODE_WIREFRAME);
+        setTooltip(
+            "Do not draw sectors, only edges and vertexes.\n"
+            "Best for performance." +
+            (string) (
+                (
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
+                    VIEW_MODE_WIREFRAME
+                ) ?
+                "This is the default." :
+                ""
+            )
+        );
+        
+        //Heightmap view mode radio button.
+        ImGui::RadioButton("Heightmap", &viewMode, VIEW_MODE_HEIGHTMAP);
+        setTooltip(
+            "Draw sectors as heightmaps. Lighter means taller." +
+            (string) (
+                (
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
+                    VIEW_MODE_HEIGHTMAP
+                ) ?
+                "This is the default." :
+                ""
+            )
+        );
+        
+        //Brightness view mode radio button.
+        ImGui::RadioButton("Brightness", &viewMode, VIEW_MODE_BRIGHTNESS);
+        setTooltip(
+            "Draw sectors as solid grays based on their brightness." +
+            (string) (
+                (
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
+                    VIEW_MODE_BRIGHTNESS
+                ) ?
+                "This is the default." :
+                ""
+            )
+        );
+        game.options.areaEd.viewMode = (VIEW_MODE) viewMode;
+        
+        ImGui::Unindent();
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::Spacer();
+    
+    processGuiEditorStyle();
+    
+    ImGui::Spacer();
+    
+    //Misc. node.
+    if(saveableTreeNode("options", "Misc.")) {
+    
+        //Interface mode text.
+        ImGui::Text("Interface mode:");
+        
+        //Basic interface button.
+        int interfaceModeI = (int) game.options.areaEd.advancedMode;
+        ImGui::Indent();
+        ImGui::RadioButton("Basic", &interfaceModeI, 0);
+        setTooltip(
+            "Only shows basic GUI items. Recommended for starters\n"
+            "so that the interface isn't overwhelming. See the\n"
+            "\"Advanced\" option's description for a list of such items."
+        );
+        
+        //Advanced interface button.
+        ImGui::RadioButton("Advanced", &interfaceModeI, 1);
+        setTooltip(
+            "Shows and enables some advanced GUI items:\n"
+            "- Toolbar buttons (and shortcut keys) to quickly swap "
+            "modes with.\n"
+            "- Toolbar button to toggle preview mode with."
+        );
+        ImGui::Unindent();
+        game.options.areaEd.advancedMode = (bool) interfaceModeI;
+        
+        //Selection transformation checkbox.
+        ImGui::Checkbox(
+            "Selection transformation", &game.options.areaEd.selTrans
+        );
+        setTooltip(
+            "If true, when you select two or more vertexes, some handles\n"
+            "will appear, allowing you to scale or rotate them together.\n"
+            "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
+        );
+        
+        //Grid interval text.
+        ImGui::Text(
+            "Grid interval: %i", (int) game.options.areaEd.gridInterval
+        );
+        
+        //Increase grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalIncreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Increase the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Plus"
+        );
+        
+        //Decrease grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalDecreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Decrease the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Minus"
+        );
+        
+        //Auto-backup interval value.
+        int backupInterval = game.options.areaEd.backupInterval;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Auto-backup interval", &backupInterval, 1, 0, INT_MAX
+        );
+        setTooltip(
+            "Interval between auto-backup saves, in seconds. 0 = off.\n"
+            "Default: " + i2s(OPTIONS::AREA_ED_D::BACKUP_INTERVAL) +
+            ".",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        game.options.areaEd.backupInterval = backupInterval;
+        
+        //Undo limit value.
+        size_t oldUndoLimit = game.options.areaEd.undoLimit;
+        int undoLimit = (int) game.options.areaEd.undoLimit;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Undo limit", &undoLimit, 0.1, 0, INT_MAX
+        );
+        setTooltip(
+            "Maximum number of operations that can be undone. 0 = off.\n"
+            "Default: " + i2s(OPTIONS::AREA_ED_D::UNDO_LIMIT) + ".",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        game.options.areaEd.undoLimit = undoLimit;
+        
+        if(game.options.areaEd.undoLimit != oldUndoLimit) {
+            updateUndoHistory();
+        }
+        
+        ImGui::Spacer();
+        
+        ImGui::TreePop();
+        
     }
 }
 
@@ -486,6 +813,15 @@ void AreaEditor::processGuiMenuBar() {
                 "Open the folder with the area's data in your "
                 "operative system.\n"
                 "Useful if you need to edit things by hand."
+            );
+            
+            //Open user data externally item.
+            if(ImGui::MenuItem("Open user data externally")) {
+                openUserDataExternallyCmd(1.0f);
+            }
+            setTooltip(
+                "Open the folder with the area's user data in your "
+                "operative system."
             );
             
             //Quick play item.
@@ -807,50 +1143,6 @@ void AreaEditor::processGuiMenuBar() {
 
 
 /**
- * @brief Processes the Dear ImGui "change mission preset" dialog
- * for this frame.
- */
-void AreaEditor::processGuiMissionPresetDialog() {
-    //Explanation text.
-    string explanationStr =
-        "If you change the preset, whatever mission data\n"
-        "the area had before will be LOST.\n"
-        "If you choose \"custom\", whatever was there before\n"
-        "will be kept, and you can then customize the mission in depth.";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
-    ImGui::Text("%s", explanationStr.c_str());
-    
-    //New preset combobox.
-    int presetInt = missionPresetDialogPreset;
-    if(
-        ImGui::Combo(
-            "New preset", &presetInt, enumGetNames(missionPresetNames), 15
-        )
-    ) {
-        missionPresetDialogPreset = (MISSION_PRESET) presetInt;
-    }
-    setTooltip("The new preset.");
-    
-    //Cancel button.
-    ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
-    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
-        closeTopDialog();
-    }
-    setTooltip("Cancel.");
-    
-    //Change button.
-    ImGui::SameLine(0.0f, 30);
-    if(ImGui::Button("Change", ImVec2(100, 40))) {
-        registerChange("mission preset change");
-        game.curArea->mission.applyPreset(missionPresetDialogPreset);
-        closeTopDialog();
-    }
-    setTooltip("Apply the new preset.");
-}
-
-
-/**
  * @brief Processes the Dear ImGui mob script vars for this frame.
  *
  * @param mPtr Mob to process.
@@ -1089,398 +1381,6 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
 
 
 /**
- * @brief Processes the Dear ImGui "new" dialog for this frame.
- */
-void AreaEditor::processGuiNewDialog() {
-    string problem;
-    bool hitCreateButton = false;
-    
-    //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
-    
-    //Internal name input.
-    ImGui::Spacer();
-    ImGui::FocusOnInputText(newDialog.needsTextFocus);
-    if(
-        monoInputText(
-            "Internal name", &newDialog.internalName,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip(
-        "Internal name of the new area.\n"
-        "Remember to keep it simple, type in lowercase, and use underscores!"
-    );
-    
-    //Simple area radio.
-    ImGui::Spacer();
-    ImGui::RadioButton("Simple area", &newDialog.type, AREA_TYPE_SIMPLE);
-    setTooltip("Choose this to make your area a simple area.");
-    
-    //Mission area radio.
-    ImGui::SameLine();
-    ImGui::RadioButton("Mission", &newDialog.type, AREA_TYPE_MISSION);
-    setTooltip("Choose this to make your area a mission area.");
-    
-    //Check if everything's ok.
-    ContentManifest tempMan;
-    tempMan.pack = newDialog.pack;
-    tempMan.internalName = newDialog.internalName;
-    newDialog.areaPath =
-        game.content.areas.manifestToPath(
-            tempMan, (AREA_TYPE) newDialog.type
-        );
-    if(newDialog.lastCheckedAreaPath != newDialog.areaPath) {
-        newDialog.areaPathExists = folderExists(newDialog.areaPath);
-        newDialog.lastCheckedAreaPath = newDialog.areaPath;
-    }
-    
-    if(newDialog.internalName.empty()) {
-        problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(newDialog.internalName)) {
-        problem =
-            "The internal name should only have lowercase letters,\n"
-            "numbers, and underscores!";
-    } else if(newDialog.areaPathExists) {
-        problem =
-            "There is already an area of that type with\n"
-            "that internal name in that pack!";
-    }
-    
-    //Create button.
-    ImGui::Spacer();
-    ImGui::SetupCentering(100);
-    if(!problem.empty()) {
-        ImGui::BeginDisabled();
-    }
-    if(ImGui::Button("Create area", ImVec2(100, 40))) {
-        hitCreateButton = true;
-    }
-    if(!problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    setTooltip(
-        problem.empty() ? "Create the area!" : problem
-    );
-    
-    //Creation logic.
-    if(hitCreateButton) {
-        if(!problem.empty()) return;
-        auto reallyCreate = [this] () {
-            createArea(newDialog.areaPath);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
-        
-        if(
-            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engineDev
-        ) {
-            openBaseContentWarningDialog(reallyCreate);
-        } else {
-            reallyCreate();
-        }
-    }
-}
-
-
-/**
- * @brief Processes the options dialog for this frame.
- */
-void AreaEditor::processGuiOptionsDialog() {
-    //Controls node.
-    if(saveableTreeNode("options", "Controls")) {
-    
-        //Snap threshold value.
-        int snapThreshold = (int) game.options.areaEd.snapThreshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Snap threshold", &snapThreshold,
-            0.1f, 0, INT_MAX
-        );
-        setTooltip(
-            "Mouse cursor must be these many pixels close\n"
-            "to a vertex/edge in order to snap there.\n"
-            "Default: " +
-            i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.snapThreshold = snapThreshold;
-        
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Drag threshold value.
-        int dragThreshold = (int) game.options.editors.mouseDragThreshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Drag threshold", &dragThreshold,
-            0.1f, 0, INT_MAX
-        );
-        setTooltip(
-            "Mouse cursor must move these many pixels "
-            "to be considered a drag.\n"
-            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
-            ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.editors.mouseDragThreshold = dragThreshold;
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //View node.
-    ImGui::Spacer();
-    if(saveableTreeNode("options", "View")) {
-    
-        //Show edge length checkbox.
-        ImGui::Checkbox(
-            "Show edge length", &game.options.areaEd.showEdgeLength
-        );
-        setTooltip(
-            "Show the length of nearby edges when drawing or moving vertexes.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_EDGE_LENGTH) + "."
-        );
-        
-        //Show circular sector info checkbox.
-        ImGui::Checkbox(
-            "Show circular sector info",
-            &game.options.areaEd.showCircularInfo
-        );
-        setTooltip(
-            "Show the radius and number of vertexes of a circular sector\n"
-            "when drawing one.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_CIRCULAR_INFO) + "."
-        );
-        
-        //Show path link length checkbox.
-        ImGui::Checkbox(
-            "Show path link length",
-            &game.options.areaEd.showPathLinkLength
-        );
-        setTooltip(
-            "Show the length of nearby path links when drawing or\n"
-            "moving path stops.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_PATH_LINK_LENGTH) + "."
-        );
-        
-        //Show territory checkbox.
-        ImGui::Checkbox(
-            "Show territory/terrain radius",
-            &game.options.areaEd.showTerritory
-        );
-        setTooltip(
-            "Show the territory radius and terrain radius\n"
-            "of the selected objects, when applicable.\n"
-            "Default: " + b2s(OPTIONS::AREA_ED_D::SHOW_TERRITORY) +
-            "."
-        );
-        
-        //View mode text.
-        int viewMode = game.options.areaEd.viewMode;
-        ImGui::Text("View mode:");
-        
-        ImGui::Indent();
-        
-        //Textures view mode radio button.
-        ImGui::RadioButton("Textures", &viewMode, VIEW_MODE_TEXTURES);
-        setTooltip(
-            "Draw textures on the sectors." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_TEXTURES
-                ) ?
-                "\nThis is the default." :
-                ""
-            )
-        );
-        
-        //Wireframe view mode radio button.
-        ImGui::RadioButton("Wireframe", &viewMode, VIEW_MODE_WIREFRAME);
-        setTooltip(
-            "Do not draw sectors, only edges and vertexes.\n"
-            "Best for performance." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_WIREFRAME
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        
-        //Heightmap view mode radio button.
-        ImGui::RadioButton("Heightmap", &viewMode, VIEW_MODE_HEIGHTMAP);
-        setTooltip(
-            "Draw sectors as heightmaps. Lighter means taller." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_HEIGHTMAP
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        
-        //Brightness view mode radio button.
-        ImGui::RadioButton("Brightness", &viewMode, VIEW_MODE_BRIGHTNESS);
-        setTooltip(
-            "Draw sectors as solid grays based on their brightness." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_BRIGHTNESS
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        game.options.areaEd.viewMode = (VIEW_MODE) viewMode;
-        
-        ImGui::Unindent();
-        
-        ImGui::TreePop();
-        
-    }
-    
-    ImGui::Spacer();
-    
-    processGuiEditorStyle();
-    
-    ImGui::Spacer();
-    
-    //Misc. node.
-    if(saveableTreeNode("options", "Misc.")) {
-    
-        //Interface mode text.
-        ImGui::Text("Interface mode:");
-        
-        //Basic interface button.
-        int interfaceModeI = (int) game.options.areaEd.advancedMode;
-        ImGui::Indent();
-        ImGui::RadioButton("Basic", &interfaceModeI, 0);
-        setTooltip(
-            "Only shows basic GUI items. Recommended for starters\n"
-            "so that the interface isn't overwhelming. See the\n"
-            "\"Advanced\" option's description for a list of such items."
-        );
-        
-        //Advanced interface button.
-        ImGui::RadioButton("Advanced", &interfaceModeI, 1);
-        setTooltip(
-            "Shows and enables some advanced GUI items:\n"
-            "- Toolbar buttons (and shortcut keys) to quickly swap "
-            "modes with.\n"
-            "- Toolbar button to toggle preview mode with."
-        );
-        ImGui::Unindent();
-        game.options.areaEd.advancedMode = (bool) interfaceModeI;
-        
-        //Selection transformation checkbox.
-        ImGui::Checkbox(
-            "Selection transformation", &game.options.areaEd.selTrans
-        );
-        setTooltip(
-            "If true, when you select two or more vertexes, some handles\n"
-            "will appear, allowing you to scale or rotate them together.\n"
-            "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
-        );
-        
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %i", (int) game.options.areaEd.gridInterval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "+",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalIncreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Plus"
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "-",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalDecreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Minus"
-        );
-        
-        //Auto-backup interval value.
-        int backupInterval = game.options.areaEd.backupInterval;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Auto-backup interval", &backupInterval, 1, 0, INT_MAX
-        );
-        setTooltip(
-            "Interval between auto-backup saves, in seconds. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::BACKUP_INTERVAL) +
-            ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.backupInterval = backupInterval;
-        
-        //Undo limit value.
-        size_t oldUndoLimit = game.options.areaEd.undoLimit;
-        int undoLimit = (int) game.options.areaEd.undoLimit;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Undo limit", &undoLimit, 0.1, 0, INT_MAX
-        );
-        setTooltip(
-            "Maximum number of operations that can be undone. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::UNDO_LIMIT) + ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.undoLimit = undoLimit;
-        
-        if(game.options.areaEd.undoLimit != oldUndoLimit) {
-            updateUndoHistory();
-        }
-        
-        ImGui::Spacer();
-        
-        ImGui::TreePop();
-        
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui area details control panel for this frame.
  */
 void AreaEditor::processGuiPanelDetails() {
@@ -1518,63 +1418,69 @@ void AreaEditor::processGuiPanelDetails() {
         if(saveableTreeNode("details", "Tree shadows")) {
         
             //Setup.
-            processGuiListNavSetup(
+            processGuiNavSetup(
                 &selectedShadowIdx, game.curArea->treeShadows.size(), true
             );
             
-            //Current shadow text.
-            processGuiListNavCurWidget(
-                selectedShadowIdx, game.curArea->treeShadows.size(),
-                "Tree shadow"
+            //Nav box start.
+            processGuiNavBoxStart(
+                "shadow", "Tree shadow", &selectedShadowIdx,
+            [this] () { return game.curArea->treeShadows.size(); },
+            [this] () { return 1; }
             );
+            
+            //Previous shadow button.
+            if(processGuiNavBoxPrev()) {
+                selectedShadow = game.curArea->treeShadows[selectedShadowIdx];
+            }
+            
+            //Current shadow text.
+            processGuiNavBoxCur();
+            
+            //Next shadow button.
+            if(processGuiNavBoxNext()) {
+                selectedShadow = game.curArea->treeShadows[selectedShadowIdx];
+            }
+            
+            //Nav box second line setup.
+            processGuiNavBoxSecondLine(2);
             
             //New shadow button.
             if(
-                processGuiListNavNewWidget(
-                    &selectedShadowIdx, game.curArea->treeShadows.size(),
-                    "Start creating a new tree shadow.\n"
-                    "Click on the canvas where you want the shadow to be.",
-                    false, "", 1.0f, "N"
+                processGuiNavWidgetNew(
+                    &selectedShadowIdx, game.curArea->treeShadows.size()
                 )
             ) {
                 addNewTreeShadowCmd(1.0f);
             }
+            setTooltip(
+                "Start creating a new tree shadow.\n"
+                "Click on the canvas where you want the shadow to be.",
+                "N"
+            );
             
             //Delete shadow button.
-            size_t prevSelectedShadowIdx = selectedShadowIdx;
-            if(
-                processGuiListNavDelWidget(
-                    &selectedShadowIdx, game.curArea->treeShadows.size(),
-                    "Delete the selected tree shadow.", true, "", 1.0f, "Delete"
-                )
-            ) {
-                selectedShadowIdx = prevSelectedShadowIdx;
-                deleteTreeShadowCmd(1.0f);
+            ImGui::SameLine();
+            if(selectedShadowIdx != INVALID) {
+                size_t prevSelectedShadowIdx = selectedShadowIdx;
+                if(
+                    processGuiNavWidgetDel(
+                        &selectedShadowIdx, game.curArea->treeShadows.size()
+                    )
+                ) {
+                    selectedShadowIdx = prevSelectedShadowIdx;
+                    deleteTreeShadowCmd(1.0f);
+                }
+                setTooltip(
+                    "Delete the selected tree shadow.",
+                    "Delete"
+                );
+            } else {
+                processGuiNavBoxPlaceholder();
             }
             
-            //Previous shadow button.
-            if(
-                processGuiListNavPrevWidget(
-                    &selectedShadowIdx, game.curArea->treeShadows.size(),
-                    "Select the previous tree shadow.", true
-                )
-            ) {
-                selectedShadow =
-                    game.curArea->treeShadows[selectedShadowIdx];
-            }
-            
-            //Next shadow button.
-            if(
-                processGuiListNavNextWidget(
-                    &selectedShadowIdx, game.curArea->treeShadows.size(),
-                    "Select the next tree shadow.", true
-                )
-            ) {
-                selectedShadow =
-                    game.curArea->treeShadows[selectedShadowIdx];
-            }
-            
-            ImGui::Spacer();
+            //End the nav box.
+            processGuiNavBoxEnd();
             
             if(selectedShadow) {
             
@@ -1626,7 +1532,7 @@ void AreaEditor::processGuiPanelDetails() {
                 //Tree shadow size value.
                 Point shadowSize = selectedShadow->pose.size;
                 if(
-                    processGuiSizeWidgets(
+                    processGuiWidgetsSize(
                         "Size", shadowSize,
                         1.0f, selectedShadowKeepAspectRatio, false,
                         -FLT_MAX
@@ -1705,61 +1611,62 @@ void AreaEditor::processGuiPanelDetails() {
         if(saveableTreeNode("details", "Regions")) {
         
             //Setup.
-            processGuiListNavSetup(
+            processGuiNavSetup(
                 &selectedRegionIdx, game.curArea->regions.size(), true
             );
             
-            //Current region text.
-            processGuiListNavCurWidget(
-                selectedRegionIdx, game.curArea->regions.size(),
-                "Region"
+            //Nav box start.
+            processGuiNavBoxStart(
+                "region", "Region", &selectedRegionIdx,
+            [this] () { return game.curArea->regions.size(); },
+            [this] () { return 1; }
             );
+            
+            //Previous region button.
+            if(processGuiNavBoxPrev()) {
+                selectedRegion = game.curArea->regions[selectedRegionIdx];
+            }
+            
+            //Current region text.
+            processGuiNavBoxCur();
+            
+            //Next region button.
+            if(processGuiNavBoxNext()) {
+                selectedRegion = game.curArea->regions[selectedRegionIdx];
+            }
+            
+            //Nav box second line setup.
+            processGuiNavBoxSecondLine(2);
             
             //New region button.
             if(
-                processGuiListNavNewWidget(
-                    &selectedRegionIdx, game.curArea->regions.size(),
-                    "Create a new area region."
+                processGuiNavWidgetNew(
+                    &selectedRegionIdx, game.curArea->regions.size()
                 )
             ) {
                 addNewRegionCmd(1.0f);
             }
+            setTooltip("Create a new area region.");
             
             //Delete region button.
-            size_t prevSelectedRegionIdx = selectedRegionIdx;
-            if(
-                processGuiListNavDelWidget(
-                    &selectedRegionIdx, game.curArea->regions.size(),
-                    "Delete the selected area region.", true, "", 1.0, "Delete"
-                )
-            ) {
-                selectedRegionIdx = prevSelectedRegionIdx;
-                deleteRegionCmd(1.0f);
+            ImGui::SameLine();
+            if(selectedRegionIdx != INVALID) {
+                size_t prevSelectedRegionIdx = selectedRegionIdx;
+                if(
+                    processGuiNavWidgetDel(
+                        &selectedRegionIdx, game.curArea->regions.size()
+                    )
+                ) {
+                    selectedRegionIdx = prevSelectedRegionIdx;
+                    deleteRegionCmd(1.0f);
+                }
+                setTooltip("Delete the selected area region.", "Delete");
+            } else {
+                processGuiNavBoxPlaceholder();
             }
             
-            //Previous region button.
-            if(
-                processGuiListNavPrevWidget(
-                    &selectedRegionIdx, game.curArea->regions.size(),
-                    "Select the previous region.", true
-                )
-            ) {
-                selectedRegion =
-                    game.curArea->regions[selectedRegionIdx];
-            }
-            
-            //Next region button.
-            if(
-                processGuiListNavNextWidget(
-                    &selectedRegionIdx, game.curArea->regions.size(),
-                    "Select the next tree region.", true
-                )
-            ) {
-                selectedRegion =
-                    game.curArea->regions[selectedRegionIdx];
-            }
-            
-            ImGui::Spacer();
+            //End the nav box.
+            processGuiNavBoxEnd();
             
             if(selectedRegion) {
             
@@ -2032,157 +1939,119 @@ void AreaEditor::processGuiPanelEdge() {
 void AreaEditor::processGuiPanelGameplay() {
     ImGui::BeginChild("gameplay");
     
-    switch(subState) {
-    case EDITOR_SUB_STATE_MISSION_EXIT: {
-
-        //Instructions text.
-        ImGui::TextWrapped(
-            "Use the handles on the canvas to control where the exit region is."
-        );
-        
-        //Region center text.
-        ImGui::Text(
-            "Exit region center: %s,%s",
-            f2s(game.curArea->missionOld.goalExitCenter.x).c_str(),
-            f2s(game.curArea->missionOld.goalExitCenter.y).c_str()
-        );
-        
-        //Region center text.
-        ImGui::Text(
-            "Exit region size: %s x %s",
-            f2s(game.curArea->missionOld.goalExitSize.x).c_str(),
-            f2s(game.curArea->missionOld.goalExitSize.y).c_str()
-        );
-        
-        //Finish button.
-        if(ImGui::Button("Finish")) {
-            subState = EDITOR_SUB_STATE_NONE;
-        }
-        setTooltip("Click here to finish.");
-        
-        break;
-        
+    //Back button.
+    if(ImGui::Button("Back")) {
+        changeState(EDITOR_STATE_MAIN);
     }
-    default: {
-
-        //Back button.
-        if(ImGui::Button("Back")) {
-            changeState(EDITOR_STATE_MAIN);
-        }
-        
-        //Panel title text.
-        panelTitle("GAMEPLAY");
-        
-        //Sprays node.
-        ImGui::Spacer();
-        if(saveableTreeNode("gameplay", "Starting sprays")) {
-        
-            map<string, string> sprayStrs =
-                getVarMap(game.curArea->sprayAmounts);
-            for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
-                string sprayInternalName =
-                    game.config.misc.sprayOrder[s]->manifest->internalName;
-                int amount = s2i(sprayStrs[sprayInternalName]);
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        game.config.misc.sprayOrder[s]->name.c_str(), &amount,
-                        0.1, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("area spray amounts change");
-                    sprayStrs[sprayInternalName] = i2s(amount);
-                    game.curArea->sprayAmounts.clear();
-                    for(auto const& v : sprayStrs) {
-                        game.curArea->sprayAmounts +=
-                            v.first + "=" + v.second + ";";
-                    }
-                }
-                setTooltip(
-                    "Starting amount of spray dosages to give the player.", "",
-                    WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            ImGui::TreePop();
-        }
-        
-        //Rules node.
-        ImGui::Spacer();
-        if(saveableTreeNode("gameplay", "Game rules")) {
-        
-            //Max Pikmin in field override checkbox.
-            bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
+    
+    //Panel title text.
+    panelTitle("GAMEPLAY");
+    
+    //Sprays node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Starting sprays")) {
+    
+        map<string, string> sprayStrs =
+            getVarMap(game.curArea->sprayAmounts);
+        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+            string sprayInternalName =
+                game.config.misc.sprayOrder[s]->manifest->internalName;
+            int amount = s2i(sprayStrs[sprayInternalName]);
+            ImGui::SetNextItemWidth(50);
             if(
-                ImGui::Checkbox(
-                    "Override max Pikmin in field", &overrideMaxPik
+                ImGui::DragInt(
+                    game.config.misc.sprayOrder[s]->name.c_str(), &amount,
+                    0.1, 0, INT_MAX
+                )
+            ) {
+                registerChange("area spray amounts change");
+                sprayStrs[sprayInternalName] = i2s(amount);
+                game.curArea->sprayAmounts.clear();
+                for(auto const& v : sprayStrs) {
+                    game.curArea->sprayAmounts +=
+                        v.first + "=" + v.second + ";";
+                }
+            }
+            setTooltip(
+                "Starting amount of spray dosages to give the player.", "",
+                WIDGET_EXPLANATION_DRAG
+            );
+            
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    //Rules node.
+    ImGui::Spacer();
+    if(saveableTreeNode("gameplay", "Game rules")) {
+    
+        //Max Pikmin in field override checkbox.
+        bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
+        if(
+            ImGui::Checkbox(
+                "Override max Pikmin in field", &overrideMaxPik
+            )
+        ) {
+            registerChange("Pikmin maximum override");
+            if(overrideMaxPik) {
+                game.curArea->maxPikminInField =
+                    game.config.rules.maxPikminInField;
+            } else {
+                game.curArea->maxPikminInField = INVALID;
+            }
+        }
+        setTooltip(
+            "Whether to use a custom maximum of Pikmin on the field,\n"
+            "or to use the game configuration default."
+        );
+        
+        if(overrideMaxPik) {
+        
+            //Max Pikmin in field override value.
+            int maxPik = (int) game.curArea->maxPikminInField;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(
+                ImGui::DragInt(
+                    "Maximum", &maxPik,
+                    0.1, 0, INT_MAX
                 )
             ) {
                 registerChange("Pikmin maximum override");
-                if(overrideMaxPik) {
-                    game.curArea->maxPikminInField =
-                        game.config.rules.maxPikminInField;
-                } else {
-                    game.curArea->maxPikminInField = INVALID;
-                }
+                game.curArea->maxPikminInField = maxPik;
             }
+            ImGui::Unindent();
             setTooltip(
-                "Whether to use a custom maximum of Pikmin on the field,\n"
-                "or to use the game configuration default."
+                "Maximum amount of Pikmin that can be out on the field.", "",
+                WIDGET_EXPLANATION_DRAG
             );
             
-            if(overrideMaxPik) {
-            
-                //Max Pikmin in field override value.
-                int maxPik = (int) game.curArea->maxPikminInField;
-                ImGui::Indent();
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        "Maximum", &maxPik,
-                        0.1, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("Pikmin maximum override");
-                    game.curArea->maxPikminInField = maxPik;
-                }
-                ImGui::Unindent();
-                setTooltip(
-                    "Maximum amount of Pikmin that can be out on the field.", "",
-                    WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            //Onions auto eject override checkbox.
-            bool onionsAutoEject = game.curArea->onionsAutoEject;
-            if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
-                registerChange("Onion auto-eject override");
-                game.curArea->onionsAutoEject = onionsAutoEject;
-            }
-            setTooltip(
-                "If checked, all Onions will automatically eject Pikmin\n"
-                "whenever there is enough free space in the field."
-            );
-            
-            //Onions eject grown Pikmin override checkbox.
-            bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
-            if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
-                registerChange("Onion eject grown Pikmin override");
-                game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
-            }
-            setTooltip(
-                "If checked, all Onions will eject fully-grown Pikmin\n"
-                "instead of seeds."
-            );
-            
-            ImGui::TreePop();
         }
         
-        break;
-    }
-    
+        //Onions auto eject override checkbox.
+        bool onionsAutoEject = game.curArea->onionsAutoEject;
+        if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
+            registerChange("Onion auto-eject override");
+            game.curArea->onionsAutoEject = onionsAutoEject;
+        }
+        setTooltip(
+            "If checked, all Onions will automatically eject Pikmin\n"
+            "whenever there is enough free space in the field."
+        );
+        
+        //Onions eject grown Pikmin override checkbox.
+        bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
+        if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
+            registerChange("Onion eject grown Pikmin override");
+            game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
+        }
+        setTooltip(
+            "If checked, all Onions will eject fully-grown Pikmin\n"
+            "instead of seeds."
+        );
+        
+        ImGui::TreePop();
     }
     
     ImGui::EndChild();
@@ -2469,21 +2338,9 @@ void AreaEditor::processGuiPanelInfo() {
         bool hasTimeLimit = false;
         float missionMin = 0;
         if(game.curArea->type == AREA_TYPE_MISSION) {
-            if(
-                game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                hasTimeLimit = true;
-                missionMin =
-                    game.curArea->missionOld.goalAmount / 60.0f;
-            } else if(
-                hasFlag(
-                    game.curArea->missionOld.failConditions,
-                    getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-                )
-            ) {
-                hasTimeLimit = true;
-                missionMin =
-                    game.curArea->missionOld.failTimeLimit / 60.0f;
+            hasTimeLimit = game.curArea->mission.timeLimit != 0;
+            if(hasTimeLimit) {
+                missionMin = game.curArea->mission.timeLimit / 60.0f;
             }
         }
         int dayStartMin = (int) game.curArea->dayTimeStart;
@@ -2529,7 +2386,7 @@ void AreaEditor::processGuiPanelInfo() {
             }
             setTooltip(
                 "Point of the (game world) day at which gameplay ends.\n"
-                "Only applicable in missions with some sort of time limits.\n"
+                "Only applicable in missions with time limits.\n"
                 "Set this to the same as the area start time to make\n"
                 "the day time frozen.",
                 "", WIDGET_EXPLANATION_DRAG
@@ -3216,183 +3073,17 @@ void AreaEditor::processGuiPanelMission() {
     
     ImGui::Spacer();
     
+    processGuiPanelMissionMedalAward();
+    
     if(game.curArea->mission.preset == MISSION_PRESET_CUSTOM) {
-        processGuiPanelMissionEv();
-        processGuiPanelMissionMobChecklists();
+        processGuiPanelMissionEndCond();
+        processGuiPanelMissionMobGroups();
         processGuiPanelMissionScoreCriteria();
         processGuiPanelMissionHudItems();
         processGuiPanelMissionBriefing();
     }
     
     ImGui::EndChild();
-}
-
-
-/**
- * @brief Processes the Dear ImGui mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionOld() {
-    float oldMissionSurvivalMin =
-        game.curArea->missionOld.goalAmount / 60.0f;
-    float oldMissionTimeLimitMin =
-        game.curArea->missionOld.failTimeLimit / 60.0f;
-    bool dayDurationNeedsUpdate = false;
-    
-    //Mission goal node.
-    if(saveableTreeNode("gameplay", "Mission goal")) {
-    
-        //Goal combobox.
-        vector<string> goalsList;
-        for(size_t g = 0; g < game.missionGoals.size(); g++) {
-            goalsList.push_back(game.missionGoals[g]->getName());
-        }
-        int missionGoal = game.curArea->missionOld.goal;
-        if(ImGui::Combo("Goal", &missionGoal, goalsList, 15)) {
-            registerChange("mission requirements change");
-            game.curArea->missionOld.goalMobIdxs.clear();
-            game.curArea->missionOld.goalAmount = 1;
-            game.curArea->missionOld.goal = (MISSION_GOAL) missionGoal;
-            if(
-                game.curArea->missionOld.goal ==
-                MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                dayDurationNeedsUpdate = true;
-            }
-        }
-        
-        switch(game.curArea->missionOld.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player has no real goal. They just play until they have "
-                "had enough, at which point they must end from the pause menu."
-            );
-            
-            break;
-            
-        }
-        case MISSION_GOAL_COLLECT_TREASURE: {
-    
-            processGuiPanelMissionGoalCt();
-            break;
-            
-        }
-        case MISSION_GOAL_BATTLE_ENEMIES: {
-    
-            processGuiPanelMissionGoalBe();
-            break;
-            
-        }
-        case MISSION_GOAL_TIMED_SURVIVAL: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must survive for a certain amount of time."
-            );
-            
-            //Time values.
-            ImGui::Spacer();
-            int totalSeconds =
-                (int) game.curArea->missionOld.goalAmount;
-            if(ImGui::DragTime2("Time", &totalSeconds)) {
-                registerChange("mission requirements change");
-                totalSeconds = std::max(totalSeconds, 1);
-                game.curArea->missionOld.goalAmount =
-                    (size_t) totalSeconds;
-                dayDurationNeedsUpdate = true;
-            }
-            setTooltip(
-                "The total survival time.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            break;
-            
-        }
-        case MISSION_GOAL_GET_TO_EXIT: {
-    
-            processGuiPanelMissionGoalGte();
-            break;
-            
-        }
-        case MISSION_GOAL_GROW_PIKMIN: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must reach or surpass a certain number of "
-                "total Pikmin."
-            );
-            
-            //Pikmin amount value.
-            ImGui::Spacer();
-            int amount =
-                (int) game.curArea->missionOld.goalAmount;
-            ImGui::SetNextItemWidth(80);
-            if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
-                registerChange("mission requirements change");
-                game.curArea->missionOld.goalAmount =
-                    (size_t) amount;
-            }
-            setTooltip(
-                "The total Pikmin amount requirement.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            break;
-            
-        }
-        }
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Mission fail conditions node.
-    ImGui::Spacer();
-    if(saveableTreeNode("gameplay", "Mission fail conditions")) {
-    
-        processGuiPanelMissionFail(&dayDurationNeedsUpdate);
-        ImGui::TreePop();
-    }
-    
-    //Mission grading node.
-    ImGui::Spacer();
-    if(saveableTreeNode("gameplay", "Mission grading")) {
-    
-        processGuiPanelMissionGrading();
-        ImGui::TreePop();
-        
-    }
-    
-    if(dayDurationNeedsUpdate) {
-        float dayStartMin = game.curArea->dayTimeStart;
-        dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
-        float daySpeed = game.curArea->dayTimeSpeed;
-        float oldMissionMin = 0;
-        size_t missionSeconds = 0;
-        if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-            oldMissionMin = oldMissionSurvivalMin;
-            missionSeconds = game.curArea->missionOld.goalAmount;
-            game.curArea->missionOld.failTimeLimit = 0.0f;
-            disableFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-        } else {
-            oldMissionMin = oldMissionTimeLimitMin;
-            missionSeconds = game.curArea->missionOld.failTimeLimit;
-        }
-        float oldDayEndMin = dayStartMin + oldMissionMin * daySpeed;
-        oldDayEndMin = wrapFloat(oldDayEndMin, 0, 60 * 24);
-        missionSeconds = std::max(missionSeconds, (size_t) 1);
-        float newMissionMin = missionSeconds / 60.0f;
-        game.curArea->dayTimeSpeed =
-            calculateDaySpeed(
-                dayStartMin, oldDayEndMin, newMissionMin
-            );
-    }
-    
 }
 
 
@@ -3421,62 +3112,69 @@ void AreaEditor::processGuiPanelMissionBriefing() {
         
         //Note setup.
         static size_t curNoteIdx = 0;
-        processGuiListNavSetup(
+        processGuiNavSetup(
             &curNoteIdx, game.curArea->mission.briefingNotes.size(), false
         );
         
-        //Current note text.
-        processGuiListNavCurWidget(
-            curNoteIdx, game.curArea->mission.briefingNotes.size(), "Note"
+        //Nav box start.
+        processGuiNavBoxStart(
+            "note", "Note", &curNoteIdx,
+        [this] () { return game.curArea->mission.briefingNotes.size(); },
+        [this] () { return 1; }
         );
         
-        //Note add widget.
+        //Previous note button.
+        processGuiNavBoxPrev();
+        
+        //Current note text.
+        processGuiNavBoxCur();
+        
+        //Next note button.
+        processGuiNavBoxNext();
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(2);
+        
+        //Add note button.
         if(
-            processGuiListNavNewWidget(
-                &curNoteIdx, game.curArea->mission.briefingNotes.size(),
-                "Add a new mission briefing note."
+            processGuiNavWidgetNew(
+                &curNoteIdx, game.curArea->mission.briefingNotes.size()
             )
         ) {
             registerChange("mission briefing note creation");
-            game.curArea->mission.briefingNotes.insert(
-                game.curArea->mission.briefingNotes.begin() +
-                curNoteIdx, ""
-            );
+            insertInVector(game.curArea->mission.briefingNotes, curNoteIdx);
             setStatus(
                 "Created mission briefing note #" + i2s(curNoteIdx + 1) + "."
             );
         };
+        setTooltip("Add a new mission briefing note.");
         
-        //Note delete widget.
+        //Delete note button.
         size_t prevCurNoteIdx = curNoteIdx;
-        if(
-            processGuiListNavDelWidget(
-                &curNoteIdx, game.curArea->mission.briefingNotes.size(),
-                "Delete the current mission briefing note.", true
-            )
-        ) {
-            registerChange("mission briefing note deletion");
-            game.curArea->mission.briefingNotes.erase(
-                game.curArea->mission.briefingNotes.begin() +
-                curNoteIdx
-            );
-            setStatus(
-                "Deleted mission briefing note #" +
-                i2s(prevCurNoteIdx + 1) + "."
-            );
-        };
+        ImGui::SameLine();
+        if(!game.curArea->mission.briefingNotes.empty()) {
+            if(
+                processGuiNavWidgetDel(
+                    &curNoteIdx, game.curArea->mission.briefingNotes.size()
+                )
+            ) {
+                registerChange("mission briefing note deletion");
+                game.curArea->mission.briefingNotes.erase(
+                    game.curArea->mission.briefingNotes.begin() +
+                    prevCurNoteIdx
+                );
+                setStatus(
+                    "Deleted mission briefing note #" +
+                    i2s(prevCurNoteIdx + 1) + "."
+                );
+            }
+            setTooltip("Delete the current mission briefing note.");
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
         
-        //Note previous widget.
-        processGuiListNavPrevWidget(
-            &curNoteIdx, game.curArea->mission.briefingNotes.size(),
-            "Change to the previous note.", true
-        );
-        
-        //Note next widget.
-        processGuiListNavNextWidget(
-            &curNoteIdx, game.curArea->mission.briefingNotes.size(),
-            "Change to the next note.", true
-        );
+        //End the nav box.
+        processGuiNavBoxEnd();
         
         if(!game.curArea->mission.briefingNotes.empty()) {
         
@@ -3502,6 +3200,287 @@ void AreaEditor::processGuiPanelMissionBriefing() {
         ImGui::TreePop();
         
     }
+    
+    ImGui::Spacer();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui end condition part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionEndCond() {
+    //Mission end condition node.
+    if(saveableTreeNode("mission", "End conditions")) {
+    
+        static size_t curCondIdx = 0;
+        
+        //Setup.
+        processGuiNavSetup(
+            &curCondIdx, game.curArea->mission.endConds.size(), false
+        );
+        
+        //Nav box start.
+        processGuiNavBoxStart(
+            "condition", "Condition", &curCondIdx,
+        [this] () { return game.curArea->mission.endConds.size(); },
+        [this] () { return 1; }
+        );
+        
+        //Previous condition button.
+        processGuiNavBoxPrev();
+        
+        //Current condition text.
+        processGuiNavBoxCur();
+        
+        //Next condition button.
+        processGuiNavBoxNext();
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(4);
+        
+        //Add condition button.
+        if(
+            processGuiNavWidgetNew(
+                &curCondIdx, game.curArea->mission.endConds.size()
+            )
+        ) {
+            registerChange("mission end condition creation");
+            insertInVector(game.curArea->mission.endConds, curCondIdx);
+            setStatus(
+                "Created mission end condition #" + i2s(curCondIdx + 1) + "."
+            );
+        };
+        setTooltip("Add a new mission end condition.");
+        
+        //Delete end condition button.
+        size_t prevCurCondIdx = curCondIdx;
+        ImGui::SameLine();
+        if(!game.curArea->mission.endConds.empty()) {
+            if(
+                processGuiNavWidgetDel(
+                    &curCondIdx, game.curArea->mission.endConds.size()
+                )
+            ) {
+                registerChange("mission end condition deletion");
+                game.curArea->mission.endConds.erase(
+                    game.curArea->mission.endConds.begin() +
+                    prevCurCondIdx
+                );
+                setStatus(
+                    "Deleted mission end condition #" +
+                    i2s(prevCurCondIdx + 1) + "."
+                );
+            };
+            setTooltip("Delete the current end condition.");
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
+        
+        //Trigger end condition earlier button.
+        ImGui::SameLine();
+        if(!game.curArea->mission.endConds.empty()) {
+            if(
+                processGuiNavWidgetMoveLeft(
+                    &curCondIdx, game.curArea->mission.endConds.size()
+                )
+            ) {
+                registerChange("mission end condition reorder");
+                std::swap(
+                    game.curArea->mission.endConds[curCondIdx],
+                    game.curArea->mission.endConds[curCondIdx - 1]
+                );
+                curCondIdx--;
+                setStatus("Made the end condition trigger earlier.");
+            }
+            setTooltip(
+                "Make this end condition trigger earlier.\n"
+                "End conditions are triggered in the order\n"
+                "they're displayed here."
+            );
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
+        
+        //Trigger end condition later button.
+        ImGui::SameLine();
+        if(!game.curArea->mission.endConds.empty()) {
+            if(
+                processGuiNavWidgetMoveRight(
+                    &curCondIdx, game.curArea->mission.endConds.size()
+                )
+            ) {
+                registerChange("mission end condition reorder");
+                std::swap(
+                    game.curArea->mission.endConds[curCondIdx],
+                    game.curArea->mission.endConds[curCondIdx + 1]
+                );
+                curCondIdx++;
+                setStatus("Made the end condition trigger later.");
+            }
+            setTooltip(
+                "Make this end condition trigger later.\n"
+                "End conditions are triggered in the order\n"
+                "they're displayed here."
+            );
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
+        
+        //End the nav box.
+        processGuiNavBoxEnd();
+        
+        if(!game.curArea->mission.endConds.empty()) {
+        
+            MissionEndCond* condPtr =
+                &game.curArea->mission.endConds[curCondIdx];
+            MissionEndCondType::EditorInfo condEditorInfo =
+                game.missionEndCondTypes[condPtr->type]->getEditorInfo();
+                
+            //End condition type combobox.
+            vector<string> condTypeNames;
+            for(size_t e = 0; e < game.missionEndCondTypes.size(); e++) {
+                condTypeNames.push_back(game.missionEndCondTypes[e]->getName());
+            }
+            int missionCondType = condPtr->type;
+            if(ImGui::Combo("Type", &missionCondType, condTypeNames, 15)) {
+                registerChange("mission end condition type change");
+                condPtr->type = (MISSION_END_COND) missionCondType;
+                condEditorInfo =
+                    game.missionEndCondTypes[condPtr->type]->getEditorInfo();
+                condPtr->indexParam = 0;
+                condPtr->amountParam = 1;
+            }
+            setTooltip(
+                "What thing needs to happen for the end condition to trigger."
+            );
+            
+            if(!condEditorInfo.description.empty()) {
+            
+                //End condition description text.
+                ImGui::BeginDisabled();
+                ImGui::TextWrapped("%s", condEditorInfo.description.c_str());
+                ImGui::EndDisabled();
+                
+            }
+            
+            if(!condEditorInfo.indexParamName.empty()) {
+            
+                //End condition index param value.
+                int number = (int) condPtr->indexParam;
+                number++;
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        (condEditorInfo.indexParamName + "##idxParam").c_str(),
+                        &number, 0.1f, 1, INT_MAX
+                    )
+                ) {
+                    registerChange("mission end condition number change");
+                    number--;
+                    condPtr->indexParam = (size_t) number;
+                }
+                setTooltip(
+                    condEditorInfo.indexParamDescription,
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+            
+            if(!condEditorInfo.amountParamName.empty()) {
+            
+                //End condition amount param value.
+                int number = (int) condPtr->amountParam;
+                ImGui::SetNextItemWidth(50);
+                if(
+                    ImGui::DragInt(
+                        (condEditorInfo.amountParamName + "##amtParam").c_str(),
+                        &number, 0.1f, 0, INT_MAX
+                    )
+                ) {
+                    registerChange("mission end condition number change");
+                    condPtr->amountParam = (size_t) number;
+                }
+                setTooltip(
+                    condEditorInfo.amountParamDescription,
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                
+            }
+            
+            //Clear checkbox.
+            
+            bool condClear = condPtr->clear;
+            ImGui::Spacer();
+            if(
+                ImGui::Checkbox("Mission clear", &condClear)
+            ) {
+                registerChange("mission end condition change");
+                condPtr->clear = condClear;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "is it a clear (player receive a medal),\n"
+                "or is it a fail (player can't receive a medal)?"
+            );
+            
+            //Zero time for scoring checkbox.
+            bool zeroTime = condPtr->zeroTimeForScore;
+            if(
+                ImGui::Checkbox(
+                    "Zero time for score", &zeroTime
+                )
+            ) {
+                registerChange("mission end condition time rule change");
+                condPtr->zeroTimeForScore = zeroTime;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "should the scoring system consider the time remaining was 0?"
+            );
+            
+            //Neutral mood checkbox.
+            bool neutralMood = condPtr->neutralMood;
+            if(
+                ImGui::Checkbox(
+                    "Neutral mood", &neutralMood
+                )
+            ) {
+                registerChange("mission end condition mood change");
+                condPtr->neutralMood = neutralMood;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "should the big message and jingle use a  neutral mood?\n"
+                "This is useful for situations that are neither good nor bad,\n"
+                "it's simply something that ends the mission sooner, and then\n"
+                "the player is going to find out if they got a medal or not.\n"
+                "If unchecked, the big message and jingle will depend on\n"
+                "whether the mission was cleared."
+            );
+            
+            //Reason input.
+            string reason = condPtr->reason;
+            if(
+                ImGui::InputText(
+                    "Reason", &reason
+                )
+            ) {
+                registerChange("mission end condition reason change");
+                condPtr->reason = reason;
+            }
+            setTooltip(
+                "When this condition is met and the mission ends,\n"
+                "what should the results menu show as the reason for\n"
+                "the mission being over?"
+            );
+            
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::Spacer();
 }
 
 
@@ -3530,7 +3509,7 @@ void AreaEditor::processGuiPanelMissionEssentials() {
             openDialog(
                 "Change mission preset",
                 std::bind(
-                    &AreaEditor::processGuiMissionPresetDialog, this
+                    &AreaEditor::processGuiDialogMissionPreset, this
                 )
             );
             dialogs.back()->customSize = Point(400, 0);
@@ -3582,1111 +3561,6 @@ void AreaEditor::processGuiPanelMissionEssentials() {
 
 
 /**
- * @brief Processes the Dear ImGui event part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionEv() {
-    //Mission events node.
-    if(saveableTreeNode("mission", "Events")) {
-    
-        static size_t curEventIdx = 0;
-        
-        processGuiListNavSetup(
-            &curEventIdx, game.curArea->mission.events.size(), false
-        );
-        
-        //Event count widget.
-        processGuiListNavCurWidget(
-            curEventIdx, game.curArea->mission.events.size(), "Event"
-        );
-        
-        //Event add widget.
-        if(
-            processGuiListNavNewWidget(
-                &curEventIdx, game.curArea->mission.events.size(),
-                "Add a new mission event."
-            )
-        ) {
-            registerChange("mission event creation");
-            game.curArea->mission.events.insert(
-                game.curArea->mission.events.begin() +
-                curEventIdx,
-                MissionEvent()
-            );
-            setStatus(
-                "Created mission event #" + i2s(curEventIdx + 1) + "."
-            );
-        };
-        
-        //Event delete widget.
-        size_t prevCurEventIdx = curEventIdx;
-        if(
-            processGuiListNavDelWidget(
-                &curEventIdx, game.curArea->mission.events.size(),
-                "Delete the current event.", true
-            )
-        ) {
-            registerChange("mission event deletion");
-            game.curArea->mission.events.erase(
-                game.curArea->mission.events.begin() +
-                prevCurEventIdx
-            );
-            setStatus(
-                "Deleted mission event #" + i2s(prevCurEventIdx + 1) + "."
-            );
-        };
-        
-        //Event previous widget.
-        processGuiListNavPrevWidget(
-            &curEventIdx, game.curArea->mission.events.size(),
-            "Change to the previous event.", true
-        );
-        
-        //Event next widget.
-        processGuiListNavNextWidget(
-            &curEventIdx, game.curArea->mission.events.size(),
-            "Change to the next event.", true
-        );
-        
-        //Event trigger earlier widget.
-        if(
-            processGuiListNavMoveLeftWidget(
-                &curEventIdx, game.curArea->mission.events.size(),
-                "Make this event trigger earlier.\n"
-                "Events are triggered in the order they're displayed here.",
-                true
-            )
-        ) {
-            registerChange("mission event reorder");
-            std::swap(
-                game.curArea->mission.events[curEventIdx],
-                game.curArea->mission.events[curEventIdx - 1]
-            );
-            curEventIdx--;
-            setStatus("Made the event trigger earlier.");
-        }
-        
-        //Event trigger later widget.
-        if(
-            processGuiListNavMoveRightWidget(
-                &curEventIdx, game.curArea->mission.events.size(),
-                "Make this event trigger later.\n"
-                "Events are triggered in the order they're displayed here.",
-                true
-            )
-        ) {
-            registerChange("mission event reorder");
-            std::swap(
-                game.curArea->mission.events[curEventIdx],
-                game.curArea->mission.events[curEventIdx + 1]
-            );
-            curEventIdx++;
-            setStatus("Made the event trigger later.");
-        }
-        
-        if(!game.curArea->mission.events.empty()) {
-        
-            MissionEvent* evPtr =
-                &game.curArea->mission.events[curEventIdx];
-            MissionEvType::EditorInfo evEditorInfo =
-                game.missionEvTypes[evPtr->type]->getEditorInfo();
-                
-            //Event type combobox.
-            ImGui::Spacer();
-            vector<string> evTypeNames;
-            for(size_t e = 0; e < game.missionEvTypes.size(); e++) {
-                evTypeNames.push_back(game.missionEvTypes[e]->getName());
-            }
-            int missionEvType = evPtr->type;
-            if(ImGui::Combo("Type", &missionEvType, evTypeNames, 15)) {
-                registerChange("mission event type change");
-                evPtr->type = (MISSION_EV) missionEvType;
-                evEditorInfo =
-                    game.missionEvTypes[evPtr->type]->getEditorInfo();
-                evPtr->indexParam = 0;
-                evPtr->amountParam = 1;
-            }
-            setTooltip("What thing needs to happen for the event to trigger.");
-            
-            if(!evEditorInfo.description.empty()) {
-            
-                //Event description text.
-                ImGui::TextWrapped("%s", evEditorInfo.description.c_str());
-                
-            }
-            
-            if(!evEditorInfo.indexParamName.empty()) {
-            
-                //Event index param value.
-                int number = (int) evPtr->indexParam;
-                number++;
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        (evEditorInfo.indexParamName + "##idxParam").c_str(),
-                        &number, 0.1f, 1, INT_MAX
-                    )
-                ) {
-                    registerChange("mission event number change");
-                    number--;
-                    evPtr->indexParam = (size_t) number;
-                }
-                setTooltip(
-                    evEditorInfo.indexParamDescription,
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            if(!evEditorInfo.amountParamName.empty()) {
-            
-                //Event amount param value.
-                int number = (int) evPtr->amountParam;
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        (evEditorInfo.amountParamName + "##amtParam").c_str(),
-                        &number, 0.1f, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("mission event number change");
-                    evPtr->amountParam = (size_t) number;
-                }
-                setTooltip(
-                    evEditorInfo.amountParamDescription,
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
-            //Action combobox.
-            vector<string> actionTypeNames;
-            for(size_t a = 0; a < game.missionActionTypes.size(); a++) {
-                actionTypeNames.push_back(
-                    game.missionActionTypes[a]->getName()
-                );
-            }
-            int missionActionType = evPtr->actionType;
-            ImGui::Spacer();
-            if(
-                ImGui::Combo("Action", &missionActionType, actionTypeNames, 15)
-            ) {
-                registerChange("mission event action change");
-                evPtr->actionType = (MISSION_ACTION) missionActionType;
-            }
-            setTooltip(
-                "What action to perform when the event is triggered."
-            );
-            
-            MissionActionType::EditorInfo actionEditorInfo =
-                game.missionActionTypes[evPtr->actionType]->getEditorInfo();
-                
-            if(!actionEditorInfo.description.empty()) {
-            
-                //Action description text.
-                ImGui::TextWrapped("%s", actionEditorInfo.description.c_str());
-                
-            }
-            
-            if(evPtr->actionType == MISSION_ACTION_SEND_MESSAGE) {
-            
-                //Action message input.
-                string message = evPtr->actionMessage;
-                if(monoInputText("Message", &message)) {
-                    registerChange("mission event action message change");
-                    evPtr->actionMessage = message;
-                }
-                setTooltip(
-                    "Specify what message you want to be sent to the script."
-                );
-                
-            } else {
-            
-                //Zero time for scoring checkbox.
-                bool zeroTime = evPtr->zeroTimeForScore;
-                if(
-                    ImGui::Checkbox(
-                        "Zero time for score", &zeroTime
-                    )
-                ) {
-                    registerChange("mission event action time rule change");
-                    evPtr->zeroTimeForScore = zeroTime;
-                }
-                setTooltip(
-                    "If true, the time remaining in the time limit will\n"
-                    "be considered 0 for the sake of scoring."
-                );
-                
-            }
-            
-        }
-        
-        ImGui::TreePop();
-    }
-    
-    ImGui::Spacer();
-}
-
-
-/**
- * @brief Processes the Dear ImGui fail conditions part of the
- * mission control panel for this frame.
- *
- * @param dayDurationNeedsUpdate The variable that dictates whether the
- * day duration widget data later in the panel needs to be updated.
- */
-void AreaEditor::processGuiPanelMissionFail(
-    bool* dayDurationNeedsUpdate
-) {
-    unsigned int failFlags =
-        (unsigned int) game.curArea->missionOld.failConditions;
-    bool failFlagsChanged = false;
-    
-    //Pause menu end checkbox.
-    bool pauseMenuEndIsFail =
-        game.curArea->missionOld.goal != MISSION_GOAL_END_MANUALLY;
-    ImGui::BeginDisabled();
-    ImGui::CheckboxFlags(
-        "End from pause menu",
-        &failFlags,
-        getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-    );
-    ImGui::EndDisabled();
-    if(pauseMenuEndIsFail) {
-        enableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-        setTooltip(
-            "Since reaching the mission goal automatically ends the\n"
-            "mission as a clear, if the player can go to the pause menu\n"
-            "and end there, then naturally they haven't reached the\n"
-            "goal yet. So this method of ending has to always be a fail."
-        );
-    } else {
-        disableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-        setTooltip(
-            "The current mission goal is \"end whenever you want\", so\n"
-            "ending from the pause menu is the goal, not a fail condition."
-        );
-    }
-    
-    //Time limit checkbox.
-    if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-        disableFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-        disableFlag(
-            game.curArea->missionOld.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-        ImGui::BeginDisabled();
-    }
-    bool timeLimitChanged =
-        ImGui::CheckboxFlags(
-            "Reach the time limit",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        );
-    failFlagsChanged |= timeLimitChanged;
-    if(
-        timeLimitChanged &&
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        *dayDurationNeedsUpdate = true;
-    }
-    if(game.curArea->missionOld.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-        ImGui::EndDisabled();
-        setTooltip(
-            "The mission's goal is to survive for a certain amount of\n"
-            "time, so it doesn't make sense to have a time limit to\n"
-            "fail with."
-        );
-    } else {
-        setTooltip(
-            "The mission ends as a fail if the player spends a certain\n"
-            "amount of time in the mission."
-        );
-    }
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        //Time limit values.
-        int seconds =
-            (int) game.curArea->missionOld.failTimeLimit;
-        ImGui::Indent();
-        if(ImGui::DragTime2("Time limit", &seconds)) {
-            registerChange("mission fail conditions change");
-            seconds = std::max(seconds, 1);
-            game.curArea->missionOld.failTimeLimit = (size_t) seconds;
-            *dayDurationNeedsUpdate = true;
-        }
-        setTooltip(
-            "Time limit that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Reaching too few Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Reach too few Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if the total Pikmin count reaches\n"
-        "a certain amount or lower. 0 means this only happens with a\n"
-        "total Pikmin extinction. This fail condition isn't forced\n"
-        "because the player might still be able to reach the mission\n"
-        "goal using leaders. Or because you may want to make a mission\n"
-        "with no Pikmin in the first place (like a puzzle stage)."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-        )
-    ) {
-        ImGui::Indent();
-        
-        //Pikmin amount value.
-        int amount =
-            (int) game.curArea->missionOld.failTooFewPikAmount;
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failTooFewPikAmount =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Unindent();
-    }
-    
-    //Reaching too many Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Reach too many Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if the total Pikmin count reaches\n"
-        "a certain amount or higher."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-        )
-    ) {
-        ImGui::Indent();
-        
-        //Pikmin amount value.
-        int amount =
-            (int) game.curArea->missionOld.failTooManyPikAmount;
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failTooManyPikAmount =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        ImGui::Unindent();
-    }
-    
-    //Losing Pikmin checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Lose Pikmin",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of Pikmin die."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-        )
-    ) {
-        //Pikmin deaths value.
-        int amount =
-            (int) game.curArea->missionOld.failPikKilled;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failPikKilled =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Pikmin death amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Taking damage checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Take damage",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
-        );
-    setTooltip(
-        "The mission ends as a fail if any leader loses any health."
-    );
-    
-    //Lose leaders checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Lose leaders",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of leaders get\n"
-        "KO'd. This fail condition isn't forced because the\n"
-        "player might still be able to reach the mission goal with the\n"
-        "Pikmin. Or because you may want to make a really gimmicky\n"
-        "automatic mission with no leaders."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(
-                MISSION_FAIL_COND_LOSE_LEADERS
-            )
-        )
-    ) {
-        //Leader KOs value.
-        int amount =
-            (int) game.curArea->missionOld.failLeadersKod;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failLeadersKod =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Leader KO amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    //Defeat enemies checkbox.
-    failFlagsChanged |=
-        ImGui::CheckboxFlags(
-            "Defeat enemies",
-            &failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
-        );
-    setTooltip(
-        "The mission ends as a fail if a certain amount of\n"
-        "enemies get defeated."
-    );
-    
-    if(
-        hasFlag(
-            failFlags,
-            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
-        )
-    ) {
-        //Enemy defeats value.
-        int amount =
-            (int) game.curArea->missionOld.failEnemiesDefeated;
-        ImGui::Indent();
-        ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Defeats", &amount, 0.1f, 1, INT_MAX)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failEnemiesDefeated =
-                (size_t) amount;
-        }
-        setTooltip(
-            "Enemy defeat amount that, when reached, ends the mission\n"
-            "as a fail.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        ImGui::Unindent();
-    }
-    
-    if(failFlagsChanged) {
-        registerChange("mission fail conditions change");
-        game.curArea->missionOld.failConditions =
-            (Bitmask8) failFlags;
-    }
-    
-    vector<MISSION_FAIL_COND> activeConditions;
-    for(size_t c = 0; c < game.missionFailConds.size(); c++) {
-        if(
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(c)
-            )
-        ) {
-            activeConditions.push_back((MISSION_FAIL_COND) c);
-        }
-    }
-    
-    if(!activeConditions.empty()) {
-    
-        //Primary HUD condition checkbox.
-        ImGui::Spacer();
-        bool showPrimary =
-            game.curArea->missionOld.failHudPrimaryCond != INVALID;
-        if(ImGui::Checkbox("Show primary HUD element", &showPrimary)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failHudPrimaryCond =
-                showPrimary ?
-                (size_t) activeConditions[0] :
-                INVALID;
-        }
-        setTooltip(
-            "If checked, a large HUD element will appear showing\n"
-            "the most important fail condition's information."
-        );
-        
-        if(showPrimary) {
-            //Primary HUD condition combobox.
-            int selected = 0;
-            bool found = false;
-            vector<string> condStrings;
-            for(size_t c = 0; c < activeConditions.size(); c++) {
-                size_t condId = activeConditions[c];
-                condStrings.push_back(
-                    game.missionFailConds[condId]->getName()
-                );
-                if(
-                    condId ==
-                    game.curArea->missionOld.failHudPrimaryCond
-                ) {
-                    found = true;
-                    selected = (int) c;
-                }
-            }
-            if(!found) {
-                game.curArea->missionOld.failHudSecondaryCond = 0;
-            }
-            ImGui::Indent();
-            if(
-                ImGui::Combo(
-                    "Primary condition", &selected, condStrings, 15
-                )
-            ) {
-                registerChange("mission fail conditions change");
-                game.curArea->missionOld.failHudPrimaryCond =
-                    activeConditions[selected];
-            }
-            setTooltip(
-                "Failure condition to show in the primary HUD element."
-            );
-            ImGui::Unindent();
-        }
-        
-        //Secondary HUD condition checkbox.
-        bool showSecondary =
-            game.curArea->missionOld.failHudSecondaryCond != INVALID;
-        if(ImGui::Checkbox("Show secondary HUD element", &showSecondary)) {
-            registerChange("mission fail conditions change");
-            game.curArea->missionOld.failHudSecondaryCond =
-                showSecondary ?
-                (size_t) activeConditions[0] :
-                INVALID;
-        }
-        setTooltip(
-            "If checked, a smaller HUD element will appear showing\n"
-            "some other fail condition's information."
-        );
-        
-        if(showSecondary) {
-            //Secondary HUD condition combobox.
-            bool found = false;
-            int selected = 0;
-            vector<string> condStrings;
-            for(size_t c = 0; c < activeConditions.size(); c++) {
-                size_t condId = activeConditions[c];
-                condStrings.push_back(
-                    game.missionFailConds[condId]->getName()
-                );
-                if(
-                    condId ==
-                    game.curArea->missionOld.failHudSecondaryCond
-                ) {
-                    found = true;
-                    selected = (int) c;
-                }
-            }
-            if(!found) {
-                game.curArea->missionOld.failHudSecondaryCond = 0;
-            }
-            ImGui::Indent();
-            if(
-                ImGui::Combo(
-                    "Secondary condition", &selected, condStrings, 15
-                )
-            ) {
-                registerChange("mission fail conditions change");
-                game.curArea->missionOld.failHudSecondaryCond =
-                    activeConditions[selected];
-            }
-            setTooltip(
-                "Failure condition to show in the secondary HUD element."
-            );
-            ImGui::Unindent();
-        }
-        
-    } else {
-        game.curArea->missionOld.failHudPrimaryCond = INVALID;
-        game.curArea->missionOld.failHudSecondaryCond = INVALID;
-        
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui battle enemies goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalBe() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must defeat certain enemies, or all of them."
-    );
-    
-    //Enemy requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Enemy requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All enemies requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to defeat all enemies "
-        "in order to reach the goal."
-    );
-    
-    //Specific enemies requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to defeat specific enemies "
-        "in order to reach the goal.\n"
-        "You must specify which enemies these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick enemies...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which enemies do and\n"
-            "do not belong to the required enemy list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
-}
-
-
-/**
- * @brief Processes the Dear ImGui collect treasures goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalCt() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must collect certain treasures, or all of them."
-    );
-    
-    //Treasure requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Treasure requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All treasures requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to collect all treasures "
-        "in order to reach the goal."
-    );
-    
-    //Specific treasures requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to collect specific treasures "
-        "in order to reach the goal.\n"
-        "You must specify which treasures these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick treasures...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which treasures, piles, and\n"
-            "resources do and do not belong to the required\n"
-            "treasure list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
-}
-
-
-/**
- * @brief Processes the Dear ImGui get to exit goal part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGoalGte() {
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The player must get a leader or all of them "
-        "to the exit point."
-    );
-    
-    //Start exit region selector mode button.
-    ImGui::Spacer();
-    if(ImGui::Button("Pick region...")) {
-        subState = EDITOR_SUB_STATE_MISSION_EXIT;
-    }
-    setTooltip(
-        "Click here to start picking where the exit region is.\n"
-    );
-    
-    //Region center text.
-    ImGui::Text(
-        "Exit region center: %s,%s",
-        f2s(game.curArea->missionOld.goalExitCenter.x).c_str(),
-        f2s(game.curArea->missionOld.goalExitCenter.y).c_str()
-    );
-    
-    //Region center text.
-    ImGui::Text(
-        "Exit region size: %s x %s",
-        f2s(game.curArea->missionOld.goalExitSize.x).c_str(),
-        f2s(game.curArea->missionOld.goalExitSize.y).c_str()
-    );
-    
-    //Leader requirements text.
-    ImGui::Spacer();
-    ImGui::Text("Leader requirements:");
-    
-    int requiresAllOption =
-        game.curArea->missionOld.goalAllMobs ? 0 : 1;
-        
-    //All leaders requirement radio button.
-    if(ImGui::RadioButton("All", &requiresAllOption, 0)) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to bring all leaders to the exit\n"
-        "region in order to reach the mission's goal."
-    );
-    
-    //Specific leaders requirement radio button.
-    ImGui::SameLine();
-    if(
-        ImGui::RadioButton("Specific ones", &requiresAllOption, 1)
-    ) {
-        registerChange("mission requirements change");
-        game.curArea->missionOld.goalAllMobs =
-            requiresAllOption == 0;
-    }
-    setTooltip(
-        "Require the player to bring specific leaders to the exit\n"
-        "region in order to reach the mission's goal.\n"
-        "You must specify which leaders these are."
-    );
-    
-    if(!game.curArea->missionOld.goalAllMobs) {
-    
-        //Start mob selector mode button.
-        if(ImGui::Button("Pick leaders...")) {
-            changeState(EDITOR_STATE_MOBS);
-            subState = EDITOR_SUB_STATE_MISSION_MOBS;
-        }
-        setTooltip(
-            "Click here to start picking which leaders do and\n"
-            "do not belong to the required leader list."
-        );
-        
-    }
-    
-    //Total objects required text.
-    size_t totalRequired = getMissionRequiredMobCount();
-    ImGui::Text("Total objects required: %lu", totalRequired);
-}
-
-
-/**
- * @brief Processes the Dear ImGui mission grading part of the
- * mission control panel for this frame.
- */
-void AreaEditor::processGuiPanelMissionGrading() {
-    //Grading mode text.
-    ImGui::Text("Grading mode:");
-    
-    //Grading mode widgets.
-    processGuiGradingModeWidgets(
-        0, "Points",
-        "The player's final grade depends on how many points they\n"
-        "got in different criteria."
-    );
-    
-    ImGui::SameLine();
-    processGuiGradingModeWidgets(
-        1, "Goal",
-        "The player's final grade depends on whether they have reached\n"
-        "the mission goal (platinum) or not (nothing)."
-    );
-    
-    ImGui::SameLine();
-    processGuiGradingModeWidgets(
-        2, "Participation",
-        "The player's final grade depends on whether they have played\n"
-        "the mission (platinum) or not (nothing)."
-    );
-    
-    //Grading criterion widgets.
-    if(
-        game.curArea->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
-    
-        ImGui::Spacer();
-        processGuiGradingCriterionWidgets(
-            &game.curArea->missionOld.pointsPerPikminBorn,
-            MISSION_SCORE_CRITERIA_PIKMIN_BORN,
-            "Points per Pikmin born",
-            "Amount of points that the player receives for each\n"
-            "Pikmin born."
-        );
-        
-        processGuiGradingCriterionWidgets(
-            &game.curArea->missionOld.pointsPerPikminDeath,
-            MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
-            "Points per Pikmin death",
-            "Amount of points that the player receives for each\n"
-            "Pikmin lost."
-        );
-        
-        if(
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            )
-        ) {
-            processGuiGradingCriterionWidgets(
-                &game.curArea->missionOld.pointsPerSecLeft,
-                MISSION_SCORE_CRITERIA_SEC_LEFT,
-                "Points per second left",
-                "Amount of points that the player receives for each\n"
-                "second of time left, from the mission's time limit."
-            );
-        }
-        
-        processGuiGradingCriterionWidgets(
-            &game.curArea->missionOld.pointsPerSecPassed,
-            MISSION_SCORE_CRITERIA_SEC_PASSED,
-            "Points per second passed",
-            "Amount of points that the player receives for each\n"
-            "second of time that has passed."
-        );
-        
-        processGuiGradingCriterionWidgets(
-            &game.curArea->missionOld.pointsPerTreasurePoint,
-            MISSION_SCORE_CRITERIA_TREASURE_POINTS,
-            "Points per treasure point",
-            "Amount of points that the player receives for each\n"
-            "point gathered from treasures. Different treasures are worth\n"
-            "different treasure points."
-        );
-        
-        processGuiGradingCriterionWidgets(
-            &game.curArea->missionOld.pointsPerEnemyPoint,
-            MISSION_SCORE_CRITERIA_ENEMY_POINTS,
-            "Points per enemy point",
-            "Amount of points that the player receives for each\n"
-            "enemy point. Different enemies are worth different\n"
-            "points."
-        );
-        
-        //Award points on collection checkbox.
-        if(game.curArea->missionOld.pointsPerEnemyPoint != 0) {
-            bool enemyPointsOnCollection =
-                game.curArea->missionOld.enemyPointsOnCollection;
-            ImGui::Indent();
-            if(
-                ImGui::Checkbox(
-                    "Award points on collection", &enemyPointsOnCollection
-                )
-            ) {
-                registerChange("mission grading change");
-                game.curArea->missionOld.enemyPointsOnCollection =
-                    enemyPointsOnCollection;
-            }
-            setTooltip(
-                "If checked, enemy points will be awarded on enemy\n"
-                "collection. If unchecked, enemy points will be awarded\n"
-                "on enemy defeat."
-            );
-            ImGui::Unindent();
-        }
-        
-        //Starting score value.
-        ImGui::Spacer();
-        int startingPoints = game.curArea->missionOld.startingPoints;
-        ImGui::SetNextItemWidth(60);
-        if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
-            registerChange("mission grading change");
-            game.curArea->missionOld.startingPoints = startingPoints;
-        }
-        setTooltip(
-            "Starting amount of points. It can be positive or negative.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Medal point requirements text.
-        ImGui::Spacer();
-        ImGui::Text("Medal point requirements:");
-        
-        //Medal point requirement widgets.
-        processGuiGradingMedalWidgets(
-            &game.curArea->missionOld.bronzeReq, "Bronze",
-            INT_MIN, game.curArea->missionOld.silverReq - 1,
-            "To get a bronze medal, the player needs at least these\n"
-            "many points. Fewer than this, and the player gets no medal."
-        );
-        
-        processGuiGradingMedalWidgets(
-            &game.curArea->missionOld.silverReq, "Silver",
-            game.curArea->missionOld.bronzeReq + 1,
-            game.curArea->missionOld.goldReq - 1,
-            "To get a silver medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        processGuiGradingMedalWidgets(
-            &game.curArea->missionOld.goldReq, "Gold",
-            game.curArea->missionOld.silverReq + 1,
-            game.curArea->missionOld.platinumReq - 1,
-            "To get a gold medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        processGuiGradingMedalWidgets(
-            &game.curArea->missionOld.platinumReq, "Platinum",
-            game.curArea->missionOld.goldReq + 1, INT_MAX,
-            "To get a platinum medal, the player needs at least these\n"
-            "many points."
-        );
-        
-        //Maker record value.
-        ImGui::Spacer();
-        int makerRecord = game.curArea->missionOld.makerRecord;
-        ImGui::SetNextItemWidth(60);
-        if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
-            registerChange("maker record change");
-            game.curArea->missionOld.makerRecord = makerRecord;
-        }
-        setTooltip(
-            "Specify your best score here, if you want.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Maker record date input.
-        string makerRecordDate =
-            game.curArea->missionOld.makerRecordDate;
-        ImGui::SetNextItemWidth(120);
-        if(
-            monoInputText(
-                "Date (YYYY/MM/DD)", &makerRecordDate
-            )
-        ) {
-            registerChange("maker record change");
-            game.curArea->missionOld.makerRecordDate = makerRecordDate;
-        }
-        setTooltip(
-            "Specify the date in which you got your best score here,\n"
-            "if you want. Your record will only be saved if you write a date.\n"
-            "The format must be YYYY/MM/DD."
-        );
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui HUD items part of the
  * mission control panel for this frame.
  */
@@ -4697,34 +3571,37 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         static size_t curHudItemIdx = 0;
         
         //Setup.
-        processGuiListNavSetup(
+        processGuiNavSetup(
             &curHudItemIdx, enumGetCount(missionHudItemIdNames), false
         );
         
-        //Current item text.
-        processGuiListNavCurWidget(
-            curHudItemIdx, enumGetCount(missionHudItemIdNames), "Item",
-            enumGetName(missionHudItemIdNames, curHudItemIdx) + " (typically)"
+        //Nav box start.
+        processGuiNavBoxStart(
+            "item", "Item", &curHudItemIdx,
+        [this] () { return enumGetCount(missionHudItemIdNames); },
+        [this] () { return 1; }
         );
         
         //Previous item button.
-        processGuiListNavPrevWidget(
-            &curHudItemIdx, enumGetCount(missionHudItemIdNames),
-            "Select the previous HUD item."
+        processGuiNavBoxPrev();
+        
+        //Current item text.
+        processGuiNavBoxCur(
+            enumGetName(missionHudItemIdNames, curHudItemIdx) +
+            " (typically)"
         );
         
         //Next item button.
-        processGuiListNavNextWidget(
-            &curHudItemIdx, enumGetCount(missionHudItemIdNames),
-            "Select the next HUD item.", true
-        );
+        processGuiNavBoxNext();
+        
+        //End the nav box.
+        processGuiNavBoxEnd();
         
         MissionHudItem* itemPtr =
             &game.curArea->mission.hudItems[curHudItemIdx];
             
         //Enabled checkbox.
         bool enabled = itemPtr->enabled;
-        ImGui::Spacer();
         if(
             ImGui::Checkbox("Enabled", &enabled)
         ) {
@@ -4751,6 +3628,89 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             setTooltip(
                 "What sort of content will be shown inside."
             );
+            
+            const auto processIdxsListWidgets =
+                [this] (
+                    vector<size_t>* idxs,
+                    const string& label, const string& term
+            ) {
+            
+                if(idxs->empty()) idxs->push_back(0);
+                
+                for(size_t i = 0; i < idxs->size(); i++) {
+                
+                    //Add button.
+                    if(
+                        ImGui::ImageButton(
+                            "add" + label + "IdxButton" + i2s(i),
+                            editorIcons[EDITOR_ICON_ADD],
+                            Point(EDITOR::ICON_BMP_SIZE) * 0.75f
+                        )
+                    ) {
+                        registerChange(
+                            "mission HUD item " + term +
+                            " addition"
+                        );
+                        idxs->insert(idxs->begin() + i, 0);
+                    }
+                    setTooltip("Add a new " + term + ".");
+                    
+                    //Remove button.
+                    ImGui::SameLine();
+                    if(idxs->size() != 1) {
+                    
+                        if(
+                            ImGui::ImageButton(
+                                "rem" + label + "IdxButton" + i2s(i),
+                                editorIcons[EDITOR_ICON_REMOVE],
+                                Point(EDITOR::ICON_BMP_SIZE) * 0.75f
+                            )
+                        ) {
+                            registerChange(
+                                "mission HUD item " + term +
+                                " removal"
+                            );
+                            idxs->erase(idxs->begin() + i);
+                        }
+                        setTooltip("Remove this " + term + ".");
+                        
+                    } else {
+                    
+                        ImGui::Dummy(
+                            ImVec2(
+                                EDITOR::ICON_BMP_SIZE,
+                                EDITOR::ICON_BMP_SIZE
+                            )
+                        );
+                        
+                    }
+                    
+                    //Number input.
+                    int idx = idxs->operator[](i);
+                    idx++;
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(50);
+                    if(
+                        ImGui::DragInt(
+                            (label + "##idx" + i2s(i)).c_str(),
+                            &idx, 0.1f, 1, INT_MAX
+                        )
+                    ) {
+                        registerChange(
+                            "mission HUD item " + term + " change"
+                        );
+                        idx--;
+                        idxs->operator[](i) = (size_t) idx;
+                    }
+                    setTooltip(
+                        "Number of the " + term + " to get the\n"
+                        "amounts from. If you specify multiple ones,\n"
+                        "it combines all of them."
+                    );
+                    
+                }
+                
+            };
             
             switch(itemPtr->contentType) {
             case MISSION_HUD_ITEM_CONTENT_TEXT: {
@@ -4779,93 +3739,31 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         
                 break;
                 
+            } case MISSION_HUD_ITEM_CONTENT_HEALTH: {
+        
+                //Label input.
+                string text = itemPtr->text;
+                if(ImGui::InputText("Label", &text)) {
+                    registerChange("mission HUD item text change");
+                    itemPtr->text = text;
+                }
+                setTooltip(
+                    "Text to label the bar with, if any."
+                );
+                
+                //Mob group number widgets.
+                processIdxsListWidgets(
+                    &itemPtr->idxsList, "Mob group number", "mob group"
+                );
+                
+                break;
+                
             } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
             case MISSION_HUD_ITEM_CONTENT_REM_TOT:
             case MISSION_HUD_ITEM_CONTENT_CUR_AMT:
             case MISSION_HUD_ITEM_CONTENT_REM_AMT:
             case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
         
-                const auto processIdxsListWidgets =
-                    [this] (
-                        vector<size_t>* idxs,
-                        const string& label, const string& descriptor
-                ) {
-                
-                    if(idxs->empty()) idxs->push_back(0);
-                    
-                    for(size_t i = 0; i < idxs->size(); i++) {
-                    
-                        //Add button.
-                        if(
-                            ImGui::ImageButton(
-                                "addIdxButton",
-                                editorIcons[EDITOR_ICON_ADD],
-                                Point(EDITOR::ICON_BMP_SIZE)
-                            )
-                        ) {
-                            registerChange(
-                                "mission HUD item " + descriptor +
-                                " addition"
-                            );
-                            idxs->insert(idxs->begin() + i, 0);
-                        }
-                        
-                        //Remove button.
-                        ImGui::SameLine();
-                        if(idxs->size() != 1) {
-                        
-                            if(
-                                ImGui::ImageButton(
-                                    "remIdxButton",
-                                    editorIcons[EDITOR_ICON_REMOVE],
-                                    Point(EDITOR::ICON_BMP_SIZE)
-                                )
-                            ) {
-                                registerChange(
-                                    "mission HUD item " + descriptor +
-                                    " removal"
-                                );
-                                idxs->erase(idxs->begin() + i);
-                            }
-                            
-                        } else {
-                        
-                            ImGui::Dummy(
-                                ImVec2(
-                                    EDITOR::ICON_BMP_SIZE,
-                                    EDITOR::ICON_BMP_SIZE
-                                )
-                            );
-                            
-                        }
-                        
-                        //Number input.
-                        int idx = idxs->operator[](i);
-                        idx++;
-                        ImGui::SameLine();
-                        ImGui::SetNextItemWidth(50);
-                        if(
-                            ImGui::DragInt(
-                                (label + "##idx" + i2s(i)).c_str(),
-                                &idx, 0.1f, 1, INT_MAX
-                            )
-                        ) {
-                            registerChange(
-                                "mission HUD item " + descriptor + " change"
-                            );
-                            idx--;
-                            idxs->operator[](i) = (size_t) idx;
-                        }
-                        setTooltip(
-                            "Number of the " + descriptor + " to get the\n"
-                            "amounts from. If you specify multiple ones,\n"
-                            "it combines all of them."
-                        );
-                        
-                    }
-                    
-                };
-                
                 //Label input.
                 string text = itemPtr->text;
                 if(ImGui::InputText("Label", &text)) {
@@ -4894,16 +3792,13 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 
                 if(
                     itemPtr->amountType ==
-                    MISSION_HUD_ITEM_AMT_MOB_CHECKLIST
+                    MISSION_HUD_ITEM_AMT_MOB_GROUP
                 ) {
                 
-                    //Mob checklist number widgets.
+                    //Mob group number widgets.
                     processIdxsListWidgets(
-                        &itemPtr->idxsList,
-                        "Mob checklist number", "mob checklist"
+                        &itemPtr->idxsList, "Mob group number", "mob group"
                     );
-                    
-                    break;
                     
                 }
                 
@@ -4918,26 +3813,9 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                         "Region number", "region"
                     );
                     
-                    break;
-                    
                 }
                 
-                if(
-                    itemPtr->contentType !=
-                    MISSION_HUD_ITEM_CONTENT_CUR_AMT &&
-                    (
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_PIKMIN ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADERS ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS ||
-                        itemPtr->amountType ==
-                        MISSION_HUD_ITEM_AMT_LEADER_KOS
-                    )
-                ) {
+                if(itemPtr->contentType != MISSION_HUD_ITEM_CONTENT_CUR_AMT) {
                 
                     //Total amount value.
                     int total = itemPtr->totalAmount;
@@ -4973,186 +3851,291 @@ void AreaEditor::processGuiPanelMissionHudItems() {
 
 
 /**
- * @brief Processes the Dear ImGui mob checklists part of the
+ * @brief Processes the Dear ImGui mission medal award part of the
  * mission control panel for this frame.
  */
-void AreaEditor::processGuiPanelMissionMobChecklists() {
-    //Mission mob checklists node.
-    if(saveableTreeNode("mission", "Mob checklists")) {
+void AreaEditor::processGuiPanelMissionMedalAward() {
+    //Medal award node.
+    if(saveableTreeNode("mission", "Medal award")) {
+    
+        //Medal award mode text.
+        ImGui::Text("Medal award mode:");
+        
+        //Medal award mode widgets.
+        processGuiWidgetsMedalAwardMode(
+            0, "Points",
+            "The player's final medal depends on how many points they\n"
+            "got in different criteria."
+        );
+        
+        ImGui::SameLine();
+        processGuiWidgetsMedalAwardMode(
+            1, "Clear",
+            "The player's final medal depends on whether they have\n"
+            "cleared the mission (platinum) or failed (nothing)."
+        );
+        
+        ImGui::SameLine();
+        processGuiWidgetsMedalAwardMode(
+            2, "Participation",
+            "The player's final medal depends on whether they have played\n"
+            "the mission (platinum) or not (nothing)."
+        );
+        
+        //Medal award criterion widgets.
+        if(
+            game.curArea->mission.medalAwardMode ==
+            MISSION_MEDAL_AWARD_MODE_POINTS
+        ) {
+        
+            //Starting score value.
+            ImGui::Spacer();
+            int startingPoints = game.curArea->mission.startingPoints;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Starting points", &startingPoints, 1.0f)) {
+                registerChange("mission medal award change");
+                game.curArea->mission.startingPoints = startingPoints;
+            }
+            setTooltip(
+                "Starting amount of points. It can be positive or negative.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Medal point requirements text.
+            ImGui::Spacer();
+            ImGui::Text("Medal point requirements:");
+            
+            //Medal point requirement widgets.
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.bronzeReq, "Bronze",
+                INT_MIN, game.curArea->mission.silverReq - 1,
+                "To get a bronze medal, the player needs at least these\n"
+                "many points. Fewer than this, and the player gets no medal."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.silverReq, "Silver",
+                game.curArea->mission.bronzeReq + 1,
+                game.curArea->mission.goldReq - 1,
+                "To get a silver medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.goldReq, "Gold",
+                game.curArea->mission.silverReq + 1,
+                game.curArea->mission.platinumReq - 1,
+                "To get a gold medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            processGuiWidgetsMedalAwardMedal(
+                &game.curArea->mission.platinumReq, "Platinum",
+                game.curArea->mission.goldReq + 1, INT_MAX,
+                "To get a platinum medal, the player needs at least these\n"
+                "many points."
+            );
+            
+            //Maker record value.
+            ImGui::Spacer();
+            int makerRecord = game.curArea->mission.makerRecord;
+            ImGui::SetNextItemWidth(60);
+            if(ImGui::DragInt("Maker's record", &makerRecord, 1.0f)) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecord = makerRecord;
+            }
+            setTooltip(
+                "Specify your best score here, if you want.\n"
+                "You must write a date too in that case.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Maker record date input.
+            string makerRecordDate =
+                game.curArea->mission.makerRecordDate;
+            ImGui::SetNextItemWidth(120);
+            if(
+                monoInputText(
+                    "Date (YYYY/MM/DD)", &makerRecordDate
+                )
+            ) {
+                registerChange("maker record change");
+                game.curArea->mission.makerRecordDate = makerRecordDate;
+            }
+            setTooltip(
+                "Specify the date in which you got your best score here,\n"
+                "if you want. Your record will only be saved if you\n"
+                "write a date.\n"
+                "The format must be YYYY/MM/DD."
+            );
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::Spacer();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui mob groups part of the
+ * mission control panel for this frame.
+ */
+void AreaEditor::processGuiPanelMissionMobGroups() {
+    //Mission mob groups node.
+    if(saveableTreeNode("mission", "Mob groups")) {
     
         //Setup.
-        processGuiListNavSetup(
-            &curMobChecklistIdx, game.curArea->mission.mobChecklists.size(),
+        processGuiNavSetup(
+            &curMobGroupIdx, game.curArea->mission.mobGroups.size(),
             false
         );
         
-        //Current checklist text.
-        processGuiListNavCurWidget(
-            curMobChecklistIdx, game.curArea->mission.mobChecklists.size(),
-            "Checklist"
+        //Nav box start.
+        processGuiNavBoxStart(
+            "group", "Group", &curMobGroupIdx,
+        [this] () { return game.curArea->mission.mobGroups.size(); },
+        [this] () { return 1; }
         );
         
-        //Create checklist button.
-        size_t prevCurMobChecklistIdx = curMobChecklistIdx;
+        //Previous group button.
+        processGuiNavBoxPrev();
+        
+        //Current group text.
+        processGuiNavBoxCur();
+        
+        //Next group button.
+        processGuiNavBoxNext();
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(2);
+        
+        //Create group button.
+        size_t prevCurMobGroupIdx = curMobGroupIdx;
         if(
-            processGuiListNavNewWidget(
-                &curMobChecklistIdx,
-                game.curArea->mission.mobChecklists.size(),
-                "Add a new mission mob checklist."
+            processGuiNavWidgetNew(
+                &curMobGroupIdx,
+                game.curArea->mission.mobGroups.size()
             )
         ) {
-            registerChange("mission mob checklist creation");
-            game.curArea->mission.mobChecklists.insert(
-                game.curArea->mission.mobChecklists.begin() +
-                prevCurMobChecklistIdx,
-                MissionMobChecklist()
-            );
+            registerChange("mission mob group creation");
+            insertInVector(game.curArea->mission.mobGroups, curMobGroupIdx);
             for(
-                size_t e = 0; e < game.curArea->mission.events.size(); e++
+                size_t e = 0; e < game.curArea->mission.endConds.size(); e++
             ) {
-                MissionEvent* ePtr = &game.curArea->mission.events[e];
-                if(ePtr->type != MISSION_EV_MOB_CHECKLIST) continue;
+                MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+                if(ePtr->type != MISSION_END_COND_MOB_GROUP) continue;
                 if(ePtr->indexParam == 0) continue;
                 adjustMisalignedIndex(
-                    ePtr->indexParam, prevCurMobChecklistIdx, true
+                    ePtr->indexParam, prevCurMobGroupIdx, true
                 );
             }
             setStatus(
-                "Created mission mob checklist #" +
-                i2s(curMobChecklistIdx + 1) + "."
+                "Created mission mob group #" +
+                i2s(curMobGroupIdx + 1) + "."
             );
         }
+        setTooltip("Add a new mission mob group.");
         
-        //Delete checklist button.
-        prevCurMobChecklistIdx = curMobChecklistIdx;
-        if(
-            processGuiListNavDelWidget(
-                &curMobChecklistIdx,
-                game.curArea->mission.mobChecklists.size(),
-                "Delete the current mission mob checklist.", true
-            )
-        ) {
-            registerChange("mission mob checklist deletion");
-            game.curArea->mission.mobChecklists.erase(
-                game.curArea->mission.mobChecklists.begin() +
-                prevCurMobChecklistIdx
-            );
-            for(
-                size_t e = 0; e < game.curArea->mission.events.size(); e++
-            ) {
-                MissionEvent* ePtr = &game.curArea->mission.events[e];
-                if(ePtr->type != MISSION_EV_MOB_CHECKLIST) continue;
-                if(ePtr->indexParam == 0) continue;
-                adjustMisalignedIndex(
-                    ePtr->indexParam, prevCurMobChecklistIdx, false
-                );
-            }
-            setStatus(
-                "Deleted mission event #" +
-                i2s(prevCurMobChecklistIdx + 1) + "."
-            );
-        }
-        
-        //Previous checklist button.
-        processGuiListNavPrevWidget(
-            &curMobChecklistIdx,
-            game.curArea->mission.mobChecklists.size(),
-            "Change to the previous mission mob checklist.", true
-        );
-        
-        //Next checklist button.
-        processGuiListNavNextWidget(
-            &curMobChecklistIdx,
-            game.curArea->mission.mobChecklists.size(),
-            "Change to the next mission mob checklist.", true
-        );
-        
-        if(!game.curArea->mission.mobChecklists.empty()) {
-        
-            MissionMobChecklist* checklistPtr =
-                &game.curArea->mission.mobChecklists[curMobChecklistIdx];
-                
-            //Checklist type combobox.
-            ImGui::Spacer();
-            int checklistType = checklistPtr->type;
+        //Delete group button.
+        prevCurMobGroupIdx = curMobGroupIdx;
+        ImGui::SameLine();
+        if(!game.curArea->mission.mobGroups.empty()) {
             if(
-                ImGui::Combo(
-                    "Type", &checklistType,
-                    enumGetNames(missionMobChecklistTypeNames), 15
+                processGuiNavWidgetDel(
+                    &curMobGroupIdx,
+                    game.curArea->mission.mobGroups.size()
                 )
             ) {
-                registerChange("mission mob checklist type change");
-                checklistPtr->type = (MISSION_MOB_CHECKLIST) checklistType;
+                registerChange("mission mob group deletion");
+                game.curArea->mission.mobGroups.erase(
+                    game.curArea->mission.mobGroups.begin() +
+                    prevCurMobGroupIdx
+                );
+                for(
+                    size_t e = 0; e < game.curArea->mission.endConds.size(); e++
+                ) {
+                    MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+                    if(ePtr->type != MISSION_END_COND_MOB_GROUP) continue;
+                    if(ePtr->indexParam == 0) continue;
+                    adjustMisalignedIndex(
+                        ePtr->indexParam, prevCurMobGroupIdx, false
+                    );
+                }
+                setStatus(
+                    "Deleted mission mob group #" +
+                    i2s(prevCurMobGroupIdx + 1) + "."
+                );
+            }
+            setTooltip("Delete the current mission mob group.");
+        } else {
+            processGuiNavBoxPlaceholder();
+        }
+        
+        //End the nav box.
+        processGuiNavBoxEnd();
+        
+        if(!game.curArea->mission.mobGroups.empty()) {
+        
+            MissionMobGroup* groupPtr =
+                &game.curArea->mission.mobGroups[curMobGroupIdx];
+                
+            //Group type combobox.
+            int groupType = groupPtr->type;
+            if(
+                ImGui::Combo(
+                    "Type", &groupType,
+                    enumGetNames(missionMobGroupTypeNames), 15
+                )
+            ) {
+                registerChange("mission mob group type change");
+                groupPtr->type = (MISSION_MOB_GROUP) groupType;
             }
             setTooltip(
-                "The checklist type controls how the objects that are\n"
+                "The group type controls how the objects that are\n"
                 "a part of it are determined."
             );
             
-            //All checkbox.
-            bool amountIsAll = checklistPtr->requiredAmount == 0;
             if(
-                ImGui::Checkbox("All matching mobs", &amountIsAll)
-            ) {
-                registerChange("mission mob checklist amount change");
-                if(amountIsAll) {
-                    checklistPtr->requiredAmount = 0;
-                } else {
-                    checklistPtr->requiredAmount = 1;
-                }
-            }
-            setTooltip(
-                "If checked, then the checklist is cleared when all of the\n"
-                "matching objects in the area are cleared. Otherwise,\n"
-                "the checklist is cleared when any X of the matching\n"
-                "objects are cleared."
-            );
-            
-            //Amount value.
-            if(!amountIsAll) {
-                int amount = (int) checklistPtr->requiredAmount;
-                ImGui::Indent();
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)
-                ) {
-                    registerChange("mission mob checklist amount change");
-                    checklistPtr->requiredAmount = (size_t) amount;
-                }
-                setTooltip(
-                    "How many matching objects within the checklist need to\n"
-                    "be cleared in order for the checklist to be cleared."
-                    , "", WIDGET_EXPLANATION_DRAG
-                );
-                ImGui::Unindent();
-            }
-            
-            if(
-                checklistPtr->type == MISSION_MOB_CHECKLIST_CUSTOM ||
-                checklistPtr->type == MISSION_MOB_CHECKLIST_ENEMIES ||
-                checklistPtr->type == MISSION_MOB_CHECKLIST_TREASURES_ENEMIES
+                groupPtr->type == MISSION_MOB_GROUP_CUSTOM ||
+                groupPtr->type == MISSION_MOB_GROUP_ENEMIES ||
+                groupPtr->type == MISSION_MOB_GROUP_TREASURES_ENEMIES
             ) {
             
                 //Enemies need collection checkbox.
                 bool enemiesNeedCollection =
-                    checklistPtr->enemiesNeedCollection;
+                    groupPtr->enemiesNeedCollection;
                 if(
                     ImGui::Checkbox(
                         "Enemies need collection", &enemiesNeedCollection
                     )
                 ) {
-                    registerChange("mission mob checklist requirement change");
-                    checklistPtr->enemiesNeedCollection = enemiesNeedCollection;
+                    registerChange("mission mob group requirement change");
+                    groupPtr->enemiesNeedCollection = enemiesNeedCollection;
                 }
                 setTooltip(
                     "If true, enemies need to be defeated and\n"
-                    "collected in order to be checked.\n"
+                    "collected in order to be marked as cleared.\n"
                     "If false, they only need to be defeated."
                 );
                 
             }
             
-            if(checklistPtr->type == MISSION_MOB_CHECKLIST_CUSTOM) {
+            //Highlight on radar checkbox.
+            bool highlightOnRadar = groupPtr->highlightOnRadar;
+            if(
+                ImGui::Checkbox("Highlight on radar", &highlightOnRadar)
+            ) {
+                registerChange("mission mob group highlight change");
+                groupPtr->highlightOnRadar = highlightOnRadar;
+            }
+            setTooltip(
+                "Whether mobs in this group should appear with a glowing\n"
+                "icon on top of them on the radar."
+            );
+            
+            if(groupPtr->type == MISSION_MOB_GROUP_CUSTOM) {
             
                 //Choose mobs button.
                 if(ImGui::Button("Pick objects...")) {
@@ -5161,13 +4144,13 @@ void AreaEditor::processGuiPanelMissionMobChecklists() {
                 }
                 setTooltip(
                     "Click here to start picking which objects do and\n"
-                    "do not belong to the checklist."
+                    "do not belong to the group."
                 );
                 
                 //Mob amount text.
                 ImGui::SameLine();
                 ImGui::Text(
-                    "(%u chosen)", (unsigned int) checklistPtr->mobIdxs.size()
+                    "(%u chosen)", (unsigned int) groupPtr->mobIdxs.size()
                 );
                 
             }
@@ -5191,69 +4174,76 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
     
         //Setup.
         static size_t curCriterionIdx = 0;
-        processGuiListNavSetup(
+        processGuiNavSetup(
             &curCriterionIdx, game.curArea->mission.scoreCriteria.size(),
             false
         );
         
-        //Current criterion text.
-        processGuiListNavCurWidget(
-            curCriterionIdx, game.curArea->mission.scoreCriteria.size(),
-            "Criterion"
+        //Nav box start.
+        processGuiNavBoxStart(
+            "criterion", "Criterion", &curCriterionIdx,
+        [this] () { return game.curArea->mission.scoreCriteria.size(); },
+        [this] () { return 1; }
         );
+        
+        //Previous criterion button.
+        processGuiNavBoxPrev();
+        
+        //Current criterion text.
+        processGuiNavBoxCur();
+        
+        //Next criterion button.
+        processGuiNavBoxNext();
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(2);
         
         //Add criterion button.
         size_t prevCurCriterionIdx = curCriterionIdx;
         if(
-            processGuiListNavNewWidget(
+            processGuiNavWidgetNew(
                 &curCriterionIdx,
-                game.curArea->mission.scoreCriteria.size(),
-                "Add a new mission score criterion."
+                game.curArea->mission.scoreCriteria.size()
             )
         ) {
             registerChange("mission score criterion creation");
-            game.curArea->mission.scoreCriteria.insert(
-                game.curArea->mission.scoreCriteria.begin() +
-                prevCurCriterionIdx,
-                MissionScoreCriterion()
+            insertInVector(
+                game.curArea->mission.scoreCriteria, curCriterionIdx
             );
             setStatus(
                 "Created mission score criterion #" +
                 i2s(curCriterionIdx + 1) + "."
             );
         }
+        setTooltip("Add a new mission score criterion.");
         
         //Delete criterion button.
         prevCurCriterionIdx = curCriterionIdx;
-        if(
-            processGuiListNavDelWidget(
-                &curCriterionIdx,
-                game.curArea->mission.scoreCriteria.size(),
-                "Delete the current mission score criterion.", true
-            )
-        ) {
-            registerChange("mission score criterion deletion");
-            game.curArea->mission.scoreCriteria.erase(
-                game.curArea->mission.scoreCriteria.begin() +
-                prevCurCriterionIdx
-            );
-            setStatus(
-                "Deleted mission score criterion #" +
-                i2s(prevCurCriterionIdx + 1) + "."
-            );
+        ImGui::SameLine();
+        if(!game.curArea->mission.scoreCriteria.empty()) {
+            if(
+                processGuiNavWidgetDel(
+                    &curCriterionIdx,
+                    game.curArea->mission.scoreCriteria.size()
+                )
+            ) {
+                registerChange("mission score criterion deletion");
+                game.curArea->mission.scoreCriteria.erase(
+                    game.curArea->mission.scoreCriteria.begin() +
+                    prevCurCriterionIdx
+                );
+                setStatus(
+                    "Deleted mission score criterion #" +
+                    i2s(prevCurCriterionIdx + 1) + "."
+                );
+            }
+            setTooltip("Delete the current mission score criterion.");
+        } else {
+            processGuiNavBoxPlaceholder();
         }
         
-        //Previous criterion button.
-        processGuiListNavPrevWidget(
-            &curCriterionIdx, game.curArea->mission.scoreCriteria.size(),
-            "Select the previous mission score criterion.", true
-        );
-        
-        //Next criterion button.
-        processGuiListNavNextWidget(
-            &curCriterionIdx, game.curArea->mission.scoreCriteria.size(),
-            "Select the next mission score criterion.", true
-        );
+        //End the nav box.
+        processGuiNavBoxEnd();
         
         if(!game.curArea->mission.scoreCriteria.empty()) {
         
@@ -5261,7 +4251,6 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 &game.curArea->mission.scoreCriteria[curCriterionIdx];
                 
             //Criterion type combobox.
-            ImGui::Spacer();
             int criterionType = criterionPtr->type;
             if(
                 ImGui::Combo(
@@ -5309,22 +4298,24 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             
-            if(criterionPtr->type == MISSION_SCORE_CRITERION_MOB_CHECKLIST) {
+            if(criterionPtr->type == MISSION_SCORE_CRITERION_MOB_GROUP) {
             
-                //Mob checklist number value.
+                //Mob group number value.
                 int number = (int) criterionPtr->indexParam;
+                number++;
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        "Mob checklist number",
-                        &number, 0.1f, 0, INT_MAX
+                        "Mob group number",
+                        &number, 0.1f, 1, INT_MAX
                     )
                 ) {
-                    registerChange("mission score criterion checklist change");
+                    registerChange("mission score criterion group change");
+                    number--;
                     criterionPtr->indexParam = (size_t) number;
                 }
                 setTooltip(
-                    "Number of the mob checklist to check the mobs of.",
+                    "Number of the mob group to check the mobs of.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 
@@ -5343,15 +4334,14 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
  * @brief Processes the Dear ImGui mob control panel for this frame.
  */
 void AreaEditor::processGuiPanelMob() {
-
-    MobGen* mPtr = *selectedMobs.begin();
+    MobGen* mPtr = game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
     
     //Category and type comboboxes.
     string customCatName = "";
     if(mPtr->type) customCatName = mPtr->type->customCategoryName;
     MobType* type = mPtr->type;
     
-    if(processGuiMobTypeWidgets(&customCatName, &type)) {
+    if(processGuiWidgetsMobType(&customCatName, &type)) {
         registerChange("object type change");
         mPtr->type = type;
         lastMobCustomCatName = "";
@@ -5518,7 +4508,7 @@ void AreaEditor::processGuiPanelMob() {
         );
         
         //Object delete link button.
-        if(!(*selectedMobs.begin())->links.empty()) {
+        if(!mPtr->links.empty()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -5526,8 +4516,8 @@ void AreaEditor::processGuiPanelMob() {
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                if((*selectedMobs.begin())->links.size() == 1) {
-                    registerChange("Object link deletion");
+                if(mPtr->links.size() == 1) {
+                    registerChange("object link deletion");
                     mPtr->links.erase(mPtr->links.begin());
                     mPtr->linkIdxs.erase(mPtr->linkIdxs.begin());
                     homogenizeSelectedMobs();
@@ -5652,22 +4642,22 @@ void AreaEditor::processGuiPanelMobs() {
     
         //Instructions text.
         ImGui::TextWrapped(
-            "Click an object to mark or unmark it as part of the checklist. "
-            "Objects flashing yellow are a part of the checklist. "
+            "Click an object to mark or unmark it as part of the group. "
+            "Objects flashing yellow are a part of the group. "
             "Click the finish button when you are done."
         );
         
         //Total objects chosen text.
         ImGui::Text(
             "Total objects chosen: %lu",
-            game.curArea->mission.mobChecklists[
-                curMobChecklistIdx
+            game.curArea->mission.mobGroups[
+                curMobGroupIdx
             ].mobIdxs.size()
         );
         
         //Finish button.
         if(ImGui::Button("Finish")) {
-            changeState(EDITOR_STATE_GAMEPLAY);
+            changeState(EDITOR_STATE_MISSION);
         }
         setTooltip("Click here to finish.");
         
@@ -5696,7 +4686,7 @@ void AreaEditor::processGuiPanelMobs() {
             "N"
         );
         
-        if(!selectedMobs.empty()) {
+        if(mobSelection.hasAny()) {
         
             //Delete object button.
             ImGui::SameLine();
@@ -5733,11 +4723,11 @@ void AreaEditor::processGuiPanelMobs() {
         
         ImGui::Spacer();
         
-        if(selectedMobs.size() == 1 || selectionHomogenized) {
+        if(mobSelection.hasOne() || mobSelection.homogenized) {
         
             processGuiPanelMob();
             
-        } else if(selectedMobs.empty()) {
+        } else if(!mobSelection.hasAny()) {
         
             //"No object selected" text.
             ImGui::TextDisabled("(No object selected)");
@@ -5753,7 +4743,7 @@ void AreaEditor::processGuiPanelMobs() {
             //Homogenize objects button.
             if(ImGui::Button("Edit all together")) {
                 registerChange("object combining");
-                selectionHomogenized = true;
+                mobSelection.homogenized = true;
                 homogenizeSelectedMobs();
             }
         }
@@ -6218,7 +5208,7 @@ void AreaEditor::processGuiPanelPaths() {
             //Select stops with label popup.
             static string labelName;
             if(
-                processGuiInputPopup("selectStops", "Label:", &labelName, true)
+                processGuiPopupInput("selectStops", "Label:", &labelName, true)
             ) {
                 selectPathStopsWithLabel(labelName);
             }
@@ -6351,7 +5341,6 @@ void AreaEditor::processGuiPanelReview() {
         
             ImGui::Indent();
             ImGui::TextWrapped("%s", problemDescription.c_str());
-            ImGui::Unindent();
             
             //Go to problem button.
             if(ImGui::Button("Go to problem")) {
@@ -6360,6 +5349,7 @@ void AreaEditor::processGuiPanelReview() {
             setTooltip(
                 "Focus the camera on the problem found, if applicable."
             );
+            ImGui::Unindent();
             
         }
         
@@ -6371,69 +5361,68 @@ void AreaEditor::processGuiPanelReview() {
     ImGui::Spacer();
     if(saveableTreeNode("review", "Reminders")) {
     
-        //Current reminder text.
-        size_t curReminderIdx = reminderSelection.getSelectedItemIdx();
-        if(reminderSelection.isMultipleSelected()) {
-            ImGui::BeginDisabled();
-            ImGui::Text("(Multiple reminders selected)");
-            ImGui::EndDisabled();
-        } else {
-            processGuiListNavCurWidget(
-                curReminderIdx, game.curArea->reminders.size(), "Reminder"
-            );
+        //Nav box start.
+        size_t curReminderIdx = reminderSelection.getSingleItemIdx();
+        processGuiNavBoxStart(
+            "reminder", "Reminder", &curReminderIdx,
+        [this] () { return game.curArea->reminders.size(); },
+        [this] () { return reminderSelection.getCount(); }
+        );
+        
+        //Previous reminder button.
+        if(processGuiNavBoxPrev()) {
+            reminderSelection.setSingle(curReminderIdx);
         }
+        
+        //Current reminder text.
+        processGuiNavBoxCur();
+        
+        //Next reminder button.
+        if(processGuiNavBoxNext()) {
+            reminderSelection.setSingle(curReminderIdx);
+        }
+        
+        //Nav box second line setup.
+        processGuiNavBoxSecondLine(2);
         
         //New reminder button.
         if(
-            processGuiListNavNewWidget(
-                &curReminderIdx, game.curArea->reminders.size(),
-                "Create a new reminder for yourself.\n"
-                "Reminders are saved in your user data, not in the area."
+            processGuiNavWidgetNew(
+                &curReminderIdx, game.curArea->reminders.size()
             )
         ) {
             registerChange("reminder deletion");
             game.curArea->reminders.push_back(AreaMakerReminder());
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
+            reminderSelection.setSingle(curReminderIdx);
         }
+        setTooltip(
+            "Create a new reminder for yourself.\n"
+            "Reminders are saved in your user data, not in the area."
+        );
         
         //Delete reminder button.
-        if(
-            processGuiListNavDelWidget(
-                &curReminderIdx, game.curArea->reminders.size(),
-                "Delete the current reminder.", true
-            )
-        ) {
-            deleteReminderCmd(1.0f);
+        ImGui::SameLine();
+        if(reminderSelection.getCount() > 0) {
+            if(
+                processGuiNavWidgetDel(
+                    &curReminderIdx, game.curArea->reminders.size()
+                )
+            ) {
+                deleteReminderCmd(1.0f);
+            }
+            setTooltip("Delete the current reminder.");
+        } else {
+            processGuiNavBoxPlaceholder();
         }
         
-        //Previous reminder button.
-        if(
-            processGuiListNavPrevWidget(
-                &curReminderIdx, game.curArea->reminders.size(),
-                "Select the previous reminder.", true, "", 1.0f, "", true
-            )
-        ) {
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
-        }
+        //End the nav box.
+        processGuiNavBoxEnd();
         
-        //Next reminder button.
-        if(
-            processGuiListNavNextWidget(
-                &curReminderIdx, game.curArea->reminders.size(),
-                "Select the next reminder.", true, "", 1.0f, "", true
-            )
-        ) {
-            reminderSelection.clear();
-            reminderSelection.select(curReminderIdx);
-        }
-        
-        if(reminderSelection.isOneSelected()) {
+        if(reminderSelection.hasOne()) {
         
             AreaMakerReminder* curReminder =
                 &game.curArea->reminders[
-                    reminderSelection.getSelectedItemIdx()
+                    reminderSelection.getSingleItemIdx()
                 ];
                 
             //Reminder position.
@@ -6658,7 +5647,7 @@ void AreaEditor::processGuiPanelSector() {
             if(sPtr->hazard) {
                 hazardIname = sPtr->hazard->manifest->internalName;
             }
-            if(processGuiHazardManagementWidgets(hazardIname)) {
+            if(processGuiWidgetsHazardManagement(hazardIname)) {
                 registerChange("sector hazard changes");
                 sPtr->hazard =
                     hazardIname.empty() ?
@@ -7068,7 +6057,7 @@ void AreaEditor::processGuiPanelTools() {
         );
         
         //Reference size value.
-        processGuiSizeWidgets(
+        processGuiWidgetsSize(
             "Size", referenceSize, 1.0f,
             referenceKeepAspectRatio, false,
             AREA_EDITOR::REFERENCE_MIN_SIZE
@@ -7497,4 +6486,56 @@ void AreaEditor::processGuiToolbar() {
         );
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a medal award medal
+ * requirement for this frame.
+ *
+ * @param requirementPtr Points to the requirement value for this medal.
+ * @param widgetLabel Label for the value widget.
+ * @param widgetMinValue Minimum value for the value widget.
+ * @param widgetMaxValue Maximum value for the value widget.
+ * @param tooltip Tooltip for the value widget.
+ */
+void AreaEditor::processGuiWidgetsMedalAwardMedal(
+    int* requirementPtr, const string& widgetLabel,
+    int widgetMinValue, int widgetMaxValue,
+    const string& tooltip
+) {
+    //Requirement value.
+    int req = *requirementPtr;
+    ImGui::SetNextItemWidth(90);
+    if(
+        ImGui::DragInt(
+            widgetLabel.c_str(), &req, 1.0f, widgetMinValue, widgetMaxValue
+        )
+    ) {
+        registerChange("mission medal award change");
+        *requirementPtr = req;
+    }
+    setTooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a medal award mode
+ * for this frame.
+ *
+ * @param value Internal value for this mode's radio button.
+ * @param widgetLabel Label for the radio widget.
+ * @param tooltip Tooltip for the radio widget.
+ */
+void AreaEditor::processGuiWidgetsMedalAwardMode(
+    int value, const string& widgetLabel, const string& tooltip
+) {
+    //Radio button.
+    int mode = game.curArea->mission.medalAwardMode;
+    if(ImGui::RadioButton(widgetLabel.c_str(), &mode, value)) {
+        registerChange("mission medal award change");
+        game.curArea->mission.medalAwardMode =
+            (MISSION_MEDAL_AWARD_MODE) mode;
+    }
+    setTooltip(tooltip);
 }

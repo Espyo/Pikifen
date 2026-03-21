@@ -16,14 +16,14 @@
 
 #include <allegro5/allegro.h>
 
+#include "../../content/script/action_types.h"
+#include "../../content/script/script.h"
 #include "../../core/misc_structs.h"
 #include "../../game_state/gameplay/in_world_hud.h"
 #include "../../util/general_utils.h"
 #include "../animation/animation.h"
 #include "../area/sector.h"
 #include "../other/particle.h"
-#include "../other/script.h"
-#include "../other/script_actions.h"
 #include "../other/status.h"
 #include "mob_utils.h"
 
@@ -182,8 +182,8 @@ public:
     
     //-Brain and behavior-
 
-    //Script finite-state machine.
-    Fsm fsm;
+    //Script virtual machine.
+    ScriptVM scriptVM;
     
     //The mob it has focus on.
     Mob* focusedMob = nullptr;

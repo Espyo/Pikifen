@@ -19,15 +19,15 @@
 namespace ConverterFsm {
 void createFsm(MobType* typ);
 
-void becomeIdle(Fsm* fsm, void* info1, void* info2);
-void bumped(Fsm* fsm, void* info1, void* info2);
-void finishBeingBumped(Fsm* fsm, void* info1, void* info2);
-void finishDying(Fsm* fsm, void* info1, void* info2);
-void handleObjectTouch(Fsm* fsm, void* info1, void* info2);
-void handlePikmin(Fsm* fsm, void* info1, void* info2);
-void open(Fsm* fsm, void* info1, void* info2);
-void openOrDie(Fsm* fsm, void* info1, void* info2);
-void openOrSpit(Fsm* fsm, void* info1, void* info2);
-void spit(Fsm* fsm, void* info1, void* info2);
-void startDying(Fsm* fsm, void* info1, void* info2);
+void becomeIdle(ScriptVM* scriptVM, void* info1, void* info2);
+void bumped(ScriptVM* scriptVM, void* info1, void* info2);
+void finishBeingBumped(ScriptVM* scriptVM, void* info1, void* info2);
+void finishDying(ScriptVM* scriptVM, void* info1, void* info2);
+void handleObjectTouch(ScriptVM* scriptVM, void* info1, void* info2);
+void handlePikmin(ScriptVM* scriptVM, void* info1, void* info2);
+void open(ScriptVM* scriptVM, void* info1, void* info2);
+void openOrDie(ScriptVM* scriptVM, void* info1, void* info2);
+void openOrSpit(ScriptVM* scriptVM, void* info1, void* info2);
+void spit(ScriptVM* scriptVM, void* info1, void* info2);
+void startDying(ScriptVM* scriptVM, void* info1, void* info2);
 }

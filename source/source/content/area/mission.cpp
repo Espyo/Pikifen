@@ -58,159 +58,465 @@ void MissionData::applyPreset(MISSION_PRESET newPreset) {
     reset();
     
     switch(newPreset) {
-    case MISSION_PRESET_GROW_PIKMIN: {
-        //Grow Pikmin -- events.
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PAUSE_MENU_END,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
-            .amountParam = 1,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        
+    case MISSION_PRESET_COLLECT_PIKMIN: {
+        applyPresetCollectPikmin();
         break;
-        
     } case MISSION_PRESET_COLLECT_TREASURE: {
-        //Collect Treasure -- events.
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PAUSE_MENU_END,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = 0,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
-            .amountParam = 1,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        
+        applyPresetCollectTreasure();
         break;
-        
     } case MISSION_PRESET_BATTLE_ENEMIES: {
-        //Battle Enemies -- events.
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PAUSE_MENU_END,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = 0,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
-            .amountParam = 1,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        
+        applyPresetBattleEnemies();
         break;
-        
     } case MISSION_PRESET_DEFEAT_BOSSES: {
-        //Defeat Bosses -- events.
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PAUSE_MENU_END,
-            .actionType = MISSION_ACTION_END_FAIL
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_FAIL
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = 0,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
-            .amountParam = 1,
-            .actionType = MISSION_ACTION_END_FAIL
-        }
-        );
-        
+        applyPresetDefeatBosses();
         break;
-        
     } case MISSION_PRESET_COLLECT_EVERYTHING: {
-        //Collect Everything -- events.
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_PAUSE_MENU_END,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_TIME_LIMIT,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_MOB_CHECKLIST,
-            .indexParam = 0,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        events.push_back(
-        MissionEvent {
-            .type = MISSION_EV_LOSE_LEADERS,
-            .amountParam = 1,
-            .actionType = MISSION_ACTION_END_CLEAR
-        }
-        );
-        
+        applyPresetCollectEverything();
         break;
-        
     } case MISSION_PRESET_CUSTOM: {
         break;
+    }
+    }
+}
+
+
+/**
+ * @brief Applies the Battle Enemies mission preset.
+ */
+void MissionData::applyPresetBattleEnemies() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got all enemies!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_ENEMIES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Enemies left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
         
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_DEFEAT_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
     }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Defeat as many enemies as you can within the time limit!";
+    briefingNotes = {
+        "Defeat them all for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Everything mission preset.
+ */
+void MissionData::applyPresetCollectEverything() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
     }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got everything!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_TREASURES_ENEMIES,
+        .enemiesNeedCollection = true,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Things left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_COLLECTION_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many treasures and enemies as you can within "
+        "the time limit!";
+    briefingNotes = {
+        "Collect everything for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Pikmin mission preset.
+ */
+void MissionData::applyPresetCollectPikmin() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_CUR_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Total Pikmin";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_PIKMIN;
+        
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion{
+        .type = MISSION_SCORE_CRITERION_PIKMIN,
+        .points = 10,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many Pikmin as you can within the time limit!";
+    briefingNotes = {
+        "The more you have, the better your medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Collect Treasure mission preset.
+ */
+void MissionData::applyPresetCollectTreasure() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = true,
+        .zeroTimeForScore = true,
+        .neutralMood = true,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Got all treasures!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = true,
+        .neutralMood = true,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_TREASURES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_REM_AMT;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
+        "Treasures left";
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
+        MISSION_HUD_ITEM_AMT_MOB_GROUP;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
+    { 0 };
+    
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_COLLECTION_PTS,
+        .indexParam = 0,
+        .points = 1,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Collect as many treasures as you can within the time limit!";
+    briefingNotes = {
+        "Collect everything for a platinum medal!",
+        "If a leader loses all their health, the mission will end early!"
+    };
+    startingPoints = 0;
+}
+
+
+/**
+ * @brief Applies the Defeat Bosses mission preset.
+ */
+void MissionData::applyPresetDefeatBosses() {
+    //End conditions.
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_PAUSE_MENU,
+        .clear = false,
+        .zeroTimeForScore = true,
+        .neutralMood = false,
+        .reason = "Ended early from the pause menu!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_TIME_LIMIT,
+        .clear = false,
+        .neutralMood = false,
+        .reason = "Time's up!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_MOB_GROUP,
+        .indexParam = 0,
+        .amountParam = 0,
+        .clear = true,
+        .neutralMood = false,
+        .reason = "Defeated the boss!",
+    }
+    );
+    endConds.push_back(
+    MissionEndCond {
+        .type = MISSION_END_COND_LOSE_LEADERS,
+        .amountParam = 1,
+        .clear = false,
+        .neutralMood = false,
+        .reason = "Lost a leader!",
+    }
+    );
+    
+    //Mob groups.
+    mobGroups.push_back(
+    MissionMobGroup {
+        .type = MISSION_MOB_GROUP_ENEMIES,
+        .highlightOnRadar = true,
+    }
+    );
+    
+    //HUD items.
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
+        MISSION_HUD_ITEM_CONTENT_SCORE;
+        
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled =
+        true;
+    hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
+        MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        
+    //Score criteria.
+    scoreCriteria.push_back(
+    MissionScoreCriterion {
+        .type = MISSION_SCORE_CRITERION_SEC_LEFT,
+        .indexParam = 0,
+        .points = 10,
+        .affectsHud = true,
+    }
+    );
+    
+    //Misc.
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_POINTS;
+    briefingObjective =
+        "Defeat the boss enemy within the time limit!";
+    briefingNotes = {
+        "The faster you are, the better your medal!",
+        "If a leader loses all their health, you'll fail the mission!"
+    };
+    startingPoints = 0;
 }
 
 
@@ -230,15 +536,15 @@ string MissionData::getBriefingObjectiveText() const {
 
 /**
  * @brief Returns what text to show in menus for each bullet point that explains
- * the mission grading.
+ * the mission medal award mode.
  *
  * @return The text.
  */
-vector<string> MissionData::getGradingBulletPoints() const {
+vector<string> MissionData::getMedalAwardBulletPoints() const {
     vector<string> result;
     
-    switch(gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+    switch(medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         result.push_back("Platinum medal: " + i2s(platinumReq) + "+ points.");
         result.push_back("Gold medal: " + i2s(goldReq) + "+ points.");
         result.push_back("Silver medal: " + i2s(silverReq) + "+ points.");
@@ -251,11 +557,11 @@ vector<string> MissionData::getGradingBulletPoints() const {
         }
         break;
     }
-    case MISSION_GRADING_MODE_GOAL: {
+    case MISSION_MEDAL_AWARD_MODE_CLEAR: {
         result.push_back("Platinum medal: Clear the mission.");
         break;
     }
-    case MISSION_GRADING_MODE_PARTICIPATION: {
+    case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
         result.push_back("Platinum medal: Just play the mission.");
         break;
     }
@@ -304,10 +610,29 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
 
 
 /**
+ * @brief Returns whether ending early through the pause menu
+ * results in a clear.
+ *
+ * @return Whether it is a clear.
+ */
+bool MissionData::isPauseMenuEndClear() const {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        if(
+            game.curArea->mission.endConds[c].type ==
+            MISSION_END_COND_PAUSE_MENU
+        ) {
+            return game.curArea->mission.endConds[c].clear;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Clears the variables.
  */
 void MissionData::reset() {
-    gradingMode = MISSION_GRADING_MODE_GOAL;
+    medalAwardMode = MISSION_MEDAL_AWARD_MODE_CLEAR;
     startingPoints = 0;
     bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
@@ -315,444 +640,27 @@ void MissionData::reset() {
     platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
     makerRecord = 0;
     makerRecordDate.clear();
-    events.clear();
+    endConds.clear();
+    mobGroups.clear();
     hudItems.clear();
     hudItems.insert(hudItems.begin(), 4, MissionHudItem());
     scoreCriteria.clear();
 }
 
 
-/**
- * @brief Returns which medal the given score would give.
- *
- * @param score Score to check.
- * @return The medal, if any.
- */
-MISSION_MEDAL MissionDataOld::getScoreMedal(int score) {
-    if(score >= platinumReq) return MISSION_MEDAL_PLATINUM;
-    if(score >= goldReq) return MISSION_MEDAL_GOLD;
-    if(score >= silverReq) return MISSION_MEDAL_SILVER;
-    if(score >= bronzeReq) return MISSION_MEDAL_BRONZE;
-    return MISSION_MEDAL_NONE;
-}
-
-
 #pragma endregion
-#pragma region Action types
+#pragma region End condition types
 
 
 /**
- * @brief Retrieves editor information about the mission action type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionActionType::EditorInfo
-MissionActionTypeEndClear::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLeadersInRegion::getEditorInfo() const {
     return
-    MissionActionType::EditorInfo {
-        .description =
-        "Ends the mission as a clear. A medal can be awarded.",
-    };
-}
-
-
-/**
- * @brief Returns the action's name.
- *
- * @return The name.
- */
-string MissionActionTypeEndClear::getName() const {
-    return "End mission, clear";
-}
-
-
-/**
- * @brief Runs the action.
- *
- * @param ev Mission event that triggered this action.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it was able to run.
- */
-bool MissionActionTypeEndClear::run(
-    MissionEvent* ev, GameplayState* gameplay
-) const {
-    return gameplay->endMission(true, ev->type == MISSION_EV_TIME_LIMIT, ev);
-}
-
-
-/**
- * @brief Retrieves editor information about the mission action type.
- *
- * @return The information.
- */
-MissionActionType::EditorInfo
-MissionActionTypeEndFail::getEditorInfo() const {
-    return
-    MissionActionType::EditorInfo {
-        .description =
-        "Ends the mission as a failure. No medal can be awarded.",
-    };
-}
-
-
-/**
- * @brief Returns the action's name.
- *
- * @return The name.
- */
-string MissionActionTypeEndFail::getName() const {
-    return "End mission, failure";
-}
-
-
-/**
- * @brief Runs the action.
- *
- * @param ev Mission event that triggered this action.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it was able to run.
- */
-bool MissionActionTypeEndFail::run(
-    MissionEvent* ev, GameplayState* gameplay
-) const {
-    return gameplay->endMission(false, ev->type == MISSION_EV_TIME_LIMIT, ev);
-}
-
-
-/**
- * @brief Retrieves editor information about the mission action type.
- *
- * @return The information.
- */
-MissionActionType::EditorInfo
-MissionActionTypeScriptMessage::getEditorInfo() const {
-    return
-    MissionActionType::EditorInfo {
-        .description =
-        "Sends a message to the area's script.",
-    };
-}
-
-
-/**
- * @brief Returns the action's name.
- *
- * @return The name.
- */
-string MissionActionTypeScriptMessage::getName() const {
-    return "Send script message";
-}
-
-
-/**
- * @brief Runs the action.
- *
- * @param ev Mission event that triggered this action.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it was able to run.
- */
-bool MissionActionTypeScriptMessage::run(
-    MissionEvent* ev, GameplayState* gameplay
-) const {
-    return true; //TODO
-}
-
-
-#pragma endregion
-#pragma region Event types
-
-
-/**
- * @brief Retrieves editor information about the mission event type.
- *
- * @return The information.
- */
-MissionEvType::EditorInfo MissionEvTypeLoseLeaders::getEditorInfo() const {
-    return
-    MissionEvType::EditorInfo {
-        .description =
-        "Triggers when the player loses the given number of leaders.",
-        .amountParamName =
-        "Loss amount",
-        .amountParamDescription =
-        "Number of leader losses to check for."
-    };
-}
-
-
-/**
- * @brief Retrieves HUD information about the mission event type.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The information.
- */
-MissionEvType::HudInfo MissionEvTypeLoseLeaders::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    return
-    MissionEvType::HudInfo {
-        .description =
-        "Lose " + i2s(ev->amountParam) + " or more leaders.",
-        .reason =
-        "Lost " + amountStr((int) gameplay->leadersKod, "leader") + "!",
-    };
-}
-
-
-/**
- * @brief Returns the event's name.
- *
- * @return The name.
- */
-string MissionEvTypeLoseLeaders::getName() const {
-    return "Lose leaders";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom when the event happens.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionEvTypeLoseLeaders::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
-    Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastHurtLeaderPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Checks if the event's conditions have been met.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionEvTypeLoseLeaders::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    return gameplay->leadersKod >= ev->amountParam;
-}
-
-
-/**
- * @brief Retrieves editor information about the mission event type.
- *
- * @return The information.
- */
-MissionEvType::EditorInfo MissionEvTypeLosePikmin::getEditorInfo() const {
-    return
-    MissionEvType::EditorInfo {
-        .description =
-        "Triggers when the player loses the given number of Pikmin. "
-        "Only Pikmin deaths count, not things like Candypop Buds.",
-        .amountParamName =
-        "Loss amount",
-        .amountParamDescription =
-        "Number of Pikmin losses to check for."
-    };
-}
-
-
-/**
- * @brief Retrieves HUD information about the mission event type.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The information.
- */
-MissionEvType::HudInfo MissionEvTypeLosePikmin::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    return
-    MissionEvType::HudInfo {
-        .description =
-        "Lose " + i2s(ev->amountParam) + " or more Pikmin.",
-        .reason =
-        "Lost " + i2s(gameplay->pikminDeaths) + " Pikmin!",
-    };
-}
-
-
-/**
- * @brief Returns the event's name.
- *
- * @return The name.
- */
-string MissionEvTypeLosePikmin::getName() const {
-    return "Lose Pikmin";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom when the event happens.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionEvTypeLosePikmin::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
-    Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastPikminDeathPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Checks if the event's conditions have been met.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionEvTypeLosePikmin::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    return gameplay->pikminDeaths >= ev->amountParam;
-}
-
-
-/**
- * @brief Retrieves editor information about the mission event type.
- *
- * @return The information.
- */
-MissionEvType::EditorInfo MissionEvTypeMobChecklist::getEditorInfo() const {
-    return
-    MissionEvType::EditorInfo {
-        .description =
-        "Triggers when the given mob checklist has been cleared. "
-        "This happens when the required amount of mobs inside of "
-        "that list has been collected or defeated.",
-        .indexParamName =
-        "Mob checklist number",
-        .indexParamDescription =
-        "Number of the mob checklist to check for."
-    };
-}
-
-
-/**
- * @brief Retrieves HUD information about the mission event type.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The information.
- */
-MissionEvType::HudInfo MissionEvTypeMobChecklist::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    if(ev->indexParam > gameplay->missionMobChecklists.size() - 1) {
-        return {};
-    }
-    
-    return
-    MissionEvType::HudInfo {
-        .description =
-        "Clear the required things.",
-        .reason =
-        "Cleared " +
-        i2s(gameplay->missionMobChecklists[ev->indexParam].requiredAmount) +
-        " things!",
-    };
-}
-
-
-/**
- * @brief Returns the event's name.
- *
- * @return The name.
- */
-string MissionEvTypeMobChecklist::getName() const {
-    return "Clear mob checklist";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom when the event happens.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere in the first place.
- */
-bool MissionEvTypeMobChecklist::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
-    Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastMobClearedPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Checks if the event's conditions have been met.
- *
- * @param ev Event being processed.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionEvTypeMobChecklist::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
-) const {
-    if(ev->indexParam > gameplay->missionMobChecklists.size() - 1) {
-        return false;
-    }
-    
-    size_t requiredAmount =
-        gameplay->missionMobChecklists[ev->indexParam].requiredAmount;
-    size_t remainingAmount =
-        gameplay->missionMobChecklists[ev->indexParam].remaining.size();
-    size_t startingAmount =
-        gameplay->missionMobChecklists[ev->indexParam].startingAmount;
-    size_t nrCleared =
-        startingAmount - remainingAmount;
-        
-    return nrCleared >= requiredAmount;
-}
-
-
-/**
- * @brief Retrieves editor information about the mission event type.
- *
- * @return The information.
- */
-MissionEvType::EditorInfo MissionEvTypeLeadersInRegion::getEditorInfo() const {
-    return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
         "Triggers when the given amount of leaders is inside "
         "the given region.",
@@ -769,137 +677,421 @@ MissionEvType::EditorInfo MissionEvTypeLeadersInRegion::getEditorInfo() const {
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypeLeadersInRegion::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypeLeadersInRegion::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
+    MissionEndCondType::HudInfo {
         .description = "Leaders in the region.",
-        .reason = "Got " + i2s(ev->amountParam) + " to the region!",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypeLeadersInRegion::getName() const {
+string MissionEndCondTypeLeadersInRegion::getName() const {
     return "Leaders in region";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypeLeadersInRegion::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypeLeadersInRegion::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
-    if(ev->indexParam > gameplay->areaRegions.size() - 1) {
+    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
         return false;
     }
     Point avgPos;
-    for(Leader* lPtr : gameplay->areaRegions[ev->indexParam].leadersInside) {
+    for(Leader* lPtr : gameplay->areaRegions[cond->indexParam].leadersInside) {
         if(lPtr) avgPos += lPtr->pos;
     }
-    avgPos.x /= gameplay->areaRegions[ev->indexParam].leadersInside.size();
-    avgPos.y /= gameplay->areaRegions[ev->indexParam].leadersInside.size();
+    avgPos.x /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
+    avgPos.y /= gameplay->areaRegions[cond->indexParam].leadersInside.size();
     *outCamPos = avgPos;
     return true;
 }
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypeLeadersInRegion::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypeLeadersInRegion::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(ev->indexParam > gameplay->areaRegions.size() - 1) {
+    if(cond->indexParam > gameplay->areaRegions.size() - 1) {
         return false;
     }
     return
-        gameplay->areaRegions[ev->indexParam].leadersInside.size() >=
-        ev->amountParam;
+        gameplay->areaRegions[cond->indexParam].leadersInside.size() >=
+        cond->amountParam;
 }
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypePauseEnd::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLoseLeaders::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
-        "Triggers when the player ends the mission from the pause menu.",
+        "Triggers when the player loses the given number of leaders.",
+        .amountParamName =
+        "Loss amount",
+        .amountParamDescription =
+        "Number of leader losses to check for."
     };
 }
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypePauseEnd::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypeLoseLeaders::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
-        .description = "End from the pause menu.",
-        .reason = "Ended from the pause menu!",
+    MissionEndCondType::HudInfo {
+        .description =
+        "Lose " + i2s(cond->amountParam) + " or more leaders.",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypePauseEnd::getName() const {
-    return "Pause menu end";
+string MissionEndCondTypeLoseLeaders::getName() const {
+    return "Lose leaders";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypePauseEnd::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypeLoseLeaders::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+    Point* outCamPos, float* outCamZoom
+) const {
+    if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
+        *outCamPos = gameplay->lastHurtLeaderPos;
+        *outCamZoom = gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypeLoseLeaders::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->leadersKod >= cond->amountParam;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::EditorInfo
+MissionEndCondTypeLosePikmin::getEditorInfo() const {
+    return
+    MissionEndCondType::EditorInfo {
+        .description =
+        "Triggers when the player loses the given number of Pikmin. "
+        "Only Pikmin deaths count, not things like Candypop Buds.",
+        .amountParamName =
+        "Loss amount",
+        .amountParamDescription =
+        "Number of Pikmin losses to check for."
+    };
+}
+
+
+/**
+ * @brief Retrieves HUD information about the mission end condition type.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The information.
+ */
+MissionEndCondType::HudInfo MissionEndCondTypeLosePikmin::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return
+    MissionEndCondType::HudInfo {
+        .description =
+        "Lose " + i2s(cond->amountParam) + " or more Pikmin.",
+    };
+}
+
+
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
+ */
+string MissionEndCondTypeLosePikmin::getName() const {
+    return "Lose Pikmin";
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypeLosePikmin::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+    Point* outCamPos, float* outCamZoom
+) const {
+    if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
+        *outCamPos = gameplay->lastPikminDeathPos;
+        *outCamZoom = gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypeLosePikmin::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->pikminDeaths >= cond->amountParam;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::EditorInfo
+MissionEndCondTypeMobGroup::getEditorInfo() const {
+    return
+    MissionEndCondType::EditorInfo {
+        .description =
+        "Triggers when the required amount of mobs inside of the "
+        "given mob group has been collected or defeated.",
+        .indexParamName =
+        "Mob group number",
+        .indexParamDescription =
+        "Number of the mob group to check for.",
+        .amountParamName =
+        "Required amount",
+        .amountParamDescription =
+        "The required number of mobs. 0 means all."
+    };
+}
+
+
+/**
+ * @brief Retrieves HUD information about the mission end condition type.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The information.
+ */
+MissionEndCondType::HudInfo MissionEndCondTypeMobGroup::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    if(cond->indexParam > gameplay->missionMobGroups.size() - 1) {
+        return {};
+    }
+    
+    return
+    MissionEndCondType::HudInfo {
+        .description =
+        "Clear the required targets.",
+    };
+}
+
+
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
+ */
+string MissionEndCondTypeMobGroup::getName() const {
+    return "Clear mob group";
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypeMobGroup::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
+    Point* outCamPos, float* outCamZoom
+) const {
+    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
+        *outCamPos = gameplay->lastMobClearedPos;
+        *outCamZoom = gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Checks if the condition has been met.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return Whether it is met.
+ */
+bool MissionEndCondTypeMobGroup::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    if(cond->indexParam > gameplay->missionMobGroups.size() - 1) {
+        return false;
+    }
+    
+    size_t requiredAmount =
+        cond->amountParam == 0 ?
+        gameplay->missionMobGroups[cond->indexParam].startingAmount :
+        cond->amountParam;
+        
+    return
+        gameplay->missionMobGroups[cond->indexParam].getNrCleared() >=
+        requiredAmount;
+}
+
+
+/**
+ * @brief Retrieves editor information about the mission end condition type.
+ *
+ * @return The information.
+ */
+MissionEndCondType::EditorInfo
+MissionEndCondTypePauseMenu::getEditorInfo() const {
+    return
+    MissionEndCondType::EditorInfo {
+        .description =
+        "Triggers when the player ends the mission early from the pause menu.",
+    };
+}
+
+
+/**
+ * @brief Retrieves HUD information about the mission end condition type.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The information.
+ */
+MissionEndCondType::HudInfo MissionEndCondTypePauseMenu::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
+) const {
+    return
+    MissionEndCondType::HudInfo {
+        .description =
+        "End early from the pause menu.",
+    };
+}
+
+
+/**
+ * @brief Returns the condition's name.
+ *
+ * @return The name.
+ */
+string MissionEndCondTypePauseMenu::getName() const {
+    return "Pause menu end";
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
+ *
+ * @param cond Condition being processed.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionEndCondTypePauseMenu::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     return false;
@@ -907,15 +1099,15 @@ bool MissionEvTypePauseEnd::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypePauseEnd::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypePauseMenu::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     //The pause menu "end mission" logic is responsible for this one.
     return false;
@@ -923,13 +1115,14 @@ bool MissionEvTypePauseEnd::isMet(
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypePikminOrFewer::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypePikminOrFewer::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
         "Triggers when the total Pikmin count reaches the given amount "
         "or fewer.",
@@ -942,49 +1135,47 @@ MissionEvType::EditorInfo MissionEvTypePikminOrFewer::getEditorInfo() const {
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypePikminOrFewer::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypePikminOrFewer::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
+    MissionEndCondType::HudInfo {
         .description =
-        "Reach " + i2s(ev->amountParam) + " Pikmin or fewer.",
-        .reason =
-        "Reached " +
-        i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
+        "Reach " + i2s(cond->amountParam) + " Pikmin or fewer.",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypePikminOrFewer::getName() const {
+string MissionEndCondTypePikminOrFewer::getName() const {
     return "Pikmin or fewer";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypePikminOrFewer::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypePikminOrFewer::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
@@ -997,28 +1188,29 @@ bool MissionEvTypePikminOrFewer::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypePikminOrFewer::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypePikminOrFewer::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin() <= (long) ev->amountParam;
+    return gameplay->getAmountOfTotalPikmin() <= (long) cond->amountParam;
 }
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypePikminOrMore::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypePikminOrMore::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
         "Triggers when the total Pikmin count reaches the given amount "
         "or more.",
@@ -1031,49 +1223,47 @@ MissionEvType::EditorInfo MissionEvTypePikminOrMore::getEditorInfo() const {
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypePikminOrMore::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypePikminOrMore::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
+    MissionEndCondType::HudInfo {
         .description =
-        "Reach " + i2s(ev->amountParam) + " Pikmin or more.",
-        .reason =
-        "Reached " +
-        i2s(gameplay->getAmountOfTotalPikmin()) + " Pikmin!",
+        "Reach " + i2s(cond->amountParam) + " Pikmin or more.",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypePikminOrMore::getName() const {
+string MissionEndCondTypePikminOrMore::getName() const {
     return "Pikmin or more";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypePikminOrMore::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypePikminOrMore::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
@@ -1086,71 +1276,76 @@ bool MissionEvTypePikminOrMore::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypePikminOrMore::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypePikminOrMore::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin() >= (long) ev->amountParam;
+    return gameplay->getAmountOfTotalPikmin() >= (long) cond->amountParam;
 }
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypeScriptTrigger::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeScript::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
-        "Triggers when the area's script sends the given signal number.",
+        "Triggers exclusively when the area script calls it.",
     };
 }
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypeScriptTrigger::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypeScript::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
-    return {};
+    return
+    MissionEndCondType::HudInfo {
+        .description = "Script.",
+    };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypeScriptTrigger::getName() const {
-    return "Script trigger";
+string MissionEndCondTypeScript::getName() const {
+    return "Script";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypeScriptTrigger::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypeScript::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     return false;
@@ -1158,28 +1353,29 @@ bool MissionEvTypeScriptTrigger::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypeScriptTrigger::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypeScript::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
-    return false; //TODO
+    return false;
 }
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypeTakeDamage::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeTakeDamage::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
         "Triggers when any leader takes any damage.",
     };
@@ -1187,46 +1383,46 @@ MissionEvType::EditorInfo MissionEvTypeTakeDamage::getEditorInfo() const {
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypeTakeDamage::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypeTakeDamage::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
+    MissionEndCondType::HudInfo {
         .description = "Take damage.",
-        .reason = "Took damage!",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypeTakeDamage::getName() const {
+string MissionEndCondTypeTakeDamage::getName() const {
     return "Take damage";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypeTakeDamage::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypeTakeDamage::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
@@ -1239,15 +1435,15 @@ bool MissionEvTypeTakeDamage::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypeTakeDamage::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypeTakeDamage::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     for(size_t l = 0; l < gameplay->mobs.leaders.size(); l++) {
         if(
@@ -1267,13 +1463,14 @@ bool MissionEvTypeTakeDamage::isMet(
 
 
 /**
- * @brief Retrieves editor information about the mission event type.
+ * @brief Retrieves editor information about the mission end condition type.
  *
  * @return The information.
  */
-MissionEvType::EditorInfo MissionEvTypeTimeLimit::getEditorInfo() const {
+MissionEndCondType::EditorInfo
+MissionEndCondTypeTimeLimit::getEditorInfo() const {
     return
-    MissionEvType::EditorInfo {
+    MissionEndCondType::EditorInfo {
         .description =
         "Triggers when the mission's time limit is up.",
     };
@@ -1281,46 +1478,46 @@ MissionEvType::EditorInfo MissionEvTypeTimeLimit::getEditorInfo() const {
 
 
 /**
- * @brief Retrieves HUD information about the mission event type.
+ * @brief Retrieves HUD information about the mission end condition type.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The information.
  */
-MissionEvType::HudInfo MissionEvTypeTimeLimit::getHudInfo(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+MissionEndCondType::HudInfo MissionEndCondTypeTimeLimit::getHudInfo(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-    MissionEvType::HudInfo {
+    MissionEndCondType::HudInfo {
         .description = "Reach the time limit.",
-        .reason = "Time's up!",
     };
 }
 
 
 /**
- * @brief Returns the event's name.
+ * @brief Returns the condition's name.
  *
  * @return The name.
  */
-string MissionEvTypeTimeLimit::getName() const {
+string MissionEndCondTypeTimeLimit::getName() const {
     return "Time limit";
 }
 
 
 /**
- * @brief Returns where the camera should go to to zoom when the event happens.
+ * @brief Returns where the camera should go to to zoom
+ * when the condition triggers.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @param outCamPos The final camera position is returned here.
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionEvTypeTimeLimit::getZoomData(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay,
+bool MissionEndCondTypeTimeLimit::getZoomData(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay,
     Point* outCamPos, float* outCamZoom
 ) const {
     return false;
@@ -1328,15 +1525,15 @@ bool MissionEvTypeTimeLimit::getZoomData(
 
 
 /**
- * @brief Checks if the event's conditions have been met.
+ * @brief Checks if the condition has been met.
  *
- * @param ev Event being processed.
+ * @param cond Condition being processed.
  * @param mission Pointer to the mission data to get info from.
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionEvTypeTimeLimit::isMet(
-    MissionEvent* ev, MissionData* mission, GameplayState* gameplay
+bool MissionEndCondTypeTimeLimit::isMet(
+    MissionEndCond* cond, MissionData* mission, GameplayState* gameplay
 ) const {
     if(mission->timeLimit == 0) return false;
     if(gameplay->afterHours) return false;
@@ -1346,2065 +1543,7 @@ bool MissionEvTypeTimeLimit::isMet(
 
 
 #pragma endregion
-#pragma region Fail conditions
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailDefeatEnemies::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->enemyDefeats;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailDefeatEnemies::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Defeated " +
-        amountStr((int) mission->failEnemiesDefeated, "enemy", "enemies") +
-        "...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailDefeatEnemies::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastMobClearedPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailDefeatEnemies::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "Enemies";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailDefeatEnemies::getName() const {
-    return "Defeat enemies";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailDefeatEnemies::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Defeat " +
-        amountStr(
-            (int) mission->failEnemiesDefeated, "enemy", "enemies"
-        ) +
-        " or more.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailDefeatEnemies::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failEnemiesDefeated;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailDefeatEnemies::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have defeated " +
-        i2s(cur) + "/" + i2s(req) +
-        " enemies. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailDefeatEnemies::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailDefeatEnemies::isMet(
-    GameplayState* gameplay
-) const {
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailLoseLeaders::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->leadersKod;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailLoseLeaders::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Lost " +
-        amountStr((int) mission->failLeadersKod, "leader") +
-        "...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailLoseLeaders::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastHurtLeaderPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailLoseLeaders::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "Leaders lost";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailLoseLeaders::getName() const {
-    return "Lose leaders";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailLoseLeaders::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Lose " +
-        amountStr((int) mission->failLeadersKod, "leader") +
-        " or more.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailLoseLeaders::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failLeadersKod;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailLoseLeaders::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have lost " +
-        i2s(cur) + "/" + i2s(req) +
-        " leaders. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailLoseLeaders::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailLoseLeaders::isMet(
-    GameplayState* gameplay
-) const {
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailLosePikmin::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->pikminDeaths;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailLosePikmin::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Lost " +
-        i2s(mission->failPikKilled) +
-        " Pikmin...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailLosePikmin::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastPikminDeathPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailLosePikmin::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "Pikmin lost";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailLosePikmin::getName() const {
-    return "Lose Pikmin";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailLosePikmin::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Lose " + i2s(mission->failPikKilled) + " Pikmin or more.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailLosePikmin::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failPikKilled;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailLosePikmin::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have lost " +
-        i2s(cur) + "/" + i2s(req) +
-        " Pikmin. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailLosePikmin::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailLosePikmin::isMet(
-    GameplayState* gameplay
-) const {
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailPauseMenu::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailPauseMenu::getEndReason(
-    MissionDataOld* mission
-) const {
-    return "Ended from pause menu...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailPauseMenu::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailPauseMenu::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailPauseMenu::getName() const {
-    return "End from pause menu";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailPauseMenu::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return "End from the pause menu.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailPauseMenu::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailPauseMenu::getStatus(
-    int cur, int req, float percentage
-) const {
-    return "";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailPauseMenu::hasHudContent() const {
-    return false;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailPauseMenu::isMet(
-    GameplayState* gameplay
-) const {
-    //The pause menu "end mission" logic is responsible for this one.
-    return false;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTakeDamage::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailTakeDamage::getEndReason(
-    MissionDataOld* mission
-) const {
-    return "A leader took damage...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailTakeDamage::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastHurtLeaderPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailTakeDamage::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailTakeDamage::getName() const {
-    return "Take damage";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailTakeDamage::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return "A leader takes damage.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTakeDamage::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailTakeDamage::getStatus(
-    int cur, int req, float percentage
-) const {
-    return "";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailTakeDamage::hasHudContent() const {
-    return false;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailTakeDamage::isMet(
-    GameplayState* gameplay
-) const {
-    for(size_t l = 0; l < gameplay->mobs.leaders.size(); l++) {
-        if(
-            gameplay->mobs.leaders[l]->health <
-            gameplay->mobs.leaders[l]->maxHealth
-        ) {
-            return true;
-        }
-    }
-    if(gameplay->mobs.leaders.size() < gameplay->startingNrOfLeaders) {
-        //If one of them vanished, they got forcefully KO'd, which...
-        //really should count as taking damage.
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTimeLimit::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return gameplay->gameplayTimePassed;
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailTimeLimit::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Took " +
-        timeToStr2(
-            mission->failTimeLimit, "m", "s"
-        ) +
-        "...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailTimeLimit::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailTimeLimit::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return
-        gameplay->afterHours ?
-        "(After hours)" :
-        "Time";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailTimeLimit::getName() const {
-    return "Reach the time limit";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailTimeLimit::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Run out of time. Time limit: " +
-        timeToStr2(
-            mission->failTimeLimit, "m", "s"
-        ) + ".";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTimeLimit::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failTimeLimit;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailTimeLimit::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        timeToStr2(cur, "m", "s") +
-        " have passed so far. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailTimeLimit::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailTimeLimit::isMet(
-    GameplayState* gameplay
-) const {
-    if(gameplay->afterHours) return false;
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTooFewPikmin::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->getAmountOfTotalPikmin();
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailTooFewPikmin::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Reached <=" +
-        i2s(mission->failTooFewPikAmount) +
-        " Pikmin...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailTooFewPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastPikminDeathPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailTooFewPikmin::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "Pikmin";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailTooFewPikmin::getName() const {
-    return "Reach too few Pikmin";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailTooFewPikmin::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Reach " + i2s(mission->failTooFewPikAmount) + " Pikmin or fewer.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTooFewPikmin::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failTooFewPikAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailTooFewPikmin::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have " +
-        i2s(cur) + "/" + i2s(req) +
-        " Pikmin.";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailTooFewPikmin::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailTooFewPikmin::isMet(
-    GameplayState* gameplay
-) const {
-    return
-        getCurAmount(gameplay) <=
-        getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTooManyPikmin::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->getAmountOfTotalPikmin();
-}
-
-
-/**
- * @brief Explains why the player lost, with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionFailTooManyPikmin::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Reached >=" +
-        i2s(mission->failTooManyPikAmount) +
-        " Pikmin...";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionFailTooManyPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastPikminBornPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The label.
- */
-string MissionFailTooManyPikmin::getHudLabel(
-    GameplayState* gameplay
-) const {
-    return "Pikmin";
-}
-
-
-/**
- * @brief Returns the condition's name.
- *
- * @return The name.
- */
-string MissionFailTooManyPikmin::getName() const {
-    return "Reach too many Pikmin";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionFailTooManyPikmin::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Reach " + i2s(mission->failTooManyPikAmount) + " Pikmin or more.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the condition needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionFailTooManyPikmin::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.failTooManyPikAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionFailTooManyPikmin::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have " +
-        i2s(cur) + "/" + i2s(req) +
-        " Pikmin. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Whether it has anything to show in the HUD.
- *
- * @return Whether it has content.
- */
-bool MissionFailTooManyPikmin::hasHudContent() const {
-    return true;
-}
-
-
-/**
- * @brief Checks if its conditions have been met to end the mission as a fail.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionFailTooManyPikmin::isMet(
-    GameplayState* gameplay
-) const {
-    return
-        getCurAmount(gameplay) >=
-        getReqAmount(gameplay);
-}
-
-
-#pragma endregion
-#pragma region Goals
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalBattleEnemies::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return
-        (int) gameplay->missionRequiredMobAmount -
-        (int) gameplay->missionRemainingMobIds.size();
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalBattleEnemies::getEndReason(
-    MissionDataOld* mission
-) const {
-    if(mission->goalAllMobs) {
-        return
-            "Defeated all enemies!";
-    } else {
-        return
-            "Defeated the " +
-            amountStr(
-                (int) mission->goalMobIdxs.size(),
-                "enemy",
-                "enemies"
-            ) +
-            "!";
-    }
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalBattleEnemies::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastMobClearedPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalBattleEnemies::getHudLabel() const {
-    return "Enemies";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalBattleEnemies::getName() const {
-    return "Battle enemies";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalBattleEnemies::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    if(mission->goalAllMobs) {
-        return
-            "Defeat all enemies.";
-    } else {
-        return
-            "Defeat the specified enemies (" +
-            i2s(mission->goalMobIdxs.size()) +
-            ").";
-    }
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalBattleEnemies::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->missionRequiredMobAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalBattleEnemies::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have defeated " + i2s(cur) + "/" + i2s(req) +
-        " enemies. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalBattleEnemies::isMet(
-    GameplayState* gameplay
-) const {
-    return gameplay->missionRemainingMobIds.empty();
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalBattleEnemies::isMobApplicable(
-    MobType* type
-) const {
-    return type->category->id == MOB_CATEGORY_ENEMIES;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalCollectTreasures::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->goalTreasuresCollected;
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalCollectTreasures::getEndReason(
-    MissionDataOld* mission
-) const {
-    if(mission->goalAllMobs) {
-        return
-            "Collected all treasures!";
-    } else {
-        return
-            "Collected the treasures!";
-    }
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalCollectTreasures::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastShipThatGotTreasurePos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastShipThatGotTreasurePos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalCollectTreasures::getHudLabel() const {
-    return "Treasures";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalCollectTreasures::getName() const {
-    return "Collect treasures";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalCollectTreasures::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    if(mission->goalAllMobs) {
-        return
-            "Collect all treasures.";
-    } else {
-        return
-            "Collect the specified treasures (" +
-            i2s(mission->goalMobIdxs.size()) +
-            " sources).";
-    }
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalCollectTreasures::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->goalTreasuresTotal;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalCollectTreasures::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have collected " + i2s(cur) + "/" + i2s(req) +
-        " treasures. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalCollectTreasures::isMet(
-    GameplayState* gameplay
-) const {
-    return
-        gameplay->goalTreasuresCollected >=
-        gameplay->goalTreasuresTotal;
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalCollectTreasures::isMobApplicable(
-    MobType* type
-) const {
-    switch(type->category->id) {
-    case MOB_CATEGORY_TREASURES: {
-        return true;
-        break;
-    }
-    case MOB_CATEGORY_RESOURCES: {
-        ResourceType* resType = (ResourceType*) type;
-        return
-            resType->deliveryResult ==
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
-        break;
-    }
-    case MOB_CATEGORY_PILES: {
-        PileType* pilType = (PileType*) type;
-        return
-            pilType->contents->deliveryResult ==
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
-        break;
-    }
-    default: {
-        return false;
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalEndManually::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalEndManually::getEndReason(
-    MissionDataOld* mission
-) const {
-    return "Ended successfully!";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalEndManually::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalEndManually::getHudLabel() const {
-    return "";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalEndManually::getName() const {
-    return "End whenever you want";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalEndManually::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return "End from the pause menu whenever you want.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalEndManually::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return 0;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalEndManually::getStatus(
-    int cur, int req, float percentage
-) const {
-    return "";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalEndManually::isMet(
-    GameplayState* gameplay
-) const {
-    //The pause menu "end mission" logic is responsible for this one.
-    return false;
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalEndManually::isMobApplicable(
-    MobType* type
-) const {
-    return false;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalGetToExit::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->curLeadersInMissionExit;
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalGetToExit::getEndReason(
-    MissionDataOld* mission
-) const {
-    return "Got to the exit!";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalGetToExit::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->missionRemainingMobIds.empty()) {
-        return false;
-    }
-    Point avgPos;
-    for(size_t leaderId : gameplay->missionRemainingMobIds) {
-        Mob* leaderPtr = nullptr;
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            Mob* mPtr = game.states.gameplay->mobs.all[m];
-            if(mPtr->id == leaderId) {
-                leaderPtr = mPtr;
-                break;
-            }
-        }
-        if(leaderPtr) avgPos += leaderPtr->pos;
-    }
-    avgPos.x /= gameplay->missionRemainingMobIds.size();
-    avgPos.y /= gameplay->missionRemainingMobIds.size();
-    *outCamPos = avgPos;
-    return true;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalGetToExit::getHudLabel() const {
-    return "In exit";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalGetToExit::getName() const {
-    return "Get to the exit";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalGetToExit::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    if(mission->goalAllMobs) {
-        return
-            "Get all leaders to the exit.";
-    } else {
-        return
-            "Get the specified leaders (" +
-            i2s(mission->goalMobIdxs.size()) +
-            ") to the exit.";
-    }
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalGetToExit::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->missionRequiredMobAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalGetToExit::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have " + i2s(cur) + "/" + i2s(req) +
-        " leaders in the exit. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalGetToExit::isMet(
-    GameplayState* gameplay
-) const {
-    return
-        getCurAmount(gameplay) >=
-        getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalGetToExit::isMobApplicable(
-    MobType* type
-) const {
-    return type->category->id == MOB_CATEGORY_LEADERS;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalGrowPikmin::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return (int) gameplay->getAmountOfTotalPikmin();
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalGrowPikmin::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Reached " +
-        i2s(mission->goalAmount) +
-        " Pikmin!";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalGrowPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
-        *outCamPos = gameplay->lastPikminBornPos;
-        *outCamZoom = gameplay->zoomLevels[0];
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalGrowPikmin::getHudLabel() const {
-    return "Pikmin";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalGrowPikmin::getName() const {
-    return "Grow Pikmin";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalGrowPikmin::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return "Reach a total of " + i2s(mission->goalAmount) + " Pikmin.";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalGrowPikmin::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.goalAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalGrowPikmin::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have " + i2s(cur) + "/" + i2s(req) +
-        " Pikmin. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalGrowPikmin::isMet(
-    GameplayState* gameplay
-) const {
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalGrowPikmin::isMobApplicable(
-    MobType* type
-) const {
-    return false;
-}
-
-
-/**
- * @brief Returns the player's current amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalTimedSurvival::getCurAmount(
-    GameplayState* gameplay
-) const {
-    return gameplay->gameplayTimePassed;
-}
-
-
-/**
- * @brief Returns a celebration describing the player's victory,
- * with values fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The reason.
- */
-string MissionGoalTimedSurvival::getEndReason(
-    MissionDataOld* mission
-) const {
-    return
-        "Survived for " +
-        timeToStr2(
-            mission->goalAmount, "m", "s"
-        ) +
-        "!";
-}
-
-
-/**
- * @brief Returns where the camera should go to to zoom on the mission
- * end reason.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param outCamPos The final camera position is returned here.
- * @param outCamZoom The final camera zoom is returned here.
- * @return Whether the camera should zoom somewhere.
- */
-bool MissionGoalTimedSurvival::getEndZoomData(
-    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
-) const {
-    return false;
-}
-
-
-/**
- * @brief HUD label for the player's current amount.
- *
- * @return The label.
- */
-string MissionGoalTimedSurvival::getHudLabel() const {
-    return "Time";
-}
-
-
-/**
- * @brief Returns the goal's name.
- *
- * @return The name.
- */
-string MissionGoalTimedSurvival::getName() const {
-    return "Survive";
-}
-
-
-/**
- * @brief A description for the player, fed from the mission data.
- *
- * @param mission Mission data object to get info from.
- * @return The description.
- */
-string MissionGoalTimedSurvival::getPlayerDescription(
-    MissionDataOld* mission
-) const {
-    return
-        "Survive for " +
-        timeToStr2(
-            mission->goalAmount, "m", "s"
-        ) + ".";
-}
-
-
-/**
- * @brief Returns the player's required amount for whatever the mission needs.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount.
- */
-int MissionGoalTimedSurvival::getReqAmount(
-    GameplayState* gameplay
-) const {
-    return (int) game.curArea->missionOld.goalAmount;
-}
-
-
-/**
- * @brief Status for the pause menu.
- *
- * @param cur Current amount.
- * @param req Required amount.
- * @param percentage Percentage cleared.
- * @return The status.
- */
-string MissionGoalTimedSurvival::getStatus(
-    int cur, int req, float percentage
-) const {
-    return
-        "You have survived for " +
-        timeToStr2(cur, "m", "s") +
-        " so far. (" + i2s(percentage) + "%)";
-}
-
-
-/**
- * @brief Returns whether or not the mission goal's has been met.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return Whether it is met.
- */
-bool MissionGoalTimedSurvival::isMet(
-    GameplayState* gameplay
-) const {
-    return getCurAmount(gameplay) >= getReqAmount(gameplay);
-}
-
-
-/**
- * @brief Returns whether a given mob is applicable to this goal's
- * required mobs.
- *
- * @param type Type of the mob.
- * @return Whether it is applicable.
- */
-bool MissionGoalTimedSurvival::isMobApplicable(
-    MobType* type
-) const {
-    return false;
-}
-
-
-#pragma endregion
-#pragma region Mob checklists
+#pragma region Mob groups
 
 
 /**
@@ -3413,8 +1552,8 @@ bool MissionGoalTimedSurvival::isMobApplicable(
  *
  * @return The list.
  */
-vector<size_t> MissionMobChecklist::calculateList() const {
-    if(type == MISSION_MOB_CHECKLIST_CUSTOM) {
+vector<size_t> MissionMobGroup::calculateList() const {
+    if(type == MISSION_MOB_GROUP_CUSTOM) {
         return mobIdxs;
     }
     
@@ -3469,21 +1608,21 @@ vector<size_t> MissionMobChecklist::calculateList() const {
         };
         
         switch(type) {
-        case MISSION_MOB_CHECKLIST_CUSTOM: {
+        case MISSION_MOB_GROUP_CUSTOM: {
             break;
-        } case MISSION_MOB_CHECKLIST_TREASURES: {
+        } case MISSION_MOB_GROUP_TREASURES: {
             toAdd = checkTreasure();
             break;
-        } case MISSION_MOB_CHECKLIST_ENEMIES: {
+        } case MISSION_MOB_GROUP_ENEMIES: {
             toAdd = checkEnemy();
             break;
-        } case MISSION_MOB_CHECKLIST_TREASURES_ENEMIES: {
+        } case MISSION_MOB_GROUP_TREASURES_ENEMIES: {
             toAdd = checkTreasure() || checkEnemy();
             break;
-        } case MISSION_MOB_CHECKLIST_LEADERS: {
+        } case MISSION_MOB_GROUP_LEADERS: {
             toAdd = checkLeader();
             break;
-        } case MISSION_MOB_CHECKLIST_PIKMIN: {
+        } case MISSION_MOB_GROUP_PIKMIN: {
             toAdd = checkPikmin();
             break;
         }
@@ -3499,37 +1638,83 @@ vector<size_t> MissionMobChecklist::calculateList() const {
 
 
 /**
+ * @brief Clears the data inside.
+ */
+void MissionRecord::clear() {
+    score = 0;
+    date.clear();
+}
+
+
+/**
  * @brief Returns whether or not this record is a platinum medal.
  *
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::isPlatinum(const MissionDataOld& mission) {
-    switch(mission.gradingMode) {
-    case MISSION_GRADING_MODE_POINTS: {
+bool MissionRecord::isPlatinum(const MissionData& mission) {
+    if(date.empty()) return false;
+    
+    switch(mission.medalAwardMode) {
+    case MISSION_MEDAL_AWARD_MODE_POINTS: {
         return score >= mission.platinumReq;
-    } case MISSION_GRADING_MODE_GOAL: {
-        return clear;
-    } case MISSION_GRADING_MODE_PARTICIPATION: {
-        return !date.empty();
+    } case MISSION_MEDAL_AWARD_MODE_CLEAR: {
+        return true;
+    } case MISSION_MEDAL_AWARD_MODE_PARTICIPATION: {
+        return true;
     }
     }
     return false;
 }
 
 
-#pragma endregion
-#pragma region Score criteria
+/**
+ * @brief Loads a record from a data node.
+ *
+ * @param node The record's node.
+ * @param ported If not nullptr, whether the record needed to be ported from
+ * an older version's format is returned here.
+ * @return Whether it succeeded.
+ */
+bool MissionRecord::loadFromDataNode(
+    DataNode* node, bool* ported
+) {
+    if(ported) *ported = false;
+    vector<string> parts = split(node->value, ";", true);
+    
+    if(parts.size() == 3) {
+        //DEPRECATED by the medal-only system in 1.2.0.
+        bool clear = parts[0] == "1";
+        if(clear) {
+            score = s2i(parts[1]);
+            date = parts[2];
+        }
+        if(ported) *ported = true;
+    } else if(parts.size() == 2) {
+        score = s2i(parts[0]);
+        date = parts[1];
+    } else {
+        return false;
+    }
+    
+    return true;
+}
 
 
 /**
- * @brief Returns the criterion's name.
+ * @brief Saves a record onto a data node.
  *
- * @return The name.
+ * @param node The record's node.
+ * @return Whether it succeeded.
  */
-string MissionScoreCriterionTypeCollectionPts::getName() const {
-    return "Collection points";
+bool MissionRecord::saveToDataNode(DataNode* node) {
+    node->value = i2s(score) + ";" + date;
+    return true;
 }
+
+
+#pragma endregion
+#pragma region Score criteria
 
 
 /**
@@ -3549,12 +1734,23 @@ size_t MissionScoreCriterionTypeCollectionPts::calculateAmount(
 
 
 /**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeCollectionPts::getFriendlyName() const {
+    return "";
+}
+
+
+/**
  * @brief Returns the criterion's name.
  *
  * @return The name.
  */
-string MissionScoreCriterionTypeDefeatPts::getName() const {
-    return "Defeat points";
+string MissionScoreCriterionTypeCollectionPts::getName() const {
+    return "Object collection points";
 }
 
 
@@ -3570,7 +1766,18 @@ string MissionScoreCriterionTypeDefeatPts::getName() const {
 size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->enemyPointsObtained;
+    return gameplay->enemyDefeatPointsObtained;
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeDefeatPts::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3579,8 +1786,8 @@ size_t MissionScoreCriterionTypeDefeatPts::calculateAmount(
  *
  * @return The name.
  */
-string MissionScoreCriterionTypeMobChecklist::getName() const {
-    return "Mob checklist mob";
+string MissionScoreCriterionTypeDefeatPts::getName() const {
+    return "Enemy defeat points";
 }
 
 
@@ -3593,16 +1800,62 @@ string MissionScoreCriterionTypeMobChecklist::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeMobChecklist::calculateAmount(
+size_t MissionScoreCriterionTypeMobGroup::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    if(cri->indexParam > gameplay->missionMobChecklists.size() - 1) {
+    if(cri->indexParam > gameplay->missionMobGroups.size() - 1) {
         return 0;
     }
     
-    MissionMobChecklistStatus* cPtr =
-        &gameplay->missionMobChecklists[cri->indexParam];
-    return cPtr->startingAmount - cPtr->remaining.size();
+    return gameplay->missionMobGroups[cri->indexParam].getNrCleared();
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeMobGroup::getFriendlyName() const {
+    return "Target objects";
+}
+
+
+/**
+ * @brief Returns the criterion's name.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeMobGroup::getName() const {
+    return "Mob group target";
+}
+
+
+/**
+ * @brief Calculates the amount relevant to this criterion so the final score
+ * can be calculated.
+ *
+ * @param cri Criterion being process.
+ * @param mission Pointer to the mission data to get info from.
+ * @param gameplay Pointer to the gameplay state to get info from.
+ * @return The amount of points.
+ */
+size_t MissionScoreCriterionTypePikmin::calculateAmount(
+    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
+) const {
+    return gameplay->getAmountOfTotalPikmin();
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikmin::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3625,10 +1878,21 @@ string MissionScoreCriterionTypePikmin::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikmin::calculateAmount(
+size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->getAmountOfTotalPikmin();
+    return gameplay->pikminBorn;
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminBorn::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3651,10 +1915,21 @@ string MissionScoreCriterionTypePikminBorn::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikminBorn::calculateAmount(
+size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->pikminBorn;
+    return gameplay->pikminDeaths;
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypePikminDeaths::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3677,10 +1952,24 @@ string MissionScoreCriterionTypePikminDeaths::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypePikminDeaths::calculateAmount(
+size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
-    return gameplay->pikminDeaths;
+    return
+        gameplay->missionConsiderZeroTime ?
+        0 :
+        mission->timeLimit - floor(gameplay->gameplayTimePassed);
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecLeft::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3703,11 +1992,24 @@ string MissionScoreCriterionTypeSecLeft::getName() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount of points.
  */
-size_t MissionScoreCriterionTypeSecLeft::calculateAmount(
+size_t MissionScoreCriterionTypeSecPassed::calculateAmount(
     MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
 ) const {
     return
-        mission->timeLimit - floor(gameplay->gameplayTimePassed);
+        gameplay->missionConsiderZeroTime ?
+        0 :
+        floor(gameplay->gameplayTimePassed);
+}
+
+
+/**
+ * @brief Returns the criterion's friendly name, for the player.
+ * If empty, the standard name should be used.
+ *
+ * @return The name.
+ */
+string MissionScoreCriterionTypeSecPassed::getFriendlyName() const {
+    return "";
 }
 
 
@@ -3721,268 +2023,4 @@ string MissionScoreCriterionTypeSecPassed::getName() const {
 }
 
 
-/**
- * @brief Calculates the amount relevant to this criterion so the final score
- * can be calculated.
- *
- * @param cri Criterion being process.
- * @param mission Pointer to the mission data to get info from.
- * @param gameplay Pointer to the gameplay state to get info from.
- * @return The amount of points.
- */
-size_t MissionScoreCriterionTypeSecPassed::calculateAmount(
-    MissionScoreCriterion* cri, MissionData* mission, GameplayState* gameplay
-) const {
-    return floor(gameplay->gameplayTimePassed);
-}
-
-
 #pragma endregion
-#pragma region Score criteria (old)
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionEnemyPoints::getMultiplier(
-    MissionDataOld* mission
-) const {
-    return mission->pointsPerEnemyPoint;
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionEnemyPoints::getName() const {
-    return "Enemy points";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionEnemyPoints::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        (int)
-        gameplay->enemyPointsObtained *
-        getMultiplier(mission);
-}
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionPikminBorn::getMultiplier(
-    MissionDataOld* mission
-) const {
-    return mission->pointsPerPikminBorn;
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionPikminBorn::getName() const {
-    return "Pikmin born";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionPikminBorn::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        (int)
-        gameplay->pikminBorn *
-        getMultiplier(mission);
-}
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionPikminDeath::getMultiplier(
-    MissionDataOld* mission
-) const {
-    return mission->pointsPerPikminDeath;
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionPikminDeath::getName() const {
-    return "Pikmin deaths";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionPikminDeath::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        (int)
-        gameplay->pikminDeaths *
-        getMultiplier(mission);
-}
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionSecLeft::getMultiplier(
-    MissionDataOld* mission
-) const {
-    if(
-        hasFlag(
-            mission->failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        return mission->pointsPerSecLeft;
-    } else {
-        return 0;
-    }
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionSecLeft::getName() const {
-    return "Seconds left";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionSecLeft::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        (mission->failTimeLimit - floor(gameplay->gameplayTimePassed)) *
-        getMultiplier(mission);
-}
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionSecPassed::getMultiplier(
-    MissionDataOld* mission
-) const {
-    return mission->pointsPerSecPassed;
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionSecPassed::getName() const {
-    return "Seconds passed";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionSecPassed::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        floor(gameplay->gameplayTimePassed) *
-        getMultiplier(mission);
-}
-
-
-/**
- * @brief Returns the mission score criterion's point multiplier.
- *
- * @param mission Mission data to get info from.
- * @return The multiplier.
- */
-int MissionScoreCriterionTreasurePoints::getMultiplier(
-    MissionDataOld* mission
-) const {
-    return mission->pointsPerTreasurePoint;
-}
-
-
-/**
- * @brief Returns the mission score criterion's name.
- *
- * @return The name.
- */
-string MissionScoreCriterionTreasurePoints::getName() const {
-    return "Treasure points";
-}
-
-
-/**
- * @brief Returns the player's score for this criterion.
- *
- * @param gameplay Pointer to the gameplay state to get info from.
- * @param mission Mission data to get info from.
- * @return The score.
- */
-int MissionScoreCriterionTreasurePoints::getScore(
-    GameplayState* gameplay, MissionDataOld* mission
-) const {
-    return
-        (int)
-        gameplay->treasurePointsObtained *
-        getMultiplier(mission);
-}

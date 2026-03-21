@@ -200,7 +200,7 @@ PauseMenu::~PauseMenu() {
 
 /**
  * @brief Creates and adds a new bullet point to either the mission note list
- * or the grading explanation list.
+ * or the medal award explanation list.
  *
  * @param list List to add to.
  * @param text Text.
@@ -226,6 +226,120 @@ void PauseMenu::addNewBullet(
     bullet->ratioSize = Point(0.96f, BULLET_HEIGHT);
     list->addChild(bullet);
     missionGui.addItem(bullet);
+}
+
+
+/**
+ * @brief Creates a button meant for changing to a page either to the left or
+ * to the right of the current one, and adds it to the GUI.
+ *
+ * @param targetPage Which page this button leads to.
+ * @param left True if this page is to the left of the current,
+ * false if to the right.
+ * @param curGui Pointer to the current page's GUI manager.
+ * @return The button.
+ */
+ButtonGuiItem* PauseMenu::addNewPageItem(
+    PAUSE_MENU_PAGE targetPage, bool left,
+    GuiManager* curGui
+) {
+    string pageName;
+    string tooltipName;
+    switch(targetPage) {
+    case PAUSE_MENU_PAGE_SYSTEM: {
+        pageName = "System";
+        tooltipName = "system";
+        break;
+    } case PAUSE_MENU_PAGE_RADAR: {
+        pageName = "Radar";
+        tooltipName = "radar";
+        break;
+    } case PAUSE_MENU_PAGE_STATUS: {
+        pageName = "Status";
+        tooltipName = "status";
+        break;
+    } case PAUSE_MENU_PAGE_MISSION: {
+        pageName = "Mission";
+        tooltipName = "mission";
+        break;
+    }
+    }
+    
+    ButtonGuiItem* newButton =
+        new ButtonGuiItem(
+        left ?
+        "< " + pageName :
+        pageName + " >",
+        game.sysContent.fntStandard,
+        game.config.guiColors.pageChange
+    );
+    newButton->onActivate =
+    [this, curGui, targetPage, left] (const Point&) {
+        switchPage(curGui, targetPage, left);
+    };
+    newButton->onGetTooltip =
+    [tooltipName] () {
+        return "Go to the pause menu's " + tooltipName + " page.";
+    };
+    
+    return newButton;
+}
+
+
+/**
+ * @brief Creates the buttons and input GUI items that allow switching pages,
+ * and adds them to the GUI.
+ *
+ * @param curPage Page that these creations belong to.
+ * @param curGui Pointer to the current page's GUI manager.
+ */
+void PauseMenu::addNewPageItems(
+    PAUSE_MENU_PAGE curPage, GuiManager* curGui
+) {
+    size_t curPageIdx =
+        std::distance(
+            pages.begin(),
+            std::find(pages.begin(), pages.end(), curPage)
+        );
+    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
+    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
+    
+    //Left page button.
+    ButtonGuiItem* leftPageButton =
+        addNewPageItem(pages[leftPageIdx], true, curGui);
+    curGui->addItem(leftPageButton, "left_page");
+    
+    //Left page input icon.
+    GuiItem* leftPageInput = new GuiItem();
+    leftPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curGui->addItem(leftPageInput, "left_page_input");
+    
+    //Right page button.
+    ButtonGuiItem* rightPageButton =
+        addNewPageItem(pages[rightPageIdx], false, curGui);
+    curGui->addItem(rightPageButton, "right_page");
+    
+    //Right page input icon.
+    GuiItem* rightPageInput = new GuiItem();
+    rightPageInput->onDraw =
+    [this] (const DrawInfo & draw) {
+        if(!game.options.misc.showGuiInputIcons) return;
+        drawPlayerActionInputSourceIcon(
+            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
+            true, game.sysContent.fntSlim, draw.tint
+        );
+    };
+    curGui->addItem(rightPageInput, "right_page_input");
+    
+    leftPageButtons[curGui] = leftPageButton;
+    rightPageButtons[curGui] = rightPageButton;
 }
 
 
@@ -519,7 +633,7 @@ void PauseMenu::calculateGoHerePath() {
         return;
     }
     
-    if(!radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)) {
+    if(!radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)) {
         goHerePath.clear();
         goHerePathResult = PATH_RESULT_ERROR;
         return;
@@ -576,47 +690,60 @@ void PauseMenu::confirmOrLeave() {
     }
     
     if(doConfirmation) {
+        string activityType =
+            game.curArea->type == AREA_TYPE_SIMPLE ?
+            "exploration" :
+            "mission";
+        string targetMenu =
+            game.quickPlay.areaPath.empty() ?
+            game.curArea->type == AREA_TYPE_SIMPLE ?
+            "area selection menu" :
+            "mission selection menu" :
+            "editor";
+            
         switch(leaveTarget) {
         case GAMEPLAY_LEAVE_TARGET_RETRY: {
             confirmationExplanation =
-                "If you retry, you will LOSE all of your progress "
-                "and start over. Are you sure you want to retry?";
+                "If you retry, you will LOSE all of the progress on your " +
+                activityType + " and start over.\n"
+                "\n"
+                "Are you sure you want to retry?";
             break;
-        } case GAMEPLAY_LEAVE_TARGET_END: {
-            confirmationExplanation =
-                "If you end now, you will stop playing and will go to the "
-                "results menu.";
-            if(game.curArea->type == AREA_TYPE_MISSION) {
-                if(
-                    game.curArea->missionOld.goal ==
-                    MISSION_GOAL_END_MANUALLY
-                ) {
+        } case GAMEPLAY_LEAVE_TARGET_END_EARLY: {
+            if(game.curArea->type == AREA_TYPE_SIMPLE) {
+                confirmationExplanation =
+                    "If you end this exploration, you will "
+                    "be taken to the results menu and receive some stats.\n"
+                    "\n"
+                    "Are you sure you want to end here?";
+            } else {
+                confirmationExplanation =
+                    "If you end this mission early, you will "
+                    "be taken to the results menu and be evaluated.";
+                if(game.curArea->mission.isPauseMenuEndClear()) {
                     confirmationExplanation +=
-                        " The goal of this mission is to end through here, so "
-                        "make sure you've done everything you need first.";
+                        "\n"
+                        "Note that in this mission you can still receive a "
+                        "medal by ending early.";
                 } else {
                     confirmationExplanation +=
-                        " This will end the mission as a fail, "
-                        "even though you may still get a medal from it.";
-                    if(
-                        game.curArea->missionOld.gradingMode ==
-                        MISSION_GRADING_MODE_POINTS
-                    ) {
-                        confirmationExplanation +=
-                            " Note that since you fail the mission, you may "
-                            "lose out on some points. You should check the "
-                            "pause menu's mission page for more information.";
-                    }
-                    
+                        "\n"
+                        "Note that in this mission you cannot receive a "
+                        "medal by ending early! You will FAIL the mission!";
                 }
+                confirmationExplanation +=
+                    "\n"
+                    "\n"
+                    "Are you sure you want to end the mission early?";
             }
-            confirmationExplanation +=
-                " Are you sure you want to end?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
             confirmationExplanation =
-                "If you quit, you will LOSE all of your progress and instantly "
-                "stop playing. Are you sure you want to quit?";
+                "If you quit, you will LOSE all of the progress on your " +
+                activityType + " and immediately return to the " +
+                targetMenu + ".\n"
+                "\n"
+                "Are you sure you want to quit?";
             break;
         }
         }
@@ -624,9 +751,8 @@ void PauseMenu::confirmOrLeave() {
         game.modal.reset();
         game.modal.title = "Are you sure?";
         game.modal.prompt =
-            confirmationExplanation + "\n\n"
-            "(You can customize this confirmation question in the "
-            "options menu.)";
+            confirmationExplanation + "\n\n\n\n"
+            "(Customize this question in the options menu.)";
         game.modal.extraButtons.push_back(
         ModalGuiManager::Button {
             .text = "Confirm",
@@ -644,120 +770,6 @@ void PauseMenu::confirmOrLeave() {
     } else {
         startLeavingGameplay();
     }
-}
-
-
-/**
- * @brief Creates a button meant for changing to a page either to the left or
- * to the right of the current one, and adds it to the GUI.
- *
- * @param targetPage Which page this button leads to.
- * @param left True if this page is to the left of the current,
- * false if to the right.
- * @param curGui Pointer to the current page's GUI manager.
- * @return The button.
- */
-ButtonGuiItem* PauseMenu::addNewPageItem(
-    PAUSE_MENU_PAGE targetPage, bool left,
-    GuiManager* curGui
-) {
-    string pageName;
-    string tooltipName;
-    switch(targetPage) {
-    case PAUSE_MENU_PAGE_SYSTEM: {
-        pageName = "System";
-        tooltipName = "system";
-        break;
-    } case PAUSE_MENU_PAGE_RADAR: {
-        pageName = "Radar";
-        tooltipName = "radar";
-        break;
-    } case PAUSE_MENU_PAGE_STATUS: {
-        pageName = "Status";
-        tooltipName = "status";
-        break;
-    } case PAUSE_MENU_PAGE_MISSION: {
-        pageName = "Mission";
-        tooltipName = "mission";
-        break;
-    }
-    }
-    
-    ButtonGuiItem* newButton =
-        new ButtonGuiItem(
-        left ?
-        "< " + pageName :
-        pageName + " >",
-        game.sysContent.fntStandard,
-        game.config.guiColors.pageChange
-    );
-    newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point&) {
-        switchPage(curGui, targetPage, left);
-    };
-    newButton->onGetTooltip =
-    [tooltipName] () {
-        return "Go to the pause menu's " + tooltipName + " page.";
-    };
-    
-    return newButton;
-}
-
-
-/**
- * @brief Creates the buttons and input GUI items that allow switching pages,
- * and adds them to the GUI.
- *
- * @param curPage Page that these creations belong to.
- * @param curGui Pointer to the current page's GUI manager.
- */
-void PauseMenu::addNewPageItems(
-    PAUSE_MENU_PAGE curPage, GuiManager* curGui
-) {
-    size_t curPageIdx =
-        std::distance(
-            pages.begin(),
-            std::find(pages.begin(), pages.end(), curPage)
-        );
-    size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
-    size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
-    
-    //Left page button.
-    ButtonGuiItem* leftPageButton =
-        addNewPageItem(pages[leftPageIdx], true, curGui);
-    curGui->addItem(leftPageButton, "left_page");
-    
-    //Left page input icon.
-    GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_LEFT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
-    curGui->addItem(leftPageInput, "left_page_input");
-    
-    //Right page button.
-    ButtonGuiItem* rightPageButton =
-        addNewPageItem(pages[rightPageIdx], false, curGui);
-    curGui->addItem(rightPageButton, "right_page");
-    
-    //Right page input icon.
-    GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.misc.showGuiInputIcons) return;
-        drawPlayerActionInputSourceIcon(
-            PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT, draw.center, draw.size,
-            true, game.sysContent.fntSlim, draw.tint
-        );
-    };
-    curGui->addItem(rightPageInput, "right_page_input");
-    
-    leftPageButtons[curGui] = leftPageButton;
-    rightPageButtons[curGui] = rightPageButton;
 }
 
 
@@ -926,15 +938,14 @@ void PauseMenu::drawRadar(
     }
     
     //Mission exit region.
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-    ) {
-        drawHighlightedRectRegion(
-            game.curArea->missionOld.goalExitCenter,
-            game.curArea->missionOld.goalExitSize,
-            changeAlpha(game.config.guiColors.gold, 192), game.timePassed
-        );
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+            AreaRegion* rPtr = game.curArea->regions[r];
+            drawHighlightedRectRegion(
+                rPtr->center, rPtr->size,
+                changeAlpha(game.config.guiColors.gold, 192), game.timePassed
+            );
+        }
     }
     
     //Onion icons.
@@ -1111,28 +1122,29 @@ void PauseMenu::drawRadar(
     }
     
     //Mission mob markers.
-    if(!game.states.gameplay->missionRemainingMobIds.empty()) {
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            Mob* mPtr = game.states.gameplay->mobs.all[m];
-            if(
-                !isInContainer(
-                    game.states.gameplay->missionRemainingMobIds, mPtr->id
-                )
-            ) continue;
-            
-            float alpha =
-                (
-                    sin(
-                        game.timePassed *
-                        PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
-                    )
-                ) + 0.5f;
-            alpha = std::clamp(alpha, 0.0f, 1.0f);
-            drawBitmap(
-                game.sysContent.bmpMissionMob, mPtr->pos,
-                Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) / radarView.cam.zoom,
-                0.0f, multAlpha(game.config.guiColors.gold, alpha)
-            );
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        for(
+            size_t g = 0; g < game.states.gameplay->missionMobGroups.size(); g++
+        ) {
+            MissionMobGroupStatus* gPtr =
+                &game.states.gameplay->missionMobGroups[g];
+            if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
+            for(Mob* mPtr : gPtr->remaining) {
+                float alpha =
+                    (
+                        sin(
+                            game.timePassed *
+                            PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
+                        )
+                    ) + 0.5f;
+                alpha = std::clamp(alpha, 0.0f, 1.0f);
+                drawBitmap(
+                    game.sysContent.bmpMissionMob, mPtr->pos,
+                    Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) /
+                    radarView.cam.zoom,
+                    0.0f, multAlpha(game.config.guiColors.gold, alpha)
+                );
+            }
         };
     }
     
@@ -1373,6 +1385,20 @@ void PauseMenu::drawRadar(
 
 
 /**
+ * @brief Fills the list of mission medal award information.
+ *
+ * @param list List item to fill.
+ */
+void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
+    vector<string> medalAwardBPStrs =
+        game.curArea->mission.getMedalAwardBulletPoints();
+    for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+        addNewBullet(list, medalAwardBPStrs[p]);
+    }
+}
+
+
+/**
  * @brief Fills the list of mission briefing notes.
  *
  * @param list List item to fill.
@@ -1383,44 +1409,6 @@ void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
     for(size_t p = 0; p < noteBPStrs.size(); p++) {
         addNewBullet(list, noteBPStrs[p]);
     }
-}
-
-
-/**
- * @brief Fills the list of mission grading information.
- *
- * @param list List item to fill.
- */
-void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    vector<string> gradingBPStrs =
-        game.curArea->mission.getGradingBulletPoints();
-    for(size_t p = 0; p < gradingBPStrs.size(); p++) {
-        addNewBullet(list, gradingBPStrs[p]);
-    }
-}
-
-
-/**
- * @brief Returns a string representing the player's status towards the
- * mission goal.
- *
- * @return The status.
- */
-string PauseMenu::getMissionGoalStatus() {
-    float percentage = 0.0f;
-    int cur =
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getCurAmount(game.states.gameplay);
-    int req =
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getReqAmount(game.states.gameplay);
-    if(req != 0.0f) {
-        percentage = cur / (float) req;
-    }
-    percentage *= 100;
-    return
-        game.missionGoals[game.curArea->missionOld.goal]->
-        getStatus(cur, req, percentage);
 }
 
 
@@ -1701,11 +1689,7 @@ void PauseMenu::initMainPauseMenu() {
     //Area subtitle.
     TextGuiItem* areaSubtitleText =
         new TextGuiItem(
-        calculateAreaSubtitle(
-            game.curArea->subtitle, game.curArea->type,
-            game.curArea->mission.preset
-        ),
-        game.sysContent.fntAreaName,
+        game.curArea->subtitle, game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
     );
     gui.addItem(areaSubtitleText, "area_subtitle");
@@ -1753,27 +1737,24 @@ void PauseMenu::initMainPauseMenu() {
         new ButtonGuiItem(
         game.curArea->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
-        "End mission",
+        "End mission early",
         game.sysContent.fntStandard
     );
     endButton->onActivate =
     [this] (const Point&) {
-        leaveTarget = GAMEPLAY_LEAVE_TARGET_END;
+        leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
         confirmOrLeave();
     };
     endButton->onGetTooltip =
     [] () {
-        bool asFail =
-            hasFlag(
-                game.curArea->missionOld.failConditions,
-                getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-            );
         return
             game.curArea->type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
-            asFail ?
-            "End this mission as a fail." :
-            "End this mission successfully.";
+            game.curArea->mission.isPauseMenuEndClear() ?
+            "End the mission early. "
+            "This mission still lets you receive a medal this way." :
+            "End the mission early. "
+            "This mission doesn't let you receive a medal this way!";
     };
     gui.addItem(endButton, "end");
     
@@ -1880,10 +1861,12 @@ void PauseMenu::initMainPauseMenu() {
     quitButton->onGetTooltip =
     [] () {
         return
-            "Lose your progress and return to the " +
+            "Lose your progress and immediately return to the " +
             string(
                 game.quickPlay.areaPath.empty() ?
+                game.curArea->type == AREA_TYPE_SIMPLE ?
                 "area selection menu" :
+                "mission selection menu" :
                 "editor"
             ) + ".";
     };
@@ -1909,21 +1892,21 @@ void PauseMenu::initMissionPage() {
         &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
         
     //Menu items.
-    missionGui.registerCoords("left_page",        12,  5, 20,  6);
-    missionGui.registerCoords("left_page_input",   3,  7,  4,  4);
-    missionGui.registerCoords("right_page",       88,  5, 20,  6);
-    missionGui.registerCoords("right_page_input", 97,  7,  4,  4);
-    missionGui.registerCoords("continue",         10, 16, 16,  4);
-    missionGui.registerCoords("continue_input",    3, 17,  4,  4);
-    missionGui.registerCoords("objective_header",      50, 16, 60,  4);
-    missionGui.registerCoords("objective",             50, 22, 96,  4);
-    missionGui.registerCoords("notes_header",      50, 32, 96,  4);
-    missionGui.registerCoords("notes_list",        48, 48, 92, 24);
-    missionGui.registerCoords("notes_scroll",      97, 48,  2, 24);
-    missionGui.registerCoords("grading_header",   50, 64, 96,  4);
-    missionGui.registerCoords("grading_list",     48, 80, 92, 24);
-    missionGui.registerCoords("grading_scroll",   97, 80,  2, 24);
-    missionGui.registerCoords("tooltip",          50, 96, 96,  4);
+    missionGui.registerCoords("left_page",          12,  5, 20,  6);
+    missionGui.registerCoords("left_page_input",     3,  7,  4,  4);
+    missionGui.registerCoords("right_page",         88,  5, 20,  6);
+    missionGui.registerCoords("right_page_input",   97,  7,  4,  4);
+    missionGui.registerCoords("continue",           10, 16, 16,  4);
+    missionGui.registerCoords("continue_input",      3, 17,  4,  4);
+    missionGui.registerCoords("objective_header",   50, 16, 60,  4);
+    missionGui.registerCoords("objective",          50, 24, 96,  8);
+    missionGui.registerCoords("notes_header",       50, 32, 96,  4);
+    missionGui.registerCoords("notes_list",         48, 48, 92, 24);
+    missionGui.registerCoords("notes_scroll",       97, 48,  2, 24);
+    missionGui.registerCoords("medal_award_header", 50, 64, 96,  4);
+    missionGui.registerCoords("medal_award_list",   48, 80, 92, 24);
+    missionGui.registerCoords("medal_award_scroll", 97, 80,  2, 24);
+    missionGui.registerCoords("tooltip",            50, 96, 96,  4);
     missionGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
@@ -1981,23 +1964,23 @@ void PauseMenu::initMissionPage() {
     notesScroll->listItem = missionNoteList;
     missionGui.addItem(notesScroll, "notes_scroll");
     
-    //Grading header text.
-    TextGuiItem* gradingHeaderText =
+    //Medal award header text.
+    TextGuiItem* medalAwardHeaderText =
         new TextGuiItem(
-        "Grading", game.sysContent.fntAreaName,
+        "Medal award", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(gradingHeaderText, "grading_header");
+    missionGui.addItem(medalAwardHeaderText, "medal_award_header");
     
-    //Grading explanation list.
-    ListGuiItem* missionGradingList = new ListGuiItem();
-    missionGui.addItem(missionGradingList, "grading_list");
-    fillMissionGradingList(missionGradingList);
+    //Medal award explanation list.
+    ListGuiItem* missionMedalAwardList = new ListGuiItem();
+    missionGui.addItem(missionMedalAwardList, "medal_award_list");
+    fillMissionMedalAwardList(missionMedalAwardList);
     
-    //Grading explanation scrollbar.
-    ScrollGuiItem* gradingScroll = new ScrollGuiItem();
-    gradingScroll->listItem = missionGradingList;
-    missionGui.addItem(gradingScroll, "grading_scroll");
+    //Medal award explanation scrollbar.
+    ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
+    medalAwardScroll->listItem = missionMedalAwardList;
+    missionGui.addItem(medalAwardScroll, "medal_award_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
@@ -2044,22 +2027,22 @@ void PauseMenu::initRadarPage() {
 #undef loader
     
     //Menu items.
-    radarGui.registerCoords("left_page",           12,     5,    20,    6);
-    radarGui.registerCoords("left_page_input",      3,     7,     4,    4);
-    radarGui.registerCoords("right_page",          88,     5,    20,    6);
-    radarGui.registerCoords("right_page_input",    97,     7,     4,    4);
-    radarGui.registerCoords("continue",            10,    16,    16,    4);
-    radarGui.registerCoords("continue_input",       3,    17,     4,    4);
-    radarGui.registerCoords("radar",               37.5,  56.25, 70,   72.5);
-    radarGui.registerCoords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
-    radarGui.registerCoords("group_pikmin_number", 86.25, 85,    22.5,  5);
-    radarGui.registerCoords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
-    radarGui.registerCoords("idle_pikmin_number",  86.25, 70,    22.5,  5);
-    radarGui.registerCoords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
-    radarGui.registerCoords("field_pikmin_number", 86.25, 55,    22.5,  5);
+    radarGui.registerCoords("left_page",              12,     5,   20,    6);
+    radarGui.registerCoords("left_page_input",         3,     7,    4,    4);
+    radarGui.registerCoords("right_page",             88,     5,   20,    6);
+    radarGui.registerCoords("right_page_input",       97,     7,    4,    4);
+    radarGui.registerCoords("continue",               10,    16,   16,    4);
+    radarGui.registerCoords("continue_input",          3,    17,    4,    4);
+    radarGui.registerCoords("radar",                37.5, 56.25,   70, 72.5);
+    radarGui.registerCoords("group_pikmin_label",  86.25,  47.5, 22.5,    5);
+    radarGui.registerCoords("group_pikmin_number", 86.25,    55, 22.5,    5);
+    radarGui.registerCoords("idle_pikmin_label",   86.25,  62.5, 22.5,    5);
+    radarGui.registerCoords("idle_pikmin_number",  86.25,    70, 22.5,    5);
+    radarGui.registerCoords("field_pikmin_label",  86.25,  77.5, 22.5,    5);
+    radarGui.registerCoords("field_pikmin_number", 86.25,    85, 22.5,    5);
     radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
-    radarGui.registerCoords("instructions",        58.75, 16,    77.5,  4);
-    radarGui.registerCoords("tooltip",             50,    96,    96,    4);
+    radarGui.registerCoords("instructions",        58.75,    16, 77.5,    4);
+    radarGui.registerCoords("tooltip",                50,    96,   96,    4);
     radarGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
@@ -2221,7 +2204,7 @@ void PauseMenu::initRadarPage() {
                 ) + radarCursorLeader->type->name;
         } else if(
             radarSelectedLeader &&
-            !radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)
+            !radarSelectedLeader->scriptVM.fsm.getEvent(LEADER_EV_GO_HERE)
         ) {
             cursorInfoText->text =
                 "Can't go here... Leader is busy!";
@@ -2289,17 +2272,17 @@ void PauseMenu::initStatusPage() {
         &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
         
     //Menu items.
-    statusGui.registerCoords("left_page",        12,     5,   20,    6);
-    statusGui.registerCoords("left_page_input",   3,     7,    4,    4);
-    statusGui.registerCoords("right_page",       88,     5,   20,    6);
-    statusGui.registerCoords("right_page_input", 97,     7,    4,    4);
-    statusGui.registerCoords("continue",         10,    16,   16,    4);
-    statusGui.registerCoords("continue_input",    3,    17,    4,    4);
-    statusGui.registerCoords("list_header",      50,    23.5, 88,    7);
-    statusGui.registerCoords("list",             50,    56,   88,   56);
-    statusGui.registerCoords("list_scroll",      97,    56,    2,   56);
-    statusGui.registerCoords("totals",           50,    89,   88,    8);
-    statusGui.registerCoords("tooltip",          50,    96,   96,    4);
+    statusGui.registerCoords("left_page",        12,    5, 20,  6);
+    statusGui.registerCoords("left_page_input",   3,    7,  4,  4);
+    statusGui.registerCoords("right_page",       88,    5, 20,  6);
+    statusGui.registerCoords("right_page_input", 97,    7,  4,  4);
+    statusGui.registerCoords("continue",         10,   16, 16,  4);
+    statusGui.registerCoords("continue_input",    3,   17,  4,  4);
+    statusGui.registerCoords("list_header",      50, 23.5, 88,  7);
+    statusGui.registerCoords("list",             50,   56, 88, 56);
+    statusGui.registerCoords("list_scroll",      97,   56,  2, 56);
+    statusGui.registerCoords("totals",           50,   89, 88,  8);
+    statusGui.registerCoords("tooltip",          50,   96, 96,  4);
     statusGui.readDataFile(guiFile);
     
     //Page buttons and inputs.
@@ -2476,7 +2459,7 @@ void PauseMenu::radarConfirm() {
         goHerePathResult == PATH_RESULT_PATH_WITH_SINGLE_STOP
     ) {
         //Start Go Here.
-        radarSelectedLeader->fsm.runEvent(
+        radarSelectedLeader->scriptVM.fsm.runEvent(
             LEADER_EV_GO_HERE, (void*) &radarCursor
         );
         startClosing(&radarGui);
@@ -2512,28 +2495,26 @@ void PauseMenu::startClosing(GuiManager* curGui) {
  */
 void PauseMenu::startLeavingGameplay() {
     if(
-        leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
+        leaveTarget == GAMEPLAY_LEAVE_TARGET_END_EARLY &&
         game.curArea->type == AREA_TYPE_MISSION
     ) {
-        bool missionEndsInClear = false;
-        for(size_t e = 0; e < game.curArea->mission.events.size(); e++) {
-            MissionEvent* ePtr = &game.curArea->mission.events[e];
-            if(ePtr->type != MISSION_EV_PAUSE_MENU_END) continue;
-            if(ePtr->actionType == MISSION_ACTION_END_CLEAR) {
-                missionEndsInClear = true;
-                game.states.gameplay->missionEndEventIdx = e;
+        MissionEndCond* cPtr = nullptr;
+        for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+            if(
+                game.curArea->mission.endConds[c].type ==
+                MISSION_END_COND_PAUSE_MENU
+            ) {
+                cPtr = &game.curArea->mission.endConds[c];
                 break;
-            } else if(ePtr->actionType == MISSION_ACTION_END_FAIL) {
-                missionEndsInClear = false;
-                game.states.gameplay->missionEndEventIdx = e;
-                break;
-            } else {
-                MissionActionType* actionType =
-                    game.missionActionTypes[ePtr->actionType];
-                actionType->run(ePtr, game.states.gameplay);
             }
         }
-        game.states.gameplay->missionWasCleared = missionEndsInClear;
+        game.states.gameplay->endMission(
+            cPtr ? cPtr->clear : false,
+            cPtr ? cPtr->zeroTimeForScore : true,
+            cPtr ? cPtr->neutralMood : false,
+            false, cPtr, true
+        );
+        game.states.gameplay->missionEndFromPauseMenu = true;
     }
     game.states.gameplay->startLeaving(leaveTarget);
 }

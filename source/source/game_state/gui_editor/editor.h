@@ -173,11 +173,11 @@ private:
     void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
-    void processGuiDeleteGuiDefDialog();
-    void processGuiLoadDialog();
+    void processGuiDialogDeleteGuiDef();
+    void processGuiDialogLoad();
+    void processGuiDialogNew();
+    void processGuiDialogOptions();
     void processGuiMenuBar();
-    void processGuiNewDialog();
-    void processGuiOptionsDialog();
     void processGuiPanelCustom();
     void processGuiPanelCustomItem();
     void processGuiPanelHardcoded();

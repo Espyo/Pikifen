@@ -22,7 +22,7 @@
 #include "../content/mob/onion.h"
 #include "../content/mob/pikmin.h"
 #include "../content/other/gui.h"
-#include "../content/other/script.h"
+#include "../content/script/script.h"
 #include "../core/game.h"
 #include "../game_state/editor.h"
 #include "../lib/data_file/data_file.h"
@@ -127,9 +127,6 @@ void getNextOffsetEffectEdge(
     float* outBaseShadowAngle,
     bool* outShadowCw
 );
-string calculateAreaSubtitle(
-    const string& subtitle, AREA_TYPE areaType, MISSION_PRESET missionPreset
-);
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
@@ -189,6 +186,7 @@ bool monoSelectable(
 bool openManual(const string& page);
 void reportFatalError(const string& s, const DataNode* dn = nullptr);
 void saveMakerTools();
+bool saveMissionRecords(DataNode* fileNode);
 void saveOptions();
 void saveScreenshot();
 void saveStatistics();

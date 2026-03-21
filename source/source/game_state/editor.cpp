@@ -371,6 +371,100 @@ void Editor::drawOpErrorCursor() {
 
 
 /**
+ * @brief Draws things related to the current selection and its transformation
+ * widget.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::drawSelectionAndTransformationThings(
+    const SelectionManager& selMgr,
+    const TransformationWidget& traWid
+) {
+    if(selMgr.hasAny()) {
+        Point selectionCenter, selectionSize;
+        selMgr.getBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            traWid.draw(
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
+        }
+    }
+    
+    selMgr.draw(
+        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+    );
+}
+
+
+/**
+ * @brief Returns the text that should be displayed on the Dear ImGui list
+ * navigation count text widget.
+ *
+ * @param curItemIdx Index of the current item.
+ * @param listSize Current size of the list.
+ * @param selectionSize How many items are currently selected.
+ * @param itemTerm Term that designates what an item is, in singular.
+ * @param showTermNormally If false, the term won't show up when showing
+ * the usual text, but will show up when grammatically needed.
+ * @param curItemName If this item has a name, specify it here.
+ * @param curItemNameMono Whether the current item name's text widget should
+ * use a monospace font.
+ * @param outText1 The first text widget's contents are returned here.
+ * @param outText1Disabled Whether the first text widget is disabled is
+ * returned here.
+ * @param outText2 If not nullptr, the second text widget's contents are
+ * returned here, if any.
+ * @param outText2Mono If not nullptr, whether the second text widget uses
+ * a monospace font is returned here.
+ */
+void Editor::getGuiNavCurText(
+    size_t curItemIdx, size_t listSize, size_t selectionSize,
+    const string& itemTerm, bool showTermNormally, const string& curItemName,
+    bool curItemNameMono,
+    string* outText1, bool* outText1Disabled,
+    string* outText2, bool* outText2Mono
+) {
+    const string termLowerSingular = strToLower(itemTerm);
+    const string termLowerPlural = strToLower(itemTerm) + "s";
+    const string termUpperSingular = strToSentence(itemTerm);
+    
+    *outText1 = "";
+    *outText1Disabled = false;
+    if(outText2) *outText2 = "";
+    if(outText2Mono) *outText2Mono = false;
+    
+    if(listSize == 0) {
+        *outText1 = "(No " + termLowerPlural + ")";
+        *outText1Disabled = true;
+        return;
+    }
+    
+    if(selectionSize != 1) {
+        *outText1 =
+            i2s(selectionSize) + " / " + i2s(listSize) + " " +
+            termLowerPlural + " selected";
+        *outText1Disabled = selectionSize == 0;
+        return;
+    }
+    
+    const string curIdxStr =
+        listSize == 0 || selectionSize == 0 || curItemIdx == INVALID ?
+        "--" :
+        ("#" + i2s(curItemIdx + 1));
+    *outText1 = showTermNormally ? (termUpperSingular + " ") : "";
+    (*outText1) += curIdxStr + " / " + i2s(listSize);
+    
+    if(!curItemName.empty()) {
+        (*outText1) += ":";
+        if(outText2) *outText2 = curItemName;
+        if(outText2Mono) *outText2Mono = curItemNameMono;
+    }
+}
+
+
+/**
  * @brief Returns the maximum number of history entries for this editor.
  *
  * @return The size.
@@ -901,6 +995,98 @@ void Editor::handleRmbUp(const ALLEGRO_EVENT& ev) {}
 
 
 /**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is pressed down.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::handleSelectionAndTransformationLmbDown(
+    SelectionManager& selMgr, TransformationWidget& traWid
+) {
+    bool twHandled = false;
+    Point selectionCenter, selectionSize;
+    selMgr.getBBox(&selectionCenter, &selectionSize);
+    if(selectionSize.x != 0.0f) {
+        twHandled =
+            traWid.handleMouseDown(
+                game.editorsView.mouseCursorWorldPos,
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
+            );
+    }
+    
+    if(twHandled) {
+        selMgr.startTransforming();
+    } else {
+        selMgr.chooseViaMouseDown(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+    }
+}
+
+
+/**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is dragged around.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ * @param mouseCursor Mouse cursor coordinates to use.
+ * @param onPreTransform Code to run before any transformation is made, if any.
+ * @return Whether the selection's data changed.
+ */
+bool Editor::handleSelectionAndTransformationLmbDrag(
+    SelectionManager& selMgr, TransformationWidget& traWid,
+    const Point& mouseCursor, std::function<void()> onPreTransform
+) {
+    bool changesMade = false;
+    if(selMgr.isCreatingRubberBand()) {
+        selMgr.updateRubberBand(
+            game.editorsView.mouseCursorWorldPos,
+            isShiftPressed, isCtrlPressed
+        );
+    } else {
+        Point selectionCenter, selectionSize;
+        selMgr.getBBox(&selectionCenter, &selectionSize);
+        if(selectionSize.x != 0.0f) {
+            bool twHandled =
+                traWid.handleMouseMove(
+                    mouseCursor,
+                    &selectionCenter, &selectionSize,
+                    nullptr, 1.0f / game.editorsView.cam.zoom,
+                    false, false, 0.10f, isAltPressed
+                );
+            if(twHandled) {
+                changesMade = true;
+                if(onPreTransform) onPreTransform();
+                selMgr.applyTransformation(
+                    selectionCenter, selectionSize
+                );
+            }
+        }
+    }
+    return changesMade;
+}
+
+
+/**
+ * @brief Handles things related to the current selection and its transformation
+ * widget when the left mouse button is released.
+ *
+ * @param selMgr The selection manager.
+ * @param traWid The transformation widget.
+ */
+void Editor::handleSelectionAndTransformationLmbUp(
+    SelectionManager& selMgr, TransformationWidget& traWid
+) {
+    selMgr.handleMouseUp();
+    traWid.handleMouseUp();
+}
+
+
+/**
  * @brief Returns whether a given internal name is good or not.
  *
  * @param name The internal name to check.
@@ -960,11 +1146,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1008,11 +1198,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<float>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1056,11 +1250,15 @@ bool Editor::keyframeEditor(
     KeyframeInterpolator<Point>& interpolator,
     size_t& selKeyframeIdx
 ) {
+    ImGui::BeginFrameBox(label + "frameBox");
+    
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
     bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    ImGui::EndFrameBox();
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
@@ -1112,22 +1310,60 @@ bool Editor::keyframeOrganizer(
     if(interpolator.getKeyframeCount() == 1) {
         interpolator.setKeyframeTime(0, 0.0f);
     }
-    processGuiListNavSetup(
+    processGuiNavSetup(
         &selKeyframeIdx, interpolator.getKeyframeCount(), false
     );
     
+    ImGui::BeginAlign();
+    
+    //Previous keyframe button.
+    if(interpolator.getKeyframeCount() > 1) {
+        processGuiNavWidgetPrev(
+            &selKeyframeIdx, interpolator.getKeyframeCount(),
+            buttonId + "prevButton", 0.75f
+        );
+        setTooltip("Select the previous keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
+    }
+    
     //Current keyframe text.
-    processGuiListNavCurWidget(
-        selKeyframeIdx, interpolator.getKeyframeCount(), "Keyframe"
+    string curKeyframeStr;
+    bool curKeyframeDisabled;
+    getGuiNavCurText(
+        selKeyframeIdx, interpolator.getKeyframeCount(), 1,
+        "Keyframe", true, "", false,
+        &curKeyframeStr, &curKeyframeDisabled, nullptr, nullptr
     );
+    ImGui::SameLine();
+    ImGui::AlignNextText(curKeyframeStr.c_str());
+    curKeyframeDisabled ?
+    ImGui::TextDisabled("%s", curKeyframeStr.c_str()) :
+    ImGui::Text("%s", curKeyframeStr.c_str());
+    
+    //Next keyframe button.
+    ImGui::SameLine();
+    if(interpolator.getKeyframeCount() > 1) {
+        ImGui::AlignNextItems({24}, 1.0f);
+        processGuiNavWidgetNext(
+            &selKeyframeIdx, interpolator.getKeyframeCount(),
+            buttonId + "nextButton", 0.75f
+        );
+        setTooltip("Select the next keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
+    }
+    
+    ImGui::EndAlign();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({24, 24});
     
     //Create keyframe button.
     size_t prevSelKeyframeIdx = selKeyframeIdx;
     if(
-        processGuiListNavNewWidget(
+        processGuiNavWidgetNew(
             &selKeyframeIdx, interpolator.getKeyframeCount(),
-            "Add a new keyframe after the currently selected one.",
-            false, buttonId + "createButton", 0.5f
+            buttonId + "createButton", 0.75f
         )
     ) {
         float prevT = interpolator.getKeyframe(prevSelKeyframeIdx).first;
@@ -1143,36 +1379,28 @@ bool Editor::keyframeOrganizer(
         );
         result = true;
     }
+    setTooltip("Add a new keyframe after the currently selected one.");
     
     //Delete keyframe button.
+    ImGui::SameLine();
     if(interpolator.getKeyframeCount() > 1) {
         prevSelKeyframeIdx = selKeyframeIdx;
         if(
-            processGuiListNavDelWidget(
+            processGuiNavWidgetDel(
                 &selKeyframeIdx, interpolator.getKeyframeCount(),
-                "Delete the currently selected keyframe.",
-                true, buttonId + "deleteButton", 0.5f
+                buttonId + "deleteButton", 0.75f
             )
         ) {
             interpolator.deleteKeyframe(prevSelKeyframeIdx);
             setStatus("Deleted keyframe #" + i2s(prevSelKeyframeIdx + 1) + ".");
             result = true;
         }
+        setTooltip("Delete the currently selected keyframe.");
+    } else {
+        ImGui::Dummy(ImVec2(24, 24));
     }
     
-    //Previous keyframe button.
-    processGuiListNavPrevWidget(
-        &selKeyframeIdx, interpolator.getKeyframeCount(),
-        "Select the previous keyframe.",
-        true, buttonId + "prevButton", 0.5f
-    );
-    
-    //Next keyframe button.
-    processGuiListNavNextWidget(
-        &selKeyframeIdx, interpolator.getKeyframeCount(),
-        "Select the next keyframe.",
-        true, buttonId + "nextButton", 0.5f
-    );
+    ImGui::EndAlign();
     
     return result;
 }
@@ -1655,7 +1883,7 @@ void Editor::openBaseContentWarningDialog(
     
     openDialog(
         "Base pack warning",
-        std::bind(&Editor::processGuiBaseContentWarningDialog, this)
+        std::bind(&Editor::processGuiDialogBaseContent, this)
     );
     dialogs.back()->customSize = Point(320, 0);
     baseContentWarningDoPickCallback = doPickCallback;
@@ -1687,7 +1915,7 @@ void Editor::openBitmapDialog(
     
     openDialog(
         "Choose a bitmap",
-        std::bind(&Editor::processGuiBitmapDialog, this)
+        std::bind(&Editor::processGuiDialogBitmap, this)
     );
     dialogs.back()->closeCallback = [this] () {
         if(!bitmapDialogCurBmpName.empty()) {
@@ -1736,14 +1964,14 @@ void Editor::openHelpDialog(
 ) {
     helpDialogMessage = message;
     helpDialogPage = page;
-    openDialog("Help", std::bind(&Editor::processGuiHelpDialog, this));
+    openDialog("Help", std::bind(&Editor::processGuiDialogHelp, this));
     dialogs.back()->customSize = Point(400, 0);
 }
 
 
 /**
  * @brief Opens an input popup with a given name. Its logic must be run with
- * a call to processGuiInputPopup().
+ * a call to processGuiPopupInput().
  *
  * @param label Name of the popup.
  */
@@ -1765,7 +1993,7 @@ void Editor::openMessageDialog(
     const std::function<void()>& closeCallback
 ) {
     messageDialogMessage = message;
-    openDialog(title, std::bind(&Editor::processGuiMessageDialog, this));
+    openDialog(title, std::bind(&Editor::processGuiDialogMessage, this));
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = closeCallback;
 }
@@ -1778,7 +2006,7 @@ void Editor::openNewPackDialog() {
     needsNewPackTextFocus = true;
     openDialog(
         "Create a new pack",
-        std::bind(&Editor::processGuiNewPackDialog, this)
+        std::bind(&Editor::processGuiDialogNewPack, this)
     );
     dialogs.back()->customSize = Point(520, 0);
 }
@@ -1843,11 +2071,11 @@ void Editor::openPickerDialog(
  * @param title Title to write.
  */
 void Editor::panelTitle(const char* title) {
-    ImGui::SameLine(
-        ImGui::GetContentRegionAvail().x -
-        (ImGui::CalcTextSize(title).x + 1)
-    );
+    ImGui::SameLine();
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(title, 1.0f);
     ImGui::TextDisabled("%s", title);
+    ImGui::EndAlign();
 }
 
 
@@ -1897,9 +2125,34 @@ void Editor::processDialogs() {
 
 
 /**
+ * @brief Processes the setup for the "widget" that controls the canvas.
+ */
+void Editor::processGuiCanvas() {
+    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
+    ImGui::EndChild();
+    isMouseInGui =
+        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+    ImVec2 itemSize = ImGui::GetItemRectSize();
+    ImVec2 itemTL = ImGui::GetItemRectMin();
+    
+    Point curTL(itemTL.x, itemTL.y);
+    Point curSize(itemSize.x, itemSize.y);
+    Point curCenter = curTL + curSize / 2.0f;
+    if(
+        curCenter != game.editorsView.center ||
+        curSize != game.editorsView.size
+    ) {
+        game.editorsView.center = curCenter;
+        game.editorsView.size = curSize;
+        game.editorsView.updateTransformations();
+    }
+}
+
+
+/**
  * @brief Processes the base content editing warning dialog for this frame.
  */
-void Editor::processGuiBaseContentWarningDialog() {
+void Editor::processGuiDialogBaseContent() {
     //Explanation text.
     ImGui::TextWrapped(
         "You're editing content in the base pack! The base pack is meant to "
@@ -1914,7 +2167,8 @@ void Editor::processGuiBaseContentWarningDialog() {
     
     //Go back button.
     ImGui::Spacer();
-    ImGui::SetupCentering(148);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({70, 70});
     if(ImGui::Button("Go back", ImVec2(70, 30))) {
         closeTopDialog();
     }
@@ -1926,19 +2180,22 @@ void Editor::processGuiBaseContentWarningDialog() {
         baseContentWarningDoPickCallback();
         baseContentWarningDoPickCallback = nullptr;
     }
+    ImGui::EndAlign();
     
     //Open manual button.
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(ImGui::Button("Open manual", ImVec2(100, 25))) {
         openManual("making.html#packs");
     }
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the bitmap picker dialog for this frame.
  */
-void Editor::processGuiBitmapDialog() {
+void Editor::processGuiDialogBitmap() {
     static bool filterWithRecommendedFolder = true;
     
     //Fill the picker's items.
@@ -1981,7 +2238,8 @@ void Editor::processGuiBitmapDialog() {
     ImGui::BeginChild("butOk");
     
     //Ok button.
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({200});
     if(!bitmapDialogCurBmpPtr) {
         ImGui::BeginDisabled();
     }
@@ -1994,6 +2252,7 @@ void Editor::processGuiBitmapDialog() {
     if(!bitmapDialogCurBmpPtr) {
         ImGui::EndDisabled();
     }
+    ImGui::EndAlign();
     
     //Recommended folder text.
     string folderStr =
@@ -2041,153 +2300,23 @@ void Editor::processGuiBitmapDialog() {
 
 
 /**
- * @brief Processes the setup for the "widget" that controls the canvas.
- */
-void Editor::processGuiCanvas() {
-    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
-    ImGui::EndChild();
-    isMouseInGui =
-        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-    ImVec2 itemSize = ImGui::GetItemRectSize();
-    ImVec2 itemTL = ImGui::GetItemRectMin();
-    
-    Point curTL(itemTL.x, itemTL.y);
-    Point curSize(itemSize.x, itemSize.y);
-    Point curCenter = curTL + curSize / 2.0f;
-    if(
-        curCenter != game.editorsView.center ||
-        curSize != game.editorsView.size
-    ) {
-        game.editorsView.center = curCenter;
-        game.editorsView.size = curSize;
-        game.editorsView.updateTransformations();
-    }
-}
-
-
-/**
- * @brief Processes the widgets that allow the player to set a custom
- * editor style.
- */
-void Editor::processGuiEditorStyle() {
-    //Style node.
-    if(saveableTreeNode("options", "Style")) {
-    
-        //Use custom style checkbox.
-        if(
-            ImGui::Checkbox(
-                "Use custom style", &game.options.editors.useCustomStyle
-            )
-        ) {
-            updateStyle();
-        }
-        setTooltip(
-            "Use a custom color scheme for the editor,\n"
-            "instead of the default.\n"
-            "Default: " + b2s(OPTIONS::EDITORS_D::USE_CUSTOM_STYLE) + "."
-        );
-        
-        //Primary color.
-        if(
-            ImGui::ColorEdit3(
-                "Custom primary color",
-                (float*) &game.options.editors.primaryColor
-            )
-        ) {
-            updateStyle();
-        }
-        setTooltip(
-            "Primary color for the custom style."
-        );
-        
-        //Secondary color.
-        if(
-            ImGui::ColorEdit3(
-                "Custom secondary color",
-                (float*) &game.options.editors.secondaryColor
-            )
-        ) {
-            updateStyle();
-        }
-        setTooltip(
-            "Secondary color for the custom style."
-        );
-        
-        //Text color.
-        if(
-            ImGui::ColorEdit3(
-                "Text color",
-                (float*) &game.options.editors.textColor
-            )
-        ) {
-            updateStyle();
-        }
-        setTooltip(
-            "Color of text in the custom style."
-        );
-        
-        //Highlight color.
-        if(
-            ImGui::ColorEdit3(
-                "Highlight color",
-                (float*) &game.options.editors.highlightColor
-            )
-        ) {
-            updateStyle();
-        }
-        setTooltip(
-            "Color of highlights in the custom style."
-        );
-        ImGui::TreePop();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui widgets that let users select a hazard.
- *
- * @param selectedHazardIname Internal name of the currently selected hazard.
- * @return Whether the hazard was changed.
- */
-bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
-    //Hazard combo.
-    int selectedHazardIdx = -1;
-    vector<string> allHazardINames = {""};
-    vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
-    for(auto& h : game.content.hazards.list) {
-        allHazardINames.push_back(h.first);
-        allHazardLabels.push_back(h.second.name + "##" + h.first);
-        if(selectedHazardIname == h.first) {
-            selectedHazardIdx = (int) allHazardLabels.size() - 1;
-        }
-    }
-    
-    if(selectedHazardIdx == -1) selectedHazardIdx = 0;
-    
-    bool result =
-        ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
-        
-    selectedHazardIname = allHazardINames[selectedHazardIdx];
-    
-    return result;
-}
-
-
-/**
  * @brief Processes the help dialog widgets.
  */
-void Editor::processGuiHelpDialog() {
+void Editor::processGuiDialogHelp() {
     //Text.
+    ImGui::BeginAlign();
     static int textWidth = 0;
     if(textWidth != 0) {
-        ImGui::SetupCentering(textWidth);
+        ImGui::AlignNextItems({textWidth});
     }
     ImGui::TextWrapped("%s", helpDialogMessage.c_str());
     textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
     
     //Open manual button.
     ImGui::Spacer();
-    ImGui::SetupCentering(200);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Open manual", ImVec2(100, 40))) {
         openManual(helpDialogPage);
     }
@@ -2197,668 +2326,39 @@ void Editor::processGuiHelpDialog() {
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
         closeTopDialog();
     }
-}
-
-
-/**
- * @brief Processes the widgets that show the editor's history.
- *
- * @param history History data to use.
- * @param nameDisplayCallback When an entry's name needs to be displayed as
- * button text, this function gets called with the entry name as an argument,
- * to determine what the final button text will be.
- * @param pickCallback Code to run when an entry is picked.
- * @param tooltipCallback Code to obtain an entry's tooltip with, if any.
- */
-void Editor::processGuiHistory(
-    const vector<pair<string, string> >& history,
-    const std::function<string(const string&)>& nameDisplayCallback,
-    const std::function<void(const string&)>& pickCallback,
-    const std::function<string(const string&)>& tooltipCallback
-) {
-    if(saveableTreeNode("load", "History")) {
-    
-        if(!history.empty() && !history[0].first.empty()) {
-        
-            size_t nFilledEntries = 0;
-            for(size_t h = 0; h < history.size(); h++) {
-                if(!history[h].first.empty()) nFilledEntries++;
-            }
-            
-            for(size_t h = 0; h < history.size(); h++) {
-                string path = history[h].first;
-                if(path.empty()) continue;
-                
-                string name = history[h].second;
-                if(name.empty()) name = history[h].first;
-                name = nameDisplayCallback(name);
-                name = trimWithEllipsis(name, 16);
-                
-                //History entry button.
-                const ImVec2 buttonSize(120, 24);
-                if(ImGui::Button((name + "##" + i2s(h)).c_str(), buttonSize)) {
-                    pickCallback(path);
-                }
-                if(tooltipCallback) {
-                    setTooltip(tooltipCallback(path));
-                }
-                ImGui::SetupButtonWrapping(
-                    buttonSize.x, (int) (h + 1), (int) nFilledEntries
-                );
-            }
-            
-        } else {
-        
-            //No history text.
-            ImGui::TextDisabled("(Empty)");
-            
-        }
-        
-        ImGui::TreePop();
-        
-    }
-}
-
-
-/**
- * @brief Processes a popup, if applicable, opened via openInputPopup(),
- * filling it with a text input for the user to type something in.
- *
- * @param label Name of the popup.
- * @param prompt What to prompt to the user. e.g.: "New name:"
- * @param text Pointer to the starting text, as well as the user's final text.
- * @param useMonospace Whether to use a monospace font.
- * @return Whether the user pressed Return or the Ok button.
- */
-bool Editor::processGuiInputPopup(
-    const char* label, const char* prompt, string* text, bool useMonospace
-) {
-    bool ret = false;
-    if(ImGui::BeginPopup(label)) {
-        if(escapeWasPressed) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::Text("%s", prompt);
-        ImGui::FocusOnInputText(needsInputPopupTextFocus);
-        bool hitEnter = false;
-        if(useMonospace) {
-            hitEnter =
-                monoInputText(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        } else {
-            hitEnter =
-                ImGui::InputText(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        }
-        if(hitEnter) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        if(ImGui::Button("Cancel")) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::SameLine();
-        if(ImGui::Button("Ok")) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-    return ret;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation create widget. This does not
- * alter the list in any way.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if a new item is created.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @return Whether the user pressed the button.
- */
-bool Editor::processGuiListNavNewWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
-) {
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "createItemButton", editorIcons[EDITOR_ICON_ADD],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(listSize == 0 || *curItemIdx == INVALID) {
-            *curItemIdx = 0;
-        } else {
-            (*curItemIdx)++;
-        }
-        pressed = true;
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation count widget.
- *
- * @param curItemIdx Index of the current item.
- * @param listSize Current size of the list.
- * @param label Label to show before the count.
- * @param name If this item has a name, specify it here.
- * @param sameLine Whether this widget is in the same line as the previous.
- */
-void Editor::processGuiListNavCurWidget(
-    size_t curItemIdx, size_t listSize, const string& label, const string& name,
-    bool sameLine
-) {
-    const char* curCStr =
-        (
-            listSize == 0 || curItemIdx == INVALID ?
-            "--" :
-            i2s(curItemIdx + 1)
-        ).c_str();
-        
-    if(sameLine) ImGui::SameLine();
-    if(name.empty()) {
-        ImGui::Text(
-            "%s: %s / %u",
-            label.c_str(), curCStr, (unsigned int) listSize
-        );
-    } else {
-        ImGui::Text(
-            "%s: %s (%s / %u)",
-            label.c_str(), name.c_str(), curCStr, (unsigned int) listSize
-        );
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation delete widget. This
- * does not alter the list in any way.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if the item is deleted.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @return Whether the user pressed the button.
- */
-bool Editor::processGuiListNavDelWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
-) {
-    if(listSize == 0 || *curItemIdx == INVALID) return false;
-    
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "delItemButton", editorIcons[EDITOR_ICON_REMOVE],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(listSize == 1) {
-            *curItemIdx = 0;
-        } else if(*curItemIdx >= listSize - 1) {
-            *curItemIdx = listSize - 2;
-        }
-        pressed = true;
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation move left widget.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if the item moved.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @return Whether the user pressed the button, and it was possible to move
- * left.
- */
-bool Editor::processGuiListNavMoveLeftWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
-) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
-    
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "moveItemLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(*curItemIdx == 0) {
-            setStatus("This is already the first one.");
-        } else {
-            pressed = true;
-        }
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation move right widget.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if the item moved.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @return Whether the user pressed the button, and it was possible to move
- * right.
- */
-bool Editor::processGuiListNavMoveRightWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut
-) {
-    if(listSize < 2 || *curItemIdx == INVALID) return false;
-    
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            "moveItemRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(*curItemIdx == listSize - 1) {
-            setStatus("This is already the last one.");
-        } else {
-            pressed = true;
-        }
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation next widget.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if a different item is chosen.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @return Whether the user pressed the button.
- */
-bool Editor::processGuiListNavNextWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut, bool alwaysAppear
-) {
-    if(!alwaysAppear) {
-        if(listSize < 2 || *curItemIdx == INVALID) return false;
-    }
-    
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            customButtonId.empty() ? "nextItemButton" : customButtonId,
-            editorIcons[EDITOR_ICON_NEXT],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(listSize > 0) {
-            *curItemIdx = sumAndWrap(*curItemIdx, +1, listSize);
-            pressed = true;
-        }
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation previous widget.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly if a different item is chosen.
- * @param listSize Current size of the list.
- * @param tooltip Tooltip for the widget.
- * @param sameLine Whether this widget is in the same line as the previous.
- * @param customButtonId If not empty, use this ID for the button.
- * @param buttonScale Scale the size of the buttons by this much.
- * @param tooltipShortcut Shortcut to show on the tooltip, if any.
- * @param alwaysAppear If true, the widget will appear.
- * @return Whether the user pressed the button.
- */
-bool Editor::processGuiListNavPrevWidget(
-    size_t* curItemIdx, size_t listSize, const string& tooltip,
-    bool sameLine, const string& customButtonId, float buttonScale,
-    const string& tooltipShortcut, bool alwaysAppear
-) {
-    if(!alwaysAppear) {
-        if(listSize < 2 || *curItemIdx == INVALID) return false;
-    }
-    
-    bool pressed = false;
-    
-    if(sameLine) ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            customButtonId.empty() ? "prevItemButton" : customButtonId,
-            editorIcons[EDITOR_ICON_PREVIOUS],
-            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
-        )
-    ) {
-        if(listSize > 0) {
-            *curItemIdx = sumAndWrap(*curItemIdx, -1, listSize);
-            pressed = true;
-        }
-    }
-    setTooltip(tooltip, tooltipShortcut);
-    
-    return pressed;
-}
-
-
-/**
- * @brief Processes the Dear ImGui list navigation widgets setup.
- *
- * @param curItemIdx Pointer to the index of the current item.
- * This will be adjusted accordingly to prevent errors.
- * @param listSize Current size of the list.
- * @param allowInvalid If true, INVALID becomes a possible value for the index.
- * If false, INVALID becomes 0.
- */
-void Editor::processGuiListNavSetup(
-    size_t* curItemIdx, size_t listSize, bool allowInvalid
-) {
-    if(*curItemIdx == INVALID) {
-        if(allowInvalid) {
-            return;
-        } else {
-            *curItemIdx = 0;
-        }
-    }
-    
-    if(listSize == 0) {
-        *curItemIdx = allowInvalid ? INVALID : 0;
-    } else if(*curItemIdx >= listSize) {
-        *curItemIdx = listSize - 1;
-    }
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the Dear ImGui message dialog widgets.
  */
-void Editor::processGuiMessageDialog() {
+void Editor::processGuiDialogMessage() {
     //Text.
     static int textWidth = 0;
+    ImGui::BeginAlign();
     if(textWidth != 0) {
-        ImGui::SetupCentering(textWidth);
+        ImGui::AlignNextItems({textWidth});
     }
     ImGui::TextWrapped("%s", messageDialogMessage.c_str());
     textWidth = ImGui::GetItemRectSize().x;
+    ImGui::EndAlign();
     
     //Ok button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
         closeTopDialog();
     }
-}
-
-
-/**
- * @brief Processes the category and type widgets that allow a user to
- * select a mob type.
- *
- * @param customCatName Pointer to the custom category name reflected
- * in the combo box.
- * @param type Pointer to the type reflected in the combo box.
- * @param packFilter If not empty, only show mob types from this pack.
- * @return Whether the user changed the category/type.
- */
-bool Editor::processGuiMobTypeWidgets(
-    string* customCatName, MobType** type, const string& packFilter
-) {
-    bool result = false;
-    
-    //These are used to communicate with the picker dialog, since that one
-    //is processed somewhere else entirely.
-    static bool internalChangedByDialog = false;
-    static string internalCustomCatName;
-    static MobType* internalMobType = nullptr;
-    
-    if(internalChangedByDialog) {
-        //Somewhere else in the code, the picker dialog changed these variables
-        //to whatever the user picked. Let's use them now, instead of the
-        //ones passed by the function's arguments.
-        result = true;
-        internalChangedByDialog = false;
-    } else {
-        //The picker dialog hasn't changed these variables. Just use
-        //whatever the function's arguments state.
-        internalCustomCatName = *customCatName;
-        internalMobType = *type;
-    }
-    
-    //Column setup.
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnWidth(-1, 62.0f);
-    
-    //Search button.
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14.0f, 14.0f));
-    bool searchButtonPressed =
-        ImGui::ImageButton(
-            "searchButton", editorIcons[EDITOR_ICON_SEARCH],
-            Point(EDITOR::ICON_BMP_SIZE)
-        );
-    ImGui::PopStyleVar();
-    
-    vector<vector<MobType*> > finalList;
-    if(!packFilter.empty()) {
-        for(size_t c = 0; c < customCatTypes.size(); c++) {
-            finalList.push_back(vector<MobType*>());
-            for(size_t n = 0; n < customCatTypes[c].size(); n++) {
-                MobType* mtPtr = customCatTypes[c][n];
-                if(mtPtr->manifest && mtPtr->manifest->pack == packFilter) {
-                    finalList[c].push_back(mtPtr);
-                }
-            }
-        }
-    } else {
-        finalList = customCatTypes;
-    }
-    
-    if(searchButtonPressed) {
-        vector<PickerItem> items;
-        for(size_t c = 0; c < finalList.size(); c++) {
-            for(size_t n = 0; n < finalList[c].size(); n++) {
-                MobType* mtPtr = finalList[c][n];
-                items.push_back(
-                    PickerItem(
-                        mtPtr->name, mtPtr->customCategoryName
-                    )
-                );
-            }
-        }
-        openPickerDialog(
-            "Pick an object type", items,
-            [this, finalList] (
-                const string& n, const string& tc, const string& sc, void*, bool
-        ) {
-            //For clarity, this code will NOT be run within the context
-            //of editor::processGuiMobTypeWidgets, but will instead
-            //be run wherever dialogs are processed.
-            internalChangedByDialog = true;
-            internalCustomCatName = tc;
-            internalMobType = nullptr;
-            size_t customCatIdx = customCatNameIdxs[tc];
-            const vector<MobType*>& types =
-                finalList[customCatIdx];
-            for(size_t t = 0; t < types.size(); t++) {
-                if(types[t]->name == n) {
-                    internalMobType = types[t];
-                    return;
-                }
-            }
-        },
-        "", false
-        );
-    }
-    setTooltip(
-        "Search for an object type from the entire list."
-    );
-    
-    ImGui::NextColumn();
-    
-    //Object category combobox.
-    vector<string> categories;
-    int selectedCategoryIdx = -1;
-    for(size_t c = 0; c < finalList.size(); c++) {
-        string cn =
-            customCatTypes[c].front()->customCategoryName;
-        categories.push_back(cn);
-        if(cn == internalCustomCatName) {
-            selectedCategoryIdx = (int) c;
-        }
-    }
-    
-    if(ImGui::Combo("Category", &selectedCategoryIdx, categories, 15)) {
-        result = true;
-        internalCustomCatName = categories[selectedCategoryIdx];
-        internalMobType =
-            finalList[selectedCategoryIdx].empty() ?
-            nullptr :
-            finalList[selectedCategoryIdx][0];
-    }
-    setTooltip(
-        "What category this object belongs to: a Pikmin, a leader, etc."
-    );
-    
-    if(!internalCustomCatName.empty()) {
-    
-        //Object type combobox.
-        vector<string> typeNames;
-        size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
-        const vector<MobType*>& types = finalList[customCatIdx];
-        for(size_t t = 0; t < types.size(); t++) {
-            MobType* tPtr = types[t];
-            typeNames.push_back(tPtr->name);
-        }
-        
-        string selectedTypeName;
-        if(internalMobType) {
-            selectedTypeName = internalMobType->name;
-        }
-        if(ImGui::Combo("Type", &selectedTypeName, typeNames, 15)) {
-            result = true;
-            for(size_t t = 0; t < types.size(); t++) {
-                if(types[t]->name == selectedTypeName) {
-                    internalMobType = types[t];
-                    break;
-                }
-            }
-        }
-        setTooltip(
-            "The specific type of object this is, from the chosen category."
-        );
-    }
-    
-    ImGui::Columns();
-    
-    if(result) {
-        *customCatName = internalCustomCatName;
-        *type = internalMobType;
-    }
-    
-    return result;
-}
-
-
-/**
- * @brief Processes the widgets for the pack selection, in a "new" dialog.
- *
- * @param pack Pointer to the internal name of the pack in the combobox.
- */
-bool Editor::processGuiNewDialogPackWidgets(string* pack) {
-    bool changed = false;
-    
-    //Pack combo.
-    vector<string> packs;
-    for(const auto& p : game.content.packs.manifestsWithBase) {
-        packs.push_back(game.content.packs.list[p].name);
-    }
-    if(packs.empty()) {
-        //Failsafe.
-        packs.push_back(FOLDER_NAMES::BASE_PACK);
-    }
-    newContentDialogPackIdx =
-        std::min(newContentDialogPackIdx, (int) packs.size() - 1);
-    changed = ImGui::Combo("Pack", &newContentDialogPackIdx, packs);
-    setTooltip("What pack it will belong to.");
-    
-    //New pack button.
-    ImGui::SameLine();
-    if(ImGui::Button("New pack...")) {
-        openNewPackDialog();
-    }
-    setTooltip("Create a new pack.");
-    
-    *pack = game.content.packs.manifestsWithBase[newContentDialogPackIdx];
-    return changed;
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the dialog for creating a new pack.
  */
-void Editor::processGuiNewPackDialog() {
+void Editor::processGuiDialogNewPack() {
     static string internalName = "my_pack";
     static string name = "My pack!";
     static string description;
@@ -2959,7 +2459,8 @@ void Editor::processGuiNewPackDialog() {
     
     //Create button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100});
     if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
@@ -2972,6 +2473,7 @@ void Editor::processGuiNewPackDialog() {
     setTooltip(
         problem.empty() ? "Create the pack!" : problem
     );
+    ImGui::EndAlign();
     
     //Creation logic.
     if(hitCreateButton) {
@@ -2997,6 +2499,938 @@ void Editor::processGuiNewPackDialog() {
 
 
 /**
+ * @brief Processes the Dear ImGui unsaved changes confirmation dialog
+ * for this frame.
+ */
+void Editor::processGuiDialogUnsavedChanges() {
+    //Explanation 1 text.
+    size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
+    string explanation1Str =
+        "You have " +
+        amountStr((int) nrUnsavedChanges, "unsaved change") +
+        ", made in the last " +
+        timeToStr3(
+            changesMgr.getUnsavedTimeDelta(),
+            "h", "m", "s",
+            TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
+            TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
+        ) +
+        ".";
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation1Str.c_str());
+    ImGui::Text("%s", explanation1Str.c_str());
+    ImGui::EndAlign();
+    
+    //Explanation 3 text.
+    string explanation2Str =
+        "Do you want to save before " +
+        changesMgr.getUnsavedWarningActionLong() + "?";
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanation2Str.c_str());
+    ImGui::Text("%s", explanation2Str.c_str());
+    ImGui::EndAlign();
+    
+    //Cancel button.
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({180, 180, 180});
+    if(ImGui::Button("Cancel", ImVec2(180, 30))) {
+        closeTopDialog();
+    }
+    setTooltip("Never mind and go back.", "Esc");
+    
+    //Save and then perform the action.
+    ImGui::SameLine();
+    if(ImGui::Button("Save", ImVec2(180, 30))) {
+        closeTopDialog();
+        const std::function<bool()>& saveCallback =
+            changesMgr.getUnsavedWarningSaveCallback();
+        const std::function<void()>& actionCallback =
+            changesMgr.getUnsavedWarningActionCallback();
+        if(saveCallback()) {
+            actionCallback();
+        }
+    }
+    setTooltip(
+        "Save first, then " +
+        changesMgr.getUnsavedWarningActionShort() + ".",
+        "Ctrl + S"
+    );
+    
+    //Perform the action without saving button.
+    ImGui::SameLine();
+    if(ImGui::Button("Don't save", ImVec2(180, 30))) {
+        closeTopDialog();
+        const std::function<void()> actionCallback =
+            changesMgr.getUnsavedWarningActionCallback();
+        actionCallback();
+    }
+    string dontSaveTooltip =
+        changesMgr.getUnsavedWarningActionShort() +
+        " without saving.";
+    dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
+    setTooltip(dontSaveTooltip, "Ctrl + D");
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the widgets that allow the player to set a custom
+ * editor style.
+ */
+void Editor::processGuiEditorStyle() {
+    //Style node.
+    if(saveableTreeNode("options", "Style")) {
+    
+        //Use custom style checkbox.
+        if(
+            ImGui::Checkbox(
+                "Use custom style", &game.options.editors.useCustomStyle
+            )
+        ) {
+            updateStyle();
+        }
+        setTooltip(
+            "Use a custom color scheme for the editor,\n"
+            "instead of the default.\n"
+            "Default: " + b2s(OPTIONS::EDITORS_D::USE_CUSTOM_STYLE) + "."
+        );
+        
+        //Primary color.
+        if(
+            ImGui::ColorEdit3(
+                "Custom primary color",
+                (float*) &game.options.editors.primaryColor
+            )
+        ) {
+            updateStyle();
+        }
+        setTooltip(
+            "Primary color for the custom style."
+        );
+        
+        //Secondary color.
+        if(
+            ImGui::ColorEdit3(
+                "Custom secondary color",
+                (float*) &game.options.editors.secondaryColor
+            )
+        ) {
+            updateStyle();
+        }
+        setTooltip(
+            "Secondary color for the custom style."
+        );
+        
+        //Text color.
+        if(
+            ImGui::ColorEdit3(
+                "Text color",
+                (float*) &game.options.editors.textColor
+            )
+        ) {
+            updateStyle();
+        }
+        setTooltip(
+            "Color of text in the custom style."
+        );
+        
+        //Highlight color.
+        if(
+            ImGui::ColorEdit3(
+                "Highlight color",
+                (float*) &game.options.editors.highlightColor
+            )
+        ) {
+            updateStyle();
+        }
+        setTooltip(
+            "Color of highlights in the custom style."
+        );
+        ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the widgets that show the editor's history.
+ *
+ * @param history History data to use.
+ * @param nameDisplayCallback When an entry's name needs to be displayed as
+ * button text, this function gets called with the entry name as an argument,
+ * to determine what the final button text will be.
+ * @param pickCallback Code to run when an entry is picked.
+ * @param tooltipCallback Code to obtain an entry's tooltip with, if any.
+ */
+void Editor::processGuiHistory(
+    const vector<pair<string, string> >& history,
+    const std::function<string(const string&)>& nameDisplayCallback,
+    const std::function<void(const string&)>& pickCallback,
+    const std::function<string(const string&)>& tooltipCallback
+) {
+    if(saveableTreeNode("load", "History")) {
+    
+        if(!history.empty() && !history[0].first.empty()) {
+        
+            size_t nFilledEntries = 0;
+            for(size_t h = 0; h < history.size(); h++) {
+                if(!history[h].first.empty()) nFilledEntries++;
+            }
+            
+            for(size_t h = 0; h < history.size(); h++) {
+                string path = history[h].first;
+                if(path.empty()) continue;
+                
+                string name = history[h].second;
+                if(name.empty()) name = history[h].first;
+                name = nameDisplayCallback(name);
+                name = trimWithEllipsis(name, 16);
+                
+                //History entry button.
+                const ImVec2 buttonSize(120, 24);
+                if(ImGui::Button((name + "##" + i2s(h)).c_str(), buttonSize)) {
+                    pickCallback(path);
+                }
+                if(tooltipCallback) {
+                    setTooltip(tooltipCallback(path));
+                }
+                ImGui::SetupButtonWrapping(
+                    buttonSize.x, (int) (h + 1), (int) nFilledEntries
+                );
+            }
+            
+        } else {
+        
+            //No history text.
+            ImGui::TextDisabled("(Empty)");
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+}
+
+
+/**
+ * @brief Processes the current item Dear ImGui widget for a typical
+ * navigation box. This does not alter the list in any way.
+ * This is expected to go in-between the previous item button and the
+ * next button item, centered.
+ *
+ * @param curItemName If this item has a name, specify it here.
+ * @param curItemNameMono If true, use a monospaced font for the item name.
+ * @param showTermNormally If false, the term won't show up when showing
+ * the usual text, but will show up when grammatically needed.
+ */
+void Editor::processGuiNavBoxCur(
+    const string& curItemName, bool curItemNameMono, bool showTermNormally
+) {
+    string text;
+    bool textDisabled;
+    string itemNameText;
+    bool itemNameTextMono;
+    getGuiNavCurText(
+        *curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+        curNavBoxOnGetSelSize(), curNavBoxItemTerm, showTermNormally,
+        curItemName, curItemNameMono,
+        &text, &textDisabled, &itemNameText, &itemNameTextMono
+    );
+    
+    int textW = ImGui::CalcTextSize(text.c_str()).x;
+    if(itemNameTextMono) {
+        ImGui::PushFont(
+            game.sysContent.fntDearImGuiMonospace,
+            game.sysContent.fntDearImGuiMonospace->LegacySize
+        );
+    }
+    int nameTextW = ImGui::CalcTextSize(itemNameText.c_str()).x;
+    if(itemNameTextMono) {
+        ImGui::PopFont();
+    }
+    
+    ImGui::SameLine();
+    ImGui::AlignTextToFramePadding();
+    ImGui::AlignNextItems({textW, nameTextW});
+    textDisabled ?
+    ImGui::TextDisabled("%s", text.c_str()) :
+    ImGui::Text("%s", text.c_str());
+    if(!itemNameText.empty()) {
+        ImGui::SameLine();
+        itemNameTextMono ?
+        monoText("%s", itemNameText.c_str()) :
+        ImGui::Text("%s", itemNameText.c_str());
+    }
+}
+
+
+/**
+ * @brief Processes the end of a typical navigation box.
+ */
+void Editor::processGuiNavBoxEnd() {
+    ImGui::EndAlign();
+    ImGui::EndFrameBox();
+}
+
+
+/**
+ * @brief Processes the next item Dear ImGui widget for a typical
+ * navigation box.
+ *
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavBoxNext() {
+    bool pressed = false;
+    ImGui::SameLine();
+    ImGui::AlignNextItems({32}, 1.0f);
+    if(curNavBoxOnGetSize() > 0) {
+        if(
+            processGuiNavWidgetNext(
+                curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+                curNavBoxItemPrefix + "nextButton"
+            )
+        ) {
+            pressed = true;
+        }
+        setTooltip(
+            "Select the next " + strToLower(curNavBoxItemTerm) + "."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    return pressed;
+}
+
+
+/**
+ * @brief Processes a placeholder button-sized Dear ImGui dummy widget for
+ * a typical navigation box.
+ */
+void Editor::processGuiNavBoxPlaceholder() {
+    ImGui::Dummy(ImVec2(32, 32));
+}
+
+
+/**
+ * @brief Processes the previous item Dear ImGui widget for a typical
+ * navigation box.
+ *
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavBoxPrev() {
+    bool pressed = false;
+    if(curNavBoxOnGetSize() > 0) {
+        if(
+            processGuiNavWidgetPrev(
+                curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
+                curNavBoxItemPrefix + "prevButton"
+            )
+        ) {
+            pressed = true;
+        }
+        setTooltip(
+            "Select the previous " + strToLower(curNavBoxItemTerm) + "."
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the start of the second line of a typical navigation box.
+ *
+ * @param nrItems Number of items the second line will contain
+ */
+void Editor::processGuiNavBoxSecondLine(size_t nrItems) {
+    ImGui::EndAlign();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems(vector<int>(nrItems, 32));
+}
+
+
+/**
+ * @brief Processes the start of a typical navigation box.
+ *
+ * @param widgetsPrefix Prefix to place before any widgets relevant
+ * to the nav box.
+ * @param itemsTerm Term that designates the items of the list.
+ * @param selIdxPtr Pointer to the selected item's index.
+ * @param onGetSize Callback for when the list size needs to be retrieved.
+ * @param onGetSelSize Callback for when the selection size needs
+ * to be retrieved.
+ */
+void Editor::processGuiNavBoxStart(
+    const string& widgetsPrefix, const string& itemsTerm,
+    size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+    const std::function<size_t()>& onGetSelSize
+) {
+    curNavBoxItemPrefix = widgetsPrefix;
+    curNavBoxItemTerm = itemsTerm;
+    curNavBoxSelIdxPtr = selIdxPtr;
+    curNavBoxOnGetSize = onGetSize;
+    curNavBoxOnGetSelSize = onGetSelSize;
+    ImGui::BeginFrameBox(widgetsPrefix + "NavBox");
+    ImGui::BeginAlign();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation widgets setup.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly to prevent errors.
+ * @param listSize Current size of the list.
+ * @param allowInvalid If true, INVALID becomes a possible value for the index.
+ * If false, INVALID becomes 0.
+ */
+void Editor::processGuiNavSetup(
+    size_t* curItemIdx, size_t listSize, bool allowInvalid
+) {
+    if(*curItemIdx == INVALID) {
+        if(allowInvalid) {
+            return;
+        } else {
+            *curItemIdx = 0;
+        }
+    }
+    
+    if(listSize == 0) {
+        *curItemIdx = allowInvalid ? INVALID : 0;
+    } else if(*curItemIdx >= listSize) {
+        *curItemIdx = listSize - 1;
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation delete widget. This
+ * does not alter the list in any way.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item is deleted.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavWidgetDel(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "delItemButton", editorIcons[EDITOR_ICON_REMOVE],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(listSize == 1) {
+            *curItemIdx = 0;
+        } else if(*curItemIdx >= listSize - 1) {
+            *curItemIdx = listSize - 2;
+        }
+        pressed = true;
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation move left widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item moved.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button, and it was possible to move
+ * left.
+ */
+bool Editor::processGuiNavWidgetMoveLeft(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "moveItemLeftButton", editorIcons[EDITOR_ICON_MOVE_LEFT],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(*curItemIdx == 0) {
+            setStatus("This is already the first one.");
+        } else {
+            pressed = true;
+        }
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation move right widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if the item moved.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button, and it was possible to move
+ * right.
+ */
+bool Editor::processGuiNavWidgetMoveRight(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "moveItemRightButton", editorIcons[EDITOR_ICON_MOVE_RIGHT],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(*curItemIdx == listSize - 1) {
+            setStatus("This is already the last one.");
+        } else {
+            pressed = true;
+        }
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation create widget. This does not
+ * alter the list in any way.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a new item is created.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavWidgetNew(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            "createItemButton", editorIcons[EDITOR_ICON_ADD],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(listSize == 0 || *curItemIdx == INVALID) {
+            *curItemIdx = 0;
+        } else {
+            (*curItemIdx)++;
+        }
+        pressed = true;
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation next widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a different item is chosen.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavWidgetNext(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            customButtonId.empty() ? "nextItemButton" : customButtonId,
+            editorIcons[EDITOR_ICON_NEXT],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(listSize > 0) {
+            *curItemIdx = sumAndWrap(*curItemIdx, +1, listSize);
+            pressed = true;
+        }
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes the Dear ImGui list navigation previous widget.
+ *
+ * @param curItemIdx Pointer to the index of the current item.
+ * This will be adjusted accordingly if a different item is chosen.
+ * @param listSize Current size of the list.
+ * @param customButtonId If not empty, use this ID for the button.
+ * @param buttonScale Scale the size of the buttons by this much.
+ * @return Whether the user pressed the button.
+ */
+bool Editor::processGuiNavWidgetPrev(
+    size_t* curItemIdx, size_t listSize,
+    const string& customButtonId, float buttonScale
+) {
+    bool pressed = false;
+    
+    if(
+        ImGui::ImageButton(
+            customButtonId.empty() ? "prevItemButton" : customButtonId,
+            editorIcons[EDITOR_ICON_PREVIOUS],
+            Point(EDITOR::ICON_BMP_SIZE) * buttonScale
+        )
+    ) {
+        if(listSize > 0) {
+            *curItemIdx = sumAndWrap(*curItemIdx, -1, listSize);
+            pressed = true;
+        }
+    }
+    
+    return pressed;
+}
+
+
+/**
+ * @brief Processes a popup, if applicable, opened via openInputPopup(),
+ * filling it with a text input for the user to type something in.
+ *
+ * @param label Name of the popup.
+ * @param prompt What to prompt to the user. e.g.: "New name:"
+ * @param text Pointer to the starting text, as well as the user's final text.
+ * @param useMonospace Whether to use a monospace font.
+ * @return Whether the user pressed Return or the Ok button.
+ */
+bool Editor::processGuiPopupInput(
+    const char* label, const char* prompt, string* text, bool useMonospace
+) {
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        if(escapeWasPressed) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::Text("%s", prompt);
+        ImGui::FocusOnInputText(needsInputPopupTextFocus);
+        bool hitEnter = false;
+        if(useMonospace) {
+            hitEnter =
+                monoInputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        } else {
+            hitEnter =
+                ImGui::InputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        }
+        if(hitEnter) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if(ImGui::Button("Cancel")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Ok")) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+    return ret;
+}
+
+
+/**
+ * @brief Process the text widget in the status bar.
+ *
+ * This is responsible for showing the text if there's anything to say,
+ * showing "Ready." if there's nothing to say,
+ * and coloring the text in case it's an error that needs to be flashed red.
+ */
+void Editor::processGuiStatusBarText() {
+    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
+    if(errorFlashTimeRatio > 0.0f) {
+        ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
+        ALLEGRO_COLOR normalColor;
+        normalColor.r = normalColorV.x;
+        normalColor.g = normalColorV.y;
+        normalColor.b = normalColorV.z;
+        normalColor.a = normalColorV.w;
+        ALLEGRO_COLOR errorFlashColor =
+            interpolateColor(
+                errorFlashTimeRatio,
+                0.0f, 1.0f,
+                normalColor, al_map_rgb(255, 0, 0)
+            );
+        ImVec4 errorFlashColorV;
+        errorFlashColorV.x = errorFlashColor.r;
+        errorFlashColorV.y = errorFlashColor.g;
+        errorFlashColorV.z = errorFlashColor.b;
+        errorFlashColorV.w = errorFlashColor.a;
+        ImGui::PushStyleColor(ImGuiCol_Text, errorFlashColorV);
+    }
+    ImGui::Text("%s", (statusText.empty() ? "Ready." : statusText.c_str()));
+    if(errorFlashTimeRatio) {
+        ImGui::PopStyleColor();
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets that let users select a hazard.
+ *
+ * @param selectedHazardIname Internal name of the currently selected hazard.
+ * @return Whether the hazard was changed.
+ */
+bool Editor::processGuiWidgetsHazardManagement(string& selectedHazardIname) {
+    //Hazard combo.
+    int selectedHazardIdx = -1;
+    vector<string> allHazardINames = {""};
+    vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
+    for(auto& h : game.content.hazards.list) {
+        allHazardINames.push_back(h.first);
+        allHazardLabels.push_back(h.second.name + "##" + h.first);
+        if(selectedHazardIname == h.first) {
+            selectedHazardIdx = (int) allHazardLabels.size() - 1;
+        }
+    }
+    
+    if(selectedHazardIdx == -1) selectedHazardIdx = 0;
+    
+    bool result =
+        ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
+        
+    selectedHazardIname = allHazardINames[selectedHazardIdx];
+    
+    return result;
+}
+
+
+
+/**
+ * @brief Processes the category and type widgets that allow a user to
+ * select a mob type.
+ *
+ * @param customCatName Pointer to the custom category name reflected
+ * in the combo box.
+ * @param type Pointer to the type reflected in the combo box.
+ * @param packFilter If not empty, only show mob types from this pack.
+ * @return Whether the user changed the category/type.
+ */
+bool Editor::processGuiWidgetsMobType(
+    string* customCatName, MobType** type, const string& packFilter
+) {
+    bool result = false;
+    
+    //These are used to communicate with the picker dialog, since that one
+    //is processed somewhere else entirely.
+    static bool internalChangedByDialog = false;
+    static string internalCustomCatName;
+    static MobType* internalMobType = nullptr;
+    
+    if(internalChangedByDialog) {
+        //Somewhere else in the code, the picker dialog changed these variables
+        //to whatever the user picked. Let's use them now, instead of the
+        //ones passed by the function's arguments.
+        result = true;
+        internalChangedByDialog = false;
+    } else {
+        //The picker dialog hasn't changed these variables. Just use
+        //whatever the function's arguments state.
+        internalCustomCatName = *customCatName;
+        internalMobType = *type;
+    }
+    
+    //Column setup.
+    ImGui::Columns(2, nullptr, false);
+    ImGui::SetColumnWidth(-1, 62.0f);
+    
+    //Search button.
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14.0f, 14.0f));
+    bool searchButtonPressed =
+        ImGui::ImageButton(
+            "searchButton", editorIcons[EDITOR_ICON_SEARCH],
+            Point(EDITOR::ICON_BMP_SIZE)
+        );
+    ImGui::PopStyleVar();
+    
+    vector<vector<MobType*> > finalList;
+    if(!packFilter.empty()) {
+        for(size_t c = 0; c < customCatTypes.size(); c++) {
+            finalList.push_back(vector<MobType*>());
+            for(size_t n = 0; n < customCatTypes[c].size(); n++) {
+                MobType* mtPtr = customCatTypes[c][n];
+                if(mtPtr->manifest && mtPtr->manifest->pack == packFilter) {
+                    finalList[c].push_back(mtPtr);
+                }
+            }
+        }
+    } else {
+        finalList = customCatTypes;
+    }
+    
+    if(searchButtonPressed) {
+        vector<PickerItem> items;
+        for(size_t c = 0; c < finalList.size(); c++) {
+            for(size_t n = 0; n < finalList[c].size(); n++) {
+                MobType* mtPtr = finalList[c][n];
+                items.push_back(
+                    PickerItem(
+                        mtPtr->name, mtPtr->customCategoryName
+                    )
+                );
+            }
+        }
+        openPickerDialog(
+            "Pick an object type", items,
+            [this, finalList] (
+                const string& n, const string& tc, const string& sc, void*, bool
+        ) {
+            //For clarity, this code will NOT be run within the context
+            //of editor::processGuiWidgetsMobType, but will instead
+            //be run wherever dialogs are processed.
+            internalChangedByDialog = true;
+            internalCustomCatName = tc;
+            internalMobType = nullptr;
+            size_t customCatIdx = customCatNameIdxs[tc];
+            const vector<MobType*>& types =
+                finalList[customCatIdx];
+            for(size_t t = 0; t < types.size(); t++) {
+                if(types[t]->name == n) {
+                    internalMobType = types[t];
+                    return;
+                }
+            }
+        },
+        "", false
+        );
+    }
+    setTooltip(
+        "Search for an object type from the entire list."
+    );
+    
+    ImGui::NextColumn();
+    
+    //Object category combobox.
+    vector<string> categories;
+    int selectedCategoryIdx = -1;
+    for(size_t c = 0; c < finalList.size(); c++) {
+        string cn =
+            customCatTypes[c].front()->customCategoryName;
+        categories.push_back(cn);
+        if(cn == internalCustomCatName) {
+            selectedCategoryIdx = (int) c;
+        }
+    }
+    
+    if(ImGui::Combo("Category", &selectedCategoryIdx, categories, 15)) {
+        result = true;
+        internalCustomCatName = categories[selectedCategoryIdx];
+        internalMobType =
+            finalList[selectedCategoryIdx].empty() ?
+            nullptr :
+            finalList[selectedCategoryIdx][0];
+    }
+    setTooltip(
+        "What category this object belongs to: a Pikmin, a leader, etc."
+    );
+    
+    if(!internalCustomCatName.empty()) {
+    
+        //Object type combobox.
+        vector<string> typeNames;
+        size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
+        const vector<MobType*>& types = finalList[customCatIdx];
+        for(size_t t = 0; t < types.size(); t++) {
+            MobType* tPtr = types[t];
+            typeNames.push_back(tPtr->name);
+        }
+        
+        string selectedTypeName;
+        if(internalMobType) {
+            selectedTypeName = internalMobType->name;
+        }
+        if(ImGui::Combo("Type", &selectedTypeName, typeNames, 15)) {
+            result = true;
+            for(size_t t = 0; t < types.size(); t++) {
+                if(types[t]->name == selectedTypeName) {
+                    internalMobType = types[t];
+                    break;
+                }
+            }
+        }
+        setTooltip(
+            "The specific type of object this is, from the chosen category."
+        );
+    }
+    
+    ImGui::Columns();
+    
+    if(result) {
+        *customCatName = internalCustomCatName;
+        *type = internalMobType;
+    }
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes the widgets for the pack selection, in a "new" dialog.
+ *
+ * @param pack Pointer to the internal name of the pack in the combobox.
+ */
+bool Editor::processGuiWidgetsNewDialogPack(string* pack) {
+    bool changed = false;
+    
+    //Pack combo.
+    vector<string> packs;
+    for(const auto& p : game.content.packs.manifestsWithBase) {
+        packs.push_back(game.content.packs.list[p].name);
+    }
+    if(packs.empty()) {
+        //Failsafe.
+        packs.push_back(FOLDER_NAMES::BASE_PACK);
+    }
+    newContentDialogPackIdx =
+        std::min(newContentDialogPackIdx, (int) packs.size() - 1);
+    changed = ImGui::Combo("Pack", &newContentDialogPackIdx, packs);
+    setTooltip("What pack it will belong to.");
+    
+    //New pack button.
+    ImGui::SameLine();
+    if(ImGui::Button("New pack...")) {
+        openNewPackDialog();
+    }
+    setTooltip("Create a new pack.");
+    
+    *pack = game.content.packs.manifestsWithBase[newContentDialogPackIdx];
+    return changed;
+}
+
+
+/**
  * @brief Process the width and height widgets that allow a user to
  * specify the size of something.
  *
@@ -3012,7 +3446,7 @@ void Editor::processGuiNewPackDialog() {
  * to have. Use -FLT_MAX for none.
  * @return Whether the user changed one of the values.
  */
-bool Editor::processGuiSizeWidgets(
+bool Editor::processGuiWidgetsSize(
     const char* label, Point& size, float vSpeed,
     bool keepAspectRatio,
     bool keepArea,
@@ -3079,111 +3513,6 @@ bool Editor::processGuiSizeWidgets(
     }
     
     return ret;
-}
-
-
-/**
- * @brief Process the text widget in the status bar.
- *
- * This is responsible for showing the text if there's anything to say,
- * showing "Ready." if there's nothing to say,
- * and coloring the text in case it's an error that needs to be flashed red.
- */
-void Editor::processGuiStatusBarText() {
-    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
-    if(errorFlashTimeRatio > 0.0f) {
-        ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
-        ALLEGRO_COLOR normalColor;
-        normalColor.r = normalColorV.x;
-        normalColor.g = normalColorV.y;
-        normalColor.b = normalColorV.z;
-        normalColor.a = normalColorV.w;
-        ALLEGRO_COLOR errorFlashColor =
-            interpolateColor(
-                errorFlashTimeRatio,
-                0.0f, 1.0f,
-                normalColor, al_map_rgb(255, 0, 0)
-            );
-        ImVec4 errorFlashColorV;
-        errorFlashColorV.x = errorFlashColor.r;
-        errorFlashColorV.y = errorFlashColor.g;
-        errorFlashColorV.z = errorFlashColor.b;
-        errorFlashColorV.w = errorFlashColor.a;
-        ImGui::PushStyleColor(ImGuiCol_Text, errorFlashColorV);
-    }
-    ImGui::Text("%s", (statusText.empty() ? "Ready." : statusText.c_str()));
-    if(errorFlashTimeRatio) {
-        ImGui::PopStyleColor();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui unsaved changes confirmation dialog
- * for this frame.
- */
-void Editor::processGuiUnsavedChangesDialog() {
-    //Explanation 1 text.
-    size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
-    string explanation1Str =
-        "You have " +
-        amountStr((int) nrUnsavedChanges, "unsaved change") +
-        ", made in the last " +
-        timeToStr3(
-            changesMgr.getUnsavedTimeDelta(),
-            "h", "m", "s",
-            TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
-            TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
-        ) +
-        ".";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation1Str.c_str()).x);
-    ImGui::Text("%s", explanation1Str.c_str());
-    
-    //Explanation 3 text.
-    string explanation2Str =
-        "Do you want to save before " +
-        changesMgr.getUnsavedWarningActionLong() + "?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation2Str.c_str()).x);
-    ImGui::Text("%s", explanation2Str.c_str());
-    
-    //Cancel button.
-    ImGui::SetupCentering(180 + 180 + 180 + 20);
-    if(ImGui::Button("Cancel", ImVec2(180, 30))) {
-        closeTopDialog();
-    }
-    setTooltip("Never mind and go back.", "Esc");
-    
-    //Save and then perform the action.
-    ImGui::SameLine(0.0f, 10);
-    if(ImGui::Button("Save", ImVec2(180, 30))) {
-        closeTopDialog();
-        const std::function<bool()>& saveCallback =
-            changesMgr.getUnsavedWarningSaveCallback();
-        const std::function<void()>& actionCallback =
-            changesMgr.getUnsavedWarningActionCallback();
-        if(saveCallback()) {
-            actionCallback();
-        }
-    }
-    setTooltip(
-        "Save first, then " +
-        changesMgr.getUnsavedWarningActionShort() + ".",
-        "Ctrl + S"
-    );
-    
-    //Perform the action without saving button.
-    ImGui::SameLine(0.0f, 10);
-    if(ImGui::Button("Don't save", ImVec2(180, 30))) {
-        closeTopDialog();
-        const std::function<void()> actionCallback =
-            changesMgr.getUnsavedWarningActionCallback();
-        actionCallback();
-    }
-    string dontSaveTooltip =
-        changesMgr.getUnsavedWarningActionShort() +
-        " without saving.";
-    dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
-    setTooltip(dontSaveTooltip, "Ctrl + D");
 }
 
 
@@ -3642,7 +3971,7 @@ bool Editor::ChangesManager::askIfUnsaved(
         
         ed->openDialog(
             "Unsaved changes!",
-            std::bind(&Editor::processGuiUnsavedChangesDialog, ed)
+            std::bind(&Editor::processGuiDialogUnsavedChanges, ed)
         );
         ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);
@@ -4224,6 +4553,8 @@ Editor::PickerItem::PickerItem(
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
+ * @param newCenter The new selection center.
+ * @param newSize The new selection size.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyTransformation(
@@ -4263,9 +4594,23 @@ bool Editor::SelectionManager::applyTransformation(
 bool Editor::SelectionManager::clear() {
     if(selectedItems.empty()) return false;
     selectedItems.clear();
+    homogenized = false;
     return true;
 }
 
+
+/**
+ * @brief Sets the selection to be a single item only.
+ *
+ * @param idx The item to select.
+ * @return Whether that item wasn't already selected.
+ */
+bool Editor::SelectionManager::setSingle(size_t idx) {
+    if(getSingleItemIdx() == idx) return false;
+    clear();
+    add(idx);
+    return true;
+}
 
 /**
  * @brief Disables the manager.
@@ -4437,6 +4782,20 @@ bool Editor::SelectionManager::enable() {
 
 
 /**
+ * @brief Returns the index of the first selected item, or INVALID if
+ * none is selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionManager::getFirstItemIdx() const {
+    if(selectedItems.size() == 0) {
+        return INVALID;
+    }
+    return *selectedItems.begin();
+}
+
+
+/**
  * @brief Returns the info of an item, or 0,0 if not possible.
  *
  * @param idx The item's index.
@@ -4491,7 +4850,7 @@ size_t Editor::SelectionManager::getNrTotalItems() const {
  *
  * @return The index or INVALID.
  */
-size_t Editor::SelectionManager::getSelectedItemIdx() const {
+size_t Editor::SelectionManager::getSingleItemIdx() const {
     if(selectedItems.size() == 1) {
         return *selectedItems.begin();
     } else {
@@ -4505,7 +4864,7 @@ size_t Editor::SelectionManager::getSelectedItemIdx() const {
  *
  * @return The list.
  */
-const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
+const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
     return selectedItems;
 }
 
@@ -4515,7 +4874,7 @@ const set<size_t>& Editor::SelectionManager::getSelectedItemIdxs() const {
  *
  * @return The amount.
  */
-size_t Editor::SelectionManager::getSelectionAmount() const {
+size_t Editor::SelectionManager::getCount() const {
     return selectedItems.size();
 }
 
@@ -4528,7 +4887,7 @@ size_t Editor::SelectionManager::getSelectionAmount() const {
  * @param size The dimensions of the box are returned here.
  * @return Whether there are any selected items.
  */
-bool Editor::SelectionManager::getSelectionBBox(
+bool Editor::SelectionManager::getBBox(
     Point* center, Point* size
 ) const {
     *center = Point();
@@ -4561,7 +4920,7 @@ bool Editor::SelectionManager::getSelectionBBox(
  *
  * @return Whether any are selected.
  */
-bool Editor::SelectionManager::isAnySelected() const {
+bool Editor::SelectionManager::hasAny() const {
     return !selectedItems.empty();
 }
 
@@ -4581,7 +4940,7 @@ bool Editor::SelectionManager::isCreatingRubberBand() const {
  *
  * @return Whether there are multiple selected.
  */
-bool Editor::SelectionManager::isMultipleSelected() const {
+bool Editor::SelectionManager::hasMultiple() const {
     return selectedItems.size() > 1;
 }
 
@@ -4591,7 +4950,7 @@ bool Editor::SelectionManager::isMultipleSelected() const {
  *
  * @return Whether there is one selected.
  */
-bool Editor::SelectionManager::isOneSelected() const {
+bool Editor::SelectionManager::hasOne() const {
     return selectedItems.size() == 1;
 }
 
@@ -4602,7 +4961,7 @@ bool Editor::SelectionManager::isOneSelected() const {
  * @param idx The item's index.
  * @return Whether it is selected.
  */
-bool Editor::SelectionManager::isSelected(size_t idx) const {
+bool Editor::SelectionManager::contains(size_t idx) const {
     return selectedItems.contains(idx);
 }
 
@@ -4623,11 +4982,29 @@ bool Editor::SelectionManager::isTransforming() const {
  * @param idx The item's index.
  * @return Whether the item was unselected.
  */
-bool Editor::SelectionManager::select(size_t idx) {
+bool Editor::SelectionManager::add(size_t idx) {
     if(!enabled) return false;
     if(selectedItems.contains(idx)) return false;
     selectedItems.insert(idx);
+    homogenized = false;
     return true;
+}
+
+
+/**
+ * @brief Selects all items available.
+ *
+ * @param totalAmount How many items there are in total.
+ * @return Whether we didn't already have all selected.
+ */
+bool Editor::SelectionManager::addAll(size_t totalAmount) {
+    if(!enabled) return false;
+    size_t prevSelSize = selectedItems.size();
+    clear();
+    for(size_t i = 0; i < totalAmount; i++) {
+        add(i);
+    }
+    return selectedItems.size() > prevSelSize;
 }
 
 
@@ -4642,13 +5019,13 @@ bool Editor::SelectionManager::select(size_t idx) {
  * selection was held down.
  * @return Whether anything changed.
  */
-bool Editor::SelectionManager::selectViaMouseDown(
+bool Editor::SelectionManager::chooseViaMouseDown(
     const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
 ) {
     if(!enabled) return false;
     bool madeChanges = false;
     Point selectionCenter, selectionSize;
-    getSelectionBBox(&selectionCenter, &selectionSize);
+    getBBox(&selectionCenter, &selectionSize);
     
     //Get which items are under the mouse cursor.
     vector<size_t> clickedItems;
@@ -4672,17 +5049,18 @@ bool Editor::SelectionManager::selectViaMouseDown(
     if(mustStartRubberBand) {
         if(!addToSelectionMod) {
             clear();
-            startRubberBand(cursorPos);
-            madeChanges = true;
         }
+        startRubberBand(cursorPos);
+        madeChanges = true;
     } else {
-        if(overlapsCycle) {
-            size_t prevSelItemIdx = getSelectedItemIdx();
-            clear();
-            select(getNextInVector(clickedItems, prevSelItemIdx));
+        if(overlapsCycle && !addToSelectionMod) {
+            size_t prevSelItemIdx = getSingleItemIdx();
+            setSingle(getNextInVector(clickedItems, prevSelItemIdx));
         } else {
-            clear();
-            select(clickedItems[0]);
+            if(!addToSelectionMod) {
+                clear();
+            }
+            add(clickedItems[0]);
         }
         madeChanges = true;
     }
@@ -4723,7 +5101,7 @@ bool Editor::SelectionManager::startTransforming() {
         preTransCenters[i] = iCenter;
         preTransSizes[i] = iSize;
     }
-    getSelectionBBox(&preTransCenter, &preTransSize);
+    getBBox(&preTransCenter, &preTransSize);
     return wasIdle;
 }
 
@@ -4738,6 +5116,20 @@ bool Editor::SelectionManager::stopRubberBand() {
     
     state = STATE_IDLING;
     return true;
+}
+
+
+/**
+ * @brief A shorthand for handling things to do when the left mouse
+ * is released.
+ *
+ * @return Whether it succeeded.
+ */
+bool Editor::SelectionManager::handleMouseUp() {
+    bool success = true;
+    success &= stopRubberBand();
+    success &= stopTransforming();
+    return success;
 }
 
 
@@ -4762,7 +5154,7 @@ bool Editor::SelectionManager::stopTransforming() {
  * @param idx The item's index.
  * @return Whether the item was selected.
  */
-bool Editor::SelectionManager::unselect(size_t idx) {
+bool Editor::SelectionManager::remove(size_t idx) {
     if(!enabled) return false;
     if(!selectedItems.contains(idx)) return false;
     selectedItems.erase(idx);
@@ -4787,7 +5179,7 @@ bool Editor::SelectionManager::updateRubberBand(
     if(state != STATE_RUBBER_BAND) return false;
     
     Point selectionCenter, selectionSize;
-    getSelectionBBox(&selectionCenter, &selectionSize);
+    getBBox(&selectionCenter, &selectionSize);
     
     if(!addToSelectionMod) clear();
     
@@ -4816,11 +5208,9 @@ bool Editor::SelectionManager::updateRubberBand(
             iBR.x <= rubberBandBR.x &&
             iBR.y <= rubberBandBR.y
         ) {
-            select(i);
+            add(i);
         }
     }
-    
-    selectionHomogenized = false;
     
     return true;
 }

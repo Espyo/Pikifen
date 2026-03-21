@@ -347,8 +347,8 @@ vertexes{
 	v=960.0000 -2112.0000
 	v=192.0000 -2560.0000
 	v=192.0000 -2880.0000
-	v=2016.0000 -2880.0000
-	v=2016.0000 -2560.0000
+	v=2816.0000 -2880.0000
+	v=2816.0000 -2560.0000
 	v=192.0000 -2944.0000
 	v=192.0000 -3296.0000
 	v=1568.0000 -3296.0000
@@ -14491,11 +14491,11 @@ mobs{
 	}
 	treasure{
 		type=jigsaw_puzzle_piece
-		p=1184.0000 -2720.0000
+		p=1312.0000 -2720.0000
 	}
 	treasure{
 		type=yo-yo
-		p=1888.0000 -2720.0000
+		p=2560.0000 -2720.0000
 	}
 	bouncer{
 		type=geyser
@@ -14680,11 +14680,11 @@ mobs{
 	}
 	treasure{
 		type=soda_cap
-		p=1568.0000 -2720.0000
+		p=2240.0000 -2720.0000
 	}
 	treasure{
 		type=yarn_ball
-		p=1696.0000 -2720.0000
+		p=2368.0000 -2720.0000
 	}
 	bouncer{
 		type=geyser
@@ -14996,11 +14996,11 @@ mobs{
 	}
 	resource{
 		type=nugget
-		p=1280.0000 -2720.0000
+		p=1408.0000 -2720.0000
 	}
 	pile{
 		type=nugget_pile
-		p=1408.0000 -2720.0000
+		p=1536.0000 -2720.0000
 	}
 	treasure{
 		type=cupcake
@@ -15108,6 +15108,31 @@ mobs{
 	custom{
 		type=ice_vent
 		p=1536.0000 -1888.0000
+	}
+	treasure{
+		type=four_sided_die
+		p=1184.0000 -2720.0000
+	}
+	treasure{
+		type=playing_card
+		p=1696.0000 -2720.0000
+	}
+	treasure{
+		type=playing_card
+		p=1824.0000 -2720.0000
+		vars=front=false
+	}
+	treasure{
+		type=poker_chip
+		p=1984.0000 -2720.0000
+	}
+	treasure{
+		type=red_die
+		p=2144.0000 -2720.0000
+	}
+	treasure{
+		type=white_die
+		p=2720.0000 -2720.0000
 	}
 }
 path_stops{

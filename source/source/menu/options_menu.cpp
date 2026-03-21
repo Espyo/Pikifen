@@ -1896,7 +1896,9 @@ void OptionsMenu::populateShortcutItems() {
     
     GuiItem* itemToFocus = nullptr;
     
-    addNewShortcutItemItems("(None)", "", &itemToFocus, al_map_rgb(255, 192, 192));
+    addNewShortcutItemItems(
+        "(None)", "", &itemToFocus, al_map_rgb(255, 192, 192)
+    );
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
         InventoryItem* iPtr = game.inventoryItems.getByIndex(i);

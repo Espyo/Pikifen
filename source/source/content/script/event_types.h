@@ -5,71 +5,38 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the scripting classes and related functions.
+ * Header for the script event type classes and related functions.
  */
 
 
 #pragma once
 
-#include <map>
-#include <vector>
 
-#include "../../core/const.h"
-#include "../../lib/data_file/data_file.h"
 #include "../../util/general_utils.h"
 
 
-using std::map;
-using std::size_t;
-using std::string;
-using std::vector;
-
-
-class Hitbox;
-class Mob;
-class MobType;
-struct ScriptActionCall;
-class ScriptState;
-
-
-#pragma region Constants
-
-
-class Fsm;
-
-/**
- * @brief Function to run custom script actions with.
- *
- * The first parameter is the FSM running the action.
- * The second parameter depends on the function.
- * The third parameter depends on the function.
- */
-typedef void (*CustomActionCode)(Fsm* fsm, void* info1, void* info2);
-
-const unsigned char STATE_HISTORY_SIZE = 3;
-
-//Types of script events.
-enum SCRIPT_EV {
+//Types of FSM events.
+enum FSM_EV {
 
     //"Special" events.
     
     //Unknown.
-    SCRIPT_EV_UNKNOWN,
+    FSM_EV_UNKNOWN,
     
     //When the state is entered.
-    SCRIPT_EV_ON_ENTER,
+    FSM_EV_ON_ENTER,
     
     //When the state is left.
-    SCRIPT_EV_ON_LEAVE,
+    FSM_EV_ON_LEAVE,
     
     //When the game ticks a frame.
-    SCRIPT_EV_ON_TICK,
+    FSM_EV_ON_TICK,
     
     //For mobs, triggered when the mob has been created, and has links and
     //such set up and ready.
-    SCRIPT_EV_ON_READY,
+    FSM_EV_ON_READY,
     
-    //Script file stuff.
+    //Mob script file stuff.
     
     //When the player's active leader is not the mob's current leader.
     MOB_EV_ACTIVE_LEADER_CHANGED,
@@ -329,11 +296,11 @@ enum SCRIPT_EV {
 
 
 //Script event enum naming (internal names for script files only).
-buildEnumNames(scriptEvScriptFileINames, SCRIPT_EV)({
-    { SCRIPT_EV_ON_ENTER, "on_enter" },
-    { SCRIPT_EV_ON_LEAVE, "on_leave" },
-    { SCRIPT_EV_ON_TICK, "on_tick" },
-    { SCRIPT_EV_ON_READY, "on_ready" },
+buildEnumNames(scriptEvScriptFileINames, FSM_EV)({
+    { FSM_EV_ON_ENTER, "on_enter" },
+    { FSM_EV_ON_LEAVE, "on_leave" },
+    { FSM_EV_ON_TICK, "on_tick" },
+    { FSM_EV_ON_READY, "on_ready" },
     { MOB_EV_ACTIVE_LEADER_CHANGED, "on_active_leader_changed" },
     { MOB_EV_ANIMATION_END, "on_animation_end" },
     { MOB_EV_DAMAGE, "on_damage" },
@@ -365,217 +332,3 @@ buildEnumNames(scriptEvScriptFileINames, SCRIPT_EV)({
     { MOB_EV_WEIGHT_ADDED, "on_weight_added" },
     { MOB_EV_WEIGHT_REMOVED, "on_weight_removed" },
 });
-
-
-#pragma endregion
-#pragma region Classes
-
-
-/**
- * @brief Actions to run on an event, inside a FSM.
- */
-class ScriptEvent {
-
-public:
-
-    //--- Public members ---
-    
-    //Type of event.
-    SCRIPT_EV type = SCRIPT_EV_UNKNOWN;
-    
-    //Actions to run.
-    vector<ScriptActionCall*> actions;
-    
-    
-    //--- Public function declarations ---
-    
-    ScriptEvent(
-        const DataNode* node, const vector<ScriptActionCall*>& actions
-    );
-    explicit ScriptEvent(
-        const SCRIPT_EV t,
-        const vector<ScriptActionCall*>& a = vector<ScriptActionCall*>()
-    );
-    void run(
-        Fsm* fsm, void* customData1 = nullptr, void* customData2 = nullptr
-    );
-    
-};
-
-
-/**
- * @brief A state in an FSM. A script can only be in one state at any given
- * time. Multiple mobs can share these states.
- */
-class ScriptState {
-
-public:
-
-    //--- Public members ---
-    
-    //Name of the state.
-    string name;
-    
-    //State ID.
-    size_t id = INVALID;
-    
-    //List of events to handle in this state.
-    ScriptEvent* events[N_SCRIPT_EVENTS];
-    
-    
-    //--- Public function declarations ---
-    
-    explicit ScriptState(const string& name);
-    ScriptState(const string& name, ScriptEvent* evs[N_SCRIPT_EVENTS]);
-    ScriptState(const string& name, size_t id);
-    ScriptEvent* getEvent(const SCRIPT_EV type) const;
-    
-};
-
-
-/**
- * @brief An instance of a finite-state machine. It contains information
- * about what state it is in, and so on, but does not contain the list
- * of states, events, and actions.
- */
-class Fsm {
-
-public:
-
-    //--- Public members ---
-    
-    //Mob that this FSM belongs to, if any.
-    Mob* m = nullptr;
-    
-    //Current state.
-    ScriptState* curState = nullptr;
-    
-    //Custom timer.
-    Timer timer;
-    
-    //Variables.
-    map<string, string> vars;
-    
-    //Conversion between pre-named states and in-file states.
-    vector<size_t> preNamedConversions;
-    
-    //Knowing the previous states' names helps with engine or content debugging.
-    string prevStateNames[STATE_HISTORY_SIZE];
-    
-    //If this is INVALID, use the first state index defined elsewhere.
-    //Otherwise, use this.
-    size_t firstStateOverride = INVALID;
-    
-    
-    //--- Public function declarations ---
-    
-    explicit Fsm(Mob* m = nullptr);
-    ScriptEvent* getEvent(const SCRIPT_EV type) const;
-    size_t getStateIdx(const string& name) const;
-    void runEvent(
-        const SCRIPT_EV type,
-        void* customData1 = nullptr, void* customData2 = nullptr
-    );
-    bool setState(
-        size_t newState, void* info1 = nullptr, void* info2 = nullptr
-    );
-    string getMakerToolVarsStr() const;
-    string getStateHistoryStr() const;
-    
-};
-
-
-/**
- * @brief The easy fsm creator makes it easy to create mob FSMs in C++ code.
-
- * For mobs created by the game maker, the state machine is simpler,
- * and written in plain text using a data file. But for the engine and
- * some preset FSMs, like the Pikmin and leader logic, there's no good way
- * to create a finite-state machine with something as simple as plain text
- * AND still give the events custom code to run.
- * The only way is to manually create a vector of states, for every
- * state, manually create the events, and for every event, manually
- * create the actions. Boring and ugly. That's why this class was born.
- * Creating a state, event, or action, are now all a single line, much like
- * they would be in a plain text file!
- */
-class EasyFsmCreator {
-
-public:
-
-    //--- Public function declarations ---
-    
-    void newState(const string& name, size_t id);
-    void newEvent(const SCRIPT_EV type);
-    void changeState(const string& newState);
-    void run(CustomActionCode code);
-    vector<ScriptState*> finish();
-    
-private:
-
-    //--- Private members ---
-    
-    //List of registered states.
-    vector<ScriptState*> states;
-    
-    //State currently being staged.
-    ScriptState* curState = nullptr;
-    
-    //Event currently being staged.
-    ScriptEvent* curEvent = nullptr;
-    
-    
-    //--- Private function declarations ---
-    
-    void commitState();
-    void commitEvent();
-    
-};
-
-
-/**
- * @brief Info about how two hitboxes interacted.
- */
-struct HitboxInteraction {
-
-    //--- Public members ---
-    
-    //Mob that touched our mob.
-    Mob* mob2 = nullptr;
-    
-    //Hitbox of our mob that got touched.
-    Hitbox* h1 = nullptr;
-    
-    //Hitbox of the other mob.
-    Hitbox* h2 = nullptr;
-    
-    
-    //--- Public function declarations ---
-    
-    explicit HitboxInteraction(
-        Mob* mob2 = nullptr,
-        Hitbox* h1 = nullptr, Hitbox* h2 = nullptr
-    );
-    
-};
-
-
-#pragma endregion
-#pragma region Global functions
-
-
-size_t fixStates(
-    vector<ScriptState*>& states, const string& startingState, const MobType* mt
-);
-void loadScript(
-    MobType* mt, DataNode* scriptNode, DataNode* globalNode,
-    vector<ScriptState*>* outStates
-);
-void loadState(
-    MobType* mt, DataNode* stateNode, DataNode* globalNode,
-    ScriptState* statePtr
-);
-void unloadScript(MobType* mt);
-
-
-#pragma endregion

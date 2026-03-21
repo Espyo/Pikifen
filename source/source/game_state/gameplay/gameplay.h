@@ -42,6 +42,8 @@ extern const float BIG_MSG_MISSION_CLEAR_DUR;
 extern const string BIG_MSG_MISSION_CLEAR_TEXT;
 extern const float BIG_MSG_MISSION_FAILED_DUR;
 extern const string BIG_MSG_MISSION_FAILED_TEXT;
+extern const float BIG_MSG_MISSION_OVER_DUR;
+extern const string BIG_MSG_MISSION_OVER_TEXT;
 extern const float BIG_MSG_ONE_MIN_LEFT_DUR;
 extern const string BIG_MSG_ONE_MIN_LEFT_TEXT;
 extern const float BIG_MSG_READY_DUR;
@@ -110,6 +112,9 @@ enum BIG_MESSAGE {
     
     //Mission failed...
     BIG_MESSAGE_MISSION_FAILED,
+    
+    //Mission over!
+    BIG_MESSAGE_MISSION_OVER,
     
 };
 
@@ -206,9 +211,9 @@ struct AreaRegionStatus {
 
 
 /**
- * @brief Information about how a mission mob checklist is doing.
+ * @brief Information about how a mission mob group is doing.
  */
-struct MissionMobChecklistStatus {
+struct MissionMobGroupStatus {
 
     //--- Public members ---
     
@@ -218,12 +223,10 @@ struct MissionMobChecklistStatus {
     //The list's starting amount.
     size_t startingAmount = 0;
     
-    //The list's required number.
-    size_t requiredAmount = 0;
-    
     
     //--- Public function declarations ---
     
+    size_t getNrCleared() const;
     bool remove(Mob* m);
     
 };
@@ -335,17 +338,8 @@ public:
     //Status of each area region.
     vector<AreaRegionStatus> areaRegions;
     
-    //Whether each mission event got triggered already.
-    vector<bool> missionEventsTriggered;
-    
-    //Status of each mission mob checklist.
-    vector<MissionMobChecklistStatus> missionMobChecklists;
-    
-    //IDs of mobs remaining for the current mission goal, if applicable.
-    unordered_set<size_t> missionRemainingMobIds;
-    
-    //How many mobs are required for the mission goal. Cache for convenience.
-    size_t missionRequiredMobAmount = 0;
+    //Status of each mission mob group.
+    vector<MissionMobGroupStatus> missionMobGroups;
     
     //How many Pikmin were born so far.
     size_t pikminBorn = 0;
@@ -359,12 +353,6 @@ public:
     //How many treasures exist in total.
     size_t treasuresTotal = 0;
     
-    //How many mission goal treasures were collected so far.
-    size_t goalTreasuresCollected = 0;
-    
-    //How many mission goal treasures exist in total.
-    size_t goalTreasuresTotal = 0;
-    
     //How many treasure points collected so far.
     size_t treasurePointsObtained = 0;
     
@@ -377,17 +365,26 @@ public:
     //How many enemies exist in total.
     size_t enemyTotal = 0;
     
-    //How many enemy points collected so far.
-    size_t enemyPointsObtained = 0;
+    //How many enemy defeat points collected so far.
+    size_t enemyDefeatPointsObtained = 0;
     
-    //How many enemy points exist in total.
+    //How many enemy collection points collected so far.
+    size_t enemyCollectionPointsObtained = 0;
+    
+    //How many enemy defeat/collection points exist in total.
     size_t enemyPointsTotal = 0;
     
     //Whether the mission ended in a clear or a failure.
     bool missionWasCleared = false;
     
-    //Mission event that triggered the mission to end. INVALID for none.
-    size_t missionEndEventIdx = INVALID;
+    //Whether to consider the time remaining as 0, for mission scoring.
+    bool missionConsiderZeroTime = false;
+    
+    //End condition that triggered the mission to end. INVALID for none.
+    size_t missionEndCondIdx = INVALID;
+    
+    //Whether the mission ended early from the pause menu.
+    bool missionEndFromPauseMenu = false;
     
     //Current mission score, for use in the HUD.
     int missionScore = 0;
@@ -443,8 +440,8 @@ public:
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
     
-    //Script finite-state machine.
-    Fsm fsm;
+    //Script VM for the area.
+    ScriptVM scriptVM;
     
     //Current interlude info.
     InterludeInfo interlude;
@@ -473,6 +470,7 @@ public:
     
     //--- Public function declarations ---
     
+    GameplayState();
     ALLEGRO_BITMAP* drawToBitmap(
         const MakerTools::AreaImageSettings& settings
     );
@@ -482,7 +480,9 @@ public:
     int calculateMissionScore(bool forHud);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     bool endMission(
-        bool clear, bool showTimesUpMsg = false, MissionEvent* ev = nullptr
+        bool clear, bool zeroTime, bool neutralMood = false,
+        bool showTimesUpMsg = false, MissionEndCond* cond = nullptr,
+        bool silent = false
     );
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
     size_t getAmountOfGroupPikmin(

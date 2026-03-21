@@ -1,0 +1,39 @@
+init {
+    set_var color Random
+}
+
+script {
+    idle_waiting {
+        on_enter {
+            if $color = Random
+                get_random_int color 1 6
+                if $color = 1
+                    set_var color Red
+                else_if $color = 2
+                    set_var color Yellow
+                else_if $color = 3
+                    set_var color Blue
+                else_if $color = 4
+                    set_var color Green
+                else_if $color = 5
+                    set_var color White
+                else_if $color = 6
+                    set_var color Black
+                end_if
+            end_if
+            if $color = Red
+                set_animation idling
+            else_if $color = Yellow
+                set_animation idling_yellow
+            else_if $color = Blue
+                set_animation idling_blue
+            else_if $color = Green
+                set_animation idling_green
+            else_if $color = White
+                set_animation idling_white
+            else_if $color = Black
+                set_animation idling_black
+            end_if
+        }
+    }
+}

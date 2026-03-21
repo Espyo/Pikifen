@@ -1,0 +1,58 @@
+name=Results menu -- scoring
+description=GUI for the scoring page of the results menu.
+maker=Espyo
+version=1.1.0
+engine_version=1.2.0
+hardcoded_items{
+	scoring_left_page{
+		center=13.0000 7.0000
+		size=18.0000 14.0000
+		description=Button to navigate to the page to the left, if any.
+	}
+	scoring_left_page_input{
+		center=4.0000 12.0000
+		size=8.0000 8.0000
+		description=Icon of the input bound to the left page.
+	}
+	scoring_right_page{
+		center=87.0000 7.0000
+		size=18.0000 14.0000
+		description=Button to navigate to the page to the right, if any.
+	}
+	scoring_right_page_input{
+		center=96.0000 12.0000
+		size=8.0000 8.0000
+		description=Icon of the input bound to the right page.
+	}
+	scoring_list{
+		center=50.0000 59.0000
+		size=92.0000 82.0000
+		description=List containing the scoring criteria.
+	}
+	scoring_scroll{
+		center=99.0000 59.0000
+		size=2.0000 82.0000
+		description=Scrollbar for the scoring criteria list.
+	}
+}
+custom_items{
+	scoring_label{
+		center=50.0000 6.0000
+		size=52.0000 8.0000
+		description=Label for the scoring criteria page.
+		type=text
+		color=255 255 255 192
+		text=Scoring criteria:
+		font=standard
+		text_alignment=1
+	}
+	scoring_bg{
+		center=50.0000 59.0000
+		size=92.0000 82.0000
+		description=Background for the scoring criteria list.
+		type=filled_rectangle
+		color=117 0 0 40
+		draw_before_hardcoded=true
+		rectangle_rounding=0.0500
+	}
+}

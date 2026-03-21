@@ -27,7 +27,7 @@
 void TrackFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", TRACK_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(TrackFsm::spawn);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -36,13 +36,14 @@ void TrackFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_TRACK_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_TRACK_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_TRACK_STATES) + " in enum."
     );
 }
@@ -55,15 +56,15 @@ void TrackFsm::createFsm(MobType* typ) {
 /**
  * @brief What to do when the track is touched.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
-    Track* traPtr = (Track*) fsm->m;
+void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
+    Track* traPtr = (Track*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
     
-    ScriptEvent* ev = nullptr;
+    FsmEventDef* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(
@@ -72,7 +73,7 @@ void TrackFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to ride it.
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_TRACK);
         
     } else if(
         hasFlag(traPtr->traType->riders, TRACK_RIDER_FLAG_LEADERS) &&
@@ -80,25 +81,25 @@ void TrackFsm::onTouched(Fsm* fsm, void* info1, void* info2) {
     ) {
     
         //Leader is about to ride it.
-        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_TRACK);
         
     }
     
     if(!ev) return;
     
-    ev->run(&toucher->fsm, (void*) traPtr);
+    ev->run(&toucher->scriptVM, (void*) traPtr);
 }
 
 
 /**
  * @brief When the track spawns.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::spawn(Fsm* fsm, void* info1, void* info2) {
-    Track* traPtr = (Track*) fsm->m;
+void TrackFsm::spawn(ScriptVM* scriptVM, void* info1, void* info2) {
+    Track* traPtr = (Track*) scriptVM->mob;
     
     traPtr->setAnimation(
         TRACK_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true

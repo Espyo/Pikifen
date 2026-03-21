@@ -32,7 +32,7 @@ hardcoded_items{
 	area_subtitle{
 		center=50.0000 28.5000
 		size=88.0000 9.0000
-		description=Area subtitle or mission goal, if any.
+		description=Area subtitle, if any.
 	}
 	continue{
 		center=13.0000 88.0000

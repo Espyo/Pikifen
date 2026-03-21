@@ -346,6 +346,33 @@ struct Group {
 
 
 /**
+ * @brief Info about how two hitboxes interacted.
+ */
+struct HitboxInteraction {
+
+    //--- Public members ---
+    
+    //Mob that touched our mob.
+    Mob* mob2 = nullptr;
+    
+    //Hitbox of our mob that got touched.
+    Hitbox* h1 = nullptr;
+    
+    //Hitbox of the other mob.
+    Hitbox* h2 = nullptr;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit HitboxInteraction(
+        Mob* mob2 = nullptr,
+        Hitbox* h1 = nullptr, Hitbox* h2 = nullptr
+    );
+    
+};
+
+
+/**
  * @brief Info about how this mob is currently being held by
  * another, if it is.
  */

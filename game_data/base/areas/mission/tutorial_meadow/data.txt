@@ -18,4 +18,4 @@ spray_amounts
 mission_goal=Collect treasures
 mission_goal_all_mobs=true
 mission_fail_conditions=128
-mission_grading_mode=1
+mission_medal_award_mode=1

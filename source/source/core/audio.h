@@ -509,7 +509,7 @@ private:
     
 };
 
-    
+
 /**
  * @brief Info on a sound that can be emitted, from a data node.
  */

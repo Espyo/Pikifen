@@ -280,36 +280,45 @@ protected:
         //one, or always select the one with the lowest index?
         bool overlapsCycle = false;
         
+        //Has the user agreed to homogenize the selection?
+        bool homogenized = false;
+        
         
         //--- Public function declarations ---
         
-        bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool add(size_t idx);
+        bool addAll(size_t totalAmount);
+        bool remove(size_t idx);
         bool clear();
-        bool disable();
+        bool setSingle(size_t idx);
+        
+        bool contains(size_t idx) const;
+        bool hasMultiple() const;
+        bool hasOne() const;
+        bool hasAny() const;
+        size_t getFirstItemIdx() const;
+        size_t getSingleItemIdx() const;
+        const set<size_t>& getItemIdxs() const;
+        size_t getCount() const;
+        
         void draw(const Point& cursorPos, float zoom) const;
+        bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool enable();
-        size_t getSelectedItemIdx() const;
-        const set<size_t>& getSelectedItemIdxs() const;
-        size_t getSelectionAmount() const;
-        bool getSelectionBBox(Point* center, Point* size) const;
-        bool isAnySelected() const;
-        bool isCreatingRubberBand() const;
-        bool isMultipleSelected() const;
-        bool isOneSelected() const;
-        bool isSelected(size_t idx) const;
-        bool isTransforming() const;
-        bool select(size_t idx);
-        bool selectViaMouseDown(
+        bool disable();
+        bool getBBox(Point* center, Point* size) const;
+        bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
-        bool startRubberBand(const Point& cursorPos);
         bool startTransforming();
-        bool stopRubberBand();
+        bool isTransforming() const;
         bool stopTransforming();
-        bool unselect(size_t idx);
+        bool startRubberBand(const Point& cursorPos);
+        bool isCreatingRubberBand() const;
         bool updateRubberBand(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
+        bool stopRubberBand();
+        bool handleMouseUp();
         
         
         private:
@@ -359,11 +368,9 @@ protected:
         //Cache for performance.
         Point preTransSize;
         
-        //Has the user agreed to homogenize the selection?
-        bool selectionHomogenized = false;
-        
         
         //--- Private function declarations ---
+        
         void getItemInfo(
             size_t idx, Point* outCenter, Point* outSize
         ) const;
@@ -824,6 +831,23 @@ protected:
     //Minimum zoom level allowed.
     float zoomMinLevel = 0.0f;
     
+    //Prefix for the widget internal names in the current nav box.
+    string curNavBoxItemPrefix;
+    
+    //Term for the items of the current nav box.
+    string curNavBoxItemTerm;
+    
+    //Pointer to the selected item's index in the current nav box.
+    size_t* curNavBoxSelIdxPtr = nullptr;
+    
+    //Callback for when the list size needs to be retrieved
+    //for the current nav box.
+    std::function<size_t()> curNavBoxOnGetSize = nullptr;
+    
+    //Callback for when the selection size needs to be retrieved
+    //for the current nav box.
+    std::function<size_t()> curNavBoxOnGetSelSize = nullptr;
+    
     
     //--- Private function declarations ---
     
@@ -839,6 +863,10 @@ protected:
         const ALLEGRO_COLOR& majorColor, const ALLEGRO_COLOR& minorColor
     );
     void drawOpErrorCursor();
+    void drawSelectionAndTransformationThings(
+        const SelectionManager& selMgr,
+        const TransformationWidget& traWid
+    );
     Point getLastWidgetPost();
     void getQuickPlayAreaList(
         string selectedAreaPath,
@@ -894,75 +922,83 @@ protected:
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
     void processDialogs();
-    void processGuiBaseContentWarningDialog();
-    void processGuiBitmapDialog();
     void processGuiCanvas();
+    void processGuiDialogBaseContent();
+    void processGuiDialogBitmap();
+    void processGuiDialogHelp();
+    void processGuiDialogMessage();
+    void processGuiDialogNewPack();
+    void processGuiDialogUnsavedChanges();
     void processGuiEditorStyle();
-    bool processGuiHazardManagementWidgets(string& selectedHazardIname);
-    void processGuiHelpDialog();
     void processGuiHistory(
         const vector<pair<string, string> >& history,
         const std::function<string(const string&)>& nameDisplayCallback,
         const std::function<void(const string&)>& pickCallback,
         const std::function<string(const string&)>& tooltipCallback
     );
-    bool processGuiInputPopup(
+    bool processGuiPopupInput(
         const char* label, const char* prompt, string* text,
         bool useMonospace = false
     );
-    void processGuiListNavSetup(
-        size_t* curItemIdx, size_t listSize, bool allowInvalid
-    );
-    void processGuiListNavCurWidget(
-        size_t curItemIdx, size_t listSize, const string& label,
-        const string& name = "",
-        bool sameLine = false
-    );
-    bool processGuiListNavNewWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
-    );
-    bool processGuiListNavDelWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
-    );
-    bool processGuiListNavPrevWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = "",
-        bool alwaysAppear = false
-    );
-    bool processGuiListNavNextWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = "",
-        bool alwaysAppear = false
-    );
-    bool processGuiListNavMoveLeftWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
-    );
-    bool processGuiListNavMoveRightWidget(
-        size_t* curItemIdx, size_t listSize, const string& tooltip,
-        bool sameLine = false, const string& customButtonId = "",
-        float buttonScale = 1.0f, const string& tooltipShortcut = ""
-    );
-    void processGuiMessageDialog();
-    bool processGuiMobTypeWidgets(
+    void processGuiStatusBarText();
+    bool processGuiWidgetsHazardManagement(string& selectedHazardIname);
+    bool processGuiWidgetsMobType(
         string* customCatName, MobType** type, const string& packFilter = ""
     );
-    bool processGuiNewDialogPackWidgets(string* pack);
-    void processGuiNewPackDialog();
-    bool processGuiSizeWidgets(
+    bool processGuiWidgetsNewDialogPack(string* pack);
+    bool processGuiWidgetsSize(
         const char* label, Point& size, float vSpeed,
         bool keepAspectRatio, bool keepArea,
         float minSize
     );
-    void processGuiStatusBarText();
-    void processGuiUnsavedChangesDialog();
+    void processGuiNavSetup(
+        size_t* curItemIdx, size_t listSize, bool allowInvalid
+    );
+    bool processGuiNavWidgetNew(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    bool processGuiNavWidgetDel(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    bool processGuiNavWidgetPrev(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    bool processGuiNavWidgetNext(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    bool processGuiNavWidgetMoveLeft(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    bool processGuiNavWidgetMoveRight(
+        size_t* curItemIdx, size_t listSize,
+        const string& customButtonId = "", float buttonScale = 1.0f
+    );
+    void processGuiNavBoxStart(
+        const string& widgetsPrefix, const string& itemsTerm,
+        size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+        const std::function<size_t()>& onGetSelSize
+    );
+    bool processGuiNavBoxPrev();
+    void processGuiNavBoxCur(
+        const string& curItemName = "", bool curItemNameMono = false,
+        bool showTermNormally = true
+    );
+    bool processGuiNavBoxNext();
+    void processGuiNavBoxPlaceholder();
+    void processGuiNavBoxSecondLine(size_t nrItems);
+    void processGuiNavBoxEnd();
+    void getGuiNavCurText(
+        size_t curItemIdx, size_t listSize, size_t selectionSize,
+        const string& itemTerm, bool showTermNormally,
+        const string& curItemName, bool curItemNameMono,
+        string* outText1, bool* outText1Disabled,
+        string* outText2, bool* outText2Mono
+    );
     void panelTitle(const char* title);
     
     void angleVisualizer(float angle);
@@ -1033,4 +1069,14 @@ protected:
     virtual void handleRmbDown(const ALLEGRO_EVENT& ev);
     virtual void handleRmbDrag(const ALLEGRO_EVENT& ev);
     virtual void handleRmbUp(const ALLEGRO_EVENT& ev);
+    void handleSelectionAndTransformationLmbDown(
+        SelectionManager& selMgr, TransformationWidget& traWid
+    );
+    bool handleSelectionAndTransformationLmbDrag(
+        SelectionManager& selMgr, TransformationWidget& traWid,
+        const Point& mouseCursor, std::function<void()> onPreTransform = nullptr
+    );
+    void handleSelectionAndTransformationLmbUp(
+        SelectionManager& selMgr, TransformationWidget& traWid
+    );
 };

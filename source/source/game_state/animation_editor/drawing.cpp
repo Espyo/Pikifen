@@ -232,7 +232,7 @@ void AnimationEditor::drawCanvas() {
                 }
                 
                 if(
-                    hitboxSelection.isSelected(h) &&
+                    hitboxSelection.contains(h) &&
                     state == EDITOR_STATE_HITBOXES
                 ) {
                     hitboxOutlineThickness =
@@ -256,7 +256,7 @@ void AnimationEditor::drawCanvas() {
         }
         
         Point selectionCenter, selectionSize;
-        hitboxSelection.getSelectionBBox(
+        hitboxSelection.getBBox(
             &selectionCenter, &selectionSize
         );
         

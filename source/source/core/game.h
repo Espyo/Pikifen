@@ -16,7 +16,7 @@
 
 #include "../content/area/area.h"
 #include "../content/content_manager.h"
-#include "../content/other/script_actions.h"
+#include "../content/script/action_types.h"
 #include "../game_state/animation_editor/editor.h"
 #include "../game_state/annex_screen.h"
 #include "../game_state/area_editor/editor.h"
@@ -134,8 +134,8 @@ public:
     //Allegro display that represents the program window.
     ALLEGRO_DISPLAY* display = nullptr;
     
-    //A dummy mob state for mobs with no state to use.
-    ScriptState* dummyMobState = nullptr;
+    //A dummy script state for FSMs with no state to use.
+    FsmStateDef* dummyScriptState = nullptr;
     
     //Error manager.
     ErrorManager errors;
@@ -183,8 +183,8 @@ public:
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loadingTextBmp = nullptr;
     
-    //List of script actions.
-    vector<ScriptAction> scriptActions;
+    //List of script actions types.
+    vector<ScriptActionType> scriptActionTypes;
     
     //List of mob categories.
     CategoryManager mobCategories;
@@ -195,23 +195,11 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
-    //Database of all mission event types.
-    vector<MissionEvType*> missionEvTypes;
-    
-    //Database of all mission action types.
-    vector<MissionActionType*> missionActionTypes;
+    //Database of all mission end conditions.
+    vector<MissionEndCondType*> missionEndCondTypes;
     
     //Database of all mission score criteria types.
     vector<MissionScoreCriterionType*> missionScoreCriterionTypes;
-    
-    //Database of all mission fail conditions.
-    vector<MissionFail*> missionFailConds;
-    
-    //Database of all mission goals.
-    vector<MissionGoal*> missionGoals;
-    
-    //Database of all mission score criteria.
-    vector<MissionScoreCriterionOld*> missionScoreCriteria;
     
     //User options.
     Options options;
@@ -295,9 +283,6 @@ public:
     
         //--- Public members ---
         
-        //Show each frame's player actions on the in-game console.
-        bool showPlayerActions = false;
-        
         //Show which area cells are active in the radar.
         bool showAreaActiveCells = false;
         
@@ -309,6 +294,9 @@ public:
         
         //Show visual information about the leader's group.
         bool showGroupInfo = false;
+        
+        //Show each frame's player actions on the in-game console.
+        bool showPlayerActions = false;
         
     } debug;
     

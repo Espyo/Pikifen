@@ -86,7 +86,7 @@ void Converter::changeType() {
  * @brief Closes up and gets ready for a conversion.
  */
 void Converter::close() {
-    fsm.setState(CONVERTER_STATE_CLOSING);
+    scriptVM.fsm.setState(CONVERTER_STATE_CLOSING);
     setAnimation(
         getAnimationIdxFromBaseAndGroup(
             CONVERTER_ANIM_CLOSING, N_CONVERTER_ANIMS, currentTypeIdx

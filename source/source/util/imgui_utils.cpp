@@ -11,11 +11,18 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdarg>
 
 #include "imgui_utils.h"
 
 #include "allegro_utils.h"
 #include "math_utils.h"
+
+
+namespace ImGui {
+stack<int> alignmentCursorStarts;
+stack<int> alignmentContentRegions;
+};
 
 
 /**
@@ -35,6 +42,79 @@ void ImGui::AdjustColorHSV(
     s += sDelta;
     v += vDelta;
     ImGui::ColorConvertHSVtoRGB(h, s, v, color.x, color.y, color.z);
+}
+
+
+/**
+ * @brief Prepares the "cursor X" so that the next widgets will be aligned
+ * horizontally on their line. This can be used to center-align them,
+ * right-align them, etc. ImGui::BeginAlign() needs to be called first.
+ * The spacing between each of the provided items
+ * will be automatically taken into account.
+ *
+ * @param itemWidths Widths of each item that will be aligned.
+ * @param alignment Alignment ratio. 0.5 centers, 1.0 aligns to the right.
+ * @param extraPadding Any extra padding, if necessary.
+ */
+void ImGui::AlignNextItems(
+    const vector<int>& itemWidths, float alignment, int extraPadding
+) {
+    const int itemsTotalWidth = GetItemsTotalWidth(itemWidths);
+    const float size = itemsTotalWidth;
+    const float space = alignmentContentRegions.top();
+    
+    float offset = (space - size) * alignment;
+    if(offset > 0.0f) {
+        ImGui::SetCursorScreenPos(
+            ImVec2(
+                (int) (alignmentCursorStarts.top() + offset),
+                ImGui::GetCursorScreenPos().y
+            )
+        );
+    }
+}
+
+
+/**
+ * @brief Prepares the "cursor X" so that the next text width will be aligned
+ * horizontally on its line. This can be used to center-align it,
+ * right-align it, etc.
+ *
+ * @param textStr Contents of the text.
+ * @param alignment Alignment ratio. 0.5 centers, 1.0 aligns to the right.
+ * @param extraPadding Any extra padding, if necessary.
+ */
+void ImGui::AlignNextText(
+    const char* textStr, float alignment, int extraPadding
+) {
+    ImGui::AlignNextItems(
+        vector<int> {(int) ImGui::CalcTextSize(textStr).x},
+        alignment, extraPadding
+    );
+}
+
+
+/**
+ * @brief Sets up the current line so that it is possible to horizontally
+ * align the items inside. Ideally, this is called at the start of the line.
+ * ImGui::EndAlign() should be called when the line is over.
+ */
+void ImGui::BeginAlign() {
+    alignmentCursorStarts.push(ImGui::GetCursorScreenPos().x);
+    alignmentContentRegions.push(ImGui::GetContentRegionAvail().x);
+}
+
+
+/**
+ * @brief Begins a table with an outer border. Visually, it encapsulates
+ * the next widgets in a frame-looking box. Ends with ImGui::EndFrameBox().
+ *
+ * @param id Text ID of the box.
+ */
+void ImGui::BeginFrameBox(const string& id) {
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(8, 8));
+    ImGui::BeginTable(id.c_str(), 1, ImGuiTableFlags_BordersOuter);
+    ImGui::TableNextColumn();
 }
 
 
@@ -208,6 +288,26 @@ bool ImGui::DragTime2(
 
 
 /**
+ * @brief Finishes all horizontal alignments for the current line.
+ * Must be called after ImGui::BeginAlign().
+ */
+void ImGui::EndAlign() {
+    alignmentCursorStarts.pop();
+    alignmentContentRegions.pop();
+}
+
+
+/**
+ * @brief Ends the frame box created with ImGui::BeginFrameBox().
+ * This essentially ends the table created internally.
+ */
+void ImGui::EndFrameBox() {
+    ImGui::EndTable();
+    ImGui::PopStyleVar();
+}
+
+
+/**
  * @brief Makes it so Dear ImGui focuses on the next input text widget.
  *
  * @param condition Only focus if this boolean is true. After setting the focus,
@@ -220,6 +320,26 @@ void ImGui::FocusOnInputText(bool& condition) {
         ImGui::SetKeyboardFocusHere();
         condition = false;
     }
+}
+
+
+/**
+ * @brief Returns the total width that a series of items will take up on a
+ * line, with the item spacing between them included.
+ *
+ * @param itemWidths Individual width of each item.
+ * @return The total width.
+ */
+int ImGui::GetItemsTotalWidth(const vector<int>& itemWidths) {
+    const int itemSpacing = (int) ImGui::GetStyle().ItemSpacing.x;
+    int totalItemWidth = 0;
+    for(size_t w = 0; w < itemWidths.size(); w++) {
+        totalItemWidth += itemWidths[w];
+        if(w < itemWidths.size() - 1) {
+            totalItemWidth += itemSpacing;
+        }
+    }
+    return totalItemWidth;
 }
 
 
@@ -439,17 +559,6 @@ void ImGui::SetupButtonWrapping(
     if(nextButtonIdx < totalNButtons && nextX2 < windowX2) {
         ImGui::SameLine();
     }
-}
-
-
-/**
- * @brief Prepares the "cursor X" so that the next widgets will be centered.
- *
- * @param upcomingItemsWidth Width of the items that will belong to this line.
- */
-void ImGui::SetupCentering(int upcomingItemsWidth) {
-    int windowWidth = ImGui::GetWindowSize().x;
-    ImGui::SetCursorPosX((windowWidth - upcomingItemsWidth) * 0.5f);
 }
 
 

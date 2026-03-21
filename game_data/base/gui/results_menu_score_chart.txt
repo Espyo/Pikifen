@@ -1,0 +1,67 @@
+name=Results menu -- score chart
+description=GUI for the score chart page of the results menu.
+maker=Espyo
+version=1.1.0
+engine_version=1.2.0
+hardcoded_items{
+	score_chart_left_page{
+		center=13.0000 7.0000
+		size=18.0000 14.0000
+		description=Button to navigate to the page to the left, if any.
+	}
+	score_chart_left_page_input{
+		center=4.0000 12.0000
+		size=8.0000 8.0000
+		description=Icon of the input bound to the left page.
+	}
+	score_chart_right_page{
+		center=87.0000 7.0000
+		size=18.0000 14.0000
+		description=Button to navigate to the page to the right, if any.
+	}
+	score_chart_right_page_input{
+		center=96.0000 12.0000
+		size=8.0000 8.0000
+		description=Icon of the input bound to the right page.
+	}
+	score_chart_chart{
+		center=79.0000 59.0000
+		size=34.0000 82.0000
+		description=Graphic for the chart proper.
+	}
+	score_chart_list{
+		center=31.0000 59.0000
+		size=54.0000 82.0000
+		description=List of each item in the chart.
+	}
+}
+custom_items{
+	score_chart_label{
+		center=50.0000 6.0000
+		size=52.0000 8.0000
+		description=Label for the score chart page.
+		type=text
+		color=255 255 255 192
+		text=Chart:
+		font=standard
+		text_alignment=1
+	}
+	score_chart_list_bg{
+		center=31.0000 59.0000
+		size=54.0000 82.0000
+		description=Background for the score chart list.
+		type=filled_rectangle
+		color=117 0 0 40
+		draw_before_hardcoded=true
+		rectangle_rounding=0.0500
+	}
+	score_chart_chart_bg{
+		center=79.0000 59.0000
+		size=34.0000 82.0000
+		description=Background for the score chart graphic.
+		type=filled_rectangle
+		color=117 0 0 40
+		draw_before_hardcoded=true
+		rectangle_rounding=0.0500
+	}
+}

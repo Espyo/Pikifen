@@ -1,0 +1,82 @@
+name=Red Die animations
+description=Animations for the Red Die.
+maker=Helodity
+version=1.1.0
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling_01{
+				duration=0.0000
+			}
+		}
+	}
+	idling_02{
+		frames{
+			idling_02{
+				duration=0.0000
+			}
+		}
+	}
+	idling_03{
+		frames{
+			idling_03{
+				duration=0.1000
+			}
+		}
+	}
+	idling_04{
+		frames{
+			idling_04{
+				duration=0.1000
+			}
+		}
+	}
+	idling_05{
+		frames{
+			idling_05{
+				duration=0.1000
+			}
+		}
+	}
+	idling_06{
+		frames{
+			idling_06{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_01{
+		file=treasures/red_die
+		file_pos=0.0000 0.0000
+		file_size=49.0000 49.0000
+	}
+	idling_02{
+		file=treasures/red_die
+		file_pos=51.0000 0.0000
+		file_size=49.0000 49.0000
+	}
+	idling_03{
+		file=treasures/red_die
+		file_pos=102.0000 0.0000
+		file_size=49.0000 49.0000
+	}
+	idling_04{
+		file=treasures/red_die
+		file_pos=0.0000 51.0000
+		file_size=49.0000 49.0000
+	}
+	idling_05{
+		file=treasures/red_die
+		file_pos=51.0000 51.0000
+		file_size=49.0000 49.0000
+	}
+	idling_06{
+		file=treasures/red_die
+		file_pos=102.0000 51.0000
+		file_size=49.0000 49.0000
+	}
+}
+body_parts

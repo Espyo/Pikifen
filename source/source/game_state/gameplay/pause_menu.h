@@ -14,7 +14,7 @@
 
 #include "../../content/mob/mob_utils.h"
 #include "../../content/other/gui.h"
-#include "../../content/other/script.h"
+#include "../../content/script/script.h"
 #include "../../core/drawing.h"
 #include "../../menu/help_menu.h"
 #include "../../util/drawing_utils.h"
@@ -50,7 +50,7 @@ enum GAMEPLAY_LEAVE_TARGET {
     GAMEPLAY_LEAVE_TARGET_RETRY,
     
     //Leave in order to end the exploration/mission.
-    GAMEPLAY_LEAVE_TARGET_END,
+    GAMEPLAY_LEAVE_TARGET_END_EARLY,
     
     //Leave in order to go to the area selection menu.
     GAMEPLAY_LEAVE_TARGET_AREA_SELECT,
@@ -279,8 +279,7 @@ private:
     );
     void drawRadar(const Point& center, const Point& size);
     void fillMissionNotesList(ListGuiItem* list);
-    void fillMissionGradingList(ListGuiItem* list);
-    string getMissionGoalStatus();
+    void fillMissionMedalAwardList(ListGuiItem* list);
     void initRadarPage();
     void initMainPauseMenu();
     void initMissionPage();

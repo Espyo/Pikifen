@@ -1,0 +1,24 @@
+name = Playing Card
+description = Some sort of paper sheet with a red, white, and black motif.
+
+can_walk_on_others = true
+casts_shadow = false
+custom_carry_spots = 50 75;
+height = 2
+max_carriers = 1
+points = 10
+pushable = false
+pushes = false
+radius = 25
+rectangular_dimensions = 104 145
+terrain_radius = 8
+weight = 1
+
+area_editor_properties {
+    Show front {
+        var = front
+        type = bool
+        def_value = true
+        tooltip = Which side of the card is shown.
+    }
+}

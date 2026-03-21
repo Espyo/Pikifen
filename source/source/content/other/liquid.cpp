@@ -232,17 +232,6 @@ vector<Mob*> Liquid::getMobsOn() const {
 
 
 /**
- * @brief Sets the liquid's state.
- *
- * @param newState The new state.
- */
-void Liquid::setState(LIQUID_STATE newState) {
-    state = newState;
-    stateTime = 0.0f;
-}
-
-
-/**
  * @brief Returns whether the liquid is currently frozen.
  *
  * @param thawOpacity If it's just about to thaw, the opacity of the ice
@@ -281,6 +270,17 @@ bool Liquid::isFrozen(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Sets the liquid's state.
+ *
+ * @param newState The new state.
+ */
+void Liquid::setState(LIQUID_STATE newState) {
+    state = newState;
+    stateTime = 0.0f;
 }
 
 

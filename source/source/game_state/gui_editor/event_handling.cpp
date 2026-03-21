@@ -121,35 +121,18 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
-    //Check if the transformation widget got clicked.
-    bool twHandled = false;
-    Point selectionCenter, selectionSize;
-    itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
-    if(selectionSize.x != 0.0f) {
-        twHandled =
-            curTransformationWidget.handleMouseDown(
-                game.editorsView.mouseCursorWorldPos,
-                &selectionCenter, &selectionSize,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
-            );
-    }
+    size_t prevSelectedItemIdx = itemSelection.getSingleItemIdx();
     
-    if(twHandled) {
-        itemSelection.startTransforming();
-    } else {
-        size_t prevSelectedItemIdx = itemSelection.getSelectedItemIdx();
-        itemSelection.selectViaMouseDown(
-            game.editorsView.mouseCursorWorldPos,
-            isShiftPressed, isCtrlPressed
-        );
-        size_t newSelectedItemIdx = itemSelection.getSelectedItemIdx();
-        if(
-            newSelectedItemIdx != INVALID &&
-            newSelectedItemIdx != prevSelectedItemIdx
-        ) {
-            mustFocusOnCurItem = true;
-        }
+    handleSelectionAndTransformationLmbDown(
+        itemSelection, curTransformationWidget
+    );
+
+    size_t newSelectedItemIdx = itemSelection.getSingleItemIdx();
+    if(
+        newSelectedItemIdx != INVALID &&
+        newSelectedItemIdx != prevSelectedItemIdx
+    ) {
+        mustFocusOnCurItem = true;
     }
 }
 
@@ -160,27 +143,13 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(itemSelection.isCreatingRubberBand()) {
-        itemSelection.updateRubberBand(
-            game.editorsView.mouseCursorWorldPos,
-            isShiftPressed, isCtrlPressed
+    bool changesMade =
+        handleSelectionAndTransformationLmbDrag(
+            itemSelection, curTransformationWidget,
+            snapPoint(game.editorsView.mouseCursorWorldPos)
         );
-    } else {
-        Point selectionCenter, selectionSize;
-        itemSelection.getSelectionBBox(&selectionCenter, &selectionSize);
-        if(selectionSize.x != 0.0f) {
-            bool twHandled =
-                curTransformationWidget.handleMouseMove(
-                    snapPoint(game.editorsView.mouseCursorWorldPos),
-                    &selectionCenter, &selectionSize,
-                    nullptr, 1.0f / game.editorsView.cam.zoom,
-                    false, false, 0.10f, isAltPressed
-                );
-            if(twHandled) {
-                changesMgr.markAsChanged();
-                itemSelection.applyTransformation(selectionCenter, selectionSize);
-            }
-        }
+    if(changesMade) {
+        changesMgr.markAsChanged();
     }
 }
 
@@ -191,9 +160,9 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
-    curTransformationWidget.handleMouseUp();
-    itemSelection.stopRubberBand();
-    itemSelection.stopTransforming();
+    handleSelectionAndTransformationLmbUp(
+        itemSelection, curTransformationWidget
+    );
 }
 
 

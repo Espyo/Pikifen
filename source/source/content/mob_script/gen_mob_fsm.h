@@ -17,20 +17,20 @@
  * @brief Functions about the generic mob's finite-state machine and behavior.
  */
 namespace GenMobFsm {
-void beAttacked(Fsm* fsm, void* info1, void* info2);
-void carryBecomeStuck(Fsm* fsm, void* info1, void* info2);
-void carryBeginMove(Fsm* fsm, void* info1, void* info2);
-void carryGetPath(Fsm* fsm, void* info1, void* info2);
-void carryReachDestination(Fsm* fsm, void* info1, void* info2);
-void carryStopBeingStuck(Fsm* fsm, void* info1, void* info2);
-void carryStopMove(Fsm* fsm, void* info1, void* info2);
-void fallDownPit(Fsm* fsm, void* info1, void* info2);
-void goToDyingState(Fsm* fsm, void* info1, void* info2);
-void handleCarrierAdded(Fsm* fsm, void* info1, void* info2);
-void handleCarrierRemoved(Fsm* fsm, void* info1, void* info2);
-void handleDelivery(Fsm* fsm, void* info1, void* info2);
-void loseMomentum(Fsm* fsm, void* info1, void* info2);
-void startBeingDelivered(Fsm* fsm, void* info1, void* info2);
-void touchHazard(Fsm* fsm, void* info1, void* info2);
-void touchSpray(Fsm* fsm, void* info1, void* info2);
+void beAttacked(ScriptVM* scriptVM, void* info1, void* info2);
+void carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2);
+void carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2);
+void carryGetPath(ScriptVM* scriptVM, void* info1, void* info2);
+void carryReachDestination(ScriptVM* scriptVM, void* info1, void* info2);
+void carryStopBeingStuck(ScriptVM* scriptVM, void* info1, void* info2);
+void carryStopMove(ScriptVM* scriptVM, void* info1, void* info2);
+void fallDownPit(ScriptVM* scriptVM, void* info1, void* info2);
+void goToDyingState(ScriptVM* scriptVM, void* info1, void* info2);
+void handleCarrierAdded(ScriptVM* scriptVM, void* info1, void* info2);
+void handleCarrierRemoved(ScriptVM* scriptVM, void* info1, void* info2);
+void handleDelivery(ScriptVM* scriptVM, void* info1, void* info2);
+void loseMomentum(ScriptVM* scriptVM, void* info1, void* info2);
+void startBeingDelivered(ScriptVM* scriptVM, void* info1, void* info2);
+void touchHazard(ScriptVM* scriptVM, void* info1, void* info2);
+void touchSpray(ScriptVM* scriptVM, void* info1, void* info2);
 }

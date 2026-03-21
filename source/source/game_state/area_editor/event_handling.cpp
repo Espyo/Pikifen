@@ -307,7 +307,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, false, true)) {
         switch(state) {
         case EDITOR_STATE_MOBS: {
-            if(selectedMobs.size() == 1 || selectionHomogenized) {
+            if(mobSelection.hasOne() || mobSelection.homogenized) {
                 if(subState == EDITOR_SUB_STATE_NEW_MOB_LINK) {
                     subState = EDITOR_SUB_STATE_NONE;
                 } else {
@@ -531,7 +531,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         TreeShadow* newShadow = new TreeShadow(hotspot);
         newShadow->bitmap = game.bmpError;
         
-        game.curArea->treeShadows.push_back(newShadow);
+        insertInVector(game.curArea->treeShadows, selectedShadowIdx, newShadow);
         
         selectTreeShadow(newShadow);
         setStatus(
@@ -892,40 +892,23 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         registerChange("object duplication");
         subState = EDITOR_SUB_STATE_NONE;
         Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
+        Point selectionCenter, selectionSize;
+        mobSelection.getBBox(&selectionCenter, &selectionSize);
+        Point newSelectionCenter = selectionCenter;
+        set<size_t> origSelection = mobSelection.getItemIdxs();
+        mobSelection.clear();
         
-        Point selectionTL = (*selectedMobs.begin())->pos;
-        Point selectionBR = selectionTL;
-        for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
-            if(m == selectedMobs.begin()) continue;
-            if((*m)->pos.x < selectionTL.x) {
-                selectionTL.x = (*m)->pos.x;
-            }
-            if((*m)->pos.x > selectionBR.x) {
-                selectionBR.x = (*m)->pos.x;
-            }
-            if((*m)->pos.y < selectionTL.y) {
-                selectionTL.y = (*m)->pos.y;
-            }
-            if((*m)->pos.y > selectionBR.y) {
-                selectionBR.y = (*m)->pos.y;
-            }
-        }
-        Point newSelectionCenter = (selectionBR + selectionTL) / 2.0;
-        set<MobGen*> mobsToSelect;
-        
-        for(auto const& m : selectedMobs) {
-            MobGen* newMg = new MobGen(*m);
-            newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
+        for(size_t mobIdx : origSelection) {
+            MobGen* selMg = game.curArea->mobGenerators[mobIdx];
+            MobGen* newMg = new MobGen(*selMg);
+            newMg->pos = Point(hotspot + (selMg->pos) - newSelectionCenter);
             game.curArea->mobGenerators.push_back(newMg);
-            mobsToSelect.insert(newMg);
+            mobSelection.add(game.curArea->mobGenerators.size() - 1);
         }
-        
-        clearSelection();
-        selectedMobs = mobsToSelect;
         
         setStatus(
             "Duplicated " +
-            amountStr((int) selectedMobs.size(), "object") + "."
+            amountStr((int) origSelection.size(), "object") + "."
         );
         
         break;
@@ -938,16 +921,17 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
             getMobUnderPoint(game.editorsView.mouseCursorWorldPos, &targetIdx);
         if(!target) return;
         
-        for(auto const& m : selectedMobs) {
-            if(m == target) {
+        for(size_t mobIdx : mobSelection.getItemIdxs()) {
+            if(mobIdx == targetIdx) {
                 setStatus(
-                    "You can't store to an object inside itself!",
+                    "You can't store an object inside itself!",
                     true
                 );
                 return;
             }
         }
-        MobGen* mPtr = *(selectedMobs.begin());
+        MobGen* mPtr =
+            game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
         if(mPtr->storedInside == targetIdx) {
             setStatus(
                 "The object is already stored inside that object!",
@@ -970,11 +954,13 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NEW_MOB_LINK: {
 
         //Link two mobs.
-        MobGen* target = getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
+        size_t targetIdx;
+        MobGen* target =
+            getMobUnderPoint(game.editorsView.mouseCursorWorldPos, &targetIdx);
         if(!target) return;
         
-        for(auto const& m : selectedMobs) {
-            if(m == target) {
+        for(size_t mobIdx : mobSelection.getItemIdxs()) {
+            if(mobIdx == targetIdx) {
                 setStatus(
                     "You can't link to an object to itself!",
                     true
@@ -982,7 +968,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
                 return;
             }
         }
-        MobGen* mPtr = *(selectedMobs.begin());
+        MobGen* mPtr =
+            game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
         for(size_t l = 0; l < mPtr->links.size(); l++) {
             if(mPtr->links[l] == target) {
                 setStatus(
@@ -1011,8 +998,9 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
 
         //Delete a mob link.
         MobGen* target = getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
-        MobGen* mPtr = *(selectedMobs.begin());
-        
+        MobGen* mPtr =
+            game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
+            
         if(!target) {
             std::pair<MobGen*, MobGen*> data1;
             std::pair<MobGen*, MobGen*> data2;
@@ -1079,10 +1067,10 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
         if(clickedMobIdx != INVALID) {
             auto& listRef =
-                game.curArea->mission.mobChecklists[
-                    curMobChecklistIdx
+                game.curArea->mission.mobGroups[
+                    curMobGroupIdx
                 ].mobIdxs;
-            registerChange("mission mob checklist choice change");
+            registerChange("mission mob group choice change");
             auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
             if(it == listRef.end()) {
                 listRef.push_back(clickedMobIdx);
@@ -1095,34 +1083,11 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_SUB_STATE_NONE: {
 
-        //Start a new mob selection or select something.
-        bool startNewSelection = true;
-        MobGen* clickedMob =
-            getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
-            
-        if(!isShiftPressed) {
-            if(clickedMob) {
-                startNewSelection = false;
-            }
-        }
+        handleSelectionAndTransformationLmbDown(
+            mobSelection, curTransformationWidget
+        );
         
-        if(startNewSelection) {
-            if(!isCtrlPressed) clearSelection();
-            selecting = true;
-            selectionStart = game.editorsView.mouseCursorWorldPos;
-            selectionEnd = game.editorsView.mouseCursorWorldPos;
-            
-        } else {
-            if(!isInContainer(selectedMobs, clickedMob)) {
-                if(!isCtrlPressed) {
-                    clearSelection();
-                }
-                selectedMobs.insert(clickedMob);
-            }
-            
-        }
-        
-        selectionHomogenized = false;
+        mobSelection.homogenized = false;
         setSelectionStatusText();
         
         break;
@@ -1317,7 +1282,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
  */
 void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     bool crossSectionHandled = false;
-
+    
     if(showCrossSection) {
         movingCrossSectionPoint = -1;
         for(unsigned char p = 0; p < 2; p++) {
@@ -1335,13 +1300,13 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
             }
         }
     }
-
+    
     if(!crossSectionHandled) {
-
+    
         //Check if the transformation widget got clicked.
         bool twHandled = false;
         Point selectionCenter, selectionSize;
-        reminderSelection.getSelectionBBox(&selectionCenter, &selectionSize);
+        reminderSelection.getBBox(&selectionCenter, &selectionSize);
         if(selectionSize.x != 0.0f) {
             twHandled =
                 curTransformationWidget.handleMouseDown(
@@ -1355,7 +1320,7 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
         if(twHandled) {
             reminderSelection.startTransforming();
         } else {
-            reminderSelection.selectViaMouseDown(
+            reminderSelection.chooseViaMouseDown(
                 game.editorsView.mouseCursorWorldPos,
                 isShiftPressed, isCtrlPressed
             );
@@ -1473,29 +1438,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             
         } case EDITOR_STATE_MOBS: {
     
-            //Selection box around mobs.
-            if(!isCtrlPressed) clearSelection();
-            
-            for(
-                size_t m = 0;
-                m < game.curArea->mobGenerators.size(); m++
-            ) {
-                MobGen* mPtr = game.curArea->mobGenerators[m];
-                float radius = getMobGenRadius(mPtr);
-                
-                if(
-                    mPtr->pos.x - radius >= selectionTL.x &&
-                    mPtr->pos.x + radius <= selectionBR.x &&
-                    mPtr->pos.y - radius >= selectionTL.y &&
-                    mPtr->pos.y + radius <= selectionBR.y
-                ) {
-                    selectedMobs.insert(mPtr);
-                }
-            }
-            
-            selectionHomogenized = false;
-            setSelectionStatusText();
-            
             break;
             
         } case EDITOR_STATE_PATHS: {
@@ -1671,28 +1613,11 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             
         } case EDITOR_STATE_MOBS: {
     
-            if(
-                !selectedMobs.empty() &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move mobs.
-                if(!moving) {
-                    startMobMove();
-                }
-                
-                Point mouseOffset =
-                    game.editorsView.mouseCursorWorldPos - moveMouseStartPos;
-                Point closestMobNewP =
-                    snapPoint(moveStartPos + mouseOffset);
-                Point offset = closestMobNewP - moveStartPos;
-                for(
-                    auto m = selectedMobs.begin();
-                    m != selectedMobs.end(); ++m
-                ) {
-                    Point orig = preMoveMobCoords[*m];
-                    (*m)->pos = orig + offset;
-                }
-            }
+            handleSelectionAndTransformationLmbDrag(
+                mobSelection, curTransformationWidget,
+                snapPoint(game.editorsView.mouseCursorWorldPos),
+                [this] { registerChange("object movement"); }
+            );
             
             break;
             
@@ -1822,7 +1747,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 crossSectionCheckpoints[movingCrossSectionPoint] =
                     snapPoint(game.editorsView.mouseCursorWorldPos);
             }
-
+            
             if(reminderSelection.isCreatingRubberBand()) {
                 reminderSelection.updateRubberBand(
                     game.editorsView.mouseCursorWorldPos,
@@ -1830,7 +1755,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 );
             } else {
                 Point selectionCenter, selectionSize;
-                reminderSelection.getSelectionBBox(
+                reminderSelection.getBBox(
                     &selectionCenter, &selectionSize
                 );
                 if(selectionSize.x != 0.0f) {
@@ -1877,8 +1802,8 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     }
     
     curTransformationWidget.handleMouseUp();
-    reminderSelection.stopRubberBand();
-    reminderSelection.stopTransforming();
+    mobSelection.handleMouseUp();
+    reminderSelection.handleMouseUp();
     
     movingPathPreviewCheckpoint = -1;
     movingCrossSectionPoint = -1;

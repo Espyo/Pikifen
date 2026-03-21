@@ -54,7 +54,7 @@ void ParticleEditor::openLoadDialog() {
     //Open the dialog that will contain the picker and history.
     openDialog(
         "Load a particle generator",
-        std::bind(&ParticleEditor::processGuiLoadDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogLoad, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeLoadDialog, this);
@@ -67,7 +67,7 @@ void ParticleEditor::openLoadDialog() {
 void ParticleEditor::openNewDialog() {
     openDialog(
         "Create a new particle generator",
-        std::bind(&ParticleEditor::processGuiNewDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogNew, this)
     );
     dialogs.back()->customSize = Point(400, 0);
     dialogs.back()->closeCallback = [this] () {
@@ -87,7 +87,7 @@ void ParticleEditor::openNewDialog() {
 void ParticleEditor::openOptionsDialog() {
     openDialog(
         "Options",
-        std::bind(&ParticleEditor::processGuiOptionsDialog, this)
+        std::bind(&ParticleEditor::processGuiDialogOptions, this)
     );
     dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeOptionsDialog, this);
@@ -189,7 +189,7 @@ void ParticleEditor::processGuiControlPanel() {
  * @brief Processes the Dear ImGui particle generator deletion dialog
  * for this frame.
  */
-void ParticleEditor::processGuiDeletePartGenDialog() {
+void ParticleEditor::processGuiDialogDeletePartGen() {
     //Explanation text.
     string explanationStr;
     if(!changesMgr.existsOnDisk()) {
@@ -201,27 +201,32 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
             "If you delete, you will lose all unsaved progress, and the\n"
             "particle generator's files in your disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(explanationStr.c_str());
     ImGui::Text("%s", explanationStr.c_str());
+    ImGui::EndAlign();
     
     //Final warning text.
     string finalWarningStr =
         "Are you sure you want to delete the current particle generator?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
+    ImGui::BeginAlign();
+    ImGui::AlignNextText(finalWarningStr.c_str());
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
         "%s", finalWarningStr.c_str()
     );
+    ImGui::EndAlign();
     
     //Cancel button.
     ImGui::Spacer();
-    ImGui::SetupCentering(100 + 100 + 30);
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({100, 100});
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
         closeTopDialog();
     }
     
     //Delete button.
-    ImGui::SameLine(0.0f, 30);
+    ImGui::SameLine();
     ImGui::PushStyleColor(
         ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
     );
@@ -236,13 +241,14 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
         deleteCurrentPartGen();
     }
     ImGui::PopStyleColor(3);
+    ImGui::EndAlign();
 }
 
 
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void ParticleEditor::processGuiLoadDialog() {
+void ParticleEditor::processGuiDialogLoad() {
     //History node.
     processGuiHistory(
         game.options.partEd.history,
@@ -277,6 +283,264 @@ void ParticleEditor::processGuiLoadDialog() {
         loadDialogPicker.process();
         
         ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void ParticleEditor::processGuiDialogNew() {
+    string problem;
+    bool hitCreateButton = false;
+    
+    //Pack widgets.
+    processGuiWidgetsNewDialogPack(&newDialog.pack);
+    
+    //Internal name input.
+    ImGui::Spacer();
+    ImGui::FocusOnInputText(newDialog.needsTextFocus);
+    if(
+        monoInputText(
+            "Internal name", &newDialog.internalName,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Internal name of the new particle generator.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Check if everything's ok.
+    ContentManifest tempMan;
+    tempMan.pack = newDialog.pack;
+    tempMan.internalName = newDialog.internalName;
+    newDialog.partGenPath =
+        game.content.particleGens.manifestToPath(tempMan);
+    if(newDialog.lastCheckedPartGenPath != newDialog.partGenPath) {
+        newDialog.partGenPathExists =
+            fileExists(newDialog.partGenPath);
+        newDialog.lastCheckedPartGenPath = newDialog.partGenPath;
+    }
+    
+    if(newDialog.internalName.empty()) {
+        problem = "You have to type an internal name first!";
+    } else if(!isInternalNameGood(newDialog.internalName)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
+    } else {
+        if(newDialog.partGenPathExists) {
+            problem =
+                "There is already a particle generator with\n"
+                "that internal name in that pack!";
+        }
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::BeginAlign();
+    ImGui::AlignNextItems({200});
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
+        hitCreateButton = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    setTooltip(problem.empty() ? "Create the particle generator!" : problem);
+    
+    //Creation logic.
+    if(hitCreateButton) {
+        if(!problem.empty()) return;
+        auto reallyCreate = [this] () {
+            createPartGen(newDialog.partGenPath);
+            closeTopDialog();
+            closeTopDialog(); //Close the load dialog.
+        };
+        
+        if(
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
+        ) {
+            openBaseContentWarningDialog(reallyCreate);
+        } else {
+            reallyCreate();
+        }
+    }
+    ImGui::EndAlign();
+}
+
+
+/**
+ * @brief Processes the options dialog for this frame.
+ */
+void ParticleEditor::processGuiDialogOptions() {
+    //Controls node.
+    if(saveableTreeNode("options", "Controls")) {
+    
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+        setTooltip(
+            "Use the middle mouse button to pan the camera\n"
+            "(and RMB to reset camera/zoom).\n"
+            "Default: " +
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+        );
+        
+        //Grid interval text.
+        ImGui::Text(
+            "Grid interval: %f", game.options.partEd.gridInterval
+        );
+        
+        //Increase grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalIncreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Increase the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Plus"
+        );
+        
+        //Decrease grid interval button.
+        ImGui::SameLine();
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
+            gridIntervalDecreaseCmd(1.0f);
+        }
+        setTooltip(
+            "Decrease the spacing on the grid.\n"
+            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
+            ".",
+            "Shift + Minus"
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::Spacer();
+    
+    processGuiEditorStyle();
+    
+    ImGui::Spacer();
+    
+    //Misc. node.
+    if(saveableTreeNode("options", "Misc.")) {
+    
+        //Background texture checkbox.
+        if(ImGui::Checkbox("Use background texture", &useBg)) {
+            if(!useBg) {
+                if(bg) {
+                    al_destroy_bitmap(bg);
+                    bg = nullptr;
+                }
+                game.options.partEd.bgPath.clear();
+            }
+        }
+        setTooltip(
+            "Check this to use a repeating texture on the background\n"
+            "of the editor."
+        );
+        
+        if(useBg) {
+            ImGui::Indent();
+            
+            //Remove background texture button.
+            unsigned char remBgOpacity =
+                game.options.partEd.bgPath.empty() ? 50 : 255;
+            if(
+                ImGui::ImageButton(
+                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
+                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                    COLOR_EMPTY, mapAlpha(remBgOpacity)
+                )
+            ) {
+                game.options.partEd.bgPath.clear();
+                if(bg) {
+                    al_destroy_bitmap(bg);
+                    bg = nullptr;
+                }
+            }
+            setTooltip(
+                "Remove the background image.\n"
+                "This does not delete the file in your disk."
+            );
+            
+            //Background texture browse button.
+            ImGui::SameLine();
+            if(ImGui::Button("Browse...")) {
+                vector<string> f =
+                    promptFileDialog(
+                        FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
+                        FOLDER_PATHS_FROM_PACK::TEXTURES,
+                        "Please choose a background texture.",
+                        "*.*", 0, game.display
+                    );
+                    
+                if(!f.empty() && !f[0].empty()) {
+                    game.options.partEd.bgPath = f[0];
+                    if(bg) {
+                        al_destroy_bitmap(bg);
+                        bg = nullptr;
+                    }
+                    bg =
+                        loadBmp(
+                            game.options.partEd.bgPath,
+                            nullptr, false, false, false
+                        );
+                }
+            }
+            setTooltip(
+                "Browse for which texture file in your disk to use."
+            );
+            
+            //Background texture name text.
+            string bgFileName =
+                getPathLastComponent(game.options.partEd.bgPath);
+            ImGui::SameLine();
+            monoText("%s", bgFileName.c_str());
+            setTooltip("Full path:\n" + game.options.partEd.bgPath);
+            
+            ImGui::Unindent();
+        }
+        
+        //Quick play area combo.
+        vector<string> areaNames;
+        vector<string> areaPaths;
+        int selectedAreaIdx = -1;
+        getQuickPlayAreaList(
+            game.options.partEd.quickPlayAreaPath,
+            &areaNames, &areaPaths, &selectedAreaIdx
+        );
+        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+            if(selectedAreaIdx == -1) {
+                game.options.partEd.quickPlayAreaPath.clear();
+            } else {
+                game.options.partEd.quickPlayAreaPath =
+                    areaPaths[selectedAreaIdx];
+            }
+        }
+        setTooltip("Area to play on when choosing the quick play feature.");
+        
+        ImGui::TreePop();
+        
     }
 }
 
@@ -440,262 +704,6 @@ void ParticleEditor::processGuiMenuBar() {
         }
         
         ImGui::EndMenuBar();
-    }
-}
-
-
-/**
- * @brief Processes the Dear ImGui "new" dialog for this frame.
- */
-void ParticleEditor::processGuiNewDialog() {
-    string problem;
-    bool hitCreateButton = false;
-    
-    //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
-    
-    //Internal name input.
-    ImGui::Spacer();
-    ImGui::FocusOnInputText(newDialog.needsTextFocus);
-    if(
-        monoInputText(
-            "Internal name", &newDialog.internalName,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip(
-        "Internal name of the new particle generator.\n"
-        "Remember to keep it simple, type in lowercase, and use underscores!"
-    );
-    
-    //Check if everything's ok.
-    ContentManifest tempMan;
-    tempMan.pack = newDialog.pack;
-    tempMan.internalName = newDialog.internalName;
-    newDialog.partGenPath =
-        game.content.particleGens.manifestToPath(tempMan);
-    if(newDialog.lastCheckedPartGenPath != newDialog.partGenPath) {
-        newDialog.partGenPathExists =
-            fileExists(newDialog.partGenPath);
-        newDialog.lastCheckedPartGenPath = newDialog.partGenPath;
-    }
-    
-    if(newDialog.internalName.empty()) {
-        problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(newDialog.internalName)) {
-        problem =
-            "The internal name should only have lowercase letters,\n"
-            "numbers, and underscores!";
-    } else {
-        if(newDialog.partGenPathExists) {
-            problem =
-                "There is already a particle generator with\n"
-                "that internal name in that pack!";
-        }
-    }
-    
-    //Create button.
-    ImGui::Spacer();
-    ImGui::SetupCentering(200);
-    if(!problem.empty()) {
-        ImGui::BeginDisabled();
-    }
-    if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
-        hitCreateButton = true;
-    }
-    if(!problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    setTooltip(problem.empty() ? "Create the particle generator!" : problem);
-    
-    //Creation logic.
-    if(hitCreateButton) {
-        if(!problem.empty()) return;
-        auto reallyCreate = [this] () {
-            createPartGen(newDialog.partGenPath);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
-        
-        if(
-            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engineDev
-        ) {
-            openBaseContentWarningDialog(reallyCreate);
-        } else {
-            reallyCreate();
-        }
-    }
-}
-
-
-/**
- * @brief Processes the options dialog for this frame.
- */
-void ParticleEditor::processGuiOptionsDialog() {
-    //Controls node.
-    if(saveableTreeNode("options", "Controls")) {
-    
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %f", game.options.partEd.gridInterval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "+",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalIncreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Plus"
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "-",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalDecreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Minus"
-        );
-        
-        ImGui::TreePop();
-        
-    }
-    
-    ImGui::Spacer();
-    
-    processGuiEditorStyle();
-    
-    ImGui::Spacer();
-    
-    //Misc. node.
-    if(saveableTreeNode("options", "Misc.")) {
-    
-        //Background texture checkbox.
-        if(ImGui::Checkbox("Use background texture", &useBg)) {
-            if(!useBg) {
-                if(bg) {
-                    al_destroy_bitmap(bg);
-                    bg = nullptr;
-                }
-                game.options.partEd.bgPath.clear();
-            }
-        }
-        setTooltip(
-            "Check this to use a repeating texture on the background\n"
-            "of the editor."
-        );
-        
-        if(useBg) {
-            ImGui::Indent();
-            
-            //Remove background texture button.
-            unsigned char remBgOpacity =
-                game.options.partEd.bgPath.empty() ? 50 : 255;
-            if(
-                ImGui::ImageButton(
-                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgOpacity)
-                )
-            ) {
-                game.options.partEd.bgPath.clear();
-                if(bg) {
-                    al_destroy_bitmap(bg);
-                    bg = nullptr;
-                }
-            }
-            setTooltip(
-                "Remove the background image.\n"
-                "This does not delete the file in your disk."
-            );
-            
-            //Background texture browse button.
-            ImGui::SameLine();
-            if(ImGui::Button("Browse...")) {
-                vector<string> f =
-                    promptFileDialog(
-                        FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
-                        FOLDER_PATHS_FROM_PACK::TEXTURES,
-                        "Please choose a background texture.",
-                        "*.*", 0, game.display
-                    );
-                    
-                if(!f.empty() && !f[0].empty()) {
-                    game.options.partEd.bgPath = f[0];
-                    if(bg) {
-                        al_destroy_bitmap(bg);
-                        bg = nullptr;
-                    }
-                    bg =
-                        loadBmp(
-                            game.options.partEd.bgPath,
-                            nullptr, false, false, false
-                        );
-                }
-            }
-            setTooltip(
-                "Browse for which texture file in your disk to use."
-            );
-            
-            //Background texture name text.
-            string bgFileName =
-                getPathLastComponent(game.options.partEd.bgPath);
-            ImGui::SameLine();
-            monoText("%s", bgFileName.c_str());
-            setTooltip("Full path:\n" + game.options.partEd.bgPath);
-            
-            ImGui::Unindent();
-        }
-        
-        //Quick play area combo.
-        vector<string> areaNames;
-        vector<string> areaPaths;
-        int selectedAreaIdx = -1;
-        getQuickPlayAreaList(
-            game.options.partEd.quickPlayAreaPath,
-            &areaNames, &areaPaths, &selectedAreaIdx
-        );
-        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
-            if(selectedAreaIdx == -1) {
-                game.options.partEd.quickPlayAreaPath.clear();
-            } else {
-                game.options.partEd.quickPlayAreaPath =
-                    areaPaths[selectedAreaIdx];
-            }
-        }
-        setTooltip("Area to play on when choosing the quick play feature.");
-        
-        ImGui::TreePop();
-        
     }
 }
 
@@ -1491,7 +1499,6 @@ void ParticleEditor::processGuiPanelGenerator() {
             );
             
             //Angle deviation value.
-            ImGui::Spacer();
             ImGui::SetNextItemWidth(75);
             if(
                 ImGui::SliderAngle(

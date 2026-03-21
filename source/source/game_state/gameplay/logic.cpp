@@ -271,7 +271,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
     );
     if(leaderMoveMagnitude < GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD) {
-        player->leaderPtr->fsm.runEvent(
+        player->leaderPtr->scriptVM.fsm.runEvent(
             LEADER_EV_MOVE_END, (void*) &player->leaderMovement
         );
     } else {
@@ -281,7 +281,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 GAMEPLAY::LEADER_MOVEMENT_MAGNITUDE_THRESHOLD, 1.0f,
                 GAMEPLAY::LEADER_MOVEMENT_MIN_SPEED_MULT, 1.0f
             );
-        player->leaderPtr->fsm.runEvent(
+        player->leaderPtr->scriptVM.fsm.runEvent(
             LEADER_EV_MOVE_START, (void*) &player->leaderMovement
         );
     }
@@ -334,7 +334,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Lying down stop prompt.
     if(
         !leaderPromptDone &&
-        player->leaderPtr->fsm.curState->id == LEADER_STATE_SLEEPING
+        player->leaderPtr->scriptVM.fsm.curState->id == LEADER_STATE_SLEEPING
     ) {
         player->leaderPrompt.setEnabled(true);
         player->leaderPrompt.setContents(
@@ -351,7 +351,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Get up prompt.
     if(
         !leaderPromptDone &&
-        player->leaderPtr->fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
+        player->leaderPtr->scriptVM.fsm.curState->id ==
+        LEADER_STATE_KNOCKED_DOWN
     ) {
         player->leaderPrompt.setEnabled(true);
         player->leaderPrompt.setContents(
@@ -420,7 +421,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Shake prompt.
     if(
         !leaderPromptDone &&
-        player->leaderPtr->fsm.getEvent(MOB_EV_ITCH)
+        player->leaderPtr->scriptVM.fsm.getEvent(MOB_EV_ITCH)
     ) {
         if(player->leaderPtr->hasOpponentPikminLatched()) {
             player->leaderPrompt.setEnabled(true);
@@ -952,19 +953,22 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *******************/
         if(game.curArea->type == AREA_TYPE_MISSION) {
         
-            //Mission events.
+            //Mission end conditions.
             for(
-                size_t e = 0; e < game.curArea->mission.events.size(); e++
+                size_t c = 0; c < game.curArea->mission.endConds.size(); c++
             ) {
-                if(missionEventsTriggered[e]) continue;
-                MissionEvent* evPtr = &game.curArea->mission.events[e];
-                MissionEvType* evTypePtr = game.missionEvTypes[evPtr->type];
-                if(evTypePtr->isMet(evPtr, &game.curArea->mission, this)) {
-                    MissionActionType* actionTypePtr =
-                        game.missionActionTypes[evPtr->actionType];
-                    if(actionTypePtr->run(evPtr, this)) {
-                        missionEventsTriggered[e] = true;
-                    }
+                MissionEndCond* condPtr =
+                    &game.curArea->mission.endConds[c];
+                MissionEndCondType* condTypePtr =
+                    game.missionEndCondTypes[condPtr->type];
+                    
+                if(condTypePtr->isMet(condPtr, &game.curArea->mission, this)) {
+                    endMission(
+                        condPtr->clear, condPtr->zeroTimeForScore,
+                        condPtr->neutralMood,
+                        condPtr->type == MISSION_END_COND_TIME_LIMIT,
+                        condPtr
+                    );
                 }
             }
             
@@ -1149,16 +1153,16 @@ void GameplayState::doMenuLogic() {
             resizeString(f2s(radToDeg(game.makerTools.infoLock->angle)), 8);
         string stateStr =
             resizeString(
-                game.makerTools.infoLock->fsm.curState ?
-                game.makerTools.infoLock->fsm.curState->name :
+                game.makerTools.infoLock->scriptVM.fsm.curState ?
+                game.makerTools.infoLock->scriptVM.fsm.curState->name :
                 "(None!)",
                 20
             );
         string prevStatesStr;
-        for(unsigned char p = 0; p < STATE_HISTORY_SIZE; p++) {
+        for(unsigned char p = 0; p < FSM::STATE_HISTORY_SIZE; p++) {
             prevStatesStr +=
                 resizeString(
-                    game.makerTools.infoLock->fsm.prevStateNames[p],
+                    game.makerTools.infoLock->scriptVM.fsm.prevStateNames[p],
                     20
                 ) + " ";
         }
@@ -1177,7 +1181,7 @@ void GameplayState::doMenuLogic() {
                 23, true, true
             );
         string timerStr =
-            f2s(game.makerTools.infoLock->fsm.timer.timeLeft);
+            f2s(game.makerTools.infoLock->scriptVM.timer.timeLeft);
             
         game.console.write(
             "Mob: " + nameStr + "\n"
@@ -1185,7 +1189,7 @@ void GameplayState::doMenuLogic() {
             "Health: " + healthStr + "\n"
             "Animation: " + animStr + " | Timer: " + timerStr + "\n"
             "State: " + stateStr + " | Prev. states: " + prevStatesStr + "\n" +
-            game.makerTools.infoLock->fsm.getMakerToolVarsStr(),
+            game.makerTools.infoLock->scriptVM.getMakerToolVarsStr(),
             5.0f, 3.0f
         );
     }
@@ -1444,6 +1448,11 @@ void GameplayState::doMenuLogic() {
             bigMsg.set(BIG_MESSAGE_NONE);
         }
         break;
+    } case BIG_MESSAGE_MISSION_OVER: {
+        if(bigMsg.getTime() >= GAMEPLAY::BIG_MSG_MISSION_OVER_DUR) {
+            bigMsg.set(BIG_MESSAGE_NONE);
+        }
+        break;
     }
     }
     
@@ -1470,7 +1479,7 @@ void GameplayState::doMenuLogic() {
         if(interlude.getTime() >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             interlude.set(INTERLUDE_NONE, false);
             deltaTMult = 1.0f;
-            leave(GAMEPLAY_LEAVE_TARGET_END);
+            leave(GAMEPLAY_LEAVE_TARGET_END_EARLY);
         }
         break;
     }
@@ -1488,21 +1497,21 @@ void GameplayState::doMenuLogic() {
  * @brief Ticks the logic of the finite-state machine script.
  */
 void GameplayState::doScriptLogic() {
-    if(!fsm.curState) return;
+    if(!scriptVM.fsm.curState) return;
     
     //Timer events.
-    ScriptEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
-    if(fsm.timer.duration > 0) {
-        if(fsm.timer.timeLeft > 0) {
-            fsm.timer.tick(game.deltaT);
-            if(fsm.timer.timeLeft == 0.0f && timerEv) {
-                timerEv->run(&fsm);
+    FsmEventDef* timerEv = scriptVM.fsm.getEvent(MOB_EV_TIMER);
+    if(scriptVM.timer.duration > 0) {
+        if(scriptVM.timer.timeLeft > 0) {
+            scriptVM.timer.tick(game.deltaT);
+            if(scriptVM.timer.timeLeft == 0.0f && timerEv) {
+                timerEv->run(&scriptVM);
             }
         }
     }
     
     //Tick event.
-    fsm.runEvent(SCRIPT_EV_ON_TICK);
+    scriptVM.fsm.runEvent(FSM_EV_ON_TICK);
 }
 
 
@@ -1666,7 +1675,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
  */
 void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     vector<PendingInterMobEvent> pendingInterMobEvents;
-    ScriptState* stateBefore = mPtr->fsm.curState;
+    FsmStateDef* stateBefore = mPtr->scriptVM.fsm.curState;
     
     size_t nMobs = mobs.all.size();
     for(size_t m2 = 0; m2 < nMobs; m2++) {
@@ -1753,14 +1762,14 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     );
     
     for(size_t e = 0; e < pendingInterMobEvents.size(); e++) {
-        if(mPtr->fsm.curState != stateBefore) {
+        if(mPtr->scriptVM.fsm.curState != stateBefore) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
             break;
         }
         if(!pendingInterMobEvents[e].eventPtr) continue;
         pendingInterMobEvents[e].eventPtr->run(
-            &mPtr->fsm, (void*) pendingInterMobEvents[e].mobPtr
+            &mPtr->scriptVM, (void*) pendingInterMobEvents[e].mobPtr
         );
         
     }
@@ -1789,8 +1798,8 @@ void GameplayState::processMobMiscInteractions(
     vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Find a carriable mob to grab.
-    ScriptEvent* ncoEvent =
-        mPtr->fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
+    FsmEventDef* ncoEvent =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
     if(
         ncoEvent &&
         m2Ptr->carryInfo &&
@@ -1806,8 +1815,8 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //Find a tool mob.
-    ScriptEvent* ntoEvent =
-        mPtr->fsm.getEvent(MOB_EV_NEAR_TOOL);
+    FsmEventDef* ntoEvent =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_TOOL);
     if(
         ntoEvent &&
         mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
@@ -1827,8 +1836,8 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //Find a group task mob.
-    ScriptEvent* ngtoEvent =
-        mPtr->fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
+    FsmEventDef* ngtoEvent =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
     if(
         ngtoEvent &&
         m2Ptr->health > 0 &&
@@ -1851,8 +1860,8 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //"Bumped" by an active leader being nearby.
-    ScriptEvent* touchLeEv =
-        mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
+    FsmEventDef* touchLeEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
         for(Player& player : players) {
             if(!player.leaderPtr) continue;
@@ -1861,7 +1870,9 @@ void GameplayState::processMobMiscInteractions(
             //Small hack. This way,
             //Pikmin don't get bumped by leaders that are,
             //for instance, lying down.
-            if(m2Ptr->fsm.curState->id != LEADER_STATE_ACTIVE) continue;
+            if(m2Ptr->scriptVM.fsm.curState->id != LEADER_STATE_ACTIVE) {
+                continue;
+            }
             if(dBetween > game.options.misc.pikminBumpDist) continue;
             
             pendingInterMobEvents.push_back(
@@ -1888,10 +1899,10 @@ void GameplayState::processMobReaches(
     vector<PendingInterMobEvent>& pendingInterMobEvents
 ) {
     //Check reaches.
-    ScriptEvent* obirEv =
-        mPtr->fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
-    ScriptEvent* opirEv =
-        mPtr->fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
+    FsmEventDef* obirEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
+    FsmEventDef* opirEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
         
     if(!obirEv && !opirEv) return;
     
@@ -1939,11 +1950,15 @@ void GameplayState::processMobTouches(
         mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
         m2Ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
         (
-            ((Pikmin*) mPtr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) mPtr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING ||
+            ((Pikmin*) mPtr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING_H
         ) && (
-            ((Pikmin*) m2Ptr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) m2Ptr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING ||
+            ((Pikmin*) m2Ptr)->scriptVM.fsm.curState->id ==
+            PIKMIN_STATE_IDLING_H
         );
     bool okToPush = true;
     if(
@@ -2116,10 +2131,10 @@ void GameplayState::processMobTouches(
     
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
-    ScriptEvent* touchOpEv =
-        mPtr->fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
-    ScriptEvent* touchObEv =
-        mPtr->fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
+    FsmEventDef* touchOpEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
+    FsmEventDef* touchObEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
     if(touchOpEv || touchObEv) {
     
         bool zTouch;
@@ -2174,26 +2189,26 @@ void GameplayState::processMobTouches(
             xyCollision
         ) {
             if(touchObEv) {
-                touchObEv->run(&mPtr->fsm, (void*) m2Ptr);
+                touchObEv->run(&mPtr->scriptVM, (void*) m2Ptr);
             }
             if(touchOpEv && mPtr->canHunt(m2Ptr)) {
-                touchOpEv->run(&mPtr->fsm, (void*) m2Ptr);
+                touchOpEv->run(&mPtr->scriptVM, (void*) m2Ptr);
             }
         }
         
     }
     
     //Check hitbox touches.
-    ScriptEvent* hitboxTouchANEv =
-        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
-    ScriptEvent* hitboxTouchNAEv =
-        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
-    ScriptEvent* hitboxTouchNNEv =
-        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
-    ScriptEvent* hitboxTouchEatEv =
-        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
-    ScriptEvent* hitboxTouchHazEv =
-        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+    FsmEventDef* hitboxTouchANEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+    FsmEventDef* hitboxTouchNAEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+    FsmEventDef* hitboxTouchNNEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+    FsmEventDef* hitboxTouchEatEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+    FsmEventDef* hitboxTouchHazEv =
+        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
         
     Sprite* s1Ptr;
     mPtr->getSpriteData(&s1Ptr, nullptr, nullptr);
@@ -2300,20 +2315,20 @@ void GameplayState::processMobTouches(
                         );
                         
                     hitboxTouchANEv->run(
-                        &mPtr->fsm, (void*) &evInfo
+                        &mPtr->scriptVM, (void*) &evInfo
                     );
                     reportedANEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchEatEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
                     hitboxTouchHazEv =
-                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                     hitboxTouchNNEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
                 }
                 
                 if(
@@ -2327,20 +2342,20 @@ void GameplayState::processMobTouches(
                         );
                         
                     hitboxTouchNNEv->run(
-                        &mPtr->fsm, (void*) &evInfo
+                        &mPtr->scriptVM, (void*) &evInfo
                     );
                     reportedNNEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchEatEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
                     hitboxTouchHazEv =
-                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                     hitboxTouchANEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
                 }
                 
 
@@ -2378,16 +2393,16 @@ void GameplayState::processMobTouches(
                     isInContainer(m2Ptr->chompBodyParts, h2Ptr->bodyPartIdx)
                 ) {
                     hitboxTouchEatEv->run(
-                        &mPtr->fsm, (void*) m2Ptr, (void*) h2Ptr
+                        &mPtr->scriptVM, (void*) m2Ptr, (void*) h2Ptr
                     );
                     reportedEatEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchHazEv =
-                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Touched hazard" event.
@@ -2404,14 +2419,14 @@ void GameplayState::processMobTouches(
                             m2Ptr, h1Ptr, h2Ptr
                         );
                     hitboxTouchHazEv->run(
-                        &mPtr->fsm, (void*) h2Ptr->hazard, (void*) &evInfo
+                        &mPtr->scriptVM, (void*) h2Ptr->hazard, (void*) &evInfo
                     );
                     reportedHazEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchNAEv =
-                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Normal hitbox touched attack hitbox" event.
@@ -2428,7 +2443,7 @@ void GameplayState::processMobTouches(
                             m2Ptr, h1Ptr, h2Ptr
                         );
                     hitboxTouchNAEv->run(
-                        &mPtr->fsm, (void*) &evInfo
+                        &mPtr->scriptVM, (void*) &evInfo
                     );
                     reportedNAEv = true;
                     

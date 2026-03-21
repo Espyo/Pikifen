@@ -25,7 +25,7 @@ using std::string;
 
 
 namespace AREA_EDITOR {
-extern const ALLEGRO_COLOR BLOCKING_COLOR;
+extern const ALLEGRO_COLOR BLOCKING_SECTOR_COLOR;
 extern const float COMFY_DIST;
 extern const float CROSS_SECTION_POINT_RADIUS;
 extern const float CURSOR_SNAP_DISTANCE;
@@ -352,11 +352,38 @@ private:
         //Unknown tree shadow image.
         EPT_UNKNOWN_SHADOW,
         
-        //No active score criteria for this mission.
-        EPT_NO_SCORE_CRITERIA,
+        //Empty mission mob group.
+        EPT_EMPTY_MISSION_MOB_GROUP,
         
-        //No mission goal mobs.
-        EPT_NO_GOAL_MOBS,
+        //Mission with no end condition.
+        EPT_MISSION_NO_END,
+        
+        //Mission has multiple pause menu end conditions.
+        EPT_MISSION_MULTIPLE_PAUSE_ENDS,
+        
+        //Mission end condition calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_END_COND,
+        
+        //Mission HUD item calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_HUD_ITEM,
+        
+        //Mission scoring criterion calls an invalid mob group or region number.
+        EPT_INVALID_IDX_PARAM_MISSION_SCORE_CRI,
+        
+        //Mission end condition uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_END_COND,
+        
+        //Mission HUD item uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_HUD_ITEM,
+        
+        //Mission score criterion item uses time limit, but it isn't set.
+        EPT_NO_TIME_LIMIT_MISSION_SCORE_CRI,
+        
+        //Mission scoring criterion awards no points.
+        EPT_ZERO_POINT_MISSION_SCORE_CRI,
+        
+        //No mission score criteria, but there should be some.
+        EPT_NO_MISSION_SCORE_CRI,
         
     };
     
@@ -401,9 +428,6 @@ private:
         //None.
         EDITOR_SUB_STATE_NONE,
         
-        //Picking a mission exit region.
-        EDITOR_SUB_STATE_MISSION_EXIT,
-        
         //Drawing the layout.
         EDITOR_SUB_STATE_DRAWING,
         
@@ -431,7 +455,7 @@ private:
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
         
-        //Picking mobs for the mission mob checklist.
+        //Picking mobs for a mission mob group.
         EDITOR_SUB_STATE_MISSION_MOBS,
         
         //Drawing paths.
@@ -517,19 +541,16 @@ private:
     //Cross-section Z legend window's end coordinates.
     Point crossSectionZWindowEnd;
     
-    //When showing a hazard in the list, this is the index of the current one.
-    size_t curHazardIdx = INVALID;
-    
-    //Mission mob checklist index currently being edited.
-    size_t curMobChecklistIdx = INVALID;
+    //Mission mob group index currently being edited.
+    size_t curMobGroupIdx = INVALID;
     
     //The current transformation widget.
     TransformationWidget curTransformationWidget;
     
-    //Last known cursor snap position for heavy snap modes.
+    //Last known cursor snap position for performance-heavy snap modes.
     Point cursorSnapCache;
     
-    //Time left to update the cursor snap position for heavy snap modes.
+    //Timer for cursor snap position updates for performance-heavy snap modes.
     Timer cursorSnapTimer = Timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL);
     
     //Debug tool -- show the edge indexes?
@@ -683,9 +704,6 @@ private:
     //Area data before vertex movement.
     Area* preMoveAreaData = nullptr;
     
-    //Position of the selected mobs before movement.
-    map<MobGen*, Point> preMoveMobCoords;
-    
     //Position of the selected path stops before movement.
     map<PathStop*, Point> preMoveStopCoords;
     
@@ -762,9 +780,6 @@ private:
     //Currently selected edges.
     set<Edge*> selectedEdges;
     
-    //Currently selected mobs.
-    set<MobGen*> selectedMobs;
-    
     //Currently selected path links.
     set<PathLink*> selectedPathLinks;
     
@@ -785,6 +800,9 @@ private:
     
     //Currently selected region's index.
     size_t selectedRegionIdx = INVALID;
+    
+    //Selection manager for the mob generators.
+    SelectionManager mobSelection;
     
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
@@ -945,7 +963,7 @@ private:
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);
     bool deleteEdges(const set<Edge*>& which);
-    void deleteMobs(const set<MobGen*>& which);
+    void deleteMobs();
     void deletePathLinks(const set<PathLink*>& which);
     void deletePathStops(const set<PathStop*>& which);
     void doSectorSplit();
@@ -955,16 +973,24 @@ private:
     string findGoodFirstTexture();
     void findProblems();
     void findProblemsBridgePath();
+    void findProblemsEmptyMissionMobGroup();
     void findProblemsIntersectingEdge();
+    void findProblemsInvalidIdxParamMissionEndCond();
+    void findProblemsInvalidIdxParamMissionHudItem();
+    void findProblemsInvalidIdxParamMissionScoreCri();
     void findProblemsLoneEdge();
     void findProblemsLonePathStop();
     void findProblemsMissingLeader();
     void findProblemsMissingTexture();
+    void findProblemsMissionMultiplePauseEnds();
+    void findProblemsMissionNoEnd();
     void findProblemsMobInsideWalls();
     void findProblemsMobLinksToSelf();
     void findProblemsMobStoredInLoop();
-    void findProblemsNoGoalMob();
-    void findProblemsNoScoreCriteria();
+    void findProblemsNoMissionScoreCri();
+    void findProblemsNoTimeLimitMissionEndCond();
+    void findProblemsNoTimeLimitMissionHudItem();
+    void findProblemsNoTimeLimitMissionScoreCri();
     void findProblemsNonSimpleSector();
     void findProblemsOobMob();
     void findProblemsOobPathStop();
@@ -975,6 +1001,7 @@ private:
     void findProblemsTypelessMob();
     void findProblemsUnknownTexture();
     void findProblemsUnknownTreeShadow();
+    void findProblemsZeroPointMissionScoreCri();
     void finishCircleSector();
     void finishLayoutMoving();
     void finishNewSectorDrawing();
@@ -1009,7 +1036,6 @@ private:
         const string& path, const string& userDataPath
     ) const;
     vector<EdgeIntersection> getIntersectingEdges() const;
-    size_t getMissionRequiredMobCount() const;
     float getMobGenRadius(MobGen* m) const;
     bool getMobLinkUnderPoint(
         const Point& p,
@@ -1027,7 +1053,6 @@ private:
     SECTOR_SPLIT_RESULT getSectorSplitEvaluation();
     Sector* getSectorUnderPoint(const Point& p) const;
     Vertex* getVertexUnderPoint(const Point& p) const;
-    void goToUndoHistoryPoint(size_t p);
     void goToProblem();
     void handleLineError();
     void homogenizeSelectedEdges();
@@ -1082,7 +1107,6 @@ private:
         PathLink* l1, PathLink* l2,
         const Point& where
     );
-    void startMobMove();
     void startPathStopMove();
     void startVertexMove();
     void traverseSectorForSplit(
@@ -1166,6 +1190,7 @@ private:
     void addNewReminderCmd(float inputValue);
     void addNewTreeShadowCmd(float inputValue);
     void openExternallyCmd(float inputValue);
+    void openUserDataExternallyCmd(float inputValue);
     void pastePropertiesCmd(float inputValue);
     void pasteTextureCmd(float inputValue);
     void quickPlayCmd(float inputValue);
@@ -1184,23 +1209,12 @@ private:
     void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
-    void processGuiDeleteAreaDialog();
-    void processGuiGradingCriterionWidgets(
-        int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-        const string& widgetLabel, const string& tooltip
-    );
-    void processGuiGradingMedalWidgets(
-        int* requirementPtr, const string& widgetLabel,
-        int widgetMinValue, int widgetMaxValue,
-        const string& tooltip
-    );
-    void processGuiGradingModeWidgets(
-        int value, const string& widgetLabel, const string& tooltip
-    );
-    void processGuiLoadDialog();
-    void processGuiNewDialog();
+    void processGuiDialogDeleteArea();
+    void processGuiDialogLoad();
+    void processGuiDialogMissionPreset();
+    void processGuiDialogNew();
+    void processGuiDialogOptions();
     void processGuiMenuBar();
-    void processGuiMissionPresetDialog();
     void processGuiMobScriptVars(MobGen* gen);
     void processGuiPanelDetails();
     void processGuiPanelEdge();
@@ -1209,17 +1223,12 @@ private:
     void processGuiPanelLayout();
     void processGuiPanelMain();
     void processGuiPanelMission();
-    void processGuiPanelMissionOld();
     void processGuiPanelMissionBriefing();
+    void processGuiPanelMissionEndCond();
     void processGuiPanelMissionEssentials();
-    void processGuiPanelMissionEv();
-    void processGuiPanelMissionFail(bool* dayDurationNeedsUpdate);
-    void processGuiPanelMissionGoalBe();
-    void processGuiPanelMissionGoalCt();
-    void processGuiPanelMissionGoalGte();
-    void processGuiPanelMissionGrading();
     void processGuiPanelMissionHudItems();
-    void processGuiPanelMissionMobChecklists();
+    void processGuiPanelMissionMedalAward();
+    void processGuiPanelMissionMobGroups();
     void processGuiPanelMissionScoreCriteria();
     void processGuiPanelMob();
     void processGuiPanelMobs();
@@ -1229,9 +1238,16 @@ private:
     void processGuiPanelReview();
     void processGuiPanelSector();
     void processGuiPanelTools();
-    void processGuiOptionsDialog();
     void processGuiStatusBar();
     void processGuiToolbar();
+    void processGuiWidgetsMedalAwardMedal(
+        int* requirementPtr, const string& widgetLabel,
+        int widgetMinValue, int widgetMaxValue,
+        const string& tooltip
+    );
+    void processGuiWidgetsMedalAwardMode(
+        int value, const string& widgetLabel, const string& tooltip
+    );
     void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);

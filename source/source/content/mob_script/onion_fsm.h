@@ -19,11 +19,11 @@
 namespace OnionFsm {
 void createFsm(MobType* typ);
 
-void checkStartGenerating(Fsm* fsm, void* info1, void* info2);
-void checkStopGenerating(Fsm* fsm, void* info1, void* info2);
-void receiveMob(Fsm* fsm, void* info1, void* info2);
-void startDelivery(Fsm* fsm, void* info1, void* info2);
-void startGenerating(Fsm* fsm, void* info1, void* info2);
-void startIdling(Fsm* fsm, void* info1, void* info2);
-void stopGenerating(Fsm* fsm, void* info1, void* info2);
+void checkStartGenerating(ScriptVM* scriptVM, void* info1, void* info2);
+void checkStopGenerating(ScriptVM* scriptVM, void* info1, void* info2);
+void receiveMob(ScriptVM* scriptVM, void* info1, void* info2);
+void startDelivery(ScriptVM* scriptVM, void* info1, void* info2);
+void startGenerating(ScriptVM* scriptVM, void* info1, void* info2);
+void startIdling(ScriptVM* scriptVM, void* info1, void* info2);
+void stopGenerating(ScriptVM* scriptVM, void* info1, void* info2);
 }

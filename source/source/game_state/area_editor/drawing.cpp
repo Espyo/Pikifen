@@ -1187,7 +1187,7 @@ void AreaEditor::drawLineDist(
  * @param style Canvas style.
  */
 void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
-    //Linking and containing.
+    //Links and stores.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
         for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
             MobGen* mPtr = game.curArea->mobGenerators[m];
@@ -1195,14 +1195,14 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             
             if(!mPtr->type) continue;
             
-            bool isSelected = isInContainer(selectedMobs, mPtr);
+            bool isSelected = mobSelection.contains(m);
             
             for(size_t l = 0; l < mPtr->links.size(); l++) {
                 m2Ptr = mPtr->links[l];
                 if(!m2Ptr->type) continue;
                 
-                bool showLink =
-                    isSelected || isInContainer(selectedMobs, m2Ptr);
+                bool isM2Selected = mobSelection.contains(mPtr->linkIdxs[l]);
+                bool showLink = isSelected || isM2Selected;
                     
                 if(showLink) {
                     drawArrow(
@@ -1219,8 +1219,8 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                     game.curArea->mobGenerators[mPtr->storedInside];
                 if(!m2Ptr->type) continue;
                 
-                bool showStore =
-                    isSelected || isInContainer(selectedMobs, m2Ptr);
+                bool isM2Selected = mobSelection.contains(mPtr->storedInside);
+                bool showStore = isSelected || isM2Selected;
                     
                 if(showStore) {
                     drawArrow(
@@ -1321,19 +1321,17 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             al_map_rgba(0, 0, 0, style.mobAlpha * 255)
         );
         
-        bool isSelected = isInContainer(selectedMobs, mPtr);
-        bool isInMobChecklist =
+        bool isSelected = mobSelection.contains(m);
+        bool isInMobGroup =
             subState == EDITOR_SUB_STATE_MISSION_MOBS &&
             isInContainer(
-                game.curArea->mission.mobChecklists[
-                    curMobChecklistIdx
-                ].mobIdxs, m
+                game.curArea->mission.mobGroups[curMobGroupIdx].mobIdxs, m
             );
         bool isHighlighted =
             highlightedMob == mPtr &&
             state == EDITOR_STATE_MOBS;
             
-        if(isSelected || isInMobChecklist) {
+        if(isSelected || isInMobGroup) {
             al_draw_filled_circle(
                 mPtr->pos.x, mPtr->pos.y, radius,
                 al_map_rgba(
@@ -1379,6 +1377,10 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         }
         
     }
+
+    drawSelectionAndTransformationThings(
+        mobSelection, curTransformationWidget
+    );
 }
 
 
@@ -1718,7 +1720,7 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
             
             drawFilledRoundedRectangle(
                 rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f,
-                reminderSelection.isSelected(r) ?
+                reminderSelection.contains(r) ?
                 al_map_rgb(
                     AREA_EDITOR::SELECTION_COLOR[0],
                     AREA_EDITOR::SELECTION_COLOR[1],
@@ -1733,21 +1735,9 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
         }
     }
     
-    Point selectionCenter, selectionSize;
-    reminderSelection.getSelectionBBox(
-        &selectionCenter, &selectionSize
+    drawSelectionAndTransformationThings(
+        reminderSelection, curTransformationWidget
     );
-    
-    reminderSelection.draw(
-        game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
-    );
-    
-    if(selectionSize.x != 0.0f) {
-        curTransformationWidget.draw(
-            &selectionCenter, &selectionSize,
-            nullptr, 1.0f / game.editorsView.cam.zoom
-        );
-    }
 }
 
 
@@ -1867,7 +1857,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                     } else if(showBlockingSectors) {
                         av[v].color =
                             sPtr->type == SECTOR_TYPE_BLOCKING ?
-                            AREA_EDITOR::BLOCKING_COLOR :
+                            AREA_EDITOR::BLOCKING_SECTOR_COLOR :
                             AREA_EDITOR::NON_BLOCKING_COLOR;
                     } else if(viewBrightness) {
                         av[v].color =

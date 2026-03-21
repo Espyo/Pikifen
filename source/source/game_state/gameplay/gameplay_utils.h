@@ -12,7 +12,7 @@
 
 #include "../../content/mob/mob_utils.h"
 #include "../../content/other/gui.h"
-#include "../../content/other/script.h"
+#include "../../content/script/script.h"
 #include "../../util/geometry_utils.h"
 
 class Leader;
@@ -36,7 +36,7 @@ struct PendingInterMobEvent {
     Distance d;
     
     //Pointer to the relevant event.
-    ScriptEvent* eventPtr = nullptr;
+    FsmEventDef* eventPtr = nullptr;
     
     //Mob who the event belongs to.
     Mob* mobPtr = nullptr;
@@ -45,7 +45,7 @@ struct PendingInterMobEvent {
     //--- Public function definitions ---
     
     PendingInterMobEvent(
-        const Distance& d, ScriptEvent* eventPtr, Mob* mobPtr
+        const Distance& d, FsmEventDef* eventPtr, Mob* mobPtr
     ):
         d(d),
         eventPtr(eventPtr),

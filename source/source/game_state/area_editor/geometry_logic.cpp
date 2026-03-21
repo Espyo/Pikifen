@@ -22,6 +22,33 @@
 
 
 /**
+ * @brief Creates a new sector for use in layout drawing operations
+ * and adds it to the area.
+ * This automatically clones it from another sector, if not nullptr, or gives it
+ * a recommended texture if the other sector nullptr.
+ *
+ * @param copyFrom Sector to copy from.
+ * @return The created sector.
+ */
+Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
+    Sector* newSector = game.curArea->addNewSector();
+    
+    if(copyFrom) {
+        copyFrom->clone(newSector);
+        updateSectorTexture(newSector, copyFrom->textureInfo.bmpName);
+    } else {
+        if(!textureSuggestions.empty()) {
+            updateSectorTexture(newSector, textureSuggestions[0].name);
+        } else {
+            updateSectorTexture(newSector, "");
+        }
+    }
+    
+    return newSector;
+}
+
+
+/**
  * @brief Checks whether it's possible to traverse from drawing node n1 to n2
  * with the existing edges and vertexes. In other words, if you draw a line
  * between n1 and n2, it will not go inside a sector.
@@ -333,7 +360,7 @@ void AreaEditor::copyEdgeProperties() {
  * so they can be then pasted onto another mob.
  */
 void AreaEditor::copyMobProperties() {
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To copy an object's properties, you must first select an object "
             "to copy from!",
@@ -342,7 +369,7 @@ void AreaEditor::copyMobProperties() {
         return;
     }
     
-    if(selectedMobs.size() > 1) {
+    if(!mobSelection.hasOne()) {
         setStatus(
             "To copy an object's properties, you can only select 1 object!",
             true
@@ -350,7 +377,8 @@ void AreaEditor::copyMobProperties() {
         return;
     }
     
-    MobGen* sourceMob = *selectedMobs.begin();
+    MobGen* sourceMob =
+        game.curArea->mobGenerators[mobSelection.getSingleItemIdx()];
     if(!copyBufferMob) {
         copyBufferMob = new MobGen();
     }
@@ -439,33 +467,6 @@ void AreaEditor::copySectorProperties() {
 
 
 /**
- * @brief Creates a new sector for use in layout drawing operations
- * and adds it to the area.
- * This automatically clones it from another sector, if not nullptr, or gives it
- * a recommended texture if the other sector nullptr.
- *
- * @param copyFrom Sector to copy from.
- * @return The created sector.
- */
-Sector* AreaEditor::addNewSectorForLayoutDrawing(const Sector* copyFrom) {
-    Sector* newSector = game.curArea->addNewSector();
-    
-    if(copyFrom) {
-        copyFrom->clone(newSector);
-        updateSectorTexture(newSector, copyFrom->textureInfo.bmpName);
-    } else {
-        if(!textureSuggestions.empty()) {
-            updateSectorTexture(newSector, textureSuggestions[0].name);
-        } else {
-            updateSectorTexture(newSector, "");
-        }
-    }
-    
-    return newSector;
-}
-
-
-/**
  * @brief Removes and deletes the specified edge, removing it from all
  * sectors and vertexes that use it, as well as removing and deleting any
  * now-useless sectors or vertexes.
@@ -525,69 +526,52 @@ bool AreaEditor::deleteEdges(const set<Edge*>& which) {
 
 
 /**
- * @brief Removes and deletes the specified mobs.
- *
- * @param which Mobs to delete.
+ * @brief Removes and deletes the selected mobs.
  */
-void AreaEditor::deleteMobs(const set<MobGen*>& which) {
-    for(auto const& sm : which) {
-        //Get its index.
-        size_t mIdx = 0;
-        for(; mIdx < game.curArea->mobGenerators.size(); mIdx++) {
-            if(game.curArea->mobGenerators[mIdx] == sm) break;
-        }
-        
+void AreaEditor::deleteMobs() {
+    const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
+    
+    for(auto const& mobIdx : selectedMobs) {
         //Update links.
         for(size_t m2 = 0; m2 < game.curArea->mobGenerators.size(); m2++) {
             MobGen* m2Ptr = game.curArea->mobGenerators[m2];
             for(size_t l = 0; l < m2Ptr->links.size(); l++) {
-                if(m2Ptr->links[l] == sm) {
+                if(m2Ptr->linkIdxs[l] == mobIdx) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
                     m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
                 } else {
-                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mIdx, false);
+                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mobIdx, false);
                 }
             }
             
             if(m2Ptr->storedInside != INVALID) {
-                if(m2Ptr->storedInside == mIdx) {
+                if(m2Ptr->storedInside == mobIdx) {
                     m2Ptr->storedInside = INVALID;
                 } else {
-                    adjustMisalignedIndex(m2Ptr->storedInside, mIdx, false);
+                    adjustMisalignedIndex(m2Ptr->storedInside, mobIdx, false);
                 }
             }
         }
         
-        for(size_t c = 0; c < game.curArea->mission.mobChecklists.size(); c++) {
-            MissionMobChecklist* cPtr = &game.curArea->mission.mobChecklists[c];
+        //Update mob groups.
+        for(size_t c = 0; c < game.curArea->mission.mobGroups.size(); c++) {
+            MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
-                if(cPtr->mobIdxs[m] == mIdx) {
+                if(cPtr->mobIdxs[m] == mobIdx) {
                     cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
                 } else {
-                    adjustMisalignedIndex(cPtr->mobIdxs[m], mIdx, false);
+                    adjustMisalignedIndex(cPtr->mobIdxs[m], mobIdx, false);
                     m++;
                 }
             }
         }
         
-        //Check the list of mission requirement objects.
-        unordered_set<size_t> newMrmi;
-        newMrmi.reserve(game.curArea->missionOld.goalMobIdxs.size());
-        for(size_t m2 : game.curArea->missionOld.goalMobIdxs) {
-            if(m2 > mIdx) {
-                newMrmi.insert(m2 - 1);
-            } else if(m2 != mIdx) {
-                newMrmi.insert(m2);
-            }
-        }
-        game.curArea->missionOld.goalMobIdxs = newMrmi;
-        
-        //Finally, delete it.
-        game.curArea->mobGenerators.erase(
-            game.curArea->mobGenerators.begin() + mIdx
-        );
-        delete sm;
+        //Delete it.
+        delete game.curArea->mobGenerators[mobIdx];
     }
+    
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedMobs, game.curArea->mobGenerators);
 }
 
 
@@ -742,10 +726,37 @@ void AreaEditor::findProblems() {
     findProblemsUnknownTreeShadow();
     if(problemType != EPT_NONE_YET) return;
     
-    findProblemsNoGoalMob();
+    findProblemsEmptyMissionMobGroup();
     if(problemType != EPT_NONE_YET) return;
     
-    findProblemsNoScoreCriteria();
+    findProblemsMissionNoEnd();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsMissionMultiplePauseEnds();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionEndCond();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionHudItem();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsInvalidIdxParamMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionEndCond();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionHudItem();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoTimeLimitMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsZeroPointMissionScoreCri();
+    if(problemType != EPT_NONE_YET) return;
+    
+    findProblemsNoMissionScoreCri();
     if(problemType != EPT_NONE_YET) return;
     
     //All good!
@@ -812,6 +823,27 @@ void AreaEditor::findProblemsBridgePath() {
 
 
 /**
+ * @brief Checks for any empty mission mob groups,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsEmptyMissionMobGroup() {
+    for(size_t g = 0; g < game.curArea->mission.mobGroups.size(); g++) {
+        MissionMobGroup* gPtr = &game.curArea->mission.mobGroups[g];
+        if(gPtr->calculateList().empty()) {
+            problemType = EPT_EMPTY_MISSION_MOB_GROUP;
+            problemTitle =
+                "Empty mission mob group!";
+            problemDescription =
+                "Mission mob group #" + i2s(g + 1) + " has no "
+                "mobs, making it pointless. Either assign some "
+                "or delete the group.";
+            return;
+        }
+    }
+}
+
+
+/**
  * @brief Checks for any intersecting edges in the area, and fills the problem
  * info if so.
  */
@@ -846,6 +878,123 @@ void AreaEditor::findProblemsIntersectingEdge() {
                 floor(eiPtr->e1->vertexes[0]->y + sin(a) * r *
                       d.toFloat())
             ) + "). Edges should never cross each other.";
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission end conditions,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionEndCond() {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        MissionEndCondType* cTypePtr = game.missionEndCondTypes[cPtr->type];
+        if(cTypePtr->getEditorInfo().indexParamDescription.empty()) continue;
+        bool idxInBounds = true;
+        switch(cPtr->type) {
+        case MISSION_END_COND_LEADERS_IN_REGION: {
+            idxInBounds =
+                cPtr->indexParam < game.curArea->regions.size();
+            break;
+        } default: {
+            idxInBounds =
+                cPtr->indexParam < game.curArea->mission.mobGroups.size();
+            break;
+        }
+        }
+        if(!idxInBounds) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_END_COND;
+            problemTitle =
+                "Invalid number in mission end condition!";
+            problemDescription =
+                "Mission end condition #" + i2s(c + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission HUD items,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionHudItem() {
+    for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+        MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
+        if(!iPtr->enabled) continue;
+        bool mustCheckMobs = false;
+        bool mustCheckRegions = false;
+        if(iPtr->contentType == MISSION_HUD_ITEM_CONTENT_HEALTH) {
+            mustCheckMobs = true;
+        }
+        if(
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_TOT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_TOT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_AMT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_AMT ||
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_TOT_AMT
+        ) {
+            if(iPtr->amountType == MISSION_HUD_ITEM_AMT_MOB_GROUP) {
+                mustCheckMobs = true;
+            } else if(
+                iPtr->amountType == MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION
+            ) {
+                mustCheckRegions = true;
+            }
+        }
+        bool idxInBounds = true;
+        if(mustCheckMobs) {
+            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
+                if(
+                    iPtr->idxsList[i2] >= game.curArea->mission.mobGroups.size()
+                ) {
+                    idxInBounds = false;
+                }
+            }
+        } else if(mustCheckRegions) {
+            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
+                if(
+                    iPtr->idxsList[i2] >= game.curArea->regions.size()
+                ) {
+                    idxInBounds = false;
+                }
+            }
+        }
+        if(!idxInBounds) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_HUD_ITEM;
+            problemTitle =
+                "Invalid number in mission HUD item!";
+            problemDescription =
+                "Mission HUD item #" + i2s(i + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for invalid index parameters in mission score criteria,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsInvalidIdxParamMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(cPtr->type != MISSION_SCORE_CRITERION_MOB_GROUP) continue;
+        if(cPtr->indexParam >= game.curArea->regions.size()) {
+            problemType = EPT_INVALID_IDX_PARAM_MISSION_SCORE_CRI;
+            problemTitle =
+                "Invalid number in mission score criterion!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " has a parameter "
+                "that refers to an area region or a mob group, but that "
+                "number is invalid. Please correct it.";
+            return;
+        }
     }
 }
 
@@ -945,6 +1094,51 @@ void AreaEditor::findProblemsMissingTexture() {
                 "Give it a valid texture.";
             return;
         }
+    }
+}
+
+
+/**
+ * @brief Checks for the existence of multiple pause menu mission end
+ * conditions, and fills the problem info if so.
+ */
+void AreaEditor::findProblemsMissionMultiplePauseEnds() {
+    bool foundOne = false;
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        if(cPtr->type != MISSION_END_COND_PAUSE_MENU) continue;
+        if(!foundOne) {
+            foundOne = true;
+        } else {
+            problemType = EPT_MISSION_MULTIPLE_PAUSE_ENDS;
+            problemTitle =
+                "Multiple pause menu mission end conditions!";
+            problemDescription =
+                "There are multiple mission end conditions of the "
+                "\"pause menu end\" type. Only the first one will "
+                "be triggered, making any others pointless.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for the mission having no end conditions,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsMissionNoEnd() {
+    if(game.curArea->type != AREA_TYPE_MISSION) return;
+    if(game.curArea->mission.endConds.empty()) {
+        problemType = EPT_MISSION_NO_END;
+        problemTitle =
+            "Mission has no end conditions!";
+        problemDescription =
+            "This mission does not have any end condition. "
+            "This means the only thing the player can do is end "
+            "the mission early from the pause menu as a fail. If that "
+            "is what you intend, please add an end condition for that.";
+        return;
     }
 }
 
@@ -1096,23 +1290,96 @@ void AreaEditor::findProblemsMobStoredInLoop() {
 
 
 /**
- * @brief Checks for any missing mission goal mob in the area, and fills the
- * problem info if so.
+ * @brief Checks for the mission having no scoring criteria when it should,
+ * and fills the problem info if so.
  */
-void AreaEditor::findProblemsNoGoalMob() {
+void AreaEditor::findProblemsNoMissionScoreCri() {
     if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        (
-            game.curArea->missionOld.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.curArea->missionOld.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.curArea->missionOld.goal == MISSION_GOAL_GET_TO_EXIT
-        )
+        game.curArea->type != AREA_TYPE_MISSION ||
+        game.curArea->mission.medalAwardMode != MISSION_MEDAL_AWARD_MODE_POINTS
     ) {
-        if(getMissionRequiredMobCount() == 0) {
-            problemType = EPT_NO_GOAL_MOBS;
-            problemTitle = "No mission goal mobs!";
+        return;
+    }
+    if(game.curArea->mission.scoreCriteria.empty()) {
+        problemType = EPT_NO_MISSION_SCORE_CRI;
+        problemTitle =
+            "Mission has no score criteria!";
+        problemDescription =
+            "This mission award a medal based on points, but has "
+            "no scoring criteria, meaning the player can't get points. "
+            "Please add some scoring criteria.";
+        return;
+    }
+}
+
+
+/**
+ * @brief Checks for mission end conditions that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionEndCond() {
+    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
+        if(
+            cPtr->type == MISSION_END_COND_TIME_LIMIT &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_END_COND;
+            problemTitle =
+                "Mission end condition needs a time limit that isn't set!";
             problemDescription =
-                "This mission's goal requires some mobs, yet there are none.";
+                "Mission end condition #" + i2s(c + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the end condition.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission HUD items that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionHudItem() {
+    for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+        MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
+        if(
+            iPtr->enabled &&
+            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_HUD_ITEM;
+            problemTitle =
+                "Mission HUD item needs a time limit that isn't set!";
+            problemDescription =
+                "Mission HUD item #" + i2s(i + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the HUD item.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission score criteria that use a time limit with none set,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsNoTimeLimitMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(
+            cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT &&
+            game.curArea->mission.timeLimit == 0
+        ) {
+            problemType = EPT_NO_TIME_LIMIT_MISSION_SCORE_CRI;
+            problemTitle =
+                "Mission score criterion needs a time limit that isn't set!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " makes use of "
+                "the mission time limit, but this mission does not have "
+                "a time limit set. Either set it or remove the criterion.";
             return;
         }
     }
@@ -1152,39 +1419,6 @@ void AreaEditor::findProblemsNonSimpleSector() {
             problemDescription.clear();
             break;
         }
-        }
-    }
-}
-
-
-/**
- * @brief Checks for any missing mission score criterion in the area, and
- * fills the problem info if so.
- */
-void AreaEditor::findProblemsNoScoreCriteria() {
-    if(
-        game.curArea->type == AREA_TYPE_MISSION &&
-        game.curArea->missionOld.gradingMode == MISSION_GRADING_MODE_POINTS
-    ) {
-        bool hasAnyCriterion = false;
-        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-            if(
-                game.missionScoreCriteria[c]->getMultiplier(
-                    &game.curArea->missionOld
-                ) != 0
-            ) {
-                hasAnyCriterion = true;
-                break;
-            }
-        }
-        if(!hasAnyCriterion) {
-            problemType = EPT_NO_SCORE_CRITERIA;
-            problemTitle = "No active score criteria!";
-            problemDescription =
-                "In this mission, the player is graded according to their "
-                "score. However, none of the score criteria are active, "
-                "so the player's score will always be 0.";
-            return;
         }
     }
 }
@@ -1398,6 +1632,27 @@ void AreaEditor::findProblemsUnknownTreeShadow() {
             problemDescription =
                 "Texture name: \"" +
                 game.curArea->treeShadows[s]->bmpName + "\".";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for mission score criteria that have a zero point multipler,
+ * and fills the problem info if so.
+ */
+void AreaEditor::findProblemsZeroPointMissionScoreCri() {
+    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
+        if(cPtr->points == 0) {
+            problemType = EPT_ZERO_POINT_MISSION_SCORE_CRI;
+            problemTitle =
+                "Mission score criterion with zero points!";
+            problemDescription =
+                "Mission score criterion #" + i2s(c + 1) + " gives 0 "
+                "points, making it useless. Either make it give the player "
+                "some points or remove it.";
             return;
         }
     }
@@ -1951,12 +2206,14 @@ void AreaEditor::homogenizeSelectedEdges() {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedMobs() {
-    if(selectedMobs.size() < 2) return;
+    if(mobSelection.getCount() < 2) return;
     
-    MobGen* base = *selectedMobs.begin();
-    for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
-        if(m == selectedMobs.begin()) continue;
-        base->clone(*m, false);
+    const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
+    MobGen* base = game.curArea->mobGenerators[*selectedMobs.begin()];
+    for(size_t mobIdx : selectedMobs) {
+        MobGen* mob = game.curArea->mobGenerators[mobIdx];
+        if(mob == base) continue;
+        base->clone(mob, false);
     }
 }
 
@@ -2269,7 +2526,7 @@ void AreaEditor::pasteMobProperties() {
         return;
     }
     
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To paste object properties, you must first select which object "
             "to paste to!",
@@ -2280,8 +2537,8 @@ void AreaEditor::pasteMobProperties() {
     
     registerChange("object property paste");
     
-    for(MobGen* m : selectedMobs) {
-        copyBufferMob->clone(m, false);
+    for(size_t mobIdx : mobSelection.getItemIdxs()) {
+        copyBufferMob->clone(game.curArea->mobGenerators[mobIdx], false);
     }
     
     setStatus("Successfully pasted object properties.");
@@ -2445,11 +2702,6 @@ void AreaEditor::resizeEverything(float mults[2]) {
         rPtr->size.x *= mults[0];
         rPtr->size.y *= mults[1];
     }
-    
-    game.curArea->missionOld.goalExitCenter.x *= mults[0];
-    game.curArea->missionOld.goalExitCenter.y *= mults[1];
-    game.curArea->missionOld.goalExitSize.x *= mults[0];
-    game.curArea->missionOld.goalExitSize.y *= mults[1];
 }
 
 
@@ -2460,7 +2712,7 @@ void AreaEditor::resizeEverything(float mults[2]) {
  * @param pos Point that the mobs must face.
  */
 void AreaEditor::rotateMobGensToPoint(const Point& pos) {
-    if(selectedMobs.empty()) {
+    if(!mobSelection.hasAny()) {
         setStatus(
             "To rotate objects, you must first select some objects!",
             true
@@ -2469,9 +2721,10 @@ void AreaEditor::rotateMobGensToPoint(const Point& pos) {
     }
     
     registerChange("object rotation");
-    selectionHomogenized = false;
-    for(auto const& m : selectedMobs) {
-        m->angle = getAngle(m->pos, pos);
+    mobSelection.homogenized = false;
+    for(size_t mobIdx : mobSelection.getItemIdxs()) {
+        MobGen* mPtr = game.curArea->mobGenerators[mobIdx];
+        mPtr->angle = getAngle(mPtr->pos, pos);
     }
     setStatus("Rotated objects to face " + p2s(pos) + ".");
 }

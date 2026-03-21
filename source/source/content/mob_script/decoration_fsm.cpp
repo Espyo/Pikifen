@@ -27,7 +27,7 @@
 void DecorationFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", DECORATION_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DecorationFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
@@ -35,7 +35,7 @@ void DecorationFsm::createFsm(MobType* typ) {
         }
     }
     efc.newState("bumped", DECORATION_STATE_BUMPED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DecorationFsm::beBumped);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -44,13 +44,14 @@ void DecorationFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_DECORATION_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_DECORATION_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_DECORATION_STATES) + " in enum."
     );
 }
@@ -63,12 +64,12 @@ void DecorationFsm::createFsm(MobType* typ) {
 /**
  * @brief When the decoration gets bumped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DecorationFsm::beBumped(Fsm* fsm, void* info1, void* info2) {
-    Decoration* decPtr = (Decoration*) fsm->m;
+void DecorationFsm::beBumped(ScriptVM* scriptVM, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) scriptVM->mob;
     
     decPtr->setAnimation(DECORATION_ANIM_BUMPED);
 }
@@ -77,12 +78,12 @@ void DecorationFsm::beBumped(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When the decoration becomes idle.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DecorationFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
-    Decoration* decPtr = (Decoration*) fsm->m;
+void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) scriptVM->mob;
 
     if(
         decPtr->decType->randomAnimationDelay &&
@@ -101,11 +102,11 @@ void DecorationFsm::becomeIdle(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief Check if the decoration should really get bumped.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */
-void DecorationFsm::checkBump(Fsm* fsm, void* info1, void* info2) {
+void DecorationFsm::checkBump(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
 
     if(
@@ -116,7 +117,7 @@ void DecorationFsm::checkBump(Fsm* fsm, void* info1, void* info2) {
         return;
     }
     
-    fsm->setState(DECORATION_STATE_BUMPED);
+    scriptVM->fsm.setState(DECORATION_STATE_BUMPED);
 }
 
 

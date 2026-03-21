@@ -1,0 +1,64 @@
+init {
+    set_var lifted false
+    set_var front true
+}
+
+script {
+    idle_moving {
+        on_enter {
+            if $lifted = false
+                if $front = true
+                    set_animation lifting_front     
+                else
+                    set_animation lifting_back
+                end_if
+                set_height 200
+                set_var lifted true
+            else
+                if $front = true
+                    set_animation lifted_front     
+                else
+                    set_animation lifted_back
+                end_if
+            end_if
+        }
+    }
+    idle_stuck {
+        on_enter {
+            if $lifted = false
+                if $front = true
+                    set_animation lifting_front     
+                else
+                    set_animation lifting_back
+                end_if
+                set_height 200
+                set_var lifted true
+            else
+                if $front = true
+                    set_animation lifted_front     
+                else
+                    set_animation lifted_back
+                end_if
+            end_if
+        }
+    }
+    idle_waiting {
+        on_enter {
+            if $lifted = true
+                if $front = true
+                    set_animation dropping_front     
+                else
+                    set_animation dropping_back
+                end_if
+                set_height 1
+                set_var lifted false
+            else
+                if $front = true
+                    set_animation idling
+                else
+                    set_animation idling_back
+                end_if
+            end_if
+        }
+    }
+}

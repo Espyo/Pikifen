@@ -29,10 +29,10 @@
 void BridgeFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BRIDGE_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BridgeFsm::setAnim);
         }
-        efc.newEvent(SCRIPT_EV_ON_READY); {
+        efc.newEvent(FSM_EV_ON_READY); {
             efc.run(BridgeFsm::setup);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
@@ -50,7 +50,7 @@ void BridgeFsm::createFsm(MobType* typ) {
     }
     efc.newState("creating_chunk", BRIDGE_STATE_CREATING_CHUNK); {
         //Sort of a dummy state for text file script enhancements.
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.changeState("idling");
         }
     }
@@ -59,13 +59,14 @@ void BridgeFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_BRIDGE_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_BRIDGE_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_BRIDGE_STATES) + " in enum."
     );
 }
@@ -78,15 +79,15 @@ void BridgeFsm::createFsm(MobType* typ) {
 /**
  * @brief Makes the bridge check its health and update its chunks, if needed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::checkHealth(Fsm* fsm, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) fsm->m;
+void BridgeFsm::checkHealth(ScriptVM* scriptVM, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) scriptVM->mob;
 
     if(briPtr->checkHealth()) {
-        fsm->setState(BRIDGE_STATE_CREATING_CHUNK);
+        scriptVM->fsm.setState(BRIDGE_STATE_CREATING_CHUNK);
     }
 }
 
@@ -94,12 +95,12 @@ void BridgeFsm::checkHealth(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief Opens up the bridge.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::open(Fsm* fsm, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) fsm->m;
+void BridgeFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) scriptVM->mob;
     
     briPtr->setAnimation(BRIDGE_ANIM_DESTROYED);
     briPtr->startDying();
@@ -111,12 +112,12 @@ void BridgeFsm::open(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief Sets the standard "idling" animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) fsm->m;
+void BridgeFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) scriptVM->mob;
 
     briPtr->setAnimation(
         BRIDGE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -128,12 +129,12 @@ void BridgeFsm::setAnim(Fsm* fsm, void* info1, void* info2) {
  * @brief Sets up the bridge with the data surrounding it,
  * like its linked destination object.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void BridgeFsm::setup(Fsm* fsm, void* info1, void* info2) {
-    Bridge* briPtr = (Bridge*) fsm->m;
+void BridgeFsm::setup(ScriptVM* scriptVM, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) scriptVM->mob;
     
     briPtr->setup();
 }

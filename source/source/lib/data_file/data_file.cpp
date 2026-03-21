@@ -192,6 +192,24 @@ unsigned char DataNode::decryptChar(unsigned char c) {
 
 
 /**
+ * @brief Removes and deletes a child from the list.
+ *
+ * @param nodeToDelete The node to be deleted.
+ * @return Whether the node existed.
+ */
+bool DataNode::deleteChild(DataNode* nodeToDelete) {
+    for(size_t c = 0; c < children.size(); c++) {
+        if(children[c] == nodeToDelete) {
+            delete nodeToDelete;
+            children.erase(children.begin() + c);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief "Encrypts" a character for saving in an encrypted data file.
  *
  * It does this by rotating each character's ASCII value backwards by 111,
@@ -567,24 +585,6 @@ DataNode& DataNode::operator=(const DataNode& dn2) {
     }
     
     return *this;
-}
-
-
-/**
- * @brief Removes and deletes a child from the list.
- *
- * @param nodeToDelete The node to be deleted.
- * @return Whether the node existed.
- */
-bool DataNode::deleteChild(DataNode* nodeToDelete) {
-    for(size_t c = 0; c < children.size(); c++) {
-        if(children[c] == nodeToDelete) {
-            delete nodeToDelete;
-            children.erase(children.begin() + c);
-            return true;
-        }
-    }
-    return false;
 }
 
 

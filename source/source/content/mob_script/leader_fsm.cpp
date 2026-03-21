@@ -38,13 +38,13 @@ using std::unordered_set;
 void LeaderFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", LEADER_STATE_IDLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::enterIdle);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::clearBoredomData);
         }
-        efc.newEvent(SCRIPT_EV_ON_TICK); {
+        efc.newEvent(FSM_EV_ON_TICK); {
             efc.run(LeaderFsm::searchSeed);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -94,7 +94,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("called", LEADER_STATE_CALLED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::called);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -118,14 +118,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("active", LEADER_STATE_ACTIVE); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::enterActive);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::setIsWalkingFalse);
             efc.run(LeaderFsm::setIsTurningFalse);
         }
-        efc.newEvent(SCRIPT_EV_ON_TICK); {
+        efc.newEvent(FSM_EV_ON_TICK); {
             efc.run(LeaderFsm::tickActiveState);
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
@@ -206,12 +206,12 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("whistling", LEADER_STATE_WHISTLING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::notifyPikminRelease);
             efc.run(LeaderFsm::release);
             efc.run(LeaderFsm::whistle);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopWhistle);
         }
         efc.newEvent(LEADER_EV_STOP_WHISTLE); {
@@ -257,7 +257,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("punching", LEADER_STATE_PUNCHING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::punch);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -303,7 +303,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("holding", LEADER_STATE_HOLDING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
         }
         efc.newEvent(LEADER_EV_THROW); {
@@ -361,7 +361,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("throwing", LEADER_STATE_THROWING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::doThrow);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -405,7 +405,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("dismissing", LEADER_STATE_DISMISSING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::dismiss);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -445,7 +445,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("spraying", LEADER_STATE_SPRAYING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::spray);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -463,7 +463,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("pain", LEADER_STATE_PAIN); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::setPainAnim);
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
@@ -476,7 +476,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::setPainAnim);
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
@@ -490,7 +490,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("knocked_back", LEADER_STATE_KNOCKED_BACK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -516,7 +516,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK
     ); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKnockedBack);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -607,7 +607,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("getting_up", LEADER_STATE_GETTING_UP); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::startGettingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -630,7 +630,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_getting_up", LEADER_STATE_INACTIVE_GETTING_UP
     ); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::startGettingUp);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -654,13 +654,13 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("ko", LEADER_STATE_KO); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::getKod);
         }
     }
     
     efc.newState("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::startChasingLeader);
         }
@@ -715,11 +715,11 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::setCorrectStandingAnim);
             efc.run(LeaderFsm::stopInGroup);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::clearBoredomData);
         }
         efc.newEvent(MOB_EV_SPOT_IS_FAR); {
@@ -828,7 +828,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("pluck_deciding", LEADER_STATE_PLUCK_DECIDING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::decidePluckAction);
         }
         efc.newEvent(LEADER_EV_GO_PLUCK); {
@@ -909,7 +909,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         "inactive_pluck_deciding",
         LEADER_STATE_INACTIVE_PLUCK_DECIDING
     ); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::decidePluckAction);
         }
         efc.newEvent(LEADER_EV_GO_PLUCK); {
@@ -1008,11 +1008,11 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("in_inventory", LEADER_STATE_IN_INVENTORY); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::standStill);
             efc.run(LeaderFsm::openInventory);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::closeInventory);
         }
         efc.newEvent(LEADER_EV_CANCEL); {
@@ -1113,7 +1113,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("held_by_leader", LEADER_STATE_HELD); {
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::beReleased);
         }
         efc.newEvent(MOB_EV_THROWN); {
@@ -1145,7 +1145,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("thrown", LEADER_STATE_THROWN); {
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1170,7 +1170,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("inactive_thrown", LEADER_STATE_INACTIVE_THROWN); {
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::stopBeingThrown);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -1195,10 +1195,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("drinking", LEADER_STATE_DRINKING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::startDrinking);
         }
-        efc.newEvent(SCRIPT_EV_ON_LEAVE); {
+        efc.newEvent(FSM_EV_ON_LEAVE); {
             efc.run(LeaderFsm::finishDrinking);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1222,10 +1222,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("riding_track", LEADER_STATE_RIDING_TRACK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::startRidingTrack);
         }
-        efc.newEvent(SCRIPT_EV_ON_TICK); {
+        efc.newEvent(FSM_EV_ON_TICK); {
             efc.run(LeaderFsm::tickTrackRide);
         }
     }
@@ -1233,10 +1233,10 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState(
         "inactive_riding_track", LEADER_STATE_INACTIVE_RIDING_TRACK
     ); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::startRidingTrack);
         }
-        efc.newEvent(SCRIPT_EV_ON_TICK); {
+        efc.newEvent(FSM_EV_ON_TICK); {
             efc.run(LeaderFsm::tickTrackRide);
         }
         efc.newEvent(MOB_EV_WHISTLED); {
@@ -1245,7 +1245,7 @@ void LeaderFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("shaking", LEADER_STATE_SHAKING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(LeaderFsm::shake);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
@@ -1254,13 +1254,14 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
     }
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_LEADER_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_LEADER_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_LEADER_STATES) + " in enum."
     );
 }
@@ -1273,15 +1274,15 @@ void LeaderFsm::createFsm(MobType* typ) {
 /**
  * @brief When a leader loses health.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
-void LeaderFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     float healthBefore = leaPtr->health;
     float offenseMultiplier = 1.0f;
@@ -1342,12 +1343,18 @@ void LeaderFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
     if(knockbackExists) {
         if(knockbackStrength > 0) {
             leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
-            if(leaPtr->player) fsm->setState(LEADER_STATE_KNOCKED_BACK);
-            else fsm->setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+            if(leaPtr->player) {
+                scriptVM->fsm.setState(LEADER_STATE_KNOCKED_BACK);
+            } else {
+                scriptVM->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+            }
         } else {
             leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-            if(leaPtr->player) fsm->setState(LEADER_STATE_PAIN);
-            else fsm->setState(LEADER_STATE_INACTIVE_PAIN);
+            if(leaPtr->player) {
+                scriptVM->fsm.setState(LEADER_STATE_PAIN);
+            } else {
+                scriptVM->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
+            }
         }
     }
 }
@@ -1356,16 +1363,16 @@ void LeaderFsm::beAttacked(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is meant to become the active one.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the player in charge.
  * @param info2 Unused.
  */
-void LeaderFsm::becomeActive(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::becomeActive(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Player* player = (Player*) info1;
     
     if(player->leaderPtr) {
-        player->leaderPtr->fsm.runEvent(LEADER_EV_INACTIVATED);
+        player->leaderPtr->scriptVM.fsm.runEvent(LEADER_EV_INACTIVATED);
     }
     
     //Normally the player can't swap to leaders that are following another,
@@ -1378,7 +1385,7 @@ void LeaderFsm::becomeActive(Fsm* fsm, void* info1, void* info2) {
     ) {
         Mob* oldLeader = leaPtr->followingGroup;
         leaPtr->leaveGroup();
-        oldLeader->fsm.runEvent(MOB_EV_WHISTLED, (void*) leaPtr);
+        oldLeader->scriptVM.fsm.runEvent(MOB_EV_WHISTLED, (void*) leaPtr);
     }
     
     //Update pointers and such.
@@ -1420,12 +1427,12 @@ void LeaderFsm::becomeActive(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader stops being the active one.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::becomeInactive(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::becomeInactive(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->player = nullptr;
     leaPtr->stopAutoThrowing();
@@ -1435,12 +1442,12 @@ void LeaderFsm::becomeInactive(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader's leader dismisses them.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beDismissed(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopChasing();
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
@@ -1450,12 +1457,14 @@ void LeaderFsm::beDismissed(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is grabbed by another leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beGrabbedByFriend(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::beGrabbedByFriend(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
 }
@@ -1464,11 +1473,11 @@ void LeaderFsm::beGrabbedByFriend(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader grabbed by another is released.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beReleased(Fsm* fsm, void* info1, void* info2) {
+void LeaderFsm::beReleased(ScriptVM* scriptVM, void* info1, void* info2) {
 
 }
 
@@ -1476,12 +1485,12 @@ void LeaderFsm::beReleased(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader grabbed by another is thrown.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::beThrown(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::beThrown(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->startThrowTrail();
     leaPtr->setAnimation(LEADER_ANIM_THROWN);
@@ -1491,12 +1500,14 @@ void LeaderFsm::beThrown(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is thrown by a bouncer mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the bouncer mob.
  * @param info2 Unused.
  */
-void LeaderFsm::beThrownByBouncer(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::beThrownByBouncer(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->startThrowTrail();
     leaPtr->setAnimation(LEADER_ANIM_THROWN);
@@ -1509,17 +1520,17 @@ void LeaderFsm::beThrownByBouncer(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is called and must jump in surprise.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::called(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    LeaderFsm::standStill(fsm, info1, info2);
+    LeaderFsm::standStill(scriptVM, info1, info2);
     
     leaPtr->focusOnMob(caller);
     
@@ -1531,15 +1542,17 @@ void LeaderFsm::called(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader that is knocked down is called over by another leader,
  * by whistling them.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::calledWhileKnockedDown(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::calledWhileKnockedDown(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     leaPtr->focusOnMob(caller);
 }
@@ -1549,12 +1562,14 @@ void LeaderFsm::calledWhileKnockedDown(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader should check if the animation that ended is a boredom
  * animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::checkBoredomAnimEnd(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::checkBoredomAnimEnd(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(!leaPtr->inBoredAnimation) return;
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
@@ -1569,15 +1584,15 @@ void LeaderFsm::checkBoredomAnimEnd(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader should check how much damage they've caused
  * with their punch.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::checkPunchDamage(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::checkPunchDamage(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     float offenseMultiplier = 0;
     float defenseMultiplier = 0;
@@ -1602,14 +1617,14 @@ void LeaderFsm::checkPunchDamage(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader has to clear any data about being bored.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::clearBoredomData(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
-    LeaderFsm::clearTimer(fsm, info1, info2);
+    LeaderFsm::clearTimer(scriptVM, info1, info2);
     leaPtr->inBoredAnimation = false;
 }
 
@@ -1617,12 +1632,12 @@ void LeaderFsm::clearBoredomData(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a Pikmin has to clear any timer set.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::clearTimer(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setTimer(0);
 }
@@ -1631,12 +1646,12 @@ void LeaderFsm::clearTimer(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader closes the inventory.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::closeInventory(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::closeInventory(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(!leaPtr->player) return;
     leaPtr->player->inventory->close();
@@ -1646,12 +1661,14 @@ void LeaderFsm::closeInventory(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader must decide what to do next after plucking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::decidePluckAction(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::decidePluckAction(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     Distance d;
     Pikmin* newPikmin = nullptr;
@@ -1665,15 +1682,15 @@ void LeaderFsm::decidePluckAction(Fsm* fsm, void* info1, void* info2) {
         //It should only signal to stop if it wanted to stop.
         //If there are no more sprouts in range, that doesn't mean the leaders
         //following it can't continue with the sprouts in their range.
-        LeaderFsm::signalStopAutoPluck(fsm, info1, info2);
+        LeaderFsm::signalStopAutoPluck(scriptVM, info1, info2);
     }
     
     leaPtr->queuedPluckCancel = false;
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-        fsm->runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+            scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     } else {
-        fsm->runEvent(LEADER_EV_CANCEL);
+            scriptVM->fsm.runEvent(LEADER_EV_CANCEL);
     }
 }
 
@@ -1681,12 +1698,12 @@ void LeaderFsm::decidePluckAction(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader dismisses the group.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 If not nullptr, then the dismiss must be silent.
  * @param info2 Unused.
  */
-void LeaderFsm::dismiss(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::dismiss(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->dismiss(info1 != nullptr);
 }
@@ -1695,17 +1712,17 @@ void LeaderFsm::dismiss(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader throws the grabbed mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::doThrow(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::doThrow(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
     
-    heldPtr->fsm.runEvent(MOB_EV_THROWN);
+    heldPtr->scriptVM.fsm.runEvent(MOB_EV_THROWN);
     heldPtr->startHeightEffect();
     
     heldPtr->stopChasing();
@@ -1733,12 +1750,12 @@ void LeaderFsm::doThrow(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader enters the active state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::enterActive(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::enterActive(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -1749,12 +1766,12 @@ void LeaderFsm::enterActive(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader enters the idling state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::enterIdle(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::enterIdle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->unfocusFromMob();
     leaPtr->setAnimation(
@@ -1770,14 +1787,14 @@ void LeaderFsm::enterIdle(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader falls asleep.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::fallAsleep(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::fallAsleep(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    LeaderFsm::dismiss(fsm, nullptr, nullptr);
+    LeaderFsm::dismiss(scriptVM, nullptr, nullptr);
     leaPtr->stopChasing();
     
     leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
@@ -1791,12 +1808,12 @@ void LeaderFsm::fallAsleep(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader falls down a bottomless pit.
  * This damages and respawns them.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::fallDownPit(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->leaveGroup();
     leaPtr->setHealth(true, true, -0.2);
@@ -1808,20 +1825,20 @@ void LeaderFsm::fallDownPit(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader finished the animation for when it's called.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishCalledAnim(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     Mob* caller = leaPtr->focusedMob;
     
     if(leaPtr) {
-        LeaderFsm::joinGroup(fsm, (void*) caller, info2);
-        fsm->setState(LEADER_STATE_IN_GROUP_CHASING, info1, info2);
+        LeaderFsm::joinGroup(scriptVM, (void*) caller, info2);
+        scriptVM->fsm.setState(LEADER_STATE_IN_GROUP_CHASING, info1, info2);
     } else {
-        fsm->setState(LEADER_STATE_IDLING, info1, info2);
+        scriptVM->fsm.setState(LEADER_STATE_IDLING, info1, info2);
     }
 }
 
@@ -1829,14 +1846,16 @@ void LeaderFsm::finishCalledAnim(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader finishes drinking the drop it was drinking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
-    engineAssert(leaPtr->focusedMob != nullptr, fsm->getStateHistoryStr());
+    engineAssert(
+        leaPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     Drop* droPtr = (Drop*) leaPtr->focusedMob;
     
     switch(droPtr->droType->effect) {
@@ -1850,7 +1869,9 @@ void LeaderFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        leaPtr->applyStatus(droPtr->droType->statusToGive, false, false, droPtr);
+        leaPtr->applyStatus(
+            droPtr->droType->statusToGive, false, false, droPtr
+        );
         break;
     } default: {
         break;
@@ -1864,19 +1885,19 @@ void LeaderFsm::finishDrinking(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader finishes getting up from being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishGettingUp(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     Mob* prevFocusedMob = leaPtr->focusedMob;
     
     if(leaPtr->player) {
-        fsm->setState(LEADER_STATE_ACTIVE);
+        scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
-        fsm->setState(LEADER_STATE_IDLING);
+        scriptVM->fsm.setState(LEADER_STATE_IDLING);
     }
     
     if(prevFocusedMob) {
@@ -1884,7 +1905,7 @@ void LeaderFsm::finishGettingUp(Fsm* fsm, void* info1, void* info2) {
             prevFocusedMob->type->category->id == MOB_CATEGORY_LEADERS &&
             !leaPtr->canHunt(prevFocusedMob)
         ) {
-            fsm->runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
+                scriptVM->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
         }
     }
 }
@@ -1893,12 +1914,12 @@ void LeaderFsm::finishGettingUp(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When the leader finishes the animation of the current pluck.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::finishPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->stopChasing();
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
@@ -1908,12 +1929,12 @@ void LeaderFsm::finishPluck(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When the leader finishes the shaking animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::finishShaking(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::finishShaking(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
 }
@@ -1922,12 +1943,12 @@ void LeaderFsm::finishShaking(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader needs gets knocked back.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedBack(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->unfocusFromMob();
     leaPtr->setAnimation(LEADER_ANIM_KNOCKED_BACK);
@@ -1937,12 +1958,12 @@ void LeaderFsm::getKnockedBack(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader gets knocked back and lands on the floor.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKnockedDown(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::getKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopTurning();
     
@@ -1959,12 +1980,12 @@ void LeaderFsm::getKnockedDown(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader gets KO'd (dies).
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getKod(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::getKod(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(game.states.gameplay->unloading) {
         return;
@@ -1978,8 +1999,8 @@ void LeaderFsm::getKod(Fsm* fsm, void* info1, void* info2) {
         changeToNextLeader(leaPtr->player, true, true, true);
     }
     
-    LeaderFsm::release(fsm, info1, info2);
-    LeaderFsm::dismiss(fsm, info1, info2);
+    LeaderFsm::release(scriptVM, info1, info2);
+    LeaderFsm::dismiss(scriptVM, info1, info2);
     leaPtr->becomeUncarriable();
     leaPtr->setAnimation(LEADER_ANIM_KO);
     
@@ -1990,21 +2011,21 @@ void LeaderFsm::getKod(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader must get up faster from being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::getUpFaster(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::getUpFaster(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
     if(leaPtr->tempI == 1) return;
     
-    fsm->timer.timeLeft =
+    scriptVM->timer.timeLeft =
         std::max(
             0.01f,
-            fsm->timer.timeLeft -
+            scriptVM->timer.timeLeft -
             leaPtr->leaType->knockedDownWhistleBonus
         );
     leaPtr->tempI = 1;
@@ -2015,15 +2036,15 @@ void LeaderFsm::getUpFaster(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader heads towards a Pikmin with the intent to pluck it.
  * Also signals other leaders in the group to search for other seeds.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the Pikmin to be plucked.
  * @param info2 Unused.
  */
-void LeaderFsm::goPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::goPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Pikmin* pikPtr = (Pikmin*) info1;
     
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     leaPtr->queuedPluckCancel = false;
     
@@ -2041,26 +2062,26 @@ void LeaderFsm::goPluck(Fsm* fsm, void* info1, void* info2) {
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
-            l2Ptr->fsm.runEvent(LEADER_EV_MUST_SEARCH_SEED);
+            l2Ptr->scriptVM.fsm.runEvent(LEADER_EV_MUST_SEARCH_SEED);
         }
     }
     
-    LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
+    LeaderFsm::setIsWalkingTrue(scriptVM, nullptr, nullptr);
 }
 
 
 /**
  * @brief When a leader grabs onto a mob for throwing.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob to grab.
  * @param info2 Unused.
  */
-void LeaderFsm::grabMob(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::grabMob(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* grabbedMob = (Mob*) info1;
 
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     leaPtr->hold(
         grabbedMob, HOLD_TYPE_PURPOSE_HAND, INVALID,
@@ -2076,17 +2097,17 @@ void LeaderFsm::grabMob(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader must either return to idling, or return to rejoining
  * its leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::idleOrRejoin(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::idleOrRejoin(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     if(leaPtr->followingGroup) {
-        fsm->setState(LEADER_STATE_IN_GROUP_CHASING);
+        scriptVM->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
     } else {
-        fsm->setState(LEADER_STATE_IDLING);
+        scriptVM->fsm.setState(LEADER_STATE_IDLING);
     }
 }
 
@@ -2095,12 +2116,12 @@ void LeaderFsm::idleOrRejoin(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader joins another leader's group. This transfers
  * their Pikmin.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::joinGroup(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::joinGroup(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Leader* caller = (Leader*) info1;
     
     Mob* topLeader = caller;
@@ -2123,12 +2144,12 @@ void LeaderFsm::joinGroup(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a thrown leader lands.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::land(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopChasing();
     leaPtr->speed.x = leaPtr->speed.y = 0;
@@ -2136,9 +2157,9 @@ void LeaderFsm::land(Fsm* fsm, void* info1, void* info2) {
     leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
     if(leaPtr->player) {
-        fsm->setState(LEADER_STATE_ACTIVE);
+        scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
-        fsm->setState(LEADER_STATE_IDLING);
+        scriptVM->fsm.setState(LEADER_STATE_IDLING);
     }
 }
 
@@ -2146,15 +2167,15 @@ void LeaderFsm::land(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader leaves a hazardous sector.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the hazard.
  * @param info2 Unused.
  */
-void LeaderFsm::leftHazard(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Hazard* h = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(h->associatedLiquid) {
         leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
@@ -2165,12 +2186,12 @@ void LeaderFsm::leftHazard(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader should lose his momentum and stand still.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopChasing();
     leaPtr->speed.x = leaPtr->speed.y = 0;
@@ -2180,15 +2201,15 @@ void LeaderFsm::loseMomentum(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader begins to move via player control.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the movement info structure.
  * @param info2 Unused.
  */
-void LeaderFsm::move(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     MovementInfo* mov = (MovementInfo*) info1;
 
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
 
     Point finalCoords;
     float dummyAngle;
@@ -2209,28 +2230,30 @@ void LeaderFsm::move(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader notifies the mob it's holding that it will be released.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::notifyPikminRelease(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::notifyPikminRelease(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
-    heldPtr->fsm.runEvent(MOB_EV_RELEASED);
+    heldPtr->scriptVM.fsm.runEvent(MOB_EV_RELEASED);
 }
 
 
 /**
  * @brief When a leader opens the inventory.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::openInventory(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::openInventory(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(!leaPtr->player) return;
     leaPtr->player->inventory->open();
@@ -2240,12 +2263,12 @@ void LeaderFsm::openInventory(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader punches.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::punch(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::punch(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopTurning();
     leaPtr->setAnimation(LEADER_ANIM_PUNCHING);
@@ -2256,12 +2279,14 @@ void LeaderFsm::punch(Fsm* fsm, void* info1, void* info2) {
  * @brief Queues the stopping of the plucking session, for after this
  * pluck's end.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::queueStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::queueStopAutoPluck(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->queuedPluckCancel = true;
 }
@@ -2270,12 +2295,12 @@ void LeaderFsm::queueStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader gently releases the held mob.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::release(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::release(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
@@ -2293,12 +2318,12 @@ void LeaderFsm::release(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader searches for a seed next to them.
  * If found, issues events to go towards the seed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::searchSeed(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::searchSeed(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     Distance d;
     Pikmin* newPikmin = nullptr;
@@ -2308,7 +2333,7 @@ void LeaderFsm::searchSeed(Fsm* fsm, void* info1, void* info2) {
     }
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-        fsm->runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+            scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     }
 }
 
@@ -2317,12 +2342,14 @@ void LeaderFsm::searchSeed(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader needs to update its animation to one of the "standing"
  * animations.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setCorrectStandingAnim(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
@@ -2348,16 +2375,18 @@ void LeaderFsm::setCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is no longer turning in place.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsTurningFalse(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setIsTurningFalse(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = false;
-        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
     }
 }
 
@@ -2365,16 +2394,16 @@ void LeaderFsm::setIsTurningFalse(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader starts turning in place.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsTurningTrue(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setIsTurningTrue(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(!leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = true;
-        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
     }
 }
 
@@ -2382,16 +2411,18 @@ void LeaderFsm::setIsTurningTrue(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is no longer walking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsWalkingFalse(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setIsWalkingFalse(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = false;
-        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
     }
 }
 
@@ -2399,16 +2430,16 @@ void LeaderFsm::setIsWalkingFalse(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader starts walking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setIsWalkingTrue(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setIsWalkingTrue(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(!leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = true;
-        LeaderFsm::trySetCorrectStandingAnim(fsm, info1, info2);
+        LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
     }
 }
 
@@ -2416,12 +2447,12 @@ void LeaderFsm::setIsWalkingTrue(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader needs to change to the knocked back animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::setPainAnim(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::setPainAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_PAIN);
 }
@@ -2430,14 +2461,14 @@ void LeaderFsm::setPainAnim(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When the leader must shake latched Pikmin off.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::shake(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::shake(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    LeaderFsm::standStill(fsm, info1, info2);
+    LeaderFsm::standStill(scriptVM, info1, info2);
     leaPtr->setAnimation(LEADER_ANIM_SHAKING);
 }
 
@@ -2446,17 +2477,19 @@ void LeaderFsm::shake(Fsm* fsm, void* info1, void* info2) {
  * @brief When the leader must signal to their follower leaders to
  * stop plucking.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::signalStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::signalStopAutoPluck(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
-            l2Ptr->fsm.runEvent(LEADER_EV_CANCEL);
+            l2Ptr->scriptVM.fsm.runEvent(LEADER_EV_CANCEL);
         }
     }
 }
@@ -2465,18 +2498,18 @@ void LeaderFsm::signalStopAutoPluck(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader uses a spray.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to a size_t with the spray's index.
  * @param info2 Unused.
  */
-void LeaderFsm::spray(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     size_t sprayIdx = *((size_t*) info1);
 
     SprayType& sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
     
     if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
-        fsm->setState(LEADER_STATE_ACTIVE);
+        scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
         return;
     }
     
@@ -2502,7 +2535,7 @@ void LeaderFsm::spray(Fsm* fsm, void* info1, void* info2) {
         }
         //If there is nothing to get sprayed, better not waste it.
         if(affectedMobs.empty())  {
-            fsm->setState(LEADER_STATE_ACTIVE);
+            scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
             return;
         };
         
@@ -2533,7 +2566,7 @@ void LeaderFsm::spray(Fsm* fsm, void* info1, void* info2) {
     }
     
     for(auto& am : affectedMobs) {
-        am->fsm.runEvent(
+        am->scriptVM.fsm.runEvent(
             MOB_EV_TOUCHED_SPRAY, (void*) game.config.misc.sprayOrder[sprayIdx]
         );
     }
@@ -2579,12 +2612,12 @@ void LeaderFsm::spray(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader stops moving.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::standStill(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopCircling();
     leaPtr->stopFollowingPath();
@@ -2596,12 +2629,12 @@ void LeaderFsm::standStill(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader should start a random boredom animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startBoredomAnim(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startBoredomAnim(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     size_t lookingAroundAnimIdx =
         leaPtr->type->animDb->findAnimation("looking_around");
@@ -2631,27 +2664,29 @@ void LeaderFsm::startBoredomAnim(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader must start chasing another.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startChasingLeader(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startChasingLeader(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->focusOnMob(leaPtr->followingGroup);
-    LeaderFsm::updateInGroupChasing(fsm, nullptr, nullptr);
+    LeaderFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
 }
 
 
 /**
  * @brief When a leader starts drinking the drop it touched.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the drop mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startDrinking(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* droPtr = (Mob*) info1;
 
     leaPtr->leaveGroup();
@@ -2665,12 +2700,12 @@ void LeaderFsm::startDrinking(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader starts getting up from being knocked down.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startGettingUp(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
 }
@@ -2679,12 +2714,12 @@ void LeaderFsm::startGettingUp(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader starts a Go Here walk.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Destination point.
  * @param info2 Unused.
  */
-void LeaderFsm::startGoHere(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Point destination = *((Point*) info1);
     
     PathFollowSettings settings;
@@ -2702,14 +2737,14 @@ void LeaderFsm::startGoHere(Fsm* fsm, void* info1, void* info2) {
         );
         
     if(success) {
-        fsm->setState(
+        scriptVM->fsm.setState(
             leaPtr->player ?
             LEADER_STATE_MID_GO_HERE :
             LEADER_STATE_INACTIVE_MID_GO_HERE
         );
         leaPtr->midGoHere = true;
-        LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
-        LeaderFsm::setCorrectStandingAnim(fsm, nullptr, nullptr);
+        LeaderFsm::setIsWalkingTrue(scriptVM, nullptr, nullptr);
+        LeaderFsm::setCorrectStandingAnim(scriptVM, nullptr, nullptr);
     }
 }
 
@@ -2717,20 +2752,22 @@ void LeaderFsm::startGoHere(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader grabs on to a sprout and begins plucking it out.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
-    engineAssert(leaPtr->pluckTarget != nullptr, fsm->getStateHistoryStr());
+    engineAssert(
+        leaPtr->pluckTarget != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
-    leaPtr->pluckTarget->fsm.runEvent(MOB_EV_PLUCKED, (void*) leaPtr);
+    leaPtr->pluckTarget->scriptVM.fsm.runEvent(MOB_EV_PLUCKED, (void*) leaPtr);
     leaPtr->pluckTarget->pluckReserved = false;
     leaPtr->pluckTarget = nullptr;
     leaPtr->setAnimation(LEADER_ANIM_PLUCKING);
-    LeaderFsm::setIsWalkingFalse(fsm, nullptr, nullptr);
+    LeaderFsm::setIsWalkingFalse(scriptVM, nullptr, nullptr);
     
 }
 
@@ -2738,15 +2775,15 @@ void LeaderFsm::startPluck(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader starts riding on a track.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the track mob.
  * @param info2 Unused.
  */
-void LeaderFsm::startRidingTrack(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Track* traPtr = (Track*) info1;
     
-    LeaderFsm::dismiss(fsm, nullptr, nullptr);
+    LeaderFsm::dismiss(scriptVM, nullptr, nullptr);
     leaPtr->leaveGroup();
     leaPtr->stopChasing();
     leaPtr->focusOnMob(traPtr);
@@ -2779,12 +2816,12 @@ void LeaderFsm::startRidingTrack(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader wakes up.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::startWakingUp(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
     
@@ -2802,12 +2839,12 @@ void LeaderFsm::startWakingUp(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader quits the auto-plucking mindset.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopAutoPluck(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::stopAutoPluck(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     if(leaPtr->pluckTarget) {
         leaPtr->stopChasing();
@@ -2823,12 +2860,12 @@ void LeaderFsm::stopAutoPluck(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is no longer in the thrown state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopBeingThrown(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     //Delete the throw particle generator.
     leaPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
@@ -2838,12 +2875,12 @@ void LeaderFsm::stopBeingThrown(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader stops a Go Here walk.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopGoHere(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::stopGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     leaPtr->stopFollowingPath();
     leaPtr->midGoHere = false;
@@ -2853,15 +2890,15 @@ void LeaderFsm::stopGoHere(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader stands still while in another's group.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopInGroup(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopChasing();
-    LeaderFsm::setIsWalkingFalse(fsm, nullptr, nullptr);
+    LeaderFsm::setIsWalkingFalse(scriptVM, nullptr, nullptr);
     leaPtr->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
@@ -2871,12 +2908,12 @@ void LeaderFsm::stopInGroup(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader stops whistling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::stopWhistle(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::stopWhistle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->stopWhistling();
 }
@@ -2885,21 +2922,24 @@ void LeaderFsm::stopWhistle(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief Every tick in the active state.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickActiveState(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::tickActiveState(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
-    leaPtr->face(getAngle(leaPtr->pos, leaPtr->player->leaderCursorWorld), nullptr);
+    leaPtr->face(
+        getAngle(leaPtr->pos, leaPtr->player->leaderCursorWorld), nullptr
+    );
     
     bool shouldBeTurning =
-        getAngleSmallestDiff(leaPtr->angle, leaPtr->intendedTurnAngle) > TAU / 300.0f;
+        getAngleSmallestDiff(leaPtr->angle, leaPtr->intendedTurnAngle) >
+        TAU / 300.0f;
     if(shouldBeTurning) {
-        LeaderFsm::setIsTurningTrue(fsm, info1, info2);
+        LeaderFsm::setIsTurningTrue(scriptVM, info1, info2);
     } else {
-        LeaderFsm::setIsTurningFalse(fsm, info1, info2);
+        LeaderFsm::setIsTurningFalse(scriptVM, info1, info2);
     }
 }
 
@@ -2907,21 +2947,23 @@ void LeaderFsm::tickActiveState(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader has to teleport to its spot in a track it is riding.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    engineAssert(leaPtr->trackInfo != nullptr, fsm->getStateHistoryStr());
+    engineAssert(
+        leaPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
+    );
     
     if(leaPtr->tickTrackRide()) {
         //Finished!
         if(leaPtr->player) {
-            fsm->setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
+            scriptVM->fsm.setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
-            fsm->setState(LEADER_STATE_IDLING, nullptr, nullptr);
+            scriptVM->fsm.setState(LEADER_STATE_IDLING, nullptr, nullptr);
         }
     }
 }
@@ -2930,15 +2972,15 @@ void LeaderFsm::tickTrackRide(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader touches a hazard.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the hazard.
  * @param info2 Pointer to the hitbox that caused this, if any.
  */
-void LeaderFsm::touchedHazard(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Hazard* hazPtr = (Hazard*) info1;
 
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
     MobType::Vulnerability vuln = leaPtr->getHazardVulnerability(hazPtr);
@@ -2979,16 +3021,16 @@ void LeaderFsm::touchedHazard(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When a leader is sprayed.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the spray type.
  * @param info2 Pointer to the mob that sprayed, if any.
  */
-void LeaderFsm::touchedSpray(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
 
-    engineAssert(info1 != nullptr, fsm->getStateHistoryStr());
+    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
         leaPtr->applyStatus(s->effects[e], false, false, sprayer);
@@ -3000,12 +3042,14 @@ void LeaderFsm::touchedSpray(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader tries to update its animation to one of the "standing"
  * ones, if he's not in another animation.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::trySetCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::trySetCorrectStandingAnim(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
@@ -3021,7 +3065,7 @@ void LeaderFsm::trySetCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
         return;
     }
     
-    LeaderFsm::setCorrectStandingAnim(fsm, info1, info2);
+    LeaderFsm::setCorrectStandingAnim(scriptVM, info1, info2);
 }
 
 
@@ -3029,13 +3073,15 @@ void LeaderFsm::trySetCorrectStandingAnim(Fsm* fsm, void* info1, void* info2) {
  * @brief When the leader should update its destination when chasing
  * another leader.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Points to the position struct with the final destination.
  *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
-void LeaderFsm::updateInGroupChasing(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::updateInGroupChasing(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
 
     Point targetPos;
     float targetDist;
@@ -3047,19 +3093,19 @@ void LeaderFsm::updateInGroupChasing(Fsm* fsm, void* info1, void* info2) {
         CHASE_FLAG_ANY_ANGLE, targetDist
     );
     
-    LeaderFsm::setIsWalkingTrue(fsm, nullptr, nullptr);
+    LeaderFsm::setIsWalkingTrue(scriptVM, nullptr, nullptr);
 }
 
 
 /**
  * @brief When a leader begins whistling.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void LeaderFsm::whistle(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::whistle(ScriptVM* scriptVM, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->startWhistling();
 }
@@ -3069,23 +3115,25 @@ void LeaderFsm::whistle(Fsm* fsm, void* info1, void* info2) {
  * @brief When a leader is whistled over by another leader while riding
  * on a track.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void LeaderFsm::whistledWhileRiding(Fsm* fsm, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) fsm->m;
+void LeaderFsm::whistledWhileRiding(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Leader* leaPtr = (Leader*) scriptVM->mob;
     Track* traPtr = (Track*) (leaPtr->trackInfo->m);
 
-    engineAssert(leaPtr->trackInfo, fsm->getStateHistoryStr());
+    engineAssert(leaPtr->trackInfo, scriptVM->fsm.getStateHistoryStr());
     
     if(!traPtr->traType->cancellableWithWhistle) {
         return;
     }
     
     leaPtr->stopTrackRide();
-    LeaderFsm::joinGroup(fsm, info1, nullptr);
-    fsm->setState(LEADER_STATE_IN_GROUP_CHASING);
+    LeaderFsm::joinGroup(scriptVM, info1, nullptr);
+    scriptVM->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
 }
 
 

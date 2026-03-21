@@ -19,6 +19,6 @@
 namespace PileFsm {
 void createFsm(MobType* typ);
 
-void beAttacked(Fsm* fsm, void* info1, void* info2);
-void becomeIdle(Fsm* fsm, void* info1, void* info2);
+void beAttacked(ScriptVM* scriptVM, void* info1, void* info2);
+void becomeIdle(ScriptVM* scriptVM, void* info1, void* info2);
 }

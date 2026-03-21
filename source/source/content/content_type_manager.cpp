@@ -168,10 +168,7 @@ bool AreaContentManager::loadArea(
         game.loadingTextBmp = nullptr;
         game.loadingSubtextBmp = nullptr;
         drawLoadingScreen(
-            areaPtr->name,
-            calculateAreaSubtitle(
-                areaPtr->subtitle, areaPtr->type, areaPtr->mission.preset
-            ),
+            areaPtr->name, areaPtr->subtitle,
             areaPtr->maker,
             1.0f
         );
@@ -197,7 +194,6 @@ bool AreaContentManager::loadArea(
             areaPtr->loadRemindersFromDataNode(&remindersFile);
         }
     }
-
     
     return true;
 }
@@ -1450,7 +1446,7 @@ void MobTypeContentManager::unloadMobType(
         if(!s) continue;
         game.content.sounds.list.free(sPtr);
     }
-    unloadScript(mt);
+    mt->scriptDef.unload();
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         mt->unloadResources();
     }

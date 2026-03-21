@@ -35,26 +35,16 @@ using std::set;
  * @param file File data node to load from.
  * @param areaPtr The area's data.
  * @param record Record object to fill.
+ * @param ported If not nullptr, whether the record needed to be ported from
+ * an older version's format is returned here.
  */
 void loadAreaMissionRecord(
-    DataNode* file, Area* areaPtr, MissionRecord& record
+    DataNode* file, Area* areaPtr, MissionRecord& record, bool* ported
 ) {
-    string missionRecordEntryName =
-        getMissionRecordEntryName(areaPtr);
-        
-    vector<string> recordParts =
-        split(
-            file->getChildByName(
-                missionRecordEntryName
-            )->value,
-            ";", true
-        );
-        
-    if(recordParts.size() == 3) {
-        record.clear = recordParts[0] == "1";
-        record.score = s2i(recordParts[1]);
-        record.date = recordParts[2];
-    }
+    string missionRecordEntryName = getMissionRecordEntryName(areaPtr);
+    record.loadFromDataNode(
+        file->getChildByName(missionRecordEntryName), ported
+    );
 }
 
 
@@ -369,10 +359,6 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalSilver);
     game.sysContent.bmpMenuIcons =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMenuIcons);
-    game.sysContent.bmpMissionClear =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpMissionClear);
-    game.sysContent.bmpMissionFail =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpMissionFail);
     game.sysContent.bmpMissionMob =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMissionMob);
     game.sysContent.bmpMore =
@@ -479,6 +465,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndMissionClear);
     game.sysContent.sndMissionFailed =
         game.content.sounds.list.get(game.sysContentNames.sndMissionFailed);
+    game.sysContent.sndMissionOver =
+        game.content.sounds.list.get(game.sysContentNames.sndMissionOver);
     game.sysContent.sndOneMinuteLeft =
         game.content.sounds.list.get(game.sysContentNames.sndOneMinuteLeft);
     game.sysContent.sndReady =
@@ -614,8 +602,6 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpMedalPlatinum);
     game.content.bitmaps.list.free(game.sysContent.bmpMedalSilver);
     game.content.bitmaps.list.free(game.sysContent.bmpMenuIcons);
-    game.content.bitmaps.list.free(game.sysContent.bmpMissionClear);
-    game.content.bitmaps.list.free(game.sysContent.bmpMissionFail);
     game.content.bitmaps.list.free(game.sysContent.bmpMissionMob);
     game.content.bitmaps.list.free(game.sysContent.bmpMore);
     game.content.bitmaps.list.free(game.sysContent.bmpMouseCursor);
@@ -669,6 +655,7 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndMenuFocus);
     game.content.sounds.list.free(game.sysContent.sndMissionClear);
     game.content.sounds.list.free(game.sysContent.sndMissionFailed);
+    game.content.sounds.list.free(game.sysContent.sndMissionOver);
     game.content.sounds.list.free(game.sysContent.sndOneMinuteLeft);
     game.content.sounds.list.free(game.sysContent.sndReady);
     game.content.sounds.list.free(game.sysContent.sndSwitchPikmin);

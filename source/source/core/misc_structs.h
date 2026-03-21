@@ -268,7 +268,7 @@ struct Console {
     
     //How long its fade period lasts.
     float fadeDuration = 3.0f;
-
+    
     //Log buffer, if any.
     vector<string> log;
     
@@ -770,12 +770,6 @@ struct SystemContentList {
     //Icons for menu buttons.
     ALLEGRO_BITMAP* bmpMenuIcons = nullptr;
     
-    //Mission clear stamp.
-    ALLEGRO_BITMAP* bmpMissionClear = nullptr;
-    
-    //Mission fail stamp.
-    ALLEGRO_BITMAP* bmpMissionFail = nullptr;
-    
     //Mission mob marker.
     ALLEGRO_BITMAP* bmpMissionMob = nullptr;
     
@@ -941,6 +935,9 @@ struct SystemContentList {
     //"Mission failed..." big message.
     ALLEGRO_SAMPLE* sndMissionFailed = nullptr;
     
+    //"Mission over!" big message.
+    ALLEGRO_SAMPLE* sndMissionOver = nullptr;
+    
     //"1 minute left!" big message.
     ALLEGRO_SAMPLE* sndOneMinuteLeft = nullptr;
     
@@ -1078,12 +1075,6 @@ struct SystemContentNames {
     
     //Icons for menu buttons.
     string bmpMenuIcons = "gui/menu_icons";
-    
-    //Mission clear stamp.
-    string bmpMissionClear = "gui/mission_clear";
-    
-    //Mission fail stamp.
-    string bmpMissionFail = "gui/mission_fail";
     
     //Mission mob marker.
     string bmpMissionMob = "gui/mission_mob";
@@ -1247,6 +1238,9 @@ struct SystemContentNames {
     
     //"Mission failed..." big message.
     string sndMissionFailed = "gui/mission_failed";
+    
+    //"Mission over!" big message.
+    string sndMissionOver = "gui/mission_over";
     
     //"1 minute left!" big message.
     string sndOneMinuteLeft = "gui/one_minute_left";

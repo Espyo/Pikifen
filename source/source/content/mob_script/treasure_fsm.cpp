@@ -29,7 +29,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", TREASURE_STATE_IDLE_WAITING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_LANDED); {
@@ -48,7 +48,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_moving", TREASURE_STATE_IDLE_MOVING); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -86,7 +86,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_stuck", TREASURE_STATE_IDLE_STUCK); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
@@ -123,7 +123,7 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("being_delivered", TREASURE_STATE_BEING_DELIVERED); {
-        efc.newEvent(SCRIPT_EV_ON_ENTER); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
         efc.newEvent(MOB_EV_TIMER); {
@@ -132,13 +132,14 @@ void TreasureFsm::createFsm(MobType* typ) {
     }
     
     
-    typ->states = efc.finish();
-    typ->firstStateIdx = fixStates(typ->states, "idle_waiting", typ);
+    typ->scriptDef.fsm.states = efc.finish();
+    typ->scriptDef.fsm.compileStates();
+    typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
-        typ->states.size() == N_TREASURE_STATES,
-        i2s(typ->states.size()) + " registered, " +
+        typ->scriptDef.fsm.states.size() == N_TREASURE_STATES,
+        i2s(typ->scriptDef.fsm.states.size()) + " registered, " +
         i2s(N_TREASURE_STATES) + " in enum."
     );
 }
@@ -151,12 +152,12 @@ void TreasureFsm::createFsm(MobType* typ) {
 /**
  * @brief When a treasure falls into a bottomless pit and should respawn.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TreasureFsm::respawn(Fsm* fsm, void* info1, void* info2) {
-    Treasure* trePtr = (Treasure*) fsm->m;
+void TreasureFsm::respawn(ScriptVM* scriptVM, void* info1, void* info2) {
+    Treasure* trePtr = (Treasure*) scriptVM->mob;
 
     trePtr->becomeUncarriable(); //Force all Pikmin to let go.
     trePtr->becomeCarriable(CARRY_DESTINATION_SHIP);
@@ -167,12 +168,12 @@ void TreasureFsm::respawn(Fsm* fsm, void* info1, void* info2) {
 /**
  * @brief When the treasure should lose its momentum and stand still.
  *
- * @param m The mob.
+ * @param scriptVM The script VM responsible.
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TreasureFsm::standStill(Fsm* fsm, void* info1, void* info2) {
-    Treasure* trePtr = (Treasure*) fsm->m;
+void TreasureFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
+    Treasure* trePtr = (Treasure*) scriptVM->mob;
     
     trePtr->stopChasing();
     trePtr->stopTurning();

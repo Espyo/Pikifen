@@ -33,6 +33,35 @@ bool isInContainer(const ContainerT& cont, const ContentT& item) {
 
 
 /**
+ * @brief Removes the items at the given indexes of a vector. This takes
+ * re-indexation into account.
+ *
+ * @tparam IdxContainerT Type of container of the indexes.
+ * @tparam ContentT Type of contents of the vector.
+ * @param idxs The indexes.
+ * @param v The vector.
+ */
+template<typename IdxContainerT, typename ContentT>
+void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
+    //First, get the list of indexes in vector format.
+    vector<size_t> idxsV;
+    for(auto i : idxs) {
+        idxsV.push_back(i);
+    }
+    
+    //Sort the indexes so we can traverse them in inverse order,
+    //bypassing any re-indexation problems.
+    std::sort(idxsV.begin(), idxsV.end());
+    
+    //Go one by one and delete them.
+    for(size_t i = 0; i < idxsV.size(); i++) {
+        size_t iToUse = idxsV.size() - i - 1;
+        v.erase(v.begin() + idxsV[iToUse]);
+    }
+}
+
+
+/**
  * @brief Removes elements from a vector if they show up in the ban list.
  *
  * @tparam ContentT Type of contents of the vector and ban list.
@@ -134,6 +163,46 @@ template<typename ContentT>
 ContentT getPrevInVectorByIdx(const vector<ContentT>& v, size_t idx) {
     if(v.empty()) return ContentT();
     return v[idx == 0 ? v.size() - 1 : idx - 1];
+}
+
+
+/**
+ * @brief Inserts something in the given position of a vector, but
+ * safely places it in the most appropriate position in case that index is out
+ * of bounds. The inserted item is a copy of the item at the previous position.
+ * If the vector is empty, an empty item is created.
+ *
+ * @tparam ContentT Type of contents of the vector.
+ * @param v The vector.
+ * @param idx The index to insert into.
+ */
+template<typename ContentT>
+void insertCopyInVector(vector<ContentT>& v, size_t idx) {
+    idx = std::min(idx, v.size());
+    if(idx == 0) {
+        v.push_back(ContentT());
+    } else {
+        v.insert(v.begin() + idx, v[idx - 1]);
+    }
+}
+
+
+/**
+ * @brief Inserts something in the given position of a vector, but
+ * safely places it in the most appropriate position in case that index is out
+ * of bounds.
+ *
+ * @tparam ContentT Type of contents of the vector.
+ * @param v The vector.
+ * @param idx The index to insert into.
+ * @param item The item to insert.
+ */
+template<typename ContentT>
+void insertInVector(
+    vector<ContentT>& v, size_t idx, const ContentT& item = ContentT()
+) {
+    idx = std::min(idx, v.size());
+    v.insert(v.begin() + idx, item);
 }
 
 
