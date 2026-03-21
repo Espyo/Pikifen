@@ -323,15 +323,16 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
 void Mob::applyHazard(Hazard* hazPtr, Mob* fromMob) {
     MobType::Vulnerability vuln = getHazardVulnerability(hazPtr);
 
-    //If the status should be overridden, apply it instead.
-    if (vuln.additionalStatus) {
-        applyStatus(vuln.additionalStatus, false, true, fromMob);
-    }
-    else if (vuln.effectMult != 0.0f && vuln.applyOriginalStatus) {
-        //Otherwise, apply the status as long as we are not immune to it.
+    //Apply the status as long as we are not immune to the hazard.
+    if (vuln.effectMult != 0.0f && !vuln.replaceOriginalStatus) {
         for (size_t e = 0; e < hazPtr->effects.size(); e++) {
             applyStatus(hazPtr->effects[e], false, true, fromMob);
         }
+    }
+
+    //If we have an additonal status, apply it after.
+    if (vuln.additionalStatus) {
+        applyStatus(vuln.additionalStatus, false, true, fromMob);
     }
 }
 

@@ -237,7 +237,7 @@ public:
         float effectMult = 1.0f;
         
         //If true, apply the original status the hazard would give.
-        bool applyOriginalStatus = true;
+        bool replaceOriginalStatus = true;
 
         //When affected by the source, also apply this status.
         StatusType* additionalStatus = nullptr;

@@ -364,7 +364,7 @@ void MobType::loadFromDataNode(
             if(!statusName.empty()) {
                 vuln.additionalStatus = statusIt->second;
             }
-            vuln.applyOriginalStatus = applyOriginalStatus;
+            vuln.replaceOriginalStatus = applyOriginalStatus;
             vuln.invulnBlockedBySectors = invulnBlockedBySectors;
         }
     }
@@ -497,7 +497,7 @@ void MobType::loadFromDataNode(
             if(statusOverrideIt != game.content.statusTypes.list.end()) {
                 s.additionalStatus = statusOverrideIt->second;
             }
-            s.applyOriginalStatus = true;
+            s.replaceOriginalStatus = true;
         }
         
     }
