@@ -646,6 +646,9 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(MOB_EV_WHISTLED); {
             efc.changeState("called");
         }
+        efc.newEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
+            efc.changeState("idling");
+        }
         efc.newEvent(MOB_EV_FOCUS_OFF_REACH); {
             efc.changeState("idling");
         }
@@ -687,6 +690,9 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_WHISTLED); {
             efc.changeState("called");
+        }
+        efc.newEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE); {
+            efc.changeState("idling");
         }
         efc.newEvent(MOB_EV_FOCUS_OFF_REACH); {
             efc.changeState("idling");
@@ -1987,7 +1993,7 @@ void PikminFsm::createFsm(MobType* typ) {
 void PikminFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     bool knockbackExists = false;
     
     if(info) {
@@ -2162,7 +2168,7 @@ void PikminFsm::beCrushed(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
@@ -2185,7 +2191,7 @@ void PikminFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::beginPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* leaPtr = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     pikPtr->focusOnMob(leaPtr);
@@ -2212,7 +2218,7 @@ void PikminFsm::beGrabbedByEnemy(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* enePtr = (Mob*) info1;
     Hitbox* hboxPtr = (Hitbox*) info2;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     engineAssert(info2 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
@@ -2237,7 +2243,7 @@ void PikminFsm::beGrabbedByFriend(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     pikPtr->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_HELD]);
@@ -2253,7 +2259,7 @@ void PikminFsm::beGrabbedByFriend(
  */
 void PikminFsm::beReleased(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->isGrabbedByEnemy = false;
     
     size_t heldSoundIdx =
@@ -2275,7 +2281,7 @@ void PikminFsm::beReleased(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::beThrown(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     pikPtr->setAnimation(PIKMIN_ANIM_THROWN);
@@ -2342,7 +2348,7 @@ void PikminFsm::beThrownByBouncer(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pikPtr->setAnimation(PIKMIN_ANIM_THROWN);
     
@@ -2361,7 +2367,7 @@ void PikminFsm::beThrownByBouncer(
 void PikminFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     pikPtr->wasLastHitDing = false;
@@ -2390,7 +2396,7 @@ void PikminFsm::calledWhileKnockedDown(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     //Let's use the "temp" variable to specify whether or not a leader
@@ -2419,7 +2425,7 @@ void PikminFsm::calledWhileKnockedDown(
  */
 void PikminFsm::celebrate(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(game.rng.i(0, 1) == 0) {
         pikPtr->setAnimation(PIKMIN_ANIM_BACKFLIP);
     } else {
@@ -2440,7 +2446,7 @@ void PikminFsm::checkBoredomAnimEnd(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->inBoredAnimation) return;
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     pikPtr->inBoredAnimation = false;
@@ -2464,7 +2470,7 @@ void PikminFsm::checkIncomingAttack(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
@@ -2501,7 +2507,7 @@ void PikminFsm::checkIncomingAttack(
     }
     
     //If we got to this point, then green light for the attack.
-        scriptVM->fsm.runEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED, info1, info2);
+    scriptVM->fsm.runEvent(MOB_EV_PIKMIN_DAMAGE_CONFIRMED, info1, info2);
 }
 
 
@@ -2515,7 +2521,7 @@ void PikminFsm::checkIncomingAttack(
  */
 void PikminFsm::checkLeaderBump(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(game.options.misc.pikminBumpDist >= 0.0f && pikPtr->bumpLock > 0.0f) {
         pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
         return;
@@ -2542,7 +2548,7 @@ void PikminFsm::checkOutgoingAttack(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     float offenseMultiplier = 0;
@@ -2583,7 +2589,7 @@ void PikminFsm::checkShakingAnimEnd(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->inShakingAnimation) return;
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     pikPtr->inShakingAnimation = false;
@@ -2637,7 +2643,7 @@ void PikminFsm::circleOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     PikminFsm::clearTimer(scriptVM, info1, info2);
     pikPtr->inBoredAnimation = false;
 }
@@ -2652,7 +2658,7 @@ void PikminFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->setTimer(0);
 }
 
@@ -2668,9 +2674,7 @@ void PikminFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
-    );
+    if(!pikPtr->focusedMob) return;
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
         //Don't let the Pikmin attack while invulnerable. Otherwise, this can
@@ -2823,7 +2827,7 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::enterOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Onion* oniPtr = (Onion*) pikPtr->focusedMob;
-
+    
     engineAssert(
         pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -2867,7 +2871,7 @@ void PikminFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Mob* leaPtr = pikPtr->focusedMob;
     bool pikIsHolding = pikPtr->getMobHeldInHand();
     
@@ -2904,7 +2908,7 @@ void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::finishCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(
         pikPtr->carryingMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -2935,7 +2939,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(
         pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
-
+    
     Drop* droPtr = (Drop*) pikPtr->focusedMob;
     
     switch(droPtr->droType->effect) {
@@ -2965,7 +2969,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->finishDying();
 }
 
@@ -2989,12 +2993,12 @@ void PikminFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
             prevFocusedMob->type->category->id == MOB_CATEGORY_LEADERS &&
             !pikPtr->canHunt(prevFocusedMob)
         ) {
-                scriptVM->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
+            scriptVM->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
             
         } else if(
             pikPtr->canHunt(prevFocusedMob)
         ) {
-                scriptVM->fsm.runEvent(
+            scriptVM->fsm.runEvent(
                 MOB_EV_OPPONENT_IN_REACH, (void*) prevFocusedMob, nullptr
             );
             
@@ -3044,7 +3048,7 @@ void PikminFsm::finishMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Tool* tooPtr = (Tool*) (pikPtr->focusedMob);
     
     if(!hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
@@ -3074,7 +3078,7 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::flailToLeader(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
-
+    
     pikPtr->chase(caller->pos, caller->z);
 }
 
@@ -3091,7 +3095,7 @@ void PikminFsm::forgetCarriableObject(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->carryingMob) return;
     
     pikPtr->carryingMob->carryInfo->spotInfo[pikPtr->tempI].state =
@@ -3133,7 +3137,7 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->focusedMob) return;
     
     Tool* tooPtr = (Tool*) (pikPtr->focusedMob);
@@ -3151,7 +3155,7 @@ void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pikPtr->setAnimation(PIKMIN_ANIM_KNOCKED_BACK);
 }
@@ -3220,7 +3224,7 @@ void PikminFsm::goToCarriableObject(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* carriableMob = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
@@ -3295,7 +3299,7 @@ void PikminFsm::goToCarriableObject(
 void PikminFsm::goToGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     GroupTask* tasPtr = (GroupTask*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(
@@ -3349,7 +3353,7 @@ void PikminFsm::goToGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     PikminNest* nestPtr = (PikminNest*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     //Pick a leg at random.
@@ -3395,7 +3399,7 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* otherPtr = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(!pikPtr->pikType->canFly) {
@@ -3457,7 +3461,7 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Tool* tooPtr = (Tool*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(tooPtr->reserved && tooPtr->reserved != pikPtr) {
@@ -3510,7 +3514,7 @@ void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     PikminFsm::standStill(scriptVM, nullptr, nullptr);
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
 }
@@ -3525,7 +3529,7 @@ void PikminFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::landAfterPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Mob* leaPtr = pikPtr->focusedMob;
     
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
@@ -3554,7 +3558,7 @@ void PikminFsm::landAfterPluck(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::landOnMob(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     Mob* m2Ptr = info->mob2;
@@ -3623,7 +3627,7 @@ void PikminFsm::landOnMobWhileHolding(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     Mob* m2Ptr = info->mob2;
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     
@@ -3697,7 +3701,7 @@ void PikminFsm::landOnMobWhileHolding(
  */
 void PikminFsm::landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     
     if(!tooPtr) return;
@@ -3747,7 +3751,7 @@ void PikminFsm::landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::leaveOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -3765,7 +3769,7 @@ void PikminFsm::leaveOnion(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Hazard* h = (Hazard*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(h->associatedLiquid) {
@@ -3799,7 +3803,7 @@ void PikminFsm::notifyLeaderRelease(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->followingGroup) return;
     if(pikPtr->holder.m != pikPtr->followingGroup) return;
     pikPtr->followingGroup->scriptVM.fsm.runEvent(MOB_EV_RELEASE_ORDER);
@@ -3837,7 +3841,7 @@ void PikminFsm::panicNewChase(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(
         pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -3874,7 +3878,7 @@ void PikminFsm::reachCarriableObject(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Mob* carriableMob = pikPtr->carryingMob;
     
     Point spotOffset =
@@ -3915,7 +3919,7 @@ void PikminFsm::reachCarriableObject(
  */
 void PikminFsm::reachDismissSpot(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->stopChasing();
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
 }
@@ -3982,7 +3986,7 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Mob* tooPtr = pikPtr->getMobHeldInHand();
     
     if(!tooPtr) return;
@@ -4048,7 +4052,7 @@ void PikminFsm::seedLanded(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::setBumpLock(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->bumpLock = game.config.pikmin.idleBumpDelay;
 }
 
@@ -4106,7 +4110,7 @@ void PikminFsm::sigh(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::sproutEvolve(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(pikPtr->maturity == 0 || pikPtr->maturity == 1) {
         //Leaf to bud, or bud to flower.
         pikPtr->increaseMaturity(1);
@@ -4128,7 +4132,7 @@ void PikminFsm::sproutScheduleEvol(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->setTimer(pikPtr->pikType->sproutEvolutionTime[pikPtr->maturity]);
 }
 
@@ -4142,7 +4146,7 @@ void PikminFsm::sproutScheduleEvol(
  */
 void PikminFsm::standStill(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->stopCircling();
     pikPtr->stopFollowingPath();
     pikPtr->stopChasing();
@@ -4221,7 +4225,7 @@ void PikminFsm::startChasingLeader(
 void PikminFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* droPtr = (Mob*) info1;
-
+    
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
     pikPtr->focusOnMob(droPtr);
@@ -4239,7 +4243,7 @@ void PikminFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::startDying(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->startDying();
     
     pikPtr->leaveGroup();
@@ -4345,7 +4349,7 @@ void PikminFsm::startKnockedDownDying(
  */
 void PikminFsm::startMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->setAnimation(PIKMIN_ANIM_MOB_LANDING);
 }
 
@@ -4359,7 +4363,7 @@ void PikminFsm::startMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::startPanicking(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
@@ -4382,7 +4386,7 @@ void PikminFsm::startPanicking(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::startPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->stopChasing();
     pikPtr->setAnimation(PIKMIN_ANIM_PICKING_UP);
 }
@@ -4399,7 +4403,7 @@ void PikminFsm::startPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::startReturning(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* carriedMob = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
@@ -4530,7 +4534,7 @@ void PikminFsm::startSeedParticles(
  */
 void PikminFsm::stopBeingIdle(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     pikPtr->bumpLock = 0.0f;
     pikPtr->inShakingAnimation = false;
 }
@@ -4559,7 +4563,7 @@ void PikminFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::stopCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     if(!pikPtr->carryingMob) return;
     
     pikPtr->carryingMob->scriptVM.fsm.runEvent(
@@ -4637,7 +4641,7 @@ void PikminFsm::tickEnteringOnion(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(
         pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -4693,7 +4697,7 @@ void PikminFsm::tickGroupTaskWork(
  */
 void PikminFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(
         pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -4728,7 +4732,7 @@ void PikminFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     engineAssert(info2 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
@@ -4758,7 +4762,7 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Hazard* hazPtr = (Hazard*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     Mob* hitboxMob = nullptr;
@@ -4826,7 +4830,7 @@ void PikminFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
@@ -4852,7 +4856,7 @@ void PikminFsm::tryHeldItemHotswap(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     if(!tooPtr) return;
     
@@ -4908,7 +4912,7 @@ void PikminFsm::updateInGroupChasing(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Point targetPos;
     float targetDist; //Unused dummy value.
     
@@ -4943,7 +4947,7 @@ void PikminFsm::whistledWhileHolding(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     
     if(!tooPtr) return;
@@ -4977,7 +4981,7 @@ void PikminFsm::whistledWhileRiding(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(pikPtr->trackInfo, scriptVM->fsm.getStateHistoryStr());
     
     Track* traPtr = (Track*) (pikPtr->trackInfo->m);
@@ -5002,7 +5006,7 @@ void PikminFsm::whistledWhileRiding(
  */
 void PikminFsm::workOnGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-
+    
     engineAssert(
         pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );

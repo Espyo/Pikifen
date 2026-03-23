@@ -181,7 +181,7 @@ public:
     Point rectangularDim;
     
     //-Brain and behavior-
-
+    
     //Script virtual machine.
     ScriptVM scriptVM;
     
@@ -362,6 +362,7 @@ public:
         float mobSpeedBaseline = 0.0f
     );
     void setHealth(bool add, bool ratio, float amount);
+    void setTeam(MOB_TEAM team);
     void setTimer(float time);
     void setVar(const string& name, const string& value);
     void setRadius(float radius);

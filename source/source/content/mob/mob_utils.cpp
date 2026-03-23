@@ -1304,6 +1304,9 @@ Mob* createMob(
         }
     }
     
+    if(firstStateOverride != INVALID) {
+        mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
+    }
     mPtr->scriptVM.fsm.init();
     
     for(size_t c = 0; c < type->children.size(); c++) {

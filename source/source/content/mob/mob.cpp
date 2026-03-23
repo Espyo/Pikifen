@@ -199,7 +199,7 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     }
     
     updateInteractionSpan();
-
+    
     scriptVM.mob = this;
 }
 
@@ -521,7 +521,7 @@ void Mob::applyStatusEffects(
     if(s->causesBetrayal) {
         statuses[listIdx].preBetrayalTeam = team;
         if(fromMob) {
-            team = fromMob->team;
+            setTeam(fromMob->team);
         } else {
             //Try to swap to a different team that makes sense.
             switch(team) {
@@ -529,13 +529,13 @@ void Mob::applyStatusEffects(
             case MOB_TEAM_PLAYER_2:
             case MOB_TEAM_PLAYER_3:
             case MOB_TEAM_PLAYER_4: {
-                team = MOB_TEAM_ENEMY_1;
+                setTeam(MOB_TEAM_ENEMY_1);
                 break;
             } case MOB_TEAM_ENEMY_1:
             case MOB_TEAM_ENEMY_2:
             case MOB_TEAM_ENEMY_3:
             case MOB_TEAM_ENEMY_4: {
-                team = MOB_TEAM_PLAYER_1;
+                setTeam(MOB_TEAM_PLAYER_1);
                 break;
             } default: {
                 break;
@@ -1614,7 +1614,7 @@ void Mob::deleteOldStatusEffects() {
                 }
                 
                 if(sRef.type->causesBetrayal) {
-                    team = sRef.preBetrayalTeam;
+                    setTeam(sRef.preBetrayalTeam);
                 }
                 
                 bool justBuildup =
@@ -3248,7 +3248,7 @@ void Mob::readScriptVars(const ScriptVarReader& svr) {
     
     if(svr.get("team", teamVar)) {
         bool found;
-        team = enumGetValue(mobTeamINames, teamVar, &found);
+        setTeam(enumGetValue(mobTeamINames, teamVar, &found));
         if(!found) {
             game.errors.report(
                 "Unknown team name \"" + teamVar +
@@ -3523,6 +3523,31 @@ void Mob::setRectangularDim(const Point& rectangularDim) {
 
 
 /**
+ * @brief Changes the mob's team.
+ *
+ * @param team New team.
+ */
+void Mob::setTeam(MOB_TEAM team) {
+    this->team = team;
+    if(!scriptVM.fsm.curState) return;
+    
+    //Make mobs that are focusing on this one lose focus.
+    //It's likely the team changed from friendly to opponent, or vice-versa.
+    //Losing focus allows it to regain focus again with the proper handling.
+    //Likewise, the mob itself probably needs to regain focus.
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
+        if(mPtr->focusedMob == this) {
+            mPtr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            mPtr->focusedMob = nullptr;
+        }
+    }
+    scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+    focusedMob = nullptr;
+}
+
+
+/**
  * @brief Changes the timer's time and interval.
  *
  * @param time New time.
@@ -3657,7 +3682,7 @@ void Mob::startDying() {
                 //So they were likely invincible. Let's correct that.
                 disableFlag(member->flags, MOB_FLAG_NON_HUNTABLE);
                 disableFlag(member->flags, MOB_FLAG_NON_HURTABLE);
-                member->team = MOB_TEAM_PLAYER_1;
+                member->setTeam(MOB_TEAM_PLAYER_1);
             }
             member->leaveGroup();
         }

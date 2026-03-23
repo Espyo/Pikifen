@@ -1915,7 +1915,7 @@ void ScriptActionRunners::setTangible(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setTeam(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->team = (MOB_TEAM) s2i(data.args[0]);
+    data.scriptVM->mob->setTeam((MOB_TEAM) s2i(data.args[0]));
 }
 
 

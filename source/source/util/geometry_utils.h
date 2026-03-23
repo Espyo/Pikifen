@@ -197,7 +197,7 @@ void calculateThrow(
     const Point& startXY, float startZ,
     const Point& targetXY, float targetZ,
     float maxH, float gravity,
-    Point* reqSpeedXY, float* reqSpeedZ, float* outHAngle
+    Point* outSpeedXY, float* outSpeedZ, float* outHAngle
 );
 bool circleIntersectsLineSeg(
     const Point& circle, float cr,

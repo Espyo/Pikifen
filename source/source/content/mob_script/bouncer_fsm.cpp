@@ -77,7 +77,7 @@ void BouncerFsm::createFsm(MobType* typ) {
 void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     Bouncer* bouPtr = (Bouncer*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
-
+    
     Mob* targetMob = nullptr;
     
     if(!bouPtr->links.empty()) {
@@ -149,7 +149,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     toucher->face(angle, nullptr, true);
     
-    ev->run(scriptVM, (void*) bouPtr);
+    ev->run(&toucher->scriptVM, (void*) bouPtr);
     
     scriptVM->fsm.setState(BOUNCER_STATE_BOUNCING, info1, info2);
 }

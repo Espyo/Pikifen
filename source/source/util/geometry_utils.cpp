@@ -662,8 +662,8 @@ bool bBoxCheck(
  * @param maxH Maximum height, using the starting Z as the reference.
  * @param gravity Constant for the force of gravity, in units per
  * second squared.
- * @param reqSpeedXY The required X and Y speed is returned here.
- * @param reqSpeedZ The required Z speed is returned here.
+ * @param outSpeedXY The required X and Y speed is returned here.
+ * @param outSpeedZ The required Z speed is returned here.
  * @param outHAngle If not nullptr, the final horizontal angle is
  * returned here.
  */
@@ -671,14 +671,14 @@ void calculateThrow(
     const Point& startXY, float startZ,
     const Point& targetXY, float targetZ,
     float maxH, float gravity,
-    Point* reqSpeedXY, float* reqSpeedZ, float* outHAngle
+    Point* outSpeedXY, float* outSpeedZ, float* outHAngle
 ) {
 
     if(targetZ - startZ > maxH) {
         //If the target is above the maximum height it can be thrown...
         //Then this is an impossible throw.
-        *reqSpeedXY = Point();
-        *reqSpeedZ = 0.0f;
+        *outSpeedXY = Point();
+        *outSpeedZ = 0.0f;
         if(outHAngle) *outHAngle = 0.0f;
         return;
     }
@@ -690,7 +690,7 @@ void calculateThrow(
     //We start with the vertical speed. This will be constant regardless
     //of how far the mob is thrown. In order to reach the required max height,
     //the vertical speed needs to be set thusly:
-    *reqSpeedZ = (float) sqrt(2.0 * (-gravity) * maxH);
+    *outSpeedZ = (float) sqrt(2.0 * (-gravity) * maxH);
     
     //Now that we know the vertical speed, we can figure out how long it takes
     //for the mob to land at the target vertical coordinate. The formula for
@@ -703,11 +703,11 @@ void calculateThrow(
             0.0f,
             (float)
             sqrt(
-                (*reqSpeedZ) * (*reqSpeedZ) +
+                (*outSpeedZ) * (*outSpeedZ) +
                 2.0 * (-gravity) * (heightDelta)
             )
         );
-    float flightTime = ((*reqSpeedZ) + sqrtPart) / (-gravity);
+    float flightTime = ((*outSpeedZ) + sqrtPart) / (-gravity);
     
     //Once we know the total flight time, we can divide the horizontal reach
     //by the total time to get the horizontal speed.
@@ -718,7 +718,7 @@ void calculateThrow(
     
     //Now that we know the vertical and horizontal speed, just split the
     //horizontal speed into X and Y 3D world components.
-    *reqSpeedXY = angleToCoordinates(hAngle, hSpeed);
+    *outSpeedXY = angleToCoordinates(hAngle, hSpeed);
     
     //Return the final horizontal angle, if needed.
     if(outHAngle) {
