@@ -227,6 +227,7 @@ struct MissionMobGroupStatus {
     //--- Public function declarations ---
     
     size_t getNrCleared() const;
+    float getCombinedHealth() const;
     bool remove(Mob* m);
     
 };
@@ -287,8 +288,11 @@ public:
     //Position of the last Pikmin that died. LARGE_FLOAT for none.
     Point lastPikminDeathPos;
     
-    //Position of the last ship that got a treasure. LARGE_FLOAT for none.
-    Point lastShipThatGotTreasurePos;
+    //Position of the last collected treasure. LARGE_FLOAT for none.
+    Point lastCollectedTreasurePos;
+    
+    //Position of the last collected enemy. LARGE_FLOAT for none.
+    Point lastCollectedEnemyPos;
     
     //List of all mobs in the area.
     MobLists mobs;
@@ -484,13 +488,17 @@ public:
         bool showTimesUpMsg = false, MissionEndCond* cond = nullptr,
         bool silent = false
     );
-    size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
+    size_t getAmountOfFieldPikmin(
+        const PikminType* filter = nullptr, bool aliveOnly = false
+    );
     size_t getAmountOfGroupPikmin(
         Player* player, const PikminType* filter = nullptr
     );
     size_t getAmountOfIdlePikmin(const PikminType* filter = nullptr);
     long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
-    long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
+    long getAmountOfTotalPikmin(
+        const PikminType* filter = nullptr, bool aliveOnly = false
+    );
     void isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss);
     bool isPaused() const;
     void tryPause();

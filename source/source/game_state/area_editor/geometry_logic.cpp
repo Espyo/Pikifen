@@ -889,17 +889,25 @@ void AreaEditor::findProblemsIntersectingEdge() {
 void AreaEditor::findProblemsInvalidIdxParamMissionEndCond() {
     for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
         MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
-        MissionEndCondType* cTypePtr = game.missionEndCondTypes[cPtr->type];
-        if(cTypePtr->getEditorInfo().indexParamDescription.empty()) continue;
+        if(
+            cPtr->type != MISSION_END_COND_METRIC_OR_LESS &&
+            cPtr->type != MISSION_END_COND_METRIC_OR_MORE
+        ) {
+            continue;
+        }
+        MissionMetricType* metricTypePtr =
+            game.missionMetricTypes[cPtr->metricType];
+        if(metricTypePtr->getInfo().idxParamName.empty()) continue;
+        
         bool idxInBounds = true;
-        switch(cPtr->type) {
-        case MISSION_END_COND_LEADERS_IN_REGION: {
+        switch(cPtr->metricType) {
+        case MISSION_METRIC_LEADERS_IN_REGION: {
             idxInBounds =
-                cPtr->indexParam < game.curArea->regions.size();
+                cPtr->idxParam < game.curArea->regions.size();
             break;
         } default: {
             idxInBounds =
-                cPtr->indexParam < game.curArea->mission.mobGroups.size();
+                cPtr->idxParam < game.curArea->mission.mobGroups.size();
             break;
         }
         }
@@ -925,43 +933,22 @@ void AreaEditor::findProblemsInvalidIdxParamMissionHudItem() {
     for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
         MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
         if(!iPtr->enabled) continue;
-        bool mustCheckMobs = false;
-        bool mustCheckRegions = false;
-        if(iPtr->contentType == MISSION_HUD_ITEM_CONTENT_HEALTH) {
-            mustCheckMobs = true;
-        }
-        if(
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_TOT ||
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_TOT ||
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CUR_AMT ||
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_REM_AMT ||
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_TOT_AMT
-        ) {
-            if(iPtr->amountType == MISSION_HUD_ITEM_AMT_MOB_GROUP) {
-                mustCheckMobs = true;
-            } else if(
-                iPtr->amountType == MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION
-            ) {
-                mustCheckRegions = true;
-            }
-        }
+        
+        MissionMetricType* metricTypePtr =
+            game.missionMetricTypes[iPtr->metricType];
+        if(metricTypePtr->getInfo().idxParamName.empty()) continue;
+        
         bool idxInBounds = true;
-        if(mustCheckMobs) {
-            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
-                if(
-                    iPtr->idxsList[i2] >= game.curArea->mission.mobGroups.size()
-                ) {
-                    idxInBounds = false;
-                }
-            }
-        } else if(mustCheckRegions) {
-            for(size_t i2 = 0; i2 < iPtr->idxsList.size(); i2++) {
-                if(
-                    iPtr->idxsList[i2] >= game.curArea->regions.size()
-                ) {
-                    idxInBounds = false;
-                }
-            }
+        switch(iPtr->metricType) {
+        case MISSION_METRIC_LEADERS_IN_REGION: {
+            idxInBounds =
+                iPtr->idxParam < game.curArea->regions.size();
+            break;
+        } default: {
+            idxInBounds =
+                iPtr->idxParam < game.curArea->mission.mobGroups.size();
+            break;
+        }
         }
         if(!idxInBounds) {
             problemType = EPT_INVALID_IDX_PARAM_MISSION_HUD_ITEM;
@@ -984,8 +971,21 @@ void AreaEditor::findProblemsInvalidIdxParamMissionHudItem() {
 void AreaEditor::findProblemsInvalidIdxParamMissionScoreCri() {
     for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
         MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
-        if(cPtr->type != MISSION_SCORE_CRITERION_MOB_GROUP) continue;
-        if(cPtr->indexParam >= game.curArea->regions.size()) {
+        
+        bool idxInBounds = true;
+        switch(cPtr->metricType) {
+        case MISSION_METRIC_LEADERS_IN_REGION: {
+            idxInBounds =
+                cPtr->idxParam < game.curArea->regions.size();
+            break;
+        } default: {
+            idxInBounds =
+                cPtr->idxParam < game.curArea->mission.mobGroups.size();
+            break;
+        }
+        }
+        
+        if(!idxInBounds) {
             problemType = EPT_INVALID_IDX_PARAM_MISSION_SCORE_CRI;
             problemTitle =
                 "Invalid number in mission score criterion!";
@@ -1321,7 +1321,10 @@ void AreaEditor::findProblemsNoTimeLimitMissionEndCond() {
     for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
         MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
         if(
-            cPtr->type == MISSION_END_COND_TIME_LIMIT &&
+            (
+                cPtr->type == MISSION_END_COND_METRIC_OR_LESS ||
+                cPtr->type == MISSION_END_COND_METRIC_OR_MORE
+            ) && cPtr->metricType == MISSION_METRIC_SECS_LEFT &&
             game.curArea->mission.timeLimit == 0
         ) {
             problemType = EPT_NO_TIME_LIMIT_MISSION_END_COND;
@@ -1346,7 +1349,7 @@ void AreaEditor::findProblemsNoTimeLimitMissionHudItem() {
         MissionHudItem* iPtr = &game.curArea->mission.hudItems[i];
         if(
             iPtr->enabled &&
-            iPtr->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN &&
+            iPtr->displayType == MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN &&
             game.curArea->mission.timeLimit == 0
         ) {
             problemType = EPT_NO_TIME_LIMIT_MISSION_HUD_ITEM;
@@ -1370,7 +1373,7 @@ void AreaEditor::findProblemsNoTimeLimitMissionScoreCri() {
     for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
         MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
         if(
-            cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT &&
+            cPtr->metricType == MISSION_METRIC_SECS_LEFT &&
             game.curArea->mission.timeLimit == 0
         ) {
             problemType = EPT_NO_TIME_LIMIT_MISSION_SCORE_CRI;

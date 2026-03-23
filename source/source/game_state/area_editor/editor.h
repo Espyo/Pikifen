@@ -1248,6 +1248,11 @@ private:
     void processGuiWidgetsMedalAwardMode(
         int value, const string& widgetLabel, const string& tooltip
     );
+    void processGuiWidgetsMetric(
+        MISSION_METRIC* metricTypeVar,
+        size_t* idxParamVar, size_t* targetParamVar,
+        const string& descriptor, bool targetIsMatch
+    );
     void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
     void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);

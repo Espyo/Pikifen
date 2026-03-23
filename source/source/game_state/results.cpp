@@ -804,7 +804,11 @@ void Results::initGuiMain() {
     gui.addItem(retryButton, "retry");
     
     //Keep playing button.
-    if(endCond && endCond->type == MISSION_END_COND_TIME_LIMIT) {
+    if(
+        endCond &&
+        endCond->type == MISSION_END_COND_METRIC_OR_LESS &&
+        endCond->metricType == MISSION_METRIC_SECS_LEFT
+    ) {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
@@ -1196,30 +1200,29 @@ void Results::populateScoringList() {
     
     for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
         MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
-        MissionScoreCriterionType* typePtr =
-            game.missionScoreCriterionTypes[cPtr->type];
+        MissionMetricType* typePtr =
+            game.missionMetricTypes[cPtr->metricType];
             
         if(cPtr->points == 0) continue;
         
-        string name = typePtr->getFriendlyName();
-        if(name.empty()) name = typePtr->getName();
         bool red = false;
+        int value = 0;
         if(
             (
-                cPtr->type == MISSION_SCORE_CRITERION_SEC_LEFT ||
-                cPtr->type == MISSION_SCORE_CRITERION_SEC_PASSED
+                cPtr->metricType == MISSION_METRIC_SECS_LEFT ||
+                cPtr->metricType == MISSION_METRIC_SECS_PASSED
             ) && game.states.gameplay->missionConsiderZeroTime
         ) {
             red = true;
+        } else {
+            value = typePtr->getAmount(cPtr->idxParam) * cPtr->points;
         }
+        string name = typePtr->getInfo().friendlyName;
+        if(name.empty()) name = typePtr->getInfo().name;
         addNewBulletPoint(
             scoringList,
             name + " x" + i2s(cPtr->points),
-            i2s(
-                typePtr->calculateAmount(
-                    cPtr, &game.curArea->mission, game.states.gameplay
-                ) * cPtr->points
-            ),
+            i2s(value),
             red ? game.config.guiColors.bad : COLOR_WHITE
         );
     }

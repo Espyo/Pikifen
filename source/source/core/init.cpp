@@ -91,14 +91,15 @@ void destroyMisc() {
     al_destroy_bitmap(game.bmpError);
     game.audio.destroy();
     
+    for(size_t v = 0; v < game.missionMetricTypes.size(); v++) {
+        delete game.missionMetricTypes[v];
+    }
+    game.missionMetricTypes.clear();
+    
     for(size_t e = 0; e < game.missionEndCondTypes.size(); e++) {
         delete game.missionEndCondTypes[e];
     }
     game.missionEndCondTypes.clear();
-    for(size_t c = 0; c < game.missionScoreCriterionTypes.size(); c++) {
-        delete game.missionScoreCriterionTypes[c];
-    }
-    game.missionScoreCriterionTypes.clear();
 }
 
 
@@ -1116,32 +1117,30 @@ void initMisc() {
  * @brief Initializes the list of sector types, mission end conditions, etc.
  */
 void initMiscDatabases() {
-    //Mission end conditions.
+    //Mission metric types.
+    //Order matters, and should match MISSION_METRIC.
+    game.missionMetricTypes = {
+        new MissionMetricTypeMobGroup(),
+        new MissionMetricTypeMobGroupHealth(),
+        new MissionMetricTypeSecsLeft(),
+        new MissionMetricTypeSecsPassed(),
+        new MissionMetricTypeLeadersInRegion(),
+        new MissionMetricTypeLivingPikmin(),
+        new MissionMetricTypePikminBorn(),
+        new MissionMetricTypePikminDeaths(),
+        new MissionMetricTypeLeadersLost(),
+        new MissionMetricTypeCollectionPoints(),
+        new MissionMetricTypeDefeatPoints(),
+        new MissionMetricTypeScriptSlot(),
+    };
+    
+    //Mission end condition types.
     //Order matters, and should match MISSION_END_COND.
     game.missionEndCondTypes = {
         new MissionEndCondTypePauseMenu(),
-        new MissionEndCondTypeMobGroup(),
-        new MissionEndCondTypeTimeLimit(),
-        new MissionEndCondTypeLeadersInRegion(),
-        new MissionEndCondTypePikminOrMore(),
-        new MissionEndCondTypePikminOrFewer(),
-        new MissionEndCondTypeLosePikmin(),
-        new MissionEndCondTypeLoseLeaders(),
+        new MissionEndCondTypeMetricOrMore(),
+        new MissionEndCondTypeMetricOrLess(),
         new MissionEndCondTypeTakeDamage(),
-        new MissionEndCondTypeScript(),
-    };
-    
-    //Mission score criteria.
-    //Order matters, and should match MISSION_SCORE_CRITERION.
-    game.missionScoreCriterionTypes = {
-        new MissionScoreCriterionTypeMobGroup(),
-        new MissionScoreCriterionTypePikmin(),
-        new MissionScoreCriterionTypePikminBorn(),
-        new MissionScoreCriterionTypePikminDeaths(),
-        new MissionScoreCriterionTypeSecLeft(),
-        new MissionScoreCriterionTypeSecPassed(),
-        new MissionScoreCriterionTypeCollectionPts(),
-        new MissionScoreCriterionTypeDefeatPts(),
     };
 }
 

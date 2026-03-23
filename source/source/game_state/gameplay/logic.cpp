@@ -42,16 +42,21 @@ int GameplayState::calculateMissionScore(bool forHud) {
     ) {
         MissionScoreCriterion* criPtr =
             &game.curArea->mission.scoreCriteria[c];
-        MissionScoreCriterionType* criTypePtr =
-            game.missionScoreCriterionTypes[criPtr->type];
+        MissionMetricType* typePtr =
+            game.missionMetricTypes[criPtr->metricType];
             
         if(!criPtr->affectsHud && forHud) continue;
         
-        size_t amount =
-            criTypePtr->calculateAmount(
-                criPtr, &game.curArea->mission, this
-            );
-        score += amount * criPtr->points;
+        int value = typePtr->getAmount(criPtr->idxParam) * criPtr->points;
+        if(
+            (
+                criPtr->metricType == MISSION_METRIC_SECS_LEFT ||
+                criPtr->metricType == MISSION_METRIC_SECS_PASSED
+            ) && missionConsiderZeroTime
+        ) {
+            value = 0;
+        }
+        score += value;
     }
     
     return score;
@@ -962,11 +967,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 MissionEndCondType* condTypePtr =
                     game.missionEndCondTypes[condPtr->type];
                     
-                if(condTypePtr->isMet(condPtr, &game.curArea->mission, this)) {
+                if(condTypePtr->isMet(condPtr)) {
                     endMission(
                         condPtr->clear, condPtr->zeroTimeForScore,
                         condPtr->neutralMood,
-                        condPtr->type == MISSION_END_COND_TIME_LIMIT,
+                        condPtr->type == MISSION_END_COND_METRIC_OR_LESS &&
+                        condPtr->metricType == MISSION_METRIC_SECS_LEFT,
                         condPtr
                     );
                 }
@@ -979,12 +985,13 @@ void GameplayState::doGameplayLogic(float deltaT) {
             lastHurtLeaderPos = Point(LARGE_FLOAT);
             lastPikminBornPos = Point(LARGE_FLOAT);
             lastPikminDeathPos = Point(LARGE_FLOAT);
-            lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
+            lastCollectedTreasurePos = Point(LARGE_FLOAT);
+            lastCollectedEnemyPos = Point(LARGE_FLOAT);
             
             //Mission score.
             missionScore = calculateMissionScore(true);
             
-            if(missionScore != oldMissionScore) {
+            if(missionScore != oldMissionScore && missionScoreCurText) {
                 missionScoreCurText->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );

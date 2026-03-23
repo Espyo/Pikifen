@@ -3334,76 +3334,49 @@ void AreaEditor::processGuiPanelMissionEndCond() {
         
             MissionEndCond* condPtr =
                 &game.curArea->mission.endConds[curCondIdx];
-            MissionEndCondType::EditorInfo condEditorInfo =
-                game.missionEndCondTypes[condPtr->type]->getEditorInfo();
+            MissionEndCondType::Info condInfo =
+                game.missionEndCondTypes[condPtr->type]->getInfo();
                 
             //End condition type combobox.
             vector<string> condTypeNames;
             for(size_t e = 0; e < game.missionEndCondTypes.size(); e++) {
-                condTypeNames.push_back(game.missionEndCondTypes[e]->getName());
+                condTypeNames.push_back(
+                    game.missionEndCondTypes[e]->getInfo().name
+                );
             }
             int missionCondType = condPtr->type;
             if(ImGui::Combo("Type", &missionCondType, condTypeNames, 15)) {
                 registerChange("mission end condition type change");
                 condPtr->type = (MISSION_END_COND) missionCondType;
-                condEditorInfo =
-                    game.missionEndCondTypes[condPtr->type]->getEditorInfo();
-                condPtr->indexParam = 0;
-                condPtr->amountParam = 1;
+                condInfo =
+                    game.missionEndCondTypes[condPtr->type]->getInfo();
+                condPtr->idxParam = 0;
+                condPtr->matchAmount = 1;
             }
             setTooltip(
                 "What thing needs to happen for the end condition to trigger."
             );
             
-            if(!condEditorInfo.description.empty()) {
+            if(!condInfo.description.empty()) {
             
                 //End condition description text.
-                ImGui::BeginDisabled();
-                ImGui::TextWrapped("%s", condEditorInfo.description.c_str());
-                ImGui::EndDisabled();
+                ImGui::TextDisabled("(%s info)", condInfo.name.c_str());
+                setTooltip(wordWrap(condInfo.description, 50));
                 
             }
             
-            if(!condEditorInfo.indexParamName.empty()) {
+            if(
+                condPtr->type == MISSION_END_COND_METRIC_OR_MORE ||
+                condPtr->type == MISSION_END_COND_METRIC_OR_LESS
+            ) {
             
-                //End condition index param value.
-                int number = (int) condPtr->indexParam;
-                number++;
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        (condEditorInfo.indexParamName + "##idxParam").c_str(),
-                        &number, 0.1f, 1, INT_MAX
-                    )
-                ) {
-                    registerChange("mission end condition number change");
-                    number--;
-                    condPtr->indexParam = (size_t) number;
-                }
-                setTooltip(
-                    condEditorInfo.indexParamDescription,
-                    "", WIDGET_EXPLANATION_DRAG
-                );
+                ImGui::Spacer();
                 
-            }
-            
-            if(!condEditorInfo.amountParamName.empty()) {
-            
-                //End condition amount param value.
-                int number = (int) condPtr->amountParam;
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        (condEditorInfo.amountParamName + "##amtParam").c_str(),
-                        &number, 0.1f, 0, INT_MAX
-                    )
-                ) {
-                    registerChange("mission end condition number change");
-                    condPtr->amountParam = (size_t) number;
-                }
-                setTooltip(
-                    condEditorInfo.amountParamDescription,
-                    "", WIDGET_EXPLANATION_DRAG
+                //Metric widgets.
+                processGuiWidgetsMetric(
+                    &condPtr->metricType, &condPtr->idxParam,
+                    &condPtr->matchAmount,
+                    "mission end condition", true
                 );
                 
             }
@@ -3520,17 +3493,33 @@ void AreaEditor::processGuiPanelMissionEssentials() {
             "whereas by picking \"custom\" you can control all the details."
         );
         
-        //Time limit values.
-        int seconds = (int) game.curArea->mission.timeLimit;
-        if(ImGui::DragTime2("Time limit", &seconds)) {
+        //Time limit checkbox.
+        bool useTimeLimit = game.curArea->mission.timeLimit > 0;
+        if(ImGui::Checkbox("Time limit", &useTimeLimit)) {
             registerChange("mission time limit change");
-            game.curArea->mission.timeLimit = (size_t) seconds;
+            if(useTimeLimit) {
+                game.curArea->mission.timeLimit = MISSION::DEF_TIME_LIMIT;
+            } else {
+                game.curArea->mission.timeLimit = 0;
+            }
             dayDurationNeedsUpdate = true;
         }
-        setTooltip(
-            "Time limit for the mission. 0 means no time limit.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
+        setTooltip("Whether to use a time limit for the mission.");
+        
+        //Time limit values.
+        if(useTimeLimit) {
+            int seconds = (int) game.curArea->mission.timeLimit;
+            ImGui::SameLine();
+            if(ImGui::DragTime2("##timeLimitValues", &seconds)) {
+                registerChange("mission time limit change");
+                game.curArea->mission.timeLimit = std::max(seconds, 1);
+                dayDurationNeedsUpdate = true;
+            }
+            setTooltip(
+                "Time limit for the mission.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+        }
         
         ImGui::TreePop();
     }
@@ -3614,106 +3603,56 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         
         if(itemPtr->enabled) {
         
-            //Content type combobox.
-            int contentType = itemPtr->contentType;
+            //Display type combobox.
+            int displayType = itemPtr->displayType;
             if(
                 ImGui::Combo(
-                    "Content type", &contentType,
-                    enumGetNames(missionHudItemContentTypeNames), 15
+                    "Display type", &displayType,
+                    enumGetNames(missionHudItemDisplayTypeNames), 15
                 )
             ) {
-                registerChange("mission HUD item content type change");
-                itemPtr->contentType = (MISSION_HUD_ITEM_CONTENT) contentType;
+                registerChange("mission HUD item display type change");
+                itemPtr->displayType = (MISSION_HUD_ITEM_DISPLAY) displayType;
             }
             setTooltip(
-                "What sort of content will be shown inside."
+                "How the information will be displayed to the player."
             );
             
-            const auto processIdxsListWidgets =
-                [this] (
-                    vector<size_t>* idxs,
-                    const string& label, const string& term
-            ) {
+            switch(itemPtr->displayType) {
+            case MISSION_HUD_ITEM_DISPLAY_HEALTH:
+            case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
+            case MISSION_HUD_ITEM_DISPLAY_REM_TOT:
+            case MISSION_HUD_ITEM_DISPLAY_CUR:
+            case MISSION_HUD_ITEM_DISPLAY_REM:
+            case MISSION_HUD_ITEM_DISPLAY_TOT: {
+        
+                bool hasTotal =
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_HEALTH ||
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_CUR_TOT ||
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+                    
+                //Metric widgets.
+                processGuiWidgetsMetric(
+                    &itemPtr->metricType, &itemPtr->idxParam,
+                    hasTotal ? &itemPtr->totalAmount : nullptr,
+                    "mission HUD item", false
+                );
+                break;
+                
+            } default: {
+                break;
+            }
+            }
             
-                if(idxs->empty()) idxs->push_back(0);
-                
-                for(size_t i = 0; i < idxs->size(); i++) {
-                
-                    //Add button.
-                    if(
-                        ImGui::ImageButton(
-                            "add" + label + "IdxButton" + i2s(i),
-                            editorIcons[EDITOR_ICON_ADD],
-                            Point(EDITOR::ICON_BMP_SIZE) * 0.75f
-                        )
-                    ) {
-                        registerChange(
-                            "mission HUD item " + term +
-                            " addition"
-                        );
-                        idxs->insert(idxs->begin() + i, 0);
-                    }
-                    setTooltip("Add a new " + term + ".");
-                    
-                    //Remove button.
-                    ImGui::SameLine();
-                    if(idxs->size() != 1) {
-                    
-                        if(
-                            ImGui::ImageButton(
-                                "rem" + label + "IdxButton" + i2s(i),
-                                editorIcons[EDITOR_ICON_REMOVE],
-                                Point(EDITOR::ICON_BMP_SIZE) * 0.75f
-                            )
-                        ) {
-                            registerChange(
-                                "mission HUD item " + term +
-                                " removal"
-                            );
-                            idxs->erase(idxs->begin() + i);
-                        }
-                        setTooltip("Remove this " + term + ".");
-                        
-                    } else {
-                    
-                        ImGui::Dummy(
-                            ImVec2(
-                                EDITOR::ICON_BMP_SIZE,
-                                EDITOR::ICON_BMP_SIZE
-                            )
-                        );
-                        
-                    }
-                    
-                    //Number input.
-                    int idx = idxs->operator[](i);
-                    idx++;
-                    ImGui::SameLine();
-                    ImGui::SetNextItemWidth(50);
-                    if(
-                        ImGui::DragInt(
-                            (label + "##idx" + i2s(i)).c_str(),
-                            &idx, 0.1f, 1, INT_MAX
-                        )
-                    ) {
-                        registerChange(
-                            "mission HUD item " + term + " change"
-                        );
-                        idx--;
-                        idxs->operator[](i) = (size_t) idx;
-                    }
-                    setTooltip(
-                        "Number of the " + term + " to get the\n"
-                        "amounts from. If you specify multiple ones,\n"
-                        "it combines all of them."
-                    );
-                    
-                }
-                
-            };
-            
-            switch(itemPtr->contentType) {
-            case MISSION_HUD_ITEM_CONTENT_TEXT: {
+            switch(itemPtr->displayType) {
+            case MISSION_HUD_ITEM_DISPLAY_TEXT:
+            case MISSION_HUD_ITEM_DISPLAY_HEALTH:
+            case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
+            case MISSION_HUD_ITEM_DISPLAY_REM_TOT:
+            case MISSION_HUD_ITEM_DISPLAY_CUR:
+            case MISSION_HUD_ITEM_DISPLAY_REM:
+            case MISSION_HUD_ITEM_DISPLAY_TOT: {
         
                 //Text input.
                 string text = itemPtr->text;
@@ -3722,131 +3661,23 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                     itemPtr->text = text;
                 }
                 setTooltip(
-                    "The HUD item won't have anything other than this text."
+                    "Text to show in the HUD item."
                 );
                 
                 break;
                 
-            } case MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN: {
-        
+            } default: {
                 break;
-                
-            } case MISSION_HUD_ITEM_CONTENT_CLOCK_UP: {
-        
-                break;
-                
-            } case MISSION_HUD_ITEM_CONTENT_SCORE: {
-        
-                break;
-                
-            } case MISSION_HUD_ITEM_CONTENT_HEALTH: {
-        
-                //Label input.
-                string text = itemPtr->text;
-                if(ImGui::InputText("Label", &text)) {
-                    registerChange("mission HUD item text change");
-                    itemPtr->text = text;
-                }
-                setTooltip(
-                    "Text to label the bar with, if any."
-                );
-                
-                //Mob group number widgets.
-                processIdxsListWidgets(
-                    &itemPtr->idxsList, "Mob group number", "mob group"
-                );
-                
-                break;
-                
-            } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
-            case MISSION_HUD_ITEM_CONTENT_REM_TOT:
-            case MISSION_HUD_ITEM_CONTENT_CUR_AMT:
-            case MISSION_HUD_ITEM_CONTENT_REM_AMT:
-            case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
-        
-                //Label input.
-                string text = itemPtr->text;
-                if(ImGui::InputText("Label", &text)) {
-                    registerChange("mission HUD item text change");
-                    itemPtr->text = text;
-                }
-                setTooltip(
-                    "Text to accompany the amounts, if any."
-                );
-                
-                //Amount type combobox.
-                int amountType = itemPtr->amountType;
-                if(
-                    ImGui::Combo(
-                        "Amount type", &amountType,
-                        enumGetNames(missionHudItemAmountTypeNames), 15
-                    )
-                ) {
-                    registerChange("mission HUD item amount type change");
-                    itemPtr->amountType = (MISSION_HUD_ITEM_AMT) amountType;
-                }
-                setTooltip(
-                    "What type of information the amount "
-                    "should be calculated from."
-                );
-                
-                if(
-                    itemPtr->amountType ==
-                    MISSION_HUD_ITEM_AMT_MOB_GROUP
-                ) {
-                
-                    //Mob group number widgets.
-                    processIdxsListWidgets(
-                        &itemPtr->idxsList, "Mob group number", "mob group"
-                    );
-                    
-                }
-                
-                if(
-                    itemPtr->amountType ==
-                    MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION
-                ) {
-                
-                    //Region number widgets.
-                    processIdxsListWidgets(
-                        &itemPtr->idxsList,
-                        "Region number", "region"
-                    );
-                    
-                }
-                
-                if(itemPtr->contentType != MISSION_HUD_ITEM_CONTENT_CUR_AMT) {
-                
-                    //Total amount value.
-                    int total = itemPtr->totalAmount;
-                    if(
-                        ImGui::DragInt(
-                            "Total", &total, 0.1f, 1, INT_MAX
-                        )
-                    ) {
-                        registerChange("mission HUD item amount change");
-                        itemPtr->totalAmount = total;
-                    }
-                    setTooltip(
-                        "Amount to use as the total."
-                    );
-                    
-                    break;
-                    
-                }
-                
-                break;
-                
             }
             }
             
         }
         
         ImGui::TreePop();
-        
     }
     
     ImGui::Spacer();
+    
 }
 
 
@@ -4025,10 +3856,18 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 size_t e = 0; e < game.curArea->mission.endConds.size(); e++
             ) {
                 MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
-                if(ePtr->type != MISSION_END_COND_MOB_GROUP) continue;
-                if(ePtr->indexParam == 0) continue;
+                if(
+                    ePtr->type != MISSION_END_COND_METRIC_OR_LESS &&
+                    ePtr->type != MISSION_END_COND_METRIC_OR_MORE
+                ) {
+                    continue;
+                }
+                if(ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS) {
+                    continue;
+                }
+                if(ePtr->idxParam == 0) continue;
                 adjustMisalignedIndex(
-                    ePtr->indexParam, prevCurMobGroupIdx, true
+                    ePtr->idxParam, prevCurMobGroupIdx, true
                 );
             }
             setStatus(
@@ -4057,10 +3896,20 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                     size_t e = 0; e < game.curArea->mission.endConds.size(); e++
                 ) {
                     MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
-                    if(ePtr->type != MISSION_END_COND_MOB_GROUP) continue;
-                    if(ePtr->indexParam == 0) continue;
+                    if(
+                        ePtr->type != MISSION_END_COND_METRIC_OR_LESS &&
+                        ePtr->type != MISSION_END_COND_METRIC_OR_MORE
+                    ) {
+                        continue;
+                    }
+                    if(
+                        ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS
+                    ) {
+                        continue;
+                    }
+                    if(ePtr->idxParam == 0) continue;
                     adjustMisalignedIndex(
-                        ePtr->indexParam, prevCurMobGroupIdx, false
+                        ePtr->idxParam, prevCurMobGroupIdx, false
                     );
                 }
                 setStatus(
@@ -4250,19 +4099,10 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
             MissionScoreCriterion* criterionPtr =
                 &game.curArea->mission.scoreCriteria[curCriterionIdx];
                 
-            //Criterion type combobox.
-            int criterionType = criterionPtr->type;
-            if(
-                ImGui::Combo(
-                    "Type", &criterionType,
-                    enumGetNames(missionScoreCriterionTypeNames), 15
-                )
-            ) {
-                registerChange("mission score criterion type change");
-                criterionPtr->type = (MISSION_SCORE_CRITERION) criterionType;
-            }
-            setTooltip(
-                "What aspect of gameplay gets judged for this criterion."
+            //Metric widgets.
+            processGuiWidgetsMetric(
+                &criterionPtr->metricType, &criterionPtr->idxParam,
+                nullptr, "mission score criterion", false
             );
             
             //Point multiplier value.
@@ -4297,29 +4137,6 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "in real time.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            
-            if(criterionPtr->type == MISSION_SCORE_CRITERION_MOB_GROUP) {
-            
-                //Mob group number value.
-                int number = (int) criterionPtr->indexParam;
-                number++;
-                ImGui::SetNextItemWidth(50);
-                if(
-                    ImGui::DragInt(
-                        "Mob group number",
-                        &number, 0.1f, 1, INT_MAX
-                    )
-                ) {
-                    registerChange("mission score criterion group change");
-                    number--;
-                    criterionPtr->indexParam = (size_t) number;
-                }
-                setTooltip(
-                    "Number of the mob group to check the mobs of.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
         }
         
         ImGui::TreePop();
@@ -6538,4 +6355,139 @@ void AreaEditor::processGuiWidgetsMedalAwardMode(
             (MISSION_MEDAL_AWARD_MODE) mode;
     }
     setTooltip(tooltip);
+}
+
+
+/**
+ * @brief Process the Dear ImGui widgets that let the user pick a
+ * mission metric's information.
+ *
+ * @param metricTypeVar Pointer to the variable that holds the performance
+ * variable type.
+ * @param idxParamVar Pointer to the variable that holds the index parameter.
+ * @param targetParamVar Pointer to the variable that holds the match/total
+ * amount parameter. If nullptr, target amount widgets will not be used.
+ * @param descriptor Descriptor to use for the undo/redo history.
+ * @param targetIsMatch Whether the target parameter is a match or a total.
+ * Used for frontend text only.
+ */
+void AreaEditor::processGuiWidgetsMetric(
+    MISSION_METRIC* metricTypeVar,
+    size_t* idxParamVar, size_t* targetParamVar,
+    const string& descriptor, bool targetIsMatch
+) {
+    //Metric type combobox.
+    vector<string> metricTypeNames;
+    for(size_t v = 0; v < game.missionMetricTypes.size(); v++) {
+        metricTypeNames.push_back(
+            game.missionMetricTypes[v]->getInfo().name
+        );
+    }
+    int metricType = *metricTypeVar;
+    if(
+        ImGui::Combo(
+            "Metric type", &metricType, metricTypeNames, 15
+        )
+    ) {
+        registerChange(descriptor + " type change");
+        *metricTypeVar = (MISSION_METRIC) metricType;
+        if(targetParamVar) {
+            if(game.missionMetricTypes[metricType]->getInfo().hasAutoTarget) {
+                *targetParamVar = INVALID;
+            } else {
+                *targetParamVar = 1;
+            }
+        }
+    }
+    setTooltip("What metric to check for.");
+    
+    MissionMetricType::Info pvInfo =
+        game.missionMetricTypes[metricType]->getInfo();
+        
+    if(!pvInfo.idxParamName.empty()) {
+    
+        //Metric index param value.
+        int number = (int) * idxParamVar;
+        number++;
+        ImGui::SetNextItemWidth(50);
+        if(
+            ImGui::DragInt(
+                (pvInfo.idxParamName + "##idxParam").c_str(),
+                &number, 0.1f, 1, INT_MAX
+            )
+        ) {
+            registerChange(descriptor + " number change");
+            number--;
+            *idxParamVar = (size_t) number;
+        }
+        setTooltip(
+            pvInfo.idxParamDescription,
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+    }
+    
+    if(targetParamVar) {
+        bool useManualTarget = false;
+        if(!pvInfo.hasAutoTarget) useManualTarget = true;
+        else if(*targetParamVar != INVALID) useManualTarget = true;
+        
+        //Use manual target amount checkbox.
+        if(!pvInfo.hasAutoTarget) {
+            ImGui::BeginDisabled();
+        }
+        string targetDescriptor = targetIsMatch ? "match" : "total";
+        if(
+            ImGui::Checkbox(
+                ("Use manual " + targetDescriptor + " amount").c_str(),
+                &useManualTarget
+            )
+        ) {
+            if(useManualTarget) {
+                *targetParamVar =
+                    pvInfo.hasAutoTarget ?
+                    game.missionMetricTypes[metricType]->getTarget(
+                        *idxParamVar, *targetParamVar
+                    ) :
+                    1;
+            } else {
+                *targetParamVar = INVALID;
+            }
+        }
+        setTooltip(
+            "If checked, use a manually-written " +
+            targetDescriptor + " amount.\n"
+            "If unchecked, use the " +
+            targetDescriptor + " amount automatically obtained\n"
+            "from the metric, if possible."
+        );
+        if(!pvInfo.hasAutoTarget) {
+            ImGui::EndDisabled();
+        }
+        
+        //Metric target amount param value.
+        int targetAmount =
+            game.missionMetricTypes[metricType]->getTarget(
+                *idxParamVar, *targetParamVar
+            );
+        ImGui::Indent();
+        ImGui::SetNextItemWidth(50);
+        if(!useManualTarget) ImGui::BeginDisabled();
+        if(
+            ImGui::DragInt(
+                "Amount",
+                &targetAmount, 0.1f, 0, INT_MAX
+            )
+        ) {
+            registerChange(descriptor + " number change");
+            *targetParamVar = (size_t) targetAmount;
+        }
+        setTooltip(
+            strToSentence(targetDescriptor) + " amount to check for.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+        if(!useManualTarget) ImGui::EndDisabled();
+        
+    }
 }

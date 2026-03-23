@@ -416,6 +416,7 @@ void Area::clone(Area& other) {
     other.mission.preset = mission.preset;
     other.mission.endConds = mission.endConds;
     other.mission.mobGroups = mission.mobGroups;
+    other.mission.hudItems = mission.hudItems;
     other.mission.timeLimit = mission.timeLimit;
     other.mission.medalAwardMode = mission.medalAwardMode;
     other.mission.startingPoints = mission.startingPoints;
@@ -1517,16 +1518,21 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         
         ReaderSetter cRS(condNode);
         int typeInt = 0;
+        int metricTypeInt = 0;
+        int matchAmountInt = 0;
         
         cRS.set("type", typeInt);
-        cRS.set("index_param", newCond.indexParam);
-        cRS.set("amount_param", newCond.amountParam);
+        cRS.set("metric_type", metricTypeInt);
+        cRS.set("index_param", newCond.idxParam);
+        cRS.set("match_amount", matchAmountInt);
         cRS.set("clear", newCond.clear);
         cRS.set("zero_time_for_score", newCond.zeroTimeForScore);
         cRS.set("neutral_mood", newCond.neutralMood);
         cRS.set("reason", newCond.reason);
         
         newCond.type = (MISSION_END_COND) typeInt;
+        newCond.metricType = (MISSION_METRIC) metricTypeInt;
+        newCond.matchAmount = matchAmountInt == -1 ? INVALID : matchAmountInt;
         
         mission.endConds.push_back(newCond);
     }
@@ -1567,25 +1573,20 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionHudItem newItem;
         
         ReaderSetter iRS(itemNode);
-        int contentTypeInt = 0;
-        int amountTypeInt = 0;
-        string idxsListStr;
+        int displayTypeInt = 0;
+        int metricTypeInt = 0;
+        int totalAmountInt = 0;
         
         iRS.set("enabled", newItem.enabled);
-        iRS.set("content_type", contentTypeInt);
+        iRS.set("display_type", displayTypeInt);
+        iRS.set("metric_type", metricTypeInt);
+        iRS.set("index_param", newItem.idxParam);
         iRS.set("text", newItem.text);
-        iRS.set("amount_type", amountTypeInt);
-        iRS.set("total_amount", newItem.totalAmount);
-        iRS.set("idxs_list", idxsListStr);
+        iRS.set("total_amount", totalAmountInt);
         
-        newItem.contentType = (MISSION_HUD_ITEM_CONTENT) contentTypeInt;
-        newItem.amountType = (MISSION_HUD_ITEM_AMT) amountTypeInt;
-        
-        vector<string> idxsListStrVec = semicolonListToVector(idxsListStr);
-        newItem.idxsList.reserve(idxsListStrVec.size());
-        for(size_t i = 0; i < idxsListStrVec.size(); i++) {
-            newItem.idxsList.push_back(s2i(idxsListStrVec[i]));
-        }
+        newItem.displayType = (MISSION_HUD_ITEM_DISPLAY) displayTypeInt;
+        newItem.metricType = (MISSION_METRIC) metricTypeInt;
+        newItem.totalAmount = totalAmountInt == -1 ? INVALID : totalAmountInt;
         
         mission.hudItems[i] = newItem;
     }
@@ -1599,14 +1600,14 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionScoreCriterion newCriterion;
         
         ReaderSetter cRS(criterionNode);
-        int typeInt = 0;
+        int metricTypeInt = 0;
         
-        cRS.set("type", typeInt);
-        cRS.set("index_param", newCriterion.indexParam);
+        cRS.set("type", metricTypeInt);
+        cRS.set("index_param", newCriterion.idxParam);
         cRS.set("points", newCriterion.points);
         cRS.set("affects_hud", newCriterion.affectsHud);
         
-        newCriterion.type = (MISSION_SCORE_CRITERION) typeInt;
+        newCriterion.metricType = (MISSION_METRIC) metricTypeInt;
         
         mission.scoreCriteria.push_back(newCriterion);
     }
@@ -1750,9 +1751,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = goalMobGroupIdx,
-            .amountParam = goalAllMobs ? 0 : goalAmount,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
+            .idxParam = goalMobGroupIdx,
+            .matchAmount = goalAllMobs ? 0 : goalAmount,
             .clear = true,
             .neutralMood = false,
             .reason = "Got all treasures!",
@@ -1784,8 +1786,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = goalMobGroupIdx,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
+            .idxParam = goalMobGroupIdx,
             .clear = true,
             .neutralMood = false,
             .reason = "Got all enemies!",
@@ -1807,7 +1810,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
+            .type = MISSION_END_COND_METRIC_OR_LESS,
+            .metricType = MISSION_METRIC_SECS_LEFT,
+            .matchAmount = 0,
             .clear = true,
             .neutralMood = false,
             .reason = "Survived!",
@@ -1837,9 +1842,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_LEADERS_IN_REGION,
-            .indexParam = exitRegionIdx,
-            .amountParam = goalAllMobs ? 1 : goalMobIdxs.size(),
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_LEADERS_IN_REGION,
+            .idxParam = exitRegionIdx,
+            .matchAmount = goalAllMobs ? 1 : goalMobIdxs.size(),
             .clear = true,
             .neutralMood = false,
             .reason = "Got to the exit!",
@@ -1861,8 +1867,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
         );
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_PIKMIN_OR_MORE,
-            .amountParam = goalAmount,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_LIVING_PIKMIN,
+            .matchAmount = goalAmount,
             .clear = true,
             .neutralMood = false,
             .reason = "Grew " + i2s(goalAmount) + " Pikmin!",
@@ -1880,7 +1887,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
     ) {
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_TIME_LIMIT,
+            .type = MISSION_END_COND_METRIC_OR_LESS,
+            .metricType = MISSION_METRIC_SECS_LEFT,
+            .matchAmount = 0,
             .clear = false,
             .zeroTimeForScore =
             hasFlag(pointLossData, MISSION_FAIL_COND_OLD_TIME_LIMIT),
@@ -1897,8 +1906,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
     ) {
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_PIKMIN_OR_FEWER,
-            .amountParam = failTooFewPikAmount,
+            .type = MISSION_END_COND_METRIC_OR_LESS,
+            .metricType = MISSION_METRIC_LIVING_PIKMIN,
+            .matchAmount = failTooFewPikAmount,
             .clear = false,
             .neutralMood = false,
             .reason = "Reached " + i2s(failTooFewPikAmount) + " Pikmin!",
@@ -1912,8 +1922,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
     ) {
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_PIKMIN_OR_MORE,
-            .amountParam = failTooManyPikAmount,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_LIVING_PIKMIN,
+            .matchAmount = failTooManyPikAmount,
             .clear = false,
             .neutralMood = false,
             .reason = "Reached " + i2s(failTooManyPikAmount) + " Pikmin!",
@@ -1927,8 +1938,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
     ) {
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_LOSE_PIKMIN,
-            .amountParam = failPikKilled,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_PIKMIN_LOST,
+            .matchAmount = failPikKilled,
             .clear = false,
             .neutralMood = false,
             .reason = "Lost " + i2s(failPikKilled) + " Pikmin!",
@@ -1956,8 +1968,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
     ) {
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_LOSE_LEADERS,
-            .amountParam = failLeadersKod,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_LEADERS_LOST,
+            .matchAmount = failLeadersKod,
             .clear = false,
             .neutralMood = false,
             .reason = "Lost " + i2s(failLeadersKod) + " leaders!",
@@ -1978,9 +1991,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
         enemyDefeatFailIdx = mission.mobGroups.size() - 1;
         mission.endConds.push_back(
         MissionEndCond {
-            .type = MISSION_END_COND_MOB_GROUP,
-            .indexParam = enemyDefeatFailIdx,
-            .amountParam = failEnemiesDefeated,
+            .type = MISSION_END_COND_METRIC_OR_MORE,
+            .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
+            .idxParam = enemyDefeatFailIdx,
+            .matchAmount = failEnemiesDefeated,
             .clear = false,
             .neutralMood = false,
             .reason = "Defeated " + i2s(failEnemiesDefeated) + " enemies!",
@@ -1999,63 +2013,60 @@ void Area::loadOldMissionSystem(DataNode* node) {
     switch(goal) {
     case MISSION_GOAL_OLD_END_MANUALLY: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_TEXT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_TEXT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text =
             "End whenever you want";
         break;
         
     } case MISSION_GOAL_OLD_COLLECT_TREASURE: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_GROUP;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobGroupIdx };
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
+            MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
         
     } case MISSION_GOAL_OLD_BATTLE_ENEMIES: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_MOB_GROUP;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { goalMobGroupIdx };
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
+            MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
         
     } case MISSION_GOAL_OLD_TIMED_SURVIVAL: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_TEXT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_TEXT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Survive";
         
         mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].contentType =
-            MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].displayType =
+            MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN;
         mission.hudItems[MISSION_HUD_ITEM_ID_CLOCK].text = "Time:";
         break;
         
     } case MISSION_GOAL_OLD_GET_TO_EXIT: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxsList =
-        { exitRegionIdx };
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
+            MISSION_METRIC_LEADERS_IN_REGION;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = exitRegionIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "In exit:";
         break;
         
     } case MISSION_GOAL_OLD_GROW_PIKMIN: {
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].contentType =
-            MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].amountType =
-            MISSION_HUD_ITEM_AMT_PIKMIN;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].displayType =
+            MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
+            MISSION_METRIC_LIVING_PIKMIN;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
             goalAmount;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Pikmin:";
@@ -2070,8 +2081,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
         pointHudData != 0
     ) {
         mission.hudItems[MISSION_HUD_ITEM_ID_SCORE].enabled = true;
-        mission.hudItems[MISSION_HUD_ITEM_ID_SCORE].contentType =
-            MISSION_HUD_ITEM_CONTENT_SCORE;
+        mission.hudItems[MISSION_HUD_ITEM_ID_SCORE].displayType =
+            MISSION_HUD_ITEM_DISPLAY_SCORE;
     }
     
     //Port the failure HUD items.
@@ -2084,7 +2095,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN;
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN;
         mission.hudItems[id].text = "Time:";
     }
     if(
@@ -2096,8 +2107,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_PIKMIN;
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[id].metricType = MISSION_METRIC_LIVING_PIKMIN;
         mission.hudItems[id].totalAmount = failTooFewPikAmount;
         mission.hudItems[id].text = "Pikmin:";
     }
@@ -2110,8 +2121,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_PIKMIN;
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[id].metricType = MISSION_METRIC_LIVING_PIKMIN;
         mission.hudItems[id].totalAmount = failTooManyPikAmount;
         mission.hudItems[id].text = "Pikmin:";
     }
@@ -2124,8 +2135,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS;
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[id].metricType = MISSION_METRIC_PIKMIN_LOST;
         mission.hudItems[id].totalAmount = failPikKilled;
         mission.hudItems[id].text = "Pikmin lost:";
     }
@@ -2138,8 +2149,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_LEADER_KOS;
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[id].metricType = MISSION_METRIC_LEADERS_LOST;
         mission.hudItems[id].totalAmount = failLeadersKod;
         mission.hudItems[id].text = "Leaders lost:";
     }
@@ -2152,9 +2163,9 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_CLOCK :
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
-        mission.hudItems[id].contentType = MISSION_HUD_ITEM_CONTENT_CUR_TOT;
-        mission.hudItems[id].amountType = MISSION_HUD_ITEM_AMT_MOB_GROUP;
-        mission.hudItems[id].idxsList = { enemyDefeatFailIdx };
+        mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
+        mission.hudItems[id].metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
+        mission.hudItems[id].idxParam = enemyDefeatFailIdx;
         mission.hudItems[id].text = "Enemies:";
     }
     
@@ -2162,7 +2173,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerPikminBorn != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_PIKMIN_BORN,
+            .metricType = MISSION_METRIC_PIKMIN_BORN,
             .points = pointsPerPikminBorn,
             .affectsHud =
             hasFlag(
@@ -2175,7 +2186,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerPikminDeath != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_PIKMIN_DEATHS,
+            .metricType = MISSION_METRIC_PIKMIN_LOST,
             .points = pointsPerPikminDeath,
             .affectsHud =
             hasFlag(
@@ -2188,7 +2199,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerSecLeft != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_SEC_LEFT,
+            .metricType = MISSION_METRIC_SECS_LEFT,
             .points = pointsPerSecLeft,
             .affectsHud =
             hasFlag(
@@ -2201,7 +2212,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerSecPassed != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_SEC_PASSED,
+            .metricType = MISSION_METRIC_SECS_PASSED,
             .points = pointsPerSecPassed,
             .affectsHud =
             hasFlag(
@@ -2214,7 +2225,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerTreasurePoint != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_COLLECTION_PTS,
+            .metricType = MISSION_METRIC_COLLECTION_POINTS,
             .points = pointsPerTreasurePoint,
             .affectsHud =
             hasFlag(
@@ -2227,7 +2238,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerEnemyPoint != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .type = MISSION_SCORE_CRITERION_DEFEAT_PTS,
+            .metricType = MISSION_METRIC_DEFEAT_POINTS,
             .points = pointsPerEnemyPoint,
             .affectsHud =
             hasFlag(
@@ -2583,10 +2594,13 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         MissionEndCond* condPtr = &mission.endConds[c];
         
         GetterWriter cGW(condNode);
-        
+        int matchAmountInt =
+            condPtr->matchAmount == INVALID ? -1 : condPtr->matchAmount;
+            
         cGW.write("type", condPtr->type);
-        cGW.write("index_param", condPtr->indexParam);
-        cGW.write("amount_param", condPtr->amountParam);
+        cGW.write("metric_type", condPtr->metricType);
+        cGW.write("index_param", condPtr->idxParam);
+        cGW.write("match_amount", matchAmountInt);
         cGW.write("clear", condPtr->clear);
         cGW.write("zero_time_for_score", condPtr->zeroTimeForScore);
         cGW.write("neutral_mood", condPtr->neutralMood);
@@ -2622,18 +2636,15 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         MissionHudItem* itemPtr = &mission.hudItems[i];
         
         GetterWriter iGW(itemNode);
-        string idxsList;
-        
-        for(size_t i = 0; i < itemPtr->idxsList.size(); i++) {
-            idxsList += i2s(itemPtr->idxsList[i]) + " ";
-        }
-        
+        int totalAmountInt =
+            itemPtr->totalAmount == INVALID ? -1 : itemPtr->totalAmount;
+            
         iGW.write("enabled", itemPtr->enabled);
-        iGW.write("content_type", itemPtr->contentType);
+        iGW.write("display_type", itemPtr->displayType);
+        iGW.write("metric_type", itemPtr->metricType);
+        iGW.write("index_param", itemPtr->idxParam);
         iGW.write("text", itemPtr->text);
-        iGW.write("amount_type", itemPtr->amountType);
-        iGW.write("total_amount", itemPtr->totalAmount);
-        iGW.write("idxs_list", idxsList);
+        iGW.write("total_amount", totalAmountInt);
     }
     
     //Score criteria.
@@ -2644,8 +2655,8 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         
         GetterWriter cGW(criterionNode);
         
-        cGW.write("type", criterionPtr->type);
-        cGW.write("index_param", criterionPtr->indexParam);
+        cGW.write("type", criterionPtr->metricType);
+        cGW.write("index_param", criterionPtr->idxParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
     }

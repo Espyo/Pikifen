@@ -75,6 +75,7 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     case MOB_CATEGORY_ENEMIES: {
         game.states.gameplay->enemyCollectionPointsObtained +=
             ((Enemy*) delivery)->eneType->points;
+        game.states.gameplay->lastCollectedEnemyPos = shiPtr->pos;
         break;
         
     }
@@ -83,7 +84,7 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->treasuresCollected++;
         game.states.gameplay->treasurePointsObtained +=
             trePtr->treType->points;
-        game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
+        game.states.gameplay->lastCollectedTreasurePos = shiPtr->pos;
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
@@ -93,7 +94,7 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
             game.states.gameplay->treasuresCollected++;
             game.states.gameplay->treasurePointsObtained +=
                 resPtr->resType->pointAmount;
-            game.states.gameplay->lastShipThatGotTreasurePos = shiPtr->pos;
+            game.states.gameplay->lastCollectedTreasurePos = shiPtr->pos;
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
             if(resPtr->deliveryInfo->playerTeamIdx != INVALID) {

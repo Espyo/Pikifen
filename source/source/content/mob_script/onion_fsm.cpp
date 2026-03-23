@@ -151,7 +151,8 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         
         game.states.gameplay->enemyCollectionPointsObtained +=
             ((Enemy*) delivery)->eneType->points;
-            
+        game.states.gameplay->lastCollectedEnemyPos = oniPtr->pos;
+        
         break;
     } case MOB_CATEGORY_PELLETS: {
         Pellet* pelPtr = (Pellet*) delivery;

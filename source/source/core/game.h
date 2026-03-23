@@ -195,11 +195,11 @@ public:
     //Mouse cursor information.
     MouseCursor mouseCursor;
     
-    //Database of all mission end conditions.
-    vector<MissionEndCondType*> missionEndCondTypes;
+    //Database of all mission metric types.
+    vector<MissionMetricType*> missionMetricTypes;
     
-    //Database of all mission score criteria types.
-    vector<MissionScoreCriterionType*> missionScoreCriterionTypes;
+    //Database of all mission end condition types.
+    vector<MissionEndCondType*> missionEndCondTypes;
     
     //User options.
     Options options;

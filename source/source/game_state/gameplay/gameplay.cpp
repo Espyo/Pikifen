@@ -531,8 +531,7 @@ bool GameplayState::endMission(
                     game.missionEndCondTypes[cond->type];
                 if(
                     condTypePtr->getZoomData(
-                        cond, &game.curArea->mission, this,
-                        &newCamPos, &newCamZoom
+                        cond, &newCamPos, &newCamZoom
                     )
                 ) {
                     player.view.cam.targetPos = newCamPos;
@@ -631,7 +630,8 @@ void GameplayState::enter() {
     lastHurtLeaderPos = Point(LARGE_FLOAT);
     lastPikminBornPos = Point(LARGE_FLOAT);
     lastPikminDeathPos = Point(LARGE_FLOAT);
-    lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
+    lastCollectedTreasurePos = Point(LARGE_FLOAT);
+    lastCollectedEnemyPos = Point(LARGE_FLOAT);
     
     missionEndCondIdx = INVALID;
     goalIndicatorRatio = 0.0f;
@@ -801,15 +801,19 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
  * This also checks inside converters.
  *
  * @param filter If not nullptr, only return Pikmin matching this type.
+ * @param aliveOnly If true, only Pikmin whose health is above 0 will count.
  * @return The amount.
  */
-size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
+size_t GameplayState::getAmountOfFieldPikmin(
+    const PikminType* filter, bool aliveOnly
+) {
     size_t total = 0;
     
     //Check the Pikmin mobs.
     for(size_t p = 0; p < mobs.pikmin.size(); p++) {
         Pikmin* pPtr = mobs.pikmin[p];
         if(filter && pPtr->pikType != filter) continue;
+        if(aliveOnly && pPtr->health <= 0.0f) continue;
         total++;
     }
     
@@ -927,13 +931,16 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
  * Pikmin inside converters.
  *
  * @param filter If not nullptr, only return Pikmin matching this type.
+ * @param aliveOnly If true, only Pikmin whose health is above 0 will count.
  * @return The amount.
  */
-long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
+long GameplayState::getAmountOfTotalPikmin(
+    const PikminType* filter, bool aliveOnly
+) {
     long total = 0;
     
     //Check Pikmin on the field and inside converters.
-    total += (long) getAmountOfFieldPikmin(filter);
+    total += (long) getAmountOfFieldPikmin(filter, aliveOnly);
     
     //Check Pikmin inside Onions and ships.
     total += getAmountOfOnionPikmin(filter);
@@ -1982,6 +1989,20 @@ void InterludeInfo::tick(float deltaT) {
 
 #pragma endregion
 #pragma region Mission mob group status
+
+
+/**
+ * @brief Returns the total combined health of the remaining mobs.
+ *
+ * @return The total.
+ */
+float MissionMobGroupStatus::getCombinedHealth() const {
+    float total = 0.0f;
+    for(Mob* m : remaining) {
+        total += m->health;
+    }
+    return total;
+}
 
 
 /**

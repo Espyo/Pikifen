@@ -59,7 +59,7 @@ int Treasure::getMissionPoints(bool* applicableInThisMission) const {
         for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
             MissionScoreCriterion* cPtr =
                 &game.curArea->mission.scoreCriteria[c];
-            if(cPtr->type == MISSION_SCORE_CRITERION_COLLECTION_PTS) {
+            if(cPtr->metricType == MISSION_METRIC_COLLECTION_POINTS) {
                 *applicableInThisMission = true;
             }
         }

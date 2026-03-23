@@ -937,8 +937,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     MissionHudItem* itemInfo = &game.curArea->mission.hudItems[which];
     if(!itemInfo->enabled) return;
     
-    switch(itemInfo->contentType) {
-    case MISSION_HUD_ITEM_CONTENT_TEXT: {
+    switch(itemInfo->displayType) {
+    case MISSION_HUD_ITEM_DISPLAY_TEXT: {
         //Text.
         
         DataNode* guiFile =
@@ -961,8 +961,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         break;
         
-    } case MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN:
-    case MISSION_HUD_ITEM_CONTENT_CLOCK_UP: {
+    } case MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN:
+    case MISSION_HUD_ITEM_DISPLAY_CLOCK_UP: {
         //Clock.
         
         DataNode* guiFile =
@@ -984,7 +984,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             if(game.states.gameplay->afterHours) {
                 clockHandOpacity = 0.3f;
             } else if(
-                itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN
+                itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN
             ) {
                 if(
                     game.curArea->mission.timeLimit > 0.0f &&
@@ -1023,7 +1023,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 text = "After hours";
                 font = game.sysContent.fntStandard;
             } else if(
-                itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CLOCK_DOWN
+                itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN
             ) {
                 if(
                     game.curArea->mission.timeLimit > 0.0f
@@ -1047,7 +1047,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         break;
         
-    } case MISSION_HUD_ITEM_CONTENT_SCORE: {
+    } case MISSION_HUD_ITEM_DISPLAY_SCORE: {
         //Score.
         
         DataNode* guiFile =
@@ -1359,7 +1359,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         break;
         
-    } case MISSION_HUD_ITEM_CONTENT_HEALTH: {
+    } case MISSION_HUD_ITEM_DISPLAY_HEALTH: {
         //Health bar.
         
         DataNode* guiFile =
@@ -1385,20 +1385,15 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         GuiItem* bar = new GuiItem();
         bar->onDraw =
         [itemInfo, this] (const DrawInfo & draw) {
-            float health = 0.0f;
-            float maxHealth = 0.0f;
-            for(size_t g = 0; g < itemInfo->idxsList.size(); g++) {
-                size_t idx = itemInfo->idxsList[g];
-                if(idx >= game.states.gameplay->missionMobGroups.size()) {
-                    continue;
-                }
-                MissionMobGroupStatus* gPtr =
-                    &game.states.gameplay->missionMobGroups[idx];
-                if(gPtr->remaining.empty()) continue;
-                health = (*gPtr->remaining.begin())->health;
-                maxHealth = (*gPtr->remaining.begin())->maxHealth;
-            }
-            
+            MissionMetricType* metricType =
+                game.missionMetricTypes[itemInfo->metricType];
+            float health =
+                metricType->getAmount(itemInfo->idxParam);
+            float maxHealth =
+                metricType->getTarget(
+                    itemInfo->idxParam, itemInfo->totalAmount
+                );
+                
             if(health == 0.0f && maxHealth == 0.0f) {
                 return;
             }
@@ -1426,19 +1421,19 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         break;
         
-    } case MISSION_HUD_ITEM_CONTENT_CUR_TOT:
-    case MISSION_HUD_ITEM_CONTENT_REM_TOT:
-    case MISSION_HUD_ITEM_CONTENT_CUR_AMT:
-    case MISSION_HUD_ITEM_CONTENT_REM_AMT:
-    case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
+    } case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
+    case MISSION_HUD_ITEM_DISPLAY_REM_TOT:
+    case MISSION_HUD_ITEM_DISPLAY_CUR:
+    case MISSION_HUD_ITEM_DISPLAY_REM:
+    case MISSION_HUD_ITEM_DISPLAY_TOT: {
         //Amount.
         
-        bool oneAmount =
-            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_CUR_AMT ||
-            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_REM_AMT ||
-            itemInfo->contentType == MISSION_HUD_ITEM_CONTENT_TOT_AMT;
+        bool onlyOneAmount =
+            itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_CUR ||
+            itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
+            itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
             
-        if(oneAmount) {
+        if(onlyOneAmount) {
             DataNode* guiFile =
                 &game.content.guiDefs.list[HUD::MISSION_AMT_ONE_GUI_FILE_NAME];
             gui.registerCoords("mission_amount_1_label", 50, 18, 92, 28);
@@ -1455,92 +1450,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             
         }
         
-        const auto getAmounts =
-        [itemInfo] (int* amt1, int* amt2) {
-            int currentAmount = 0;
-            switch(itemInfo->amountType) {
-            case MISSION_HUD_ITEM_AMT_MOB_GROUP: {
-                for(size_t g = 0; g < itemInfo->idxsList.size(); g++) {
-                    size_t idx = itemInfo->idxsList[g];
-                    if(idx >= game.states.gameplay->missionMobGroups.size()) {
-                        continue;
-                    }
-                    MissionMobGroupStatus* gPtr =
-                        &game.states.gameplay->missionMobGroups[idx];
-                    currentAmount += gPtr->getNrCleared();
-                }
-                break;
-                
-            } case MISSION_HUD_ITEM_AMT_LEADERS_IN_REGION: {
-                unordered_set<Leader*> leadersInRegions;
-                for(size_t r = 0; r < itemInfo->idxsList.size(); r++) {
-                    size_t idx = itemInfo->idxsList[r];
-                    if(idx >= game.states.gameplay->areaRegions.size()) {
-                        continue;
-                    }
-                    AreaRegionStatus* rPtr =
-                        &game.states.gameplay->areaRegions[idx];
-                    leadersInRegions.insert(
-                        rPtr->leadersInside.begin(), rPtr->leadersInside.end()
-                    );
-                }
-                currentAmount = leadersInRegions.size();
-                break;
-                
-            } case MISSION_HUD_ITEM_AMT_PIKMIN: {
-                currentAmount = game.states.gameplay->getAmountOfTotalPikmin();
-                break;
-                
-            } case MISSION_HUD_ITEM_AMT_LEADERS: {
-                for(
-                    size_t l = 0;
-                    l < game.states.gameplay->mobs.leaders.size(); l++
-                ) {
-                    Leader* lPtr = game.states.gameplay->mobs.leaders[l];
-                    if(lPtr->health > 0) {
-                        currentAmount++;
-                    }
-                }
-                break;
-                
-            } case MISSION_HUD_ITEM_AMT_PIKMIN_DEATHS: {
-                currentAmount = game.states.gameplay->pikminDeaths;
-                break;
-                
-            } case MISSION_HUD_ITEM_AMT_LEADER_KOS: {
-                currentAmount = game.states.gameplay->leadersKod;
-                break;
-                
-            }
-            }
-            
-            int remainingAmount = itemInfo->totalAmount - currentAmount;
-            int totalAmount = itemInfo->totalAmount;
-            
-            switch(itemInfo->contentType) {
-            case MISSION_HUD_ITEM_CONTENT_CUR_TOT: {
-                *amt1 = currentAmount;
-                *amt2 = totalAmount;
-                break;
-            } case MISSION_HUD_ITEM_CONTENT_REM_TOT: {
-                *amt1 = remainingAmount;
-                *amt2 = totalAmount;
-                break;
-            } case MISSION_HUD_ITEM_CONTENT_CUR_AMT: {
-                *amt1 = currentAmount;
-                break;
-            } case MISSION_HUD_ITEM_CONTENT_REM_AMT: {
-                *amt1 = remainingAmount;
-                break;
-            } case MISSION_HUD_ITEM_CONTENT_TOT_AMT: {
-                *amt1 = totalAmount;
-                break;
-            } default: {
-                break;
-            }
-            }
-        };
-        
         //Label.
         GuiItem* label = new GuiItem();
         label->onDraw =
@@ -1554,17 +1463,41 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(label);
         gui.addItem(
             label,
-            oneAmount ? "mission_amount_1_label" : "mission_amount_2_label"
+            onlyOneAmount ? "mission_amount_1_label" : "mission_amount_2_label"
         );
         
         //First amount.
         GuiItem* amt1Text = new GuiItem();
         amt1Text->onDraw =
-        [itemInfo, getAmounts, amt1Text] (const DrawInfo & draw) {
+        [itemInfo, amt1Text] (const DrawInfo & draw) {
             static int oldAmt1 = INT_MAX;
             static int amt1 = 0;
-            int dummy = 0;
-            getAmounts(&amt1, &dummy);
+            
+            MissionMetricType* metricType =
+                game.missionMetricTypes[itemInfo->metricType];
+                
+            switch(itemInfo->displayType) {
+            case MISSION_HUD_ITEM_DISPLAY_CUR:
+            case MISSION_HUD_ITEM_DISPLAY_CUR_TOT: {
+                amt1 = metricType->getAmount(itemInfo->idxParam);
+                break;
+            } case MISSION_HUD_ITEM_DISPLAY_REM:
+            case MISSION_HUD_ITEM_DISPLAY_REM_TOT: {
+                amt1 =
+                    metricType->getRemaining(
+                        itemInfo->idxParam, itemInfo->totalAmount
+                    );
+                break;
+            } case MISSION_HUD_ITEM_DISPLAY_TOT: {
+                amt1 =
+                    metricType->getTarget(
+                        itemInfo->idxParam, itemInfo->totalAmount
+                    );
+                break;
+            } default: {
+                break;
+            }
+            }
             
             if(oldAmt1 != amt1) {
                 amt1Text->startJuiceAnimation(
@@ -1582,20 +1515,25 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         item->addChild(amt1Text);
         gui.addItem(
             amt1Text,
-            oneAmount ? "mission_amount_1_first" : "mission_amount_2_first"
+            onlyOneAmount ? "mission_amount_1_first" : "mission_amount_2_first"
         );
         
-        if(!oneAmount) {
+        if(!onlyOneAmount) {
         
             //Second amount.
             GuiItem* amt2Text = new GuiItem();
             amt2Text->onDraw =
-            [itemInfo, getAmounts, amt2Text] (const DrawInfo & draw) {
+            [itemInfo, amt2Text] (const DrawInfo & draw) {
                 static int oldAmt2 = INT_MAX;
                 static int amt2 = 0;
-                int dummy = 0;
-                getAmounts(&dummy, &amt2);
                 
+                MissionMetricType* metricType =
+                    game.missionMetricTypes[itemInfo->metricType];
+                amt2 =
+                    metricType->getTarget(
+                        itemInfo->idxParam, itemInfo->totalAmount
+                    );
+                    
                 if(oldAmt2 != amt2) {
                     amt2Text->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM

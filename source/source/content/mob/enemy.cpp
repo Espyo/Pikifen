@@ -162,8 +162,8 @@ int Enemy::getMissionPoints(bool* applicableInThisMission) const {
             MissionScoreCriterion* cPtr =
                 &game.curArea->mission.scoreCriteria[c];
             if(
-                cPtr->type == MISSION_SCORE_CRITERION_COLLECTION_PTS ||
-                cPtr->type == MISSION_SCORE_CRITERION_DEFEAT_PTS
+                cPtr->metricType == MISSION_METRIC_COLLECTION_POINTS ||
+                cPtr->metricType == MISSION_METRIC_DEFEAT_POINTS
             ) {
                 *applicableInThisMission = true;
             }
