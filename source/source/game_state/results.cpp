@@ -1250,6 +1250,13 @@ void Results::populateStatsList() {
         i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
     );
     
+    //Living Pikmin count bullet.
+    addNewBulletPoint(
+        statsList,
+        "Living Pikmin:",
+        i2s(game.states.gameplay->getAmountOfTotalPikmin(nullptr, true))
+    );
+    
     //Pikmin born bullet.
     addNewBulletPoint(
         statsList,

@@ -1,5 +1,5 @@
 name=Gameplay, mission amount (two)
-description=GUI for the dual mission amount HUD items.
+description=GUI for the HUD items that show two mission amounts.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

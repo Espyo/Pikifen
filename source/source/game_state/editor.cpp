@@ -5126,9 +5126,8 @@ bool Editor::SelectionManager::stopRubberBand() {
  * @return Whether it succeeded.
  */
 bool Editor::SelectionManager::handleMouseUp() {
-    bool success = true;
-    success &= stopRubberBand();
-    success &= stopTransforming();
+    bool success = stopRubberBand();
+    success |= stopTransforming();
     return success;
 }
 

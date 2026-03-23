@@ -2129,7 +2129,7 @@ void AnimationEditor::processGuiPanelSprite() {
                 setTooltip(
                     "The sprite is used in this animation " +
                     amountStr((int) e.second.size(), "time") + ".\n"
-                    "Click to go to this animation."
+                    "Press to go to this animation."
                 );
                 
             }

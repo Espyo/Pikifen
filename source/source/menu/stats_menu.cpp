@@ -249,7 +249,7 @@ void StatsMenu::populateStatsList() {
     addNewStatItem(
         "Distance walked (m)",
         f2s((game.statistics.distanceWalked * CM_PER_PIXEL) / 100.0),
-        "Total distance walked by an active leader, in meters."
+        "Total distance walked by active leaders, in meters."
     );
     addNewStatItem(
         "Leader damage suffered", i2s(game.statistics.leaderDamageSuffered),

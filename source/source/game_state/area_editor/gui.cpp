@@ -2279,15 +2279,15 @@ void AreaEditor::processGuiPanelInfo() {
         }
         if(canPreviewSelectedSong) {
             previewTooltipStr +=
-                "Click here to preview the song \"" +
+                "Press here to preview the song \"" +
                 game.content.songs.list[game.curArea->songName].name +
                 "\".";
         } else if(canStopPreviewing) {
             previewTooltipStr +=
-                "Click here to stop.";
+                "Press here to stop.";
         } else {
             previewTooltipStr +=
-                "If you select a song, you can click here to preview it.";
+                "If you select a song, you can press here to preview it.";
         }
         setTooltip(previewTooltipStr);
         
@@ -2836,7 +2836,7 @@ void AreaEditor::processGuiPanelLayout() {
                     ImGui::TextWrapped(
                         "Multiple different sectors selected. "
                         "To make all their properties the same "
-                        "and edit them all together, click here:"
+                        "and edit them all together, press here:"
                     );
                     
                     //Homogenize sectors button.
@@ -2869,7 +2869,7 @@ void AreaEditor::processGuiPanelLayout() {
                     ImGui::TextWrapped(
                         "Multiple different edges selected. "
                         "To make all their properties the same "
-                        "and edit them all together, click here:"
+                        "and edit them all together, press here:"
                     );
                     
                     //Homogenize edges button.
@@ -3382,7 +3382,6 @@ void AreaEditor::processGuiPanelMissionEndCond() {
             }
             
             //Clear checkbox.
-            
             bool condClear = condPtr->clear;
             ImGui::Spacer();
             if(
@@ -3393,7 +3392,7 @@ void AreaEditor::processGuiPanelMissionEndCond() {
             }
             setTooltip(
                 "When this condition is met and the mission ends,\n"
-                "is it a clear (player receive a medal),\n"
+                "is it a clear (player can receive a medal),\n"
                 "or is it a fail (player can't receive a medal)?"
             );
             
@@ -3992,7 +3991,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                     subState = EDITOR_SUB_STATE_MISSION_MOBS;
                 }
                 setTooltip(
-                    "Click here to start picking which objects do and\n"
+                    "Press here to start picking which objects do and\n"
                     "do not belong to the group."
                 );
                 
@@ -4280,7 +4279,7 @@ void AreaEditor::processGuiPanelMob() {
             }
             setTooltip(
                 "If you want to store this object inside another object,\n"
-                "click here to choose which object will do the storing.\n"
+                "press here to choose which object will do the storing.\n"
                 "When that object dies, this one pops out."
             );
             
@@ -4292,7 +4291,7 @@ void AreaEditor::processGuiPanelMob() {
                 mPtr->storedInside = INVALID;
             }
             setTooltip(
-                "This object is currently stored inside another. Click here\n"
+                "This object is currently stored inside another. Press here\n"
                 "to unstore it and make it a regular object instead."
             );
         }
@@ -4476,7 +4475,7 @@ void AreaEditor::processGuiPanelMobs() {
         if(ImGui::Button("Finish")) {
             changeState(EDITOR_STATE_MISSION);
         }
-        setTooltip("Click here to finish.");
+        setTooltip("Press here to finish.");
         
     } else {
     
@@ -4554,7 +4553,7 @@ void AreaEditor::processGuiPanelMobs() {
             //Non-homogenized objects warning.
             ImGui::TextWrapped(
                 "Multiple different objects selected. To make all their "
-                "properties the same and edit them all together, click here:"
+                "properties the same and edit them all together, press here:"
             );
             
             //Homogenize objects button.
@@ -4781,7 +4780,7 @@ void AreaEditor::processGuiPanelPaths() {
                 ImGui::TextWrapped(
                     "Multiple different path stops selected. "
                     "To make all their properties the same and "
-                    "edit them all together, click here:"
+                    "edit them all together, press here:"
                 );
                 
                 //Homogenize stops button.
@@ -4839,7 +4838,7 @@ void AreaEditor::processGuiPanelPaths() {
                 ImGui::TextWrapped(
                     "Multiple different path links selected. "
                     "To make all their properties the same and "
-                    "edit them all together, click here:"
+                    "edit them all together, press here:"
                 );
                 
                 //Homogenize links button.

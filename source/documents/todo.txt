@@ -8,15 +8,17 @@ Current tasks (tasks being worked on, but not yet committed)
         Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     New editor selection system
         Add logic to allow moving by dragging anywhere on the item, not just the transformation widget's center bubble
-        Add it to the layout, mobs, paths, and details area editor states
+        Add it to the layout, paths, and details area editor states
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
-        Ctrl+A, unselecting with Ctrl, etc.
+        Ctrl+A, Delete, unselecting with Ctrl, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Pikmin health regeneration lockout isn't working
+    Onions are ejecting fully-grown Pikmin with non-stopping momentum
     Using the transformation widget's resizing on selected items that can't change size (reminders, mobs) makes it behave weirdly
     Leaders aren't following the bounce arc when bounced by a geyser
     Ice vent is hitting frozen Pikmin multiple times and eventually killing them

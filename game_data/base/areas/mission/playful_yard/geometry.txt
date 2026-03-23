@@ -8278,7 +8278,7 @@ mobs{
 		angle=-0.1917
 	}
 	treasure{
-		type=jigsaw_puzzle_piece
+		type=red_die
 		p=-432.0000 1600.0000
 		angle=-2.5114
 	}
@@ -8303,7 +8303,7 @@ mobs{
 		angle=-2.0226
 	}
 	treasure{
-		type=jigsaw_puzzle_piece
+		type=white_die
 		p=1112.0000 -704.0000
 		angle=2.0702
 	}
