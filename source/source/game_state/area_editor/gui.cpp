@@ -1424,7 +1424,7 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Nav box start.
             processGuiNavBoxStart(
-                "shadow", "Tree shadow", &selectedShadowIdx,
+                "shadow", "Tree shadow", "", &selectedShadowIdx,
             [this] () { return game.curArea->treeShadows.size(); },
             [this] () { return 1; }
             );
@@ -1617,7 +1617,7 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Nav box start.
             processGuiNavBoxStart(
-                "region", "Region", &selectedRegionIdx,
+                "region", "Region", "", &selectedRegionIdx,
             [this] () { return game.curArea->regions.size(); },
             [this] () { return 1; }
             );
@@ -3118,7 +3118,7 @@ void AreaEditor::processGuiPanelMissionBriefing() {
         
         //Nav box start.
         processGuiNavBoxStart(
-            "note", "Note", &curNoteIdx,
+            "note", "Note", "", &curNoteIdx,
         [this] () { return game.curArea->mission.briefingNotes.size(); },
         [this] () { return 1; }
         );
@@ -3222,7 +3222,7 @@ void AreaEditor::processGuiPanelMissionEndCond() {
         
         //Nav box start.
         processGuiNavBoxStart(
-            "condition", "Condition", &curCondIdx,
+            "condition", "Condition", "", &curCondIdx,
         [this] () { return game.curArea->mission.endConds.size(); },
         [this] () { return 1; }
         );
@@ -3562,7 +3562,7 @@ void AreaEditor::processGuiPanelMissionHudItems() {
         
         //Nav box start.
         processGuiNavBoxStart(
-            "item", "Item", &curHudItemIdx,
+            "item", "Item", "", &curHudItemIdx,
         [this] () { return enumGetCount(missionHudItemIdNames); },
         [this] () { return 1; }
         );
@@ -3709,7 +3709,9 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
                 &game.curArea->mission.bronzeReq, "Bronze",
                 INT_MIN, game.curArea->mission.silverReq - 1,
                 "To get a bronze medal, the player needs at least these\n"
-                "many points. Fewer than this, and the player gets no medal."
+                "many points. Fewer than this, and the player gets no medal.\n"
+                "If the score depends on treasures or enemies,\n"
+                "check the review panel's stats listing for hints."
             );
             
             processGuiWidgetsMedalAwardMedal(
@@ -3717,7 +3719,8 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
                 game.curArea->mission.bronzeReq + 1,
                 game.curArea->mission.goldReq - 1,
                 "To get a silver medal, the player needs at least these\n"
-                "many points."
+                "many points. If the score depends on treasures or enemies,\n"
+                "check the review panel's stats listing for hints."
             );
             
             processGuiWidgetsMedalAwardMedal(
@@ -3725,14 +3728,16 @@ void AreaEditor::processGuiPanelMissionMedalAward() {
                 game.curArea->mission.silverReq + 1,
                 game.curArea->mission.platinumReq - 1,
                 "To get a gold medal, the player needs at least these\n"
-                "many points."
+                "many points. If the score depends on treasures or enemies,\n"
+                "check the review panel's stats listing for hints."
             );
             
             processGuiWidgetsMedalAwardMedal(
                 &game.curArea->mission.platinumReq, "Platinum",
                 game.curArea->mission.goldReq + 1, INT_MAX,
                 "To get a platinum medal, the player needs at least these\n"
-                "many points."
+                "many points. If the score depends on treasures or enemies,\n"
+                "check the review panel's stats listing for hints."
             );
             
             //Maker record value.
@@ -3793,7 +3798,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
         
         //Nav box start.
         processGuiNavBoxStart(
-            "group", "Group", &curMobGroupIdx,
+            "group", "Group", "", &curMobGroupIdx,
         [this] () { return game.curArea->mission.mobGroups.size(); },
         [this] () { return 1; }
         );
@@ -3989,7 +3994,7 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
         
         //Nav box start.
         processGuiNavBoxStart(
-            "criterion", "Criterion", &curCriterionIdx,
+            "criterion", "Criterion", "Criteria", &curCriterionIdx,
         [this] () { return game.curArea->mission.scoreCriteria.size(); },
         [this] () { return 1; }
         );
@@ -5140,7 +5145,7 @@ void AreaEditor::processGuiPanelReview() {
         //Nav box start.
         size_t curReminderIdx = reminderSelection.getSingleItemIdx();
         processGuiNavBoxStart(
-            "reminder", "Reminder", &curReminderIdx,
+            "reminder", "Reminder", "", &curReminderIdx,
         [this] () { return game.curArea->reminders.size(); },
         [this] () { return reminderSelection.getCount(); }
         );
@@ -5336,25 +5341,91 @@ void AreaEditor::processGuiPanelReview() {
         ImGui::BulletText(
             "Sectors: %i", (int) game.curArea->sectors.size()
         );
+        setTooltip(
+            "Total amount of sectors in the area.\n"
+            "Use this to help gauge performance."
+        );
         
         //Edge amount text.
         ImGui::BulletText(
             "Edges: %i", (int) game.curArea->edges.size()
+        );
+        setTooltip(
+            "Total amount of edges in the area.\n"
+            "Use this to help gauge performance."
         );
         
         //Vertex amount text.
         ImGui::BulletText(
             "Vertexes: %i", (int) game.curArea->vertexes.size()
         );
+        setTooltip(
+            "Total amount of vertexes in the area.\n"
+            "Use this to help gauge performance."
+        );
         
         //Object amount text.
         ImGui::BulletText(
             "Objects: %i", (int) game.curArea->mobGenerators.size()
         );
+        setTooltip(
+            "Total amount of objects in the area.\n"
+            "Use this to help gauge performance."
+        );
         
         //Path stop amount text.
         ImGui::BulletText(
             "Path stops: %i", (int) game.curArea->pathStops.size()
+        );
+        setTooltip(
+            "Total amount of path stops in the area."
+        );
+        
+        size_t treasureTotal;
+        size_t treasurePointTotal;
+        game.curArea->getTotalTreasureInfo(&treasureTotal, &treasurePointTotal);
+        
+        //Treasure amount text.
+        ImGui::BulletText(
+            "Treasures: %i", (int) treasureTotal
+        );
+        setTooltip(
+            "Total amount of treasure-like objects in the area.\n"
+            "This includes treasures, and piles and resources that give\n"
+            "treasure points."
+        );
+        
+        //Treasure point amount text.
+        ImGui::BulletText(
+            "Treasure points: %i", (int) treasurePointTotal
+        );
+        setTooltip(
+            "Total amount of treasure points in the area.\n"
+            "See the previous bullet point for more information.\n"
+            "This is the raw amount, not multiplied by any mission\n"
+            "scoring criterion multipliers."
+        );
+        
+        size_t enemyTotal;
+        size_t enemyPointTotal;
+        game.curArea->getTotalEnemyInfo(&enemyTotal, &enemyPointTotal);
+        
+        //Enemy amount text.
+        ImGui::BulletText(
+            "Enemies: %i", (int) enemyTotal
+        );
+        setTooltip(
+            "Total amount of enemy objects in the area."
+        );
+        
+        //Enemy point amount text.
+        ImGui::BulletText(
+            "Enemy points: %i", (int) enemyPointTotal
+        );
+        setTooltip(
+            "Total amount of enemy points in the area.\n"
+            "This is the raw amount, not multiplied by any mission\n"
+            "scoring criterion multipliers."
         );
         
         ImGui::TreePop();

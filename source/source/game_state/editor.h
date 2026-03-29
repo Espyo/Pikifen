@@ -834,8 +834,12 @@ protected:
     //Prefix for the widget internal names in the current nav box.
     string curNavBoxItemPrefix;
     
-    //Term for the items of the current nav box.
+    //Singular term for the items of the current nav box.
     string curNavBoxItemTerm;
+    
+    //Plural term for the items of the current nav box, if different from
+    //the singular term plus an 's'.
+    string curNavBoxItemTermPlural;
     
     //Pointer to the selected item's index in the current nav box.
     size_t* curNavBoxSelIdxPtr = nullptr;
@@ -980,7 +984,8 @@ protected:
     );
     void processGuiNavBoxStart(
         const string& widgetsPrefix, const string& itemsTerm,
-        size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+        const string& itemsTermPlural, size_t* selIdxPtr,
+        const std::function<size_t()>& onGetSize,
         const std::function<size_t()>& onGetSelSize
     );
     bool processGuiNavBoxPrev();
@@ -994,8 +999,8 @@ protected:
     void processGuiNavBoxEnd();
     void getGuiNavCurText(
         size_t curItemIdx, size_t listSize, size_t selectionSize,
-        const string& itemTerm, bool showTermNormally,
-        const string& curItemName, bool curItemNameMono,
+        const string& itemTerm, const string& itemTermPlural,
+        bool showTermNormally, const string& curItemName, bool curItemNameMono,
         string* outText1, bool* outText1Disabled,
         string* outText2, bool* outText2Mono
     );

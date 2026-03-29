@@ -929,7 +929,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
     
     //Nav box start.
     processGuiNavBoxStart(
-        "animation", "Animation", &curAnimIdx,
+        "animation", "Animation", "", &curAnimIdx,
     [this] () { return db.animations.size(); },
     [this] () { return 1; }
     );
@@ -1489,7 +1489,7 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
     
     //Nav box start.
     processGuiNavBoxStart(
-        "frame", "Frame", &curAnimInst.curFrameIdx,
+        "frame", "Frame", "", &curAnimInst.curFrameIdx,
     [this] () { return curAnimInst.curAnim->frames.size(); },
     [this] () { return 1; }
     );
@@ -1871,7 +1871,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Nav box start.
     processGuiNavBoxStart(
-        "sprite", "Sprite", &curSpriteIdx,
+        "sprite", "Sprite", "", &curSpriteIdx,
     [this] () { return db.sprites.size(); },
     [this] () { return 1; }
     );
@@ -2408,7 +2408,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     //Nav box start.
     size_t curHitboxIdx = hitboxSelection.getSingleItemIdx();
     processGuiNavBoxStart(
-        "hitbox", "Hitbox", &curHitboxIdx,
+        "hitbox", "Hitbox", "Hitboxes", &curHitboxIdx,
     [this] () { return curSprite->hitboxes.size(); },
     [this] () { return 1; }
     );

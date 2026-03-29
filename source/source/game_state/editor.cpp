@@ -406,6 +406,8 @@ void Editor::drawSelectionAndTransformationThings(
  * @param listSize Current size of the list.
  * @param selectionSize How many items are currently selected.
  * @param itemTerm Term that designates what an item is, in singular.
+ * @param itemTermPlural If the term in plural is different from the singular
+ * term with an 's', specify it here.
  * @param showTermNormally If false, the term won't show up when showing
  * the usual text, but will show up when grammatically needed.
  * @param curItemName If this item has a name, specify it here.
@@ -421,13 +423,17 @@ void Editor::drawSelectionAndTransformationThings(
  */
 void Editor::getGuiNavCurText(
     size_t curItemIdx, size_t listSize, size_t selectionSize,
-    const string& itemTerm, bool showTermNormally, const string& curItemName,
+    const string& itemTerm, const string& itemTermPlural,
+    bool showTermNormally, const string& curItemName,
     bool curItemNameMono,
     string* outText1, bool* outText1Disabled,
     string* outText2, bool* outText2Mono
 ) {
     const string termLowerSingular = strToLower(itemTerm);
-    const string termLowerPlural = strToLower(itemTerm) + "s";
+    const string termLowerPlural =
+        itemTermPlural.empty() ?
+        strToLower(itemTerm) + "s" :
+        strToLower(itemTermPlural);
     const string termUpperSingular = strToSentence(itemTerm);
     
     *outText1 = "";
@@ -1332,7 +1338,7 @@ bool Editor::keyframeOrganizer(
     bool curKeyframeDisabled;
     getGuiNavCurText(
         selKeyframeIdx, interpolator.getKeyframeCount(), 1,
-        "Keyframe", true, "", false,
+        "Keyframe", "", true, "", false,
         &curKeyframeStr, &curKeyframeDisabled, nullptr, nullptr
     );
     ImGui::SameLine();
@@ -2731,8 +2737,8 @@ void Editor::processGuiNavBoxCur(
     bool itemNameTextMono;
     getGuiNavCurText(
         *curNavBoxSelIdxPtr, curNavBoxOnGetSize(),
-        curNavBoxOnGetSelSize(), curNavBoxItemTerm, showTermNormally,
-        curItemName, curItemNameMono,
+        curNavBoxOnGetSelSize(), curNavBoxItemTerm, curNavBoxItemTermPlural,
+        showTermNormally, curItemName, curItemNameMono,
         &text, &textDisabled, &itemNameText, &itemNameTextMono
     );
     
@@ -2854,7 +2860,9 @@ void Editor::processGuiNavBoxSecondLine(size_t nrItems) {
  *
  * @param widgetsPrefix Prefix to place before any widgets relevant
  * to the nav box.
- * @param itemsTerm Term that designates the items of the list.
+ * @param itemsTerm Term that designates the items of the list, in singular.
+ * @param itemsTermPlural If the term in plural is different from the singular
+ * term with an 's', specify it here.
  * @param selIdxPtr Pointer to the selected item's index.
  * @param onGetSize Callback for when the list size needs to be retrieved.
  * @param onGetSelSize Callback for when the selection size needs
@@ -2862,11 +2870,13 @@ void Editor::processGuiNavBoxSecondLine(size_t nrItems) {
  */
 void Editor::processGuiNavBoxStart(
     const string& widgetsPrefix, const string& itemsTerm,
-    size_t* selIdxPtr, const std::function<size_t()>& onGetSize,
+    const string& itemsTermPlural, size_t* selIdxPtr,
+    const std::function<size_t()>& onGetSize,
     const std::function<size_t()>& onGetSelSize
 ) {
     curNavBoxItemPrefix = widgetsPrefix;
     curNavBoxItemTerm = itemsTerm;
+    curNavBoxItemTermPlural = itemsTermPlural;
     curNavBoxSelIdxPtr = selIdxPtr;
     curNavBoxOnGetSize = onGetSize;
     curNavBoxOnGetSelSize = onGetSelSize;
