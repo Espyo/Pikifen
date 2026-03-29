@@ -2,7 +2,7 @@ name=Tutorial Meadow
 description=A tutorial area designed to teach you how to navigate through PNF-404!
 tags=Tutorial
 maker=Espyo
-version=1.1.0
+version=1.1.1
 engine_version=1.2.0
 subtitle=Get the treasure
 difficulty=1
@@ -23,7 +23,7 @@ mission_bronze_req=1000
 mission_silver_req=2000
 mission_gold_req=3000
 mission_platinum_req=4000
-mission_briefing_objective=Collect treasures!
+mission_briefing_objective=Recover the treasure!
 mission_briefing_notes
 mission_maker_record=0
 mission_maker_record_date
@@ -46,7 +46,7 @@ mission_end_conditions{
 		clear=true
 		zero_time_for_score=false
 		neutral_mood=false
-		reason=Got all treasures!
+		reason=Got the treasure!
 	}
 }
 mission_mob_groups{
@@ -59,15 +59,15 @@ mission_mob_groups{
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=5
+		display_type=0
 		metric_type=0
 		index_param=0
-		text=Treasures:
+		text=Recover the treasure!
 		total_amount=-1
 	}
 	item{
-		enabled=true
-		display_type=3
+		enabled=false
+		display_type=0
 		metric_type=0
 		index_param=0
 		text

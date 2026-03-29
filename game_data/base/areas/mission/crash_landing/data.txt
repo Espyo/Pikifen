@@ -2,7 +2,7 @@ name=Crash Landing
 description=The Koppaites' cargo ship is going to crash! Get all three leaders to the cockpit so they can escape! But if you can rescue some of the treasures along the way, all the better...
 tags=Short and sweet; Metal
 maker=Helodity
-version=1.4.0
+version=1.4.1
 engine_version=1.2.0
 subtitle=Escape the cargo ship!
 difficulty=5
@@ -24,7 +24,7 @@ mission_silver_req=800
 mission_gold_req=1400
 mission_platinum_req=2600
 mission_briefing_objective=Get the leaders to the exit!
-mission_briefing_notes
+mission_briefing_notes=The more treasures you get along the way, the better your score!;Losing a leader ends the mission early!
 mission_maker_record=2740
 mission_maker_record_date=2025/07/29
 mission_end_conditions{
@@ -59,14 +59,20 @@ mission_end_conditions{
 		reason=Time's up!
 	}
 }
-mission_mob_groups
+mission_mob_groups{
+	group{
+		type=1
+		enemies_need_collection=false
+		highlight_on_radar=true
+	}
+}
 mission_hud_items{
 	item{
 		enabled=true
 		display_type=5
 		metric_type=4
 		index_param=0
-		text=In exit:
+		text=Leaders in exit:
 		total_amount=-1
 	}
 	item{
@@ -86,11 +92,11 @@ mission_hud_items{
 		total_amount=-1
 	}
 	item{
-		enabled=false
-		display_type=0
+		enabled=true
+		display_type=8
 		metric_type=0
 		index_param=0
-		text
+		text=Treasures left:
 		total_amount=-1
 	}
 }
@@ -102,7 +108,7 @@ mission_score_criteria{
 		affects_hud=false
 	}
 	criterion{
-		type=10
+		type=9
 		index_param=0
 		points=1
 		affects_hud=true

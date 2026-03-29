@@ -2,7 +2,7 @@ name=Emerald Grove
 description=You figured when the Koppaites mentioned growing food on the planet, they didn't have this nasty swamp in mind! It doesn't matter; they're paying you based on how much you clear out by morning.
 tags=Swamp; Standard
 maker=Helodity
-version=1.0.0
+version=1.0.1
 engine_version=1.2.0
 subtitle=Collect everything!
 difficulty=4
@@ -23,8 +23,8 @@ mission_bronze_req=1500
 mission_silver_req=2500
 mission_gold_req=3000
 mission_platinum_req=3500
-mission_briefing_objective=Survive until the time limit!
-mission_briefing_notes
+mission_briefing_objective=Collect as many treasures and enemies as you can within the time limit!
+mission_briefing_notes=The more you collect, the better your medal!;Losing a leader ends the mission early!
 mission_maker_record=0
 mission_maker_record_date
 mission_end_conditions{
@@ -33,9 +33,9 @@ mission_end_conditions{
 		metric_type=0
 		index_param=0
 		match_amount=1
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
 		reason=Ended early from the pause menu!
 	}
 	end_condition{
@@ -45,38 +45,44 @@ mission_end_conditions{
 		match_amount=0
 		clear=true
 		zero_time_for_score=false
-		neutral_mood=false
-		reason=Survived!
+		neutral_mood=true
+		reason=Time's up!
 	}
 	end_condition{
 		type=2
 		metric_type=5
 		index_param=0
 		match_amount=0
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Reached 0 Pikmin!
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
+		reason=Lost all Pikmin!
 	}
 	end_condition{
 		type=1
 		metric_type=8
 		index_param=0
-		match_amount=1
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Lost 1 leaders!
+		match_amount=-1
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
+		reason=Lost your leader!
 	}
 }
-mission_mob_groups
+mission_mob_groups{
+	group{
+		type=3
+		enemies_need_collection=true
+		highlight_on_radar=true
+	}
+}
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=0
+		display_type=8
 		metric_type=0
 		index_param=0
-		text=Survive
+		text=Things left
 		total_amount=-1
 	}
 	item{

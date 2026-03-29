@@ -2,7 +2,7 @@ name=Playful Yard
 description=In the forest, a few creatures found some large wooden object... While its origin is mysterious, it does give this otherwise drab place some playful life!
 tags=Standard; Forest
 maker=Espyo
-version=1.1.0
+version=1.1.1
 engine_version=1.2.0
 notes=This stage is an evolution of the "Play" stage from older versions of Pikifen, which in turn is based on the geometry of an unused stage in Pikmin, "tuto2".
 subtitle=Collect treasures
@@ -25,7 +25,7 @@ mission_silver_req=550
 mission_gold_req=800
 mission_platinum_req=1050
 mission_briefing_objective=Collect treasures!
-mission_briefing_notes
+mission_briefing_notes=Get them all for a platinum medal!;Losing a leader ends the mission early!
 mission_maker_record=1980
 mission_maker_record_date=2025/03/01
 mission_end_conditions{
@@ -34,9 +34,9 @@ mission_end_conditions{
 		metric_type=0
 		index_param=0
 		match_amount=1
-		clear=false
+		clear=true
 		zero_time_for_score=true
-		neutral_mood=false
+		neutral_mood=true
 		reason=Ended early from the pause menu!
 	}
 	end_condition{
@@ -54,9 +54,9 @@ mission_end_conditions{
 		metric_type=2
 		index_param=0
 		match_amount=0
-		clear=false
+		clear=true
 		zero_time_for_score=false
-		neutral_mood=false
+		neutral_mood=true
 		reason=Time's up!
 	}
 	end_condition{
@@ -64,10 +64,10 @@ mission_end_conditions{
 		metric_type=8
 		index_param=0
 		match_amount=1
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Lost 1 leaders!
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
+		reason=Lost a leader!
 	}
 }
 mission_mob_groups{
@@ -80,10 +80,10 @@ mission_mob_groups{
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=5
+		display_type=8
 		metric_type=0
 		index_param=0
-		text=Treasures:
+		text=Treasures left
 		total_amount=-1
 	}
 	item{

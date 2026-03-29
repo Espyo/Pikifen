@@ -2,7 +2,7 @@ name=Turbulent Tundra
 description=Brave the icy cold to get as many Pikmin as possible.
 tags=Standard; Snow
 maker=Helodity
-version=1.0.0
+version=1.0.1
 engine_version=1.2.0
 subtitle=Grow Pikmin!
 difficulty=4
@@ -18,12 +18,12 @@ spray_amounts
 mission_preset=5
 mission_time_limit=600
 mission_medal_award_mode=0
-mission_starting_points=12
+mission_starting_points=0
 mission_bronze_req=50
 mission_silver_req=100
 mission_gold_req=150
 mission_platinum_req=200
-mission_briefing_objective=Survive until the time limit!
+mission_briefing_objective=Grow as many Pikmin as you can within the time limit!
 mission_briefing_notes
 mission_maker_record=228
 mission_maker_record_date=2025/03/01
@@ -33,9 +33,9 @@ mission_end_conditions{
 		metric_type=0
 		index_param=0
 		match_amount=1
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
 		reason=Ended early from the pause menu!
 	}
 	end_condition{
@@ -44,9 +44,9 @@ mission_end_conditions{
 		index_param=0
 		match_amount=0
 		clear=true
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Survived!
+		zero_time_for_score=true
+		neutral_mood=true
+		reason=Time's up!
 	}
 	end_condition{
 		type=2
@@ -54,19 +54,19 @@ mission_end_conditions{
 		index_param=0
 		match_amount=0
 		clear=false
-		zero_time_for_score=false
+		zero_time_for_score=true
 		neutral_mood=false
-		reason=Reached 0 Pikmin!
+		reason=Pikmin extinction!
 	}
 	end_condition{
 		type=1
 		metric_type=8
 		index_param=0
 		match_amount=2
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Lost 2 leaders!
+		clear=true
+		zero_time_for_score=true
+		neutral_mood=true
+		reason=Lost all leaders!
 	}
 }
 mission_mob_groups
@@ -74,10 +74,10 @@ mission_hud_items{
 	item{
 		enabled=true
 		display_type=0
-		metric_type=0
+		metric_type=5
 		index_param=0
-		text=Survive
-		total_amount=-1
+		text=Grow many Pikmin!
+		total_amount=100
 	}
 	item{
 		enabled=true
@@ -106,15 +106,9 @@ mission_hud_items{
 }
 mission_score_criteria{
 	criterion{
-		type=6
+		type=5
 		index_param=0
 		points=1
-		affects_hud=true
-	}
-	criterion{
-		type=7
-		index_param=0
-		points=-1
 		affects_hud=true
 	}
 }

@@ -2,7 +2,7 @@ name=Cryptic Atrium
 description=Three pressure plates, three markers on the floor... How should you go about pressing them to escape this room?
 tags=Puzzle; Short and sweet; Tiles
 maker=Espyo
-version=1.2.0
+version=1.2.1
 engine_version=1.2.0
 subtitle=Get to the exit
 difficulty=3
@@ -23,8 +23,8 @@ mission_bronze_req=1000
 mission_silver_req=2000
 mission_gold_req=3000
 mission_platinum_req=4000
-mission_briefing_objective=Get the leaders to the exit!
-mission_briefing_notes
+mission_briefing_objective=Get to the exit!
+mission_briefing_notes=Don't let any Pikmin die!
 mission_maker_record=0
 mission_maker_record_date
 mission_end_conditions{
@@ -56,22 +56,22 @@ mission_end_conditions{
 		clear=false
 		zero_time_for_score=false
 		neutral_mood=false
-		reason=Lost 1 Pikmin!
+		reason=Lost a Pikmin!
 	}
 }
 mission_mob_groups
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=5
+		display_type=0
 		metric_type=4
 		index_param=0
-		text=In exit:
+		text=Find a way to the exit!
 		total_amount=-1
 	}
 	item{
-		enabled=true
-		display_type=3
+		enabled=false
+		display_type=0
 		metric_type=0
 		index_param=0
 		text

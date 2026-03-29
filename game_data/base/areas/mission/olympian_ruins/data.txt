@@ -2,7 +2,7 @@ name=Olympian Ruins
 description=Legend has it this was a site for Olympian prowesses! Why don't you channel some of that spirit with a fast collectathon? Think of it like an obstacle course.
 tags=Short and sweet; Garden
 maker=Espyo
-version=1.1.0
+version=1.2.0
 engine_version=1.2.0
 notes=This stage was inspired by Super Smash Bros.'s Break the Targets.
 subtitle=Collect treasures
@@ -14,19 +14,19 @@ bg_zoom=1.0000
 song=areas/trials_and_tribulations
 weather=dripping
 day_time_start=990
-day_time_speed=0.0000
+day_time_speed=120.0000
 spray_amounts
 mission_preset=5
-mission_time_limit=60
+mission_time_limit=0
 mission_medal_award_mode=0
-mission_starting_points=0
-mission_bronze_req=350
-mission_silver_req=550
-mission_gold_req=750
-mission_platinum_req=950
-mission_briefing_objective=Collect treasures!
-mission_briefing_notes
-mission_maker_record=1030
+mission_starting_points=1200
+mission_bronze_req=150
+mission_silver_req=300
+mission_gold_req=450
+mission_platinum_req=600
+mission_briefing_objective=Collect all treasures!
+mission_briefing_notes=The faster you are, the better your score!
+mission_maker_record=680
 mission_maker_record_date=2025/05/26
 mission_end_conditions{
 	end_condition{
@@ -35,7 +35,7 @@ mission_end_conditions{
 		index_param=0
 		match_amount=1
 		clear=false
-		zero_time_for_score=true
+		zero_time_for_score=false
 		neutral_mood=false
 		reason=Ended early from the pause menu!
 	}
@@ -49,16 +49,6 @@ mission_end_conditions{
 		neutral_mood=false
 		reason=Got all treasures!
 	}
-	end_condition{
-		type=2
-		metric_type=2
-		index_param=0
-		match_amount=0
-		clear=false
-		zero_time_for_score=false
-		neutral_mood=false
-		reason=Time's up!
-	}
 }
 mission_mob_groups{
 	group{
@@ -70,10 +60,10 @@ mission_mob_groups{
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=5
+		display_type=8
 		metric_type=0
 		index_param=0
-		text=Treasures:
+		text=Treasures left
 		total_amount=-1
 	}
 	item{
@@ -86,7 +76,7 @@ mission_hud_items{
 	}
 	item{
 		enabled=true
-		display_type=1
+		display_type=2
 		metric_type=0
 		index_param=0
 		text=Time:
@@ -103,15 +93,9 @@ mission_hud_items{
 }
 mission_score_criteria{
 	criterion{
-		type=2
+		type=3
 		index_param=0
-		points=10
-		affects_hud=false
-	}
-	criterion{
-		type=10
-		index_param=0
-		points=1
+		points=-10
 		affects_hud=true
 	}
 }
