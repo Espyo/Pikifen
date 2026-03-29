@@ -15,9 +15,9 @@ weather=snowstorm
 day_time_start=480
 day_time_speed=72.0000
 spray_amounts
-mission_preset=5
+mission_preset=Custom
 mission_time_limit=600
-mission_medal_award_mode=0
+mission_medal_award_mode=Points
 mission_starting_points=0
 mission_bronze_req=50
 mission_silver_req=100
@@ -29,8 +29,8 @@ mission_maker_record=228
 mission_maker_record_date=2025/03/01
 mission_end_conditions{
 	end_condition{
-		type=0
-		metric_type=0
+		type=Pause menu end
+		metric_type=Mob group cleared mobs
 		index_param=0
 		match_amount=1
 		clear=true
@@ -39,8 +39,8 @@ mission_end_conditions{
 		reason=Ended early from the pause menu!
 	}
 	end_condition{
-		type=2
-		metric_type=2
+		type=Metric is equal or less
+		metric_type=Seconds left
 		index_param=0
 		match_amount=0
 		clear=true
@@ -49,8 +49,8 @@ mission_end_conditions{
 		reason=Time's up!
 	}
 	end_condition{
-		type=2
-		metric_type=5
+		type=Metric is equal or less
+		metric_type=Living Pikmin
 		index_param=0
 		match_amount=0
 		clear=false
@@ -59,8 +59,8 @@ mission_end_conditions{
 		reason=Pikmin extinction!
 	}
 	end_condition{
-		type=1
-		metric_type=8
+		type=Metric is equal or more
+		metric_type=Leaders lost
 		index_param=0
 		match_amount=2
 		clear=true
@@ -73,32 +73,32 @@ mission_mob_groups
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=0
-		metric_type=5
+		display_type=Custom text
+		metric_type=Living Pikmin
 		index_param=0
 		text=Grow many Pikmin!
 		total_amount=100
 	}
 	item{
 		enabled=true
-		display_type=3
-		metric_type=0
+		display_type=Score
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text
 		total_amount=-1
 	}
 	item{
 		enabled=true
-		display_type=1
-		metric_type=0
+		display_type=Clock ticking down
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text=Time:
 		total_amount=-1
 	}
 	item{
 		enabled=false
-		display_type=0
-		metric_type=0
+		display_type=Custom text
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text
 		total_amount=-1
@@ -106,7 +106,7 @@ mission_hud_items{
 }
 mission_score_criteria{
 	criterion{
-		type=5
+		type=Living Pikmin
 		index_param=0
 		points=1
 		affects_hud=true

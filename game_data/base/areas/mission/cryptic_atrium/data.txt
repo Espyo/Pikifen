@@ -15,9 +15,9 @@ weather=cave_normal
 day_time_start=420
 day_time_speed=120.0000
 spray_amounts
-mission_preset=5
+mission_preset=Custom
 mission_time_limit=0
-mission_medal_award_mode=1
+mission_medal_award_mode=Clear
 mission_starting_points=0
 mission_bronze_req=1000
 mission_silver_req=2000
@@ -29,8 +29,8 @@ mission_maker_record=0
 mission_maker_record_date
 mission_end_conditions{
 	end_condition{
-		type=0
-		metric_type=0
+		type=Pause menu end
+		metric_type=Mob group cleared mobs
 		index_param=0
 		match_amount=1
 		clear=false
@@ -39,8 +39,8 @@ mission_end_conditions{
 		reason=Ended early from the pause menu!
 	}
 	end_condition{
-		type=1
-		metric_type=4
+		type=Metric is equal or more
+		metric_type=Leaders in region
 		index_param=0
 		match_amount=-1
 		clear=true
@@ -49,8 +49,8 @@ mission_end_conditions{
 		reason=Got to the exit!
 	}
 	end_condition{
-		type=1
-		metric_type=7
+		type=Metric is equal or more
+		metric_type=Pikmin lost
 		index_param=0
 		match_amount=1
 		clear=false
@@ -63,32 +63,32 @@ mission_mob_groups
 mission_hud_items{
 	item{
 		enabled=true
-		display_type=0
-		metric_type=4
+		display_type=Custom text
+		metric_type=Leaders in region
 		index_param=0
 		text=Find a way to the exit!
 		total_amount=-1
 	}
 	item{
 		enabled=false
-		display_type=0
-		metric_type=0
+		display_type=Custom text
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text
 		total_amount=-1
 	}
 	item{
 		enabled=false
-		display_type=0
-		metric_type=0
+		display_type=Custom text
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text
 		total_amount=-1
 	}
 	item{
 		enabled=false
-		display_type=0
-		metric_type=0
+		display_type=Custom text
+		metric_type=Mob group cleared mobs
 		index_param=0
 		text
 		total_amount=-1

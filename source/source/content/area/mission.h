@@ -125,6 +125,24 @@ enum MISSION_METRIC {
 };
 
 
+//Mission metric enum naming.
+buildEnumNames(missionMetricNames, MISSION_METRIC)({
+    { MISSION_METRIC_MOB_GROUP_CLEARED_MOBS, "Mob group cleared mobs" },
+    { MISSION_METRIC_MOB_GROUP_HEALTH, "Mob group health" },
+    { MISSION_METRIC_SECS_LEFT, "Seconds left" },
+    { MISSION_METRIC_SECS_PASSED, "Seconds passed" },
+    { MISSION_METRIC_LEADERS_IN_REGION, "Leaders in region" },
+    { MISSION_METRIC_LIVING_PIKMIN, "Living Pikmin" },
+    { MISSION_METRIC_PIKMIN_BORN, "Pikmin born" },
+    { MISSION_METRIC_PIKMIN_LOST, "Pikmin lost" },
+    { MISSION_METRIC_LEADERS_LOST, "Leaders lost" },
+    { MISSION_METRIC_OBJECT_COLLECTION_PTS, "Object collection points" },
+    { MISSION_METRIC_TREASURE_COLLECTION_PTS, "Treasure collection points" },
+    { MISSION_METRIC_ENEMY_COLLECTION_PTS, "Enemy collection points" },
+    { MISSION_METRIC_ENEMY_DEFEAT_PTS, "Enemy defeat points" },
+});
+
+
 //Possible end conditions for missions.
 enum MISSION_END_COND {
 
@@ -141,6 +159,15 @@ enum MISSION_END_COND {
     MISSION_END_COND_TAKE_DAMAGE,
     
 };
+
+
+//Mission end condition enum naming.
+buildEnumNames(missionEndCondNames, MISSION_END_COND)({
+    { MISSION_END_COND_PAUSE_MENU, "Pause menu end" },
+    { MISSION_END_COND_METRIC_OR_MORE, "Metric is equal or more" },
+    { MISSION_END_COND_METRIC_OR_LESS, "Metric is equal or less" },
+    { MISSION_END_COND_TAKE_DAMAGE, "Take damage" },
+});
 
 
 //Types of mission mob groups.
@@ -290,6 +317,14 @@ enum MISSION_MEDAL_AWARD_MODE {
     MISSION_MEDAL_AWARD_MODE_PARTICIPATION,
     
 };
+
+
+//Mission medal award mode enum naming.
+buildEnumNames(missionMedalAwardModeNames, MISSION_MEDAL_AWARD_MODE)({
+    { MISSION_MEDAL_AWARD_MODE_POINTS, "Points" },
+    { MISSION_MEDAL_AWARD_MODE_CLEAR, "Clear" },
+    { MISSION_MEDAL_AWARD_MODE_PARTICIPATION, "Participation" },
+});
 
 
 //DEPRECATED by MISSION_END_COND in 1.2.0.

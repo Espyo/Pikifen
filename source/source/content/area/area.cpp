@@ -1577,8 +1577,9 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     );
     
     ReaderSetter mRS(node);
-    int presetInt = MISSION_PRESET_CUSTOM;
-    int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_CLEAR;
+    string presetStr;
+    string medalAwardModeStr;
+    DataNode* presetNode = nullptr;
     DataNode* medalAwardModeNode = nullptr;
     string briefingNotesStr;
     
@@ -1588,9 +1589,9 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     }
     
     //General properties.
-    mRS.set("mission_preset", presetInt);
+    mRS.set("mission_preset", presetStr, &presetNode);
     mRS.set("mission_time_limit", mission.timeLimit);
-    mRS.set("mission_medal_award_mode", medalAwardModeInt, &medalAwardModeNode);
+    mRS.set("mission_medal_award_mode", medalAwardModeStr, &medalAwardModeNode);
     mRS.set("mission_starting_points", mission.startingPoints);
     mRS.set("mission_bronze_req", mission.bronzeReq);
     mRS.set("mission_silver_req", mission.silverReq);
@@ -1601,8 +1602,18 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_maker_record", mission.makerRecord);
     mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
+    if(presetNode) {
+        readEnumProp(
+            missionPresetNames, presetStr,
+            &mission.preset, "mission preset", presetNode
+        );
+    }
     if(medalAwardModeNode) {
-        mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
+        readEnumProp(
+            missionMedalAwardModeNames, medalAwardModeStr,
+            &mission.medalAwardMode, "mission medal award mode",
+            medalAwardModeNode
+        );
     }
     mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
@@ -1614,12 +1625,14 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionEndCond newCond;
         
         ReaderSetter cRS(condNode);
-        int typeInt = 0;
-        int metricTypeInt = 0;
+        string typeStr;
+        string metricTypeStr;
         int matchAmountInt = 0;
+        DataNode* typeNode = nullptr;
+        DataNode* metricTypeNode = nullptr;
         
-        cRS.set("type", typeInt);
-        cRS.set("metric_type", metricTypeInt);
+        cRS.set("type", typeStr, &typeNode);
+        cRS.set("metric_type", metricTypeStr, &metricTypeNode);
         cRS.set("index_param", newCond.idxParam);
         cRS.set("match_amount", matchAmountInt);
         cRS.set("clear", newCond.clear);
@@ -1627,8 +1640,14 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         cRS.set("neutral_mood", newCond.neutralMood);
         cRS.set("reason", newCond.reason);
         
-        newCond.type = (MISSION_END_COND) typeInt;
-        newCond.metricType = (MISSION_METRIC) metricTypeInt;
+        readEnumProp(
+            missionEndCondNames, typeStr, &newCond.type,
+            "mission end condition type", typeNode
+        );
+        readEnumProp(
+            missionMetricNames, metricTypeStr, &newCond.metricType,
+            "mission end condition metric type", metricTypeNode
+        );
         newCond.matchAmount = matchAmountInt == -1 ? INVALID : matchAmountInt;
         
         mission.endConds.push_back(newCond);
@@ -1643,15 +1662,19 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionMobGroup newGroup;
         
         ReaderSetter cRS(groupNode);
-        int typeInt = 0;
+        string typeStr;
         string mobIdxsStr;
+        DataNode* typeNode = nullptr;
         
-        cRS.set("type", typeInt);
+        cRS.set("type", typeStr);
         cRS.set("enemies_need_collection", newGroup.enemiesNeedCollection);
         cRS.set("highlight_on_radar", newGroup.highlightOnRadar);
         cRS.set("mob_idxs", mobIdxsStr);
         
-        newGroup.type = (MISSION_MOB_GROUP) typeInt;
+        readEnumProp(
+            missionMobGroupTypeNames, typeStr, &newGroup.type,
+            "mission mob group type", typeNode
+        );
         
         vector<string> mobIdxsStrVec = semicolonListToVector(mobIdxsStr);
         newGroup.mobIdxs.reserve(mobIdxsStrVec.size());
@@ -1670,19 +1693,29 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionHudItem newItem;
         
         ReaderSetter iRS(itemNode);
-        int displayTypeInt = 0;
-        int metricTypeInt = 0;
+        string displayTypeStr;
+        string metricTypeStr;
         int totalAmountInt = 0;
+        DataNode* displayTypeNode = nullptr;
+        DataNode* metricTypeNode = nullptr;
         
         iRS.set("enabled", newItem.enabled);
-        iRS.set("display_type", displayTypeInt);
-        iRS.set("metric_type", metricTypeInt);
+        iRS.set("display_type", displayTypeStr);
+        iRS.set("metric_type", metricTypeStr);
         iRS.set("index_param", newItem.idxParam);
         iRS.set("text", newItem.text);
         iRS.set("total_amount", totalAmountInt);
         
-        newItem.displayType = (MISSION_HUD_ITEM_DISPLAY) displayTypeInt;
-        newItem.metricType = (MISSION_METRIC) metricTypeInt;
+        readEnumProp(
+            missionHudItemDisplayTypeNames, displayTypeStr,
+            &newItem.displayType, "mission HUD item display type",
+            displayTypeNode
+        );
+        readEnumProp(
+            missionMetricNames, metricTypeStr,
+            &newItem.metricType, "mission HUD item metric type",
+            metricTypeNode
+        );
         newItem.totalAmount = totalAmountInt == -1 ? INVALID : totalAmountInt;
         
         mission.hudItems[i] = newItem;
@@ -1697,14 +1730,19 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         MissionScoreCriterion newCriterion;
         
         ReaderSetter cRS(criterionNode);
-        int metricTypeInt = 0;
+        string metricTypeStr;
+        DataNode* metricTypeNode;
         
-        cRS.set("type", metricTypeInt);
+        cRS.set("type", metricTypeStr, &metricTypeNode);
         cRS.set("index_param", newCriterion.idxParam);
         cRS.set("points", newCriterion.points);
         cRS.set("affects_hud", newCriterion.affectsHud);
         
-        newCriterion.metricType = (MISSION_METRIC) metricTypeInt;
+        readEnumProp(
+            missionMetricNames, metricTypeStr,
+            &newCriterion.metricType, "mission score criterion metric type",
+            metricTypeNode
+        );
         
         mission.scoreCriteria.push_back(newCriterion);
     }
@@ -2684,9 +2722,14 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     string briefingNotesStr =
         join(mission.briefingNotes, ";");
-    mGW.write("mission_preset", mission.preset);
+    mGW.write(
+        "mission_preset", enumGetName(missionPresetNames, mission.preset)
+    );
     mGW.write("mission_time_limit", mission.timeLimit);
-    mGW.write("mission_medal_award_mode", mission.medalAwardMode);
+    mGW.write(
+        "mission_medal_award_mode",
+        enumGetName(missionMedalAwardModeNames, mission.medalAwardMode)
+    );
     mGW.write("mission_starting_points", mission.startingPoints);
     mGW.write("mission_bronze_req", mission.bronzeReq);
     mGW.write("mission_silver_req", mission.silverReq);
@@ -2707,8 +2750,12 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         int matchAmountInt =
             condPtr->matchAmount == INVALID ? -1 : condPtr->matchAmount;
             
-        cGW.write("type", condPtr->type);
-        cGW.write("metric_type", condPtr->metricType);
+        cGW.write(
+            "type", enumGetName(missionEndCondNames, condPtr->type)
+        );
+        cGW.write(
+            "metric_type", enumGetName(missionMetricNames, condPtr->metricType)
+        );
         cGW.write("index_param", condPtr->idxParam);
         cGW.write("match_amount", matchAmountInt);
         cGW.write("clear", condPtr->clear);
@@ -2725,7 +2772,9 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         
         GetterWriter cGW(groupNode);
         
-        cGW.write("type", groupPtr->type);
+        cGW.write(
+            "type", enumGetName(missionMobGroupTypeNames, groupPtr->type)
+        );
         cGW.write("enemies_need_collection", groupPtr->enemiesNeedCollection);
         cGW.write("highlight_on_radar", groupPtr->highlightOnRadar);
         
@@ -2750,8 +2799,13 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             itemPtr->totalAmount == INVALID ? -1 : itemPtr->totalAmount;
             
         iGW.write("enabled", itemPtr->enabled);
-        iGW.write("display_type", itemPtr->displayType);
-        iGW.write("metric_type", itemPtr->metricType);
+        iGW.write(
+            "display_type",
+            enumGetName(missionHudItemDisplayTypeNames, itemPtr->displayType)
+        );
+        iGW.write(
+            "metric_type", enumGetName(missionMetricNames, itemPtr->metricType)
+        );
         iGW.write("index_param", itemPtr->idxParam);
         iGW.write("text", itemPtr->text);
         iGW.write("total_amount", totalAmountInt);
@@ -2765,7 +2819,9 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         
         GetterWriter cGW(criterionNode);
         
-        cGW.write("type", criterionPtr->metricType);
+        cGW.write(
+            "type", enumGetName(missionMetricNames, criterionPtr->metricType)
+        );
         cGW.write("index_param", criterionPtr->idxParam);
         cGW.write("points", criterionPtr->points);
         cGW.write("affects_hud", criterionPtr->affectsHud);
