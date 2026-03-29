@@ -352,6 +352,18 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                 game.states.gameplay->players[0].view.cam.setPos(
                     game.states.gameplay->players[0].view.mouseCursorWorldPos
                 );
+                if(!mod2) {
+                    for(
+                        size_t p = 0;
+                        p < mobToTeleport->group->members.size(); p++
+                    ) {
+                        mobToTeleport->group->members[p]->chase(
+                            game.states.gameplay->
+                            players[0].view.mouseCursorWorldPos,
+                            mouseSector->z, CHASE_FLAG_TELEPORT
+                        );
+                    }
+                }
             } else {
                 //Tick it once so it can run its teleportation code.
                 //This is useful if the player teleports it far away,
