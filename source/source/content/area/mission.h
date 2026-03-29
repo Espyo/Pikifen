@@ -111,10 +111,16 @@ enum MISSION_METRIC {
     MISSION_METRIC_LEADERS_LOST,
     
     //Object collection points.
-    MISSION_METRIC_COLLECTION_POINTS,
+    MISSION_METRIC_OBJECT_COLLECTION_PTS,
+    
+    //Treasure collection points.
+    MISSION_METRIC_TREASURE_COLLECTION_PTS,
+    
+    //Enemy collection points.
+    MISSION_METRIC_ENEMY_COLLECTION_PTS,
     
     //Enemy defeat points.
-    MISSION_METRIC_DEFEAT_POINTS,
+    MISSION_METRIC_ENEMY_DEFEAT_PTS,
     
 };
 
@@ -416,6 +422,11 @@ struct MissionEndCond {
     //to show in the results menu.
     string reason;
     
+    
+    //--- Public function declarations ---
+    
+    bool usesMetric() const;
+    
 };
 
 
@@ -494,7 +505,14 @@ struct MissionHudItem {
     
     //Fixed number for the total amount, if applicable.
     //INVALID means it should let the metric type calculate it.
-    size_t totalAmount = 0;
+    size_t totalAmount = INVALID;
+    
+    
+    //--- Public function declarations ---
+    
+    bool usesMetric() const;
+    bool usesText() const;
+    bool usesTotal() const;
     
 };
 
@@ -873,7 +891,55 @@ protected:
 /**
  * @brief Represents the "object collection points" metric type.
  */
-class MissionMetricTypeCollectionPoints : public MissionMetricType {
+class MissionMetricTypeObjectCollectionPts : public MissionMetricType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    MissionMetricType::Info getInfo() const override;
+    int getAmount(size_t idxParam = 0) const override;
+    bool getZoomData(
+        size_t idxParam, Point* outCamPos, float* outCamZoom
+    ) const override;
+    
+    
+protected:
+
+    //--- Protected function declarations ---
+    
+    int getAutoTarget(size_t idxParam = 0) const override;
+};
+
+
+/**
+ * @brief Represents the "treasure collection points" metric type.
+ */
+class MissionMetricTypeTreasureCollectionPts : public MissionMetricType {
+
+public:
+
+    //--- Public function declarations ---
+    
+    MissionMetricType::Info getInfo() const override;
+    int getAmount(size_t idxParam = 0) const override;
+    bool getZoomData(
+        size_t idxParam, Point* outCamPos, float* outCamZoom
+    ) const override;
+    
+    
+protected:
+
+    //--- Protected function declarations ---
+    
+    int getAutoTarget(size_t idxParam = 0) const override;
+};
+
+
+/**
+ * @brief Represents the "enemy collection points" metric type.
+ */
+class MissionMetricTypeEnemyCollectionPts : public MissionMetricType {
 
 public:
 
@@ -897,7 +963,7 @@ protected:
 /**
  * @brief Represents the "enemy defeat points" metric type.
  */
-class MissionMetricTypeDefeatPoints : public MissionMetricType {
+class MissionMetricTypeDefeatPts : public MissionMetricType {
 
 public:
 

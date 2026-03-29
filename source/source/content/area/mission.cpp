@@ -158,7 +158,7 @@ void MissionData::applyPresetBattleEnemies() {
     //Score criteria.
     scoreCriteria.push_back(
     MissionScoreCriterion {
-        .metricType = MISSION_METRIC_DEFEAT_POINTS,
+        .metricType = MISSION_METRIC_ENEMY_DEFEAT_PTS,
         .points = 1,
         .affectsHud = true,
     }
@@ -170,7 +170,7 @@ void MissionData::applyPresetBattleEnemies() {
         "Defeat as many enemies as you can within the time limit!";
     briefingNotes = {
         "Defeat them all for a platinum medal!",
-        "If a leader loses all their health, the mission will end early!"
+        "Losing a leader ends the mission early!"
     };
     startingPoints = 0;
 }
@@ -255,7 +255,7 @@ void MissionData::applyPresetCollectEverything() {
     //Score criteria.
     scoreCriteria.push_back(
     MissionScoreCriterion {
-        .metricType = MISSION_METRIC_COLLECTION_POINTS,
+        .metricType = MISSION_METRIC_OBJECT_COLLECTION_PTS,
         .points = 1,
         .affectsHud = true,
     }
@@ -268,7 +268,7 @@ void MissionData::applyPresetCollectEverything() {
         "the time limit!";
     briefingNotes = {
         "Collect everything for a platinum medal!",
-        "If a leader loses all their health, the mission will end early!"
+        "Losing a leader ends the mission early!"
     };
     startingPoints = 0;
 }
@@ -291,6 +291,7 @@ void MissionData::applyPresetCollectPikmin() {
     endConds.push_back(
     MissionEndCond {
         .type = MISSION_END_COND_METRIC_OR_LESS,
+        .metricType = MISSION_METRIC_SECS_LEFT,
         .matchAmount = 0,
         .clear = true,
         .neutralMood = true,
@@ -343,7 +344,7 @@ void MissionData::applyPresetCollectPikmin() {
         "Collect as many Pikmin as you can within the time limit!";
     briefingNotes = {
         "The more you have, the better your medal!",
-        "If a leader loses all their health, the mission will end early!"
+        "Losing a leader ends the mission early!"
     };
     startingPoints = 0;
 }
@@ -427,7 +428,7 @@ void MissionData::applyPresetCollectTreasure() {
     //Score criteria.
     scoreCriteria.push_back(
     MissionScoreCriterion {
-        .metricType = MISSION_METRIC_COLLECTION_POINTS,
+        .metricType = MISSION_METRIC_TREASURE_COLLECTION_PTS,
         .points = 1,
         .affectsHud = true,
     }
@@ -439,7 +440,7 @@ void MissionData::applyPresetCollectTreasure() {
         "Collect as many treasures as you can within the time limit!";
     briefingNotes = {
         "Collect everything for a platinum medal!",
-        "If a leader loses all their health, the mission will end early!"
+        "Losing a leader ends the mission early!"
     };
     startingPoints = 0;
 }
@@ -656,6 +657,22 @@ void MissionData::reset() {
     hudItems.clear();
     hudItems.insert(hudItems.begin(), 4, MissionHudItem());
     scoreCriteria.clear();
+}
+
+
+#pragma endregion
+#pragma region End condition
+
+
+/**
+ * @brief Returns whether this end condition makes use of a mission metric.
+ *
+ * @return
+ */
+bool MissionEndCond::usesMetric() const {
+    return
+        type == MISSION_END_COND_METRIC_OR_MORE ||
+        type == MISSION_END_COND_METRIC_OR_LESS;
 }
 
 
@@ -888,7 +905,60 @@ bool MissionEndCondTypeTakeDamage::isMet(MissionEndCond* cond) const {
 
 
 #pragma endregion
-#pragma region Mission metric
+#pragma region HUD item
+
+
+/**
+ * @brief Returns whether this HUD item makes use of a mission metric.
+ *
+ * @return Whether it uses one.
+ */
+bool MissionHudItem::usesMetric() const {
+    return
+        displayType == MISSION_HUD_ITEM_DISPLAY_HEALTH ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_CUR_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_CUR ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+}
+
+
+/**
+ * @brief Returns whether this HUD item makes use of a text parameter.
+ *
+ * @return Whether it uses it.
+ */
+bool MissionHudItem::usesText() const {
+    return
+        displayType == MISSION_HUD_ITEM_DISPLAY_TEXT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_HEALTH ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_CUR_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_CUR ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+}
+
+
+/**
+ * @brief Returns whether this HUD item makes use of a total amount
+ * of something.
+ *
+ * @return Whether it uses it.
+ */
+bool MissionHudItem::usesTotal() const {
+    return
+        displayType == MISSION_HUD_ITEM_DISPLAY_HEALTH ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_CUR_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+}
+
+
+#pragma endregion
+#pragma region Mission metric type
 
 
 /**
@@ -930,10 +1000,8 @@ int MissionMetricType::getTarget(
  * @param idxParam Index parameter, if applicable.
  * @return The amount.
  */
-int MissionMetricTypeCollectionPoints::getAmount(size_t idxParam) const {
-    return
-        game.states.gameplay->treasurePointsObtained +
-        game.states.gameplay->enemyCollectionPointsObtained;
+int MissionMetricTypeEnemyCollectionPts::getAmount(size_t idxParam) const {
+    return game.states.gameplay->enemyCollectionPointsObtained;
 }
 
 
@@ -943,8 +1011,10 @@ int MissionMetricTypeCollectionPoints::getAmount(size_t idxParam) const {
  * @param idxParam Index parameter, if applicable.
  * @return The amount, or 0 if none.
  */
-int MissionMetricTypeCollectionPoints::getAutoTarget(size_t idxParam) const {
-    return 0;
+int MissionMetricTypeEnemyCollectionPts::getAutoTarget(size_t idxParam) const {
+    size_t enemyPoints = 0;
+    game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
+    return enemyPoints;
 }
 
 
@@ -953,11 +1023,11 @@ int MissionMetricTypeCollectionPoints::getAutoTarget(size_t idxParam) const {
  *
  * @return The information.
  */
-MissionMetricType::Info MissionMetricTypeCollectionPoints::getInfo() const {
+MissionMetricType::Info MissionMetricTypeEnemyCollectionPts::getInfo() const {
     return
     Info {
-        .name = "Object collection points",
-        .hasAutoTarget = false
+        .name = "Enemy collection points",
+        .hasAutoTarget = true
     };
 }
 
@@ -971,7 +1041,70 @@ MissionMetricType::Info MissionMetricTypeCollectionPoints::getInfo() const {
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionMetricTypeCollectionPoints::getZoomData(
+bool MissionMetricTypeEnemyCollectionPts::getZoomData(
+    size_t idxParam, Point* outCamPos, float* outCamZoom
+) const {
+    if(game.states.gameplay->lastCollectedEnemyPos.x != LARGE_FLOAT) {
+        *outCamPos = game.states.gameplay->lastCollectedEnemyPos;
+        *outCamZoom = game.states.gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Returns the current amount.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount.
+ */
+int MissionMetricTypeObjectCollectionPts::getAmount(size_t idxParam) const {
+    return
+        game.states.gameplay->treasurePointsObtained +
+        game.states.gameplay->enemyCollectionPointsObtained;
+}
+
+
+/**
+ * @brief Returns the automatic target amount, if possible.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount, or 0 if none.
+ */
+int MissionMetricTypeObjectCollectionPts::getAutoTarget(size_t idxParam) const {
+    size_t treasurePoints = 0;
+    size_t enemyPoints = 0;
+    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
+    game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
+    return treasurePoints + enemyPoints;
+}
+
+
+/**
+ * @brief Returns static information about the type.
+ *
+ * @return The information.
+ */
+MissionMetricType::Info MissionMetricTypeObjectCollectionPts::getInfo() const {
+    return
+    Info {
+        .name = "Object collection points",
+        .hasAutoTarget = true
+    };
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * into something relevant to the metric.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionMetricTypeObjectCollectionPts::getZoomData(
     size_t idxParam, Point* outCamPos, float* outCamZoom
 ) const {
     if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
@@ -994,8 +1127,8 @@ bool MissionMetricTypeCollectionPoints::getZoomData(
  * @param idxParam Index parameter, if applicable.
  * @return The amount.
  */
-int MissionMetricTypeDefeatPoints::getAmount(size_t idxParam) const {
-    return game.states.gameplay->enemyDefeatPointsObtained;
+int MissionMetricTypeTreasureCollectionPts::getAmount(size_t idxParam) const {
+    return game.states.gameplay->treasurePointsObtained;
 }
 
 
@@ -1005,8 +1138,12 @@ int MissionMetricTypeDefeatPoints::getAmount(size_t idxParam) const {
  * @param idxParam Index parameter, if applicable.
  * @return The amount, or 0 if none.
  */
-int MissionMetricTypeDefeatPoints::getAutoTarget(size_t idxParam) const {
-    return 0;
+int MissionMetricTypeTreasureCollectionPts::getAutoTarget(
+    size_t idxParam
+) const {
+    size_t treasurePoints = 0;
+    game.curArea->getTotalTreasureInfo(nullptr, &treasurePoints);
+    return treasurePoints;
 }
 
 
@@ -1015,11 +1152,12 @@ int MissionMetricTypeDefeatPoints::getAutoTarget(size_t idxParam) const {
  *
  * @return The information.
  */
-MissionMetricType::Info MissionMetricTypeDefeatPoints::getInfo() const {
+MissionMetricType::Info
+MissionMetricTypeTreasureCollectionPts::getInfo() const {
     return
     Info {
-        .name = "Enemy defeat points",
-        .hasAutoTarget = false
+        .name = "Treasure collection points",
+        .hasAutoTarget = true
     };
 }
 
@@ -1033,7 +1171,66 @@ MissionMetricType::Info MissionMetricTypeDefeatPoints::getInfo() const {
  * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere in the first place.
  */
-bool MissionMetricTypeDefeatPoints::getZoomData(
+bool MissionMetricTypeTreasureCollectionPts::getZoomData(
+    size_t idxParam, Point* outCamPos, float* outCamZoom
+) const {
+    if(game.states.gameplay->lastCollectedTreasurePos.x != LARGE_FLOAT) {
+        *outCamPos = game.states.gameplay->lastCollectedTreasurePos;
+        *outCamZoom = game.states.gameplay->zoomLevels[0];
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Returns the current amount.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount.
+ */
+int MissionMetricTypeDefeatPts::getAmount(size_t idxParam) const {
+    return game.states.gameplay->enemyDefeatPointsObtained;
+}
+
+
+/**
+ * @brief Returns the automatic target amount, if possible.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @return The amount, or 0 if none.
+ */
+int MissionMetricTypeDefeatPts::getAutoTarget(size_t idxParam) const {
+    size_t enemyPoints = 0;
+    game.curArea->getTotalEnemyInfo(nullptr, &enemyPoints);
+    return enemyPoints;
+}
+
+
+/**
+ * @brief Returns static information about the type.
+ *
+ * @return The information.
+ */
+MissionMetricType::Info MissionMetricTypeDefeatPts::getInfo() const {
+    return
+    Info {
+        .name = "Enemy defeat points",
+        .hasAutoTarget = true
+    };
+}
+
+
+/**
+ * @brief Returns where the camera should go to to zoom
+ * into something relevant to the metric.
+ *
+ * @param idxParam Index parameter, if applicable.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
+ * @return Whether the camera should zoom somewhere in the first place.
+ */
+bool MissionMetricTypeDefeatPts::getZoomData(
     size_t idxParam, Point* outCamPos, float* outCamZoom
 ) const {
     if(game.states.gameplay->lastMobClearedPos.x != LARGE_FLOAT) {
@@ -1067,7 +1264,14 @@ int MissionMetricTypeLeadersInRegion::getAmount(size_t idxParam) const {
  * @return The amount, or 0 if none.
  */
 int MissionMetricTypeLeadersInRegion::getAutoTarget(size_t idxParam) const {
-    return 0;
+    size_t nLeaders = 0;
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+            nLeaders++;
+        }
+    }
+    return nLeaders;
 }
 
 
@@ -1082,7 +1286,7 @@ MissionMetricType::Info MissionMetricTypeLeadersInRegion::getInfo() const {
         .name = "Leaders in region",
         .idxParamName = "Region number",
         .idxParamDescription = "Number of the area region.",
-        .hasAutoTarget = false
+        .hasAutoTarget = true
     };
 }
 
@@ -1136,7 +1340,14 @@ int MissionMetricTypeLeadersLost::getAmount(size_t idxParam) const {
  * @return The amount, or 0 if none.
  */
 int MissionMetricTypeLeadersLost::getAutoTarget(size_t idxParam) const {
-    return 0;
+    size_t nLeaders = 0;
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
+            nLeaders++;
+        }
+    }
+    return nLeaders;
 }
 
 
@@ -1149,7 +1360,7 @@ MissionMetricType::Info MissionMetricTypeLeadersLost::getInfo() const {
     return
     Info {
         .name = "Leaders lost",
-        .hasAutoTarget = false
+        .hasAutoTarget = true
     };
 }
 
@@ -1193,7 +1404,14 @@ int MissionMetricTypeLivingPikmin::getAmount(size_t idxParam) const {
  * @return The amount, or 0 if none.
  */
 int MissionMetricTypeLivingPikmin::getAutoTarget(size_t idxParam) const {
-    return 0;
+    size_t nPikmin = 0;
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            nPikmin++;
+        }
+    }
+    return nPikmin;
 }
 
 
@@ -1206,7 +1424,7 @@ MissionMetricType::Info MissionMetricTypeLivingPikmin::getInfo() const {
     return
     Info {
         .name = "Living Pikmin",
-        .hasAutoTarget = false
+        .hasAutoTarget = true
     };
 }
 
@@ -1387,7 +1605,14 @@ int MissionMetricTypePikminBorn::getAmount(size_t idxParam) const {
  * @return The amount, or 0 if none.
  */
 int MissionMetricTypePikminBorn::getAutoTarget(size_t idxParam) const {
-    return 0;
+    size_t nPikmin = 0;
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            nPikmin++;
+        }
+    }
+    return nPikmin;
 }
 
 
@@ -1400,7 +1625,7 @@ MissionMetricType::Info MissionMetricTypePikminBorn::getInfo() const {
     return
     Info {
         .name = "Pikmin born",
-        .hasAutoTarget = false
+        .hasAutoTarget = true
     };
 }
 
@@ -1444,7 +1669,14 @@ int MissionMetricTypePikminDeaths::getAmount(size_t idxParam) const {
  * @return The amount, or 0 if none.
  */
 int MissionMetricTypePikminDeaths::getAutoTarget(size_t idxParam) const {
-    return 0;
+    size_t nPikmin = 0;
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            nPikmin++;
+        }
+    }
+    return nPikmin;
 }
 
 
@@ -1457,7 +1689,7 @@ MissionMetricType::Info MissionMetricTypePikminDeaths::getInfo() const {
     return
     Info {
         .name = "Pikmin deaths",
-        .hasAutoTarget = false
+        .hasAutoTarget = true
     };
 }
 

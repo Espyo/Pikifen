@@ -889,12 +889,7 @@ void AreaEditor::findProblemsIntersectingEdge() {
 void AreaEditor::findProblemsInvalidIdxParamMissionEndCond() {
     for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
         MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
-        if(
-            cPtr->type != MISSION_END_COND_METRIC_OR_LESS &&
-            cPtr->type != MISSION_END_COND_METRIC_OR_MORE
-        ) {
-            continue;
-        }
+        if(!cPtr->usesMetric()) continue;
         MissionMetricType* metricTypePtr =
             game.missionMetricTypes[cPtr->metricType];
         if(metricTypePtr->getInfo().idxParamName.empty()) continue;
@@ -1321,10 +1316,8 @@ void AreaEditor::findProblemsNoTimeLimitMissionEndCond() {
     for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
         MissionEndCond* cPtr = &game.curArea->mission.endConds[c];
         if(
-            (
-                cPtr->type == MISSION_END_COND_METRIC_OR_LESS ||
-                cPtr->type == MISSION_END_COND_METRIC_OR_MORE
-            ) && cPtr->metricType == MISSION_METRIC_SECS_LEFT &&
+            cPtr->usesMetric() &&
+            cPtr->metricType == MISSION_METRIC_SECS_LEFT &&
             game.curArea->mission.timeLimit == 0
         ) {
             problemType = EPT_NO_TIME_LIMIT_MISSION_END_COND;

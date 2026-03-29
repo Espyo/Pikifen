@@ -991,10 +991,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             //Mission score.
             missionScore = calculateMissionScore(true);
             
-            if(missionScore != oldMissionScore && missionScoreCurText) {
-                missionScoreCurText->startJuiceAnimation(
-                    GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
-                );
+            if(missionScore != oldMissionScore) {
                 MISSION_MEDAL oldMedal =
                     game.curArea->mission.getScoreMedal(oldMissionScore);
                 MISSION_MEDAL newMedal =
@@ -1006,7 +1003,6 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     { .volume = 0.50f }
                     );
                 }
-                
                 oldMissionScore = missionScore;
             }
             

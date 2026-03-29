@@ -40,17 +40,39 @@ Resource::Resource(const Point& pos, ResourceType* type, float angle) :
  * @return The point amount.
  */
 int Resource::getMissionPoints(bool* applicableInThisMission) const {
+    if(parent) return parent->m->getMissionPoints(applicableInThisMission);
+    
     if(applicableInThisMission) {
+        const auto checkMetric = [] (MISSION_METRIC metric) {
+            return
+                metric == MISSION_METRIC_OBJECT_COLLECTION_PTS ||
+                metric == MISSION_METRIC_TREASURE_COLLECTION_PTS;
+        };
+        
         *applicableInThisMission = false;
+        
+        for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+            MissionEndCond* cPtr =
+                &game.curArea->mission.endConds[c];
+            if(!cPtr->usesMetric()) continue;
+            if(!checkMetric(cPtr->metricType)) continue;
+            *applicableInThisMission = true;
+        }
         for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
             MissionScoreCriterion* cPtr =
                 &game.curArea->mission.scoreCriteria[c];
-            if(cPtr->metricType == MISSION_METRIC_COLLECTION_POINTS) {
-                *applicableInThisMission = true;
-            }
+            if(!checkMetric(cPtr->metricType)) continue;
+            *applicableInThisMission = true;
+        }
+        for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+            MissionHudItem* iPtr =
+                &game.curArea->mission.hudItems[i];
+            if(!iPtr->usesMetric()) continue;
+            if(!checkMetric(iPtr->metricType)) continue;
+            *applicableInThisMission = true;
         }
     }
-    if(parent) return parent->m->getMissionPoints(applicableInThisMission);
+    
     if(
         resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS

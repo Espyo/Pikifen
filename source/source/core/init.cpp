@@ -1129,8 +1129,10 @@ void initMiscDatabases() {
         new MissionMetricTypePikminBorn(),
         new MissionMetricTypePikminDeaths(),
         new MissionMetricTypeLeadersLost(),
-        new MissionMetricTypeCollectionPoints(),
-        new MissionMetricTypeDefeatPoints(),
+        new MissionMetricTypeObjectCollectionPts(),
+        new MissionMetricTypeTreasureCollectionPts(),
+        new MissionMetricTypeEnemyCollectionPts(),
+        new MissionMetricTypeDefeatPts(),
         new MissionMetricTypeScriptSlot(),
     };
     

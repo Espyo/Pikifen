@@ -334,6 +334,8 @@ struct Area : public Content {
     void generateEdgesBlockmap(const vector<Edge*>& edges);
     size_t getMaxPikminInField() const;
     size_t getNrPathLinks();
+    void getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const;
+    void getTotalEnemyInfo(size_t* outAmount, size_t* outPoints) const;
     void loadMainDataFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );

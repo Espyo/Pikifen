@@ -1205,20 +1205,16 @@ void GameplayState::load() {
     treasurePointsObtained = 0;
     treasurePointsTotal = 0;
     enemyDefeats = 0;
-    enemyTotal = 0;
+    enemiesTotal = 0;
     enemyDefeatPointsObtained = 0;
     enemyCollectionPointsObtained = 0;
     enemyPointsTotal = 0;
-    curLeadersInMissionExit = 0;
-    missionScore = 0;
     missionConsiderZeroTime = false;
     missionEndCondIdx = INVALID;
     missionEndFromPauseMenu = false;
     missionWasCleared = false;
-    oldMissionScore = 0;
-    oldMissionGoalCur = 0;
-    oldMissionFail1Cur = 0;
-    oldMissionFail2Cur = 0;
+    missionHudItemOldAmt1.clear();
+    missionHudItemOldAmt2.clear();
     nrLivingLeaders = 0;
     leadersKod = 0;
     medalGotItJuiceTimer = 0.0f;
@@ -1428,45 +1424,9 @@ void GameplayState::load() {
         }
     }
     
-    //Figure out the total amount of treasures and their points.
-    for(size_t t = 0; t < mobs.treasures.size(); t++) {
-        treasuresTotal++;
-        treasurePointsTotal +=
-            mobs.treasures[t]->treType->points;
-    }
-    for(size_t p = 0; p < mobs.piles.size(); p++) {
-        Pile* pPtr = mobs.piles[p];
-        ResourceType* resType = pPtr->pilType->contents;
-        if(
-            resType->deliveryResult !=
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-        ) {
-            continue;
-        }
-        treasuresTotal += pPtr->amount;
-        treasurePointsTotal +=
-            pPtr->amount * resType->pointAmount;
-    }
-    for(size_t r = 0; r < mobs.resources.size(); r++) {
-        Resource* rPtr = mobs.resources[r];
-        if(
-            rPtr->resType->deliveryResult !=
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-        ) {
-            continue;
-        }
-        treasuresTotal++;
-        treasurePointsTotal += rPtr->resType->pointAmount;
-    }
-    
-    //Figure out the total amount of enemies and their points.
-    enemyTotal = 0;
-    for(size_t e = 0; e < mobs.enemies.size(); e++) {
-        if(!mobs.enemies[e]->parent) {
-            enemyTotal++;
-            enemyPointsTotal += mobs.enemies[e]->eneType->points;
-        }
-    }
+    //Figure out the total amount of treasures and enemies, and their points.
+    game.curArea->getTotalTreasureInfo(&treasuresTotal, &treasurePointsTotal);
+    game.curArea->getTotalEnemyInfo(&enemiesTotal, &enemyPointsTotal);
     
     //Initialize the area's active cells.
     float areaWidth =

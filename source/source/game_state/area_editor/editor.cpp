@@ -1109,12 +1109,7 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
         );
         for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
             MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
-            if(
-                ePtr->type != MISSION_END_COND_METRIC_OR_LESS &&
-                ePtr->type != MISSION_END_COND_METRIC_OR_MORE
-            ) {
-                continue;
-            }
+            if(!ePtr->usesMetric()) continue;
             if(ePtr->metricType != MISSION_METRIC_LEADERS_IN_REGION) {
                 continue;
             }

@@ -1050,6 +1050,100 @@ size_t Area::getNrPathLinks() {
 
 
 /**
+ * @brief Returns information about the enemy-related objects in the area.
+ *
+ * @param outAmount If not nullptr, the total amount of enemy objects
+ * is returned here.
+ * @param outPoints If not nullptr, the total amount of enemy points
+ * is returned here.
+ */
+void Area::getTotalEnemyInfo(size_t* outAmount, size_t* outPoints) const {
+    size_t amount = 0;
+    size_t points = 0;
+    
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        switch(mPtr->type->category->id) {
+        case MOB_CATEGORY_ENEMIES: {
+            EnemyType* eneType = (EnemyType*) mPtr->type;
+            amount++;
+            points += eneType->points;
+            break;
+            
+        } default: {
+            break;
+        }
+        }
+    }
+    
+    if(outAmount) *outAmount = amount;
+    if(outPoints) *outPoints = points;
+}
+
+
+/**
+ * @brief Returns information about the treasure-related objects in the area.
+ *
+ * @param outAmount If not nullptr, the total amount of treasure objects
+ * is returned here.
+ * @param outPoints If not nullptr, the total amount of treasure points
+ * is returned here.
+ */
+void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
+    size_t amount = 0;
+    size_t points = 0;
+    
+    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curArea->mobGenerators[m];
+        switch(mPtr->type->category->id) {
+        case MOB_CATEGORY_TREASURES: {
+            TreasureType* treType = (TreasureType*) mPtr->type;
+            amount++;
+            points += treType->points;
+            break;
+            
+        } case MOB_CATEGORY_PILES: {
+            PileType* pilType = (PileType*) mPtr->type;
+            if(
+                pilType->contents->deliveryResult !=
+                RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+            ) {
+                continue;
+            }
+            size_t amountInPile = pilType->maxAmount;
+            map<string, string> varMap = getVarMap(mPtr->vars);
+            ScriptVarReader sv(varMap);
+            sv.get("amount", amountInPile);
+            amountInPile =
+                std::clamp(amountInPile, (size_t) 0, pilType->maxAmount);
+            amount += amountInPile;
+            points += amountInPile * pilType->contents->pointAmount;
+            break;
+            
+        } case MOB_CATEGORY_RESOURCES: {
+            ResourceType* resType = (ResourceType*) mPtr->type;
+            if(
+                resType->deliveryResult !=
+                RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+            ) {
+                continue;
+            }
+            amount++;
+            points += resType->pointAmount;
+            break;
+            
+        } default: {
+            break;
+        }
+        }
+    }
+    
+    if(outAmount) *outAmount = amount;
+    if(outPoints) *outPoints = points;
+}
+
+
+/**
  * @brief Loads the area's geometry from a data node.
  *
  * @param node Data node to load from.
@@ -1485,6 +1579,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     ReaderSetter mRS(node);
     int presetInt = MISSION_PRESET_CUSTOM;
     int medalAwardModeInt = MISSION_MEDAL_AWARD_MODE_CLEAR;
+    DataNode* medalAwardModeNode = nullptr;
     string briefingNotesStr;
     
     //DEPRECATED in 1.2.0 by the new mission system.
@@ -1495,7 +1590,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     //General properties.
     mRS.set("mission_preset", presetInt);
     mRS.set("mission_time_limit", mission.timeLimit);
-    mRS.set("mission_medal_award_mode", medalAwardModeInt);
+    mRS.set("mission_medal_award_mode", medalAwardModeInt, &medalAwardModeNode);
     mRS.set("mission_starting_points", mission.startingPoints);
     mRS.set("mission_bronze_req", mission.bronzeReq);
     mRS.set("mission_silver_req", mission.silverReq);
@@ -1506,7 +1601,9 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_maker_record", mission.makerRecord);
     mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
-    mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
+    if(medalAwardModeNode) {
+        mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
+    }
     mission.briefingNotes = semicolonListToVector(briefingNotesStr);
     
     //End conditions.
@@ -1678,6 +1775,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
     mRS.set("mission_point_hud_data", pointHudData);
     mRS.set("mission_grading_mode", medalAwardModeInt);
     
+    mission.medalAwardMode = (MISSION_MEDAL_AWARD_MODE) medalAwardModeInt;
+    
     //Goal.
     goal = enumGetValue(missionGoalNames, goalStr);
     vector<string> missionRequiredMobsStr =
@@ -1754,7 +1853,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
             .idxParam = goalMobGroupIdx,
-            .matchAmount = goalAllMobs ? 0 : goalAmount,
+            .matchAmount = goalAllMobs ? INVALID : goalAmount,
             .clear = true,
             .neutralMood = false,
             .reason = "Got all treasures!",
@@ -1789,6 +1888,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
             .idxParam = goalMobGroupIdx,
+            .matchAmount = goalAllMobs ? INVALID : goalAmount,
             .clear = true,
             .neutralMood = false,
             .reason = "Got all enemies!",
@@ -1845,7 +1945,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = MISSION_END_COND_METRIC_OR_MORE,
             .metricType = MISSION_METRIC_LEADERS_IN_REGION,
             .idxParam = exitRegionIdx,
-            .matchAmount = goalAllMobs ? 1 : goalMobIdxs.size(),
+            .matchAmount = goalAllMobs ? INVALID : goalMobIdxs.size(),
             .clear = true,
             .neutralMood = false,
             .reason = "Got to the exit!",
@@ -2025,6 +2125,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
             MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
+            goalAllMobs ? INVALID : goalAmount;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Treasures:";
         break;
@@ -2035,6 +2137,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
             MISSION_METRIC_MOB_GROUP_CLEARED_MOBS;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
+            goalAllMobs ? INVALID : goalAmount;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = goalMobGroupIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "Enemies:";
         break;
@@ -2057,6 +2161,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_DISPLAY_CUR_TOT;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].metricType =
             MISSION_METRIC_LEADERS_IN_REGION;
+        mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].totalAmount =
+            goalAllMobs ? INVALID : goalMobIdxs.size();
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].idxParam = exitRegionIdx;
         mission.hudItems[MISSION_HUD_ITEM_ID_GOAL].text = "In exit:";
         break;
@@ -2096,6 +2202,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             MISSION_HUD_ITEM_ID_MISC;
         mission.hudItems[id].enabled = true;
         mission.hudItems[id].displayType = MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN;
+        mission.hudItems[id].totalAmount = INVALID;
         mission.hudItems[id].text = "Time:";
     }
     if(
@@ -2225,7 +2332,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerTreasurePoint != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .metricType = MISSION_METRIC_COLLECTION_POINTS,
+            .metricType = MISSION_METRIC_TREASURE_COLLECTION_PTS,
             .points = pointsPerTreasurePoint,
             .affectsHud =
             hasFlag(
@@ -2238,7 +2345,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
     if(pointsPerEnemyPoint != 0) {
         mission.scoreCriteria.push_back(
         MissionScoreCriterion {
-            .metricType = MISSION_METRIC_DEFEAT_POINTS,
+            .metricType =
+            enemyPointsOnCollection ?
+            MISSION_METRIC_ENEMY_COLLECTION_PTS :
+            MISSION_METRIC_ENEMY_DEFEAT_PTS,
             .points = pointsPerEnemyPoint,
             .affectsHud =
             hasFlag(

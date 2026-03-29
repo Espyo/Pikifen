@@ -3365,10 +3365,7 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                 
             }
             
-            if(
-                condPtr->type == MISSION_END_COND_METRIC_OR_MORE ||
-                condPtr->type == MISSION_END_COND_METRIC_OR_LESS
-            ) {
+            if(condPtr->usesMetric()) {
             
                 ImGui::Spacer();
                 
@@ -3617,42 +3614,19 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                 "How the information will be displayed to the player."
             );
             
-            switch(itemPtr->displayType) {
-            case MISSION_HUD_ITEM_DISPLAY_HEALTH:
-            case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
-            case MISSION_HUD_ITEM_DISPLAY_REM_TOT:
-            case MISSION_HUD_ITEM_DISPLAY_CUR:
-            case MISSION_HUD_ITEM_DISPLAY_REM:
-            case MISSION_HUD_ITEM_DISPLAY_TOT: {
-        
-                bool hasTotal =
-                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_HEALTH ||
-                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_CUR_TOT ||
-                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
-                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
-                    
+            if(itemPtr->usesMetric()) {
+            
                 //Metric widgets.
                 processGuiWidgetsMetric(
                     &itemPtr->metricType, &itemPtr->idxParam,
-                    hasTotal ? &itemPtr->totalAmount : nullptr,
+                    itemPtr->usesTotal() ? &itemPtr->totalAmount : nullptr,
                     "mission HUD item", false
                 );
-                break;
                 
-            } default: {
-                break;
-            }
             }
             
-            switch(itemPtr->displayType) {
-            case MISSION_HUD_ITEM_DISPLAY_TEXT:
-            case MISSION_HUD_ITEM_DISPLAY_HEALTH:
-            case MISSION_HUD_ITEM_DISPLAY_CUR_TOT:
-            case MISSION_HUD_ITEM_DISPLAY_REM_TOT:
-            case MISSION_HUD_ITEM_DISPLAY_CUR:
-            case MISSION_HUD_ITEM_DISPLAY_REM:
-            case MISSION_HUD_ITEM_DISPLAY_TOT: {
-        
+            if(itemPtr->usesText()) {
+            
                 //Text input.
                 string text = itemPtr->text;
                 if(ImGui::InputText("Text", &text)) {
@@ -3663,11 +3637,6 @@ void AreaEditor::processGuiPanelMissionHudItems() {
                     "Text to show in the HUD item."
                 );
                 
-                break;
-                
-            } default: {
-                break;
-            }
             }
             
         }
@@ -3855,12 +3824,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 size_t e = 0; e < game.curArea->mission.endConds.size(); e++
             ) {
                 MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
-                if(
-                    ePtr->type != MISSION_END_COND_METRIC_OR_LESS &&
-                    ePtr->type != MISSION_END_COND_METRIC_OR_MORE
-                ) {
-                    continue;
-                }
+                if(!ePtr->usesMetric()) continue;
                 if(ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS) {
                     continue;
                 }
@@ -3895,14 +3859,10 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                     size_t e = 0; e < game.curArea->mission.endConds.size(); e++
                 ) {
                     MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+                    if(!ePtr->usesMetric()) continue;
                     if(
-                        ePtr->type != MISSION_END_COND_METRIC_OR_LESS &&
-                        ePtr->type != MISSION_END_COND_METRIC_OR_MORE
-                    ) {
-                        continue;
-                    }
-                    if(
-                        ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS
+                        ePtr->metricType !=
+                        MISSION_METRIC_MOB_GROUP_CLEARED_MOBS
                     ) {
                         continue;
                     }
@@ -6431,33 +6391,42 @@ void AreaEditor::processGuiWidgetsMetric(
         if(!pvInfo.hasAutoTarget) useManualTarget = true;
         else if(*targetParamVar != INVALID) useManualTarget = true;
         
-        //Use manual target amount checkbox.
+        //Target amount label text.
+        ImGui::Text(
+            "%s amount:",
+            targetIsMatch ? "Match" : "Total"
+        );
+        
+        //Use manual target amount radio.
         if(!pvInfo.hasAutoTarget) {
             ImGui::BeginDisabled();
         }
-        string targetDescriptor = targetIsMatch ? "match" : "total";
+        ImGui::SameLine();
         if(
-            ImGui::Checkbox(
-                ("Use manual " + targetDescriptor + " amount").c_str(),
-                &useManualTarget
-            )
+            ImGui::RadioButton("Manual", useManualTarget)
         ) {
-            if(useManualTarget) {
-                *targetParamVar =
-                    pvInfo.hasAutoTarget ?
-                    game.missionMetricTypes[metricType]->getTarget(
-                        *idxParamVar, *targetParamVar
-                    ) :
-                    1;
-            } else {
-                *targetParamVar = INVALID;
-            }
+            registerChange(descriptor + " number change");
+            *targetParamVar =
+                pvInfo.hasAutoTarget ?
+                game.missionMetricTypes[metricType]->getTarget(
+                    *idxParamVar, *targetParamVar
+                ) :
+                1;
         }
         setTooltip(
-            "If checked, use a manually-written " +
-            targetDescriptor + " amount.\n"
-            "If unchecked, use the " +
-            targetDescriptor + " amount automatically obtained\n"
+            "Use a manually-written amount."
+        );
+        
+        //Use automatic target amount radio.
+        ImGui::SameLine();
+        if(
+            ImGui::RadioButton("Auto", !useManualTarget)
+        ) {
+            registerChange(descriptor + " number change");
+            *targetParamVar = INVALID;
+        }
+        setTooltip(
+            "Use the amount automatically determined\n"
             "from the metric, if possible."
         );
         if(!pvInfo.hasAutoTarget) {
@@ -6482,7 +6451,7 @@ void AreaEditor::processGuiWidgetsMetric(
             *targetParamVar = (size_t) targetAmount;
         }
         setTooltip(
-            strToSentence(targetDescriptor) + " amount to check for.",
+            "Amount to check for.",
             "", WIDGET_EXPLANATION_DRAG
         );
         ImGui::Unindent();

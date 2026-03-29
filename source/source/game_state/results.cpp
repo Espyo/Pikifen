@@ -1282,7 +1282,7 @@ void Results::populateStatsList() {
         statsList,
         "Enemies defeated:",
         i2s(game.states.gameplay->enemyDefeats) + "/" +
-        i2s(game.states.gameplay->enemyTotal)
+        i2s(game.states.gameplay->enemiesTotal)
     );
 }
 

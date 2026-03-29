@@ -354,20 +354,20 @@ public:
     //How many treasures collected so far.
     size_t treasuresCollected = 0;
     
-    //How many treasures exist in total.
+    //How many treasures exist in total. Cache for performance.
     size_t treasuresTotal = 0;
     
     //How many treasure points collected so far.
     size_t treasurePointsObtained = 0;
     
-    //How many treasure points exist in total.
+    //How many treasure points exist in total. Cache for performance.
     size_t treasurePointsTotal = 0;
     
     //How many enemy defeats so far.
     size_t enemyDefeats = 0;
     
-    //How many enemies exist in total.
-    size_t enemyTotal = 0;
+    //How many enemies exist in total. Cache for performance.
+    size_t enemiesTotal = 0;
     
     //How many enemy defeat points collected so far.
     size_t enemyDefeatPointsObtained = 0;
@@ -376,6 +376,7 @@ public:
     size_t enemyCollectionPointsObtained = 0;
     
     //How many enemy defeat/collection points exist in total.
+    //Cache for performance.
     size_t enemyPointsTotal = 0;
     
     //Whether the mission ended in a clear or a failure.
@@ -396,29 +397,13 @@ public:
     //Mission score in the previous frame.
     int oldMissionScore = 0;
     
-    //GUI item with the mission score's text.
-    GuiItem* missionScoreCurText = nullptr;
+    //Value shown on the first slot on the previous frame, for each mission
+    //HUD item. Used for juice.
+    map<MISSION_HUD_ITEM_ID, int> missionHudItemOldAmt1;
     
-    //Mission goal current count in the previous frame.
-    int oldMissionGoalCur = 0;
-    
-    //GUI item with the mission goal current count's text.
-    GuiItem* missionGoalCurText = nullptr;
-    
-    //Mission goal primary fail condition count in the previous frame.
-    int oldMissionFail1Cur = 0;
-    
-    //GUI item with the mission primary fail condition current count's text.
-    GuiItem* missionFail1CurText = nullptr;
-    
-    //Mission goal secondary fail condition count in the previous frame.
-    int oldMissionFail2Cur = 0;
-    
-    //GUI item with the mission secondary fail condition current count's text.
-    GuiItem* missionFail2CurText = nullptr;
-    
-    //How many leaders are in the mission exit. Cache for convenience.
-    size_t curLeadersInMissionExit = 0;
+    //Value shown on the second slot on the previous frame, for each mission
+    //HUD item. Used for juice.
+    map<MISSION_HUD_ITEM_ID, int> missionHudItemOldAmt2;
     
     //Current number of living leaders. Cache for convenience.
     size_t nrLivingLeaders = 0;

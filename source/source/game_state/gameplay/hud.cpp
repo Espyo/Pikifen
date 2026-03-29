@@ -1016,7 +1016,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         //Digital clock.
         GuiItem* digital = new GuiItem();
         digital->onDraw =
-        [itemInfo, this] (const DrawInfo & draw) {
+        [itemInfo, digital, which, this] (const DrawInfo & draw) {
             string text;
             ALLEGRO_FONT* font = game.sysContent.fntCounter;
             if(game.states.gameplay->afterHours) {
@@ -1033,13 +1033,36 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                         game.states.gameplay->gameplayTimePassed;
                     seconds = std::max(seconds, 0);
                     text = timeToStr2(seconds);
+                    if(
+                        game.states.gameplay->missionHudItemOldAmt1[which] !=
+                        seconds
+                    ) {
+                        digital->startJuiceAnimation(
+                            GuiItem::JUICE_TYPE_GROW_TEXT_LOW
+                        );
+                        game.states.gameplay->missionHudItemOldAmt1[which] =
+                            seconds;
+                    }
                 }
             } else {
                 size_t seconds = game.states.gameplay->gameplayTimePassed;
                 text = timeToStr2(seconds);
+                if(
+                    game.states.gameplay->missionHudItemOldAmt1[which] !=
+                    (int) seconds
+                ) {
+                    digital->startJuiceAnimation(
+                        GuiItem::JUICE_TYPE_GROW_TEXT_LOW
+                    );
+                    game.states.gameplay->missionHudItemOldAmt1[which] =
+                        seconds;
+                }
             }
+            float juicyGrowAmount = digital->getJuiceValue();
             drawText(
-                text, font, draw.center, draw.size, draw.tint
+                text, font, draw.center, draw.size, draw.tint,
+                ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
+                Point(1.0f) + juicyGrowAmount
             );
         };
         item->addChild(digital);
@@ -1075,8 +1098,18 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         //Score points.
         GuiItem* points = new GuiItem();
         points->onDraw =
-            [this, points]
+            [this, which, points]
         (const DrawInfo & draw) {
+            if(
+                game.states.gameplay->missionScore !=
+                game.states.gameplay->missionHudItemOldAmt1[which]
+            ) {
+                points->startJuiceAnimation(
+                    GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
+                );
+                game.states.gameplay->missionHudItemOldAmt1[which] =
+                    game.states.gameplay->missionScore;
+            }
             float juicyGrowAmount = points->getJuiceValue();
             drawText(
                 i2s(game.states.gameplay->missionScore),
@@ -1087,7 +1120,6 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         };
         item->addChild(points);
         gui.addItem(points, "mission_score_points");
-        game.states.gameplay->missionScoreCurText = points;
         
         //"Points" label.
         GuiItem* pointsLabel = new GuiItem();
@@ -1469,10 +1501,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         //First amount.
         GuiItem* amt1Text = new GuiItem();
         amt1Text->onDraw =
-        [itemInfo, amt1Text] (const DrawInfo & draw) {
-            static int oldAmt1 = INT_MAX;
-            static int amt1 = 0;
-            
+        [itemInfo, which, amt1Text] (const DrawInfo & draw) {
+            int amt1 = 0;
             MissionMetricType* metricType =
                 game.missionMetricTypes[itemInfo->metricType];
                 
@@ -1499,11 +1529,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             }
             }
             
-            if(oldAmt1 != amt1) {
+            if(game.states.gameplay->missionHudItemOldAmt1[which] != amt1) {
                 amt1Text->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
-                oldAmt1 = amt1;
+                game.states.gameplay->missionHudItemOldAmt1[which] = amt1;
             }
             float juicyGrowAmount = amt1Text->getJuiceValue();
             drawText(
@@ -1523,9 +1553,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             //Second amount.
             GuiItem* amt2Text = new GuiItem();
             amt2Text->onDraw =
-            [itemInfo, amt2Text] (const DrawInfo & draw) {
-                static int oldAmt2 = INT_MAX;
-                static int amt2 = 0;
+            [itemInfo, which, amt2Text] (const DrawInfo & draw) {
+                int amt2 = 0;
                 
                 MissionMetricType* metricType =
                     game.missionMetricTypes[itemInfo->metricType];
@@ -1534,11 +1563,11 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                         itemInfo->idxParam, itemInfo->totalAmount
                     );
                     
-                if(oldAmt2 != amt2) {
+                if(game.states.gameplay->missionHudItemOldAmt2[which] != amt2) {
                     amt2Text->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                     );
-                    oldAmt2 = amt2;
+                    game.states.gameplay->missionHudItemOldAmt2[which] = amt2;
                 }
                 float juicyGrowAmount = amt2Text->getJuiceValue();
                 drawText(
