@@ -7631,3 +7631,4 @@ tree_shadows{
 		alpha=120
 	}
 }
+regions

@@ -3,7 +3,7 @@ description=You figured when the Koppaites mentioned growing food on the planet,
 tags=Swamp; Standard
 maker=Helodity
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 subtitle=Collect everything!
 difficulty=4
 bg_bmp=textures/grass_dark
@@ -15,17 +15,106 @@ weather=normal
 day_time_start=1080
 day_time_speed=65.0000
 spray_amounts
-mission_goal=Survive
-mission_goal_amount=660
-mission_fail_conditions=162
-mission_fail_too_few_pik_amount=0
-mission_fail_leaders_kod=1
+mission_preset=5
+mission_time_limit=660
 mission_medal_award_mode=0
-mission_points_per_treasure_point=1
-mission_points_per_enemy_point=5
-enemy_points_on_collection=true
-mission_point_hud_data=251
+mission_starting_points=0
 mission_bronze_req=1500
 mission_silver_req=2500
 mission_gold_req=3000
 mission_platinum_req=3500
+mission_briefing_objective=Survive until the time limit!
+mission_briefing_notes
+mission_maker_record=0
+mission_maker_record_date
+mission_end_conditions{
+	end_condition{
+		type=0
+		metric_type=0
+		index_param=0
+		match_amount=1
+		clear=false
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Ended early from the pause menu!
+	}
+	end_condition{
+		type=2
+		metric_type=2
+		index_param=0
+		match_amount=0
+		clear=true
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Survived!
+	}
+	end_condition{
+		type=2
+		metric_type=5
+		index_param=0
+		match_amount=0
+		clear=false
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Reached 0 Pikmin!
+	}
+	end_condition{
+		type=1
+		metric_type=8
+		index_param=0
+		match_amount=1
+		clear=false
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Lost 1 leaders!
+	}
+}
+mission_mob_groups
+mission_hud_items{
+	item{
+		enabled=true
+		display_type=0
+		metric_type=0
+		index_param=0
+		text=Survive
+		total_amount=-1
+	}
+	item{
+		enabled=true
+		display_type=3
+		metric_type=0
+		index_param=0
+		text
+		total_amount=-1
+	}
+	item{
+		enabled=true
+		display_type=1
+		metric_type=0
+		index_param=0
+		text=Time:
+		total_amount=-1
+	}
+	item{
+		enabled=false
+		display_type=0
+		metric_type=0
+		index_param=0
+		text
+		total_amount=-1
+	}
+}
+mission_score_criteria{
+	criterion{
+		type=10
+		index_param=0
+		points=1
+		affects_hud=true
+	}
+	criterion{
+		type=11
+		index_param=0
+		points=5
+		affects_hud=true
+	}
+}

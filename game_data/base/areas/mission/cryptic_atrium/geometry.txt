@@ -8135,3 +8135,9 @@ path_stops{
 	}
 }
 tree_shadows
+regions{
+	region{
+		center=-544.0000 -544.0000
+		size=320.0000 192.0000
+	}
+}

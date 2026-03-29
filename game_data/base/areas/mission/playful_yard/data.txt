@@ -3,9 +3,9 @@ description=In the forest, a few creatures found some large wooden object... Whi
 tags=Standard; Forest
 maker=Espyo
 version=1.1.0
-engine_version=1.0.0
+engine_version=1.2.0
 notes=This stage is an evolution of the "Play" stage from older versions of Pikifen, which in turn is based on the geometry of an unused stage in Pikmin, "tuto2".
-subtitle
+subtitle=Collect treasures
 difficulty=2
 bg_bmp=textures/grass_dark
 bg_color=0 0 0
@@ -16,20 +16,112 @@ weather=normal
 day_time_start=420
 day_time_speed=70.0000
 spray_amounts
-mission_goal=Collect treasures
-mission_goal_all_mobs=true
-mission_fail_conditions=161
-mission_fail_leaders_kod=1
-mission_fail_time_limit=585
-mission_fail_hud_primary_cond=0
+mission_preset=5
+mission_time_limit=585
 mission_medal_award_mode=0
-mission_points_per_sec_left=10
-mission_points_per_treasure_point=1
-mission_point_loss_data=4
-mission_point_hud_data=251
+mission_starting_points=0
 mission_bronze_req=300
 mission_silver_req=550
 mission_gold_req=800
 mission_platinum_req=1050
+mission_briefing_objective=Collect treasures!
+mission_briefing_notes
 mission_maker_record=1980
 mission_maker_record_date=2025/03/01
+mission_end_conditions{
+	end_condition{
+		type=0
+		metric_type=0
+		index_param=0
+		match_amount=1
+		clear=false
+		zero_time_for_score=true
+		neutral_mood=false
+		reason=Ended early from the pause menu!
+	}
+	end_condition{
+		type=1
+		metric_type=0
+		index_param=0
+		match_amount=-1
+		clear=true
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Got all treasures!
+	}
+	end_condition{
+		type=2
+		metric_type=2
+		index_param=0
+		match_amount=0
+		clear=false
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Time's up!
+	}
+	end_condition{
+		type=1
+		metric_type=8
+		index_param=0
+		match_amount=1
+		clear=false
+		zero_time_for_score=false
+		neutral_mood=false
+		reason=Lost 1 leaders!
+	}
+}
+mission_mob_groups{
+	group{
+		type=1
+		enemies_need_collection=false
+		highlight_on_radar=true
+	}
+}
+mission_hud_items{
+	item{
+		enabled=true
+		display_type=5
+		metric_type=0
+		index_param=0
+		text=Treasures:
+		total_amount=-1
+	}
+	item{
+		enabled=true
+		display_type=3
+		metric_type=0
+		index_param=0
+		text
+		total_amount=-1
+	}
+	item{
+		enabled=true
+		display_type=1
+		metric_type=0
+		index_param=0
+		text=Time:
+		total_amount=-1
+	}
+	item{
+		enabled=false
+		display_type=0
+		metric_type=0
+		index_param=0
+		text
+		total_amount=-1
+	}
+}
+mission_score_criteria{
+	criterion{
+		type=2
+		index_param=0
+		points=10
+		affects_hud=false
+	}
+	criterion{
+		type=10
+		index_param=0
+		points=1
+		affects_hud=true
+	}
+}

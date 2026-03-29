@@ -9629,3 +9629,4 @@ tree_shadows{
 		alpha=192
 	}
 }
+regions
