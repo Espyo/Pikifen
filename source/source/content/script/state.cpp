@@ -154,7 +154,7 @@ bool FsmStateDef::loadFromDataNode(
     //Add these events to the state.
     mergeEvents(newEvents, newEventFlags);
     
-    //Check if the mob category wants to do something to the action.
+    //Let the mob type do extra processing, if necessary.
     if(scriptDef->mobType) {
         scriptDef->mobType->handleLoadedScriptState(this);
     }

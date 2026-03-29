@@ -79,9 +79,80 @@ AnimConversionVector MobType::getAnimConversions() const {
 
 
 /**
- * @brief Does extra processing to a loaded FSM state, if needed.
+ * @brief Handles a state that was just loaded from a script file.
+ *
+ * @param state The state.
  */
-void MobType::handleLoadedScriptState(FsmStateDef*) { }
+void MobType::handleLoadedScriptState(FsmStateDef* state) {
+    vector<FsmEventDef*> newEvents;
+    
+    //Inject a damage event.
+    if(!state->events[MOB_EV_HITBOX_TOUCH_N_A]) {
+        vector<ScriptActionDef*> daActions;
+        daActions.push_back(
+            new ScriptActionDef(GenMobFsm::beAttacked)
+        );
+        newEvents.push_back(
+            new FsmEventDef(MOB_EV_HITBOX_TOUCH_N_A, daActions)
+        );
+    }
+    
+    //Inject a zero health event.
+    if(
+        state->name != dyingStateName &&
+        !state->events[MOB_EV_ZERO_HEALTH] &&
+        !isInContainer(statesIgnoringDeath, state->name) &&
+        !dyingStateName.empty()
+    ) {
+        vector<ScriptActionDef*> zhActions;
+        zhActions.push_back(new ScriptActionDef(GenMobFsm::goToDyingState));
+        newEvents.push_back(
+            new FsmEventDef(MOB_EV_ZERO_HEALTH, zhActions)
+        );
+    }
+    
+    //Inject a bottomless pit event.
+    if(!state->events[MOB_EV_BOTTOMLESS_PIT]) {
+        vector<ScriptActionDef*> bpActions;
+        bpActions.push_back(
+            new ScriptActionDef(GenMobFsm::fallDownPit)
+        );
+        newEvents.push_back(
+            new FsmEventDef(MOB_EV_BOTTOMLESS_PIT, bpActions)
+        );
+    }
+    
+    //Inject a spray touch event.
+    if(
+        !state->events[MOB_EV_TOUCHED_SPRAY] &&
+        !isInContainer(statesIgnoringSpray, state->name)
+    ) {
+        vector<ScriptActionDef*> spActions;
+        spActions.push_back(
+            new ScriptActionDef(GenMobFsm::touchSpray)
+        );
+        newEvents.push_back(
+            new FsmEventDef(MOB_EV_TOUCHED_SPRAY, spActions)
+        );
+    }
+    
+    //Inject a hazard event.
+    if(
+        !state->events[MOB_EV_TOUCHED_HAZARD] &&
+        !isInContainer(statesIgnoringHazard, state->name)
+    ) {
+        vector<ScriptActionDef*> haActions;
+        haActions.push_back(
+            new ScriptActionDef(GenMobFsm::touchHazard)
+        );
+        newEvents.push_back(
+            new FsmEventDef(MOB_EV_TOUCHED_HAZARD, haActions)
+        );
+    }
+    
+    //Merge them.
+    state->mergeEvents(newEvents, vector<Bitmask8>(newEvents.size(), 0));
+}
 
 
 /**
@@ -99,15 +170,71 @@ void MobType::loadCatResources(DataNode*) { }
 /**
  * @brief Loads script data from the script's data file, after the script
  * proper is loaded.
+ *
+ * @param file The file.
  */
-void MobType::loadCatScriptDataPos(DataNode*) { }
+void MobType::loadCatScriptDataPos(DataNode* file) {
+    if(!dyingStateName.empty()) {
+        for(size_t s = 0; s < scriptDef.fsm.states.size(); s++) {
+            if(scriptDef.fsm.states[s]->name == dyingStateName) {
+                dyingStateIdx = s;
+                break;
+            }
+        }
+        if(dyingStateIdx == INVALID) {
+            game.errors.report(
+                "Unknown state \"" + dyingStateName + "\" "
+                "to set as the death state!",
+                file->getChildByName("death_state")
+            );
+        }
+    }
+    
+    DataNode* reviveStateNameNode =
+        file->getChildByName("revive_state");
+    string reviveStateName = reviveStateNameNode->value;
+    
+    if(!reviveStateName.empty()) {
+        for(size_t s = 0; s < scriptDef.fsm.states.size(); s++) {
+            if(scriptDef.fsm.states[s]->name == reviveStateName) {
+                reviveStateIdx = s;
+                break;
+            }
+        }
+        if(reviveStateIdx == INVALID) {
+            game.errors.report(
+                "Unknown state \"" + reviveStateName + "\" "
+                "to set as the revive state!",
+                reviveStateNameNode
+            );
+        }
+    } else {
+        reviveStateIdx = scriptDef.fsm.firstStateIdx;
+    }
+}
 
 
 /**
  * @brief Loads script data from the script's data file, before the script
  * proper is loaded.
+ *
+ * @param file The file.
  */
-void MobType::loadCatScriptDataPre(DataNode*) { }
+void MobType::loadCatScriptDataPre(DataNode* file) {
+    ReaderSetter sRS(file);
+    string statesIgnoringDeathStr;
+    string statesIgnoringSprayStr;
+    string statesIgnoringHazardStr;
+    
+    sRS.set("death_state", dyingStateName);
+    sRS.set("states_ignoring_death", statesIgnoringDeathStr);
+    sRS.set("states_ignoring_spray", statesIgnoringSprayStr);
+    sRS.set("states_ignoring_hazard", statesIgnoringHazardStr);
+    
+    statesIgnoringDeath = semicolonListToVector(statesIgnoringDeathStr);
+    statesIgnoringSpray = semicolonListToVector(statesIgnoringSprayStr);
+    statesIgnoringHazard = semicolonListToVector(statesIgnoringHazardStr);
+}
 
 
 /**
