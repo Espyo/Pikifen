@@ -491,6 +491,7 @@ public:
     void arachnorbPlanLogic(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorbFootMoveLogic();
     
+    void applyHazard(Hazard* hazPtr, Mob* fromMob = nullptr);
     void applyStatus(
         StatusType* s, bool givenByParent, bool fromHazard,
         Mob* fromMob = nullptr, float overrideBuildup = FLT_MAX,

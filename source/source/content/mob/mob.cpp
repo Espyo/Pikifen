@@ -316,6 +316,28 @@ void Mob::applyKnockback(float knockback, float knockbackAngle) {
     }
 }
 
+/**
+ * @brief Applies status effects from a hazard.
+ *
+ * @param hazPtr Hazard to use.
+ * @param fromMob If not nullptr, this hazard was given by this mob.
+ */
+void Mob::applyHazard(Hazard* hazPtr, Mob* fromMob) {
+    MobType::Vulnerability vuln = getHazardVulnerability(hazPtr);
+
+    //Apply the status as long as we are not immune to the hazard.
+    if (vuln.effectMult != 0.0f && !vuln.replaceOriginalStatus) {
+        for (size_t e = 0; e < hazPtr->effects.size(); e++) {
+            applyStatus(hazPtr->effects[e], false, true, fromMob);
+        }
+    }
+
+    //If we have an additonal status, apply it after.
+    if (vuln.additionalStatus) {
+        applyStatus(vuln.additionalStatus, false, true, fromMob);
+    }
+}
+
 
 /**
  * @brief Applies a status effect.
@@ -431,10 +453,10 @@ void Mob::applyStatusEffects(
     //Get the vulnerabilities to this status.
     auto vulnIt = type->statusVulnerabilities.find(s);
     if(vulnIt != type->statusVulnerabilities.end()) {
-        if(vulnIt->second.statusToApply) {
+        if(vulnIt->second.additionalStatus) {
             //It must instead receive this status.
             applyStatus(
-                vulnIt->second.statusToApply, givenByParent, fromHazard,
+                vulnIt->second.additionalStatus, givenByParent, fromHazard,
                 fromMob, false, forceReapplyResetTime
             );
             return;
@@ -1284,10 +1306,10 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     
     if(
         v != victim->type->spikeDamageVulnerabilities.end() &&
-        v->second.statusToApply
+        v->second.additionalStatus
     ) {
         victim->applyStatus(
-            v->second.statusToApply, false, false, this
+            v->second.additionalStatus, false, false, this
         );
     }
 }

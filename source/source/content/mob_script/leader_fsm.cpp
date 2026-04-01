@@ -2987,14 +2987,7 @@ void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* hitboxMob = nullptr;
     if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
-    if(!vuln.statusToApply || !vuln.statusOverrides) {
-        for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            leaPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
-        }
-    }
-    if(vuln.statusToApply) {
-        leaPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
-    }
+    leaPtr->applyHazard(hazPtr, hitboxMob);
     
     if(hazPtr->associatedLiquid) {
         bool alreadyGenerating = false;

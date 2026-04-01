@@ -4805,17 +4805,7 @@ void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(pikPtr->invulnPeriod.timeLeft > 0) return;
-    MobType::Vulnerability vuln = pikPtr->getHazardVulnerability(hazPtr);
-    if(vuln.effectMult == 0.0f) return;
-    
-    if(!vuln.statusToApply || !vuln.statusOverrides) {
-        for(size_t e = 0; e < hazPtr->effects.size(); e++) {
-            pikPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
-        }
-    }
-    if(vuln.statusToApply) {
-        pikPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
-    }
+    pikPtr->applyHazard(hazPtr, hitboxMob);
 }
 
 

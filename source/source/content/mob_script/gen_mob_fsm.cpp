@@ -563,9 +563,7 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Hazard* h = (Hazard*) info1;
     
-    for(size_t e = 0; e < h->effects.size(); e++) {
-        scriptVM->mob->applyStatus(h->effects[e], false, true);
-    }
+    scriptVM->mob->applyHazard(h);
 }
 
 
