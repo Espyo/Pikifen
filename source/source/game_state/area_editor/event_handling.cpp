@@ -307,7 +307,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, false, true)) {
         switch(state) {
         case EDITOR_STATE_MOBS: {
-            if(mobSelection.hasOne() || mobSelection.homogenized) {
+            if(mobSelection.hasOne() || mobSelection.isHomogenized()) {
                 if(subState == EDITOR_SUB_STATE_NEW_MOB_LINK) {
                     subState = EDITOR_SUB_STATE_NONE;
                 } else {
@@ -1087,7 +1087,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
             mobSelection, curTransformationWidget
         );
         
-        mobSelection.homogenized = false;
+        mobSelection.setHomogenized(false);
         setSelectionStatusText();
         
         break;

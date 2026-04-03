@@ -4574,6 +4574,190 @@ Editor::PickerItem::PickerItem(
 
 
 /**
+ * @brief Adds an item to the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was unselected.
+ */
+bool Editor::SelectionList::add(size_t idx) {
+    if(list.contains(idx)) return false;
+    list.insert(idx);
+    return true;
+}
+
+
+/**
+ * @brief Selects all items available.
+ *
+ * @param totalAmount How many items there are in total.
+ * @return Whether we didn't already have all selected.
+ */
+bool Editor::SelectionList::addAll(size_t totalAmount) {
+    size_t prevSelSize = list.size();
+    clear();
+    for(size_t i = 0; i < totalAmount; i++) {
+        add(i);
+    }
+    return list.size() > prevSelSize;
+}
+
+
+/**
+ * @brief Clears the selection.
+ *
+ * @return Whether there were items to clear.
+ */
+bool Editor::SelectionList::clear() {
+    if(list.empty()) return false;
+    list.clear();
+    return true;
+}
+
+
+/**
+ * @brief Returns whether a given items is selected.
+ *
+ * @param idx The item's index.
+ * @return Whether it is selected.
+ */
+bool Editor::SelectionList::contains(size_t idx) const {
+    return list.contains(idx);
+}
+
+
+/**
+ * @brief Returns the index of the first selected item, or INVALID if
+ * none is selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionList::getFirstItemIdx() const {
+    if(list.size() == 0) {
+        return INVALID;
+    }
+    return *list.begin();
+}
+
+
+/**
+ * @brief Returns the list of all selected items.
+ *
+ * @return The list.
+ */
+const set<size_t>& Editor::SelectionList::getItemIdxs() const {
+    return list;
+}
+
+
+/**
+ * @brief Returns how many items are selected.
+ *
+ * @return The amount.
+ */
+size_t Editor::SelectionList::getCount() const {
+    return list.size();
+}
+
+
+/**
+ * @brief Returns the index of the only selected item, or INVALID if
+ * multiple or none are selected.
+ *
+ * @return The index or INVALID.
+ */
+size_t Editor::SelectionList::getSingleItemIdx() const {
+    if(list.size() == 1) {
+        return *list.begin();
+    } else {
+        return INVALID;
+    }
+}
+
+
+/**
+ * @brief Returns whether any items are selected.
+ *
+ * @return Whether any are selected.
+ */
+bool Editor::SelectionList::hasAny() const {
+    return !list.empty();
+}
+
+
+/**
+ * @brief Returns whether there is are multiple items selected.
+ *
+ * @return Whether there are multiple selected.
+ */
+bool Editor::SelectionList::hasMultiple() const {
+    return list.size() > 1;
+}
+
+
+/**
+ * @brief Returns whether there is only one item selected.
+ *
+ * @return Whether there is one selected.
+ */
+bool Editor::SelectionList::hasOne() const {
+    return list.size() == 1;
+}
+
+
+/**
+ * @brief Removes an item from the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was selected.
+ */
+bool Editor::SelectionList::remove(size_t idx) {
+    if(!list.contains(idx)) return false;
+    list.erase(idx);
+    return true;
+}
+
+
+/**
+ * @brief Sets the selection to be a single item only.
+ *
+ * @param idx The item to select.
+ * @return Whether that item wasn't already selected.
+ */
+bool Editor::SelectionList::setSingle(size_t idx) {
+    if(getSingleItemIdx() == idx) return false;
+    clear();
+    add(idx);
+    return true;
+}
+
+
+/**
+ * @brief Adds an item to the selection.
+ *
+ * @param idx The item's index.
+ * @return Whether the item was unselected.
+ */
+bool Editor::SelectionManager::add(size_t idx) {
+    if(!enabled) return false;
+    if(!selectedItems.add(idx)) return false;
+    homogenized = false;
+    return true;
+}
+
+
+/**
+ * @brief Selects all items available.
+ *
+ * @param totalAmount How many items there are in total.
+ * @return Whether we didn't already have all selected.
+ */
+bool Editor::SelectionManager::addAll(size_t totalAmount) {
+    if(!enabled) return false;
+    return selectedItems.addAll(totalAmount);
+}
+
+
+/**
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
@@ -4590,8 +4774,9 @@ bool Editor::SelectionManager::applyTransformation(
     
     Point preTransTL = preTransCenter - preTransSize / 2.0f;
     Point newTL = newCenter - newSize / 2.0f;
+    const set<size_t>& list = selectedItems.getItemIdxs();
     
-    for(size_t i : selectedItems) {
+    for(size_t i : list) {
         Point iCenter, iSize;
         if(onGetInfo && onSetInfo) {
             onGetInfo(i, &iCenter, &iSize);
@@ -4611,30 +4796,89 @@ bool Editor::SelectionManager::applyTransformation(
 
 
 /**
+ * @brief Selects an item, or items, based on the left mouse button being
+ * pressed down. This also starts a rubber band selection box if applicable.
+ *
+ * @param cursorPos Mouse cursor position.
+ * @param rubberBandMod Whether a modifier key that forces rubber band
+ * selection box creation was held down.
+ * @param addToSelectionMod Whether a modifier key that adds to the
+ * selection was held down.
+ * @return Whether anything changed.
+ */
+bool Editor::SelectionManager::chooseViaMouseDown(
+    const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
+) {
+    if(!enabled) return false;
+    bool madeChanges = false;
+    Point selectionCenter, selectionSize;
+    getBBox(&selectionCenter, &selectionSize);
+    
+    //Get which items are under the mouse cursor.
+    vector<size_t> clickedItems;
+    size_t nrTotalItems = getNrTotalItems();
+    for(size_t i = 0; i < nrTotalItems; i++) {
+        if(!getItemIsEligible(i)) continue;
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
+        if(itemsAreRectangular) {
+            if(isPointInRectangle(cursorPos, iCenter, iSize)) {
+                clickedItems.push_back(i);
+            }
+        } else {
+            if(Distance(cursorPos, iCenter) <= iSize.x / 2.0f) {
+                clickedItems.push_back(i);
+            }
+        }
+    }
+    
+    bool mustStartRubberBand = clickedItems.empty() || rubberBandMod;
+    if(mustStartRubberBand) {
+        if(!addToSelectionMod) {
+            clear();
+        }
+        startRubberBand(cursorPos);
+        madeChanges = true;
+    } else {
+        if(overlapsCycle && !addToSelectionMod) {
+            size_t prevSelItemIdx = getSingleItemIdx();
+            setSingle(getNextInVector(clickedItems, prevSelItemIdx));
+        } else {
+            if(!addToSelectionMod) {
+                clear();
+            }
+            add(clickedItems[0]);
+        }
+        madeChanges = true;
+    }
+    
+    return madeChanges;
+}
+
+
+/**
  * @brief Clears the selection.
  *
  * @return Whether there were items to clear.
  */
 bool Editor::SelectionManager::clear() {
-    if(selectedItems.empty()) return false;
-    selectedItems.clear();
+    if(!enabled) return false;
+    if(!selectedItems.clear()) return false;
     homogenized = false;
     return true;
 }
 
 
 /**
- * @brief Sets the selection to be a single item only.
+ * @brief Returns whether a given items is selected.
  *
- * @param idx The item to select.
- * @return Whether that item wasn't already selected.
+ * @param idx The item's index.
+ * @return Whether it is selected.
  */
-bool Editor::SelectionManager::setSingle(size_t idx) {
-    if(getSingleItemIdx() == idx) return false;
-    clear();
-    add(idx);
-    return true;
+bool Editor::SelectionManager::contains(size_t idx) const {
+    return selectedItems.contains(idx);
 }
+
 
 /**
  * @brief Disables the manager.
@@ -4644,7 +4888,7 @@ bool Editor::SelectionManager::setSingle(size_t idx) {
 bool Editor::SelectionManager::disable() {
     bool wasEnabled = enabled;
     enabled = false;
-    clear();
+    selectedItems.clear();
     return wasEnabled;
 }
 
@@ -4796,16 +5040,80 @@ bool Editor::SelectionManager::enable() {
 
 
 /**
+ * @brief Returns the center point and size of the bounding box of the
+ * selected items.
+ *
+ * @param center The center of the box is returned here.
+ * @param size The dimensions of the box are returned here.
+ * @return Whether there are any selected items.
+ */
+bool Editor::SelectionManager::getBBox(
+    Point* center, Point* size
+) const {
+    *center = Point();
+    *size = Point();
+    if(!selectedItems.hasAny()) return false;
+    
+    Point minCoords(FLT_MAX);
+    Point maxCoords(-FLT_MAX);
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    
+    for(size_t i : list) {
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
+        updateMinCoords(
+            minCoords, iCenter - iSize / 2.0f
+        );
+        updateMaxCoords(
+            maxCoords, iCenter + iSize / 2.0f
+        );
+    }
+    
+    *center = (minCoords + maxCoords) / 2.0f;
+    *size = maxCoords - minCoords;
+    
+    return true;
+}
+
+
+/**
+ * @brief Returns how many items are selected.
+ *
+ * @return The amount.
+ */
+size_t Editor::SelectionManager::getCount() const {
+    return selectedItems.getCount();
+}
+
+
+/**
+ * @brief Returns whether the selection has been homogenized by the user.
+ *
+ * @return Whether it was homogenized.
+ */
+bool Editor::SelectionManager::isHomogenized() const {
+    return homogenized;
+}
+
+
+/**
  * @brief Returns the index of the first selected item, or INVALID if
  * none is selected.
  *
  * @return The index or INVALID.
  */
 size_t Editor::SelectionManager::getFirstItemIdx() const {
-    if(selectedItems.size() == 0) {
-        return INVALID;
-    }
-    return *selectedItems.begin();
+    return selectedItems.getFirstItemIdx();
+}
+
+
+/**
+ * @brief Returns the list of all selected items.
+ *
+ * @return The list.
+ */
+const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
+    return selectedItems.getItemIdxs();
 }
 
 
@@ -4865,67 +5173,7 @@ size_t Editor::SelectionManager::getNrTotalItems() const {
  * @return The index or INVALID.
  */
 size_t Editor::SelectionManager::getSingleItemIdx() const {
-    if(selectedItems.size() == 1) {
-        return *selectedItems.begin();
-    } else {
-        return INVALID;
-    }
-}
-
-
-/**
- * @brief Returns the list of all selected items.
- *
- * @return The list.
- */
-const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
-    return selectedItems;
-}
-
-
-/**
- * @brief Returns how many items are selected.
- *
- * @return The amount.
- */
-size_t Editor::SelectionManager::getCount() const {
-    return selectedItems.size();
-}
-
-
-/**
- * @brief Returns the center point and size of the bounding box of the
- * selected items.
- *
- * @param center The center of the box is returned here.
- * @param size The dimensions of the box are returned here.
- * @return Whether there are any selected items.
- */
-bool Editor::SelectionManager::getBBox(
-    Point* center, Point* size
-) const {
-    *center = Point();
-    *size = Point();
-    if(selectedItems.empty()) return false;
-    
-    Point minCoords(FLT_MAX);
-    Point maxCoords(-FLT_MAX);
-    
-    for(size_t i : selectedItems) {
-        Point iCenter, iSize;
-        getItemInfo(i, &iCenter, &iSize);
-        updateMinCoords(
-            minCoords, iCenter - iSize / 2.0f
-        );
-        updateMaxCoords(
-            maxCoords, iCenter + iSize / 2.0f
-        );
-    }
-    
-    *center = (minCoords + maxCoords) / 2.0f;
-    *size = maxCoords - minCoords;
-    
-    return true;
+    return selectedItems.getSingleItemIdx();
 }
 
 
@@ -4935,7 +5183,27 @@ bool Editor::SelectionManager::getBBox(
  * @return Whether any are selected.
  */
 bool Editor::SelectionManager::hasAny() const {
-    return !selectedItems.empty();
+    return selectedItems.hasAny();
+}
+
+
+/**
+ * @brief Returns whether there is are multiple items selected.
+ *
+ * @return Whether there are multiple selected.
+ */
+bool Editor::SelectionManager::hasMultiple() const {
+    return selectedItems.hasMultiple();
+}
+
+
+/**
+ * @brief Returns whether there is only one item selected.
+ *
+ * @return Whether there is one selected.
+ */
+bool Editor::SelectionManager::hasOne() const {
+    return selectedItems.hasOne();
 }
 
 
@@ -4950,37 +5218,6 @@ bool Editor::SelectionManager::isCreatingRubberBand() const {
 
 
 /**
- * @brief Returns whether there is are multiple items selected.
- *
- * @return Whether there are multiple selected.
- */
-bool Editor::SelectionManager::hasMultiple() const {
-    return selectedItems.size() > 1;
-}
-
-
-/**
- * @brief Returns whether there is only one item selected.
- *
- * @return Whether there is one selected.
- */
-bool Editor::SelectionManager::hasOne() const {
-    return selectedItems.size() == 1;
-}
-
-
-/**
- * @brief Returns whether a given items is selected.
- *
- * @param idx The item's index.
- * @return Whether it is selected.
- */
-bool Editor::SelectionManager::contains(size_t idx) const {
-    return selectedItems.contains(idx);
-}
-
-
-/**
  * @brief Returns whether the user is currently transforming the selection.
  *
  * @return Whether it is transforming.
@@ -4991,95 +5228,39 @@ bool Editor::SelectionManager::isTransforming() const {
 
 
 /**
- * @brief Adds an item to the selection.
+ * @brief Removes an item from the selection.
  *
  * @param idx The item's index.
- * @return Whether the item was unselected.
+ * @return Whether the item was selected.
  */
-bool Editor::SelectionManager::add(size_t idx) {
+bool Editor::SelectionManager::remove(size_t idx) {
     if(!enabled) return false;
-    if(selectedItems.contains(idx)) return false;
-    selectedItems.insert(idx);
-    homogenized = false;
+    return selectedItems.remove(idx);
+}
+
+
+/**
+ * @brief Sets the selection to be a single item only.
+ *
+ * @param idx The item to select.
+ * @return Whether that item wasn't already selected.
+ */
+bool Editor::SelectionManager::setSingle(size_t idx) {
+    if(!enabled) return false;
+    return selectedItems.setSingle(idx);
+}
+
+
+/**
+ * @brief Sets whether the selection was homogenized by the user.
+ *
+ * @param homogenized The new value.
+ * @return Whether that wasn't already the case.
+ */
+bool Editor::SelectionManager::setHomogenized(bool homogenized) {
+    if(this->homogenized == homogenized) return false;
+    this->homogenized = homogenized;
     return true;
-}
-
-
-/**
- * @brief Selects all items available.
- *
- * @param totalAmount How many items there are in total.
- * @return Whether we didn't already have all selected.
- */
-bool Editor::SelectionManager::addAll(size_t totalAmount) {
-    if(!enabled) return false;
-    size_t prevSelSize = selectedItems.size();
-    clear();
-    for(size_t i = 0; i < totalAmount; i++) {
-        add(i);
-    }
-    return selectedItems.size() > prevSelSize;
-}
-
-
-/**
- * @brief Selects an item, or items, based on the left mouse button being
- * pressed down. This also starts a rubber band selection box if applicable.
- *
- * @param cursorPos Mouse cursor position.
- * @param rubberBandMod Whether a modifier key that forces rubber band
- * selection box creation was held down.
- * @param addToSelectionMod Whether a modifier key that adds to the
- * selection was held down.
- * @return Whether anything changed.
- */
-bool Editor::SelectionManager::chooseViaMouseDown(
-    const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
-) {
-    if(!enabled) return false;
-    bool madeChanges = false;
-    Point selectionCenter, selectionSize;
-    getBBox(&selectionCenter, &selectionSize);
-    
-    //Get which items are under the mouse cursor.
-    vector<size_t> clickedItems;
-    size_t nrTotalItems = getNrTotalItems();
-    for(size_t i = 0; i < nrTotalItems; i++) {
-        if(!getItemIsEligible(i)) continue;
-        Point iCenter, iSize;
-        getItemInfo(i, &iCenter, &iSize);
-        if(itemsAreRectangular) {
-            if(isPointInRectangle(cursorPos, iCenter, iSize)) {
-                clickedItems.push_back(i);
-            }
-        } else {
-            if(Distance(cursorPos, iCenter) <= iSize.x / 2.0f) {
-                clickedItems.push_back(i);
-            }
-        }
-    }
-    
-    bool mustStartRubberBand = clickedItems.empty() || rubberBandMod;
-    if(mustStartRubberBand) {
-        if(!addToSelectionMod) {
-            clear();
-        }
-        startRubberBand(cursorPos);
-        madeChanges = true;
-    } else {
-        if(overlapsCycle && !addToSelectionMod) {
-            size_t prevSelItemIdx = getSingleItemIdx();
-            setSingle(getNextInVector(clickedItems, prevSelItemIdx));
-        } else {
-            if(!addToSelectionMod) {
-                clear();
-            }
-            add(clickedItems[0]);
-        }
-        madeChanges = true;
-    }
-    
-    return madeChanges;
 }
 
 
@@ -5109,7 +5290,8 @@ bool Editor::SelectionManager::startTransforming() {
     state = STATE_TRANSFORMING;
     preTransCenters.clear();
     preTransSizes.clear();
-    for(size_t i : selectedItems) {
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    for(size_t i : list) {
         Point iCenter, iSize;
         getItemInfo(i, &iCenter, &iSize);
         preTransCenters[i] = iCenter;
@@ -5157,20 +5339,6 @@ bool Editor::SelectionManager::stopTransforming() {
     preTransCenters.clear();
     preTransSizes.clear();
     state = STATE_IDLING;
-    return true;
-}
-
-
-/**
- * @brief Removes an item from the selection.
- *
- * @param idx The item's index.
- * @return Whether the item was selected.
- */
-bool Editor::SelectionManager::remove(size_t idx) {
-    if(!enabled) return false;
-    if(!selectedItems.contains(idx)) return false;
-    selectedItems.erase(idx);
     return true;
 }
 

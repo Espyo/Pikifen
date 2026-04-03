@@ -2717,7 +2717,7 @@ void AreaEditor::rotateMobGensToPoint(const Point& pos) {
     }
     
     registerChange("object rotation");
-    mobSelection.homogenized = false;
+    mobSelection.setHomogenized(false);
     for(size_t mobIdx : mobSelection.getItemIdxs()) {
         MobGen* mPtr = game.curArea->mobGenerators[mobIdx];
         mPtr->angle = getAngle(mPtr->pos, pos);

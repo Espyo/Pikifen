@@ -4504,7 +4504,7 @@ void AreaEditor::processGuiPanelMobs() {
         
         ImGui::Spacer();
         
-        if(mobSelection.hasOne() || mobSelection.homogenized) {
+        if(mobSelection.hasOne() || mobSelection.isHomogenized()) {
         
             processGuiPanelMob();
             
@@ -4524,7 +4524,7 @@ void AreaEditor::processGuiPanelMobs() {
             //Homogenize objects button.
             if(ImGui::Button("Edit all together")) {
                 registerChange("object combining");
-                mobSelection.homogenized = true;
+                mobSelection.setHomogenized(true);
                 homogenizeSelectedMobs();
             }
         }

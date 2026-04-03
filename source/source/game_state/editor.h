@@ -244,6 +244,41 @@ protected:
     };
     
     /**
+     * @brief Wrapper for a list with the indexes of the currently
+     * selected items.
+     */
+    struct SelectionList {
+    
+        public:
+        
+        //--- Public function declarations ---
+        
+        bool add(size_t idx);
+        bool addAll(size_t totalAmount);
+        bool remove(size_t idx);
+        bool clear();
+        bool setSingle(size_t idx);
+        
+        bool contains(size_t idx) const;
+        bool hasMultiple() const;
+        bool hasOne() const;
+        bool hasAny() const;
+        size_t getFirstItemIdx() const;
+        size_t getSingleItemIdx() const;
+        const set<size_t>& getItemIdxs() const;
+        size_t getCount() const;
+        
+        
+        private:
+        
+        //--- Private members ---
+        
+        //The list proper.
+        set<size_t> list;
+        
+    };
+    
+    /**
      * @brief Manages selections and selected things. It only knows about
      * item indexes, and needs a bit of help for more complex operations
      * like center and size management.
@@ -284,9 +319,6 @@ protected:
         //one, or always select the one with the lowest index?
         bool overlapsCycle = false;
         
-        //Has the user agreed to homogenize the selection?
-        bool homogenized = false;
-        
         
         //--- Public function declarations ---
         
@@ -305,10 +337,11 @@ protected:
         const set<size_t>& getItemIdxs() const;
         size_t getCount() const;
         
-        void draw(const Point& cursorPos, float zoom) const;
-        bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool enable();
         bool disable();
+        
+        void draw(const Point& cursorPos, float zoom) const;
+        bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool getBBox(Point* center, Point* size) const;
         bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
@@ -322,6 +355,8 @@ protected:
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
         bool stopRubberBand();
+        bool setHomogenized(bool homogenized);
+        bool isHomogenized() const;
         bool handleMouseUp();
         
         
@@ -346,8 +381,8 @@ protected:
         
         //--- Private members ---
         
-        //List of the indexes of all currently selected items.
-        set<size_t> selectedItems;
+        //The list of selected items.
+        SelectionList selectedItems;
         
         //Current user state.
         STATE state = STATE_IDLING;
@@ -357,6 +392,9 @@ protected:
         
         //Rubber band box starting point.
         Point rubberBandStart;
+        
+        //Has the user agreed to homogenize the selection?
+        bool homogenized = false;
         
         //Center of each selected item before transformation began.
         map<size_t, Point> preTransCenters;
