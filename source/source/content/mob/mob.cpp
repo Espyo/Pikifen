@@ -3667,6 +3667,7 @@ void Mob::startDying() {
     gravityMult = 1.0;
     
     for(size_t s = 0; s < statuses.size(); s++) {
+        statuses[s].prevState = statuses[s].state;
         statuses[s].state = STATUS_STATE_TO_DELETE;
     }
     

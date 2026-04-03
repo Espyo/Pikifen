@@ -346,19 +346,27 @@ void Liquid::tick(float deltaT) {
     for(size_t m = 0; m < freezeCaughtMobs.size(); m++) {
         Mob* mPtr = freezeCaughtMobs[m];
         
+        bool mustRemove = false;
         const auto it =
             std::find(
                 game.states.gameplay->mobs.all.begin(),
                 game.states.gameplay->mobs.all.end(),
                 mPtr
             );
+            
         if(it == game.states.gameplay->mobs.all.end()) {
+            mustRemove = true;
+        }
+        if(mPtr->health <= 0.0f) {
+            mustRemove = true;
+        }
+        
+        if(mustRemove) {
             freezeCaughtMobs.erase(freezeCaughtMobs.begin() + m);
             m--;
             continue;
         }
         
-        if(mPtr->health <= 0.0f) continue;
         mPtr->applyStatus(
             hazard->associatedLiquid->freezeMobStatus,
             false, true, nullptr, 1.0f, true
