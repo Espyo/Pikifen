@@ -228,21 +228,21 @@ void AreaEditor::drawCanvas() {
     
     drawGrid(
         game.options.areaEd.gridInterval,
-        al_map_rgba(64, 64, 64, style.gridAlpha * 255),
-        al_map_rgba(48, 48, 48, style.gridAlpha * 255)
+        multAlpha(EDITOR::GRID_COLOR_MAJOR, style.gridAlpha),
+        multAlpha(EDITOR::GRID_COLOR_MINOR, style.gridAlpha)
     );
     
     //0,0 marker.
     al_draw_line(
         -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2, 0,
-        al_map_rgba(192, 192, 224, style.gridAlpha * 255),
+        multAlpha(EDITOR::GRID_COLOR_ORIGIN, style.gridAlpha),
         1.0f / game.editorsView.cam.zoom
     );
     al_draw_line(
         0, -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2,
-        al_map_rgba(192, 192, 224, style.gridAlpha * 255),
+        multAlpha(EDITOR::GRID_COLOR_ORIGIN, style.gridAlpha),
         1.0f / game.editorsView.cam.zoom
     );
     
@@ -275,6 +275,10 @@ void AreaEditor::drawCanvas() {
     
     //Cross-section points and line.
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
+        const ALLEGRO_COLOR POINT_BG_COLOR = al_map_rgb(255, 255, 32);
+        const ALLEGRO_COLOR POINT_TEXT_COLOR = al_map_rgb(0, 64, 64);
+        const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(255, 0, 0);
+
         for(unsigned char p = 0; p < 2; p++) {
             string letter = (p == 0 ? "A" : "B");
             float radius =
@@ -285,7 +289,7 @@ void AreaEditor::drawCanvas() {
                 crossSectionCheckpoints[p].y - radius,
                 crossSectionCheckpoints[p].x + radius,
                 crossSectionCheckpoints[p].y + radius,
-                al_map_rgb(255, 255, 32)
+                POINT_BG_COLOR
             );
             drawText(
                 letter, game.sysContent.fntBuiltin,
@@ -296,7 +300,7 @@ void AreaEditor::drawCanvas() {
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
                     game.editorsView.cam.zoom
                 ),
-                al_map_rgb(0, 64, 64)
+                POINT_TEXT_COLOR
             );
         }
         al_draw_line(
@@ -304,7 +308,7 @@ void AreaEditor::drawCanvas() {
             crossSectionCheckpoints[0].y,
             crossSectionCheckpoints[1].x,
             crossSectionCheckpoints[1].y,
-            al_map_rgb(255, 0, 0), 3.0 / game.editorsView.cam.zoom
+            LINE_COLOR, 3.0 / game.editorsView.cam.zoom
         );
     }
     
@@ -334,13 +338,15 @@ void AreaEditor::drawCanvas() {
     
     //Sector drawing.
     if(subState == EDITOR_SUB_STATE_DRAWING) {
+        const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
+
         for(size_t n = 1; n < drawingNodes.size(); n++) {
             al_draw_line(
                 drawingNodes[n - 1].snappedSpot.x,
                 drawingNodes[n - 1].snappedSpot.y,
                 drawingNodes[n].snappedSpot.x,
                 drawingNodes[n].snappedSpot.y,
-                al_map_rgb(128, 255, 128),
+                AREA_EDITOR::DRAWING_OLD_LINE_COLOR,
                 3.0 / game.editorsView.cam.zoom
             );
         }
@@ -348,9 +354,7 @@ void AreaEditor::drawCanvas() {
             ALLEGRO_COLOR newLineColor =
                 interpolateColor(
                     newSectorErrorTintTimer.getRatioLeft(),
-                    1, 0,
-                    al_map_rgb(255, 0, 0),
-                    al_map_rgb(64, 255, 64)
+                    1.0f, 0.0f, ERROR_COLOR, AREA_EDITOR::DRAWING_NEW_LINE_COLOR
                 );
             Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
             
@@ -371,6 +375,8 @@ void AreaEditor::drawCanvas() {
     
     //New circular sector drawing.
     if(subState == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+        const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
+
         switch(newCircleSectorStep) {
         case 1: {
             float circleRadius =
@@ -381,7 +387,7 @@ void AreaEditor::drawCanvas() {
                 newCircleSectorCenter.x,
                 newCircleSectorCenter.y,
                 circleRadius,
-                al_map_rgb(64, 255, 64),
+                AREA_EDITOR::DRAWING_NEW_LINE_COLOR,
                 3.0 / game.editorsView.cam.zoom
             );
             if(game.options.areaEd.showCircularInfo) {
@@ -399,8 +405,8 @@ void AreaEditor::drawCanvas() {
                     getNextInVectorByIdx(newCircleSectorPoints, p);
                 ALLEGRO_COLOR color =
                     newCircleSectorValidEdges[p] ?
-                    al_map_rgb(64, 255, 64) :
-                    al_map_rgb(255, 0, 0);
+                    AREA_EDITOR::DRAWING_NEW_LINE_COLOR :
+                    ERROR_COLOR;
                     
                 al_draw_line(
                     curPoint.x, curPoint.y,
@@ -413,7 +419,8 @@ void AreaEditor::drawCanvas() {
                 al_draw_filled_circle(
                     newCircleSectorPoints[p].x,
                     newCircleSectorPoints[p].y,
-                    3.0 / game.editorsView.cam.zoom, al_map_rgb(192, 255, 192)
+                    3.0 / game.editorsView.cam.zoom,
+                    AREA_EDITOR::DRAWING_OLD_LINE_COLOR
                 );
             }
             
@@ -431,6 +438,7 @@ void AreaEditor::drawCanvas() {
     
     //Quick sector height set.
     if(subState == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
+        const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(64, 255, 64);
         Point nrCoords = quickHeightSetStartPos;
         nrCoords.x += 100.0f;
         al_transform_coordinates(
@@ -438,8 +446,7 @@ void AreaEditor::drawCanvas() {
         );
         float offset = getQuickHeightSetOffset();
         drawDebugText(
-            al_map_rgb(64, 255, 64),
-            nrCoords,
+            TEXT_COLOR, nrCoords,
             "Height " +
             string(offset < 0 ? "" : "+") + i2s(offset) + "" +
             (
@@ -459,7 +466,7 @@ void AreaEditor::drawCanvas() {
                 pathDrawingStop1->pos.y,
                 hotspot.x,
                 hotspot.y,
-                al_map_rgb(64, 255, 64),
+                AREA_EDITOR::DRAWING_NEW_LINE_COLOR,
                 3.0 / game.editorsView.cam.zoom
             );
             
@@ -476,11 +483,7 @@ void AreaEditor::drawCanvas() {
             selectionStart.y,
             selectionEnd.x,
             selectionEnd.y,
-            al_map_rgb(
-                AREA_EDITOR::SELECTION_COLOR[0],
-                AREA_EDITOR::SELECTION_COLOR[1],
-                AREA_EDITOR::SELECTION_COLOR[2]
-            ),
+            AREA_EDITOR::SELECTION_COLOR,
             2.0 / game.editorsView.cam.zoom
             
         );
@@ -555,6 +558,9 @@ void AreaEditor::drawCanvas() {
  * @brief Draws the cross-section graph onto the canvas.
  */
 void AreaEditor::drawCrossSectionGraph() {
+    const ALLEGRO_COLOR DEF_BG_COLOR = al_map_rgb(0, 0, 64);
+    const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(160, 96, 96);
+
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
     
         Distance crossSectionWorldLength(
@@ -567,7 +573,7 @@ void AreaEditor::drawCrossSectionGraph() {
         ALLEGRO_COLOR bgColor =
             game.options.editors.useCustomStyle ?
             changeColorLighting(game.options.editors.primaryColor, -0.3f) :
-            al_map_rgb(0, 0, 64);
+            DEF_BG_COLOR;
             
         al_draw_filled_rectangle(
             crossSectionWindowStart.x, crossSectionWindowStart.y,
@@ -816,12 +822,12 @@ void AreaEditor::drawCrossSectionGraph() {
         al_draw_line(
             crossSectionWindowStart.x, crossSectionWindowEnd.y + 1,
             crossSectionX2 + 2, crossSectionWindowEnd.y + 1,
-            al_map_rgb(160, 96, 96), 2
+            LINE_COLOR, 2
         );
         al_draw_line(
             crossSectionX2 + 1, crossSectionWindowStart.y,
             crossSectionX2 + 1, crossSectionWindowEnd.y + 2,
-            al_map_rgb(160, 96, 96), 2
+            LINE_COLOR, 2
         );
     }
 }
@@ -840,6 +846,9 @@ void AreaEditor::drawCrossSectionSector(
     float startRatio, float endRatio, float proportion,
     float lowestZ, const Sector* sectorPtr
 ) {
+    const ALLEGRO_COLOR DEF_SECTOR_COLOR = al_map_rgb(0, 64, 0);
+    const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(192, 192, 192);
+
     float rectangleX1 =
         crossSectionWindowStart.x +
         (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
@@ -855,7 +864,7 @@ void AreaEditor::drawCrossSectionSector(
     ALLEGRO_COLOR color =
         game.options.editors.useCustomStyle ?
         changeColorLighting(game.options.editors.secondaryColor, -0.2f) :
-        al_map_rgb(0, 64, 0);
+        DEF_SECTOR_COLOR;
         
     al_draw_filled_rectangle(
         rectangleX1, rectangleY,
@@ -865,17 +874,17 @@ void AreaEditor::drawCrossSectionSector(
     al_draw_line(
         rectangleX1 + 0.5, rectangleY,
         rectangleX1 + 0.5, crossSectionWindowEnd.y,
-        al_map_rgb(192, 192, 192), 1
+        LINE_COLOR, 1
     );
     al_draw_line(
         rectangleX2 + 0.5, rectangleY,
         rectangleX2 + 0.5, crossSectionWindowEnd.y,
-        al_map_rgb(192, 192, 192), 1
+        LINE_COLOR, 1
     );
     al_draw_line(
         rectangleX1, rectangleY + 0.5,
         rectangleX2, rectangleY + 0.5,
-        al_map_rgb(192, 192, 192), 1
+        LINE_COLOR, 1
     );
     
 }
@@ -893,6 +902,9 @@ void AreaEditor::drawDebugText(
     const ALLEGRO_COLOR color, const Point& where, const string& text,
     unsigned char dots
 ) {
+    const ALLEGRO_COLOR BG_COLOR = al_map_rgba(0, 0, 0, 128);
+    const ALLEGRO_COLOR DOT_BG_COLOR = al_map_rgba(0, 0, 0, 128);
+
     int dox = 0;
     int doy = 0;
     int dw = 0;
@@ -910,7 +922,7 @@ void AreaEditor::drawDebugText(
     al_draw_filled_rectangle(
         where.x - bboxW * 0.5, where.y - bboxH * 0.5,
         where.x + bboxW * 0.5, where.y + bboxH * 0.5,
-        al_map_rgba(0, 0, 0, 128)
+        BG_COLOR
     );
     
     drawText(
@@ -924,7 +936,7 @@ void AreaEditor::drawDebugText(
             where.y + bboxH * 0.5f,
             where.x + 3.0f / game.editorsView.cam.zoom,
             where.y + bboxH * 0.5f + 3.0f / game.editorsView.cam.zoom,
-            al_map_rgba(0, 0, 0, 128)
+            DOT_BG_COLOR
         );
         
         if(dots == 1) {
@@ -961,6 +973,15 @@ void AreaEditor::drawDebugText(
  * @param style Canvas style.
  */
 void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR VALID_EDGE_COLOR = al_map_rgb(192, 32, 32);
+    const ALLEGRO_COLOR ONE_SIDED_EDGE_COLOR = al_map_rgb(128, 128, 128);
+    const ALLEGRO_COLOR SAME_Z_EDGE_COLOR = al_map_rgb(128, 128, 128);
+    const ALLEGRO_COLOR NORMAL_EDGE_COLOR = al_map_rgb(150, 150, 150);
+    const ALLEGRO_COLOR DEBUG_TRIANGLE_COLOR = al_map_rgb(192, 0, 160);
+    const ALLEGRO_COLOR DEBUG_SECTOR_A_COLOR = al_map_rgb(216, 224, 128);
+    const ALLEGRO_COLOR DEBUG_SECTOR_B_COLOR = al_map_rgb(128, 224, 160);
+    const ALLEGRO_COLOR DEBUG_EDGE_IDX_COLOR = al_map_rgb(255, 192, 192);
+
     size_t nEdges = game.curArea->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
         Edge* ePtr = game.curArea->edges[e];
@@ -1027,26 +1048,16 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             ePtr->vertexes[1]->y,
             (
                 selected ?
-                al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
-                    style.selectionAlpha * 255
-                ) :
+                multAlpha(AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha) :
                 !valid ?
-                al_map_rgba(192, 32,  32,  style.edgeAlpha * 255) :
+                multAlpha(VALID_EDGE_COLOR, style.edgeAlpha) :
                 highlighted ?
-                al_map_rgba(
-                    style.highlightColor.r * 255,
-                    style.highlightColor.g * 255,
-                    style.highlightColor.b * 255,
-                    style.edgeAlpha * 255
-                ) :
+                multAlpha(style.highlightColor, style.edgeAlpha) :
                 oneSided ?
-                al_map_rgba(128, 128, 128, style.edgeAlpha * 255) :
+                multAlpha(ONE_SIDED_EDGE_COLOR, style.edgeAlpha) :
                 sameZ ?
-                al_map_rgba(128, 128, 128, style.edgeAlpha * 255) :
-                al_map_rgba(150, 150, 150, style.edgeAlpha * 255)
+                multAlpha(SAME_Z_EDGE_COLOR, style.edgeAlpha) :
+                multAlpha(NORMAL_EDGE_COLOR, style.edgeAlpha)
             ),
             (selected ? 3.0 : 2.0) / game.editorsView.cam.zoom
         );
@@ -1090,7 +1101,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                     tPtr->points[1]->y,
                     tPtr->points[2]->x,
                     tPtr->points[2]->y,
-                    al_map_rgb(192, 0, 160),
+                    DEBUG_TRIANGLE_COLOR,
                     2.0f / game.editorsView.cam.zoom
                 );
             }
@@ -1113,8 +1124,6 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                 middle.x + cos(edgeAngle + TAU / 4) * distFromEdge,
                 middle.y + sin(edgeAngle + TAU / 4) * distFromEdge
             );
-            ALLEGRO_COLOR color1 = al_map_rgb(216, 224, 128);
-            ALLEGRO_COLOR color2 = al_map_rgb(128, 224, 160);
             string text1 =
                 "A" +
                 (
@@ -1131,16 +1140,16 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                 );
                 
             al_draw_line(
-                middle.x, middle.y, pos1.x, pos1.y, color1,
+                middle.x, middle.y, pos1.x, pos1.y, DEBUG_SECTOR_A_COLOR,
                 2.0f / game.editorsView.cam.zoom
             );
-            drawDebugText(color1, pos1, text1);
+            drawDebugText(DEBUG_SECTOR_A_COLOR, pos1, text1);
             
             al_draw_line(
-                middle.x, middle.y, pos2.x, pos2.y, color2,
+                middle.x, middle.y, pos2.x, pos2.y, DEBUG_SECTOR_B_COLOR,
                 2.0f / game.editorsView.cam.zoom
             );
-            drawDebugText(color2, pos2, text2);
+            drawDebugText(DEBUG_SECTOR_B_COLOR, pos2, text2);
         }
         
         if(debugEdgeIdxs) {
@@ -1148,7 +1157,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                 (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
                 (ePtr->vertexes[0]->y + ePtr->vertexes[1]->y) / 2.0f
             );
-            drawDebugText(al_map_rgb(255, 192, 192), middle, i2s(e));
+            drawDebugText(DEBUG_EDGE_IDX_COLOR, middle, i2s(e));
         }
     }
 }
@@ -1187,6 +1196,13 @@ void AreaEditor::drawLineDist(
  * @param style Canvas style.
  */
 void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR LINK_COLOR = al_map_rgb(160, 224, 64);
+    const ALLEGRO_COLOR STORE_COLOR = al_map_rgb(224, 200, 200);
+    const ALLEGRO_COLOR DEF_TYPE_COLOR = al_map_rgb(255, 0, 0);
+    const ALLEGRO_COLOR ANGLE_ARROW_COLOR = COLOR_BLACK;
+    const ALLEGRO_COLOR TERRITORY_COLOR = al_map_rgb(240, 240, 192);
+    const ALLEGRO_COLOR TERRAIN_RADIUS_COLOR = al_map_rgb(240, 192, 192);
+
     //Links and stores.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
         for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
@@ -1209,7 +1225,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                         mPtr->pos, m2Ptr->pos,
                         mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
-                        al_map_rgb(160, 224, 64)
+                        LINK_COLOR
                     );
                 }
             }
@@ -1227,7 +1243,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                         mPtr->pos, m2Ptr->pos,
                         mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
-                        al_map_rgb(224, 200, 200)
+                        STORE_COLOR
                     );
                 }
             }
@@ -1239,7 +1255,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         
         float radius = getMobGenRadius(mPtr);
-        ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
+        ALLEGRO_COLOR color = DEF_TYPE_COLOR;
         if(mPtr->type && mPtr != problemMobPtr) {
             color =
                 changeAlpha(
@@ -1300,7 +1316,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         al_draw_line(
             mPtr->pos.x - lrw * 0.8, mPtr->pos.y - lrh * 0.8,
             mPtr->pos.x + lrw * 0.8, mPtr->pos.y + lrh * 0.8,
-            al_map_rgba(0, 0, 0, style.mobAlpha * 255), lt
+            multAlpha(ANGLE_ARROW_COLOR, style.mobAlpha), lt
         );
         
         float tx1 = mPtr->pos.x + lrw;
@@ -1318,7 +1334,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             tx1, ty1,
             tx2, ty2,
             tx3, ty3,
-            al_map_rgba(0, 0, 0, style.mobAlpha * 255)
+            multAlpha(ANGLE_ARROW_COLOR, style.mobAlpha)
         );
         
         bool isSelected = mobSelection.contains(m);
@@ -1334,12 +1350,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         if(isSelected || isInMobGroup) {
             al_draw_filled_circle(
                 mPtr->pos.x, mPtr->pos.y, radius,
-                al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
-                    style.selectionAlpha * 255
-                )
+                multAlpha(AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha)
             );
             
             if(
@@ -1350,7 +1361,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->territoryRadius,
-                    al_map_rgb(240, 240, 192), 1.0f / game.editorsView.cam.zoom
+                    TERRITORY_COLOR, 1.0f / game.editorsView.cam.zoom
                 );
             }
             if(
@@ -1361,18 +1372,13 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->terrainRadius,
-                    al_map_rgb(240, 192, 192), 1.0f / game.editorsView.cam.zoom
+                    TERRAIN_RADIUS_COLOR, 1.0f / game.editorsView.cam.zoom
                 );
             }
         } else if(isHighlighted) {
             al_draw_filled_circle(
                 mPtr->pos.x, mPtr->pos.y, radius,
-                al_map_rgba(
-                    style.highlightColor.r * 255,
-                    style.highlightColor.g * 255,
-                    style.highlightColor.b * 255,
-                    64
-                )
+                multAlpha(style.highlightColor, 0.25f)
             );
         }
         
@@ -1390,6 +1396,20 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR SCRIPT_STOP_COLOR = al_map_rgba(187, 102, 34, 224);
+    const ALLEGRO_COLOR LIGHT_STOP_COLOR = al_map_rgba(102, 170, 34, 224);
+    const ALLEGRO_COLOR AIRBORNE_STOP_COLOR = al_map_rgba(187, 102, 153, 224);
+    const ALLEGRO_COLOR NORMAL_STOP_COLOR = al_map_rgb(88, 177, 177);
+    const ALLEGRO_COLOR DEBUG_STOP_COLOR = al_map_rgb(80, 192, 192);
+    const ALLEGRO_COLOR NORMAL_LINK_COLOR = al_map_rgba(34, 136, 187, 224);
+    const ALLEGRO_COLOR LEDGE_LINK_COLOR = al_map_rgba(180, 180, 64, 224);
+    const ALLEGRO_COLOR DEBUG_LINK_COLOR = al_map_rgb(96, 104, 224);
+    const ALLEGRO_COLOR CLOSEST_LINE_COLOR = al_map_rgb(192, 128, 32);
+    const ALLEGRO_COLOR PREVIEW_OK_COLOR = al_map_rgb(255, 187, 136);
+    const ALLEGRO_COLOR PREVIEW_INVALID_COLOR = al_map_rgb(221, 17, 17);
+    const ALLEGRO_COLOR PREVIEW_CP_BG_COLOR = al_map_rgb(240, 224, 160);
+    const ALLEGRO_COLOR PREVIEW_CP_TEXT_COLOR = al_map_rgb(0, 64, 64);
+            
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
         for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
@@ -1397,13 +1417,13 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             bool highlighted = highlightedPathStop == sPtr;
             ALLEGRO_COLOR color;
             if(hasFlag(sPtr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
-                color = al_map_rgba(187, 102, 34, 224);
+                color = SCRIPT_STOP_COLOR;
             } else if(hasFlag(sPtr->flags, PATH_STOP_FLAG_LIGHT_LOAD_ONLY)) {
-                color = al_map_rgba(102, 170, 34, 224);
+                color = LIGHT_STOP_COLOR;
             } else if(hasFlag(sPtr->flags, PATH_STOP_FLAG_AIRBORNE_ONLY)) {
-                color = al_map_rgba(187, 102, 153, 224);
+                color = AIRBORNE_STOP_COLOR;
             } else {
-                color = al_map_rgb(88, 177, 177);
+                color = NORMAL_STOP_COLOR;
             }
             al_draw_filled_circle(
                 sPtr->pos.x, sPtr->pos.y,
@@ -1414,28 +1434,20 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             if(isInContainer(selectedPathStops, sPtr)) {
                 al_draw_filled_circle(
                     sPtr->pos.x, sPtr->pos.y, sPtr->radius,
-                    al_map_rgba(
-                        AREA_EDITOR::SELECTION_COLOR[0],
-                        AREA_EDITOR::SELECTION_COLOR[1],
-                        AREA_EDITOR::SELECTION_COLOR[2],
-                        style.selectionAlpha * 255
+                    multAlpha(
+                        AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha
                     )
                 );
             } else if(highlighted) {
                 al_draw_filled_circle(
                     sPtr->pos.x, sPtr->pos.y, sPtr->radius,
-                    al_map_rgba(
-                        style.highlightColor.r * 255,
-                        style.highlightColor.g * 255,
-                        style.highlightColor.b * 255,
-                        128
-                    )
+                    multAlpha(style.highlightColor, 0.50f)
                 );
             }
             
             if(debugPathIdxs) {
                 drawDebugText(
-                    al_map_rgb(80, 192, 192), sPtr->pos, i2s(s)
+                    DEBUG_STOP_COLOR, sPtr->pos, i2s(s)
                 );
             }
         }
@@ -1452,27 +1464,19 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
                     color =
-                        al_map_rgba(
-                            AREA_EDITOR::SELECTION_COLOR[0],
-                            AREA_EDITOR::SELECTION_COLOR[1],
-                            AREA_EDITOR::SELECTION_COLOR[2],
-                            style.selectionAlpha * 255
+                        multAlpha(
+                            AREA_EDITOR::SELECTION_COLOR,
+                            style.selectionAlpha
                         );
                 } else if(highlighted) {
-                    color =
-                        al_map_rgba(
-                            style.highlightColor.r * 255,
-                            style.highlightColor.g * 255,
-                            style.highlightColor.b * 255,
-                            255
-                        );
+                    color = changeAlpha(style.highlightColor, 255);
                 } else {
                     switch(lPtr->type) {
                     case PATH_LINK_TYPE_NORMAL: {
-                        color = al_map_rgba(34, 136, 187, 224);
+                        color = NORMAL_LINK_COLOR;
                         break;
                     } case PATH_LINK_TYPE_LEDGE: {
-                        color = al_map_rgba(180, 180, 64, 224);
+                        color = LEDGE_LINK_COLOR;
                         break;
                     }
                     }
@@ -1527,7 +1531,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 if(debugPathIdxs && (oneWay || s < sPtr->links[l]->endIdx)) {
                     Point middle = (sPtr->pos + s2Ptr->pos) / 2.0f;
                     drawDebugText(
-                        al_map_rgb(96, 104, 224),
+                        DEBUG_LINK_COLOR,
                         Point(
                             middle.x + cos(angle + TAU / 4) * 4,
                             middle.y + sin(angle + TAU / 4) * 4
@@ -1582,7 +1586,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     game.editorsView.mouseCursorWorldPos.x,
                     game.editorsView.mouseCursorWorldPos.y,
                     closest->pos.x, closest->pos.y,
-                    al_map_rgb(192, 128, 32), 2.0 / game.editorsView.cam.zoom
+                    CLOSEST_LINE_COLOR, 2.0 / game.editorsView.cam.zoom
                 );
             }
         }
@@ -1590,8 +1594,6 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         //Path preview.
         if(showPathPreview) {
             //Draw the lines of the path.
-            ALLEGRO_COLOR linesColor = al_map_rgb(255, 187, 136);
-            ALLEGRO_COLOR invalidLinesColor = al_map_rgb(221, 17, 17);
             float linesThickness = 4.0f / game.editorsView.cam.zoom;
             
             if(!pathPreview.empty()) {
@@ -1600,7 +1602,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     pathPreviewCheckpoints[0].y,
                     pathPreview[0]->pos.x,
                     pathPreview[0]->pos.y,
-                    linesColor, linesThickness
+                    PREVIEW_OK_COLOR, linesThickness
                 );
                 for(size_t s = 0; s < pathPreview.size() - 1; s++) {
                     al_draw_line(
@@ -1608,7 +1610,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                         pathPreview[s]->pos.y,
                         pathPreview[s + 1]->pos.x,
                         pathPreview[s + 1]->pos.y,
-                        linesColor, linesThickness
+                        PREVIEW_OK_COLOR, linesThickness
                     );
                 }
                 al_draw_line(
@@ -1616,7 +1618,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     pathPreview.back()->pos.y,
                     pathPreviewCheckpoints[1].x,
                     pathPreviewCheckpoints[1].y,
-                    linesColor, linesThickness
+                    PREVIEW_OK_COLOR, linesThickness
                 );
             } else if(
                 pathPreviewResult == PATH_RESULT_DIRECT ||
@@ -1628,7 +1630,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     pathPreviewCheckpoints[0].y,
                     pathPreviewCheckpoints[1].x,
                     pathPreviewCheckpoints[1].y,
-                    linesColor, linesThickness
+                    PREVIEW_OK_COLOR, linesThickness
                 );
             } else {
                 for(size_t c = 0; c < 2; c++) {
@@ -1638,7 +1640,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                             pathPreviewClosest[c]->pos.y,
                             pathPreviewCheckpoints[c].x,
                             pathPreviewCheckpoints[c].y,
-                            invalidLinesColor, linesThickness
+                            PREVIEW_INVALID_COLOR, linesThickness
                         );
                     }
                 }
@@ -1656,7 +1658,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     pathPreviewCheckpoints[c].y - factor,
                     pathPreviewCheckpoints[c].x + factor,
                     pathPreviewCheckpoints[c].y + factor,
-                    al_map_rgb(240, 224, 160)
+                    PREVIEW_CP_BG_COLOR
                 );
                 drawText(
                     letter, game.sysContent.fntBuiltin,
@@ -1667,7 +1669,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
                         game.editorsView.cam.zoom
                     ),
-                    al_map_rgb(0, 64, 64)
+                    PREVIEW_CP_TEXT_COLOR
                 );
             }
         }
@@ -1681,9 +1683,10 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR REGION_BG_COLOR = al_map_rgb(128, 128, 64);
+
     if(state == EDITOR_STATE_DETAILS) {
         for(size_t r = 0; r < game.curArea->regions.size(); r++) {
-        
             AreaRegion* rPtr = game.curArea->regions[r];
             
             al_draw_rectangle(
@@ -1691,7 +1694,7 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
                 rPtr->center.y - rPtr->size.y / 2.0f,
                 rPtr->center.x + rPtr->size.x / 2.0f,
                 rPtr->center.y + rPtr->size.y / 2.0f,
-                al_map_rgb(128, 128, 64),
+                REGION_BG_COLOR,
                 4.0 / game.editorsView.cam.zoom
             );
         }
@@ -1714,6 +1717,8 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR REMINDER_BG_COLOR = al_map_rgb(128, 128, 64);
+
     if(state == EDITOR_STATE_REVIEW) {
         for(size_t r = 0; r < game.curArea->reminders.size(); r++) {
             AreaMakerReminder* rPtr = &game.curArea->reminders[r];
@@ -1721,12 +1726,8 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
             drawFilledRoundedRectangle(
                 rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f,
                 reminderSelection.contains(r) ?
-                al_map_rgb(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2]
-                ) :
-                al_map_rgb(128, 128, 64)
+                AREA_EDITOR::SELECTION_COLOR :
+                REMINDER_BG_COLOR
             );
             drawText(
                 "!", game.sysContent.fntAreaName, rPtr->pos,
@@ -1747,6 +1748,10 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR INVALID_COLOR = al_map_rgba(160, 16, 16, 224);
+    const ALLEGRO_COLOR BRIGHTNESS_MAP_COLOR = al_map_rgb(180, 200, 180);
+    const ALLEGRO_COLOR HEIGHT_MAP_COLOR = al_map_rgb(224, 255, 224);
+    
     //Edge offset effect updates.
     if(style.wallShadowAlpha > 0.0f) {
         updateOffsetEffectBuffer(
@@ -1853,7 +1858,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                 ALLEGRO_VERTEX av[3];
                 for(size_t v = 0; v < 3; v++) {
                     if(!valid) {
-                        av[v].color = al_map_rgba(160, 16, 16, 224);
+                        av[v].color = INVALID_COLOR;
                     } else if(showBlockingSectors) {
                         av[v].color =
                             sPtr->type == SECTOR_TYPE_BLOCKING ?
@@ -1861,37 +1866,27 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
                             AREA_EDITOR::NON_BLOCKING_COLOR;
                     } else if(viewBrightness) {
                         av[v].color =
-                            al_map_rgba(
-                                sPtr->brightness * 0.7,
-                                sPtr->brightness * 0.8,
-                                sPtr->brightness * 0.7,
-                                255
+                            tintColor(
+                                BRIGHTNESS_MAP_COLOR, mapGray(sPtr->brightness)
                             );
                     } else if(viewHeightmap) {
-                        unsigned char g =
+                        float h =
                             interpolateNumber(
                                 sPtr->z,
                                 style.lowestSectorZ, style.highestSectorZ,
-                                0, 224
+                                0, 1.0f
                             );
                         av[v].color =
-                            al_map_rgba(g, g + 31, g, 255);
+                            tintColor(HEIGHT_MAP_COLOR, mapGray(h * 255));
                     } else {
                         av[v].color =
-                            al_map_rgba(
-                                AREA_EDITOR::SELECTION_COLOR[0],
-                                AREA_EDITOR::SELECTION_COLOR[1],
-                                AREA_EDITOR::SELECTION_COLOR[2],
-                                style.selectionAlpha * 0.5 * 255
+                            multAlpha(
+                                AREA_EDITOR::SELECTION_COLOR,
+                                style.selectionAlpha / 2.0f
                             );
                         if(highlighted && !selected) {
                             av[v].color =
-                                al_map_rgba(
-                                    style.highlightColor.r * 255,
-                                    style.highlightColor.g * 255,
-                                    style.highlightColor.b * 255,
-                                    16
-                                );
+                                multAlpha(style.highlightColor, 0.06f);
                         }
                     }
                     av[v].u = 0;
@@ -1918,6 +1913,8 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR SHADOW_BG_COLOR = al_map_rgb(128, 128, 64);
+
     if(
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
@@ -1966,7 +1963,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                 if(selectedShadow != sPtr) {
                     al_draw_rectangle(
                         minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
-                        al_map_rgb(128, 128, 64),
+                        SHADOW_BG_COLOR,
                         4.0 / game.editorsView.cam.zoom
                     );
                 }
@@ -1990,6 +1987,10 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
+    const ALLEGRO_COLOR INVALID_COLOR = al_map_rgb(192, 32, 32);
+    const ALLEGRO_COLOR NORMAL_COLOR = al_map_rgb(80, 160, 255);
+    const ALLEGRO_COLOR DEBUG_COLOR = al_map_rgb(192, 192, 255);
+
     if(state == EDITOR_STATE_LAYOUT) {
         size_t nVertexes = game.curArea->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {
@@ -2006,29 +2007,19 @@ void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
             drawFilledDiamond(
                 v2p(vPtr), 3.0 / game.editorsView.cam.zoom,
                 selected ?
-                al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
-                    style.selectionAlpha * 255
+                multAlpha(
+                    AREA_EDITOR::SELECTION_COLOR,
+                    style.selectionAlpha
                 ) :
                 !valid ?
-                al_map_rgb(192, 32, 32) :
+                INVALID_COLOR :
                 highlighted ?
-                al_map_rgba(
-                    style.highlightColor.r * 255,
-                    style.highlightColor.g * 255,
-                    style.highlightColor.b * 255,
-                    style.edgeAlpha * 255
-                ) :
-                al_map_rgba(80, 160, 255, style.edgeAlpha * 255)
+                multAlpha(style.highlightColor, style.edgeAlpha) :
+                multAlpha(NORMAL_COLOR, style.edgeAlpha)
             );
             
             if(debugVertexIdxs) {
-                drawDebugText(
-                    al_map_rgb(192, 192, 255),
-                    v2p(vPtr), i2s(v)
-                );
+                drawDebugText(DEBUG_COLOR, v2p(vPtr), i2s(v));
             }
         }
     }

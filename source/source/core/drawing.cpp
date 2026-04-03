@@ -61,6 +61,24 @@ const float CAM_SHAKE_MAX_OFFSET = 30.0f;
 //Default health wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 
+//Color that represents attack hitboxes.
+const ALLEGRO_COLOR HITBOX_COLOR_ATTACK = al_map_rgba(128, 0, 0, 128);
+
+//Color that represents disabled hitboxes.
+const ALLEGRO_COLOR HITBOX_COLOR_DISABLED = al_map_rgba(128, 128, 0, 128);
+
+//Color that represents normal hitboxes.
+const ALLEGRO_COLOR HITBOX_COLOR_NORMAL = al_map_rgba(0, 128, 0, 128);
+
+//Color that represents the outline of attack hitboxes.
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_ATTACK = al_map_rgba(64, 0, 0, 255);
+
+//Color that represents the outline of disabled hitboxes.
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_DISABLED = al_map_rgba(64, 64, 0, 255);
+
+//Color that represents the outline of normal hitboxes.
+const ALLEGRO_COLOR HITBOX_OUTLINE_COLOR_NORMAL = al_map_rgba(0, 64, 0, 255);
+
 //How long to display the most recently used inventory shortcut for.
 const float INVENTORY_SHORTCUT_DISPLAY_DURATION = 1.5f;
 
@@ -85,6 +103,9 @@ const float LOADING_SCREEN_TEXT_HEIGHT = 0.10f;
 
 //Loading screen text width, in window ratio.
 const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
+
+//Tint unresponsive GUI buttons with this color.
+const ALLEGRO_COLOR UNRESPONSIVE_BUTTON_TINT = al_map_rgba(128, 128, 128, 128);
 
 }
 
@@ -278,28 +299,37 @@ void drawFraction(
  * Used for leader HP on the HUD.
  */
 void drawHealth(
-    const Point& center,
-    float ratio, float alpha,
-    float radius, bool justChart
+    const Point& center, float ratio, float alpha, float radius, bool justChart
 ) {
-    ALLEGRO_COLOR c;
+    const ALLEGRO_COLOR BG_COLOR = COLOR_BLACK;
+    const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
+    const ALLEGRO_COLOR MID_COLOR = al_map_rgb(255, 255, 0);
+    const ALLEGRO_COLOR BAD_COLOR = al_map_rgb(255, 0, 0);
+
+    ALLEGRO_COLOR color;
     if(ratio >= 0.5) {
-        c = al_map_rgba_f(1 - (ratio - 0.5) * 2, 1, 0, alpha);
+        color =
+            interpolateColor(
+                ratio, 0.5f, 1.0f, MID_COLOR, GOOD_COLOR
+            );
     } else {
-        c = al_map_rgba_f(1, (ratio * 2), 0, alpha);
+        color =
+            interpolateColor(
+                ratio, 0.0f, 0.5f, BAD_COLOR, MID_COLOR
+            );
     }
     
     if(!justChart) {
         al_draw_filled_circle(
-            center.x, center.y, radius, al_map_rgba(0, 0, 0, 128 * alpha)
+            center.x, center.y, radius, multAlpha(BG_COLOR, 0.5f * alpha)
         );
     }
     al_draw_filled_pieslice(
-        center.x, center.y, radius, -TAU / 4, -ratio * TAU, c
+        center.x, center.y, radius, -TAU / 4, -ratio * TAU, color
     );
     if(!justChart) {
         al_draw_circle(
-            center.x, center.y, radius + 1, al_map_rgba(0, 0, 0, alpha * 255), 2
+            center.x, center.y, radius + 1, multAlpha(BG_COLOR, alpha), 2
         );
     }
 }
@@ -700,11 +730,12 @@ void drawLiquid(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                al_map_rgba_f(
-                    textureSector[t]->textureInfo.tint.r * tsBrightnessMult,
-                    textureSector[t]->textureInfo.tint.g * tsBrightnessMult,
-                    textureSector[t]->textureInfo.tint.b * tsBrightnessMult,
-                    textureSector[t]->textureInfo.tint.a * alphaMult
+                multAlpha(
+                    tintColor(
+                        textureSector[t]->textureInfo.tint,
+                        mapGray(tsBrightnessMult * 255)
+                    ),
+                    alphaMult
                 );
         }
         
@@ -1280,12 +1311,7 @@ void drawSectorIce(
         av[v].v = vy;
         av[v].z = 0;
         av[v].color =
-            al_map_rgba_f(
-                brightnessMult,
-                brightnessMult,
-                brightnessMult,
-                opacity
-            );
+            changeAlpha(mapGray(brightnessMult * 255), opacity * 255);
     }
     
     for(size_t v = 0; v < nVertexes; v++) {
@@ -1315,11 +1341,9 @@ void drawSectorIce(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                al_map_rgba_f(
-                    brightnessMult,
-                    brightnessMult,
-                    brightnessMult,
-                    opacity * flashEffectOpacity
+                changeAlpha(
+                    mapGray(brightnessMult * 255),
+                    opacity * flashEffectOpacity * 255
                 );
         }
         
@@ -1448,12 +1472,12 @@ void drawSectorTexture(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                al_map_rgba_f(
-                    textureSector[t]->textureInfo.tint.r * brightnessMult,
-                    textureSector[t]->textureInfo.tint.g * brightnessMult,
-                    textureSector[t]->textureInfo.tint.b * brightnessMult,
-                    textureSector[t]->textureInfo.tint.a * alphaMult *
-                    opacity
+                multAlpha(
+                    tintColor(
+                        textureSector[t]->textureInfo.tint,
+                        mapGray(brightnessMult * 255)
+                    ),
+                    alphaMult * opacity
                 );
         }
         

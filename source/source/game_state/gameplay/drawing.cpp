@@ -451,9 +451,13 @@ void GameplayState::drawDebugTools(Player* player) {
     ImGui::SliderFloat2("Analog stick XY", inputAnalogStick, -1, 1);
     
     //Raw value graph.
-    const float RAW_STICK_VIEWER_X = 8;
-    const float RAW_STICK_VIEWER_Y = 8;
-    const float RAW_STICK_VIEWER_SIZE = 200;
+    const float STICKS_X = 8;
+    const float STICKS_Y = 8;
+    const float STICKS_SIZE = 200;
+    const ALLEGRO_COLOR STICKS_BG_COLOR = al_map_rgba(0, 0, 0, 200);
+    const ALLEGRO_COLOR STICKS_LIMIT_COLOR = al_map_rgba(240, 64, 64, 200);
+    const ALLEGRO_COLOR STICKS_NORMAL_COLOR = al_map_rgba(240, 240, 240, 200);
+    const ALLEGRO_COLOR STICKS_POS_COLOR = al_map_rgb(255, 64, 64);
     
     Point rawStickCoords;
     //rawStickCoords.x = game.controls.mgr.rawSticks[0][0][0];
@@ -465,61 +469,61 @@ void GameplayState::drawDebugTools(Player* player) {
         rawStickCoords, &rawStickAngle, &rawStickMag
     );
     al_draw_filled_rectangle(
-        RAW_STICK_VIEWER_X,
-        RAW_STICK_VIEWER_Y,
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE,
-        al_map_rgba(0, 0, 0, 200)
+        STICKS_X,
+        STICKS_Y,
+        STICKS_X + STICKS_SIZE,
+        STICKS_Y + STICKS_SIZE,
+        STICKS_BG_COLOR
     );
     al_draw_circle(
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
-        RAW_STICK_VIEWER_SIZE / 2.0f,
+        STICKS_X + STICKS_SIZE / 2.0f,
+        STICKS_Y + STICKS_SIZE / 2.0f,
+        STICKS_SIZE / 2.0f,
         rawStickMag >= 0.99f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     al_draw_line(
-        RAW_STICK_VIEWER_X,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
+        STICKS_X,
+        STICKS_Y + STICKS_SIZE / 2.0f,
+        STICKS_X + STICKS_SIZE,
+        STICKS_Y + STICKS_SIZE / 2.0f,
         fabs(rawStickCoords.y) <= 0.01f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     al_draw_line(
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
-        RAW_STICK_VIEWER_Y,
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE,
+        STICKS_X + STICKS_SIZE / 2.0f,
+        STICKS_Y,
+        STICKS_X + STICKS_SIZE / 2.0f,
+        STICKS_Y + STICKS_SIZE,
         fabs(rawStickCoords.x) <= 0.01f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     Point rawDrawCoords =
-        rawStickCoords * RAW_STICK_VIEWER_SIZE / 2.0f;
+        rawStickCoords * STICKS_SIZE / 2.0f;
     al_draw_filled_circle(
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f +
+        STICKS_X + STICKS_SIZE / 2.0f +
         rawDrawCoords.x,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f +
+        STICKS_Y + STICKS_SIZE / 2.0f +
         rawDrawCoords.y,
-        3.5f, al_map_rgb(255, 64, 64)
+        3.5f, STICKS_POS_COLOR
     );
     al_draw_filled_rectangle(
-        RAW_STICK_VIEWER_X,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
-        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
-        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 18,
-        al_map_rgba(0, 0, 0, 200)
+        STICKS_X,
+        STICKS_Y + STICKS_SIZE + 1,
+        STICKS_X + STICKS_SIZE,
+        STICKS_Y + STICKS_SIZE + 18,
+        STICKS_BG_COLOR
     );
     al_draw_text(
         game.sysContent.fntBuiltin,
-        al_map_rgb(255, 64, 64),
-        RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
+        STICKS_POS_COLOR,
+        STICKS_X, STICKS_Y + STICKS_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
             resizeString(
@@ -533,8 +537,8 @@ void GameplayState::drawDebugTools(Player* player) {
     );
     al_draw_text(
         game.sysContent.fntBuiltin,
-        al_map_rgb(255, 64, 64),
-        RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
+        STICKS_POS_COLOR,
+        STICKS_X, STICKS_Y + STICKS_SIZE + 1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
             resizeString(
@@ -549,9 +553,9 @@ void GameplayState::drawDebugTools(Player* player) {
     
     
     //Clean value graph.
-    const float CLEAN_STICK_VIEWER_X = 216;
-    const float CLEAN_STICK_VIEWER_Y = 8;
-    const float CLEAN_STICK_VIEWER_SIZE = 200;
+    const float STICKS_CLEAN_X = 216;
+    const float STICKS_CLEAN_Y = 8;
+    const float STICKS_CLEAN_SIZE = 200;
     
     float oldCleanStick[2] =
         { prevCleanAnalogStick[0], prevCleanAnalogStick[1] };
@@ -576,62 +580,62 @@ void GameplayState::drawDebugTools(Player* player) {
         cleanStickCoords, &cleanStickAngle, &cleanStickMag
     );
     al_draw_filled_rectangle(
-        CLEAN_STICK_VIEWER_X,
-        CLEAN_STICK_VIEWER_Y,
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE,
-        al_map_rgba(0, 0, 0, 200)
+        STICKS_CLEAN_X,
+        STICKS_CLEAN_Y,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE,
+        STICKS_BG_COLOR
     );
     al_draw_circle(
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE / 2.0f,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE / 2.0f,
+        STICKS_CLEAN_SIZE / 2.0f,
         cleanStickMag >= 0.99f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     al_draw_line(
-        CLEAN_STICK_VIEWER_X,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        STICKS_CLEAN_X,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE / 2.0f,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE / 2.0f,
         fabs(cleanStickCoords.y) <= 0.01f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     al_draw_line(
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        CLEAN_STICK_VIEWER_Y,
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE / 2.0f,
+        STICKS_CLEAN_Y,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE / 2.0f,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE,
         fabs(cleanStickCoords.x) <= 0.01f ?
-        al_map_rgba(240, 64, 64, 200) :
-        al_map_rgba(240, 240, 240, 200),
+        STICKS_LIMIT_COLOR :
+        STICKS_NORMAL_COLOR,
         1
     );
     Point cleanDrawCoords =
-        cleanStickCoords * CLEAN_STICK_VIEWER_SIZE / 2.0f;
+        cleanStickCoords * STICKS_CLEAN_SIZE / 2.0f;
     al_draw_filled_circle(
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f +
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE / 2.0f +
         cleanDrawCoords.x,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f +
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE / 2.0f +
         cleanDrawCoords.y,
-        3.5f, al_map_rgb(255, 64, 64)
+        3.5f, STICKS_POS_COLOR
     );
     al_draw_filled_rectangle(
-        CLEAN_STICK_VIEWER_X,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
-        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 18,
-        al_map_rgba(0, 0, 0, 200)
+        STICKS_CLEAN_X,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE + 1,
+        STICKS_CLEAN_X + STICKS_CLEAN_SIZE,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE + 18,
+        STICKS_BG_COLOR
     );
     al_draw_text(
         game.sysContent.fntBuiltin,
-        al_map_rgb(255, 64, 64),
-        CLEAN_STICK_VIEWER_X,
-        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
+        STICKS_POS_COLOR,
+        STICKS_CLEAN_X,
+        STICKS_CLEAN_Y + STICKS_CLEAN_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
             resizeString(
@@ -645,8 +649,8 @@ void GameplayState::drawDebugTools(Player* player) {
     );
     al_draw_text(
         game.sysContent.fntBuiltin,
-        al_map_rgb(255, 64, 64),
-        CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE +
+        STICKS_POS_COLOR,
+        STICKS_CLEAN_X, STICKS_CLEAN_Y + STICKS_CLEAN_SIZE +
         1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
@@ -663,6 +667,12 @@ void GameplayState::drawDebugTools(Player* player) {
     
     
     //Group stuff.
+    const ALLEGRO_COLOR GROUP_SPOT_COLOR = al_map_rgba(0, 0, 0, 192);
+    const ALLEGRO_COLOR GROUP_SHUFFLE_COLOR = al_map_rgba(0, 255, 0, 192);
+    const ALLEGRO_COLOR GROUP_BACK_COLOR = al_map_rgba(255, 255, 0, 192);
+    const ALLEGRO_COLOR GROUP_SWARM_COLOR = al_map_rgba(255, 0, 0, 192);
+    const ALLEGRO_COLOR GROUP_MID_COLOR = al_map_rgb(0, 0, 255);
+
     if(game.debug.showGroupInfo && player->leaderPtr) {
         al_use_transform(&player->view.worldToWindowTransform);
         for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
@@ -670,8 +680,7 @@ void GameplayState::drawDebugTools(Player* player) {
             al_draw_filled_circle(
                 player->leaderPtr->group->anchor.x + offset.x,
                 player->leaderPtr->group->anchor.y + offset.y,
-                3.0f,
-                al_map_rgba(0, 0, 0, 192)
+                3.0f, GROUP_SPOT_COLOR
             );
         }
         al_draw_circle(
@@ -679,10 +688,10 @@ void GameplayState::drawDebugTools(Player* player) {
             player->leaderPtr->group->anchor.y,
             3.0f,
             player->leaderPtr->group->mode == Group::MODE_SHUFFLE ?
-            al_map_rgba(0, 255, 0, 192) :
+            GROUP_SHUFFLE_COLOR :
             player->leaderPtr->group->mode == Group::MODE_FOLLOW_BACK ?
-            al_map_rgba(255, 255, 0, 192) :
-            al_map_rgba(255, 0, 0, 192),
+            GROUP_BACK_COLOR :
+            GROUP_SWARM_COLOR,
             2.0f
         );
         
@@ -693,10 +702,8 @@ void GameplayState::drawDebugTools(Player* player) {
                 player->leaderPtr->group->anchorAngle
             );
         al_draw_filled_circle(
-            groupMidPoint.x,
-            groupMidPoint.y,
-            3.0f,
-            al_map_rgb(0, 0, 255)
+            groupMidPoint.x, groupMidPoint.y,
+            3.0f, GROUP_MID_COLOR
         );
         al_use_transform(&game.identityTransform);
     }
@@ -707,6 +714,8 @@ void GameplayState::drawDebugTools(Player* player) {
  * @brief Draws a gameplay message box.
  */
 void GameplayState::drawGameplayMessageBox() {
+    const ALLEGRO_COLOR DARKENER_COLOR = COLOR_BLACK;
+
     //Mouse cursor.
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
     
@@ -726,7 +735,7 @@ void GameplayState::drawGameplayMessageBox() {
     al_draw_filled_rectangle(
         0.0f, 0.0f,
         game.winW, game.winH,
-        al_map_rgba(0, 0, 0, 64 * (1 - transitionRatio))
+        multAlpha(DARKENER_COLOR, 0.25f * (1 - transitionRatio))
     );
     
     //Draw the message box proper.
@@ -929,13 +938,13 @@ void GameplayState::drawInGameText(Player* player) {
                     ALLEGRO_COLOR hc;
                     switch(hPtr->type) {
                     case HITBOX_TYPE_NORMAL: {
-                        hc = al_map_rgba(0, 128, 0, 192); //Green.
+                        hc = DRAWING::HITBOX_COLOR_NORMAL;
                         break;
                     } case HITBOX_TYPE_ATTACK: {
-                        hc = al_map_rgba(128, 0, 0, 192); //Red.
+                        hc = DRAWING::HITBOX_COLOR_ATTACK;
                         break;
                     } case HITBOX_TYPE_DISABLED: {
-                        hc = al_map_rgba(128, 128, 0, 192); //Yellow.
+                        hc = DRAWING::HITBOX_COLOR_DISABLED;
                         break;
                     } default:
                         hc = COLOR_BLACK;
@@ -1011,6 +1020,19 @@ void GameplayState::drawInGameText(Player* player) {
         game.makerTools.pathInfo &&
         game.makerTools.infoLock->pathInfo
     ) {
+        const ALLEGRO_COLOR BLOCKED_LINE_COLOR = al_map_rgba(255, 0, 0, 200);
+        const ALLEGRO_COLOR FREE_LINE_COLOR = al_map_rgba(0, 0, 255, 200);
+        const ALLEGRO_COLOR BLOCKED_F_LINE_COLOR = al_map_rgba(200, 0, 0, 150);
+        const ALLEGRO_COLOR FREE_F_LINE_COLOR = al_map_rgba(0, 0, 200, 150);
+        const ALLEGRO_COLOR FIRST_STOP_COLOR = al_map_rgba(192, 0, 0, 200);
+        const ALLEGRO_COLOR LAST_STOP_COLOR = al_map_rgba(0, 192, 0, 200);
+        const ALLEGRO_COLOR BLOCKED_STOP_COLOR = al_map_rgba(192, 0, 0, 200);
+        const ALLEGRO_COLOR FREE_STOP_COLOR = al_map_rgba(0, 0, 192, 200);
+        const ALLEGRO_COLOR TARGET_STOP_COLOR = al_map_rgba(0, 192, 0, 200);
+        const ALLEGRO_COLOR TARGET_DIST_COLOR = al_map_rgba(0, 255, 0, 200);
+        const ALLEGRO_COLOR FAKE_START_COLOR = al_map_rgba(255, 0, 0, 200);
+        const ALLEGRO_COLOR FAKE_END_COLOR = al_map_rgba(0, 255, 0, 200);
+
         Path* path = game.makerTools.infoLock->pathInfo;
         Point targetPos =
             hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
@@ -1033,25 +1055,19 @@ void GameplayState::drawInGameText(Player* player) {
                     path->path[s]->pos.y,
                     path->path[s + 1]->pos.x,
                     path->path[s + 1]->pos.y,
-                    isBlocked ?
-                    al_map_rgba(200, 0, 0, 150) :
-                    al_map_rgba(0, 0, 200, 150),
+                    isBlocked ? BLOCKED_F_LINE_COLOR : FREE_F_LINE_COLOR,
                     2.0f
                 );
             }
             
             //Colored circles for the first and last stops.
             al_draw_filled_circle(
-                path->path[0]->pos.x,
-                path->path[0]->pos.y,
-                16.0f,
-                al_map_rgba(192, 0, 0, 200)
+                path->path[0]->pos.x, path->path[0]->pos.y,
+                16.0f, FIRST_STOP_COLOR
             );
             al_draw_filled_circle(
-                path->path.back()->pos.x,
-                path->path.back()->pos.y,
-                16.0f,
-                al_map_rgba(0, 192, 0, 200)
+                path->path.back()->pos.x, path->path.back()->pos.y,
+                16.0f, LAST_STOP_COLOR
             );
             
         }
@@ -1067,9 +1083,7 @@ void GameplayState::drawInGameText(Player* player) {
                 game.makerTools.infoLock->pos.y,
                 targetPos.x,
                 targetPos.y,
-                isBlocked ?
-                al_map_rgba(255, 0, 0, 200) :
-                al_map_rgba(0, 0, 255, 200),
+                isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
                 4.0f
             );
         } else if(path->curPathStopIdx < path->path.size()) {
@@ -1080,18 +1094,14 @@ void GameplayState::drawInGameText(Player* player) {
                 game.makerTools.infoLock->pos.y,
                 path->path[path->curPathStopIdx]->pos.x,
                 path->path[path->curPathStopIdx]->pos.y,
-                isBlocked ?
-                al_map_rgba(255, 0, 0, 200) :
-                al_map_rgba(0, 0, 255, 200),
+                isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
                 4.0f
             );
             al_draw_filled_circle(
                 path->path[path->curPathStopIdx]->pos.x,
                 path->path[path->curPathStopIdx]->pos.y,
                 10.0f,
-                isBlocked ?
-                al_map_rgba(192, 0, 0, 200) :
-                al_map_rgba(0, 0, 192, 200)
+                isBlocked ? BLOCKED_STOP_COLOR : FREE_STOP_COLOR
             );
         }
         
@@ -1101,37 +1111,40 @@ void GameplayState::drawInGameText(Player* player) {
             targetPos.y - 8.0f,
             targetPos.x + 8.0f,
             targetPos.y + 8.0f,
-            al_map_rgba(0, 192, 0, 200)
+            TARGET_STOP_COLOR
         );
         al_draw_circle(
             targetPos.x,
             targetPos.y,
             path->settings.finalTargetDistance,
-            al_map_rgba(0, 255, 0, 200),
+            TARGET_DIST_COLOR,
             1.0f
         );
         
         //Diamonds for faked starts and ends.
         if(hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FAKED_START)) {
             drawFilledDiamond(
-                path->settings.fakedStart, 8, al_map_rgba(255, 0, 0, 200)
+                path->settings.fakedStart, 8, FAKE_START_COLOR
             );
         }
         if(hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FAKED_END)) {
             drawFilledDiamond(
-                path->settings.fakedEnd, 8, al_map_rgba(0, 255, 0, 200)
+                path->settings.fakedEnd, 8, FAKE_END_COLOR
             );
         }
     }
     
     //Maker tool -- draw reaches.
     if(game.makerTools.infoLock && game.makerTools.reaches) {
+        const ALLEGRO_COLOR FAR_REACH_COLOR = al_map_rgba(192, 64, 64, 192);
+        const ALLEGRO_COLOR NEAR_REACH_COLOR = al_map_rgba(64, 192, 64, 192);
+
         if(game.makerTools.infoLock->farReach != INVALID) {
             MobType::Reach* farReach =
                 &game.makerTools.infoLock->type->reaches[
                     game.makerTools.infoLock->farReach
                 ];
-            ALLEGRO_COLOR color = al_map_rgba(192, 64, 64, 192);
+            ALLEGRO_COLOR color = FAR_REACH_COLOR;
             drawReach(
                 game.makerTools.infoLock->pos,
                 game.makerTools.infoLock->angle,
@@ -1150,7 +1163,7 @@ void GameplayState::drawInGameText(Player* player) {
                 &game.makerTools.infoLock->type->reaches[
                     game.makerTools.infoLock->nearReach
                 ];
-            ALLEGRO_COLOR color = al_map_rgba(64, 192, 64, 192);
+            ALLEGRO_COLOR color = NEAR_REACH_COLOR;
             drawReach(
                 game.makerTools.infoLock->pos,
                 game.makerTools.infoLock->angle,

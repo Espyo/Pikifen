@@ -317,6 +317,8 @@ void AreaMenu::initGuiBriefingPage() {
  * @brief Initializes the area info page GUI items.
  */
 void AreaMenu::initGuiInfoPage() {
+    const ALLEGRO_COLOR RECORD_DATE_COLOR = al_map_rgb(128, 128, 128);
+
     DataNode* guiFile =
         &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
     gui.registerCoords("name",         36,  6, 68,  8);
@@ -412,7 +414,7 @@ void AreaMenu::initGuiInfoPage() {
             //Record date.
             recordDateText =
                 new TextGuiItem(
-                "", game.sysContent.fntSlim, al_map_rgb(128, 128, 128)
+                "", game.sysContent.fntSlim, RECORD_DATE_COLOR
             );
             infoBox->addChild(recordDateText);
             gui.addItem(recordDateText, "record_date");

@@ -601,13 +601,14 @@ void OptionsMenu::deleteBind(
  * @brief Draws the options menu.
  */
 void OptionsMenu::draw() {
+    ALLEGRO_COLOR CAPTURE_BG_COLOR = al_map_rgba(24, 24, 32, 192);
+
     Menu::draw();
     if(packsMenu) packsMenu->draw();
     
     if(capturingInput == 1) {
         al_draw_filled_rectangle(
-            0, 0, game.winW, game.winH,
-            al_map_rgba(24, 24, 32, 192)
+            0, 0, game.winW, game.winH, CAPTURE_BG_COLOR
         );
         
         drawTextLines(
@@ -1892,12 +1893,14 @@ void OptionsMenu::populateBinds() {
  * @brief Populates the list of inventory shortcut items.
  */
 void OptionsMenu::populateShortcutItems() {
+    const ALLEGRO_COLOR EMPTY_SHORTCUT_COLOR = al_map_rgb(255, 192, 192);
+
     shortcutItemsListBox->deleteAllChildren();
     
     GuiItem* itemToFocus = nullptr;
     
     addNewShortcutItemItems(
-        "(None)", "", &itemToFocus, al_map_rgb(255, 192, 192)
+        "(None)", "", &itemToFocus, EMPTY_SHORTCUT_COLOR
     );
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {

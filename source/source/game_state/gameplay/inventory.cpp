@@ -281,7 +281,7 @@ void Inventory::populateInventoryListGui() {
             button->defDrawCode(draw);
             ALLEGRO_COLOR bmpTint = draw.tint;
             if(!button->responsive) {
-                bmpTint = tintColor(bmpTint, al_map_rgba(128, 128, 128, 128));
+                bmpTint = tintColor(bmpTint, DRAWING::UNRESPONSIVE_BUTTON_TINT);
             }
             if(iPtr->icon) {
                 drawBitmapInBox(

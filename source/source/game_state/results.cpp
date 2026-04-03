@@ -378,6 +378,9 @@ void Results::doLogic() {
  * @brief Draws the score chart's connection lines.
  */
 void Results::drawScoreChartConnections() {
+    const ALLEGRO_COLOR LINE_COLOR = COLOR_BLACK;
+    const ALLEGRO_COLOR SCORE_CIRCLE_COLOR = al_map_rgb(96, 96, 192);
+    const ALLEGRO_COLOR MINOR_CIRCLE_COLOR = al_map_rgb(0, 0, 96);
     DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     
@@ -395,7 +398,7 @@ void Results::drawScoreChartConnections() {
         const float y1 = itemDraw.center.y;
         const float y2 = getScoreChartY(scoreMarkers[i].second) - 1.0f;
         const ALLEGRO_COLOR color =
-            al_map_rgba(0, 0, 0, iPtr->focused ? 192 : 48);
+            multAlpha(LINE_COLOR, iPtr->focused ? 0.75f : 0.20f);
         const float thickness = iPtr->focused ? 2.0f : 1.0f;
         
         al_draw_line(x1, y1, x2, y1, color, thickness);
@@ -408,8 +411,7 @@ void Results::drawScoreChartConnections() {
         chartDraw.center.x, getScoreChartY(finalMissionScore),
         16.0f +
         sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
-        RESULTS::CHART_CIRCLE_SIZE_OFFSET,
-        al_map_rgb(96, 96, 192)
+        RESULTS::CHART_CIRCLE_SIZE_OFFSET, SCORE_CIRCLE_COLOR
     );
     
     //Circle for the old record.
@@ -417,7 +419,7 @@ void Results::drawScoreChartConnections() {
         al_draw_filled_circle(
             chartDraw.center.x,
             getScoreChartY(oldRecord.score),
-            12.0f, al_map_rgb(0, 0, 96)
+            12.0f, MINOR_CIRCLE_COLOR
         );
     }
     
@@ -426,7 +428,7 @@ void Results::drawScoreChartConnections() {
         al_draw_filled_circle(
             chartDraw.center.x,
             getScoreChartY(game.curArea->mission.makerRecord),
-            12.0f, al_map_rgb(0, 0, 96)
+            12.0f, MINOR_CIRCLE_COLOR
         );
     }
 }
@@ -438,6 +440,7 @@ void Results::drawScoreChartConnections() {
  * @param draw Draw info.
  */
 void Results::drawScoreChartGraphic(const DrawInfo& draw) {
+    const ALLEGRO_COLOR AXIS_COLOR = al_map_rgb(0, 0, 96);
     const auto drawRegion =
     [&draw] (float startY, float endY, ALLEGRO_COLOR color, bool endFades) {
         ALLEGRO_VERTEX av[4];
@@ -505,7 +508,7 @@ void Results::drawScoreChartGraphic(const DrawInfo& draw) {
     al_draw_line(
         draw.center.x, draw.center.y - draw.size.y / 2.0f + 8.0f,
         draw.center.x, draw.center.y + draw.size.y / 2.0f,
-        al_map_rgb(0, 0, 96), 4.0f
+        AXIS_COLOR, 4.0f
     );
     
     //Line for 0.
@@ -513,13 +516,13 @@ void Results::drawScoreChartGraphic(const DrawInfo& draw) {
     al_draw_line(
         draw.center.x - 16.0f, zeroY,
         draw.center.x + 16.0f, zeroY,
-        al_map_rgb(0, 0, 96), 2.0f
+        AXIS_COLOR, 2.0f
     );
     
     //Triangle at the top.
     drawFilledEquilateralTriangle(
         Point(draw.center.x, draw.center.y - draw.size.y / 2.0f + 8),
-        8.0f, -TAU / 4.0f, al_map_rgb(0, 0, 96)
+        8.0f, -TAU / 4.0f, AXIS_COLOR
     );
 }
 

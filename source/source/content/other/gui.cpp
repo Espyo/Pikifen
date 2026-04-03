@@ -898,21 +898,20 @@ bool GuiManager::draw() {
     }
     
 #ifdef EASY_SPAT_NAV_DEBUG
+    const ALLEGRO_COLOR DEBUG_NOT_ACCEPTED_COLOR = al_map_rgba(255, 0, 0, 192);
+    const ALLEGRO_COLOR DEBUG_ACCEPTED_COLOR = al_map_rgba(0, 255, 0, 192);
+    const ALLEGRO_COLOR DEBUG_FOCUS_COLOR = al_map_rgb(0, 0, 255);
     for(const auto& i : esnInterface.lastNavInfo) {
         al_draw_filled_circle(
-            i.second.focusX, i.second.focusY, 3, al_map_rgb(0, 0, 255)
+            i.second.focusX, i.second.focusY, 3, DEBUG_FOCUS_COLOR
         );
         al_draw_filled_circle(
             i.second.itemX, i.second.itemY, 3,
-            i.second.accepted ?
-            al_map_rgba(0, 255, 0, 192) :
-            al_map_rgba(255, 0, 0, 192)
+            i.second.accepted ? DEBUG_ACCEPTED_COLOR : DEBUG_NOT_ACCEPTED_COLOR
         );
         al_draw_text(
             game.sysContent.fntBuiltin,
-            i.second.accepted ?
-            al_map_rgba(0, 255, 0, 192) :
-            al_map_rgba(255, 0, 0, 192),
+            i.second.accepted ? DEBUG_ACCEPTED_COLOR : DEBUG_NOT_ACCEPTED_COLOR,
             i.second.itemX, i.second.itemY, ALLEGRO_ALIGN_CENTER,
             ((i.second.looped ? "L" : "") + f2s(i.second.score)).c_str()
         );

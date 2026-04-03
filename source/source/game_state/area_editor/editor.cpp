@@ -50,6 +50,12 @@ const float DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char DEF_REFERENCE_ALPHA = 128;
 
+//Color to use for new lines when the user is drawing something.
+const ALLEGRO_COLOR DRAWING_NEW_LINE_COLOR = al_map_rgb(64, 255, 64);
+
+//Color to use for existing old lines when the user is drawing something.
+const ALLEGRO_COLOR DRAWING_OLD_LINE_COLOR = al_map_rgb(128, 255, 128);
+
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 
@@ -102,7 +108,7 @@ const float REFERENCE_MIN_SIZE = 5.0f;
 const float REMINDER_SIZE = 32.0f;
 
 //Color of a selected element, or the selection box.
-const unsigned char SELECTION_COLOR[3] = {255, 255, 0};
+const ALLEGRO_COLOR SELECTION_COLOR = al_map_rgb(255, 255, 0);
 
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float SELECTION_EFFECT_SPEED = TAU * 2;

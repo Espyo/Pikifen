@@ -37,6 +37,7 @@ void AnimationEditor::doDrawing() {
  * This is called as a callback inside the Dear ImGui rendering process.
  */
 void AnimationEditor::drawCanvas() {
+    const ALLEGRO_COLOR BG_COLOR = al_map_rgb(128, 144, 128);
     Point canvasTL = game.editorsView.getTopLeft();
     Point canvasBR = game.editorsView.getBottomRight();
     
@@ -84,7 +85,7 @@ void AnimationEditor::drawCanvas() {
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
     } else {
-        al_clear_to_color(al_map_rgb(128, 144, 128));
+        al_clear_to_color(BG_COLOR);
     }
     
     al_use_transform(&game.editorsView.worldToWindowTransform);
@@ -114,6 +115,8 @@ void AnimationEditor::drawCanvas() {
     }
     
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
+        const ALLEGRO_COLOR UNSELECTED_COLOR = al_map_rgba(0, 0, 0, 128);
+        const ALLEGRO_COLOR SELECTION_COLOR = al_map_rgb(224, 192, 0);
         gridOpacity = 0.0f;
         drawMobRadius = false;
         drawLeaderSilhouette = false;
@@ -174,21 +177,21 @@ void AnimationEditor::drawCanvas() {
                     al_draw_filled_rectangle(
                         recTL.x, recTL.y,
                         recBR.x, recBR.y,
-                        al_map_rgba(0, 0, 0, 128)
+                        UNSELECTED_COLOR
                     );
                 }
             }
             
             if(s->bmpSize.x > 0 && s->bmpSize.y > 0) {
             
-                unsigned char outlineAlpha =
-                    255 * ((sin(selEffectAlpha) / 2.0) + 0.5);
+                float outlineAlpha =
+                    (sin(selEffectAlpha) / 2.0f) + 0.5f;
                 al_draw_rectangle(
                     bmpX + s->bmpPos.x + 0.5,
                     bmpY + s->bmpPos.y + 0.5,
                     bmpX + s->bmpPos.x + s->bmpSize.x - 0.5,
                     bmpY + s->bmpPos.y + s->bmpSize.y - 0.5,
-                    al_map_rgba(224, 192, 0, outlineAlpha), 1.0
+                    multAlpha(SELECTION_COLOR, outlineAlpha), 1.0
                 );
             }
         }
@@ -217,16 +220,16 @@ void AnimationEditor::drawCanvas() {
                 
                 switch(hPtr->type) {
                 case HITBOX_TYPE_NORMAL: {
-                    hitboxColor = al_map_rgba(0, 128, 0, 128);
-                    hitboxOutlineColor = al_map_rgba(0, 64, 0, 255);
+                    hitboxColor = DRAWING::HITBOX_COLOR_NORMAL;
+                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_NORMAL;
                     break;
                 } case HITBOX_TYPE_ATTACK: {
-                    hitboxColor = al_map_rgba(128, 0, 0, 128);
-                    hitboxOutlineColor = al_map_rgba(64, 0, 0, 255);
+                    hitboxColor = DRAWING::HITBOX_COLOR_ATTACK;
+                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_ATTACK;
                     break;
                 } case HITBOX_TYPE_DISABLED: {
-                    hitboxColor = al_map_rgba(128, 128, 0, 128);
-                    hitboxOutlineColor = al_map_rgba(64, 64, 0, 255);
+                    hitboxColor = DRAWING::HITBOX_COLOR_DISABLED;
+                    hitboxOutlineColor = DRAWING::HITBOX_OUTLINE_COLOR_DISABLED;
                     break;
                 }
                 }
@@ -298,8 +301,8 @@ void AnimationEditor::drawCanvas() {
     
         drawGrid(
             ANIM_EDITOR::GRID_INTERVAL,
-            al_map_rgba(64, 64, 64, gridOpacity * 255),
-            al_map_rgba(48, 48, 48, gridOpacity * 255)
+            multAlpha(EDITOR::GRID_COLOR_MAJOR, gridOpacity),
+            multAlpha(EDITOR::GRID_COLOR_MINOR, gridOpacity)
         );
         
         Point camTLCorner(0, 0);
@@ -315,11 +318,11 @@ void AnimationEditor::drawCanvas() {
         
         al_draw_line(
             0, camTLCorner.y, 0, camBRCorner.y,
-            al_map_rgb(240, 240, 240), 1.0f / game.editorsView.cam.zoom
+            EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
         al_draw_line(
             camTLCorner.x, 0, camBRCorner.x, 0,
-            al_map_rgb(240, 240, 240), 1.0f / game.editorsView.cam.zoom
+            EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
     }
     
@@ -359,13 +362,14 @@ void AnimationEditor::drawCanvas() {
  * @brief Draws the comparison sprite on the canvas, all tinted and everything.
  */
 void AnimationEditor::drawComparison() {
+    const ALLEGRO_COLOR COMPARISON_TINT = al_map_rgb(255, 128, 0);
     if(
         comparison && comparisonBlinkShow &&
         comparisonSprite && comparisonSprite->bitmap
     ) {
         ALLEGRO_COLOR tint;
         if(comparisonTint) {
-            tint = al_map_rgb(255, 128, 0);
+            tint = COMPARISON_TINT;
         } else {
             tint = comparisonSprite->tint;
         }
@@ -444,7 +448,7 @@ void AnimationEditor::drawSideViewLeaderSilhouette(float xOffset) {
         game.sysContent.bmpLeaderSilhouetteSide,
         Point(xOffset, -game.config.leaders.standardHeight / 2.0),
         Point(-1, game.config.leaders.standardHeight),
-        0, al_map_rgba(240, 240, 240, 160)
+        0, EDITOR::SILHOUETTE_COLOR
     );
 }
 
@@ -455,6 +459,7 @@ void AnimationEditor::drawSideViewLeaderSilhouette(float xOffset) {
  * @param s Sprite to draw.
  */
 void AnimationEditor::drawSideViewSprite(const Sprite* s) {
+    const ALLEGRO_COLOR DEF_COLOR = al_map_rgb(128, 32, 128);
     Point min, max;
     ALLEGRO_COLOR color = COLOR_EMPTY;
     
@@ -471,7 +476,7 @@ void AnimationEditor::drawSideViewSprite(const Sprite* s) {
         min.y = max.x - min.x;
     }
     if(color.a == 0) {
-        color = al_map_rgb(128, 32, 128);
+        color = DEF_COLOR;
     }
     min.y = -min.y; //Up is negative Y.
     al_draw_filled_rectangle(min.x, min.y, max.x, max.y, color);
@@ -482,6 +487,13 @@ void AnimationEditor::drawSideViewSprite(const Sprite* s) {
  * @brief Draws a timeline for the current animation.
  */
 void AnimationEditor::drawTimeline() {
+    const ALLEGRO_COLOR TIMELINE_COLOR = al_map_rgb(160, 180, 160);
+    const ALLEGRO_COLOR FRAME_EVEN_COLOR = al_map_rgb(128, 132, 128);
+    const ALLEGRO_COLOR FRAME_ODD_COLOR = al_map_rgb(148, 152, 148);
+    const ALLEGRO_COLOR LOOP_FRAME_COLOR = al_map_rgb(64, 64, 96);
+    const ALLEGRO_COLOR HEAD_COLOR = al_map_rgb(128, 48, 48);
+    const ALLEGRO_COLOR MILESTONE_COLOR = al_map_rgb(32, 32, 32);
+    
     if(!curAnimInst.validFrame()) return;
     
     //Some initial calculations.
@@ -517,8 +529,7 @@ void AnimationEditor::drawTimeline() {
     //Draw the entire timeline's rectangle.
     al_draw_filled_rectangle(
         canvasTL.x, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-        canvasBR.x, canvasBR.y,
-        al_map_rgb(160, 180, 160)
+        canvasBR.x, canvasBR.y, TIMELINE_COLOR
     );
     
     //Draw every frame as a rectangle.
@@ -533,9 +544,7 @@ void AnimationEditor::drawTimeline() {
             frameRectanglesCurX +
             curAnimInst.curAnim->frames[f].duration * scale;
         ALLEGRO_COLOR color =
-            f % 2 == 0 ?
-            al_map_rgb(128, 132, 128) :
-            al_map_rgb(148, 152, 148);
+            f % 2 == 0 ? FRAME_EVEN_COLOR : FRAME_ODD_COLOR;
             
         al_draw_filled_rectangle(
             frameRectanglesCurX, frameRectangleTop,
@@ -557,7 +566,7 @@ void AnimationEditor::drawTimeline() {
             frameRectangleBottom - ANIM_EDITOR::TIMELINE_LOOP_TRI_SIZE,
             loopX + ANIM_EDITOR::TIMELINE_LOOP_TRI_SIZE,
             frameRectangleBottom,
-            al_map_rgb(64, 64, 96)
+            LOOP_FRAME_COLOR
         );
     }
     
@@ -567,7 +576,7 @@ void AnimationEditor::drawTimeline() {
     al_draw_line(
         curTimeLineX, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
         curTimeLineX, canvasBR.y,
-        al_map_rgb(128, 48, 48), 2.0f
+        HEAD_COLOR, 2.0f
     );
     
     //Draw the milestone markers.
@@ -592,14 +601,14 @@ void AnimationEditor::drawTimeline() {
                     floor(xToUse) + 2,
                     canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
                 ),
-                Point(LARGE_FLOAT, 8.0f), al_map_rgb(32, 32, 32),
+                Point(LARGE_FLOAT, 8.0f), MILESTONE_COLOR,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
             );
             al_draw_line(
                 xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
                 xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT,
-                al_map_rgb(32, 32, 32), 1.0f
+                MILESTONE_COLOR, 1.0f
             );
             break;
             
@@ -610,7 +619,7 @@ void AnimationEditor::drawTimeline() {
                 xToUse + 0.5,
                 canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.66f,
-                al_map_rgb(32, 32, 32), 1.0f
+                MILESTONE_COLOR, 1.0f
             );
             break;
             
@@ -620,7 +629,7 @@ void AnimationEditor::drawTimeline() {
                 xToUse + 0.5,
                 canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.33f,
-                al_map_rgb(32, 32, 32), 1.0f
+                MILESTONE_COLOR, 1.0f
             );
             break;
             
@@ -670,7 +679,7 @@ void AnimationEditor::drawTopDownViewLeaderSilhouette(
     drawBitmap(
         game.sysContent.bmpLeaderSilhouetteTop, Point(xOffset, 0),
         Point(-1, game.config.leaders.standardRadius * 2.0f),
-        0, al_map_rgba(240, 240, 240, 160)
+        0, EDITOR::SILHOUETTE_COLOR
     );
 }
 
@@ -681,15 +690,15 @@ void AnimationEditor::drawTopDownViewLeaderSilhouette(
  * @param mt Type of the mob to draw.
  */
 void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
+    const ALLEGRO_COLOR COLOR = al_map_rgb(240, 240, 240);
     al_draw_circle(
-        0, 0, mt->radius,
-        al_map_rgb(240, 240, 240), 1.0f / game.editorsView.cam.zoom
+        0, 0, mt->radius, COLOR, 1.0f / game.editorsView.cam.zoom
     );
     if(mt->rectangularDim.x != 0) {
         al_draw_rectangle(
             -mt->rectangularDim.x / 2.0, -mt->rectangularDim.y / 2.0,
             mt->rectangularDim.x / 2.0, mt->rectangularDim.y / 2.0,
-            al_map_rgb(240, 240, 240), 1.0f / game.editorsView.cam.zoom
+            COLOR, 1.0f / game.editorsView.cam.zoom
         );
     }
 }
@@ -701,6 +710,8 @@ void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
  * @param s Sprite to draw.
  */
 void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
+    const ALLEGRO_COLOR COMPARISON_TINT = al_map_rgb(240, 240, 240);
+    
     if(!comparisonAbove) {
         drawComparison();
     }
@@ -730,7 +741,7 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
             comparison && comparisonTint &&
             comparisonSprite && comparisonSprite->bitmap
         ) {
-            tint = al_map_rgb(0, 128, 255);
+            tint = COMPARISON_TINT;
         }
         drawBitmap(
             s->bitmap, coords,

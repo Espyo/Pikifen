@@ -852,6 +852,15 @@ void PauseMenu::drawGoHereSegment(
 void PauseMenu::drawRadar(
     const Point& center, const Point& size
 ) {
+    const ALLEGRO_COLOR SEL_LEADER_COLOR = al_map_rgb(0, 255, 255);
+    const ALLEGRO_COLOR INACTIVE_LEADER_COLOR = COLOR_WHITE;
+    const ALLEGRO_COLOR KO_LEADER_COLOR = al_map_rgb(128, 128, 128);
+    const ALLEGRO_COLOR ACTIVE_GO_HERE_COLOR = al_map_rgba(120, 140, 170, 192);
+    const ALLEGRO_COLOR NEW_GO_HERE_COLOR = al_map_rgb(64, 200, 240);
+    const ALLEGRO_COLOR BAD_GO_HERE_COLOR = al_map_rgb(200, 64, 64);
+    const ALLEGRO_COLOR ACTIVE_CELL_COLOR = al_map_rgb(32, 192, 32);
+    const ALLEGRO_COLOR INACTIVE_CELL_COLOR = al_map_rgb(192, 32, 32);
+    
     //Setup.
     ALLEGRO_TRANSFORM oldTransform;
     int oldCrX = 0;
@@ -1031,8 +1040,8 @@ void PauseMenu::drawRadar(
             Point(48.0f / radarView.cam.zoom),
             0.0f,
             radarSelectedLeader == lPtr ?
-            al_map_rgb(0, 255, 255) :
-            COLOR_WHITE
+            SEL_LEADER_COLOR :
+            INACTIVE_LEADER_COLOR
         );
         drawFilledEquilateralTriangle(
             lPtr->pos +
@@ -1040,10 +1049,10 @@ void PauseMenu::drawRadar(
             6.0f / radarView.cam.zoom,
             lPtr->angle,
             radarSelectedLeader == lPtr ?
-            al_map_rgb(0, 255, 255) :
+            SEL_LEADER_COLOR :
             lPtr->health > 0 ?
-            COLOR_WHITE :
-            al_map_rgb(128, 128, 128)
+            INACTIVE_LEADER_COLOR :
+            KO_LEADER_COLOR
         );
         if(lPtr->health <= 0) {
             drawBitmap(
@@ -1154,7 +1163,7 @@ void PauseMenu::drawRadar(
         if(!lPtr->midGoHere) continue;
         
         float pathTexturePoint = 0.0f;
-        ALLEGRO_COLOR color = al_map_rgba(120, 140, 170, 192);
+        ALLEGRO_COLOR color = ACTIVE_GO_HERE_COLOR;
         
         switch(lPtr->pathInfo->result) {
         case PATH_RESULT_DIRECT:
@@ -1219,7 +1228,7 @@ void PauseMenu::drawRadar(
         drawGoHereSegment(
             radarSelectedLeader->pos,
             radarCursor,
-            al_map_rgb(64, 200, 240), &pathTexturePoint
+            NEW_GO_HERE_COLOR, &pathTexturePoint
         );
         
         break;
@@ -1230,9 +1239,9 @@ void PauseMenu::drawRadar(
         //Regular path.
         ALLEGRO_COLOR color;
         if(goHerePathResult == PATH_RESULT_PATH_WITH_OBSTACLES) {
-            color = al_map_rgb(200, 64, 64);
+            color = BAD_GO_HERE_COLOR;
         } else {
-            color = al_map_rgb(64, 200, 240);
+            color = NEW_GO_HERE_COLOR;
         }
         
         if(!goHerePath.empty()) {
@@ -1296,8 +1305,8 @@ void PauseMenu::drawRadar(
                     startY + GEOMETRY::AREA_CELL_SIZE -
                     (1.0f / radarView.cam.zoom),
                     game.states.gameplay->areaActiveCells[cellX][cellY] ?
-                    al_map_rgb(32, 192, 32) :
-                    al_map_rgb(192, 32, 32),
+                    ACTIVE_CELL_COLOR :
+                    INACTIVE_CELL_COLOR,
                     1.0f / radarView.cam.zoom
                 );
             }

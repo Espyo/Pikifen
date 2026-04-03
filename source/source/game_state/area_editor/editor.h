@@ -32,6 +32,8 @@ extern const float CURSOR_SNAP_DISTANCE;
 extern const float CURSOR_SNAP_UPDATE_INTERVAL;
 extern const float DEBUG_TEXT_SCALE;
 extern const unsigned char DEF_REFERENCE_ALPHA;
+extern const ALLEGRO_COLOR DRAWING_NEW_LINE_COLOR;
+extern const ALLEGRO_COLOR DRAWING_OLD_LINE_COLOR;
 extern const float KEYBOARD_PAN_AMOUNT;
 extern const unsigned char MAX_CIRCLE_SECTOR_POINTS;
 extern const float MAX_GRID_INTERVAL;
@@ -49,7 +51,7 @@ extern const float POINT_LETTER_TEXT_SCALE;
 extern const float REFERENCE_MIN_SIZE;
 extern const float REMINDER_SIZE;
 extern const float QUICK_PREVIEW_DURATION;
-extern const unsigned char SELECTION_COLOR[3];
+extern const ALLEGRO_COLOR SELECTION_COLOR;
 extern const float SELECTION_EFFECT_SPEED;
 extern const float SELECTION_TW_PADDING;
 extern const float UNDO_SAVE_LOCK_DURATION;
@@ -229,16 +231,16 @@ private:
     //Style of the different things to draw in the canvas.
     struct AreaEdCanvasStyle : CanvasStyle {
     
-        //Texture alpha.
+        //Texture alpha, [0 - 1].
         float textureAlpha = 1.0f;
         
-        //Wall shadow alpha.
+        //Wall shadow alpha, [0 - 1].
         float wallShadowAlpha = 1.0f;
         
-        //Edge line alpha.
+        //Edge line alpha, [0 - 1].
         float edgeAlpha = 1.0f;
         
-        //Mob alpha.
+        //Mob alpha, [0 - 1].
         float mobAlpha = 1.0f;
         
         //Z of the lowest sector.

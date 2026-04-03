@@ -10,10 +10,12 @@ Current tasks (tasks being worked on, but not yet committed)
             Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob
+        Some selected things become solid yellow, others an oscillating yellow, others no yellow
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Using the transformation widget's resizing on selected items that can't change size (reminders, mobs) makes it behave weirdly
+        Maybe the transformation data should specify two rectangles: one with the total size, and one that encompasses just centers
     Ice vent is hitting frozen Pikmin multiple times and eventually killing them
         Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
@@ -32,18 +34,27 @@ Next tasks (roughly sorted most important first)
     Glow Pikmin
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
-    Ice geysers
     Freezecake
     Swarming jingle
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
-    All editors should have a button to load content, and a button to create content, instead of it all being bundled into one dialog
-    Try to move more colors into game config; maybe have an "accent color" property
+    All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
+    Try to move more colors into game config
+        Maybe have an "accent color" property that's green
+        Enemy spirit
+        Whistle faint circle
+        Whistle dot colors?
+        Standard cursor color
+        Colors for "system" feel; basically the blue tones used throughout
+        The medal colors
+    Standardize usages of "alpha" and "opacity" in the code
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
+    
+    --- 2.0.0 ---
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
@@ -69,8 +80,6 @@ Next tasks (roughly sorted most important first)
             Misc
                 Does it make sense to create a FOF above a bottomless pit?
                 https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
-    
-    --- 2.0.0 ---
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus

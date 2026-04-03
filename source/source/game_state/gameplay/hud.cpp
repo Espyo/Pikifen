@@ -190,6 +190,7 @@ Hud::Hud() :
         GuiItem* leaderHealth = new GuiItem();
         leaderHealth->onDraw =
         [this, l] (const DrawInfo & draw) {
+            const ALLEGRO_COLOR DANGER_COLOR = al_map_rgb(255, 0, 0);
             LeaderHealthBubble health;
             DrawInfo finalDraw;
             this->leaderHealthMgr.getDrawingInfo(
@@ -214,7 +215,7 @@ Hud::Hud() :
                 tintColor(
                     interpolateColor(
                         health.redness, 0.0f, 1.0f,
-                        COLOR_WHITE, al_map_rgb(255, 0, 0)
+                        COLOR_WHITE, DANGER_COLOR
                     ),
                     draw.tint
                 )
@@ -275,6 +276,7 @@ Hud::Hud() :
     GuiItem* sunMeter = new GuiItem();
     sunMeter->onDraw =
     [this, sunMeter] (const DrawInfo & draw) {
+        const ALLEGRO_COLOR SUN_BUBBLE_COLOR = al_map_rgb(255, 192, 128);
         unsigned char nHours =
             (
                 game.config.misc.dayMinutesEnd -
@@ -348,7 +350,7 @@ Hud::Hud() :
             Point(firstDotX + dayPassedRatio * dotsSpan, dotsY),
             sunSize,
             0.0f,
-            tintColor(al_map_rgb(255, 192, 128), draw.tint)
+            tintColor(SUN_BUBBLE_COLOR, draw.tint)
         );
     };
     sunMeter->onTick =
@@ -1141,6 +1143,10 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         GuiItem* ruler = new GuiItem();
         ruler->onDraw =
         [this] (const DrawInfo & draw) {
+            const ALLEGRO_COLOR MARKING_COLOR = al_map_rgb(100, 110, 180);
+            const ALLEGRO_COLOR FLAPPER_DARK_COLOR = al_map_rgb(64, 186, 64);
+            const ALLEGRO_COLOR FLAPPER_LIGHT_COLOR = al_map_rgb(75, 218, 75);
+            
             //Setup.
             const float lowestNormalValue =
                 std::min(0, game.curArea->mission.bronzeReq);
@@ -1295,7 +1301,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                     draw.center.y - draw.size.y / 2.0f,
                     markingX - 2.0f,
                     draw.center.y - draw.size.y / 2.0f,
-                    tintColor(al_map_rgb(100, 110, 180), draw.tint)
+                    tintColor(MARKING_COLOR, draw.tint)
                 );
             }
             
@@ -1376,14 +1382,14 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 draw.center.x, draw.center.y,
                 draw.center.x + (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                tintColor(al_map_rgb(64, 186, 64), draw.tint)
+                tintColor(FLAPPER_DARK_COLOR, draw.tint)
             );
             al_draw_filled_triangle(
                 draw.center.x, draw.center.y + draw.size.y / 2.0f,
                 draw.center.x, draw.center.y,
                 draw.center.x - (draw.size.y * 0.4),
                 draw.center.y + draw.size.y / 2.0f,
-                tintColor(al_map_rgb(75, 218, 75), draw.tint)
+                tintColor(FLAPPER_LIGHT_COLOR, draw.tint)
             );
         };
         item->addChild(ruler);

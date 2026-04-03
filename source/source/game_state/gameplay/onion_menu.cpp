@@ -129,20 +129,22 @@ OnionMenu::OnionMenu(
         new TextGuiItem("", game.sysContent.fntStandard);
     fieldAmountText->onDraw =
     [this] (const DrawInfo & draw) {
+        const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(188, 230, 230);
+        const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
+
         int totalDelta = 0;
         for(size_t t = 0; t < this->types.size(); t++) {
             totalDelta += this->types[t].delta;
         }
         
-        ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
+        ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
         const auto& redIt = this->redItems.find(fieldAmountText);
         if(redIt != this->redItems.end()) {
             color =
                 interpolateColor(
                     redIt->second,
                     0, ONION_MENU::RED_TEXT_DURATION,
-                    tintColor(color, draw.tint),
-                    tintColor(al_map_rgb(224, 0, 0), draw.tint)
+                    color, tintColor(ERROR_COLOR, draw.tint)
                 );
         }
         
@@ -159,10 +161,7 @@ OnionMenu::OnionMenu(
     gui.addItem(fieldAmountText, "field");
     
     //Change ten at a time button.
-    changeTenButton =
-        new ButtonGuiItem(
-        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
-    );
+    changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
     [this] (const Point&) {
@@ -207,10 +206,7 @@ OnionMenu::OnionMenu(
     gui.addItem(changeTenInput, "change_ten_input");
     
     //Select all button.
-    selectAllButton =
-        new ButtonGuiItem(
-        "", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
-    );
+    selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     selectAllButton->forceSquare = true;
     selectAllButton->onActivate =
     [this] (const Point&) {
@@ -330,6 +326,10 @@ OnionMenu::OnionMenu(
         onionAmountText->onDraw =
             [this, t, onionAmountText]
         (const DrawInfo & draw) {
+            const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
+            const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
+            const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
+            
             OnionMenuPikminType* tPtr = &this->types[t];
             
             size_t realOnionAmount =
@@ -337,17 +337,17 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRatioRectangle(
                 draw.center, draw.size, 0.30f,
-                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
+                tintColor(BG_COLOR, draw.tint)
             );
             
-            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
             const auto& redIt = this->redItems.find(onionAmountText);
             if(redIt != this->redItems.end()) {
                 color =
                     interpolateColor(
                         redIt->second,
                         0, ONION_MENU::RED_TEXT_DURATION,
-                        color, tintColor(al_map_rgb(224, 0, 0), draw.tint)
+                        color, tintColor(ERROR_COLOR, draw.tint)
                     );
             }
             
@@ -422,6 +422,10 @@ OnionMenu::OnionMenu(
         groupAmountText->onDraw =
             [this, t, groupAmountText]
         (const DrawInfo & draw) {
+            const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
+            const ALLEGRO_COLOR TEXT_COLOR = COLOR_WHITE;
+            const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
+            
             OnionMenuPikminType* tPtr = &this->types[t];
             
             size_t realGroupAmount =
@@ -429,17 +433,17 @@ OnionMenu::OnionMenu(
                 
             drawFilledRoundedRatioRectangle(
                 draw.center, draw.size, 0.30f,
-                tintColor(al_map_rgba(188, 230, 230, 128), draw.tint)
+                tintColor(BG_COLOR, draw.tint)
             );
             
-            ALLEGRO_COLOR color = draw.tint;
+            ALLEGRO_COLOR color = tintColor(TEXT_COLOR, draw.tint);
             const auto& redIt = this->redItems.find(groupAmountText);
             if(redIt != this->redItems.end()) {
                 color =
                     interpolateColor(
                         redIt->second,
                         0, ONION_MENU::RED_TEXT_DURATION,
-                        color, al_map_rgb(224, 0, 0)
+                        color, ERROR_COLOR
                     );
             }
             

@@ -28,6 +28,9 @@ using std::vector;
 namespace EDITOR {
 extern const size_t DEF_MAX_HISTORY_SIZE;
 extern const float DOUBLE_CLICK_TIMEOUT;
+extern const ALLEGRO_COLOR GRID_COLOR_MAJOR;
+extern const ALLEGRO_COLOR GRID_COLOR_MINOR;
+extern const ALLEGRO_COLOR GRID_COLOR_ORIGIN;
 extern const int ICON_BMP_PADDING;
 extern const int ICON_BMP_SIZE;
 extern const float KEYBOARD_CAM_ZOOM;
@@ -40,6 +43,7 @@ extern const float OP_ERROR_FLASH_DURATION;
 extern const float PICKER_IMG_BUTTON_MIN_SIZE;
 extern const float PICKER_IMG_BUTTON_SIZE;
 extern const float RUBBER_BAND_TEXTURE_TIME_MULT;
+extern const ALLEGRO_COLOR SILHOUETTE_COLOR;
 extern const float STATUS_BAR_HEIGHT;
 extern const float TW_DEF_SIZE;
 extern const float TW_HANDLE_RADIUS;

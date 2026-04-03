@@ -36,6 +36,15 @@ const size_t DEF_MAX_HISTORY_SIZE = 6;
 //Time until the next click is no longer considered a double-click.
 const float DOUBLE_CLICK_TIMEOUT = 0.5f;
 
+//Color of major lines in the grid.
+const ALLEGRO_COLOR GRID_COLOR_MAJOR = al_map_rgb(64, 64, 64);
+
+//Color of minor lines in the grid.
+const ALLEGRO_COLOR GRID_COLOR_MINOR = al_map_rgb(48, 48, 48);
+
+//Color of origin lines in the grid.
+const ALLEGRO_COLOR GRID_COLOR_ORIGIN = al_map_rgb(240, 240, 240);
+
 //Every icon in the icon bitmap file is these many pixels from the previous.
 const int ICON_BMP_PADDING = 1;
 
@@ -71,6 +80,9 @@ const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 
 //Multiply time by this much for the rubber band texture animation.
 const float RUBBER_BAND_TEXTURE_TIME_MULT = 10.0f;
+
+//Color to use for silhouette icons.
+const ALLEGRO_COLOR SILHOUETTE_COLOR = al_map_rgba(240, 240, 240, 160);
 
 //Height of the status bar.
 const float STATUS_BAR_HEIGHT = 22.0f;
@@ -330,6 +342,7 @@ void Editor::drawGrid(
  * signifying an operation has failed.
  */
 void Editor::drawOpErrorCursor() {
+    const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
     float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
     if(errorFlashTimeRatio <= 0.0f) return;
     Point pos = opErrorPos;
@@ -356,7 +369,7 @@ void Editor::drawOpErrorCursor() {
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.x + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
-        al_map_rgba_f(1.0f, 0.0f, 0.0f, errorFlashTimeRatio),
+        multAlpha(ERROR_COLOR, errorFlashTimeRatio),
         EDITOR::OP_ERROR_CURSOR_THICKNESS
     );
     al_draw_line(
@@ -364,7 +377,7 @@ void Editor::drawOpErrorCursor() {
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
-        al_map_rgba_f(1.0f, 0.0f, 0.0f, errorFlashTimeRatio),
+        multAlpha(ERROR_COLOR, errorFlashTimeRatio),
         EDITOR::OP_ERROR_CURSOR_THICKNESS
     );
 }
@@ -3179,6 +3192,7 @@ bool Editor::processGuiPopupInput(
  * and coloring the text in case it's an error that needs to be flashed red.
  */
 void Editor::processGuiStatusBarText() {
+    const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
     float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
     if(errorFlashTimeRatio > 0.0f) {
         ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
@@ -3191,7 +3205,7 @@ void Editor::processGuiStatusBarText() {
             interpolateColor(
                 errorFlashTimeRatio,
                 0.0f, 1.0f,
-                normalColor, al_map_rgb(255, 0, 0)
+                normalColor, ERROR_COLOR
             );
         ImVec4 errorFlashColorV;
         errorFlashColorV.x = errorFlashColor.r;
@@ -4657,12 +4671,7 @@ void Editor::SelectionManager::draw(const Point& cursorPos, float zoom) const {
         //Interior.
         al_draw_filled_rectangle(
             rBTL.x, rBTL.y, rBBR.x, rBBR.y,
-            al_map_rgba(
-                AREA_EDITOR::SELECTION_COLOR[0],
-                AREA_EDITOR::SELECTION_COLOR[1],
-                AREA_EDITOR::SELECTION_COLOR[2],
-                48
-            )
+            multAlpha(AREA_EDITOR::SELECTION_COLOR, 0.20f)
         );
         
         //Marching ants outline.
@@ -4680,12 +4689,7 @@ void Editor::SelectionManager::draw(const Point& cursorPos, float zoom) const {
             
         for(size_t v = 0; v < 4; v++) {
             av[v].z = 0;
-            av[v].color =
-                al_map_rgb(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2]
-                );
+            av[v].color = AREA_EDITOR::SELECTION_COLOR;
         }
         
         enum DIR {
@@ -5237,6 +5241,9 @@ void Editor::TransformationWidget::draw(
     const Point* const center, const Point* const size,
     const float* const angle, float zoom
 ) const {
+    const ALLEGRO_COLOR ROT_HANDLE_COLOR = al_map_rgb(64, 64, 192);
+    const ALLEGRO_COLOR NORMAL_HANDLE_COLOR = al_map_rgb(96, 96, 224);
+    const ALLEGRO_COLOR OUTLINE_COLOR = al_map_rgb(32, 32, 160);
     if(!center) return;
     
     Point handles[9];
@@ -5247,7 +5254,7 @@ void Editor::TransformationWidget::draw(
     if(angle && radius >= 0.0f) {
         al_draw_circle(
             center->x, center->y, radius,
-            al_map_rgb(64, 64, 192), EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
+            ROT_HANDLE_COLOR, EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
         );
     }
     
@@ -5263,7 +5270,7 @@ void Editor::TransformationWidget::draw(
         al_draw_line(
             corners[c].x, corners[c].y,
             corners[c2].x, corners[c2].y,
-            al_map_rgb(32, 32, 160), EDITOR::TW_OUTLINE_THICKNESS * zoom
+            OUTLINE_COLOR, EDITOR::TW_OUTLINE_THICKNESS * zoom
         );
     }
     
@@ -5272,7 +5279,7 @@ void Editor::TransformationWidget::draw(
         if(!size && h != 4) continue;
         al_draw_filled_circle(
             handles[h].x, handles[h].y,
-            EDITOR::TW_HANDLE_RADIUS * zoom, al_map_rgb(96, 96, 224)
+            EDITOR::TW_HANDLE_RADIUS * zoom, NORMAL_HANDLE_COLOR
         );
     }
 }

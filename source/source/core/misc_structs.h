@@ -1348,7 +1348,7 @@ struct FadeManager {
     void startFade(bool fadeIn, const std::function<void()>& onEnd);
     bool isFadeIn() const;
     bool isFading() const;
-    float getPercLeft() const;
+    float getRatioLeft() const;
     void tick(float deltaT);
     void draw();
     

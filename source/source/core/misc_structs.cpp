@@ -328,6 +328,7 @@ void Console::clear() {
  * @brief Draws the console onto the game window.
  */
 void Console::draw() const {
+    const ALLEGRO_COLOR CONSOLE_BG_COLOR = al_map_rgba(0, 0, 0, 96);
     if(text.empty()) return;
     
     float alphaMult = 1;
@@ -342,7 +343,7 @@ void Console::draw() const {
     
     al_draw_filled_rectangle(
         0, 0, game.winW, totalHeight + 16,
-        al_map_rgba(0, 0, 0, 96 * alphaMult)
+        multAlpha(CONSOLE_BG_COLOR, alphaMult)
     );
     drawTextLines(
         text, game.sysContent.fntBuiltin,
@@ -561,12 +562,13 @@ FadeManager::FadeManager(float duration) :
  * @brief Draws the fade overlay, if there is a fade in progress.
  */
 void FadeManager::draw() {
+    const ALLEGRO_COLOR FADE_COLOR = COLOR_BLACK;
     if(isFading()) {
-        unsigned char alpha = (game.fadeMgr.getPercLeft()) * 255;
+        float alpha = game.fadeMgr.getRatioLeft();
         al_draw_filled_rectangle(
             0, 0, game.winW, game.winH,
-            al_map_rgba(
-                0, 0, 0, (game.fadeMgr.isFadeIn() ? alpha : 255 - alpha)
+            multAlpha(
+                FADE_COLOR, game.fadeMgr.isFadeIn() ? alpha : 1.0f - alpha
             )
         );
     }
@@ -574,11 +576,11 @@ void FadeManager::draw() {
 
 
 /**
- * @brief Returns the percentage of progress left in the current fade.
+ * @brief Returns the ratio of progress left in the current fade.
  *
- * @return The percentage.
+ * @return The ratio.
  */
-float FadeManager::getPercLeft() const {
+float FadeManager::getRatioLeft() const {
     float curDuration = durationOverride == 0.0f ? duration : durationOverride;
     if(curDuration == 0.0f) return 0.0f;
     return timeLeft / curDuration;

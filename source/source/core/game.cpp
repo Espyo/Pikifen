@@ -97,12 +97,14 @@ void Game::changeState(
  * @brief Draws the framerate chart for the system information visualizer.
  */
 void Game::drawFramerateChart() const {
+    const ALLEGRO_COLOR CHART_BG_COLOR = al_map_rgba(0, 0, 0, 192);
+    const ALLEGRO_COLOR CHART_FRAME_COLOR = al_map_rgba(24, 96, 192, 192);
+    const ALLEGRO_COLOR TARGET_FPS_COLOR = al_map_rgba(128, 224, 128, 48);
     if(showSystemInfo && !framerateHistory.empty()) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
             winW - GAME::FRAMERATE_HISTORY_SIZE, 0,
-            winW, 100,
-            al_map_rgba(0, 0, 0, 192)
+            winW, 100, CHART_BG_COLOR
         );
         double chartMin = 1.0f; //1 FPS.
         double chartMax =
@@ -123,7 +125,7 @@ void Game::drawFramerateChart() const {
             al_draw_line(
                 winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
                 winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fpsY,
-                al_map_rgba(24, 96, 192, 192), 1
+                CHART_FRAME_COLOR, 1
             );
         }
         float targetFpsY =
@@ -135,7 +137,7 @@ void Game::drawFramerateChart() const {
         al_draw_line(
             winW - GAME::FRAMERATE_HISTORY_SIZE, targetFpsY,
             winW, targetFpsY,
-            al_map_rgba(128, 224, 128, 48), 1
+            TARGET_FPS_COLOR, 1
         );
     }
 }

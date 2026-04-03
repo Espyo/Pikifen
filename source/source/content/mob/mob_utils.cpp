@@ -1130,11 +1130,7 @@ void PikminNestType::createColormap() {
     //Add a darker variant for single-type Onions.
     if(pikTypes.size() == 1) {
         ALLEGRO_COLOR c =
-            al_map_rgb_f(
-                pikTypes[0]->mainColor.r * 0.4f,
-                pikTypes[0]->mainColor.g * 0.4f,
-                pikTypes[0]->mainColor.b * 0.4f
-            );
+            tintColor(pikTypes[0]->mainColor, mapGray(0.40f * 255));
         ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
     }
     

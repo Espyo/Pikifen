@@ -30,6 +30,14 @@ void GuiEditor::doDrawing() {
  * Dear ImGui rendering process.
  */
 void GuiEditor::drawCanvas() {
+    const ALLEGRO_COLOR BG_COLOR = al_map_rgb(96, 128, 96);
+    const ALLEGRO_COLOR GRID_MAJOR_COLOR = al_map_rgba(64, 64, 64, 84);
+    const ALLEGRO_COLOR GRID_MINOR_COLOR = al_map_rgba(64, 64, 64, 40);
+    const ALLEGRO_COLOR GRID_ORIGIN_COLOR = al_map_rgba(208, 208, 224, 84);
+    const ALLEGRO_COLOR HC_ITEM_COLOR = al_map_rgb(224, 160, 160);
+    const ALLEGRO_COLOR CUSTOM_ITEM_COLOR = al_map_rgb(160, 224, 160);
+    const ALLEGRO_COLOR ITEM_NAME_COLOR = al_map_rgb(40, 40, 96);
+
     Point canvasTL = game.editorsView.getTopLeft();
     
     al_set_clipping_rectangle(
@@ -43,26 +51,22 @@ void GuiEditor::drawCanvas() {
     
     //Virtual game window.
     al_draw_filled_rectangle(
-        0.0f, 0.0f, 100.0f, 100.0f, al_map_rgb(96, 128, 96)
+        0.0f, 0.0f, 100.0f, 100.0f, BG_COLOR
     );
     
     //Grid.
     drawGrid(
-        game.options.guiEd.gridInterval,
-        al_map_rgba(64, 64, 64, 84),
-        al_map_rgba(64, 64, 64, 40)
+        game.options.guiEd.gridInterval, GRID_MAJOR_COLOR, GRID_MINOR_COLOR
     );
     
     //50%,50% marker.
     al_draw_line(
         0.0f, 50.0f, 100.0f, 50.0f,
-        al_map_rgba(208, 208, 224, 84),
-        1.0f / game.editorsView.cam.zoom
+        GRID_ORIGIN_COLOR, 1.0f / game.editorsView.cam.zoom
     );
     al_draw_line(
         50.0f, 0.0f, 50.0f, 100.0f,
-        al_map_rgba(208, 208, 224, 84),
-        1.0f / game.editorsView.cam.zoom
+        GRID_ORIGIN_COLOR, 1.0f / game.editorsView.cam.zoom
     );
     
     //Items.
@@ -104,9 +108,7 @@ void GuiEditor::drawCanvas() {
         bool isCustom =
             drawingSortedItems[i].second != GUI::DRAWING_LAYER_NORMAL;
         ALLEGRO_COLOR color =
-            isCustom ?
-            al_map_rgb(160, 224, 160) :
-            al_map_rgb(224, 160, 160);
+            isCustom ? CUSTOM_ITEM_COLOR : HC_ITEM_COLOR;
             
         drawFilledRoundedRectangle(
             item->center, item->size,
@@ -133,7 +135,7 @@ void GuiEditor::drawCanvas() {
                 (4.0f / game.editorsView.cam.zoom)
             ),
             Point(LARGE_FLOAT, 8.0 / game.editorsView.cam.zoom),
-            al_map_rgb(40, 40, 96), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
+            ITEM_NAME_COLOR, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
         al_set_clipping_rectangle(
             origClipX, origClipY, origClipW, origClipH

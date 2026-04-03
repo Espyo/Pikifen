@@ -942,18 +942,14 @@ void initDebugConfig() {
  * @brief Initializes the error bitmap.
  */
 void initErrorBitmap() {
+    const ALLEGRO_COLOR ERROR_BLACK = al_map_rgba(0, 0, 0, 192);
+    const ALLEGRO_COLOR ERROR_PINK = al_map_rgba(255, 0, 255, 192);
     //Error bitmap.
     game.bmpError = al_create_bitmap(32, 32);
     al_set_target_bitmap(game.bmpError); {
-        al_clear_to_color(al_map_rgba(0, 0, 0, 192));
-        al_draw_filled_rectangle(
-            0.0, 0.0, 16.0, 16.0,
-            al_map_rgba(255, 0, 255, 192)
-        );
-        al_draw_filled_rectangle(
-            16.0, 16.0, 32.0, 32.0,
-            al_map_rgba(255, 0, 255, 192)
-        );
+        al_clear_to_color(ERROR_BLACK);
+        al_draw_filled_rectangle(0.0, 0.0, 16.0, 16.0, ERROR_PINK);
+        al_draw_filled_rectangle(16.0, 16.0, 32.0, 32.0, ERROR_PINK);
     } al_set_target_backbuffer(game.display);
     game.bmpError = recreateBitmap(game.bmpError);
 }
