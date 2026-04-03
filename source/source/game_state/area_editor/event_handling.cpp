@@ -1303,28 +1303,9 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     
     if(!crossSectionHandled) {
     
-        //Check if the transformation widget got clicked.
-        bool twHandled = false;
-        Point selectionCenter, selectionSize;
-        reminderSelection.getBBox(&selectionCenter, &selectionSize);
-        if(selectionSize.x != 0.0f) {
-            twHandled =
-                curTransformationWidget.handleMouseDown(
-                    game.editorsView.mouseCursorWorldPos,
-                    &selectionCenter, &selectionSize,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom
-                );
-        }
-        
-        if(twHandled) {
-            reminderSelection.startTransforming();
-        } else {
-            reminderSelection.chooseViaMouseDown(
-                game.editorsView.mouseCursorWorldPos,
-                isShiftPressed, isCtrlPressed
-            );
-        }
+        handleSelectionAndTransformationLmbDown(
+            reminderSelection, curTransformationWidget
+        );
         
         setSelectionStatusText();
     }
@@ -1748,32 +1729,11 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     snapPoint(game.editorsView.mouseCursorWorldPos);
             }
             
-            if(reminderSelection.isCreatingRubberBand()) {
-                reminderSelection.updateRubberBand(
-                    game.editorsView.mouseCursorWorldPos,
-                    isShiftPressed, isCtrlPressed
-                );
-            } else {
-                Point selectionCenter, selectionSize;
-                reminderSelection.getBBox(
-                    &selectionCenter, &selectionSize
-                );
-                if(selectionSize.x != 0.0f) {
-                    bool twHandled =
-                        curTransformationWidget.handleMouseMove(
-                            snapPoint(game.editorsView.mouseCursorWorldPos),
-                            &selectionCenter, &selectionSize,
-                            nullptr, 1.0f / game.editorsView.cam.zoom,
-                            false, false, 0.10f, isAltPressed
-                        );
-                    if(twHandled) {
-                        changesMgr.markAsChanged();
-                        reminderSelection.applyTransformation(
-                            selectionCenter, selectionSize
-                        );
-                    }
-                }
-            }
+            handleSelectionAndTransformationLmbDrag(
+                reminderSelection, curTransformationWidget,
+                game.editorsView.mouseCursorWorldPos,
+            [this] () { changesMgr.markAsChanged(); }
+            );
             
             break;
             
@@ -1802,8 +1762,12 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     }
     
     curTransformationWidget.handleMouseUp();
-    mobSelection.handleMouseUp();
-    reminderSelection.handleMouseUp();
+    handleSelectionAndTransformationLmbUp(
+        mobSelection, curTransformationWidget
+    );
+    handleSelectionAndTransformationLmbUp(
+        reminderSelection, curTransformationWidget
+    );
     
     movingPathPreviewCheckpoint = -1;
     movingCrossSectionPoint = -1;

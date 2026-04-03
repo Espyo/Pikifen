@@ -3,7 +3,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Add logic to allow moving by dragging anywhere on the item, not just the transformation widget's center bubble
         Add it to the layout, paths, and details area editor states
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected

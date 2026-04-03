@@ -149,6 +149,9 @@ AnimationEditor::AnimationEditor() :
         return curSprite->hitboxes.size();
     };
     hitboxSelection.overlapsCycle = true;
+    hitboxSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
+    hitboxSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
+    hitboxSelection.clickingSelectedUnselectsOthers = true;
 }
 
 

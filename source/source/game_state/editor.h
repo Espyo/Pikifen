@@ -287,6 +287,25 @@ protected:
     
         public:
         
+        //--- Public misc. declarations ---
+        
+        //Rules for how and when a given operation can be started.
+        enum OP_RULE {
+        
+            //Always allow it.
+            OP_RULE_ALWAYS,
+            
+            //Allow it if it's only one item.
+            OP_RULE_ONE_ITEM,
+            
+            //Allow it if it's only multiple items.
+            OP_RULE_MULTIPLE_ITEMS,
+            
+            //Cannot drag move.
+            OP_RULE_NEVER,
+            
+        };
+        
         //--- Public members ---
         
         //Callback for when the info of an item needs to be retrieved.
@@ -311,6 +330,9 @@ protected:
         std::function<void(size_t, const Point&, const Point&)> onSetInfo =
             nullptr;
             
+        //Callback for when a point should probably be snapped.
+        std::function<Point(const Point&)> onSnapPoint = nullptr;
+        
         //Whether items are rectangular in shape or circular.
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
@@ -318,6 +340,15 @@ protected:
         //When clicking on overlapping items, cycle selection between a single
         //one, or always select the one with the lowest index?
         bool overlapsCycle = false;
+        
+        //How and when a drag move can be started.
+        OP_RULE dragMoveRule = OP_RULE_NEVER;
+        
+        //How and when a transformation widget transformation can be started.
+        OP_RULE twTransformRule = OP_RULE_ALWAYS;
+        
+        //Whether clicking a selected item unselects the other selected items.
+        bool clickingSelectedUnselectsOthers = true;
         
         
         //--- Public function declarations ---
@@ -355,13 +386,18 @@ protected:
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
         bool stopRubberBand();
+        bool startDragMove(const Point& cursorPos);
+        bool isDragMoving() const;
+        bool updateDragMove(const Point& cursorPos);
+        bool stopDragMove();
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
+        bool isOpRuleRespected(OP_RULE rule) const;
         bool handleMouseUp();
         
         
-        private:
-        
+    private:
+    
         //--- Private misc. declarations ---
         
         //User state, in the selection manager's context.
@@ -373,8 +409,11 @@ protected:
             //Creating a rubber band selection box.
             STATE_RUBBER_BAND,
             
-            //Transforming the selection.
-            STATE_TRANSFORMING,
+            //Moving the selection by dragging one of its items.
+            STATE_DRAG_MOVING,
+            
+            //Transforming the selection via a transformation widget.
+            STATE_TW_TRANSFORMING,
             
         };
         
@@ -390,8 +429,8 @@ protected:
         //Whether it is currently enabled.
         bool enabled = false;
         
-        //Rubber band box starting point.
-        Point rubberBandStart;
+        //Cursor position when the current operation started.
+        Point opStartCursorPos;
         
         //Has the user agreed to homogenize the selection?
         bool homogenized = false;
@@ -409,6 +448,13 @@ protected:
         //Size of the entire selection before transformation began.
         //Cache for performance.
         Point preTransSize;
+        
+        //Position of each selected item before a drag move.
+        map<size_t, Point> preDragMoveItemsPos;
+        
+        //Position of the pivot item before a drag move.
+        //i.e. the item closest to the cursor.
+        Point preDragMovePivotItemPos;
         
         
         //--- Private function declarations ---

@@ -223,8 +223,13 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_MOBS;
     };
+    mobSelection.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
     mobSelection.itemsAreRectangular = false;
     mobSelection.overlapsCycle = true;
+    mobSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
+    mobSelection.twTransformRule = SelectionManager::OP_RULE_MULTIPLE_ITEMS;
+    mobSelection.clickingSelectedUnselectsOthers = false;
     
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize) {
@@ -239,8 +244,13 @@ AreaEditor::AreaEditor() :
     [] () {
         return game.curArea->reminders.size();
     };
+    reminderSelection.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.overlapsCycle = true;
+    reminderSelection.dragMoveRule = SelectionManager::OP_RULE_ALWAYS;
+    reminderSelection.twTransformRule = SelectionManager::OP_RULE_NEVER;
+    reminderSelection.clickingSelectedUnselectsOthers = false;
 }
 
 

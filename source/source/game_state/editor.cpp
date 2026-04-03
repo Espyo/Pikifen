@@ -394,7 +394,8 @@ void Editor::drawSelectionAndTransformationThings(
     const SelectionManager& selMgr,
     const TransformationWidget& traWid
 ) {
-    if(selMgr.hasAny()) {
+    //Transformation widget, if possible.
+    if(selMgr.hasAny() && selMgr.isOpRuleRespected(selMgr.twTransformRule)) {
         Point selectionCenter, selectionSize;
         selMgr.getBBox(&selectionCenter, &selectionSize);
         if(selectionSize.x != 0.0f) {
@@ -405,6 +406,7 @@ void Editor::drawSelectionAndTransformationThings(
         }
     }
     
+    //Selection manager.
     selMgr.draw(
         game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
     );
@@ -1026,7 +1028,10 @@ void Editor::handleSelectionAndTransformationLmbDown(
     bool twHandled = false;
     Point selectionCenter, selectionSize;
     selMgr.getBBox(&selectionCenter, &selectionSize);
-    if(selectionSize.x != 0.0f) {
+    if(
+        selectionSize.x != 0.0f &&
+        selMgr.isOpRuleRespected(selMgr.twTransformRule)
+    ) {
         twHandled =
             traWid.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
@@ -1066,10 +1071,15 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
             game.editorsView.mouseCursorWorldPos,
             isShiftPressed, isCtrlPressed
         );
+    } else if(selMgr.isDragMoving()) {
+        selMgr.updateDragMove(game.editorsView.mouseCursorWorldPos);
     } else {
         Point selectionCenter, selectionSize;
         selMgr.getBBox(&selectionCenter, &selectionSize);
-        if(selectionSize.x != 0.0f) {
+        if(
+            selectionSize.x != 0.0f &&
+            selMgr.isOpRuleRespected(selMgr.twTransformRule)
+        ) {
             bool twHandled =
                 traWid.handleMouseMove(
                     mouseCursor,
@@ -4769,7 +4779,7 @@ bool Editor::SelectionManager::applyTransformation(
     const Point& newCenter, const Point& newSize
 ) {
     if(!enabled) return false;
-    if(state != STATE_TRANSFORMING) return false;
+    if(state != STATE_TW_TRANSFORMING) return false;
     if(preTransSize.x <= 0.0f || preTransSize.y <= 0.0f) return false;
     
     Point preTransTL = preTransCenter - preTransSize / 2.0f;
@@ -4810,13 +4820,13 @@ bool Editor::SelectionManager::chooseViaMouseDown(
     const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
 ) {
     if(!enabled) return false;
-    bool madeChanges = false;
     Point selectionCenter, selectionSize;
     getBBox(&selectionCenter, &selectionSize);
     
     //Get which items are under the mouse cursor.
     vector<size_t> clickedItems;
     size_t nrTotalItems = getNrTotalItems();
+    size_t finalItem;
     for(size_t i = 0; i < nrTotalItems; i++) {
         if(!getItemIsEligible(i)) continue;
         Point iCenter, iSize;
@@ -4832,27 +4842,40 @@ bool Editor::SelectionManager::chooseViaMouseDown(
         }
     }
     
+    //Check if we must start a rubber band.
     bool mustStartRubberBand = clickedItems.empty() || rubberBandMod;
     if(mustStartRubberBand) {
         if(!addToSelectionMod) {
             clear();
         }
         startRubberBand(cursorPos);
-        madeChanges = true;
-    } else {
-        if(overlapsCycle && !addToSelectionMod) {
-            size_t prevSelItemIdx = getSingleItemIdx();
-            setSingle(getNextInVector(clickedItems, prevSelItemIdx));
-        } else {
-            if(!addToSelectionMod) {
-                clear();
-            }
-            add(clickedItems[0]);
-        }
-        madeChanges = true;
+        return true;
     }
     
-    return madeChanges;
+    //Figure out which of the clicked items to focus on.
+    if(overlapsCycle) {
+        size_t prevSelItemIdx = getSingleItemIdx();
+        finalItem = getNextInVector(clickedItems, prevSelItemIdx);
+    }
+    
+    //Select it.
+    bool keepOldSelection = false;
+    if(addToSelectionMod) {
+        keepOldSelection = true;
+    }
+    if(selectedItems.contains(finalItem) && !clickingSelectedUnselectsOthers) {
+        keepOldSelection = true;
+    }
+    if(!keepOldSelection) clear();
+    add(finalItem);
+    
+    //Check if we can start drag moving.
+    bool canStartDragMove = isOpRuleRespected(dragMoveRule);
+    if(!clickedItems.empty() && canStartDragMove) {
+        startDragMove(cursorPos);
+    }
+    
+    return true;
 }
 
 
@@ -4904,12 +4927,12 @@ void Editor::SelectionManager::draw(const Point& cursorPos, float zoom) const {
     if(state == STATE_RUBBER_BAND) {
         //Setup.
         Point rBTL(
-            std::min(rubberBandStart.x, cursorPos.x),
-            std::min(rubberBandStart.y, cursorPos.y)
+            std::min(opStartCursorPos.x, cursorPos.x),
+            std::min(opStartCursorPos.y, cursorPos.y)
         );
         Point rBBR(
-            std::max(rubberBandStart.x, cursorPos.x),
-            std::max(rubberBandStart.y, cursorPos.y)
+            std::max(opStartCursorPos.x, cursorPos.x),
+            std::max(opStartCursorPos.y, cursorPos.y)
         );
         
         //Interior.
@@ -5097,6 +5120,32 @@ bool Editor::SelectionManager::isHomogenized() const {
 
 
 /**
+ * @brief Returns whether the given operation rule is currently respected.
+ *
+ * @param rule The rule
+ * @return Whether it's respected.
+ */
+bool Editor::SelectionManager::isOpRuleRespected(OP_RULE rule) const {
+    switch(rule) {
+    case OP_RULE_ALWAYS: {
+        break;
+    } case OP_RULE_ONE_ITEM: {
+        if(!selectedItems.hasOne()) return false;
+        break;
+    } case OP_RULE_MULTIPLE_ITEMS: {
+        if(!selectedItems.hasMultiple()) return false;
+        break;
+    } case OP_RULE_NEVER: {
+        return false;
+        break;
+    }
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Returns the index of the first selected item, or INVALID if
  * none is selected.
  *
@@ -5178,6 +5227,20 @@ size_t Editor::SelectionManager::getSingleItemIdx() const {
 
 
 /**
+ * @brief A shorthand for handling things to do when the left mouse
+ * is released.
+ *
+ * @return Whether it succeeded.
+ */
+bool Editor::SelectionManager::handleMouseUp() {
+    bool success = stopRubberBand();
+    success |= stopTransforming();
+    success |= stopDragMove();
+    return success;
+}
+
+
+/**
  * @brief Returns whether any items are selected.
  *
  * @return Whether any are selected.
@@ -5218,12 +5281,23 @@ bool Editor::SelectionManager::isCreatingRubberBand() const {
 
 
 /**
+ * @brief Returns whether the user is currently moving the selected items
+ * by dragging one of them.
+ *
+ * @return Whether it is drag moving.
+ */
+bool Editor::SelectionManager::isDragMoving() const {
+    return state == STATE_DRAG_MOVING;
+}
+
+
+/**
  * @brief Returns whether the user is currently transforming the selection.
  *
  * @return Whether it is transforming.
  */
 bool Editor::SelectionManager::isTransforming() const {
-    return state == STATE_TRANSFORMING;
+    return state == STATE_TW_TRANSFORMING;
 }
 
 
@@ -5265,6 +5339,39 @@ bool Editor::SelectionManager::setHomogenized(bool homogenized) {
 
 
 /**
+ * @brief Starts moving the selected items via dragging one of them.
+ *
+ * @param cursorPos Position of the cursor.
+ * @return Whether it was idling before this.
+ */
+bool Editor::SelectionManager::startDragMove(const Point& cursorPos) {
+    if(!enabled) return false;
+    bool wasIdle = state == STATE_IDLING;
+    state = STATE_DRAG_MOVING;
+    opStartCursorPos = cursorPos;
+    preDragMoveItemsPos.clear();
+    
+    bool gotClosest = false;
+    Distance closestDist;
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    
+    for(size_t i : list) {
+        Point pos, size;
+        onGetInfo(i, &pos, &size);
+        preDragMoveItemsPos[i] = pos;
+        Distance d(game.editorsView.mouseCursorWorldPos, pos);
+        if(!gotClosest || d < closestDist) {
+            gotClosest = true;
+            closestDist = d;
+            preDragMovePivotItemPos = pos;
+        }
+    }
+    
+    return wasIdle;
+}
+
+
+/**
  * @brief Starts the creation of a rubber band selection box.
  *
  * @param cursorPos Position of the cursor.
@@ -5274,7 +5381,7 @@ bool Editor::SelectionManager::startRubberBand(const Point& cursorPos) {
     if(!enabled) return false;
     bool wasIdle = state == STATE_IDLING;
     state = STATE_RUBBER_BAND;
-    rubberBandStart = cursorPos;
+    opStartCursorPos = cursorPos;
     return wasIdle;
 }
 
@@ -5287,7 +5394,7 @@ bool Editor::SelectionManager::startRubberBand(const Point& cursorPos) {
 bool Editor::SelectionManager::startTransforming() {
     if(!enabled) return false;
     bool wasIdle = state == STATE_IDLING;
-    state = STATE_TRANSFORMING;
+    state = STATE_TW_TRANSFORMING;
     preTransCenters.clear();
     preTransSizes.clear();
     const set<size_t>& list = selectedItems.getItemIdxs();
@@ -5299,6 +5406,19 @@ bool Editor::SelectionManager::startTransforming() {
     }
     getBBox(&preTransCenter, &preTransSize);
     return wasIdle;
+}
+
+
+/**
+ * @brief Finishes moving items via dragging one of them.
+ *
+ * @return Whether it was in drag-move mode before this.
+ */
+bool Editor::SelectionManager::stopDragMove() {
+    if(state != STATE_DRAG_MOVING) return false;
+    
+    state = STATE_IDLING;
+    return true;
 }
 
 
@@ -5316,29 +5436,43 @@ bool Editor::SelectionManager::stopRubberBand() {
 
 
 /**
- * @brief A shorthand for handling things to do when the left mouse
- * is released.
- *
- * @return Whether it succeeded.
- */
-bool Editor::SelectionManager::handleMouseUp() {
-    bool success = stopRubberBand();
-    success |= stopTransforming();
-    return success;
-}
-
-
-/**
  * @brief Stops a transformation of the selection bounding box.
  *
  * @return Whether it was in a transformation before this.
  */
 bool Editor::SelectionManager::stopTransforming() {
-    if(state != STATE_TRANSFORMING) return false;
+    if(state != STATE_TW_TRANSFORMING) return false;
     
     preTransCenters.clear();
     preTransSizes.clear();
     state = STATE_IDLING;
+    return true;
+}
+
+
+/**
+ * @brief If drag-moving, updates the cursor position.
+ *
+ * @param cursorPos New cursor position.
+ * @return Whether it was drag-moving before this.
+ */
+bool Editor::SelectionManager::updateDragMove(const Point& cursorPos) {
+    if(!enabled) return false;
+    if(state != STATE_DRAG_MOVING) return false;
+    
+    Point mouseOffset = cursorPos - opStartCursorPos;
+    Point newPivotPos = preDragMovePivotItemPos + mouseOffset;
+    if(onSnapPoint) newPivotPos = onSnapPoint(newPivotPos);
+    Point totalMoveOffset = newPivotPos - preDragMovePivotItemPos;
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    
+    for(size_t i : list) {
+        Point origPos = preDragMoveItemsPos[i];
+        Point pos, size;
+        onGetInfo(i, &pos, &size);
+        onSetInfo(i, origPos + totalMoveOffset, size);
+    }
+    
     return true;
 }
 
@@ -5366,13 +5500,13 @@ bool Editor::SelectionManager::updateRubberBand(
     
     Point rubberBandTL =
         Point(
-            std::min(rubberBandStart.x, cursorPos.x),
-            std::min(rubberBandStart.y, cursorPos.y)
+            std::min(opStartCursorPos.x, cursorPos.x),
+            std::min(opStartCursorPos.y, cursorPos.y)
         );
     Point rubberBandBR =
         Point(
-            std::max(rubberBandStart.x, cursorPos.x),
-            std::max(rubberBandStart.y, cursorPos.y)
+            std::max(opStartCursorPos.x, cursorPos.x),
+            std::max(opStartCursorPos.y, cursorPos.y)
         );
         
     size_t nrTotalItems = getNrTotalItems();
