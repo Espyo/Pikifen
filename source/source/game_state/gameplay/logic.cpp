@@ -307,8 +307,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 Mob* member = player->leaderPtr->group->members[m];
                 updateMinMaxCoords(tl, br, member->pos);
             }
-            groupCenter.x = (tl.x + br.x) / 2.0f;
-            groupCenter.y = (tl.y + br.y) / 2.0f;
+            cornersToCenterAndSize(tl, br, &groupCenter, nullptr);
             groupWeight = 0.1f;
             
             Distance groupDist(player->leaderPtr->pos, groupCenter);

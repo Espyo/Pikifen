@@ -4121,8 +4121,9 @@ void AreaEditor::updateVertexSelection() {
     selTL.y -= AREA_EDITOR::SELECTION_TW_PADDING;
     selBR.x += AREA_EDITOR::SELECTION_TW_PADDING;
     selBR.y += AREA_EDITOR::SELECTION_TW_PADDING;
-    selectionCenter = (selBR + selTL) / 2.0f;
-    selectionSize = selBR - selTL;
+    cornersToCenterAndSize(
+        selTL, selBR, &selectionCenter, &selectionSize
+    );
     selectionAngle = 0.0f;
     selectionOrigCenter = selectionCenter;
     selectionOrigSize = selectionSize;

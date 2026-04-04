@@ -728,6 +728,44 @@ void calculateThrow(
 
 
 /**
+ * @brief Converts coordinates of a rectangle's center and size into
+ * coordinates of its top-left and bottom-right corners.
+ *
+ * @param Center Center coordinates.
+ * @param size Size.
+ * @param outTopLeftCorner If not nullptr, the top-left corner's coordinates
+ * are returned here.
+ * @param outBottomRightCorner If not nullptr, the bottom-right corner's
+ * coordinates are returned here.
+ */
+void centerAndSizeToCorners(
+    const Point& center, const Point& size,
+    Point* outTopLeftCorner, Point* outBottomRightCorner
+) {
+    if(outTopLeftCorner) *outTopLeftCorner = center - size / 2.0f;
+    if(outBottomRightCorner) *outBottomRightCorner = center + size / 2.0f;
+}
+
+
+/**
+ * @brief Converts coordinates of a rectangle's top-left and bottom-right
+ * corners into coordinates of its center and size.
+ *
+ * @param topLeftCorner Top-left corner's coordinates.
+ * @param bottomRightCorner Bottom-right corner's coordinates.
+ * @param outCenter If not nullptr, the center is returned here.
+ * @param outSize If not nullptr, the size is returned here.
+ */
+void cornersToCenterAndSize(
+    const Point& topLeftCorner, const Point& bottomRightCorner,
+    Point* outCenter, Point* outSize
+) {
+    if(outCenter) *outCenter = (topLeftCorner + bottomRightCorner) / 2.0f;
+    if(outSize) *outSize = bottomRightCorner - topLeftCorner;
+}
+
+
+/**
  * @brief Returns whether a circle is touching a line segment or not.
  *
  * @param circle Coordinates of the circle.
@@ -2074,8 +2112,8 @@ bool rectanglesIntersect(
     float* outOverlapDist, float* outOverlapAngle
 ) {
     //Start by getting the vertexes of the rectangles.
-    Point tl(-rectDim1.x / 2.0f, -rectDim1.y / 2.0f);
-    Point br(rectDim1.x / 2.0f, rectDim1.y / 2.0f);
+    Point tl, br;
+    centerAndSizeToCorners(Point(), rectDim1, &tl, &br);
     vector<Point> rect1Vertexes {
         rotatePoint(tl, rectAngle1) + rect1,
         rotatePoint(Point(tl.x, br.y), rectAngle1) + rect1,
@@ -2083,9 +2121,7 @@ bool rectanglesIntersect(
         rotatePoint(Point(br.x, tl.y), rectAngle1) + rect1
     };
     
-    tl = Point(-rectDim2.x / 2, -rectDim2.y / 2);
-    br = Point(rectDim2.x / 2, rectDim2.y / 2);
-    
+    centerAndSizeToCorners(Point(), rectDim2, &tl, &br);
     vector<Point> rect2Vertexes {
         rotatePoint(tl, rectAngle2) + rect2,
         rotatePoint(Point(tl.x, br.y), rectAngle2) + rect2,

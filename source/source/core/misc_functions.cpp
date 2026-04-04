@@ -48,7 +48,7 @@
  * sectors. False otherwise.
  * @return Whether there are walls between.
  */
-bool areaWallsBetween(
+bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ, bool* outImpassableWalls
 ) {

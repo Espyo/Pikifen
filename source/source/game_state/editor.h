@@ -377,9 +377,9 @@ protected:
         void draw(const Point& cursorPos, float zoom) const;
         bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool getBBox(
-            Point* center, Point* size,
-            Point* centersOnlyCenter = nullptr,
-            Point* centersOnlySize = nullptr
+            Point* outCenter, Point* outSize,
+            Point* outCentersOnlyCenter = nullptr,
+            Point* outCentersOnlySize = nullptr
         ) const;
         bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod

@@ -199,6 +199,14 @@ void calculateThrow(
     float maxH, float gravity,
     Point* outSpeedXY, float* outSpeedZ, float* outHAngle
 );
+void centerAndSizeToCorners(
+    const Point& center, const Point& size,
+    Point* outTopLeftCorner, Point* outBottomRightCorner
+);
+void cornersToCenterAndSize(
+    const Point& topLeftCorner, const Point& bottomRightCorner,
+    Point* outCenter, Point* outSize
+);
 bool circleIntersectsLineSeg(
     const Point& circle, float cr,
     const Point& lineP1, const Point& lineP2,

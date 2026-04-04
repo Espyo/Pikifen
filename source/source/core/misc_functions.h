@@ -72,7 +72,7 @@ typedef float (*OffsetEffectLengthGetter)(Edge*);
 
 
 
-bool areaWallsBetween(
+bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ = -FLT_MAX, bool* outImpassableWalls = nullptr
 );

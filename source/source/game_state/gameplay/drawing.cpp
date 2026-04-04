@@ -975,13 +975,9 @@ void GameplayState::drawInGameText(Player* player) {
                     }
                 }
             } else if(mobPtr->rectangularDim.x != 0) {
-                Point tl(
-                    -mobPtr->rectangularDim.x / 2.0f,
-                    -mobPtr->rectangularDim.y / 2.0f
-                );
-                Point br(
-                    mobPtr->rectangularDim.x / 2.0f,
-                    mobPtr->rectangularDim.y / 2.0f
+                Point tl, br;
+                centerAndSizeToCorners(
+                    Point(), mobPtr->rectangularDim, &tl, &br
                 );
                 vector<Point> rectVertices {
                     rotatePoint(tl, mobPtr->angle) +
@@ -1415,6 +1411,8 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         Point fogBR =
             view.cam.pos +
             Point(game.curArea->weatherCondition.fogFar);
+        Point fogCenter, fogSize;
+        cornersToCenterAndSize(fogTL, fogBR, &fogCenter, &fogSize);
         al_transform_coordinates(
             &view.worldToWindowTransform, &fogTL.x, &fogTL.y
         );
@@ -1423,7 +1421,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         );
         
         if(bmpFog) {
-            drawBitmap(bmpFog, (fogTL + fogBR) / 2, (fogBR - fogTL), 0, fogC);
+            drawBitmap(bmpFog, fogCenter, fogSize, 0, fogC);
         }
         
         //Now draw the fully opaque fog around the central fade.

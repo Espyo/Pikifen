@@ -425,10 +425,8 @@ void Leader::dismissLogic() {
                 maxCoords.y = memberPtr->pos.y;
         }
         
-        Point groupCenter(
-            (minCoords.x + maxCoords.x) / 2,
-            (minCoords.y + maxCoords.y) / 2
-        );
+        Point groupCenter;
+        cornersToCenterAndSize(minCoords, maxCoords, &groupCenter, nullptr);
         baseAngle = getAngle(pos, groupCenter);
     }
     

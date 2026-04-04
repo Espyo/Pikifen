@@ -142,11 +142,9 @@ Point Liquid::getCenter() const {
         updateMaxCoords(br, sectors[s]->bbox[1]);
     }
     
-    return
-        Point(
-            (tl.x + br.x) / 2.0f,
-            (tl.y + br.y) / 2.0f
-        );
+    Point center;
+    cornersToCenterAndSize(tl, br, &center, nullptr);
+    return center;
 }
 
 

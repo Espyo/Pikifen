@@ -4247,8 +4247,8 @@ void Editor::Dialog::process() {
         pos.x = game.winW / 2.0f;
         pos.y = game.winH / 2.0f;
     }
-    Point tl = pos - size / 2.0f;
-    Point br = pos + size / 2.0f;
+    Point tl, br;
+    centerAndSizeToCorners(pos, size, &tl, &br);
     if(tl.x < 0.0f) {
         pos.x -= tl.x;
     }
@@ -5140,20 +5140,20 @@ bool Editor::SelectionManager::enable() {
  * @brief Returns the center point and size of the bounding box of the
  * selected items.
  *
- * @param center The center of the box is returned here.
- * @param size The dimensions of the box are returned here.
- * @param centersOnlyCenter If not nullptr, the center of the box that delimits
- * the centers only is returned here.
- * @param centersOnlySize If not nullptr, the size of the box that delimits
+ * @param outCenter The center of the box is returned here.
+ * @param outSize The dimensions of the box are returned here.
+ * @param outCentersOnlyCenter If not nullptr, the center of the box that
+ * delimits the centers only is returned here.
+ * @param outCentersOnlySize If not nullptr, the size of the box that delimits
  * the centers only is returned here.
  * @return Whether there are any selected items.
  */
 bool Editor::SelectionManager::getBBox(
-    Point* center, Point* size,
-    Point* centersOnlyCenter, Point* centersOnlySize
+    Point* outCenter, Point* outSize,
+    Point* outCentersOnlyCenter, Point* outCentersOnlySize
 ) const {
-    *center = Point();
-    *size = Point();
+    *outCenter = Point();
+    *outSize = Point();
     if(!selectedItems.hasAny()) return false;
     
     Point minCoords(FLT_MAX);
@@ -5176,15 +5176,11 @@ bool Editor::SelectionManager::getBBox(
         );
     }
     
-    *center = (minCoords + maxCoords) / 2.0f;
-    *size = maxCoords - minCoords;
-    if(centersOnlyCenter) {
-        *centersOnlyCenter =
-            (centersOnlyMinCoords + centersOnlyMaxCoords) / 2.0f;
-    }
-    if(centersOnlySize) {
-        *centersOnlySize = centersOnlyMaxCoords - centersOnlyMinCoords;
-    }
+    cornersToCenterAndSize(minCoords, maxCoords, outCenter, outSize);
+    cornersToCenterAndSize(
+        centersOnlyMinCoords, centersOnlyMaxCoords,
+        outCentersOnlyCenter, outCentersOnlySize
+    );
     
     return true;
 }
@@ -5609,8 +5605,10 @@ bool Editor::SelectionManager::updateRubberBand(
         if(!getItemIsEligible(i)) continue;
         Point iCenter, iSize;
         getItemInfo(i, &iCenter, &iSize);
-        Point iTL = iCenter - iSize / 2.0f;
-        Point iBR = iCenter + iSize / 2.0f;
+        Point iTL, iBR;
+        centerAndSizeToCorners(
+            iCenter, iSize, &iTL, &iBR
+        );
         
         if(
             iTL.x >= rubberBandTL.x &&

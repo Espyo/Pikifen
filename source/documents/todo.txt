@@ -458,6 +458,7 @@ Small tasks (for when I'm feeling lazy)
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some use reportEnumError, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
+        Create a forEachIdx macro, that turns "forEachIdx(m, mobs)" into "for(size_t m = 0; m < mobs.size(); m++)"
     
     
 Misc things (so I don't forget)

@@ -1015,37 +1015,27 @@ void GuiEditor::processGuiPanelItem() {
         WIDGET_EXPLANATION_DRAG
     );
     
-    Point topLeft(
-        curItemPtr->center.x - curItemPtr->size.x / 2.0f,
-        curItemPtr->center.y - curItemPtr->size.y / 2.0f
-    );
-    Point bottomRight(
-        curItemPtr->center.x + curItemPtr->size.x / 2.0f,
-        curItemPtr->center.y + curItemPtr->size.y / 2.0f
+    Point curItemTL, curItemBR;
+    centerAndSizeToCorners(
+        curItemPtr->center, curItemPtr->size, &curItemTL, &curItemBR
     );
     bool updateFromCorners = false;
     
     //Top-left coordinates values.
     ImGui::Spacer();
-    if(ImGui::DragFloat2("Top-left", (float*) &topLeft, 0.10f)) {
+    if(ImGui::DragFloat2("Top-left", (float*) &curItemTL, 0.10f)) {
         updateFromCorners = true;
     }
     
     //Bottom-right coordinates values.
-    if(ImGui::DragFloat2("Bottom-right", (float*) &bottomRight, 0.10f)) {
+    if(ImGui::DragFloat2("Bottom-right", (float*) &curItemBR, 0.10f)) {
         updateFromCorners = true;
     }
     
     if(updateFromCorners) {
-        Point newSize(
-            bottomRight.x - topLeft.x,
-            bottomRight.y - topLeft.y
-        );
+        Point newCenter, newSize;
+        cornersToCenterAndSize(curItemTL, curItemBR, &newCenter, &newSize);
         if(newSize.x > 0.0f && newSize.y > 0.0f) {
-            Point newCenter(
-                (topLeft.x + bottomRight.x) / 2.0f,
-                (topLeft.y + bottomRight.y) / 2.0f
-            );
             curItemPtr->center = newCenter;
             curItemPtr->size = newSize;
         }

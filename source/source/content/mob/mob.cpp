@@ -2954,7 +2954,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
     //We can ignore walls that are below or within stepping distance of
     //both mobs, so use the lowest of the two Zs as a cut-off point.
     if(
-        areaWallsBetween(
+        areWallsBetween(
             pos, targetMob->pos,
             std::min(z + height, targetMob->z + targetMob->height) +
             GEOMETRY::STEP_HEIGHT
