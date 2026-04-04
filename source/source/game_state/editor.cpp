@@ -1059,44 +1059,52 @@ void Editor::handleSelectionAndTransformationLmbDown(
  * @param traWid The transformation widget.
  * @param mouseCursor Mouse cursor coordinates to use.
  * @param onPreTransform Code to run before any transformation is made, if any.
- * @return Whether the selection's data changed.
+ * @return Whether any important data changed.
  */
 bool Editor::handleSelectionAndTransformationLmbDrag(
     SelectionManager& selMgr, TransformationWidget& traWid,
     const Point& mouseCursor, std::function<void()> onPreTransform
 ) {
-    bool changesMade = false;
+    //Rubber band.
     if(selMgr.isCreatingRubberBand()) {
         selMgr.updateRubberBand(
             game.editorsView.mouseCursorWorldPos,
             isShiftPressed, isCtrlPressed
         );
-    } else if(selMgr.isDragMoving()) {
+        return false;
+    }
+    
+    //Drag move.
+    if(selMgr.isDragMoving()) {
+        if(onPreTransform) onPreTransform();
         selMgr.updateDragMove(game.editorsView.mouseCursorWorldPos);
-    } else {
-        Point selectionCenter, selectionSize;
-        selMgr.getBBox(&selectionCenter, &selectionSize);
-        if(
-            selectionSize.x != 0.0f &&
-            selMgr.isOpRuleRespected(selMgr.twTransformRule)
-        ) {
-            bool twHandled =
-                traWid.handleMouseMove(
-                    mouseCursor,
-                    &selectionCenter, &selectionSize,
-                    nullptr, 1.0f / game.editorsView.cam.zoom,
-                    false, false, 0.10f, isAltPressed
-                );
-            if(twHandled) {
-                changesMade = true;
-                if(onPreTransform) onPreTransform();
-                selMgr.applyTransformation(
-                    selectionCenter, selectionSize
-                );
-            }
+        return true;
+    }
+    
+    //Transformation widget.
+    Point selectionCenter, selectionSize;
+    selMgr.getBBox(&selectionCenter, &selectionSize);
+    if(
+        selectionSize.x != 0.0f &&
+        selMgr.isOpRuleRespected(selMgr.twTransformRule)
+    ) {
+        bool twHandled =
+            traWid.handleMouseMove(
+                mouseCursor,
+                &selectionCenter, &selectionSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom,
+                false, false, 0.10f, isAltPressed
+            );
+        if(twHandled) {
+            if(onPreTransform) onPreTransform();
+            selMgr.applyTransformation(
+                selectionCenter, selectionSize
+            );
+            return true;
         }
     }
-    return changesMade;
+    
+    return false;
 }
 
 
@@ -4781,24 +4789,66 @@ bool Editor::SelectionManager::applyTransformation(
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
     if(preTransSize.x <= 0.0f || preTransSize.y <= 0.0f) return false;
+    if(!onGetInfo || !onSetInfo) return false;
     
     Point preTransTL = preTransCenter - preTransSize / 2.0f;
+    Point preTransCentersOnlyTL =
+        preTransCentersOnlyCenter - preTransCentersOnlySize / 2.0f;
+        
+    Point centersOnlyOffset = preTransCentersOnlyTL - preTransTL;
     Point newTL = newCenter - newSize / 2.0f;
-    const set<size_t>& list = selectedItems.getItemIdxs();
+    Point newCentersOnlyTL = newTL + centersOnlyOffset;
+    Point newCentersOnlySize =
+        newSize - (preTransSize - preTransCentersOnlySize);
+    newCentersOnlySize.x = std::max(0.0f, newCentersOnlySize.x);
+    newCentersOnlySize.y = std::max(0.0f, newCentersOnlySize.y);
     
+    const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        if(onGetInfo && onSetInfo) {
-            onGetInfo(i, &iCenter, &iSize);
+        onGetInfo(i, &iCenter, &iSize);
+        
+        if(itemsCanResize) {
+            //Position and resize the item according to the new shape.
             Point preTransCenterRatio =
                 (preTransCenters[i] - preTransTL) / preTransSize;
             Point preTransSizeRatio =
                 preTransSizes[i] / preTransSize;
-            onSetInfo(
-                i, newTL + preTransCenterRatio * newSize,
-                preTransSizeRatio * newSize
-            );
+            iCenter = newTL + preTransCenterRatio * newSize;
+            iSize = preTransSizeRatio * newSize;
+            
+        } else {
+            if(list.size() == 1) {
+                //If there's only one item and it can't be resized, just move
+                //it. Pretty simple scenario.
+                iCenter = newCenter;
+            } else {
+                //Position the item based on the "centers-only" bounding
+                //box. Keep its size.
+                if(preTransCentersOnlySize.x > 0.0f) {
+                    float preTransCenterRatioX =
+                        (preTransCenters[i].x - preTransCentersOnlyTL.x) /
+                        preTransCentersOnlySize.x;
+                    iCenter.x =
+                        newCentersOnlyTL.x +
+                        preTransCenterRatioX * newCentersOnlySize.x;
+                } else {
+                    iCenter.x = newCenter.x;
+                }
+                if(preTransCentersOnlySize.y > 0.0f) {
+                    float preTransCenterRatioY =
+                        (preTransCenters[i].y - preTransCentersOnlyTL.y) /
+                        preTransCentersOnlySize.y;
+                    iCenter.y =
+                        newCentersOnlyTL.y +
+                        preTransCenterRatioY * newCentersOnlySize.y;
+                } else {
+                    iCenter.y = newCenter.y;
+                }
+            }
         }
+        
+        onSetInfo(i, iCenter, iSize);
     }
     
     return true;
@@ -5068,10 +5118,15 @@ bool Editor::SelectionManager::enable() {
  *
  * @param center The center of the box is returned here.
  * @param size The dimensions of the box are returned here.
+ * @param centersOnlyCenter If not nullptr, the center of the box that delimits
+ * the centers only is returned here.
+ * @param centersOnlySize If not nullptr, the size of the box that delimits
+ * the centers only is returned here.
  * @return Whether there are any selected items.
  */
 bool Editor::SelectionManager::getBBox(
-    Point* center, Point* size
+    Point* center, Point* size,
+    Point* centersOnlyCenter, Point* centersOnlySize
 ) const {
     *center = Point();
     *size = Point();
@@ -5079,6 +5134,8 @@ bool Editor::SelectionManager::getBBox(
     
     Point minCoords(FLT_MAX);
     Point maxCoords(-FLT_MAX);
+    Point centersOnlyMinCoords(FLT_MAX);
+    Point centersOnlyMaxCoords(-FLT_MAX);
     const set<size_t>& list = selectedItems.getItemIdxs();
     
     for(size_t i : list) {
@@ -5090,10 +5147,20 @@ bool Editor::SelectionManager::getBBox(
         updateMaxCoords(
             maxCoords, iCenter + iSize / 2.0f
         );
+        updateMinMaxCoords(
+            centersOnlyMinCoords, centersOnlyMaxCoords, iCenter
+        );
     }
     
     *center = (minCoords + maxCoords) / 2.0f;
     *size = maxCoords - minCoords;
+    if(centersOnlyCenter) {
+        *centersOnlyCenter =
+            (centersOnlyMinCoords + centersOnlyMaxCoords) / 2.0f;
+    }
+    if(centersOnlySize) {
+        *centersOnlySize = centersOnlyMaxCoords - centersOnlyMinCoords;
+    }
     
     return true;
 }
@@ -5356,14 +5423,14 @@ bool Editor::SelectionManager::startDragMove(const Point& cursorPos) {
     const set<size_t>& list = selectedItems.getItemIdxs();
     
     for(size_t i : list) {
-        Point pos, size;
-        onGetInfo(i, &pos, &size);
-        preDragMoveItemsPos[i] = pos;
-        Distance d(game.editorsView.mouseCursorWorldPos, pos);
+        Point iCenter, iSize;
+        getItemInfo(i, &iCenter, &iSize);
+        preDragMoveItemsPos[i] = iCenter;
+        Distance d(game.editorsView.mouseCursorWorldPos, iCenter);
         if(!gotClosest || d < closestDist) {
             gotClosest = true;
             closestDist = d;
-            preDragMovePivotItemPos = pos;
+            preDragMovePivotItemPos = iCenter;
         }
     }
     
@@ -5404,7 +5471,10 @@ bool Editor::SelectionManager::startTransforming() {
         preTransCenters[i] = iCenter;
         preTransSizes[i] = iSize;
     }
-    getBBox(&preTransCenter, &preTransSize);
+    getBBox(
+        &preTransCenter, &preTransSize,
+        &preTransCentersOnlyCenter, &preTransCentersOnlySize
+    );
     return wasIdle;
 }
 
@@ -5459,6 +5529,7 @@ bool Editor::SelectionManager::stopTransforming() {
 bool Editor::SelectionManager::updateDragMove(const Point& cursorPos) {
     if(!enabled) return false;
     if(state != STATE_DRAG_MOVING) return false;
+    if(!onGetInfo || !onSetInfo) return false;
     
     Point mouseOffset = cursorPos - opStartCursorPos;
     Point newPivotPos = preDragMovePivotItemPos + mouseOffset;
@@ -5468,9 +5539,9 @@ bool Editor::SelectionManager::updateDragMove(const Point& cursorPos) {
     
     for(size_t i : list) {
         Point origPos = preDragMoveItemsPos[i];
-        Point pos, size;
-        onGetInfo(i, &pos, &size);
-        onSetInfo(i, origPos + totalMoveOffset, size);
+        Point iCenter, iSize;
+        onGetInfo(i, &iCenter, &iSize);
+        onSetInfo(i, origPos + totalMoveOffset, iSize);
     }
     
     return true;

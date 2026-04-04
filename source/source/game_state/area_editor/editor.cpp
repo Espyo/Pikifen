@@ -226,6 +226,7 @@ AreaEditor::AreaEditor() :
     mobSelection.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     mobSelection.itemsAreRectangular = false;
+    mobSelection.itemsCanResize = false;
     mobSelection.overlapsCycle = true;
     mobSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
     mobSelection.twTransformRule = SelectionManager::OP_RULE_MULTIPLE_ITEMS;
@@ -247,6 +248,7 @@ AreaEditor::AreaEditor() :
     reminderSelection.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     reminderSelection.itemsAreRectangular = true;
+    reminderSelection.itemsCanResize = false;
     reminderSelection.overlapsCycle = true;
     reminderSelection.dragMoveRule = SelectionManager::OP_RULE_ALWAYS;
     reminderSelection.twTransformRule = SelectionManager::OP_RULE_NEVER;

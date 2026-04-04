@@ -148,6 +148,7 @@ AnimationEditor::AnimationEditor() :
         if(!curSprite) return (size_t) 0;
         return curSprite->hitboxes.size();
     };
+    hitboxSelection.itemsCanResize = true;
     hitboxSelection.overlapsCycle = true;
     hitboxSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
     hitboxSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;

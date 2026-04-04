@@ -13,8 +13,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Using the transformation widget's resizing on selected items that can't change size (reminders, mobs) makes it behave weirdly
-        Maybe the transformation data should specify two rectangles: one with the total size, and one that encompasses just centers
     Ice vent is hitting frozen Pikmin multiple times and eventually killing them
         Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
     Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack

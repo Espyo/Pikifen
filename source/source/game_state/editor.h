@@ -337,18 +337,21 @@ protected:
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
         
+        //Whether the items can be resized.
+        bool itemsCanResize = false;
+        
         //When clicking on overlapping items, cycle selection between a single
         //one, or always select the one with the lowest index?
         bool overlapsCycle = false;
+        
+        //Whether clicking a selected item unselects the other selected items.
+        bool clickingSelectedUnselectsOthers = true;
         
         //How and when a drag move can be started.
         OP_RULE dragMoveRule = OP_RULE_NEVER;
         
         //How and when a transformation widget transformation can be started.
         OP_RULE twTransformRule = OP_RULE_ALWAYS;
-        
-        //Whether clicking a selected item unselects the other selected items.
-        bool clickingSelectedUnselectsOthers = true;
         
         
         //--- Public function declarations ---
@@ -373,7 +376,11 @@ protected:
         
         void draw(const Point& cursorPos, float zoom) const;
         bool applyTransformation(const Point& newCenter, const Point& newSize);
-        bool getBBox(Point* center, Point* size) const;
+        bool getBBox(
+            Point* center, Point* size,
+            Point* centersOnlyCenter = nullptr,
+            Point* centersOnlySize = nullptr
+        ) const;
         bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
@@ -448,6 +455,14 @@ protected:
         //Size of the entire selection before transformation began.
         //Cache for performance.
         Point preTransSize;
+        
+        //If the transformation should apply to centers only (i.e. items
+        //can't resize), use this selection center.
+        Point preTransCentersOnlyCenter;
+        
+        //If the transformation should apply to centers only (i.e. items
+        //can't resize), use this selection size.
+        Point preTransCentersOnlySize;
         
         //Position of each selected item before a drag move.
         map<size_t, Point> preDragMoveItemsPos;

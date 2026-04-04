@@ -90,6 +90,7 @@ GuiEditor::GuiEditor() :
     itemSelection.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     itemSelection.itemsAreRectangular = true;
+    itemSelection.itemsCanResize = true;
     itemSelection.overlapsCycle = true;
     itemSelection.dragMoveRule = SelectionManager::OP_RULE_NEVER;
     itemSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
