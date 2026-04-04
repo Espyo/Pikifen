@@ -489,6 +489,12 @@ public:
     void tryPause();
     void updateAvailableLeaders();
     void updateClosestGroupMembers(Player* player);
+    void showInventoryUpdateDisplay(
+        PlayerTeam* team, const string& itemIName, int change
+    );
+    void showInventoryUpdateDisplay(
+        Player* player, const string& itemIName, int change
+    );
     void load() override;
     void unload() override;
     void handleAllegroEvent(ALLEGRO_EVENT& ev) override;

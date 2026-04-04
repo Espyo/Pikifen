@@ -169,10 +169,10 @@ hardcoded_items{
 		size=30.0000 50.0000
 		description=List of controls, shown when the player has been idling for a bit.
 	}
-	inventory_shortcut_usage{
+	inventory_update{
 		center=50.0000 37.0000
 		size=12.0000 10.0000
-		description=Icon of the inventory item that the player has just used via a shortcut, if any.
+		description=Icon of the inventory item that just got updated or used, if any.
 	}
 }
 bitmaps{

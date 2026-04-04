@@ -996,6 +996,9 @@ void InventoryItemDatabase::init() {
             player->leaderPtr->scriptVM.fsm.runEvent(
                 LEADER_EV_FALL_ASLEEP
             );
+            game.states.gameplay->showInventoryUpdateDisplay(
+                player, "napsack", 0
+            );
         };
         items.push_back(item);
     }

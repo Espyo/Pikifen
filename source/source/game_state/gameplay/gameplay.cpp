@@ -1187,6 +1187,7 @@ void GameplayState::load() {
         }
     }
     players[0].team = &playerTeams[0];
+    playerTeams[0].players = { &players[0] };
     
     areaTitleFadeTimer.start(
         game.quickPlay.areaPath.empty() ?
@@ -1628,6 +1629,41 @@ void GameplayState::loadGameContent() {
     }
     
     subgroupTypes.registerType(SUBGROUP_TYPE_CATEGORY_LEADER);
+}
+
+
+/**
+ * @brief Shows the pop-up about an inventory item update or usage to every
+ * player in a team.
+ *
+ * @param team The team.
+ * @param itemIName Internal name of the inventory item.
+ * @param change Amount change, or 0 if not applicable.
+ */
+void GameplayState::showInventoryUpdateDisplay(
+    PlayerTeam* team, const string& itemIName, int change
+) {
+    for(size_t p = 0; p < team->players.size(); p++) {
+        showInventoryUpdateDisplay(team->players[p], itemIName, change);
+    }
+}
+
+
+/**
+ * @brief Shows the pop-up about an inventory item update or usage to a
+ * player.
+ *
+ * @param player The player.
+ * @param itemIName Internal name of the inventory item.
+ * @param change Amount change, or 0 if not applicable.
+ */
+void GameplayState::showInventoryUpdateDisplay(
+    Player* player, const string& itemIName, int change
+) {
+    player->inventoryUpdateDisplayIName = itemIName;
+    player->inventoryUpdateDisplayTimer =
+        DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;
+    player->inventoryUpdateDisplayChange = change;
 }
 
 

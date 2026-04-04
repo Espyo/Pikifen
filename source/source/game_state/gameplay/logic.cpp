@@ -221,11 +221,11 @@ void GameplayState::doAestheticLogic(float deltaT) {
         //Camera shake.
         player.view.shaker.tick(deltaT);
         
-        //Inventory shortcut usage display.
-        player.inventoryShortcutDisplayTimer -= deltaT;
-        if(player.inventoryShortcutDisplayTimer <= 0.0f) {
-            player.inventoryShortcutDisplayTimer = 0.0f;
-            player.inventoryShortcutDisplayIdx = INVALID;
+        //Inventory update display.
+        player.inventoryUpdateDisplayTimer -= deltaT;
+        if(player.inventoryUpdateDisplayTimer <= 0.0f) {
+            player.inventoryUpdateDisplayTimer = 0.0f;
+            player.inventoryUpdateDisplayIName.clear();
         }
     }
     

@@ -111,12 +111,15 @@ struct Player {
     //Multiply the leader's walking speed by this.
     float leaderSpeedMult = 1.0f;
     
-    //Index of the shortcut when showing a shortcut's usage on-screen.
-    //INVALID for none.
-    size_t inventoryShortcutDisplayIdx = INVALID;
+    //Internal name of the inventory item when showing an inventory
+    //update pop-up on-screen. INVALID for none.
+    string inventoryUpdateDisplayIName;
     
-    //Animation timer when showing a shortcut's usage on-screen.
-    float inventoryShortcutDisplayTimer = 0.0f;
+    //Animation timer when showing an inventory pop-up update on-screen.
+    float inventoryUpdateDisplayTimer = 0.0f;
+    
+    //Change amount, if applicable, to show in the inventory update pop-up.
+    int inventoryUpdateDisplayChange = 0;
     
     //Current leader prompt, if any.
     LeaderPrompt leaderPrompt;

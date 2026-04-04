@@ -147,7 +147,7 @@ Hud::Hud() :
     gui.registerCoords("mission_clock",            82,    8, 32, 12);
     gui.registerCoords("mission_misc",             82,   20, 32, 10);
     gui.registerCoords("control_guide",            83,   55, 30, 50);
-    gui.registerCoords("inventory_shortcut_usage", 50,   37, 12, 10);
+    gui.registerCoords("inventory_update",         50,   37, 12, 10);
     gui.readDataFile(hudFileNode);
     
     //Leader health and icons.
@@ -796,14 +796,11 @@ Hud::Hud() :
     gui.addItem(controlGuide, "control_guide");
     
     
-    //Inventory shortcut usage display.
-    GuiItem* inventoryShortcutUsage = new GuiItem();
-    inventoryShortcutUsage->onDraw =
+    //Inventory update display.
+    GuiItem* inventoryUpdate = new GuiItem();
+    inventoryUpdate->onDraw =
     [this] (const DrawInfo & draw) {
-        if(player->inventoryShortcutDisplayIdx != INVALID) {
-            const string& itemIName =
-                game.options.controls.inventoryShortcuts[player->playerNr]
-                [player->inventoryShortcutDisplayIdx];
+        if(!player->inventoryUpdateDisplayIName.empty()) {
             KeyframeInterpolator<float> alphaKI;
             alphaKI.addNew(1.0f, 0.0f);
             alphaKI.addNew(0.9f, 1.0f);
@@ -813,11 +810,13 @@ Hud::Hud() :
             yOffsetKI.addNew(1.0f, 15.0f);
             yOffsetKI.addNew(0.9f, 0.0f, EASE_METHOD_IN);
             float timeRatio =
-                player->inventoryShortcutDisplayTimer /
+                player->inventoryUpdateDisplayTimer /
                 DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;
             float alphaMult = alphaKI.get(timeRatio);
             InventoryItem* iPtr =
-                game.inventoryItems.getByIName(itemIName);
+                game.inventoryItems.getByIName(
+                    player->inventoryUpdateDisplayIName
+                );
             Point offset(0.0f, yOffsetKI.get(timeRatio));
             
             drawBitmapInBox(
@@ -836,8 +835,8 @@ Hud::Hud() :
             }
         }
     };
-    inventoryShortcutUsage->forceSquare = true;
-    gui.addItem(inventoryShortcutUsage, "inventory_shortcut_usage");
+    inventoryUpdate->forceSquare = true;
+    gui.addItem(inventoryUpdate, "inventory_update");
     
     
     DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");

@@ -111,6 +111,12 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
                     team->sprayStats[typeIdx].nrIngredients -=
                         game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded;
                     game.states.gameplay->changeSprayCount(team, typeIdx, 1);
+                    game.states.gameplay->showInventoryUpdateDisplay(
+                        team,
+                        game.config.misc.sprayOrder[typeIdx]->
+                        manifest->internalName,
+                        1
+                    );
                 }
             }
             break;

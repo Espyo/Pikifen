@@ -1433,7 +1433,7 @@ void LeaderFsm::becomeActive(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::becomeInactive(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->player = nullptr;
     leaPtr->stopAutoThrowing();
 }
@@ -1508,7 +1508,7 @@ void LeaderFsm::beThrownByBouncer(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->startThrowTrail();
     leaPtr->setAnimation(LEADER_ANIM_THROWN);
     if(!leaPtr->player) {
@@ -1570,7 +1570,7 @@ void LeaderFsm::checkBoredomAnimEnd(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(!leaPtr->inBoredAnimation) return;
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
     leaPtr->inBoredAnimation = false;
@@ -1623,7 +1623,7 @@ void LeaderFsm::checkPunchDamage(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     LeaderFsm::clearTimer(scriptVM, info1, info2);
     leaPtr->inBoredAnimation = false;
 }
@@ -1652,7 +1652,7 @@ void LeaderFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::closeInventory(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(!leaPtr->player) return;
     leaPtr->player->inventory->close();
 }
@@ -1688,9 +1688,9 @@ void LeaderFsm::decidePluckAction(
     leaPtr->queuedPluckCancel = false;
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-            scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+        scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     } else {
-            scriptVM->fsm.runEvent(LEADER_EV_CANCEL);
+        scriptVM->fsm.runEvent(LEADER_EV_CANCEL);
     }
 }
 
@@ -1718,7 +1718,7 @@ void LeaderFsm::dismiss(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::doThrow(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
     
@@ -1831,7 +1831,7 @@ void LeaderFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     Mob* caller = leaPtr->focusedMob;
     
     if(leaPtr) {
@@ -1852,7 +1852,7 @@ void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     engineAssert(
         leaPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -1865,6 +1865,12 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->changeSprayCount(
             &game.states.gameplay->playerTeams[playerTeamIdx],
             droPtr->droType->sprayTypeToIncrease,
+            droPtr->droType->increaseAmount
+        );
+        game.states.gameplay->showInventoryUpdateDisplay(
+            &game.states.gameplay->playerTeams[playerTeamIdx],
+            game.config.misc.sprayOrder[droPtr->droType->sprayTypeToIncrease]->
+            manifest->internalName,
             droPtr->droType->increaseAmount
         );
         break;
@@ -1891,7 +1897,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     Mob* prevFocusedMob = leaPtr->focusedMob;
     
     if(leaPtr->player) {
@@ -1905,7 +1911,7 @@ void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
             prevFocusedMob->type->category->id == MOB_CATEGORY_LEADERS &&
             !leaPtr->canHunt(prevFocusedMob)
         ) {
-                scriptVM->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
+            scriptVM->fsm.runEvent(MOB_EV_WHISTLED, (void*) prevFocusedMob);
         }
     }
 }
@@ -1920,7 +1926,7 @@ void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::finishPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->stopChasing();
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
 }
@@ -2080,7 +2086,7 @@ void LeaderFsm::goPluck(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::grabMob(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* grabbedMob = (Mob*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     leaPtr->hold(
@@ -2174,7 +2180,7 @@ void LeaderFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::leftHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Hazard* h = (Hazard*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(h->associatedLiquid) {
@@ -2208,9 +2214,9 @@ void LeaderFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     MovementInfo* mov = (MovementInfo*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-
+    
     Point finalCoords;
     float dummyAngle;
     float dummyMagnitude;
@@ -2238,7 +2244,7 @@ void LeaderFsm::notifyPikminRelease(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
     heldPtr->scriptVM.fsm.runEvent(MOB_EV_RELEASED);
@@ -2254,7 +2260,7 @@ void LeaderFsm::notifyPikminRelease(
  */
 void LeaderFsm::openInventory(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(!leaPtr->player) return;
     leaPtr->player->inventory->open();
 }
@@ -2287,7 +2293,7 @@ void LeaderFsm::queueStopAutoPluck(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->queuedPluckCancel = true;
 }
 
@@ -2304,7 +2310,7 @@ void LeaderFsm::release(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Mob* heldPtr = leaPtr->getMobHeldInHand();
     if(!heldPtr) return;
-
+    
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
     heldPtr->pos = leaPtr->pos;
@@ -2333,7 +2339,7 @@ void LeaderFsm::searchSeed(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
-            scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
+        scriptVM->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) newPikmin);
     }
 }
 
@@ -2383,7 +2389,7 @@ void LeaderFsm::setIsTurningFalse(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = false;
         LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
@@ -2400,7 +2406,7 @@ void LeaderFsm::setIsTurningFalse(
  */
 void LeaderFsm::setIsTurningTrue(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(!leaPtr->isActiveTurning) {
         leaPtr->isActiveTurning = true;
         LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
@@ -2419,7 +2425,7 @@ void LeaderFsm::setIsWalkingFalse(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = false;
         LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
@@ -2436,7 +2442,7 @@ void LeaderFsm::setIsWalkingFalse(
  */
 void LeaderFsm::setIsWalkingTrue(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(!leaPtr->isActiveWalking) {
         leaPtr->isActiveWalking = true;
         LeaderFsm::trySetCorrectStandingAnim(scriptVM, info1, info2);
@@ -2485,7 +2491,7 @@ void LeaderFsm::signalStopAutoPluck(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
@@ -2505,7 +2511,7 @@ void LeaderFsm::signalStopAutoPluck(
 void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     size_t sprayIdx = *((size_t*) info1);
-
+    
     SprayType& sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
     
     if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
@@ -2515,7 +2521,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     
     float shootAngle =
         leaPtr->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
-    
+        
     unordered_set<Mob*> affectedMobs;
     if(sprayTypeRef.affectsUser) {
         affectedMobs.insert(leaPtr);
@@ -2601,6 +2607,11 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->particleGenerators.push_back(pg);
     
     game.states.gameplay->changeSprayCount(leaPtr->player->team, sprayIdx, -1);
+    game.states.gameplay->showInventoryUpdateDisplay(
+        leaPtr->player->team,
+        game.config.misc.sprayOrder[sprayIdx]->manifest->internalName,
+        -1
+    );
     
     leaPtr->stopChasing();
     leaPtr->setAnimation(LEADER_ANIM_SPRAYING);
@@ -2688,7 +2699,7 @@ void LeaderFsm::startChasingLeader(
 void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* droPtr = (Mob*) info1;
-
+    
     leaPtr->leaveGroup();
     leaPtr->stopChasing();
     leaPtr->focusOnMob(droPtr);
@@ -2758,7 +2769,7 @@ void LeaderFsm::startGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::startPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     engineAssert(
         leaPtr->pluckTarget != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
@@ -2822,7 +2833,7 @@ void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
     
     if(leaPtr->leaType->sleepingStatus) {
@@ -2845,7 +2856,7 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::stopAutoPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     if(leaPtr->pluckTarget) {
         leaPtr->stopChasing();
         leaPtr->pluckTarget->pluckReserved = false;
@@ -2881,7 +2892,7 @@ void LeaderFsm::stopBeingThrown(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::stopGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->stopFollowingPath();
     leaPtr->midGoHere = false;
 }
@@ -2928,7 +2939,7 @@ void LeaderFsm::stopWhistle(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void LeaderFsm::tickActiveState(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     leaPtr->face(
         getAngle(leaPtr->pos, leaPtr->player->leaderCursorWorld), nullptr
     );
@@ -2979,7 +2990,7 @@ void LeaderFsm::tickTrackRide(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Hazard* hazPtr = (Hazard*) info1;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     HitboxInteraction* hitboxInfo = (HitboxInteraction*) info2;
@@ -3036,7 +3047,7 @@ void LeaderFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
-
+    
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     for(size_t e = 0; e < s->effects.size(); e++) {
@@ -3057,7 +3068,7 @@ void LeaderFsm::trySetCorrectStandingAnim(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     size_t walkAnimIdx =
         leaPtr->anim.animDb->preNamedConversions[LEADER_ANIM_WALKING];
     size_t idleAnimIdx =
@@ -3089,7 +3100,7 @@ void LeaderFsm::updateInGroupChasing(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
-
+    
     Point targetPos;
     float targetDist;
     
@@ -3131,7 +3142,7 @@ void LeaderFsm::whistledWhileRiding(
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     Track* traPtr = (Track*) (leaPtr->trackInfo->m);
-
+    
     engineAssert(leaPtr->trackInfo, scriptVM->fsm.getStateHistoryStr());
     
     if(!traPtr->traType->cancellableWithWhistle) {

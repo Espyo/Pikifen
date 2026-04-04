@@ -58,14 +58,10 @@ void GameplayState::doPlayerActionInventoryShortcut(
     if(!isDown) return;
     if(!player->leaderPtr) return;
     if(player->leaderPtr->hasOpponentPikminLatched()) return;
-    if(game.options.controls.inventoryShortcuts[0][shortcutIdx].empty()) return;
+    string itemIName = game.options.controls.inventoryShortcuts[0][shortcutIdx];
+    if(itemIName.empty()) return;
     
-    player->inventory->useShortcut(
-        game.options.controls.inventoryShortcuts[0][shortcutIdx]
-    );
-    player->inventoryShortcutDisplayIdx = shortcutIdx;
-    player->inventoryShortcutDisplayTimer =
-        DRAWING::INVENTORY_SHORTCUT_DISPLAY_DURATION;
+    player->inventory->useShortcut(itemIName);
 }
 
 
@@ -451,7 +447,7 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(isDown) {
         FsmEventDef* cancelEv =
             player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_CANCEL);
-        
+            
         if(cancelEv && !player->inventory->isOpen) {
             //Cancel auto-pluck, lying down, etc.
             cancelEv->run(&player->leaderPtr->scriptVM);
