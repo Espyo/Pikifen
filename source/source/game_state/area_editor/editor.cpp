@@ -230,7 +230,61 @@ AreaEditor::AreaEditor() :
     mobSelection.overlapsCycle = true;
     mobSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
     mobSelection.twTransformRule = SelectionManager::OP_RULE_MULTIPLE_ITEMS;
-    mobSelection.clickingSelectedUnselectsOthers = false;
+    mobSelection.clickingSelectedUnselectsOthers = true;
+    
+    shadowSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
+        *outCenter = game.curArea->treeShadows[idx]->pose.pos;
+        *outSize = game.curArea->treeShadows[idx]->pose.size;
+    };
+    shadowSelection.onSetInfo =
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        game.curArea->treeShadows[idx]->pose.pos = newCenter;
+        game.curArea->treeShadows[idx]->pose.size = newSize;
+    };
+    shadowSelection.onGetTotal =
+    [this] () {
+        return game.curArea->treeShadows.size();
+    };
+    shadowSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_DETAILS;
+    };
+    shadowSelection.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    shadowSelection.itemsAreRectangular = true;
+    shadowSelection.itemsCanResize = true;
+    shadowSelection.overlapsCycle = true;
+    shadowSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
+    shadowSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
+    shadowSelection.clickingSelectedUnselectsOthers = true;
+    
+    regionSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize) {
+        *outCenter = game.curArea->regions[idx]->center;
+        *outSize = game.curArea->regions[idx]->size;
+    };
+    regionSelection.onSetInfo =
+    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        game.curArea->regions[idx]->center = newCenter;
+        game.curArea->regions[idx]->size = newSize;
+    };
+    regionSelection.onGetTotal =
+    [this] () {
+        return game.curArea->regions.size();
+    };
+    regionSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_DETAILS;
+    };
+    regionSelection.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    regionSelection.itemsAreRectangular = true;
+    regionSelection.itemsCanResize = true;
+    regionSelection.overlapsCycle = true;
+    regionSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
+    regionSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
+    regionSelection.clickingSelectedUnselectsOthers = true;
     
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize) {
@@ -348,8 +402,10 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
     registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
     newRegion->size = MISSION::EXIT_MIN_SIZE;
-    insertInVector(game.curArea->regions, selectedRegionIdx, newRegion);
-    selectRegion(newRegion);
+    size_t selectedRegionIdx = regionSelection.getFirstItemIdx();
+    selectedRegionIdx =
+        insertInVector(game.curArea->regions, selectedRegionIdx, newRegion);
+    regionSelection.setSingle(selectedRegionIdx);
     setStatus("Created region #" + i2s(selectedRegionIdx + 1) + ".");
 }
 
@@ -462,11 +518,17 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     setStatus();
     
     mobSelection.disable();
+    shadowSelection.disable();
+    regionSelection.disable();
     reminderSelection.disable();
     
     switch(newState) {
     case EDITOR_STATE_MOBS: {
         mobSelection.enable();
+        break;
+    } case EDITOR_STATE_DETAILS: {
+        shadowSelection.enable();
+        regionSelection.enable();
         break;
     } case EDITOR_STATE_REVIEW: {
         reminderSelection.enable();
@@ -630,10 +692,8 @@ void AreaEditor::clearSelection() {
     mobSelection.clear();
     selectedPathStops.clear();
     selectedPathLinks.clear();
-    selectedShadow = nullptr;
-    selectedShadowIdx = INVALID;
-    selectedRegion = nullptr;
-    selectedRegionIdx = INVALID;
+    shadowSelection.clear();
+    regionSelection.clear();
     reminderSelection.clear();
     selectionHomogenized = false;
     setSelectionStatusText();
@@ -1035,7 +1095,8 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     
     //Prepare everything.
     registerChange("object deletion");
-    size_t nBefore = game.curArea->mobGenerators.size();
+    size_t singleDeletionIdx = mobSelection.getSingleItemIdx();
+    size_t nDeletions = mobSelection.getCount();
     
     //Delete!
     deleteMobs();
@@ -1047,11 +1108,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     //Report.
     setStatus(
         "Deleted " +
-        amountStr(
-            (int) (nBefore - game.curArea->mobGenerators.size()),
-            "object"
-        ) +
-        "."
+        getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "object") + "."
     );
 }
 
@@ -1114,33 +1171,33 @@ void AreaEditor::deletePathCmd(float inputValue) {
 void AreaEditor::deleteRegionCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
+    //Check if the user can delete.
     if(moving || selecting) {
         return;
     }
     
-    if(!selectedRegion) {
-        setStatus("You have to select a region to delete!", true);
-    } else {
-        registerChange("region deletion");
-        game.curArea->regions.erase(
-            game.curArea->regions.begin() + selectedRegionIdx
-        );
-        for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
-            MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
-            if(!ePtr->usesMetric()) continue;
-            if(ePtr->metricType != MISSION_METRIC_LEADERS_IN_REGION) {
-                continue;
-            }
-            if(ePtr->idxParam == 0) continue;
-            adjustMisalignedIndex(
-                ePtr->idxParam, selectedRegionIdx, false
-            );
-        }
-        setStatus("Deleted region #" + i2s(selectedRegionIdx + 1) + ".");
-        delete selectedRegion;
-        selectedRegion = nullptr;
-        selectedRegionIdx = INVALID;
+    if(!regionSelection.hasAny()) {
+        setStatus("You have to select regions to delete!", true);
+        return;
     }
+    
+    //Prepare everything.
+    registerChange("region deletion");
+    size_t singleDeletionIdx = regionSelection.getSingleItemIdx();
+    size_t nDeletions = regionSelection.getCount();
+    
+    //Delete!
+    deleteRegions();
+    
+    //Cleanup.
+    clearSelection();
+    subState = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "region") + "."
+    );
 }
 
 
@@ -1186,22 +1243,35 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
 void AreaEditor::deleteTreeShadowCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
+    //Check if the user can delete.
     if(moving || selecting) {
         return;
     }
     
-    if(!selectedShadow) {
-        setStatus("You have to select a shadow to delete!", true);
-    } else {
-        registerChange("tree shadow deletion");
-        game.curArea->treeShadows.erase(
-            game.curArea->treeShadows.begin() + selectedShadowIdx
-        );
-        setStatus("Deleted tree shadow #" + i2s(selectedShadowIdx + 1) + ".");
-        delete selectedShadow;
-        selectedShadow = nullptr;
-        selectedShadowIdx = INVALID;
+    if(!shadowSelection.hasAny()) {
+        setStatus("You have to select tree shadows to delete!", true);
+        return;
     }
+    
+    //Prepare everything.
+    registerChange("tree shadow deletion");
+    size_t singleDeletionIdx = shadowSelection.getSingleItemIdx();
+    size_t nDeletions = shadowSelection.getCount();
+    
+    //Delete!
+    deleteTreeShadows();
+    
+    //Cleanup.
+    clearSelection();
+    subState = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        getAmountOrIdxDescription(
+            singleDeletionIdx, nDeletions, "tree shadow"
+        ) + "."
+    );
 }
 
 
@@ -2222,7 +2292,9 @@ void AreaEditor::goToProblem() {
         );
         
         changeState(EDITOR_STATE_DETAILS);
-        selectTreeShadow(problemShadowPtr);
+        shadowSelection.setSingle(
+            game.curArea->findTreeShadowIdx(problemShadowPtr)
+        );
         centerCamera(minCoords, maxCoords);
         
         break;
@@ -2383,10 +2455,6 @@ void AreaEditor::load() {
     //Misc. setup.
     lastMobCustomCatName.clear();
     lastMobType = nullptr;
-    selectedShadow = nullptr;
-    selectedShadowIdx = INVALID;
-    selectedRegion = nullptr;
-    selectedRegionIdx = INVALID;
     selectionEffect = 0.0;
     selectionHomogenized = false;
     showClosestStop = false;
@@ -3165,6 +3233,10 @@ void AreaEditor::selectAllCmd(float inputValue) {
                 game.curArea->pathStops.begin(),
                 game.curArea->pathStops.end()
             );
+        } else if(state == EDITOR_STATE_DETAILS) {
+            shadowSelection.addAll(game.curArea->treeShadows.size());
+            regionSelection.addAll(game.curArea->regions.size());
+            
         }
         
         updateVertexSelection();
@@ -3258,23 +3330,6 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
 
 
 /**
- * @brief Selects an area region.
- *
- * @param rPtr Region to select.
- */
-void AreaEditor::selectRegion(AreaRegion* rPtr) {
-    selectedRegion = rPtr;
-    selectedRegionIdx = INVALID;
-    for(size_t r = 0; r < game.curArea->regions.size(); r++) {
-        if(game.curArea->regions[r] == selectedRegion) {
-            selectedRegionIdx = r;
-        }
-    }
-    setSelectionStatusText();
-}
-
-
-/**
  * @brief Selects a sector and its edges and vertexes.
  *
  * @param s Sector to select.
@@ -3284,23 +3339,6 @@ void AreaEditor::selectSector(Sector* s) {
     selectedSectors.insert(s);
     for(size_t e = 0; e < s->edges.size(); e++) {
         selectEdge(s->edges[e]);
-    }
-    setSelectionStatusText();
-}
-
-
-/**
- * @brief Selects a tree shadow.
- *
- * @param sPtr Tree shadow to select.
- */
-void AreaEditor::selectTreeShadow(TreeShadow* sPtr) {
-    selectedShadow = sPtr;
-    selectedShadowIdx = INVALID;
-    for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
-        if(game.curArea->treeShadows[s] == selectedShadow) {
-            selectedShadowIdx = s;
-        }
     }
     setSelectionStatusText();
 }
@@ -3419,8 +3457,10 @@ void AreaEditor::setSelectionStatusText() {
         if(mobSelection.hasAny()) {
             setStatus(
                 "Selected " +
-                amountStr((int) mobSelection.getCount(), "object") +
-                "."
+                getAmountOrIdxDescription(
+                    mobSelection.getSingleItemIdx(),
+                    mobSelection.getCount(), "object"
+                ) + "."
             );
         }
         break;
@@ -3451,10 +3491,22 @@ void AreaEditor::setSelectionStatusText() {
         break;
         
     } case EDITOR_STATE_DETAILS: {
-        if(selectedShadow) {
-            setStatus("Selected a tree shadow.");
-        } else if(selectedRegion) {
-            setStatus("Selected a region.");
+        if(shadowSelection.hasAny()) {
+            setStatus(
+                "Selected " +
+                getAmountOrIdxDescription(
+                    shadowSelection.getSingleItemIdx(),
+                    shadowSelection.getCount(), "tree shadow"
+                ) + "."
+            );
+        } else if(regionSelection.hasAny()) {
+            setStatus(
+                "Selected " +
+                getAmountOrIdxDescription(
+                    regionSelection.getSingleItemIdx(),
+                    regionSelection.getCount(), "region"
+                ) + "."
+            );
         }
         break;
         

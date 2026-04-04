@@ -619,6 +619,51 @@ void AreaEditor::deletePathStops(const set<PathStop*>& which) {
 
 
 /**
+ * @brief Deletes the currently-selected regions.
+ */
+void AreaEditor::deleteRegions() {
+    const set<size_t>& selectedRegions = regionSelection.getItemIdxs();
+    
+    for(auto const& regIdx : selectedRegions) {
+        //Update end conditions.
+        for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
+            MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
+            if(!ePtr->usesMetric()) continue;
+            if(ePtr->metricType != MISSION_METRIC_LEADERS_IN_REGION) {
+                continue;
+            }
+            if(ePtr->idxParam == 0) continue;
+            adjustMisalignedIndex(
+                ePtr->idxParam, regIdx, false
+            );
+        }
+        
+        //Delete it.
+        delete game.curArea->regions[regIdx];
+    }
+    
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedRegions, game.curArea->regions);
+}
+
+
+/**
+ * @brief Deletes the currently-selected tree shadows.
+ */
+void AreaEditor::deleteTreeShadows() {
+    const set<size_t>& selectedShadows = shadowSelection.getItemIdxs();
+    
+    for(auto const& regIdx : selectedShadows) {
+        //Delete it.
+        delete game.curArea->treeShadows[regIdx];
+    }
+    
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedShadows, game.curArea->treeShadows);
+}
+
+
+/**
  * @brief Tries to find a good texture for the first sector in a
  * newly-created area.
  *

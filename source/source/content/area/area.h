@@ -322,6 +322,7 @@ struct Area : public Content {
     size_t findMobGenIdx(const MobGen* mPtr) const;
     size_t findSectorIdx(const Sector* sPtr) const;
     size_t findVertexIdx(const Vertex* vPtr) const;
+    size_t findTreeShadowIdx(const TreeShadow* sPtr) const;
     void fixEdgeIdxs(Edge* ePtr);
     void fixEdgePointers(Edge* ePtr);
     void fixPathStopIdxs(PathStop* sPtr);

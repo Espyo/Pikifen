@@ -791,20 +791,14 @@ private:
     //Currently selected sectors.
     set<Sector*> selectedSectors;
     
-    //Currently selected tree shadow.
-    TreeShadow* selectedShadow = nullptr;
-    
-    //Currently selected tree shadow's index.
-    size_t selectedShadowIdx = INVALID;
-    
-    //Currently selected region.
-    AreaRegion* selectedRegion = nullptr;
-    
-    //Currently selected region's index.
-    size_t selectedRegionIdx = INVALID;
-    
     //Selection manager for the mob generators.
     SelectionManager mobSelection;
+    
+    //Selection manager for the tree shadows.
+    SelectionManager shadowSelection;
+    
+    //Selection manager for the regions.
+    SelectionManager regionSelection;
     
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
@@ -968,6 +962,8 @@ private:
     void deleteMobs();
     void deletePathLinks(const set<PathLink*>& which);
     void deletePathStops(const set<PathStop*>& which);
+    void deleteRegions();
+    void deleteTreeShadows();
     void doSectorSplit();
     void emitTriangulationErrorStatusBarMessage(
         const TRIANGULATION_ERROR error
@@ -1093,9 +1089,7 @@ private:
     void saveReference();
     void selectEdge(Edge* ePtr);
     void selectPathStopsWithLabel(const string& label);
-    void selectRegion(AreaRegion* rPtr);
     void selectSector(Sector* sPtr);
-    void selectTreeShadow(TreeShadow* sPtr);
     void selectVertex(Vertex* vPtr);
     void setNewCircleSectorPoints();
     void setSelectionStatusText();

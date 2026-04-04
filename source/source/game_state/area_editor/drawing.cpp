@@ -278,7 +278,7 @@ void AreaEditor::drawCanvas() {
         const ALLEGRO_COLOR POINT_BG_COLOR = al_map_rgb(255, 255, 32);
         const ALLEGRO_COLOR POINT_TEXT_COLOR = al_map_rgb(0, 64, 64);
         const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(255, 0, 0);
-
+        
         for(unsigned char p = 0; p < 2; p++) {
             string letter = (p == 0 ? "A" : "B");
             float radius =
@@ -339,7 +339,7 @@ void AreaEditor::drawCanvas() {
     //Sector drawing.
     if(subState == EDITOR_SUB_STATE_DRAWING) {
         const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
-
+        
         for(size_t n = 1; n < drawingNodes.size(); n++) {
             al_draw_line(
                 drawingNodes[n - 1].snappedSpot.x,
@@ -376,7 +376,7 @@ void AreaEditor::drawCanvas() {
     //New circular sector drawing.
     if(subState == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(255, 0, 0);
-
+        
         switch(newCircleSectorStep) {
         case 1: {
             float circleRadius =
@@ -560,7 +560,7 @@ void AreaEditor::drawCanvas() {
 void AreaEditor::drawCrossSectionGraph() {
     const ALLEGRO_COLOR DEF_BG_COLOR = al_map_rgb(0, 0, 64);
     const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(160, 96, 96);
-
+    
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
     
         Distance crossSectionWorldLength(
@@ -848,7 +848,7 @@ void AreaEditor::drawCrossSectionSector(
 ) {
     const ALLEGRO_COLOR DEF_SECTOR_COLOR = al_map_rgb(0, 64, 0);
     const ALLEGRO_COLOR LINE_COLOR = al_map_rgb(192, 192, 192);
-
+    
     float rectangleX1 =
         crossSectionWindowStart.x +
         (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
@@ -904,7 +904,7 @@ void AreaEditor::drawDebugText(
 ) {
     const ALLEGRO_COLOR BG_COLOR = al_map_rgba(0, 0, 0, 128);
     const ALLEGRO_COLOR DOT_BG_COLOR = al_map_rgba(0, 0, 0, 128);
-
+    
     int dox = 0;
     int doy = 0;
     int dw = 0;
@@ -981,7 +981,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR DEBUG_SECTOR_A_COLOR = al_map_rgb(216, 224, 128);
     const ALLEGRO_COLOR DEBUG_SECTOR_B_COLOR = al_map_rgb(128, 224, 160);
     const ALLEGRO_COLOR DEBUG_EDGE_IDX_COLOR = al_map_rgb(255, 192, 192);
-
+    
     size_t nEdges = game.curArea->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
         Edge* ePtr = game.curArea->edges[e];
@@ -1202,7 +1202,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR ANGLE_ARROW_COLOR = COLOR_BLACK;
     const ALLEGRO_COLOR TERRITORY_COLOR = al_map_rgb(240, 240, 192);
     const ALLEGRO_COLOR TERRAIN_RADIUS_COLOR = al_map_rgb(240, 192, 192);
-
+    
     //Links and stores.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
         for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
@@ -1219,7 +1219,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 
                 bool isM2Selected = mobSelection.contains(mPtr->linkIdxs[l]);
                 bool showLink = isSelected || isM2Selected;
-                    
+                
                 if(showLink) {
                     drawArrow(
                         mPtr->pos, m2Ptr->pos,
@@ -1237,7 +1237,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 
                 bool isM2Selected = mobSelection.contains(mPtr->storedInside);
                 bool showStore = isSelected || isM2Selected;
-                    
+                
                 if(showStore) {
                     drawArrow(
                         mPtr->pos, m2Ptr->pos,
@@ -1383,7 +1383,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         }
         
     }
-
+    
     drawSelectionAndTransformationThings(
         mobSelection, curTransformationWidget
     );
@@ -1409,7 +1409,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR PREVIEW_INVALID_COLOR = al_map_rgb(221, 17, 17);
     const ALLEGRO_COLOR PREVIEW_CP_BG_COLOR = al_map_rgb(240, 224, 160);
     const ALLEGRO_COLOR PREVIEW_CP_TEXT_COLOR = al_map_rgb(0, 64, 64);
-            
+    
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
         for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
@@ -1684,7 +1684,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  */
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR REGION_BG_COLOR = al_map_rgb(128, 128, 64);
-
+    
     if(state == EDITOR_STATE_DETAILS) {
         for(size_t r = 0; r < game.curArea->regions.size(); r++) {
             AreaRegion* rPtr = game.curArea->regions[r];
@@ -1699,14 +1699,9 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
             );
         }
         
-        if(selectedRegion) {
-            curTransformationWidget.draw(
-                &selectedRegion->center,
-                &selectedRegion->size,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
-            );
-        }
+        drawSelectionAndTransformationThings(
+            regionSelection, curTransformationWidget
+        );
     }
 }
 
@@ -1718,7 +1713,7 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
  */
 void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR REMINDER_BG_COLOR = al_map_rgb(128, 128, 64);
-
+    
     if(state == EDITOR_STATE_REVIEW) {
         for(size_t r = 0; r < game.curArea->reminders.size(); r++) {
             AreaMakerReminder* rPtr = &game.curArea->reminders[r];
@@ -1914,7 +1909,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
  */
 void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR SHADOW_BG_COLOR = al_map_rgb(128, 128, 64);
-
+    
     if(
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
@@ -1922,10 +1917,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
         for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
         
             TreeShadow* sPtr = game.curArea->treeShadows[s];
-            if(
-                !previewMode &&
-                sPtr == selectedShadow
-            ) {
+            if(!previewMode && shadowSelection.contains(s)) {
                 //Draw a white rectangle to contrast the shadow better.
                 ALLEGRO_TRANSFORM tra, current;
                 al_identity_transform(&tra);
@@ -1960,7 +1952,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                     &minCoords, &maxCoords
                 );
                 
-                if(selectedShadow != sPtr) {
+                if(!shadowSelection.contains(s)) {
                     al_draw_rectangle(
                         minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
                         SHADOW_BG_COLOR,
@@ -1969,15 +1961,11 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                 }
             }
         }
-        if(selectedShadow) {
-            curTransformationWidget.draw(
-                &selectedShadow->pose.pos,
-                &selectedShadow->pose.size,
-                &selectedShadow->pose.angle,
-                1.0f / game.editorsView.cam.zoom
-            );
-        }
     }
+    
+    drawSelectionAndTransformationThings(
+        shadowSelection, curTransformationWidget
+    );
 }
 
 
@@ -1990,7 +1978,7 @@ void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR INVALID_COLOR = al_map_rgb(192, 32, 32);
     const ALLEGRO_COLOR NORMAL_COLOR = al_map_rgb(80, 160, 255);
     const ALLEGRO_COLOR DEBUG_COLOR = al_map_rgb(192, 192, 255);
-
+    
     if(state == EDITOR_STATE_LAYOUT) {
         size_t nVertexes = game.curArea->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {

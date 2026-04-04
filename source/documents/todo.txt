@@ -1,13 +1,16 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-
+    if a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
+    https://github.com/Espyo/Pikifen/pull/91
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
         Add it to the layout, paths, and details area editor states
+        Add logic for when two managers compete with each other
+        Add rotation logic
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
-        Ctrl+A, Delete, unselecting with Ctrl, etc.
+        Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob
         Some selected things become solid yellow, others an oscillating yellow, others no yellow
 

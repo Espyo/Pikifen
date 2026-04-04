@@ -530,10 +530,12 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         
         TreeShadow* newShadow = new TreeShadow(hotspot);
         newShadow->bitmap = game.bmpError;
-        
-        insertInVector(game.curArea->treeShadows, selectedShadowIdx, newShadow);
-        
-        selectTreeShadow(newShadow);
+        size_t selectedShadowIdx = shadowSelection.getFirstItemIdx();
+        selectedShadowIdx =
+            insertInVector(
+                game.curArea->treeShadows, selectedShadowIdx, newShadow
+            );
+        shadowSelection.setSingle(selectedShadowIdx);
         setStatus(
             "Created tree shadow #" + i2s(selectedShadowIdx + 1) + "."
         );
@@ -542,76 +544,18 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_SUB_STATE_NONE: {
 
-        bool twHandled = false;
-        if(selectedShadow) {
-            twHandled =
-                curTransformationWidget.handleMouseDown(
-                    game.editorsView.mouseCursorWorldPos,
-                    &selectedShadow->pose.pos,
-                    &selectedShadow->pose.size,
-                    &selectedShadow->pose.angle,
-                    1.0f / game.editorsView.cam.zoom
-                );
-        } else if(selectedRegion) {
-            twHandled =
-                curTransformationWidget.handleMouseDown(
-                    game.editorsView.mouseCursorWorldPos,
-                    &selectedRegion->center,
-                    &selectedRegion->size,
-                    nullptr,
-                    1.0f / game.editorsView.cam.zoom
-                );
-        }
+        handleSelectionAndTransformationLmbDown(
+            shadowSelection, curTransformationWidget
+        );
         
-        if(!twHandled) {
-            //Select a tree shadow.
-            selectedShadow = nullptr;
-            selectedShadowIdx = INVALID;
-            for(
-                size_t s = 0;
-                s < game.curArea->treeShadows.size(); s++
-            ) {
-            
-                TreeShadow* sPtr = game.curArea->treeShadows[s];
-                Point minCoords, maxCoords;
-                getTransformedRectangleBBox(
-                    sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
-                    &minCoords, &maxCoords
-                );
-                
-                if(
-                    game.editorsView.mouseCursorWorldPos.x >= minCoords.x &&
-                    game.editorsView.mouseCursorWorldPos.x <= maxCoords.x &&
-                    game.editorsView.mouseCursorWorldPos.y >= minCoords.y &&
-                    game.editorsView.mouseCursorWorldPos.y <= maxCoords.y
-                ) {
-                    selectTreeShadow(sPtr);
-                    break;
-                }
-            }
-            
-            //Select a region.
-            selectedRegion = nullptr;
-            selectedRegionIdx = INVALID;
-            for(size_t r = 0; r < game.curArea->regions.size(); r++) {
-            
-                AreaRegion* rPtr = game.curArea->regions[r];
-                Point minCoords = rPtr->center - rPtr->size / 2.0f;
-                Point maxCoords = rPtr->center + rPtr->size / 2.0f;
-                
-                if(
-                    game.editorsView.mouseCursorWorldPos.x >= minCoords.x &&
-                    game.editorsView.mouseCursorWorldPos.x <= maxCoords.x &&
-                    game.editorsView.mouseCursorWorldPos.y >= minCoords.y &&
-                    game.editorsView.mouseCursorWorldPos.y <= maxCoords.y
-                ) {
-                    selectRegion(rPtr);
-                    break;
-                }
-            }
-            
-            setSelectionStatusText();
-        }
+        shadowSelection.setHomogenized(false);
+        
+        handleSelectionAndTransformationLmbDown(
+            regionSelection, curTransformationWidget
+        );
+        
+        regionSelection.setHomogenized(false);
+        setSelectionStatusText();
         
         break;
         
@@ -1650,57 +1594,16 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             
         } case EDITOR_STATE_DETAILS: {
     
-            if(
-                selectedShadow &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move tree shadow.
-                Point shadowCenter = selectedShadow->pose.pos;
-                Point shadowSize = selectedShadow->pose.size;
-                float shadowAngle = selectedShadow->pose.angle;
-                if(
-                    curTransformationWidget.handleMouseMove(
-                        snapPoint(game.editorsView.mouseCursorWorldPos),
-                        &shadowCenter,
-                        &shadowSize,
-                        &shadowAngle,
-                        1.0f / game.editorsView.cam.zoom,
-                        selectedShadowKeepAspectRatio,
-                        false,
-                        -FLT_MAX,
-                        isAltPressed
-                    )
-                ) {
-                    registerChange("tree shadow transformation");
-                    selectedShadow->pose.pos = shadowCenter;
-                    selectedShadow->pose.size = shadowSize;
-                    selectedShadow->pose.angle = shadowAngle;
-                }
-            } else if(
-                selectedRegion &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move region.
-                Point regionCenter = selectedRegion->center;
-                Point regionSize = selectedRegion->size;
-                if(
-                    curTransformationWidget.handleMouseMove(
-                        snapPoint(game.editorsView.mouseCursorWorldPos),
-                        &regionCenter,
-                        &regionSize,
-                        nullptr,
-                        1.0f / game.editorsView.cam.zoom,
-                        false,
-                        false,
-                        -FLT_MAX,
-                        isAltPressed
-                    )
-                ) {
-                    registerChange("region transformation");
-                    selectedRegion->center = regionCenter;
-                    selectedRegion->size = regionSize;
-                }
-            }
+            handleSelectionAndTransformationLmbDrag(
+                shadowSelection, curTransformationWidget,
+                snapPoint(game.editorsView.mouseCursorWorldPos),
+                [this] { registerChange("tree shadow movement"); }
+            );
+            handleSelectionAndTransformationLmbDrag(
+                regionSelection, curTransformationWidget,
+                snapPoint(game.editorsView.mouseCursorWorldPos),
+                [this] { registerChange("region movement"); }
+            );
             
             break;
             
@@ -1764,6 +1667,12 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     curTransformationWidget.handleMouseUp();
     handleSelectionAndTransformationLmbUp(
         mobSelection, curTransformationWidget
+    );
+    handleSelectionAndTransformationLmbUp(
+        shadowSelection, curTransformationWidget
+    );
+    handleSelectionAndTransformationLmbUp(
+        regionSelection, curTransformationWidget
     );
     handleSelectionAndTransformationLmbUp(
         reminderSelection, curTransformationWidget

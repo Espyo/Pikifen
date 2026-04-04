@@ -702,6 +702,21 @@ size_t Area::findVertexIdx(const Vertex* vPtr) const {
 
 
 /**
+ * @brief Scans the list of tree shadows and retrieves the index of
+ * the specified tree shadow.
+ *
+ * @param sPtr Shadow to find.
+ * @return The index, or INVALID if not found.
+ */
+size_t Area::findTreeShadowIdx(const TreeShadow* sPtr) const {
+    for(size_t s = 0; s < treeShadows.size(); s++) {
+        if(treeShadows[s] == sPtr) return s;
+    }
+    return INVALID;
+}
+
+
+/**
  * @brief Fixes the sector and vertex indexes in an edge,
  * making them match the correct sectors and vertexes,
  * based on the existing sector and vertex pointers.

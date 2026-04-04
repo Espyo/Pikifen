@@ -1124,6 +1124,30 @@ void Editor::handleSelectionAndTransformationLmbUp(
 
 
 /**
+ * @brief Returns a string describing either an individual item's index,
+ * or the total amount of multiple items. Useful for things like the status bar.
+ *
+ * @param singleIdx Index of the single item, 0-indexed.
+ * INVALID if there are 0 or multiple items.
+ * @param amount Amount of items.
+ * @param singularTerm Term that designates the items, in singular.
+ * @param pluralTerm If the term in plural is different from the term in
+ * singular plus an 's', specify it here.
+ * @return The string.
+ */
+string Editor::getAmountOrIdxDescription(
+    size_t singleIdx, size_t amount,
+    const string& singularTerm, const string& pluralTerm
+) const {
+    if(singleIdx != INVALID && amount == 1) {
+        return singularTerm + " #" + i2s(singleIdx + 1);
+    } else {
+        return amountStr((int) amount, singularTerm, pluralTerm);
+    }
+}
+
+
+/**
  * @brief Returns whether a given internal name is good or not.
  *
  * @param name The internal name to check.
@@ -2889,7 +2913,7 @@ void Editor::processGuiNavBoxSecondLine(size_t nrItems) {
 /**
  * @brief Processes the start of a typical navigation box.
  *
- * @param widgetsPrefix Prefix to place before any widgets relevant
+ * @param widgetsPrefix Prefix to place before the name of any widgets relevant
  * to the nav box.
  * @param itemsTerm Term that designates the items of the list, in singular.
  * @param itemsTermPlural If the term in plural is different from the singular
@@ -3587,7 +3611,7 @@ bool Editor::saveableTreeNode(const string& category, const string& label) {
 
 
 /**
- * @brief Sets the status bar, and notifies the user of an error,
+ * @brief Sets the status bar's text, and notifies the user of an error,
  * if it is an error, by flashing the text.
  *
  * @param text Text to put in the status bar.

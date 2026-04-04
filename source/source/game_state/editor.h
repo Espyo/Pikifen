@@ -1187,4 +1187,8 @@ protected:
     void handleSelectionAndTransformationLmbUp(
         SelectionManager& selMgr, TransformationWidget& traWid
     );
+    string getAmountOrIdxDescription(
+        size_t singleIdx, size_t amount,
+        const string& singularTerm, const string& pluralTerm = ""
+    ) const;
 };

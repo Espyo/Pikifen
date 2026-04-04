@@ -1417,21 +1417,17 @@ void AreaEditor::processGuiPanelDetails() {
         //Tree shadows node.
         if(saveableTreeNode("details", "Tree shadows")) {
         
-            //Setup.
-            processGuiNavSetup(
-                &selectedShadowIdx, game.curArea->treeShadows.size(), true
-            );
-            
             //Nav box start.
+            size_t curShadowIdx = shadowSelection.getSingleItemIdx();
             processGuiNavBoxStart(
-                "shadow", "Tree shadow", "", &selectedShadowIdx,
+                "shadow", "Tree shadow", "", &curShadowIdx,
             [this] () { return game.curArea->treeShadows.size(); },
-            [this] () { return 1; }
+            [this] () { return shadowSelection.getCount(); }
             );
             
             //Previous shadow button.
             if(processGuiNavBoxPrev()) {
-                selectedShadow = game.curArea->treeShadows[selectedShadowIdx];
+                shadowSelection.setSingle(curShadowIdx);
             }
             
             //Current shadow text.
@@ -1439,7 +1435,7 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Next shadow button.
             if(processGuiNavBoxNext()) {
-                selectedShadow = game.curArea->treeShadows[selectedShadowIdx];
+                shadowSelection.setSingle(curShadowIdx);
             }
             
             //Nav box second line setup.
@@ -1448,7 +1444,7 @@ void AreaEditor::processGuiPanelDetails() {
             //New shadow button.
             if(
                 processGuiNavWidgetNew(
-                    &selectedShadowIdx, game.curArea->treeShadows.size()
+                    &curShadowIdx, game.curArea->treeShadows.size()
                 )
             ) {
                 addNewTreeShadowCmd(1.0f);
@@ -1461,14 +1457,12 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Delete shadow button.
             ImGui::SameLine();
-            if(selectedShadowIdx != INVALID) {
-                size_t prevSelectedShadowIdx = selectedShadowIdx;
+            if(shadowSelection.getCount() > 0) {
                 if(
                     processGuiNavWidgetDel(
-                        &selectedShadowIdx, game.curArea->treeShadows.size()
+                        &curShadowIdx, game.curArea->treeShadows.size()
                     )
                 ) {
-                    selectedShadowIdx = prevSelectedShadowIdx;
                     deleteTreeShadowCmd(1.0f);
                 }
                 setTooltip(
@@ -1482,24 +1476,28 @@ void AreaEditor::processGuiPanelDetails() {
             //End the nav box.
             processGuiNavBoxEnd();
             
-            if(selectedShadow) {
-            
+            if(shadowSelection.hasOne()) {
+                TreeShadow* curShadow =
+                    game.curArea->treeShadows[
+                        shadowSelection.getSingleItemIdx()
+                    ];
+                    
                 //Choose the tree shadow image button.
                 if(ImGui::Button("Choose image...")) {
                     openBitmapDialog(
-                    [this] (const string& bmp) {
-                        if(bmp != selectedShadow->bmpName) {
+                    [this, curShadow] (const string& bmp) {
+                        if(bmp != curShadow->bmpName) {
                             //New image, delete the old one.
                             registerChange("tree shadow image change");
-                            if(selectedShadow->bitmap != game.bmpError) {
+                            if(curShadow->bitmap != game.bmpError) {
                                 game.content.bitmaps.list.free(
-                                    selectedShadow->bmpName
+                                    curShadow->bmpName
                                 );
                             }
-                            selectedShadow->bmpName = bmp;
-                            selectedShadow->bitmap =
+                            curShadow->bmpName = bmp;
+                            curShadow->bitmap =
                                 game.content.bitmaps.list.get(
-                                    selectedShadow->bmpName, nullptr, false
+                                    curShadow->bmpName, nullptr, false
                                 );
                         }
                         setStatus("Picked a tree shadow image successfully.");
@@ -1513,16 +1511,16 @@ void AreaEditor::processGuiPanelDetails() {
                 
                 //Tree shadow image name text.
                 ImGui::SameLine();
-                monoText("%s", selectedShadow->bmpName.c_str());
-                setTooltip("Internal name:\n" + selectedShadow->bmpName);
+                monoText("%s", curShadow->bmpName.c_str());
+                setTooltip("Internal name:\n" + curShadow->bmpName);
                 
                 //Tree shadow center value.
-                Point shadowCenter = selectedShadow->pose.pos;
+                Point shadowCenter = curShadow->pose.pos;
                 if(
                     ImGui::DragFloat2("Center", (float*) &shadowCenter)
                 ) {
                     registerChange("tree shadow center change");
-                    selectedShadow->pose.pos = shadowCenter;
+                    curShadow->pose.pos = shadowCenter;
                 }
                 setTooltip(
                     "Center coordinates of the tree shadow.",
@@ -1530,7 +1528,7 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Tree shadow size value.
-                Point shadowSize = selectedShadow->pose.size;
+                Point shadowSize = curShadow->pose.size;
                 if(
                     processGuiWidgetsSize(
                         "Size", shadowSize,
@@ -1539,7 +1537,7 @@ void AreaEditor::processGuiPanelDetails() {
                     )
                 ) {
                     registerChange("tree shadow size change");
-                    selectedShadow->pose.size = shadowSize;
+                    curShadow->pose.size = shadowSize;
                 };
                 setTooltip(
                     "Width and height of the tree shadow.",
@@ -1557,14 +1555,14 @@ void AreaEditor::processGuiPanelDetails() {
                 
                 //Tree shadow angle value.
                 float shadowAngle =
-                    normalizeAngle(selectedShadow->pose.angle);
+                    normalizeAngle(curShadow->pose.angle);
                 if(
                     ImGui::SliderAngleWithContext(
                         "Angle", &shadowAngle, 0, 360, "%.2f"
                     )
                 ) {
                     registerChange("tree shadow angle change");
-                    selectedShadow->pose.angle = shadowAngle;
+                    curShadow->pose.angle = shadowAngle;
                 }
                 setTooltip(
                     "Angle of the tree shadow.",
@@ -1572,10 +1570,10 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Tree shadow opacity value.
-                int shadowOpacity = selectedShadow->alpha;
+                int shadowOpacity = curShadow->alpha;
                 if(ImGui::SliderInt("Opacity", &shadowOpacity, 0, 255)) {
                     registerChange("tree shadow opacity change");
-                    selectedShadow->alpha = shadowOpacity;
+                    curShadow->alpha = shadowOpacity;
                 }
                 setTooltip(
                     "How opaque the tree shadow is.",
@@ -1583,21 +1581,16 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Tree shadow sway value.
-                Point shadowSway = selectedShadow->sway;
+                Point shadowSway = curShadow->sway;
                 if(ImGui::DragFloat2("Sway", (float*) &shadowSway, 0.1)) {
                     registerChange("tree shadow sway change");
-                    selectedShadow->sway = shadowSway;
+                    curShadow->sway = shadowSway;
                 }
                 setTooltip(
                     "Multiply the amount of swaying by this much. 0 means "
                     "no swaying in that direction.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
-                
-            } else {
-            
-                //"No tree shadow selected" text.
-                ImGui::TextDisabled("(No tree shadow selected)");
                 
             }
             
@@ -1610,21 +1603,17 @@ void AreaEditor::processGuiPanelDetails() {
         //Regions node.
         if(saveableTreeNode("details", "Regions")) {
         
-            //Setup.
-            processGuiNavSetup(
-                &selectedRegionIdx, game.curArea->regions.size(), true
-            );
-            
             //Nav box start.
+            size_t curRegionIdx = regionSelection.getSingleItemIdx();
             processGuiNavBoxStart(
-                "region", "Region", "", &selectedRegionIdx,
+                "region", "Region", "", &curRegionIdx,
             [this] () { return game.curArea->regions.size(); },
-            [this] () { return 1; }
+            [this] () { return regionSelection.getCount(); }
             );
             
             //Previous region button.
             if(processGuiNavBoxPrev()) {
-                selectedRegion = game.curArea->regions[selectedRegionIdx];
+                regionSelection.setSingle(curRegionIdx);
             }
             
             //Current region text.
@@ -1632,7 +1621,7 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Next region button.
             if(processGuiNavBoxNext()) {
-                selectedRegion = game.curArea->regions[selectedRegionIdx];
+                regionSelection.setSingle(curRegionIdx);
             }
             
             //Nav box second line setup.
@@ -1641,7 +1630,7 @@ void AreaEditor::processGuiPanelDetails() {
             //New region button.
             if(
                 processGuiNavWidgetNew(
-                    &selectedRegionIdx, game.curArea->regions.size()
+                    &curRegionIdx, game.curArea->regions.size()
                 )
             ) {
                 addNewRegionCmd(1.0f);
@@ -1650,14 +1639,12 @@ void AreaEditor::processGuiPanelDetails() {
             
             //Delete region button.
             ImGui::SameLine();
-            if(selectedRegionIdx != INVALID) {
-                size_t prevSelectedRegionIdx = selectedRegionIdx;
+            if(regionSelection.getCount() > 0) {
                 if(
                     processGuiNavWidgetDel(
-                        &selectedRegionIdx, game.curArea->regions.size()
+                        &curRegionIdx, game.curArea->regions.size()
                     )
                 ) {
-                    selectedRegionIdx = prevSelectedRegionIdx;
                     deleteRegionCmd(1.0f);
                 }
                 setTooltip("Delete the selected area region.", "Delete");
@@ -1668,15 +1655,20 @@ void AreaEditor::processGuiPanelDetails() {
             //End the nav box.
             processGuiNavBoxEnd();
             
-            if(selectedRegion) {
+            if(regionSelection.hasOne()) {
             
+                AreaRegion* curRegion =
+                    game.curArea->regions[
+                        regionSelection.getSingleItemIdx()
+                    ];
+                    
                 //Region center value.
-                Point regionCenter = selectedRegion->center;
+                Point regionCenter = curRegion->center;
                 if(
                     ImGui::DragFloat2("Center", (float*) &regionCenter)
                 ) {
                     registerChange("region center change");
-                    selectedRegion->center = regionCenter;
+                    curRegion->center = regionCenter;
                 };
                 setTooltip(
                     "Center coordinates of the region.",
@@ -1684,22 +1676,17 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Region size value.
-                Point regionSize = selectedRegion->size;
+                Point regionSize = curRegion->size;
                 if(
                     ImGui::DragFloat2("Size", (float*) &regionSize)
                 ) {
                     registerChange("region size change");
-                    selectedRegion->size = regionSize;
+                    curRegion->size = regionSize;
                 };
                 setTooltip(
                     "Width and height of the region.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
-                
-            } else {
-            
-                //"No region selected" text.
-                ImGui::TextDisabled("(No region selected)");
                 
             }
             
@@ -5172,7 +5159,7 @@ void AreaEditor::processGuiPanelReview() {
                 &curReminderIdx, game.curArea->reminders.size()
             )
         ) {
-            registerChange("reminder deletion");
+            registerChange("reminder creation");
             game.curArea->reminders.push_back(AreaMakerReminder());
             reminderSelection.setSingle(curReminderIdx);
         }

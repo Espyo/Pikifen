@@ -196,13 +196,15 @@ void insertCopyInVector(vector<ContentT>& v, size_t idx) {
  * @param v The vector.
  * @param idx The index to insert into.
  * @param item The item to insert.
+ * @return The index of the inserted item.
  */
 template<typename ContentT>
-void insertInVector(
+size_t insertInVector(
     vector<ContentT>& v, size_t idx, const ContentT& item = ContentT()
 ) {
     idx = std::min(idx, v.size());
     v.insert(v.begin() + idx, item);
+    return idx;
 }
 
 
