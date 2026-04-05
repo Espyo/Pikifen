@@ -76,6 +76,9 @@ private:
     //Selection manager for all items.
     SelectionManager itemSelection;
     
+    //Selection controller for all items.
+    SelectionController itemSelCtrl;
+    
     //Data node for the contents of the current GUI definition.
     DataNode fileNode;
     

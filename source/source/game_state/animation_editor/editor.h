@@ -132,8 +132,11 @@ private:
     //Animation instance, for when the user is editing animations.
     AnimationInstance curAnimInst;
     
-    //selection manager for the hitboxes.
+    //Selection manager for the hitboxes.
     SelectionManager hitboxSelection;
+    
+    //Selection controller for the hitboxes.
+    SelectionController hitboxSelCtrl;
     
     //The selection effect alpha is calculated using the sine of this value.
     float selEffectAlpha = 0.0f;

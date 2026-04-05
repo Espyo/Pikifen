@@ -203,6 +203,11 @@ void centerAndSizeToCorners(
     const Point& center, const Point& size,
     Point* outTopLeftCorner, Point* outBottomRightCorner
 );
+void combineBBoxes(
+    const Point& bBox1Center, const Point& bBox1Size,
+    const Point& bBox2Center, const Point& bBox2Size,
+    Point* outResultCenter, Point* outResultSize
+);
 void cornersToCenterAndSize(
     const Point& topLeftCorner, const Point& bottomRightCorner,
     Point* outCenter, Point* outSize
@@ -247,6 +252,9 @@ Point getClosestPointInRotatedRectangle(
 void getMiterPoints(
     const Point& a, const Point& b, const Point& c, float thickness,
     Point* miterPoint1, Point* miterPoint2, float maxMiterLength = 0.0f
+);
+Point getPointPosRatioInRectangle(
+    const Point& p, const Point& rCenter, const Point& rSize
 );
 float getPointSign(
     const Point& p, const Point& lp1, const Point& lp2

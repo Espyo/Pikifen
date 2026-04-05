@@ -545,15 +545,10 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NONE: {
 
         handleSelectionAndTransformationLmbDown(
-            shadowSelection, curTransformationWidget
+            detailsSelCtrl, curTransformationWidget
         );
         
         shadowSelection.setHomogenized(false);
-        
-        handleSelectionAndTransformationLmbDown(
-            regionSelection, curTransformationWidget
-        );
-        
         regionSelection.setHomogenized(false);
         setSelectionStatusText();
         
@@ -1028,7 +1023,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NONE: {
 
         handleSelectionAndTransformationLmbDown(
-            mobSelection, curTransformationWidget
+            mobsSelCtrl, curTransformationWidget
         );
         
         mobSelection.setHomogenized(false);
@@ -1248,7 +1243,7 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     if(!crossSectionHandled) {
     
         handleSelectionAndTransformationLmbDown(
-            reminderSelection, curTransformationWidget
+            reviewSelCtrl, curTransformationWidget
         );
         
         setSelectionStatusText();
@@ -1539,7 +1534,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         } case EDITOR_STATE_MOBS: {
     
             handleSelectionAndTransformationLmbDrag(
-                mobSelection, curTransformationWidget,
+                mobsSelCtrl, curTransformationWidget,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
                 [this] { registerChange("object movement"); }
             );
@@ -1595,14 +1590,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         } case EDITOR_STATE_DETAILS: {
     
             handleSelectionAndTransformationLmbDrag(
-                shadowSelection, curTransformationWidget,
+                detailsSelCtrl, curTransformationWidget,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
                 [this] { registerChange("tree shadow movement"); }
-            );
-            handleSelectionAndTransformationLmbDrag(
-                regionSelection, curTransformationWidget,
-                snapPoint(game.editorsView.mouseCursorWorldPos),
-                [this] { registerChange("region movement"); }
             );
             
             break;
@@ -1633,7 +1623,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             }
             
             handleSelectionAndTransformationLmbDrag(
-                reminderSelection, curTransformationWidget,
+                reviewSelCtrl, curTransformationWidget,
                 game.editorsView.mouseCursorWorldPos,
             [this] () { changesMgr.markAsChanged(); }
             );
@@ -1666,16 +1656,13 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     
     curTransformationWidget.handleMouseUp();
     handleSelectionAndTransformationLmbUp(
-        mobSelection, curTransformationWidget
+        mobsSelCtrl, curTransformationWidget
     );
     handleSelectionAndTransformationLmbUp(
-        shadowSelection, curTransformationWidget
+        detailsSelCtrl, curTransformationWidget
     );
     handleSelectionAndTransformationLmbUp(
-        regionSelection, curTransformationWidget
-    );
-    handleSelectionAndTransformationLmbUp(
-        reminderSelection, curTransformationWidget
+        reviewSelCtrl, curTransformationWidget
     );
     
     movingPathPreviewCheckpoint = -1;

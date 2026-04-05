@@ -223,14 +223,8 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_MOBS;
     };
-    mobSelection.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
     mobSelection.itemsAreRectangular = false;
     mobSelection.itemsCanResize = false;
-    mobSelection.overlapsCycle = true;
-    mobSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
-    mobSelection.twTransformRule = SelectionManager::OP_RULE_MULTIPLE_ITEMS;
-    mobSelection.clickingSelectedUnselectsOthers = true;
     
     shadowSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize) {
@@ -250,14 +244,8 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_DETAILS;
     };
-    shadowSelection.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
     shadowSelection.itemsAreRectangular = true;
     shadowSelection.itemsCanResize = true;
-    shadowSelection.overlapsCycle = true;
-    shadowSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
-    shadowSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
-    shadowSelection.clickingSelectedUnselectsOthers = true;
     
     regionSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize) {
@@ -277,14 +265,8 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_DETAILS;
     };
-    regionSelection.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
     regionSelection.itemsAreRectangular = true;
     regionSelection.itemsCanResize = true;
-    regionSelection.overlapsCycle = true;
-    regionSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
-    regionSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
-    regionSelection.clickingSelectedUnselectsOthers = true;
     
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize) {
@@ -299,14 +281,33 @@ AreaEditor::AreaEditor() :
     [] () {
         return game.curArea->reminders.size();
     };
-    reminderSelection.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.itemsCanResize = false;
-    reminderSelection.overlapsCycle = true;
-    reminderSelection.dragMoveRule = SelectionManager::OP_RULE_ALWAYS;
-    reminderSelection.twTransformRule = SelectionManager::OP_RULE_NEVER;
-    reminderSelection.clickingSelectedUnselectsOthers = false;
+    
+    mobsSelCtrl.managers.push_back(&mobSelection);
+    mobsSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    mobsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+    mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    mobsSelCtrl.overlapsCycle = true;
+    mobsSelCtrl.clickingSelectedUnselectsOthers = true;
+    
+    detailsSelCtrl.managers.push_back(&shadowSelection);
+    detailsSelCtrl.managers.push_back(&regionSelection);
+    detailsSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    detailsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
+    detailsSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
+    detailsSelCtrl.overlapsCycle = true;
+    detailsSelCtrl.clickingSelectedUnselectsOthers = true;
+    
+    reviewSelCtrl.managers.push_back(&reminderSelection);
+    reviewSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    reviewSelCtrl.twTransformRule = SelectionController::OP_RULE_NEVER;
+    reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
+    reviewSelCtrl.overlapsCycle = true;
+    reviewSelCtrl.clickingSelectedUnselectsOthers = false;
 }
 
 
@@ -521,17 +522,23 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     shadowSelection.disable();
     regionSelection.disable();
     reminderSelection.disable();
+    mobsSelCtrl.disable();
+    detailsSelCtrl.disable();
+    reviewSelCtrl.disable();
     
     switch(newState) {
     case EDITOR_STATE_MOBS: {
         mobSelection.enable();
+        mobsSelCtrl.enable();
         break;
     } case EDITOR_STATE_DETAILS: {
         shadowSelection.enable();
         regionSelection.enable();
+        detailsSelCtrl.enable();
         break;
     } case EDITOR_STATE_REVIEW: {
         reminderSelection.enable();
+        reviewSelCtrl.enable();
         break;
     } default: {
         break;

@@ -268,8 +268,13 @@ void AreaEditor::drawCanvas() {
     
     drawPaths(style);
     
-    drawTreeShadows(style);
-    drawRegions(style);
+    if(state == EDITOR_STATE_DETAILS) {
+        drawTreeShadows(style);
+        drawRegions(style);
+        drawSelectionAndTransformationThings(
+            detailsSelCtrl, curTransformationWidget
+        );
+    }
     
     drawReminders(style);
     
@@ -1385,7 +1390,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     }
     
     drawSelectionAndTransformationThings(
-        mobSelection, curTransformationWidget
+        mobsSelCtrl, curTransformationWidget
     );
 }
 
@@ -1698,10 +1703,6 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
                 4.0 / game.editorsView.cam.zoom
             );
         }
-        
-        drawSelectionAndTransformationThings(
-            regionSelection, curTransformationWidget
-        );
     }
 }
 
@@ -1732,7 +1733,7 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
     }
     
     drawSelectionAndTransformationThings(
-        reminderSelection, curTransformationWidget
+        reviewSelCtrl, curTransformationWidget
     );
 }
 
@@ -1962,10 +1963,6 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
             }
         }
     }
-    
-    drawSelectionAndTransformationThings(
-        shadowSelection, curTransformationWidget
-    );
 }
 
 

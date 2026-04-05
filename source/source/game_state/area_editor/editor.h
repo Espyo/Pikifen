@@ -803,6 +803,15 @@ private:
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
     
+    //Selection controller for the mob state.
+    SelectionController mobsSelCtrl;
+    
+    //Selection controller for the details state.
+    SelectionController detailsSelCtrl;
+    
+    //Selection controller for the review state.
+    SelectionController reviewSelCtrl;
+    
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
     

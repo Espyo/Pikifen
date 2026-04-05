@@ -152,7 +152,7 @@ void GuiEditor::drawCanvas() {
     }
     
     drawSelectionAndTransformationThings(
-        itemSelection, curTransformationWidget
+        itemSelCtrl, curTransformationWidget
     );
     
     //Finish up.

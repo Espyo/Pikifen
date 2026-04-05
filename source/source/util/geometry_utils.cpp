@@ -748,6 +748,42 @@ void centerAndSizeToCorners(
 
 
 /**
+ * @brief Combines two bounding boxes (or rectangles in general),
+ * such that the result encompasses both.
+ *
+ * @param bBox1Center First bounding box's center.
+ * @param bBox1Size First bounding box's size.
+ * @param bBox2Center Second bounding box's center.
+ * @param bBox2Size Second bounding box's size.
+ * @param outResultCenter The center of the resulting combined bounding box
+ * is returned here.
+ * @param outResultSize The size of the resulting combined bounding box
+ * is returned here.
+ */
+void combineBBoxes(
+    const Point& bBox1Center, const Point& bBox1Size,
+    const Point& bBox2Center, const Point& bBox2Size,
+    Point* outResultCenter, Point* outResultSize
+) {
+    Point bBox1TL, bBox1BR;
+    centerAndSizeToCorners(bBox1Center, bBox1Size, &bBox1TL, &bBox1BR);
+    Point bBox2TL, bBox2BR;
+    centerAndSizeToCorners(bBox2Center, bBox2Size, &bBox2TL, &bBox2BR);
+    
+    Point resultTL(
+        std::min(bBox1TL.x, bBox2TL.x),
+        std::min(bBox1TL.y, bBox2TL.y)
+    );
+    Point resultBR(
+        std::max(bBox1BR.x, bBox2BR.x),
+        std::max(bBox1BR.y, bBox2BR.y)
+    );
+    
+    cornersToCenterAndSize(resultTL, resultBR, outResultCenter, outResultSize);
+}
+
+
+/**
  * @brief Converts coordinates of a rectangle's top-left and bottom-right
  * corners into coordinates of its center and size.
  *
@@ -1228,6 +1264,26 @@ void getMiterPoints(
     //Return the final point.
     *miterPoint1 = b + miterDirection * miterLength;
     *miterPoint2 = b - miterDirection * miterLength;
+}
+
+
+/**
+ * @brief Returns how far inside a rectangle a point is, from the top-left
+ * corner. 0,0 means it's at that corner, 1,1 means it's at the opposite corner,
+ * 0.5,0.5 means the center, etc. Values below 0 and above 1 will be
+ * returned if the point is outside the rectangle.
+ *
+ * @param p The point.
+ * @param rCenter The rectangle's center.
+ * @param rSize The rectangle's size.
+ * @return
+ */
+Point getPointPosRatioInRectangle(
+    const Point& p, const Point& rCenter, const Point& rSize
+) {
+    Point localP = p - rCenter;
+    localP += rSize / 2.0f;
+    return localP / rSize;
 }
 
 

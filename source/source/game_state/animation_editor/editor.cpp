@@ -149,10 +149,12 @@ AnimationEditor::AnimationEditor() :
         return curSprite->hitboxes.size();
     };
     hitboxSelection.itemsCanResize = true;
-    hitboxSelection.overlapsCycle = true;
-    hitboxSelection.dragMoveRule = SelectionManager::OP_RULE_ONE_ITEM;
-    hitboxSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
-    hitboxSelection.clickingSelectedUnselectsOthers = true;
+    
+    hitboxSelCtrl.managers.push_back(&hitboxSelection);
+    hitboxSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
+    hitboxSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    hitboxSelCtrl.overlapsCycle = true;
+    hitboxSelCtrl.clickingSelectedUnselectsOthers = true;
 }
 
 

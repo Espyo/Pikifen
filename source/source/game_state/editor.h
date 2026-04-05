@@ -279,32 +279,13 @@ protected:
     };
     
     /**
-     * @brief Manages selections and selected things. It only knows about
-     * item indexes, and needs a bit of help for more complex operations
-     * like center and size management.
+     * @brief Manages the selection of a specific type of item.
+     * It only stores item indexes and knows how to manipulate the items'
+     * 2D data.
      */
     struct SelectionManager {
     
         public:
-        
-        //--- Public misc. declarations ---
-        
-        //Rules for how and when a given operation can be started.
-        enum OP_RULE {
-        
-            //Always allow it.
-            OP_RULE_ALWAYS,
-            
-            //Allow it if it's only one item.
-            OP_RULE_ONE_ITEM,
-            
-            //Allow it if it's only multiple items.
-            OP_RULE_MULTIPLE_ITEMS,
-            
-            //Cannot drag move.
-            OP_RULE_NEVER,
-            
-        };
         
         //--- Public members ---
         
@@ -330,28 +311,12 @@ protected:
         std::function<void(size_t, const Point&, const Point&)> onSetInfo =
             nullptr;
             
-        //Callback for when a point should probably be snapped.
-        std::function<Point(const Point&)> onSnapPoint = nullptr;
-        
         //Whether items are rectangular in shape or circular.
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
         
         //Whether the items can be resized.
         bool itemsCanResize = false;
-        
-        //When clicking on overlapping items, cycle selection between a single
-        //one, or always select the one with the lowest index?
-        bool overlapsCycle = false;
-        
-        //Whether clicking a selected item unselects the other selected items.
-        bool clickingSelectedUnselectsOthers = true;
-        
-        //How and when a drag move can be started.
-        OP_RULE dragMoveRule = OP_RULE_NEVER;
-        
-        //How and when a transformation widget transformation can be started.
-        OP_RULE twTransformRule = OP_RULE_ALWAYS;
         
         
         //--- Public function declarations ---
@@ -374,33 +339,155 @@ protected:
         bool enable();
         bool disable();
         
-        void draw(const Point& cursorPos, float zoom) const;
+        bool startOperation();
+        bool applyDragMove(const Point& cursorPos);
         bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool setHomogenized(bool homogenized);
+        bool isHomogenized() const;
+        
+        void calculateSelectionPortion(
+            const Point& largerPreTransCenter, const Point& largerPreTransSize,
+            const Point& largerNewCenter, const Point& largerNewSize,
+            Point* outPortionedNewCenter, Point* outPortionedNewSize
+        ) const;
         bool getBBox(
             Point* outCenter, Point* outSize,
             Point* outCentersOnlyCenter = nullptr,
             Point* outCentersOnlySize = nullptr
         ) const;
+        vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
+        void getItemInfo(
+            size_t idx, Point* outCenter, Point* outSize
+        ) const;
+        bool getItemIsEligible(size_t idx) const;
+        size_t getNrTotalItems() const;
+        
+        
+        private:
+        
+        //--- Private members ---
+        
+        //The list of selected items.
+        SelectionList selectedItems;
+        
+        //Whether it is currently enabled.
+        bool enabled = false;
+        
+        //Has the user agreed to homogenize the selection?
+        bool homogenized = false;
+        
+        //Center of each selected item before the latest operation began.
+        map<size_t, Point> preOpItemCenters;
+        
+        //Size of each selected item before the latest operation began.
+        map<size_t, Point> preOpItemSizes;
+        
+        //Center of the entire selection before the latest operation began.
+        //Cache for performance.
+        Point preOpSelCenter;
+        
+        //Size of the entire selection before the latest operation began.
+        //Cache for performance.
+        Point preOpSelSize;
+        
+        //If the transformation should apply to centers only (i.e. items
+        //can't resize), use this selection center.
+        Point preOpCentersOnlySelCenter;
+        
+        //If the transformation should apply to centers only (i.e. items
+        //can't resize), use this selection size.
+        Point preOpCentersOnlySelSize;
+        
+    };
+    
+    /**
+     * @brief User controller for controlling selections in a given set of
+     * types of items.
+     */
+    struct SelectionController {
+    
+        public:
+        
+        //--- Public misc. declarations ---
+        
+        //Rules for how and when a given operation can be started.
+        enum OP_RULE {
+        
+            //Always allow it.
+            OP_RULE_ALWAYS,
+            
+            //Allow it if it's only one item.
+            OP_RULE_ONE_ITEM,
+            
+            //Allow it if it's only multiple items.
+            OP_RULE_MULTIPLE_ITEMS,
+            
+            //Cannot drag move.
+            OP_RULE_NEVER,
+            
+        };
+        
+        
+        //--- Public members ---
+        
+        //List of managers it controls.
+        vector<SelectionManager*> managers;
+        
+        //Callback for when a point should probably be snapped.
+        std::function<Point(const Point&)> onSnapPoint = nullptr;
+        
+        //How and when a transformation widget transformation can be started.
+        OP_RULE twTransformRule = OP_RULE_ALWAYS;
+        
+        //How and when a drag move can be started.
+        OP_RULE dragMoveRule = OP_RULE_NEVER;
+        
+        //When clicking on overlapping items, cycle selection between a single
+        //one, or always select the one with the lowest index?
+        bool overlapsCycle = false;
+        
+        //Whether clicking a selected item unselects the other selected items.
+        bool clickingSelectedUnselectsOthers = true;
+        
+        
+        //--- Public function declarations ---
+        
+        void draw(const Point& cursorPos, float zoom) const;
+        
         bool chooseViaMouseDown(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
+        
         bool startTransforming();
         bool isTransforming() const;
+        bool applyTransformation(const Point& newCenter, const Point& newSize);
         bool stopTransforming();
+        
         bool startRubberBand(const Point& cursorPos);
         bool isCreatingRubberBand() const;
         bool updateRubberBand(
             const Point& cursorPos, bool rubberBandMod, bool addToSelectionMod
         );
         bool stopRubberBand();
+        
         bool startDragMove(const Point& cursorPos);
         bool isDragMoving() const;
         bool updateDragMove(const Point& cursorPos);
         bool stopDragMove();
-        bool setHomogenized(bool homogenized);
-        bool isHomogenized() const;
+        
+        bool getTotalBBox(
+            Point* outCenter, Point* outSize,
+            Point* outCentersOnlyCenter = nullptr,
+            Point* outCentersOnlySize = nullptr
+        ) const;
+        size_t getSelectionTotalCount() const;
+        bool isTransformationWidgetAvailable() const;
         bool isOpRuleRespected(OP_RULE rule) const;
+        
         bool handleMouseUp();
+        
+        bool enable();
+        bool disable();
         
         
     private:
@@ -427,9 +514,6 @@ protected:
         
         //--- Private members ---
         
-        //The list of selected items.
-        SelectionList selectedItems;
-        
         //Current user state.
         STATE state = STATE_IDLING;
         
@@ -439,46 +523,25 @@ protected:
         //Cursor position when the current operation started.
         Point opStartCursorPos;
         
-        //Has the user agreed to homogenize the selection?
-        bool homogenized = false;
-        
-        //Center of each selected item before transformation began.
-        map<size_t, Point> preTransCenters;
-        
-        //Size of each selected item before transformation began.
-        map<size_t, Point> preTransSizes;
-        
-        //Center of the entire selection before transformation began.
+        //Center of the entire selection before the latest operation began.
         //Cache for performance.
-        Point preTransCenter;
+        Point preOpSelCenter;
         
-        //Size of the entire selection before transformation began.
+        //Size of the entire selection before the latest operation began.
         //Cache for performance.
-        Point preTransSize;
+        Point preOpSelSize;
         
-        //If the transformation should apply to centers only (i.e. items
+        //If the operation should apply to centers only (i.e. items
         //can't resize), use this selection center.
-        Point preTransCentersOnlyCenter;
+        Point preOpCentersOnlySelCenter;
         
-        //If the transformation should apply to centers only (i.e. items
+        //If the operation should apply to centers only (i.e. items
         //can't resize), use this selection size.
-        Point preTransCentersOnlySize;
+        Point preOpCentersOnlySelSize;
         
-        //Position of each selected item before a drag move.
-        map<size_t, Point> preDragMoveItemsPos;
-        
-        //Position of the pivot item before a drag move.
+        //Position of the pivot item before an operation.
         //i.e. the item closest to the cursor.
-        Point preDragMovePivotItemPos;
-        
-        
-        //--- Private function declarations ---
-        
-        void getItemInfo(
-            size_t idx, Point* outCenter, Point* outSize
-        ) const;
-        bool getItemIsEligible(size_t idx) const;
-        size_t getNrTotalItems() const;
+        Point preOpPivotItemPos;
         
     };
     
@@ -971,7 +1034,7 @@ protected:
     );
     void drawOpErrorCursor();
     void drawSelectionAndTransformationThings(
-        const SelectionManager& selMgr,
+        const SelectionController& selCtrl,
         const TransformationWidget& traWid
     );
     Point getLastWidgetPost();
@@ -1178,14 +1241,14 @@ protected:
     virtual void handleRmbDrag(const ALLEGRO_EVENT& ev);
     virtual void handleRmbUp(const ALLEGRO_EVENT& ev);
     void handleSelectionAndTransformationLmbDown(
-        SelectionManager& selMgr, TransformationWidget& traWid
+        SelectionController& selCtrl, TransformationWidget& traWid
     );
     bool handleSelectionAndTransformationLmbDrag(
-        SelectionManager& selMgr, TransformationWidget& traWid,
+        SelectionController& selCtrl, TransformationWidget& traWid,
         const Point& mouseCursor, std::function<void()> onPreTransform = nullptr
     );
     void handleSelectionAndTransformationLmbUp(
-        SelectionManager& selMgr, TransformationWidget& traWid
+        SelectionController& selCtrl, TransformationWidget& traWid
     );
     string getAmountOrIdxDescription(
         size_t singleIdx, size_t amount,

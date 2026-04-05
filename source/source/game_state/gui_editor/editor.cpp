@@ -87,14 +87,16 @@ GuiEditor::GuiEditor() :
         if(!isCustom && state != EDITOR_STATE_HARDCODED) return false;
         return true;
     };
-    itemSelection.onSnapPoint =
-    [this] (const Point & p) { return snapPoint(p); };
     itemSelection.itemsAreRectangular = true;
     itemSelection.itemsCanResize = true;
-    itemSelection.overlapsCycle = true;
-    itemSelection.dragMoveRule = SelectionManager::OP_RULE_NEVER;
-    itemSelection.twTransformRule = SelectionManager::OP_RULE_ALWAYS;
-    itemSelection.clickingSelectedUnselectsOthers = true;
+    
+    itemSelCtrl.managers.push_back(&itemSelection);
+    itemSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    itemSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
+    itemSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
+    itemSelCtrl.overlapsCycle = true;
+    itemSelCtrl.clickingSelectedUnselectsOthers = true;
 }
 
 

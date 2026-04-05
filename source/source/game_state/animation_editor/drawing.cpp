@@ -258,13 +258,8 @@ void AnimationEditor::drawCanvas() {
             }
         }
         
-        Point selectionCenter, selectionSize;
-        hitboxSelection.getBBox(
-            &selectionCenter, &selectionSize
-        );
-        
-        hitboxSelection.draw(
-            game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
+        drawSelectionAndTransformationThings(
+            hitboxSelCtrl, curTransformationWidget
         );
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
@@ -283,14 +278,6 @@ void AnimationEditor::drawCanvas() {
                 &s->topPose.size,
                 &s->topPose.angle,
                 1.0f / game.editorsView.cam.zoom
-            );
-            
-        } else if(
-            state == EDITOR_STATE_HITBOXES && selectionSize.x != 0.0f
-        ) {
-            curTransformationWidget.draw(
-                &selectionCenter, &selectionSize,
-                nullptr, 1.0f / game.editorsView.cam.zoom
             );
             
         }
