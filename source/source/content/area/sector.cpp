@@ -39,7 +39,7 @@ Sector::~Sector() {
  * @param eIdx Index of the edge to add.
  */
 void Sector::addEdge(Edge* ePtr, size_t eIdx) {
-    for(size_t i = 0; i < edges.size(); i++) {
+    forIdx(i, edges) {
         if(edges[i] == ePtr) {
             return;
         }
@@ -64,7 +64,7 @@ void Sector::calculateBoundingBox() {
     bbox[0] = v2p(edges[0]->vertexes[0]);
     bbox[1] = bbox[0];
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         for(unsigned char v = 0; v < 2; v++) {
             Point p = v2p(edges[e]->vertexes[v]);
             updateMinMaxCoords(bbox[0], bbox[1], p);
@@ -111,7 +111,7 @@ void Sector::getNeighborSectorsConditionally(
 ) {
 
     //If this sector is already on the list, skip.
-    for(size_t s = 0; s < sectorList.size(); s++) {
+    forIdx(s, sectorList) {
         if(sectorList[s] == this) return;
     }
     
@@ -124,7 +124,7 @@ void Sector::getNeighborSectorsConditionally(
     //Now check its neighbors.
     Edge* ePtr = nullptr;
     Sector* otherS = nullptr;
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         ePtr = edges[e];
         otherS = ePtr->getOtherSector(this);
         if(!otherS) continue;
@@ -142,7 +142,7 @@ void Sector::getNeighborSectorsConditionally(
 Vertex* Sector::getRightmostVertex() const {
     Vertex* rightmost = nullptr;
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         if(!rightmost) rightmost = ePtr->vertexes[0];
         else {
@@ -173,7 +173,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     //So save all sector/length pairs.
     //Sectors with different heights from the current one are also saved,
     //but they have lower priority compared to same-heigh sectors.
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         ePtr = edges[e];
         bool valid = true;
         
@@ -237,7 +237,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
  */
 bool Sector::isClockwise() const {
     vector<Vertex*> vertexes;
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         vertexes.push_back(edges[e]->vertexes[0]);
     }
     return isPolygonClockwise(vertexes);
@@ -251,7 +251,7 @@ bool Sector::isClockwise() const {
  * @return Whether it is in the sector.
  */
 bool Sector::isPointInSector(const Point& p) const {
-    for(size_t t = 0; t < triangles.size(); t++) {
+    forIdx(t, triangles) {
         const Triangle* tPtr = &triangles[t];
         if(
             isPointInTriangle(
@@ -327,7 +327,7 @@ Sector* getSector(
         
     } else {
     
-        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        forIdx(s, game.curArea->sectors) {
             Sector* sPtr = game.curArea->sectors[s];
             
             if(

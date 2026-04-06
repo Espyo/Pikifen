@@ -365,7 +365,7 @@ void InWorldHealthWheel::draw() {
     curYOffset += wheelRadius + IN_WORLD_STATUS_BUILDUP::PADDING;
     
     //Draw any status effect buildup bars.
-    for(size_t s = 0; s < m->statuses.size(); s++) {
+    forIdx(s, m->statuses) {
         Status* sPtr = &m->statuses[s];
         if(sPtr->type->buildup == 0.0f) continue;
         

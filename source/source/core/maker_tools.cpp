@@ -353,10 +353,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                     game.states.gameplay->players[0].view.mouseCursorWorldPos
                 );
                 if(!mod2) {
-                    for(
-                        size_t p = 0;
-                        p < mobToTeleport->group->members.size(); p++
-                    ) {
+                    forIdx(p, mobToTeleport->group->members) {
                         mobToTeleport->group->members[p]->chase(
                             game.states.gameplay->
                             players[0].view.mouseCursorWorldPos,

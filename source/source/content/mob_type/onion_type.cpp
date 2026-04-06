@@ -91,7 +91,7 @@ void OnionType::loadCatProperties(DataNode* file) {
         );
     }
     
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         if(sounds[s].name == "pop") {
             soundPopIdx = s;
         } else if(sounds[s].name == "beam") {
@@ -112,7 +112,7 @@ void OnionType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->legBodyParts.size(); b++) {
+    forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
             game.errors.report(
                 "The Onion type \"" + name + "\" specifies a leg body part "

@@ -50,6 +50,10 @@ typedef uint32_t Bitmask32;
 #define hasFlag(flags, flag) (((flags) & (flag)) > 0)
 
 
+//Shorthand for a standard for loop that iterates through a vector's indexes.
+#define forIdx(it, vec) for(size_t it = 0; it < vec.size(); it++)
+
+
 //Cross-platform way of representing an invalid index.
 constexpr size_t INVALID = UINT32_MAX;
 
@@ -147,7 +151,7 @@ struct KeyframeInterpolator {
             return keyframeValues[0];
         }
         
-        for(size_t k = 1; k < keyframeTimes.size(); ++k) {
+        for(size_t k = 1; k < keyframeTimes.size(); k++) {
             if(t <= keyframeTimes[k]) {
                 float deltaT =
                     std::max(keyframeTimes[k] - keyframeTimes[k - 1], 0.01f);
@@ -204,7 +208,7 @@ struct KeyframeInterpolator {
         float t, const InterT& value,
         EASE_METHOD easeMethod = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
-        for(size_t k = 0; k < keyframeTimes.size(); ++k) {
+        forIdx(k, keyframeTimes) {
             if(keyframeTimes[k] == t) {
                 if(outIdx) *outIdx = k;
                 setKeyframeValue(k, value);

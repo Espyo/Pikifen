@@ -64,7 +64,7 @@ void GameplayState::doGameDrawing(
         );
     }
     
-    for(size_t p = 0; p < players.size(); p++) {
+    forIdx(p, players) {
         Player& player = players[p];
         al_clear_to_color(game.curArea->bgColor);
         
@@ -303,7 +303,7 @@ void GameplayState::drawBigMsg() {
         kiH.addNew(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
         kiH.addNew(1.0f, 0.0f, EASE_METHOD_IN);
         
-        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); c++) {
+        forIdx(c, GAMEPLAY::BIG_MSG_READY_TEXT) {
             float charRatio =
                 c / ((float) GAMEPLAY::BIG_MSG_READY_TEXT.size() - 1);
             charRatio = 1.0f - charRatio;
@@ -356,7 +356,7 @@ void GameplayState::drawBigMsg() {
         kiX.addNew(TEXT_MOVE_AGAIN_T, TEXT_DRIFT_END_X);
         kiX.addNew(1.0f, -(float) game.winW, EASE_METHOD_IN_OUT_BACK);
         
-        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT.size(); c++) {
+        forIdx(c, GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT) {
             float charRatio =
                 c / ((float) GAMEPLAY::BIG_MSG_ONE_MIN_LEFT_TEXT.size() - 1);
             charRatio = 1.0f - charRatio;
@@ -410,7 +410,7 @@ void GameplayState::drawBigMsg() {
         
         float alpha = kiA.get(t);
         
-        for(size_t c = 0; c < TEXT.size(); c++) {
+        forIdx(c, TEXT) {
             float charRatio = c / ((float) TEXT.size() - 1);
             charRatio = 1.0f - charRatio;
             float xOffset = (TEXT_W / 2.0f) - (TEXT_W * charRatio);
@@ -675,7 +675,7 @@ void GameplayState::drawDebugTools(Player* player) {
 
     if(game.debug.showGroupInfo && player->leaderPtr) {
         al_use_transform(&player->view.worldToWindowTransform);
-        for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+        forIdx(m, player->leaderPtr->group->members) {
             Point offset = player->leaderPtr->group->getSpotOffset(m);
             al_draw_filled_circle(
                 player->leaderPtr->group->anchor.x + offset.x,
@@ -799,7 +799,7 @@ void GameplayState::drawGameplayMessageBox() {
         //Figure out what scaling is necessary, if any.
         unsigned int totalWidth = 0;
         float xScale = 1.0f;
-        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+        forIdx(t, msgBox->tokensPerLine[lineIdx]) {
             totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
         }
         const float maxTextWidth =
@@ -813,7 +813,7 @@ void GameplayState::drawGameplayMessageBox() {
         float startY =
             game.winH - lineHeight * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
             
-        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+        forIdx(t, msgBox->tokensPerLine[lineIdx]) {
             tokenIdx++;
             if(tokenIdx >= msgBox->curToken) break;
             StringToken& curToken = msgBox->tokensPerLine[lineIdx][t];
@@ -908,7 +908,7 @@ void GameplayState::drawGameplayMessageBox() {
  */
 void GameplayState::drawInGameText(Player* player) {
     //Liquid things.
-    for(size_t l = 0; l < liquids.size(); l++) {
+    forIdx(l, liquids) {
         Liquid* lPtr = liquids[l];
         if(lPtr->chillFraction) {
             lPtr->chillFraction->draw();
@@ -933,7 +933,7 @@ void GameplayState::drawInGameText(Player* player) {
             Sprite* s;
             mobPtr->getSpriteData(&s, nullptr, nullptr);
             if(s) {
-                for(size_t h = 0; h < s->hitboxes.size(); h++) {
+                forIdx(h, s->hitboxes) {
                     Hitbox* hPtr = &s->hitboxes[h];
                     ALLEGRO_COLOR hc;
                     switch(hPtr->type) {
@@ -963,7 +963,7 @@ void GameplayState::drawInGameText(Player* player) {
                 Sprite* s;
                 mobPtr->getSpriteData(&s, nullptr, nullptr);
                 if(s) {
-                    for(size_t h = 0; h < s->hitboxes.size(); h++) {
+                    forIdx(h, s->hitboxes) {
                         Hitbox* hPtr = &s->hitboxes[h];
                         Point p =
                             mobPtr->pos +
@@ -1180,7 +1180,7 @@ void GameplayState::drawInGameText(Player* player) {
     
     //Area regions.
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+        forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             drawHighlightedRectRegion(
                 rPtr->center, rPtr->size,
@@ -1342,9 +1342,7 @@ void GameplayState::drawLeaderCursor(
         game.options.misc.showLeaderCursorCounter &&
         player->leaderPtr->group->curStandbyType
     ) {
-        for(
-            size_t m = 0; m < player->leaderPtr->group->members.size(); m++
-        ) {
+        forIdx(m, player->leaderPtr->group->members) {
             Mob* mPtr = player->leaderPtr->group->members[m];
             if(
                 mPtr->subgroupTypePtr ==
@@ -1475,7 +1473,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         //Then, find out spotlights, and draw
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < mobs.all.size(); m++) {
+        forIdx(m, mobs.all) {
             Mob* mPtr = mobs.all[m];
             if(
                 hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
@@ -1903,7 +1901,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     Point minCoords(FLT_MAX, FLT_MAX);
     Point maxCoords(-FLT_MAX, -FLT_MAX);
     
-    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+    forIdx(v, game.curArea->vertexes) {
         Vertex* vPtr = game.curArea->vertexes[v];
         updateMinMaxCoords(
             minCoords, maxCoords, v2p(vPtr)
@@ -1948,7 +1946,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
  * @brief Draws tree shadows.
  */
 void GameplayState::drawTreeShadows() {
-    for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
+    forIdx(s, game.curArea->treeShadows) {
         TreeShadow* sPtr = game.curArea->treeShadows[s];
         
         unsigned char alpha =
@@ -2049,7 +2047,7 @@ void GameplayState::drawWorldComponents(
     );
     
     //Sectors.
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         
         if(
@@ -2073,7 +2071,7 @@ void GameplayState::drawWorldComponents(
     particles.fillComponentList(components, view.box[0], view.box[1]);
     
     //Mobs.
-    for(size_t m = 0; m < mobs.all.size(); m++) {
+    forIdx(m, mobs.all) {
         Mob* mobPtr = mobs.all[m];
         
         if(!bmpOutput && mobPtr->isOffCamera(view)) {
@@ -2154,7 +2152,7 @@ void GameplayState::drawWorldComponents(
     }
     
     //Time to draw!
-    for(size_t c = 0; c < components.size(); c++) {
+    forIdx(c, components) {
         components[c].idx = c;
     }
     
@@ -2178,7 +2176,7 @@ void GameplayState::drawWorldComponents(
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
     
-    for(size_t c = 0; c < components.size(); c++) {
+    forIdx(c, components) {
         WorldComponent* cPtr = &components[c];
         
         if(cPtr->sectorPtr) {

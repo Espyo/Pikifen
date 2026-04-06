@@ -412,7 +412,7 @@ void Leader::dismissLogic() {
         //Leftmost member coordinate, rightmost, etc.
         Point minCoords, maxCoords;
         
-        for(size_t m = 0; m < group->members.size(); m++) {
+        forIdx(m, group->members) {
             Mob* memberPtr = group->members[m];
             
             if(memberPtr->pos.x < minCoords.x || m == 0)
@@ -468,7 +468,7 @@ void Leader::dismissLogic() {
         
             bool subgroupExists = false;
             
-            for(size_t m = 0; m < group->members.size(); m++) {
+            forIdx(m, group->members) {
                 Mob* mPtr = group->members[m];
                 if(mPtr->subgroupTypePtr != curType) continue;
                 
@@ -514,7 +514,7 @@ void Leader::dismissLogic() {
     //The second row is 6 spots around that one.
     //The third is 12 spots around those 6.
     //And so on. Each row fits an additional 6.
-    for(size_t s = 0; s < subgroupsInfo.size(); s++) {
+    forIdx(s, subgroupsInfo) {
         size_t nRows = getDismissRows(subgroupsInfo[s].members.size());
         
         //Since each row loops all around,
@@ -576,7 +576,7 @@ void Leader::dismissLogic() {
             );
             
         float newAngleOccupation = 0;
-        for(size_t s = 0; s < curRow.subgroups.size(); s++) {
+        forIdx(s, curRow.subgroups) {
             newAngleOccupation +=
                 linearDistToAngular(
                     subgroupsInfo[curRow.subgroups[s]].radius * 2.0,
@@ -637,11 +637,11 @@ void Leader::dismissLogic() {
     
     //Now that we know which subgroups go into which row,
     //simply decide the positioning.
-    for(size_t r = 0; r < rows.size(); r++) {
+    forIdx(r, rows) {
         float startAngle = -(rows[r].angleOccupation / 2.0f);
         float curAngle = startAngle;
         
-        for(size_t s = 0; s < rows[r].subgroups.size(); s++) {
+        forIdx(s, rows[r].subgroups) {
             size_t sIdx = rows[r].subgroups[s];
             float subgroupAngle = curAngle;
             
@@ -687,7 +687,7 @@ void Leader::dismissLogic() {
         
     } else {
         //Let's dismiss normally, possibly keeping the current standby type.
-        for(size_t s = 0; s < subgroupsInfo.size(); s++) {
+        forIdx(s, subgroupsInfo) {
             if(
                 subgroupsInfo[s].type == group->curStandbyType &&
                 keepCurType
@@ -707,7 +707,7 @@ void Leader::dismissLogic() {
     }
     
     //Dismiss leaders now.
-    for(size_t m = 0; m < group->members.size(); m++) {
+    forIdx(m, group->members) {
         if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
             group->members[m]->scriptVM.fsm.runEvent(MOB_EV_DISMISSED, nullptr);
             group->members[m]->leaveGroup();
@@ -751,7 +751,7 @@ void Leader::drawMob() {
     
     //Light.
     ParticleGenerator* antennaPG = nullptr;
-    for(size_t p = 0; p < particleGenerators.size(); p++) {
+    forIdx(p, particleGenerators) {
         if(
             particleGenerators[p].id ==
             MOB_PARTICLE_GENERATOR_ID_ANTENNA
@@ -769,7 +769,7 @@ void Leader::drawMob() {
         BitmapEffect lightEff = mobEff;
         ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
         
-        for(size_t s = 0; s < statuses.size(); s++) {
+        forIdx(s, statuses) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             if(statuses[s].type->topReplacementBmp) {
                 lightBmp = statuses[s].type->topReplacementBmp;
@@ -848,7 +848,7 @@ void Leader::drawMob() {
 size_t Leader::getAmountOfGroupPikmin(const PikminType* filter) {
     size_t total = 0;
     
-    for(size_t m = 0; m < group->members.size(); m++) {
+    forIdx(m, group->members) {
         Mob* mPtr = group->members[m];
         if(mPtr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
         if(filter && mPtr->type != filter) continue;
@@ -902,7 +902,7 @@ void Leader::getGroupSpotInfo(
         followingGroup->radius +
         radius + game.config.pikmin.standardRadius;
         
-    for(size_t me = 0; me < leaderGroupPtr->members.size(); me++) {
+    forIdx(me, leaderGroupPtr->members) {
         Mob* memberPtr = leaderGroupPtr->members[me];
         if(memberPtr == this) {
             break;
@@ -925,7 +925,7 @@ void Leader::getGroupSpotInfo(
  * @return Whether it has any.
  */
 bool Leader::hasOpponentPikminLatched() const {
-    for(size_t m = 0; m < player->leaderPtr->holding.size(); m++) {
+    forIdx(m, player->leaderPtr->holding) {
         if(player->leaderPtr->holding[m]->holder.type == HOLD_TYPE_LATCH) {
             return true;
         }
@@ -953,7 +953,7 @@ bool Leader::orderPikminToOnion(
     vector<std::pair<Distance, Pikmin*>> candidates;
     size_t amountOrdered = 0;
     
-    for(size_t m = 0; m < group->members.size(); m++) {
+    forIdx(m, group->members) {
         Mob* mobPtr = group->members[m];
         if(
             mobPtr->type->category->id != MOB_CATEGORY_PIKMIN ||
@@ -987,7 +987,7 @@ bool Leader::orderPikminToOnion(
     );
     
     //Order Pikmin, in order.
-    for(size_t p = 0; p < candidates.size(); p++) {
+    forIdx(p, candidates) {
     
         Pikmin* pikPtr = candidates[p].second;
         FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(MOB_EV_GO_TO_ONION);
@@ -1024,7 +1024,7 @@ void Leader::queueThrow() {
  * @brief Signals the group members that the swarm mode stopped.
  */
 void Leader::signalSwarmEnd() const {
-    for(size_t m = 0; m < group->members.size(); m++) {
+    forIdx(m, group->members) {
         group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_ENDED);
     }
 }
@@ -1034,7 +1034,7 @@ void Leader::signalSwarmEnd() const {
  * @brief Signals the group members that the swarm mode started.
  */
 void Leader::signalSwarmStart() const {
-    for(size_t m = 0; m < group->members.size(); m++) {
+    forIdx(m, group->members) {
         group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_STARTED);
     }
 }
@@ -1056,7 +1056,7 @@ void Leader::specificDismiss(
     size_t curRowSpotIdx = 0;
     size_t curRowSpots = 1;
     
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         Point destination;
         
         if(curRowidx == 0) {

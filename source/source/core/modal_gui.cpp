@@ -253,7 +253,7 @@ void ModalGuiManager::updateItems() {
     //Back input icon.
     guiCreateBackInputIcon(this);
     
-    for(size_t b = 0; b < extraButtons.size(); b++) {
+    forIdx(b, extraButtons) {
         //Extra button.
         ButtonGuiItem* button =
             new ButtonGuiItem(
@@ -287,7 +287,7 @@ void ModalGuiManager::updateItems() {
         (buttonAreaSize.x - totalEmptySpace) / buttonItems.size();
     float curX = buttonAreaCenter.x - buttonAreaSize.x / 2.0f;
     
-    for(size_t b = 0; b < buttonItems.size(); b++) {
+    forIdx(b, buttonItems) {
         buttonItems[b]->ratioCenter.x = curX + buttonWidth / 2.0f;
         buttonItems[b]->ratioSize.x = buttonWidth;
         curX += buttonWidth + MODAL::BUTTON_MARGIN;

@@ -36,7 +36,7 @@
 bool ControlsMediator::actionQueueContains(
     PLAYER_ACTION_TYPE actionTypeId
 ) const {
-    for(size_t a = 0; a < actionQueue.size(); a++) {
+    forIdx(a, actionQueue) {
         if(actionQueue[a].actionTypeId == actionTypeId) return true;
     }
     return false;
@@ -55,7 +55,7 @@ bool ControlsMediator::actionTypesShareInputSource(
 ) {
     set<Inpution::InputSource> sourcesUsed;
     const vector<Inpution::Bind>& allBinds = binds();
-    for(size_t b = 0; b < allBinds.size(); b++) {
+    forIdx(b, allBinds) {
         if(!isInContainer(actionTypes, allBinds[b].actionTypeId)) continue;
         if(sourcesUsed.find(allBinds[b].inputSource) != sourcesUsed.end()) {
             return true;
@@ -226,7 +226,7 @@ vector<Inpution::Bind>& ControlsMediator::binds() {
 Inpution::Bind ControlsMediator::findBind(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
-    for(size_t b = 0; b < mgr.binds.size(); b++) {
+    forIdx(b, mgr.binds) {
         if(mgr.binds[b].actionTypeId == actionTypeId) {
             return mgr.binds[b];
         }
@@ -245,7 +245,7 @@ Inpution::Bind ControlsMediator::findBind(
 Inpution::Bind ControlsMediator::findBind(
     const string& actionTypeName
 ) const {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+    forIdx(b, playerActionTypes) {
         if(playerActionTypes[b].internalName == actionTypeName) {
             return findBind(playerActionTypes[b].id);
         }
@@ -265,7 +265,7 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) const {
     vector<Inpution::Bind> result;
-    for(size_t b = 0; b < mgr.binds.size(); b++) {
+    forIdx(b, mgr.binds) {
         if(mgr.binds[b].actionTypeId == actionTypeId) {
             result.push_back(mgr.binds[b]);
         }
@@ -284,7 +284,7 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
 vector<Inpution::Bind> ControlsMediator::findBinds(
     const string& actionTypeName
 ) const {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+    forIdx(b, playerActionTypes) {
         if(playerActionTypes[b].internalName == actionTypeName) {
             return findBinds(playerActionTypes[b].id);
         }
@@ -302,7 +302,7 @@ vector<Inpution::Bind> ControlsMediator::findBinds(
 PlayerActionType ControlsMediator::getActionTypeById(
     PLAYER_ACTION_TYPE id
 ) const {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+    forIdx(b, playerActionTypes) {
         if(playerActionTypes[b].id == id) {
             return playerActionTypes[b];
         }
@@ -321,7 +321,7 @@ PlayerActionType ControlsMediator::getActionTypeById(
 PLAYER_ACTION_TYPE ControlsMediator::getActionTypeByIName(
     const string& iName
 ) const {
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+    forIdx(b, playerActionTypes) {
         if(playerActionTypes[b].internalName == iName) {
             return playerActionTypes[b].id;
         }
@@ -523,14 +523,14 @@ void ControlsMediator::loadBindsFromDataNode(
     const vector<PlayerActionType>& playerActionTypes =
         getAllActionTypes();
         
-    for(size_t a = 0; a < playerActionTypes.size(); a++) {
+    forIdx(a, playerActionTypes) {
         string actionTypeName = playerActionTypes[a].internalName;
         if(actionTypeName.empty()) continue;
         
         DataNode* bindNode = node->getChildByName(actionTypeName);
         vector<string> inputs = semicolonListToVector(bindNode->value);
         
-        for(size_t c = 0; c < inputs.size(); c++) {
+        forIdx(c, inputs) {
             Inpution::InputSource inputSource = strToInputSource(inputs[c]);
             if(inputSource.type == Inpution::INPUT_SOURCE_TYPE_NONE) continue;
             
@@ -589,14 +589,14 @@ void ControlsMediator::saveBindsToDataNode(
     const vector<Inpution::Bind>& allBinds = binds();
     
     //Fill the defaults, which are all empty strings.
-    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+    forIdx(b, playerActionTypes) {
         string actionTypeName = playerActionTypes[b].internalName;
         if(actionTypeName.empty()) continue;
         bindStrs[actionTypeName].clear();
     }
     
     //Fill their input strings.
-    for(size_t b = 0; b < allBinds.size(); b++) {
+    forIdx(b, allBinds) {
         if(allBinds[b].playerNr != playerNr) continue;
         PlayerActionType actionType =
             getActionTypeById((PLAYER_ACTION_TYPE) allBinds[b].actionTypeId);

@@ -42,8 +42,8 @@ void AnimationEditor::openLoadDialog() {
             )
         );
     }
-    for(size_t c = 0; c < customCatTypes.size(); c++) {
-        for(size_t a = 0; a < customCatTypes[c].size(); a++) {
+    forIdx(c, customCatTypes) {
+        forIdx(a, customCatTypes[c]) {
             MobType* mtPtr = customCatTypes[c][a];
             if(!mtPtr) continue;
             if(!mtPtr->manifest) continue;
@@ -966,7 +966,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
             )
         ) {
             vector<PickerItem> animNames;
-            for(size_t a = 0; a < db.animations.size(); a++) {
+            forIdx(a, db.animations) {
                 ALLEGRO_BITMAP* animFrame1 = nullptr;
                 if(!db.animations[a]->frames.empty()) {
                     size_t sPos =
@@ -1081,7 +1081,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
     
     //Import animation popup.
     vector<string> importAnimNames;
-    for(size_t a = 0; a < db.animations.size(); a++) {
+    forIdx(a, db.animations) {
         if(db.animations[a] == curAnimInst.curAnim) continue;
         importAnimNames.push_back(db.animations[a]->name);
     }
@@ -1169,7 +1169,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
     ) {
         if(!newPartName.empty()) {
             bool alreadyExists = false;
-            for(size_t b = 0; b < db.bodyParts.size(); b++) {
+            forIdx(b, db.bodyParts) {
                 if(db.bodyParts[b]->name == newPartName) {
                     selectedPart = (int) b;
                     alreadyExists = true;
@@ -1270,7 +1270,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
             )
         ) {
         
-            for(size_t p = 0; p < db.bodyParts.size(); p++) {
+            forIdx(p, db.bodyParts) {
             
                 //Body part selectable.
                 bool isSelected = (p == (size_t) selectedPart);
@@ -1328,7 +1328,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
 void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
     //Sprite combobox.
     vector<string> spriteNames;
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         spriteNames.push_back(db.sprites[s]->name);
     }
     if(
@@ -1427,11 +1427,7 @@ void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
             //Sound combobox.
             ImGui::SameLine();
             vector<string> sounds = { NONE_OPTION };
-            for(
-                size_t s = 0;
-                s < loadedMobType->sounds.size();
-                s++
-            ) {
+            forIdx(s, loadedMobType->sounds) {
                 sounds.push_back(loadedMobType->sounds[s].name);
             }
             if(
@@ -1459,11 +1455,7 @@ void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
             curAnimInst.curAnim->frames[
                 curAnimInst.curFrameIdx
             ].duration;
-        for(
-            size_t i = 0;
-            i < curAnimInst.curAnim->frames.size();
-            i++
-        ) {
+        forIdx(i, curAnimInst.curAnim->frames) {
             curAnimInst.curAnim->frames[i].duration = d;
         }
         curAnimInst.curFrameTime = 0.0f;
@@ -1903,7 +1895,7 @@ void AnimationEditor::processGuiPanelSprite() {
             )
         ) {
             vector<PickerItem> spriteNames;
-            for(size_t s = 0; s < db.sprites.size(); s++) {
+            forIdx(s, db.sprites) {
                 spriteNames.push_back(
                     PickerItem(
                         db.sprites[s]->name,
@@ -2009,7 +2001,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Import sprite popup.
     vector<string> importSpriteNames;
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         if(db.sprites[s] == curSprite) continue;
         importSpriteNames.push_back(db.sprites[s]->name);
     }
@@ -2093,9 +2085,9 @@ void AnimationEditor::processGuiPanelSprite() {
         if(ImGui::BeginMenu("Uses in animations")) {
         
             map<string, vector<size_t> > entries;
-            for(size_t a = 0; a < db.animations.size(); a++) {
+            forIdx(a, db.animations) {
                 Animation* aPtr = db.animations[a];
-                for(size_t f = 0; f < aPtr->frames.size(); f++) {
+                forIdx(f, aPtr->frames) {
                     if(aPtr->frames[f].spritePtr == curSprite) {
                         entries[aPtr->name].push_back(f);
                     }
@@ -2261,7 +2253,7 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
         
         //Import bitmap popup.
         vector<string> importSpriteNames;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
+        forIdx(s, db.sprites) {
             if(db.sprites[s] == curSprite) continue;
             importSpriteNames.push_back(db.sprites[s]->name);
         }
@@ -2455,7 +2447,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
     
     //Import sprite popup.
     vector<string> importSpriteNames;
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         if(db.sprites[s] == curSprite) continue;
         importSpriteNames.push_back(db.sprites[s]->name);
     }
@@ -2499,7 +2491,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
         
             //Vertically selectable.
             if(ImGui::Selectable("Vertically")) {
-                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+                forIdx(h, curSprite->hitboxes) {
                     flipHitbox(&curSprite->hitboxes[h], false);
                 }
                 changesMgr.markAsChanged();
@@ -2511,7 +2503,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             
             //Horizontally selectable.
             if(ImGui::Selectable("Horizontally")) {
-                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+                forIdx(h, curSprite->hitboxes) {
                     flipHitbox(&curSprite->hitboxes[h], true);
                 }
                 changesMgr.markAsChanged();
@@ -2855,7 +2847,7 @@ void AnimationEditor::processGuiPanelSpriteTop() {
         
         //Import sprite popup.
         vector<string> importSpriteNames;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
+        forIdx(s, db.sprites) {
             if(db.sprites[s] == curSprite) continue;
             importSpriteNames.push_back(db.sprites[s]->name);
         }
@@ -2987,7 +2979,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
         
         //Import sprite popup.
         vector<string> importSpriteNames;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
+        forIdx(s, db.sprites) {
             if(db.sprites[s] == curSprite) continue;
             importSpriteNames.push_back(db.sprites[s]->name);
         }
@@ -3110,7 +3102,7 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
             
                 //Comparison sprite combobox.
                 vector<string> allSprites;
-                for(size_t s = 0; s < db.sprites.size(); s++) {
+                forIdx(s, db.sprites) {
                     if(curSprite == db.sprites[s]) continue;
                     allSprites.push_back(db.sprites[s]->name);
                 }
@@ -3358,8 +3350,12 @@ void AnimationEditor::processGuiToolbar() {
             game.options.animEd.quickPlayAreaPath,
             &areaNames, &areaPaths, &selectedAreaIdx
         );
-        for(int a = 0; a < (int) areaNames.size(); a++) {
-            if(ImGui::Selectable(areaNames[a].c_str(), a == selectedAreaIdx)) {
+        forIdx(a, areaNames) {
+            if(
+                ImGui::Selectable(
+                    areaNames[a].c_str(), (int) a == selectedAreaIdx
+                )
+            ) {
                 game.options.animEd.quickPlayAreaPath = areaPaths[a];
                 saveOptions();
                 ImGui::CloseCurrentPopup();

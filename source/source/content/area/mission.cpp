@@ -628,7 +628,7 @@ MISSION_MEDAL MissionData::getScoreMedal(int score) {
  * @return Whether it is a clear.
  */
 bool MissionData::isPauseMenuEndClear() const {
-    for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+    forIdx(c, game.curArea->mission.endConds) {
         if(
             game.curArea->mission.endConds[c].type ==
             MISSION_END_COND_PAUSE_MENU
@@ -884,7 +884,7 @@ bool MissionEndCondTypeTakeDamage::getZoomData(
  * @return Whether it is met.
  */
 bool MissionEndCondTypeTakeDamage::isMet(MissionEndCond* cond) const {
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         if(
             game.states.gameplay->mobs.leaders[l]->health <
             game.states.gameplay->mobs.leaders[l]->maxHealth
@@ -1265,7 +1265,7 @@ int MissionMetricTypeLeadersInRegion::getAmount(size_t idxParam) const {
  */
 int MissionMetricTypeLeadersInRegion::getAutoTarget(size_t idxParam) const {
     size_t nLeaders = 0;
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
             nLeaders++;
@@ -1341,7 +1341,7 @@ int MissionMetricTypeLeadersLost::getAmount(size_t idxParam) const {
  */
 int MissionMetricTypeLeadersLost::getAutoTarget(size_t idxParam) const {
     size_t nLeaders = 0;
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_LEADERS) {
             nLeaders++;
@@ -1405,7 +1405,7 @@ int MissionMetricTypeLivingPikmin::getAmount(size_t idxParam) const {
  */
 int MissionMetricTypeLivingPikmin::getAutoTarget(size_t idxParam) const {
     size_t nPikmin = 0;
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             nPikmin++;
@@ -1606,7 +1606,7 @@ int MissionMetricTypePikminBorn::getAmount(size_t idxParam) const {
  */
 int MissionMetricTypePikminBorn::getAutoTarget(size_t idxParam) const {
     size_t nPikmin = 0;
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             nPikmin++;
@@ -1670,7 +1670,7 @@ int MissionMetricTypePikminDeaths::getAmount(size_t idxParam) const {
  */
 int MissionMetricTypePikminDeaths::getAutoTarget(size_t idxParam) const {
     size_t nPikmin = 0;
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             nPikmin++;
@@ -1896,7 +1896,7 @@ vector<size_t> MissionMobGroup::calculateList() const {
     
     vector<size_t> result;
     
-    for(size_t g = 0; g < game.curArea->mobGenerators.size(); g++) {
+    forIdx(g, game.curArea->mobGenerators) {
         MobGen* gPtr = game.curArea->mobGenerators[g];
         bool toAdd = false;
         
@@ -1982,7 +1982,7 @@ vector<size_t> MissionMobGroup::calculateList() const {
 float MissionMobGroup::calculateTotalHealth() const {
     vector<size_t> idxs = calculateList();
     float total = 0.0f;
-    for(size_t i = 0; i < idxs.size(); i++) {
+    forIdx(i, idxs) {
         total += game.curArea->mobGenerators[idxs[i]]->type->maxHealth;
     }
     return total;

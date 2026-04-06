@@ -105,7 +105,7 @@ bool Bridge::checkHealth() {
                     angle
                 );
                 
-            for(size_t m = 0; m < prevChunkComponents.size(); m++) {
+            forIdx(m, prevChunkComponents) {
                 prevChunkComponents[m]->pos +=
                     offset;
                 prevChunkComponents[m]->setRectangularDim(
@@ -206,7 +206,7 @@ bool Bridge::checkHealth() {
     }
     
     //Finish setting up the new component mobs.
-    for(size_t m = 0; m < newMobs.size(); m++) {
+    forIdx(m, newMobs) {
         Mob* mPtr = newMobs[m];
         enableFlag(mPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         mPtr->links.push_back(this);

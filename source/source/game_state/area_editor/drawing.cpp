@@ -404,7 +404,7 @@ void AreaEditor::drawCanvas() {
             break;
             
         } case 2: {
-            for(size_t p = 0; p < newCircleSectorPoints.size(); p++) {
+            forIdx(p, newCircleSectorPoints) {
                 Point curPoint = newCircleSectorPoints[p];
                 Point nextPoint =
                     getNextInVectorByIdx(newCircleSectorPoints, p);
@@ -420,7 +420,7 @@ void AreaEditor::drawCanvas() {
                 );
             }
             
-            for(size_t p = 0; p < newCircleSectorPoints.size(); p++) {
+            forIdx(p, newCircleSectorPoints) {
                 al_draw_filled_circle(
                     newCircleSectorPoints[p].x,
                     newCircleSectorPoints[p].y,
@@ -636,7 +636,7 @@ void AreaEditor::drawCrossSectionGraph() {
             
         };
         vector<Split> splits;
-        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        forIdx(e, game.curArea->edges) {
             Edge* ePtr = game.curArea->edges[e];
             float l1r = 0;
             float l2r = 0;
@@ -1097,7 +1097,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
         
         if(debugTriangulation && !selectedSectors.empty()) {
             Sector* sPtr = *selectedSectors.begin();
-            for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+            forIdx(t, sPtr->triangles) {
                 Triangle* tPtr = &sPtr->triangles[t];
                 al_draw_triangle(
                     tPtr->points[0]->x,
@@ -1210,7 +1210,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     
     //Links and stores.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
-        for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        forIdx(m, game.curArea->mobGenerators) {
             MobGen* mPtr = game.curArea->mobGenerators[m];
             MobGen* m2Ptr = nullptr;
             
@@ -1218,7 +1218,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
             
             bool isSelected = mobSelection.contains(m);
             
-            for(size_t l = 0; l < mPtr->links.size(); l++) {
+            forIdx(l, mPtr->links) {
                 m2Ptr = mPtr->links[l];
                 if(!m2Ptr->type) continue;
                 
@@ -1256,7 +1256,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     }
     
     //The generators themselves.
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         
         float radius = getMobGenRadius(mPtr);
@@ -1277,7 +1277,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         
         //Draw children of this mob.
         if(mPtr->type) {
-            for(size_t c = 0; c < mPtr->type->children.size(); c++) {
+            forIdx(c, mPtr->type->children) {
                 MobType::Child* childInfo =
                     &mPtr->type->children[c];
                 MobType::SpawnInfo* spawnInfo =
@@ -1417,7 +1417,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
-        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        forIdx(s, game.curArea->pathStops) {
             PathStop* sPtr = game.curArea->pathStops[s];
             bool highlighted = highlightedPathStop == sPtr;
             ALLEGRO_COLOR color;
@@ -1458,9 +1458,9 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         }
         
         //Links.
-        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        forIdx(s, game.curArea->pathStops) {
             PathStop* sPtr = game.curArea->pathStops[s];
-            for(size_t l = 0; l < sPtr->links.size(); l++) {
+            forIdx(l, sPtr->links) {
                 PathLink* lPtr = sPtr->links[l];
                 PathStop* s2Ptr = lPtr->endPtr;
                 bool oneWay = !lPtr->endPtr->getLink(sPtr);
@@ -1572,7 +1572,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         if(showClosestStop) {
             PathStop* closest = nullptr;
             float closestDist = FLT_MAX;
-            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            forIdx(s, game.curArea->pathStops) {
                 PathStop* sPtr = game.curArea->pathStops[s];
                 float d =
                     Distance(
@@ -1691,7 +1691,7 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR REGION_BG_COLOR = al_map_rgb(128, 128, 64);
     
     if(state == EDITOR_STATE_DETAILS) {
-        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+        forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             
             al_draw_rectangle(
@@ -1716,7 +1716,7 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR REMINDER_BG_COLOR = al_map_rgb(128, 128, 64);
     
     if(state == EDITOR_STATE_REVIEW) {
-        for(size_t r = 0; r < game.curArea->reminders.size(); r++) {
+        forIdx(r, game.curArea->reminders) {
             AreaMakerReminder* rPtr = &game.curArea->reminders[r];
             
             drawFilledRoundedRectangle(
@@ -1849,7 +1849,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             selected || !valid || viewHeightmap ||
             viewBrightness || showBlockingSectors || highlighted
         ) {
-            for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+            forIdx(t, sPtr->triangles) {
             
                 ALLEGRO_VERTEX av[3];
                 for(size_t v = 0; v < 3; v++) {
@@ -1915,7 +1915,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
     ) {
-        for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
+        forIdx(s, game.curArea->treeShadows) {
         
             TreeShadow* sPtr = game.curArea->treeShadows[s];
             if(!previewMode && shadowSelection.contains(s)) {

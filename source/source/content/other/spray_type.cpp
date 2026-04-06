@@ -51,7 +51,7 @@ void SprayType::loadFromDataNode(
     if(effectsNode) {
         vector<string> effectsStrs =
             semicolonListToVector(effectsNode->value);
-        for(size_t e = 0; e < effectsStrs.size(); e++) {
+        forIdx(e, effectsStrs) {
             string effectName = effectsStrs[e];
             if(!isInMap(game.content.statusTypes.list, effectName)) {
                 game.errors.report(

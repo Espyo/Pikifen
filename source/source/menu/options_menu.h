@@ -122,7 +122,7 @@ public:
      */
     void init() {
         curOptionIdx = INVALID;
-        for(size_t p = 0; p < presetValues.size(); p++) {
+        forIdx(p, presetValues) {
             if(*curValue == presetValues[p]) {
                 curOptionIdx = p;
                 break;

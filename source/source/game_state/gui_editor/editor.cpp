@@ -349,7 +349,7 @@ void GuiEditor::gridIntervalDecreaseCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     float newGridInterval = GUI_EDITOR::GRID_INTERVALS[0];
-    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
+    forIdx(i, GUI_EDITOR::GRID_INTERVALS) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] >=
             game.options.guiEd.gridInterval
@@ -573,7 +573,7 @@ void GuiEditor::quickPlayCmd(float inputValue) {
     
     bool areaFound = false;
     for(size_t t = 0; t < 2; t++) {
-        for(size_t a = 0; a < game.content.areas.list[t].size(); a++) {
+        forIdx(a, game.content.areas.list[t]) {
             if(
                 game.content.areas.list[t][a]->manifest->path ==
                 game.options.guiEd.quickPlayAreaPath
@@ -618,10 +618,10 @@ void GuiEditor::quitCmd(float inputValue) {
  */
 void GuiEditor::rebuildAllItemsCache() {
     allItems.clear();
-    for(size_t h = 0; h < hardcodedItems.size(); h++) {
+    forIdx(h, hardcodedItems) {
         allItems.push_back(&hardcodedItems[h]);
     }
-    for(size_t c = 0; c < customItems.size(); c++) {
+    forIdx(c, customItems) {
         allItems.push_back(&customItems[c]);
     }
 }

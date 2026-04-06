@@ -81,7 +81,7 @@ CarryInfo::CarryInfo(
  * @return Whether it can fly.
  */
 bool CarryInfo::canFly() const {
-    for(size_t c = 0; c < spotInfo.size(); c++) {
+    forIdx(c, spotInfo) {
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         if(!hasFlag(spotInfo[c].pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
@@ -101,7 +101,7 @@ bool CarryInfo::canFly() const {
 vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<MobType*> carrierTypes;
-    for(size_t c = 0; c < spotInfo.size(); c++) {
+    forIdx(c, spotInfo) {
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         carrierTypes.insert(carrierPtr->type);
@@ -119,7 +119,7 @@ vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
  * @return The player team index, or INVALID.
  */
 size_t CarryInfo::getPlayerTeamIdx() const {
-    for(size_t s = 0; s < spotInfo.size(); s++) {
+    forIdx(s, spotInfo) {
         if(!spotInfo[s].pikPtr) continue;
         return spotInfo[s].pikPtr->getPlayerTeamIdx();
     }
@@ -141,7 +141,7 @@ float CarryInfo::getSpeed() const {
     float maxSpeed = 0;
     
     //Begin by obtaining the average walking speed of the carriers.
-    for(size_t s = 0; s < spotInfo.size(); s++) {
+    forIdx(s, spotInfo) {
         const CarrierSpot* sPtr = &spotInfo[s];
         
         if(sPtr->state != CARRY_SPOT_STATE_USED) continue;
@@ -177,7 +177,7 @@ float CarryInfo::getSpeed() const {
  * @return Whether it is empty.
  */
 bool CarryInfo::isEmpty() const {
-    for(size_t s = 0; s < spotInfo.size(); s++) {
+    forIdx(s, spotInfo) {
         if(spotInfo[s].state != CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
@@ -190,7 +190,7 @@ bool CarryInfo::isEmpty() const {
  * @return Whether it is full.
  */
 bool CarryInfo::isFull() const {
-    for(size_t s = 0; s < spotInfo.size(); s++) {
+    forIdx(s, spotInfo) {
         if(spotInfo[s].state == CARRY_SPOT_STATE_FREE) return false;
     }
     return true;
@@ -206,7 +206,7 @@ bool CarryInfo::isFull() const {
  * @param angle Angle to rotate to.
  */
 void CarryInfo::rotatePoints(float angle) {
-    for(size_t s = 0; s < spotInfo.size(); s++) {
+    forIdx(s, spotInfo) {
         float sAngle = angle + (TAU / m->type->maxCarriers * s);
         Point p(
             cos(sAngle) *
@@ -278,7 +278,7 @@ bool Group::changeStandbyType(bool moveBackwards) {
  * Pikmin of the current one. Or to no type.
  */
 void Group::changeStandbyTypeIfNeeded() {
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         if(members[m]->subgroupTypePtr == curStandbyType) {
             //Never mind, there is a member of this subgroup type.
             return;
@@ -297,7 +297,7 @@ void Group::changeStandbyTypeIfNeeded() {
  */
 size_t Group::getAmountByType(const MobType* type) const {
     size_t amount = 0;
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         if(members[m]->type == type) {
             amount++;
         }
@@ -313,7 +313,7 @@ size_t Group::getAmountByType(const MobType* type) const {
  */
 Point Group::getAverageMemberPos() const {
     Point avg;
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         avg += members[m]->pos;
     }
     return avg / members.size();
@@ -332,7 +332,7 @@ vector<Hazard*> Group::getGroupInvulnerabilities(
 ) const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<MobType*> memberTypes;
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         Mob* memberPtr = members[m];
         if(!memberPtr) continue;
         memberTypes.insert(memberPtr->type);
@@ -393,7 +393,7 @@ bool Group::getNextStandbyType(
         ) {
             //If this is a leader, and leaders cannot be thrown, skip.
         } else {
-            for(size_t m = 0; m < members.size(); m++) {
+            forIdx(m, members) {
                 if(members[m]->subgroupTypePtr == scanningType) {
                     finalType = scanningType;
                     success = true;
@@ -452,7 +452,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
     //First, backup the old mob indexes.
     vector<Mob*> oldMobs;
     oldMobs.resize(spots.size());
-    for(size_t m = 0; m < spots.size(); m++) {
+    forIdx(m, spots) {
         oldMobs[m] = spots[m].mobPtr;
     }
     
@@ -556,7 +556,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
     //with the rightmost points coming first.
     
     //Start by sorting the points.
-    for(size_t a = 0; a < alphaSpots.size(); a++) {
+    forIdx(a, alphaSpots) {
         alphaSpots[a].distanceToRightmost =
             Distance(
                 alphaSpots[a].pos,
@@ -574,7 +574,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
     //Finally, create the group spots.
     spots.clear();
     spots.resize(members.size(), GroupSpot());
-    for(size_t s = 0; s < members.size(); s++) {
+    forIdx(s, members) {
         spots[s] =
             GroupSpot(
                 Point(
@@ -587,7 +587,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
     
     //Pass the old mobs over.
     if(oldMobs.size() < spots.size()) {
-        for(size_t m = 0; m < oldMobs.size(); m++) {
+        forIdx(m, oldMobs) {
             spots[m].mobPtr = oldMobs[m];
             spots[m].mobPtr->groupSpotIdx = m;
         }
@@ -595,7 +595,8 @@ void Group::initSpots(Mob* affectedMobPtr) {
         affectedMobPtr->groupSpotIdx = oldMobs.size();
         
     } else if(oldMobs.size() > spots.size()) {
-        for(size_t m = 0, s = 0; m < oldMobs.size(); m++) {
+        size_t s = 0;
+        forIdx(m, oldMobs) {
             if(oldMobs[m] == affectedMobPtr) {
                 oldMobs[m]->groupSpotIdx = INVALID;
                 continue;
@@ -606,7 +607,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
         }
         
     } else {
-        for(size_t m = 0; m < oldMobs.size(); m++) {
+        forIdx(m, oldMobs) {
             spots[m].mobPtr = oldMobs[m];
             spots[m].mobPtr->groupSpotIdx = m;
         }
@@ -619,16 +620,16 @@ void Group::initSpots(Mob* affectedMobPtr) {
  * each spot.
  */
 void Group::reassignSpots() {
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         members[m]->groupSpotIdx = INVALID;
     }
     
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         Point spotPos = anchor + getSpotOffset(s);
         Mob* closestMob = nullptr;
         Distance closestDist;
         
-        for(size_t m = 0; m < members.size(); m++) {
+        forIdx(m, members) {
             Mob* mPtr = members[m];
             if(mPtr->groupSpotIdx != INVALID) continue;
             
@@ -653,7 +654,7 @@ void Group::reassignSpots() {
  * the group.
  */
 void Group::sort(SubgroupType* leadingType) {
-    for(size_t m = 0; m < members.size(); m++) {
+    forIdx(m, members) {
         members[m]->groupSpotIdx = INVALID;
     }
     
@@ -666,7 +667,7 @@ void Group::sort(SubgroupType* leadingType) {
         //Find the member closest to this spot.
         Mob* closestMember = nullptr;
         Distance closestDist;
-        for(size_t m = 0; m < members.size(); m++) {
+        forIdx(m, members) {
             Mob* mPtr = members[m];
             if(mPtr->subgroupTypePtr != curType) continue;
             if(mPtr->groupSpotIdx != INVALID) continue;
@@ -873,7 +874,7 @@ PikminNest::PikminNest(
     mPtr(mPtr),
     nestType(type) {
     
-    for(size_t t = 0; t < nestType->pikTypes.size(); t++) {
+    forIdx(t, nestType->pikTypes) {
         pikminInside.push_back(vector<size_t>(N_MATURITIES, 0));
         callQueue.push_back(0);
     }
@@ -964,7 +965,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
  */
 size_t PikminNest::getAmountByType(const PikminType* type) {
     size_t amount = 0;
-    for(size_t t = 0; t < nestType->pikTypes.size(); t++) {
+    forIdx(t, nestType->pikTypes) {
         if(nestType->pikTypes[t] == type) {
             for(size_t m = 0; m < N_MATURITIES; m++) {
                 amount += pikminInside[t][m];
@@ -1005,7 +1006,7 @@ void PikminNest::readScriptVars(const ScriptVarReader& svr) {
         vector<string> pikminInsideVars = split(pikminInsideVar);
         size_t word = 0;
         
-        for(size_t t = 0; t < nestType->pikTypes.size(); t++) {
+        forIdx(t, nestType->pikTypes) {
             for(size_t m = 0; m < N_MATURITIES; m++) {
                 if(word < pikminInsideVars.size()) {
                     pikminInside[t][m] = s2i(pikminInsideVars[word]);
@@ -1041,7 +1042,7 @@ void PikminNest::requestPikmin(
  * @param pPtr Pikmin to store.
  */
 void PikminNest::storePikmin(Pikmin* pPtr) {
-    for(size_t t = 0; t < nestType->pikTypes.size(); t++) {
+    forIdx(t, nestType->pikTypes) {
         if(pPtr->type == nestType->pikTypes[t]) {
             pikminInside[t][pPtr->maturity]++;
             break;
@@ -1073,7 +1074,7 @@ void PikminNest::tick(float deltaT) {
         size_t bestType = INVALID;
         size_t bestTypeAmount = 0;
         
-        for(size_t t = 0; t < nestType->pikTypes.size(); t++) {
+        forIdx(t, nestType->pikTypes) {
             if(callQueue[t] == 0) continue;
             if(callQueue[t] > bestTypeAmount) {
                 bestType = t;
@@ -1182,7 +1183,7 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     }
     
     vector<string> pikTypesStrs = semicolonListToVector(pikTypesStr);
-    for(size_t t = 0; t < pikTypesStrs.size(); t++) {
+    forIdx(t, pikTypesStrs) {
         string& str = pikTypesStrs[t];
         if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
             game.errors.report(
@@ -1194,7 +1195,7 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
         }
     }
     
-    for(size_t s = 0; s < mobType->sounds.size(); s++) {
+    forIdx(s, mobType->sounds) {
         if(mobType->sounds[s].name == "pikmin_entry") {
             soundPikminEntryIdx = s;
         } else if(mobType->sounds[s].name == "pikmin_exit") {
@@ -1305,7 +1306,7 @@ Mob* createMob(
     }
     mPtr->scriptVM.fsm.init();
     
-    for(size_t c = 0; c < type->children.size(); c++) {
+    forIdx(c, type->children) {
         MobType::Child* childInfo =
             &type->children[c];
         MobType::SpawnInfo* spawnInfo =
@@ -1335,7 +1336,7 @@ Mob* createMob(
         if(!childInfo->limbAnimName.empty()) {
             pInfo->limbAnim.animDb = mPtr->anim.animDb;
             Animation* animToUse = nullptr;
-            for(size_t a = 0; a < mPtr->anim.animDb->animations.size(); a++) {
+            forIdx(a, mPtr->anim.animDb->animations) {
                 if(
                     mPtr->anim.animDb->animations[a]->name ==
                     childInfo->limbAnimName
@@ -1424,7 +1425,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
     if(!completeDestruction) {
         mPtr->leaveGroup();
         
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        forIdx(m, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->focusedMob == mPtr) {
                 m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
@@ -1437,17 +1438,17 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                 m2Ptr->parent = nullptr;
                 m2Ptr->toDelete = true;
             }
-            for(size_t f = 0; f < m2Ptr->focusedMobMemory.size(); f++) {
+            forIdx(f, m2Ptr->focusedMobMemory) {
                 if(m2Ptr->focusedMobMemory[f] == mPtr) {
                     m2Ptr->focusedMobMemory[f] = nullptr;
                 }
             }
-            for(size_t c = 0; c < m2Ptr->chompingMobs.size(); c++) {
+            forIdx(c, m2Ptr->chompingMobs) {
                 if(m2Ptr->chompingMobs[c] == mPtr) {
                     m2Ptr->chompingMobs[c] = nullptr;
                 }
             }
-            for(size_t l = 0; l < m2Ptr->links.size(); l++) {
+            forIdx(l, m2Ptr->links) {
                 if(m2Ptr->links[l] == mPtr) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
                     l--;
@@ -1458,9 +1459,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                 m2Ptr->storedInsideAnother = nullptr;
             }
             if(m2Ptr->carryInfo) {
-                for(
-                    size_t c = 0; c < m2Ptr->carryInfo->spotInfo.size(); c++
-                ) {
+                forIdx(c, m2Ptr->carryInfo->spotInfo) {
                     if(m2Ptr->carryInfo->spotInfo[c].pikPtr == mPtr) {
                         m2Ptr->carryInfo->spotInfo[c].pikPtr =
                             nullptr;
@@ -1570,7 +1569,7 @@ vector<Hazard*> getMobTypeListInvulnerabilities(
 MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* childInfo
 ) {
-    for(size_t s = 0; s < type->spawns.size(); s++) {
+    forIdx(s, type->spawns) {
         if(type->spawns[s].name == childInfo->spawnName) {
             return &type->spawns[s];
         }

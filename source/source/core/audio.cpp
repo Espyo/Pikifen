@@ -279,7 +279,7 @@ bool AudioManager::destroySoundSource(size_t sourceId) {
             SOUND_FLAG_KEEP_PLAYBACK_ON_DESTROY
         )
     ) {
-        for(size_t p = 0; p < playbacks.size(); p++) {
+        forIdx(p, playbacks) {
             if(playbacks[p].sourceId == sourceId) {
                 stopSoundPlayback(p);
             }
@@ -310,7 +310,7 @@ bool AudioManager::emit(size_t sourceId) {
         sourcePtr->config.stackMinPos > 0.0f ||
         sourcePtr->config.stackMode == SOUND_STACK_MODE_NEVER
     ) {
-        for(size_t p = 0; p < playbacks.size(); p++) {
+        forIdx(p, playbacks) {
             SoundPlayback* playback = &playbacks[p];
             SoundSource* pSourcePtr = getSource(playback->sourceId);
             if(!pSourcePtr || pSourcePtr->sample != sample) continue;
@@ -352,7 +352,7 @@ bool AudioManager::emit(size_t sourceId) {
     
     //Check if other playbacks exist and if we need to stop them.
     if(sourcePtr->config.stackMode == SOUND_STACK_MODE_OVERRIDE) {
-        for(size_t p = 0; p < playbacks.size(); p++) {
+        forIdx(p, playbacks) {
             SoundPlayback* playback = &playbacks[p];
             SoundSource* pSourcePtr = getSource(playback->sourceId);
             if(!pSourcePtr || pSourcePtr->sample != sample) {
@@ -524,7 +524,7 @@ void AudioManager::handleStreamFinished(ALLEGRO_AUDIO_STREAM* stream) {
  */
 void AudioManager::handleWorldPause() {
     //Pause playbacks.
-    for(size_t p = 0; p < playbacks.size(); p++) {
+    forIdx(p, playbacks) {
         SoundPlayback* playbackPtr = &playbacks[p];
         if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) {
             continue;
@@ -561,7 +561,7 @@ void AudioManager::handleWorldPause() {
  */
 void AudioManager::handleWorldUnpause() {
     //Unpause playbacks.
-    for(size_t p = 0; p < playbacks.size(); p++) {
+    forIdx(p, playbacks) {
         SoundPlayback* playbackPtr = &playbacks[p];
         if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) {
             continue;
@@ -875,7 +875,7 @@ void AudioManager::startSongTrack(
  * @param filter Sound sample to filter by, or nullptr to stop all playbacks.
  */
 void AudioManager::stopAllPlaybacks(const ALLEGRO_SAMPLE* filter) {
-    for(size_t p = 0; p < playbacks.size(); p++) {
+    forIdx(p, playbacks) {
         bool toStop = false;
         
         if(!filter) {
@@ -953,7 +953,7 @@ void AudioManager::tick(float deltaT) {
     }
     
     //Update playbacks.
-    for(size_t p = 0; p < playbacks.size(); p++) {
+    forIdx(p, playbacks) {
         SoundPlayback* playbackPtr = &playbacks[p];
         if(playbackPtr->state == SOUND_PLAYBACK_STATE_DESTROYED) continue;
         

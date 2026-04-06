@@ -153,7 +153,7 @@ void ContentManager::loadAll(
 ) {
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         engineAssert(
             loadLevels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
@@ -164,7 +164,7 @@ void ContentManager::loadAll(
     }
     
     //Now load the content.
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         const string& perfMonName = mgrPtr->getPerfMonMeasurementName();
         if(!perfMonName.empty() && game.perfMon) {
@@ -239,7 +239,7 @@ void ContentManager::reloadPacks() {
  * @param types Types of content to unload.
  */
 void ContentManager::unloadAll(const vector<CONTENT_TYPE>& types) {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         
         engineAssert(
@@ -292,7 +292,7 @@ void PackManager::fillManifests() {
     vector<string> rawFolders =
         folderToVector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
         
-    for(size_t f = 0; f < rawFolders.size(); f++) {
+    forIdx(f, rawFolders) {
         if(rawFolders[f] != FOLDER_NAMES::BASE_PACK) {
             manifestsSansBaseRaw.push_back(rawFolders[f]);
         }
@@ -313,7 +313,7 @@ void PackManager::fillManifests() {
             organizedFolders, game.options.packs.order
         );
         
-    for(size_t f = 0; f < organizedFolders.size(); f++) {
+    forIdx(f, organizedFolders) {
         if(organizedFolders[f] != FOLDER_NAMES::BASE_PACK) {
             manifestsSansBase.push_back(organizedFolders[f]);
         }
@@ -335,7 +335,7 @@ void PackManager::fillManifests() {
  * player options.
  */
 void PackManager::loadAll() {
-    for(size_t p = 0; p < manifestsWithBaseRaw.size(); p++) {
+    forIdx(p, manifestsWithBaseRaw) {
         DataNode packFile =
             loadDataFile(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +

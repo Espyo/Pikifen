@@ -3669,7 +3669,7 @@ void PikminFsm::landOnMobWhileHolding(
         
         Distance closestLeaderDist;
         Leader* closestLeader = nullptr;
-        for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+        forIdx(l, game.states.gameplay->mobs.leaders) {
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
             if(!lPtr->player) continue;
             if(!lPtr->isViableLeader(pikPtr)) continue;
@@ -3718,7 +3718,7 @@ void PikminFsm::landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
         
         Distance closestLeaderDist;
         Leader* closestLeader = nullptr;
-        for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+        forIdx(l, game.states.gameplay->mobs.leaders) {
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
             if(!lPtr->player) continue;
             if(!lPtr->isViableLeader(pikPtr)) continue;
@@ -4465,7 +4465,7 @@ void PikminFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->startHeightEffect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < traPtr->type->animDb->bodyParts.size(); c++) {
+    forIdx(c, traPtr->type->animDb->bodyParts) {
         checkpoints.push_back(c);
     }
     pikPtr->trackInfo =
@@ -4741,7 +4741,7 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    for(size_t s = 0; s < pikPtr->statuses.size(); s++) {
+    forIdx(s, pikPtr->statuses) {
         if(pikPtr->statuses[s].state != STATUS_STATE_ACTIVE) continue;
         if(pikPtr->statuses[s].type->turnsInedible) {
             return;
@@ -4779,7 +4779,7 @@ void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     
     if(hazPtr->associatedLiquid) {
         bool alreadyGenerating = false;
-        for(size_t g = 0; g < pikPtr->particleGenerators.size(); g++) {
+        forIdx(g, pikPtr->particleGenerators) {
             if(
                 pikPtr->particleGenerators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
@@ -4809,7 +4809,7 @@ void PikminFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     if(vuln.effectMult == 0.0f) return;
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
-        for(size_t e = 0; e < hazPtr->effects.size(); e++) {
+        forIdx(e, hazPtr->effects) {
             pikPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
         }
     }
@@ -4833,7 +4833,7 @@ void PikminFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    for(size_t e = 0; e < s->effects.size(); e++) {
+    forIdx(e, s->effects) {
         pikPtr->applyStatus(s->effects[e], false, false, sprayer);
     }
     

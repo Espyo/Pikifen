@@ -591,9 +591,7 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
             setNewCircleSectorPoints();
             
             bool allValid = true;
-            for(
-                size_t e = 0; e < newCircleSectorValidEdges.size(); e++
-            ) {
+            forIdx(e, newCircleSectorValidEdges) {
                 if(!newCircleSectorValidEdges[e]) {
                     allValid = false;
                     break;
@@ -909,7 +907,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         }
         MobGen* mPtr =
             game.curArea->mobGenerators[mobSelection.getFirstItemIdx()];
-        for(size_t l = 0; l < mPtr->links.size(); l++) {
+        forIdx(l, mPtr->links) {
             if(mPtr->links[l] == target) {
                 setStatus(
                     "The object already links to that object!",
@@ -1289,7 +1287,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             //Selection box around the layout.
             if(!isCtrlPressed) clearSelection();
             
-            for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+            forIdx(v, game.curArea->vertexes) {
                 Vertex* vPtr = game.curArea->vertexes[v];
                 
                 if(
@@ -1304,7 +1302,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             updateVertexSelection();
             
             if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-                for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+                forIdx(e, game.curArea->edges) {
                     Edge* ePtr = game.curArea->edges[e];
                     
                     if(
@@ -1323,11 +1321,11 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             }
             
             if(selectionFilter == SELECTION_FILTER_SECTORS) {
-                for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+                forIdx(s, game.curArea->sectors) {
                     Sector* sPtr = game.curArea->sectors[s];
                     bool validSector = true;
                     
-                    for(size_t e = 0; e < sPtr->edges.size(); e++) {
+                    forIdx(e, sPtr->edges) {
                         Edge* ePtr = sPtr->edges[e];
                         
                         if(
@@ -1365,7 +1363,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             //Selection box around path stops.
             if(!isCtrlPressed) clearSelection();
             
-            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            forIdx(s, game.curArea->pathStops) {
                 PathStop* sPtr = game.curArea->pathStops[s];
                 
                 if(
@@ -1382,9 +1380,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 }
             }
             
-            for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+            forIdx(s, game.curArea->pathStops) {
                 PathStop* sPtr = game.curArea->pathStops[s];
-                for(size_t l = 0; l < sPtr->links.size(); l++) {
+                forIdx(l, sPtr->links) {
                     PathStop* s2Ptr = sPtr->links[l]->endPtr;
                     
                     if(

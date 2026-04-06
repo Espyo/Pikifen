@@ -469,7 +469,7 @@ void Options::loadFromDataNode(DataNode* file) {
         editors.openNodes.clear();
         vector<string> openNodesVector =
             semicolonListToVector(openNodesStr);
-        for(size_t n = 0; n < openNodesVector.size(); n++) {
+        forIdx(n, openNodesVector) {
             editors.openNodes[openNodesVector[n]] = true;
         }
         

@@ -483,9 +483,7 @@ void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(
-            size_t g = 0; g < game.states.gameplay->missionMobGroups.size(); g++
-        ) {
+        forIdx(g, game.states.gameplay->missionMobGroups) {
             game.states.gameplay->missionMobGroups[g].remove(scriptVM->mob);
         }
     }
@@ -515,7 +513,7 @@ void GenMobFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
 void GenMobFsm::startBeingDelivered(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
-    for(size_t p = 0; p < scriptVM->mob->carryInfo->spotInfo.size(); p++) {
+    forIdx(p, scriptVM->mob->carryInfo->spotInfo) {
         Mob* pikPtr = scriptVM->mob->carryInfo->spotInfo[p].pikPtr;
         if(pikPtr) {
             pikPtr->scriptVM.fsm.runEvent(MOB_EV_FINISHED_TASK);
@@ -563,7 +561,7 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Hazard* h = (Hazard*) info1;
     
-    for(size_t e = 0; e < h->effects.size(); e++) {
+    forIdx(e, h->effects) {
         scriptVM->mob->applyStatus(h->effects[e], false, true);
     }
 }
@@ -582,7 +580,7 @@ void GenMobFsm::touchSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     SprayType* s = (SprayType*) info1;
     Mob* sprayer = (Mob*) info2;
     
-    for(size_t e = 0; e < s->effects.size(); e++) {
+    forIdx(e, s->effects) {
         scriptVM->mob->applyStatus(s->effects[e], false, false, sprayer);
     }
 }

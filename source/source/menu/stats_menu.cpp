@@ -277,10 +277,7 @@ void StatsMenu::populateStatsList() {
     size_t missionPlatinums = 0;
     long missionScores = 0;
     
-    for(
-        size_t a = 0;
-        a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
-    ) {
+    forIdx(a, game.content.areas.list[AREA_TYPE_MISSION]) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
         loadAreaMissionRecord(&missionRecordsFile, areaPtr, record, nullptr);

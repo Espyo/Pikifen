@@ -101,20 +101,20 @@ int Pile::getMissionPoints(bool* applicableInThisMission) const {
         
         *applicableInThisMission = false;
         
-        for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        forIdx(c, game.curArea->mission.endConds) {
             MissionEndCond* cPtr =
                 &game.curArea->mission.endConds[c];
             if(!cPtr->usesMetric()) continue;
             if(!checkMetric(cPtr->metricType)) continue;
             *applicableInThisMission = true;
         }
-        for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+        forIdx(c, game.curArea->mission.scoreCriteria) {
             MissionScoreCriterion* cPtr =
                 &game.curArea->mission.scoreCriteria[c];
             if(!checkMetric(cPtr->metricType)) continue;
             *applicableInThisMission = true;
         }
-        for(size_t i = 0; i < game.curArea->mission.hudItems.size(); i++) {
+        forIdx(i, game.curArea->mission.hudItems) {
             MissionHudItem* iPtr =
                 &game.curArea->mission.hudItems[i];
             if(!iPtr->usesMetric()) continue;
@@ -174,10 +174,7 @@ void Pile::tickClassSpecifics(float deltaT) {
     if(amount == 0 && pilType->deleteWhenFinished) {
         //Ready to delete. Unless it's being used, that is.
         
-        for(
-            size_t r = 0;
-            r < game.states.gameplay->mobs.resources.size(); r++
-        ) {
+        forIdx(r, game.states.gameplay->mobs.resources) {
             Resource* rPtr = game.states.gameplay->mobs.resources[r];
             if(rPtr->originPile == this) {
                 return;

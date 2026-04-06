@@ -124,7 +124,7 @@ size_t Edge::removeFromSectors() {
     for(unsigned char s = 0; s < 2; s++) {
         Sector* sPtr = sectors[s];
         if(!sPtr) continue;
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             Edge* ePtr = sPtr->edges[e];
             if(ePtr == this) {
                 sPtr->edges.erase(sPtr->edges.begin() + e);
@@ -152,7 +152,7 @@ size_t Edge::removeFromVertexes() {
     for(unsigned char v = 0; v < 2; v++) {
         Vertex* vPtr = vertexes[v];
         if(!vPtr) continue;
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+        forIdx(e, vPtr->edges) {
             Edge* ePtr = vPtr->edges[e];
             if(ePtr == this) {
                 vPtr->edges.erase(vPtr->edges.begin() + e);

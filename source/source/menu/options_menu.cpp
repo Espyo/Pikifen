@@ -201,7 +201,7 @@ void OptionsMenu::addNewBindEntryItems(
         }
         
         vector<Inpution::Bind> aBinds = bindsPerActionType[actionType.id];
-        for(size_t b = 0; b < aBinds.size(); b++) {
+        forIdx(b, aBinds) {
         
             //Change bind button.
             ButtonGuiItem* bindButton =
@@ -559,7 +559,7 @@ void OptionsMenu::chooseInput(
     curActionType = actionType;
     curBindIdx = allBinds.size();
     
-    for(size_t b = 0; b < allBinds.size(); b++) {
+    forIdx(b, allBinds) {
         if(allBinds[b].actionTypeId != actionType) continue;
         if(bindsCounted == bindIdx) {
             curBindIdx = b;
@@ -583,7 +583,7 @@ void OptionsMenu::deleteBind(
     vector<Inpution::Bind>& allBinds = game.controls.binds();
     size_t bindsCounted = 0;
     
-    for(size_t b = 0; b < allBinds.size(); b++) {
+    forIdx(b, allBinds) {
         if(allBinds[b].actionTypeId != actionType) continue;
         if(bindsCounted == bindIdx) {
             allBinds.erase(allBinds.begin() + b);
@@ -1181,7 +1181,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     
     //Resolution picker.
     vector<string> resolutionPresetNames;
-    for(size_t p = 0; p < resolutionPresets.size(); p++) {
+    forIdx(p, resolutionPresets) {
         resolutionPresetNames.push_back(
             i2s(resolutionPresets[p].first) + "x" +
             i2s(resolutionPresets[p].second)
@@ -1858,13 +1858,13 @@ void OptionsMenu::populateBinds() {
     );
     
     //Read all binds and sort them by player action type.
-    for(size_t b = 0; b < allBinds.size(); b++) {
+    forIdx(b, allBinds) {
         const Inpution::Bind& bind = allBinds[b];
         if(bind.playerNr != 0) continue;
         bindsPerActionType[bind.actionTypeId].push_back(bind);
     }
     
-    for(size_t a = 0; a < allPlayerActionTypes.size(); a++) {
+    forIdx(a, allPlayerActionTypes) {
         const PlayerActionType& actionType = allPlayerActionTypes[a];
         
         if(actionType.internalName.empty()) continue;
@@ -2037,7 +2037,7 @@ void OptionsMenu::updateBindWarnings() {
         game.controls.getAllActionTypes();
     const vector<Inpution::Bind> binds =
         game.controls.binds();
-    for(size_t a = 0; a < actionTypes.size(); a++) {
+    forIdx(a, actionTypes) {
         const PlayerActionType& actionType = actionTypes[a];
         if(!actionType.recommended) continue;
         const auto it =

@@ -110,7 +110,7 @@ void Game::drawFramerateChart() const {
         double chartMax =
             options.advanced.targetFps +
             options.advanced.targetFps * 0.05f;
-        for(size_t f = 0; f < framerateHistory.size(); f++) {
+        forIdx(f, framerateHistory) {
             float fps =
                 std::min(
                     (float) (1.0f / framerateHistory[f]),
@@ -323,7 +323,7 @@ void Game::globalLogicPre() {
     //Debug printing.
     if(debug.showPlayerActions && !controls.actionQueue.empty()) {
         string str = "Actions: ";
-        for(size_t a = 0; a < controls.actionQueue.size(); a++) {
+        forIdx(a, controls.actionQueue) {
             string actionName =
                 controls.getActionTypeById(
                     (PLAYER_ACTION_TYPE) controls.actionQueue[a].actionTypeId
@@ -594,7 +594,7 @@ void Game::processSystemInfo() {
             curArea->maker.empty() ? "-" : curArea->maker;
 
         size_t activeMobCount = 0;
-        for(size_t m = 0; m < states.gameplay->mobs.all.size(); m++) {
+        forIdx(m, states.gameplay->mobs.all) {
             if(states.gameplay->mobs.all[m]->isActive) {
                 activeMobCount++;
             }

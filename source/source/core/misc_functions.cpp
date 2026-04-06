@@ -119,7 +119,7 @@ bool areWallsBetween(
 void clearAreaTextures() {
     if(!game.curArea) return;
     
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         if(
             sPtr->textureInfo.bitmap &&
@@ -396,7 +396,7 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
     Distance closestMobToCursorDist;
     Mob* closestMobToCursor = nullptr;
     
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
@@ -532,7 +532,7 @@ Mob* getNextMobNearCursor(
     vector<Mob*> mobsNearCursor;
     
     //First, get all mobs that are close to the mouse cursor.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         
         bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
@@ -698,7 +698,7 @@ map<string, string> getVarMap(const string& varsString) {
     map<string, string> finalMap;
     vector<string> rawVars = semicolonListToVector(varsString);
     
-    for(size_t v = 0; v < rawVars.size(); v++) {
+    forIdx(v, rawVars) {
         vector<string> rawParts = split(rawVars[v], "=");
         if(rawParts.size() < 2) {
             continue;
@@ -1336,7 +1336,7 @@ void setStringTokenWidths(
     const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,
     float maxControlBitmapHeight, bool controlCondensed
 ) {
-    for(size_t t = 0; t < tokens.size(); t++) {
+    forIdx(t, tokens) {
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
             tokens[t].width =
@@ -1377,7 +1377,7 @@ void signalHandler(int signum) {
     
     string btStr = "Backtrace:\n";
     vector<string> bt = getBacktrace();
-    for(size_t s = 0; s < bt.size(); s++) {
+    forIdx(s, bt) {
         btStr += "    " + bt[s] + "\n";
     }
     if(btStr.back() == '\n') {
@@ -1591,7 +1591,7 @@ vector<StringToken> tokenizeString(const string& s) {
     StringToken curToken;
     curToken.type = STRING_TOKEN_CHAR;
     
-    for(size_t c = 0; c < s.size(); c++) {
+    forIdx(c, s) {
         if(strPeek(s, c, "\\\\")) {
             curToken.content.push_back('\\');
             if(curToken.type == STRING_TOKEN_CHAR) {

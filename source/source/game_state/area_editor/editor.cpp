@@ -609,7 +609,7 @@ void AreaEditor::clearCurrentArea() {
     clearAreaTextures();
     
     if(game.curArea) {
-        for(size_t s = 0; s < game.curArea->treeShadows.size(); s++) {
+        forIdx(s, game.curArea->treeShadows) {
             game.content.bitmaps.list.free(
                 game.curArea->treeShadows[s]->bmpName
             );
@@ -711,7 +711,7 @@ void AreaEditor::clearSelection() {
  * @brief Clears the list of texture suggestions. This frees up the bitmaps.
  */
 void AreaEditor::clearTextureSuggestions() {
-    for(size_t s = 0; s < textureSuggestions.size(); s++) {
+    forIdx(s, textureSuggestions) {
         textureSuggestions[s].destroy();
     }
     textureSuggestions.clear();
@@ -722,11 +722,11 @@ void AreaEditor::clearTextureSuggestions() {
  * @brief Clears the undo history, deleting the memory allocated for them.
  */
 void AreaEditor::clearUndoHistory() {
-    for(size_t h = 0; h < undoHistory.size(); h++) {
+    forIdx(h, undoHistory) {
         delete undoHistory[h].first;
     }
     undoHistory.clear();
-    for(size_t h = 0; h < redoHistory.size(); h++) {
+    forIdx(h, redoHistory) {
         delete redoHistory[h].first;
     }
     redoHistory.clear();
@@ -866,7 +866,7 @@ void AreaEditor::createArea(const string& requestedAreaPath) {
  * either create edge splits, or create simple vertexes inside a sector.
  */
 void AreaEditor::createDrawingVertexes() {
-    for(size_t n = 0; n < drawingNodes.size(); n++) {
+    forIdx(n, drawingNodes) {
         LayoutDrawingNode* nPtr = &drawingNodes[n];
         if(nPtr->onVertex) continue;
         Vertex* newVertex = nullptr;
@@ -1342,7 +1342,7 @@ void AreaEditor::doSectorSplit() {
     //Let's figure out which stage to use now.
     vector<Edge*> newSectorEdges = drawingEdges;
     vector<Vertex*> newSectorVertexes;
-    for(size_t d = 0; d < drawingNodes.size(); d++) {
+    forIdx(d, drawingNodes) {
         newSectorVertexes.push_back(drawingNodes[d].onVertex);
     }
     
@@ -1376,7 +1376,7 @@ void AreaEditor::doSectorSplit() {
         //inner sector. Let's swap to the traversal stage 2 data.
         
         newSectorVertexes.clear();
-        for(size_t d = 0; d < drawingNodes.size(); d++) {
+        forIdx(d, drawingNodes) {
             newSectorVertexes.push_back(drawingNodes[d].onVertex);
         }
         //Same as before, skip the last.
@@ -1390,11 +1390,7 @@ void AreaEditor::doSectorSplit() {
             );
         }
         
-        for(
-            size_t t = 0;
-            t < sectorSplitInfo.traversedEdges[1].size();
-            t++
-        ) {
+        forIdx(t, sectorSplitInfo.traversedEdges[1]) {
             newSectorEdges.push_back(
                 sectorSplitInfo.traversedEdges[1][t]
             );
@@ -1403,11 +1399,7 @@ void AreaEditor::doSectorSplit() {
     } else {
         //We can use stage 1's data!
         //The vertexes are already in place, so let's fill in the edges.
-        for(
-            size_t t = 0;
-            t < sectorSplitInfo.traversedEdges[0].size();
-            t++
-        ) {
+        forIdx(t, sectorSplitInfo.traversedEdges[0]) {
             newSectorEdges.push_back(
                 sectorSplitInfo.traversedEdges[0][t]
             );
@@ -1416,7 +1408,7 @@ void AreaEditor::doSectorSplit() {
     }
     
     //Organize all edge vertexes such that they follow the same order.
-    for(size_t e = 0; e < newSectorEdges.size(); e++) {
+    forIdx(e, newSectorEdges) {
         if(newSectorEdges[e]->vertexes[0] != newSectorVertexes[e]) {
             newSectorEdges[e]->swapVertexes();
         }
@@ -1430,7 +1422,7 @@ void AreaEditor::doSectorSplit() {
     unsigned char newSectorSide = (isNewClockwise ? 1 : 0);
     unsigned char workingSectorSide = (isNewClockwise ? 0 : 1);
     
-    for(size_t e = 0; e < newSectorEdges.size(); e++) {
+    forIdx(e, newSectorEdges) {
         Edge* ePtr = newSectorEdges[e];
         
         if(!ePtr->sectors[0] && !ePtr->sectors[1]) {
@@ -1610,7 +1602,7 @@ void AreaEditor::emitTriangulationErrorStatusBarMessage(
  */
 void AreaEditor::finishCircleSector() {
     clearLayoutDrawing();
-    for(size_t p = 0; p < newCircleSectorPoints.size(); p++) {
+    forIdx(p, newCircleSectorPoints) {
         LayoutDrawingNode n;
         n.rawSpot = newCircleSectorPoints[p];
         n.snappedSpot = n.rawSpot;
@@ -1701,7 +1693,7 @@ void AreaEditor::finishLayoutMoving() {
     }
     
     set<Edge*> movedEdges;
-    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+    forIdx(e, game.curArea->edges) {
         Edge* ePtr = game.curArea->edges[e];
         bool bothSelected = true;
         for(size_t v = 0; v < 2; v++) {
@@ -1717,7 +1709,7 @@ void AreaEditor::finishLayoutMoving() {
     
     //If an edge is moving into a stationary vertex, it needs to be split.
     //Let's find such edges.
-    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+    forIdx(v, game.curArea->vertexes) {
         Vertex* vPtr = game.curArea->vertexes[v];
         Point p = v2p(vPtr);
         
@@ -1758,8 +1750,8 @@ void AreaEditor::finishLayoutMoving() {
     vector<EdgeIntersection> intersections =
         getIntersectingEdges();
     for(auto& m : merges) {
-        for(size_t e1 = 0; e1 < m.first->edges.size(); e1++) {
-            for(size_t e2 = 0; e2 < m.second->edges.size(); e2++) {
+        forIdx(e1, m.first->edges) {
+            forIdx(e2, m.second->edges) {
                 for(size_t i = 0; i < intersections.size();) {
                     if(
                         intersections[i].contains(m.first->edges[e1]) &&
@@ -1774,7 +1766,7 @@ void AreaEditor::finishLayoutMoving() {
         }
     }
     for(auto& v : edgesToSplit) {
-        for(size_t e = 0; e < v.first->edges.size(); e++) {
+        forIdx(e, v.first->edges) {
             for(size_t i = 0; i < intersections.size();) {
                 if(
                     intersections[i].contains(v.first->edges[e]) &&
@@ -1880,7 +1872,7 @@ void AreaEditor::finishNewSectorDrawing() {
     if(outerSector) {
         outerSectorOldEdges = outerSector->edges;
     } else {
-        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        forIdx(e, game.curArea->edges) {
             Edge* ePtr = game.curArea->edges[e];
             if(ePtr->sectors[0] == nullptr || ePtr->sectors[1] == nullptr) {
                 outerSectorOldEdges.push_back(ePtr);
@@ -1896,7 +1888,7 @@ void AreaEditor::finishNewSectorDrawing() {
     //Now that all nodes have a vertex, create the necessary edges.
     vector<Vertex*> drawingVertexes;
     vector<Edge*> drawingEdges;
-    for(size_t n = 0; n < drawingNodes.size(); n++) {
+    forIdx(n, drawingNodes) {
         LayoutDrawingNode* nPtr = &drawingNodes[n];
         size_t prevNodeIdx =
             sumAndWrap((int) n, -1, (int) drawingNodes.size());
@@ -1929,7 +1921,7 @@ void AreaEditor::finishNewSectorDrawing() {
     unsigned char innerSectorSide = (isClockwise ? 1 : 0);
     unsigned char outerSectorSide = (isClockwise ? 0 : 1);
     
-    for(size_t e = 0; e < drawingEdges.size(); e++) {
+    forIdx(e, drawingEdges) {
         Edge* ePtr = drawingEdges[e];
         
         game.curArea->connectEdgeToSector(
@@ -2533,7 +2525,7 @@ void AreaEditor::loadAreaFolder(
     map<string, size_t> textureUsesMap;
     vector<std::pair<string, size_t> > textureUsesVector;
     
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         const string& n = game.curArea->sectors[s]->textureInfo.bmpName;
         if(n.empty()) continue;
         textureUsesMap[n]++;
@@ -2867,7 +2859,7 @@ void AreaEditor::quitCmd(float inputValue) {
  *
  */
 void AreaEditor::recreateDrawingNodes() {
-    for(size_t n = 0; n < drawingNodes.size(); n++) {
+    forIdx(n, drawingNodes) {
         drawingNodes[n] = LayoutDrawingNode(this, drawingNodes[n].rawSpot);
     }
 }
@@ -2975,7 +2967,7 @@ void AreaEditor::registerChange(
     }
     undoHistory.push_front(make_pair(newState, operationName));
     
-    for(size_t h = 0; h < redoHistory.size(); h++) {
+    forIdx(h, redoHistory) {
         delete redoHistory[h].first;
     }
     redoHistory.clear();
@@ -3256,7 +3248,7 @@ void AreaEditor::selectAllCmd(float inputValue) {
         game.curArea->mission.mobGroups[
             curMobGroupIdx
         ].mobIdxs.clear();
-        for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+        forIdx(m, game.curArea->mobGenerators) {
             game.curArea->mission.mobGroups[
                 curMobGroupIdx
             ].mobIdxs.push_back(m);
@@ -3326,7 +3318,7 @@ void AreaEditor::selectionFilterCmd(float inputValue) {
  */
 void AreaEditor::selectPathStopsWithLabel(const string& label) {
     clearSelection();
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         if(sPtr->label == label) {
             selectedPathStops.insert(sPtr);
@@ -3344,7 +3336,7 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
 void AreaEditor::selectSector(Sector* s) {
     if(selectionFilter != SELECTION_FILTER_SECTORS) return;
     selectedSectors.insert(s);
-    for(size_t e = 0; e < s->edges.size(); e++) {
+    forIdx(e, s->edges) {
         selectEdge(s->edges[e]);
     }
     setSelectionStatusText();
@@ -3407,7 +3399,7 @@ void AreaEditor::setNewCircleSectorPoints() {
         Point next = getNextInVectorByIdx(newCircleSectorPoints, p);
         bool valid = true;
         
-        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        forIdx(e, game.curArea->edges) {
             Edge* ePtr = game.curArea->edges[e];
             
             if(
@@ -3620,7 +3612,7 @@ void AreaEditor::setupSectorSplit() {
         sectorSplitInfo.workingSectorOldEdges =
             sectorSplitInfo.workingSector->edges;
     } else {
-        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        forIdx(e, game.curArea->edges) {
             Edge* ePtr = game.curArea->edges[e];
             if(ePtr->sectors[0] == nullptr || ePtr->sectors[1] == nullptr) {
                 sectorSplitInfo.workingSectorOldEdges.push_back(ePtr);
@@ -4071,7 +4063,7 @@ void AreaEditor::updateTextureSuggestions(const string& n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
-    for(size_t s = 0; s < textureSuggestions.size(); s++) {
+    forIdx(s, textureSuggestions) {
         if(textureSuggestions[s].name == n) {
             pos = s;
             break;
@@ -4165,7 +4157,7 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
     bool gotSomething = false;
     Point minCoords, maxCoords;
     
-    for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+    forIdx(v, game.curArea->vertexes) {
         Vertex* vPtr = game.curArea->vertexes[v];
         if(vPtr->x < minCoords.x || !gotSomething) {
             minCoords.x = vPtr->x;
@@ -4182,7 +4174,7 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
         gotSomething = true;
     }
     
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         if(mPtr->pos.x < minCoords.x || !gotSomething) {
             minCoords.x = mPtr->pos.x;
@@ -4199,7 +4191,7 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
         gotSomething = true;
     }
     
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         if(sPtr->pos.x < minCoords.x || !gotSomething) {
             minCoords.x = sPtr->pos.x;

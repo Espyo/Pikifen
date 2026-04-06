@@ -292,7 +292,7 @@ bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::playSound(ScriptActionDef& def, MobType* mt) {
-    for(size_t s = 0; s < mt->sounds.size(); s++) {
+    forIdx(s, mt->sounds) {
         if(mt->sounds[s].name == def.args[0]) {
             def.args[0] = i2s(s);
             return true;
@@ -395,7 +395,7 @@ bool ScriptActionLoaders::setAnimation(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
-    for(size_t r = 0; r < mt->reaches.size(); r++) {
+    forIdx(r, mt->reaches) {
         if(mt->reaches[r].name == def.args[0]) {
             def.args[0] = i2s(r);
             return true;
@@ -414,7 +414,7 @@ bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
-    for(size_t a = 0; a < def.args.size(); a++) {
+    forIdx(a, def.args) {
         bool found;
         HOLDABILITY_FLAG flag =
             enumGetValue(holdabilityFlagINames, def.args[a], &found);
@@ -436,7 +436,7 @@ bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setNearReach(ScriptActionDef& def, MobType* mt) {
-    for(size_t r = 0; r < mt->reaches.size(); r++) {
+    forIdx(r, mt->reaches) {
         if(mt->reaches[r].name == def.args[0]) {
             def.args[0] = i2s(r);
             return true;
@@ -474,7 +474,7 @@ bool ScriptActionLoaders::setTeam(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
-    for(size_t s = 0; s < mt->spawns.size(); s++) {
+    forIdx(s, mt->spawns) {
         if(mt->spawns[s].name == def.args[0]) {
             def.args[0] = i2s(s);
             return true;
@@ -785,7 +785,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
         );
     } else {
         //If there's a label, we should only pick stops that have the label.
-        for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+        forIdx(s, game.curArea->pathStops) {
             PathStop* sPtr = game.curArea->pathStops[s];
             if(sPtr->label == label) {
                 choices.push_back(sPtr);
@@ -1310,7 +1310,7 @@ void ScriptActionRunners::linkWithFocus(ScriptActionInstRunData& data) {
         return;
     }
     
-    for(size_t l = 0; l < data.scriptVM->mob->links.size(); l++) {
+    forIdx(l, data.scriptVM->mob->links) {
         if(data.scriptVM->mob->links[l] == data.scriptVM->mob->focusedMob) {
             //Already linked.
             return;
@@ -1441,7 +1441,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         }
         
         Point des;
-        for(size_t l = 0; l < data.scriptVM->mob->links.size(); l++) {
+        forIdx(l, data.scriptVM->mob->links) {
             if(!data.scriptVM->mob->links[l]) continue;
             des += data.scriptVM->mob->links[l]->pos;
         }
@@ -1510,9 +1510,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     }
     
     string log;
-    for(
-        size_t l = 0; l < game.states.gameplay->printActionLogLines.size(); l++
-    ) {
+    forIdx(l, game.states.gameplay->printActionLogLines) {
         log += "\n" + game.states.gameplay->printActionLogLines[l];
     }
     
@@ -1558,7 +1556,7 @@ void ScriptActionRunners::releaseStoredMobs(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
-    for(size_t s = 0; s < data.scriptVM->mob->statuses.size(); s++) {
+    forIdx(s, data.scriptVM->mob->statuses) {
         if(
             data.scriptVM->mob->statuses[s].type->manifest->internalName ==
             data.args[0]
@@ -1615,7 +1613,7 @@ void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
-    for(size_t l = 0; l < data.scriptVM->mob->links.size(); l++) {
+    forIdx(l, data.scriptVM->mob->links) {
         if(data.scriptVM->mob->links[l] == data.scriptVM->mob) continue;
         if(!data.scriptVM->mob->links[l]) continue;
         data.scriptVM->mob->sendScriptMessage(
@@ -1633,7 +1631,7 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
 void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
     float d = s2f(data.args[0]);
     
-    for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
+    forIdx(m2, game.states.gameplay->mobs.all) {
         if(game.states.gameplay->mobs.all[m2] == data.scriptVM->mob) {
             continue;
         }
@@ -1752,7 +1750,7 @@ void ScriptActionRunners::setHeight(ScriptActionInstRunData& data) {
     
     if(data.scriptVM->mob->type->walkable) {
         //Update the Z of mobs standing on top of it.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        forIdx(m, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->standingOnMob == data.scriptVM->mob) {
                 m2Ptr->z = data.scriptVM->mob->z + data.scriptVM->mob->height;
@@ -1784,7 +1782,7 @@ void ScriptActionRunners::setHiding(ScriptActionInstRunData& data) {
 void ScriptActionRunners::setHoldable(ScriptActionInstRunData& data) {
     if(typeid(*(data.scriptVM->mob)) == typeid(Tool)) {
         unsigned char flags = 0;
-        for(size_t i = 0; i < data.args.size(); i++) {
+        forIdx(i, data.args) {
             flags |= s2i(data.args[i]);
         }
         ((Tool*) (data.scriptVM->mob))->holdabilityFlags = flags;
@@ -1945,7 +1943,7 @@ void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
-    for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+    forIdx(p, game.states.gameplay->players) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d =
             Distance(data.scriptVM->mob->pos, pPtr->view.cam.pos).toFloat();

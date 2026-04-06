@@ -106,12 +106,12 @@ void AreaMenu::animateInfoAndBriefing() {
         objectiveText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
-        for(size_t c = 0; c < noteList->children.size(); c++) {
+        forIdx(c, noteList->children) {
             noteList->children[c]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
-        for(size_t c = 0; c < medalAwardList->children.size(); c++) {
+        forIdx(c, medalAwardList->children) {
             medalAwardList->children[c]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
@@ -213,12 +213,12 @@ void AreaMenu::changeInfo(size_t areaIdx) {
         objectiveText->text = mission.getBriefingObjectiveText();
         
         vector<string> noteBPStrs = mission.getNoteBulletPoints();
-        for(size_t p = 0; p < noteBPStrs.size(); p++) {
+        forIdx(p, noteBPStrs) {
             addNewBullet(noteList, noteBPStrs[p]);
         }
         
         vector<string> medalAwardBPStrs = mission.getMedalAwardBulletPoints();
-        for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+        forIdx(p, medalAwardBPStrs) {
             addNewBullet(medalAwardList, medalAwardBPStrs[p]);
         }
     }
@@ -529,7 +529,7 @@ void AreaMenu::initGuiMain() {
         gui.addItem(listScroll, "list_scroll");
         
         //Items for the various areas.
-        for(size_t a = 0; a < game.content.areas.list[areaType].size(); a++) {
+        forIdx(a, game.content.areas.list[areaType]) {
             Area* areaPtr = game.content.areas.list[areaType][a];
             const float BUTTON_HEIGHT = 0.09f;
             const float centerY = 0.045f + a * 0.10f;
@@ -736,10 +736,7 @@ void AreaMenu::load() {
             FILE_PATHS_FROM_ROOT::MISSION_RECORDS, nullptr, true, false, true
         );
         
-        for(
-            size_t a = 0;
-            a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
-        ) {
+        forIdx(a, game.content.areas.list[AREA_TYPE_MISSION]) {
             Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
             MissionRecord record;
             bool ported;

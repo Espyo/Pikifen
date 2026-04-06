@@ -80,7 +80,7 @@ void GuiEditor::drawCanvas() {
     
     //Sort them by layer.
     vector<pair<GuiItemDef*, unsigned char> > drawingSortedItems;
-    for(size_t i = 0; i < allItems.size(); i++) {
+    forIdx(i, allItems) {
         bool isCustom = i >= hardcodedItems.size();
         unsigned char drawingLayer;
         if(isCustom) {
@@ -101,7 +101,7 @@ void GuiEditor::drawCanvas() {
     }
     );
     
-    for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+    forIdx(i, drawingSortedItems) {
         size_t itemIdx = drawingSortedItems[i].second;
         GuiItemDef* item = drawingSortedItems[i].first;
         if(item->size.x == 0.0f) continue;

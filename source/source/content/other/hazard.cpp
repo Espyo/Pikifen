@@ -42,7 +42,7 @@ void Hazard::loadFromDataNode(DataNode* node) {
     
     if(effectsNode) {
         vector<string> effectsStrs = semicolonListToVector(effectsStr);
-        for(size_t e = 0; e < effectsStrs.size(); e++) {
+        forIdx(e, effectsStrs) {
             string effectName = effectsStrs[e];
             if(!isInMap(game.content.statusTypes.list, effectName)) {
                 game.errors.report(

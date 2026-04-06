@@ -31,7 +31,7 @@ Mob* Mob::getMobToWalkOn() const {
     if(speedZ > 0.0f) return nullptr;
     
     Mob* bestCandidate = nullptr;
-    for(size_t m = 0; m < game.states.gameplay->mobs.walkables.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.walkables) {
         Mob* mPtr = game.states.gameplay->mobs.walkables[m];
         if(mPtr == this) {
             continue;
@@ -438,7 +438,7 @@ void Mob::tickHorizontalMovementPhysics(
         
         //For every sector in the new position, let's figure out
         //the ground sector, and also a stepping sector, if possible.
-        for(size_t e = 0; e < intersectingEdges.size(); e++) {
+        forIdx(e, intersectingEdges) {
             Edge* ePtr = intersectingEdges[e];
             Sector* tallestSector = groundSector; //Tallest of the two.
             if(
@@ -493,7 +493,7 @@ void Mob::tickHorizontalMovementPhysics(
         
         //Check the sector heights of the intersecting edges to figure out
         //which are really walls, and how to slide against them.
-        for(size_t e = 0; e < intersectingEdges.size(); e++) {
+        forIdx(e, intersectingEdges) {
             Edge* ePtr = intersectingEdges[e];
             bool isEdgeWall = false;
             unsigned char wallSector = 0;
@@ -845,7 +845,7 @@ void Mob::tickVerticalMovementPhysics(
             (void*) onHazard
         );
         
-        for(size_t s = 0; s < statuses.size(); s++) {
+        forIdx(s, statuses) {
             if(statuses[s].type->removeOnHazardLeave) {
                 statuses[s].prevState = statuses[s].state;
                 statuses[s].state = STATUS_STATE_TO_DELETE;

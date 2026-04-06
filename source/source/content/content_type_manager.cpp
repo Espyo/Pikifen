@@ -297,8 +297,8 @@ void AreaContentManager::saveAreaReminders(Area* areaPtr) const {
  * @param level Load level. Should match the level used to load the content.
  */
 void AreaContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(size_t t = 0; t < list.size(); t++) {
-        for(size_t a = 0; a < list[t].size(); a++) {
+    forIdx(t, list) {
+        forIdx(a, list[t]) {
             delete list[t][a];
         }
     }
@@ -451,7 +451,7 @@ void ContentTypeManager::fillManifestsMapFromPack(
     vector<string> items =
         folderToVectorRecursively(folderPath, folders);
         
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         string internalName = removeExtension(items[i]);
         manifests[internalName] =
             ContentManifest(
@@ -1044,7 +1044,7 @@ void MobAnimContentManager::fillCatManifestsFromPack(
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
         category->folderName;
     vector<string> typeFolders = folderToVectorRecursively(categoryPath, true);
-    for(size_t f = 0; f < typeFolders.size(); f++) {
+    forIdx(f, typeFolders) {
         string internalName = typeFolders[f];
         manifests[category->id][internalName] =
             ContentManifest(
@@ -1193,7 +1193,7 @@ void MobAnimContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void MobAnimContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(size_t t = 0; t < list.size(); t++) {
+    forIdx(t, list) {
         for(auto& a : list[t]) {
             a.second.destroy();
         }
@@ -1296,7 +1296,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missingPikminOrderTypes.end()
         );
     }
-    for(size_t o = 0; o < game.config.pikmin.orderStrings.size(); o++) {
+    forIdx(o, game.config.pikmin.orderStrings) {
         string s = game.config.pikmin.orderStrings[o];
         if(isInMap(list.pikmin, s)) {
             game.config.pikmin.order.push_back(list.pikmin[s]);
@@ -1327,7 +1327,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missingLeaderOrderTypes.end()
         );
     }
-    for(size_t o = 0; o < game.config.leaders.orderStrings.size(); o++) {
+    forIdx(o, game.config.leaders.orderStrings) {
         string s = game.config.leaders.orderStrings[o];
         if(isInMap(list.leader, s)) {
             game.config.leaders.order.push_back(list.leader[s]);
@@ -1441,7 +1441,7 @@ void MobTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 void MobTypeContentManager::unloadMobType(
     MobType* mt, CONTENT_LOAD_LEVEL level
 ) {
-    for(size_t s = 0; s < mt->sounds.size(); s++) {
+    forIdx(s, mt->sounds) {
         ALLEGRO_SAMPLE* sPtr = mt->sounds[s].sample;
         if(!s) continue;
         game.content.sounds.list.free(sPtr);
@@ -1466,7 +1466,7 @@ void MobTypeContentManager::unloadMobTypesOfCategory(
     vector<string> typeNames;
     category->getTypeNames(typeNames);
     
-    for(size_t t = 0; t < typeNames.size(); t++) {
+    forIdx(t, typeNames) {
         MobType* mt = category->getType(typeNames[t]);
         unloadMobType(mt, level);
     }
@@ -2106,7 +2106,7 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missingSprayOrderTypes.end()
         );
     }
-    for(size_t o = 0; o < game.config.misc.sprayOrderStrings.size(); o++) {
+    forIdx(o, game.config.misc.sprayOrderStrings) {
         string s = game.config.misc.sprayOrderStrings[o];
         if(isInMap(list, s)) {
             game.config.misc.sprayOrder.push_back(&list[s]);
@@ -2249,7 +2249,7 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         }
     }
     
-    for(size_t s = 0; s < typesWithReplacements.size(); s++) {
+    forIdx(s, typesWithReplacements) {
         string rn = typesWithReplacementsNames[s];
         bool found = false;
         for(auto& s2 : list) {

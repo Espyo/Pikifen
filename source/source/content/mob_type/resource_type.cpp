@@ -84,7 +84,7 @@ void ResourceType::loadCatProperties(DataNode* file) {
     }
     
     if(deliveryResult == RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS) {
-        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+        forIdx(s, game.config.misc.sprayOrder) {
             if(
                 game.config.misc.sprayOrder[s]->manifest->internalName ==
                 sprayToConcoctStr

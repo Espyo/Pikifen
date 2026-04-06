@@ -84,18 +84,18 @@ Vertex* Area::addNewVertex() {
  * pointers don't match.
  */
 void Area::checkStability() {
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         Vertex* vPtr = vertexes[v];
         engineAssert(
             vPtr->edges.size() == vPtr->edgeIdxs.size(),
             i2s(vPtr->edges.size()) + " " + i2s(vPtr->edgeIdxs.size())
         );
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+        forIdx(e, vPtr->edges) {
             engineAssert(vPtr->edges[e] == edges[vPtr->edgeIdxs[e]], "");
         }
     }
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             engineAssert(
@@ -115,13 +115,13 @@ void Area::checkStability() {
         }
     }
     
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         Sector* sPtr = sectors[s];
         engineAssert(
             sPtr->edges.size() == sPtr->edgeIdxs.size(),
             i2s(sPtr->edges.size()) + " " + i2s(sPtr->edgeIdxs.size())
         );
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             engineAssert(sPtr->edges[e] == edges[sPtr->edgeIdxs[e]], "");
         }
     }
@@ -162,25 +162,25 @@ void Area::cleanup(bool* outDeletedSectors) {
  * @brief Clears the info of an area map.
  */
 void Area::clear() {
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         delete vertexes[v];
     }
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         delete edges[e];
     }
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         delete sectors[s];
     }
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
         delete mobGenerators[m];
     }
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         delete pathStops[s];
     }
-    for(size_t s = 0; s < treeShadows.size(); s++) {
+    forIdx(s, treeShadows) {
         delete treeShadows[s];
     }
-    for(size_t r = 0; r < regions.size(); r++) {
+    forIdx(r, regions) {
         delete regions[r];
     }
     
@@ -246,49 +246,49 @@ void Area::clone(Area& other) {
     other.bmap = bmap;
     
     other.vertexes.reserve(vertexes.size());
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         other.vertexes.push_back(new Vertex());
     }
     other.edges.reserve(edges.size());
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         other.edges.push_back(new Edge());
     }
     other.sectors.reserve(sectors.size());
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         other.sectors.push_back(new Sector());
     }
     other.mobGenerators.reserve(mobGenerators.size());
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
         other.mobGenerators.push_back(new MobGen());
     }
     other.pathStops.reserve(pathStops.size());
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         other.pathStops.push_back(new PathStop());
     }
     other.treeShadows.reserve(treeShadows.size());
-    for(size_t t = 0; t < treeShadows.size(); t++) {
+    forIdx(t, treeShadows) {
         other.treeShadows.push_back(new TreeShadow());
     }
     other.regions.reserve(regions.size());
-    for(size_t r = 0; r < regions.size(); r++) {
+    forIdx(r, regions) {
         other.regions.push_back(new AreaRegion());
     }
     
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         Vertex* vPtr = vertexes[v];
         Vertex* ovPtr = other.vertexes[v];
         ovPtr->x = vPtr->x;
         ovPtr->y = vPtr->y;
         ovPtr->edges.reserve(vPtr->edges.size());
         ovPtr->edgeIdxs.reserve(vPtr->edgeIdxs.size());
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+        forIdx(e, vPtr->edges) {
             size_t nr = vPtr->edgeIdxs[e];
             ovPtr->edges.push_back(other.edges[nr]);
             ovPtr->edgeIdxs.push_back(nr);
         }
     }
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         Edge* oePtr = other.edges[e];
         oePtr->vertexes[0] = other.vertexes[ePtr->vertexIdxs[0]];
@@ -310,7 +310,7 @@ void Area::clone(Area& other) {
         ePtr->clone(oePtr);
     }
     
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         Sector* sPtr = sectors[s];
         Sector* osPtr = other.sectors[s];
         sPtr->clone(osPtr);
@@ -321,13 +321,13 @@ void Area::clone(Area& other) {
             );
         osPtr->edges.reserve(sPtr->edges.size());
         osPtr->edgeIdxs.reserve(sPtr->edgeIdxs.size());
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             size_t nr = sPtr->edgeIdxs[e];
             osPtr->edges.push_back(other.edges[nr]);
             osPtr->edgeIdxs.push_back(nr);
         }
         osPtr->triangles.reserve(sPtr->triangles.size());
-        for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+        forIdx(t, sPtr->triangles) {
             Triangle* tPtr = &sPtr->triangles[t];
             osPtr->triangles.push_back(
                 Triangle(
@@ -341,27 +341,27 @@ void Area::clone(Area& other) {
         osPtr->bbox[1] = sPtr->bbox[1];
     }
     
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
         MobGen* mPtr = mobGenerators[m];
         MobGen* omPtr = other.mobGenerators[m];
         mPtr->clone(omPtr);
     }
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
         MobGen* omPtr = other.mobGenerators[m];
-        for(size_t l = 0; l < omPtr->linkIdxs.size(); l++) {
+        forIdx(l, omPtr->linkIdxs) {
             omPtr->links.push_back(
                 other.mobGenerators[omPtr->linkIdxs[l]]
             );
         }
     }
     
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         PathStop* sPtr = pathStops[s];
         PathStop* osPtr = other.pathStops[s];
         osPtr->pos = sPtr->pos;
         sPtr->clone(osPtr);
         osPtr->links.reserve(sPtr->links.size());
-        for(size_t l = 0; l < sPtr->links.size(); l++) {
+        forIdx(l, sPtr->links) {
             PathLink* newLink =
                 new PathLink(
                 osPtr,
@@ -374,7 +374,7 @@ void Area::clone(Area& other) {
         }
     }
     
-    for(size_t t = 0; t < treeShadows.size(); t++) {
+    forIdx(t, treeShadows) {
         TreeShadow* tPtr = treeShadows[t];
         TreeShadow* otPtr = other.treeShadows[t];
         otPtr->alpha = tPtr->alpha;
@@ -387,7 +387,7 @@ void Area::clone(Area& other) {
             game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
     }
     
-    for(size_t r = 0; r < regions.size(); r++) {
+    forIdx(r, regions) {
         AreaRegion* rPtr = regions[r];
         AreaRegion* orPtr = other.regions[r];
         orPtr->center = rPtr->center;
@@ -496,7 +496,7 @@ void Area::connectEdgeToVertex(
  */
 void Area::connectSectorEdges(Sector* sPtr) {
     sPtr->edgeIdxs.clear();
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         if(ePtr->sectors[0] == sPtr || ePtr->sectors[1] == sPtr) {
             sPtr->edgeIdxs.push_back(e);
@@ -513,7 +513,7 @@ void Area::connectSectorEdges(Sector* sPtr) {
  */
 void Area::connectVertexEdges(Vertex* vPtr) {
     vPtr->edgeIdxs.clear();
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         if(ePtr->vertexes[0] == vPtr || ePtr->vertexes[1] == vPtr) {
             vPtr->edgeIdxs.push_back(e);
@@ -532,9 +532,9 @@ void Area::deleteEdge(size_t eIdx) {
     delete edges[eIdx];
     edges.erase(edges.begin() + eIdx);
     
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         Vertex* vPtr = vertexes[v];
-        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+        forIdx(e, vPtr->edges) {
             if(vPtr->edgeIdxs[e] == INVALID) continue;
             adjustMisalignedIndex(
                 vPtr->edgeIdxs[e], eIdx, false
@@ -542,9 +542,9 @@ void Area::deleteEdge(size_t eIdx) {
         }
     }
     
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         Sector* sPtr = sectors[s];
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             if(sPtr->edgeIdxs[e] == INVALID) continue;
             adjustMisalignedIndex(
                 sPtr->edgeIdxs[e], eIdx, false
@@ -560,7 +560,7 @@ void Area::deleteEdge(size_t eIdx) {
  * @param ePtr Pointer of the edge to delete.
  */
 void Area::deleteEdge(const Edge* ePtr) {
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         if(edges[e] == ePtr) {
             deleteEdge(e);
             return;
@@ -578,7 +578,7 @@ void Area::deleteSector(size_t sIdx) {
     delete sectors[sIdx];
     sectors.erase(sectors.begin() + sIdx);
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(ePtr->sectorIdxs[s] == INVALID) continue;
@@ -596,7 +596,7 @@ void Area::deleteSector(size_t sIdx) {
  * @param sPtr Pointer of the sector to delete.
  */
 void Area::deleteSector(const Sector* sPtr) {
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         if(sectors[s] == sPtr) {
             deleteSector(s);
             return;
@@ -614,7 +614,7 @@ void Area::deleteVertex(size_t vIdx) {
     delete vertexes[vIdx];
     vertexes.erase(vertexes.begin() + vIdx);
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             if(ePtr->vertexIdxs[v] == INVALID) continue;
@@ -632,7 +632,7 @@ void Area::deleteVertex(size_t vIdx) {
  * @param vPtr Pointer of the vertex to delete.
  */
 void Area::deleteVertex(const Vertex* vPtr) {
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         if(vertexes[v] == vPtr) {
             deleteVertex(v);
             return;
@@ -649,7 +649,7 @@ void Area::deleteVertex(const Vertex* vPtr) {
  * @return The index, or INVALID if not found.
  */
 size_t Area::findEdgeIdx(const Edge* ePtr) const {
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         if(edges[e] == ePtr) return e;
     }
     return INVALID;
@@ -664,7 +664,7 @@ size_t Area::findEdgeIdx(const Edge* ePtr) const {
  * @return The index, or INVALID if not found.
  */
 size_t Area::findMobGenIdx(const MobGen* mPtr) const {
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
         if(mobGenerators[m] == mPtr) return m;
     }
     return INVALID;
@@ -679,7 +679,7 @@ size_t Area::findMobGenIdx(const MobGen* mPtr) const {
  * @return The index, or INVALID if not found.
  */
 size_t Area::findSectorIdx(const Sector* sPtr) const {
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         if(sectors[s] == sPtr) return s;
     }
     return INVALID;
@@ -694,7 +694,7 @@ size_t Area::findSectorIdx(const Sector* sPtr) const {
  * @return The index, or INVALID if not found.
  */
 size_t Area::findVertexIdx(const Vertex* vPtr) const {
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         if(vertexes[v] == vPtr) return v;
     }
     return INVALID;
@@ -709,7 +709,7 @@ size_t Area::findVertexIdx(const Vertex* vPtr) const {
  * @return The index, or INVALID if not found.
  */
 size_t Area::findTreeShadowIdx(const TreeShadow* sPtr) const {
-    for(size_t s = 0; s < treeShadows.size(); s++) {
+    forIdx(s, treeShadows) {
         if(treeShadows[s] == sPtr) return s;
     }
     return INVALID;
@@ -774,13 +774,13 @@ void Area::fixEdgePointers(Edge* ePtr) {
  * @param sPtr Path stop to fix the indexes of.
  */
 void Area::fixPathStopIdxs(PathStop* sPtr) {
-    for(size_t l = 0; l < sPtr->links.size(); l++) {
+    forIdx(l, sPtr->links) {
         PathLink* lPtr = sPtr->links[l];
         lPtr->endIdx = INVALID;
         
         if(!lPtr->endPtr) continue;
         
-        for(size_t s = 0; s < pathStops.size(); s++) {
+        forIdx(s, pathStops) {
             if(lPtr->endPtr == pathStops[s]) {
                 lPtr->endIdx = s;
                 break;
@@ -798,7 +798,7 @@ void Area::fixPathStopIdxs(PathStop* sPtr) {
  * @param sPtr Path stop to fix the pointers of.
  */
 void Area::fixPathStopPointers(PathStop* sPtr) {
-    for(size_t l = 0; l < sPtr->links.size(); l++) {
+    forIdx(l, sPtr->links) {
         PathLink* lPtr = sPtr->links[l];
         lPtr->endPtr = nullptr;
         
@@ -819,7 +819,7 @@ void Area::fixPathStopPointers(PathStop* sPtr) {
  */
 void Area::fixSectorIdxs(Sector* sPtr) {
     sPtr->edgeIdxs.clear();
-    for(size_t e = 0; e < sPtr->edges.size(); e++) {
+    forIdx(e, sPtr->edges) {
         sPtr->edgeIdxs.push_back(findEdgeIdx(sPtr->edges[e]));
     }
 }
@@ -834,7 +834,7 @@ void Area::fixSectorIdxs(Sector* sPtr) {
  */
 void Area::fixSectorPointers(Sector* sPtr) {
     sPtr->edges.clear();
-    for(size_t e = 0; e < sPtr->edgeIdxs.size(); e++) {
+    forIdx(e, sPtr->edgeIdxs) {
         size_t eIdx = sPtr->edgeIdxs[e];
         sPtr->edges.push_back(eIdx == INVALID ? nullptr : edges[eIdx]);
     }
@@ -850,7 +850,7 @@ void Area::fixSectorPointers(Sector* sPtr) {
  */
 void Area::fixVertexIdxs(Vertex* vPtr) {
     vPtr->edgeIdxs.clear();
-    for(size_t e = 0; e < vPtr->edges.size(); e++) {
+    forIdx(e, vPtr->edges) {
         vPtr->edgeIdxs.push_back(findEdgeIdx(vPtr->edges[e]));
     }
 }
@@ -865,7 +865,7 @@ void Area::fixVertexIdxs(Vertex* vPtr) {
  */
 void Area::fixVertexPointers(Vertex* vPtr) {
     vPtr->edges.clear();
-    for(size_t e = 0; e < vPtr->edgeIdxs.size(); e++) {
+    forIdx(e, vPtr->edgeIdxs) {
         size_t eIdx = vPtr->edgeIdxs[e];
         vPtr->edges.push_back(eIdx == INVALID ? nullptr : edges[eIdx]);
     }
@@ -884,7 +884,7 @@ void Area::generateBlockmap() {
     Point minCoords = v2p(vertexes[0]);
     Point maxCoords = minCoords;
     
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         updateMinMaxCoords(minCoords, maxCoords, v2p(vertexes[v]));
     }
     
@@ -969,7 +969,7 @@ void Area::generateBlockmap() {
  * @param edgeList Edges to generate the blockmap around.
  */
 void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
-    for(size_t e = 0; e < edgeList.size(); e++) {
+    forIdx(e, edgeList) {
     
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
@@ -1048,9 +1048,9 @@ size_t Area::getMaxPikminInField() const {
 size_t Area::getNrPathLinks() {
     size_t oneWaysFound = 0;
     size_t normalsFound = 0;
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         PathStop* sPtr = pathStops[s];
-        for(size_t l = 0; l < sPtr->links.size(); l++) {
+        forIdx(l, sPtr->links) {
             PathLink* lPtr = sPtr->links[l];
             if(lPtr->endPtr->getLink(sPtr)) {
                 //The other stop links to this one. So it's a two-way.
@@ -1076,7 +1076,7 @@ void Area::getTotalEnemyInfo(size_t* outAmount, size_t* outPoints) const {
     size_t amount = 0;
     size_t points = 0;
     
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         switch(mPtr->type->category->id) {
         case MOB_CATEGORY_ENEMIES: {
@@ -1108,7 +1108,7 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
     size_t amount = 0;
     size_t points = 0;
     
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         switch(mPtr->type->category->id) {
         case MOB_CATEGORY_TREASURES: {
@@ -1319,7 +1319,7 @@ void Area::loadGeometryFromDataNode(
         }
         
         vector<string> linkStrs = split(linksStr);
-        for(size_t l = 0; l < linkStrs.size(); l++) {
+        forIdx(l, linkStrs) {
             mobLinksBuffer.push_back(std::make_pair(m, s2i(linkStrs[l])));
         }
         
@@ -1340,7 +1340,7 @@ void Area::loadGeometryFromDataNode(
         mobGenerators.push_back(newMob);
     }
     
-    for(size_t l = 0; l < mobLinksBuffer.size(); l++) {
+    forIdx(l, mobLinksBuffer) {
         size_t f = mobLinksBuffer[l].first;
         size_t s = mobLinksBuffer[l].second;
         mobGenerators[f]->links.push_back(
@@ -1452,25 +1452,25 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Geometry calculations");
     }
     
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         fixEdgePointers(edges[e]);
     }
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         connectSectorEdges(sectors[s]);
     }
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
         connectVertexEdges(vertexes[v]);
     }
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         fixPathStopPointers(pathStops[s]);
     }
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
         pathStops[s]->calculateDists();
     }
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         //Fade sectors that also fade brightness should be
         //at midway between the two neighbors.
-        for(size_t s = 0; s < sectors.size(); s++) {
+        forIdx(s, sectors) {
             Sector* sPtr = sectors[s];
             if(sPtr->fade) {
                 Sector* n1 = nullptr;
@@ -1486,7 +1486,7 @@ void Area::loadGeometryFromDataNode(
     
     //Triangulate everything and save bounding boxes.
     set<Edge*> loneEdges;
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         Sector* sPtr = sectors[s];
         sPtr->triangles.clear();
         TRIANGULATION_ERROR res =
@@ -1693,7 +1693,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
         
         vector<string> mobIdxsStrVec = semicolonListToVector(mobIdxsStr);
         newGroup.mobIdxs.reserve(mobIdxsStrVec.size());
-        for(size_t m = 0; m < mobIdxsStrVec.size(); m++) {
+        forIdx(m, mobIdxsStrVec) {
             newGroup.mobIdxs.push_back(s2i(mobIdxsStrVec[m]));
         }
         
@@ -1835,7 +1835,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     vector<string> missionRequiredMobsStr =
         semicolonListToVector(requiredMobsStr);
     goalMobIdxs.reserve(missionRequiredMobsStr.size());
-    for(size_t m = 0; m < missionRequiredMobsStr.size(); m++) {
+    forIdx(m, missionRequiredMobsStr) {
         goalMobIdxs.insert(
             s2i(missionRequiredMobsStr[m])
         );
@@ -2472,7 +2472,7 @@ void Area::loadThumbnail(const string& thumbnailPath) {
 void Area::saveGeometryToDataNode(DataNode* node) {
     //Vertexes.
     DataNode* vertexesNode = node->addNew("vertexes");
-    for(size_t v = 0; v < vertexes.size(); v++) {
+    forIdx(v, vertexes) {
     
         //Vertex.
         Vertex* vPtr = vertexes[v];
@@ -2481,7 +2481,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Edges.
     DataNode* edgesNode = node->addNew("edges");
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
     
         //Edge.
         Edge* ePtr = edges[e];
@@ -2520,7 +2520,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Sectors.
     DataNode* sectorsNode = node->addNew("sectors");
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
     
         //Sector.
         Sector* sPtr = sectors[s];
@@ -2580,7 +2580,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Mobs.
     DataNode* mobsNode = node->addNew("mobs");
-    for(size_t m = 0; m < mobGenerators.size(); m++) {
+    forIdx(m, mobGenerators) {
     
         //Mob.
         MobGen* mPtr = mobGenerators[m];
@@ -2606,7 +2606,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         }
         
         string linksStr;
-        for(size_t l = 0; l < mPtr->linkIdxs.size(); l++) {
+        forIdx(l, mPtr->linkIdxs) {
             if(l > 0) linksStr += " ";
             linksStr += i2s(mPtr->linkIdxs[l]);
         }
@@ -2622,7 +2622,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Path stops.
     DataNode* pathStopsNode = node->addNew("path_stops");
-    for(size_t s = 0; s < pathStops.size(); s++) {
+    forIdx(s, pathStops) {
     
         //Path stop.
         PathStop* sPtr = pathStops[s];
@@ -2641,7 +2641,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         }
         
         DataNode* linksNode = pathStopNode->addNew("links");
-        for(size_t l = 0; l < sPtr->links.size(); l++) {
+        forIdx(l, sPtr->links) {
             PathLink* lPtr = sPtr->links[l];
             string linkData = i2s(lPtr->endIdx);
             if(lPtr->type != PATH_LINK_TYPE_NORMAL) {
@@ -2654,7 +2654,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Tree shadows.
     DataNode* shadowsNode = node->addNew("tree_shadows");
-    for(size_t s = 0; s < treeShadows.size(); s++) {
+    forIdx(s, treeShadows) {
     
         //Tree shadow.
         TreeShadow* sPtr = treeShadows[s];
@@ -2676,7 +2676,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
     
     //Regions.
     DataNode* regionsNode = node->addNew("regions");
-    for(size_t r = 0; r < regions.size(); r++) {
+    forIdx(r, regions) {
     
         //Region.
         AreaRegion* rPtr = regions[r];
@@ -2757,7 +2757,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     //End conditions.
     DataNode* condsNode = node->addNew("mission_end_conditions");
-    for(size_t c = 0; c < mission.endConds.size(); c++) {
+    forIdx(c, mission.endConds) {
         DataNode* condNode = condsNode->addNew("end_condition");
         MissionEndCond* condPtr = &mission.endConds[c];
         
@@ -2781,7 +2781,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     //Mob groups.
     DataNode* groupsNode = node->addNew("mission_mob_groups");
-    for(size_t g = 0; g < mission.mobGroups.size(); g++) {
+    forIdx(g, mission.mobGroups) {
         DataNode* groupNode = groupsNode->addNew("group");
         MissionMobGroup* groupPtr = &mission.mobGroups[g];
         
@@ -2805,7 +2805,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     //HUD items.
     DataNode* itemsNode = node->addNew("mission_hud_items");
-    for(size_t i = 0; i < mission.hudItems.size(); i++) {
+    forIdx(i, mission.hudItems) {
         DataNode* itemNode = itemsNode->addNew("item");
         MissionHudItem* itemPtr = &mission.hudItems[i];
         
@@ -2828,7 +2828,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     //Score criteria.
     DataNode* scoreCriteriaNode = node->addNew("mission_score_criteria");
-    for(size_t c = 0; c < mission.scoreCriteria.size(); c++) {
+    forIdx(c, mission.scoreCriteria) {
         DataNode* criterionNode = scoreCriteriaNode->addNew("criterion");
         MissionScoreCriterion* criterionPtr = &mission.scoreCriteria[c];
         
@@ -2850,7 +2850,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
  * @param node Data node to save to.
  */
 void Area::saveRemindersToDataNode(DataNode* node) {
-    for(size_t r = 0; r < reminders.size(); r++) {
+    forIdx(r, reminders) {
         DataNode* reminderNode = node->addNew("reminder");
         AreaMakerReminder* reminderPtr = &reminders[r];
         
@@ -2941,7 +2941,7 @@ bool Blockmap::getEdgesInRegion(
         
             const vector<Edge*>& blockEdges = edges[bx][by];
             
-            for(size_t e = 0; e < blockEdges.size(); e++) {
+            forIdx(e, blockEdges) {
                 outEdges.insert(blockEdges[e]);
             }
         }

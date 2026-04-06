@@ -99,9 +99,9 @@ void PathManager::clear() {
     
     obstructions.clear();
     
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
-        for(size_t l = 0; l < sPtr->links.size(); l++) {
+        forIdx(l, sPtr->links) {
             game.curArea->pathStops[s]->links[l]->blockedByObstacle =
                 false;
         }
@@ -115,7 +115,7 @@ void PathManager::clear() {
  */
 void PathManager::handleAreaLoad() {
     //Go through all path stops and check if they're on hazardous sectors.
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         if(!sPtr->sectorPtr) continue;
         if(!sPtr->sectorPtr->hazard) continue;
@@ -135,10 +135,10 @@ void PathManager::handleObstacleAdd(Mob* m) {
     bool pathsChanged = false;
     
     //Go through all path links and check if they have obstacles.
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         
-        for(size_t l = 0; l < sPtr->links.size(); l++) {
+        forIdx(l, sPtr->links) {
             PathLink* lPtr = game.curArea->pathStops[s]->links[l];
             
             if(
@@ -156,7 +156,7 @@ void PathManager::handleObstacleAdd(Mob* m) {
     
     if(pathsChanged) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
+        forIdx(m2, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
@@ -194,7 +194,7 @@ void PathManager::handleObstacleRemove(Mob* m) {
     
     if(pathsChanged) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
+        forIdx(m2, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m2];
             if(!m2Ptr->pathInfo) continue;
             
@@ -233,7 +233,7 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
     
     if(pathsChanged) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        forIdx(m, game.states.gameplay->mobs.all) {
             Mob* mPtr = game.states.gameplay->mobs.all[m];
             if(!mPtr->pathInfo) continue;
             
@@ -310,7 +310,7 @@ void PathStop::addNewLink(PathStop* otherStop, bool normal) {
  * @brief Calculates the distance between it and all neighbors.
  */
 void PathStop::calculateDists() {
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         links[l]->calculateDist(this);
     }
 }
@@ -322,12 +322,12 @@ void PathStop::calculateDists() {
  * if that neighbor links back.
  */
 void PathStop::calculateDistsPlusNeighbors() {
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         PathLink* lPtr = links[l];
         lPtr->calculateDist(this);
     }
     
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         PathLink* lPtr = sPtr->getLink(this);
         if(lPtr) {
@@ -356,7 +356,7 @@ void PathStop::clone(PathStop* destination) const {
  * @param linkPtr Pointer to the link to delete.
  */
 void PathStop::deleteLink(const PathLink* linkPtr) {
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         if(links[l] == linkPtr) {
             delete links[l];
             links.erase(links.begin() + l);
@@ -373,7 +373,7 @@ void PathStop::deleteLink(const PathLink* linkPtr) {
  * @param otherStop Path stop to delete the link from.
  */
 void PathStop::deleteLink(const PathStop* otherStop) {
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         if(links[l]->endPtr == otherStop) {
             delete links[l];
             links.erase(links.begin() + l);
@@ -392,7 +392,7 @@ void PathStop::deleteLink(const PathStop* otherStop) {
  * @return The link, or nullptr if it does not link to that stop.
  */
 PathLink* PathStop::getLink(const PathStop* otherStop) const {
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         if(links[l]->endPtr == otherStop) return links[l];
     }
     return nullptr;
@@ -490,7 +490,7 @@ PATH_RESULT aStar(
         toVisit.erase(curNode);
         
         //Part 4: Check the neighbors.
-        for(size_t l = 0; l < curNode->links.size(); l++) {
+        forIdx(l, curNode->links) {
             PathLink* lPtr = curNode->links[l];
             PathStop* neighbor = lPtr->endPtr;
             
@@ -630,7 +630,7 @@ bool canTakePathStop(
     ) {
         //Check if this hazard doesn't cause Pikmin to try and avoid it.
         bool invulnerable = false;
-        for(size_t ih = 0; ih < settings.invulnerabilities.size(); ih++) {
+        forIdx(ih, settings.invulnerabilities) {
             if(
                 settings.invulnerabilities[ih] ==
                 sectorPtr->hazard
@@ -736,11 +736,11 @@ void depthFirstSearch(
     visited.insert(start);
     unordered_set<PathStop*> links;
     
-    for(size_t l = 0; l < start->links.size(); l++) {
+    forIdx(l, start->links) {
         links.insert(start->links[l]->endPtr);
     }
     
-    for(size_t n = 0; n < nodes.size(); n++) {
+    forIdx(n, nodes) {
         PathStop* nPtr = nodes[n];
         if(nPtr == start) continue;
         if(isInContainer(visited, nPtr)) continue;
@@ -802,7 +802,7 @@ PATH_RESULT getPath(
     float closestToStartDist = 0.0f;
     float closestToEndDist = 0.0f;
     
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         
         float distToStart =

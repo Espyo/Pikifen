@@ -55,7 +55,7 @@ void ParticleEditor::drawCanvas() {
             &game.editorsView.windowToWorldTransform, &textureBR.x, &textureBR.y
         );
         ALLEGRO_VERTEX bgVertexes[4];
-        for(size_t v = 0; v < 4; ++v) {
+        for(size_t v = 0; v < 4; v++) {
             bgVertexes[v].z = 0;
             bgVertexes[v].color = COLOR_WHITE;
         }
@@ -97,7 +97,7 @@ void ParticleEditor::drawCanvas() {
         components, game.editorsView.box[0], game.editorsView.box[1]
     );
     
-    for(size_t c = 0; c < components.size(); ++c) {
+    forIdx(c, components) {
         components[c].idx = c;
     }
     
@@ -110,7 +110,7 @@ void ParticleEditor::drawCanvas() {
         return c1.z < c2.z;
     }
     );
-    for(size_t c = 0; c < components.size(); ++c) {
+    forIdx(c, components) {
         WorldComponent* cPtr = &components[c];
         if(cPtr->particlePtr) {
             cPtr->particlePtr->draw();

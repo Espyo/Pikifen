@@ -902,7 +902,7 @@ void GetterWriter::write(
  * @brief Clears the database.
  */
 void InventoryItemDatabase::clear() {
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         if(items[i].icon) {
             game.content.bitmaps.list.free(items[i].icon);
         }
@@ -928,7 +928,7 @@ size_t InventoryItemDatabase::getAmount() const {
  * @return The item, or nullptr if not found.
  */
 InventoryItem* InventoryItemDatabase::getByIName(const string& iName) {
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         if(items[i].iName == iName) return &items[i];
     }
     return nullptr;
@@ -955,7 +955,7 @@ void InventoryItemDatabase::init() {
     clear();
     
     //All sprays.
-    for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+    forIdx(s, game.config.misc.sprayOrder) {
         SprayType& sprayTypeRef = *game.config.misc.sprayOrder[s];
         InventoryItem item;
         item.iName = sprayTypeRef.manifest->internalName;
@@ -1262,7 +1262,7 @@ void PerformanceMonitor::finishMeasurement() {
     double dur = al_get_time() - curMeasurementStartTime;
     bool isNew = true;
     
-    for(size_t m = 0; m < curPage.measurements.size(); m++) {
+    forIdx(m, curPage.measurements) {
         if(curPage.measurements[m].first == curMeasurementName) {
             curPage.measurements[m].second += dur;
             isNew = false;
@@ -1311,12 +1311,9 @@ void PerformanceMonitor::leaveState() {
             frameAvgPage = curPage;
         } else {
             frameAvgPage.duration += curPage.duration;
-            for(size_t m = 0; m < curPage.measurements.size(); m++) {
+            forIdx(m, curPage.measurements) {
                 bool isNew = true;
-                for(
-                    size_t m2 = 0;
-                    m2 < frameAvgPage.measurements.size(); m2++
-                ) {
+                forIdx(m2, frameAvgPage.measurements) {
                     if(
                         curPage.measurements[m].first ==
                         frameAvgPage.measurements[m2].first
@@ -1371,7 +1368,7 @@ void PerformanceMonitor::saveLog() {
     
     //Average out the frames of gameplay.
     frameAvgPage.duration /= (double) frameSamples;
-    for(size_t m = 0; m < frameAvgPage.measurements.size(); m++) {
+    forIdx(m, frameAvgPage.measurements) {
         frameAvgPage.measurements[m].second /= (double) frameSamples;
     }
     
@@ -1472,12 +1469,12 @@ void PerformanceMonitor::startMeasurement(const string& name) {
 void PerformanceMonitor::Page::write(string& s) {
     //Get the total measured time.
     double totalMeasuredTime = 0.0;
-    for(size_t m = 0; m < measurements.size(); m++) {
+    forIdx(m, measurements) {
         totalMeasuredTime += measurements[m].second;
     }
     
     //Write each measurement into the string.
-    for(size_t m = 0; m < measurements.size(); m++) {
+    forIdx(m, measurements) {
         writeMeasurement(
             s, measurements[m].first,
             measurements[m].second,
@@ -2134,7 +2131,7 @@ bool ScriptVarReader::get(const string& name, Point& dest) const {
  * @brief Clears the list of registered subgroup types.
  */
 void SubgroupTypeManager::clear() {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         delete types[t];
     }
     types.clear();
@@ -2160,7 +2157,7 @@ SubgroupType* SubgroupTypeManager::getFirstType() const {
 SubgroupType* SubgroupTypeManager::getNextType(
     const SubgroupType* sgt
 ) const {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         if(types[t] == sgt) {
             return getNextInVectorByIdx(types, t);
         }
@@ -2178,7 +2175,7 @@ SubgroupType* SubgroupTypeManager::getNextType(
 SubgroupType* SubgroupTypeManager::getPrevType(
     const SubgroupType* sgt
 ) const {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         if(types[t] == sgt) {
             return getPrevInVectorByIdx(types, t);
         }
@@ -2199,7 +2196,7 @@ SubgroupType* SubgroupTypeManager::getType(
     const SUBGROUP_TYPE_CATEGORY category,
     const MobType* specificType
 ) const {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         SubgroupType* tPtr = types[t];
         if(
             tPtr->category == category &&
@@ -2415,7 +2412,7 @@ bool SystemNotificationManager::add(
     if(text.empty()) return false;
     
     if(!canRepeat) {
-        for(size_t n = 0; n < notifications.size(); n++) {
+        forIdx(n, notifications) {
             if(notifications[n].text == text) return false;
         }
     }

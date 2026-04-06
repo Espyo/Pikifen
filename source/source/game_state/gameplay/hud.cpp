@@ -573,7 +573,7 @@ Hud::Hud() :
         Leader* lPtr = player->leaderPtr;
         
         if(lPtr && lPtr->group->curStandbyType) {
-            for(size_t m = 0; m < lPtr->group->members.size(); m++) {
+            forIdx(m, lPtr->group->members) {
                 Mob* mPtr = lPtr->group->members[m];
                 if(mPtr->subgroupTypePtr == lPtr->group->curStandbyType) {
                     nStandbyPikmin++;

@@ -177,7 +177,7 @@ void AnimationEditor::applyChangesToAllMatchingSprites(
     }
     
     size_t spritesAffected = 0;
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         Sprite* sPtr = db.sprites[s];
         if(sPtr->bmpPos == oldPos && sPtr->bmpSize == oldSize) {
             sPtr->bmpPos = newPos;
@@ -398,7 +398,7 @@ void AnimationEditor::doLogic() {
             vector<size_t> frameSounds;
             curAnimInst.tick(game.deltaT, nullptr, &frameSounds);
             
-            for(size_t s = 0; s < frameSounds.size(); s++) {
+            forIdx(s, frameSounds) {
                 playSound(frameSounds[s]);
             }
         } else {
@@ -526,7 +526,7 @@ Hitbox* AnimationEditor::getMatchingSymmetricalHitbox(
     
     Distance bestDist;
     Hitbox* bestHitbox = nullptr;
-    for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+    forIdx(h, curSprite->hitboxes) {
         Hitbox* hPtr = &curSprite->hitboxes[h];
         if(hPtr == pivotPtr) continue;
         Distance dist(hPtr->pos, mirrorPos);
@@ -645,7 +645,7 @@ void AnimationEditor::importSpriteBmpData(const string& name) {
  * @param name Name of the animation to import.
  */
 void AnimationEditor::importSpriteHitboxData(const string& name) {
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         if(db.sprites[s]->name == name) {
             curSprite->hitboxes = db.sprites[s]->hitboxes;
         }
@@ -848,7 +848,7 @@ void AnimationEditor::loadAnimDbFile(
     if(!db.sprites.empty()) {
         map<string, size_t> fileUsesMap;
         vector<std::pair<size_t, string> > fileUsesVector;
-        for(size_t f = 0; f < db.sprites.size(); f++) {
+        forIdx(f, db.sprites) {
             fileUsesMap[db.sprites[f]->bmpName]++;
         }
         for(auto& u : fileUsesMap) {
@@ -913,7 +913,7 @@ void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
     
     size_t nHitboxesArranged = 0;
     
-    for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+    forIdx(h, curSprite->hitboxes) {
         Hitbox* hPtr = &curSprite->hitboxes[h];
         
         if(!isHitboxOnSide(hPtr, horizontal, topLeft)) continue;
@@ -1134,7 +1134,7 @@ void AnimationEditor::quickPlayCmd(float inputValue) {
     
     bool areaFound = false;
     for(size_t t = 0; t < 2; t++) {
-        for(size_t a = 0; a < game.content.areas.list[t].size(); a++) {
+        forIdx(a, game.content.areas.list[t]) {
             if(
                 game.content.areas.list[t][a]->manifest->path ==
                 game.options.animEd.quickPlayAreaPath
@@ -1245,7 +1245,7 @@ void AnimationEditor::renameAnimation(
     }
     
     //Check if the name already exists.
-    for(size_t a = 0; a < db.animations.size(); a++) {
+    forIdx(a, db.animations) {
         if(db.animations[a]->name == newName) {
             setStatus(
                 "An animation by the name \"" + newName + "\" already exists!",
@@ -1294,7 +1294,7 @@ void AnimationEditor::renameBodyPart(
     }
     
     //Check if the name already exists.
-    for(size_t b = 0; b < db.bodyParts.size(); b++) {
+    forIdx(b, db.bodyParts) {
         if(db.bodyParts[b]->name == newName) {
             setStatus(
                 "A body part by the name \"" + newName + "\" already exists!",
@@ -1305,8 +1305,8 @@ void AnimationEditor::renameBodyPart(
     }
     
     //Rename!
-    for(size_t s = 0; s < db.sprites.size(); s++) {
-        for(size_t h = 0; h < db.sprites[s]->hitboxes.size(); h++) {
+    forIdx(s, db.sprites) {
+        forIdx(h, db.sprites[s]->hitboxes) {
             if(db.sprites[s]->hitboxes[h].bodyPartName == oldName) {
                 db.sprites[s]->hitboxes[h].bodyPartName = newName;
             }
@@ -1351,7 +1351,7 @@ void AnimationEditor::renameSprite(
     }
     
     //Check if the name already exists.
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         if(db.sprites[s]->name == newName) {
             setStatus(
                 "A sprite by the name \"" + newName + "\" already exists!",
@@ -1363,9 +1363,9 @@ void AnimationEditor::renameSprite(
     
     //Rename!
     spr->name = newName;
-    for(size_t a = 0; a < db.animations.size(); a++) {
+    forIdx(a, db.animations) {
         Animation* aPtr = db.animations[a];
-        for(size_t f = 0; f < aPtr->frames.size(); f++) {
+        forIdx(f, aPtr->frames) {
             if(aPtr->frames[f].spriteName == oldName) {
                 aPtr->frames[f].spriteName = newName;
             }
@@ -1412,7 +1412,7 @@ void AnimationEditor::resizeEverything(float mult) {
         return;
     }
     
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         resizeSprite(db.sprites[s], mult);
     }
     
@@ -1442,7 +1442,7 @@ void AnimationEditor::resizeSprite(Sprite* s, float mult) {
     s->topPose.pos *= mult;
     s->topPose.size *= mult;
     
-    for(size_t h = 0; h < s->hitboxes.size(); h++) {
+    forIdx(h, s->hitboxes) {
         Hitbox* hPtr = &s->hitboxes[h];
         
         hPtr->radius = fabs(hPtr->radius * mult);
@@ -1564,7 +1564,7 @@ void AnimationEditor::setAllSpriteScales(float scale) {
         return;
     }
     
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
         Sprite* sPtr = db.sprites[s];
         sPtr->tf.scale.x = scale;
         sPtr->tf.scale.y = scale;
@@ -1598,7 +1598,7 @@ void AnimationEditor::setBestFrameSprite() {
     
     if(db.sprites.size() > 1) {
         size_t bestScore = 3;
-        for(size_t s = 0; s < db.sprites.size(); s++) {
+        forIdx(s, db.sprites) {
             size_t score = 0;
             if(
                 strToLower(curAnimInst.curAnim->name) ==
@@ -1879,7 +1879,7 @@ void AnimationEditor::spriteBmpFloodFill(
             }
         }
         
-        for(size_t c = 0; c < columns.size(); c++) {
+        forIdx(c, columns) {
             //For each column obtained, mark the pixel there,
             //and check the pixels above and below, to see if they should be
             //processed next.
@@ -1910,7 +1910,7 @@ void AnimationEditor::spriteBmpFloodFill(
  * @brief Stops all of the mob's sounds that are playing.
  */
 void AnimationEditor::stopSounds() {
-    for(size_t s = 0; s < animSoundIds.size(); s++) {
+    forIdx(s, animSoundIds) {
         game.audio.destroySoundSource(animSoundIds[s]);
     }
     animSoundIds.clear();
@@ -1951,7 +1951,7 @@ void AnimationEditor::unload() {
  * @brief Update every frame's hitbox instances in light of new hitbox info.
  */
 void AnimationEditor::updateHitboxes() {
-    for(size_t s = 0; s < db.sprites.size(); s++) {
+    forIdx(s, db.sprites) {
     
         Sprite* sPtr = db.sprites[s];
         
@@ -1960,7 +1960,7 @@ void AnimationEditor::updateHitboxes() {
             string hName = sPtr->hitboxes[h].bodyPartName;
             bool nameFound = false;
             
-            for(size_t b = 0; b < db.bodyParts.size(); b++) {
+            forIdx(b, db.bodyParts) {
                 if(db.bodyParts[b]->name == hName) {
                     nameFound = true;
                     break;
@@ -1977,11 +1977,11 @@ void AnimationEditor::updateHitboxes() {
         }
         
         //Create missing hitboxes.
-        for(size_t b = 0; b < db.bodyParts.size(); b++) {
+        forIdx(b, db.bodyParts) {
             bool hitboxFound = false;
             const string& name = db.bodyParts[b]->name;
             
-            for(size_t h = 0; h < sPtr->hitboxes.size(); h++) {
+            forIdx(h, sPtr->hitboxes) {
                 if(sPtr->hitboxes[h].bodyPartName == name) {
                     hitboxFound = true;
                     break;
@@ -2005,7 +2005,7 @@ void AnimationEditor::updateHitboxes() {
             sPtr->hitboxes.end(),
         [this] (const Hitbox & h1, const Hitbox & h2) -> bool {
             size_t pos1 = 0, pos2 = 1;
-            for(size_t b = 0; b < db.bodyParts.size(); b++) {
+            forIdx(b, db.bodyParts) {
                 if(db.bodyParts[b]->name == h1.bodyPartName) pos1 = b;
                 if(db.bodyParts[b]->name == h2.bodyPartName) pos2 = b;
             }
@@ -2066,7 +2066,7 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
         updateMaxCoords(cmax, topMax);
     }
     
-    for(size_t h = 0; h < sPtr->hitboxes.size(); h++) {
+    forIdx(h, sPtr->hitboxes) {
         Hitbox* hPtr = &sPtr->hitboxes[h];
         updateMinCoords(cmin, hPtr->pos - hPtr->radius);
         updateMaxCoords(cmax, hPtr->pos + hPtr->radius);

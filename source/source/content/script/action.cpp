@@ -31,7 +31,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     //Check if the "if"-related actions are okay.
     int depth = 0;
     vector<bool> seenElseAction;
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
         switch(list[a]->actionType->type) {
         case MOB_ACTION_IF: {
             depth++;
@@ -89,7 +89,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     
     //Check if the "goto"-related actions are okay.
     set<string> labels;
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
         if(list[a]->actionType->type == MOB_ACTION_LABEL) {
             const string& name = list[a]->args[0];
             if(isInContainer(labels, name)) {
@@ -101,7 +101,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
             labels.insert(name);
         }
     }
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
         if(list[a]->actionType->type == MOB_ACTION_GOTO) {
             const string& name = list[a]->args[0];
             if(!isInContainer(labels, name)) {
@@ -116,7 +116,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     
     //Check if there are actions after a "set_state" action.
     bool passedSetState = false;
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
         switch(list[a]->actionType->type) {
         case MOB_ACTION_SET_STATE: {
             passedSetState = true;
@@ -206,7 +206,7 @@ void ScriptActionBlockDef::run(
     FLOW_CODE flowCodeToRun = FLOW_CODE_NONE;
     bool processElseIfCondition = false;
     
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
     
         switch(list[a]->actionType->type) {
         case MOB_ACTION_IF: {
@@ -307,7 +307,7 @@ void ScriptActionBlockDef::run(
         } case FLOW_CODE_JUMP: {
             //Find the label that matches.
             size_t nextActionIdx = list.size();
-            for(size_t a2 = 0; a2 < list.size(); a2++) {
+            forIdx(a2, list) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
                 if(a2Type == MOB_ACTION_LABEL) {
                     if(list[a]->args[0] == list[a2]->args[0]) {
@@ -340,7 +340,7 @@ void ScriptActionBlockDef::run(
  * @brief Unloads the action block definition and its contents from memory.
  */
 void ScriptActionBlockDef::unload() {
-    for(size_t a = 0; a < list.size(); a++) {
+    forIdx(a, list) {
         list[a]->unload();
         delete list[a];
     }
@@ -358,7 +358,7 @@ void ScriptActionBlockDef::unload() {
  * @param type Type of script action call.
  */
 ScriptActionDef::ScriptActionDef(SCRIPT_ACTION type) {
-    for(size_t a = 0; a < game.scriptActionTypes.size(); a++) {
+    forIdx(a, game.scriptActionTypes) {
         if(game.scriptActionTypes[a].type == type) {
             actionType = &(game.scriptActionTypes[a]);
             break;
@@ -375,7 +375,7 @@ ScriptActionDef::ScriptActionDef(SCRIPT_ACTION type) {
 ScriptActionDef::ScriptActionDef(ScriptActionCustomCode code) :
     customCode(code) {
     
-    for(size_t a = 0; a < game.scriptActionTypes.size(); a++) {
+    forIdx(a, game.scriptActionTypes) {
         if(game.scriptActionTypes[a].type == SCRIPT_ACTION_UNKNOWN) {
             actionType = &(game.scriptActionTypes[a]);
             break;
@@ -397,7 +397,7 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     //First, get the name and arguments.
     vector<string> words = split(node->name);
     
-    for(size_t w = 0; w < words.size(); w++) {
+    forIdx(w, words) {
         words[w] = trimSpaces(words[w]);
     }
     
@@ -405,7 +405,7 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     words.erase(words.begin());
     
     //Find the corresponding action.
-    for(size_t a = 0; a < game.scriptActionTypes.size(); a++) {
+    forIdx(a, game.scriptActionTypes) {
         if(game.scriptActionTypes[a].type == SCRIPT_ACTION_UNKNOWN) continue;
         if(game.scriptActionTypes[a].name == name) {
             actionType = &(game.scriptActionTypes[a]);
@@ -452,7 +452,7 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     }
     
     //Fetch the arguments, and check if any of them are not allowed.
-    for(size_t w = 0; w < words.size(); w++) {
+    forIdx(w, words) {
         size_t paramIdx = std::min(w, actionType->parameters.size() - 1);
         bool isVar = (words[w][0] == '$' && words[w].size() > 1);
         
@@ -526,7 +526,7 @@ bool ScriptActionDef::run(
     
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
-    for(size_t a = 0; a < args.size(); a++) {
+    forIdx(a, args) {
         if(argIsVar[a]) {
             data.args[a] = scriptVM->vars[args[a]];
         }

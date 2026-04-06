@@ -36,7 +36,7 @@ Vertex::Vertex(float x, float y) :
  * @param eIdx Index number of the edge to add.
  */
 void Vertex::addEdge(Edge* ePtr, size_t eIdx) {
-    for(size_t i = 0; i < edges.size(); i++) {
+    forIdx(i, edges) {
         if(edges[i] == ePtr) {
             return;
         }
@@ -54,7 +54,7 @@ void Vertex::addEdge(Edge* ePtr, size_t eIdx) {
  * @return The edge, or nullptr if not found.
  */
 Edge* Vertex::getEdgeByNeighbor(const Vertex* neighbor) const {
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         if(edges[e]->getOtherVertex(this) == neighbor) {
             return edges[e];
         }
@@ -70,7 +70,7 @@ Edge* Vertex::getEdgeByNeighbor(const Vertex* neighbor) const {
  * @return Whether it has the edge.
  */
 bool Vertex::hasEdge(const Edge* ePtr) const {
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         if(edges[e] == ePtr) return true;
     }
     return false;
@@ -92,10 +92,10 @@ bool Vertex::is2ndDegreeNeighbor(
     //Let's crawl forward through all edges and stop at the second level.
     //If other_v is at that distance, then we found it!
     
-    for(size_t e1 = 0; e1 < edges.size(); e1++) {
+    forIdx(e1, edges) {
         Vertex* nextV = edges[e1]->getOtherVertex(this);
         
-        for(size_t e2 = 0; e2 < nextV->edges.size(); e2++) {
+        forIdx(e2, nextV->edges) {
             if(nextV->edges[e2]->getOtherVertex(nextV) == otherV) {
                 *firstNeighbor = nextV;
                 return true;
@@ -122,10 +122,10 @@ bool Vertex::is2ndDegreeNeighbor(
     //Let's crawl forward through all edges and stop at the second level.
     //If otherE is at that distance, then we found it!
     
-    for(size_t e1 = 0; e1 < edges.size(); e1++) {
+    forIdx(e1, edges) {
         Vertex* nextV = edges[e1]->getOtherVertex(this);
         
-        for(size_t e2 = 0; e2 < nextV->edges.size(); e2++) {
+        forIdx(e2, nextV->edges) {
             if(nextV->edges[e2] == otherE) {
                 *firstNeighbor = nextV;
                 return true;
@@ -145,7 +145,7 @@ bool Vertex::is2ndDegreeNeighbor(
  * @return Whether it is a neighbor.
  */
 bool Vertex::isNeighbor(const Vertex* otherV) const {
-    for(size_t e = 0; e < edges.size(); e++) {
+    forIdx(e, edges) {
         if(edges[e]->getOtherVertex(this) == otherV) {
             return true;
         }

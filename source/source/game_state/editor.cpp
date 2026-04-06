@@ -217,7 +217,7 @@ void Editor::centerCamera(
  * @brief Closes the topmost dialog that is still open.
  */
 void Editor::closeTopDialog() {
-    for(size_t d = 0; d < dialogs.size(); d++) {
+    forIdx(d, dialogs) {
         Dialog* dPtr = dialogs[dialogs.size() - (d + 1)];
         if(dPtr->isOpen) {
             dPtr->isOpen = false;
@@ -531,7 +531,7 @@ void Editor::getQuickPlayAreaList(
     auto scanAreas =
         [&selectedAreaPath, outAreaNames, outAreaPaths, outSelectedAreaIdx]
     (const vector<Area*> areas) {
-        for(size_t a = 0; a < areas.size(); a++) {
+        forIdx(a, areas) {
             Area* aPtr = areas[a];
             if(aPtr->manifest->path == selectedAreaPath) {
                 *outSelectedAreaIdx = (int) outAreaNames->size();
@@ -1148,7 +1148,7 @@ string Editor::getAmountOrIdxDescription(
  * @return Whether it's good.
  */
 bool Editor::isInternalNameGood(const string& name) const {
-    for(size_t c = 0; c < name.size(); c++) {
+    forIdx(c, name) {
         char ch = name[c];
         const bool isLowercase = ch >= 'a' && ch <= 'z';
         const bool isDigit = ch >= '0' && ch <= '9';
@@ -1761,7 +1761,7 @@ bool Editor::listPopup(
                 game.sysContent.fntDearImGuiMonospace->LegacySize
             );
         }
-        for(size_t i = 0; i < items.size(); i++) {
+        forIdx(i, items) {
             string name = items[i];
             bool hitButton =
                 useMonospace ?
@@ -1804,7 +1804,7 @@ bool Editor::listPopup(
                 game.sysContent.fntDearImGuiMonospace->LegacySize
             );
         }
-        for(size_t i = 0; i < items.size(); i++) {
+        forIdx(i, items) {
             string name = items[i];
             bool hitButton =
                 useMonospace ?
@@ -1875,7 +1875,7 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
         vector<string> typeNames;
         cPtr->getTypeNames(typeNames);
         
-        for(size_t tn = 0; tn < typeNames.size(); tn++) {
+        forIdx(tn, typeNames) {
             MobType* mtPtr = cPtr->getType(typeNames[tn]);
             
             if(isAreaEditor && !mtPtr->appearsInAreaEditor) {
@@ -1904,7 +1904,7 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
         c2.front()->customCategoryName;
     }
     );
-    for(size_t c = 0; c < customCatTypes.size(); c++) {
+    forIdx(c, customCatTypes) {
         vector<MobType*>& types = customCatTypes[c];
         //Sort the types within a custom category.
         std::sort(
@@ -2536,9 +2536,7 @@ void Editor::processGuiDialogNewPack() {
         game.content.addNewPack(
             internalName, name, description, maker
         );
-        for(
-            size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++
-        ) {
+        forIdx(p, game.content.packs.manifestsWithBase) {
             if(game.content.packs.manifestsWithBase[p] == internalName) {
                 newContentDialogPackIdx = (int) p;
                 break;
@@ -2727,11 +2725,11 @@ void Editor::processGuiHistory(
         if(!history.empty() && !history[0].first.empty()) {
         
             size_t nFilledEntries = 0;
-            for(size_t h = 0; h < history.size(); h++) {
+            forIdx(h, history) {
                 if(!history[h].first.empty()) nFilledEntries++;
             }
             
-            for(size_t h = 0; h < history.size(); h++) {
+            forIdx(h, history) {
                 string path = history[h].first;
                 if(path.empty()) continue;
                 
@@ -3337,9 +3335,9 @@ bool Editor::processGuiWidgetsMobType(
     
     vector<vector<MobType*> > finalList;
     if(!packFilter.empty()) {
-        for(size_t c = 0; c < customCatTypes.size(); c++) {
+        forIdx(c, customCatTypes) {
             finalList.push_back(vector<MobType*>());
-            for(size_t n = 0; n < customCatTypes[c].size(); n++) {
+            forIdx(n, customCatTypes[c]) {
                 MobType* mtPtr = customCatTypes[c][n];
                 if(mtPtr->manifest && mtPtr->manifest->pack == packFilter) {
                     finalList[c].push_back(mtPtr);
@@ -3352,8 +3350,8 @@ bool Editor::processGuiWidgetsMobType(
     
     if(searchButtonPressed) {
         vector<PickerItem> items;
-        for(size_t c = 0; c < finalList.size(); c++) {
-            for(size_t n = 0; n < finalList[c].size(); n++) {
+        forIdx(c, finalList) {
+            forIdx(n, finalList[c]) {
                 MobType* mtPtr = finalList[c][n];
                 items.push_back(
                     PickerItem(
@@ -3376,7 +3374,7 @@ bool Editor::processGuiWidgetsMobType(
             size_t customCatIdx = customCatNameIdxs[tc];
             const vector<MobType*>& types =
                 finalList[customCatIdx];
-            for(size_t t = 0; t < types.size(); t++) {
+            forIdx(t, types) {
                 if(types[t]->name == n) {
                     internalMobType = types[t];
                     return;
@@ -3395,7 +3393,7 @@ bool Editor::processGuiWidgetsMobType(
     //Object category combobox.
     vector<string> categories;
     int selectedCategoryIdx = -1;
-    for(size_t c = 0; c < finalList.size(); c++) {
+    forIdx(c, finalList) {
         string cn =
             customCatTypes[c].front()->customCategoryName;
         categories.push_back(cn);
@@ -3422,7 +3420,7 @@ bool Editor::processGuiWidgetsMobType(
         vector<string> typeNames;
         size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
         const vector<MobType*>& types = finalList[customCatIdx];
-        for(size_t t = 0; t < types.size(); t++) {
+        forIdx(t, types) {
             MobType* tPtr = types[t];
             typeNames.push_back(tPtr->name);
         }
@@ -3433,7 +3431,7 @@ bool Editor::processGuiWidgetsMobType(
         }
         if(ImGui::Combo("Type", &selectedTypeName, typeNames, 15)) {
             result = true;
-            for(size_t t = 0; t < types.size(); t++) {
+            forIdx(t, types) {
                 if(types[t]->name == selectedTypeName) {
                     internalMobType = types[t];
                     break;
@@ -3761,7 +3759,7 @@ void Editor::updateHistory(
     //First, check if it exists.
     size_t pos = INVALID;
     
-    for(size_t h = 0; h < history.size(); h++) {
+    forIdx(h, history) {
         if(history[h].first == manifest.path) {
             pos = h;
             break;
@@ -4295,7 +4293,7 @@ void Editor::Picker::process() {
     string filterLower = strToLower(filter);
     
     //Figure out the items.
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         if(!filter.empty()) {
             string nameLower = strToLower(items[i].name);
             if(nameLower.find(filterLower) == string::npos) {
@@ -4304,7 +4302,7 @@ void Editor::Picker::process() {
         }
         
         size_t topCatIdx = INVALID;
-        for(size_t c = 0; c < topCatNames.size(); c++) {
+        forIdx(c, topCatNames) {
             if(topCatNames[c] == items[i].topCategory) {
                 topCatIdx = c;
                 break;
@@ -4319,7 +4317,7 @@ void Editor::Picker::process() {
         }
         
         size_t secCatIdx = INVALID;
-        for(size_t c = 0; c < secCatNames[topCatIdx].size(); c++) {
+        forIdx(c, secCatNames[topCatIdx]) {
             if(secCatNames[topCatIdx][c] == items[i].secCategory) {
                 secCatIdx = c;
                 break;
@@ -4350,7 +4348,7 @@ void Editor::Picker::process() {
         }
         
         bool isReallyNew = true;
-        for(size_t i = 0; i < items.size(); i++) {
+        forIdx(i, items) {
             if(
                 filter == items[i].name &&
                 newItemTopCat == items[i].topCategory
@@ -4413,7 +4411,7 @@ void Editor::Picker::process() {
             tryMakeNew();
         } else {
             size_t possibleChoices = 0;
-            for(size_t c = 0; c < finalItems.size(); c++) {
+            forIdx(c, finalItems) {
                 possibleChoices += finalItems[c].size();
             }
             if(possibleChoices > 0) {
@@ -4440,7 +4438,7 @@ void Editor::Picker::process() {
                 "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Borders
             )
         ) {
-            for(size_t c = 0; c < newItemTopCatChoices.size(); c++) {
+            forIdx(c, newItemTopCatChoices) {
                 //Item selectable.
                 if(ImGui::Selectable(newItemTopCatChoices[c].c_str())) {
                     newItemTopCat = newItemTopCatChoices[c];
@@ -4467,7 +4465,7 @@ void Editor::Picker::process() {
     //Item list.
     ImGui::BeginChild("list");
     
-    for(size_t tc = 0; tc < finalItems.size(); tc++) {
+    forIdx(tc, finalItems) {
     
         bool topCatOpened = true;
         if(!topCatNames[tc].empty()) {
@@ -4478,7 +4476,7 @@ void Editor::Picker::process() {
         
         if(!topCatOpened) continue;
         
-        for(size_t sc = 0; sc < finalItems[tc].size(); sc++) {
+        forIdx(sc, finalItems[tc]) {
         
             bool secCatOpened = true;
             if(!secCatNames[tc][sc].empty()) {
@@ -4489,7 +4487,7 @@ void Editor::Picker::process() {
             
             if(!secCatOpened) continue;
             
-            for(size_t i = 0; i < finalItems[tc][sc].size(); i++) {
+            forIdx(i, finalItems[tc][sc]) {
                 PickerItem* iPtr = &finalItems[tc][sc][i];
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
@@ -4807,7 +4805,7 @@ bool Editor::SelectionController::applyTransformation(
     Point preTransTL;
     centerAndSizeToCorners(preOpSelCenter, preOpSelSize, &preTransTL, nullptr);
     
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         Point mNewCenter, mNewSize;
         managers[m]->calculateSelectionPortion(
             preOpSelCenter, preOpSelSize,
@@ -4842,7 +4840,7 @@ bool Editor::SelectionController::chooseViaMouseDown(
     std::pair<size_t, size_t> singleSelectedItem = { INVALID, INVALID };
     size_t totalNrSelectedItems = 0;
     size_t totalNrClickedItems = 0;
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         size_t mgrCount = managers[m]->getCount();
         totalNrSelectedItems += mgrCount;
         if(mgrCount == 1) {
@@ -4852,7 +4850,7 @@ bool Editor::SelectionController::chooseViaMouseDown(
         
         const vector<size_t>& itemsUnderCursor =
             managers[m]->getItemsUnderCursor(cursorPos);
-        for(size_t i = 0; i < itemsUnderCursor.size(); i++) {
+        forIdx(i, itemsUnderCursor) {
             clickedItems.push_back(std::make_pair(m, itemsUnderCursor[i]));
         }
         totalNrClickedItems += itemsUnderCursor.size();
@@ -4862,7 +4860,7 @@ bool Editor::SelectionController::chooseViaMouseDown(
     bool mustStartRubberBand = (totalNrClickedItems == 0) || rubberBandMod;
     if(mustStartRubberBand) {
         if(!addToSelectionMod) {
-            for(size_t m = 0; m < managers.size(); m++) {
+            forIdx(m, managers) {
                 managers[m]->clear();
             }
         }
@@ -4895,7 +4893,7 @@ bool Editor::SelectionController::chooseViaMouseDown(
         keepOldSelection = true;
     }
     if(!keepOldSelection) {
-        for(size_t m = 0; m < managers.size(); m++) {
+        forIdx(m, managers) {
             managers[m]->clear();
         }
     }
@@ -5095,7 +5093,7 @@ bool Editor::SelectionController::getTotalBBox(
     Point centersOnlyTotalCenter, centersOnlyTotalSize;
     bool hasFirst = false;
     
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         Point mCenter, mSize;
         Point mCOCenter, mCOSize;
         managers[m]->getBBox(&mCenter, &mSize, &mCOCenter, &mCOSize);
@@ -5136,7 +5134,7 @@ bool Editor::SelectionController::getTotalBBox(
  */
 size_t Editor::SelectionController::getSelectionTotalCount() const {
     size_t total = 0;
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         total += managers[m]->getCount();
     }
     return total;
@@ -5254,7 +5252,7 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
     bool gotClosest = false;
     Distance closestDist;
     
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         managers[m]->startOperation();
         const set<size_t>& list = managers[m]->getItemIdxs();
         
@@ -5289,7 +5287,7 @@ bool Editor::SelectionController::startTransforming() {
         &preOpCentersOnlySelCenter, &preOpCentersOnlySelSize
     );
     
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         managers[m]->startOperation();
     }
     
@@ -5350,7 +5348,7 @@ bool Editor::SelectionController::updateDragMove(const Point& cursorPos) {
     if(onSnapPoint) newPivotPos = onSnapPoint(newPivotPos);
     Point totalMoveOffset = newPivotPos - preOpPivotItemPos;
     
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         managers[m]->applyDragMove(totalMoveOffset);
     }
     
@@ -5385,7 +5383,7 @@ bool Editor::SelectionController::updateRubberBand(
             std::max(opStartCursorPos.y, cursorPos.y)
         );
         
-    for(size_t m = 0; m < managers.size(); m++) {
+    forIdx(m, managers) {
         if(!addToSelectionMod) {
             managers[m]->clear();
         }

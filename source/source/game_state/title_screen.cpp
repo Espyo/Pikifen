@@ -751,7 +751,7 @@ void TitleScreen::doDrawing() {
     pikSize.x *= game.winW / 100.0f;
     pikSize.y *= game.winH / 100.0f;
     
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
+    forIdx(p, logoPikmin) {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
             game.sysContent.bmpShadow,
@@ -759,7 +759,7 @@ void TitleScreen::doDrawing() {
             true, 0.0f, COLOR_TRANSPARENT_WHITE
         );
     }
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
+    forIdx(p, logoPikmin) {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
             pik->top, pik->pos, pikSize, true, pik->angle
@@ -804,7 +804,7 @@ void TitleScreen::doLogic() {
     
     //Animate the logo Pikmin.
     int largestWindowDim = std::max(game.winW, game.winH);
-    for(size_t p = 0; p < logoPikmin.size(); p++) {
+    forIdx(p, logoPikmin) {
         LogoPikmin* pik = &logoPikmin[p];
         
         if(!pik->reachedDestination) {
@@ -834,7 +834,7 @@ void TitleScreen::doLogic() {
     }
     
     if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+        forIdx(a, game.controls.actionQueue) {
             bool handled =
                 mainMenu.handlePlayerAction(game.controls.actionQueue[a]);
             if(!handled) {
@@ -940,7 +940,7 @@ void TitleScreen::load() {
     for(size_t r = 0; r < mapTotalRows; r++) {
         string row = mapNode->getChild(r)->name;
         
-        for(size_t c = 0; c < row.size(); c++) {
+        forIdx(c, row) {
             if(row[c] == '.') continue;
             if(!isInMap(logoTypeBitmaps, row[c])) {
                 mapOk = false;

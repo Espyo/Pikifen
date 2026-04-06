@@ -264,7 +264,7 @@ void Inventory::populateInventoryListGui() {
         }
     };
     
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
         InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
         
@@ -390,7 +390,7 @@ bool Inventory::tryUseItem(size_t itemIdx) {
  * @brief Updates the state of the inventory items.
  */
 void Inventory::update() {
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
         iiPtr->button->responsive = canUseItem(iiPtr);
     }
@@ -404,7 +404,7 @@ void Inventory::update() {
  * @return Whether it succeeded.
  */
 bool Inventory::useShortcut(const string& itemInternalName) {
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
         InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
         if(iPtr->iName == itemInternalName) {

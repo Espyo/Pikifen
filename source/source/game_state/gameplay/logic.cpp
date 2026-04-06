@@ -36,10 +36,7 @@
 int GameplayState::calculateMissionScore(bool forHud) {
     int score = game.curArea->mission.startingPoints;
     
-    for(
-        size_t c = 0;
-        c < game.curArea->mission.scoreCriteria.size(); c++
-    ) {
+    forIdx(c, game.curArea->mission.scoreCriteria) {
         MissionScoreCriterion* criPtr =
             &game.curArea->mission.scoreCriteria[c];
         MissionMetricType* typePtr =
@@ -136,7 +133,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     }
     
     player->throwDestMob = nullptr;
-    for(size_t m = 0; m < mobs.all.size(); m++) {
+    forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
         if(!bBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
             //Too far away; of course the leader's cursor isn't on it.
@@ -447,7 +444,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         
         //Ship healing prompt.
         player->closeToShipToHeal = nullptr;
-        for(size_t s = 0; s < mobs.ships.size(); s++) {
+        forIdx(s, mobs.ships) {
             Ship* sPtr = mobs.ships[s];
             d = Distance(player->leaderPtr->pos, sPtr->pos);
             if(!sPtr->isLeaderOnCp(player->leaderPtr)) {
@@ -480,7 +477,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         d = 0;
         player->closeToInteractableToUse = nullptr;
         if(!leaderPromptDone) {
-            for(size_t i = 0; i < mobs.interactables.size(); i++) {
+            forIdx(i, mobs.interactables) {
                 d =
                     Distance(
                         player->leaderPtr->pos, mobs.interactables[i]->pos
@@ -532,7 +529,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         d = 0;
         player->closeToNestToOpen = nullptr;
         if(!leaderPromptDone) {
-            for(size_t o = 0; o < mobs.onions.size(); o++) {
+            forIdx(o, mobs.onions) {
                 if(!mobs.onions[o]->nest->nestType->hasMenu) continue;
                 d = Distance(player->leaderPtr->pos, mobs.onions[o]->pos);
                 if(d > game.config.leaders.onionOpenRange) continue;
@@ -551,7 +548,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     leaderPromptDone = true;
                 }
             }
-            for(size_t s = 0; s < mobs.ships.size(); s++) {
+            forIdx(s, mobs.ships) {
                 d = Distance(player->leaderPtr->pos, mobs.ships[s]->pos);
                 if(!mobs.ships[s]->isLeaderOnCp(player->leaderPtr)) {
                     continue;
@@ -797,12 +794,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
             game.perfMon->startMeasurement("Logic -- Sector animation");
         }
         
-        for(size_t l = 0; l < liquids.size(); l++) {
+        forIdx(l, liquids) {
             Liquid* lPtr = liquids[l];
             lPtr->tick(deltaT);
         }
         
-        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        forIdx(s, game.curArea->sectors) {
             Sector* sPtr = game.curArea->sectors[s];
             
             if(sPtr->scroll.x != 0 || sPtr->scroll.y != 0) {
@@ -826,7 +823,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         Leader* oldLeaders[MAX_PLAYERS];
         Point oldLeaderPos[MAX_PLAYERS];
         bool oldLeaderWasWalking[MAX_PLAYERS];
-        for(size_t p = 0; p < players.size(); p++) {
+        forIdx(p, players) {
             Player* player = &players[p];
             //Some setup to calculate how far the leader walks.
             oldLeaders[p] = player->leaderPtr;
@@ -881,7 +878,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             m++;
         }
         
-        for(size_t p = 0; p < players.size(); p++) {
+        forIdx(p, players) {
             Player* player = &players[p];
             doGameplayLeaderLogic(player, deltaT);
             
@@ -903,7 +900,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
         nrLivingLeaders = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); l++) {
+        forIdx(l, mobs.leaders) {
             if(mobs.leaders[l]->health > 0.0f) {
                 nrLivingLeaders++;
             }
@@ -958,9 +955,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         if(game.curArea->type == AREA_TYPE_MISSION) {
         
             //Mission end conditions.
-            for(
-                size_t c = 0; c < game.curArea->mission.endConds.size(); c++
-            ) {
+            forIdx(c, game.curArea->mission.endConds) {
                 MissionEndCond* condPtr =
                     &game.curArea->mission.endConds[c];
                 MissionEndCondType* condTypePtr =
@@ -1068,9 +1063,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
         *                  *
         ********************/
         
-        for(size_t r = 0; r < areaRegions.size(); r++) {
+        forIdx(r, areaRegions) {
             areaRegions[r].leadersInside.clear();
-            for(size_t l = 0; l < mobs.leaders.size(); l++) {
+            forIdx(l, mobs.leaders) {
                 Leader* lPtr = mobs.leaders[l];
                 AreaRegion* rPtr = game.curArea->regions[r];
                 if(
@@ -1269,7 +1264,7 @@ void GameplayState::doMenuLogic() {
                 players[0].view.mouseCursorWorldPos, nullptr, true
             );
         size_t mouseSectorIdx = INVALID;
-        for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+        forIdx(s, game.curArea->sectors) {
             if(game.curArea->sectors[s] == mouseSector) {
                 mouseSectorIdx = s;
                 break;
@@ -1278,7 +1273,7 @@ void GameplayState::doMenuLogic() {
         size_t closestEdgeIdx = INVALID;
         Distance closestEdgeDist;
         Point ppp;
-        for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+        forIdx(e, game.curArea->edges) {
             Edge* ePtr = game.curArea->edges[e];
             float ratio;
             Point p = getClosestPointInLineSeg(
@@ -1296,7 +1291,7 @@ void GameplayState::doMenuLogic() {
         }
         size_t closestVertexIdx = INVALID;
         Distance closestVertexDist;
-        for(size_t v = 0; v < game.curArea->vertexes.size(); v++) {
+        forIdx(v, game.curArea->vertexes) {
             Vertex* vPtr = game.curArea->vertexes[v];
             Distance d(players[0].view.mouseCursorWorldPos, v2p(vPtr));
             if(closestVertexIdx == INVALID || d < closestVertexDist) {
@@ -1531,7 +1526,7 @@ void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     bool foundBoss = false;
     for(Player& player : players) {
         if(!player.leaderPtr) continue;
-        for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
+        forIdx(e, game.states.gameplay->mobs.enemies) {
             Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
             if(ePtr->health <= 0.0f) continue;
             
@@ -1763,7 +1758,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     }
     );
     
-    for(size_t e = 0; e < pendingInterMobEvents.size(); e++) {
+    forIdx(e, pendingInterMobEvents) {
         if(mPtr->scriptVM.fsm.curState != stateBefore) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
@@ -2005,7 +2000,7 @@ void GameplayState::processMobTouches(
             Sprite* s2Ptr;
             m2Ptr->getSpriteData(&s2Ptr, nullptr, nullptr);
             
-            for(size_t h = 0; h < s2Ptr->hitboxes.size(); h++) {
+            forIdx(h, s2Ptr->hitboxes) {
                 Hitbox* hPtr = &s2Ptr->hitboxes[h];
                 if(hPtr->type == HITBOX_TYPE_DISABLED) continue;
                 Point hPos(
@@ -2232,12 +2227,12 @@ void GameplayState::processMobTouches(
         bool reportedEatEv = false;
         bool reportedHazEv = false;
         
-        for(size_t h1 = 0; h1 < s1Ptr->hitboxes.size(); h1++) {
+        forIdx(h1, s1Ptr->hitboxes) {
         
             Hitbox* h1Ptr = &s1Ptr->hitboxes[h1];
             if(h1Ptr->type == HITBOX_TYPE_DISABLED) continue;
             
-            for(size_t h2 = 0; h2 < s2Ptr->hitboxes.size(); h2++) {
+            forIdx(h2, s2Ptr->hitboxes) {
                 Hitbox* h2Ptr = &s2Ptr->hitboxes[h2];
                 if(h2Ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
@@ -2371,7 +2366,7 @@ void GameplayState::processMobTouches(
                 //Check if m2 is under any status effect
                 //that disables attacks.
                 bool disableAttackStatus = false;
-                for(size_t s = 0; s < m2Ptr->statuses.size(); s++) {
+                forIdx(s, m2Ptr->statuses) {
                     if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
                         continue;
                     }
@@ -2458,21 +2453,21 @@ void GameplayState::processMobTouches(
  */
 void GameplayState::updateAreaActiveCells() {
     //Initialize the grid to false.
-    for(size_t x = 0; x < areaActiveCells.size(); x++) {
-        for(size_t y = 0; y < areaActiveCells[x].size(); y++) {
+    forIdx(x, areaActiveCells) {
+        forIdx(y, areaActiveCells[x]) {
             areaActiveCells[x][y] = false;
         }
     }
     
     //Mark the 3x3 region around Pikmin and leaders as active.
-    for(size_t p = 0; p < mobs.pikmin.size(); p++) {
+    forIdx(p, mobs.pikmin) {
         markAreaCellsActive(
             mobs.pikmin[p]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.pikmin[p]->pos + GEOMETRY::AREA_CELL_SIZE
         );
     }
     
-    for(size_t l = 0; l < mobs.leaders.size(); l++) {
+    forIdx(l, mobs.leaders) {
         markAreaCellsActive(
             mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
@@ -2492,7 +2487,7 @@ void GameplayState::updateAreaActiveCells() {
 void GameplayState::updateMobIsActiveFlag() {
     unordered_set<Mob*> childMobs;
     
-    for(size_t m = 0; m < mobs.all.size(); m++) {
+    forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
         
         int cellX =

@@ -276,7 +276,7 @@ void ParticleGenerator::emit(ParticleManager& manager) {
     basePZ += followZOffset;
     
     bool visible = false;
-    for(size_t v = 0; v < manager.viewports.size(); v++) {
+    forIdx(v, manager.viewports) {
         if(
             basePPos.x >= manager.viewports[v]->box[0].x &&
             basePPos.x <= manager.viewports[v]->box[1].x &&

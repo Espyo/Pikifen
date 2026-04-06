@@ -565,9 +565,9 @@ void drawLiquid(
     vector<sector*> checkedS {sPtr};
     vector<edge*> borderEdges;
     
-    for(size_t s = 0; s < checkedS.size(); s++) {
+    forIdx(s, checkedS) {
         sector* s2Ptr = checkedS[s];
-        for(size_t e = 0; e < s2Ptr->edges.size(); e++) {
+        forIdx(e, s2Ptr->edges) {
             edge* ePtr = s2Ptr->edges[e];
             sector* uS = nullptr;
             sector* aS = nullptr;
@@ -577,7 +577,7 @@ void drawLiquid(
     
             sector* otherPtr = ePtr->getOtherSector(s2Ptr);
             if(otherPtr) {
-                for(size_t h = 0; h < otherPtr->hazards.size(); h++) {
+                forIdx(h, otherPtr->hazards) {
                     if(otherPtr->hazards[h]->associatedLiquid) {
                         if(!isInContainer(checkedS, otherPtr)) {
                             checkedS.push_back(otherPtr);
@@ -699,9 +699,7 @@ void drawLiquid(
             if(t == 1) {
                 if(!drawSector0) {
                     alphaMult = 0;
-                    for(
-                        size_t e = 0; e < textureSector[1]->edges.size(); e++
-                    ) {
+                    forIdx(e, textureSector[1]->edges) {
                         if(
                             textureSector[1]->edges[e]->vertexes[0] == vPtr ||
                             textureSector[1]->edges[e]->vertexes[1] == vPtr
@@ -710,9 +708,7 @@ void drawLiquid(
                         }
                     }
                 } else {
-                    for(
-                        size_t e = 0; e < textureSector[0]->edges.size(); e++
-                    ) {
+                    forIdx(e, textureSector[0]->edges) {
                         if(
                             textureSector[0]->edges[e]->vertexes[0] == vPtr ||
                             textureSector[0]->edges[e]->vertexes[1] == vPtr
@@ -1250,7 +1246,7 @@ void drawPlayerActionInputSourceIcon(
     
     //Find the best icon to use, based on the last hardware input.
     size_t bindIdx = 0;
-    for(size_t b = 0; b < binds.size(); b++) {
+    forIdx(b, binds) {
         Inpution::INPUT_SOURCE_TYPE bindSourceType = binds[b].inputSource.type;
         bool bindIsController =
             bindSourceType == Inpution::INPUT_SOURCE_TYPE_CONTROLLER_BUTTON ||
@@ -1441,9 +1437,7 @@ void drawSectorTexture(
             if(t == 1) {
                 if(!drawSector0) {
                     alphaMult = 0;
-                    for(
-                        size_t e = 0; e < textureSector[1]->edges.size(); e++
-                    ) {
+                    forIdx(e, textureSector[1]->edges) {
                         if(
                             textureSector[1]->edges[e]->vertexes[0] == vPtr ||
                             textureSector[1]->edges[e]->vertexes[1] == vPtr
@@ -1452,9 +1446,7 @@ void drawSectorTexture(
                         }
                     }
                 } else {
-                    for(
-                        size_t e = 0; e < textureSector[0]->edges.size(); e++
-                    ) {
+                    forIdx(e, textureSector[0]->edges) {
                         if(
                             textureSector[0]->edges[e]->vertexes[0] == vPtr ||
                             textureSector[0]->edges[e]->vertexes[1] == vPtr
@@ -1542,7 +1534,7 @@ void drawStringTokens(
 ) {
     unsigned int totalWidth = 0;
     float xScale = 1.0f;
-    for(size_t t = 0; t < tokens.size(); t++) {
+    forIdx(t, tokens) {
         totalWidth += tokens[t].width;
     }
     if(totalWidth > maxSize.x) {
@@ -1562,7 +1554,7 @@ void drawStringTokens(
     }
     
     float caret = startX;
-    for(size_t t = 0; t < tokens.size(); t++) {
+    forIdx(t, tokens) {
         float tokenFinalWidth = tokens[t].width * xScale;
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {

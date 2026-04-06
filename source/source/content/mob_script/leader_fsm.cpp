@@ -1390,7 +1390,7 @@ void LeaderFsm::becomeActive(ScriptVM* scriptVM, void* info1, void* info2) {
     
     //Update pointers and such.
     size_t newLeaderIdx = player->leaderIdx;
-    for(size_t l = 0; l < game.states.gameplay->availableLeaders.size(); l++) {
+    forIdx(l, game.states.gameplay->availableLeaders) {
         if(game.states.gameplay->availableLeaders[l] == leaPtr) {
             newLeaderIdx = l;
             break;
@@ -2065,7 +2065,7 @@ void LeaderFsm::goPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->pluckReserved = true;
     
     //Now for the leaders in the group.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
             l2Ptr->scriptVM.fsm.runEvent(LEADER_EV_MUST_SEARCH_SEED);
@@ -2492,7 +2492,7 @@ void LeaderFsm::signalStopAutoPluck(
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         Leader* l2Ptr = game.states.gameplay->mobs.leaders[l];
         if(l2Ptr->followingGroup == leaPtr) {
             l2Ptr->scriptVM.fsm.runEvent(LEADER_EV_CANCEL);
@@ -2528,7 +2528,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(sprayTypeRef.group) {
-        for(size_t gm = 0; gm < leaPtr->group->members.size(); gm++) {
+        forIdx(gm, leaPtr->group->members) {
             Mob* gmPtr = leaPtr->group->members[gm];
             if(
                 gmPtr->type->category->id != MOB_CATEGORY_PIKMIN &&
@@ -2546,9 +2546,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
         };
         
     } else {
-        for(
-            size_t am = 0; am < game.states.gameplay->mobs.all.size(); am++
-        ) {
+        forIdx(am, game.states.gameplay->mobs.all) {
             Mob* amPtr = game.states.gameplay->mobs.all[am];
             if(amPtr == leaPtr) continue;
             
@@ -2737,7 +2735,7 @@ void LeaderFsm::startGoHere(ScriptVM* scriptVM, void* info1, void* info2) {
     settings.targetPoint = destination;
     
     float speed = leaPtr->getBaseSpeed();
-    for(size_t gm = 0; gm < leaPtr->group->members.size(); gm++) {
+    forIdx(gm, leaPtr->group->members) {
         //It can only go as fast as its slowest member.
         speed = std::min(speed, leaPtr->group->members[gm]->getBaseSpeed());
     }
@@ -2801,7 +2799,7 @@ void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->startHeightEffect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < traPtr->type->animDb->bodyParts.size(); c++) {
+    forIdx(c, traPtr->type->animDb->bodyParts) {
         checkpoints.push_back(c);
     }
     leaPtr->trackInfo =
@@ -2837,7 +2835,7 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
     
     if(leaPtr->leaType->sleepingStatus) {
-        for(size_t s = 0; s < leaPtr->statuses.size(); s++) {
+        forIdx(s, leaPtr->statuses) {
             if(leaPtr->statuses[s].type == leaPtr->leaType->sleepingStatus) {
                 leaPtr->statuses[s].prevState = leaPtr->statuses[s].state;
                 leaPtr->statuses[s].state = STATUS_STATE_TO_DELETE;
@@ -2999,7 +2997,7 @@ void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
-        for(size_t e = 0; e < hazPtr->effects.size(); e++) {
+        forIdx(e, hazPtr->effects) {
             leaPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
         }
     }
@@ -3009,7 +3007,7 @@ void LeaderFsm::touchedHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     
     if(hazPtr->associatedLiquid) {
         bool alreadyGenerating = false;
-        for(size_t g = 0; g < leaPtr->particleGenerators.size(); g++) {
+        forIdx(g, leaPtr->particleGenerators) {
             if(
                 leaPtr->particleGenerators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
@@ -3050,7 +3048,7 @@ void LeaderFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    for(size_t e = 0; e < s->effects.size(); e++) {
+    forIdx(e, s->effects) {
         leaPtr->applyStatus(s->effects[e], false, false, sprayer);
     }
 }

@@ -113,7 +113,7 @@ void LeaderType::loadCatProperties(DataNode* file) {
     lRS.set("sleeping_status", sleepingStatusStr, &sleepingStatusNode);
     lRS.set("whistle_range", whistleRange);
     
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         if(sounds[s].name == "whistling") {
             soundDataIdxs[LEADER_SOUND_WHISTLING] = s;
         } else if(sounds[s].name == "dismissing") {

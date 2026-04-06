@@ -1834,8 +1834,12 @@ void ParticleEditor::processGuiToolbar() {
             game.options.partEd.quickPlayAreaPath,
             &areaNames, &areaPaths, &selectedAreaIdx
         );
-        for(int a = 0; a < (int) areaNames.size(); a++) {
-            if(ImGui::Selectable(areaNames[a].c_str(), a == selectedAreaIdx)) {
+        forIdx(a, areaNames) {
+            if(
+                ImGui::Selectable(
+                    areaNames[a].c_str(), (int) a == selectedAreaIdx
+                )
+            ) {
                 game.options.partEd.quickPlayAreaPath = areaPaths[a];
                 saveOptions();
                 ImGui::CloseCurrentPopup();

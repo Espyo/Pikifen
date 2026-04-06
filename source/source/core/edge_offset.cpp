@@ -522,7 +522,7 @@ void getNextEdge(
     float bestEdgeDiff = 0.0f;
     float bestEdgeAngle = 0.0f;
     
-    for(size_t e = 0; e < vPtr->edges.size(); e++) {
+    forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];
         
         if(ePtr == ignore) continue;
@@ -581,7 +581,7 @@ void getNextOffsetEffectEdge(
     float bestEdgeAngle = 0;
     bool bestEdgeEffectCw = false;
     
-    for(size_t e = 0; e < vPtr->edges.size(); e++) {
+    forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];
         
         if(ePtr == ignore) continue;
@@ -651,7 +651,7 @@ void updateOffsetEffectBuffer(
 ) {
     unordered_set<size_t> edges;
     
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         
         if(
@@ -674,7 +674,7 @@ void updateOffsetEffectBuffer(
             fullyOnCamera = true;
         }
         
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             if(!fullyOnCamera) {
                 //If the sector's fully on-camera, it's faster to not bother
                 //with the edge-by-edge check.

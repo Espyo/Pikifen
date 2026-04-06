@@ -133,14 +133,14 @@ bool FsmDef::compileStates(DataNode* fileNode) {
     bool success = true;
     
     //Fix actions that change the state that are using a string.
-    for(size_t s = 0; s < states.size(); s++) {
+    forIdx(s, states) {
         FsmStateDef* state = states[s];
         
         for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
             FsmEventDef* ev = state->events[e];
             if(!ev) continue;
             
-            for(size_t a = 0; a < ev->actions.list.size(); a++) {
+            forIdx(a, ev->actions.list) {
                 ScriptActionDef* call = ev->actions.list[a];
                 
                 if(call->actionType->type == MOB_ACTION_SET_STATE) {
@@ -200,7 +200,7 @@ bool FsmDef::loadFromDataNode(
     for(size_t s = 0; s < nNewStates; s++) {
         DataNode* stateNode = node->getChild(s);
         bool skip = false;
-        for(size_t s2 = 0; s2 < states.size(); s2++) {
+        forIdx(s2, states) {
             if(states[s2]->name == stateNode->name) {
                 //Already exists, probably hardcoded. Skip this.
                 skip = true;
@@ -212,7 +212,7 @@ bool FsmDef::loadFromDataNode(
         }
     }
     
-    for(size_t s = 0; s < states.size(); s++) {
+    forIdx(s, states) {
         FsmStateDef* statePtr = states[s];
         DataNode* stateNode = node->getChildByName(statePtr->name);
         success &= statePtr->loadFromDataNode(stateNode, globalNode, scriptDef);
@@ -244,7 +244,7 @@ bool FsmDef::loadFromDataNode(
  * @return Whether it succeeded.
  */
 bool FsmDef::setFirstState(const string& name) {
-    for(size_t s = 0; s < states.size(); s++) {
+    forIdx(s, states) {
         if(states[s]->name == name) {
             firstStateIdx = s;
             return true;
@@ -258,7 +258,7 @@ bool FsmDef::setFirstState(const string& name) {
  * @brief Unloads the FSM definition and its contents from memory.
  */
 void FsmDef::unload() {
-    for(size_t s = 0; s < states.size(); s++) {
+    forIdx(s, states) {
         FsmStateDef* sPtr = states[s];
         sPtr->unload();
         delete sPtr;
@@ -316,7 +316,7 @@ string FsmInst::getStateHistoryStr() const {
  * @return The index, or INVALID if it doesn't exist.
  */
 size_t FsmInst::getStateIdx(const string& name) const {
-    for(size_t s = 0; s < script->scriptDef->fsm.states.size(); s++) {
+    forIdx(s, script->scriptDef->fsm.states) {
         if(script->scriptDef->fsm.states[s]->name == name) {
             return s;
         }

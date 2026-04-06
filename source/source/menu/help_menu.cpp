@@ -68,7 +68,7 @@ void HelpMenu::drawTidbit(
     }
     
     //Draw!
-    for(size_t l = 0; l < tokensPerLine.size(); l++) {
+    forIdx(l, tokensPerLine) {
         drawStringTokens(
             tokensPerLine[l],
             game.sysContent.fntStandard, game.sysContent.fntSlim,
@@ -316,7 +316,7 @@ void HelpMenu::load() {
             categoryTidbits.push_back(newT);
         }
     }
-    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
+    forIdx(p, game.config.pikmin.order) {
         Tidbit newT;
         newT.name = game.config.pikmin.order[p]->name;
         newT.description = game.config.pikmin.order[p]->description;
@@ -365,7 +365,7 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
     
     tidbitList->deleteAllChildren();
     
-    for(size_t t = 0; t < categoryTidbits.size(); t++) {
+    forIdx(t, categoryTidbits) {
         Tidbit* tPtr = &categoryTidbits[t];
         BulletGuiItem* tidbitBullet =
             new BulletGuiItem(
@@ -399,7 +399,7 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
 void HelpMenu::unload() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(c == HELP_CATEGORY_PIKMIN) continue;
-        for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
+        forIdx(t, tidbits[(HELP_CATEGORY) c]) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
                 game.content.bitmaps.list.free(
                     tidbits[(HELP_CATEGORY) c][t].image

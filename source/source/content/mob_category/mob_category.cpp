@@ -26,7 +26,7 @@ using std::string;
  * @brief Clears the list of registered categories, freeing memory.
  */
 void CategoryManager::clear() {
-    for(size_t c = 0; c < categories.size(); c++) {
+    forIdx(c, categories) {
         delete categories[c];
     }
     categories.clear();
@@ -42,7 +42,7 @@ void CategoryManager::clear() {
  * @return The type, or nullptr on error.
  */
 MobType* CategoryManager::findMobType(const string& name) const {
-    for(size_t n = 0; n < categories.size(); n++) {
+    forIdx(n, categories) {
         MobType* t = categories[n]->getType(name);
         if(t) return t;
     }
@@ -71,7 +71,7 @@ MobCategory* CategoryManager::get(const MOB_CATEGORY id) const {
 MobCategory* CategoryManager::getFromFolderName(
     const string& name
 ) const {
-    for(size_t n = 0; n < categories.size(); n++) {
+    forIdx(n, categories) {
         if(categories[n]->folderName == name) return categories[n];
     }
     game.errors.report(
@@ -90,7 +90,7 @@ MobCategory* CategoryManager::getFromFolderName(
 MobCategory* CategoryManager::getFromInternalName(
     const string& internalName
 ) const {
-    for(size_t n = 0; n < categories.size(); n++) {
+    forIdx(n, categories) {
         if(categories[n]->internalName == internalName) return categories[n];
     }
     return nullptr;
@@ -104,7 +104,7 @@ MobCategory* CategoryManager::getFromInternalName(
  * @return The category, or nullptr on error.
  */
 MobCategory* CategoryManager::getFromName(const string& name) const {
-    for(size_t n = 0; n < categories.size(); n++) {
+    forIdx(n, categories) {
         if(categories[n]->name == name) return categories[n];
     }
     return nullptr;
@@ -118,7 +118,7 @@ MobCategory* CategoryManager::getFromName(const string& name) const {
  * @return The category, or nullptr on error.
  */
 MobCategory* CategoryManager::getFromPName(const string& pname) const {
-    for(size_t n = 0; n < categories.size(); n++) {
+    forIdx(n, categories) {
         if(categories[n]->pluralName == pname) return categories[n];
     }
     return nullptr;

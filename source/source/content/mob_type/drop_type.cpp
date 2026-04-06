@@ -82,7 +82,7 @@ void DropType::loadCatProperties(DataNode* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+        forIdx(s, game.config.misc.sprayOrder) {
             if(
                 game.config.misc.sprayOrder[s]->manifest->internalName ==
                 sprayNameStr

@@ -178,7 +178,7 @@ HardwareMediator::deviceBrandDb {
  * @return The number.
  */
 size_t HardwareMediator::getControllerNr(ALLEGRO_JOYSTICK* aJoyPtr) {
-    for(size_t c = 0; c < controllers.size(); c++) {
+    forIdx(c, controllers) {
         if(controllers[c].aJoyPtr == aJoyPtr) {
             return c;
         }
@@ -372,7 +372,7 @@ void HardwareMediator::getIconInfoFromScratch(
         source.type == Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY
     ) {
         string name = al_keycode_to_name(source.buttonNr);
-        for(size_t c = 0; c < name.size(); c++) {
+        forIdx(c, name) {
             if(name[c] == '_') name[c] = ' ';
         }
         *outText = strToTitle(name);

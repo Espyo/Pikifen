@@ -20,7 +20,7 @@
 void Menu::draw() {
     if(!loaded) return;
     
-    for(size_t g = 0; g < guis.size(); g++) {
+    forIdx(g, guis) {
         if(guis[g]) {
             guis[g]->draw();
         }
@@ -49,7 +49,7 @@ void Menu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!loaded || !active) return;
     
     if(!game.modal.isActive()) {
-        for(size_t g = 0; g < guis.size(); g++) {
+        forIdx(g, guis) {
             if(guis[g]) {
                 guis[g]->handleAllegroEvent(ev);
             }
@@ -72,7 +72,7 @@ bool Menu::handlePlayerAction(const Inpution::Action& action) {
     bool handled = false;
     
     if(!game.modal.isActive()) {
-        for(size_t g = 0; g < guis.size(); g++) {
+        forIdx(g, guis) {
             if(guis[g]) {
                 handled |= guis[g]->handlePlayerAction(action);
             }
@@ -115,7 +115,7 @@ void Menu::tick(float deltaT) {
     if(!loaded) return;
     
     //Tick the GUIs.
-    for(size_t g = 0; g < guis.size(); g++) {
+    forIdx(g, guis) {
         if(guis[g]) {
             guis[g]->tick(deltaT);
         }
@@ -141,7 +141,7 @@ void Menu::tick(float deltaT) {
 void Menu::unload() {
     if(!loaded) return;
     
-    for(size_t g = 0; g < guis.size(); g++) {
+    forIdx(g, guis) {
         if(guis[g]) {
             guis[g]->destroy();
         }

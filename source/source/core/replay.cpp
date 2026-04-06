@@ -72,7 +72,7 @@ void Replay::addNewState(
     );
     
     if(!prevStateMobs.empty()) {
-        for(size_t pm = 0; pm < prevStateMobs.size(); pm++) {
+        forIdx(pm, prevStateMobs) {
             if(!isInContainer(newStateMobs, prevStateMobs[pm])) {
                 //This isn't in the list of new mobs. That means it was removed.
                 ReplayEvent ev(REPLAY_EVENT_REMOVED, pm);
@@ -80,7 +80,7 @@ void Replay::addNewState(
             }
         }
         
-        for(size_t m = 0; m < newStateMobs.size(); m++) {
+        forIdx(m, newStateMobs) {
             if(!isInContainer(prevStateMobs, newStateMobs[m])) {
                 //This isn't in the list of previous mobs. That means it's new.
                 ReplayEvent ev(REPLAY_EVENT_ADDED, m);
@@ -103,32 +103,32 @@ void Replay::addNewState(
         onionList.size() +
         obstacleList.size()
     );
-    for(size_t l = 0; l < leaderList.size(); l++) {
+    forIdx(l, leaderList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_LEADER, leaderList[l]->pos)
         );
     }
-    for(size_t p = 0; p < pikminList.size(); p++) {
+    forIdx(p, pikminList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_PIKMIN, pikminList[p]->pos)
         );
     }
-    for(size_t e = 0; e < enemyList.size(); e++) {
+    forIdx(e, enemyList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_ENEMY, enemyList[e]->pos)
         );
     }
-    for(size_t t = 0; t < treasureList.size(); t++) {
+    forIdx(t, treasureList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_TREASURE, treasureList[t]->pos)
         );
     }
-    for(size_t o = 0; o < onionList.size(); o++) {
+    forIdx(o, onionList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_ONION, onionList[o]->pos)
         );
     }
-    for(size_t o = 0; o < obstacleList.size(); o++) {
+    forIdx(o, obstacleList) {
         newStatePtr->elements.push_back(
             ReplayElement(REPLAY_ELEMENT_OBSTACLE, obstacleList[o]->pos)
         );
@@ -210,18 +210,18 @@ void Replay::saveToFile(const string& filePath) const {
     ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());
-    for(size_t s = 0; s < states.size(); s++) {
+    forIdx(s, states) {
         const ReplayState* sPtr = &states[s];
         
         al_fwrite32be(file, (int32_t) sPtr->elements.size());
-        for(size_t e = 0; e < sPtr->elements.size(); e++) {
+        forIdx(e, sPtr->elements) {
             al_fputc(file, sPtr->elements[e].type);
             al_fwrite32be(file, floor(sPtr->elements[e].pos.x));
             al_fwrite32be(file, floor(sPtr->elements[e].pos.y));
         }
         
         al_fwrite32be(file, (int32_t) sPtr->events.size());
-        for(size_t e = 0; e < sPtr->events.size(); e++) {
+        forIdx(e, sPtr->events) {
             al_fputc(file, sPtr->events[e].type);
             al_fwrite32be(file, (int32_t) sPtr->events[e].data);
         }

@@ -50,7 +50,7 @@ OnionMenu::OnionMenu(
     nestPtr(nPtr),
     leaderPtr(lPtr) {
     
-    for(size_t t = 0; t < nPtr->nestType->pikTypes.size(); t++) {
+    forIdx(t, nPtr->nestType->pikTypes) {
         types.push_back(
             OnionMenuPikminType(t, nPtr->nestType->pikTypes[t])
         );
@@ -133,7 +133,7 @@ OnionMenu::OnionMenu(
         const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
 
         int totalDelta = 0;
-        for(size_t t = 0; t < this->types.size(); t++) {
+        forIdx(t, this->types) {
             totalDelta += this->types[t].delta;
         }
         
@@ -265,7 +265,7 @@ OnionMenu::OnionMenu(
     gui.addItem(listScroll, "list_scroll");
     
     //Items for each Pikmin type.
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
     
         //Onion icon.
         GuiItem* onionIcon = new GuiItem(false);
@@ -606,7 +606,7 @@ ONION_TRANSFER_RESULT OnionMenu::canAddToGroup(size_t typeIdx) {
     
     //Next, check if the addition won't make the field amount hit the limit.
     int totalDelta = 0;
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         totalDelta += types[t].delta;
     }
     if(
@@ -648,7 +648,7 @@ ONION_TRANSFER_RESULT OnionMenu::canAddToOnion(size_t typeIdx) {
  * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
  */
 void OnionMenu::confirm() {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         if(types[t].delta > 0) {
             nestPtr->requestPikmin(t, types[t].delta, leaderPtr);
         } else if(types[t].delta < 0) {
@@ -745,7 +745,7 @@ string OnionMenu::getTransferAmountStr() {
  * @brief Makes the Onion and group buttons juicy grow.
  */
 void OnionMenu::growButtons() {
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         onionIconItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
@@ -856,7 +856,7 @@ void OnionMenu::tick(float deltaT) {
     //Correct the amount of wanted group members, if they are invalid.
     int totalDelta = 0;
     
-    for(size_t t = 0; t < nestPtr->nestType->pikTypes.size(); t++) {
+    forIdx(t, nestPtr->nestType->pikTypes) {
         //Get how many the player really has with them.
         int realGroupAmount =
             (int) leaderPtr->group->getAmountByType(
@@ -885,7 +885,7 @@ void OnionMenu::tick(float deltaT) {
     while(deltaOverLimit > 0) {
         vector<size_t> candidateTypes;
         
-        for(size_t t = 0; t < nestPtr->nestType->pikTypes.size(); t++) {
+        forIdx(t, nestPtr->nestType->pikTypes) {
             int realGroupAmount =
                 (int) leaderPtr->group->getAmountByType(
                     nestPtr->nestType->pikTypes[t]
@@ -1074,7 +1074,7 @@ void OnionMenu::update() {
     
     //Assign the coordinates of each type GUI item.
     float curX = listStartX;
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         curX += columnPadding + columnWidth / 2.0f;
         onionIconItems[t]->ratioCenter.x = curX;
         onionButtonItems[t]->ratioCenter.x = curX;
@@ -1087,7 +1087,7 @@ void OnionMenu::update() {
     }
     
     //Make all relevant GUI items in/active.
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         onionButtonItems[t]->visible = !selectAll;
         onionButtonItems[t]->focusable = !selectAll;
         groupButtonItems[t]->visible = !selectAll;
@@ -1106,7 +1106,7 @@ void OnionMenu::update() {
     float onionAllButtonX2 = -FLT_MAX;
     float groupAllButtonX1 = FLT_MAX;
     float groupAllButtonX2 = -FLT_MAX;
-    for(size_t t = 0; t < types.size(); t++) {
+    forIdx(t, types) {
         onionAllButtonX1 =
             std::min(
                 onionAllButtonX1,

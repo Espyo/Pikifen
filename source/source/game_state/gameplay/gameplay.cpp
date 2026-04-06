@@ -225,7 +225,7 @@ GameplayMessageBox::GameplayMessageBox(
     );
     
     vector<StringToken> line;
-    for(size_t t = 0; t < tokens.size(); t++) {
+    forIdx(t, tokens) {
         if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
             tokensPerLine.push_back(line);
             line.clear();
@@ -465,7 +465,7 @@ void GameplayState::doLogic() {
     }
     
     //Controls.
-    for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+    forIdx(a, game.controls.actionQueue) {
         handlePlayerAction(game.controls.actionQueue[a]);
         if(onionMenu) {
             onionMenu->handlePlayerAction(game.controls.actionQueue[a]);
@@ -574,7 +574,7 @@ bool GameplayState::endMission(
     }
     
     missionEndCondIdx = INVALID;
-    for(size_t e = 0; e < game.curArea->mission.endConds.size(); e++) {
+    forIdx(e, game.curArea->mission.endConds) {
         if(cond == &game.curArea->mission.endConds[e]) {
             missionEndCondIdx = e;
         }
@@ -810,7 +810,7 @@ size_t GameplayState::getAmountOfFieldPikmin(
     size_t total = 0;
     
     //Check the Pikmin mobs.
-    for(size_t p = 0; p < mobs.pikmin.size(); p++) {
+    forIdx(p, mobs.pikmin) {
         Pikmin* pPtr = mobs.pikmin[p];
         if(filter && pPtr->pikType != filter) continue;
         if(aliveOnly && pPtr->health <= 0.0f) continue;
@@ -818,7 +818,7 @@ size_t GameplayState::getAmountOfFieldPikmin(
     }
     
     //Check Pikmin inside converters.
-    for(size_t c = 0; c < mobs.converters.size(); c++) {
+    forIdx(c, mobs.converters) {
         Converter* cPtr = mobs.converters[c];
         if(filter && cPtr->currentType != filter) continue;
         total += cPtr->amountInBuffer;
@@ -842,7 +842,7 @@ size_t GameplayState::getAmountOfGroupPikmin(
     
     size_t total = 0;
     
-    for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+    forIdx(m, player->leaderPtr->group->members) {
         Mob* mPtr = player->leaderPtr->group->members[m];
         if(mPtr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
         if(filter && mPtr->type != filter) continue;
@@ -862,7 +862,7 @@ size_t GameplayState::getAmountOfGroupPikmin(
 size_t GameplayState::getAmountOfIdlePikmin(const PikminType* filter) {
     size_t total = 0;
     
-    for(size_t p = 0; p < mobs.pikmin.size(); p++) {
+    forIdx(p, mobs.pikmin) {
         Pikmin* pPtr = mobs.pikmin[p];
         if(filter && pPtr->type != filter) continue;
         if(
@@ -888,13 +888,9 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
     long total = 0;
     
     //Check Onions proper.
-    for(size_t o = 0; o < mobs.onions.size(); o++) {
+    forIdx(o, mobs.onions) {
         Onion* oPtr = mobs.onions[o];
-        for(
-            size_t t = 0;
-            t < oPtr->oniType->nest->pikTypes.size();
-            t++
-        ) {
+        forIdx(t, oPtr->oniType->nest->pikTypes) {
             if(filter && oPtr->oniType->nest->pikTypes[t] != filter) {
                 continue;
             }
@@ -905,14 +901,10 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
     }
     
     //Check ships.
-    for(size_t s = 0; s < mobs.ships.size(); s++) {
+    forIdx(s, mobs.ships) {
         Ship* sPtr = mobs.ships[s];
         if(!sPtr->nest) continue;
-        for(
-            size_t t = 0;
-            t < sPtr->shiType->nest->pikTypes.size();
-            t++
-        ) {
+        forIdx(t, sPtr->shiType->nest->pikTypes) {
             if(filter && sPtr->shiType->nest->pikTypes[t] != filter) {
                 continue;
             }
@@ -1064,7 +1056,7 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
     
     Mob* closest = nullptr;
     Distance closestDist;
-    for(size_t m = 0; m < mobs.all.size(); m++) {
+    forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
         
         if(mPtr->isStoredInsideMob()) continue;
@@ -1182,7 +1174,7 @@ void GameplayState::load() {
     
     //Initialize some important things.
     for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
-        for(size_t s = 0; s < game.content.sprayTypes.list.size(); s++) {
+        forIdx(s, game.content.sprayTypes.list) {
             playerTeams[t].sprayStats.push_back(SprayStats());
         }
     }
@@ -1287,7 +1279,7 @@ void GameplayState::load() {
     
     vector<Mob*> mobsPerGen;
     
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         bool valid = true;
         
@@ -1314,12 +1306,12 @@ void GameplayState::load() {
     //does not necessarily correspond to mob index X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* genPtr = game.curArea->mobGenerators[m];
         Mob* mobPtr = mobsPerGen[m];
         if(!mobPtr) continue;
         
-        for(size_t l = 0; l < genPtr->linkIdxs.size(); l++) {
+        forIdx(l, genPtr->linkIdxs) {
             size_t linkTargetGenIdx = genPtr->linkIdxs[l];
             Mob* linkTargetMobPtr = mobsPerGen[linkTargetGenIdx];
             mobPtr->links.push_back(linkTargetMobPtr);
@@ -1327,7 +1319,7 @@ void GameplayState::load() {
     }
     
     //Mobs stored inside other. Same logic as mob links.
-    for(size_t m = 0; m < game.curArea->mobGenerators.size(); m++) {
+    forIdx(m, game.curArea->mobGenerators) {
         MobGen* holdeeGenPtr = game.curArea->mobGenerators[m];
         if(holdeeGenPtr->storedInside == INVALID) continue;
         Mob* holdeePtr = mobsPerGen[m];
@@ -1336,13 +1328,13 @@ void GameplayState::load() {
     }
     
     //Save each path stop's sector.
-    for(size_t s = 0; s < game.curArea->pathStops.size(); s++) {
+    forIdx(s, game.curArea->pathStops) {
         game.curArea->pathStops[s]->sectorPtr =
             getSector(game.curArea->pathStops[s]->pos, nullptr, true);
     }
     
     //Create liquids.
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         if(!sPtr->hazard) continue;
         if(!sPtr->hazard->associatedLiquid) continue;
@@ -1358,7 +1350,7 @@ void GameplayState::load() {
         );
         
         liquids.push_back(new Liquid(sPtr->hazard, liquidSectors));
-        for(size_t s = 0; s < liquidSectors.size(); s++) {
+        forIdx(s, liquidSectors) {
             sPtr->liquid = liquids.back();
         }
     }
@@ -1407,15 +1399,12 @@ void GameplayState::load() {
     if(game.curArea->type == AREA_TYPE_MISSION) {
         //Organize mob groups.
         missionMobGroups.clear();
-        for(
-            size_t c = 0;
-            c < game.curArea->mission.mobGroups.size(); c++
-        ) {
+        forIdx(c, game.curArea->mission.mobGroups) {
             missionMobGroups.push_back(MissionMobGroupStatus());
             vector<size_t> idxs =
                 game.curArea->mission.mobGroups[c].calculateList();
             missionMobGroups.back().remaining.reserve(idxs.size());
-            for(size_t i = 0; i < idxs.size(); i++) {
+            forIdx(i, idxs) {
                 missionMobGroups.back().remaining.insert(
                     mobsPerGen[idxs[i]]
                 );
@@ -1609,7 +1598,7 @@ void GameplayState::loadGameContent() {
     );
     
     //Register leader sub-group types.
-    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
+    forIdx(p, game.config.pikmin.order) {
         subgroupTypes.registerType(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin.order[p],
             game.config.pikmin.order[p]->bmpIcon
@@ -1621,7 +1610,7 @@ void GameplayState::loadGameContent() {
         toolTypesVector.push_back(t.first);
     }
     sort(toolTypesVector.begin(), toolTypesVector.end());
-    for(size_t t = 0; t < toolTypesVector.size(); t++) {
+    forIdx(t, toolTypesVector) {
         ToolType* ttPtr = game.content.mobTypes.list.tool[toolTypesVector[t]];
         subgroupTypes.registerType(
             SUBGROUP_TYPE_CATEGORY_TOOL, ttPtr, ttPtr->bmpIcon
@@ -1643,7 +1632,7 @@ void GameplayState::loadGameContent() {
 void GameplayState::showInventoryUpdateDisplay(
     PlayerTeam* team, const string& itemIName, int change
 ) {
-    for(size_t p = 0; p < team->players.size(); p++) {
+    forIdx(p, team->players) {
         showInventoryUpdateDisplay(team->players[p], itemIName, change);
     }
 }
@@ -1746,7 +1735,7 @@ void GameplayState::unload() {
     pathMgr.clear();
     particles.clear();
     
-    for(size_t l = 0; l < liquids.size(); l++) {
+    forIdx(l, liquids) {
         delete liquids[l];
     }
     liquids.clear();
@@ -1813,7 +1802,7 @@ void GameplayState::unloadGameContent() {
 void GameplayState::updateAvailableLeaders() {
     //Build the list.
     availableLeaders.clear();
-    for(size_t l = 0; l < mobs.leaders.size(); l++) {
+    forIdx(l, mobs.leaders) {
         if(mobs.leaders[l]->health <= 0.0f) continue;
         if(mobs.leaders[l]->toDelete) continue;
         if(mobs.leaders[l]->isStoredInsideMob()) continue;
@@ -1832,7 +1821,7 @@ void GameplayState::updateAvailableLeaders() {
     [] (const Leader * l1, const Leader * l2) -> bool {
         size_t l1OrderIdx = INVALID;
         size_t l2OrderIdx = INVALID;
-        for(size_t t = 0; t < game.config.leaders.order.size(); t++) {
+        forIdx(t, game.config.leaders.order) {
             if(game.config.leaders.order[t] == l1->type) l1OrderIdx = t;
             if(game.config.leaders.order[t] == l2->type) l2OrderIdx = t;
         }
@@ -1845,7 +1834,7 @@ void GameplayState::updateAvailableLeaders() {
     
     //Update the current leader's index, which could've changed.
     for(Player& player : players) {
-        for(size_t l = 0; l < availableLeaders.size(); l++) {
+        forIdx(l, availableLeaders) {
             if(availableLeaders[l] == player.leaderPtr) {
                 player.leaderIdx = l;
                 break;

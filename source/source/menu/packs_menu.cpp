@@ -157,7 +157,7 @@ void PacksMenu::initGuiMain() {
     packsList->addChild(baseBullet);
     gui.addItem(baseBullet);
     
-    for(size_t p = 0; p < packOrder.size(); p++) {
+    forIdx(p, packOrder) {
         float listBottomY = packsList->getChildrenSpan();
         float rowCenterY = listBottomY + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
@@ -410,9 +410,7 @@ void PacksMenu::load() {
     packsDisabled = game.options.packs.disabled;
     
     //Get the thumbnails.
-    for(
-        size_t p = 0; p < game.content.packs.manifestsWithBaseRaw.size(); p++
-    ) {
+    forIdx(p, game.content.packs.manifestsWithBaseRaw) {
         string pack = game.content.packs.manifestsWithBaseRaw[p];
         string thumbPath =
             FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
@@ -434,7 +432,7 @@ void PacksMenu::load() {
  * @brief Populates the packs list with rows for each pack.
  */
 void PacksMenu::populatePacksList() {
-    for(size_t p = 0; p < packOrder.size(); p++) {
+    forIdx(p, packOrder) {
         packBullets[p]->text =
             game.content.packs.list[packOrder[p]].name;
         packChecks[p]->value = !isInContainer(packsDisabled, packOrder[p]);

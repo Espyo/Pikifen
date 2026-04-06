@@ -391,7 +391,7 @@ bool GuiItem::deleteAllChildren() {
  */
 float GuiItem::getChildrenSpan(bool horizontal) const {
     float span = 0.0f;
-    for(size_t c = 0; c < children.size(); c++) {
+    forIdx(c, children) {
         GuiItem* cPtr = children[c];
         float cCoord =
             horizontal ?
@@ -567,7 +567,7 @@ bool GuiItem::isVisible() const {
  */
 bool GuiItem::removeChild(GuiItem* item) {
     bool success = false;
-    for(size_t c = 0; c < children.size(); c++) {
+    forIdx(c, children) {
         if(children[c] == item) {
             children.erase(children.begin() + c);
             item->parent = nullptr;
@@ -811,13 +811,13 @@ void GuiManager::createAndAddCustomItems(
 bool GuiManager::destroy() {
     setFocusedItem(nullptr);
     backItem = nullptr;
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         delete items[i];
     }
     items.clear();
     registeredCenters.clear();
     registeredSizes.clear();
-    for(size_t i = 0; i < customItemDefs.size(); i++) {
+    forIdx(i, customItemDefs) {
         customItemDefs[i].clearBitmap();
     }
     customItemDefs.clear();
@@ -847,7 +847,7 @@ bool GuiManager::draw() {
     }
     );
     
-    for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+    forIdx(i, drawingSortedItems) {
     
         GuiItem* iPtr = drawingSortedItems[i];
         
@@ -1215,7 +1215,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
         GuiItem* focusResult = nullptr;
-        for(size_t i = 0; i < items.size(); i++) {
+        forIdx(i, items) {
             GuiItem* iPtr = items[i];
             if(
                 iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
@@ -1249,7 +1249,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         handled = true;
     }
     
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         if(items[i]->isResponsive() && items[i]->onAllegroEvent) {
             items[i]->onAllegroEvent(ev);
         }
@@ -1352,7 +1352,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     }
     
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         GuiItem* iPtr = items[i];
         if(!iPtr->isResponsive()) continue;
         
@@ -1436,7 +1436,7 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
         
     if(!success) return false;
     
-    for(size_t i = 0; i < hardcodedItemDefs.size(); i++) {
+    forIdx(i, hardcodedItemDefs) {
         registerCoords(
             hardcodedItemDefs[i].name,
             hardcodedItemDefs[i].center.x,
@@ -1493,7 +1493,7 @@ bool GuiManager::removeItem(GuiItem* item) {
         backItem = nullptr;
     }
     
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         if(items[i] == item) {
             items.erase(items.begin() + i);
             item->manager = nullptr;
@@ -1597,7 +1597,7 @@ bool GuiManager::tick(float deltaT) {
     animTimer.tick(deltaT);
     
     //Tick all items.
-    for(size_t i = 0; i < items.size(); i++) {
+    forIdx(i, items) {
         GuiItem* iPtr = items[i];
         if(iPtr->onTick) {
             iPtr->onTick(deltaT);
@@ -1692,7 +1692,7 @@ bool GuiManager::writeItemDefsToDataFile(
     //Hardcoded items.
     DataNode* hardcodedNode = file->getChildOrAddNew("hardcoded_items");
     hardcodedNode->clearChildren();
-    for(size_t i = 0; i < hardcodedItemDefs.size(); i++) {
+    forIdx(i, hardcodedItemDefs) {
         const HardcodedGuiItemDef* itemPtr = &hardcodedItemDefs[i];
         DataNode* itemNode = hardcodedNode->addNew(itemPtr->name);
         
@@ -1707,7 +1707,7 @@ bool GuiManager::writeItemDefsToDataFile(
     //Custom items.
     DataNode* customNode = file->getChildOrAddNew("custom_items");
     customNode->clearChildren();
-    for(size_t i = 0; i < customItemDefs.size(); i++) {
+    forIdx(i, customItemDefs) {
         const CustomGuiItemDef* itemPtr = &customItemDefs[i];
         DataNode* itemNode = customNode->addNew(itemPtr->name);
         
@@ -2415,7 +2415,7 @@ void TextGuiItem::defDrawCode(const DrawInfo& draw) {
         vector<vector<StringToken> > tokensPerLine =
             splitLongStringWithTokens(tokens, draw.size.x);
             
-        for(size_t l = 0; l < tokensPerLine.size(); l++) {
+        forIdx(l, tokensPerLine) {
             drawStringTokens(
                 tokensPerLine[l], this->font, game.sysContent.fntSlim,
                 controlCondensed,

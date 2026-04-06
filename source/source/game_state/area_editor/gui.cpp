@@ -32,9 +32,7 @@ void AreaEditor::openLoadDialog() {
     //Set up the picker's behavior and data.
     vector<PickerItem> areas;
     
-    for(
-        size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++
-    ) {
+    forIdx(a, game.content.areas.list[AREA_TYPE_SIMPLE]) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
         ContentManifest* man = areaPtr->manifest;
         areas.push_back(
@@ -47,9 +45,7 @@ void AreaEditor::openLoadDialog() {
             )
         );
     }
-    for(
-        size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
-    ) {
+    forIdx(a, game.content.areas.list[AREA_TYPE_MISSION]) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         ContentManifest* man = areaPtr->manifest;
         areas.push_back(
@@ -1243,7 +1239,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
     //Now, dynamically create widgets for all properties this mob type has.
     
-    for(size_t p = 0; p < mPtr->type->areaEditorProps.size(); p++) {
+    forIdx(p, mPtr->type->areaEditorProps) {
     
         MobType::AreaEditorProp* pPtr =
             &mPtr->type->areaEditorProps[p];
@@ -1940,7 +1936,7 @@ void AreaEditor::processGuiPanelGameplay() {
     
         map<string, string> sprayStrs =
             getVarMap(game.curArea->sprayAmounts);
-        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
+        forIdx(s, game.config.misc.sprayOrder) {
             string sprayInternalName =
                 game.config.misc.sprayOrder[s]->manifest->internalName;
             int amount = s2i(sprayStrs[sprayInternalName]);
@@ -3326,7 +3322,7 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                 
             //End condition type combobox.
             vector<string> condTypeNames;
-            for(size_t e = 0; e < game.missionEndCondTypes.size(); e++) {
+            forIdx(e, game.missionEndCondTypes) {
                 condTypeNames.push_back(
                     game.missionEndCondTypes[e]->getInfo().name
                 );
@@ -3812,9 +3808,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
         ) {
             registerChange("mission mob group creation");
             insertInVector(game.curArea->mission.mobGroups, curMobGroupIdx);
-            for(
-                size_t e = 0; e < game.curArea->mission.endConds.size(); e++
-            ) {
+            forIdx(e, game.curArea->mission.endConds) {
                 MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
                 if(!ePtr->usesMetric()) continue;
                 if(ePtr->metricType != MISSION_METRIC_MOB_GROUP_CLEARED_MOBS) {
@@ -3847,9 +3841,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                     game.curArea->mission.mobGroups.begin() +
                     prevCurMobGroupIdx
                 );
-                for(
-                    size_t e = 0; e < game.curArea->mission.endConds.size(); e++
-                ) {
+                forIdx(e, game.curArea->mission.endConds) {
                     MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
                     if(!ePtr->usesMetric()) continue;
                     if(
@@ -4149,13 +4141,9 @@ void AreaEditor::processGuiPanelMob() {
         
         if(mPtr->type->areaEditorRecommendLinksTo) {
             bool hasLinksTo = false;
-            for(
-                size_t m = 0;
-                m < game.curArea->mobGenerators.size();
-                m++
-            ) {
+            forIdx(m, game.curArea->mobGenerators) {
                 MobGen* otherMPtr = game.curArea->mobGenerators[m];
-                for(size_t l = 0; l < otherMPtr->links.size(); l++) {
+                forIdx(l, otherMPtr->links) {
                     if(otherMPtr->links[l] == mPtr) {
                         hasLinksTo = true;
                         break;
@@ -5625,7 +5613,7 @@ void AreaEditor::processGuiPanelSector() {
                 
                 pickerButtons.push_back(PickerItem("Choose another..."));
                 
-                for(size_t s = 0; s < textureSuggestions.size(); s++) {
+                forIdx(s, textureSuggestions) {
                     pickerButtons.push_back(
                         PickerItem(
                             textureSuggestions[s].name,
@@ -6395,7 +6383,7 @@ void AreaEditor::processGuiWidgetsMetric(
 ) {
     //Metric type combobox.
     vector<string> metricTypeNames;
-    for(size_t v = 0; v < game.missionMetricTypes.size(); v++) {
+    forIdx(v, game.missionMetricTypes) {
         metricTypeNames.push_back(
             game.missionMetricTypes[v]->getInfo().name
         );

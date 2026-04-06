@@ -95,7 +95,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     lowestSectorZ = FLT_MAX;
     highestSectorZ = -FLT_MAX;
     
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
         lowestSectorZ = std::min(lowestSectorZ, sPtr->z);
@@ -112,7 +112,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     radarMinCoords = Point(FLT_MAX);
     radarMaxCoords = Point(-FLT_MAX);
     
-    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+    forIdx(e, game.curArea->edges) {
         Edge* ePtr = game.curArea->edges[e];
         if(!ePtr->sectors[0] || !ePtr->sectors[1]) continue;
         if(
@@ -612,7 +612,7 @@ void PauseMenu::addNewPikminStatusLine(
  */
 void PauseMenu::calculateGoHerePath() {
     radarCursorLeader = nullptr;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         Leader* lPtr = game.states.gameplay->mobs.leaders[l];
         if(
             lPtr->health > 0 &&
@@ -882,7 +882,7 @@ void PauseMenu::drawRadar(
     al_clear_to_color(game.config.aestheticRadar.backgroundColor);
     
     //Draw each sector.
-    for(size_t s = 0; s < game.curArea->sectors.size(); s++) {
+    forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
@@ -901,7 +901,7 @@ void PauseMenu::drawRadar(
                 );
         }
         
-        for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+        forIdx(t, sPtr->triangles) {
             ALLEGRO_VERTEX av[3];
             for(size_t v = 0; v < 3; v++) {
                 av[v].u = 0;
@@ -920,7 +920,7 @@ void PauseMenu::drawRadar(
     }
     
     //Draw each edge.
-    for(size_t e = 0; e < game.curArea->edges.size(); e++) {
+    forIdx(e, game.curArea->edges) {
         Edge* ePtr = game.curArea->edges[e];
         
         if(!ePtr->sectors[0] || !ePtr->sectors[1]) {
@@ -948,7 +948,7 @@ void PauseMenu::drawRadar(
     
     //Mission exit region.
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(size_t r = 0; r < game.curArea->regions.size(); r++) {
+        forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             drawHighlightedRectRegion(
                 rPtr->center, rPtr->size,
@@ -958,7 +958,7 @@ void PauseMenu::drawRadar(
     }
     
     //Onion icons.
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+    forIdx(o, game.states.gameplay->mobs.onions) {
         Onion* oPtr =
             game.states.gameplay->mobs.onions[o];
         vector<PikminType*>* pikTypesPtr =
@@ -1005,7 +1005,7 @@ void PauseMenu::drawRadar(
     }
     
     //Ship icons.
-    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
+    forIdx(s, game.states.gameplay->mobs.ships) {
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
         
         drawBitmap(
@@ -1015,7 +1015,7 @@ void PauseMenu::drawRadar(
     }
     
     //Enemy icons.
-    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
+    forIdx(e, game.states.gameplay->mobs.enemies) {
         Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
         if(ePtr->parent) continue;
         
@@ -1028,7 +1028,7 @@ void PauseMenu::drawRadar(
     }
     
     //Leader icons.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         Leader* lPtr = game.states.gameplay->mobs.leaders[l];
         
         drawBitmap(
@@ -1063,7 +1063,7 @@ void PauseMenu::drawRadar(
     }
     
     //Treasure icons.
-    for(size_t t = 0; t < game.states.gameplay->mobs.treasures.size(); t++) {
+    forIdx(t, game.states.gameplay->mobs.treasures) {
         Treasure* tPtr = game.states.gameplay->mobs.treasures[t];
         
         drawBitmap(
@@ -1072,7 +1072,7 @@ void PauseMenu::drawRadar(
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
-    for(size_t r = 0; r < game.states.gameplay->mobs.resources.size(); r++) {
+    forIdx(r, game.states.gameplay->mobs.resources) {
         Resource* rPtr = game.states.gameplay->mobs.resources[r];
         if(
             rPtr->resType->deliveryResult !=
@@ -1087,7 +1087,7 @@ void PauseMenu::drawRadar(
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
-    for(size_t p = 0; p < game.states.gameplay->mobs.piles.size(); p++) {
+    forIdx(p, game.states.gameplay->mobs.piles) {
         Pile* pPtr = game.states.gameplay->mobs.piles[p];
         if(
             !pPtr->pilType->contents ||
@@ -1106,7 +1106,7 @@ void PauseMenu::drawRadar(
     }
     
     //Pikmin icons.
-    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin.size(); p++) {
+    forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
         
         drawBitmap(
@@ -1132,9 +1132,7 @@ void PauseMenu::drawRadar(
     
     //Mission mob markers.
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(
-            size_t g = 0; g < game.states.gameplay->missionMobGroups.size(); g++
-        ) {
+        forIdx(g, game.states.gameplay->missionMobGroups) {
             MissionMobGroupStatus* gPtr =
                 &game.states.gameplay->missionMobGroups[g];
             if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
@@ -1158,7 +1156,7 @@ void PauseMenu::drawRadar(
     }
     
     //Currently-active Go Here paths.
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+    forIdx(l, game.states.gameplay->mobs.leaders) {
         Leader* lPtr = game.states.gameplay->mobs.leaders[l];
         if(!lPtr->midGoHere) continue;
         
@@ -1281,16 +1279,8 @@ void PauseMenu::drawRadar(
     
     //Debugging feature -- show area active cells.
     if(game.debug.showAreaActiveCells) {
-        for(
-            size_t cellX = 0;
-            cellX < game.states.gameplay->areaActiveCells.size();
-            cellX++
-        ) {
-            for(
-                size_t cellY = 0;
-                cellY < game.states.gameplay->areaActiveCells[cellX].size();
-                cellY++
-            ) {
+        forIdx(cellX, game.states.gameplay->areaActiveCells) {
+            forIdx(cellY, game.states.gameplay->areaActiveCells[cellX]) {
                 float startX =
                     game.curArea->bmap.topLeftCorner.x +
                     cellX * GEOMETRY::AREA_CELL_SIZE;
@@ -1401,7 +1391,7 @@ void PauseMenu::drawRadar(
 void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
     vector<string> medalAwardBPStrs =
         game.curArea->mission.getMedalAwardBulletPoints();
-    for(size_t p = 0; p < medalAwardBPStrs.size(); p++) {
+    forIdx(p, medalAwardBPStrs) {
         addNewBullet(list, medalAwardBPStrs[p]);
     }
 }
@@ -1415,7 +1405,7 @@ void PauseMenu::fillMissionMedalAwardList(ListGuiItem* list) {
 void PauseMenu::fillMissionNotesList(ListGuiItem* list) {
     vector<string> noteBPStrs =
         game.curArea->mission.getNoteBulletPoints();
-    for(size_t p = 0; p < noteBPStrs.size(); p++) {
+    forIdx(p, noteBPStrs) {
         addNewBullet(list, noteBPStrs[p]);
     }
 }
@@ -2154,7 +2144,7 @@ void PauseMenu::initRadarPage() {
             splitLongStringWithTokens(tokens, draw.size.x);
         float textH = tokensPerLine.size() * lineHeight;
         
-        for(size_t l = 0; l < tokensPerLine.size(); l++) {
+        forIdx(l, tokensPerLine) {
             drawStringTokens(
                 tokensPerLine[l], game.sysContent.fntStandard,
                 game.sysContent.fntSlim,
@@ -2362,7 +2352,7 @@ void PauseMenu::initStatusPage() {
     long totalLost = 0;
     
     //Setup the list rows.
-    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
+    forIdx(p, game.config.pikmin.order) {
         PikminType* ptPtr = game.config.pikmin.order[p];
         
         size_t inGroup =
@@ -2508,7 +2498,7 @@ void PauseMenu::startLeavingGameplay() {
         game.curArea->type == AREA_TYPE_MISSION
     ) {
         MissionEndCond* cPtr = nullptr;
-        for(size_t c = 0; c < game.curArea->mission.endConds.size(); c++) {
+        forIdx(c, game.curArea->mission.endConds) {
             if(
                 game.curArea->mission.endConds[c].type ==
                 MISSION_END_COND_PAUSE_MENU

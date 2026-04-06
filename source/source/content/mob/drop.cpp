@@ -86,7 +86,7 @@ void Drop::tickClassSpecifics(float deltaT) {
     if(curScale == 0) {
         //Disappeared into nothingness. Time to delete...if it's not being used.
         
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        forIdx(m, game.states.gameplay->mobs.all) {
             if(game.states.gameplay->mobs.all[m]->focusedMob == this) {
                 return;
             }

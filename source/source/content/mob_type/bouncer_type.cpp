@@ -65,7 +65,7 @@ void BouncerType::loadCatProperties(DataNode* file) {
     if(ridersNode) {
         riders = 0;
         vector<string> ridersStrWords = split(ridersStr);
-        for(size_t r = 0; r < ridersStrWords.size(); r++) {
+        forIdx(r, ridersStrWords) {
             BOUNCER_RIDER_FLAG rf;
             if(
                 readEnumProp(

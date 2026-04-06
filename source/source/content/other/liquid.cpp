@@ -70,7 +70,7 @@ Liquid::Liquid(Hazard* hazard, const vector<Sector*>& sectors) :
         size_t highestVarValue = 0;
         float totalSurfaceArea = 0.0f;
         
-        for(size_t s = 0; s < sectors.size(); s++) {
+        forIdx(s, sectors) {
             totalSurfaceArea += sectors[s]->surfaceArea;
             if(!sectors[s]->vars.empty()) {
                 map<string, string> vars = getVarMap(sectors[s]->vars);
@@ -109,13 +109,13 @@ Liquid::~Liquid() {
  * @param hPtr New hazard, or nullptr to remove.
  */
 void Liquid::changeSectorsHazard(Hazard* hPtr) {
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         Sector* sPtr = sectors[s];
         sPtr->hazard = hPtr;
         game.states.gameplay->pathMgr.handleSectorHazardChange(sPtr);
         
         unordered_set<Vertex*> sectorVertexes;
-        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        forIdx(e, sPtr->edges) {
             sectorVertexes.insert(sPtr->edges[e]->vertexes[0]);
             sectorVertexes.insert(sPtr->edges[e]->vertexes[1]);
         }
@@ -137,7 +137,7 @@ Point Liquid::getCenter() const {
     Point tl(FLT_MAX);
     Point br(-FLT_MAX);
     
-    for(size_t s = 0; s < sectors.size(); s++) {
+    forIdx(s, sectors) {
         updateMinCoords(tl, sectors[s]->bbox[0]);
         updateMaxCoords(br, sectors[s]->bbox[1]);
     }
@@ -184,7 +184,7 @@ Point Liquid::getChillHotspot() const {
  */
 Point Liquid::getCursorOn() const {
     Point cursorPos(FLT_MAX);
-    for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+    forIdx(p, game.states.gameplay->players) {
         Player* pPtr = &game.states.gameplay->players[p];
         Pikmin* throwee = nullptr;
         if(!pPtr->leaderCursorSector) continue;
@@ -213,9 +213,9 @@ Point Liquid::getCursorOn() const {
  */
 vector<Mob*> Liquid::getMobsOn() const {
     vector<Mob*> result;
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
-        for(size_t s = 0; s < sectors.size(); s++) {
+        forIdx(s, sectors) {
             if(
                 mPtr->groundSector == sectors[s] &&
                 mPtr->z <= mPtr->groundSector->z
@@ -341,7 +341,7 @@ void Liquid::tick(float deltaT) {
     }
     
     //Apply a status to any mobs that got caught.
-    for(size_t m = 0; m < freezeCaughtMobs.size(); m++) {
+    forIdx(m, freezeCaughtMobs) {
         Mob* mPtr = freezeCaughtMobs[m];
         
         bool mustRemove = false;
@@ -377,7 +377,7 @@ void Liquid::tick(float deltaT) {
         vector<Mob*> mobsOn = getMobsOn();
         size_t chillingMobs = 0;
         Point firstChillingMobPos(FLT_MAX);
-        for(size_t m = 0; m < mobsOn.size(); m++) {
+        forIdx(m, mobsOn) {
             if(mobsOn[m]->type->category->id == MOB_CATEGORY_PIKMIN) {
                 Pikmin* pikPtr = (Pikmin*) mobsOn[m];
                 if(pikPtr->pikType->chillsLiquids) {

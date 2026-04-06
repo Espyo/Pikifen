@@ -171,7 +171,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     affects = 0;
     vector<string> affectsStrParts = semicolonListToVector(affectsStr);
-    for(size_t a = 0; a < affectsStrParts.size(); a++) {
+    forIdx(a, affectsStrParts) {
         STATUS_AFFECTS_FLAG af;
         if(
             readEnumProp(

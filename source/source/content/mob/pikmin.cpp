@@ -164,7 +164,7 @@ void Pikmin::drawMob() {
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
         
-        for(size_t s = 0; s < statuses.size(); s++) {
+        forIdx(s, statuses) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             if(statuses[s].type->topReplacementBmp) {
                 topBmp = statuses[s].type->topReplacementBmp;
@@ -372,7 +372,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
     bool stillHasFlailing = false;
     bool stillHasHelplessness = false;
     bool stillHasPanic = false;
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(statuses[s].type == staType) continue;
         
         switch(statuses[s].type->stateChangeType) {

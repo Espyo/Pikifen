@@ -356,7 +356,7 @@ void ParticleEditor::gridIntervalDecreaseCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     float newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS[0];
-    for(size_t i = 0; i < PARTICLE_EDITOR::GRID_INTERVALS.size(); ++i) {
+    forIdx(i, PARTICLE_EDITOR::GRID_INTERVALS) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] >=
             game.options.partEd.gridInterval
@@ -652,7 +652,7 @@ void ParticleEditor::quickPlayCmd(float inputValue) {
     
     bool areaFound = false;
     for(size_t t = 0; t < 2; t++) {
-        for(size_t a = 0; a < game.content.areas.list[t].size(); a++) {
+        forIdx(a, game.content.areas.list[t]) {
             if(
                 game.content.areas.list[t][a]->manifest->path ==
                 game.options.partEd.quickPlayAreaPath

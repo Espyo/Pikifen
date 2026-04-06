@@ -211,7 +211,7 @@ void PikminType::loadCatProperties(DataNode* file) {
         );
     }
     
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         if(sounds[s].name == "called") {
             soundDataIdxs[PIKMIN_SOUND_CALLED] = s;
         } else if(sounds[s].name == "carrying") {

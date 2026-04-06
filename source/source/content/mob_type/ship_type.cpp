@@ -79,7 +79,7 @@ void ShipType::loadCatProperties(DataNode* file) {
     nest->loadProperties(file, this);
     nest->createColormap();
     
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         if(sounds[s].name == "beam") {
             soundBeamIdx = s;
         } else if(sounds[s].name == "reception") {
@@ -98,7 +98,7 @@ void ShipType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->legBodyParts.size(); b++) {
+    forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
             game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "

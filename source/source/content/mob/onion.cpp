@@ -78,7 +78,7 @@ Onion::Onion(const Point& pos, OnionType* type, float angle) :
     [this] () { startGenerating(); };
     nextGenerationTimer.onEnd =
     [this] () {
-        for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
+        forIdx(t, oniType->nest->pikTypes) {
             if(generationQueue[t] > 0) {
                 nextGenerationTimer.start();
                 generate();
@@ -88,7 +88,7 @@ Onion::Onion(const Point& pos, OnionType* type, float angle) :
         stopGenerating();
     };
     
-    for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
+    forIdx(t, oniType->nest->pikTypes) {
         generationQueue.push_back(0);
     }
 }
@@ -134,7 +134,7 @@ void Onion::drawMob() {
  * @brief Spit a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void Onion::generate() {
-    for(size_t t = 0; t < generationQueue.size(); t++) {
+    forIdx(t, generationQueue) {
         if(generationQueue[t] == 0) continue;
         
         generationQueue[t]--;
@@ -296,7 +296,7 @@ void Onion::tickClassSpecifics(float deltaT) {
         game.states.gameplay->mobs.pikmin.size() <
         game.curArea->getMaxPikminInField()
     ) {
-        for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
+        forIdx(t, oniType->nest->pikTypes) {
             if(!nest->hasPikminInside(t)) continue;
             if(
                 game.states.gameplay->mobs.pikmin.size() >=

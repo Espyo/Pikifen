@@ -318,12 +318,12 @@ void Results::doDrawing() {
  */
 void Results::doLogic() {
     if(!game.fadeMgr.isFading()) {
-        for(size_t a = 0; a < game.controls.actionQueue.size(); a++) {
+        forIdx(a, game.controls.actionQueue) {
             gui.handlePlayerAction(game.controls.actionQueue[a]);
             switch(game.controls.actionQueue[a].actionTypeId) {
             case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT: {
                 if(game.controls.actionQueue[a].value < 0.5f) continue;
-                for(size_t b = 0; b < leftPageButtons.size(); b++) {
+                forIdx(b, leftPageButtons) {
                     if(leftPageButtons[b]->isResponsive()) {
                         leftPageButtons[b]->activate();
                         break;
@@ -332,7 +332,7 @@ void Results::doLogic() {
                 break;
             } case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
                 if(game.controls.actionQueue[a].value < 0.5f) continue;
-                for(size_t b = 0; b < rightPageButtons.size(); b++) {
+                forIdx(b, rightPageButtons) {
                     if(rightPageButtons[b]->isResponsive()) {
                         rightPageButtons[b]->activate();
                         break;
@@ -356,7 +356,7 @@ void Results::doLogic() {
     const float oldAnimTime = newAnimTime - game.deltaT;
     const float oldTimeRatio = oldAnimTime / TEXT_ANIM_FALL_DURATION;
     
-    for(size_t t = 0; t < textToAnimate.size(); t++) {
+    forIdx(t, textToAnimate) {
         DrawInfo itemDrawInfo;
         bool itemVisible = gui.getItemDrawInfo(textToAnimate[t], &itemDrawInfo);
         if(!itemVisible) continue;
@@ -385,7 +385,7 @@ void Results::drawScoreChartConnections() {
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     
     //The connector lines.
-    for(size_t i = 0; i < scoreMarkerGuiItems.size(); i++) {
+    forIdx(i, scoreMarkerGuiItems) {
         GuiItem* iPtr =
             scoreMarkerGuiItems[scoreMarkerGuiItems.size() - (1 + i)];
         DrawInfo itemDraw;
@@ -1201,7 +1201,7 @@ void Results::populateScoringList() {
         scoringList, "Starting score", i2s(game.curArea->mission.startingPoints)
     );
     
-    for(size_t c = 0; c < game.curArea->mission.scoreCriteria.size(); c++) {
+    forIdx(c, game.curArea->mission.scoreCriteria) {
         MissionScoreCriterion* cPtr = &game.curArea->mission.scoreCriteria[c];
         MissionMetricType* typePtr =
             game.missionMetricTypes[cPtr->metricType];
@@ -1333,7 +1333,7 @@ void Results::switchPage(RESULTS_MENU_PAGE newPage) {
     
     //Animate them all indiscriminately. The ones that don't belong to the
     //new page won't show up anyway.
-    for(size_t i = 0; i < pageTextToAnimate.size(); i++) {
+    forIdx(i, pageTextToAnimate) {
         pageTextToAnimate[i]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );

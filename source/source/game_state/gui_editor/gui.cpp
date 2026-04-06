@@ -1057,7 +1057,7 @@ void GuiEditor::processGuiPanelItems() {
             "itemsList", ImVec2(0.0f, 200.0f), ImGuiChildFlags_Borders
         )
     ) {
-        for(size_t i = 0; i < allItems.size(); i++) {
+        forIdx(i, allItems) {
             GuiItemDef* item = allItems[i];
             
             bool isCustom = i >= hardcodedItems.size();
@@ -1453,8 +1453,12 @@ void GuiEditor::processGuiToolbar() {
             game.options.guiEd.quickPlayAreaPath,
             &areaNames, &areaPaths, &selectedAreaIdx
         );
-        for(int a = 0; a < (int) areaNames.size(); a++) {
-            if(ImGui::Selectable(areaNames[a].c_str(), a == selectedAreaIdx)) {
+        forIdx(a, areaNames) {
+            if(
+                ImGui::Selectable(
+                    areaNames[a].c_str(), (int) a == selectedAreaIdx
+                )
+            ) {
                 game.options.guiEd.quickPlayAreaPath = areaPaths[a];
                 saveOptions();
                 ImGui::CloseCurrentPopup();

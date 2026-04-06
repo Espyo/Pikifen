@@ -175,7 +175,7 @@ void MobType::loadCatResources(DataNode*) { }
  */
 void MobType::loadCatScriptDataPos(DataNode* file) {
     if(!dyingStateName.empty()) {
-        for(size_t s = 0; s < scriptDef.fsm.states.size(); s++) {
+        forIdx(s, scriptDef.fsm.states) {
             if(scriptDef.fsm.states[s]->name == dyingStateName) {
                 dyingStateIdx = s;
                 break;
@@ -195,7 +195,7 @@ void MobType::loadCatScriptDataPos(DataNode* file) {
     string reviveStateName = reviveStateNameNode->value;
     
     if(!reviveStateName.empty()) {
-        for(size_t s = 0; s < scriptDef.fsm.states.size(); s++) {
+        forIdx(s, scriptDef.fsm.states) {
             if(scriptDef.fsm.states[s]->name == reviveStateName) {
                 reviveStateIdx = s;
                 break;
@@ -341,7 +341,7 @@ void MobType::loadFromDataNode(
                 customCarrySpotsNode
             );
         } else {
-            for(size_t p = 0; p < points.size(); p++) {
+            forIdx(p, points) {
                 customCarrySpots.push_back(s2p(points[p]));
             }
         }
@@ -737,7 +737,7 @@ void MobType::loadFromDataNode(
     if(huntableTargetsNode) {
         huntableTargets = 0;
     }
-    for(size_t t = 0; t < huntableTargetsStrs.size(); t++) {
+    forIdx(t, huntableTargetsStrs) {
         MOB_TARGET_FLAG tt;
         if(
             readEnumProp(
@@ -754,7 +754,7 @@ void MobType::loadFromDataNode(
     if(hurtableTargetsNode) {
         hurtableTargets = 0;
     }
-    for(size_t t = 0; t < hurtableTargetsStrs.size(); t++) {
+    forIdx(t, hurtableTargetsStrs) {
         MOB_TARGET_FLAG tt;
         if(
             readEnumProp(
@@ -813,7 +813,7 @@ void MobType::loadFromDataNode(
  * @brief Unloads loaded resources from memory.
  */
 void MobType::unloadResources() {
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         game.content.sounds.list.free(sounds[s].name);
     }
 }
@@ -833,8 +833,8 @@ MobTypeWithAnimGroups::getAnimConversionsWithGroups(
 ) const {
     AnimConversionVector newV;
     
-    for(size_t g = 0; g < animationGroupSuffixes.size(); g++) {
-        for(size_t c = 0; c < v.size(); c++) {
+    forIdx(g, animationGroupSuffixes) {
+        forIdx(c, v) {
             newV.push_back(
                 make_pair(
                     g * baseAnimTotal + v[c].first,

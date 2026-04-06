@@ -123,7 +123,7 @@ bool FsmStateDef::loadFromDataNode(
     }
     
     //Merge global event actions with the dedicated event actions.
-    for(size_t e = 0; e < globalEvents.size(); e++) {
+    forIdx(e, globalEvents) {
         FsmEventDef* globalEvent = globalEvents[e];
         Bitmask8 globalFlags = globalEventFlags[e];
         
@@ -173,7 +173,7 @@ void FsmStateDef::mergeEvents(
     const vector<FsmEventDef*>& newEvents,
     const vector<Bitmask8>& newEventFlags
 ) {
-    for(size_t e = 0; e < newEvents.size(); e++) {
+    forIdx(e, newEvents) {
         FSM_EV evType = newEvents[e]->type;
         
         if(events[evType]) {

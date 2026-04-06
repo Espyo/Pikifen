@@ -166,7 +166,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     vector<std::pair<int, string> > lightingTable =
         getWeatherTable(node->getChildByName("lighting"));
         
-    for(size_t p = 0; p < lightingTable.size(); p++) {
+    forIdx(p, lightingTable) {
         daylight.push_back(
             std::make_pair(
                 lightingTable[p].first,
@@ -179,7 +179,7 @@ void Weather::loadFromDataNode(DataNode* node) {
     vector<std::pair<int, string> > sunStrengthTable =
         getWeatherTable(node->getChildByName("sun_strength"));
         
-    for(size_t p = 0; p < sunStrengthTable.size(); p++) {
+    forIdx(p, sunStrengthTable) {
         sunStrength.push_back(
             std::make_pair(
                 sunStrengthTable[p].first,
@@ -194,7 +194,7 @@ void Weather::loadFromDataNode(DataNode* node) {
             node->getChildByName("blackout_strength")
         );
         
-    for(size_t p = 0; p < blackoutStrengthTable.size(); p++) {
+    forIdx(p, blackoutStrengthTable) {
         blackoutStrength.push_back(
             std::make_pair(
                 blackoutStrengthTable[p].first,
@@ -208,7 +208,7 @@ void Weather::loadFromDataNode(DataNode* node) {
         getWeatherTable(
             node->getChildByName("fog_color")
         );
-    for(size_t p = 0; p < fogColorTable.size(); p++) {
+    forIdx(p, fogColorTable) {
         fogColor.push_back(
             std::make_pair(
                 fogColorTable[p].first,

@@ -81,7 +81,7 @@ GroupTask::GroupTask(
  * @param who Pikmin to add.
  */
 void GroupTask::addWorker(Pikmin* who) {
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         if(spots[s].pikminHere == who) {
             spots[s].state = 2;
             break;
@@ -117,10 +117,7 @@ void GroupTask::addWorker(Pikmin* who) {
  * @brief Code to run when the task is finished.
  */
 void GroupTask::finishTask() {
-    for(
-        size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin.size(); p++
-    ) {
+    forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pikPtr = game.states.gameplay->mobs.pikmin[p];
         if(pikPtr->focusedMob && pikPtr->focusedMob == this) {
             pikPtr->scriptVM.fsm.runEvent(MOB_EV_FINISHED_TASK);
@@ -138,7 +135,7 @@ void GroupTask::finishTask() {
 void GroupTask::freeUpSpot(Pikmin* whose) {
     bool wasContributing = false;
     
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         if(spots[s].pikminHere == whose) {
             if(spots[s].state == 2) {
                 wasContributing = true;
@@ -207,7 +204,7 @@ FRACTION_NR_VISIBILITY GroupTask::getFractionNumbersInfo(
 GroupTask::GroupTaskSpot* GroupTask::getFreeSpot() {
     size_t spotsTaken = 0;
     
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         if(spots[s].state != 0) {
             spotsTaken++;
             if(spotsTaken == tasType->maxPikmin) {
@@ -240,7 +237,7 @@ float GroupTask::getPower() const {
  * @return The coordinates, or (0,0) if that Pikmin doesn't have a spot.
  */
 Point GroupTask::getSpotPos(const Pikmin* whose) const {
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         if(spots[s].pikminHere == whose) {
             return spots[s].absolutePos;
         }
@@ -316,7 +313,7 @@ void GroupTask::updateSpotAbsolutePositions() {
     al_rotate_transform(&t, angle);
     al_translate_transform(&t, pos.x, pos.y);
     
-    for(size_t s = 0; s < spots.size(); s++) {
+    forIdx(s, spots) {
         Point* p = &(spots[s].absolutePos);
         *p = spots[s].relativePos;
         al_transform_coordinates(&t, &(p->x), &(p->y));

@@ -130,7 +130,7 @@ void ContentManifest::fillFromPath(const string& path) {
     
     vector<string> parts = split(path, "/");
     size_t gameDataIdx = string::npos;
-    for(size_t p = 0; p < parts.size(); p++) {
+    forIdx(p, parts) {
         if(parts[p] == FOLDER_NAMES::GAME_DATA) {
             gameDataIdx = p;
             break;

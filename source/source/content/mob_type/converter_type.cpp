@@ -72,7 +72,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
     vector<string> pikminTypesStrs =
         semicolonListToVector(pikminTypesStr);
         
-    for(size_t t = 0; t < pikminTypesStrs.size(); t++) {
+    forIdx(t, pikminTypesStrs) {
         MobType* typePtr = pikCat->getType(pikminTypesStrs[t]);
         
         if(typePtr) {
@@ -111,7 +111,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
         );
     }
     
-    for(size_t s = 0; s < sounds.size(); s++) {
+    forIdx(s, sounds) {
         if(sounds[s].name == "reception") {
             soundReceptionIdx = s;
         }

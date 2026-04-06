@@ -147,7 +147,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
         closestMembers[m] = nullptr;
     }
     
-    for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+    forIdx(m, player->leaderPtr->group->members) {
         Mob* mPtr = player->leaderPtr->group->members[m];
         if(mPtr->type != heldPik->type) continue;
         

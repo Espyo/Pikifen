@@ -70,7 +70,7 @@ bool FsmEventDef::loadFromDataNode(
     
     success &= actions.loadFromDataNode(node, scriptDef, outActionFlags);
     
-    for(size_t a = 0; a < actions.list.size(); a++) {
+    forIdx(a, actions.list) {
         actions.list[a]->parentEvent = type;
     }
     

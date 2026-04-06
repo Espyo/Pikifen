@@ -91,12 +91,12 @@ void destroyMisc() {
     al_destroy_bitmap(game.bmpError);
     game.audio.destroy();
     
-    for(size_t v = 0; v < game.missionMetricTypes.size(); v++) {
+    forIdx(v, game.missionMetricTypes) {
         delete game.missionMetricTypes[v];
     }
     game.missionMetricTypes.clear();
     
-    for(size_t e = 0; e < game.missionEndCondTypes.size(); e++) {
+    forIdx(e, game.missionEndCondTypes) {
         delete game.missionEndCondTypes[e];
     }
     game.missionEndCondTypes.clear();
@@ -762,7 +762,7 @@ void initControls() {
     //If the options are loaded successfully, these binds are overwritten.
     const vector<PlayerActionType>& actionTypes =
         game.controls.getAllActionTypes();
-    for(size_t a = 0; a < actionTypes.size(); a++) {
+    forIdx(a, actionTypes) {
         const string& def = actionTypes[a].defaultBindStr;
         if(def.empty()) continue;
         
@@ -876,7 +876,7 @@ void initDearImGuiColors() {
         ImGuiCol_NavCursor,
     };
     
-    for(size_t c = 0; c < colorsToChange.size(); c++) {
+    forIdx(c, colorsToChange) {
         ImGui::AdjustColorHSV(
             style.Colors[colorsToChange[c]], -0.25f, 0.0f, 0.0f
         );

@@ -487,7 +487,7 @@ void AnimationEditor::drawTimeline() {
     float animTotalDuration = 0;
     float animCurTime = 0;
     float animLoopTime = 0;
-    for(size_t f = 0; f < curAnimInst.curAnim->frames.size(); f++) {
+    forIdx(f, curAnimInst.curAnim->frames) {
         float fDur = curAnimInst.curAnim->frames[f].duration;
         
         if(f < curAnimInst.curFrameIdx) {
@@ -526,7 +526,7 @@ void AnimationEditor::drawTimeline() {
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
     float frameRectangleBottom =
         canvasBR.y - ANIM_EDITOR::TIMELINE_PADDING;
-    for(size_t f = 0; f < curAnimInst.curAnim->frames.size(); f++) {
+    forIdx(f, curAnimInst.curAnim->frames) {
         float endX =
             frameRectanglesCurX +
             curAnimInst.curAnim->frames[f].duration * scale;

@@ -444,7 +444,7 @@ void Mob::applyStatusEffects(
     //Check how this status is doing in the list, if it's there.
     size_t listIdx = INVALID;
     bool alreadyActive = false;
-    for(size_t ms = 0; ms < statuses.size(); ms++) {
+    forIdx(ms, statuses) {
         if(statuses[ms].type == s) {
             listIdx = ms;
             if(statuses[ms].state == STATUS_STATE_ACTIVE) {
@@ -573,7 +573,7 @@ bool Mob::applyStatusParentLogic(
     StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob
 ) {
     //Send the status to the child mobs.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* m2Ptr = game.states.gameplay->mobs.all[m];
         if(m2Ptr->parent && m2Ptr->parent->m == this) {
             m2Ptr->applyStatus(s, true, fromHazard, fromMob);
@@ -639,7 +639,7 @@ void Mob::arachnorbHeadTurnLogic() {
     float angleDeviationAvg = 0;
     size_t nFeet = 0;
     
-    for(size_t l = 0; l < links.size(); l++) {
+    forIdx(l, links) {
         if(!links[l]) {
             continue;
         }
@@ -761,7 +761,7 @@ void Mob::becomeCarriable(const CARRY_DESTINATION destination) {
 void Mob::becomeUncarriable() {
     if(!carryInfo) return;
     
-    for(size_t p = 0; p < carryInfo->spotInfo.size(); p++) {
+    forIdx(p, carryInfo->spotInfo) {
         if(carryInfo->spotInfo[p].state != CARRY_SPOT_STATE_FREE) {
             carryInfo->spotInfo[p].pikPtr->scriptVM.fsm.runEvent(
                 MOB_EV_FOCUSED_MOB_UNAVAILABLE
@@ -824,11 +824,11 @@ bool Mob::calculateAttackBasics(
     }
     
     //Calculate the status multipliers.
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         *outOffenseMultiplier *= statuses[s].type->attackMultiplier;
     }
-    for(size_t s = 0; s < victim->statuses.size(); s++) {
+    forIdx(s, victim->statuses) {
         if(victim->statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float statusDefMult =
             victim->statuses[s].type->defenseMultiplier - 1.0f;
@@ -1007,7 +1007,7 @@ bool Mob::calculateCarryingDestination(
         Mob* closestLink = nullptr;
         Distance closestLinkDist;
         
-        for(size_t s = 0; s < links.size(); s++) {
+        forIdx(s, links) {
             Distance d(pos, links[s]->pos);
             
             if(!closestLink || d < closestLinkDist) {
@@ -1035,7 +1035,7 @@ bool Mob::calculateCarryingDestination(
         unordered_set<PikminType*> availableTypes;
         vector<std::pair<Mob*, PikminType*> > mobsPerType;
         
-        for(size_t l = 0; l < links.size(); l++) {
+        forIdx(l, links) {
             if(!links[l]) continue;
             string typeName =
                 links[l]->scriptVM.vars["carry_destination_type"];
@@ -1062,7 +1062,7 @@ bool Mob::calculateCarryingDestination(
         //Figure out which linked mob matches the decided type.
         size_t closestTargetIdx = INVALID;
         Distance closestTargetDist;
-        for(size_t m = 0; m < mobsPerType.size(); m++) {
+        forIdx(m, mobsPerType) {
             if(mobsPerType[m].second != decidedType) continue;
             
             Distance d(pos, mobsPerType[m].first->pos);
@@ -1098,7 +1098,7 @@ bool Mob::calculateCarryingDestination(
 Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
     //First, check which Onion Pikmin types are even available.
     unordered_set<PikminType*> availableTypes;
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+    forIdx(o, game.states.gameplay->mobs.onions) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
         if(!oPtr->activated) continue;
         availableTypes.insert(
@@ -1119,11 +1119,11 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
     //Figure out where that type's closest Onion is.
     size_t closestOnionIdx = INVALID;
     Distance closestOnionDist;
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+    forIdx(o, game.states.gameplay->mobs.onions) {
         Onion* oPtr = game.states.gameplay->mobs.onions[o];
         if(!oPtr->activated) continue;
         bool hasType = false;
-        for(size_t t = 0; t < oPtr->oniType->nest->pikTypes.size(); t++) {
+        forIdx(t, oPtr->oniType->nest->pikTypes) {
             if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
                 hasType = true;
                 break;
@@ -1154,7 +1154,7 @@ Ship* Mob::calculateCarryingShip() const {
     Ship* closestShip = nullptr;
     Distance closestShipDist;
     
-    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
+    forIdx(s, game.states.gameplay->mobs.ships) {
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
         Distance d(pos, sPtr->controlPointFinalPos);
         
@@ -1213,7 +1213,7 @@ bool Mob::canHurt(Mob* v) const {
     if(hasFlag(v->flags, MOB_FLAG_NON_HURTABLE)) return false;
     
     //Check if this mob has already hit v recently.
-    for(size_t h = 0; h < hitOpponents.size(); h++) {
+    forIdx(h, hitOpponents) {
         if(hitOpponents[h].second == v) {
             //v was hit by this mob recently, so don't let it attack again.
             //This stops the same attack from hitting every single frame.
@@ -1405,7 +1405,7 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
         }
     }
     
-    for(size_t c = 0; c < chompingMobs.size(); c++) {
+    forIdx(c, chompingMobs) {
         if(chompingMobs[c] == m) {
             //It's already chomping the mob.
             return;
@@ -1644,7 +1644,7 @@ void Mob::deleteOldStatusEffects() {
     }
     
     //Apply new status effects.
-    for(size_t s = 0; s < newStatusesToApply.size(); s++) {
+    forIdx(s, newStatusesToApply) {
         applyStatus(
             newStatusesToApply[s].first,
             false, newStatusesToApply[s].second, nullptr
@@ -1657,7 +1657,7 @@ void Mob::deleteOldStatusEffects() {
     
     //Update some flags.
     hasInvisibilityStatus = false;
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(
             statuses[s].state == STATUS_STATE_ACTIVE &&
             statuses[s].type->turnsInvisible
@@ -2084,7 +2084,7 @@ Hitbox* Mob::getClosestHitbox(
     Hitbox* closestHitbox = nullptr;
     float closestHitboxDist = 0;
     
-    for(size_t h = 0; h < s->hitboxes.size(); h++) {
+    forIdx(h, s->hitboxes) {
         Hitbox* hPtr = &s->hitboxes[h];
         if(hType != INVALID && hPtr->type != hType) continue;
         
@@ -2304,10 +2304,7 @@ void Mob::getHitboxHoldPoint(
  */
 size_t Mob::getLatchedPikminAmount() const {
     size_t total = 0;
-    for(
-        size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin.size(); p++
-    ) {
+    forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
         if(pPtr->focusedMob != this) continue;
         if(pPtr->holder.m != this) continue;
@@ -2326,10 +2323,7 @@ size_t Mob::getLatchedPikminAmount() const {
  */
 float Mob::getLatchedPikminWeight() const {
     float total = 0;
-    for(
-        size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin.size(); p++
-    ) {
+    forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
         if(pPtr->focusedMob != this) continue;
         if(pPtr->holder.m != this) continue;
@@ -2363,7 +2357,7 @@ int Mob::getMissionPoints(bool* applicableInThisMission) const {
  * @return The mob.
  */
 Mob* Mob::getMobHeldInHand() const {
-    for(size_t h = 0; h < holding.size(); h++) {
+    forIdx(h, holding) {
         if(holding[h]->holder.type == HOLD_TYPE_PURPOSE_HAND) {
             return holding[h];
         }
@@ -2394,7 +2388,7 @@ size_t Mob::getPlayerTeamIdx() const {
  */
 float Mob::getSpeedMultiplier() const {
     float moveSpeedMult = 1.0f;
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float vulnMult = statuses[s].type->speedMultiplier - 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
@@ -2451,7 +2445,7 @@ void Mob::getSpriteBitmapEffects(
         size_t nColorizes = 0;
         ALLEGRO_COLOR colorizeSum = COLOR_EMPTY;
         
-        for(size_t s = 0; s < statuses.size(); s++) {
+        forIdx(s, statuses) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             StatusType* t = statuses[s].type;
             if(
@@ -2531,7 +2525,7 @@ void Mob::getSpriteBitmapEffects(
             
             Distance closestDist[2] = {Distance(FLT_MAX), Distance(FLT_MAX)};
             for(size_t n = 0; n < 2; n++) {
-                for(size_t e = 0; e < fadeEdges[n].size(); e++) {
+                forIdx(e, fadeEdges[n]) {
                     Point v1 = v2p(fadeEdges[n][e]->vertexes[0]);
                     Point v2 = v2p(fadeEdges[n][e]->vertexes[1]);
                     float segmentRatio;
@@ -2837,7 +2831,7 @@ void Mob::getSpriteData(
  */
 ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
     *bmpScale = 0.0f;
-    for(size_t st = 0; st < statuses.size(); st++) {
+    forIdx(st, statuses) {
         if(statuses[st].state != STATUS_STATE_ACTIVE) continue;
         StatusType* t = statuses[st].type;
         if(t->overlayAnimation.empty()) continue;
@@ -2894,7 +2888,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
     const float targetMobMaxZ = targetMob->z + targetMob->height;
     
     //Check against other mobs.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         
         if(!mPtr->type->pushes) continue;
@@ -2991,7 +2985,7 @@ void Mob::hold(
         //A different mob is already holding it.
         return;
     }
-    for(size_t h = 0; h < holding.size(); h++) {
+    forIdx(h, holding) {
         if(holding[h] == m) {
             //It's already holding the mob.
             return;
@@ -3088,7 +3082,7 @@ bool Mob::isPointOn(const Point& p) const {
  * @return Whether it is resistant.
  */
 bool Mob::isResistantToHazards(const vector<Hazard*>& hazards) const {
-    for(size_t h = 0; h < hazards.size(); h++) {
+    forIdx(h, hazards) {
         if(getHazardVulnerability(hazards[h]).effectMult != 0.0f) {
             return false;
         }
@@ -3276,7 +3270,7 @@ void Mob::readScriptVars(const ScriptVarReader& svr) {
  */
 void Mob::release(Mob* m) {
     size_t idx = INVALID;
-    for(size_t h = 0; h < holding.size(); h++) {
+    forIdx(h, holding) {
         if(holding[h] == m) {
             idx = h;
             break;
@@ -3307,7 +3301,7 @@ void Mob::release(Mob* m) {
  * @brief Safely releases all chomped Pikmin.
  */
 void Mob::releaseChompedPikmin() {
-    for(size_t p = 0; p < chompingMobs.size(); p++) {
+    forIdx(p, chompingMobs) {
         if(!chompingMobs[p]) continue;
         release(chompingMobs[p]);
     }
@@ -3319,7 +3313,7 @@ void Mob::releaseChompedPikmin() {
  * @brief Releases any mobs stored inside.
  */
 void Mob::releaseStoredMobs() {
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         if(mPtr->storedInsideAnother == this) {
             release(mPtr);
@@ -3535,7 +3529,7 @@ void Mob::setTeam(MOB_TEAM team) {
     //It's likely the team changed from friendly to opponent, or vice-versa.
     //Losing focus allows it to regain focus again with the proper handling.
     //Likewise, the mob itself probably needs to regain focus.
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+    forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         if(mPtr->focusedMob == this) {
             mPtr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
@@ -3666,7 +3660,7 @@ void Mob::startDying() {
     stopTurning();
     gravityMult = 1.0;
     
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         statuses[s].prevState = statuses[s].state;
         statuses[s].state = STATUS_STATE_TO_DELETE;
     }
@@ -3692,9 +3686,7 @@ void Mob::startDying() {
     releaseStoredMobs();
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
-        for(
-            size_t g = 0; g < game.states.gameplay->missionMobGroups.size(); g++
-        ) {
+        forIdx(g, game.states.gameplay->missionMobGroups) {
             if(
                 game.curArea->mission.mobGroups[g].enemiesNeedCollection &&
                 type->category->id == MOB_CATEGORY_ENEMIES
@@ -3853,7 +3845,7 @@ void Mob::swallowChompedPikmin(size_t amount) {
     amount = std::min(amount, chompingMobs.size());
     
     vector<float> pickRandomFloats;
-    for(size_t f = 0; f < chompingMobs.size(); f++) {
+    forIdx(f, chompingMobs) {
         pickRandomFloats.push_back(game.rng.f(0.0f, 1.0f));
     }
     vector<Mob*> shuffledList =
@@ -3874,7 +3866,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
     if(!mPtr) return;
     
     size_t idx = INVALID;
-    for(size_t m = 0; m < chompingMobs.size(); m++) {
+    forIdx(m, chompingMobs) {
         if(chompingMobs[m] == mPtr) {
             idx = m;
             break;
@@ -3988,7 +3980,7 @@ void Mob::tick(float deltaT) {
  */
 void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
         float vulnMult = statuses[s].type->animSpeedMultiplier - 1.0f;
         auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
@@ -4016,10 +4008,10 @@ void Mob::tickAnimation(float deltaT) {
     if(finishedAnim) {
         scriptVM.fsm.runEvent(MOB_EV_ANIMATION_END);
     }
-    for(size_t s = 0; s < frameSignals.size(); s++) {
+    forIdx(s, frameSignals) {
         scriptVM.fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frameSignals[s]);
     }
-    for(size_t s = 0; s < frameSounds.size(); s++) {
+    forIdx(s, frameSounds) {
         playSound(frameSounds[s]);
     }
     
@@ -4218,7 +4210,7 @@ void Mob::tickMiscLogic(float deltaT) {
     
     invulnPeriod.tick(deltaT);
     
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         statuses[s].tick(deltaT);
         
         if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
@@ -4288,7 +4280,7 @@ void Mob::tickMiscLogic(float deltaT) {
         health > 0.0f &&
         health < maxHealth;
     bool shouldShowStatusBuildups = false;
-    for(size_t s = 0; s < statuses.size(); s++) {
+    forIdx(s, statuses) {
         if(statuses[s].buildup > 0.0f) {
             shouldShowStatusBuildups = true;
             break;
@@ -4577,7 +4569,7 @@ void Mob::tickScript(float deltaT) {
         scriptVM.fsm.runEvent(MOB_EV_WHISTLED, (void*) player.leaderPtr);
         
         bool savedByWhistle = false;
-        for(size_t s = 0; s < statuses.size(); s++) {
+        forIdx(s, statuses) {
             if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
             if(statuses[s].type->removableWithWhistle) {
                 statuses[s].state = STATUS_STATE_TO_DELETE;
@@ -4617,7 +4609,7 @@ void Mob::tickScript(float deltaT) {
     FsmEventDef* activeLeaderChangedEv =
         scriptVM.fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
     if(activeLeaderChangedEv) {
-        for(size_t p = 0; p < game.states.gameplay->players.size(); p++) {
+        forIdx(p, game.states.gameplay->players) {
             Leader* candidateLeader =
                 game.states.gameplay->players[p].leaderPtr;
             if(!candidateLeader) continue;
