@@ -2504,7 +2504,7 @@ void Mob::getSpriteBitmapEffects(
     //Sector brightness tint.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
         Sector* sectorPtr = centerSector;
-        float brightness = centerSector->brightness / 255.0;
+        float brightness = centerSector->brightness / 255.0f;
         if(sectorPtr->fade) {
             Sector* textureSector[2] = {nullptr, nullptr};
             sectorPtr->getTextureMergeSectors(
@@ -2567,7 +2567,7 @@ void Mob::getSpriteBitmapEffects(
                         )
                     );
             }
-            brightness = totalBrightness / 255.0;
+            brightness = totalBrightness / 255.0f;
         }
         
         info->tintColor.r *= brightness;

@@ -35,7 +35,7 @@ class StatusType;
 namespace LIQUID {
 extern const float DRAIN_DURATION;
 extern const float FREEZING_EFFECT_DURATION;
-extern const float FREEZING_OPACITY;
+extern const float FREEZING_ALPHA;
 extern const float FREEZING_POINT_AREA_MULT;
 extern const string FREEZING_POINT_SECTOR_VAR;
 extern const float THAW_CRACKED_DURATION;
@@ -108,7 +108,7 @@ struct Liquid {
     
     Liquid(Hazard* hazard, const vector<Sector*>& sectors);
     ~Liquid();
-    bool isFrozen(float* thawOpacity, float* flashOpacity, bool* cracked) const;
+    bool isFrozen(float* thawAlpha, float* flashAlpha, bool* cracked) const;
     bool startDraining();
     void tick(float deltaT);
     

@@ -53,7 +53,7 @@ extern const string BIG_MSG_TIMES_UP_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_FACTOR;
-extern const unsigned char COLLISION_OPACITY;
+extern const float COLLISION_ALPHA;
 extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;
 extern const float LEADER_LAND_PART_MAX_SIZE;
@@ -62,7 +62,7 @@ extern const float LEADER_MOVEMENT_MAGNITUDE_THRESHOLD;
 extern const float LEADER_MOVEMENT_MIN_SPEED_MULT;
 extern const float MENU_ENTRY_HUD_MOVE_TIME;
 extern const float MENU_EXIT_HUD_MOVE_TIME;
-extern const unsigned char PREVIEW_OPACITY;
+extern const float PREVIEW_ALPHA;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;
 extern const float REPLAY_SAVE_FREQUENCY;
@@ -645,7 +645,7 @@ struct GameplayMessageBox {
     //Timer where the player can't advance. Stops accidental misinputs.
     float misinputProtectionTimer = 0.0f;
     
-    //Opacity of the advance button icon.
+    //Alpha of the advance button icon [0 - 1].
     float advanceButtonAlpha = 0.0f;
     
     //Time left to swipe the current section away with.

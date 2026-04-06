@@ -108,7 +108,7 @@ void AnimationEditor::drawCanvas() {
     bool drawHitboxes = hitboxesVisible;
     bool drawMobRadius = mobRadiusVisible;
     bool drawLeaderSilhouette = leaderSilhouetteVisible;
-    float gridOpacity = gridVisible ? 0.33f : 0.0f;
+    float gridAlpha = gridVisible ? 0.33f : 0.0f;
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
         drawHitboxes = false;
@@ -117,7 +117,7 @@ void AnimationEditor::drawCanvas() {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         const ALLEGRO_COLOR UNSELECTED_COLOR = al_map_rgba(0, 0, 0, 128);
         const ALLEGRO_COLOR SELECTION_COLOR = al_map_rgb(224, 192, 0);
-        gridOpacity = 0.0f;
+        gridAlpha = 0.0f;
         drawMobRadius = false;
         drawLeaderSilhouette = false;
         
@@ -205,8 +205,8 @@ void AnimationEditor::drawCanvas() {
         }
         
         if(drawHitboxes) {
-            unsigned char hitboxOutlineAlpha =
-                63 + 192 * ((sin(selEffectAlpha) / 2.0) + 0.5);
+            float hitboxOutlineAlpha =
+                0.25f + 0.75f * ((sin(selEffectAlpha) / 2.0f) + 0.5f);
             size_t nHitboxes = s->hitboxes.size();
             
             for(int h = (int) nHitboxes - 1; h >= 0; --h) {
@@ -241,7 +241,7 @@ void AnimationEditor::drawCanvas() {
                     hitboxOutlineThickness =
                         3.0f / game.editorsView.cam.zoom;
                     hitboxOutlineColor =
-                        changeAlpha(hitboxColor, hitboxOutlineAlpha);
+                        changeAlpha(hitboxColor, hitboxOutlineAlpha * 255);
                 }
                 
                 if(sideView && state == EDITOR_STATE_HITBOXES) {
@@ -284,12 +284,12 @@ void AnimationEditor::drawCanvas() {
     }
     
     //Grid.
-    if(gridOpacity != 0.0f) {
+    if(gridAlpha != 0.0f) {
     
         drawGrid(
             ANIM_EDITOR::GRID_INTERVAL,
-            multAlpha(EDITOR::GRID_COLOR_MAJOR, gridOpacity),
-            multAlpha(EDITOR::GRID_COLOR_MINOR, gridOpacity)
+            multAlpha(EDITOR::GRID_COLOR_MAJOR, gridAlpha),
+            multAlpha(EDITOR::GRID_COLOR_MINOR, gridAlpha)
         );
         
         Point camTLCorner(0, 0);

@@ -1405,13 +1405,19 @@ void Area::loadGeometryFromDataNode(
         DataNode* shadowNode = shadowsNode->getChild(s);
         ReaderSetter sRS(shadowNode);
         TreeShadow* newShadow = new TreeShadow();
+        unsigned char alphaC = 0;
+        DataNode* alphaNode = nullptr;
         
         sRS.set("pos", newShadow->pose.pos);
         sRS.set("size", newShadow->pose.size);
         sRS.set("angle", newShadow->pose.angle);
-        sRS.set("alpha", newShadow->alpha);
+        sRS.set("alpha", alphaC, &alphaNode);
         sRS.set("file", newShadow->bmpName);
         sRS.set("sway", newShadow->sway);
+
+        if(alphaNode) {
+            newShadow->alpha = alphaC / 255.0f;
+        }
         
         newShadow->bitmap =
             game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
@@ -2668,8 +2674,8 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(sPtr->pose.angle != 0) {
             sGW.write("angle", sPtr->pose.angle);
         }
-        if(sPtr->alpha != 255) {
-            sGW.write("alpha", sPtr->alpha);
+        if(sPtr->alpha != 1.0f) {
+            sGW.write("alpha", sPtr->alpha * 255);
         }
         
     }
@@ -3031,14 +3037,14 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * @param center Center coordinates.
  * @param size Width and height.
  * @param angle Angle it is rotated by.
- * @param alpha How opaque it is [0 - 255].
+ * @param alpha Its alpha [0 - 1].
  * @param bmpName Internal name of the tree shadow texture's bitmap.
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.
  */
 TreeShadow::TreeShadow(
     const Point& center, const Point& size, float angle,
-    unsigned char alpha, const string& bmpName, const Point& sway
+    float alpha, const string& bmpName, const Point& sway
 ) :
     bmpName(bmpName),
     bitmap(nullptr),

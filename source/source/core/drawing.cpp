@@ -293,7 +293,7 @@ void drawFraction(
  *
  * @param center Center of the wheel.
  * @param ratio Ratio of health that is filled. 0 is empty, 1 is full.
- * @param alpha Total opacity of the health wheel.
+ * @param alpha Total alpha of the health wheel [0 - 1].
  * @param radius Radius of the wheel (the whole wheel, not just the pie-slice).
  * @param justChart If true, only draw the actual pie-slice (pie-chart).
  * Used for leader HP on the HUD.
@@ -522,17 +522,17 @@ void drawInputSourceIcon(
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
  * @param time How much time has passed. Used to animate.
- * @param drainOpacity Opacity multiplier, used for draining. 1 if not draining.
+ * @param drainAlpha Alpha multiplier, used for draining. 1 if not draining.
  */
 void drawLiquid(
     Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
-    float time, float drainOpacity
+    float time, float drainAlpha
 ) {
     //Setup.
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
     
-    float brightnessMult = sPtr->brightness / 255.0;
+    float brightnessMult = sPtr->brightness / 255.0f;
     float sectorScroll[2] = {
         sPtr->scroll.x,
         sPtr->scroll.y
@@ -617,7 +617,7 @@ void drawLiquid(
     ALLEGRO_SHADER* liqShader = game.shaders.getShader(SHADER_TYPE_LIQUID);
     al_use_shader(liqShader);
     al_set_shader_float("area_time", time * lPtr->animSpeed);
-    al_set_shader_float("opacity", drainOpacity);
+    al_set_shader_float("alpha", drainAlpha);
     al_set_shader_float("sector_brightness", brightnessMult);
     al_set_shader_float_vector("sector_scroll", 2, &sectorScroll[0], 1);
     al_set_shader_float("shine_min_threshold", lPtr->shineMinThreshold);
@@ -694,7 +694,7 @@ void drawLiquid(
             float vy = vPtr->y;
             
             float alphaMult = 1;
-            float tsBrightnessMult = textureSector[t]->brightness / 255.0;
+            float tsBrightnessMult = textureSector[t]->brightness / 255.0f;
             
             if(t == 1) {
                 if(!drawSector0) {
@@ -774,21 +774,21 @@ void drawLiquid(
  * @param text The main text to show, optional.
  * @param subtext Subtext to show under the main text, optional.
  * @param maker Name of the maker, optional.
- * @param opacity [0 - 1]. The background blackness lowers in opacity
+ * @param alpha Alpha [0 - 1]. The background blackness lowers in alpha
  * much faster.
  */
 void drawLoadingScreen(
     const string& text, const string& subtext, const string& maker,
-    float opacity
+    float alpha
 ) {
     const float textW = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
     const float textH = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
     const float subtextW = textW * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
     const float subtextH = textH * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
     
-    unsigned char blacknessAlpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
+    float blacknessAlpha = std::max(0.0f, alpha * 4 - 3);
     al_draw_filled_rectangle(
-        0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blacknessAlpha)
+        0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blacknessAlpha * 255)
     );
     
     int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
@@ -845,7 +845,7 @@ void drawLoadingScreen(
         }
         al_draw_tinted_bitmap(
             game.loadingTextBmp,
-            mapAlpha(255.0 * opacity),
+            mapAlpha(alpha * 255),
             game.winW * 0.5 - textW * 0.5, textY, 0
         );
         
@@ -858,13 +858,13 @@ void drawLoadingScreen(
     
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
-            mapAlpha(255.0 * opacity),
+            mapAlpha(alpha * 255),
             game.winW * 0.5 - subtextW * 0.5, subtextY, 0
         );
         
     }
     
-    const unsigned char reflectionAlpha = 128.0 * opacity;
+    const float reflectionAlpha = alpha * 0.5f;
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
@@ -877,14 +877,14 @@ void drawLoadingScreen(
         textVertexes[0].z = 0;
         textVertexes[0].u = 0;
         textVertexes[0].v = textH;
-        textVertexes[0].color = mapAlpha(reflectionAlpha);
+        textVertexes[0].color = mapAlpha(reflectionAlpha * 255);
         //Top-right vertex.
         textVertexes[1].x = textX + textW;
         textVertexes[1].y = textY + textH;
         textVertexes[1].z = 0;
         textVertexes[1].u = textW;
         textVertexes[1].v = textH;
-        textVertexes[1].color = mapAlpha(reflectionAlpha);
+        textVertexes[1].color = mapAlpha(reflectionAlpha * 255);
         //Bottom-right vertex.
         textVertexes[2].x = textX + textW;
         textVertexes[2].y = textY + textH + textReflectionH;
@@ -918,14 +918,14 @@ void drawLoadingScreen(
         subtextVertexes[0].z = 0;
         subtextVertexes[0].u = 0;
         subtextVertexes[0].v = subtextH;
-        subtextVertexes[0].color = mapAlpha(reflectionAlpha);
+        subtextVertexes[0].color = mapAlpha(reflectionAlpha * 255);
         //Top-right vertex.
         subtextVertexes[1].x = subtextX + subtextW;
         subtextVertexes[1].y = subtextY + subtextH;
         subtextVertexes[1].z = 0;
         subtextVertexes[1].u = subtextW;
         subtextVertexes[1].v = subtextH;
-        subtextVertexes[1].color = mapAlpha(reflectionAlpha);
+        subtextVertexes[1].color = mapAlpha(reflectionAlpha * 255);
         //Bottom-right vertex.
         subtextVertexes[2].x = subtextX + subtextW;
         subtextVertexes[2].y = subtextY + subtextH + subtextReflectionH;
@@ -954,7 +954,7 @@ void drawLoadingScreen(
         drawText(
             "Made by: " + maker, game.sysContent.fntStandard,
             Point(8, game.winH - 8), textBox,
-            al_map_rgba(192, 192, 192, opacity * 255.0),
+            al_map_rgba(192, 192, 192, alpha * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_BOTTOM, 0,
             Point(0.8f, 0.8f)
         );
@@ -962,7 +962,7 @@ void drawLoadingScreen(
     
     //Draw the game's logo to the left of the "Loading..." text,
     //if we're not fading.
-    if(opacity == 1.0f) {
+    if(alpha == 1.0f) {
         const Point textBox(game.winW * 0.11f, game.winH * 0.03f);
         
         if(
@@ -976,7 +976,7 @@ void drawLoadingScreen(
             drawBitmap(
                 game.sysContent.bmpIcon, iconPos,
                 Point(-1, textBox.y),
-                0, mapAlpha(opacity * 255.0)
+                0, mapAlpha(alpha * 255)
             );
         }
         
@@ -1108,10 +1108,10 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
                 anchor / (float) game.mouseCursor.history.size();
             float startThickness =
                 GAME::CURSOR_TRAIL_MAX_WIDTH * startRatio;
-            unsigned char startAlpha =
+            float startAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * startRatio;
             ALLEGRO_COLOR startColor =
-                changeAlpha(color, startAlpha * game.mouseCursor.alpha);
+                changeAlpha(color, startAlpha * game.mouseCursor.alpha * 255);
             Point startP1;
             Point startP2;
             
@@ -1119,10 +1119,10 @@ void drawMouseCursor(const ALLEGRO_COLOR& color) {
                 s / (float) GAME::CURSOR_TRAIL_SAVE_N_SPOTS;
             float endThickness =
                 GAME::CURSOR_TRAIL_MAX_WIDTH * endRatio;
-            unsigned char endAlpha =
+            float endAlpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * endRatio;
             ALLEGRO_COLOR endColor =
-                changeAlpha(color, endAlpha * game.mouseCursor.alpha);
+                changeAlpha(color, endAlpha * game.mouseCursor.alpha * 255);
             Point endP1;
             Point endP2;
             
@@ -1273,22 +1273,22 @@ void drawPlayerActionInputSourceIcon(
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
- * @param opacity Draw the texture at this opacity [0 - 1].
- * @param thawEffectOpacity If not 0, multiply the texture opacity with this,
+ * @param alpha Draw the texture at this alpha [0 - 1].
+ * @param thawEffectAlpha If not 0, multiply the texture alpha with this,
  * for an effect that indicates the ice is just about to thaw.
- * @param flashEffectOpacity If not 0, draw a flash of white with this opacity,
- * for an effect that indicates the liquid was just frozen.
+ * @param flashEffectAlpha If not 0, draw a flash of white with this
+ * alpha [0 - 1], for an effect that indicates the liquid was just frozen.
  * @param cracked If true, use the cracked texture.
  */
 void drawSectorIce(
-    Sector* sPtr, const Point& where, float scale, float opacity,
-    float thawEffectOpacity, float flashEffectOpacity, bool cracked
+    Sector* sPtr, const Point& where, float scale, float alpha,
+    float thawEffectAlpha, float flashEffectAlpha, bool cracked
 ) {
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
     
-    if(thawEffectOpacity > 0.0f) {
-        opacity *= thawEffectOpacity;
+    if(thawEffectAlpha > 0.0f) {
+        alpha *= thawEffectAlpha;
     }
     
     size_t nVertexes = sPtr->triangles.size() * 3;
@@ -1299,7 +1299,7 @@ void drawSectorIce(
         Vertex* vPtr = tPtr->points[v % 3];
         float vx = vPtr->x;
         float vy = vPtr->y;
-        float brightnessMult = sPtr->brightness / 255.0;
+        float brightnessMult = sPtr->brightness / 255.0f;
         
         av[v].x = vx - where.x;
         av[v].y = vy - where.y;
@@ -1307,7 +1307,7 @@ void drawSectorIce(
         av[v].v = vy;
         av[v].z = 0;
         av[v].color =
-            changeAlpha(mapGray(brightnessMult * 255), opacity * 255);
+            changeAlpha(mapGray(brightnessMult * 255), alpha * 255);
     }
     
     for(size_t v = 0; v < nVertexes; v++) {
@@ -1323,13 +1323,13 @@ void drawSectorIce(
         0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     
-    if(flashEffectOpacity > 0.0f) {
+    if(flashEffectAlpha > 0.0f) {
         for(size_t v = 0; v < nVertexes; v++) {
             const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;
             float vy = vPtr->y;
-            float brightnessMult = sPtr->brightness / 255.0;
+            float brightnessMult = sPtr->brightness / 255.0f;
             
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
@@ -1339,7 +1339,7 @@ void drawSectorIce(
             av[v].color =
                 changeAlpha(
                     mapGray(brightnessMult * 255),
-                    opacity * flashEffectOpacity * 255
+                    alpha * flashEffectAlpha * 255
                 );
         }
         
@@ -1364,10 +1364,10 @@ void drawSectorIce(
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
- * @param opacity Draw the textures at this opacity [0 - 1].
+ * @param Alpha Draw the textures at this alpha [0 - 1].
  */
 void drawSectorTexture(
-    Sector* sPtr, const Point& where, float scale, float opacity
+    Sector* sPtr, const Point& where, float scale, float alpha
 ) {
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
@@ -1432,7 +1432,7 @@ void drawSectorTexture(
             float vy = vPtr->y;
             
             float alphaMult = 1;
-            float brightnessMult = textureSector[t]->brightness / 255.0;
+            float brightnessMult = textureSector[t]->brightness / 255.0f;
             
             if(t == 1) {
                 if(!drawSector0) {
@@ -1469,7 +1469,7 @@ void drawSectorTexture(
                         textureSector[t]->textureInfo.tint,
                         mapGray(brightnessMult * 255)
                     ),
-                    alphaMult * opacity
+                    alphaMult * alpha
                 );
         }
         

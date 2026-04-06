@@ -91,8 +91,8 @@ const float HIDE_UP_SPEED = 3.0f;
 
 namespace LEADER_PROMPT {
 
-//Leader prompt opacity.
-const unsigned char ALPHA = 160;
+//Leader prompt alpha [0 - 1].
+const float ALPHA = 0.66f;
 
 //How quickly it fades, in alpha per second.
 const float FADE_SPEED = 4.0f;
@@ -1045,7 +1045,7 @@ void LeaderPrompt::draw(const Viewport& view) const {
         Point(0, -bmpH * 0.5),
         Point(bmpW, bmpH),
         0,
-        mapAlpha(LEADER_PROMPT::ALPHA * visibility)
+        mapAlpha(LEADER_PROMPT::ALPHA * visibility * 255)
     );
     
     if(actionType != PLAYER_ACTION_TYPE_NONE) {
@@ -1076,7 +1076,7 @@ void LeaderPrompt::draw(const Viewport& view) const {
             textBoxX2 - textBoxX1,
             textBoxY2 - textBoxY1
         ),
-        mapAlpha(LEADER_PROMPT::ALPHA * visibility),
+        mapAlpha(LEADER_PROMPT::ALPHA * visibility * 255),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, TEXT_SETTING_FLAG_CANT_GROW
     );
     

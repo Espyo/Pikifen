@@ -526,13 +526,13 @@ void AnimationEditor::processGuiDialogOptions() {
             ImGui::Indent();
             
             //Remove background texture button.
-            unsigned char remBgOpacity =
-                game.options.animEd.bgPath.empty() ? 50 : 255;
+            float remBgAlpha =
+                game.options.animEd.bgPath.empty() ? 0.20f : 1.0f;
             if(
                 ImGui::ImageButton(
                     "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgOpacity)
+                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
                 )
             ) {
                 game.options.animEd.bgPath.clear();

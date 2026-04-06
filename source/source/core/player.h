@@ -102,10 +102,10 @@ struct Player {
     //Sector that the leader's cursor is on, if any.
     Sector* leaderCursorSector = nullptr;
     
-    //Amount of enemy or treasure points to show next to the leader cursor.
+    //Amount of enemy/treasure points to show near the leader cursor.
     int leaderCursorMobPoints = 0;
     
-    //Alpha of the enemy or treasure points to show next to the leader cursor.
+    //Alpha [0 - 1] of the enemy/treasure points to show near the leader cursor.
     float leaderCursorMobPointsAlpha = 0.0f;
     
     //Multiply the leader's walking speed by this.

@@ -47,8 +47,8 @@ const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
 const float DEBUG_TEXT_SCALE = 1.3f;
 
-//Default reference image opacity.
-const unsigned char DEF_REFERENCE_ALPHA = 128;
+//Default reference image alpha [0 - 1].
+const float DEF_REFERENCE_ALPHA = 0.50f;
 
 //Color to use for new lines when the user is drawing something.
 const ALLEGRO_COLOR DRAWING_NEW_LINE_COLOR = al_map_rgb(64, 255, 64);
@@ -2622,18 +2622,22 @@ void AreaEditor::loadReference() {
     
     if(fileWasOpened) {
         ReaderSetter rRS(&file);
+        unsigned char alphaC = 0;
+        DataNode* alphaNode = nullptr;
         
         rRS.set("file", referenceFilePath);
         rRS.set("center", referenceCenter);
         rRS.set("size", referenceSize);
-        rRS.set("alpha", referenceAlpha);
+        rRS.set("alpha", alphaC);
         rRS.set("visible", showReference);
+
+        referenceAlpha = alphaC / 255.0f;
         
     } else {
         referenceFilePath.clear();
         referenceCenter = Point();
         referenceSize = Point();
-        referenceAlpha = 0;
+        referenceAlpha = 0.0f;
         showReference = true;
     }
     

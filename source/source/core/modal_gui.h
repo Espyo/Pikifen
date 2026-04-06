@@ -25,7 +25,7 @@ using std::vector;
 
 
 namespace MODAL {
-extern const float BG_OPACITY;
+extern const float BG_ALPHA;
 extern const float BUTTON_MARGIN;
 extern const float CARET_BLINK_INTERVAL;
 extern const float FADE_DURATION;

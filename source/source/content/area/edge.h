@@ -45,13 +45,13 @@ struct Edge {
     //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
     float wallShadowLength = LARGE_FLOAT;
     
-    //Color of the wall shadow, opacity included.
+    //Color of the wall shadow, alpha included.
     ALLEGRO_COLOR wallShadowColor = GEOMETRY::SHADOW_DEF_COLOR;
     
     //Length of the ledge smoothing effect. 0 = none.
     float ledgeSmoothingLength = 0.0f;
     
-    //Color of the ledge smoothing effect, opacity included.
+    //Color of the ledge smoothing effect, alpha included.
     ALLEGRO_COLOR ledgeSmoothingColor = GEOMETRY::SMOOTHING_DEF_COLOR;
     
     

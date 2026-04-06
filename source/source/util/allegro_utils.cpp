@@ -79,7 +79,7 @@ string c2s(const ALLEGRO_COLOR& c) {
 /**
  * @brief Returns the color that was provided, but with the alpha changed.
  *
- * @param c The color to change the alpha on.
+ * @param c The color to change the alpha of.
  * @param a The new alpha, [0 - 255].
  * @return The new color.
  */
@@ -418,7 +418,7 @@ ALLEGRO_COLOR interpolateColor(
  * @brief Returns the color that was provided, but with the alpha multiplied
  * by a given value.
  *
- * @param c The color to change the alpha on.
+ * @param c The color to change the alpha of.
  * @param mult The multiplier.
  * @return The new color.
  */
@@ -541,25 +541,25 @@ ALLEGRO_COLOR s2c(const string& s) {
     string s2 = s;
     s2 = trimSpaces(s2);
     
-    unsigned char alpha = 255;
+    unsigned char alphaC = 255;
     vector<string> components = split(s2);
-    if(components.size() >= 2) alpha = s2i(components[1]);
+    if(components.size() >= 2) alphaC = s2i(components[1]);
     
     if(s2 == "nothing") return al_map_rgba(0,   0,   0,   0);
     if(s2 == "none")    return al_map_rgba(0,   0,   0,   0);
-    if(s2 == "black")   return al_map_rgba(0,   0,   0,   alpha);
-    if(s2 == "gray")    return al_map_rgba(128, 128, 128, alpha);
-    if(s2 == "grey")    return al_map_rgba(128, 128, 128, alpha);
-    if(s2 == "white")   return mapAlpha(alpha);
-    if(s2 == "yellow")  return al_map_rgba(255, 255, 0,   alpha);
-    if(s2 == "orange")  return al_map_rgba(255, 128, 0,   alpha);
-    if(s2 == "brown")   return al_map_rgba(128, 64,  0,   alpha);
-    if(s2 == "red")     return al_map_rgba(255, 0,   0,   alpha);
-    if(s2 == "violet")  return al_map_rgba(255, 0,   255, alpha);
-    if(s2 == "purple")  return al_map_rgba(128, 0,   255, alpha);
-    if(s2 == "blue")    return al_map_rgba(0,   0,   255, alpha);
-    if(s2 == "cyan")    return al_map_rgba(0,   255, 255, alpha);
-    if(s2 == "green")   return al_map_rgba(0,   255, 0,   alpha);
+    if(s2 == "black")   return al_map_rgba(0,   0,   0,   alphaC);
+    if(s2 == "gray")    return al_map_rgba(128, 128, 128, alphaC);
+    if(s2 == "grey")    return al_map_rgba(128, 128, 128, alphaC);
+    if(s2 == "white")   return mapAlpha(alphaC);
+    if(s2 == "yellow")  return al_map_rgba(255, 255, 0,   alphaC);
+    if(s2 == "orange")  return al_map_rgba(255, 128, 0,   alphaC);
+    if(s2 == "brown")   return al_map_rgba(128, 64,  0,   alphaC);
+    if(s2 == "red")     return al_map_rgba(255, 0,   0,   alphaC);
+    if(s2 == "violet")  return al_map_rgba(255, 0,   255, alphaC);
+    if(s2 == "purple")  return al_map_rgba(128, 0,   255, alphaC);
+    if(s2 == "blue")    return al_map_rgba(0,   0,   255, alphaC);
+    if(s2 == "cyan")    return al_map_rgba(0,   255, 255, alphaC);
+    if(s2 == "green")   return al_map_rgba(0,   255, 0,   alphaC);
     
     ALLEGRO_COLOR c =
         al_map_rgba(

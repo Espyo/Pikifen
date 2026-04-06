@@ -28,8 +28,8 @@ namespace HUD {
 //Delay before the control guide is allowed to appear.
 const float CONTROL_GUIDE_DELAY = 1.0f;
 
-//The control guide's opacity changes these many units per second.
-const float CONTROL_GUIDE_OPACITY_SPEED = 2.0f;
+//The control guide's alpha changes these many units per second.
+const float CONTROL_GUIDE_ALPHA_SPEED = 2.0f;
 
 //Smoothen the mission goal indicator's movement by this factor.
 const float GOAL_INDICATOR_SMOOTHNESS_FACTOR = 5.5f;
@@ -231,11 +231,11 @@ Hud::Hud() :
                         1.2f, 1.8f
                     );
                     
-                KeyframeInterpolator<unsigned char> alphaKeyframes(0);
-                alphaKeyframes.addNew(0.2f, 255);
-                alphaKeyframes.addNew(0.3f, 255);
-                alphaKeyframes.addNew(0.8f, 0);
-                alphaKeyframes.addNew(1.0f, 0);
+                KeyframeInterpolator<float> alphaKeyframes(0.0f);
+                alphaKeyframes.addNew(0.2f, 1.0f);
+                alphaKeyframes.addNew(0.3f, 1.0f);
+                alphaKeyframes.addNew(0.8f, 0.0f);
+                alphaKeyframes.addNew(1.0f, 0.0f);
                 
                 float cautionRingSize =
                     std::min(finalDraw.size.x, finalDraw.size.y) *
@@ -247,7 +247,7 @@ Hud::Hud() :
                     Point(cautionRingSize),
                     0.0f,
                     tintColor(
-                        mapAlpha(alphaKeyframes.get(animRatio)), draw.tint
+                        mapAlpha(alphaKeyframes.get(animRatio) * 255), draw.tint
                     )
                 );
             }
@@ -443,7 +443,7 @@ Hud::Hud() :
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_NEXT_TYPE, draw.center, draw.size,
             true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
     gui.addItem(standbyNextInput, "standby_next_input");
@@ -483,7 +483,7 @@ Hud::Hud() :
         drawPlayerActionInputSourceIcon(
             PLAYER_ACTION_TYPE_PREV_TYPE, draw.center, draw.size,
             true, game.sysContent.fntSlim,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
     gui.addItem(standbyPrevInput, "standby_prev_input");
@@ -521,7 +521,7 @@ Hud::Hud() :
         }
         
         ALLEGRO_COLOR color =
-            mapAlpha(this->standbyItemsOpacity * 255);
+            mapAlpha(this->standbyItemsAlpha * 255);
             
         if(standbyMatBmp) {
             drawBitmapInBox(
@@ -559,7 +559,7 @@ Hud::Hud() :
             bmpCounterBubbleStandby,
             draw.center, draw.size,
             0.0f,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
     gui.addItem(standbyBubble, "standby_bubble");
@@ -591,7 +591,7 @@ Hud::Hud() :
         drawText(
             i2s(nStandbyPikmin), game.sysContent.fntCounter,
             draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint),
+            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + standbyAmount->getJuiceValue())
         );
@@ -715,7 +715,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         drawText(
             "x", game.sysContent.fntCounter, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsOpacity * 255), draw.tint)
+            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
     gui.addItem(countersX, "counters_x");
@@ -784,7 +784,7 @@ Hud::Hud() :
     [this, controlGuide] (const DrawInfo & draw) {
         if(!game.options.misc.showControlGuide) return;
         DrawInfo drawWithAlpha = draw;
-        drawWithAlpha.tint.a *= controlGuideOpacity;
+        drawWithAlpha.tint.a *= controlGuideAlpha;
         drawFilledRoundedRectangle(
             draw.center, draw.size, 8.0f,
             tintColor(game.config.guiColors.pauseBg, drawWithAlpha.tint)
@@ -906,7 +906,7 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     if(!icon) return;
     
     ALLEGRO_COLOR color =
-        tintColor(mapAlpha(standbyItemsOpacity * 255), draw.tint);
+        tintColor(mapAlpha(standbyItemsAlpha * 255), draw.tint);
         
     drawBitmapInBox(icon, draw.center, draw.size * 0.8, true, 0.0f, color);
     
@@ -981,9 +981,9 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 draw.center, draw.size, 0.0f, draw.tint
             );
             float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
-            float clockHandOpacity = 1.0f;
+            float clockHandAlpha = 1.0f;
             if(game.states.gameplay->afterHours) {
-                clockHandOpacity = 0.3f;
+                clockHandAlpha = 0.3f;
             } else if(
                 itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_CLOCK_DOWN
             ) {
@@ -1007,7 +1007,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             drawBitmap(
                 game.sysContent.bmpClockHand,
                 draw.center, draw.size, clockHandAngle,
-                multAlpha(draw.tint, clockHandOpacity)
+                multAlpha(draw.tint, clockHandAlpha)
             );
         };
         analog->forceSquare = true;
@@ -1704,7 +1704,7 @@ void Hud::tick(float deltaT) {
     }
     standbyIconMgr.tick(deltaT);
     
-    //Update the standby items opacity.
+    //Update the standby items alpha.
     if(
         !player->leaderPtr ||
         player->leaderPtr->group->members.empty()
@@ -1712,16 +1712,16 @@ void Hud::tick(float deltaT) {
         if(standbyItemsFadeTimer > 0.0f) {
             standbyItemsFadeTimer -= deltaT;
         } else {
-            standbyItemsOpacity -=
+            standbyItemsAlpha -=
                 HUD::UNNECESSARY_ITEMS_FADE_OUT_SPEED * deltaT;
         }
     } else {
         standbyItemsFadeTimer =
             HUD::UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-        standbyItemsOpacity +=
+        standbyItemsAlpha +=
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * deltaT;
     }
-    standbyItemsOpacity = std::clamp(standbyItemsOpacity, 0.0f, 1.0f);
+    standbyItemsAlpha = std::clamp(standbyItemsAlpha, 0.0f, 1.0f);
     
     //Update the control guide.
     bool playerIsIdling = false;
@@ -1739,11 +1739,11 @@ void Hud::tick(float deltaT) {
         controlGuideActivityTimer = 0.0f;
     }
     if(controlGuideActivityTimer >= HUD::CONTROL_GUIDE_DELAY) {
-        controlGuideOpacity += HUD::CONTROL_GUIDE_OPACITY_SPEED * deltaT;
+        controlGuideAlpha += HUD::CONTROL_GUIDE_ALPHA_SPEED * deltaT;
     } else {
-        controlGuideOpacity -= HUD::CONTROL_GUIDE_OPACITY_SPEED * deltaT;
+        controlGuideAlpha -= HUD::CONTROL_GUIDE_ALPHA_SPEED * deltaT;
     }
-    controlGuideOpacity = std::clamp(controlGuideOpacity, 0.0f, 1.0f);
+    controlGuideAlpha = std::clamp(controlGuideAlpha, 0.0f, 1.0f);
     
     //Tick the GUI items proper.
     gui.tick(game.deltaT);

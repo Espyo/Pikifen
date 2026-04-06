@@ -151,8 +151,8 @@ uniform float shine_min_threshold;
 //Noise values above this will have full shine [0 - 1].
 uniform float shine_max_threshold;
 
-//Opacity of the liquid.
-uniform float opacity;
+//Alpha of the liquid [0 - 1].
+uniform float alpha;
 
 //Translation of the floor texture underneath the water.
 uniform vec2 tex_translation;
@@ -351,9 +351,9 @@ void main() {
 
     vec2 final_noise_value = vec2(raw_noise_value, raw_noise_value);
     final_noise_value.x *= distortion_amount.x;
-    final_noise_value.x *= opacity;
+    final_noise_value.x *= alpha;
     final_noise_value.y *= distortion_amount.y;
-    final_noise_value.y *= opacity;
+    final_noise_value.y *= alpha;
     final_noise_value = rotate(final_noise_value, tex_rotation);
 
     //Now that we have the noise value, let's fetch the texture coords.
@@ -368,7 +368,7 @@ void main() {
 
     //Liquid tint.
     float liq_alpha = surface_color.a * sector_brightness;
-    liq_alpha *= opacity;
+    liq_alpha *= alpha;
 
     //And add it to the final output!
     final_pixel.r = final_pixel.r + (surface_color.r - final_pixel.r) * liq_alpha;
@@ -410,7 +410,7 @@ void main() {
     //Multiply by alpha and brightness after, since we want these to apply no matter what.
     shine_scale *= sector_brightness;
     shine_scale *= shine_color.a;
-    shine_scale *= opacity;
+    shine_scale *= alpha;
 
     //Add the shine!
     final_pixel.r = final_pixel.r + (shine_color.r - final_pixel.r) * shine_scale;
@@ -464,8 +464,8 @@ uniform float area_time;
 //Multiply the general distortion by this much.
 uniform vec2 distortion_amount;
 
-//Opacity of the liquid.
-uniform float opacity;
+//Alpha of the liquid [0 - 1].
+uniform float alpha;
 
 //Texture for the colormap.
 uniform sampler2D colormap;
@@ -612,7 +612,7 @@ void main() {
     float raw_noise_value = simplex_noise(varying_texcoord, noise_func_scale, noise_func_step, 0.02);
     raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, noise_func_scale, noise_func_step, 0.02);
     vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
-    final_pixel.a = opacity;
+    final_pixel.a = alpha;
     final_pixel.r *= brightness;
     final_pixel.g *= brightness;
     final_pixel.b *= brightness;

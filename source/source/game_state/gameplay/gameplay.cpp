@@ -90,8 +90,8 @@ const float CAMERA_BOX_MARGIN = 128.0f;
 //Smoothen the camera's movements by this factor.
 const float CAMERA_SMOOTHNESS_FACTOR = 4.5f;
 
-//Opacity of the collision bubbles in the maker tool.
-const unsigned char COLLISION_OPACITY = 192;
+//Alpha of the collision bubbles in the maker tool [0 - 1].
+const float COLLISION_ALPHA = 0.75f;
 
 //If an enemy is this close to the active leader, turn on the song's enemy mix.
 const float ENEMY_MIX_DISTANCE = 150.0f;
@@ -117,8 +117,8 @@ const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
 const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
 
-//Opacity of the throw preview.
-const unsigned char PREVIEW_OPACITY = 160;
+//Alpha of the throw preview [0 - 1].
+const float PREVIEW_ALPHA = 0.66f;
 
 //Scale of the throw preview's effect texture.
 const float PREVIEW_TEXTURE_SCALE = 20.0f;
@@ -360,7 +360,7 @@ void GameplayMessageBox::tick(float deltaT) {
     misinputProtectionTimer -= deltaT;
     misinputProtectionTimer = std::max(0.0f, misinputProtectionTimer);
     
-    //Button opacity logic.
+    //Button alpha logic.
     if(
         transitionTimer == 0.0f &&
         misinputProtectionTimer == 0.0f &&
@@ -741,8 +741,8 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
     unsigned char* row = (unsigned char*) region->data;
     
     //We need to draw a radial gradient to represent the fog.
-    //Between the center and the "near" radius, the opacity is 0%.
-    //From there to the edge, the opacity fades to 100%.
+    //Between the center and the "near" radius, the alpha is 0%.
+    //From there to the edge, the alpha fades to 100%.
     //Because the every quadrant of the image is the same, just mirrored,
     //we only need to process the pixels on the top-left quadrant and then
     //apply them to the respective pixels on the other quadrants as well.

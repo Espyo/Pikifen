@@ -807,10 +807,10 @@ protected:
     //Style of the different things to draw in the canvas.
     struct CanvasStyle {
     
-        //Alpha for the selection effects.
+        //Alpha for the selection effects [0 - 1].
         float selectionAlpha = 0.75f;
         
-        //Grid alpha.
+        //Grid alpha [0 - 1].
         float gridAlpha = 1.0f;
         
         //Highlights color.

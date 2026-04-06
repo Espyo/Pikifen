@@ -1056,7 +1056,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     
     Point finalCenter = item->getReferenceCenter();
     Point finalSize = item->getReferenceSize();
-    unsigned char finalAlpha = 255;
+    float finalAlpha = 1.0f;
     
     if(animTimer.timeLeft > 0.0f) {
         switch(animType) {
@@ -1171,14 +1171,14 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         } case GUI_MANAGER_ANIM_FADE_IN: {
             finalAlpha =
                 interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 255, 0
+                    animTimer.getRatioLeft(), 0.0f, 1.0f, 1.0f, 0
                 );
             break;
             
         } case GUI_MANAGER_ANIM_FADE_OUT: {
             finalAlpha =
                 interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 255
+                    animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 1.0f
                 );
             break;
             
@@ -1191,7 +1191,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     
     draw->center = finalCenter;
     draw->size = finalSize;
-    draw->tint = mapAlpha(finalAlpha);
+    draw->tint = mapAlpha(finalAlpha * 255);
     return true;
 }
 
@@ -2218,17 +2218,17 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         float barY = 0.0f; //Top, in height ratio.
         float barH = 0.0f; //In height ratio.
         float listBottom = listItem->getChildrenSpan();
-        unsigned char alpha = 48;
+        float alpha = 0.20f;
         if(listBottom > 1.0f) {
             float offset = std::min(listItem->offset.y, listBottom - 1.0f);
             barY = offset / listBottom;
             barH = 1.0f / listBottom;
-            alpha = 128;
+            alpha = 0.50f;
         }
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(mapAlpha(alpha), draw.tint)
+            tintColor(mapAlpha(alpha * 255), draw.tint)
         );
         
         if(barH != 0.0f) {
@@ -2247,17 +2247,17 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         float barX = 0.0f; //Left, in width ratio.
         float barW = 0.0f; //In width ratio.
         float listDepth = listItem->getChildrenSpan(true);
-        unsigned char alpha = 48;
+        float alpha = 0.20f;
         if(listDepth > 1.0f) {
             float offset = std::min(listItem->offset.x, listDepth - 1.0f);
             barX = offset / listDepth;
             barW = 1.0f / listDepth;
-            alpha = 128;
+            alpha = 0.50f;
         }
         
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
-            tintColor(mapAlpha(alpha), draw.tint)
+            tintColor(mapAlpha(alpha * 255), draw.tint)
         );
         
         if(barW != 0.0f) {

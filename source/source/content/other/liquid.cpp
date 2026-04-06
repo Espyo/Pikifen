@@ -31,7 +31,7 @@ const float DRAIN_DURATION = 2.0f;
 const float FREEZING_EFFECT_DURATION = 0.3f;
 
 //How opaque the sheet of ice is [0 - 1].
-const float FREEZING_OPACITY = 0.8f;
+const float FREEZING_ALPHA = 0.8f;
 
 //Multiply the liquid's surface area by this to get the freezing point.
 const float FREEZING_POINT_AREA_MULT = 0.0003f;
@@ -232,19 +232,19 @@ vector<Mob*> Liquid::getMobsOn() const {
 /**
  * @brief Returns whether the liquid is currently frozen.
  *
- * @param thawOpacity If it's just about to thaw, the opacity of the ice
+ * @param thawAlpha If it's just about to thaw, the alpha of the ice
  * is returned here [0 - 1]. Otherwise, 0 is returned.
- * @param flashOpacity If it's just been frozen, the opacity of the white flash
+ * @param flashAlpha If it's just been frozen, the alpha of the white flash
  * is returned here [0 - 1]. Otherwise, 0 is returned.
  * @param cracked If it's getting close to thawing, true is returned here so
  * the ice texture can be drawn cracked. Otherwise, false is returned.
  * @return Whether it is frozen.
  */
 bool Liquid::isFrozen(
-    float* thawOpacity, float* flashOpacity, bool* cracked
+    float* thawAlpha, float* flashAlpha, bool* cracked
 ) const {
-    *thawOpacity = 0.0f;
-    *flashOpacity = 0.0f;
+    *thawAlpha = 0.0f;
+    *flashAlpha = 0.0f;
     *cracked = false;
     
     if(freezingPoint == 0) return false;
@@ -252,7 +252,7 @@ bool Liquid::isFrozen(
     if(state == LIQUID_STATE_THAWING) {
         float timeLeft = LIQUID::THAW_DURATION - stateTime;
         if(timeLeft < LIQUID::THAW_EFFECT_DURATION) {
-            *thawOpacity = timeLeft / LIQUID::THAW_EFFECT_DURATION;
+            *thawAlpha = timeLeft / LIQUID::THAW_EFFECT_DURATION;
         }
         if(timeLeft < LIQUID::THAW_CRACKED_DURATION) {
             *cracked = true;
@@ -261,7 +261,7 @@ bool Liquid::isFrozen(
     }
     if(state == LIQUID_STATE_FROZEN) {
         if(stateTime < LIQUID::FREEZING_EFFECT_DURATION) {
-            *flashOpacity =
+            *flashAlpha =
                 1.0f - (stateTime / LIQUID::FREEZING_EFFECT_DURATION);
         }
         return true;

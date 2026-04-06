@@ -105,7 +105,7 @@ void Ship::drawMob() {
             );
         ringAnimRatio /= SHIP::CONTROL_POINT_ANIM_DUR;
         
-        unsigned char ringAlpha = 120;
+        float ringAlpha = 0.45f;
         
         if(ringAnimRatio <= 0.3f) {
             //Fading into existence.
@@ -138,7 +138,7 @@ void Ship::drawMob() {
             game.sysContent.bmpBrightRing,
             controlPointFinalPos, Point(ringDiameter),
             0.0f,
-            changeAlpha(ringColor, ringAlpha)
+            changeAlpha(ringColor, ringAlpha * 255)
         );
     }
     
@@ -149,7 +149,7 @@ void Ship::drawMob() {
         float ringAnimRatio =
             beamRings[r] / SHIP::BEAM_RING_ANIM_DUR;
             
-        unsigned char ringAlpha = 80;
+        float ringAlpha = 0.30f;
         if(ringAnimRatio <= 0.3f) {
             //Fading into existence.
             ringAlpha =
@@ -177,7 +177,7 @@ void Ship::drawMob() {
             
         ALLEGRO_COLOR ringColor =
             al_color_hsl(beamRingColors[r], 1.0f, ringBrightness);
-        ringColor = changeAlpha(ringColor, ringAlpha);
+        ringColor = changeAlpha(ringColor, ringAlpha * 255);
         
         float ringScale =
             interpolateNumber(

@@ -42,7 +42,7 @@ const float DISMISS_ANGLE_RANGE = TAU / 2;
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
 
-//Opacity of the dismiss particles.
+//Alpha of the dismiss particles [0 - 1].
 const float DISMISS_PARTICLE_ALPHA = 1.0f;
 
 //Amount of dismiss particles to spawn.
@@ -93,7 +93,7 @@ const float INVULN_PERIOD_NORMAL = 1.5f;
 //Seconds that need to pass before another swarm arrow appears.
 const float SWARM_ARROW_INTERVAL = 0.1f;
 
-//Swarm particle opacity.
+//Swarm particle alpha [0 - 1].
 const float SWARM_PARTICLE_ALPHA = 0.8f;
 
 //Swarm particle random angle deviation.
@@ -349,15 +349,17 @@ void Leader::dismissDetails() {
     game.audio.addNewMobSoundSource(sound->sample, this, false, soundConfig);
     
     //Particles.
-    unsigned char particleAlpha =
-        LEADER::DISMISS_PARTICLE_ALPHA * 255 *
+    float particleAlpha =
+        LEADER::DISMISS_PARTICLE_ALPHA *
         (group->members.empty() ? 0.75f : 1.0f);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
         Particle par;
         const unsigned char* colorIdx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
         ALLEGRO_COLOR c =
-            al_map_rgba(colorIdx[0], colorIdx[1], colorIdx[2], particleAlpha);
+            al_map_rgba(
+                colorIdx[0], colorIdx[1], colorIdx[2], particleAlpha * 255
+            );
         par.color.setKeyframeValue(0, c);
         par.color.addNew(1, changeAlpha(c, 0));
         par.bitmap = game.sysContent.bmpBrightCircle;

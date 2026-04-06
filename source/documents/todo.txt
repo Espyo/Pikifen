@@ -46,7 +46,7 @@ Next tasks (roughly sorted most important first)
         Standard cursor color
         Colors for "system" feel; basically the blue tones used throughout
         The medal colors
-    Standardize usages of "alpha" and "opacity" in the code
+    Tree shadows and references should use a tint property instead of just opacity
     Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on

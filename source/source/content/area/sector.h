@@ -92,7 +92,7 @@ struct Sector {
     //Extra information, if any.
     string vars;
     
-    //Brightness.
+    //Brightness [0 - 255].
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
     
     //Information about its texture.

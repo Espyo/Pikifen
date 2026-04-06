@@ -328,7 +328,7 @@ void AreaEditor::drawCanvas() {
             referenceCenter,
             referenceSize,
             0,
-            mapAlpha(referenceAlpha)
+            mapAlpha(referenceAlpha * 255)
         );
         
         if(state == EDITOR_STATE_TOOLS) {
@@ -1935,7 +1935,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                     -sPtr->pose.size.y / 2.0,
                     sPtr->pose.size.x / 2.0,
                     sPtr->pose.size.y / 2.0,
-                    mapAlpha(96 * (sPtr->alpha / 255.0))
+                    mapAlpha(sPtr->alpha * 96)
                 );
                 
                 al_use_transform(&current);
@@ -1943,7 +1943,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
             
             drawBitmap(
                 sPtr->bitmap, sPtr->pose.pos, sPtr->pose.size,
-                sPtr->pose.angle, mapAlpha(sPtr->alpha)
+                sPtr->pose.angle, mapAlpha(sPtr->alpha * 255)
             );
             
             if(state == EDITOR_STATE_DETAILS) {

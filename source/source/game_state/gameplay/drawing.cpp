@@ -820,7 +820,7 @@ void GameplayState::drawGameplayMessageBox() {
             
             float x = caret;
             float y = startY + lineHeight * l;
-            unsigned char alpha = 255;
+            float alpha = 1.0f;
             float thisTokenAnimTime;
             
             //Change the token's position and alpha, if it needs animating.
@@ -847,7 +847,7 @@ void GameplayState::drawGameplayMessageBox() {
                 y +=
                     GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
                     ease(ratio, EASE_METHOD_UP_AND_DOWN_ELASTIC);
-                alpha = ratio * 255;
+                alpha = ratio;
             }
             
             //Now, for the swiping animation.
@@ -860,7 +860,7 @@ void GameplayState::drawGameplayMessageBox() {
                     );
                 x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
                 y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
-                alpha = std::max(0, (signed int) (alpha - ratio * 255));
+                alpha = std::max(0.0f, alpha - ratio);
             }
             
             //Actually draw it now.
@@ -871,7 +871,7 @@ void GameplayState::drawGameplayMessageBox() {
                     curToken.content, game.sysContent.fntStandard,
                     Point(x, y),
                     Point(tokenFinalWidth, LARGE_FLOAT),
-                    mapAlpha(alpha),
+                    mapAlpha(alpha * 255),
                     ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
                     Point(xScale, 1.0f)
                 );
@@ -1305,15 +1305,15 @@ void GameplayState::drawLeaderCursor(
                         WHISTLE::DOT_COLORS[d][1],
                         WHISTLE::DOT_COLORS[d][2]
                     );
-                unsigned char dotAlpha = 255;
+                float dotAlpha = 1.0f;
                 if(player->whistle.fadeTimer.timeLeft > 0.0f) {
-                    dotAlpha = 255 * player->whistle.fadeTimer.getRatioLeft();
+                    dotAlpha = player->whistle.fadeTimer.getRatioLeft();
                 }
                 
                 drawBitmap(
                     game.sysContent.bmpBrightCircle,
                     dotPos, Point(5.0f),
-                    0.0f, changeAlpha(dotColor, dotAlpha)
+                    0.0f, changeAlpha(dotColor, dotAlpha * 255)
                 );
             }
         }
@@ -1531,7 +1531,7 @@ void GameplayState::drawOnionMenu() {
         );
         al_set_shader_float("area_time", game.timePassed);
         al_set_shader_float("brightness", 0.4f);
-        al_set_shader_float("opacity", 0.8f * onionMenu->bgAlphaMult);
+        al_set_shader_float("alpha", 0.8f * onionMenu->bgAlphaMult);
         
         drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
         al_use_shader(nullptr);
@@ -1647,7 +1647,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                 player->leaderPtr->pos, player->throwDest,
                 changeAlpha(
                     game.config.aestheticGen.noPikminColor,
-                    GAMEPLAY::PREVIEW_OPACITY / 2.0f
+                    GAMEPLAY::PREVIEW_ALPHA / 2.0f * 255
                 ),
                 0.0f, 1.0f, false
             );
@@ -1780,7 +1780,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                 player->leaderPtr->pos, player->throwDest,
                 changeAlpha(
                     player->leaderPtr->throwee->type->mainColor,
-                    GAMEPLAY::PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_ALPHA * 255
                 ),
                 textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
             );
@@ -1813,7 +1813,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                     player->leaderPtr->pos, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
-                        GAMEPLAY::PREVIEW_OPACITY
+                        GAMEPLAY::PREVIEW_ALPHA * 255
                     ),
                     textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
@@ -1830,7 +1830,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                 collisionPoint, Point(32.0f), throwHAngle,
                 changeAlpha(
                     player->leaderPtr->throwee->type->mainColor,
-                    GAMEPLAY::PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_ALPHA * 255
                 )
             );
             
@@ -1843,7 +1843,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                     player->leaderPtr->pos, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
-                        GAMEPLAY::COLLISION_OPACITY
+                        GAMEPLAY::COLLISION_ALPHA * 255
                     ),
                     textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
@@ -1861,7 +1861,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                     player->leaderPtr->pos, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
-                        GAMEPLAY::PREVIEW_OPACITY
+                        GAMEPLAY::PREVIEW_ALPHA * 255
                     ),
                     0.0f, 1.0f, true
                 );
@@ -1878,7 +1878,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                 collisionPoint, Point(16.0f), throwHAngle,
                 changeAlpha(
                     player->leaderPtr->throwee->type->mainColor,
-                    GAMEPLAY::PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_ALPHA * 255
                 )
             );
             
@@ -1949,11 +1949,9 @@ void GameplayState::drawTreeShadows() {
     forIdx(s, game.curArea->treeShadows) {
         TreeShadow* sPtr = game.curArea->treeShadows[s];
         
-        unsigned char alpha =
-            (
-                (sPtr->alpha / 255.0) *
-                game.curArea->weatherCondition.getSunStrength()
-            ) * 255;
+        float alpha =
+            sPtr->alpha *
+            game.curArea->weatherCondition.getSunStrength();
             
         drawBitmap(
             sPtr->bitmap,
@@ -1966,7 +1964,7 @@ void GameplayState::drawTreeShadows() {
                 sPtr->sway.y
             ),
             sPtr->pose.size,
-            sPtr->pose.angle, mapAlpha(alpha)
+            sPtr->pose.angle, mapAlpha(alpha * 255)
         );
     }
 }
@@ -2185,14 +2183,14 @@ void GameplayState::drawWorldComponents(
             bool mustDrawIce = false;
             
             bool frozen = false;
-            float frozenFlashEffectOpacity = 0.0f;
-            float frozenThawEffectOpacity = 0.0f;
+            float frozenFlashEffectAlpha = 0.0f;
+            float frozenThawEffectAlpha = 0.0f;
             bool cracked = false;
             
             if(cPtr->sectorPtr->liquid) {
                 frozen =
                     cPtr->sectorPtr->liquid->isFrozen(
-                        &frozenThawEffectOpacity, &frozenFlashEffectOpacity,
+                        &frozenThawEffectAlpha, &frozenFlashEffectAlpha,
                         &cracked
                     );
             }
@@ -2203,7 +2201,7 @@ void GameplayState::drawWorldComponents(
                 mustDrawLiquid = true;
             } else {
                 mustDrawIce = true;
-                if(frozenThawEffectOpacity > 0.0f) {
+                if(frozenThawEffectAlpha > 0.0f) {
                     mustDrawLiquid = true;
                 } else {
                     mustDrawGround = true;
@@ -2214,12 +2212,12 @@ void GameplayState::drawWorldComponents(
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
             if(mustDrawLiquid) {
-                float drainOpacity = 1.0f;
+                float drainAlpha = 1.0f;
                 if(
                     cPtr->sectorPtr->liquid &&
                     cPtr->sectorPtr->liquid->state == LIQUID_STATE_DRAINING
                 ) {
-                    drainOpacity =
+                    drainAlpha =
                         (
                             LIQUID::DRAIN_DURATION -
                             cPtr->sectorPtr->liquid->stateTime
@@ -2229,20 +2227,20 @@ void GameplayState::drawWorldComponents(
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->liquid->hazard->associatedLiquid,
-                    Point(), 1.0f, areaTimePassed, drainOpacity
+                    Point(), 1.0f, areaTimePassed, drainAlpha
                 );
                 drawSectorEdgeOffsets(
                     cPtr->sectorPtr,
                     bmpOutput ?
                     customLiquidLimitEffectBuffer :
                     game.liquidLimitEffectBuffer,
-                    drainOpacity, view
+                    drainAlpha, view
                 );
             }
             if(mustDrawIce) {
                 drawSectorIce(
-                    cPtr->sectorPtr, Point(), 1.0f, LIQUID::FREEZING_OPACITY,
-                    frozenThawEffectOpacity, frozenFlashEffectOpacity, cracked
+                    cPtr->sectorPtr, Point(), 1.0f, LIQUID::FREEZING_ALPHA,
+                    frozenThawEffectAlpha, frozenFlashEffectAlpha, cracked
                 );
             }
             

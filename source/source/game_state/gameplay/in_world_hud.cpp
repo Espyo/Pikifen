@@ -55,8 +55,8 @@ const float TRANSITION_OUT_DURATION = 0.5f;
 
 namespace IN_WORLD_HEALTH_WHEEL {
 
-//Standard opacity.
-const float OPACITY = 0.85f;
+//Standard alpha [0 - 1].
+const float ALPHA = 0.85f;
 
 //Padding between mob and wheel.
 const float PADDING = 4.0f;
@@ -81,8 +81,8 @@ const float CORNER_RADIUS = 0.20f;
 //Height of each bar.
 const float HEIGHT = 16.0f;
 
-//Standard opacity [0 - 1].
-const float OPACITY = 0.85f;
+//Standard alpha [0 - 1].
+const float ALPHA = 0.85f;
 
 //Size of the dark outline between the total bar and the filled portion.
 const float OUTLINE_SIZE = 2.0f;
@@ -358,7 +358,7 @@ void InWorldHealthWheel::draw() {
     drawHealth(
         Point(m->pos.x, m->pos.y - curYOffset),
         visibleRatio,
-        IN_WORLD_HEALTH_WHEEL::OPACITY * alphaMult,
+        IN_WORLD_HEALTH_WHEEL::ALPHA * alphaMult,
         wheelRadius
     );
     
@@ -377,7 +377,7 @@ void InWorldHealthWheel::draw() {
             buildupBarSize,
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
             changeAlpha(
-                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::OPACITY * alphaMult
+                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
             )
         );
         
@@ -395,7 +395,7 @@ void InWorldHealthWheel::draw() {
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
             changeAlpha(
                 sPtr->type->color,
-                255 * IN_WORLD_STATUS_BUILDUP::OPACITY * alphaMult
+                255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
             )
         );
     }

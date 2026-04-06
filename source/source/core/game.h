@@ -37,7 +37,7 @@
 
 namespace GAME {
 extern const ALLEGRO_COLOR CURSOR_STANDARD_COLOR;
-extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
+extern const float CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;
 extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const float CURSOR_TRAIL_SAVE_INTERVAL;

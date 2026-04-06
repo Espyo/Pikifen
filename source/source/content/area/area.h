@@ -153,8 +153,8 @@ struct TreeShadow {
     //Positional data.
     Pose2d pose;
     
-    //Opacity.
-    unsigned char alpha = 255;
+    //Alpha [0 - 1].
+    float alpha = 1.0f;
     
     //Swaying is multiplied by this.
     Point sway;
@@ -164,7 +164,7 @@ struct TreeShadow {
     
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
-        float angle = 0, unsigned char alpha = 255,
+        float angle = 0, float alpha = 1.0f,
         const string& bmpName = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();

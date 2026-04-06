@@ -1565,11 +1565,11 @@ void AreaEditor::processGuiPanelDetails() {
                     "", WIDGET_EXPLANATION_SLIDER
                 );
                 
-                //Tree shadow opacity value.
-                int shadowOpacity = curShadow->alpha;
-                if(ImGui::SliderInt("Opacity", &shadowOpacity, 0, 255)) {
+                //Tree shadow alpha value.
+                float shadowAlpha = curShadow->alpha;
+                if(ImGui::SliderFloat("Opacity", &shadowAlpha, 0.0f, 1.0f)) {
                     registerChange("tree shadow opacity change");
-                    curShadow->alpha = shadowOpacity;
+                    curShadow->alpha = shadowAlpha;
                 }
                 setTooltip(
                     "How opaque the tree shadow is.",
@@ -2403,13 +2403,12 @@ void AreaEditor::processGuiPanelInfo() {
     if(saveableTreeNode("info", "Thumbnail")) {
     
         //Remove thumbnail button.
-        unsigned char remThumbOpacity =
-            !game.curArea->thumbnail ? 50 : 255;
+        float remThumbAlpha = !game.curArea->thumbnail ? 0.20f : 1.0f;
         if(
             ImGui::ImageButton(
                 "remThumbButton", editorIcons[EDITOR_ICON_REMOVE],
                 Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                COLOR_EMPTY, mapAlpha(remThumbOpacity)
+                COLOR_EMPTY, mapAlpha(remThumbAlpha * 255)
             ) &&
             game.curArea->thumbnail
         ) {
@@ -2480,13 +2479,12 @@ void AreaEditor::processGuiPanelInfo() {
     if(saveableTreeNode("info", "Background")) {
     
         //Remove background texture button.
-        unsigned char remBgOpacity =
-            game.curArea->bgBmpName.empty() ? 50 : 255;
+        float remBgAlpha = game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
         if(
             ImGui::ImageButton(
                 "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                 Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                COLOR_EMPTY, mapAlpha(remBgOpacity)
+                COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
             ) &&
             !game.curArea->bgBmpName.empty()
         ) {
@@ -5826,12 +5824,12 @@ void AreaEditor::processGuiPanelTools() {
     if(saveableTreeNode("tools", "Reference image")) {
     
         //Remove reference image button.
-        unsigned char remRefOpacity = referenceFilePath.empty() ? 50 : 255;
+        float remRefAlpha = referenceFilePath.empty() ? 0.20f : 1.0f;
         if(
             ImGui::ImageButton(
                 "remRefButton", editorIcons[EDITOR_ICON_REMOVE],
                 Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                COLOR_EMPTY, mapAlpha(remRefOpacity)
+                COLOR_EMPTY, mapAlpha(remRefAlpha * 255)
             )
         ) {
             referenceFilePath.clear();
@@ -5898,10 +5896,10 @@ void AreaEditor::processGuiPanelTools() {
         ImGui::Unindent();
         setTooltip("Keep the aspect ratio when resizing the image.");
         
-        //Reference opacity value.
-        int opacity = referenceAlpha;
-        ImGui::SliderInt("Opacity", &opacity, 0, 255);
-        referenceAlpha = opacity;
+        //Reference alpha value.
+        float alpha = referenceAlpha;
+        ImGui::SliderFloat("Opacity", &alpha, 0.0f, 1.0f);
+        referenceAlpha = alpha;
         setTooltip(
             "How opaque it is.",
             "", WIDGET_EXPLANATION_SLIDER
@@ -6109,14 +6107,14 @@ void AreaEditor::processGuiToolbar() {
     );
     
     //Undo button.
-    unsigned char undoOpacity = undoHistory.empty() ? 50 : 255;
+    float undoAlpha = undoHistory.empty() ? 0.20f : 1.0f;
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
             "undoButton", editorIcons[EDITOR_ICON_UNDO],
             Point(EDITOR::ICON_BMP_SIZE),
             Point(0.0f), Point(1.0f),
-            COLOR_EMPTY, mapAlpha(undoOpacity)
+            COLOR_EMPTY, mapAlpha(undoAlpha * 255)
         )
     ) {
         undoCmd(1.0f);
@@ -6133,14 +6131,14 @@ void AreaEditor::processGuiToolbar() {
     );
     
     //Redo button.
-    unsigned redoOpacity = redoHistory.empty() ? 50 : 255;
+    float redoAlpha = redoHistory.empty() ? 0.20f : 1.0f;
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "redoButton", editorIcons[EDITOR_ICON_UNDO],
             Point(EDITOR::ICON_BMP_SIZE),
             Point(1.0f, 0.0f), Point(0.0f, 1.0f),
-            COLOR_EMPTY, mapAlpha(redoOpacity)
+            COLOR_EMPTY, mapAlpha(redoAlpha * 255)
         )
     ) {
         redoCmd(1.0f);
@@ -6175,19 +6173,19 @@ void AreaEditor::processGuiToolbar() {
             "Ctrl + R"
         );
         
-        //Reference image opacity value.
-        int referenceAlphaInt = referenceAlpha;
+        //Reference image alpha value.
+        float referenceAlphaF = referenceAlpha;
         ImGui::SameLine();
         ImGui::BeginGroup();
         ImGui::Dummy(ImVec2(0.0f, 0.0f));
         ImGui::SetNextItemWidth(48.0f);
-        ImGui::SliderInt("##refAlpha", &referenceAlphaInt, 0, 255, "");
+        ImGui::SliderFloat("##refAlpha", &referenceAlphaF, 0.0f, 1.0f, "");
         setTooltip(
             "Opacity of the reference image.",
             "", WIDGET_EXPLANATION_SLIDER
         );
         ImGui::EndGroup();
-        referenceAlpha = referenceAlphaInt;
+        referenceAlpha = referenceAlphaF;
         
     }
     

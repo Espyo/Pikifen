@@ -19,7 +19,7 @@
 
 namespace HUD {
 extern const float CONTROL_GUIDE_DELAY;
-extern const float CONTROL_GUIDE_OPACITY_SPEED;
+extern const float CONTROL_GUIDE_ALPHA_SPEED;
 extern const float GOAL_INDICATOR_SMOOTHNESS_FACTOR;
 extern const string GUI_FILE_NAME;
 extern const float HEALTH_SHAKE_MAX_OFFSET;
@@ -155,8 +155,8 @@ struct Hud {
     //Bubble manager for the standby type.
     HudBubbleManager<ALLEGRO_BITMAP*> standbyIconMgr;
     
-    //Opacity of the standby HUD items.
-    float standbyItemsOpacity = 0.0f;
+    //Alpha of the standby HUD items [0 - 1].
+    float standbyItemsAlpha = 0.0f;
     
     //Time left before the standby items start fading out.
     float standbyItemsFadeTimer = 0.0f;
@@ -167,8 +167,8 @@ struct Hud {
     //Maturity icon in the previous frame.
     ALLEGRO_BITMAP* prevMaturityIcon = nullptr;
     
-    //Opacity of the control guide HUD item.
-    float controlGuideOpacity = 0.0f;
+    //Alpha of the control guide HUD item [0 - 1].
+    float controlGuideAlpha = 0.0f;
     
     //Time since the player last moved, for the control guide.
     float controlGuideActivityTimer = 0.0f;

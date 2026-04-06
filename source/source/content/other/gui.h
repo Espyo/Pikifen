@@ -852,7 +852,7 @@ protected:
         //Intended base width and height.
         Point intendedSize;
         
-        //Current base opacity [0 - 1].
+        //Current base alpha [0 - 1].
         float alpha = 0.0f;
         
     } focusCursor;

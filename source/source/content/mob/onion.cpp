@@ -37,8 +37,8 @@ const float NEW_SEED_Z_OFFSET = 320.0f;
 //Interval between each individual Pikmin generation.
 const float NEXT_GENERATION_INTERVAL = 0.10f;
 
-//Onion opacity when it goes see-through.
-const unsigned char SEETHROUGH_ALPHA = 128;
+//Onion alpha when it goes see-through [0 - 1].
+const float SEETHROUGH_ALPHA = 0.5f;
 
 //After spitting a seed, the next seed's angle shifts by this much.
 const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
@@ -124,7 +124,7 @@ void Onion::drawMob() {
         (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
     );
     
-    eff.tintColor.a *= (seethrough / 255.0f);
+    eff.tintColor.a *= seethrough;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
@@ -251,7 +251,7 @@ void Onion::tickClassSpecifics(float deltaT) {
     nextGenerationTimer.tick(deltaT);
     
     //See-through effect.
-    unsigned char finalAlpha = 255;
+    float finalAlpha = 1.0f;
     
     for(const Player& player : game.states.gameplay->players) {
         if(!player.leaderPtr) continue;
@@ -278,14 +278,12 @@ void Onion::tickClassSpecifics(float deltaT) {
         if(finalAlpha < seethrough) {
             seethrough =
                 std::max(
-                    (double) finalAlpha,
-                    (double) seethrough - ONION::FADE_SPEED * deltaT
+                    finalAlpha, seethrough - ONION::FADE_SPEED * deltaT
                 );
         } else {
             seethrough =
                 std::min(
-                    (double) finalAlpha,
-                    (double) seethrough + ONION::FADE_SPEED * deltaT
+                    finalAlpha, seethrough + ONION::FADE_SPEED * deltaT
                 );
         }
     }

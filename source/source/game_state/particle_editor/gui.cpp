@@ -463,13 +463,13 @@ void ParticleEditor::processGuiDialogOptions() {
             ImGui::Indent();
             
             //Remove background texture button.
-            unsigned char remBgOpacity =
-                game.options.partEd.bgPath.empty() ? 50 : 255;
+            float remBgAlpha =
+                game.options.partEd.bgPath.empty() ? 0.20f : 1.0f;
             if(
                 ImGui::ImageButton(
                     "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgOpacity)
+                    COLOR_EMPTY, mapAlpha(remBgAlpha)
                 )
             ) {
                 game.options.partEd.bgPath.clear();
@@ -1146,13 +1146,13 @@ void ParticleEditor::processGuiPanelGenerator() {
         if(openImageNode) {
         
             //Remove bitmap button.
-            unsigned char remBmpOpacity =
-                loadedGen.baseParticle.bmpName.empty() ? 50 : 255;
+            float remBmpAlpha =
+                loadedGen.baseParticle.bmpName.empty() ? 0.20f : 1.0f;
             if(
                 ImGui::ImageButton(
                     "remBmpButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBmpOpacity)
+                    COLOR_EMPTY, mapAlpha(remBmpAlpha)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,

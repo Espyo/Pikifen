@@ -130,11 +130,11 @@ void drawHealth(
 );
 void drawLiquid(
     Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
-    float time, float drainOpacity
+    float time, float drainAlpha
 );
 void drawLoadingScreen(
     const string& areaName, const string& subtitle, const string& maker,
-    float opacity
+    float alpha
 );
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
@@ -152,14 +152,14 @@ void drawInputSourceIcon(
     const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawSectorTexture(
-    Sector* sPtr, const Point& where, float scale, float opacity
+    Sector* sPtr, const Point& where, float scale, float alpha
 );
 void drawSectorIce(
-    Sector* sPtr, const Point& where, float scale, float opacity,
-    float thawEffectOpacity, float flashEffectOpacity, bool cracked
+    Sector* sPtr, const Point& where, float scale, float alpha,
+    float thawEffectAlpha, float flashEffectAlpha, bool cracked
 );
 void drawSectorEdgeOffsets(
-    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity, const Viewport& view
+    Sector* sPtr, ALLEGRO_BITMAP* buffer, float alpha, const Viewport& view
 );
 void drawMobShadow(
     const Mob* m,

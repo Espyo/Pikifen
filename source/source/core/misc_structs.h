@@ -69,7 +69,7 @@ extern const float HIDE_UP_SPEED;
 
 
 namespace LEADER_PROMPT {
-extern const unsigned char ALPHA;
+extern const float ALPHA;
 extern const float FADE_SPEED;
 extern const float INPUT_SIZE;
 extern const float PADDING;

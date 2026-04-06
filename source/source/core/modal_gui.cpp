@@ -21,8 +21,8 @@ using DrawInfo = GuiItem::DrawInfo;
 
 namespace MODAL {
 
-//Background opacity [0 - 1].
-const float BG_OPACITY = 0.8f;
+//Background alpha [0 - 1].
+const float BG_ALPHA = 0.8f;
 
 //Space between each button.
 const float BUTTON_MARGIN = 0.05f;
@@ -67,21 +67,21 @@ void ModalGuiManager::close() {
 void ModalGuiManager::draw() {
     if(!visible) return;
     
-    float opacityMult;
+    float alphaMult;
     if(animType == GUI_MANAGER_ANIM_FADE_OUT) {
-        opacityMult = animTimer.getRatioLeft();
+        alphaMult = animTimer.getRatioLeft();
     } else {
-        opacityMult = 1.0f - animTimer.getRatioLeft();
+        alphaMult = 1.0f - animTimer.getRatioLeft();
     }
     
     al_draw_filled_rectangle(
         0, 0, game.winW, game.winH,
-        multAlpha(game.config.guiColors.pauseBg, opacityMult)
+        multAlpha(game.config.guiColors.pauseBg, alphaMult)
     );
     drawBitmap(
         game.sysContent.bmpVignette,
         Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
-        multAlpha(game.config.guiColors.pauseVignette, opacityMult)
+        multAlpha(game.config.guiColors.pauseVignette, alphaMult)
     );
     
     GuiManager::draw();

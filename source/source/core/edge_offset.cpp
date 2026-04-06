@@ -35,9 +35,9 @@ void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx,
     const Viewport& view
 ) {
-    //Keep the end opacity as a constant, since changing it helps with
+    //Keep the end alpha as a constant, since changing it helps with
     //engine debugging.
-    const float END_OPACITY = 0.0f;
+    const float END_ALPHA = 0.0f;
     Edge* ePtr = game.curArea->edges[eIdx];
     
     //End vertexes. Like in updateOffsetEffectCaches, order is important.
@@ -123,12 +123,12 @@ void drawEdgeOffsetOnBuffer(
     av[2].x = endRelCoords[1].x + av[1].x;
     av[2].y = endRelCoords[1].y + av[1].y;
     av[2].color = endColors[1];
-    av[2].color.a = END_OPACITY;
+    av[2].color.a = END_ALPHA;
     av[2].z = 0;
     av[3].x = endRelCoords[0].x + av[0].x;
     av[3].y = endRelCoords[0].y + av[0].y;
     av[3].color = endColors[0];
-    av[3].color.a = END_OPACITY;
+    av[3].color.a = END_ALPHA;
     av[3].z = 0;
     
     //Let's transform the "rectangle" coordinates for the buffer.
@@ -165,7 +165,7 @@ void drawEdgeOffsetOnBuffer(
                 endVertexes[e]->y + elbowRelCoords[e][v].y;
             elbowAV[e][v + 2].z = 0.0f;
             elbowAV[e][v + 2].color = endColors[e];
-            elbowAV[e][v + 2].color.a = END_OPACITY;
+            elbowAV[e][v + 2].color.a = END_ALPHA;
             al_transform_coordinates(
                 &view.worldToWindowTransform,
                 &elbowAV[e][v + 2].x, &elbowAV[e][v + 2].y
@@ -191,11 +191,11 @@ void drawEdgeOffsetOnBuffer(
  *
  * @param sPtr Sector to draw the effects of.
  * @param buffer Buffer to draw from.
- * @param opacity Draw at this opacity, [0 - 1].
+ * @param alpha Draw at this alpha, [0 - 1].
  * @param view Viewport to draw to.
  */
 void drawSectorEdgeOffsets(
-    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity,
+    Sector* sPtr, ALLEGRO_BITMAP* buffer, float alpha,
     const Viewport& view
 ) {
     if(sPtr->isBottomlessPit) return;
@@ -220,7 +220,7 @@ void drawSectorEdgeOffsets(
         av[v].color.r = 1.0f;
         av[v].color.g = 1.0f;
         av[v].color.b = 1.0f;
-        av[v].color.a = opacity;
+        av[v].color.a = alpha;
     }
     
     al_draw_prim(
