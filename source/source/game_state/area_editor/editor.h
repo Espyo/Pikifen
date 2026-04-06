@@ -31,7 +31,7 @@ extern const float CROSS_SECTION_POINT_RADIUS;
 extern const float CURSOR_SNAP_DISTANCE;
 extern const float CURSOR_SNAP_UPDATE_INTERVAL;
 extern const float DEBUG_TEXT_SCALE;
-extern const float DEF_REFERENCE_ALPHA;
+extern const ALLEGRO_COLOR DEF_REFERENCE_TINT;
 extern const ALLEGRO_COLOR DRAWING_NEW_LINE_COLOR;
 extern const ALLEGRO_COLOR DRAWING_OLD_LINE_COLOR;
 extern const float KEYBOARD_PAN_AMOUNT;
@@ -758,8 +758,8 @@ private:
     //Redo history, with the state of the area at each point. Front = latest.
     deque<std::pair<Area*, string> > redoHistory;
     
-    //Alpha of the reference image [0 - 1].
-    float referenceAlpha = 1.0f;
+    //Tint for the reference image.
+    ALLEGRO_COLOR referenceTint = COLOR_WHITE;
     
     //Reference image center.
     Point referenceCenter;

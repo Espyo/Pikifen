@@ -1948,10 +1948,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
 void GameplayState::drawTreeShadows() {
     forIdx(s, game.curArea->treeShadows) {
         TreeShadow* sPtr = game.curArea->treeShadows[s];
-        
-        float alpha =
-            sPtr->alpha *
-            game.curArea->weatherCondition.getSunStrength();
+        float alphaMult = game.curArea->weatherCondition.getSunStrength();
             
         drawBitmap(
             sPtr->bitmap,
@@ -1963,8 +1960,7 @@ void GameplayState::drawTreeShadows() {
                 sin(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * areaTimePassed) *
                 sPtr->sway.y
             ),
-            sPtr->pose.size,
-            sPtr->pose.angle, mapAlpha(alpha * 255)
+            sPtr->pose.size, sPtr->pose.angle, multAlpha(sPtr->tint, alphaMult)
         );
     }
 }

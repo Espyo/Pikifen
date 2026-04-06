@@ -377,7 +377,7 @@ void Area::clone(Area& other) {
     forIdx(t, treeShadows) {
         TreeShadow* tPtr = treeShadows[t];
         TreeShadow* otPtr = other.treeShadows[t];
-        otPtr->alpha = tPtr->alpha;
+        otPtr->tint = tPtr->tint;
         otPtr->pose.pos = tPtr->pose.pos;
         otPtr->pose.size = tPtr->pose.size;
         otPtr->pose.angle = tPtr->pose.angle;
@@ -1408,17 +1408,19 @@ void Area::loadGeometryFromDataNode(
         unsigned char alphaC = 0;
         DataNode* alphaNode = nullptr;
         
+        //DEPRECATED in 1.2.0 by "tint".
+        sRS.set("alpha", alphaC, &alphaNode);
+        if(alphaNode) {
+            newShadow->tint.a = alphaC / 255.0f;
+        }
+
         sRS.set("pos", newShadow->pose.pos);
         sRS.set("size", newShadow->pose.size);
         sRS.set("angle", newShadow->pose.angle);
-        sRS.set("alpha", alphaC, &alphaNode);
+        sRS.set("tint", newShadow->tint);
         sRS.set("file", newShadow->bmpName);
         sRS.set("sway", newShadow->sway);
 
-        if(alphaNode) {
-            newShadow->alpha = alphaC / 255.0f;
-        }
-        
         newShadow->bitmap =
             game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
         if(
@@ -2669,14 +2671,10 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         
         sGW.write("pos", sPtr->pose.pos);
         sGW.write("size", sPtr->pose.size);
+        sGW.write("angle", sPtr->pose.angle);
+        sGW.write("tint", sPtr->tint);
         sGW.write("file", sPtr->bmpName);
         sGW.write("sway", sPtr->sway);
-        if(sPtr->pose.angle != 0) {
-            sGW.write("angle", sPtr->pose.angle);
-        }
-        if(sPtr->alpha != 1.0f) {
-            sGW.write("alpha", sPtr->alpha * 255);
-        }
         
     }
     
@@ -3037,18 +3035,18 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * @param center Center coordinates.
  * @param size Width and height.
  * @param angle Angle it is rotated by.
- * @param alpha Its alpha [0 - 1].
+ * @param tint Tint color.
  * @param bmpName Internal name of the tree shadow texture's bitmap.
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.
  */
 TreeShadow::TreeShadow(
     const Point& center, const Point& size, float angle,
-    float alpha, const string& bmpName, const Point& sway
+    const ALLEGRO_COLOR& tint, const string& bmpName, const Point& sway
 ) :
     bmpName(bmpName),
     bitmap(nullptr),
-    alpha(alpha),
+    tint(tint),
     sway(sway) {
     
     pose.pos = center;

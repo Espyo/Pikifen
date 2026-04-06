@@ -153,8 +153,8 @@ struct TreeShadow {
     //Positional data.
     Pose2d pose;
     
-    //Alpha [0 - 1].
-    float alpha = 1.0f;
+    //Tint color.
+    ALLEGRO_COLOR tint = COLOR_WHITE;
     
     //Swaying is multiplied by this.
     Point sway;
@@ -164,7 +164,7 @@ struct TreeShadow {
     
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
-        float angle = 0, float alpha = 1.0f,
+        float angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE,
         const string& bmpName = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();

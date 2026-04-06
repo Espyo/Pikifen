@@ -47,8 +47,8 @@ const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
 const float DEBUG_TEXT_SCALE = 1.3f;
 
-//Default reference image alpha [0 - 1].
-const float DEF_REFERENCE_ALPHA = 0.50f;
+//Default reference image tint color.
+const ALLEGRO_COLOR DEF_REFERENCE_TINT = mapAlpha(128);
 
 //Color to use for new lines when the user is drawing something.
 const ALLEGRO_COLOR DRAWING_NEW_LINE_COLOR = al_map_rgb(64, 255, 64);
@@ -2625,19 +2625,23 @@ void AreaEditor::loadReference() {
         unsigned char alphaC = 0;
         DataNode* alphaNode = nullptr;
         
+        //DEPRECATED in 1.2.0 by "tint".
+        rRS.set("alpha", alphaC);
+        if(alphaNode) {
+            referenceTint.a = alphaC / 255.0f;
+        }
+
         rRS.set("file", referenceFilePath);
         rRS.set("center", referenceCenter);
         rRS.set("size", referenceSize);
-        rRS.set("alpha", alphaC);
+        rRS.set("tint", referenceTint);
         rRS.set("visible", showReference);
 
-        referenceAlpha = alphaC / 255.0f;
-        
     } else {
         referenceFilePath.clear();
         referenceCenter = Point();
         referenceSize = Point();
-        referenceAlpha = 0.0f;
+        referenceTint = COLOR_WHITE;
         showReference = true;
     }
     
@@ -3198,7 +3202,7 @@ void AreaEditor::saveReference() {
     rGW.write("file", referenceFilePath);
     rGW.write("center", referenceCenter);
     rGW.write("size", referenceSize);
-    rGW.write("alpha", referenceAlpha);
+    rGW.write("tint", referenceTint);
     rGW.write("visible", showReference);
     
     referenceFile.saveFile(filePath);
@@ -4031,9 +4035,9 @@ void AreaEditor::updateReference() {
             referenceSize.x == 0 ||
             referenceSize.y == 0
         ) {
-            //Let's assume this is a new reference. Reset sizes and alpha.
+            //Let's assume this is a new reference. Reset sizes and tint.
             referenceSize = getBitmapDimensions(referenceBitmap);
-            referenceAlpha = AREA_EDITOR::DEF_REFERENCE_ALPHA;
+            referenceTint = AREA_EDITOR::DEF_REFERENCE_TINT;
         }
     } else {
         referenceCenter = Point();

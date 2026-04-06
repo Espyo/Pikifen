@@ -1565,14 +1565,15 @@ void AreaEditor::processGuiPanelDetails() {
                     "", WIDGET_EXPLANATION_SLIDER
                 );
                 
-                //Tree shadow alpha value.
-                float shadowAlpha = curShadow->alpha;
-                if(ImGui::SliderFloat("Opacity", &shadowAlpha, 0.0f, 1.0f)) {
-                    registerChange("tree shadow opacity change");
-                    curShadow->alpha = shadowAlpha;
+                //Tree shadow tint color.
+                ALLEGRO_COLOR shadowTint = curShadow->tint;
+                if(ImGui::ColorEdit4("Tint", (float*) &shadowTint)) {
+                    registerChange("tree shadow tint change");
+                    curShadow->tint = shadowTint;
                 }
                 setTooltip(
-                    "How opaque the tree shadow is.",
+                    "Tint color. You can use this to control how "
+                    "opaque the tree shadow is.",
                     "", WIDGET_EXPLANATION_SLIDER
                 );
                 
@@ -5896,12 +5897,12 @@ void AreaEditor::processGuiPanelTools() {
         ImGui::Unindent();
         setTooltip("Keep the aspect ratio when resizing the image.");
         
-        //Reference alpha value.
-        float alpha = referenceAlpha;
-        ImGui::SliderFloat("Opacity", &alpha, 0.0f, 1.0f);
-        referenceAlpha = alpha;
+        //Reference tint value.
+        ALLEGRO_COLOR tint = referenceTint;
+        ImGui::ColorEdit4("Tint", (float*) &tint);
+        referenceTint = tint;
         setTooltip(
-            "How opaque it is.",
+            "Tint color. You can use this to control how opaque it is.",
             "", WIDGET_EXPLANATION_SLIDER
         );
         
@@ -6174,18 +6175,18 @@ void AreaEditor::processGuiToolbar() {
         );
         
         //Reference image alpha value.
-        float referenceAlphaF = referenceAlpha;
+        float referenceAlpha = referenceTint.a;
         ImGui::SameLine();
         ImGui::BeginGroup();
         ImGui::Dummy(ImVec2(0.0f, 0.0f));
         ImGui::SetNextItemWidth(48.0f);
-        ImGui::SliderFloat("##refAlpha", &referenceAlphaF, 0.0f, 1.0f, "");
+        ImGui::SliderFloat("##refAlpha", &referenceAlpha, 0.0f, 1.0f, "");
         setTooltip(
             "Opacity of the reference image.",
             "", WIDGET_EXPLANATION_SLIDER
         );
         ImGui::EndGroup();
-        referenceAlpha = referenceAlphaF;
+        referenceTint.a = referenceAlpha;
         
     }
     
