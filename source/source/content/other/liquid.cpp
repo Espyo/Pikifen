@@ -291,6 +291,7 @@ bool Liquid::startDraining() {
     if(state == LIQUID_STATE_GONE) return false;
     if(state == LIQUID_STATE_DRAINING) return false;
     setState(LIQUID_STATE_DRAINING);
+    chillAmount = 0;
     return true;
 }
 

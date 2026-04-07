@@ -1351,7 +1351,7 @@ void GameplayState::load() {
         
         liquids.push_back(new Liquid(sPtr->hazard, liquidSectors));
         forIdx(s, liquidSectors) {
-            sPtr->liquid = liquids.back();
+            liquidSectors[s]->liquid = liquids.back();
         }
     }
     

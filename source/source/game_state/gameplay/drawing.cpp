@@ -672,7 +672,7 @@ void GameplayState::drawDebugTools(Player* player) {
     const ALLEGRO_COLOR GROUP_BACK_COLOR = al_map_rgba(255, 255, 0, 192);
     const ALLEGRO_COLOR GROUP_SWARM_COLOR = al_map_rgba(255, 0, 0, 192);
     const ALLEGRO_COLOR GROUP_MID_COLOR = al_map_rgb(0, 0, 255);
-
+    
     if(game.debug.showGroupInfo && player->leaderPtr) {
         al_use_transform(&player->view.worldToWindowTransform);
         forIdx(m, player->leaderPtr->group->members) {
@@ -715,7 +715,7 @@ void GameplayState::drawDebugTools(Player* player) {
  */
 void GameplayState::drawGameplayMessageBox() {
     const ALLEGRO_COLOR DARKENER_COLOR = COLOR_BLACK;
-
+    
     //Mouse cursor.
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
     
@@ -1028,7 +1028,7 @@ void GameplayState::drawInGameText(Player* player) {
         const ALLEGRO_COLOR TARGET_DIST_COLOR = al_map_rgba(0, 255, 0, 200);
         const ALLEGRO_COLOR FAKE_START_COLOR = al_map_rgba(255, 0, 0, 200);
         const ALLEGRO_COLOR FAKE_END_COLOR = al_map_rgba(0, 255, 0, 200);
-
+        
         Path* path = game.makerTools.infoLock->pathInfo;
         Point targetPos =
             hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
@@ -1134,7 +1134,7 @@ void GameplayState::drawInGameText(Player* player) {
     if(game.makerTools.infoLock && game.makerTools.reaches) {
         const ALLEGRO_COLOR FAR_REACH_COLOR = al_map_rgba(192, 64, 64, 192);
         const ALLEGRO_COLOR NEAR_REACH_COLOR = al_map_rgba(64, 192, 64, 192);
-
+        
         if(game.makerTools.infoLock->farReach != INVALID) {
             MobType::Reach* farReach =
                 &game.makerTools.infoLock->type->reaches[
@@ -1949,7 +1949,7 @@ void GameplayState::drawTreeShadows() {
     forIdx(s, game.curArea->treeShadows) {
         TreeShadow* sPtr = game.curArea->treeShadows[s];
         float alphaMult = game.curArea->weatherCondition.getSunStrength();
-            
+        
         drawBitmap(
             sPtr->bitmap,
             Point(
@@ -2219,7 +2219,13 @@ void GameplayState::drawWorldComponents(
                             cPtr->sectorPtr->liquid->stateTime
                         ) /
                         LIQUID::DRAIN_DURATION;
+                } else if(
+                    cPtr->sectorPtr->liquid &&
+                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_GONE
+                ) {
+                    drainAlpha = 0.0f;
                 }
+                
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->liquid->hazard->associatedLiquid,
