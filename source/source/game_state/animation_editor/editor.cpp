@@ -228,9 +228,13 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
 void AnimationEditor::changeState(const EDITOR_STATE newState) {
     comparison = false;
     comparisonSprite = nullptr;
+    
     hitboxSelection.disable();
+    hitboxSelCtrl.disable();
+    
     if(newState == EDITOR_STATE_HITBOXES) {
         hitboxSelection.enable();
+        hitboxSelCtrl.enable();
         selectPreviousHitboxes();
     }
     state = newState;

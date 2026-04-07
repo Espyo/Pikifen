@@ -4870,13 +4870,10 @@ bool Editor::SelectionController::chooseViaMouseDown(
     
     //Figure out which of the clicked items to focus on.
     std::pair<size_t, size_t> finalItem = { INVALID, INVALID };
-    if(totalNrClickedItems == 1) {
-        finalItem = clickedItems[0];
-        
-    } else if(
-        overlapsCycle && totalNrSelectedItems == 1 && totalNrClickedItems >= 2
-    ) {
+    if(overlapsCycle && totalNrSelectedItems == 1 && totalNrClickedItems >= 2) {
         finalItem = getNextInVector(clickedItems, singleSelectedItem);
+    } else if(totalNrClickedItems > 0) {
+        finalItem = clickedItems[0];
     }
     
     //Unselect others, if applicable.

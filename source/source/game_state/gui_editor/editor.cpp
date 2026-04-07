@@ -107,8 +107,12 @@ GuiEditor::GuiEditor() :
  */
 void GuiEditor::changeState(const EDITOR_STATE newState) {
     itemSelection.disable();
+    itemSelCtrl.disable();
+    
     if(newState == EDITOR_STATE_CUSTOM || newState == EDITOR_STATE_HARDCODED) {
         itemSelection.enable();
+        itemSelCtrl.enable();
+        
     }
     state = newState;
 }
