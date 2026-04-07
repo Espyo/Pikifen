@@ -7626,9 +7626,10 @@ tree_shadows{
 	shadow{
 		pos=-288.0000 316.8000
 		size=6836.3999 6955.1997
+		angle=0.0000
+		tint=255 255 255 120
 		file=textures/tree_shadow
 		sway=45.0000 -20.0000
-		alpha=120
 	}
 }
 regions

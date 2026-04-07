@@ -26,7 +26,7 @@ using std::string;
 namespace ONION {
 
 //How quickly an Onion fades to and from see-through, in values per second.
-const float FADE_SPEED = 255.0f;
+const float FADE_SPEED = 1.0f;
 
 //Delay before the Onion starts the generation process.
 const float GENERATION_DELAY = 2.0f;

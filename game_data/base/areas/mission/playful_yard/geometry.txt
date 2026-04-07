@@ -9596,37 +9596,42 @@ tree_shadows{
 	shadow{
 		pos=104.0000 -232.0000
 		size=1936.0000 2480.0000
+		angle=0.0000
+		tint=255 255 255 192
 		file=textures/tree_shadow
 		sway=1.0000 1.0000
-		alpha=192
 	}
 	shadow{
 		pos=-1040.0000 2064.0000
 		size=4224.0000 2112.0000
+		angle=0.0000
+		tint=255 255 255 192
 		file=textures/only_shadow
 		sway=1.0000 1.0000
-		alpha=192
 	}
 	shadow{
 		pos=-2008.0000 -1704.0000
 		size=2288.0000 5424.0000
+		angle=0.0000
+		tint=255 255 255 192
 		file=textures/only_shadow
 		sway=1.0000 1.0000
-		alpha=192
 	}
 	shadow{
 		pos=2400.0000 824.0000
 		size=2656.0000 4592.0000
+		angle=0.0000
+		tint=255 255 255 192
 		file=textures/only_shadow
 		sway=1.0000 1.0000
-		alpha=192
 	}
 	shadow{
 		pos=1432.0000 -2944.0000
 		size=4592.0000 2944.0000
+		angle=0.0000
+		tint=255 255 255 192
 		file=textures/only_shadow
 		sway=1.0000 1.0000
-		alpha=192
 	}
 }
 regions
