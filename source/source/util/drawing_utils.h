@@ -120,6 +120,10 @@ void drawRotatedRectangle(
     const Point& center, const Point& dimensions,
     float angle, const ALLEGRO_COLOR& color, float thickness
 );
+void drawRotatedRoundedRectangle(
+    const Point& center, const Point& size, float angle,
+    float radii, const ALLEGRO_COLOR& color, float thickness
+);
 void drawRoundedRatioRectangle(
     const Point& center, const Point& size, float radiiRatio,
     const ALLEGRO_COLOR& color, float thickness

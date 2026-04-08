@@ -1660,12 +1660,12 @@ void AreaEditor::processGuiPanelDetails() {
                     ];
                     
                 //Region center value.
-                Point regionCenter = curRegion->center;
+                Point regionCenter = curRegion->pose.pos;
                 if(
                     ImGui::DragFloat2("Center", (float*) &regionCenter)
                 ) {
                     registerChange("region center change");
-                    curRegion->center = regionCenter;
+                    curRegion->pose.pos = regionCenter;
                 };
                 setTooltip(
                     "Center coordinates of the region.",
@@ -1673,16 +1673,31 @@ void AreaEditor::processGuiPanelDetails() {
                 );
                 
                 //Region size value.
-                Point regionSize = curRegion->size;
+                Point regionSize = curRegion->pose.size;
                 if(
                     ImGui::DragFloat2("Size", (float*) &regionSize)
                 ) {
                     registerChange("region size change");
-                    curRegion->size = regionSize;
+                    curRegion->pose.size = regionSize;
                 };
                 setTooltip(
                     "Width and height of the region.",
                     "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Region angle value.
+                float regionAngle = curRegion->pose.angle;
+                if(
+                    ImGui::SliderAngleWithContext(
+                        "Angle", &regionAngle, 0, 360, "%.2f"
+                    )
+                ) {
+                    registerChange("region angle change");
+                    curRegion->pose.angle = regionAngle;
+                };
+                setTooltip(
+                    "Angle of the region.",
+                    "", WIDGET_EXPLANATION_SLIDER
                 );
                 
             }

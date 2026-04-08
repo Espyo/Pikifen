@@ -273,6 +273,44 @@ void drawRotatedRectangle(
 
 
 /**
+ * @brief Draws a rotated rounded rectangle.
+ * This is like drawRoundedRectangle but rotates it.
+ *
+ * @param center Center.
+ * @param size Width and height.
+ * @param angle Angle.
+ * @param radii Radii of the corners. Will be smaller if the rectangle is
+ * too small.
+ * @param color Color the rectangle's lines with this color.
+ * @param thickness Line thickness.
+ */
+void drawRotatedRoundedRectangle(
+    const Point& center, const Point& size, float angle,
+    float radii, const ALLEGRO_COLOR& color, float thickness
+) {
+    float finalRadii = std::min(radii, size.x / 2.0f);
+    finalRadii = std::min(finalRadii, size.y / 2.0f);
+    finalRadii = std::max(0.0f, finalRadii);
+    
+    ALLEGRO_TRANSFORM rotTransform, oldTransform;
+    al_copy_transform(&oldTransform, al_get_current_transform());
+    al_identity_transform(&rotTransform);
+    al_rotate_transform(&rotTransform, angle);
+    al_translate_transform(&rotTransform, center.x, center.y);
+    al_compose_transform(&rotTransform, &oldTransform);
+    
+    al_use_transform(&rotTransform); {
+        al_draw_rounded_rectangle(
+            -size.x / 2.0, -size.y / 2.0,
+            size.x / 2.0, size.y / 2.0,
+            finalRadii, finalRadii,
+            color, thickness
+        );
+    }; al_use_transform(&oldTransform);
+}
+
+
+/**
  * @brief Draws a rounded rectangle, with the rounding being specified
  * as a ratio of the total size.
  * This is basically Allegro's function, but safer and simpler.

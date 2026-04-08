@@ -260,17 +260,18 @@ AreaEditor::AreaEditor() :
     
     regionSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->regions[idx]->center;
-        *outSize = game.curArea->regions[idx]->size;
-        *outAngle = 0.0f;
+        *outCenter = game.curArea->regions[idx]->pose.pos;
+        *outSize = game.curArea->regions[idx]->pose.size;
+        *outAngle = game.curArea->regions[idx]->pose.angle;
     };
     regionSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
     ) {
-        game.curArea->regions[idx]->center = newCenter;
-        game.curArea->regions[idx]->size = newSize;
+        game.curArea->regions[idx]->pose.pos = newCenter;
+        game.curArea->regions[idx]->pose.size = newSize;
+        game.curArea->regions[idx]->pose.angle = newAngle;
     };
     regionSelection.onGetTotal =
     [this] () {
@@ -282,7 +283,7 @@ AreaEditor::AreaEditor() :
     };
     regionSelection.itemsAreRectangular = true;
     regionSelection.itemsCanResize = true;
-    regionSelection.itemsCanRotate = false;
+    regionSelection.itemsCanRotate = true;
     
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
@@ -423,7 +424,7 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
     clearSelection();
     registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
-    newRegion->size = MISSION::EXIT_MIN_SIZE;
+    newRegion->pose.size = MISSION::EXIT_MIN_SIZE;
     size_t selectedRegionIdx = regionSelection.getFirstItemIdx();
     selectedRegionIdx =
         insertInVector(game.curArea->regions, selectedRegionIdx, newRegion);

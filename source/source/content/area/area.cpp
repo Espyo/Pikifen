@@ -390,8 +390,7 @@ void Area::clone(Area& other) {
     forIdx(r, regions) {
         AreaRegion* rPtr = regions[r];
         AreaRegion* orPtr = other.regions[r];
-        orPtr->center = rPtr->center;
-        orPtr->size = rPtr->size;
+        orPtr->pose = rPtr->pose;
     }
     
     other.manifest = manifest;
@@ -1413,14 +1412,14 @@ void Area::loadGeometryFromDataNode(
         if(alphaNode) {
             newShadow->tint.a = alphaC / 255.0f;
         }
-
+        
         sRS.set("pos", newShadow->pose.pos);
         sRS.set("size", newShadow->pose.size);
         sRS.set("angle", newShadow->pose.angle);
         sRS.set("tint", newShadow->tint);
         sRS.set("file", newShadow->bmpName);
         sRS.set("sway", newShadow->sway);
-
+        
         newShadow->bitmap =
             game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
         if(
@@ -1449,8 +1448,9 @@ void Area::loadGeometryFromDataNode(
         ReaderSetter rRS(regionNode);
         AreaRegion* newRegion = new AreaRegion();
         
-        rRS.set("center", newRegion->center);
-        rRS.set("size", newRegion->size);
+        rRS.set("center", newRegion->pose.pos);
+        rRS.set("size", newRegion->pose.size);
+        rRS.set("angle", newRegion->pose.angle);
         
         regions.push_back(newRegion);
     }
@@ -1987,8 +1987,12 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Get the leaders to the exit!";
         regions.push_back(
         new AreaRegion {
-            .center = goalExitCenter,
-            .size = goalExitSize,
+            .pose =
+            Pose2d {
+                .pos = goalExitCenter,
+                .size = goalExitSize,
+                .angle = 0.0f,
+            }
         }
         );
         exitRegionIdx = regions.size() - 1;
@@ -2687,8 +2691,9 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* regionNode = regionsNode->addNew("region");
         GetterWriter rGW(regionNode);
         
-        rGW.write("center", rPtr->center);
-        rGW.write("size", rPtr->size);
+        rGW.write("center", rPtr->pose.pos);
+        rGW.write("size", rPtr->pose.size);
+        rGW.write("angle", rPtr->pose.angle);
         
     }
 }

@@ -2738,10 +2738,10 @@ void AreaEditor::resizeEverything(float mults[2]) {
     
     forIdx(r, game.curArea->regions) {
         AreaRegion* rPtr = game.curArea->regions[r];
-        rPtr->center.x *= mults[0];
-        rPtr->center.y *= mults[1];
-        rPtr->size.x *= mults[0];
-        rPtr->size.y *= mults[1];
+        rPtr->pose.pos.x *= mults[0];
+        rPtr->pose.pos.y *= mults[1];
+        rPtr->pose.size.x *= mults[0];
+        rPtr->pose.size.y *= mults[1];
     }
 }
 

@@ -179,11 +179,8 @@ struct AreaRegion {
 
     //--- Public members ---
     
-    //Center.
-    Point center;
-    
-    //Size.
-    Point size;
+    //Pose data.
+    Pose2d pose;
     
 };
 

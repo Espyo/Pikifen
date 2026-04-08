@@ -1068,12 +1068,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
             forIdx(l, mobs.leaders) {
                 Leader* lPtr = mobs.leaders[l];
                 AreaRegion* rPtr = game.curArea->regions[r];
-                if(
-                    fabs(lPtr->pos.x - rPtr->center.x) <=
-                    rPtr->size.x / 2.0f &&
-                    fabs(lPtr->pos.y - rPtr->center.y) <=
-                    rPtr->size.y / 2.0f
-                ) {
+                bool isInside;
+                getClosestPointInRotatedRectangle(
+                    lPtr->pos, rPtr->pose.pos, rPtr->pose.size,
+                    rPtr->pose.angle, &isInside
+                );
+                if(isInside) {
                     areaRegions[r].leadersInside.push_back(lPtr);
                 }
             }

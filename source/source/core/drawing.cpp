@@ -305,7 +305,7 @@ void drawHealth(
     const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
     const ALLEGRO_COLOR MID_COLOR = al_map_rgb(255, 255, 0);
     const ALLEGRO_COLOR BAD_COLOR = al_map_rgb(255, 0, 0);
-
+    
     ALLEGRO_COLOR color;
     if(ratio >= 0.5) {
         color =
@@ -342,12 +342,13 @@ void drawHealth(
  *
  * @param center Center coordinates of the region.
  * @param size Width and height of the region.
+ * @param angle Angle of the region.
  * @param color Color of the highlight.
  * @param timeSpent Total time spent. Used for animating.
  */
 void drawHighlightedRectRegion(
-    const Point& center, const Point& size, const ALLEGRO_COLOR& color,
-    float timeSpent
+    const Point& center, const Point& size, float angle,
+    const ALLEGRO_COLOR& color, float timeSpent
 ) {
     const float CORNER_RADIUS = 2.0f;
     const float DURATION = 3.0f;
@@ -356,7 +357,10 @@ void drawHighlightedRectRegion(
     const float THICKNESS = 4.0f;
     
     //Outer rectangle.
-    drawRoundedRectangle(center, size, CORNER_RADIUS, color, THICKNESS);
+    drawRotatedRoundedRectangle(
+        center, size, angle,
+        CORNER_RADIUS, color, THICKNESS
+    );
     
     //Inner rectangles.
     for(size_t i = 0; i < N_INNER_RECTS; i++) {
@@ -371,8 +375,9 @@ void drawHighlightedRectRegion(
                 iAnimTime, 0.0f, DURATION, 1.0f, 0.0f
             );
             
-        drawRoundedRectangle(
-            center, iSize, CORNER_RADIUS, multAlpha(color, alpha), THICKNESS
+        drawRotatedRoundedRectangle(
+            center, iSize, angle,
+            CORNER_RADIUS, multAlpha(color, alpha), THICKNESS
         );
     }
 }

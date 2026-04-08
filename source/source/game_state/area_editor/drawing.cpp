@@ -1686,19 +1686,15 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
-    const ALLEGRO_COLOR REGION_BG_COLOR = al_map_rgb(128, 128, 64);
+    const ALLEGRO_COLOR REGION_OUTLINE_COLOR = al_map_rgb(128, 128, 64);
     
     if(state == EDITOR_STATE_DETAILS) {
         forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             
-            al_draw_rectangle(
-                rPtr->center.x - rPtr->size.x / 2.0f,
-                rPtr->center.y - rPtr->size.y / 2.0f,
-                rPtr->center.x + rPtr->size.x / 2.0f,
-                rPtr->center.y + rPtr->size.y / 2.0f,
-                REGION_BG_COLOR,
-                4.0 / game.editorsView.cam.zoom
+            drawRotatedRectangle(
+                rPtr->pose.pos, rPtr->pose.size, rPtr->pose.angle,
+                REGION_OUTLINE_COLOR, 4.0 / game.editorsView.cam.zoom
             );
         }
     }

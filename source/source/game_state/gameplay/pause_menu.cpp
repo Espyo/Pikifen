@@ -951,7 +951,7 @@ void PauseMenu::drawRadar(
         forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
             drawHighlightedRectRegion(
-                rPtr->center, rPtr->size,
+                rPtr->pose.pos, rPtr->pose.size, rPtr->pose.angle,
                 changeAlpha(game.config.guiColors.gold, 192), game.timePassed
             );
         }
