@@ -5,7 +5,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
         Add it to the layout and paths area editor states
-        Add rotation logic
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?

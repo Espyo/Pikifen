@@ -397,11 +397,14 @@ void Editor::drawSelectionAndTransformationThings(
     //Transformation widget, if possible.
     if(selCtrl.isTransformationWidgetAvailable()) {
         Point selectionCenter, selectionSize;
+        float selectionAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
         if(selectionSize.x != 0.0f) {
             traWid.draw(
                 &selectionCenter, &selectionSize,
-                nullptr, 1.0f / game.editorsView.cam.zoom
+                useAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom
             );
         }
     }
@@ -1028,12 +1031,15 @@ void Editor::handleSelectionAndTransformationLmbDown(
     bool twHandled = false;
     if(selCtrl.isTransformationWidgetAvailable()) {
         Point selectionCenter, selectionSize;
+        float selectionAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
         twHandled =
             traWid.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
                 &selectionCenter, &selectionSize,
-                nullptr, 1.0f / game.editorsView.cam.zoom
+                useAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom
             );
     }
     
@@ -1081,18 +1087,21 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     //Transformation widget.
     if(selCtrl.isTransformationWidgetAvailable()) {
         Point selectionCenter, selectionSize;
+        float selectionAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
         bool twHandled =
             traWid.handleMouseMove(
                 mouseCursor,
                 &selectionCenter, &selectionSize,
-                nullptr, 1.0f / game.editorsView.cam.zoom,
+                useAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom,
                 false, false, 0.10f, isAltPressed
             );
         if(twHandled) {
             if(onPreTransform) onPreTransform();
             selCtrl.applyTransformation(
-                selectionCenter, selectionSize
+                selectionCenter, selectionSize, selectionAngle
             );
             return true;
         }
@@ -4780,8 +4789,9 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
     for(size_t i : list) {
         Point origPos = preOpItemCenters[i];
         Point iCenter, iSize;
-        onGetInfo(i, &iCenter, &iSize);
-        onSetInfo(i, origPos + offset, iSize);
+        float iAngle;
+        onGetInfo(i, &iCenter, &iSize, &iAngle);
+        onSetInfo(i, origPos + offset, iSize, iAngle);
     }
     
     return true;
@@ -4794,10 +4804,11 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
  *
  * @param newCenter The new selection center.
  * @param newSize The new selection size.
+ * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionController::applyTransformation(
-    const Point& newCenter, const Point& newSize
+    const Point& newCenter, const Point& newSize, float newAngle
 ) {
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
@@ -4812,7 +4823,7 @@ bool Editor::SelectionController::applyTransformation(
             newCenter, newSize,
             &mNewCenter, &mNewSize
         );
-        managers[m]->applyTransformation(mNewCenter, mNewSize);
+        managers[m]->applyTransformation(mNewCenter, mNewSize, newAngle);
     }
     
     return true;
@@ -5124,6 +5135,33 @@ bool Editor::SelectionController::getTotalBBox(
     return false;
 }
 
+
+/**
+ * @brief Returns the angle of the selected item, if it's something that
+ * can be edited. This only works for a single item being selected.
+ *
+ * @param outAngle The angle is returned here.
+ * @return Whether the item's angle can be edited.
+ */
+bool Editor::SelectionController::getSelectedItemAngle(float* outAngle) const {
+    if(getSelectionTotalCount() != 1) {
+        //Not supported.
+        return false;
+    }
+    
+    forIdx(m, managers) {
+        if(!managers[m]->itemsCanRotate) continue;
+        size_t itemIdx = managers[m]->getSingleItemIdx();
+        if(itemIdx == INVALID) continue;
+        
+        Point center, size;
+        managers[m]->getItemInfo(itemIdx, &center, &size, outAngle);
+        return true;
+    }
+    
+    return false;
+}
+
 /**
  * @brief Returns the total number of selected items.
  *
@@ -5255,7 +5293,8 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
         
         for(size_t i : list) {
             Point iCenter, iSize;
-            managers[m]->getItemInfo(i, &iCenter, &iSize);
+            float iAngle;
+            managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             Distance d(game.editorsView.mouseCursorWorldPos, iCenter);
             if(!gotClosest || d < closestDist) {
                 gotClosest = true;
@@ -5389,9 +5428,20 @@ bool Editor::SelectionController::updateRubberBand(
         for(size_t i = 0; i < nrTotalItems; i++) {
             if(!managers[m]->getItemIsEligible(i)) continue;
             Point iCenter, iSize;
-            managers[m]->getItemInfo(i, &iCenter, &iSize);
+            float iAngle;
+            managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             Point iTL, iBR;
-            centerAndSizeToCorners(iCenter, iSize, &iTL, &iBR);
+            
+            if(
+                managers[m]->itemsCanRotate &&
+                managers[m]->itemsAreRectangular
+            ) {
+                getTransformedRectangleBBox(
+                    iCenter, iSize, iAngle, &iTL, &iBR
+                );
+            } else {
+                centerAndSizeToCorners(iCenter, iSize, &iTL, &iBR);
+            }
             
             if(
                 iTL.x >= rubberBandTL.x &&
@@ -5440,10 +5490,11 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
  *
  * @param newCenter The new selection center.
  * @param newSize The new selection size.
+ * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyTransformation(
-    const Point& newCenter, const Point& newSize
+    const Point& newCenter, const Point& newSize, float newAngle
 ) {
     if(!enabled) return false;
     if(preOpSelSize.x <= 0.0f || preOpSelSize.y <= 0.0f) return false;
@@ -5464,7 +5515,8 @@ bool Editor::SelectionManager::applyTransformation(
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        onGetInfo(i, &iCenter, &iSize);
+        float iAngle;
+        onGetInfo(i, &iCenter, &iSize, &iAngle);
         
         if(itemsCanResize) {
             //Position and resize the item according to the new shape.
@@ -5506,7 +5558,11 @@ bool Editor::SelectionManager::applyTransformation(
             }
         }
         
-        onSetInfo(i, iCenter, iSize);
+        if(itemsCanRotate && list.size() == 1) {
+            iAngle = newAngle;
+        }
+        
+        onSetInfo(i, iCenter, iSize, iAngle);
     }
     
     return true;
@@ -5590,13 +5646,20 @@ bool Editor::SelectionManager::getBBox(
     
     for(size_t i : list) {
         Point iCenter, iSize;
-        getItemInfo(i, &iCenter, &iSize);
-        updateMinCoords(
-            minCoords, iCenter - iSize / 2.0f
-        );
-        updateMaxCoords(
-            maxCoords, iCenter + iSize / 2.0f
-        );
+        float iAngle;
+        getItemInfo(i, &iCenter, &iSize, &iAngle);
+        Point iTL, iBR;
+        
+        if(itemsCanRotate && itemsAreRectangular && list.size() > 1) {
+            getTransformedRectangleBBox(
+                iCenter, iSize, iAngle, &iTL, &iBR
+            );
+        } else {
+            centerAndSizeToCorners(iCenter, iSize, &iTL, &iBR);
+        }
+        
+        updateMinCoords(minCoords, iTL);
+        updateMaxCoords(maxCoords, iBR);
         updateMinMaxCoords(
             centersOnlyMinCoords, centersOnlyMaxCoords, iCenter
         );
@@ -5673,16 +5736,26 @@ vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
     
     for(size_t i = 0; i < nrTotalItems; i++) {
         if(!getItemIsEligible(i)) continue;
+        
+        bool isInside;
         Point iCenter, iSize;
-        getItemInfo(i, &iCenter, &iSize);
+        float iAngle;
+        getItemInfo(i, &iCenter, &iSize, &iAngle);
+        
         if(itemsAreRectangular) {
-            if(isPointInRectangle(cursorPos, iCenter, iSize)) {
-                result.push_back(i);
+            if(itemsCanRotate) {
+                getClosestPointInRotatedRectangle(
+                    cursorPos, iCenter, iSize, iAngle, &isInside
+                );
+            } else {
+                isInside = isPointInRectangle(cursorPos, iCenter, iSize);
             }
         } else {
-            if(Distance(cursorPos, iCenter) <= iSize.x / 2.0f) {
-                result.push_back(i);
-            }
+            isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
+        }
+        
+        if(isInside) {
+            result.push_back(i);
         }
     }
     
@@ -5727,16 +5800,18 @@ const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
  * @param idx The item's index.
  * @param outCenter The item's center is returned here.
  * @param outSize The item's size is returned here.
+ * @param outAngle The item's angle is returned here.
  * @return The info.
  */
 void Editor::SelectionManager::getItemInfo(
-    size_t idx, Point* outCenter, Point* outSize
+    size_t idx, Point* outCenter, Point* outSize, float* outAngle
 ) const {
     if(onGetInfo) {
-        onGetInfo(idx, outCenter, outSize);
+        onGetInfo(idx, outCenter, outSize, outAngle);
     } else {
         *outCenter = Point();
         *outSize = Point();
+        *outAngle = 0.0f;
     }
 }
 
@@ -5862,7 +5937,8 @@ bool Editor::SelectionManager::startOperation() {
     const set<size_t>& list = getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        getItemInfo(i, &iCenter, &iSize);
+        float iAngle;
+        getItemInfo(i, &iCenter, &iSize, &iAngle);
         preOpItemCenters[i] = iCenter;
         preOpItemSizes[i] = iSize;
     }

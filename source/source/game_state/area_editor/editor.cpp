@@ -207,12 +207,16 @@ AreaEditor::AreaEditor() :
     
     //Setup the selection managers.
     mobSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->mobGenerators[idx]->pos;
         *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
+        *outAngle = 0.0f;
     };
     mobSelection.onSetInfo =
-    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         game.curArea->mobGenerators[idx]->pos = newCenter;
     };
     mobSelection.onGetTotal =
@@ -225,16 +229,22 @@ AreaEditor::AreaEditor() :
     };
     mobSelection.itemsAreRectangular = false;
     mobSelection.itemsCanResize = false;
+    mobSelection.itemsCanRotate = false;
     
     shadowSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->treeShadows[idx]->pose.pos;
         *outSize = game.curArea->treeShadows[idx]->pose.size;
+        *outAngle = game.curArea->treeShadows[idx]->pose.angle;
     };
     shadowSelection.onSetInfo =
-    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         game.curArea->treeShadows[idx]->pose.pos = newCenter;
         game.curArea->treeShadows[idx]->pose.size = newSize;
+        game.curArea->treeShadows[idx]->pose.angle = newAngle;
     };
     shadowSelection.onGetTotal =
     [this] () {
@@ -246,14 +256,19 @@ AreaEditor::AreaEditor() :
     };
     shadowSelection.itemsAreRectangular = true;
     shadowSelection.itemsCanResize = true;
+    shadowSelection.itemsCanRotate = true;
     
     regionSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->regions[idx]->center;
         *outSize = game.curArea->regions[idx]->size;
+        *outAngle = 0.0f;
     };
     regionSelection.onSetInfo =
-    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         game.curArea->regions[idx]->center = newCenter;
         game.curArea->regions[idx]->size = newSize;
     };
@@ -267,14 +282,19 @@ AreaEditor::AreaEditor() :
     };
     regionSelection.itemsAreRectangular = true;
     regionSelection.itemsCanResize = true;
+    regionSelection.itemsCanRotate = false;
     
     reminderSelection.onGetInfo =
-    [] (size_t idx, Point * outCenter, Point * outSize) {
+    [] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->reminders[idx].pos;
         *outSize = AREA_EDITOR::REMINDER_SIZE;
+        *outAngle = 0.0f;
     };
     reminderSelection.onSetInfo =
-    [] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         game.curArea->reminders[idx].pos = newCenter;
     };
     reminderSelection.onGetTotal =
@@ -283,6 +303,7 @@ AreaEditor::AreaEditor() :
     };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.itemsCanResize = false;
+    reminderSelection.itemsCanRotate = false;
     
     mobsSelCtrl.managers.push_back(&mobSelection);
     mobsSelCtrl.onSnapPoint =
@@ -2630,13 +2651,13 @@ void AreaEditor::loadReference() {
         if(alphaNode) {
             referenceTint.a = alphaC / 255.0f;
         }
-
+        
         rRS.set("file", referenceFilePath);
         rRS.set("center", referenceCenter);
         rRS.set("size", referenceSize);
         rRS.set("tint", referenceTint);
         rRS.set("visible", showReference);
-
+        
     } else {
         referenceFilePath.clear();
         referenceCenter = Point();

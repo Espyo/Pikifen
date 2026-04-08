@@ -67,12 +67,16 @@ GuiEditor::GuiEditor() :
     
     //Setup the selection manager.
     itemSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = allItems[idx]->center;
         *outSize = allItems[idx]->size;
+        *outAngle = 0.0f;
     };
     itemSelection.onSetInfo =
-    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         allItems[idx]->center = newCenter;
         allItems[idx]->size = newSize;
     };
@@ -89,6 +93,7 @@ GuiEditor::GuiEditor() :
     };
     itemSelection.itemsAreRectangular = true;
     itemSelection.itemsCanResize = true;
+    itemSelection.itemsCanRotate = false;
     
     itemSelCtrl.managers.push_back(&itemSelection);
     itemSelCtrl.onSnapPoint =

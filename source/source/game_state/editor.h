@@ -291,9 +291,11 @@ protected:
         
         //Callback for when the info of an item needs to be retrieved.
         //The second argument is where the center is returned, the third
-        //is where the size is returned.
+        //is where the size is returned, the fourth is where the angle is
+        //returned.
         //The default center and size values are 0,0.
-        std::function<void(size_t, Point*, Point*)> onGetInfo = nullptr;
+        std::function<void(size_t, Point*, Point*, float*)>
+        onGetInfo = nullptr;
         
         //Callback for when the total amount of all editor items needs to
         //be retrieved.
@@ -307,16 +309,19 @@ protected:
         
         //Callback for when the info of an item needs to be set.
         //The second argument is the new center, the third
-        //is the new size.
-        std::function<void(size_t, const Point&, const Point&)> onSetInfo =
-            nullptr;
-            
+        //is the new size, the fourth is the new angle.
+        std::function<void(size_t, const Point&, const Point&, float)>
+        onSetInfo = nullptr;
+        
         //Whether items are rectangular in shape or circular.
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
         
         //Whether the items can be resized.
         bool itemsCanResize = false;
+        
+        //Whether the items can rotate.
+        bool itemsCanRotate = false;
         
         
         //--- Public function declarations ---
@@ -341,7 +346,9 @@ protected:
         
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
-        bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool applyTransformation(
+            const Point& newCenter, const Point& newSize, float newAngle
+        );
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
         
@@ -357,7 +364,7 @@ protected:
         ) const;
         vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
         void getItemInfo(
-            size_t idx, Point* outCenter, Point* outSize
+            size_t idx, Point* outCenter, Point* outSize, float* outAngle
         ) const;
         bool getItemIsEligible(size_t idx) const;
         size_t getNrTotalItems() const;
@@ -460,7 +467,9 @@ protected:
         
         bool startTransforming();
         bool isTransforming() const;
-        bool applyTransformation(const Point& newCenter, const Point& newSize);
+        bool applyTransformation(
+            const Point& newCenter, const Point& newSize, float newAngle
+        );
         bool stopTransforming();
         
         bool startRubberBand(const Point& cursorPos);
@@ -480,6 +489,7 @@ protected:
             Point* outCentersOnlyCenter = nullptr,
             Point* outCentersOnlySize = nullptr
         ) const;
+        bool getSelectedItemAngle(float* outAngle) const;
         size_t getSelectionTotalCount() const;
         bool isTransformationWidgetAvailable() const;
         bool isOpRuleRespected(OP_RULE rule) const;

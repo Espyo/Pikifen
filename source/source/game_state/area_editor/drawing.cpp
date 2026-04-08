@@ -1907,7 +1907,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
-    const ALLEGRO_COLOR SHADOW_BG_COLOR = al_map_rgb(128, 128, 64);
+    const ALLEGRO_COLOR SHADOW_OUTLINE_COLOR = al_map_rgb(128, 128, 64);
     
     if(
         state == EDITOR_STATE_DETAILS ||
@@ -1945,19 +1945,11 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
             );
             
             if(state == EDITOR_STATE_DETAILS) {
-                Point minCoords, maxCoords;
-                getTransformedRectangleBBox(
+                drawRotatedRectangle(
                     sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
-                    &minCoords, &maxCoords
+                    SHADOW_OUTLINE_COLOR,
+                    4.0 / game.editorsView.cam.zoom
                 );
-                
-                if(!shadowSelection.contains(s)) {
-                    al_draw_rectangle(
-                        minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
-                        SHADOW_BG_COLOR,
-                        4.0 / game.editorsView.cam.zoom
-                    );
-                }
             }
         }
     }

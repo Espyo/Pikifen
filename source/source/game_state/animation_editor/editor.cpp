@@ -113,7 +113,7 @@ AnimationEditor::AnimationEditor() :
     
     //Setup the selection manager.
     hitboxSelection.onGetInfo =
-    [this] (size_t idx, Point * outCenter, Point * outSize) {
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         if(!sideView) {
             *outCenter = curSprite->hitboxes[idx].pos;
             *outSize = Point(curSprite->hitboxes[idx].radius * 2.0f);
@@ -130,9 +130,13 @@ AnimationEditor::AnimationEditor() :
                     curSprite->hitboxes[idx].height
                 );
         }
+        *outAngle = 0.0f;
     };
     hitboxSelection.onSetInfo =
-    [this] (size_t idx, const Point & newCenter, const Point & newSize) {
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
         if(!sideView) {
             curSprite->hitboxes[idx].pos = newCenter;
             curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
@@ -149,6 +153,7 @@ AnimationEditor::AnimationEditor() :
         return curSprite->hitboxes.size();
     };
     hitboxSelection.itemsCanResize = true;
+    hitboxSelection.itemsCanRotate = false;
     
     hitboxSelCtrl.managers.push_back(&hitboxSelection);
     hitboxSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
