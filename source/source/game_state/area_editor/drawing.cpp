@@ -1434,7 +1434,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 color
             );
             
-            if(isInContainer(selectedPathStops, sPtr)) {
+            if(pathStopSelection.contains(s)) {
                 al_draw_filled_circle(
                     sPtr->pos.x, sPtr->pos.y, sPtr->radius,
                     multAlpha(
@@ -1462,7 +1462,10 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 PathLink* lPtr = sPtr->links[l];
                 PathStop* s2Ptr = lPtr->endPtr;
                 bool oneWay = !lPtr->endPtr->getLink(sPtr);
-                bool selected = isInContainer(selectedPathLinks, lPtr);
+                bool selected =
+                    pathLinkSelection.contains(
+                        game.curArea->findPathLinkIdx(lPtr)
+                    );
                 bool highlighted = highlightedPathLink == lPtr;
                 ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
@@ -1511,18 +1514,18 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     bool drawDist = false;
                     Point otherPoint;
                     if(
-                        lPtr->startPtr == moveClosestStop &&
-                        !isInContainer(selectedPathStops, lPtr->endPtr)
+                        sPtr == moveClosestStop &&
+                        pathStopSelection.contains(lPtr->endIdx)
                     ) {
                         otherPoint.x = lPtr->endPtr->pos.x;
                         otherPoint.y = lPtr->endPtr->pos.y;
                         drawDist = true;
                     } else if(
                         lPtr->endPtr == moveClosestStop &&
-                        !isInContainer(selectedPathStops, lPtr->startPtr)
+                        pathStopSelection.contains(s)
                     ) {
-                        otherPoint.x = lPtr->startPtr->pos.x;
-                        otherPoint.y = lPtr->startPtr->pos.y;
+                        otherPoint.x = sPtr->pos.x;
+                        otherPoint.y = sPtr->pos.y;
                         drawDist = true;
                     }
                     
@@ -1676,6 +1679,11 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 );
             }
         }
+        
+        drawSelectionAndTransformationThings(
+            pathsSelCtrl, curTransformationWidget
+        );
+        
     }
 }
 

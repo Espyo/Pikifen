@@ -231,6 +231,62 @@ AreaEditor::AreaEditor() :
     mobSelection.itemsCanResize = false;
     mobSelection.itemsCanRotate = false;
     
+    pathStopSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
+        *outCenter = game.curArea->pathStops[idx]->pos;
+        *outSize = Point(game.curArea->pathStops[idx]->radius * 2.0f);
+        *outAngle = 0.0f;
+    };
+    pathStopSelection.onSetInfo =
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
+        game.curArea->pathStops[idx]->pos = newCenter;
+        game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
+    };
+    pathStopSelection.onGetTotal =
+    [this] () {
+        return game.curArea->pathStops.size();
+    };
+    pathStopSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_PATHS;
+    };
+    pathStopSelection.itemsAreRectangular = false;
+    pathStopSelection.itemsCanResize = false;
+    pathStopSelection.itemsCanRotate = false;
+    
+    pathLinkSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
+        PathLink* lPtr = game.curArea->pathLinks[idx];
+        Point p1 = lPtr->startPtr->pos;
+        Point p2 = lPtr->endPtr->pos;
+        *outCenter = (p1 + p2) / 2.0f;
+        *outSize = Point(fabs(p2.x - p1.x), fabs(p2.y - p1.y));
+        *outAngle = 0.0f;
+        const float threshold = 8.0f / game.editorsView.cam.zoom;
+        if(outSize->x < threshold) outSize->x = threshold;
+        if(outSize->y < threshold) outSize->y = threshold;
+    };
+    pathLinkSelection.onSetInfo =
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
+    };
+    pathLinkSelection.onGetTotal =
+    [this] () {
+        return game.curArea->pathLinks.size();
+    };
+    pathLinkSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_PATHS;
+    };
+    pathLinkSelection.itemsAreRectangular = true;
+    pathLinkSelection.itemsCanResize = false;
+    pathLinkSelection.itemsCanRotate = false;
+    
     shadowSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->treeShadows[idx]->pose.pos;
@@ -313,6 +369,15 @@ AreaEditor::AreaEditor() :
     mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
     mobsSelCtrl.overlapsCycle = true;
     mobsSelCtrl.clickingSelectedUnselectsOthers = true;
+    
+    pathsSelCtrl.managers.push_back(&pathStopSelection);
+    pathsSelCtrl.managers.push_back(&pathLinkSelection);
+    pathsSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
+    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+    pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    pathsSelCtrl.overlapsCycle = true;
+    pathsSelCtrl.clickingSelectedUnselectsOthers = true;
     
     detailsSelCtrl.managers.push_back(&shadowSelection);
     detailsSelCtrl.managers.push_back(&regionSelection);
@@ -541,10 +606,13 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     setStatus();
     
     mobSelection.disable();
+    pathStopSelection.disable();
+    pathLinkSelection.disable();
     shadowSelection.disable();
     regionSelection.disable();
     reminderSelection.disable();
     mobsSelCtrl.disable();
+    pathsSelCtrl.disable();
     detailsSelCtrl.disable();
     reviewSelCtrl.disable();
     
@@ -552,6 +620,11 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     case EDITOR_STATE_MOBS: {
         mobSelection.enable();
         mobsSelCtrl.enable();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        pathStopSelection.enable();
+        pathLinkSelection.enable();
+        pathsSelCtrl.enable();
         break;
     } case EDITOR_STATE_DETAILS: {
         shadowSelection.enable();
@@ -719,8 +792,8 @@ void AreaEditor::clearSelection() {
     selectedEdges.clear();
     selectedSectors.clear();
     mobSelection.clear();
-    selectedPathStops.clear();
-    selectedPathLinks.clear();
+    pathStopSelection.clear();
+    pathLinkSelection.clear();
     shadowSelection.clear();
     regionSelection.clear();
     reminderSelection.clear();
@@ -1155,19 +1228,21 @@ void AreaEditor::deletePathCmd(float inputValue) {
         return;
     }
     
-    if(selectedPathLinks.empty() && selectedPathStops.empty()) {
+    if(!pathStopSelection.hasAny() && !pathLinkSelection.hasAny()) {
         setStatus("You have to select something to delete!", true);
         return;
     }
     
     //Prepare everything.
     registerChange("path deletion");
-    size_t nStopsBefore = game.curArea->pathStops.size();
-    size_t nLinksBefore = game.curArea->getNrPathLinks();
+    size_t singleStopDeletionIdx = pathStopSelection.getSingleItemIdx();
+    size_t singleLinkDeletionIdx = pathLinkSelection.getSingleItemIdx();
+    size_t nStopDeletions = pathStopSelection.getCount();
+    size_t nLinkDeletions = pathLinkSelection.getCount();
     
     //Delete!
-    deletePathLinks(selectedPathLinks);
-    deletePathStops(selectedPathStops);
+    deletePathLinks();
+    deletePathStops();
     
     //Cleanup.
     clearSelection();
@@ -1176,19 +1251,23 @@ void AreaEditor::deletePathCmd(float inputValue) {
     pathPreviewTimer.start(false);
     
     //Report.
-    setStatus(
-        "Deleted " +
-        amountStr(
-            (int) (nStopsBefore - game.curArea->pathStops.size()),
-            "path stop"
-        ) +
-        ", " +
-        amountStr(
-            (int) (nLinksBefore - game.curArea->getNrPathLinks()),
-            "path link"
-        ) +
-        "."
-    );
+    string description;
+    if(
+        singleStopDeletionIdx != INVALID &&
+        nStopDeletions == 1 && nLinkDeletions == 0
+    ) {
+        description = "path stop #" + i2s(singleStopDeletionIdx + 1);
+    } else if(
+        nLinkDeletions != INVALID &&
+        nLinkDeletions == 1 && nStopDeletions == 0
+    ) {
+        description = "path link #" + i2s(singleLinkDeletionIdx + 1);
+    } else {
+        description =
+            amountStr((int) nStopDeletions, "path stop") + ", " +
+            amountStr((int) nLinkDeletions, "path link");
+    }
+    setStatus("Deleted " + description + ".");
 }
 
 
@@ -2296,7 +2375,9 @@ void AreaEditor::goToProblem() {
         }
         
         changeState(EDITOR_STATE_PATHS);
-        selectedPathStops.insert(problemPathStopPtr);
+        pathStopSelection.add(
+            game.curArea->findPathStopIdx(problemPathStopPtr)
+        );
         centerCamera(
             problemPathStopPtr->pos - 64,
             problemPathStopPtr->pos + 64
@@ -3258,10 +3339,8 @@ void AreaEditor::selectAllCmd(float inputValue) {
             mobSelection.addAll(game.curArea->mobGenerators.size());
             
         } else if(state == EDITOR_STATE_PATHS) {
-            selectedPathStops.insert(
-                game.curArea->pathStops.begin(),
-                game.curArea->pathStops.end()
-            );
+            pathStopSelection.addAll(game.curArea->pathStops.size());
+            pathLinkSelection.addAll(game.curArea->pathLinks.size());
         } else if(state == EDITOR_STATE_DETAILS) {
             shadowSelection.addAll(game.curArea->treeShadows.size());
             regionSelection.addAll(game.curArea->regions.size());
@@ -3349,9 +3428,8 @@ void AreaEditor::selectionFilterCmd(float inputValue) {
 void AreaEditor::selectPathStopsWithLabel(const string& label) {
     clearSelection();
     forIdx(s, game.curArea->pathStops) {
-        PathStop* sPtr = game.curArea->pathStops[s];
-        if(sPtr->label == label) {
-            selectedPathStops.insert(sPtr);
+        if(game.curArea->pathStops[s]->label == label) {
+            pathStopSelection.add(s);
         }
     }
     setSelectionStatusText();
@@ -3495,11 +3573,13 @@ void AreaEditor::setSelectionStatusText() {
         break;
         
     } case EDITOR_STATE_PATHS: {
-        if(!selectedPathLinks.empty() || !selectedPathStops.empty()) {
+        if(pathStopSelection.hasAny() || pathLinkSelection.hasAny()) {
             size_t normalsFound = 0;
             size_t oneWaysFound = 0;
-            for(const auto& l : selectedPathLinks) {
-                if(l->endPtr->getLink(l->startPtr)) {
+            const set<size_t>& links = pathLinkSelection.getItemIdxs();
+            forIdx(l, links) {
+                PathLink* lPtr = game.curArea->pathLinks[l];
+                if(lPtr->endPtr->getLink(lPtr->startPtr)) {
                     //They both link to each other. So it's a two-way.
                     normalsFound++;
                 } else {
@@ -3508,7 +3588,7 @@ void AreaEditor::setSelectionStatusText() {
             }
             setStatus(
                 "Selected " +
-                amountStr((int) selectedPathStops.size(), "path stop") +
+                amountStr((int) pathStopSelection.getCount(), "path stop") +
                 ", " +
                 amountStr(
                     (int) ((normalsFound / 2.0f) + oneWaysFound),
@@ -3693,33 +3773,6 @@ void AreaEditor::snapModeCmd(float inputValue) {
     }
     finalStatusText += ".";
     setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Procedure to start moving the selected path stops.
- */
-void AreaEditor::startPathStopMove() {
-    registerChange("path stop movement");
-    
-    moveClosestStop = nullptr;
-    Distance moveClosestStopDist;
-    for(
-        auto s = selectedPathStops.begin();
-        s != selectedPathStops.end(); ++s
-    ) {
-        preMoveStopCoords[*s] = (*s)->pos;
-        
-        Distance d(game.editorsView.mouseCursorWorldPos, (*s)->pos);
-        if(!moveClosestStop || d < moveClosestStopDist) {
-            moveClosestStop = *s;
-            moveClosestStopDist = d;
-            moveStartPos = (*s)->pos;
-        }
-    }
-    
-    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
-    moving = true;
 }
 
 

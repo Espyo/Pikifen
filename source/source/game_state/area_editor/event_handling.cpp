@@ -459,7 +459,9 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                             snapPoint(game.editorsView.mouseCursorWorldPos)
                         );
                     clearSelection();
-                    selectedPathStops.insert(newStop);
+                    pathStopSelection.add(
+                        game.curArea->findPathStopIdx(newStop)
+                    );
                 }
             }
         }
@@ -1067,7 +1069,9 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                         snapPoint(game.editorsView.mouseCursorWorldPos)
                     );
                 clearSelection();
-                selectedPathStops.insert(clickedStop);
+                pathStopSelection.add(
+                    game.curArea->findPathStopIdx(clickedStop)
+                );
             }
         }
         
@@ -1154,55 +1158,11 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
             }
         }
         
-        //Start a new path selection or select something.
-        bool startNewSelection = true;
+        handleSelectionAndTransformationLmbDown(
+            pathsSelCtrl, curTransformationWidget
+        );
         
-        PathStop* clickedStop =
-            getPathStopUnderPoint(game.editorsView.mouseCursorWorldPos);
-        PathLink* clickedLink1;
-        PathLink* clickedLink2;
-        bool clickedLink =
-            getPathLinkUnderPoint(
-                game.editorsView.mouseCursorWorldPos,
-                &clickedLink1, &clickedLink2
-            );
-        if(!isShiftPressed) {
-            if(clickedStop || clickedLink) {
-                startNewSelection = false;
-            }
-            
-        }
-        
-        if(startNewSelection) {
-            if(!isCtrlPressed) clearSelection();
-            selecting = true;
-            selectionStart = game.editorsView.mouseCursorWorldPos;
-            selectionEnd = game.editorsView.mouseCursorWorldPos;
-            
-        } else {
-        
-            if(clickedStop) {
-                if(!isInContainer(selectedPathStops, clickedStop)) {
-                    if(!isCtrlPressed) {
-                        clearSelection();
-                    }
-                    selectedPathStops.insert(clickedStop);
-                }
-            } else {
-                if(!isInContainer(selectedPathLinks, clickedLink1)) {
-                    if(!isCtrlPressed) {
-                        clearSelection();
-                    }
-                    selectedPathLinks.insert(clickedLink1);
-                    if(clickedLink2 != nullptr) {
-                        selectedPathLinks.insert(clickedLink2);
-                    }
-                }
-            }
-            
-            setSelectionStatusText();
-            
-        }
+        setSelectionStatusText();
         
         break;
         
@@ -1360,48 +1320,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             
         } case EDITOR_STATE_PATHS: {
     
-            //Selection box around path stops.
-            if(!isCtrlPressed) clearSelection();
-            
-            forIdx(s, game.curArea->pathStops) {
-                PathStop* sPtr = game.curArea->pathStops[s];
-                
-                if(
-                    sPtr->pos.x -
-                    sPtr->radius >= selectionTL.x &&
-                    sPtr->pos.x +
-                    sPtr->radius <= selectionBR.x &&
-                    sPtr->pos.y -
-                    sPtr->radius >= selectionTL.y &&
-                    sPtr->pos.y +
-                    sPtr->radius <= selectionBR.y
-                ) {
-                    selectedPathStops.insert(sPtr);
-                }
-            }
-            
-            forIdx(s, game.curArea->pathStops) {
-                PathStop* sPtr = game.curArea->pathStops[s];
-                forIdx(l, sPtr->links) {
-                    PathStop* s2Ptr = sPtr->links[l]->endPtr;
-                    
-                    if(
-                        sPtr->pos.x >= selectionTL.x &&
-                        sPtr->pos.x <= selectionBR.x &&
-                        sPtr->pos.y >= selectionTL.y &&
-                        sPtr->pos.y <= selectionBR.y &&
-                        s2Ptr->pos.x >= selectionTL.x &&
-                        s2Ptr->pos.x <= selectionBR.x &&
-                        s2Ptr->pos.y >= selectionTL.y &&
-                        s2Ptr->pos.y <= selectionBR.y
-                    ) {
-                        selectedPathLinks.insert(sPtr->links[l]);
-                    }
-                }
-            }
-            
-            setSelectionStatusText();
-            
             break;
             
         }
@@ -1537,43 +1455,13 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 [this] { registerChange("object movement"); }
             );
             
+            setSelectionStatusText();
+            
             break;
             
         } case EDITOR_STATE_PATHS: {
     
             if(
-                !selectedPathStops.empty() &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move path stops.
-                if(!moving) {
-                    startPathStopMove();
-                }
-                
-                Point mouseOffset =
-                    game.editorsView.mouseCursorWorldPos - moveMouseStartPos;
-                Point closestStopNewP =
-                    snapPoint(moveStartPos + mouseOffset);
-                Point offset = closestStopNewP - moveStartPos;
-                for(
-                    auto s = selectedPathStops.begin();
-                    s != selectedPathStops.end(); ++s
-                ) {
-                    Point orig = preMoveStopCoords[*s];
-                    (*s)->pos.x = orig.x + offset.x;
-                    (*s)->pos.y = orig.y + offset.y;
-                }
-                
-                for(
-                    auto s = selectedPathStops.begin();
-                    s != selectedPathStops.end(); ++s
-                ) {
-                    (*s)->calculateDistsPlusNeighbors();
-                }
-                
-                pathPreviewTimer.start(false);
-                
-            } else if(
                 movingPathPreviewCheckpoint != -1 &&
                 subState == EDITOR_SUB_STATE_NONE
             ) {
@@ -1581,6 +1469,24 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 pathPreviewCheckpoints[movingPathPreviewCheckpoint] =
                     snapPoint(game.editorsView.mouseCursorWorldPos);
                 pathPreviewTimer.start(false);
+            } else {
+            
+                handleSelectionAndTransformationLmbDrag(
+                    pathsSelCtrl, curTransformationWidget,
+                    snapPoint(game.editorsView.mouseCursorWorldPos),
+                    [this] { registerChange("path stop movement"); }
+                );
+                
+                const set<size_t>& selectedPathStops =
+                    pathStopSelection.getItemIdxs();
+                for(size_t s : selectedPathStops) {
+                    game.curArea->pathStops[s]->calculateDistsPlusNeighbors();
+                }
+                
+                pathPreviewTimer.start(false);
+                
+                setSelectionStatusText();
+                
             }
             
             break;
@@ -1655,6 +1561,9 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     curTransformationWidget.handleMouseUp();
     handleSelectionAndTransformationLmbUp(
         mobsSelCtrl, curTransformationWidget
+    );
+    handleSelectionAndTransformationLmbUp(
+        pathsSelCtrl, curTransformationWidget
     );
     handleSelectionAndTransformationLmbUp(
         detailsSelCtrl, curTransformationWidget

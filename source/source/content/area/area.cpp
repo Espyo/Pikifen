@@ -189,6 +189,7 @@ void Area::clear() {
     sectors.clear();
     mobGenerators.clear();
     pathStops.clear();
+    pathLinks.clear();
     treeShadows.clear();
     regions.clear();
     bmap.clear();
@@ -437,6 +438,12 @@ void Area::clone(Area& other) {
         size_t nr = findEdgeIdx(e);
         other.problems.loneEdges.insert(other.edges[nr]);
     }
+    
+    forIdx(s, other.pathStops) {
+        forIdx(l, other.pathStops[s]->links) {
+            other.pathLinks.push_back(other.pathStops[s]->links[l]);
+        }
+    }
 }
 
 
@@ -665,6 +672,36 @@ size_t Area::findEdgeIdx(const Edge* ePtr) const {
 size_t Area::findMobGenIdx(const MobGen* mPtr) const {
     forIdx(m, mobGenerators) {
         if(mobGenerators[m] == mPtr) return m;
+    }
+    return INVALID;
+}
+
+
+/**
+ * @brief Scans the list of path links and retrieves the index of
+ * the specified path link.
+ *
+ * @param lPtr Path link to find.
+ * @return The index, or INVALID if not found.
+ */
+size_t Area::findPathLinkIdx(const PathLink* lPtr) const {
+    forIdx(l, pathLinks) {
+        if(pathLinks[l] == lPtr) return l;
+    }
+    return INVALID;
+}
+
+
+/**
+ * @brief Scans the list of path stops and retrieves the index of
+ * the specified path stop.
+ *
+ * @param sPtr Path stop to find.
+ * @return The index, or INVALID if not found.
+ */
+size_t Area::findPathStopIdx(const PathStop* sPtr) const {
+    forIdx(s, pathStops) {
+        if(pathStops[s] == sPtr) return s;
     }
     return INVALID;
 }
@@ -1382,6 +1419,7 @@ void Area::loadGeometryFromDataNode(
             }
             
             newStop->links.push_back(newLink);
+            pathLinks.push_back(newLink);
         }
         
         newStop->radius = std::max(newStop->radius, PATHS::MIN_STOP_RADIUS);

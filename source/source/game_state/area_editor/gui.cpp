@@ -4527,8 +4527,9 @@ void AreaEditor::processGuiPanelMobs() {
  * @brief Processes the Dear ImGui path link control panel for this frame.
  */
 void AreaEditor::processGuiPanelPathLink() {
-    PathLink* lPtr = *selectedPathLinks.begin();
-    
+    PathLink* lPtr =
+        game.curArea->pathLinks[pathLinkSelection.getFirstItemIdx()];
+        
     //Type combobox.
     vector<string> linkTypeNames;
     linkTypeNames.push_back("Normal");
@@ -4696,7 +4697,7 @@ void AreaEditor::processGuiPanelPaths() {
         );
         
         //Delete path button.
-        if(!selectedPathLinks.empty() || !selectedPathStops.empty()) {
+        if(pathStopSelection.hasAny() || !pathLinkSelection.hasAny()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -4717,9 +4718,9 @@ void AreaEditor::processGuiPanelPaths() {
         if(saveableTreeNode("paths", "Stop properties")) {
         
             bool okToEdit =
-                (selectedPathStops.size() == 1) || selectionHomogenized;
+                (pathStopSelection.hasOne()) || pathStopSelection.isHomogenized();
                 
-            if(selectedPathStops.empty()) {
+            if(!pathStopSelection.hasAny()) {
             
                 //"No stop selected" text.
                 ImGui::TextDisabled("(No path stop selected)");
@@ -4740,10 +4741,10 @@ void AreaEditor::processGuiPanelPaths() {
                 //Homogenize stops button.
                 if(ImGui::Button("Edit all together")) {
                     registerChange("path stop combining");
-                    selectionHomogenized = true;
+                    pathStopSelection.setHomogenized(true);
                     //Unselect path links otherwise those will be considered
                     //homogenized too.
-                    selectedPathLinks.clear();
+                    pathLinkSelection.clear();
                     homogenizeSelectedPathStops();
                 }
             }
@@ -4758,17 +4759,19 @@ void AreaEditor::processGuiPanelPaths() {
         if(saveableTreeNode("paths", "Link properties")) {
         
             bool okToEdit =
-                (selectedPathLinks.size() == 1) || selectionHomogenized;
-            if(!okToEdit && selectedPathLinks.size() == 2) {
+                (pathLinkSelection.hasOne()) || pathLinkSelection.isHomogenized();
+            if(!okToEdit && pathLinkSelection.getCount() == 2) {
+                const set<size_t>& selectedPathLinks =
+                    pathLinkSelection.getItemIdxs();
                 auto it = selectedPathLinks.begin();
-                PathLink* l1 = *it;
+                PathLink* l1 = game.curArea->pathLinks[*it];
                 it++;
-                PathLink* l2 = *it;
+                PathLink* l2 = game.curArea->pathLinks[*it];
                 if(
                     l1->startPtr == l2->endPtr &&
                     l1->endPtr == l2->startPtr
                 ) {
-                    //The only things we have selected are a link,
+                    //The only things we have selected are a link
                     //and also the opposite link. As far as the user cares,
                     //this is all just one link that is of the "normal" type.
                     //And if they edit the properties, we want both links to
@@ -4777,7 +4780,7 @@ void AreaEditor::processGuiPanelPaths() {
                 }
             }
             
-            if(selectedPathLinks.empty()) {
+            if(!pathLinkSelection.hasAny()) {
             
                 //"No link selected" text.
                 ImGui::TextDisabled("(No path link selected)");
@@ -4798,10 +4801,10 @@ void AreaEditor::processGuiPanelPaths() {
                 //Homogenize links button.
                 if(ImGui::Button("Edit all together")) {
                     registerChange("path link combining");
-                    selectionHomogenized = true;
+                    pathLinkSelection.setHomogenized(true);
                     //Unselect path stops otherwise those will be considered
                     //homogenized too.
-                    selectedPathStops.clear();
+                    pathStopSelection.clear();
                     homogenizeSelectedPathLinks();
                 }
             }
@@ -4997,8 +5000,9 @@ void AreaEditor::processGuiPanelPaths() {
  * @brief Processes the Dear ImGui path stop control panel for this frame.
  */
 void AreaEditor::processGuiPanelPathStop() {
-    PathStop* sPtr = *selectedPathStops.begin();
-    
+    PathStop* sPtr =
+        game.curArea->pathStops[pathStopSelection.getFirstItemIdx()];
+        
     //Radius value.
     float radius = sPtr->radius;
     if(ImGui::DragFloat("Radius", &radius, 0.5f, PATHS::MIN_STOP_RADIUS)) {
@@ -5368,6 +5372,15 @@ void AreaEditor::processGuiPanelReview() {
         );
         setTooltip(
             "Total amount of path stops in the area."
+        );
+        
+        //Path link amount text.
+        ImGui::BulletText(
+            "Path links: %i", (int) game.curArea->pathLinks.size()
+        );
+        setTooltip(
+            "Total amount of path stop links in the area.\n"
+            "Two-way links are counted as two."
         );
         
         size_t treasureTotal;

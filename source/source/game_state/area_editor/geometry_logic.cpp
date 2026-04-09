@@ -394,7 +394,7 @@ void AreaEditor::copyMobProperties() {
  *
  */
 void AreaEditor::copyPathLinkProperties() {
-    if(selectedPathLinks.empty()) {
+    if(!pathLinkSelection.hasAny()) {
         setStatus(
             "To copy a path link's properties, you must first select a path "
             "link to copy from!",
@@ -403,12 +403,14 @@ void AreaEditor::copyPathLinkProperties() {
         return;
     }
     
-    size_t reallySelectedNr = selectedPathLinks.size();
+    PathLink* sourceLink = nullptr;
+    size_t reallySelectedNr = pathLinkSelection.getCount();
     if(reallySelectedNr == 2) {
         //Check if these are just the two sides of the same two-way link.
         //If so then yeah, we basically only have one link really selected.
-        PathLink* lPtr = *selectedPathLinks.begin();
-        if(!lPtr->isOneWay()) {
+        sourceLink =
+            game.curArea->pathLinks[pathLinkSelection.getFirstItemIdx()];
+        if(!sourceLink->isOneWay()) {
             reallySelectedNr = 1;
         }
     }
@@ -422,7 +424,6 @@ void AreaEditor::copyPathLinkProperties() {
         return;
     }
     
-    PathLink* sourceLink = *selectedPathLinks.begin();
     if(!copyBufferPathLink) {
         copyBufferPathLink = new PathLink(nullptr, nullptr, INVALID);
     }
@@ -580,10 +581,17 @@ void AreaEditor::deleteMobs() {
  *
  * @param which Path links to delete.
  */
-void AreaEditor::deletePathLinks(const set<PathLink*>& which) {
-    for(auto& l : which) {
-        l->startPtr->deleteLink(l);
+void AreaEditor::deletePathLinks() {
+    const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
+    
+    for(auto const& linkIdx : selectedLinks) {
+        PathLink* lPtr = game.curArea->pathLinks[linkIdx];
+        //Delete it from the start path stop.
+        lPtr->startPtr->deleteLink(lPtr);
     }
+    
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedLinks, game.curArea->pathLinks);
 }
 
 
@@ -592,29 +600,22 @@ void AreaEditor::deletePathLinks(const set<PathLink*>& which) {
  *
  * @param which Path stops to delete.
  */
-void AreaEditor::deletePathStops(const set<PathStop*>& which) {
-    for(auto& s : which) {
+void AreaEditor::deletePathStops() {
+    const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
+    
+    for(auto const& stopIdx : selectedStops) {
         //Check all links that end at this stop.
         forIdx(s2, game.curArea->pathStops) {
             PathStop* s2Ptr = game.curArea->pathStops[s2];
-            s2Ptr->deleteLink(s);
+            s2Ptr->deleteLink(game.curArea->pathStops[stopIdx]);
         }
         
-        //Finally, delete the stop.
-        delete s;
-        forIdx(s2, game.curArea->pathStops) {
-            if(game.curArea->pathStops[s2] == s) {
-                game.curArea->pathStops.erase(
-                    game.curArea->pathStops.begin() + s2
-                );
-                break;
-            }
-        }
+        //Delete it.
+        delete game.curArea->pathStops[stopIdx];
     }
     
-    forIdx(s, game.curArea->pathStops) {
-        game.curArea->fixPathStopIdxs(game.curArea->pathStops[s]);
-    }
+    //Finally, erase them from the vector.
+    eraseIndexesInVector(selectedStops, game.curArea->pathStops);
 }
 
 
@@ -2264,17 +2265,14 @@ void AreaEditor::homogenizeSelectedMobs() {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedPathLinks() {
-    if(selectedPathLinks.size() < 2) return;
+    if(pathLinkSelection.getCount() < 2) return;
     
-    PathLink* base = *selectedPathLinks.begin();
-    for(
-        auto l = selectedPathLinks.begin();
-        l != selectedPathLinks.end();
-        ++l
-    ) {
-        if(l == selectedPathLinks.begin()) continue;
-        
-        base->clone(*l);
+    const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
+    PathLink* base = game.curArea->pathLinks[*selectedLinks.begin()];
+    for(size_t linkIdx : selectedLinks) {
+        PathLink* link = game.curArea->pathLinks[linkIdx];
+        if(link == base) continue;
+        base->clone(link);
     }
 }
 
@@ -2284,17 +2282,14 @@ void AreaEditor::homogenizeSelectedPathLinks() {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedPathStops() {
-    if(selectedPathStops.size() < 2) return;
+    if(pathStopSelection.getCount() < 2) return;
     
-    PathStop* base = *selectedPathStops.begin();
-    for(
-        auto s = selectedPathStops.begin();
-        s != selectedPathStops.end();
-        ++s
-    ) {
-        if(s == selectedPathStops.begin()) continue;
-        
-        base->clone(*s);
+    const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
+    PathStop* base = game.curArea->pathStops[*selectedStops.begin()];
+    for(size_t stopIdx : selectedStops) {
+        PathStop* stop = game.curArea->pathStops[stopIdx];
+        if(stop == base) continue;
+        base->clone(stop);
     }
 }
 
@@ -2601,7 +2596,7 @@ void AreaEditor::pastePathLinkProperties() {
         return;
     }
     
-    if(selectedPathLinks.empty()) {
+    if(!pathLinkSelection.hasAny()) {
         setStatus(
             "To paste path link properties, you must first select which path "
             "link to paste to!",
@@ -2612,8 +2607,8 @@ void AreaEditor::pastePathLinkProperties() {
     
     registerChange("path link property paste");
     
-    for(PathLink* l : selectedPathLinks) {
-        copyBufferPathLink->clone(l);
+    for(size_t linkIdx : pathLinkSelection.getItemIdxs()) {
+        copyBufferPathLink->clone(game.curArea->pathLinks[linkIdx]);
     }
     
     setStatus("Successfully pasted path link properties.");

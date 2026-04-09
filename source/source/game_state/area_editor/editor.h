@@ -482,7 +482,7 @@ private:
         
     };
     
-    //Filters for selecting.
+    //Filters for selecting in layout mode.
     enum SELECTION_FILTER {
     
         //Select sectors, edges, and vertexes.
@@ -706,9 +706,6 @@ private:
     //Area data before vertex movement.
     Area* preMoveAreaData = nullptr;
     
-    //Position of the selected path stops before movement.
-    map<PathStop*, Point> preMoveStopCoords;
-    
     //Position of the selected vertexes before movement.
     map<Vertex*, Point> preMoveVertexCoords;
     
@@ -782,17 +779,17 @@ private:
     //Currently selected edges.
     set<Edge*> selectedEdges;
     
-    //Currently selected path links.
-    set<PathLink*> selectedPathLinks;
-    
-    //Currently selected path stops.
-    set<PathStop*> selectedPathStops;
-    
     //Currently selected sectors.
     set<Sector*> selectedSectors;
     
     //Selection manager for the mob generators.
     SelectionManager mobSelection;
+    
+    //Selection manager for the path stops.
+    SelectionManager pathStopSelection;
+    
+    //Selection manager for the path links.
+    SelectionManager pathLinkSelection;
     
     //Selection manager for the tree shadows.
     SelectionManager shadowSelection;
@@ -803,8 +800,11 @@ private:
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
     
-    //Selection controller for the mob state.
+    //Selection controller for the mobs state.
     SelectionController mobsSelCtrl;
+    
+    //Selection controller for the paths state.
+    SelectionController pathsSelCtrl;
     
     //Selection controller for the details state.
     SelectionController detailsSelCtrl;
@@ -833,7 +833,7 @@ private:
     //Point where the selection is currently at.
     Point selectionEnd;
     
-    //Current selection filter.
+    //Current layout mode selection filter.
     SELECTION_FILTER selectionFilter = SELECTION_FILTER_SECTORS;
     
     //Has the user agreed to homogenize the selection?
@@ -969,8 +969,8 @@ private:
     void deleteEdge(Edge* ePtr);
     bool deleteEdges(const set<Edge*>& which);
     void deleteMobs();
-    void deletePathLinks(const set<PathLink*>& which);
-    void deletePathStops(const set<PathStop*>& which);
+    void deletePathLinks();
+    void deletePathStops();
     void deleteRegions();
     void deleteTreeShadows();
     void doSectorSplit();
@@ -1112,7 +1112,6 @@ private:
         PathLink* l1, PathLink* l2,
         const Point& where
     );
-    void startPathStopMove();
     void startVertexMove();
     void traverseSectorForSplit(
         const Sector* sPtr, Vertex* begin, const Vertex* checkpoint,

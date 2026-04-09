@@ -232,6 +232,9 @@ struct Area : public Content {
     //List of path stops.
     vector<PathStop*> pathStops;
     
+    //List of path links. Only really useful for the editor.
+    vector<PathLink*> pathLinks;
+    
     //List of tree shadows.
     vector<TreeShadow*> treeShadows;
     
@@ -317,6 +320,8 @@ struct Area : public Content {
     void connectVertexEdges(Vertex* vPtr);
     size_t findEdgeIdx(const Edge* ePtr) const;
     size_t findMobGenIdx(const MobGen* mPtr) const;
+    size_t findPathLinkIdx(const PathLink* lPtr) const;
+    size_t findPathStopIdx(const PathStop* sPtr) const;
     size_t findSectorIdx(const Sector* sPtr) const;
     size_t findVertexIdx(const Vertex* vPtr) const;
     size_t findTreeShadowIdx(const TreeShadow* sPtr) const;
