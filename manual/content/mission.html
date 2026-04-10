@@ -1,0 +1,128 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+  <link rel="icon" href="../../game_data/base/graphics/gui/icon.png" />
+</head>
+
+<body onload="setup('Mission', ['Making content', 'Areas'], ['making.html', 'area.html']);">
+  <div id="page-content">
+    
+    <p>This page will explain how mission areas work in <i>Pikifen</i>. For a general guide on how areas work, see <a href="area.html">here</a>.</p>
+
+    <h2 id="intro">Introduction</h2>
+
+    <p>Missions are areas that task the player with achieving a certain goal, with the promise of a medal at the end. When you create a mission-type area in the <a href="area.html">area editor</a>, the main panel will contain a button that lets you enter the mission settings panel, where you can determine everything about how the player's challenge will work.</p>
+
+    <p>If you want to create a simple mission, like the ones found in the <i>Pikmin</i> games, the very first section of the panel lets you specify a preset. If you want something more involved, or just want to tweak some of the internals of one of the presets, you'll want to change the preset type to "custom" and read on.</p>
+
+    <p>Fundamentally, missions have three main concepts: <a href="#end-condition">end conditions</a>, <a href="#score-criterion">score criteria</a>, and <a href="#hud-item">HUD items</a>.</p>
+
+    <h2 id="end-condition">End condition</h2>
+
+    <p>These determine under what conditions a mission ends. Use these to establish what the mission goal is and when that is considered obtained, as well as to determine any failure conditions that the player should avoid. For instance: the mission is instantly won when all the treasures have been collected, but is instantly lost if the player loses 10 or more Pikmin.</p>
+
+    <dl>
+      <dt><b>An end condition determines when and how the mission ends.</b></dt>
+      <dd>Inside of an end condition's data, you specify the condition that must be met for it to trigger, and then what happens to the mission's completion status as a result.</dd>
+      <dt><b>The condition usually involves a metric reaching a target amount, or some specific thing happening.</b></dt>
+      <dd>Types of events include the player ending early from the pause menu, the player taking damage, a <a href="#metric">metric</a> reaching a certain value or higher, or a metric reaching a certain value or lower.</dd>
+      <dt><b>Missions can end in clears or fails.</b></dt>
+      <dd>If a mission ends as a "clear", that means the player can receive a medal. If it ends in a "fail", that means the player cannot receive a medal.</dd>
+      <dt><b>End conditions trigger immediately as soon as the condition is met.</b></dt>
+      <dd>During gameplay, the game will be constantly checking if the condition is met, and if so, its effects will trigger instantaneously.</dd>
+      <dt><b>You can have multiple end conditions.</b></dt>
+      <dd>Whichever one triggers first determines how the mission ends. If multiple conditions are met at the exact same time, the game will prioritize the end condition that appears earliest in this list, so feel free to sort it accordingly.</dd>
+      <dt><b>Missions must always end in a clear or fail, but the mood can be neutral.</b></dt>
+      <dd>Some end conditions obviously make the player fail while others obviously make the player fully complete the mission. But some are a bit less certain. If the player is <a href="#score-criterion">scored</a> based how many treasures they can get before the time limit is over, the time limit itself is neither positive or negative, it's just an aspect of the mission. When the time limit is reached, the player is neither happy nor sad specifically, since it all depends on the score. By marking the mood as neutral, the jingle and effects that play will be more neutral-sounding instead of positive-sounding or negative-sounding.</dd>
+      <dt><b>Some conditions should clear the time remaining so the player doesn't get an unfair score.</b></dt>
+      <dd>Imagine a mission that requires defeating all enemies, but ends if the player takes damage, and the player's <a href="#score-criterion">score</a> receives a bonus depending on how much time was still in the clock. If the player starts the mission, beelines for an enemy, and gets hurt, their time remaining bonus will be gigantic! To stop that from happening, you can use the "Zero time for score" checkbox.</dd>
+      <dt><b>Notes:</b></dt>
+      <dd><ul>
+        <li>If you don't specify an end condition for when the player ends early from the pause menu, the game will just assume the mission was failed.</li>
+      </ul></dd>
+    </dl>
+
+    <h2 id="score-criterion">Score criterion</h2>
+
+    <p>The player's main goal is to obtain a medal. In some missions, the player gets a platinum medal just by participating once. In some others, they get a platinum medal if the mission is cleared, and no medal if the mission is failed. Most other missions give the player a different medal depending on the score they've obtained.</p>
+
+    <p>Usually, for missions that use score, the current score is visible in a dedicated score ruler <a href="#hud-item">HUD item</a> and the final score is shown in the results menu. How the score is calculated is controlled by the mission's score criteria. For instance: the player receives 10 points per enemy defeated, loses 1 point per Pikmin lost, and then receives a bonus of 1 point per second remaining in the clock when the mission is over.</p>
+
+    <dl>
+      <dt><b>A score criterion is controlled by a metric.</b></dt>
+      <dd>The higher the value in a <a href="#metric">metric</a>, the more points that criterion gives. Or the fewer points!</dd>
+      <dt><b>The points received from that metric can be positive or negative, and multiplied by any amount.</b></dt>
+      <dd>If you want the player to lose points, write a negative number. If you want a criterion to give more points than just 1, just write a bigger number. Use this to balance the weight of each criterion.</dd>
+      <dt><b>Some criteria should be calculated only at the end, instead of being shown mid-gameplay.</b></dt>
+      <dd>Something like awarding bonus points based on how much time was left in the clock can be a good idea, but it should probably be exclusive to the score tally in the results menu when the mission is done. Otherwise, the player will see their score ruler <a href="#hud-item">HUD item</a> continuously tick down. This feeling of "losing" points is probably not what you want. In such cases, clear the "Applies to HUD" checkbox.</dd>
+    </dl>
+
+    <h2 id="hud-item">HUD item</h2>
+
+    <p>Most HUD items during gameplay let the player know of important information at all times. Something like the Pikmin counter is useful for keeping track of the player's army, but for missions, there should also be some HUD items that let the player keep track of how the mission is going and how close they are to succeeding...or failing. For instance: how many treasures they've collected and how many they need in total, how much time is left, or what their <a href="#score-criterion">score</a> currently is.</p>
+
+    <dl>
+      <dt><b>There are four HUD item slots.</b></dt>
+      <dd>The HUD has to look nice and be organized as a part of the <a href="gui.html">GUI</a> system, so the HUD's GUI definition determines the space and position for four items. This means you can't have dozens of arbitrary HUD items since it'd be unreasonable to place them all with <i>Pikifen</i>'s GUI system. But of these four, you can choose what to place on which one. Standard convention dictates one is usually where things related to the mission's goal get placed, another is where the score ruler gets placed, another is where the clock is placed, and the other is for miscellaneous information. But you don't need to specifically follow this convention. In addition, any slot can also be lacking an item entirely if you so choose.</dd>
+      <dt><b>Most HUD items obtain their information from a metric.</b></dt>
+      <dd>HUD items typically show the player the status of something related to the mission, and so, you can choose which <a href="#metric">metric</a> it obtains the information from. Some HUD items decide this automatically, like the time limit obviously drawing from the number of seconds remaining. One HUD item type even contains static text that you write yourself.</dd>
+      <dt><b>How the HUD item displays its information can be chosen from a list.</b></dt>
+      <dd>The score is best shown in a score ruler. The time remaining is best shown with a clock. And so on. For most of the metric-related HUD items, you can choose to display the current amount, the remaining amount, or the total amount, as well as optionally a slash and the total amount afterwards. Pick whichever one you feel is most appropriate for the type of information you want the player to know.</dd>
+    </dl>
+
+    <h2 id="metric">Metric</h2>
+
+    <p>Throughout a mission's development you'll come across the need to use metrics. A metric is simply a number of something that is happening during gameplay that tends to be useful in a mission. Examples of metrics include how many Pikmin are currently alive, how many have perished so far, the number of seconds remaining, etc.</p>
+
+    <dl>
+      <dt><b>Some metrics need a mob group or area region number.</b></dt>
+      <dd>The metric that tells you how many leaders are currently inside of an area region needs to know the number of the area region. The metrics that need to check how many objects in a <a href="mob-group">mob group</a> have been cleared also needs to know the number of the mob group. When you select these metrics in an end condition, score criterion, or HUD item, you will also be asked to provide the mob group or area region number.</dd>
+      <dt><b>The "target" amount of a metric can be set manually, but some can figure it out automatically.</b></dt>
+      <dd>Using the current amount of something that a metric tracks is simple enough. But more often than not you want to be able to specify a "target" amount too. For end conditions you'll want to specify the match amount that triggers the condition, and for HUD items, you may want to show a grand total to the player. In these cases you can specify this amount manually. But a number of metrics can also suggest a number for you! For instance, a metric for how many objects in a mob group have been cleared can suggest a "target" amount that's just the total amount of objects in that group. The metric for how much time is left can automatically recommend the time limit's amount.</dd>
+    </dl>
+
+    <h2 id="mob-group">Mob group</h2>
+
+    <p>Some objects are relevant for the mission. In such cases they need to belong to a mob group so the mission can keep track of them. For instance, it can be important to keep track of how many enemies have been defeated, how many treasures need to be collected, or if the object you're protecting lost all its health.</p>
+
+    <dl>
+      <dt><b>The objects in a mob group can belong to a given pattern, or be completely custom.</b></dt>
+      <dd>For ease of use, you can select one of the mob group types, and this will include all objects that match into the group. This is a great way to, for instance, keep track of all treasures in the stage. Otherwise, you can pick the "custom" type and choose which objects you want, one by one.</dd>
+      <dt><b>An object is "cleared" when it's killed or collected.</b></dt>
+      <dd>For treasures, they count as "cleared" when they are collected. For enemies, they count as "cleared" when defeated, or if the "Enemies need collection" checkbox is active, when they are collected. Everything else counts as "cleared" when killed.</dd>
+      <dt><b>Objects you think the player should keep track of can be highlighted in the radar.</b></dt>
+      <dd>The "Highlight on radar" makes all objects that belong to this group (and have not yet been "cleared") receive a highlight icon in the radar.</dd>
+    </dl>
+
+    <h2 id="other">Other information</h2>
+
+    <dl>
+      <dt><b>Use the mission briefing to succinctly tell the player how the mission works.</b></dt>
+      <dd>The mission briefing objective textbox is where you write down a summary of the mission, in around one or two sentences. The mission briefing notes is a list of bullet points that can have any size, and each bullet point should describe one important aspect for the player to keep in mind. Examples include describing the failure conditions or bonus points. The player can find mission briefing information in the area selection menu and in the pause menu.
+      </dd>
+      <dt><b>Treasure collection points, enemy collection points, and enemy defeat points are not associated with mob groups.</b></dt>
+      <dd>If you just want to keep track of the treasure collection points, enemy collection points, or enemy defeat points, you don't need to create a mob group. On the flip side, you also cannot filter for the points only within a certain group of objects. Keep this in mind when working with these points.</dd>
+      <dt><b>Add your score record to drive competition.</b></dt>
+      <dd>Try your best at your own mission, and if you get a good score, write it down in the mission's data! This will give players something to aim for if they want to go beyond a platinum medal.</dd>
+      <dt><b>To achieve more complex missions, use scripts.</b></dt>
+      <dd>Writing an area <a href="script.html">script</a> can let you have more complex <a href="#end-condition">end conditions</a>, <a href="#score-criterion">score criteria</a>, <a href="#hud-item">HUD items</a>, and more!</dd>
+    </dl>
+
+    <h2 id="see-also">See also</h2>
+    
+    <ul>
+      <li><a href="area_tips.html">Area tips</a> &ndash; tips on how to make your area seem natural, look detailed, and be fun
+    </ul>
+    
+  </div>
+</body>
+
+</html>

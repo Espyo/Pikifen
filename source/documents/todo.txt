@@ -13,7 +13,7 @@ Current tasks (tasks being worked on, but not yet committed)
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, etc.
-        The area editor should show the index of the selected sector, edge, vertex, mob
+        The area editor should show the index of the selected sector, edge, vertex, mob, path stop, path link
         Some selected things become solid yellow, others an oscillating yellow, others no yellow
 
 Next tasks (roughly sorted most important first)
@@ -49,7 +49,6 @@ Next tasks (roughly sorted most important first)
         Standard cursor color
         Colors for "system" feel; basically the blue tones used throughout
         The medal colors
-    Update the manual's tutorial to cover the new mission system
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
