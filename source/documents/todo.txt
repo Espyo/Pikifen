@@ -4,10 +4,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Paths
-            Clicking a two-way link alternates between the two of them
-            Angled link clicks count anywhere in their bounding box
-            Transformation widget has handles when you only have links selected
         Add it to the layout area editor state
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected

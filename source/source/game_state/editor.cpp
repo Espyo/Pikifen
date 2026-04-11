@@ -395,21 +395,32 @@ void Editor::drawSelectionAndTransformationThings(
     const TransformationWidget& traWid
 ) {
     //Transformation widget, if possible.
-    if(selCtrl.isTransformationWidgetAvailable()) {
+    bool canChange;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
+        bool canChangeAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
+        bool useAngle =
+            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
+        Bitmask8 flags = 0;
+        if(!canChange) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
+        }
+        if(!canChangeAngle || !canChange) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
+        }
         if(selectionSize.x != 0.0f) {
             traWid.draw(
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom
+                1.0f / game.editorsView.cam.zoom, flags
             );
         }
     }
     
-    //Selection manager.
+    //Selection controller.
     selCtrl.draw(
         game.editorsView.mouseCursorWorldPos, game.editorsView.cam.zoom
     );
@@ -1029,17 +1040,28 @@ void Editor::handleSelectionAndTransformationLmbDown(
     SelectionController& selCtrl, TransformationWidget& traWid
 ) {
     bool twHandled = false;
-    if(selCtrl.isTransformationWidgetAvailable()) {
+    bool canChange;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
+        bool canChangeAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
+        bool useAngle =
+            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
+        Bitmask8 flags = 0;
+        if(!canChange) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
+        }
+        if(!canChangeAngle) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
+        }
         twHandled =
             traWid.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom
+                1.0f / game.editorsView.cam.zoom, flags
             );
     }
     
@@ -1085,18 +1107,31 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     }
     
     //Transformation widget.
-    if(selCtrl.isTransformationWidgetAvailable()) {
+    bool canChange;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
+        bool canChangeAngle;
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle = selCtrl.getSelectedItemAngle(&selectionAngle);
+        bool useAngle =
+            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
+        Bitmask8 flags = 0;
+        if(!canChange) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
+        }
+        if(!canChangeAngle) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
+        }
+        if(isAltPressed) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+        }
         bool twHandled =
             traWid.handleMouseMove(
                 mouseCursor,
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom,
-                false, false, 0.10f, isAltPressed
+                1.0f / game.editorsView.cam.zoom, flags, 0.10f
             );
         if(twHandled) {
             if(onPreTransform) onPreTransform();
@@ -5141,9 +5176,12 @@ bool Editor::SelectionController::getTotalBBox(
  * can be edited. This only works for a single item being selected.
  *
  * @param outAngle The angle is returned here.
+ * @param outCanChange Whether changing the angle is allowed is returned here.
  * @return Whether the item's angle can be edited.
  */
-bool Editor::SelectionController::getSelectedItemAngle(float* outAngle) const {
+bool Editor::SelectionController::getSelectedItemAngle(
+    float* outAngle, bool* outCanChange
+) const {
     if(getSelectionTotalCount() != 1) {
         //Not supported.
         return false;
@@ -5156,6 +5194,7 @@ bool Editor::SelectionController::getSelectedItemAngle(float* outAngle) const {
         
         Point center, size;
         managers[m]->getItemInfo(itemIdx, &center, &size, outAngle);
+        *outCanChange = !managers[m]->disableChanges;
         return true;
     }
     
@@ -5165,13 +5204,23 @@ bool Editor::SelectionController::getSelectedItemAngle(float* outAngle) const {
 /**
  * @brief Returns the total number of selected items.
  *
+ * @param outCanChange Whether the selected items can have their properties
+ * changed is returned here.
  * @return The total.
  */
-size_t Editor::SelectionController::getSelectionTotalCount() const {
+size_t Editor::SelectionController::getSelectionTotalCount(
+    bool* outCanChange
+) const {
+    bool canChange = false;
     size_t total = 0;
+    
     forIdx(m, managers) {
-        total += managers[m]->getCount();
+        size_t count = managers[m]->getCount();
+        total += count;
+        if(count > 0) canChange |= (!managers[m]->disableChanges);
     }
+    
+    if(outCanChange) *outCanChange = canChange;
     return total;
 }
 
@@ -5230,10 +5279,17 @@ bool Editor::SelectionController::isOpRuleRespected(OP_RULE rule) const {
 /**
  * @brief Returns whether the transformation widget is available right now.
  *
+ * @param outCanChange Whether the selected items can have their properties
+ * changed is returned here.
  * @return Whether it is available.
  */
-bool Editor::SelectionController::isTransformationWidgetAvailable() const {
-    return getSelectionTotalCount() && isOpRuleRespected(twTransformRule);
+bool Editor::SelectionController::isTransformationWidgetAvailable(
+    bool* outCanChange
+) const {
+    *outCanChange = false;
+    if(!isOpRuleRespected(twTransformRule)) return false;
+    size_t selected = getSelectionTotalCount(outCanChange);
+    return selected > 0;
 }
 
 
@@ -5468,6 +5524,7 @@ bool Editor::SelectionManager::add(size_t idx) {
     if(!enabled) return false;
     if(!selectedItems.add(idx)) return false;
     homogenized = false;
+    if(onSelectionChanged) onSelectionChanged();
     return true;
 }
 
@@ -5480,7 +5537,9 @@ bool Editor::SelectionManager::add(size_t idx) {
  */
 bool Editor::SelectionManager::addAll(size_t totalAmount) {
     if(!enabled) return false;
-    return selectedItems.addAll(totalAmount);
+    bool changed = selectedItems.addAll(totalAmount);
+    if(changed && onSelectionChanged) onSelectionChanged();
+    return changed;
 }
 
 
@@ -5578,6 +5637,7 @@ bool Editor::SelectionManager::clear() {
     if(!enabled) return false;
     if(!selectedItems.clear()) return false;
     homogenized = false;
+    if(onSelectionChanged) onSelectionChanged();
     return true;
 }
 
@@ -5601,7 +5661,8 @@ bool Editor::SelectionManager::contains(size_t idx) const {
 bool Editor::SelectionManager::disable() {
     bool wasEnabled = enabled;
     enabled = false;
-    selectedItems.clear();
+    bool changed = selectedItems.clear();
+    if(changed && onSelectionChanged) onSelectionChanged();
     return wasEnabled;
 }
 
@@ -5894,7 +5955,9 @@ bool Editor::SelectionManager::hasOne() const {
  */
 bool Editor::SelectionManager::remove(size_t idx) {
     if(!enabled) return false;
-    return selectedItems.remove(idx);
+    bool changed = selectedItems.remove(idx);
+    if(changed && onSelectionChanged) onSelectionChanged();
+    return changed;
 }
 
 
@@ -5906,7 +5969,9 @@ bool Editor::SelectionManager::remove(size_t idx) {
  */
 bool Editor::SelectionManager::setSingle(size_t idx) {
     if(!enabled) return false;
-    return selectedItems.setSingle(idx);
+    bool changed = selectedItems.setSingle(idx);
+    if(changed && onSelectionChanged) onSelectionChanged();
+    return changed;
 }
 
 
@@ -5959,10 +6024,11 @@ bool Editor::SelectionManager::startOperation() {
  * @param size Width and height. If nullptr, no scale handles will be drawn.
  * @param angle Angle. If nullptr, the rotation handle will not be drawn.
  * @param zoom Zoom the widget's components by this much.
+ * @param flags Flags to use.
  */
 void Editor::TransformationWidget::draw(
     const Point* const center, const Point* const size,
-    const float* const angle, float zoom
+    const float* const angle, float zoom, Bitmask8 flags
 ) const {
     const ALLEGRO_COLOR ROT_HANDLE_COLOR = al_map_rgb(64, 64, 192);
     const ALLEGRO_COLOR NORMAL_HANDLE_COLOR = al_map_rgb(96, 96, 224);
@@ -5974,7 +6040,7 @@ void Editor::TransformationWidget::draw(
     getLocations(center, size, angle, handles, &radius, nullptr);
     
     //Draw the rotation handle.
-    if(angle && radius >= 0.0f) {
+    if(angle && radius >= 0.0f && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         al_draw_circle(
             center->x, center->y, radius,
             ROT_HANDLE_COLOR, EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
@@ -5999,7 +6065,15 @@ void Editor::TransformationWidget::draw(
     
     //Draw the translation and scale handles.
     for(unsigned char h = 0; h < 9; h++) {
-        if(!size && h != 4) continue;
+        if(h == 4) {
+            //Translation.
+            if(hasFlag(flags, TW_FLAG_DISABLE_CENTER)) continue;
+        } else {
+            //Scale.
+            if(!size) continue;
+            if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
+        }
+        
         al_draw_filled_circle(
             handles[h].x, handles[h].y,
             EDITOR::TW_HANDLE_RADIUS * zoom, NORMAL_HANDLE_COLOR
@@ -6029,6 +6103,8 @@ void Editor::TransformationWidget::getLocations(
 ) const {
     Point sizeToUse(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
     if(size) sizeToUse = *size;
+    if(sizeToUse.x <= 4.0f) sizeToUse.x = 4.0f;
+    if(sizeToUse.y <= 4.0f) sizeToUse.y = 4.0f;
     
     //First, the Allegro transformation.
     ALLEGRO_TRANSFORM transformToUse;
@@ -6085,11 +6161,13 @@ Point Editor::TransformationWidget::getOldCenter() const {
  * will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
+ * @param flags Flags to use.
  * @return Whether the user clicked on a handle.
  */
 bool Editor::TransformationWidget::handleMouseDown(
     const Point& mouseCoords, const Point* const center,
-    const Point* const size, const float* const angle, float zoom
+    const Point* const size, const float* const angle, float zoom,
+    Bitmask8 flags
 ) {
     if(!center) return false;
     
@@ -6099,24 +6177,31 @@ bool Editor::TransformationWidget::handleMouseDown(
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; h++) {
+        if(h == 4) {
+            //Center.
+            if(hasFlag(flags, TW_FLAG_DISABLE_CENTER)) continue;
+        } else {
+            //Size.
+            if(!size) continue;
+            if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
+        }
+        
         if(
             Distance(handles[h], mouseCoords) <=
             EDITOR::TW_HANDLE_RADIUS * zoom
         ) {
             if(h == 4) {
-                movingHandle = h;
                 oldCenter = *center;
-                return true;
-            } else if(size) {
-                movingHandle = h;
+            } else {
                 oldSize = *size;
-                return true;
             }
+            movingHandle = h;
+            return true;
         }
     }
     
     //Check if the user clicked on the rotation handle.
-    if(angle) {
+    if(angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         Distance d(*center, mouseCoords);
         if(
             d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
@@ -6142,19 +6227,14 @@ bool Editor::TransformationWidget::handleMouseDown(
  * will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
- * @param keepAspectRatio If true, aspect ratio is kept when resizing.
- * @param keepArea If true, keep the same total area.
- * Used for squash and stretch.
+ * @param flags Flags to use.
  * @param minSize Minimum possible size for the width or height.
  * Use -FLT_MAX for none.
- * @param lockCenter If true, scaling happens with the center locked.
- * If false, the opposite edge or corner is locked instead.
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
     const Point& mouseCoords, Point* center, Point* size, float* angle,
-    float zoom, bool keepAspectRatio, bool keepArea,
-    float minSize, bool lockCenter
+    float zoom, Bitmask8 flags, float minSize
 ) {
     if(!center) return false;
     
@@ -6163,13 +6243,13 @@ bool Editor::TransformationWidget::handleMouseMove(
     }
     
     //Logic for moving the center handle.
-    if(movingHandle == 4) {
+    if(movingHandle == 4 && !hasFlag(flags, TW_FLAG_DISABLE_CENTER)) {
         *center = mouseCoords;
         return true;
     }
     
     //Logic for moving the rotation handle.
-    if(movingHandle == 9 && angle) {
+    if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         *angle =
             oldAngle +
             getAngle(*center, mouseCoords) - oldMouseAngle;
@@ -6177,7 +6257,7 @@ bool Editor::TransformationWidget::handleMouseMove(
     }
     
     //From here on out, it's logic to move a scale handle.
-    if(!size) {
+    if(!size || hasFlag(flags, TW_FLAG_DISABLE_SIZE)) {
         return false;
     }
     
@@ -6230,7 +6310,10 @@ bool Editor::TransformationWidget::handleMouseMove(
     newSize.x = std::max(minSize, newSize.x);
     newSize.y = std::max(minSize, newSize.y);
     
-    if(keepAspectRatio && oldSize.x != 0.0f && oldSize.y != 0.0f) {
+    if(
+        hasFlag(flags, TW_FLAG_KEEP_RATIO) &&
+        oldSize.x != 0.0f && oldSize.y != 0.0f
+    ) {
         float scaleToUse;
         float wScale = newSize.x / oldSize.x;
         float hScale = newSize.y / oldSize.y;
@@ -6249,7 +6332,10 @@ bool Editor::TransformationWidget::handleMouseMove(
         scaleToUse = std::max(minSize / oldSize.y, scaleToUse);
         newSize = oldSize * scaleToUse;
         
-    } else if(keepArea && oldSize.x != 0.0f && oldSize.y != 0.0f) {
+    } else if(
+        hasFlag(flags, TW_FLAG_KEEP_AREA) &&
+        oldSize.x != 0.0f && oldSize.y != 0.0f
+    ) {
         bool byX;
         float wScale = newSize.x / oldSize.x;
         float hScale = newSize.y / oldSize.y;
@@ -6282,14 +6368,14 @@ bool Editor::TransformationWidget::handleMouseMove(
     case 0:
     case 3:
     case 6: {
-        if(!lockCenter) {
+        if(!hasFlag(flags, TW_FLAG_LOCK_CENTER)) {
             transformedCenter.x = (size->x / 2.0f) - newSize.x / 2.0f;
         }
         break;
     } case 2:
     case 5:
     case 8: {
-        if(!lockCenter) {
+        if(!hasFlag(flags, TW_FLAG_LOCK_CENTER)) {
             transformedCenter.x = (-size->x / 2.0f) + newSize.x / 2.0f;
         }
         break;
@@ -6300,14 +6386,14 @@ bool Editor::TransformationWidget::handleMouseMove(
     case 0:
     case 1:
     case 2: {
-        if(!lockCenter) {
+        if(!hasFlag(flags, TW_FLAG_LOCK_CENTER)) {
             transformedCenter.y = (size->y / 2.0f) - newSize.y / 2.0f;
         }
         break;
     } case 6:
     case 7:
     case 8: {
-        if(!lockCenter) {
+        if(!hasFlag(flags, TW_FLAG_LOCK_CENTER)) {
             transformedCenter.y = (-size->y / 2.0f) + newSize.y / 2.0f;
         }
         break;

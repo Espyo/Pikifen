@@ -313,6 +313,9 @@ protected:
         std::function<void(size_t, const Point&, const Point&, float)>
         onSetInfo = nullptr;
         
+        //Callback for when the selection changed.
+        std::function<void()> onSelectionChanged = nullptr;
+        
         //Whether items are rectangular in shape or circular.
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
@@ -322,6 +325,9 @@ protected:
         
         //Whether the items can rotate.
         bool itemsCanRotate = false;
+        
+        //Whether to disable the editing the item's translation data.
+        bool disableChanges = false;
         
         
         //--- Public function declarations ---
@@ -489,9 +495,9 @@ protected:
             Point* outCentersOnlyCenter = nullptr,
             Point* outCentersOnlySize = nullptr
         ) const;
-        bool getSelectedItemAngle(float* outAngle) const;
-        size_t getSelectionTotalCount() const;
-        bool isTransformationWidgetAvailable() const;
+        bool getSelectedItemAngle(float* outAngle, bool* outCanChange) const;
+        size_t getSelectionTotalCount(bool* outCanChange = nullptr) const;
+        bool isTransformationWidgetAvailable(bool* outCanChange) const;
         bool isOpRuleRespected(OP_RULE rule) const;
         
         bool handleMouseUp();
@@ -565,32 +571,57 @@ protected:
     
         public:
         
+        //--- Public misc. declarations ---
+        
+        //Flags.
+        enum TW_FLAG {
+        
+            //Use position, but don't allow the position handle.
+            TW_FLAG_DISABLE_CENTER = 1 << 0,
+            
+            //Use size, but don't allow the resizing handles.
+            TW_FLAG_DISABLE_SIZE = 1 << 1,
+            
+            //Use rotation, but don't allow the rotation handle.
+            TW_FLAG_DISABLE_ANGLE = 1 << 2,
+            
+            //Whether to keep the aspect ratio when resizing.
+            TW_FLAG_KEEP_RATIO = 1 << 3,
+            
+            //Whether to keep the total area when resizing.
+            //Used for squash and stretch.
+            TW_FLAG_KEEP_AREA = 1 << 4,
+            
+            //Whether to lock to the center when resizing.
+            //If not set, the opposite edge or corner is locked instead.
+            TW_FLAG_LOCK_CENTER = 1 << 5,
+            
+        };
+        
+        
         //--- Public function declarations ---
         
         void draw(
             const Point* const center, const Point* const size,
-            const float* const angle, float zoom = 1.0f
+            const float* const angle, float zoom = 1.0f, Bitmask8 flags = 0
         ) const;
         bool handleMouseDown(
             const Point& mouseCoords, const Point* const center,
             const Point* const size, const float* const angle,
-            float zoom = 1.0f
+            float zoom = 1.0f, Bitmask8 flags = 0
         );
         bool handleMouseMove(
             const Point& mouseCoords, Point* center, Point* size, float* angle,
-            float zoom = 1.0f,
-            bool keepAspectRatio = false,
-            bool keepArea = false,
-            float minSize = -FLT_MAX,
-            bool lockCenter = true
+            float zoom = 1.0f, Bitmask8 flags = 0, float minSize = -FLT_MAX
         );
         bool handleMouseUp();
         bool isMovingCenterHandle();
         bool isMovingHandle();
         Point getOldCenter() const;
         
-        private:
         
+    private:
+    
         //--- Private members ---
         
         //What handle is being moved. -1 for none. 9 for the rotation handle.

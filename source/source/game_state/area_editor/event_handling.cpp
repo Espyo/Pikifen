@@ -1335,17 +1335,20 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 game.options.areaEd.selTrans &&
                 selectedVertexes.size() >= 2
             ) {
+                Bitmask8 flags = 0;
+                if(isAltPressed) {
+                    enableFlag(
+                        flags, TransformationWidget::TW_FLAG_LOCK_CENTER
+                    );
+                }
                 twHandled =
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.editorsView.mouseCursorWorldPos, true),
                         &selectionCenter,
                         &selectionSize,
                         &selectionAngle,
-                        1.0f / game.editorsView.cam.zoom,
-                        false,
-                        false,
-                        AREA_EDITOR::SELECTION_TW_PADDING * 2.0f,
-                        isAltPressed
+                        1.0f / game.editorsView.cam.zoom, flags,
+                        AREA_EDITOR::SELECTION_TW_PADDING * 2.0f
                     );
                 if(twHandled) {
                     if(!moving) {
@@ -1504,16 +1507,19 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         } case EDITOR_STATE_TOOLS: {
     
             //Move reference handle.
+            Bitmask8 flags = 0;
+            if(referenceKeepAspectRatio) {
+                enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+            }
+            if(isAltPressed) {
+                enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+            }
             curTransformationWidget.handleMouseMove(
                 snapPoint(game.editorsView.mouseCursorWorldPos),
                 &referenceCenter,
                 &referenceSize,
                 nullptr,
-                1.0f / game.editorsView.cam.zoom,
-                referenceKeepAspectRatio,
-                false,
-                5.0f,
-                isAltPressed
+                1.0f / game.editorsView.cam.zoom, flags, 5.0f
             );
             
             break;

@@ -263,11 +263,11 @@ AreaEditor::AreaEditor() :
         Point p1 = lPtr->startPtr->pos;
         Point p2 = lPtr->endPtr->pos;
         *outCenter = (p1 + p2) / 2.0f;
-        *outSize = Point(fabs(p2.x - p1.x), fabs(p2.y - p1.y));
-        *outAngle = 0.0f;
-        const float threshold = 8.0f / game.editorsView.cam.zoom;
-        if(outSize->x < threshold) outSize->x = threshold;
-        if(outSize->y < threshold) outSize->y = threshold;
+        *outSize =
+            Point(
+                Distance(p1, p2).toFloat(), 16.0f / game.editorsView.cam.zoom
+            );
+        *outAngle = getAngle(p1, p2);
     };
     pathLinkSelection.onSetInfo =
         [this] (
@@ -283,9 +283,28 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_PATHS;
     };
+    pathLinkSelection.onSelectionChanged =
+    [this] () {
+        static bool alreadyUpdating = false;
+        if(alreadyUpdating) return;
+        alreadyUpdating = true;
+        
+        const set<size_t>& list = pathLinkSelection.getItemIdxs();
+        for(size_t idx : list) {
+            PathLink* lPtr = game.curArea->pathLinks[idx];
+            if(lPtr->isOneWay()) continue;
+            PathLink* oppositeLink = lPtr->endPtr->getLink(lPtr->startPtr);
+            size_t oppositeLinkIdx =
+                game.curArea->findPathLinkIdx(oppositeLink);
+            if(pathLinkSelection.contains(oppositeLinkIdx)) continue;
+            pathLinkSelection.add(oppositeLinkIdx);
+        }
+        alreadyUpdating = false;
+    };
     pathLinkSelection.itemsAreRectangular = true;
     pathLinkSelection.itemsCanResize = false;
-    pathLinkSelection.itemsCanRotate = false;
+    pathLinkSelection.itemsCanRotate = true;
+    pathLinkSelection.disableChanges = true;
     
     shadowSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
@@ -374,7 +393,7 @@ AreaEditor::AreaEditor() :
     pathsSelCtrl.managers.push_back(&pathLinkSelection);
     pathsSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
-    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
     pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
     pathsSelCtrl.overlapsCycle = true;
     pathsSelCtrl.clickingSelectedUnselectsOthers = true;

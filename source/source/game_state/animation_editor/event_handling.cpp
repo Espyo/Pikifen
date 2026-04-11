@@ -291,17 +291,23 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         Point curSpriteSize = curSprite->tf.scale * curSprite->bmpSize;
+        Bitmask8 flags = 0;
+        if(curSpriteKeepAspectRatio) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+        }
+        if(curSpriteKeepArea) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_AREA);
+        }
+        if(isAltPressed) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+        }
         if(
             curTransformationWidget.handleMouseMove(
                 game.editorsView.mouseCursorWorldPos,
                 &curSprite->tf.trans,
                 &curSpriteSize,
                 &curSprite->tf.rot,
-                1.0f / game.editorsView.cam.zoom,
-                curSpriteKeepAspectRatio,
-                curSpriteKeepArea,
-                -FLT_MAX,
-                isAltPressed
+                1.0f / game.editorsView.cam.zoom, flags, -FLT_MAX
             )
         ) {
             curSprite->tf.scale = curSpriteSize / curSprite->bmpSize;
@@ -324,17 +330,21 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_STATE_TOP: {
         if(curSprite && curSprite->topVisible) {
+            Bitmask8 flags = 0;
+            if(topKeepAspectRatio) {
+                enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+            }
+            if(isAltPressed) {
+                enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+            }
             if(
                 curTransformationWidget.handleMouseMove(
                     game.editorsView.mouseCursorWorldPos,
                     &curSprite->topPose.pos,
                     &curSprite->topPose.size,
                     &curSprite->topPose.angle,
-                    1.0f / game.editorsView.cam.zoom,
-                    topKeepAspectRatio,
-                    false,
-                    ANIM_EDITOR::TOP_MIN_SIZE,
-                    isAltPressed
+                    1.0f / game.editorsView.cam.zoom, flags,
+                    ANIM_EDITOR::TOP_MIN_SIZE
                 )
             ) {
                 changesMgr.markAsChanged();
