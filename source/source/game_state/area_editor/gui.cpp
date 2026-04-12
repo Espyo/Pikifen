@@ -4527,18 +4527,18 @@ void AreaEditor::processGuiPanelMobs() {
  * @brief Processes the Dear ImGui path link control panel for this frame.
  */
 void AreaEditor::processGuiPanelPathLink() {
-    PathLink* lPtr =
-        game.curArea->pathLinks[pathLinkSelection.getFirstItemIdx()];
+    EditorPathLink* elPtr =
+        &game.curArea->editorPathLinks[pathLinkSelection.getFirstItemIdx()];
         
     //Type combobox.
     vector<string> linkTypeNames;
     linkTypeNames.push_back("Normal");
     linkTypeNames.push_back("Ledge");
     
-    int typeI = lPtr->type;
+    int typeI = elPtr->link1->type;
     if(ImGui::Combo("Type", &typeI, linkTypeNames, 15)) {
         registerChange("path link type change");
-        lPtr->type = (PATH_LINK_TYPE) typeI;
+        elPtr->link1->type = (PATH_LINK_TYPE) typeI;
     }
     setTooltip(
         "What type of link this is."
@@ -4759,26 +4759,8 @@ void AreaEditor::processGuiPanelPaths() {
         if(saveableTreeNode("paths", "Link properties")) {
         
             bool okToEdit =
-                (pathLinkSelection.hasOne()) || pathLinkSelection.isHomogenized();
-            if(!okToEdit && pathLinkSelection.getCount() == 2) {
-                const set<size_t>& selectedPathLinks =
-                    pathLinkSelection.getItemIdxs();
-                auto it = selectedPathLinks.begin();
-                PathLink* l1 = game.curArea->pathLinks[*it];
-                it++;
-                PathLink* l2 = game.curArea->pathLinks[*it];
-                if(
-                    l1->startPtr == l2->endPtr &&
-                    l1->endPtr == l2->startPtr
-                ) {
-                    //The only things we have selected are a link
-                    //and also the opposite link. As far as the user cares,
-                    //this is all just one link that is of the "normal" type.
-                    //And if they edit the properties, we want both links to
-                    //be edited together.
-                    okToEdit = true;
-                }
-            }
+                (pathLinkSelection.hasOne()) ||
+                pathLinkSelection.isHomogenized();
             
             if(!pathLinkSelection.hasAny()) {
             
@@ -5376,11 +5358,11 @@ void AreaEditor::processGuiPanelReview() {
         
         //Path link amount text.
         ImGui::BulletText(
-            "Path links: %i", (int) game.curArea->pathLinks.size()
+            "Path links: %i", (int) game.curArea->editorPathLinks.size()
         );
         setTooltip(
             "Total amount of path stop links in the area.\n"
-            "Two-way links are counted as two."
+            "Normal links and two-way links are all counted as one."
         );
         
         size_t treasureTotal;

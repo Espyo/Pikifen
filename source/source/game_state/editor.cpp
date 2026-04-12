@@ -5711,7 +5711,7 @@ bool Editor::SelectionManager::getBBox(
         getItemInfo(i, &iCenter, &iSize, &iAngle);
         Point iTL, iBR;
         
-        if(itemsCanRotate && itemsAreRectangular && list.size() > 1) {
+        if(itemsCanRotate && itemsAreRectangular) {
             getTransformedRectangleBBox(
                 iCenter, iSize, iAngle, &iTL, &iBR
             );

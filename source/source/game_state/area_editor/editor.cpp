@@ -259,15 +259,30 @@ AreaEditor::AreaEditor() :
     
     pathLinkSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        PathLink* lPtr = game.curArea->pathLinks[idx];
-        Point p1 = lPtr->startPtr->pos;
-        Point p2 = lPtr->endPtr->pos;
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[idx];
+        PathStop* s1 = elPtr->link1->startPtr;
+        PathStop* s2 = elPtr->link1->endPtr;
+        Point p1 = s1->pos;
+        Point p2 = s2->pos;
+        *outAngle = getAngle(p1, p2);
+        Point offset = p1;
+        //Transform both points so that p1 is at the origin,
+        //and p2 is to its right. Then shrink by the stop radii.
+        p1 = p1 - offset;
+        p2 = p2 - offset;
+        p2 = rotatePoint(p2, -(*outAngle));
+        p1.x += s1->radius;
+        p2.x -= s2->radius;
+        //Transform them back.
+        p1 = rotatePoint(p1, (*outAngle));
+        p2 = rotatePoint(p2, (*outAngle));
+        p1 = p1 + offset;
+        p2 = p2 + offset;
         *outCenter = (p1 + p2) / 2.0f;
         *outSize =
             Point(
                 Distance(p1, p2).toFloat(), 16.0f / game.editorsView.cam.zoom
             );
-        *outAngle = getAngle(p1, p2);
     };
     pathLinkSelection.onSetInfo =
         [this] (
@@ -277,29 +292,11 @@ AreaEditor::AreaEditor() :
     };
     pathLinkSelection.onGetTotal =
     [this] () {
-        return game.curArea->pathLinks.size();
+        return game.curArea->editorPathLinks.size();
     };
     pathLinkSelection.onIsEligible =
     [this] (size_t idx) {
         return state == EDITOR_STATE_PATHS;
-    };
-    pathLinkSelection.onSelectionChanged =
-    [this] () {
-        static bool alreadyUpdating = false;
-        if(alreadyUpdating) return;
-        alreadyUpdating = true;
-        
-        const set<size_t>& list = pathLinkSelection.getItemIdxs();
-        for(size_t idx : list) {
-            PathLink* lPtr = game.curArea->pathLinks[idx];
-            if(lPtr->isOneWay()) continue;
-            PathLink* oppositeLink = lPtr->endPtr->getLink(lPtr->startPtr);
-            size_t oppositeLinkIdx =
-                game.curArea->findPathLinkIdx(oppositeLink);
-            if(pathLinkSelection.contains(oppositeLinkIdx)) continue;
-            pathLinkSelection.add(oppositeLinkIdx);
-        }
-        alreadyUpdating = false;
     };
     pathLinkSelection.itemsAreRectangular = true;
     pathLinkSelection.itemsCanResize = false;
@@ -393,7 +390,7 @@ AreaEditor::AreaEditor() :
     pathsSelCtrl.managers.push_back(&pathLinkSelection);
     pathsSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
-    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
+    pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
     pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
     pathsSelCtrl.overlapsCycle = true;
     pathsSelCtrl.clickingSelectedUnselectsOthers = true;
@@ -1266,6 +1263,10 @@ void AreaEditor::deletePathCmd(float inputValue) {
     //Cleanup.
     clearSelection();
     subState = EDITOR_SUB_STATE_NONE;
+    forIdx(s, game.curArea->pathStops) {
+        game.curArea->fixPathStopIdxs(game.curArea->pathStops[s]);
+    }
+    game.curArea->setupEditorPathLinks();
     pathPreview.clear(); //Clear so it doesn't reference deleted stops.
     pathPreviewTimer.start(false);
     
@@ -3359,7 +3360,7 @@ void AreaEditor::selectAllCmd(float inputValue) {
             
         } else if(state == EDITOR_STATE_PATHS) {
             pathStopSelection.addAll(game.curArea->pathStops.size());
-            pathLinkSelection.addAll(game.curArea->pathLinks.size());
+            pathLinkSelection.addAll(game.curArea->editorPathLinks.size());
         } else if(state == EDITOR_STATE_DETAILS) {
             shadowSelection.addAll(game.curArea->treeShadows.size());
             regionSelection.addAll(game.curArea->regions.size());
@@ -3593,26 +3594,11 @@ void AreaEditor::setSelectionStatusText() {
         
     } case EDITOR_STATE_PATHS: {
         if(pathStopSelection.hasAny() || pathLinkSelection.hasAny()) {
-            size_t normalsFound = 0;
-            size_t oneWaysFound = 0;
-            const set<size_t>& links = pathLinkSelection.getItemIdxs();
-            forIdx(l, links) {
-                PathLink* lPtr = game.curArea->pathLinks[l];
-                if(lPtr->endPtr->getLink(lPtr->startPtr)) {
-                    //They both link to each other. So it's a two-way.
-                    normalsFound++;
-                } else {
-                    oneWaysFound++;
-                }
-            }
             setStatus(
                 "Selected " +
                 amountStr((int) pathStopSelection.getCount(), "path stop") +
                 ", " +
-                amountStr(
-                    (int) ((normalsFound / 2.0f) + oneWaysFound),
-                    "path link"
-                ) +
+                amountStr((int) pathLinkSelection.getCount(), "path link") +
                 "."
             );
         }

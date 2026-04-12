@@ -291,7 +291,25 @@ struct PathLink {
     PathLink(PathStop* startPtr, PathStop* endPtr, size_t endIdx);
     void calculateDist(const PathStop* startPtr);
     void clone(PathLink* destination) const;
+    PathLink* getOppositeLink() const;
     bool isOneWay() const;
+    
+};
+
+
+/**
+ * @brief Represents a path link in the editor. This can represent either one
+ * one-way link, or both of the links that make up a two-way link.
+ */
+struct EditorPathLink {
+
+    //--- Public members ---
+    
+    //Primary link.
+    PathLink* link1 = nullptr;
+    
+    //Link in the opposite direction, if any.
+    PathLink* link2 = nullptr;
     
 };
 

@@ -77,6 +77,16 @@ void PathLink::clone(PathLink* destination) const {
 
 
 /**
+ * @brief Returns the link connecting the opposite way, if it exists.
+ *
+ * @return The link.
+ */
+PathLink* PathLink::getOppositeLink() const {
+    return endPtr->getLink(startPtr);
+}
+
+
+/**
  * @brief Checks if a path link is a plain one-way link,
  * or if it's actually one part of a normal, two-way link.
  *

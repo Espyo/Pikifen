@@ -1456,116 +1456,117 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         }
         
         //Links.
-        forIdx(s, game.curArea->pathStops) {
-            PathStop* sPtr = game.curArea->pathStops[s];
-            forIdx(l, sPtr->links) {
-                PathLink* lPtr = sPtr->links[l];
-                PathStop* s2Ptr = lPtr->endPtr;
-                bool oneWay = !lPtr->endPtr->getLink(sPtr);
-                bool selected =
-                    pathLinkSelection.contains(
-                        game.curArea->findPathLinkIdx(lPtr)
-                    );
-                bool highlighted = highlightedPathLink == lPtr;
-                ALLEGRO_COLOR color = COLOR_WHITE;
-                if(selected) {
-                    color =
-                        multAlpha(
-                            AREA_EDITOR::SELECTION_COLOR,
-                            style.selectionAlpha
-                        );
-                } else if(highlighted) {
-                    color = changeAlpha(style.highlightColor, 255);
-                } else {
-                    switch(lPtr->type) {
-                    case PATH_LINK_TYPE_NORMAL: {
-                        color = NORMAL_LINK_COLOR;
-                        break;
-                    } case PATH_LINK_TYPE_LEDGE: {
-                        color = LEDGE_LINK_COLOR;
-                        break;
-                    }
-                    }
-                    if(!oneWay) {
-                        color = changeColorLighting(color, 0.33f);
-                    }
-                }
-                
-                float angle =
-                    getAngle(sPtr->pos, s2Ptr->pos);
-                Point offset1 =
-                    angleToCoordinates(angle, sPtr->radius);
-                Point offset2 =
-                    angleToCoordinates(angle, s2Ptr->radius);
-                al_draw_line(
-                    sPtr->pos.x + offset1.x,
-                    sPtr->pos.y + offset1.y,
-                    s2Ptr->pos.x - offset2.x,
-                    s2Ptr->pos.y - offset2.y,
-                    color,
-                    AREA_EDITOR::PATH_LINK_THICKNESS / game.editorsView.cam.zoom
+        forIdx(l, game.curArea->editorPathLinks) {
+            EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
+            PathStop* s1Ptr = elPtr->link1->startPtr;
+            PathStop* s2Ptr = elPtr->link1->endPtr;
+            size_t s1Idx =
+                game.curArea->findPathStopIdx(elPtr->link1->startPtr);
+            size_t s2Idx = elPtr->link1->endIdx;
+            bool oneWay = elPtr->link2 == nullptr;
+            bool selected =
+                pathLinkSelection.contains(
+                    game.curArea->findEditorPathLinkIdx(elPtr)
                 );
-                
+            bool highlighted = highlightedEditorPathLink == elPtr;
+            ALLEGRO_COLOR color = COLOR_WHITE;
+            if(selected) {
+                color =
+                    multAlpha(
+                        AREA_EDITOR::SELECTION_COLOR,
+                        style.selectionAlpha
+                    );
+            } else if(highlighted) {
+                color = changeAlpha(style.highlightColor, 255);
+            } else {
+                switch(elPtr->link1->type) {
+                case PATH_LINK_TYPE_NORMAL: {
+                    color = NORMAL_LINK_COLOR;
+                    break;
+                } case PATH_LINK_TYPE_LEDGE: {
+                    color = LEDGE_LINK_COLOR;
+                    break;
+                }
+                }
+                if(!oneWay) {
+                    color = changeColorLighting(color, 0.33f);
+                }
+            }
+            
+            float angle =
+                getAngle(s1Ptr->pos, s2Ptr->pos);
+            Point offset1 =
+                angleToCoordinates(angle, s1Ptr->radius);
+            Point offset2 =
+                angleToCoordinates(angle, s2Ptr->radius);
+            al_draw_line(
+                s1Ptr->pos.x + offset1.x,
+                s1Ptr->pos.y + offset1.y,
+                s2Ptr->pos.x - offset2.x,
+                s2Ptr->pos.y - offset2.y,
+                color,
+                AREA_EDITOR::PATH_LINK_THICKNESS / game.editorsView.cam.zoom
+            );
+            
+            if(
+                state == EDITOR_STATE_PATHS &&
+                moving &&
+                game.options.areaEd.showPathLinkLength
+            ) {
+                bool drawDist = false;
+                Point otherPoint;
                 if(
-                    state == EDITOR_STATE_PATHS &&
-                    moving &&
-                    game.options.areaEd.showPathLinkLength
+                    s1Ptr == moveClosestStop &&
+                    pathStopSelection.contains(s2Idx)
                 ) {
-                    bool drawDist = false;
-                    Point otherPoint;
-                    if(
-                        sPtr == moveClosestStop &&
-                        pathStopSelection.contains(lPtr->endIdx)
-                    ) {
-                        otherPoint.x = lPtr->endPtr->pos.x;
-                        otherPoint.y = lPtr->endPtr->pos.y;
-                        drawDist = true;
-                    } else if(
-                        lPtr->endPtr == moveClosestStop &&
-                        pathStopSelection.contains(s)
-                    ) {
-                        otherPoint.x = sPtr->pos.x;
-                        otherPoint.y = sPtr->pos.y;
-                        drawDist = true;
-                    }
+                    otherPoint.x = s2Ptr->pos.x;
+                    otherPoint.y = s2Ptr->pos.y;
+                    drawDist = true;
+                } else if(
+                    s2Ptr == moveClosestStop &&
+                    pathStopSelection.contains(s1Idx)
+                ) {
+                    otherPoint.x = s1Ptr->pos.x;
+                    otherPoint.y = s1Ptr->pos.y;
+                    drawDist = true;
+                }
+                
+                if(drawDist) {
+                    drawLineDist(moveClosestStop->pos, otherPoint);
+                }
+            }
+            
+            if(debugPathIdxs && (oneWay || s1Idx < s2Idx)) {
+                Point middle = (s1Ptr->pos + s2Ptr->pos) / 2.0f;
+                drawDebugText(
+                    DEBUG_LINK_COLOR,
+                    Point(
+                        middle.x + cos(angle + TAU / 4) * 4,
+                        middle.y + sin(angle + TAU / 4) * 4
+                    ),
+                    f2s(s1Ptr->links[l]->distance)
+                );
+            }
+            
+            if(oneWay) {
+                //Draw a triangle down the middle.
+                float midX =
+                    (s1Ptr->pos.x + s2Ptr->pos.x) / 2.0f;
+                float midY =
+                    (s1Ptr->pos.y + s2Ptr->pos.y) / 2.0f;
+                const float delta =
+                    (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
+                    game.editorsView.cam.zoom;
                     
-                    if(drawDist) {
-                        drawLineDist(moveClosestStop->pos, otherPoint);
-                    }
-                }
-                
-                if(debugPathIdxs && (oneWay || s < sPtr->links[l]->endIdx)) {
-                    Point middle = (sPtr->pos + s2Ptr->pos) / 2.0f;
-                    drawDebugText(
-                        DEBUG_LINK_COLOR,
-                        Point(
-                            middle.x + cos(angle + TAU / 4) * 4,
-                            middle.y + sin(angle + TAU / 4) * 4
-                        ),
-                        f2s(sPtr->links[l]->distance)
-                    );
-                }
-                
-                if(oneWay) {
-                    //Draw a triangle down the middle.
-                    float midX =
-                        (sPtr->pos.x + s2Ptr->pos.x) / 2.0f;
-                    float midY =
-                        (sPtr->pos.y + s2Ptr->pos.y) / 2.0f;
-                    const float delta =
-                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
-                        game.editorsView.cam.zoom;
-                        
-                    al_draw_filled_triangle(
-                        midX + cos(angle) * delta,
-                        midY + sin(angle) * delta,
-                        midX + cos(angle + TAU / 4) * delta,
-                        midY + sin(angle + TAU / 4) * delta,
-                        midX + cos(angle - TAU / 4) * delta,
-                        midY + sin(angle - TAU / 4) * delta,
-                        color
-                    );
-                }
+                al_draw_filled_triangle(
+                    midX + cos(angle) * delta,
+                    midY + sin(angle) * delta,
+                    midX + cos(angle + TAU / 4) * delta,
+                    midY + sin(angle + TAU / 4) * delta,
+                    midX + cos(angle - TAU / 4) * delta,
+                    midY + sin(angle - TAU / 4) * delta,
+                    color
+                );
             }
         }
         

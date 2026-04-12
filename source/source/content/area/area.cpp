@@ -189,7 +189,7 @@ void Area::clear() {
     sectors.clear();
     mobGenerators.clear();
     pathStops.clear();
-    pathLinks.clear();
+    editorPathLinks.clear();
     treeShadows.clear();
     regions.clear();
     bmap.clear();
@@ -439,11 +439,7 @@ void Area::clone(Area& other) {
         other.problems.loneEdges.insert(other.edges[nr]);
     }
     
-    forIdx(s, other.pathStops) {
-        forIdx(l, other.pathStops[s]->links) {
-            other.pathLinks.push_back(other.pathStops[s]->links[l]);
-        }
-    }
+    other.setupEditorPathLinks();
 }
 
 
@@ -663,6 +659,21 @@ size_t Area::findEdgeIdx(const Edge* ePtr) const {
 
 
 /**
+ * @brief Scans the list of editor path links and retrieves the index of
+ * the specified path link.
+ *
+ * @param elPtr Editor path link to find.
+ * @return The index, or INVALID if not found.
+ */
+size_t Area::findEditorPathLinkIdx(const EditorPathLink* elPtr) const {
+    forIdx(el, editorPathLinks) {
+        if(&editorPathLinks[el] == elPtr) return el;
+    }
+    return INVALID;
+}
+
+
+/**
  * @brief Scans the list of mob generators and retrieves the index of
  * the specified mob generator.
  *
@@ -672,21 +683,6 @@ size_t Area::findEdgeIdx(const Edge* ePtr) const {
 size_t Area::findMobGenIdx(const MobGen* mPtr) const {
     forIdx(m, mobGenerators) {
         if(mobGenerators[m] == mPtr) return m;
-    }
-    return INVALID;
-}
-
-
-/**
- * @brief Scans the list of path links and retrieves the index of
- * the specified path link.
- *
- * @param lPtr Path link to find.
- * @return The index, or INVALID if not found.
- */
-size_t Area::findPathLinkIdx(const PathLink* lPtr) const {
-    forIdx(l, pathLinks) {
-        if(pathLinks[l] == lPtr) return l;
     }
     return INVALID;
 }
@@ -1088,11 +1084,10 @@ size_t Area::getNrPathLinks() {
         PathStop* sPtr = pathStops[s];
         forIdx(l, sPtr->links) {
             PathLink* lPtr = sPtr->links[l];
-            if(lPtr->endPtr->getLink(sPtr)) {
-                //The other stop links to this one. So it's a two-way.
-                normalsFound++;
-            } else {
+            if(lPtr->isOneWay()) {
                 oneWaysFound++;
+            } else {
+                normalsFound++;
             }
         }
     }
@@ -1419,7 +1414,6 @@ void Area::loadGeometryFromDataNode(
             }
             
             newStop->links.push_back(newLink);
-            pathLinks.push_back(newLink);
         }
         
         newStop->radius = std::max(newStop->radius, PATHS::MIN_STOP_RADIUS);
@@ -1478,7 +1472,6 @@ void Area::loadGeometryFromDataNode(
     }
     
     //Regions.
-    
     DataNode* regionsNode = node->getChildByName("regions");
     size_t nRegions = regionsNode->getNrOfChildren();
     for(size_t r = 0; r < nRegions; r++) {
@@ -1512,6 +1505,9 @@ void Area::loadGeometryFromDataNode(
     }
     forIdx(s, pathStops) {
         pathStops[s]->calculateDists();
+    }
+    if(level == CONTENT_LOAD_LEVEL_EDITOR) {
+        setupEditorPathLinks();
     }
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         //Fade sectors that also fade brightness should be
@@ -2923,6 +2919,30 @@ void Area::saveThumbnail(bool toBackup) {
         al_save_bitmap(thumbPath.c_str(), thumbnail.get());
     } else {
         al_remove_filename(thumbPath.c_str());
+    }
+}
+
+
+/**
+ * @brief Reads the existing path stops and their links, and creates
+ * the list of editor path links.
+ */
+void Area::setupEditorPathLinks() {
+    editorPathLinks.clear();
+    forIdx(s, pathStops) {
+        forIdx(l, pathStops[s]->links) {
+            EditorPathLink el {
+                .link1 = pathStops[s]->links[l],
+                .link2 = pathStops[s]->links[l]->getOppositeLink()
+            };
+            if(el.link2) {
+                //Let's make sure it's not already in the list.
+                if(el.link1->endIdx < el.link2->endIdx) {
+                    continue;
+                }
+            }
+            editorPathLinks.push_back(el);
+        }
     }
 }
 

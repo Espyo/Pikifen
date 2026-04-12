@@ -444,24 +444,17 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
             bool clickedStop =
                 getPathStopUnderPoint(game.editorsView.mouseCursorWorldPos);
             if(!clickedStop) {
-                PathLink* clickedLink1;
-                PathLink* clickedLink2;
-                bool clickedLink =
-                    getPathLinkUnderPoint(
-                        game.editorsView.mouseCursorWorldPos,
-                        &clickedLink1, &clickedLink2
+                EditorPathLink* clickedELink =
+                    getEditorPathLinkUnderPoint(
+                        game.editorsView.mouseCursorWorldPos
                     );
-                if(clickedLink) {
+                if(clickedELink) {
                     registerChange("path link split");
-                    PathStop* newStop =
-                        splitPathLink(
-                            clickedLink1, clickedLink2,
-                            snapPoint(game.editorsView.mouseCursorWorldPos)
-                        );
-                    clearSelection();
-                    pathStopSelection.add(
-                        game.curArea->findPathStopIdx(newStop)
+                    splitPathLink(
+                        clickedELink->link1, clickedELink->link2,
+                        snapPoint(game.editorsView.mouseCursorWorldPos)
                     );
+                    clearSelection();
                 }
             }
         }
@@ -1054,24 +1047,18 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
             
         //Split a link, if one was clicked.
         if(!clickedStop) {
-            PathLink* clickedLink1;
-            PathLink* clickedLink2;
-            bool clickedLink =
-                getPathLinkUnderPoint(
-                    game.editorsView.mouseCursorWorldPos,
-                    &clickedLink1, &clickedLink2
+            EditorPathLink* clickedELink =
+                getEditorPathLinkUnderPoint(
+                    game.editorsView.mouseCursorWorldPos
                 );
-            if(clickedLink) {
+            if(clickedELink) {
                 registerChange("path link split");
                 clickedStop =
                     splitPathLink(
-                        clickedLink1, clickedLink2,
+                        clickedELink->link1, clickedELink->link2,
                         snapPoint(game.editorsView.mouseCursorWorldPos)
                     );
                 clearSelection();
-                pathStopSelection.add(
-                    game.curArea->findPathStopIdx(clickedStop)
-                );
             }
         }
         
@@ -1107,6 +1094,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                 game.curArea->fixPathStopIdxs(pathDrawingStop1);
                 game.curArea->fixPathStopIdxs(nextStop);
                 nextStop->calculateDistsPlusNeighbors();
+                game.curArea->setupEditorPathLinks();
                 setStatus("Created path link.");
                 
                 if(clickedStop) {
@@ -1636,7 +1624,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     highlightedSector = nullptr;
     highlightedMob = nullptr;
     highlightedPathStop = nullptr;
-    highlightedPathLink = nullptr;
+    highlightedEditorPathLink = nullptr;
     if(!isMouseInGui) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
@@ -1649,21 +1637,14 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
                 getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
             break;
         } case EDITOR_STATE_PATHS: {
-            PathLink* hoveredLink1;
-            
             highlightedPathStop =
                 getPathStopUnderPoint(game.editorsView.mouseCursorWorldPos);
                 
             if(highlightedPathStop == nullptr) {
-                //Selecting the stop takes priority,
-                //so keep the link null if there's a stop.
-                getPathLinkUnderPoint(
-                    game.editorsView.mouseCursorWorldPos,
-                    &hoveredLink1, &highlightedPathLink
-                );
-                if(highlightedPathLink == nullptr) {
-                    highlightedPathLink = hoveredLink1;
-                }
+                highlightedEditorPathLink =
+                    getEditorPathLinkUnderPoint(
+                        game.editorsView.mouseCursorWorldPos
+                    );
             }
             break;
         }

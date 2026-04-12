@@ -585,8 +585,8 @@ private:
     //Currently highlighted mob, if any.
     MobGen* highlightedMob = nullptr;
     
-    //Currently highlighted path link, if any.
-    PathLink* highlightedPathLink = nullptr;
+    //Currently highlighted editor path link, if any.
+    EditorPathLink* highlightedEditorPathLink = nullptr;
     
     //Currently highlighted path stop, if any.
     PathStop* highlightedPathStop = nullptr;
@@ -1052,9 +1052,7 @@ private:
     MobGen* getMobUnderPoint(
         const Point& p, size_t* outIdx = nullptr
     ) const;
-    bool getPathLinkUnderPoint(
-        const Point& p, PathLink** link1, PathLink** link2
-    ) const;
+    EditorPathLink* getEditorPathLinkUnderPoint(const Point& p) const;
     PathStop* getPathStopUnderPoint(const Point& p) const;
     float getQuickHeightSetOffset() const;
     SECTOR_SPLIT_RESULT getSectorSplitEvaluation();

@@ -403,19 +403,7 @@ void AreaEditor::copyPathLinkProperties() {
         return;
     }
     
-    PathLink* sourceLink = nullptr;
-    size_t reallySelectedNr = pathLinkSelection.getCount();
-    if(reallySelectedNr == 2) {
-        //Check if these are just the two sides of the same two-way link.
-        //If so then yeah, we basically only have one link really selected.
-        sourceLink =
-            game.curArea->pathLinks[pathLinkSelection.getFirstItemIdx()];
-        if(!sourceLink->isOneWay()) {
-            reallySelectedNr = 1;
-        }
-    }
-    
-    if(reallySelectedNr > 1) {
+    if(pathLinkSelection.getCount() > 1) {
         setStatus(
             "To copy a path link's properties, you can only select 1 "
             "path link!",
@@ -424,10 +412,13 @@ void AreaEditor::copyPathLinkProperties() {
         return;
     }
     
+    EditorPathLink* sourceELink =
+        &game.curArea->editorPathLinks[pathLinkSelection.getFirstItemIdx()];
+        
     if(!copyBufferPathLink) {
         copyBufferPathLink = new PathLink(nullptr, nullptr, INVALID);
     }
-    sourceLink->clone(copyBufferPathLink);
+    sourceELink->link1->clone(copyBufferPathLink);
     setStatus("Successfully copied the path link's properties.");
     return;
 }
@@ -585,13 +576,16 @@ void AreaEditor::deletePathLinks() {
     const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
     
     for(auto const& linkIdx : selectedLinks) {
-        PathLink* lPtr = game.curArea->pathLinks[linkIdx];
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[linkIdx];
         //Delete it from the start path stop.
-        lPtr->startPtr->deleteLink(lPtr);
+        elPtr->link1->startPtr->deleteLink(elPtr->link1);
+        
+        //Delete it from the end path stop.
+        if(elPtr->link2) elPtr->link2->startPtr->deleteLink(elPtr->link2);
     }
     
     //Finally, erase them from the vector.
-    eraseIndexesInVector(selectedLinks, game.curArea->pathLinks);
+    eraseIndexesInVector(selectedLinks, game.curArea->editorPathLinks);
 }
 
 
@@ -2128,38 +2122,26 @@ MobGen* AreaEditor::getMobUnderPoint(const Point& p, size_t* outIdx) const {
 
 
 /**
- * @brief Returns true if there are path links currently under the specified
- * point. link1 takes the info of the found link. If there's also a link in
- * the opposite direction, link2 gets that data,
- * otherwise link2 receives nullptr.
+ * @brief Returns the editor path link currently under a point.
  *
  * @param p The point to check against.
- * @param link1 If there is a path link under that point,
- * its pointer is returned here.
- * @param link2 If there is a path link under the point, but going in the
- * opposite direction, its pointer is returned here.
  * @return The link.
  */
-bool AreaEditor::getPathLinkUnderPoint(
-    const Point& p, PathLink** link1, PathLink** link2
-) const {
-    forIdx(s, game.curArea->pathStops) {
-        PathStop* sPtr = game.curArea->pathStops[s];
-        forIdx(l, sPtr->links) {
-            PathStop* s2Ptr = sPtr->links[l]->endPtr;
-            if(
-                circleIntersectsLineSeg(
-                    p, 8 / game.editorsView.cam.zoom, sPtr->pos, s2Ptr->pos
-                )
-            ) {
-                *link1 = sPtr->links[l];
-                *link2 = s2Ptr->getLink(sPtr);
-                return true;
-            }
+EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(const Point& p) const {
+    forIdx(l, game.curArea->editorPathLinks) {
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
+        PathStop* s1Ptr = elPtr->link1->startPtr;
+        PathStop* s2Ptr = elPtr->link1->endPtr;
+        if(
+            circleIntersectsLineSeg(
+                p, 8.0f / game.editorsView.cam.zoom, s1Ptr->pos, s2Ptr->pos
+            )
+        ) {
+            return elPtr;
         }
     }
     
-    return false;
+    return nullptr;
 }
 
 
@@ -2252,10 +2234,10 @@ void AreaEditor::homogenizeSelectedMobs() {
     
     const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
     MobGen* base = game.curArea->mobGenerators[*selectedMobs.begin()];
-    for(size_t mobIdx : selectedMobs) {
-        MobGen* mob = game.curArea->mobGenerators[mobIdx];
-        if(mob == base) continue;
-        base->clone(mob, false);
+    for(size_t mIdx : selectedMobs) {
+        MobGen* mPtr = game.curArea->mobGenerators[mIdx];
+        if(mPtr == base) continue;
+        base->clone(mPtr, false);
     }
 }
 
@@ -2268,11 +2250,13 @@ void AreaEditor::homogenizeSelectedPathLinks() {
     if(pathLinkSelection.getCount() < 2) return;
     
     const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
-    PathLink* base = game.curArea->pathLinks[*selectedLinks.begin()];
-    for(size_t linkIdx : selectedLinks) {
-        PathLink* link = game.curArea->pathLinks[linkIdx];
-        if(link == base) continue;
-        base->clone(link);
+    EditorPathLink* base =
+        &game.curArea->editorPathLinks[*selectedLinks.begin()];
+    for(size_t elIdx : selectedLinks) {
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[elIdx];
+        if(elPtr == base) continue;
+        base->link1->clone(elPtr->link1);
+        if(elPtr->link2) base->link1->clone(elPtr->link2);
     }
 }
 
@@ -2286,10 +2270,10 @@ void AreaEditor::homogenizeSelectedPathStops() {
     
     const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
     PathStop* base = game.curArea->pathStops[*selectedStops.begin()];
-    for(size_t stopIdx : selectedStops) {
-        PathStop* stop = game.curArea->pathStops[stopIdx];
-        if(stop == base) continue;
-        base->clone(stop);
+    for(size_t sIdx : selectedStops) {
+        PathStop* sPtr = game.curArea->pathStops[sIdx];
+        if(sPtr == base) continue;
+        base->clone(sPtr);
     }
 }
 
@@ -2608,7 +2592,9 @@ void AreaEditor::pastePathLinkProperties() {
     registerChange("path link property paste");
     
     for(size_t linkIdx : pathLinkSelection.getItemIdxs()) {
-        copyBufferPathLink->clone(game.curArea->pathLinks[linkIdx]);
+        EditorPathLink* lPtr = &game.curArea->editorPathLinks[linkIdx];
+        copyBufferPathLink->clone(lPtr->link1);
+        if(lPtr->link2) copyBufferPathLink->clone(lPtr->link2);
     }
     
     setStatus("Successfully pasted path link properties.");
@@ -3019,8 +3005,9 @@ PathStop* AreaEditor::splitPathLink(
         oldEndPtr->getLink(newStopPtr)->type = oldLinkType;
     }
     
-    //Update the distances.
+    //Update the distances and editor links.
     newStopPtr->calculateDistsPlusNeighbors();
+    game.curArea->setupEditorPathLinks();
     
     return newStopPtr;
 }
