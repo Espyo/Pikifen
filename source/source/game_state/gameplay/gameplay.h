@@ -462,7 +462,6 @@ public:
     
     //--- Public function declarations ---
     
-    GameplayState();
     ALLEGRO_BITMAP* drawToBitmap(
         const MakerTools::AreaImageSettings& settings
     );

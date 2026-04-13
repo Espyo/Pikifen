@@ -67,13 +67,27 @@ void ScriptDef::unload() {
 
 /**
  * @brief Constructs a new script VM object.
- *
- * @param scriptDef Its script definition.
  */
-ScriptVM::ScriptVM(ScriptDef* scriptDef) :
-    scriptDef(scriptDef) {
-    
+ScriptVM::ScriptVM() {
     fsm.script = this;
+}
+
+
+/**
+ * @brief Initializes the script VM, setting up its data, running its
+ * init actions, etc.
+ *
+ * @param scriptDef Script definition it should follow.
+ * @param mobPtr Whether there is an associated mob.
+ */
+void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
+    this->scriptDef = scriptDef;
+    mob = mobPtr;
+    timer.stop();
+    vars.clear();
+    
+    scriptDef->initActions.run(this);
+    fsm.init();
 }
 
 
@@ -98,6 +112,29 @@ string ScriptVM::getMakerToolVarsStr() const {
     result = wordWrap(result, 98, 2);
     
     return result;
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic. This processes the timer and
+ * runs some convenient events.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void ScriptVM::tick(float deltaT) {
+    //Timer event.
+    FsmEventDef* timerEv = fsm.getEvent(MOB_EV_TIMER);
+    if(timer.duration > 0) {
+        if(timer.timeLeft > 0) {
+            timer.tick(deltaT);
+            if(timer.timeLeft == 0.0f && timerEv) {
+                timerEv->run(this);
+            }
+        }
+    }
+    
+    //Tick event.
+    fsm.runEvent(FSM_EV_ON_TICK);
 }
 
 

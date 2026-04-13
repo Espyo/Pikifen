@@ -90,7 +90,9 @@ public:
     
     //--- Public function declarations ---
     
-    explicit ScriptVM(ScriptDef* scriptDef);
+    ScriptVM();
+    void init(ScriptDef* scriptDef, Mob* mobPtr = nullptr);
+    void tick(float deltaT);
     string getMakerToolVarsStr() const;
     
 };

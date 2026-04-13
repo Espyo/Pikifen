@@ -389,15 +389,6 @@ void GameplayMessageBox::tick(float deltaT) {
 
 
 /**
- * @brief Constructs a new gameplay state object.
- */
-GameplayState::GameplayState() :
-    scriptVM(nullptr) {
-    
-}
-
-
-/**
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
@@ -1488,10 +1479,7 @@ void GameplayState::load() {
         
         if(scriptFileExists) {
             scriptDef.loadFromDataNode(&scriptFile);
-            scriptVM = ScriptVM(&scriptDef);
-            
-            scriptDef.initActions.run(&scriptVM);
-            scriptVM.fsm.init();
+            scriptVM.init(&scriptDef);
         }
     }
     

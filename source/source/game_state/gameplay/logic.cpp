@@ -2455,19 +2455,7 @@ void GameplayState::processMobTouches(
 void GameplayState::tickAreaScript(float deltaT) {
     if(!scriptVM.fsm.curState) return;
     
-    //Timer events.
-    FsmEventDef* timerEv = scriptVM.fsm.getEvent(MOB_EV_TIMER);
-    if(scriptVM.timer.duration > 0) {
-        if(scriptVM.timer.timeLeft > 0) {
-            scriptVM.timer.tick(deltaT);
-            if(scriptVM.timer.timeLeft == 0.0f && timerEv) {
-                timerEv->run(&scriptVM);
-            }
-        }
-    }
-    
-    //Tick event.
-    scriptVM.fsm.runEvent(FSM_EV_ON_TICK);
+    scriptVM.tick(deltaT);
 }
 
 

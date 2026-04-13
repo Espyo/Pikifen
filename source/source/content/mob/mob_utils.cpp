@@ -1287,9 +1287,6 @@ Mob* createMob(
         codeAfterCreation(mPtr);
     }
     
-    mPtr->scriptVM.mob = mPtr;
-    type->scriptDef.initActions.run(&mPtr->scriptVM);
-    
     if(!vars.empty()) {
         map<string, string> varsMap = getVarMap(vars);
         ScriptVarReader svr(varsMap);
@@ -1301,10 +1298,11 @@ Mob* createMob(
         }
     }
     
+    mPtr->scriptVM.init(&type->scriptDef, mPtr);
+    
     if(firstStateOverride != INVALID) {
         mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
     }
-    mPtr->scriptVM.fsm.init();
     
     forIdx(c, type->children) {
         MobType::Child* childInfo =

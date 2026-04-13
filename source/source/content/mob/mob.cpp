@@ -167,7 +167,6 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     radius(type->radius),
     height(type->height),
     rectangularDim(type->rectangularDim),
-    scriptVM(&type->scriptDef),
     intendedTurnAngle(angle),
     home(pos),
     id(game.states.gameplay->nextMobId),
@@ -199,8 +198,6 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     }
     
     updateInteractionSpan();
-    
-    scriptVM.mob = this;
 }
 
 
@@ -4487,17 +4484,6 @@ void Mob::tickMiscLogic(float deltaT) {
 void Mob::tickScript(float deltaT) {
     if(!scriptVM.fsm.curState) return;
     
-    //Timer events.
-    FsmEventDef* timerEv = scriptVM.fsm.getEvent(MOB_EV_TIMER);
-    if(scriptVM.timer.duration > 0) {
-        if(scriptVM.timer.timeLeft > 0) {
-            scriptVM.timer.tick(deltaT);
-            if(scriptVM.timer.timeLeft == 0.0f && timerEv) {
-                timerEv->run(&scriptVM);
-            }
-        }
-    }
-    
     //Has it reached 0 health?
     if(health <= 0 && maxHealth != 0) {
         scriptVM.fsm.runEvent(MOB_EV_ZERO_HEALTH, this);
@@ -4631,8 +4617,8 @@ void Mob::tickScript(float deltaT) {
         }
     }
     
-    //Tick event.
-    scriptVM.fsm.runEvent(FSM_EV_ON_TICK);
+    //Actual script VM ticking.
+    scriptVM.tick(deltaT);
 }
 
 
