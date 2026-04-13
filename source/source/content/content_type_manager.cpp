@@ -113,11 +113,14 @@ void AreaContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * set from the list of manifests.
  * @param level Level to load at.
  * @param fromBackup If true, load from a backup, if any.
+ * @param outScriptFilePath If not nullptr, if at the correct load level,
+ * the path to the area's script file is returned here.
  * @return Whether it succeeded.
  */
 bool AreaContentManager::loadArea(
     Area* areaPtr, const string& requestedAreaPath,
-    ContentManifest* manifPtr, CONTENT_LOAD_LEVEL level, bool fromBackup
+    ContentManifest* manifPtr, CONTENT_LOAD_LEVEL level, bool fromBackup,
+    string* outScriptFilePath
 ) {
     //Setup.
     ContentManifest tempManif;
@@ -184,6 +187,11 @@ bool AreaContentManager::loadArea(
         areaPtr->loadGeometryFromDataNode(&geometryFile, level);
     }
     
+    //Script.
+    if(level >= CONTENT_LOAD_LEVEL_FULL && outScriptFilePath) {
+        *outScriptFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_SCRIPT;
+    }
+    
     //Reminders.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
         string remindersPath =
@@ -214,7 +222,7 @@ void AreaContentManager::loadAreaIntoVector(
     if (
         loadArea(
             newArea, manifest->path, manifest,
-            CONTENT_LOAD_LEVEL_BASIC, fromBackup
+            CONTENT_LOAD_LEVEL_BASIC, fromBackup, nullptr
         )
     ) {
         list[type].push_back(newArea);

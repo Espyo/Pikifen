@@ -1250,10 +1250,11 @@ void GameplayState::load() {
     }
     
     //Load the area.
+    string scriptFilePath;
     if(
         !game.content.loadAreaAsCurrent(
             pathOfAreaToLoad, nullptr,
-            CONTENT_LOAD_LEVEL_FULL, false
+            CONTENT_LOAD_LEVEL_FULL, false, &scriptFilePath
         )
     ) {
         leave(GAMEPLAY_LEAVE_TARGET_AREA_SELECT);
@@ -1474,6 +1475,23 @@ void GameplayState::load() {
         
         for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
             playerTeams[t].sprayStats[sprayIdx].nrSprays = s2i(s.second);
+        }
+    }
+    
+    //Load the area's script.
+    if(!scriptFilePath.empty()) {
+        DataNode scriptFile;
+        bool scriptFileExists = false;
+        scriptFile.loadFile(
+            scriptFilePath, &scriptFileExists, true, true
+        );
+        
+        if(scriptFileExists) {
+            scriptDef.loadFromDataNode(&scriptFile);
+            scriptVM = ScriptVM(&scriptDef);
+            
+            scriptDef.initActions.run(&scriptVM);
+            scriptVM.fsm.init();
         }
     }
     

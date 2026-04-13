@@ -91,7 +91,7 @@ public:
     bool loadArea(
         Area* areaPtr, const string& requestedAreaPath,
         ContentManifest* manifPtr,
-        CONTENT_LOAD_LEVEL level, bool fromBackup
+        CONTENT_LOAD_LEVEL level, bool fromBackup, string* outScriptFilePath
     );
     string manifestToPath(
         const ContentManifest& manifest, AREA_TYPE type

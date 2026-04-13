@@ -189,6 +189,9 @@ const string AREA_MAIN_DATA = "data.txt";
 //Area geometry file.
 const string AREA_GEOMETRY = "geometry.txt";
 
+//Area script file.
+const string AREA_SCRIPT = "script.txt";
+
 //Area thumbnail file.
 const string AREA_THUMBNAIL = "thumbnail.png";
 
@@ -270,7 +273,7 @@ namespace FILE_PATHS_FROM_ROOT {
 //Debug config.
 const string DEBUG_CONFIG =
     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::DEBUG_CONFIG;
-
+    
 //Error log.
 const string ERROR_LOG =
     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::ERROR_LOG;

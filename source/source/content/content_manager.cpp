@@ -189,11 +189,13 @@ void ContentManager::loadAll(
  * set from the list of manifests.
  * @param level Level to load at.
  * @param fromBackup If true, load from a backup, if any.
+ * @param outScriptFilePath If not nullptr, if at the correct load level,
+ * the path to the area's script file is returned here.
  * @return Whether it succeeded.
  */
 bool ContentManager::loadAreaAsCurrent(
     const string& requestedAreaPath, ContentManifest* manifPtr,
-    CONTENT_LOAD_LEVEL level, bool fromBackup
+    CONTENT_LOAD_LEVEL level, bool fromBackup, string* outScriptFilePath
 ) {
     engineAssert(
         game.curArea == nullptr,
@@ -210,7 +212,7 @@ bool ContentManager::loadAreaAsCurrent(
     bool success =
         areas.loadArea(
             game.curArea, requestedAreaPath, manifPtr,
-            level, fromBackup
+            level, fromBackup, outScriptFilePath
         );
         
     if(!success) {

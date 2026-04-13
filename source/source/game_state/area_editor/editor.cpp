@@ -2632,7 +2632,7 @@ void AreaEditor::loadAreaFolder(
     if(
         !game.content.loadAreaAsCurrent(
             requestedAreaPath, &manifest,
-            CONTENT_LOAD_LEVEL_EDITOR, fromBackup
+            CONTENT_LOAD_LEVEL_EDITOR, fromBackup, nullptr
         )
     ) {
         openMessageDialog(

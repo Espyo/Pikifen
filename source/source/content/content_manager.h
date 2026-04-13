@@ -124,7 +124,7 @@ struct ContentManager {
     );
     bool loadAreaAsCurrent(
         const string& requestedAreaPath, ContentManifest* manifPtr,
-        CONTENT_LOAD_LEVEL level, bool fromBackup
+        CONTENT_LOAD_LEVEL level, bool fromBackup, string* outScriptFilePath
     );
     void loadAll(const vector<CONTENT_TYPE>& types, CONTENT_LOAD_LEVEL level);
     void reloadPacks();

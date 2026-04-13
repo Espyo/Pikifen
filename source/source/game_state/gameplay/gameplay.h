@@ -429,6 +429,9 @@ public:
     //Animation timer for the "Got it!" medal text on the mission score ruler.
     float medalGotItJuiceTimer = 0.0f;
     
+    //Script definition for the area.
+    ScriptDef scriptDef;
+    
     //Script VM for the area.
     ScriptVM scriptVM;
     
@@ -607,6 +610,7 @@ private:
     );
     bool shouldIgnorePlayerAction(const Inpution::Action& action);
     void stopAllLeaders();
+    void tickAreaScript(float deltaT);
     void unloadGameContent();
     void updateAreaActiveCells();
     void updateMobIsActiveFlag();
