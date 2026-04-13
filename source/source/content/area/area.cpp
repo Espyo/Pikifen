@@ -391,6 +391,7 @@ void Area::clone(Area& other) {
     forIdx(r, regions) {
         AreaRegion* rPtr = regions[r];
         AreaRegion* orPtr = other.regions[r];
+        orPtr->type = rPtr->type;
         orPtr->pose = rPtr->pose;
     }
     
@@ -1477,12 +1478,15 @@ void Area::loadGeometryFromDataNode(
     for(size_t r = 0; r < nRegions; r++) {
         DataNode* regionNode = regionsNode->getChild(r);
         ReaderSetter rRS(regionNode);
+        string typeStr;
         AreaRegion* newRegion = new AreaRegion();
         
+        rRS.set("type", typeStr);
         rRS.set("center", newRegion->pose.pos);
         rRS.set("size", newRegion->pose.size);
         rRS.set("angle", newRegion->pose.angle);
         
+        newRegion->type = enumGetValue(areaRegionTypeNames, typeStr);
         regions.push_back(newRegion);
     }
     
@@ -2021,6 +2025,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Get the leaders to the exit!";
         regions.push_back(
         new AreaRegion {
+            .type = AREA_REGION_TYPE_MISSION,
             .pose =
             Pose2d {
                 .pos = goalExitCenter,
@@ -2725,6 +2730,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* regionNode = regionsNode->addNew("region");
         GetterWriter rGW(regionNode);
         
+        rGW.write("type", enumGetName(areaRegionTypeNames, rPtr->type));
         rGW.write("center", rPtr->pose.pos);
         rGW.write("size", rPtr->pose.size);
         rGW.write("angle", rPtr->pose.angle);
@@ -2979,14 +2985,14 @@ size_t Blockmap::getCol(float x) const {
 
 /**
  * @brief Obtains a list of edges that are within the specified
- * rectangular region.
+ * rectangle.
  *
- * @param tl Top-left coordinates of the region.
- * @param br Bottom-right coordinates of the region.
+ * @param tl Top-left coordinates of the rectangle.
+ * @param br Bottom-right coordinates of the rectangle.
  * @param outEdges Set to fill the edges into.
  * @return Whether it succeeded.
  */
-bool Blockmap::getEdgesInRegion(
+bool Blockmap::getEdgesInRect(
     const Point& tl, const Point& br, set<Edge*>& outEdges
 ) const {
 

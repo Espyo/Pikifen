@@ -1659,6 +1659,18 @@ void AreaEditor::processGuiPanelDetails() {
                         regionSelection.getSingleItemIdx()
                     ];
                     
+                //Region type combobox.
+                int typeInt = curRegion->type;
+                if(
+                    ImGui::Combo(
+                        "Type", &typeInt, enumGetNames(areaRegionTypeNames), 15
+                    )
+                ) {
+                    registerChange("region type change");
+                    curRegion->type = (AREA_REGION_TYPE) typeInt;
+                }
+                setTooltip("The type and purpose of the region.");
+                
                 //Region center value.
                 Point regionCenter = curRegion->pose.pos;
                 if(
@@ -4761,7 +4773,7 @@ void AreaEditor::processGuiPanelPaths() {
             bool okToEdit =
                 (pathLinkSelection.hasOne()) ||
                 pathLinkSelection.isHomogenized();
-            
+                
             if(!pathLinkSelection.hasAny()) {
             
                 //"No link selected" text.

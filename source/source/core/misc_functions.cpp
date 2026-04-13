@@ -58,7 +58,7 @@ bool areWallsBetween(
     
     set<Edge*> candidateEdges;
     if(
-        !game.curArea->bmap.getEdgesInRegion(
+        !game.curArea->bmap.getEdgesInRect(
             bbTL, bbBR,
             candidateEdges
         )

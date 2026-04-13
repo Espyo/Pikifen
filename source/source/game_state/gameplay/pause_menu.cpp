@@ -946,10 +946,11 @@ void PauseMenu::drawRadar(
         );
     }
     
-    //Mission exit region.
+    //Mission area regions.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
+            if(rPtr->type != AREA_REGION_TYPE_MISSION) continue;
             drawHighlightedRectRegion(
                 rPtr->pose.pos, rPtr->pose.size, rPtr->pose.angle,
                 changeAlpha(game.config.guiColors.gold, 192), game.timePassed

@@ -37,6 +37,21 @@ enum AREA_TYPE {
 };
 
 
+//Types of area regions.
+enum AREA_REGION_TYPE {
+
+    //Something used for the mission, highlighted in the radar.
+    AREA_REGION_TYPE_MISSION,
+    
+};
+
+
+//Area region type enum naming.
+buildEnumNames(areaRegionTypeNames, AREA_REGION_TYPE)({
+    { AREA_REGION_TYPE_MISSION, "Mission region" },
+});
+
+
 namespace AREA {
 extern const float DEF_DAY_TIME_SPEED;
 extern const size_t DEF_DAY_TIME_START;
@@ -79,7 +94,7 @@ struct Blockmap {
     
     size_t getCol(float x) const;
     size_t getRow(float y) const;
-    bool getEdgesInRegion(
+    bool getEdgesInRect(
         const Point& tl, const Point& br, set<Edge*>& edges
     ) const;
     Point getTopLeftCorner(size_t col, size_t row) const;
@@ -178,6 +193,9 @@ struct TreeShadow {
 struct AreaRegion {
 
     //--- Public members ---
+    
+    //Type.
+    AREA_REGION_TYPE type = AREA_REGION_TYPE_MISSION;
     
     //Pose data.
     Pose2d pose;

@@ -119,7 +119,7 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
         type->terrainRadius;
         
     if(
-        !game.curArea->bmap.getEdgesInRegion(
+        !game.curArea->bmap.getEdgesInRect(
             newPos - radiusToUse,
             newPos + radiusToUse,
             candidateEdges

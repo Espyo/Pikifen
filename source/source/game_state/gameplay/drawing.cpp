@@ -1178,10 +1178,11 @@ void GameplayState::drawInGameText(Player* player) {
     //Leader prompt.
     player->leaderPrompt.draw(player->view);
     
-    //Area regions.
+    //Mission area regions.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         forIdx(r, game.curArea->regions) {
             AreaRegion* rPtr = game.curArea->regions[r];
+            if(rPtr->type != AREA_REGION_TYPE_MISSION) continue;
             drawHighlightedRectRegion(
                 rPtr->pose.pos, rPtr->pose.size, rPtr->pose.angle,
                 changeAlpha(game.config.guiColors.gold, 192), areaTimePassed
@@ -1665,7 +1666,7 @@ void GameplayState::drawThrowPreview(Player* player) {
     //Check which edges exist near the throw.
     set<Edge*> candidateEdges;
     
-    game.curArea->bmap.getEdgesInRegion(
+    game.curArea->bmap.getEdgesInRect(
         Point(
             std::min(player->leaderPtr->pos.x, player->throwDest.x),
             std::min(player->leaderPtr->pos.y, player->throwDest.y)

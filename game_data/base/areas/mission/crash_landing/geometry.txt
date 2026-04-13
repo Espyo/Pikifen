@@ -3848,7 +3848,9 @@ path_stops{
 tree_shadows
 regions{
 	region{
+		type=Mission region
 		center=1392.0000 -44.0000
 		size=416.0000 504.0000
+		angle=0.0000
 	}
 }
