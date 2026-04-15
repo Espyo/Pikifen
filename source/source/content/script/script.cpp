@@ -74,6 +74,17 @@ ScriptVM::ScriptVM() {
 
 
 /**
+ * @brief Clears the script VM's data.
+ */
+void ScriptVM::clear() {
+    scriptDef = nullptr;
+    mob = nullptr;
+    timer.stop();
+    vars.clear();
+}
+
+
+/**
  * @brief Initializes the script VM, setting up its data, running its
  * init actions, etc.
  *
@@ -83,8 +94,6 @@ ScriptVM::ScriptVM() {
 void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
     this->scriptDef = scriptDef;
     mob = mobPtr;
-    timer.stop();
-    vars.clear();
     
     scriptDef->initActions.run(this);
     fsm.init();

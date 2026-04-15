@@ -93,6 +93,7 @@ public:
     ScriptVM();
     void init(ScriptDef* scriptDef, Mob* mobPtr = nullptr);
     void tick(float deltaT);
+    void clear();
     string getMakerToolVarsStr() const;
     
 };

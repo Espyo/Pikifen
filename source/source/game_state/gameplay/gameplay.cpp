@@ -1479,6 +1479,7 @@ void GameplayState::load() {
         
         if(scriptFileExists) {
             scriptDef.loadFromDataNode(&scriptFile);
+            scriptVM.clear();
             scriptVM.init(&scriptDef);
         }
     }
