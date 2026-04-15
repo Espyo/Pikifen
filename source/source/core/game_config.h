@@ -64,6 +64,7 @@ extern const ALLEGRO_COLOR PAGE_CHANGE;
 extern const ALLEGRO_COLOR PAUSE_BG;
 extern const ALLEGRO_COLOR PAUSE_VIGNETTE;
 extern const ALLEGRO_COLOR SMALL_HEADER;
+extern const ALLEGRO_COLOR STANDARD_MOUSE_CURSOR;
 }
 
 
@@ -221,6 +222,9 @@ struct GameConfig {
         
         //Small headers.
         ALLEGRO_COLOR smallHeader = GUI_COLORS_D::SMALL_HEADER;
+        
+        //Standard mouse cursor.
+        ALLEGRO_COLOR standardMouseCursor = GUI_COLORS_D::STANDARD_MOUSE_CURSOR;
         
     } guiColors;
     

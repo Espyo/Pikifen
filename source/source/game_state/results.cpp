@@ -309,7 +309,7 @@ void Results::doDrawing() {
     gui.draw();
     if(scoreChartPageBox->visible) drawScoreChartConnections();
     
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(game.config.guiColors.standardMouseCursor);
 }
 
 

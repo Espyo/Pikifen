@@ -792,7 +792,7 @@ void TitleScreen::doDrawing() {
     
     mainMenu.draw();
     
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(game.config.guiColors.standardMouseCursor);
 }
 
 

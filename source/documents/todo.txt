@@ -38,14 +38,6 @@ Next tasks (roughly sorted most important first)
     Other mission tweaks
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
-    Try to move more colors into game config
-        Maybe have an "accent color" property that's green
-        Enemy spirit
-        Whistle faint circle
-        Whistle dot colors?
-        Standard cursor color
-        Colors for "system" feel; basically the blue tones used throughout
-        The medal colors
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
@@ -977,7 +969,14 @@ Tasks for later on (I might never implement these)
         Hide some of the HUD items? Stuff like a leader's health might not be necessary if it's full
         When showing a mission's score, the units and tens digits should be smaller than the rest, to highlight the hundreds being a checkpoint
             One mission might make getting 1000 points very easy while another might make getting 50 points very hard, so this might not work...
-        If a mission mob checklist enemy is killed, but is later revived, it won't be re-added to the checklist. Maybe it should, maybe it shouldn't
+        If a mission mob group enemy is killed, but is later revived, it won't be re-added to the group. Maybe it should, maybe it shouldn't
+            Try to move more colors into game config
+        Maybe have an "accent color" property that's green
+            Colors for "system" feel; basically the blue tones used throughout
+            Enemy spirit?
+            Whistle faint filled circle
+            Whistle dot colors?
+            The medal colors
     Possible solutions to known issues
         Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

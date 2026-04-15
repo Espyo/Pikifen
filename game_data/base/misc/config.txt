@@ -34,6 +34,7 @@ gui_colors {
     pause_bg = 25 46 70 204
     pause_vignette = 140 182 224 44
     small_header = 188 230 230
+    standard_mouse_cursor = 188 230 230
 }
 
 leaders {

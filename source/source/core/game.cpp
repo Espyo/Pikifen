@@ -28,9 +28,6 @@
 
 namespace GAME {
 
-//Standard color of the mouse cursor.
-const ALLEGRO_COLOR CURSOR_STANDARD_COLOR = al_map_rgb(188, 230, 230);
-
 //Maximum alpha [0 - 1] of the cursor's trail -- the alpha near the cursor.
 const float CURSOR_TRAIL_MAX_ALPHA = 0.30f;
 

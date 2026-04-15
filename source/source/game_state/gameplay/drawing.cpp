@@ -180,7 +180,7 @@ void GameplayState::doGameDrawing(
             }
             game.modal.draw();
             if(game.modal.responsive) {
-                drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+                drawMouseCursor(game.config.guiColors.standardMouseCursor);
             }
         }
         
@@ -717,7 +717,7 @@ void GameplayState::drawGameplayMessageBox() {
     const ALLEGRO_COLOR DARKENER_COLOR = COLOR_BLACK;
     
     //Mouse cursor.
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(game.config.guiColors.standardMouseCursor);
     
     al_use_transform(&game.identityTransform);
     
@@ -1547,7 +1547,7 @@ void GameplayState::drawOnionMenu() {
     
     onionMenu->gui.draw();
     
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(game.config.guiColors.standardMouseCursor);
 }
 
 
@@ -1567,7 +1567,7 @@ void GameplayState::drawPauseMenu() {
     
     pauseMenu->draw();
     
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(game.config.guiColors.standardMouseCursor);
 }
 
 

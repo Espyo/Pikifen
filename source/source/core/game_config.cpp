@@ -75,31 +75,34 @@ const float SPEED_WEIGHT_MULT = 0.0004f;
 namespace GUI_COLORS_D {
 
 //Default value for the "back" button color.
-const ALLEGRO_COLOR BACK = { 1.0f, 0.82f, 0.72f, 1.0f };
+const ALLEGRO_COLOR BACK = al_map_rgb(255, 210, 186);
 
 //Default value for the red bad color.
-const ALLEGRO_COLOR BAD = { 0.88f, 0.44f, 0.44f, 1.0f };
+const ALLEGRO_COLOR BAD = al_map_rgb(226, 112, 112);
 
 //Default value for the focused GUI item color.
-const ALLEGRO_COLOR FOCUSED_ITEM = { 0.34f, 0.78f, 0.82f, 1.0f };
+const ALLEGRO_COLOR FOCUSED_ITEM = al_map_rgb(87, 200, 208);
 
 //Default value for the gold-like color.
-const ALLEGRO_COLOR GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
+const ALLEGRO_COLOR GOLD = al_map_rgb(255, 242, 0);
 
 //Default value for the green good color.
-const ALLEGRO_COLOR GOOD = { 0.38f, 0.88f, 0.30f, 1.0f };
+const ALLEGRO_COLOR GOOD = al_map_rgb(96, 226, 80);
 
 //Default value for the page change buttons.
-const ALLEGRO_COLOR PAGE_CHANGE = { 0.74f, 0.90f, 0.90f, 1.0f };
+const ALLEGRO_COLOR PAGE_CHANGE = al_map_rgb(188, 230, 230);
 
 //Default value for the pause menu's background.
-const ALLEGRO_COLOR PAUSE_BG = { 0.10f, 0.18f, 0.27f, 0.80f };
+const ALLEGRO_COLOR PAUSE_BG = al_map_rgba(25, 46, 70, 204);
 
 //Default value for the pause menu's vignette.
-const ALLEGRO_COLOR PAUSE_VIGNETTE = { 0.54f, 0.70f, 0.88f, 0.18f };
+const ALLEGRO_COLOR PAUSE_VIGNETTE = al_map_rgba(140, 182, 224, 44);
 
 //Default value for small headers.
-const ALLEGRO_COLOR SMALL_HEADER = { 0.74f, 0.90f, 0.90f, 1.0f };
+const ALLEGRO_COLOR SMALL_HEADER = al_map_rgb(188, 230, 230);
+
+//Default value for the standard mouse cursor.
+const ALLEGRO_COLOR STANDARD_MOUSE_CURSOR = al_map_rgb(188, 230, 230);
 
 }
 
@@ -269,6 +272,7 @@ void GameConfig::load(DataNode* file) {
         cRS.set("pause_bg", guiColors.pauseBg);
         cRS.set("pause_vignette", guiColors.pauseVignette);
         cRS.set("small_header", guiColors.smallHeader);
+        cRS.set("standard_mouse_cursor", guiColors.standardMouseCursor);
     }
     
     //Leaders.
