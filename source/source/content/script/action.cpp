@@ -33,11 +33,11 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     vector<bool> seenElseAction;
     forIdx(a, list) {
         switch(list[a]->actionType->type) {
-        case MOB_ACTION_IF: {
+        case SCRIPT_ACTION_IF: {
             depth++;
             seenElseAction.push_back(false);
             break;
-        } case MOB_ACTION_ELSE: {
+        } case SCRIPT_ACTION_ELSE: {
             if(depth == 0) {
                 game.errors.report(
                     "Found an \"else\" action without a matching "
@@ -47,7 +47,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
             }
             seenElseAction.back() = true;
             break;
-        } case MOB_ACTION_ELSE_IF: {
+        } case SCRIPT_ACTION_ELSE_IF: {
             if(depth == 0) {
                 game.errors.report(
                     "Found an \"else_if\" action without a matching "
@@ -63,7 +63,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
                 return false;
             }
             break;
-        } case MOB_ACTION_END_IF: {
+        } case SCRIPT_ACTION_END_IF: {
             if(depth == 0) {
                 game.errors.report(
                     "Found an \"end_if\" action without a matching "
@@ -90,7 +90,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     //Check if the "goto"-related actions are okay.
     set<string> labels;
     forIdx(a, list) {
-        if(list[a]->actionType->type == MOB_ACTION_LABEL) {
+        if(list[a]->actionType->type == SCRIPT_ACTION_LABEL) {
             const string& name = list[a]->args[0];
             if(isInContainer(labels, name)) {
                 game.errors.report(
@@ -102,7 +102,7 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
         }
     }
     forIdx(a, list) {
-        if(list[a]->actionType->type == MOB_ACTION_GOTO) {
+        if(list[a]->actionType->type == SCRIPT_ACTION_GOTO) {
             const string& name = list[a]->args[0];
             if(!isInContainer(labels, name)) {
                 game.errors.report(
@@ -118,19 +118,19 @@ bool ScriptActionBlockDef::assertActions(DataNode* dn) {
     bool passedSetState = false;
     forIdx(a, list) {
         switch(list[a]->actionType->type) {
-        case MOB_ACTION_SET_STATE: {
+        case SCRIPT_ACTION_SET_STATE: {
             passedSetState = true;
             break;
-        } case MOB_ACTION_ELSE: {
+        } case SCRIPT_ACTION_ELSE: {
             passedSetState = false;
             break;
-        } case MOB_ACTION_ELSE_IF: {
+        } case SCRIPT_ACTION_ELSE_IF: {
             passedSetState = false;
             break;
-        } case MOB_ACTION_END_IF: {
+        } case SCRIPT_ACTION_END_IF: {
             passedSetState = false;
             break;
-        } case MOB_ACTION_LABEL: {
+        } case SCRIPT_ACTION_LABEL: {
             passedSetState = false;
             break;
         } default: {
@@ -209,10 +209,10 @@ void ScriptActionBlockDef::run(
     forIdx(a, list) {
     
         switch(list[a]->actionType->type) {
-        case MOB_ACTION_IF: {
+        case SCRIPT_ACTION_IF: {
             flowCodeToRun = FLOW_CODE_CONDITION;
             break;
-        } case MOB_ACTION_ELSE_IF: {
+        } case SCRIPT_ACTION_ELSE_IF: {
             if(processElseIfCondition) {
                 flowCodeToRun = FLOW_CODE_CONDITION;
                 processElseIfCondition = false;
@@ -220,14 +220,14 @@ void ScriptActionBlockDef::run(
                 flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
             }
             break;
-        } case MOB_ACTION_ELSE: {
+        } case SCRIPT_ACTION_ELSE: {
             flowCodeToRun = FLOW_CODE_CONDITION_OTHER_BRANCH;
             break;
-        } case MOB_ACTION_GOTO: {
+        } case SCRIPT_ACTION_GOTO: {
             flowCodeToRun = FLOW_CODE_JUMP;
             break;
-        } case MOB_ACTION_END_IF:
-        case MOB_ACTION_LABEL: {
+        } case SCRIPT_ACTION_END_IF:
+        case SCRIPT_ACTION_LABEL: {
             flowCodeToRun = FLOW_CODE_DO_NOTHING;
             break;
         } default: {
@@ -253,20 +253,20 @@ void ScriptActionBlockDef::run(
                 
                 for(size_t a2 = a + 1; a2 < list.size(); a2++) {
                     SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                    if(a2Type == MOB_ACTION_IF) {
+                    if(a2Type == SCRIPT_ACTION_IF) {
                         depth++;
-                    } else if(a2Type == MOB_ACTION_ELSE) {
+                    } else if(a2Type == SCRIPT_ACTION_ELSE) {
                         if(depth == 0) {
                             nextActionIdx = a2 + 1;
                             break;
                         }
-                    } else if(a2Type == MOB_ACTION_ELSE_IF) {
+                    } else if(a2Type == SCRIPT_ACTION_ELSE_IF) {
                         if(depth == 0) {
                             processElseIfCondition = true;
                             nextActionIdx = a2;
                             break;
                         }
-                    } else if(a2Type == MOB_ACTION_END_IF) {
+                    } else if(a2Type == SCRIPT_ACTION_END_IF) {
                         if(depth == 0) {
                             nextActionIdx = a2 + 1;
                             break;
@@ -290,9 +290,9 @@ void ScriptActionBlockDef::run(
             
             for(size_t a2 = a + 1; a2 < list.size(); a2++) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                if(a2Type == MOB_ACTION_IF) {
+                if(a2Type == SCRIPT_ACTION_IF) {
                     depth++;
-                } else if(a2Type == MOB_ACTION_END_IF) {
+                } else if(a2Type == SCRIPT_ACTION_END_IF) {
                     if(depth == 0) {
                         nextActionIdx = a2 + 1;
                         break;
@@ -309,7 +309,7 @@ void ScriptActionBlockDef::run(
             size_t nextActionIdx = list.size();
             forIdx(a2, list) {
                 SCRIPT_ACTION a2Type = list[a2]->actionType->type;
-                if(a2Type == MOB_ACTION_LABEL) {
+                if(a2Type == SCRIPT_ACTION_LABEL) {
                     if(list[a]->args[0] == list[a2]->args[0]) {
                         nextActionIdx = a2 + 1;
                         break;
@@ -327,7 +327,7 @@ void ScriptActionBlockDef::run(
             //Normal action.
             list[a]->run(scriptVM, customData1, customData2);
             //If the state got changed, jump out.
-            if(list[a]->actionType->type == MOB_ACTION_SET_STATE) return;
+            if(list[a]->actionType->type == SCRIPT_ACTION_SET_STATE) return;
             
             break;
         }

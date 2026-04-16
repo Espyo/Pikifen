@@ -49,7 +49,7 @@ enum PATH_LINK_TYPE {
 //Flags for path stops.
 enum PATH_STOP_FLAG {
 
-    //Only usable by mob scripts that reference it.
+    //Only usable by scripts that reference it.
     PATH_STOP_FLAG_SCRIPT_ONLY = 1 << 0,
     
     //Only for mobs carrying nothing, or a 1-weight mob.

@@ -485,7 +485,7 @@ public:
     float getSpeedMultiplier() const;
     
     void arachnorbHeadTurnLogic();
-    void arachnorbPlanLogic(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
+    void arachnorbPlanLogic(SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorbFootMoveLogic();
     
     void applyStatus(

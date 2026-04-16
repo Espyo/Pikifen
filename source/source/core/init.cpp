@@ -1262,28 +1262,10 @@ void initScriptActionTypes() {
     queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_ABSOLUTE_NUMBER,
+        SCRIPT_ACTION_ABSOLUTE_NUMBER,
         "absolute_number",
         ScriptActionRunners::absoluteNumber,
         nullptr
-    );
-    
-    //Add health.
-    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_ADD_HEALTH,
-        "add_health",
-        ScriptActionRunners::addHealth,
-        nullptr
-    );
-    
-    //Arachnorb plan logic.
-    queueParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    commitAction(
-        MOB_ACTION_ARACHNORB_PLAN_LOGIC,
-        "arachnorb_plan_logic",
-        ScriptActionRunners::arachnorbPlanLogic,
-        ScriptActionLoaders::arachnorbPlanLogic
     );
     
     //Calculate.
@@ -1292,7 +1274,7 @@ void initScriptActionTypes() {
     queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("right operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_CALCULATE,
+        SCRIPT_ACTION_CALCULATE,
         "calculate",
         ScriptActionRunners::calculate,
         ScriptActionLoaders::calculate
@@ -1302,25 +1284,9 @@ void initScriptActionTypes() {
     queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_CEIL_NUMBER,
+        SCRIPT_ACTION_CEIL_NUMBER,
         "ceil_number",
         ScriptActionRunners::ceilNumber,
-        nullptr
-    );
-    
-    //Delete.
-    commitAction(
-        MOB_ACTION_DELETE,
-        "delete",
-        ScriptActionRunners::deleteFunction,
-        nullptr
-    );
-    
-    //Drain liquid.
-    commitAction(
-        MOB_ACTION_DRAIN_LIQUID,
-        "drain_liquid",
-        ScriptActionRunners::drainLiquid,
         nullptr
     );
     
@@ -1329,7 +1295,7 @@ void initScriptActionTypes() {
     queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("method", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_EASE_NUMBER,
+        SCRIPT_ACTION_EASE_NUMBER,
         "ease_number",
         ScriptActionRunners::easeNumber,
         ScriptActionLoaders::easeNumber
@@ -1337,7 +1303,7 @@ void initScriptActionTypes() {
     
     //Else.
     commitAction(
-        MOB_ACTION_ELSE,
+        SCRIPT_ACTION_ELSE,
         "else",
         nullptr,
         nullptr
@@ -1348,7 +1314,7 @@ void initScriptActionTypes() {
     queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
     commitAction(
-        MOB_ACTION_ELSE_IF,
+        SCRIPT_ACTION_ELSE_IF,
         "else_if",
         ScriptActionRunners::ifFunction,
         ScriptActionLoaders::ifFunction
@@ -1356,67 +1322,19 @@ void initScriptActionTypes() {
     
     //End if.
     commitAction(
-        MOB_ACTION_END_IF,
+        SCRIPT_ACTION_END_IF,
         "end_if",
         nullptr,
-        nullptr
-    );
-    
-    //Finish dying.
-    commitAction(
-        MOB_ACTION_FINISH_DYING,
-        "finish_dying",
-        ScriptActionRunners::finishDying,
-        nullptr
-    );
-    
-    //Floor number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_FLOOR_NUMBER,
-        "floor_number",
-        ScriptActionRunners::floorNumber,
         nullptr
     );
     
     //Focus.
     queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_FOCUS,
+        SCRIPT_ACTION_FOCUS,
         "focus",
         ScriptActionRunners::focus,
         ScriptActionLoaders::focus
-    );
-    
-    //Follow mob as a leader.
-    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
-    commitAction(
-        MOB_ACTION_FOLLOW_MOB_AS_LEADER,
-        "follow_mob_as_leader",
-        ScriptActionRunners::followMobAsLeader,
-        ScriptActionLoaders::followMobAsLeader
-    );
-    
-    //Follow path randomly.
-    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
-    commitAction(
-        MOB_ACTION_FOLLOW_PATH_RANDOMLY,
-        "follow_path_randomly",
-        ScriptActionRunners::followPathRandomly,
-        nullptr
-    );
-    
-    //Follow path to absolute.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
-    commitAction(
-        MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
-        "follow_path_to_absolute",
-        ScriptActionRunners::followPathToAbsolute,
-        nullptr
     );
     
     //Get angle.
@@ -1426,7 +1344,7 @@ void initScriptActionTypes() {
     queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_ANGLE,
+        SCRIPT_ACTION_GET_ANGLE,
         "get_angle",
         ScriptActionRunners::getAngle,
         nullptr
@@ -1437,7 +1355,7 @@ void initScriptActionTypes() {
     queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_ANGLE_CW_DIFF,
+        SCRIPT_ACTION_GET_ANGLE_CW_DIFF,
         "get_angle_clockwise_difference",
         ScriptActionRunners::getAngleCwDiff,
         nullptr
@@ -1448,7 +1366,7 @@ void initScriptActionTypes() {
     queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
+        SCRIPT_ACTION_GET_ANGLE_SMALLEST_DIFF,
         "get_angle_smallest_difference",
         ScriptActionRunners::getAngleSmallestDiff,
         nullptr
@@ -1458,18 +1376,10 @@ void initScriptActionTypes() {
     queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     commitAction(
-        MOB_ACTION_GET_AREA_INFO,
+        SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
         ScriptActionRunners::getAreaInfo,
         ScriptActionLoaders::getAreaInfo
-    );
-    
-    //Get chomped.
-    commitAction(
-        MOB_ACTION_GET_CHOMPED,
-        "get_chomped",
-        ScriptActionRunners::getChomped,
-        nullptr
     );
     
     //Get coordinates from angle.
@@ -1482,7 +1392,7 @@ void initScriptActionTypes() {
     queueParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
+        SCRIPT_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
         ScriptActionRunners::getCoordinatesFromAngle,
         nullptr
@@ -1495,7 +1405,7 @@ void initScriptActionTypes() {
     queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_DISTANCE,
+        SCRIPT_ACTION_GET_DISTANCE,
         "get_distance",
         ScriptActionRunners::getDistance,
         nullptr
@@ -1505,21 +1415,10 @@ void initScriptActionTypes() {
     queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     commitAction(
-        MOB_ACTION_GET_EVENT_INFO,
+        SCRIPT_ACTION_GET_EVENT_INFO,
         "get_event_info",
         ScriptActionRunners::getEventInfo,
         ScriptActionLoaders::getEventInfo
-    );
-    
-    //Get floor Z.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_GET_FLOOR_Z,
-        "get_floor_z",
-        ScriptActionRunners::getFloorZ,
-        nullptr
     );
     
     //Get focus var.
@@ -1530,7 +1429,7 @@ void initScriptActionTypes() {
         "focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false
     );
     commitAction(
-        MOB_ACTION_GET_FOCUS_VAR,
+        SCRIPT_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
         ScriptActionRunners::getFocusVar,
         nullptr
@@ -1541,7 +1440,7 @@ void initScriptActionTypes() {
     queueParam("target", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
     commitAction(
-        MOB_ACTION_GET_MOB_INFO,
+        SCRIPT_ACTION_GET_MOB_INFO,
         "get_mob_info",
         ScriptActionRunners::getMobInfo,
         ScriptActionLoaders::getMobInfo
@@ -1552,7 +1451,7 @@ void initScriptActionTypes() {
     queueParam("minimum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("maximum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_GET_RANDOM_FLOAT,
+        SCRIPT_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
         ScriptActionRunners::getRandomFloat,
         nullptr
@@ -1563,7 +1462,7 @@ void initScriptActionTypes() {
     queueParam("minimum value", SCRIPT_ACTION_PARAM_INT, false, false);
     queueParam("maximum value", SCRIPT_ACTION_PARAM_INT, false, false);
     commitAction(
-        MOB_ACTION_GET_RANDOM_INT,
+        SCRIPT_ACTION_GET_RANDOM_INT,
         "get_random_int",
         ScriptActionRunners::getRandomInt,
         nullptr
@@ -1572,20 +1471,10 @@ void initScriptActionTypes() {
     //Goto.
     queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
     commitAction(
-        MOB_ACTION_GOTO,
+        SCRIPT_ACTION_GOTO,
         "goto",
         nullptr,
         nullptr
-    );
-    
-    //Hold focused mob.
-    queueParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
-    commitAction(
-        MOB_ACTION_HOLD_FOCUS,
-        "hold_focused_mob",
-        ScriptActionRunners::holdFocus,
-        ScriptActionLoaders::holdFocus
     );
     
     //If.
@@ -1593,7 +1482,7 @@ void initScriptActionTypes() {
     queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
     commitAction(
-        MOB_ACTION_IF,
+        SCRIPT_ACTION_IF,
         "if",
         ScriptActionRunners::ifFunction,
         ScriptActionLoaders::ifFunction
@@ -1607,7 +1496,7 @@ void initScriptActionTypes() {
     queueParam("output start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("output end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_INTERPOLATE_NUMBER,
+        SCRIPT_ACTION_INTERPOLATE_NUMBER,
         "interpolate_number",
         ScriptActionRunners::interpolateNumber,
         nullptr
@@ -1616,15 +1505,215 @@ void initScriptActionTypes() {
     //Label.
     queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
     commitAction(
-        MOB_ACTION_LABEL,
+        SCRIPT_ACTION_LABEL,
         "label",
         nullptr,
         nullptr
     );
     
+    //Print.
+    queueParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
+        SCRIPT_ACTION_PRINT,
+        "print",
+        ScriptActionRunners::print,
+        nullptr
+    );
+    
+    //Round number.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_ROUND_NUMBER,
+        "round_number",
+        ScriptActionRunners::roundNumber,
+        nullptr
+    );
+    
+    //Send message to focus.
+    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
+        SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
+        "send_message_to_focus",
+        ScriptActionRunners::sendMessageToFocus,
+        nullptr
+    );
+    
+    //Set focus var.
+    queueParam(
+        "focused mob's destination var name",
+        SCRIPT_ACTION_PARAM_STRING, false, false
+    );
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
+        SCRIPT_ACTION_SET_FOCUS_VAR,
+        "set_focus_var",
+        ScriptActionRunners::setFocusVar,
+        nullptr
+    );
+    
+    //Set state.
+    queueParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
+        SCRIPT_ACTION_SET_STATE,
+        "set_state",
+        ScriptActionRunners::setState,
+        nullptr
+    );
+    
+    //Set timer.
+    queueParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_SET_TIMER,
+        "set_timer",
+        ScriptActionRunners::setTimer,
+        nullptr
+    );
+    
+    //Set var.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    commitAction(
+        SCRIPT_ACTION_SET_VAR,
+        "set_var",
+        ScriptActionRunners::setVar,
+        nullptr
+    );
+    
+    //Show message from var.
+    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
+        SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
+        "show_message_from_var",
+        ScriptActionRunners::showMessageFromVar,
+        nullptr
+    );
+    
+    //Square root number.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_SQUARE_ROOT_NUMBER,
+        "square_root_number",
+        ScriptActionRunners::squareRootNumber,
+        nullptr
+    );
+    
+    
+    //Add health.
+    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_ADD_HEALTH,
+        "add_health",
+        ScriptActionRunners::addHealth,
+        nullptr
+    );
+    
+    //Arachnorb plan logic.
+    queueParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    commitAction(
+        SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
+        "arachnorb_plan_logic",
+        ScriptActionRunners::arachnorbPlanLogic,
+        ScriptActionLoaders::arachnorbPlanLogic
+    );
+    
+    //Delete.
+    commitAction(
+        SCRIPT_ACTION_DELETE,
+        "delete",
+        ScriptActionRunners::deleteFunction,
+        nullptr
+    );
+    
+    //Drain liquid.
+    commitAction(
+        SCRIPT_ACTION_DRAIN_LIQUID,
+        "drain_liquid",
+        ScriptActionRunners::drainLiquid,
+        nullptr
+    );
+    
+    //Finish dying.
+    commitAction(
+        SCRIPT_ACTION_FINISH_DYING,
+        "finish_dying",
+        ScriptActionRunners::finishDying,
+        nullptr
+    );
+    
+    //Floor number.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_FLOOR_NUMBER,
+        "floor_number",
+        ScriptActionRunners::floorNumber,
+        nullptr
+    );
+    
+    //Follow mob as a leader.
+    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    commitAction(
+        SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
+        "follow_mob_as_leader",
+        ScriptActionRunners::followMobAsLeader,
+        ScriptActionLoaders::followMobAsLeader
+    );
+    
+    //Follow path randomly.
+    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
+        SCRIPT_ACTION_FOLLOW_PATH_RANDOMLY,
+        "follow_path_randomly",
+        ScriptActionRunners::followPathRandomly,
+        nullptr
+    );
+    
+    //Follow path to absolute.
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    commitAction(
+        SCRIPT_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
+        "follow_path_to_absolute",
+        ScriptActionRunners::followPathToAbsolute,
+        nullptr
+    );
+    
+    //Get chomped.
+    commitAction(
+        SCRIPT_ACTION_GET_CHOMPED,
+        "get_chomped",
+        ScriptActionRunners::getChomped,
+        nullptr
+    );
+    
+    //Get floor Z.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    commitAction(
+        SCRIPT_ACTION_GET_FLOOR_Z,
+        "get_floor_z",
+        ScriptActionRunners::getFloorZ,
+        nullptr
+    );
+    
+    //Hold focused mob.
+    queueParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    commitAction(
+        SCRIPT_ACTION_HOLD_FOCUS,
+        "hold_focused_mob",
+        ScriptActionRunners::holdFocus,
+        ScriptActionLoaders::holdFocus
+    );
+    
     //Link with focused mob.
     commitAction(
-        MOB_ACTION_LINK_WITH_FOCUS,
+        SCRIPT_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
         ScriptActionRunners::linkWithFocus,
         nullptr
@@ -1633,7 +1722,7 @@ void initScriptActionTypes() {
     //Load focused mob memory.
     queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
     commitAction(
-        MOB_ACTION_LOAD_FOCUS_MEMORY,
+        SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
         ScriptActionRunners::loadFocusMemory,
         nullptr
@@ -1644,7 +1733,7 @@ void initScriptActionTypes() {
     queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     commitAction(
-        MOB_ACTION_MOVE_TO_ABSOLUTE,
+        SCRIPT_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
         ScriptActionRunners::moveToAbsolute,
         nullptr
@@ -1655,7 +1744,7 @@ void initScriptActionTypes() {
     queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     commitAction(
-        MOB_ACTION_MOVE_TO_RELATIVE,
+        SCRIPT_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
         ScriptActionRunners::moveToRelative,
         nullptr
@@ -1664,7 +1753,7 @@ void initScriptActionTypes() {
     //Move to target.
     queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_MOVE_TO_TARGET,
+        SCRIPT_ACTION_MOVE_TO_TARGET,
         "move_to_target",
         ScriptActionRunners::moveToTarget,
         ScriptActionLoaders::moveToTarget
@@ -1672,7 +1761,7 @@ void initScriptActionTypes() {
     
     //Order release.
     commitAction(
-        MOB_ACTION_ORDER_RELEASE,
+        SCRIPT_ACTION_ORDER_RELEASE,
         "order_release",
         ScriptActionRunners::orderRelease,
         nullptr
@@ -1684,25 +1773,16 @@ void initScriptActionTypes() {
         "sound ID destination var name", SCRIPT_ACTION_PARAM_STRING, true, true
     );
     commitAction(
-        MOB_ACTION_PLAY_SOUND,
+        SCRIPT_ACTION_PLAY_SOUND,
         "play_sound",
         ScriptActionRunners::playSound,
         ScriptActionLoaders::playSound
     );
     
-    //Print.
-    queueParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
-    commitAction(
-        MOB_ACTION_PRINT,
-        "print",
-        ScriptActionRunners::print,
-        nullptr
-    );
-    
     //Receive status.
     queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_RECEIVE_STATUS,
+        SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
         ScriptActionRunners::receiveStatus,
         ScriptActionLoaders::receiveStatus
@@ -1710,7 +1790,7 @@ void initScriptActionTypes() {
     
     //Release.
     commitAction(
-        MOB_ACTION_RELEASE,
+        SCRIPT_ACTION_RELEASE,
         "release",
         ScriptActionRunners::release,
         nullptr
@@ -1718,7 +1798,7 @@ void initScriptActionTypes() {
     
     //Release stored mobs.
     commitAction(
-        MOB_ACTION_RELEASE_STORED_MOBS,
+        SCRIPT_ACTION_RELEASE_STORED_MOBS,
         "release_stored_mobs",
         ScriptActionRunners::releaseStoredMobs,
         nullptr
@@ -1727,44 +1807,25 @@ void initScriptActionTypes() {
     //Remove status.
     queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_REMOVE_STATUS,
+        SCRIPT_ACTION_REMOVE_STATUS,
         "remove_status",
         ScriptActionRunners::removeStatus,
         ScriptActionLoaders::removeStatus
     );
     
-    //Round number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_ROUND_NUMBER,
-        "round_number",
-        ScriptActionRunners::roundNumber,
-        nullptr
-    );
-    
     //Save focused mob memory.
     queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
     commitAction(
-        MOB_ACTION_SAVE_FOCUS_MEMORY,
+        SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
         ScriptActionRunners::saveFocusMemory,
-        nullptr
-    );
-    
-    //Send message to focus.
-    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
-    commitAction(
-        MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
-        "send_message_to_focus",
-        ScriptActionRunners::sendMessageToFocus,
         nullptr
     );
     
     //Send message to links.
     queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
     commitAction(
-        MOB_ACTION_SEND_MESSAGE_TO_LINKS,
+        SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
         ScriptActionRunners::sendMessageToLinks,
         nullptr
@@ -1774,7 +1835,7 @@ void initScriptActionTypes() {
     queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
     commitAction(
-        MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
+        SCRIPT_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
         ScriptActionRunners::sendMessageToNearby,
         nullptr
@@ -1784,7 +1845,7 @@ void initScriptActionTypes() {
     queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
     commitAction(
-        MOB_ACTION_SET_ANIMATION,
+        SCRIPT_ACTION_SET_ANIMATION,
         "set_animation",
         ScriptActionRunners::setAnimation,
         ScriptActionLoaders::setAnimation
@@ -1793,7 +1854,7 @@ void initScriptActionTypes() {
     //Set can block paths.
     queueParam("blocks", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_CAN_BLOCK_PATHS,
+        SCRIPT_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
         ScriptActionRunners::setCanBlockPaths,
         nullptr
@@ -1802,7 +1863,7 @@ void initScriptActionTypes() {
     //Set far reach.
     queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_SET_FAR_REACH,
+        SCRIPT_ACTION_SET_FAR_REACH,
         "set_far_reach",
         ScriptActionRunners::setFarReach,
         ScriptActionLoaders::setFarReach
@@ -1811,29 +1872,16 @@ void initScriptActionTypes() {
     //Set flying.
     queueParam("flying", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_FLYING,
+        SCRIPT_ACTION_SET_FLYING,
         "set_flying",
         ScriptActionRunners::setFlying,
-        nullptr
-    );
-    
-    //Set focus var.
-    queueParam(
-        "focused mob's destination var name",
-        SCRIPT_ACTION_PARAM_STRING, false, false
-    );
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
-    commitAction(
-        MOB_ACTION_SET_FOCUS_VAR,
-        "set_focus_var",
-        ScriptActionRunners::setFocusVar,
         nullptr
     );
     
     //Set gravity.
     queueParam("multiplier", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SET_GRAVITY,
+        SCRIPT_ACTION_SET_GRAVITY,
         "set_gravity",
         ScriptActionRunners::setGravity,
         nullptr
@@ -1842,7 +1890,7 @@ void initScriptActionTypes() {
     //Set health.
     queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SET_HEALTH,
+        SCRIPT_ACTION_SET_HEALTH,
         "set_health",
         ScriptActionRunners::setHealth,
         nullptr
@@ -1851,7 +1899,7 @@ void initScriptActionTypes() {
     //Set height.
     queueParam("height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SET_HEIGHT,
+        SCRIPT_ACTION_SET_HEIGHT,
         "set_height",
         ScriptActionRunners::setHeight,
         nullptr
@@ -1860,7 +1908,7 @@ void initScriptActionTypes() {
     //Set hiding.
     queueParam("hiding", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_HIDING,
+        SCRIPT_ACTION_SET_HIDING,
         "set_hiding",
         ScriptActionRunners::setHiding,
         nullptr
@@ -1869,7 +1917,7 @@ void initScriptActionTypes() {
     //Set huntable.
     queueParam("huntable", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_HUNTABLE,
+        SCRIPT_ACTION_SET_HUNTABLE,
         "set_huntable",
         ScriptActionRunners::setHuntable,
         nullptr
@@ -1878,7 +1926,7 @@ void initScriptActionTypes() {
     //Set holdable.
     queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
     commitAction(
-        MOB_ACTION_SET_HOLDABLE,
+        SCRIPT_ACTION_SET_HOLDABLE,
         "set_holdable",
         ScriptActionRunners::setHoldable,
         ScriptActionLoaders::setHoldable
@@ -1887,7 +1935,7 @@ void initScriptActionTypes() {
     //Set limb animation.
     queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, false, false);
     commitAction(
-        MOB_ACTION_SET_LIMB_ANIMATION,
+        SCRIPT_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
         ScriptActionRunners::setLimbAnimation,
         nullptr
@@ -1896,7 +1944,7 @@ void initScriptActionTypes() {
     //Set near reach.
     queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_SET_NEAR_REACH,
+        SCRIPT_ACTION_SET_NEAR_REACH,
         "set_near_reach",
         ScriptActionRunners::setNearReach,
         ScriptActionLoaders::setNearReach
@@ -1905,7 +1953,7 @@ void initScriptActionTypes() {
     //Set radius.
     queueParam("radius", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SET_RADIUS,
+        SCRIPT_ACTION_SET_RADIUS,
         "set_radius",
         ScriptActionRunners::setRadius,
         nullptr
@@ -1915,7 +1963,7 @@ void initScriptActionTypes() {
     queueParam("x speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("y speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SET_SECTOR_SCROLL,
+        SCRIPT_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
         ScriptActionRunners::setSectorScroll,
         nullptr
@@ -1924,25 +1972,16 @@ void initScriptActionTypes() {
     //Set shadow visibility.
     queueParam("visible", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_SHADOW_VISIBILITY,
+        SCRIPT_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
         ScriptActionRunners::setShadowVisibility,
-        nullptr
-    );
-    
-    //Set state.
-    queueParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    commitAction(
-        MOB_ACTION_SET_STATE,
-        "set_state",
-        ScriptActionRunners::setState,
         nullptr
     );
     
     //Set tangible.
     queueParam("tangible", SCRIPT_ACTION_PARAM_BOOL, false, false);
     commitAction(
-        MOB_ACTION_SET_TANGIBLE,
+        SCRIPT_ACTION_SET_TANGIBLE,
         "set_tangible",
         ScriptActionRunners::setTangible,
         nullptr
@@ -1951,63 +1990,25 @@ void initScriptActionTypes() {
     //Set team.
     queueParam("team name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_SET_TEAM,
+        SCRIPT_ACTION_SET_TEAM,
         "set_team",
         ScriptActionRunners::setTeam,
         ScriptActionLoaders::setTeam
     );
     
-    //Set timer.
-    queueParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_SET_TIMER,
-        "set_timer",
-        ScriptActionRunners::setTimer,
-        nullptr
-    );
-    
-    //Set var.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
-    commitAction(
-        MOB_ACTION_SET_VAR,
-        "set_var",
-        ScriptActionRunners::setVar,
-        nullptr
-    );
-    
     //Shake camera.
     queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_SHAKE_CAMERA,
+        SCRIPT_ACTION_SHAKE_CAMERA,
         "shake_camera",
         ScriptActionRunners::shakeCamera,
-        nullptr
-    );
-    
-    //Show message from var.
-    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    commitAction(
-        MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
-        "show_message_from_var",
-        ScriptActionRunners::showMessageFromVar,
-        nullptr
-    );
-    
-    //Square root number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    commitAction(
-        MOB_ACTION_SQUARE_ROOT_NUMBER,
-        "square_root_number",
-        ScriptActionRunners::squareRootNumber,
         nullptr
     );
     
     //Spawn.
     queueParam("spawn data", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_SPAWN,
+        SCRIPT_ACTION_SPAWN,
         "spawn",
         ScriptActionRunners::spawn,
         ScriptActionLoaders::spawn
@@ -2017,7 +2018,7 @@ void initScriptActionTypes() {
     queueParam("reference", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("offset", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_STABILIZE_Z,
+        SCRIPT_ACTION_STABILIZE_Z,
         "stabilize_z",
         ScriptActionRunners::stabilizeZ,
         ScriptActionLoaders::stabilizeZ
@@ -2028,7 +2029,7 @@ void initScriptActionTypes() {
     queueParam("body part", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("more body parts", SCRIPT_ACTION_PARAM_ENUM, true, true);
     commitAction(
-        MOB_ACTION_START_CHOMPING,
+        SCRIPT_ACTION_START_CHOMPING,
         "start_chomping",
         ScriptActionRunners::startChomping,
         ScriptActionLoaders::startChomping
@@ -2036,7 +2037,7 @@ void initScriptActionTypes() {
     
     //Start dying.
     commitAction(
-        MOB_ACTION_START_DYING,
+        SCRIPT_ACTION_START_DYING,
         "start_dying",
         ScriptActionRunners::startDying,
         nullptr
@@ -2044,7 +2045,7 @@ void initScriptActionTypes() {
     
     //Start height effect.
     commitAction(
-        MOB_ACTION_START_HEIGHT_EFFECT,
+        SCRIPT_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
         ScriptActionRunners::startHeightEffect,
         nullptr
@@ -2054,7 +2055,7 @@ void initScriptActionTypes() {
     queueParam("generator name", SCRIPT_ACTION_PARAM_ENUM, true, false);
     queueParam("offset coordinates", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     commitAction(
-        MOB_ACTION_START_PARTICLES,
+        SCRIPT_ACTION_START_PARTICLES,
         "start_particles",
         ScriptActionRunners::startParticles,
         ScriptActionLoaders::startParticles
@@ -2062,7 +2063,7 @@ void initScriptActionTypes() {
     
     //Stop.
     commitAction(
-        MOB_ACTION_STOP,
+        SCRIPT_ACTION_STOP,
         "stop",
         ScriptActionRunners::stop,
         nullptr
@@ -2070,7 +2071,7 @@ void initScriptActionTypes() {
     
     //Stop chomping.
     commitAction(
-        MOB_ACTION_STOP_CHOMPING,
+        SCRIPT_ACTION_STOP_CHOMPING,
         "stop_chomping",
         ScriptActionRunners::stopChomping,
         nullptr
@@ -2078,7 +2079,7 @@ void initScriptActionTypes() {
     
     //Stop height effect.
     commitAction(
-        MOB_ACTION_STOP_HEIGHT_EFFECT,
+        SCRIPT_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
         ScriptActionRunners::stopHeightEffect,
         nullptr
@@ -2086,7 +2087,7 @@ void initScriptActionTypes() {
     
     //Stop particles.
     commitAction(
-        MOB_ACTION_STOP_PARTICLES,
+        SCRIPT_ACTION_STOP_PARTICLES,
         "stop_particles",
         ScriptActionRunners::stopParticles,
         nullptr
@@ -2095,7 +2096,7 @@ void initScriptActionTypes() {
     //Stop sound.
     queueParam("sound ID", SCRIPT_ACTION_PARAM_INT, false, false);
     commitAction(
-        MOB_ACTION_STOP_SOUND,
+        SCRIPT_ACTION_STOP_SOUND,
         "stop_sound",
         ScriptActionRunners::stopSound,
         nullptr
@@ -2103,7 +2104,7 @@ void initScriptActionTypes() {
     
     //Stop vertically.
     commitAction(
-        MOB_ACTION_STOP_VERTICALLY,
+        SCRIPT_ACTION_STOP_VERTICALLY,
         "stop_vertically",
         ScriptActionRunners::stopVertically,
         nullptr
@@ -2111,7 +2112,7 @@ void initScriptActionTypes() {
     
     //Store focus inside.
     commitAction(
-        MOB_ACTION_STORE_FOCUS_INSIDE,
+        SCRIPT_ACTION_STORE_FOCUS_INSIDE,
         "store_focus_inside",
         ScriptActionRunners::storeFocusInside,
         nullptr
@@ -2120,7 +2121,7 @@ void initScriptActionTypes() {
     //Swallow.
     queueParam("amount", SCRIPT_ACTION_PARAM_INT, false, false);
     commitAction(
-        MOB_ACTION_SWALLOW,
+        SCRIPT_ACTION_SWALLOW,
         "swallow",
         ScriptActionRunners::swallow,
         nullptr
@@ -2128,7 +2129,7 @@ void initScriptActionTypes() {
     
     //Swallow all.
     commitAction(
-        MOB_ACTION_SWALLOW_ALL,
+        SCRIPT_ACTION_SWALLOW_ALL,
         "swallow_all",
         ScriptActionRunners::swallowAll,
         nullptr
@@ -2139,7 +2140,7 @@ void initScriptActionTypes() {
     queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_TELEPORT_TO_ABSOLUTE,
+        SCRIPT_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
         ScriptActionRunners::teleportToAbsolute,
         nullptr
@@ -2150,7 +2151,7 @@ void initScriptActionTypes() {
     queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_TELEPORT_TO_RELATIVE,
+        SCRIPT_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
         ScriptActionRunners::teleportToRelative,
         nullptr
@@ -2162,7 +2163,7 @@ void initScriptActionTypes() {
     queueParam("z coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     queueParam("max height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
     commitAction(
-        MOB_ACTION_THROW_FOCUS,
+        SCRIPT_ACTION_THROW_FOCUS,
         "throw_focused_mob",
         ScriptActionRunners::throwFocus,
         nullptr
@@ -2176,7 +2177,7 @@ void initScriptActionTypes() {
         "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
     );
     commitAction(
-        MOB_ACTION_TURN_TO_ABSOLUTE,
+        SCRIPT_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
         ScriptActionRunners::turnToAbsolute,
         nullptr
@@ -2190,7 +2191,7 @@ void initScriptActionTypes() {
         "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
     );
     commitAction(
-        MOB_ACTION_TURN_TO_RELATIVE,
+        SCRIPT_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
         ScriptActionRunners::turnToRelative,
         nullptr
@@ -2199,7 +2200,7 @@ void initScriptActionTypes() {
     //Turn to target.
     queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
     commitAction(
-        MOB_ACTION_TURN_TO_TARGET,
+        SCRIPT_ACTION_TURN_TO_TARGET,
         "turn_to_target",
         ScriptActionRunners::turnToTarget,
         ScriptActionLoaders::turnToTarget

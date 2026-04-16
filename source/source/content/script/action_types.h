@@ -30,295 +30,295 @@ enum SCRIPT_ACTION {
     SCRIPT_ACTION_UNKNOWN,
     
     //Get the absolute value of a float number.
-    MOB_ACTION_ABSOLUTE_NUMBER,
+    SCRIPT_ACTION_ABSOLUTE_NUMBER,
     
     //Add health.
-    MOB_ACTION_ADD_HEALTH,
+    SCRIPT_ACTION_ADD_HEALTH,
     
     //Plan something. Used for arachnorbs.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
     
     //Perform a numeric calculation.
-    MOB_ACTION_CALCULATE,
+    SCRIPT_ACTION_CALCULATE,
     
     //Ceil a float number.
-    MOB_ACTION_CEIL_NUMBER,
+    SCRIPT_ACTION_CEIL_NUMBER,
     
     //Delete mob.
-    MOB_ACTION_DELETE,
+    SCRIPT_ACTION_DELETE,
     
     //Drain liquid.
-    MOB_ACTION_DRAIN_LIQUID,
+    SCRIPT_ACTION_DRAIN_LIQUID,
     
     //Ease a float number.
-    MOB_ACTION_EASE_NUMBER,
+    SCRIPT_ACTION_EASE_NUMBER,
     
     //Conditional "else" marker.
-    MOB_ACTION_ELSE,
+    SCRIPT_ACTION_ELSE,
     
     //Conditional "else if" marker.
-    MOB_ACTION_ELSE_IF,
+    SCRIPT_ACTION_ELSE_IF,
     
     //Conditional "end if" marker.
-    MOB_ACTION_END_IF,
+    SCRIPT_ACTION_END_IF,
     
     //Finish the death procedure.
-    MOB_ACTION_FINISH_DYING,
+    SCRIPT_ACTION_FINISH_DYING,
     
     //Floor a float number.
-    MOB_ACTION_FLOOR_NUMBER,
+    SCRIPT_ACTION_FLOOR_NUMBER,
     
     //Focus on another mob.
-    MOB_ACTION_FOCUS,
+    SCRIPT_ACTION_FOCUS,
     
     //Follow a mob as its leader.
-    MOB_ACTION_FOLLOW_MOB_AS_LEADER,
+    SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
     
     //Follow a path randomly.
-    MOB_ACTION_FOLLOW_PATH_RANDOMLY,
+    SCRIPT_ACTION_FOLLOW_PATH_RANDOMLY,
     
     //Follow a path towards an absolute position.
-    MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
+    SCRIPT_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
     
     //Get angle between two sets of coordinates.
-    MOB_ACTION_GET_ANGLE,
+    SCRIPT_ACTION_GET_ANGLE,
     
     //Get the clockwise difference between two angles.
-    MOB_ACTION_GET_ANGLE_CW_DIFF,
+    SCRIPT_ACTION_GET_ANGLE_CW_DIFF,
     
     //Get the smallest difference between two angles.
-    MOB_ACTION_GET_ANGLE_SMALLEST_DIFF,
+    SCRIPT_ACTION_GET_ANGLE_SMALLEST_DIFF,
     
     //Get information about the area.
-    MOB_ACTION_GET_AREA_INFO,
+    SCRIPT_ACTION_GET_AREA_INFO,
     
     //Get chomped by another mob.
-    MOB_ACTION_GET_CHOMPED,
+    SCRIPT_ACTION_GET_CHOMPED,
     
     //Get coordinates from a given angle.
-    MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
+    SCRIPT_ACTION_GET_COORDINATES_FROM_ANGLE,
     
     //Get distance between two sets of coordinates.
-    MOB_ACTION_GET_DISTANCE,
+    SCRIPT_ACTION_GET_DISTANCE,
     
     //Get information about an event.
-    MOB_ACTION_GET_EVENT_INFO,
+    SCRIPT_ACTION_GET_EVENT_INFO,
     
     //Get the Z of the floor at a set of coordinates.
-    MOB_ACTION_GET_FLOOR_Z,
+    SCRIPT_ACTION_GET_FLOOR_Z,
     
     //Get a script variable's value from the focused mob.
-    MOB_ACTION_GET_FOCUS_VAR,
+    SCRIPT_ACTION_GET_FOCUS_VAR,
     
     //Get information about a mob.
-    MOB_ACTION_GET_MOB_INFO,
+    SCRIPT_ACTION_GET_MOB_INFO,
     
     //Get a random float number.
-    MOB_ACTION_GET_RANDOM_FLOAT,
+    SCRIPT_ACTION_GET_RANDOM_FLOAT,
     
     //Get a random integer number.
-    MOB_ACTION_GET_RANDOM_INT,
+    SCRIPT_ACTION_GET_RANDOM_INT,
     
     //Go to a different part of the script.
-    MOB_ACTION_GOTO,
+    SCRIPT_ACTION_GOTO,
     
     //Hold focused mob.
-    MOB_ACTION_HOLD_FOCUS,
+    SCRIPT_ACTION_HOLD_FOCUS,
     
     //Conditional "if" condition.
-    MOB_ACTION_IF,
+    SCRIPT_ACTION_IF,
     
     //Interpolate a float number.
-    MOB_ACTION_INTERPOLATE_NUMBER,
+    SCRIPT_ACTION_INTERPOLATE_NUMBER,
     
     //Label for use with "goto".
-    MOB_ACTION_LABEL,
+    SCRIPT_ACTION_LABEL,
     
     //Create a link with the focused mob.
-    MOB_ACTION_LINK_WITH_FOCUS,
+    SCRIPT_ACTION_LINK_WITH_FOCUS,
     
     //Load focused mob from focused mobs memory.
-    MOB_ACTION_LOAD_FOCUS_MEMORY,
+    SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
     
     //Move to absolute coordinates.
-    MOB_ACTION_MOVE_TO_ABSOLUTE,
+    SCRIPT_ACTION_MOVE_TO_ABSOLUTE,
     
     //Move to relative coordinates.
-    MOB_ACTION_MOVE_TO_RELATIVE,
+    SCRIPT_ACTION_MOVE_TO_RELATIVE,
     
     //Move to a target.
-    MOB_ACTION_MOVE_TO_TARGET,
+    SCRIPT_ACTION_MOVE_TO_TARGET,
     
     //Order to be released.
-    MOB_ACTION_ORDER_RELEASE,
+    SCRIPT_ACTION_ORDER_RELEASE,
     
     //Play a sound.
-    MOB_ACTION_PLAY_SOUND,
+    SCRIPT_ACTION_PLAY_SOUND,
     
     //Print some content debug text.
-    MOB_ACTION_PRINT,
+    SCRIPT_ACTION_PRINT,
     
     //Receive a status effect.
-    MOB_ACTION_RECEIVE_STATUS,
+    SCRIPT_ACTION_RECEIVE_STATUS,
     
     //Release held mob.
-    MOB_ACTION_RELEASE,
+    SCRIPT_ACTION_RELEASE,
     
     //Release mobs that are stored inside.
-    MOB_ACTION_RELEASE_STORED_MOBS,
+    SCRIPT_ACTION_RELEASE_STORED_MOBS,
     
     //Remove a status effect.
-    MOB_ACTION_REMOVE_STATUS,
+    SCRIPT_ACTION_REMOVE_STATUS,
     
     //Round a float number.
-    MOB_ACTION_ROUND_NUMBER,
+    SCRIPT_ACTION_ROUND_NUMBER,
     
     //Save focused mob into focused mobs memory.
-    MOB_ACTION_SAVE_FOCUS_MEMORY,
+    SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
     
     //Send a message to the focused mob.
-    MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
+    SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
     
     //Send a message to all linked mobs.
-    MOB_ACTION_SEND_MESSAGE_TO_LINKS,
+    SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
     
     //Send a message to nearby mobs.
-    MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
+    SCRIPT_ACTION_SEND_MESSAGE_TO_NEARBY,
     
     //Set animation.
-    MOB_ACTION_SET_ANIMATION,
+    SCRIPT_ACTION_SET_ANIMATION,
     
     //Set whether it can block paths.
-    MOB_ACTION_SET_CAN_BLOCK_PATHS,
+    SCRIPT_ACTION_SET_CAN_BLOCK_PATHS,
     
     //Set its far reach.
-    MOB_ACTION_SET_FAR_REACH,
+    SCRIPT_ACTION_SET_FAR_REACH,
     
     //Set whether it is flying.
-    MOB_ACTION_SET_FLYING,
+    SCRIPT_ACTION_SET_FLYING,
     
     //Set a script variable's value of the focused mob.
-    MOB_ACTION_SET_FOCUS_VAR,
+    SCRIPT_ACTION_SET_FOCUS_VAR,
     
     //Set its gravity.
-    MOB_ACTION_SET_GRAVITY,
+    SCRIPT_ACTION_SET_GRAVITY,
     
     //Set its health.
-    MOB_ACTION_SET_HEALTH,
+    SCRIPT_ACTION_SET_HEALTH,
     
     //Set its height.
-    MOB_ACTION_SET_HEIGHT,
+    SCRIPT_ACTION_SET_HEIGHT,
     
     //Set whether it is hiding.
-    MOB_ACTION_SET_HIDING,
+    SCRIPT_ACTION_SET_HIDING,
     
     //Set whether it is holdable.
-    MOB_ACTION_SET_HOLDABLE,
+    SCRIPT_ACTION_SET_HOLDABLE,
     
     //Set whether it is huntable.
-    MOB_ACTION_SET_HUNTABLE,
+    SCRIPT_ACTION_SET_HUNTABLE,
     
     //Set limb animation.
-    MOB_ACTION_SET_LIMB_ANIMATION,
+    SCRIPT_ACTION_SET_LIMB_ANIMATION,
     
     //Set its near reach.
-    MOB_ACTION_SET_NEAR_REACH,
+    SCRIPT_ACTION_SET_NEAR_REACH,
     
     //Set its radius.
-    MOB_ACTION_SET_RADIUS,
+    SCRIPT_ACTION_SET_RADIUS,
     
     //Set scrolling of its sector.
-    MOB_ACTION_SET_SECTOR_SCROLL,
+    SCRIPT_ACTION_SET_SECTOR_SCROLL,
     
     //Set whether its shadow is visible.
-    MOB_ACTION_SET_SHADOW_VISIBILITY,
+    SCRIPT_ACTION_SET_SHADOW_VISIBILITY,
     
     //Set state.
-    MOB_ACTION_SET_STATE,
+    SCRIPT_ACTION_SET_STATE,
     
     //Set whether it is tangible.
-    MOB_ACTION_SET_TANGIBLE,
+    SCRIPT_ACTION_SET_TANGIBLE,
     
     //Set team.
-    MOB_ACTION_SET_TEAM,
+    SCRIPT_ACTION_SET_TEAM,
     
     //Set a timer.
-    MOB_ACTION_SET_TIMER,
+    SCRIPT_ACTION_SET_TIMER,
     
     //Set a script variable.
-    MOB_ACTION_SET_VAR,
+    SCRIPT_ACTION_SET_VAR,
     
     //Shake the camera.
-    MOB_ACTION_SHAKE_CAMERA,
+    SCRIPT_ACTION_SHAKE_CAMERA,
     
     //Show a message that is inside a script variable.
-    MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
+    SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
     
     //Spawn something.
-    MOB_ACTION_SPAWN,
+    SCRIPT_ACTION_SPAWN,
     
     //Square root a number.
-    MOB_ACTION_SQUARE_ROOT_NUMBER,
+    SCRIPT_ACTION_SQUARE_ROOT_NUMBER,
     
     //Stabilize its Z coordinate.
-    MOB_ACTION_STABILIZE_Z,
+    SCRIPT_ACTION_STABILIZE_Z,
     
     //Start chomping.
-    MOB_ACTION_START_CHOMPING,
+    SCRIPT_ACTION_START_CHOMPING,
     
     //Start the death procedure.
-    MOB_ACTION_START_DYING,
+    SCRIPT_ACTION_START_DYING,
     
     //Start the height effect.
-    MOB_ACTION_START_HEIGHT_EFFECT,
+    SCRIPT_ACTION_START_HEIGHT_EFFECT,
     
     //Start some particle generator.
-    MOB_ACTION_START_PARTICLES,
+    SCRIPT_ACTION_START_PARTICLES,
     
     //Stop moving.
-    MOB_ACTION_STOP,
+    SCRIPT_ACTION_STOP,
     
     //Stop chomping.
-    MOB_ACTION_STOP_CHOMPING,
+    SCRIPT_ACTION_STOP_CHOMPING,
     
     //Stop the height effect.
-    MOB_ACTION_STOP_HEIGHT_EFFECT,
+    SCRIPT_ACTION_STOP_HEIGHT_EFFECT,
     
     //Stop some particle generator.
-    MOB_ACTION_STOP_PARTICLES,
+    SCRIPT_ACTION_STOP_PARTICLES,
     
     //Stop a playing sound.
-    MOB_ACTION_STOP_SOUND,
+    SCRIPT_ACTION_STOP_SOUND,
     
     //Stop vertical movement.
-    MOB_ACTION_STOP_VERTICALLY,
+    SCRIPT_ACTION_STOP_VERTICALLY,
     
     //Store the focused mob inside.
-    MOB_ACTION_STORE_FOCUS_INSIDE,
+    SCRIPT_ACTION_STORE_FOCUS_INSIDE,
     
     //Swallow some chomped Pikmin.
-    MOB_ACTION_SWALLOW,
+    SCRIPT_ACTION_SWALLOW,
     
     //Swallow all chomped Pikmin.
-    MOB_ACTION_SWALLOW_ALL,
+    SCRIPT_ACTION_SWALLOW_ALL,
     
     //Teleport to absolute coordinates.
-    MOB_ACTION_TELEPORT_TO_ABSOLUTE,
+    SCRIPT_ACTION_TELEPORT_TO_ABSOLUTE,
     
     //Teleport to relative coordinates.
-    MOB_ACTION_TELEPORT_TO_RELATIVE,
+    SCRIPT_ACTION_TELEPORT_TO_RELATIVE,
     
     //Throw focused mob.
-    MOB_ACTION_THROW_FOCUS,
+    SCRIPT_ACTION_THROW_FOCUS,
     
     //Turn towards an absolute angle.
-    MOB_ACTION_TURN_TO_ABSOLUTE,
+    SCRIPT_ACTION_TURN_TO_ABSOLUTE,
     
     //Turn towards a relative angle.
-    MOB_ACTION_TURN_TO_RELATIVE,
+    SCRIPT_ACTION_TURN_TO_RELATIVE,
     
     //Turn towards a target.
-    MOB_ACTION_TURN_TO_TARGET,
+    SCRIPT_ACTION_TURN_TO_TARGET,
     
     //Total amount of script actions.
     N_SCRIPT_ACTIONS,
@@ -327,347 +327,347 @@ enum SCRIPT_ACTION {
 
 
 //Arachnorb plan logic action sub-types.
-enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
+enum SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE {
 
     //Plan to go home.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME,
     
     //Plan to move forward.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD,
     
     //Plan a clockwise turn.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN,
     
     //Plan a counterclockwise turn.
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN,
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN,
     
 };
 
 
-//Mob action arachnorb plan logic type enum naming (internal names).
+//Script action arachnorb plan logic type enum naming (internal names).
 buildEnumNames(
-    mobActionArachnorbPlanLogicTypeINames, MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE
+    scriptActionArachnorbPlanLogicTypeINames, SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE
 )({
-    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME, "home" },
-    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD, "forward" },
-    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN, "cw_turn" },
-    { MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN, "ccw_turn" },
+    { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME, "home" },
+    { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD, "forward" },
+    { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN, "cw_turn" },
+    { SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN, "ccw_turn" },
 });
 
 
 //Turn action sub-types.
-enum MOB_ACTION_TURN_TYPE {
+enum SCRIPT_ACTION_TURN_TYPE {
 
     //Logic for an arachnorb's head to turn.
-    MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC,
+    SCRIPT_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC,
     
     //Turn towards the focused mob.
-    MOB_ACTION_TURN_TYPE_FOCUSED_MOB,
+    SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB,
     
     //Turn towards home.
-    MOB_ACTION_TURN_TYPE_HOME,
+    SCRIPT_ACTION_TURN_TYPE_HOME,
     
 };
 
 
-//Mob action turn type enum naming (internal names).
+//Script action turn type enum naming (internal names).
 buildEnumNames(
-    mobActionTurnTypeINames, MOB_ACTION_TURN_TYPE
+    scriptActionTurnTypeINames, SCRIPT_ACTION_TURN_TYPE
 )({
-    { MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC, "arachnorb_head_logic" },
-    { MOB_ACTION_TURN_TYPE_FOCUSED_MOB, "focused_mob" },
-    { MOB_ACTION_TURN_TYPE_HOME, "home" },
+    { SCRIPT_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC, "arachnorb_head_logic" },
+    { SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB, "focused_mob" },
+    { SCRIPT_ACTION_TURN_TYPE_HOME, "home" },
 });
 
 
 //If action operator types.
-enum MOB_ACTION_IF_OP {
+enum SCRIPT_ACTION_IF_OP {
 
     //Check if two values are equal.
-    MOB_ACTION_IF_OP_EQUAL,
+    SCRIPT_ACTION_IF_OP_EQUAL,
     
     //Check if two values are different.
-    MOB_ACTION_IF_OP_NOT,
+    SCRIPT_ACTION_IF_OP_NOT,
     
     //Check if a value is less than another value.
-    MOB_ACTION_IF_OP_LESS,
+    SCRIPT_ACTION_IF_OP_LESS,
     
     //Check if a value is more than another value.
-    MOB_ACTION_IF_OP_MORE,
+    SCRIPT_ACTION_IF_OP_MORE,
     
     //Check if a value is less than another value, or equal.
-    MOB_ACTION_IF_OP_LESS_E,
+    SCRIPT_ACTION_IF_OP_LESS_E,
     
     //Check if a value is more than another value, or equal.
-    MOB_ACTION_IF_OP_MORE_E,
+    SCRIPT_ACTION_IF_OP_MORE_E,
     
 };
 
 
-//Mob action if operator enum naming (internal names).
-buildEnumNames(mobActionIfOpINames, MOB_ACTION_IF_OP)({
-    { MOB_ACTION_IF_OP_EQUAL, "=" },
-    { MOB_ACTION_IF_OP_NOT, "!=" },
-    { MOB_ACTION_IF_OP_LESS, "<" },
-    { MOB_ACTION_IF_OP_MORE, ">" },
-    { MOB_ACTION_IF_OP_LESS_E, "<=" },
-    { MOB_ACTION_IF_OP_MORE_E, ">=" },
+//Script action if operator enum naming (internal names).
+buildEnumNames(scriptActionIfOpINames, SCRIPT_ACTION_IF_OP)({
+    { SCRIPT_ACTION_IF_OP_EQUAL, "=" },
+    { SCRIPT_ACTION_IF_OP_NOT, "!=" },
+    { SCRIPT_ACTION_IF_OP_LESS, "<" },
+    { SCRIPT_ACTION_IF_OP_MORE, ">" },
+    { SCRIPT_ACTION_IF_OP_LESS_E, "<=" },
+    { SCRIPT_ACTION_IF_OP_MORE_E, ">=" },
 });
 
 
 //Target types for actions that target mobs.
-enum MOB_ACTION_MOB_TARGET_TYPE {
+enum SCRIPT_ACTION_MOB_TARGET_TYPE {
 
     //Targets the mob the script belongs to.
-    MOB_ACTION_MOB_TARGET_TYPE_SELF,
+    SCRIPT_ACTION_MOB_TARGET_TYPE_SELF,
     
     //Targets the currently focused mob, if any.
-    MOB_ACTION_MOB_TARGET_TYPE_FOCUS,
+    SCRIPT_ACTION_MOB_TARGET_TYPE_FOCUS,
     
     //Targets the mob that triggered the event, if any.
-    MOB_ACTION_MOB_TARGET_TYPE_TRIGGER,
+    SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER,
     
     //Targets the first linked object, if any.
-    MOB_ACTION_MOB_TARGET_TYPE_LINK,
+    SCRIPT_ACTION_MOB_TARGET_TYPE_LINK,
     
     //Targets the parent mob, if any.
-    MOB_ACTION_MOB_TARGET_TYPE_PARENT,
+    SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT,
     
 };
 
 
-//Mob action mob target type enum naming (internal names).
-buildEnumNames(mobActionMobTargetTypeINames, MOB_ACTION_MOB_TARGET_TYPE)({
-    { MOB_ACTION_MOB_TARGET_TYPE_SELF, "self" },
-    { MOB_ACTION_MOB_TARGET_TYPE_FOCUS, "focus" },
-    { MOB_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
-    { MOB_ACTION_MOB_TARGET_TYPE_LINK, "link" },
-    { MOB_ACTION_MOB_TARGET_TYPE_PARENT, "parent" },
+//Script action mob target type enum naming (internal names).
+buildEnumNames(scriptActionMobTargetTypeINames, SCRIPT_ACTION_MOB_TARGET_TYPE)({
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_SELF, "self" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_FOCUS, "focus" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_LINK, "link" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT, "parent" },
 });
 
 
 //Get area info action info types.
-enum MOB_ACTION_GET_AREA_INFO_TYPE {
+enum SCRIPT_ACTION_GET_AREA_INFO_TYPE {
 
     //Get time of day, in minutes.
-    MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES,
+    SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES,
     
     //Get number of Pikmin on the field.
-    MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN,
+    SCRIPT_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN,
     
 };
 
 
-//Mob action get area info type enum naming (internal names).
-buildEnumNames(mobActionGetAreaInfoTypeINames, MOB_ACTION_GET_AREA_INFO_TYPE)({
-    { MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES, "day_minutes" },
-    { MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
+//Script action get area info type enum naming (internal names).
+buildEnumNames(scriptActionGetAreaInfoTypeINames, SCRIPT_ACTION_GET_AREA_INFO_TYPE)({
+    { SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES, "day_minutes" },
+    { SCRIPT_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
 });
 
 
 //Get event info action info types.
-enum MOB_ACTION_GET_EV_INFO_TYPE {
+enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
 
     //Get body part that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART,
     
     //Get frame signal that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL,
     
     //Get name of hazard that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_HAZARD,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD,
     
     //Get the name of the input that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_NAME,
     
     //Get the value of the input that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE,
     
     //Get message that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE,
     
     //Get the other body part that triggered the event.
-    MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
 };
 
 
-//Mob action get event info type enum naming (internal names).
-buildEnumNames(mobActionGetEvInfoTypeINames, MOB_ACTION_GET_EV_INFO_TYPE)({
-    { MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART, "body_part" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL, "frame_signal" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_HAZARD, "hazard" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME, "input_name" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE, "message" },
-    { MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
+//Script action get event info type enum naming (internal names).
+buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)({
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART, "body_part" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL, "frame_signal" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD, "hazard" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_NAME, "input_name" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE, "message" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
 });
 
 
 //Get mob info action info types.
-enum MOB_ACTION_GET_MOB_INFO_TYPE {
+enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
 
     //Get angle.
-    MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE,
     
     //Get amount of chomped Pikmin.
-    MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN,
     
     //Get distance towards focused mob.
-    MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE,
     
     //Get total power on the group task.
-    MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER,
     
     //Get health.
-    MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH,
     
     //Get health ratio.
-    MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO,
     
     //Get the numerical ID.
-    MOB_ACTION_GET_MOB_INFO_TYPE_ID,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_ID,
     
     //Get amount of latched Pikmin.
-    MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN,
     
     //Get total weight of latched Pikmin.
-    MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
     
     //Get category of mob that triggered the event.
-    MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY,
     
     //Get type of mob that triggered the event.
-    MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE,
     
     //Get name of current state.
-    MOB_ACTION_GET_MOB_INFO_TYPE_STATE,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE,
     
     //Get current weight on top of it.
-    MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT,
     
     //Get X.
-    MOB_ACTION_GET_MOB_INFO_TYPE_X,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_X,
     
     //Get Y.
-    MOB_ACTION_GET_MOB_INFO_TYPE_Y,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y,
     
     //Get Z.
-    MOB_ACTION_GET_MOB_INFO_TYPE_Z,
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z,
     
 };
 
 
-//Mob action get mob info type enum naming (internal names).
-buildEnumNames(mobActionGetMobInfoTypeINames, MOB_ACTION_GET_MOB_INFO_TYPE)({
-    { MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE, "angle" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN, "chomped_pikmin" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE, "focus_distance" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER, "group_task_power" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH, "health" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO, "health_ratio" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_ID, "id" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN, "latched_pikmin" },
+//Script action get mob info type enum naming (internal names).
+buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE)({
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE, "angle" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN, "chomped_pikmin" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE, "focus_distance" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER, "group_task_power" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH, "health" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO, "health_ratio" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ID, "id" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN, "latched_pikmin" },
     {
-        MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
+        SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
         "latched_pikmin_weight"
     },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT, "weight" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_X, "x" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_Y, "y" },
-    { MOB_ACTION_GET_MOB_INFO_TYPE_Z, "z" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT, "weight" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_X, "x" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y, "y" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z, "z" },
 });
 
 
 //Moving action sub-types.
-enum MOB_ACTION_MOVE_TYPE {
+enum SCRIPT_ACTION_MOVE_TYPE {
 
     //Move away from focused mob.
-    MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS,
+    SCRIPT_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS,
     
     //Move towards focused mob.
-    MOB_ACTION_MOVE_TYPE_FOCUS,
+    SCRIPT_ACTION_MOVE_TYPE_FOCUS,
     
     //Move towards the position the focus mob is on right now.
-    MOB_ACTION_MOVE_TYPE_FOCUS_POS,
+    SCRIPT_ACTION_MOVE_TYPE_FOCUS_POS,
     
     //Move towards home.
-    MOB_ACTION_MOVE_TYPE_HOME,
+    SCRIPT_ACTION_MOVE_TYPE_HOME,
     
     //Follow arachnorb foot movement logic.
-    MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC,
+    SCRIPT_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC,
     
     //Move towards the average spot of the linked mobs.
-    MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE,
+    SCRIPT_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE,
     
 };
 
 
-//Mob action move type enum naming (internal names).
-buildEnumNames(mobActionMoveTypeINames, MOB_ACTION_MOVE_TYPE)({
-    { MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS, "away_from_focused_mob" },
-    { MOB_ACTION_MOVE_TYPE_FOCUS, "focused_mob" },
-    { MOB_ACTION_MOVE_TYPE_FOCUS_POS, "focus_mob_position" },
-    { MOB_ACTION_MOVE_TYPE_HOME, "home" },
-    { MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC, "arachnorb_foot_logic" },
-    { MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE, "linked_mob_average" },
+//Script action move type enum naming (internal names).
+buildEnumNames(scriptActionMoveTypeINames, SCRIPT_ACTION_MOVE_TYPE)({
+    { SCRIPT_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS, "away_from_focused_mob" },
+    { SCRIPT_ACTION_MOVE_TYPE_FOCUS, "focused_mob" },
+    { SCRIPT_ACTION_MOVE_TYPE_FOCUS_POS, "focus_mob_position" },
+    { SCRIPT_ACTION_MOVE_TYPE_HOME, "home" },
+    { SCRIPT_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC, "arachnorb_foot_logic" },
+    { SCRIPT_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE, "linked_mob_average" },
 });
 
 
 //Calculate action sub-types.
-enum MOB_ACTION_CALCULATE_TYPE {
+enum SCRIPT_ACTION_CALCULATE_TYPE {
 
     //Sum two numbers.
-    MOB_ACTION_CALCULATE_TYPE_SUM,
+    SCRIPT_ACTION_CALCULATE_TYPE_SUM,
     
     //Subtract one number from another.
-    MOB_ACTION_CALCULATE_TYPE_SUBTRACT,
+    SCRIPT_ACTION_CALCULATE_TYPE_SUBTRACT,
     
     //Multiply two numbers.
-    MOB_ACTION_CALCULATE_TYPE_MULTIPLY,
+    SCRIPT_ACTION_CALCULATE_TYPE_MULTIPLY,
     
     //Divide one number by another.
-    MOB_ACTION_CALCULATE_TYPE_DIVIDE,
+    SCRIPT_ACTION_CALCULATE_TYPE_DIVIDE,
     
     //Get the modulo of a number with another.
-    MOB_ACTION_CALCULATE_TYPE_MODULO,
+    SCRIPT_ACTION_CALCULATE_TYPE_MODULO,
     
     //Raise one number to the power of another.
-    MOB_ACTION_CALCULATE_TYPE_POWER,
+    SCRIPT_ACTION_CALCULATE_TYPE_POWER,
     
 };
 
 
-//Mob action calculate type enum naming (internal names).
-buildEnumNames(mobActionCalculateTypeINames, MOB_ACTION_CALCULATE_TYPE)({
-    { MOB_ACTION_CALCULATE_TYPE_SUM, "+" },
-    { MOB_ACTION_CALCULATE_TYPE_SUBTRACT, "-" },
-    { MOB_ACTION_CALCULATE_TYPE_MULTIPLY, "*" },
-    { MOB_ACTION_CALCULATE_TYPE_DIVIDE, "/" },
-    { MOB_ACTION_CALCULATE_TYPE_MODULO, "%" },
-    { MOB_ACTION_CALCULATE_TYPE_POWER, "^" },
+//Script action calculate type enum naming (internal names).
+buildEnumNames(scriptActionCalculateTypeINames, SCRIPT_ACTION_CALCULATE_TYPE)({
+    { SCRIPT_ACTION_CALCULATE_TYPE_SUM, "+" },
+    { SCRIPT_ACTION_CALCULATE_TYPE_SUBTRACT, "-" },
+    { SCRIPT_ACTION_CALCULATE_TYPE_MULTIPLY, "*" },
+    { SCRIPT_ACTION_CALCULATE_TYPE_DIVIDE, "/" },
+    { SCRIPT_ACTION_CALCULATE_TYPE_MODULO, "%" },
+    { SCRIPT_ACTION_CALCULATE_TYPE_POWER, "^" },
 });
 
 
 //Stabilize Z action sub-types.
-enum MOB_ACTION_STABILIZE_Z_TYPE {
+enum SCRIPT_ACTION_STABILIZE_Z_TYPE {
 
     //Stabilize towards highest Z.
-    MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST,
+    SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST,
     
     //Stabilize towards lowest z.
-    MOB_ACTION_STABILIZE_Z_TYPE_LOWEST,
+    SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST,
     
 };
 
 
-//Mob action stabilize Z type enum naming (internal names).
-buildEnumNames(mobActionStabilizeZTypeINames, MOB_ACTION_STABILIZE_Z_TYPE)({
-    { MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST, "highest" },
-    { MOB_ACTION_STABILIZE_Z_TYPE_LOWEST, "lowest" },
+//Script action stabilize Z type enum naming (internal names).
+buildEnumNames(scriptActionStabilizeZTypeINames, SCRIPT_ACTION_STABILIZE_Z_TYPE)({
+    { SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST, "highest" },
+    { SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST, "lowest" },
 });
 
 
@@ -942,7 +942,7 @@ bool loadMobTargetType(ScriptActionDef& call, size_t argIdx);
 
 Mob* getTriggerMob(ScriptActionInstRunData& data);
 Mob* getTargetMob(
-    ScriptActionInstRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
+    ScriptActionInstRunData& data, SCRIPT_ACTION_MOB_TARGET_TYPE type
 );
 
 

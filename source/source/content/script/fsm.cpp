@@ -25,7 +25,7 @@
  */
 void EasyFsmCreator::changeState(const string& newState) {
     curEvent->actions.list.push_back(
-        new ScriptActionDef(MOB_ACTION_SET_STATE)
+        new ScriptActionDef(SCRIPT_ACTION_SET_STATE)
     );
     curEvent->actions.list.back()->args.push_back(newState);
     curEvent->actions.list.back()->argIsVar.push_back(false);
@@ -143,7 +143,7 @@ bool FsmDef::compileStates(DataNode* fileNode) {
             forIdx(a, ev->actions.list) {
                 ScriptActionDef* call = ev->actions.list[a];
                 
-                if(call->actionType->type == MOB_ACTION_SET_STATE) {
+                if(call->actionType->type == SCRIPT_ACTION_SET_STATE) {
                     string stateName = call->args[0];
                     size_t stateIdx = 0;
                     bool foundState = false;

@@ -453,7 +453,7 @@ public:
     //Last Pikmin type chosen to resolve a carrying tie, if any.
     PikminType* lastCarryingTieBreaker = nullptr;
     
-    //Lines of the text to show for the print debug mob script action.
+    //Lines of the text to show for the print debug script action.
     vector<string> printActionLogLines;
     
     //Closest, middle, and farthest zoom levels. Cache for convenience.

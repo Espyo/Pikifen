@@ -36,7 +36,7 @@ enum FSM_EV {
     //such set up and ready.
     FSM_EV_ON_READY,
     
-    //Mob script file stuff.
+    //Script file stuff.
     
     //When the player's active leader is not the mob's current leader.
     MOB_EV_ACTIVE_LEADER_CHANGED,

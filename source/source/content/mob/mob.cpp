@@ -681,7 +681,7 @@ void Mob::arachnorbHeadTurnLogic() {
  * @param goal What its goal is.
  */
 void Mob::arachnorbPlanLogic(
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
     float maxStepDistance = s2f(scriptVM.vars["max_step_distance"]);
     float maxTurnAngle = degToRad(s2f(scriptVM.vars["max_turn_angle"]));
@@ -697,7 +697,7 @@ void Mob::arachnorbPlanLogic(
     float amountToTurn = 0;
     
     switch(goal) {
-    case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME: {
+    case SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME: {
         amountToTurn = getAngleCwDiff(angle, getAngle(pos, home));
         if(amountToTurn > TAU / 2)  amountToTurn -= TAU;
         if(amountToTurn < -TAU / 2) amountToTurn += TAU;
@@ -708,15 +708,15 @@ void Mob::arachnorbPlanLogic(
         }
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD: {
+    } case SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD: {
         amountToMove = maxStepDistance;
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN: {
+    } case SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN: {
         amountToTurn = game.rng.f(minTurnAngle, TAU * 0.25);
         break;
         
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN: {
+    } case SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN: {
         amountToTurn = game.rng.f(-TAU * 0.25, -minTurnAngle);
         break;
         

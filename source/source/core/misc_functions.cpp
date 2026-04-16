@@ -687,7 +687,7 @@ unsigned char getThrowPreviewVertexes(
 
 
 /**
- * @brief Given a string representation of mob script variables,
+ * @brief Given a string representation of script variables,
  * returns a map, where every key is a variable, and every value is the
  * variable's value.
  *

@@ -57,9 +57,9 @@ bool ScriptActionLoaders::arachnorbPlanLogic(
     ScriptActionDef& def, MobType* mt
 ) {
     bool found;
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
+    SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
         enumGetValue(
-            mobActionArachnorbPlanLogicTypeINames, def.args[0], &found
+            scriptActionArachnorbPlanLogicTypeINames, def.args[0], &found
         );
     if(!found) {
         reportEnumError(def, 0);
@@ -79,8 +79,8 @@ bool ScriptActionLoaders::arachnorbPlanLogic(
  */
 bool ScriptActionLoaders::calculate(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_CALCULATE_TYPE type =
-        enumGetValue(mobActionCalculateTypeINames, def.args[2], &found);
+    SCRIPT_ACTION_CALCULATE_TYPE type =
+        enumGetValue(scriptActionCalculateTypeINames, def.args[2], &found);
     if(!found) {
         reportEnumError(def, 2);
         return false;
@@ -143,8 +143,8 @@ bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
  */
 bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_GET_AREA_INFO_TYPE type =
-        enumGetValue(mobActionGetAreaInfoTypeINames, def.args[1], &found);
+    SCRIPT_ACTION_GET_AREA_INFO_TYPE type =
+        enumGetValue(scriptActionGetAreaInfoTypeINames, def.args[1], &found);
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[1] + "\"! "
@@ -165,8 +165,8 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
  */
 bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_GET_EV_INFO_TYPE type =
-        enumGetValue(mobActionGetEvInfoTypeINames, def.args[1], &found);
+    SCRIPT_ACTION_GET_EV_INFO_TYPE type =
+        enumGetValue(scriptActionGetEvInfoTypeINames, def.args[1], &found);
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[1] + "\"! "
@@ -191,8 +191,8 @@ bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
     }
     
     bool found;
-    MOB_ACTION_GET_MOB_INFO_TYPE type =
-        enumGetValue(mobActionGetMobInfoTypeINames, def.args[2], &found);
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE type =
+        enumGetValue(scriptActionGetMobInfoTypeINames, def.args[2], &found);
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[2] + "\"! "
@@ -232,8 +232,8 @@ bool ScriptActionLoaders::holdFocus(ScriptActionDef& def, MobType* mt) {
  */
 bool ScriptActionLoaders::ifFunction(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_IF_OP op =
-        enumGetValue(mobActionIfOpINames, def.args[1], &found);
+    SCRIPT_ACTION_IF_OP op =
+        enumGetValue(scriptActionIfOpINames, def.args[1], &found);
     if(!found) {
         reportEnumError(def, 1);
         return false;
@@ -253,8 +253,8 @@ bool ScriptActionLoaders::loadMobTargetType(
     ScriptActionDef& def, size_t argIdx
 ) {
     bool found;
-    MOB_ACTION_MOB_TARGET_TYPE type =
-        enumGetValue(mobActionMobTargetTypeINames, def.args[argIdx], &found);
+    SCRIPT_ACTION_MOB_TARGET_TYPE type =
+        enumGetValue(scriptActionMobTargetTypeINames, def.args[argIdx], &found);
     if(!found) {
         reportEnumError(def, argIdx);
         return false;
@@ -273,8 +273,8 @@ bool ScriptActionLoaders::loadMobTargetType(
  */
 bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_MOVE_TYPE type =
-        enumGetValue(mobActionMoveTypeINames, def.args[0], &found);
+    SCRIPT_ACTION_MOVE_TYPE type =
+        enumGetValue(scriptActionMoveTypeINames, def.args[0], &found);
     if(!found) {
         reportEnumError(def, 0);
         return false;
@@ -495,8 +495,8 @@ bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
  */
 bool ScriptActionLoaders::stabilizeZ(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_STABILIZE_Z_TYPE type =
-        enumGetValue(mobActionStabilizeZTypeINames, def.args[0], &found);
+    SCRIPT_ACTION_STABILIZE_Z_TYPE type =
+        enumGetValue(scriptActionStabilizeZTypeINames, def.args[0], &found);
     if(!found) {
         reportEnumError(def, 0);
         return false;
@@ -553,8 +553,8 @@ bool ScriptActionLoaders::startParticles(ScriptActionDef& def, MobType* mt) {
  */
 bool ScriptActionLoaders::turnToTarget(ScriptActionDef& def, MobType* mt) {
     bool found;
-    MOB_ACTION_TURN_TYPE type =
-        enumGetValue(mobActionTurnTypeINames, def.args[0], &found);
+    SCRIPT_ACTION_TURN_TYPE type =
+        enumGetValue(scriptActionTurnTypeINames, def.args[0], &found);
     if(!found) {
         reportEnumError(def, 0);
         return false;
@@ -595,7 +595,7 @@ void ScriptActionRunners::addHealth(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
     data.scriptVM->mob->arachnorbPlanLogic(
-        (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
+        (SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
     );
 }
 
@@ -607,25 +607,25 @@ void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
     float lhs = s2f(data.args[1]);
-    MOB_ACTION_CALCULATE_TYPE op =
-        (MOB_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
+    SCRIPT_ACTION_CALCULATE_TYPE op =
+        (SCRIPT_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
     float rhs = s2f(data.args[3]);
     float result = 0;
     
     switch(op) {
-    case MOB_ACTION_CALCULATE_TYPE_SUM: {
+    case SCRIPT_ACTION_CALCULATE_TYPE_SUM: {
         result = lhs + rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_TYPE_SUBTRACT: {
+    } case SCRIPT_ACTION_CALCULATE_TYPE_SUBTRACT: {
         result = lhs - rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_TYPE_MULTIPLY: {
+    } case SCRIPT_ACTION_CALCULATE_TYPE_MULTIPLY: {
         result = lhs * rhs;
         break;
         
-    } case MOB_ACTION_CALCULATE_TYPE_DIVIDE: {
+    } case SCRIPT_ACTION_CALCULATE_TYPE_DIVIDE: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -633,7 +633,7 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_CALCULATE_TYPE_MODULO: {
+    } case SCRIPT_ACTION_CALCULATE_TYPE_MODULO: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -641,7 +641,7 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_CALCULATE_TYPE_POWER: {
+    } case SCRIPT_ACTION_CALCULATE_TYPE_POWER: {
         result = pow(lhs, rhs);
         break;
         
@@ -723,8 +723,8 @@ void ScriptActionRunners::floorNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
-    MOB_ACTION_MOB_TARGET_TYPE s =
-        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+    SCRIPT_ACTION_MOB_TARGET_TYPE s =
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
@@ -739,8 +739,8 @@ void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
-    MOB_ACTION_MOB_TARGET_TYPE s =
-        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+    SCRIPT_ACTION_MOB_TARGET_TYPE s =
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
     bool silent = false;
     if(data.args.size() >= 2) {
@@ -902,15 +902,15 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
     string* var = &(data.scriptVM->vars[data.args[0]]);
-    MOB_ACTION_GET_AREA_INFO_TYPE t =
-        (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
+    SCRIPT_ACTION_GET_AREA_INFO_TYPE t =
+        (SCRIPT_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
         
     switch (t) {
-    case MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
+    case SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
         *var = i2s(game.states.gameplay->dayMinutes);
         break;
         
-    } case MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN: {
+    } case SCRIPT_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN: {
         *var = i2s(game.states.gameplay->mobs.pikmin.size());
         break;
         
@@ -975,11 +975,11 @@ void ScriptActionRunners::getDistance(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
     string* var = &(data.scriptVM->vars[data.args[0]]);
-    MOB_ACTION_GET_EV_INFO_TYPE t =
-        (MOB_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
+    SCRIPT_ACTION_GET_EV_INFO_TYPE t =
+        (SCRIPT_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
         
     switch (t) {
-    case MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
+    case SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
         if(
             data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
             data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
@@ -1002,13 +1002,13 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
         if(data.actionDef->parentEvent == MOB_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*)(data.customData1)));
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_HAZARD: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD: {
         if(
             data.actionDef->parentEvent == MOB_EV_TOUCHED_HAZARD ||
             data.actionDef->parentEvent == MOB_EV_LEFT_HAZARD
@@ -1017,7 +1017,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_NAME: {
         if(data.actionDef->parentEvent == MOB_EV_INPUT_RECEIVED) {
             PLAYER_ACTION_TYPE playerActionTypeId =
                 (PLAYER_ACTION_TYPE)
@@ -1029,19 +1029,19 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
         if(data.actionDef->parentEvent == MOB_EV_INPUT_RECEIVED) {
             *var = f2s(((Inpution::Action*) (data.customData1))->value);
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
         if(data.actionDef->parentEvent == MOB_EV_RECEIVE_MESSAGE) {
             *var = *((string*)(data.customData1));
         }
         break;
         
-    } case MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART: {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART: {
         if(
             data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
             data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
@@ -1100,26 +1100,26 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
-    MOB_ACTION_MOB_TARGET_TYPE s =
-        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
+    SCRIPT_ACTION_MOB_TARGET_TYPE s =
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
     
     string* var = &(data.scriptVM->vars[data.args[0]]);
-    MOB_ACTION_GET_MOB_INFO_TYPE t =
-        (MOB_ACTION_GET_MOB_INFO_TYPE) s2i(data.args[2]);
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE t =
+        (SCRIPT_ACTION_GET_MOB_INFO_TYPE) s2i(data.args[2]);
         
     switch(t) {
-    case MOB_ACTION_GET_MOB_INFO_TYPE_ANGLE: {
+    case SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE: {
         *var = f2s(radToDeg(target->angle));
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
         *var = i2s(target->chompingMobs.size());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
         if(target->scriptVM.focusedMob) {
             float d =
                 Distance(target->pos, target->scriptVM.focusedMob->pos).
@@ -1128,17 +1128,17 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
         if(target->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
             *var = f2s(((GroupTask*)target)->getPower());
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH: {
         *var = i2s(target->health);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
         if(target->maxHealth != 0.0f) {
             *var = f2s(target->health / target->maxHealth);
         } else {
@@ -1146,23 +1146,23 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_ID: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_ID: {
         *var = i2s(target->id);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN: {
         *var = i2s(target->getLatchedPikminAmount());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT: {
         *var = i2s(target->getLatchedPikminWeight());
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
         *var = target->type->category->internalName;
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
         if(target->type->manifest) {
             *var = target->type->manifest->internalName;
         } else {
@@ -1170,26 +1170,26 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE: {
         *var = target->scriptVM.fsm.curState->name;
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
         if(target->type->category->id == MOB_CATEGORY_SCALES) {
             Scale* sPtr = (Scale*)(target);
             *var = i2s(sPtr->calculateCurWeight());
         }
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_X: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_X: {
         *var = f2s(target->pos.x);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_Y: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y: {
         *var = f2s(target->pos.y);
         break;
         
-    } case MOB_ACTION_GET_MOB_INFO_TYPE_Z: {
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z: {
         *var = f2s(target->z);
         break;
     }
@@ -1243,12 +1243,12 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
     string lhs = data.args[0];
-    MOB_ACTION_IF_OP op =
-        (MOB_ACTION_IF_OP) s2i(data.args[1]);
+    SCRIPT_ACTION_IF_OP op =
+        (SCRIPT_ACTION_IF_OP) s2i(data.args[1]);
     string rhs = vectorTailToString(data.args, 2);
     
     switch(op) {
-    case MOB_ACTION_IF_OP_EQUAL: {
+    case SCRIPT_ACTION_IF_OP_EQUAL: {
         if(isNumber(lhs) && isNumber(rhs)) {
             data.returnValue = (s2f(lhs) == s2f(rhs));
         } else {
@@ -1256,7 +1256,7 @@ void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_IF_OP_NOT: {
+    } case SCRIPT_ACTION_IF_OP_NOT: {
         if(isNumber(lhs) && isNumber(rhs)) {
             data.returnValue = (s2f(lhs) != s2f(rhs));
         } else {
@@ -1264,19 +1264,19 @@ void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_IF_OP_LESS: {
+    } case SCRIPT_ACTION_IF_OP_LESS: {
         data.returnValue = (s2f(lhs) < s2f(rhs));
         break;
         
-    } case MOB_ACTION_IF_OP_MORE: {
+    } case SCRIPT_ACTION_IF_OP_MORE: {
         data.returnValue = (s2f(lhs) > s2f(rhs));
         break;
         
-    } case MOB_ACTION_IF_OP_LESS_E: {
+    } case SCRIPT_ACTION_IF_OP_LESS_E: {
         data.returnValue = (s2f(lhs) <= s2f(rhs));
         break;
         
-    } case MOB_ACTION_IF_OP_MORE_E: {
+    } case SCRIPT_ACTION_IF_OP_MORE_E: {
         data.returnValue = (s2f(lhs) >= s2f(rhs));
         break;
         
@@ -1377,10 +1377,10 @@ void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
-    MOB_ACTION_MOVE_TYPE t = (MOB_ACTION_MOVE_TYPE) s2i(data.args[0]);
+    SCRIPT_ACTION_MOVE_TYPE t = (SCRIPT_ACTION_MOVE_TYPE) s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
+    case SCRIPT_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
         if(data.scriptVM->focusedMob) {
             float a =
                 getAngle(
@@ -1399,7 +1399,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_TYPE_FOCUS: {
+    } case SCRIPT_ACTION_MOVE_TYPE_FOCUS: {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
                 &data.scriptVM->focusedMob->pos,
@@ -1412,7 +1412,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
+    } case SCRIPT_ACTION_MOVE_TYPE_FOCUS_POS: {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
                 data.scriptVM->focusedMob->pos,
@@ -1424,7 +1424,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case MOB_ACTION_MOVE_TYPE_HOME: {
+    } case SCRIPT_ACTION_MOVE_TYPE_HOME: {
         data.scriptVM->mob->chase(
             data.scriptVM->mob->home,
             data.scriptVM->mob->z,
@@ -1432,11 +1432,11 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         );
         break;
         
-    } case MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC: {
+    } case SCRIPT_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC: {
         data.scriptVM->mob->arachnorbFootMoveLogic();
         break;
         
-    } case MOB_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE: {
+    } case SCRIPT_ACTION_MOVE_TYPE_LINKED_MOB_AVERAGE: {
         if(data.scriptVM->mob->links.empty()) {
             return;
         }
@@ -2000,21 +2000,21 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
     }
     
     float bestMatchZ = data.scriptVM->mob->links[0]->z;
-    MOB_ACTION_STABILIZE_Z_TYPE t =
-        (MOB_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
+    SCRIPT_ACTION_STABILIZE_Z_TYPE t =
+        (SCRIPT_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
         
     for(size_t l = 1; l < data.scriptVM->mob->links.size(); l++) {
     
         if(!data.scriptVM->mob->links[l]) continue;
         
         switch(t) {
-        case MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
+        case SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
             if(data.scriptVM->mob->links[l]->z > bestMatchZ) {
                 bestMatchZ = data.scriptVM->mob->links[l]->z;
             }
             break;
             
-        } case MOB_ACTION_STABILIZE_Z_TYPE_LOWEST: {
+        } case SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST: {
             if(data.scriptVM->mob->links[l]->z < bestMatchZ) {
                 bestMatchZ = data.scriptVM->mob->links[l]->z;
             }
@@ -2306,20 +2306,20 @@ void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
-    MOB_ACTION_TURN_TYPE t = (MOB_ACTION_TURN_TYPE) s2i(data.args[0]);
+    SCRIPT_ACTION_TURN_TYPE t = (SCRIPT_ACTION_TURN_TYPE) s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC: {
+    case SCRIPT_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC: {
         data.scriptVM->mob->arachnorbHeadTurnLogic();
         break;
         
-    } case MOB_ACTION_TURN_TYPE_FOCUSED_MOB: {
+    } case SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB: {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->face(0, &data.scriptVM->focusedMob->pos);
         }
         break;
         
-    } case MOB_ACTION_TURN_TYPE_HOME: {
+    } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->mob->face(
             getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->home),
             nullptr
@@ -2367,24 +2367,24 @@ ScriptActionTypeParam::ScriptActionTypeParam(
  * @param type Type of target.
  */
 Mob* getTargetMob(
-    ScriptActionInstRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
+    ScriptActionInstRunData& data, SCRIPT_ACTION_MOB_TARGET_TYPE type
 ) {
     switch (type) {
-    case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
+    case SCRIPT_ACTION_MOB_TARGET_TYPE_SELF: {
         return data.scriptVM->mob;
         break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_FOCUS: {
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_FOCUS: {
         return data.scriptVM->focusedMob;
         break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_TRIGGER: {
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER: {
         return getTriggerMob(data);
         break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_LINK: {
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_LINK: {
         if(!data.scriptVM->mob->links.empty() && data.scriptVM->mob->links[0]) {
             return data.scriptVM->mob->links[0];
         }
         break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT: {
         if(data.scriptVM->mob->parent) {
             return data.scriptVM->mob->parent->m;
         }
