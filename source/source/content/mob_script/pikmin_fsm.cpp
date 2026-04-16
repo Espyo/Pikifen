@@ -2110,12 +2110,12 @@ void PikminFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
         );
     }
     
-    pikPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
     
     pikPtr->setAnimation(
         PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME, true
     );
-    pikPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -2194,7 +2194,7 @@ void PikminFsm::beginPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    pikPtr->focusOnMob(leaPtr);
+    scriptVM->focusOnMob(leaPtr);
     disableFlag(pikPtr->flags, MOB_FLAG_NON_HUNTABLE);
     disableFlag(pikPtr->flags, MOB_FLAG_NON_HURTABLE);
     disableFlag(pikPtr->flags, MOB_FLAG_INTANGIBLE);
@@ -2374,7 +2374,7 @@ void PikminFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->consecutiveDings = 0;
     PikminFsm::standStill(scriptVM, info1, info2);
     
-    pikPtr->focusOnMob(caller);
+    scriptVM->focusOnMob(caller);
     
     pikPtr->setAnimation(PIKMIN_ANIM_CALLED);
     if(info2 == nullptr) {
@@ -2403,7 +2403,7 @@ void PikminFsm::calledWhileKnockedDown(
     //already whistled it.
     if(pikPtr->tempI == 1) return;
     
-    pikPtr->focusOnMob(caller);
+    scriptVM->focusOnMob(caller);
     
     scriptVM->timer.timeLeft =
         std::max(
@@ -2450,7 +2450,7 @@ void PikminFsm::checkBoredomAnimEnd(
     if(!pikPtr->inBoredAnimation) return;
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     pikPtr->inBoredAnimation = false;
-    pikPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -2593,7 +2593,7 @@ void PikminFsm::checkShakingAnimEnd(
     if(!pikPtr->inShakingAnimation) return;
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     pikPtr->inShakingAnimation = false;
-    pikPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -2618,7 +2618,7 @@ void PikminFsm::circleOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     //to attack, not dance!
     circleTime *= circleTime;
     circleTime += 0.5f;
-    pikPtr->setTimer(circleTime);
+    scriptVM->setTimer(circleTime);
     
     bool goCw = game.rng.f(0.0f, 1.0f) <= 0.5f;
     pikPtr->circleAround(
@@ -2657,9 +2657,7 @@ void PikminFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
-    Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-    
-    pikPtr->setTimer(0);
+    scriptVM->setTimer(0);
 }
 
 
@@ -2956,7 +2954,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     }
     
-    pikPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
 }
 
 
@@ -3064,7 +3062,7 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
         tooPtr, HOLD_TYPE_PURPOSE_HAND, INVALID, 4, 0, 0.5f,
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
-    pikPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
 }
 
 
@@ -3124,7 +3122,7 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     
     GroupTask* tasPtr = (GroupTask*) (scriptVM->focusedMob);
     tasPtr->freeUpSpot(pikPtr);
-    pikPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
 }
 
 
@@ -3136,13 +3134,11 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
-    Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-    
     if(!scriptVM->focusedMob) return;
     
     Tool* tooPtr = (Tool*) (scriptVM->focusedMob);
     tooPtr->reserved = nullptr;
-    pikPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
 }
 
 
@@ -3179,7 +3175,7 @@ void PikminFsm::getKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    pikPtr->setTimer(pikPtr->pikType->knockedDownDuration);
+    scriptVM->setTimer(pikPtr->pikType->knockedDownDuration);
     
     pikPtr->setAnimation(PIKMIN_ANIM_LYING);
 }
@@ -3201,7 +3197,7 @@ void PikminFsm::goingToDismissSpot(
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    pikPtr->setTimer(PIKMIN::DISMISS_TIMEOUT);
+    scriptVM->setTimer(PIKMIN::DISMISS_TIMEOUT);
     
     pikPtr->setAnimation(
         pikPtr->getMobHeldInHand() ?
@@ -3270,7 +3266,7 @@ void PikminFsm::goToCarriableObject(
     
     if(!closestSpotPtr) return;
     
-    pikPtr->focusOnMob(carriableMob);
+    scriptVM->focusOnMob(carriableMob);
     pikPtr->tempI = closestSpot;
     closestSpotPtr->state = CARRY_SPOT_STATE_RESERVED;
     closestSpotPtr->pikPtr = pikPtr;
@@ -3279,7 +3275,7 @@ void PikminFsm::goToCarriableObject(
         &carriableMob->pos, &carriableMob->z,
         closestSpotOffset, 0.0f
     );
-    pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
+    scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     pikPtr->setAnimation(
         PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
@@ -3325,13 +3321,13 @@ void PikminFsm::goToGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
     
-    pikPtr->focusOnMob(tasPtr);
+    scriptVM->focusOnMob(tasPtr);
     
     pikPtr->chase(
         &(freeSpot->absolutePos), &tasPtr->z,
         Point(), tasPtr->tasType->spotsZ
     );
-    pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
+    scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     pikPtr->setAnimation(
         PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
@@ -3377,7 +3373,7 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     bool auxB = true; //Needed for a gentle release.
     PikminFsm::releaseTool(scriptVM, (void*) &auxB, nullptr);
     
-    pikPtr->focusOnMob(nestPtr->mPtr);
+    scriptVM->focusOnMob(nestPtr->mPtr);
     pikPtr->stopChasing();
     pikPtr->chase(coords, nestPtr->mPtr->z);
     pikPtr->leaveGroup();
@@ -3414,7 +3410,7 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    pikPtr->focusOnMob(otherPtr);
+    scriptVM->focusOnMob(otherPtr);
     pikPtr->stopChasing();
     
     Point offset = Point();
@@ -3486,14 +3482,14 @@ void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
     
-    pikPtr->focusOnMob(tooPtr);
+    scriptVM->focusOnMob(tooPtr);
     
     pikPtr->chase(
         &tooPtr->pos, &tooPtr->z,
         Point(), 0.0f, 0,
         pikPtr->radius + tooPtr->radius
     );
-    pikPtr->setTimer(PIKMIN::GOTO_TIMEOUT);
+    scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     pikPtr->setAnimation(
         PIKMIN_ANIM_WALKING, START_ANIM_OPTION_RANDOM_TIME,
@@ -3828,7 +3824,7 @@ void PikminFsm::panicNewChase(ScriptVM* scriptVM, void* info1, void* info2) {
         ),
         pikPtr->z
     );
-    pikPtr->setTimer(PIKMIN::PANIC_CHASE_INTERVAL);
+    scriptVM->setTimer(PIKMIN::PANIC_CHASE_INTERVAL);
 }
 
 
@@ -3992,9 +3988,9 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     if(!tooPtr) return;
     
     if(info1) {
-        tooPtr->setVar("gentle_release", "true");
+        tooPtr->scriptVM.setVar("gentle_release", "true");
     } else {
-        tooPtr->setVar("gentle_release", "false");
+        tooPtr->scriptVM.setVar("gentle_release", "false");
     }
     pikPtr->release(tooPtr);
     tooPtr->pos = pikPtr->pos;
@@ -4133,7 +4129,7 @@ void PikminFsm::sproutScheduleEvol(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    pikPtr->setTimer(pikPtr->pikType->sproutEvolutionTime[pikPtr->maturity]);
+    scriptVM->setTimer(pikPtr->pikType->sproutEvolutionTime[pikPtr->maturity]);
 }
 
 
@@ -4204,7 +4200,7 @@ void PikminFsm::startChasingLeader(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    pikPtr->focusOnMob(pikPtr->followingGroup);
+    scriptVM->focusOnMob(pikPtr->followingGroup);
     PikminFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
     pikPtr->setAnimation(
         pikPtr->getMobHeldInHand() ?
@@ -4228,7 +4224,7 @@ void PikminFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
-    pikPtr->focusOnMob(droPtr);
+    scriptVM->focusOnMob(droPtr);
     pikPtr->face(getAngle(pikPtr->pos, droPtr->pos), nullptr);
     pikPtr->setAnimation(PIKMIN_ANIM_DRINKING);
 }
@@ -4279,7 +4275,7 @@ void PikminFsm::startFlailing(ScriptVM* scriptVM, void* info1, void* info2) {
     //Let the Pikmin continue to swim into the water for a bit
     //before coming to a stop. Otherwise the Pikmin would stop nearly
     //on the edge of the water, and that just looks bad.
-    pikPtr->setTimer(1.0f);
+    scriptVM->setTimer(1.0f);
     
     pikPtr->setAnimation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
     pikPtr->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_SUFFERING]);
@@ -4461,7 +4457,7 @@ void PikminFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
-    pikPtr->focusOnMob(traPtr);
+    scriptVM->focusOnMob(traPtr);
     pikPtr->startHeightEffect();
     
     vector<size_t> checkpoints;
@@ -4571,7 +4567,7 @@ void PikminFsm::stopCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
     );
     
     pikPtr->carryingMob = nullptr;
-    pikPtr->setTimer(0);
+    scriptVM->setTimer(0);
 }
 
 
@@ -4593,7 +4589,7 @@ void PikminFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME);
-    pikPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }

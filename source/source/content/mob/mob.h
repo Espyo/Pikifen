@@ -360,8 +360,6 @@ public:
     );
     void setHealth(bool add, bool ratio, float amount);
     void setTeam(MOB_TEAM team);
-    void setTimer(float time);
-    void setVar(const string& name, const string& value);
     void setRadius(float radius);
     void setRectangularDim(const Point& rectangularDim);
     void setCanBlockPaths(bool blocks);
@@ -415,8 +413,6 @@ public:
     bool isOffCamera(const Viewport& viewport) const;
     bool isPointOn(const Point& p) const;
     bool isViableLeader(Mob* whom) const;
-    void focusOnMob(Mob* m);
-    void unfocusFromMob();
     void leaveGroup();
     void hold(
         Mob* m, HOLD_TYPE type, size_t hitboxIdx,
@@ -438,7 +434,6 @@ public:
     void storeMobInside(Mob* m);
     void releaseChompedPikmin();
     void releaseStoredMobs();
-    void sendScriptMessage(Mob* receiver, string& msg) const;
     Mob* spawn(const MobType::SpawnInfo* info, MobType* typePtr = nullptr);
     void startDying();
     void finishDying();

@@ -102,6 +102,17 @@ void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
 
 
 /**
+ * @brief Makes the script focus on the given mob.
+ *
+ * @param m2 The mob to focus on.
+ */
+void ScriptVM::focusOnMob(Mob* mob) {
+    unfocusFromMob();
+    focusedMob = mob;
+}
+
+
+/**
  * @brief Returns a string representing the values of all script vars,
  * formatted in a way that's friendly for the info maker tool.
  *
@@ -122,6 +133,28 @@ string ScriptVM::getMakerToolVarsStr() const {
     result = wordWrap(result, 98, 2);
     
     return result;
+}
+
+
+/**
+ * @brief Changes the timer's time and interval.
+ *
+ * @param time New time.
+ */
+void ScriptVM::setTimer(float time) {
+    timer.duration = time;
+    timer.start();
+}
+
+
+/**
+ * @brief Sets a script variable's value.
+ *
+ * @param name The variable's name.
+ * @param value The variable's new value.
+ */
+void ScriptVM::setVar(const string& name, const string& value) {
+    vars[name] = value;
 }
 
 
@@ -155,6 +188,14 @@ void ScriptVM::tick(float deltaT) {
     
     //Tick event.
     fsm.runEvent(FSM_EV_ON_TICK);
+}
+
+
+/**
+ * @brief Makes the script lose focus on its currently focused mob.
+ */
+void ScriptVM::unfocusFromMob() {
+    focusedMob = nullptr;
 }
 
 

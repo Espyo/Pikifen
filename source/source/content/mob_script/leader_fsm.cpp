@@ -1532,7 +1532,7 @@ void LeaderFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
     
     LeaderFsm::standStill(scriptVM, info1, info2);
     
-    leaPtr->focusOnMob(caller);
+    scriptVM->focusOnMob(caller);
     
     leaPtr->setAnimation(LEADER_ANIM_CALLED);
 }
@@ -1549,12 +1549,11 @@ void LeaderFsm::called(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::calledWhileKnockedDown(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
-    Leader* leaPtr = (Leader*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
     
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
-    leaPtr->focusOnMob(caller);
+    scriptVM->focusOnMob(caller);
 }
 
 
@@ -1574,7 +1573,7 @@ void LeaderFsm::checkBoredomAnimEnd(
     if(!leaPtr->inBoredAnimation) return;
     leaPtr->setAnimation(LEADER_ANIM_IDLING);
     leaPtr->inBoredAnimation = false;
-    leaPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -1637,9 +1636,7 @@ void LeaderFsm::clearBoredomData(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
-    Leader* leaPtr = (Leader*) scriptVM->mob;
-    
-    leaPtr->setTimer(0);
+    scriptVM->setTimer(0);
 }
 
 
@@ -1773,12 +1770,12 @@ void LeaderFsm::enterActive(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::enterIdle(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    leaPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
     leaPtr->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     
-    leaPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
@@ -1884,7 +1881,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     }
     
-    leaPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
 }
 
 
@@ -1956,7 +1953,7 @@ void LeaderFsm::finishShaking(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::getKnockedBack(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    leaPtr->unfocusFromMob();
+    scriptVM->unfocusFromMob();
     leaPtr->setAnimation(LEADER_ANIM_KNOCKED_BACK);
 }
 
@@ -1977,7 +1974,7 @@ void LeaderFsm::getKnockedDown(ScriptVM* scriptVM, void* info1, void* info2) {
     //it already received the getting up timer bonus.
     leaPtr->tempI = 0;
     
-    leaPtr->setTimer(leaPtr->leaType->knockedDownDuration);
+    scriptVM->setTimer(leaPtr->leaType->knockedDownDuration);
     
     leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
 }
@@ -2682,7 +2679,7 @@ void LeaderFsm::startChasingLeader(
 ) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    leaPtr->focusOnMob(leaPtr->followingGroup);
+    scriptVM->focusOnMob(leaPtr->followingGroup);
     LeaderFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
 }
 
@@ -2700,9 +2697,9 @@ void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->leaveGroup();
     leaPtr->stopChasing();
-    leaPtr->focusOnMob(droPtr);
     leaPtr->face(getAngle(leaPtr->pos, droPtr->pos), nullptr);
     leaPtr->setAnimation(LEADER_ANIM_DRINKING);
+    scriptVM->focusOnMob(droPtr);
 }
 
 
@@ -2795,8 +2792,8 @@ void LeaderFsm::startRidingTrack(ScriptVM* scriptVM, void* info1, void* info2) {
     LeaderFsm::dismiss(scriptVM, nullptr, nullptr);
     leaPtr->leaveGroup();
     leaPtr->stopChasing();
-    leaPtr->focusOnMob(traPtr);
     leaPtr->startHeightEffect();
+    scriptVM->focusOnMob(traPtr);
     
     vector<size_t> checkpoints;
     forIdx(c, traPtr->type->animDb->bodyParts) {
@@ -2908,7 +2905,7 @@ void LeaderFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->stopChasing();
     LeaderFsm::setIsWalkingFalse(scriptVM, nullptr, nullptr);
-    leaPtr->setTimer(
+    scriptVM->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }

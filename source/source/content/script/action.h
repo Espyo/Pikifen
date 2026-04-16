@@ -63,7 +63,7 @@ public:
     //If something went wrong in parsing it, this describes the error.
     string customError;
     
-    //Event the action belongs to.
+    //Event the action belongs to, if any.
     FSM_EV parentEvent = FSM_EV_UNKNOWN;
     
     
@@ -103,4 +103,37 @@ public:
     );
     void unload();
 
+};
+
+
+/**
+ * @brief Info about how to run a specific instance of a script action.
+ */
+struct ScriptActionInstRunData {
+
+    //--- Public members ---
+    
+    //Script VM under which the action will be run.
+    ScriptVM* scriptVM = nullptr;
+    
+    //Action definition information.
+    ScriptActionDef* actionDef = nullptr;
+    
+    //Arguments used.
+    vector<string> args;
+    
+    //Event custom data 1.
+    void* customData1 = nullptr;
+    
+    //Event custom data 2.
+    void* customData2 = nullptr;
+    
+    //Return value, if applicable.
+    bool returnValue = false;
+    
+    
+    //--- Public function declarations ---
+    
+    ScriptActionInstRunData(ScriptVM* scriptVM, ScriptActionDef* call);
+    
 };

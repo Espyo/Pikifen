@@ -419,6 +419,29 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         return false;
     }
     
+    //Check if this action is allowed in the current context.
+    string curContextName = scriptDef->mobType ? "object" : "area";
+    bool rightContext = true;
+    if(
+        scriptDef->mobType &&
+        !hasFlag(actionType->contexts, SCRIPT_CONTEXT_FLAG_MOB)
+    ) {
+        rightContext = false;
+    }
+    if(
+        !scriptDef->mobType &&
+        !hasFlag(actionType->contexts, SCRIPT_CONTEXT_FLAG_AREA)
+    ) {
+        rightContext = false;
+    }
+    if(!rightContext) {
+        game.errors.report(
+            "The action \"" + name + "\" can't be used in an " +
+            curContextName + " script context!", node
+        );
+        return false;
+    }
+    
     //Check if there are too many or too few arguments.
     size_t mandatoryParams = actionType->parameters.size();
     

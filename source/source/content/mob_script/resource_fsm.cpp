@@ -217,7 +217,7 @@ void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1, void* info2) {
     if(resPtr->resType->vanishDelay == 0) {
         ResourceFsm::vanish(scriptVM, info1, info2);
     } else {
-        resPtr->setTimer(resPtr->resType->vanishDelay);
+        scriptVM->setTimer(resPtr->resType->vanishDelay);
     }
 }
 
@@ -253,9 +253,7 @@ void ResourceFsm::handleReachDestination(
 void ResourceFsm::handleStartMoving(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
-    Resource* resPtr = (Resource*) scriptVM->mob;
-
-    resPtr->setTimer(0);
+    scriptVM->setTimer(0);
 }
 
 

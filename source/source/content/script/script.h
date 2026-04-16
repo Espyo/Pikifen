@@ -97,6 +97,10 @@ public:
     void init(ScriptDef* scriptDef, Mob* mobPtr = nullptr);
     void tick(float deltaT);
     void clear();
+    void focusOnMob(Mob* m);
+    void unfocusFromMob();
+    void setTimer(float time);
+    void setVar(const string& name, const string& value);
     string getMakerToolVarsStr() const;
     
 };

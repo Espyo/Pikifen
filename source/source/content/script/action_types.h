@@ -21,6 +21,7 @@ class Mob;
 class MobType;
 class ScriptActionDef;
 class ScriptVM;
+struct ScriptActionInstRunData;
 
 
 //Types of script action.
@@ -692,6 +693,18 @@ enum SCRIPT_ACTION_PARAM {
 };
 
 
+//Contexts in which a script can run.
+enum SCRIPT_CONTEXT_FLAG {
+
+    //Mob script.
+    SCRIPT_CONTEXT_FLAG_MOB = 1 << 0,
+    
+    //Area script.
+    SCRIPT_CONTEXT_FLAG_AREA = 1 << 1,
+    
+};
+
+
 #pragma endregion
 #pragma region Classes
 
@@ -728,44 +741,12 @@ struct ScriptActionTypeParam {
 
 
 /**
- * @brief Info about how to run a specific instance of a script action.
- */
-struct ScriptActionInstRunData {
-
-    //--- Public members ---
-    
-    //Script VM under which the action will be run.
-    ScriptVM* scriptVM = nullptr;
-    
-    //Action definition information.
-    ScriptActionDef* actionDef = nullptr;
-    
-    //Arguments used.
-    vector<string> args;
-    
-    //Event custom data 1.
-    void* customData1 = nullptr;
-    
-    //Event custom data 2.
-    void* customData2 = nullptr;
-    
-    //Return value, if applicable.
-    bool returnValue = false;
-    
-    
-    //--- Public function declarations ---
-    
-    ScriptActionInstRunData(ScriptVM* scriptVM, ScriptActionDef* call);
-    
-};
-
-
-/**
  * @brief Function that runs a script action instance's logic.
  *
  * The first parameter is the data to run with.
  */
 typedef void (ScriptActionTypeCode)(ScriptActionInstRunData& data);
+
 
 /**
  * @brief Function to run when a script action instance is loaded
@@ -801,6 +782,9 @@ struct ScriptActionType {
     
     //Parameters that it can take.
     vector<ScriptActionTypeParam> parameters;
+    
+    //Contexts in which it can be run. Use SCRIPT_CONTEXT_FLAG.
+    Bitmask8 contexts = 0;
     
 };
 

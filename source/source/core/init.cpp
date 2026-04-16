@@ -1220,11 +1220,12 @@ void initMobCategories() {
 void initScriptActionTypes() {
     game.scriptActionTypes.assign(N_SCRIPT_ACTIONS, ScriptActionType());
     vector<ScriptActionTypeParam> params;
+    Bitmask8 contexts = 0;
     
     auto queueParam =
-    [&params] (
-        const string& paramName, SCRIPT_ACTION_PARAM paramType,
-        bool paramForceConst, bool paramIsExtras
+        [&params] (
+            const string& paramName, SCRIPT_ACTION_PARAM paramType,
+            bool paramForceConst, bool paramIsExtras
     ) {
         params.push_back(
             ScriptActionTypeParam(
@@ -1232,12 +1233,12 @@ void initScriptActionTypes() {
             )
         );
     };
-
+    
     auto commitAction =
-    [&params] (
-        SCRIPT_ACTION actionType, const string& actionName,
-        ScriptActionTypeCode* actionRunCode,
-        ScriptActionTypeLoadCode* actionLoadCode
+        [&params, &contexts] (
+            SCRIPT_ACTION actionType, const string& actionName,
+            ScriptActionTypeCode * actionRunCode,
+            ScriptActionTypeLoadCode * actionLoadCode
     ) {
         ScriptActionType* actionTypePtr;
         actionTypePtr = &(game.scriptActionTypes[actionType]);
@@ -1246,10 +1247,16 @@ void initScriptActionTypes() {
         actionTypePtr->code = actionRunCode;
         actionTypePtr->extraLoadLogic = actionLoadCode;
         actionTypePtr->parameters = params;
+        actionTypePtr->contexts = contexts;
         params.clear();
     };
-
-
+    
+    
+    //-Global actions-
+    contexts =
+        SCRIPT_CONTEXT_FLAG_MOB |
+        SCRIPT_CONTEXT_FLAG_AREA;
+        
     //Unknown.
     commitAction(
         SCRIPT_ACTION_UNKNOWN,
@@ -1599,6 +1606,9 @@ void initScriptActionTypes() {
         nullptr
     );
     
+    
+    //-Mob script actions-
+    contexts = SCRIPT_CONTEXT_FLAG_MOB;
     
     //Add health.
     queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);

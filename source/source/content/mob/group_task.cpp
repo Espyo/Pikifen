@@ -108,7 +108,7 @@ void GroupTask::addWorker(Pikmin* who) {
     
     if(!hadGoal && power >= powerGoal) {
         string msg = "goal_reached";
-        who->sendScriptMessage(this, msg);
+        game.states.gameplay->sendScriptMessage(who, this, msg);
     }
 }
 
@@ -176,7 +176,7 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
         
         if(hadGoal && power < powerGoal) {
             string msg = "goal_lost";
-            whose->sendScriptMessage(this, msg);
+            game.states.gameplay->sendScriptMessage(whose, this, msg);
         }
     }
 }

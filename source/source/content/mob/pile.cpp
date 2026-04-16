@@ -53,7 +53,7 @@ void Pile::changeAmount(int change) {
     
     if(change > 0) {
         string grownResourceMsg = "grown_resource";
-        sendScriptMessage(this, grownResourceMsg);
+        game.states.gameplay->sendScriptMessage(this, this, grownResourceMsg);
     }
 }
 

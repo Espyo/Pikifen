@@ -729,7 +729,7 @@ void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
     
     if(!target) return;
     
-    data.scriptVM->mob->focusOnMob(target);
+    data.scriptVM->focusOnMob(target);
 }
 
 
@@ -995,10 +995,12 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
             data.actionDef->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
-            *var =
-                data.scriptVM->mob->getClosestHitbox(
-                    ((Mob*)(data.customData1))->pos
-                )->bodyPartName;
+            if(data.scriptVM->mob) {
+                *var =
+                    data.scriptVM->mob->getClosestHitbox(
+                        ((Mob*)(data.customData1))->pos
+                    )->bodyPartName;
+            }
         }
         break;
         
@@ -1057,10 +1059,12 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
             data.actionDef->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
-            *var =
-                ((Mob*)(data.customData1))->getClosestHitbox(
-                    data.scriptVM->mob->pos
-                )->bodyPartName;
+            if(data.customData1 && data.scriptVM->mob) {
+                *var =
+                    ((Mob*)(data.customData1))->getClosestHitbox(
+                        data.scriptVM->mob->pos
+                    )->bodyPartName;
+            }
         }
         break;
         
@@ -1332,7 +1336,7 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->mob->focusOnMob(
+    data.scriptVM->focusOnMob(
         data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])]
     );
 }
@@ -1481,7 +1485,7 @@ void ScriptActionRunners::orderRelease(ScriptActionInstRunData& data) {
 void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
     size_t soundId = data.scriptVM->mob->playSound(s2i(data.args[0]));
     if(data.args.size() >= 2) {
-        data.scriptVM->mob->setVar(data.args[1], i2s(soundId));
+        data.scriptVM->setVar(data.args[1], i2s(soundId));
     }
 }
 
@@ -1500,9 +1504,12 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
         resizeString(i2s(centiseconds), 2, true, true, true, '0');
         
     string scriptText = vectorTailToString(data.args, 0);
+    string speaker =
+        data.scriptVM->mob ?
+        data.scriptVM->mob->type->name :
+        "Area";
     game.states.gameplay->printActionLogLines.push_back(
-        "[@" + timestamp + "s " +
-        data.scriptVM->mob->type->name + " said:] " + scriptText
+        "[@" + timestamp + "s " + speaker + " said:] " + scriptText
     );
     if(game.states.gameplay->printActionLogLines.size() > 10) {
         game.states.gameplay->printActionLogLines.erase(
@@ -1515,7 +1522,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
         log += "\n" + game.states.gameplay->printActionLogLines[l];
     }
     
-    game.console.write("=== DEBUG MOB SCRIPT PRINTS ===" + log, 15.0f);
+    game.console.write("=== DEBUG SCRIPT PRINTS ===" + log, 15.0f);
 }
 
 
@@ -1602,8 +1609,8 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
     if(!data.scriptVM->focusedMob) return;
-    data.scriptVM->mob->sendScriptMessage(
-        data.scriptVM->focusedMob, data.args[0]
+    game.states.gameplay->sendScriptMessage(
+        data.scriptVM->mob, data.scriptVM->focusedMob, data.args[0]
     );
 }
 
@@ -1617,8 +1624,8 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
     forIdx(l, data.scriptVM->mob->links) {
         if(data.scriptVM->mob->links[l] == data.scriptVM->mob) continue;
         if(!data.scriptVM->mob->links[l]) continue;
-        data.scriptVM->mob->sendScriptMessage(
-            data.scriptVM->mob->links[l], data.args[0]
+        game.states.gameplay->sendScriptMessage(
+            data.scriptVM->mob, data.scriptVM->mob->links[l], data.args[0]
         );
     }
 }
@@ -1645,8 +1652,8 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
             continue;
         }
         
-        data.scriptVM->mob->sendScriptMessage(
-            game.states.gameplay->mobs.all[m2], data.args[1]
+        game.states.gameplay->sendScriptMessage(
+            data.scriptVM->mob, game.states.gameplay->mobs.all[m2], data.args[1]
         );
     }
 }
@@ -1924,7 +1931,7 @@ void ScriptActionRunners::setTeam(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setTimer(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setTimer(s2f(data.args[0]));
+    data.scriptVM->setTimer(s2f(data.args[0]));
 }
 
 
@@ -1934,7 +1941,7 @@ void ScriptActionRunners::setTimer(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setVar(data.args[0], data.args[1]);
+    data.scriptVM->setVar(data.args[0], data.args[1]);
 }
 
 
@@ -2380,12 +2387,16 @@ Mob* getTargetMob(
         return getTriggerMob(data);
         break;
     } case SCRIPT_ACTION_MOB_TARGET_TYPE_LINK: {
-        if(!data.scriptVM->mob->links.empty() && data.scriptVM->mob->links[0]) {
+        if(
+            data.scriptVM->mob &&
+            !data.scriptVM->mob->links.empty() &&
+            data.scriptVM->mob->links[0]
+        ) {
             return data.scriptVM->mob->links[0];
         }
         break;
     } case SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT: {
-        if(data.scriptVM->mob->parent) {
+        if(data.scriptVM->mob && data.scriptVM->mob->parent) {
             return data.scriptVM->mob->parent->m;
         }
         break;

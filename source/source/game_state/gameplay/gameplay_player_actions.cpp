@@ -342,8 +342,8 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             player->closeToInteractableToUse
         ) {
             string msg = "interact";
-            player->leaderPtr->sendScriptMessage(
-                player->closeToInteractableToUse, msg
+            game.states.gameplay->sendScriptMessage(
+                player->leaderPtr, player->closeToInteractableToUse, msg
             );
             done = true;
         }
@@ -517,14 +517,16 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     Player* player = &players[0];
     bool isDown = (action.value >= 0.5);
     
-    //Before we do the actions, we'll tell the leader object
+    //Before we do the actions, we'll tell the leader object and the area script
     //it's received an input, which will trigger an event.
     if(player->leaderPtr) {
         player->leaderPtr->scriptVM.fsm.runEvent(
-            MOB_EV_INPUT_RECEIVED,
-            (void*) &action
+            MOB_EV_INPUT_RECEIVED, (void*) &action
         );
     }
+    game.states.gameplay->scriptVM.fsm.runEvent(
+        MOB_EV_INPUT_RECEIVED, (void*) &action
+    );
     
     if(!msgBox && !onionMenu && !pauseMenu) {
         switch(action.actionTypeId) {

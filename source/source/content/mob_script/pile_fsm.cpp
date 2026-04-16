@@ -143,7 +143,9 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         }
         
         string droppedResourceMsg = "dropped_resource";
-        pilPtr->sendScriptMessage(pilPtr, droppedResourceMsg);
+        game.states.gameplay->sendScriptMessage(
+            pilPtr, pilPtr, droppedResourceMsg
+        );
     }
     
     if(pikminToStartCarrying) {

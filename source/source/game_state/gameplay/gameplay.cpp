@@ -1629,6 +1629,23 @@ void GameplayState::loadGameContent() {
 
 
 /**
+ * @brief Sends a script message to a mob. This calls the mob's
+ * "message received" event, with the message as data.
+ *
+ * @param sender Mob that sent the message, if any.
+ * @param receiver Mob that will receive the message.
+ * @param msg The message.
+ */
+void GameplayState::sendScriptMessage(
+    Mob* sender, Mob* receiver, string& msg
+) const {
+    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
+    if(!ev) return;
+    ev->run(&receiver->scriptVM, (void*) &msg, (void*) sender);
+}
+
+
+/**
  * @brief Shows the pop-up about an inventory item update or usage to every
  * player in a team.
  *

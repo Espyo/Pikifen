@@ -225,7 +225,7 @@ void Onion::startGenerating() {
     generationDelayTimer.stop();
     nextGenerationTimer.start();
     string msg = "started_generation";
-    sendScriptMessage(this, msg);
+    game.states.gameplay->sendScriptMessage(this, this, msg);
 }
 
 
@@ -236,7 +236,7 @@ void Onion::stopGenerating() {
     generationDelayTimer.stop();
     nextGenerationTimer.stop();
     string msg = "stopped_generation";
-    sendScriptMessage(this, msg);
+    game.states.gameplay->sendScriptMessage(this, this, msg);
 }
 
 

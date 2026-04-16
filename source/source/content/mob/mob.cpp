@@ -1421,7 +1421,7 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
         true, HOLD_ROTATION_METHOD_NEVER
     );
     
-    m->focusOnMob(this);
+    m->scriptVM.focusOnMob(this);
     chompingMobs.push_back(m);
 }
 
@@ -1905,17 +1905,6 @@ void Mob::finishDying() {
  * This function is meant to be overridden by child classes.
  */
 void Mob::finishDyingClassSpecifics() {
-}
-
-
-/**
- * @brief Makes the mob focus on m2.
- *
- * @param m2 The mob to focus on.
- */
-void Mob::focusOnMob(Mob* m2) {
-    unfocusFromMob();
-    scriptVM.focusedMob = m2;
 }
 
 
@@ -3345,20 +3334,6 @@ void Mob::respawn() {
 
 
 /**
- * @brief Sends a script message to another mob. This calls the mob's
- * "message received" event, with the message as data.
- *
- * @param receiver Mob that will receive the message.
- * @param msg The message.
- */
-void Mob::sendScriptMessage(Mob* receiver, string& msg) const {
-    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
-    if(!ev) return;
-    ev->run(&receiver->scriptVM, (void*) &msg, (void*) this);
-}
-
-
-/**
  * @brief Sets the mob's animation.
  *
  * @param idx Animation index.
@@ -3543,28 +3518,6 @@ void Mob::setTeam(MOB_TEAM team) {
     }
     scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
     scriptVM.focusedMob = nullptr;
-}
-
-
-/**
- * @brief Changes the timer's time and interval.
- *
- * @param time New time.
- */
-void Mob::setTimer(float time) {
-    scriptVM.timer.duration = time;
-    scriptVM.timer.start();
-}
-
-
-/**
- * @brief Sets a script variable's value.
- *
- * @param name The variable's name.
- * @param value The variable's new value.
- */
-void Mob::setVar(const string& name, const string& value) {
-    scriptVM.vars[name] = value;
 }
 
 
@@ -4679,14 +4632,6 @@ bool Mob::tickTrackRide() {
     face(destAngle, nullptr);
     
     return false;
-}
-
-
-/**
- * @brief Makes the mob lose focus on its currently focused mob.
- */
-void Mob::unfocusFromMob() {
-    scriptVM.focusedMob = nullptr;
 }
 
 

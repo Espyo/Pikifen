@@ -402,7 +402,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* staType) {
         scriptVM.fsm.setState(PIKMIN_STATE_IDLING);
         setAnimation(PIKMIN_ANIM_SHAKING);
         inShakingAnimation = true;
-        setTimer(0); //The boredom animation timeout.
+        scriptVM.setTimer(0); //The boredom animation timeout.
         PikminFsm::standStill(&scriptVM, nullptr, nullptr);
         invulnPeriod.start();
     }

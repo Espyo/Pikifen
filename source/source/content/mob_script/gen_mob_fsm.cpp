@@ -528,7 +528,7 @@ void GenMobFsm::startBeingDelivered(
         scriptVM->mob->deliveryInfo->animType = oniPtr->oniType->deliveryAnim;
     }
     
-    scriptVM->mob->focusOnMob(scriptVM->mob->carryInfo->intendedMob);
+    scriptVM->focusOnMob(scriptVM->mob->carryInfo->intendedMob);
     enableFlag(scriptVM->mob->flags, MOB_FLAG_INTANGIBLE);
     scriptVM->mob->becomeUncarriable();
     
@@ -538,11 +538,11 @@ void GenMobFsm::startBeingDelivered(
     
     switch(scriptVM->mob->deliveryInfo->animType) {
     case DELIVERY_ANIM_SUCK: {
-        scriptVM->mob->setTimer(MOB::DELIVERY_SUCK_TIME);
+        scriptVM->setTimer(MOB::DELIVERY_SUCK_TIME);
         break;
     }
     case DELIVERY_ANIM_TOSS: {
-        scriptVM->mob->setTimer(MOB::DELIVERY_TOSS_TIME);
+        scriptVM->setTimer(MOB::DELIVERY_TOSS_TIME);
         break;
     }
     }

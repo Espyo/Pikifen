@@ -5,10 +5,11 @@
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
         Add it to the layout area editor state
+        Select some vertexes, drag center with Shift, with Shift still held zoom out, keep dragging = they start growing
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
-        Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, etc.
+        Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob, path stop, path link
         Some selected things become solid yellow, others an oscillating yellow, others no yellow
         Bring back the double-click+drag feature when creating a new mob, path stop, etc.
@@ -42,6 +43,9 @@ Next tasks (roughly sorted most important first)
         What upgrades are on
     Global script and script variables, which apply to the whole area
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
+        A way for the area script to focus on some mobs
+        A way for objects to send messages to the area
+        A button in the area editor that creates/opens the script file externally?
     
     --- 2.0.0 ---
     Floors-over-floors; mostly for bridges
@@ -961,7 +965,7 @@ Tasks for later on (I might never implement these)
         Allowing a mob to run an action on behalf of another mob
             Not really workable since when the script is compiled at load, anything involving arguments can only be compiled from the runner's point of view, not the caster's, so it'll be impossible to compile the script actions of the caster
             Plus, anything involving script variables, states, focuses, and so on will just lead to endless spaghetti for the engine and for the script maker
-        Action groups for mob scripts (like functions)
+        Action groups for scripts (like functions)
             Not really necessary since you can just create an aux state to do those
         Optimize the Armored Cannon Beetle's spritesheet, ever since its inhale sprites stopped using drawn lines and started using dust particles
         Fade some HUD items (or all?) when the mouse is on them? Would this be useful?
