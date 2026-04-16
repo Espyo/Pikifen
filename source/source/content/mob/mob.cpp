@@ -1915,7 +1915,7 @@ void Mob::finishDyingClassSpecifics() {
  */
 void Mob::focusOnMob(Mob* m2) {
     unfocusFromMob();
-    focusedMob = m2;
+    scriptVM.focusedMob = m2;
 }
 
 
@@ -2303,7 +2303,7 @@ size_t Mob::getLatchedPikminAmount() const {
     size_t total = 0;
     forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
-        if(pPtr->focusedMob != this) continue;
+        if(pPtr->scriptVM.focusedMob != this) continue;
         if(pPtr->holder.m != this) continue;
         if(!pPtr->latched) continue;
         total++;
@@ -2322,7 +2322,7 @@ float Mob::getLatchedPikminWeight() const {
     float total = 0;
     forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
-        if(pPtr->focusedMob != this) continue;
+        if(pPtr->scriptVM.focusedMob != this) continue;
         if(pPtr->holder.m != this) continue;
         if(!pPtr->latched) continue;
         total += pPtr->type->weight;
@@ -2597,8 +2597,7 @@ void Mob::getSpriteBitmapEffects(
     //Being delivered.
     if(
         hasFlag(effects, SPRITE_BMP_EFFECT_DELIVERY) &&
-        deliveryInfo &&
-        focusedMob
+        deliveryInfo && scriptVM.focusedMob
     ) {
         switch(deliveryInfo->animType) {
         case DELIVERY_ANIM_SUCK: {
@@ -2647,10 +2646,13 @@ void Mob::getSpriteBitmapEffects(
                     );
                 newScale = ease(newScale, EASE_METHOD_OUT);
                 
-                Point targetPos = focusedMob->pos;
+                Point targetPos = scriptVM.focusedMob->pos;
                 
-                if(focusedMob->type->category->id == MOB_CATEGORY_SHIPS) {
-                    Ship* shiPtr = (Ship*) focusedMob;
+                if(
+                    scriptVM.focusedMob->type->category->id ==
+                    MOB_CATEGORY_SHIPS
+                ) {
+                    Ship* shiPtr = (Ship*) scriptVM.focusedMob;
                     targetPos = shiPtr->receptacleFinalPos;
                 }
                 
@@ -3528,13 +3530,19 @@ void Mob::setTeam(MOB_TEAM team) {
     //Likewise, the mob itself probably needs to regain focus.
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
-        if(mPtr->focusedMob == this) {
+        if(mPtr->scriptVM.focusedMob == this) {
             mPtr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-            mPtr->focusedMob = nullptr;
+            mPtr->scriptVM.focusedMob = nullptr;
         }
     }
+    if(game.states.gameplay->scriptVM.focusedMob == this) {
+        game.states.gameplay->scriptVM.fsm.runEvent(
+            MOB_EV_FOCUSED_MOB_UNAVAILABLE
+        );
+        game.states.gameplay->scriptVM.focusedMob = nullptr;
+    }
     scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-    focusedMob = nullptr;
+    scriptVM.focusedMob = nullptr;
 }
 
 
@@ -4490,35 +4498,22 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Check the focused mob.
-    if(focusedMob) {
-    
-        if(focusedMob->health <= 0) {
-            scriptVM.fsm.runEvent(MOB_EV_FOCUS_DIED);
-            scriptVM.fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
-        }
+    if(scriptVM.focusedMob) {
+        Mob* focus = scriptVM.focusedMob;
+        FsmEventDef* forEv = scriptVM.fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
         
-        //We have to recheck if the focused mob is not nullptr, because
-        //sending MOB_EV_FOCUS_DIED could've set this to nullptr.
-        if(focusedMob) {
-        
-            Mob* focus = focusedMob;
-            FsmEventDef* forEv = scriptVM.fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
-            
-            if(farReach != INVALID && forEv) {
-                float angleToFocus = getAngle(pos, focus->pos);
-                if(
-                    !isMobInReach(
-                        &type->reaches[farReach],
-                        getDistanceBetween(focusedMob),
-                        getAngleSmallestDiff(angle, angleToFocus)
-                    )
-                ) {
-                    forEv->run(&scriptVM);
-                }
-                
+        if(farReach != INVALID && forEv) {
+            float angleToFocus = getAngle(pos, focus->pos);
+            if(
+                !isMobInReach(
+                    &type->reaches[farReach],
+                    getDistanceBetween(scriptVM.focusedMob),
+                    getAngleSmallestDiff(angle, angleToFocus)
+                )
+            ) {
+                forEv->run(&scriptVM);
             }
         }
-        
     }
     
     //Itch event.
@@ -4691,7 +4686,7 @@ bool Mob::tickTrackRide() {
  * @brief Makes the mob lose focus on its currently focused mob.
  */
 void Mob::unfocusFromMob() {
-    focusedMob = nullptr;
+    scriptVM.focusedMob = nullptr;
 }
 
 

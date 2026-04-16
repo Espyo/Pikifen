@@ -1088,9 +1088,9 @@ void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) return;
+    if(!data.scriptVM->focusedMob) return;
     data.scriptVM->vars[data.args[0]] =
-        data.scriptVM->mob->focusedMob->scriptVM.vars[data.args[1]];
+        data.scriptVM->focusedMob->scriptVM.vars[data.args[1]];
 }
 
 
@@ -1120,9 +1120,10 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
-        if(target->focusedMob) {
+        if(target->scriptVM.focusedMob) {
             float d =
-                Distance(target->pos, target->focusedMob->pos).toFloat();
+                Distance(target->pos, target->scriptVM.focusedMob->pos).
+                toFloat();
             *var = f2s(d);
         }
         break;
@@ -1224,9 +1225,9 @@ void ScriptActionRunners::getRandomInt(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
-    if(data.scriptVM->mob->focusedMob) {
+    if(data.scriptVM->focusedMob) {
         data.scriptVM->mob->hold(
-            data.scriptVM->mob->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
+            data.scriptVM->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
             s2i(data.args[0]), 0.0f, 0.0f, 0.5f,
             data.args.size() >= 2 ? s2b(data.args[1]) : false,
             HOLD_ROTATION_METHOD_COPY_HOLDER
@@ -1306,18 +1307,18 @@ void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::linkWithFocus(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) {
+    if(!data.scriptVM->focusedMob) {
         return;
     }
     
     forIdx(l, data.scriptVM->mob->links) {
-        if(data.scriptVM->mob->links[l] == data.scriptVM->mob->focusedMob) {
+        if(data.scriptVM->mob->links[l] == data.scriptVM->focusedMob) {
             //Already linked.
             return;
         }
     }
     
-    data.scriptVM->mob->links.push_back(data.scriptVM->mob->focusedMob);
+    data.scriptVM->mob->links.push_back(data.scriptVM->focusedMob);
 }
 
 
@@ -1380,11 +1381,11 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     
     switch(t) {
     case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
-        if(data.scriptVM->mob->focusedMob) {
+        if(data.scriptVM->focusedMob) {
             float a =
                 getAngle(
                     data.scriptVM->mob->pos,
-                    data.scriptVM->mob->focusedMob->pos
+                    data.scriptVM->focusedMob->pos
                 );
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
@@ -1399,10 +1400,10 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         break;
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS: {
-        if(data.scriptVM->mob->focusedMob) {
+        if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
-                &data.scriptVM->mob->focusedMob->pos,
-                &data.scriptVM->mob->focusedMob->z,
+                &data.scriptVM->focusedMob->pos,
+                &data.scriptVM->focusedMob->z,
                 Point(), 0.0f,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
@@ -1412,10 +1413,10 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         break;
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
-        if(data.scriptVM->mob->focusedMob) {
+        if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
-                data.scriptVM->mob->focusedMob->pos,
-                data.scriptVM->mob->focusedMob->z,
+                data.scriptVM->focusedMob->pos,
+                data.scriptVM->focusedMob->z,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1585,12 +1586,12 @@ void ScriptActionRunners::roundNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) {
+    if(!data.scriptVM->focusedMob) {
         return;
     }
     
     data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])] =
-        data.scriptVM->mob->focusedMob;
+        data.scriptVM->focusedMob;
 }
 
 
@@ -1600,9 +1601,9 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) return;
+    if(!data.scriptVM->focusedMob) return;
     data.scriptVM->mob->sendScriptMessage(
-        data.scriptVM->mob->focusedMob, data.args[0]
+        data.scriptVM->focusedMob, data.args[0]
     );
 }
 
@@ -1715,8 +1716,8 @@ void ScriptActionRunners::setFlying(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setFocusVar(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) return;
-    data.scriptVM->mob->focusedMob->scriptVM.vars[data.args[0]] = data.args[1];
+    if(!data.scriptVM->focusedMob) return;
+    data.scriptVM->focusedMob->scriptVM.vars[data.args[0]] = data.args[1];
 }
 
 
@@ -2156,10 +2157,10 @@ void ScriptActionRunners::stopVertically(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
     if(
-        data.scriptVM->mob->focusedMob &&
-        !data.scriptVM->mob->focusedMob->isStoredInsideMob()
+        data.scriptVM->focusedMob &&
+        !data.scriptVM->focusedMob->isStoredInsideMob()
     ) {
-        data.scriptVM->mob->storeMobInside(data.scriptVM->mob->focusedMob);
+        data.scriptVM->mob->storeMobInside(data.scriptVM->focusedMob);
     }
 }
 
@@ -2227,12 +2228,12 @@ void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
-    if(!data.scriptVM->mob->focusedMob) {
+    if(!data.scriptVM->focusedMob) {
         return;
     }
     
-    if(data.scriptVM->mob->focusedMob->holder.m == data.scriptVM->mob) {
-        data.scriptVM->mob->release(data.scriptVM->mob->focusedMob);
+    if(data.scriptVM->focusedMob->holder.m == data.scriptVM->mob) {
+        data.scriptVM->mob->release(data.scriptVM->focusedMob);
     }
     
     float maxHeight = s2f(data.args[3]);
@@ -2244,11 +2245,11 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
     
     data.scriptVM->mob->startHeightEffect();
     calculateThrow(
-        data.scriptVM->mob->focusedMob->pos, data.scriptVM->mob->focusedMob->z,
+        data.scriptVM->focusedMob->pos, data.scriptVM->focusedMob->z,
         Point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
         maxHeight, MOB::GRAVITY_ADDER,
-        &data.scriptVM->mob->focusedMob->speed,
-        &data.scriptVM->mob->focusedMob->speedZ,
+        &data.scriptVM->focusedMob->speed,
+        &data.scriptVM->focusedMob->speedZ,
         nullptr
     );
 }
@@ -2313,8 +2314,8 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         break;
         
     } case MOB_ACTION_TURN_TYPE_FOCUSED_MOB: {
-        if(data.scriptVM->mob->focusedMob) {
-            data.scriptVM->mob->face(0, &data.scriptVM->mob->focusedMob->pos);
+        if(data.scriptVM->focusedMob) {
+            data.scriptVM->mob->face(0, &data.scriptVM->focusedMob->pos);
         }
         break;
         
@@ -2373,7 +2374,7 @@ Mob* getTargetMob(
         return data.scriptVM->mob;
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_FOCUS: {
-        return data.scriptVM->mob->focusedMob;
+        return data.scriptVM->focusedMob;
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_TRIGGER: {
         return getTriggerMob(data);

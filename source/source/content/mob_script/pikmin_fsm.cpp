@@ -2321,7 +2321,7 @@ void PikminFsm::beThrownAfterPluck(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    float throwAngle = getAngle(pikPtr->pos, pikPtr->focusedMob->pos);
+    float throwAngle = getAngle(pikPtr->pos, scriptVM->focusedMob->pos);
     pikPtr->speedZ = PIKMIN::THROW_VER_SPEED;
     pikPtr->speed = angleToCoordinates(throwAngle, PIKMIN::THROW_HOR_SPEED);
     pikPtr->face(throwAngle + TAU / 2.0f, nullptr, true);
@@ -2622,8 +2622,8 @@ void PikminFsm::circleOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     
     bool goCw = game.rng.f(0.0f, 1.0f) <= 0.5f;
     pikPtr->circleAround(
-        pikPtr->focusedMob, Point(),
-        pikPtr->focusedMob->radius + pikPtr->radius, goCw,
+        scriptVM->focusedMob, Point(),
+        scriptVM->focusedMob->radius + pikPtr->radius, goCw,
         pikPtr->getBaseSpeed(), true
     );
     
@@ -2674,7 +2674,7 @@ void PikminFsm::clearTimer(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!pikPtr->focusedMob) return;
+    if(!scriptVM->focusedMob) return;
     
     if(pikPtr->invulnPeriod.timeLeft > 0) {
         //Don't let the Pikmin attack while invulnerable. Otherwise, this can
@@ -2692,20 +2692,20 @@ void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     
     bool canCircle =
         scriptVM->fsm.curState->id != PIKMIN_STATE_CIRCLING_OPPONENT &&
-        pikPtr->focusedMob->type->category->id == MOB_CATEGORY_ENEMIES;
+        scriptVM->focusedMob->type->category->id == MOB_CATEGORY_ENEMIES;
         
     switch(pikPtr->pikType->attackMethod) {
     case PIKMIN_ATTACK_LATCH: {
         //This Pikmin latches on to things and/or smacks with its top.
         Distance d;
         Hitbox* closestH =
-            pikPtr->focusedMob->getClosestHitbox(
+            scriptVM->focusedMob->getClosestHitbox(
                 pikPtr->pos, HITBOX_TYPE_NORMAL, &d
             );
         float hZ = 0;
         
         if(closestH) {
-            hZ = closestH->z + pikPtr->focusedMob->z;
+            hZ = closestH->z + scriptVM->focusedMob->z;
         }
         
         if(
@@ -2741,7 +2741,7 @@ void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
                 scriptVM->fsm.setState(PIKMIN_STATE_CIRCLING_OPPONENT);
             } else {
                 //Latch on.
-                pikPtr->latch(pikPtr->focusedMob, closestH);
+                pikPtr->latch(scriptVM->focusedMob, closestH);
                 scriptVM->fsm.setState(PIKMIN_STATE_ATTACKING_LATCHED);
             }
             
@@ -2787,21 +2787,21 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
     float impactAngle = 0.0f;
     float impactSpeed = 0.0f;
     
-    if(pikPtr->focusedMob) {
-        if(pikPtr->focusedMob->rectangularDim.x != 0) {
+    if(scriptVM->focusedMob) {
+        if(scriptVM->focusedMob->rectangularDim.x != 0) {
             impactAngle =
                 getAngle(
                     getClosestPointInRotatedRectangle(
                         pikPtr->pos,
-                        pikPtr->focusedMob->pos,
-                        pikPtr->focusedMob->rectangularDim,
-                        pikPtr->focusedMob->angle,
+                        scriptVM->focusedMob->pos,
+                        scriptVM->focusedMob->rectangularDim,
+                        scriptVM->focusedMob->angle,
                         nullptr
                     ),
                     pikPtr->pos
                 );
         } else {
-            impactAngle = getAngle(pikPtr->focusedMob->pos, pikPtr->pos);
+            impactAngle = getAngle(scriptVM->focusedMob->pos, pikPtr->pos);
         }
         impactSpeed = 200.0f;
     }
@@ -2826,10 +2826,10 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void PikminFsm::enterOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
-    Onion* oniPtr = (Onion*) pikPtr->focusedMob;
+    Onion* oniPtr = (Onion*) scriptVM->focusedMob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2872,7 +2872,7 @@ void PikminFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Mob* leaPtr = pikPtr->focusedMob;
+    Mob* leaPtr = scriptVM->focusedMob;
     bool pikIsHolding = pikPtr->getMobHeldInHand();
     
     if(leaPtr) {
@@ -2937,10 +2937,10 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    Drop* droPtr = (Drop*) pikPtr->focusedMob;
+    Drop* droPtr = (Drop*) scriptVM->focusedMob;
     
     switch(droPtr->droType->effect) {
     case DROP_EFFECT_MATURATE: {
@@ -2984,7 +2984,7 @@ void PikminFsm::finishDying(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Mob* prevFocusedMob = pikPtr->focusedMob;
+    Mob* prevFocusedMob = scriptVM->focusedMob;
     
     scriptVM->fsm.setState(PIKMIN_STATE_IDLING);
     
@@ -3017,7 +3017,7 @@ void PikminFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::finishMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!pikPtr->focusedMob) {
+    if(!scriptVM->focusedMob) {
         //The mob has died or vanished since the Pikmin first landed.
         //Return to idle.
         scriptVM->fsm.setState(PIKMIN_STATE_IDLING);
@@ -3049,7 +3049,7 @@ void PikminFsm::finishMobLanding(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Tool* tooPtr = (Tool*) (pikPtr->focusedMob);
+    Tool* tooPtr = (Tool*) (scriptVM->focusedMob);
     
     if(!hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
         scriptVM->fsm.setState(PIKMIN_STATE_IDLING);
@@ -3117,12 +3117,12 @@ void PikminFsm::forgetCarriableObject(
 void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!pikPtr->focusedMob) return;
-    if(pikPtr->focusedMob->type->category->id != MOB_CATEGORY_GROUP_TASKS) {
+    if(!scriptVM->focusedMob) return;
+    if(scriptVM->focusedMob->type->category->id != MOB_CATEGORY_GROUP_TASKS) {
         return;
     }
     
-    GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
+    GroupTask* tasPtr = (GroupTask*) (scriptVM->focusedMob);
     tasPtr->freeUpSpot(pikPtr);
     pikPtr->unfocusFromMob();
 }
@@ -3138,9 +3138,9 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!pikPtr->focusedMob) return;
+    if(!scriptVM->focusedMob) return;
     
-    Tool* tooPtr = (Tool*) (pikPtr->focusedMob);
+    Tool* tooPtr = (Tool*) (scriptVM->focusedMob);
     tooPtr->reserved = nullptr;
     pikPtr->unfocusFromMob();
 }
@@ -3419,24 +3419,24 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Point offset = Point();
     float targetDist =
-        pikPtr->focusedMob->radius +
+        scriptVM->focusedMob->radius +
         pikPtr->radius + PIKMIN::GROUNDED_ATTACK_DIST;
         
-    if(pikPtr->focusedMob->rectangularDim.x != 0.0f) {
+    if(scriptVM->focusedMob->rectangularDim.x != 0.0f) {
         bool isInside = false;
         offset =
             getClosestPointInRotatedRectangle(
                 pikPtr->pos,
-                pikPtr->focusedMob->pos,
-                pikPtr->focusedMob->rectangularDim,
-                pikPtr->focusedMob->angle,
+                scriptVM->focusedMob->pos,
+                scriptVM->focusedMob->rectangularDim,
+                scriptVM->focusedMob->angle,
                 &isInside
-            ) - pikPtr->focusedMob->pos;
-        targetDist -= pikPtr->focusedMob->radius;
+            ) - scriptVM->focusedMob->pos;
+        targetDist -= scriptVM->focusedMob->radius;
     }
     
     pikPtr->chase(
-        &pikPtr->focusedMob->pos, &pikPtr->focusedMob->z,
+        &scriptVM->focusedMob->pos, &scriptVM->focusedMob->z,
         offset, 0.0f, 0,
         targetDist
     );
@@ -3530,7 +3530,7 @@ void PikminFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::landAfterPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Mob* leaPtr = pikPtr->focusedMob;
+    Mob* leaPtr = scriptVM->focusedMob;
     
     pikPtr->setAnimation(PIKMIN_ANIM_IDLING);
     
@@ -3595,7 +3595,7 @@ void PikminFsm::landOnMob(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     pikPtr->stopHeightEffect();
-    pikPtr->focusedMob = m2Ptr;
+    scriptVM->focusedMob = m2Ptr;
     disableFlag(pikPtr->flags, MOB_FLAG_WAS_THROWN);
     
     switch(pikPtr->pikType->attackMethod) {
@@ -3651,7 +3651,7 @@ void PikminFsm::landOnMobWhileHolding(
             tooPtr->speed.x = tooPtr->speed.y = tooPtr->speedZ = 0;
             tooPtr->stopHeightEffect();
             
-            tooPtr->focusedMob = m2Ptr;
+            tooPtr->scriptVM.focusedMob = m2Ptr;
             
             float hOffsetDist;
             float hOffsetAngle;
@@ -3843,23 +3843,23 @@ void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    if(pikPtr->focusedMob->rectangularDim.x != 0.0f) {
+    if(scriptVM->focusedMob->rectangularDim.x != 0.0f) {
         bool isInside = false;
         Point target =
             getClosestPointInRotatedRectangle(
                 pikPtr->pos,
-                pikPtr->focusedMob->pos,
-                pikPtr->focusedMob->rectangularDim,
-                pikPtr->focusedMob->angle,
+                scriptVM->focusedMob->pos,
+                scriptVM->focusedMob->rectangularDim,
+                scriptVM->focusedMob->angle,
                 &isInside
             );
         pikPtr->face(getAngle(pikPtr->pos, target), nullptr);
         
     } else {
-        pikPtr->face(0, &pikPtr->focusedMob->pos);
+        pikPtr->face(0, &scriptVM->focusedMob->pos);
         
     }
     
@@ -3949,11 +3949,11 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     bool canContinueAttacking =
-        pikPtr->focusedMob &&
-        pikPtr->focusedMob->health > 0 &&
-        Distance(pikPtr->pos, pikPtr->focusedMob->pos) <=
+        scriptVM->focusedMob &&
+        scriptVM->focusedMob->health > 0 &&
+        Distance(pikPtr->pos, scriptVM->focusedMob->pos) <=
         (
-            pikPtr->radius + pikPtr->focusedMob->radius +
+            pikPtr->radius + scriptVM->focusedMob->radius +
             PIKMIN::GROUNDED_ATTACK_DIST
         );
         
@@ -4315,10 +4315,10 @@ void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    pikPtr->chase(&pikPtr->focusedMob->pos, &pikPtr->focusedMob->z);
+    pikPtr->chase(&scriptVM->focusedMob->pos, &scriptVM->focusedMob->z);
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
 }
 
@@ -4646,12 +4646,12 @@ void PikminFsm::tickEnteringOnion(
         pikPtr->trackInfo != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
     if(pikPtr->tickTrackRide()) {
         //Finished!
-        ((Onion*) pikPtr->focusedMob)->nest->storePikmin(pikPtr);
+        ((Onion*) scriptVM->focusedMob)->nest->storePikmin(pikPtr);
     }
 }
 
@@ -4669,10 +4669,10 @@ void PikminFsm::tickGroupTaskWork(
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
+    GroupTask* tasPtr = (GroupTask*) (scriptVM->focusedMob);
     Point curSpotPos = tasPtr->getSpotPos(pikPtr);
     float curSpotZ = tasPtr->z + tasPtr->tasType->spotsZ;
     
@@ -4893,9 +4893,9 @@ void PikminFsm::tryHeldItemHotswap(
 void PikminFsm::unlatch(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(!pikPtr->focusedMob) return;
+    if(!scriptVM->focusedMob) return;
     
-    pikPtr->focusedMob->release(pikPtr);
+    scriptVM->focusedMob->release(pikPtr);
     pikPtr->latched = false;
 }
 
@@ -5008,10 +5008,10 @@ void PikminFsm::workOnGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     engineAssert(
-        pikPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    GroupTask* tasPtr = (GroupTask*) (pikPtr->focusedMob);
+    GroupTask* tasPtr = (GroupTask*) (scriptVM->focusedMob);
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);

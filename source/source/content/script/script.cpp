@@ -10,6 +10,7 @@
 
 #include <algorithm>
 
+#include "../mob/mob.h"
 #include "script.h"
 
 
@@ -131,6 +132,16 @@ string ScriptVM::getMakerToolVarsStr() const {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ScriptVM::tick(float deltaT) {
+    //Check the focused mob.
+    if(focusedMob) {
+    
+        if(focusedMob->health <= 0) {
+            fsm.runEvent(MOB_EV_FOCUS_DIED);
+            fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
+        }
+        
+    }
+    
     //Timer event.
     FsmEventDef* timerEv = fsm.getEvent(MOB_EV_TIMER);
     if(timer.duration > 0) {

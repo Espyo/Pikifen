@@ -476,8 +476,8 @@ void GenMobFsm::handleCarrierRemoved(
  * @param info2 Unused.
  */
 void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
-    if(scriptVM->mob->focusedMob) {
-        scriptVM->mob->focusedMob->scriptVM.fsm.runEvent(
+    if(scriptVM->focusedMob) {
+        scriptVM->focusedMob->scriptVM.fsm.runEvent(
             MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) scriptVM->mob
         );
     }
@@ -532,7 +532,7 @@ void GenMobFsm::startBeingDelivered(
     enableFlag(scriptVM->mob->flags, MOB_FLAG_INTANGIBLE);
     scriptVM->mob->becomeUncarriable();
     
-    scriptVM->mob->focusedMob->scriptVM.fsm.runEvent(
+    scriptVM->focusedMob->scriptVM.fsm.runEvent(
         MOB_EV_STARTED_RECEIVING_DELIVERY, scriptVM->mob
     );
     

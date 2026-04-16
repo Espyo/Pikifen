@@ -190,9 +190,9 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
     if(
         resPtr->resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB &&
-        resPtr->focusedMob
+        scriptVM->focusedMob
     ) {
-        resPtr->focusedMob->setHealth(
+        scriptVM->focusedMob->setHealth(
             true, false, -resPtr->resType->damageMobAmount
         );
         

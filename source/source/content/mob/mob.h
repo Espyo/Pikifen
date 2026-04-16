@@ -185,9 +185,6 @@ public:
     //Script virtual machine.
     ScriptVM scriptVM;
     
-    //The mob it has focus on.
-    Mob* focusedMob = nullptr;
-    
     //Further memory of focused mobs.
     map<size_t, Mob*> focusedMobMemory;
     

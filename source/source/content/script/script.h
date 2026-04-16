@@ -84,6 +84,9 @@ public:
     //Custom timer.
     Timer timer;
     
+    //The mob it has focus on.
+    Mob* focusedMob = nullptr;
+    
     //Variables.
     map<string, string> vars;
     

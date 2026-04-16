@@ -1832,7 +1832,7 @@ void LeaderFsm::fallDownPit(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::finishCalledAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    Mob* caller = leaPtr->focusedMob;
+    Mob* caller = scriptVM->focusedMob;
     
     if(leaPtr) {
         LeaderFsm::joinGroup(scriptVM, (void*) caller, info2);
@@ -1854,9 +1854,9 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     engineAssert(
-        leaPtr->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
+        scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
-    Drop* droPtr = (Drop*) leaPtr->focusedMob;
+    Drop* droPtr = (Drop*) scriptVM->focusedMob;
     
     switch(droPtr->droType->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
@@ -1898,7 +1898,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
 void LeaderFsm::finishGettingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
-    Mob* prevFocusedMob = leaPtr->focusedMob;
+    Mob* prevFocusedMob = scriptVM->focusedMob;
     
     if(leaPtr->player) {
         scriptVM->fsm.setState(LEADER_STATE_ACTIVE);
