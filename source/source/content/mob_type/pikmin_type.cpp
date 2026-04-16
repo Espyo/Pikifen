@@ -126,42 +126,41 @@ PikminType::PikminType() :
  */
 AnimConversionVector PikminType::getAnimConversions() const {
     AnimConversionVector v;
+
+    auto add = [&v] (size_t idx, const string& name) {
+        v.push_back(std::make_pair(idx, name));
+    };
     
-#define a(idx, name) \
-    v.push_back(std::make_pair(idx, name));
-    
-    a(PIKMIN_ANIM_IDLING,             "idling");
-    a(PIKMIN_ANIM_CALLED,             "called");
-    a(PIKMIN_ANIM_WALKING,            "walking");
-    a(PIKMIN_ANIM_THROWN,             "thrown");
-    a(PIKMIN_ANIM_MOB_LANDING,        "mob_landing");
-    a(PIKMIN_ANIM_ATTACKING,          "attacking");
-    a(PIKMIN_ANIM_BACKFLIP,           "backflip");
-    a(PIKMIN_ANIM_TWIRLING,           "twirling");
-    a(PIKMIN_ANIM_SIGHING,            "sighing");
-    a(PIKMIN_ANIM_SHAKING,            "shaking");
-    a(PIKMIN_ANIM_CARRYING,           "carrying");
-    a(PIKMIN_ANIM_CARRYING_LIGHT,     "carrying_light");
-    a(PIKMIN_ANIM_CARRYING_STRUGGLE,  "carrying_struggle");
-    a(PIKMIN_ANIM_SPROUT,             "sprout");
-    a(PIKMIN_ANIM_PLUCKING,           "plucking");
-    a(PIKMIN_ANIM_PLUCKING_THROWN,    "plucking_thrown");
-    a(PIKMIN_ANIM_KNOCKED_BACK,       "knocked_back");
-    a(PIKMIN_ANIM_BOUNCED_BACK,       "bounced_back");
-    a(PIKMIN_ANIM_LYING,              "lying");
-    a(PIKMIN_ANIM_GETTING_UP,         "getting_up");
-    a(PIKMIN_ANIM_FLAILING,           "flailing");
-    a(PIKMIN_ANIM_DRINKING,           "drinking");
-    a(PIKMIN_ANIM_PICKING_UP,         "picking_up");
-    a(PIKMIN_ANIM_ARMS_OUT,           "arms_out");
-    a(PIKMIN_ANIM_PUSHING,            "pushing");
-    a(PIKMIN_ANIM_CLIMBING,           "climbing");
-    a(PIKMIN_ANIM_SLIDING,            "sliding");
-    a(PIKMIN_ANIM_CRUSHED,            "crushed");
-    a(PIKMIN_ANIM_KNOCKED_DOWN_DYING, "knocked_down_dying");
-    a(PIKMIN_ANIM_DYING,              "dying");
-    
-#undef a
+    add(PIKMIN_ANIM_IDLING,             "idling");
+    add(PIKMIN_ANIM_CALLED,             "called");
+    add(PIKMIN_ANIM_WALKING,            "walking");
+    add(PIKMIN_ANIM_THROWN,             "thrown");
+    add(PIKMIN_ANIM_MOB_LANDING,        "mob_landing");
+    add(PIKMIN_ANIM_ATTACKING,          "attacking");
+    add(PIKMIN_ANIM_BACKFLIP,           "backflip");
+    add(PIKMIN_ANIM_TWIRLING,           "twirling");
+    add(PIKMIN_ANIM_SIGHING,            "sighing");
+    add(PIKMIN_ANIM_SHAKING,            "shaking");
+    add(PIKMIN_ANIM_CARRYING,           "carrying");
+    add(PIKMIN_ANIM_CARRYING_LIGHT,     "carrying_light");
+    add(PIKMIN_ANIM_CARRYING_STRUGGLE,  "carrying_struggle");
+    add(PIKMIN_ANIM_SPROUT,             "sprout");
+    add(PIKMIN_ANIM_PLUCKING,           "plucking");
+    add(PIKMIN_ANIM_PLUCKING_THROWN,    "plucking_thrown");
+    add(PIKMIN_ANIM_KNOCKED_BACK,       "knocked_back");
+    add(PIKMIN_ANIM_BOUNCED_BACK,       "bounced_back");
+    add(PIKMIN_ANIM_LYING,              "lying");
+    add(PIKMIN_ANIM_GETTING_UP,         "getting_up");
+    add(PIKMIN_ANIM_FLAILING,           "flailing");
+    add(PIKMIN_ANIM_DRINKING,           "drinking");
+    add(PIKMIN_ANIM_PICKING_UP,         "picking_up");
+    add(PIKMIN_ANIM_ARMS_OUT,           "arms_out");
+    add(PIKMIN_ANIM_PUSHING,            "pushing");
+    add(PIKMIN_ANIM_CLIMBING,           "climbing");
+    add(PIKMIN_ANIM_SLIDING,            "sliding");
+    add(PIKMIN_ANIM_CRUSHED,            "crushed");
+    add(PIKMIN_ANIM_KNOCKED_DOWN_DYING, "knocked_down_dying");
+    add(PIKMIN_ANIM_DYING,              "dying");
     
     return v;
 }

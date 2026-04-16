@@ -41,11 +41,12 @@ GuiEditor::GuiEditor() :
     zoomMaxLevel = GUI_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = GUI_EDITOR::ZOOM_MIN_LEVEL;
     
-#define registerCmd(ptr, name) \
-    commands.push_back( \
-        Command(std::bind((ptr), this, std::placeholders::_1), \
-            (name)) \
+    auto registerCmd =
+    [this] (void (GuiEditor::* func)(float), const string& name) {
+        commands.push_back(
+            Command(std::bind(func, this, std::placeholders::_1), name)
         );
+    };
     
     registerCmd(
         &GuiEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
@@ -62,8 +63,6 @@ GuiEditor::GuiEditor() :
     registerCmd(&GuiEditor::zoomAndPosResetCmd, "zoom_and_pos_reset");
     registerCmd(&GuiEditor::zoomInCmd, "zoom_in");
     registerCmd(&GuiEditor::zoomOutCmd, "zoom_out");
-    
-#undef registerCmd
     
     //Setup the selection manager.
     itemSelection.onGetInfo =

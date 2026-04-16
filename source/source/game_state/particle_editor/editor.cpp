@@ -42,11 +42,12 @@ ParticleEditor::ParticleEditor() :
     zoomMaxLevel = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = PARTICLE_EDITOR::ZOOM_MIN_LEVEL;
     
-#define registerCmd(ptr, name) \
-    commands.push_back( \
-        Command(std::bind((ptr), this, std::placeholders::_1), \
-            (name)) \
+    auto registerCmd =
+    [this] (void (ParticleEditor::* func)(float), const string& name) {
+        commands.push_back(
+            Command(std::bind(func, this, std::placeholders::_1), name)
         );
+    };
     
     registerCmd(
         &ParticleEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
@@ -75,8 +76,6 @@ ParticleEditor::ParticleEditor() :
     );
     registerCmd(&ParticleEditor::zoomInCmd, "zoom_in");
     registerCmd(&ParticleEditor::zoomOutCmd, "zoom_out");
-    
-#undef registerCmd
 }
 
 

@@ -82,11 +82,12 @@ AnimationEditor::AnimationEditor() :
     zoomMinLevel = ANIM_EDITOR::ZOOM_MIN_LEVEL;
     zoomMaxLevel = ANIM_EDITOR::ZOOM_MAX_LEVEL;
     
-#define registerCmd(ptr, name) \
-    commands.push_back( \
-        Command(std::bind((ptr), this, std::placeholders::_1), \
-            (name)) \
+    auto registerCmd =
+    [this] (void (AnimationEditor::* func)(float), const string& name) {
+        commands.push_back(
+            Command(std::bind(func, this, std::placeholders::_1), name)
         );
+    };
     
     registerCmd(&AnimationEditor::gridToggleCmd, "grid_toggle");
     registerCmd(&AnimationEditor::hitboxesToggleCmd, "hitboxes_toggle");
@@ -108,8 +109,6 @@ AnimationEditor::AnimationEditor() :
     registerCmd(&AnimationEditor::zoomEverythingCmd, "zoom_everything");
     registerCmd(&AnimationEditor::zoomInCmd, "zoom_in");
     registerCmd(&AnimationEditor::zoomOutCmd, "zoom_out");
-    
-#undef registerCmd
     
     //Setup the selection manager.
     hitboxSelection.onGetInfo =

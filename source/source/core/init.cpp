@@ -1218,23 +1218,38 @@ void initMobCategories() {
  * @brief Initializes the list of script action types.
  */
 void initScriptActionTypes() {
-
-#define queueParam(pName, pType, constant, extras) \
-    params.push_back(ScriptActionTypeParam(pName, pType, constant, extras));
-#define commitAction(aType, aName, runCode, loadCode) \
-    a = &(game.scriptActionTypes[aType]); \
-    a->type = aType; \
-    a->name = aName; \
-    a->code = runCode; \
-    a->extraLoadLogic = loadCode; \
-    a->parameters = params; \
-    params.clear();
-
-
     game.scriptActionTypes.assign(N_SCRIPT_ACTIONS, ScriptActionType());
     vector<ScriptActionTypeParam> params;
-    ScriptActionType* a;
     
+    auto queueParam =
+    [&params] (
+        const string& paramName, SCRIPT_ACTION_PARAM paramType,
+        bool paramForceConst, bool paramIsExtras
+    ) {
+        params.push_back(
+            ScriptActionTypeParam(
+                paramName, paramType, paramForceConst, paramIsExtras
+            )
+        );
+    };
+
+    auto commitAction =
+    [&params] (
+        SCRIPT_ACTION actionType, const string& actionName,
+        ScriptActionTypeCode* actionRunCode,
+        ScriptActionTypeLoadCode* actionLoadCode
+    ) {
+        ScriptActionType* actionTypePtr;
+        actionTypePtr = &(game.scriptActionTypes[actionType]);
+        actionTypePtr->type = actionType;
+        actionTypePtr->name = actionName;
+        actionTypePtr->code = actionRunCode;
+        actionTypePtr->extraLoadLogic = actionLoadCode;
+        actionTypePtr->parameters = params;
+        params.clear();
+    };
+
+
     //Unknown.
     commitAction(
         SCRIPT_ACTION_UNKNOWN,
@@ -2189,10 +2204,6 @@ void initScriptActionTypes() {
         ScriptActionRunners::turnToTarget,
         ScriptActionLoaders::turnToTarget
     );
-    
-    
-#undef queueParam
-#undef commitAction
 }
 
 

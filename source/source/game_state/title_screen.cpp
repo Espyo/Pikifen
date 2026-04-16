@@ -49,18 +49,17 @@ void MainMenu::initGuiMainPage() {
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
+
+    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    };
     
-#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-    getValueOrDefault(def))
-    
-    bool playIconLeft = iconLeft("play", "true");
-    bool makeIconLeft = iconLeft("make", "false");
-    bool helpIconLeft = iconLeft("help", "true");
-    bool optionsIconLeft = iconLeft("options", "true");
-    bool statsIconLeft = iconLeft("statistics", "true");
-    bool quitIconLeft = iconLeft("quit", "false");
-    
-#undef iconLeft
+    bool playIconLeft = getIconLeft("play", "true");
+    bool makeIconLeft = getIconLeft("make", "false");
+    bool helpIconLeft = getIconLeft("help", "true");
+    bool optionsIconLeft = getIconLeft("options", "true");
+    bool statsIconLeft = getIconLeft("statistics", "true");
+    bool quitIconLeft = getIconLeft("quit", "false");
     
     //Menu items.
     mainGui.registerCoords("play",       42, 58, 44, 12);
@@ -379,15 +378,14 @@ void MainMenu::initGuiMakePage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-    getValueOrDefault(def))
+    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    };
     
-    bool animEditorIconLeft = iconLeft("animation_editor", "true");
-    bool areaEditorIconLeft = iconLeft("area_editor", "false");
-    bool particleEditorIconLeft = iconLeft("particle_editor", "true");
-    bool guiEditorIconLeft = iconLeft("gui_editor", "false");
-    
-#undef iconLeft
+    bool animEditorIconLeft = getIconLeft("animation_editor", "true");
+    bool areaEditorIconLeft = getIconLeft("area_editor", "false");
+    bool particleEditorIconLeft = getIconLeft("particle_editor", "true");
+    bool guiEditorIconLeft = getIconLeft("gui_editor", "false");
     
     //Menu items.
     makeGui.registerCoords("animation_editor", 27.5, 63, 43, 12);
@@ -587,13 +585,12 @@ void MainMenu::initGuiPlayPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-    getValueOrDefault(def))
+    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    };
     
-    bool simpleAreasIconLeft = iconLeft("simple_areas", "true");
-    bool missionsIconLeft = iconLeft("missions", "true");
-    
-#undef iconLeft
+    bool simpleAreasIconLeft = getIconLeft("simple_areas", "true");
+    bool missionsIconLeft = getIconLeft("missions", "true");
     
     //Menu items.
     playGui.registerCoords("simple",     42, 60, 60, 12.5);

@@ -841,12 +841,13 @@ Hud::Hud() :
     
     DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");
     
-#define loader(var, name) \
-    var = \
-        game.content.bitmaps.list.get( \
-            bitmapsNode->getChildByName(name)->value, \
-            bitmapsNode->getChildByName(name) \
-        );
+    auto loader = [&bitmapsNode] (ALLEGRO_BITMAP*& bmpVar, const string& name) {
+        bmpVar =
+            game.content.bitmaps.list.get(
+                bitmapsNode->getChildByName(name)->value,
+                bitmapsNode->getChildByName(name)
+            );
+    };
     
     loader(bmpBubble,               "bubble");
     loader(bmpCounterBubbleField,   "counter_bubble_field");
@@ -858,8 +859,6 @@ Hud::Hud() :
     loader(bmpHardBubble,           "hard_bubble");
     loader(bmpNoPikminBubble,       "no_pikmin_bubble");
     loader(bmpSun,                  "sun");
-    
-#undef loader
     
     leaderIconMgr.moveMethod = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
     leaderIconMgr.transitionDuration = HUD::LEADER_SWAP_JUICE_DURATION;

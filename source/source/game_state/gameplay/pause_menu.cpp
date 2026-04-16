@@ -2004,12 +2004,13 @@ void PauseMenu::initRadarPage() {
     //Assets.
     DataNode* bitmapsNode = guiFile->getChildByName("bitmaps");
     
-#define loader(var, name) \
-    var = \
-    game.content.bitmaps.list.get( \
-        bitmapsNode->getChildByName(name)->value, \
-        bitmapsNode->getChildByName(name) \
-    );
+    auto loader = [&bitmapsNode] (ALLEGRO_BITMAP*& bmpVar, const string& name) {
+        bmpVar =
+            game.content.bitmaps.list.get(
+                bitmapsNode->getChildByName(name)->value,
+                bitmapsNode->getChildByName(name)
+            );
+    };
     
     loader(bmpRadarCursor,        "cursor");
     loader(bmpRadarPikmin,        "pikmin");
@@ -2023,8 +2024,6 @@ void PauseMenu::initRadarPage() {
     loader(bmpRadarOnionBulb,     "onion_bulb");
     loader(bmpRadarShip,          "ship");
     loader(bmpRadarPath,          "path");
-    
-#undef loader
     
     //Menu items.
     radarGui.registerCoords("left_page",              12,     5,   20,    6);

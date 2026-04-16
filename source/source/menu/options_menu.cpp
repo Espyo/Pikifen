@@ -1511,16 +1511,15 @@ void OptionsMenu::initGuiTopPage() {
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-    getValueOrDefault(def))
-    
-    bool controlsIconLeft = iconLeft("controls", "true");
-    bool graphicsIconLeft = iconLeft("graphics", "true");
-    bool audioIconLeft = iconLeft("audio", "true");
-    bool packsIconLeft = iconLeft("packs", "true");
-    bool miscIconLeft = iconLeft("misc", "true");
-    
-#undef iconLeft
+    auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
+        return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
+    };
+
+    bool controlsIconLeft = getIconLeft("controls", "true");
+    bool graphicsIconLeft = getIconLeft("graphics", "true");
+    bool audioIconLeft = getIconLeft("audio", "true");
+    bool packsIconLeft = getIconLeft("packs", "true");
+    bool miscIconLeft = getIconLeft("misc", "true");
     
     //Menu items.
     topGui.registerCoords("back",       12,  5, 20,  6);

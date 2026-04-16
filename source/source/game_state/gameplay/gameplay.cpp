@@ -730,6 +730,7 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
             bmp, ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_WRITEONLY
         );
     unsigned char* row = (unsigned char*) region->data;
+    unsigned char curA = 0;
     
     //We need to draw a radial gradient to represent the fog.
     //Between the center and the "near" radius, the alpha is 0%.
@@ -741,11 +742,12 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
     //This is where the "near" section of the fog is.
     float nearRatio = nearRadius / farRadius;
     
-#define fillPixel(x, row) \
-    row[(x) * 4 + 0] = 255; \
-    row[(x) * 4 + 1] = 255; \
-    row[(x) * 4 + 2] = 255; \
-    row[(x) * 4 + 3] = curA; \
+    auto fillPixel = [&curA] (int x, unsigned char* row) {
+        row[(x) * 4 + 0] = 255;
+        row[(x) * 4 + 1] = 255;
+        row[(x) * 4 + 2] = 255;
+        row[(x) * 4 + 3] = curA;
+    };
     
     for(int y = 0; y < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); y++) {
         for(int x = 0; x < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); x++) {
@@ -766,7 +768,7 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
                 interpolateNumber(curRatio, nearRatio, 1.0f, 0.0f, 1.0f);
             //Finally, clamp the value and get the alpha.
             curRatio = std::clamp(curRatio, 0.0f, 1.0f);
-            unsigned char curA = 255 * curRatio;
+            curA = 255 * curRatio;
             
             //Save the memory location of the opposite row's pixels.
             unsigned char* oppositeRow =
@@ -778,8 +780,6 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
         }
         row += region->pitch;
     }
-    
-#undef fillPixel
     
     al_unlock_bitmap(bmp);
     bmp = recreateBitmap(bmp); //Refresh mipmaps.

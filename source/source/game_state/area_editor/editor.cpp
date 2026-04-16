@@ -161,11 +161,12 @@ AreaEditor::AreaEditor() :
     zoomMaxLevel = AREA_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = AREA_EDITOR::ZOOM_MIN_LEVEL;
     
-#define registerCmd(ptr, name) \
-    commands.push_back( \
-        Command(std::bind((ptr), this, std::placeholders::_1), \
-            (name)) \
+    auto registerCmd =
+    [this] (void (AreaEditor::* func)(float), const string& name) {
+        commands.push_back(
+            Command(std::bind(func, this, std::placeholders::_1), name)
         );
+    };
     
     registerCmd(&AreaEditor::circleSectorCmd, "circle_sector");
     registerCmd(&AreaEditor::copyPropertiesCmd, "copy_properties");
@@ -202,8 +203,6 @@ AreaEditor::AreaEditor() :
     registerCmd(&AreaEditor::zoomEverythingCmd, "zoom_everything");
     registerCmd(&AreaEditor::zoomInCmd, "zoom_in");
     registerCmd(&AreaEditor::zoomOutCmd, "zoom_out");
-    
-#undef registerCmd
     
     //Setup the selection managers.
     mobSelection.onGetInfo =
