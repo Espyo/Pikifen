@@ -135,7 +135,7 @@ bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the info getting script actions.
+ * @brief Loading code for the area info getting script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -148,7 +148,7 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[1] + "\"! "
-            "Try using \"get_mob_info\" or \"get_event_info\".";
+            "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
     def.args[1] = i2s(type);
@@ -157,7 +157,7 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the info getting script actions.
+ * @brief Loading code for the event info getting script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -170,7 +170,7 @@ bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[1] + "\"! "
-            "Try using \"get_mob_info\" or \"get_area_info\".";
+            "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
     def.args[1] = i2s(type);
@@ -179,7 +179,29 @@ bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the info getting script actions.
+ * @brief Loading code for the misc. info getting script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::getMiscInfo(ScriptActionDef& def, MobType* mt) {
+    bool found;
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE type =
+        enumGetValue(scriptActionGetMiscInfoTypeINames, def.args[1], &found);
+    if(!found) {
+        def.customError =
+            "Unknown info type \"" + def.args[1] + "\"! "
+            "Did you mean to use a different \"get_*_info\" action?";
+        return false;
+    }
+    def.args[1] = i2s(type);
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the mob info getting script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -196,7 +218,7 @@ bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
     if(!found) {
         def.customError =
             "Unknown info type \"" + def.args[2] + "\"! "
-            "Try using \"get_event_info\" or \"get_area_info\".";
+            "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
     def.args[2] = i2s(type);
@@ -1095,6 +1117,26 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     if(!data.scriptVM->focusedMob) return;
     data.scriptVM->vars[data.args[0]] =
         data.scriptVM->focusedMob->scriptVM.vars[data.args[1]];
+}
+
+
+/**
+ * @brief Code for the misc info obtaining script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
+    string* var = &(data.scriptVM->vars[data.args[0]]);
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE t =
+        (SCRIPT_ACTION_GET_MISC_INFO_TYPE) s2i(data.args[1]);
+        
+    switch (t) {
+    case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T: {
+        *var = f2s(game.deltaT);
+        break;
+        
+    }
+    }
 }
 
 

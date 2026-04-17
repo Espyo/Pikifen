@@ -19,11 +19,11 @@
 
     <h2 id="events">Events</h2>
 
-    <h3 id="events-global">Global events</h3>
+    <h3 id="events-common">Common events</h3>
 
     <p>Events that can be used both in object scripts and in area scripts.</p>
 
-    <h4 id="events-global-script-flow">Script flow</h4>
+    <h4 id="events-common-script-flow">Script flow</h4>
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
@@ -37,21 +37,21 @@
       </tr>
     </table>
 
-    <h4 id="events-global-timing">Timing</h4>
+    <h4 id="events-common-timing">Timing</h4>
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
       <tr id="on-tick">
         <th style="text-align: left;"><code>on_tick</code></th>
-        <td>Triggered every single game frame. Because a frame can last for any amount of time, this is not an appropriate way to make things change over time. It is more useful for when you want to constantly update something, like make the object constantly turn to its focused object's position.</td>
+        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <a href="get-misc-info"><code>get_misc_info</code></a> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
       </tr>
       <tr id="on-timer">
         <th style="text-align: left;"><code>on_timer</code></th>
-        <td>Triggered when the script's internal timer reaches 0.</td>
+        <td>Triggered when the script's internal timer reaches 0. To have more than one timer, you can create custom timers by hand; see <a href="script.html#tips"><code>script tips</code></a>.</td>
       </tr>
     </table>
 
-    <h4 id="events-mobs-misc">Misc.</h4>
+    <h4 id="events-common-misc">Misc.</h4>
     
     <table>
       <tr><th>Event</th><th>Description</th></tr>
@@ -63,7 +63,7 @@
 
     <h3 id="events-mobs">Object events</h3>
 
-    <p>Events that can only be used in object scripts. Object scripts can also use the <a href="#events-global">global events list</a>.</p>
+    <p>Events that can only be used in object scripts. Object scripts can also use the <a href="#events-common">common events list</a>.</p>
 
     <h4 id="events-mobs-timing">Timing</h4>
     
@@ -215,11 +215,11 @@
 
     <p>In this list, any parameter surrounded by square brackets is optional.</p>
 
-    <h3 id="actions-global">Global actions</h3>
+    <h3 id="actions-common">Common actions</h3>
 
     <p>Actions that can be used both in object scripts and in area scripts.</p>
 
-    <h4 id="actions-global-script-control">Script control</h4>
+    <h4 id="actions-common-script-control">Script control</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -276,7 +276,7 @@
       </tr>
     </table>
     
-    <h4 id="actions-global-maths">Mathematics</h4>
+    <h4 id="actions-common-maths">Mathematics</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -401,7 +401,7 @@
       </tr>
     </table>
 
-    <h4 id="actions-global-focus">Focused object management</h4>
+    <h4 id="actions-common-focus">Focused object management</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -428,7 +428,7 @@
       </tr>
     </table>
 
-    <h4 id="actions-global-obtain-info">Obtaining information</h4>
+    <h4 id="actions-common-obtain-info">Obtaining information</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -463,6 +463,18 @@
           </dd>
         </dl></td>
       </tr>
+      <tr id="get-misc-info">
+        <th><code>get_misc_info</code></th>
+        <td><dl>
+          <dt><code><b>get_misc_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to some special information. The possible data are:
+            <ul>
+              <li><code><b>delta_t</b></code>: The amount of time that passed between the previous frame and the current frame. Use this to keep track of time; see <a href="script.html#tips">script tips</a> for more information.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
       <tr id="get-mob-info">
         <th><code>get_mob_info</code></th>
         <td><dl>
@@ -492,7 +504,7 @@
       </tr>
     </table>
     
-    <h4 id="actions-global-important">Other important actions</h4>
+    <h4 id="actions-common-important">Other important actions</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -507,12 +519,12 @@
         <th><code>set_timer</code></th>
         <td><dl>
           <dt><code><b>set_timer</b> &lt;amount&gt;</code></dt>
-          <dd>Starts the mob's timer with the specified time period. Writing 0 makes the current timer stop, without triggering any <code>on_timer</code> events.</dd>
+          <dd>Starts the mob's timer with the specified time period. Writing 0 makes the current timer stop, without triggering any <code>on_timer</code> events. For custom timers, see <a href="script.html#tips">script tips</a>.</dd>
         </dl></td>
       </tr>
     </table>
     
-    <h4 id="actions-global-misc">Misc.</h4>
+    <h4 id="actions-common-misc">Misc.</h4>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -541,7 +553,7 @@
 
     <h3 id="actions-mobs">Object actions</h3>
 
-    <p>Actions that can only be used in object scripts. Object scripts can also use the <a href="#actions-global">global actions list</a>.</p>
+    <p>Actions that can only be used in object scripts. Object scripts can also use the <a href="#actions-common">common actions list</a>.</p>
     
     <h4 id="actions-mobs-movement">Movement</h4>
     

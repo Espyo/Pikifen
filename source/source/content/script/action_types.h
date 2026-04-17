@@ -112,6 +112,9 @@ enum SCRIPT_ACTION {
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
     
+    //Get misc. information.
+    SCRIPT_ACTION_GET_MISC_INFO,
+    
     //Get information about a mob.
     SCRIPT_ACTION_GET_MOB_INFO,
     
@@ -506,6 +509,21 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
 });
 
 
+//Get misc. info action info types.
+enum SCRIPT_ACTION_GET_MISC_INFO_TYPE {
+
+    //Get the frame's delta T.
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T,
+    
+};
+
+
+//Script action get misc. info type enum naming (internal names).
+buildEnumNames(scriptActionGetMiscInfoTypeINames, SCRIPT_ACTION_GET_MISC_INFO_TYPE)({
+    { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T, "delta_t" },
+});
+
+
 //Get mob info action info types.
 enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
 
@@ -806,6 +824,7 @@ void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);
 void getAreaInfo(ScriptActionInstRunData& data);
 void getFloorZ(ScriptActionInstRunData& data);
+void getMiscInfo(ScriptActionInstRunData& data);
 void getMobInfo(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);
 void getRandomFloat(ScriptActionInstRunData& data);
@@ -886,6 +905,7 @@ bool focus(ScriptActionDef& call, MobType* mt);
 bool followMobAsLeader(ScriptActionDef& call, MobType* mt);
 bool getAreaInfo(ScriptActionDef& call, MobType* mt);
 bool getEventInfo(ScriptActionDef& call, MobType* mt);
+bool getMiscInfo(ScriptActionDef& call, MobType* mt);
 bool getMobInfo(ScriptActionDef& call, MobType* mt);
 bool holdFocus(ScriptActionDef& call, MobType* mt);
 bool ifFunction(ScriptActionDef& call, MobType* mt);

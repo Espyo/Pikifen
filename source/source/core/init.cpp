@@ -1061,7 +1061,7 @@ void initFsmEventTypes() {
     };
     
     
-    //-Global events-
+    //-Common events-
     contexts =
         getIdxBitmask(SCRIPT_CONTEXT_MOB) |
         getIdxBitmask(SCRIPT_CONTEXT_AREA);
@@ -1494,7 +1494,7 @@ void initScriptActionTypes() {
     };
     
     
-    //-Global actions-
+    //-Common actions-
     contexts =
         getIdxBitmask(SCRIPT_CONTEXT_MOB) |
         getIdxBitmask(SCRIPT_CONTEXT_AREA);
@@ -1682,6 +1682,16 @@ void initScriptActionTypes() {
         "get_focus_var",
         ScriptActionRunners::getFocusVar,
         nullptr
+    );
+    
+    //Get misc. info.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
+        SCRIPT_ACTION_GET_MISC_INFO,
+        "get_misc_info",
+        ScriptActionRunners::getMiscInfo,
+        ScriptActionLoaders::getMiscInfo
     );
     
     //Get mob info.

@@ -604,6 +604,7 @@ reaches {
 
     <ul>
         <li>The <code>init</code> block of the script file runs right as soon as the object spawns. Directly after that, the object changes to its first state and runs that state's <code><a href="events_and_actions.html#on-enter">on_enter</a></code> event. Finally, in the first frame of gameplay after the object's creation, the <code><a href="events_and_actions.html#on-ready">on_ready</a></code> event will fire. When you want to run something at the start of the object's life, it's important to pick which of these three points to use.</li>
+        <li>The built-in script timer feature only keeps track of one timer. But you can create custom hand-made timers to keep track of multiple things. Have a variable store the time left for the timer to trigger, in seconds. Then, in a state (or better yet, the <a href="#global-events">global events</a> block), listen for the <a href="events_and_actions.html#on-tick"><code>on_tick</code></a> event, and use the <a href="events_and_actions.html#get-misc-info"><code>get_misc_info</code></a> action, with the <code>delta_t</code> data, in order to know how many seconds to decrease the timer variable by. Once it reaches 0 or below, the timer has just triggered!</li>
     </ul>
 
     <h2 id="see-also">See also</h2>

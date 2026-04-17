@@ -96,7 +96,7 @@
       <dt><b>Why can't Pikmin be limited to only picking path stops within their height?</b></dt>
       <dd>While yes, it would make life easier, since Pikmin wouldn't try to walk against the wall to go to path stops on a cliff above them, the truth is that because ramps exist, the engine can't know if a given path stop high above is reachable or not. At least not without it being too computationally costly.</dd>
       <dt><b>Why can't mobs have more than one timer?</b></dt>
-      <dd>Each mob having one timer is easy &ndash; it's just one variable with the amount of time left. But keeping a list is harder, not just because of memory usage (the structures that hold lists have a lot of memory overhead), but also performance (adding to or removing from the list is a bit costly). Plus the engine sometimes wants to use timers, and there could be a name conflict with a user-script timer.</dd>
+      <dd>Each mob having one timer is easy &ndash; it's just one variable with the amount of time left. But keeping a list is harder, not just because of memory usage (the structures that hold lists have a lot of memory overhead), but also performance (adding to or removing from the list is a bit costly). Plus the engine sometimes wants to use timers, and there could be a name conflict with a user-script timer. That said, custom manual timers can be created with <code>on_tick</code> and <code>get_misc_info * delta_t</code>; see <a href="script.html#tips">script tips</a>.</dd>
     </dl>
 
   </div>
