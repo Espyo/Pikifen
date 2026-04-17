@@ -694,18 +694,6 @@ enum SCRIPT_ACTION_PARAM {
 };
 
 
-//Contexts in which a script can run.
-enum SCRIPT_CONTEXT_FLAG {
-
-    //Mob script.
-    SCRIPT_CONTEXT_FLAG_MOB = 1 << 0,
-    
-    //Area script.
-    SCRIPT_CONTEXT_FLAG_AREA = 1 << 1,
-    
-};
-
-
 #pragma endregion
 #pragma region Classes
 
@@ -784,7 +772,7 @@ struct ScriptActionType {
     //Parameters that it can take.
     vector<ScriptActionTypeParam> parameters;
     
-    //Contexts in which it can be run. Use SCRIPT_CONTEXT_FLAG.
+    //Flags for the contexts in which it can be run. Use SCRIPT_CONTEXT.
     Bitmask8 contexts = 0;
     
 };

@@ -12,6 +12,7 @@
 #include "action.h"
 
 #include "../../core/game.h"
+#include "script_utils.h"
 
 
 #pragma region Script action block definition
@@ -412,6 +413,7 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         }
     }
     
+    //Check if it is recognized.
     if(!actionType) {
         game.errors.report(
             "Unknown script action name \"" + name + "\"!", node
@@ -420,24 +422,10 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     }
     
     //Check if this action is allowed in the current context.
-    string curContextName = scriptDef->mobType ? "object" : "area";
-    bool rightContext = true;
-    if(
-        scriptDef->mobType &&
-        !hasFlag(actionType->contexts, SCRIPT_CONTEXT_FLAG_MOB)
-    ) {
-        rightContext = false;
-    }
-    if(
-        !scriptDef->mobType &&
-        !hasFlag(actionType->contexts, SCRIPT_CONTEXT_FLAG_AREA)
-    ) {
-        rightContext = false;
-    }
-    if(!rightContext) {
+    if(!scriptDef->checkContextFlags(actionType->contexts)) {
         game.errors.report(
             "The action \"" + name + "\" can't be used in an " +
-            curContextName + " script context!", node
+            scriptDef->getContextName() + " script context!", node
         );
         return false;
     }

@@ -27,6 +27,48 @@ ScriptDef::ScriptDef() :
 
 
 /**
+ * @brief Returns whether the current script context is valid for the given
+ * context flags.
+ * 
+ * @param flags The flags.
+ * @return Whether it is valid.
+ */
+bool ScriptDef::checkContextFlags(Bitmask8 flags) const {
+    int flagBitmask = getIdxBitmask(getContext());
+    return hasFlag(flags, flagBitmask);
+}
+
+
+/**
+ * @brief Returns what the current script context is.
+ * 
+ * @return The context.
+ */
+SCRIPT_CONTEXT ScriptDef::getContext() const {
+    return mobType ? SCRIPT_CONTEXT_MOB : SCRIPT_CONTEXT_AREA;
+}
+
+
+/**
+ * @brief Returns the name of the current script context, in lowercase.
+ * 
+ * @return The name.
+ */
+string ScriptDef::getContextName() const {
+    switch(getContext()) {
+    case SCRIPT_CONTEXT_MOB: {
+        return "mob";
+        break;
+    } case SCRIPT_CONTEXT_AREA: {
+        return "area";
+        break;
+    }
+    }
+    return "";
+}
+
+
+/**
  * @brief Loads a script definition from a data node.
  *
  * @param node Node to load from.

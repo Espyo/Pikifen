@@ -15,6 +15,9 @@
 #include "../../util/general_utils.h"
 
 
+#pragma region Constants
+
+
 //Types of FSM event.
 enum FSM_EV {
 
@@ -332,3 +335,29 @@ buildEnumNames(scriptEvScriptFileINames, FSM_EV)({
     { FSM_EV_WEIGHT_ADDED, "on_weight_added" },
     { FSM_EV_WEIGHT_REMOVED, "on_weight_removed" },
 });
+
+
+#pragma endregion
+#pragma region Classes
+
+
+/**
+ * @brief Info about a type of FSM event.
+ */
+struct FsmEventType {
+
+    //--- Public members ---
+    
+    //Type of FSM event.
+    FSM_EV type = FSM_EV_UNKNOWN;
+
+    //Name.
+    string name;
+    
+    //Flags for the contexts in which it can be used. Use SCRIPT_CONTEXT.
+    Bitmask8 contexts = 0;
+    
+};
+
+
+#pragma endregion

@@ -1470,6 +1470,7 @@ void GameplayState::load() {
     }
     
     //Load the area's script.
+    scriptVM.fsm.curState = game.dummyFsmState;
     if(!scriptFilePath.empty()) {
         DataNode scriptFile;
         bool scriptFileExists = false;

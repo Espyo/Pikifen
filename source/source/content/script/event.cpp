@@ -55,26 +55,43 @@ void FsmEventDef::insertActions(
 bool FsmEventDef::loadFromDataNode(
     DataNode* node, ScriptDef* scriptDef, Bitmask8* outActionFlags
 ) {
-    bool success = true;
+    type = FSM_EV_UNKNOWN;
+    FsmEventType* evTypePtr = nullptr;
     
-    bool typeFound;
-    type = enumGetValue(scriptEvScriptFileINames, node->name, &typeFound);
-    
-    if(!typeFound) {
-        type = FSM_EV_UNKNOWN;
-        game.errors.report(
-            "Unknown script event name \"" + node->name + "\"!", node
-        );
-        success = false;
+    //Find the corresponding event type.
+    forIdx(e, game.fsmEventTypes) {
+        if(game.fsmEventTypes[e].type == FSM_EV_UNKNOWN) continue;
+        if(game.fsmEventTypes[e].name == node->name) {
+            evTypePtr = &(game.fsmEventTypes[e]);
+            type = evTypePtr->type;
+        }
     }
     
-    success &= actions.loadFromDataNode(node, scriptDef, outActionFlags);
+    //Check if it is recognized.
+    if(!evTypePtr) {
+        game.errors.report(
+            "Unknown script FSM event name \"" + node->name + "\"!", node
+        );
+        return false;
+    }
+
+    //Check if this event is allowed in the current context.
+    if(!scriptDef->checkContextFlags(evTypePtr->contexts)) {
+        game.errors.report(
+            "The event \"" + node->name + "\" can't be used in an " +
+            scriptDef->getContextName() + " script context!", node
+        );
+        return false;
+    }
+    
+    //Load its contents.
+    bool loadOk = actions.loadFromDataNode(node, scriptDef, outActionFlags);
     
     forIdx(a, actions.list) {
         actions.list[a]->parentEvent = type;
     }
     
-    return success;
+    return loadOk;
 }
 
 

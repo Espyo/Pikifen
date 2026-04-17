@@ -749,6 +749,7 @@ int Game::start() {
     initDearImGui();
     
     //Init and load some engine things.
+    initFsmEventTypes();
     initScriptActionTypes();
     initMobCategories();
     initMiscDatabases();

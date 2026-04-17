@@ -182,6 +182,9 @@ public:
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loadingTextBmp = nullptr;
     
+    //List of FSM event types.
+    vector<FsmEventType> fsmEventTypes;
+    
     //List of script actions types.
     vector<ScriptActionType> scriptActionTypes;
     

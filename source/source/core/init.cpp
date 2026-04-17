@@ -42,6 +42,7 @@
 #include "../content/mob_category/track_category.h"
 #include "../content/mob_category/treasure_category.h"
 #include "../content/script/script.h"
+#include "../content/script/script_utils.h"
 #include "../game_state/game_state.h"
 #include "../game_state/gameplay/gameplay.h"
 #include "../lib/imgui/imgui_impl_allegro5.h"
@@ -1043,6 +1044,247 @@ void initEventThings(
 
 
 /**
+ * @brief Initializes the list of FSM event types. This only initializes the
+ * external, script file events. Internal ones are not accounted for.
+ */
+void initFsmEventTypes() {
+    game.fsmEventTypes.assign(N_FSM_EVENTS, FsmEventType());
+    Bitmask8 contexts = 0;
+    
+    auto commitEvent =
+    [&contexts] (FSM_EV eventType, const string eventName) {
+        FsmEventType* eventTypePtr;
+        eventTypePtr = &(game.fsmEventTypes[eventType]);
+        eventTypePtr->type = eventType;
+        eventTypePtr->name = eventName;
+        eventTypePtr->contexts = contexts;
+    };
+    
+    
+    //-Global events-
+    contexts =
+        getIdxBitmask(SCRIPT_CONTEXT_MOB) |
+        getIdxBitmask(SCRIPT_CONTEXT_AREA);
+
+        
+    //Unknown.
+    commitEvent(
+        FSM_EV_UNKNOWN,
+        "unknown"
+    );
+
+    //On enter.
+    commitEvent(
+        FSM_EV_ON_ENTER,
+        "on_enter"
+    );
+
+    //On leave.
+    commitEvent(
+        FSM_EV_ON_LEAVE,
+        "on_leave"
+    );
+
+    //On tick.
+    commitEvent(
+        FSM_EV_ON_TICK,
+        "on_tick"
+    );
+
+    //Timer.
+    commitEvent(
+        FSM_EV_TIMER,
+        "on_timer"
+    );
+
+    //Input received.
+    commitEvent(
+        FSM_EV_INPUT_RECEIVED,
+        "on_input_received"
+    );
+
+    
+    //-Mob events-
+    contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
+    
+
+    //On ready.
+    commitEvent(
+        FSM_EV_ON_READY,
+        "on_ready"
+    );
+
+    //Active leader changed.
+    commitEvent(
+        FSM_EV_ACTIVE_LEADER_CHANGED,
+        "on_active_leader_changed"
+    );
+
+    //Animation end.
+    commitEvent(
+        FSM_EV_ANIMATION_END,
+        "on_animation_end"
+    );
+
+    //Damage.
+    commitEvent(
+        FSM_EV_DAMAGE,
+        "on_damage"
+    );
+
+    //Far from home.
+    commitEvent(
+        FSM_EV_FAR_FROM_HOME,
+        "on_far_from_home"
+    );
+
+    //Finished receiving delivery.
+    commitEvent(
+        FSM_EV_FINISHED_RECEIVING_DELIVERY,
+        "on_finish_receiving_delivery"
+    );
+
+    //Focus off reach.
+    commitEvent(
+        FSM_EV_FOCUS_OFF_REACH,
+        "on_focus_off_reach"
+    );
+
+    //Frame signal.
+    commitEvent(
+        FSM_EV_FRAME_SIGNAL,
+        "on_frame_signal"
+    );
+
+    //Held.
+    commitEvent(
+        FSM_EV_HELD,
+        "on_held"
+    );
+
+    //Hitbox touch eat.
+    commitEvent(
+        FSM_EV_HITBOX_TOUCH_EAT,
+        "on_hitbox_touch_eat"
+    );
+
+    //Hitbox touch attack-normal.
+    commitEvent(
+        FSM_EV_HITBOX_TOUCH_A_N,
+        "on_hitbox_touch_a_n"
+    );
+
+    //Hitbox touch normal-normal.
+    commitEvent(
+        FSM_EV_HITBOX_TOUCH_N_N,
+        "on_hitbox_touch_n_n"
+    );
+
+    //Itch.
+    commitEvent(
+        FSM_EV_ITCH,
+        "on_itch"
+    );
+
+    //Landed.
+    commitEvent(
+        FSM_EV_LANDED,
+        "on_land"
+    );
+
+    //Left hazard.
+    commitEvent(
+        FSM_EV_LEFT_HAZARD,
+        "on_leave_hazard"
+    );
+
+    //Object in reach.
+    commitEvent(
+        FSM_EV_OBJECT_IN_REACH,
+        "on_object_in_reach"
+    );
+
+    //Opponent in reach.
+    commitEvent(
+        FSM_EV_OPPONENT_IN_REACH,
+        "on_opponent_in_reach"
+    );
+
+    //Thrown Pikmin landed.
+    commitEvent(
+        FSM_EV_THROWN_PIKMIN_LANDED,
+        "on_pikmin_land"
+    );
+
+    //Receive message.
+    commitEvent(
+        FSM_EV_RECEIVE_MESSAGE,
+        "on_receive_message"
+    );
+
+    //Released.
+    commitEvent(
+        FSM_EV_RELEASED,
+        "on_released"
+    );
+
+    //Reached destination.
+    commitEvent(
+        FSM_EV_REACHED_DESTINATION,
+        "on_reach_destination"
+    );
+
+    //Receiving delivery.
+    commitEvent(
+        FSM_EV_STARTED_RECEIVING_DELIVERY,
+        "on_start_receiving_delivery"
+    );
+
+    //Swallowed.
+    commitEvent(
+        FSM_EV_SWALLOWED,
+        "on_swallowed"
+    );
+
+    //Touched hazard.
+    commitEvent(
+        FSM_EV_TOUCHED_HAZARD,
+        "on_touch_hazard"
+    );
+
+    //Touched object.
+    commitEvent(
+        FSM_EV_TOUCHED_OBJECT,
+        "on_touch_object"
+    );
+
+    //Touched opponent.
+    commitEvent(
+        FSM_EV_TOUCHED_OPPONENT,
+        "on_touch_opponent"
+    );
+
+    //Touched wall.
+    commitEvent(
+        FSM_EV_TOUCHED_WALL,
+        "on_touch_wall"
+    );
+
+    //Weight added.
+    commitEvent(
+        FSM_EV_WEIGHT_ADDED,
+        "on_weight_added"
+    );
+
+    //Weight removed.
+    commitEvent(
+        FSM_EV_WEIGHT_REMOVED,
+        "on_weight_removed"
+    );
+}
+
+
+/**
  * @brief Initializes the list of inventory items.
  */
 void initInventoryItems() {
@@ -1254,8 +1496,8 @@ void initScriptActionTypes() {
     
     //-Global actions-
     contexts =
-        SCRIPT_CONTEXT_FLAG_MOB |
-        SCRIPT_CONTEXT_FLAG_AREA;
+        getIdxBitmask(SCRIPT_CONTEXT_MOB) |
+        getIdxBitmask(SCRIPT_CONTEXT_AREA);
         
     //Unknown.
     commitAction(
@@ -1608,7 +1850,7 @@ void initScriptActionTypes() {
     
     
     //-Mob script actions-
-    contexts = SCRIPT_CONTEXT_FLAG_MOB;
+    contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
     
     //Add health.
     queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);

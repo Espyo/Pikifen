@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "fsm.h"
+#include "script_utils.h"
 
 using std::map;
 using std::string;
@@ -53,6 +54,9 @@ public:
     
     ScriptDef();
     bool loadFromDataNode(DataNode* node);
+    SCRIPT_CONTEXT getContext() const;
+    string getContextName() const;
+    bool checkContextFlags(Bitmask8 flags) const;
     void unload();
     
 };
