@@ -83,48 +83,48 @@ AnimConversionVector MobType::getAnimConversions() const {
  *
  * @param state The state.
  */
-void MobType::handleLoadedScriptState(FsmStateDef* state) {
+void MobType::handleLoadedFsmState(FsmStateDef* state) {
     vector<FsmEventDef*> newEvents;
     
     //Inject a damage event.
-    if(!state->events[MOB_EV_HITBOX_TOUCH_N_A]) {
+    if(!state->events[FSM_EV_HITBOX_TOUCH_N_A]) {
         vector<ScriptActionDef*> daActions;
         daActions.push_back(
             new ScriptActionDef(GenMobFsm::beAttacked)
         );
         newEvents.push_back(
-            new FsmEventDef(MOB_EV_HITBOX_TOUCH_N_A, daActions)
+            new FsmEventDef(FSM_EV_HITBOX_TOUCH_N_A, daActions)
         );
     }
     
     //Inject a zero health event.
     if(
         state->name != dyingStateName &&
-        !state->events[MOB_EV_ZERO_HEALTH] &&
+        !state->events[FSM_EV_ZERO_HEALTH] &&
         !isInContainer(statesIgnoringDeath, state->name) &&
         !dyingStateName.empty()
     ) {
         vector<ScriptActionDef*> zhActions;
         zhActions.push_back(new ScriptActionDef(GenMobFsm::goToDyingState));
         newEvents.push_back(
-            new FsmEventDef(MOB_EV_ZERO_HEALTH, zhActions)
+            new FsmEventDef(FSM_EV_ZERO_HEALTH, zhActions)
         );
     }
     
     //Inject a bottomless pit event.
-    if(!state->events[MOB_EV_BOTTOMLESS_PIT]) {
+    if(!state->events[FSM_EV_BOTTOMLESS_PIT]) {
         vector<ScriptActionDef*> bpActions;
         bpActions.push_back(
             new ScriptActionDef(GenMobFsm::fallDownPit)
         );
         newEvents.push_back(
-            new FsmEventDef(MOB_EV_BOTTOMLESS_PIT, bpActions)
+            new FsmEventDef(FSM_EV_BOTTOMLESS_PIT, bpActions)
         );
     }
     
     //Inject a spray touch event.
     if(
-        !state->events[MOB_EV_TOUCHED_SPRAY] &&
+        !state->events[FSM_EV_TOUCHED_SPRAY] &&
         !isInContainer(statesIgnoringSpray, state->name)
     ) {
         vector<ScriptActionDef*> spActions;
@@ -132,13 +132,13 @@ void MobType::handleLoadedScriptState(FsmStateDef* state) {
             new ScriptActionDef(GenMobFsm::touchSpray)
         );
         newEvents.push_back(
-            new FsmEventDef(MOB_EV_TOUCHED_SPRAY, spActions)
+            new FsmEventDef(FSM_EV_TOUCHED_SPRAY, spActions)
         );
     }
     
     //Inject a hazard event.
     if(
-        !state->events[MOB_EV_TOUCHED_HAZARD] &&
+        !state->events[FSM_EV_TOUCHED_HAZARD] &&
         !isInContainer(statesIgnoringHazard, state->name)
     ) {
         vector<ScriptActionDef*> haActions;
@@ -146,7 +146,7 @@ void MobType::handleLoadedScriptState(FsmStateDef* state) {
             new ScriptActionDef(GenMobFsm::touchHazard)
         );
         newEvents.push_back(
-            new FsmEventDef(MOB_EV_TOUCHED_HAZARD, haActions)
+            new FsmEventDef(FSM_EV_TOUCHED_HAZARD, haActions)
         );
     }
     

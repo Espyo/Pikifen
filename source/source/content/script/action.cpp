@@ -404,7 +404,7 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     string name = words[0];
     words.erase(words.begin());
     
-    //Find the corresponding action.
+    //Find the corresponding action type.
     forIdx(a, game.scriptActionTypes) {
         if(game.scriptActionTypes[a].type == SCRIPT_ACTION_UNKNOWN) continue;
         if(game.scriptActionTypes[a].name == name) {

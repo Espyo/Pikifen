@@ -285,7 +285,7 @@ void Mob::applyAttackDamage(
         setHealth(true, false, -damage);
         
         HitboxInteraction evInfo(this, victimH, attackH);
-        scriptVM.fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
+        scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
         
         attacker->causeSpikeDamage(this, false);
     }
@@ -761,7 +761,7 @@ void Mob::becomeUncarriable() {
     forIdx(p, carryInfo->spotInfo) {
         if(carryInfo->spotInfo[p].state != CARRY_SPOT_STATE_FREE) {
             carryInfo->spotInfo[p].pikPtr->scriptVM.fsm.runEvent(
-                MOB_EV_FOCUSED_MOB_UNAVAILABLE
+                FSM_EV_FOCUSED_MOB_UNAVAILABLE
             );
         }
     }
@@ -2001,7 +2001,7 @@ bool Mob::followPath(
     
     if(pathInfo->path.size() >= 2 && pathInfo->curPathStopIdx > 0) {
         if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
-            scriptVM.fsm.runEvent(MOB_EV_PATH_BLOCKED);
+            scriptVM.fsm.runEvent(FSM_EV_PATH_BLOCKED);
         }
     }
     
@@ -2989,13 +2989,13 @@ void Mob::hold(
     m->holder.verticalDist = verticalDist;
     m->holder.forceAboveHolder = forceAboveHolder;
     m->holder.rotationMethod = rotationMethod;
-    m->scriptVM.fsm.runEvent(MOB_EV_HELD, (void*) this);
+    m->scriptVM.fsm.runEvent(FSM_EV_HELD, (void*) this);
     
     if(standingOnMob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that extra weight has been added.
             standingOnMob->scriptVM.fsm.runEvent(
-                MOB_EV_WEIGHT_ADDED, (void*) m
+                FSM_EV_WEIGHT_ADDED, (void*) m
             );
         }
     }
@@ -3270,7 +3270,7 @@ void Mob::release(Mob* m) {
         return;
     }
     
-    m->scriptVM.fsm.runEvent(MOB_EV_RELEASED, (void*) this);
+    m->scriptVM.fsm.runEvent(FSM_EV_RELEASED, (void*) this);
     holding.erase(holding.begin() + idx);
     m->holder.clear();
     
@@ -3278,7 +3278,7 @@ void Mob::release(Mob* m) {
         if(m->type->weight > 0) {
             //Better inform the mob below that weight has been removed.
             standingOnMob->scriptVM.fsm.runEvent(
-                MOB_EV_WEIGHT_REMOVED, (void*) m
+                FSM_EV_WEIGHT_REMOVED, (void*) m
             );
         }
     }
@@ -3506,17 +3506,17 @@ void Mob::setTeam(MOB_TEAM team) {
     forIdx(m, game.states.gameplay->mobs.all) {
         Mob* mPtr = game.states.gameplay->mobs.all[m];
         if(mPtr->scriptVM.focusedMob == this) {
-            mPtr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            mPtr->scriptVM.fsm.runEvent(FSM_EV_FOCUSED_MOB_UNAVAILABLE);
             mPtr->scriptVM.focusedMob = nullptr;
         }
     }
     if(game.states.gameplay->scriptVM.focusedMob == this) {
         game.states.gameplay->scriptVM.fsm.runEvent(
-            MOB_EV_FOCUSED_MOB_UNAVAILABLE
+            FSM_EV_FOCUSED_MOB_UNAVAILABLE
         );
         game.states.gameplay->scriptVM.focusedMob = nullptr;
     }
-    scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+    scriptVM.fsm.runEvent(FSM_EV_FOCUSED_MOB_UNAVAILABLE);
     scriptVM.focusedMob = nullptr;
 }
 
@@ -3627,7 +3627,7 @@ void Mob::startDying() {
         while(!group->members.empty()) {
             Mob* member = group->members[0];
             member->scriptVM.fsm.runEvent(
-                MOB_EV_DISMISSED,
+                FSM_EV_DISMISSED,
                 (void*) & (member->pos)
             );
             if(type->category->id != MOB_CATEGORY_LEADERS) {
@@ -3836,7 +3836,7 @@ void Mob::swallowChompedPikmin(Mob* mPtr) {
         return;
     }
     
-    mPtr->scriptVM.fsm.runEvent(MOB_EV_SWALLOWED);
+    mPtr->scriptVM.fsm.runEvent(FSM_EV_SWALLOWED);
     mPtr->causeSpikeDamage(this, true);
     mPtr->setHealth(false, false, 0.0f);
     release(mPtr);
@@ -3964,10 +3964,10 @@ void Mob::tickAnimation(float deltaT) {
         anim.tick(deltaT * mult, &frameSignals, &frameSounds);
         
     if(finishedAnim) {
-        scriptVM.fsm.runEvent(MOB_EV_ANIMATION_END);
+        scriptVM.fsm.runEvent(FSM_EV_ANIMATION_END);
     }
     forIdx(s, frameSignals) {
-        scriptVM.fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frameSignals[s]);
+        scriptVM.fsm.runEvent(FSM_EV_FRAME_SIGNAL, &frameSignals[s]);
     }
     forIdx(s, frameSounds) {
         playSound(frameSounds[s]);
@@ -4034,7 +4034,7 @@ void Mob::tickBrain(float deltaT) {
                     &carryInfo->intendedPikType,
                     &carryInfo->intendedMob, &carryInfo->intendedPoint
                 );
-            scriptVM.fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
+            scriptVM.fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
             carryInfo->mustRecalculate = false;
         }
     }
@@ -4106,7 +4106,7 @@ void Mob::tickBrain(float deltaT) {
                     //Think about going to the next, if possible.
                     if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
                         //Oop, there's an obstacle! Or some other blockage.
-                        scriptVM.fsm.runEvent(MOB_EV_PATH_BLOCKED);
+                        scriptVM.fsm.runEvent(FSM_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
                         chaseNextPathStop(chaseInfo.maxSpeed);
@@ -4135,7 +4135,7 @@ void Mob::tickBrain(float deltaT) {
             
             if(chaseInfo.state == CHASE_STATE_FINISHED) {
                 //Reached the final destination.
-                scriptVM.fsm.runEvent(MOB_EV_REACHED_DESTINATION);
+                scriptVM.fsm.runEvent(FSM_EV_REACHED_DESTINATION);
             }
         }
         
@@ -4447,13 +4447,13 @@ void Mob::tickScript(float deltaT) {
     
     //Has it reached 0 health?
     if(health <= 0 && maxHealth != 0) {
-        scriptVM.fsm.runEvent(MOB_EV_ZERO_HEALTH, this);
+        scriptVM.fsm.runEvent(FSM_EV_ZERO_HEALTH, this);
     }
     
     //Check the focused mob.
     if(scriptVM.focusedMob) {
         Mob* focus = scriptVM.focusedMob;
-        FsmEventDef* forEv = scriptVM.fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
+        FsmEventDef* forEv = scriptVM.fsm.getEvent(FSM_EV_FOCUS_OFF_REACH);
         
         if(farReach != INVALID && forEv) {
             float angleToFocus = getAngle(pos, focus->pos);
@@ -4472,7 +4472,7 @@ void Mob::tickScript(float deltaT) {
     //Itch event.
     if(type->itchDamage > 0 || type->itchTime > 0) {
         itchTime += deltaT;
-        FsmEventDef* itchEv = scriptVM.fsm.getEvent(MOB_EV_ITCH);
+        FsmEventDef* itchEv = scriptVM.fsm.getEvent(FSM_EV_ITCH);
         if(
             itchEv &&
             itchDamage > type->itchDamage && itchTime > type->itchTime
@@ -4500,7 +4500,7 @@ void Mob::tickScript(float deltaT) {
             continue;
         }
         
-        scriptVM.fsm.runEvent(MOB_EV_WHISTLED, (void*) player.leaderPtr);
+        scriptVM.fsm.runEvent(FSM_EV_WHISTLED, (void*) player.leaderPtr);
         
         bool savedByWhistle = false;
         forIdx(s, statuses) {
@@ -4524,7 +4524,7 @@ void Mob::tickScript(float deltaT) {
     
     //Following a leader.
     if(followingGroup) {
-        FsmEventDef* spotFarEv =  scriptVM.fsm.getEvent(MOB_EV_SPOT_IS_FAR);
+        FsmEventDef* spotFarEv =  scriptVM.fsm.getEvent(FSM_EV_SPOT_IS_FAR);
         
         if(spotFarEv) {
             Point targetPos;
@@ -4541,7 +4541,7 @@ void Mob::tickScript(float deltaT) {
     
     //Check if the active leader is different from the current leader.
     FsmEventDef* activeLeaderChangedEv =
-        scriptVM.fsm.getEvent(MOB_EV_ACTIVE_LEADER_CHANGED);
+        scriptVM.fsm.getEvent(FSM_EV_ACTIVE_LEADER_CHANGED);
     if(activeLeaderChangedEv) {
         forIdx(p, game.states.gameplay->players) {
             Leader* candidateLeader =
@@ -4557,7 +4557,7 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Far away from home.
-    FsmEventDef* farFromHomeEv = scriptVM.fsm.getEvent(MOB_EV_FAR_FROM_HOME);
+    FsmEventDef* farFromHomeEv = scriptVM.fsm.getEvent(FSM_EV_FAR_FROM_HOME);
     if(farFromHomeEv) {
         Distance d(pos, home);
         if(d >= type->territoryRadius) {

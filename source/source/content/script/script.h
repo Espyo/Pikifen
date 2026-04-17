@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the finite-state machine event classes and related functions.
+ * Header for the script classes and related functions.
  */
 
 

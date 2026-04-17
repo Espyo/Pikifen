@@ -33,20 +33,20 @@ void ResourceFsm::createFsm(MobType* typ) {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
-        efc.newEvent(MOB_EV_LANDED); {
+        efc.newEvent(FSM_EV_LANDED); {
             efc.run(ResourceFsm::loseMomentum);
         }
-        efc.newEvent(MOB_EV_TIMER); {
+        efc.newEvent(FSM_EV_TIMER); {
             efc.run(ResourceFsm::vanish);
         }
     }
@@ -56,34 +56,34 @@ void ResourceFsm::createFsm(MobType* typ) {
             efc.run(ResourceFsm::handleStartMoving);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
+        efc.newEvent(FSM_EV_REACHED_DESTINATION); {
             efc.run(ResourceFsm::handleReachDestination);
         }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
+        efc.newEvent(FSM_EV_PATH_BLOCKED); {
             efc.changeState("idle_stuck");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
+        efc.newEvent(FSM_EV_CARRY_DELIVERED); {
             efc.changeState("being_delivered");
         }
-        efc.newEvent(MOB_EV_TOUCHED_BOUNCER); {
+        efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.changeState("idle_thrown");
         }
     }
@@ -92,23 +92,23 @@ void ResourceFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
@@ -116,7 +116,7 @@ void ResourceFsm::createFsm(MobType* typ) {
     }
     
     efc.newState("idle_thrown", RESOURCE_STATE_IDLE_THROWN); {
-        efc.newEvent(MOB_EV_LANDED); {
+        efc.newEvent(FSM_EV_LANDED); {
             efc.run(GenMobFsm::loseMomentum);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
@@ -128,7 +128,7 @@ void ResourceFsm::createFsm(MobType* typ) {
             efc.run(ResourceFsm::startBeingDelivered);
             efc.run(GenMobFsm::startBeingDelivered);
         }
-        efc.newEvent(MOB_EV_TIMER); {
+        efc.newEvent(FSM_EV_TIMER); {
             efc.run(ResourceFsm::handleDelivery);
             efc.run(GenMobFsm::handleDelivery);
         }
@@ -141,17 +141,17 @@ void ResourceFsm::createFsm(MobType* typ) {
             efc.run(ResourceFsm::startWaiting);
             efc.run(GenMobFsm::carryStopMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
@@ -197,7 +197,7 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         
         HitboxInteraction evInfo(resPtr, nullptr, nullptr);
-        resPtr->scriptVM.fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
+        resPtr->scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
     }
 }
 

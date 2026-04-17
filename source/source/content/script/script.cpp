@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Scripting classes and related functions.
+ * Script classes and related functions.
  */
 
 #include <algorithm>
@@ -169,14 +169,14 @@ void ScriptVM::tick(float deltaT) {
     if(focusedMob) {
     
         if(focusedMob->health <= 0) {
-            fsm.runEvent(MOB_EV_FOCUS_DIED);
-            fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
+            fsm.runEvent(FSM_EV_FOCUS_DIED);
+            fsm.runEvent(FSM_EV_FOCUS_OFF_REACH);
         }
         
     }
     
     //Timer event.
-    FsmEventDef* timerEv = fsm.getEvent(MOB_EV_TIMER);
+    FsmEventDef* timerEv = fsm.getEvent(FSM_EV_TIMER);
     if(timer.duration > 0) {
         if(timer.timeLeft > 0) {
             timer.tick(deltaT);

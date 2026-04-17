@@ -422,7 +422,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     //Shake prompt.
     if(
         !leaderPromptDone &&
-        player->leaderPtr->scriptVM.fsm.getEvent(MOB_EV_ITCH)
+        player->leaderPtr->scriptVM.fsm.getEvent(FSM_EV_ITCH)
     ) {
         if(player->leaderPtr->hasOpponentPikminLatched()) {
             player->leaderPrompt.setEnabled(true);
@@ -1497,7 +1497,7 @@ void GameplayState::doScriptLogic() {
     if(!scriptVM.fsm.curState) return;
     
     //Timer events.
-    FsmEventDef* timerEv = scriptVM.fsm.getEvent(MOB_EV_TIMER);
+    FsmEventDef* timerEv = scriptVM.fsm.getEvent(FSM_EV_TIMER);
     if(scriptVM.timer.duration > 0) {
         if(scriptVM.timer.timeLeft > 0) {
             scriptVM.timer.tick(game.deltaT);
@@ -1796,7 +1796,7 @@ void GameplayState::processMobMiscInteractions(
 ) {
     //Find a carriable mob to grab.
     FsmEventDef* ncoEvent =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_NEAR_CARRIABLE_OBJECT);
     if(
         ncoEvent &&
         m2Ptr->carryInfo &&
@@ -1813,7 +1813,7 @@ void GameplayState::processMobMiscInteractions(
     
     //Find a tool mob.
     FsmEventDef* ntoEvent =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_TOOL);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_NEAR_TOOL);
     if(
         ntoEvent &&
         mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
@@ -1834,7 +1834,7 @@ void GameplayState::processMobMiscInteractions(
     
     //Find a group task mob.
     FsmEventDef* ngtoEvent =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_NEAR_GROUP_TASK);
     if(
         ngtoEvent &&
         m2Ptr->health > 0 &&
@@ -1858,7 +1858,7 @@ void GameplayState::processMobMiscInteractions(
     
     //"Bumped" by an active leader being nearby.
     FsmEventDef* touchLeEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
         for(Player& player : players) {
             if(!player.leaderPtr) continue;
@@ -1897,9 +1897,9 @@ void GameplayState::processMobReaches(
 ) {
     //Check reaches.
     FsmEventDef* obirEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_OBJECT_IN_REACH);
     FsmEventDef* opirEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_OPPONENT_IN_REACH);
         
     if(!obirEv && !opirEv) return;
     
@@ -2129,9 +2129,9 @@ void GameplayState::processMobTouches(
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
     FsmEventDef* touchOpEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_OPPONENT);
     FsmEventDef* touchObEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_OBJECT);
     if(touchOpEv || touchObEv) {
     
         bool zTouch;
@@ -2197,15 +2197,15 @@ void GameplayState::processMobTouches(
     
     //Check hitbox touches.
     FsmEventDef* hitboxTouchANEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_A_N);
     FsmEventDef* hitboxTouchNAEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_A);
     FsmEventDef* hitboxTouchNNEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_N);
     FsmEventDef* hitboxTouchEatEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_EAT);
     FsmEventDef* hitboxTouchHazEv =
-        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_HAZARD);
         
     Sprite* s1Ptr;
     mPtr->getSpriteData(&s1Ptr, nullptr, nullptr);
@@ -2306,13 +2306,13 @@ void GameplayState::processMobTouches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchEatEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_EAT);
                     hitboxTouchHazEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_A);
                     hitboxTouchNNEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_N);
                 }
                 
                 if(
@@ -2333,13 +2333,13 @@ void GameplayState::processMobTouches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchEatEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_EAT);
                     hitboxTouchHazEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_A);
                     hitboxTouchANEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_A_N);
                 }
                 
                 if(
@@ -2394,9 +2394,9 @@ void GameplayState::processMobTouches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchHazEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_HAZARD);
                     hitboxTouchNAEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Touched hazard" event.
@@ -2420,7 +2420,7 @@ void GameplayState::processMobTouches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitboxTouchNAEv =
-                        mPtr->scriptVM.fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                        mPtr->scriptVM.fsm.getEvent(FSM_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Normal hitbox touched attack hitbox" event.

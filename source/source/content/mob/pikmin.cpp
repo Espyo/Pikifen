@@ -266,7 +266,7 @@ void Pikmin::forceCarry(Mob* m) {
     scriptVM.fsm.setState(
         PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr
     );
-    scriptVM.fsm.runEvent(MOB_EV_REACHED_DESTINATION);
+    scriptVM.fsm.runEvent(FSM_EV_REACHED_DESTINATION);
 }
 
 
@@ -632,7 +632,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     //Carrying object.
     if(carryingMob) {
         if(!carryingMob->carryInfo) {
-            scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            scriptVM.fsm.runEvent(FSM_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
     
@@ -645,7 +645,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     if(mustFollowLinkAsLeader && !links.empty()) {
         Mob* leader = links[0];
         scriptVM.fsm.runEvent(
-            MOB_EV_TOUCHED_ACTIVE_LEADER,
+            FSM_EV_TOUCHED_ACTIVE_LEADER,
             (void*) (leader),
             (void*) 1 //Be silent.
         );

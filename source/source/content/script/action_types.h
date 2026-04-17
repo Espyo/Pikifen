@@ -11,6 +11,7 @@
 
 #pragma once
 
+
 #include "../../util/general_utils.h"
 
 
@@ -762,7 +763,7 @@ typedef bool (ScriptActionTypeLoadCode)(
 
 
 /**
- * @brief Info about an type of a script action.
+ * @brief Info about a type of script action.
  */
 struct ScriptActionType {
 

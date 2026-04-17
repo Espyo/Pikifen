@@ -157,10 +157,10 @@ public:
         //Should the child relay damage to the parent?
         bool relayDamage = false;
         
-        //Should the child handle script events?
+        //Should the child handle FSM events?
         bool handleEvents = false;
         
-        //Should the child relay script events to the parent?
+        //Should the child relay FSM events to the parent?
         bool relayEvents = false;
         
         //Should the child handle status effects?
@@ -484,7 +484,7 @@ public:
     void loadFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level, const string& folder
     );
-    virtual void handleLoadedScriptState(FsmStateDef* state);
+    virtual void handleLoadedFsmState(FsmStateDef* state);
     virtual void loadCatProperties(DataNode* file);
     virtual void loadCatResources(DataNode* file);
     virtual void loadCatScriptDataPre(DataNode* file);

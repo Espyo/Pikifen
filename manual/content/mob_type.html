@@ -25,7 +25,7 @@
     
     <p>To create a new object type, make a folder for it in the right category, with the folder's name representing the object type's <a href="making.html#content">internal name</a>. Create an empty <a href="making.html#data-file">data file</a> inside called <code>data.txt</code>. Inside of that, you will write all of the object's properties, like the name, its movement speed, etc.</p>
 
-    <p>Some properties are mandatory, some are optional, some apply to all object types, and some only apply to certain categories of object type. You can get a list of properties that apply to all object types in the following sub-sections of this page, and then check what properties exist for that category by visiting the category's article from the <a href="#mob-categories">list</a>. After you're done setting the properties, you must create the animations for the object type; use the <a href="animation.html">animation tutorial</a> for this. Finally, some object types will also need a script to run. To figure out if your object will need a script or not, check the <a href="#mob-categories">list of categories</a> and if it does, read the <a href="script.html">object script tutorial</a> to learn what you need to do.</p>
+    <p>Some properties are mandatory, some are optional, some apply to all object types, and some only apply to certain categories of object type. You can get a list of properties that apply to all object types in the following sub-sections of this page, and then check what properties exist for that category by visiting the category's article from the <a href="#mob-categories">list</a>. After you're done setting the properties, you must create the animations for the object type; use the <a href="animation.html">animation tutorial</a> for this. Finally, some object types will also need a script to run. To figure out if your object will need a script or not, check the <a href="#mob-categories">list of categories</a> and if it does, read the <a href="script.html">script tutorial</a> to learn what you need to do.</p>
 
     <p>After you have done that, you can boot up the engine, go to the area editor, place your new object in an area, hit play, and watch it in action!</p>
 
@@ -526,7 +526,7 @@
     
     <p>Your object can be a <b>parent</b> object, meaning it is actually composed of several different <b>child</b> objects. This feature is especially useful when you need several independently-moving parts. For instance, in a <a href="https://www.pikminwiki.com/Beady_Long_Legs">Beady Long Legs</a>, the head is the parent object, meaning it is the enemy proper, and each leg is a child object.</p>
 
-    <p>A parent will spawn its children at the same time that it itself is spawned. Because every child is meant to be its own individual thing but also serve as components of the parent object, there are several ways for you to specify what it should do when it interacts with the world. This means specifying what happens when it receives damage, receives a script event, or receives a status effect: it can either ignore what it received or not, and it can either relay it to the parent object or not.</p>
+    <p>A parent will spawn its children at the same time that it itself is spawned. Because every child is meant to be its own individual thing but also serve as components of the parent object, there are several ways for you to specify what it should do when it interacts with the world. This means specifying what happens when it receives damage, receives a script FSM event, or receives a status effect: it can either ignore what it received or not, and it can either relay it to the parent object or not.</p>
 
     <p>Children objects can also be connected to a specific body part in the parent. Because children objects are commonly used as appendages of the creature, it is possible to draw a "limb" connecting a parent object to a child object. This limb is a rectangular shaped sprite that stretches and rotates accordingly.</p>
 
@@ -593,7 +593,7 @@
       </tr>
       <tr>
         <td>handle_events</td>
-        <td>If <code>true</code>, the child object handles any script event that it receives. If <code>false</code>, it ignores the event.</td>
+        <td>If <code>true</code>, the child object handles any script FSM event that it receives. If <code>false</code>, it ignores the event.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>

@@ -32,16 +32,16 @@ void TreasureFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
-        efc.newEvent(MOB_EV_LANDED); {
+        efc.newEvent(FSM_EV_LANDED); {
             efc.run(TreasureFsm::standStill);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
@@ -51,36 +51,36 @@ void TreasureFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.changeState("idle_waiting");
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
+        efc.newEvent(FSM_EV_REACHED_DESTINATION); {
             efc.run(GenMobFsm::carryReachDestination);
         }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
+        efc.newEvent(FSM_EV_CARRY_DELIVERED); {
             efc.changeState("being_delivered");
         }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
+        efc.newEvent(FSM_EV_PATH_BLOCKED); {
             efc.changeState("idle_stuck");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
             efc.run(TreasureFsm::respawn);
         }
-        efc.newEvent(MOB_EV_TOUCHED_BOUNCER); {
+        efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.changeState("idle_thrown");
         }
     }
@@ -89,33 +89,33 @@ void TreasureFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.changeState("idle_waiting");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
-        efc.newEvent(MOB_EV_BOTTOMLESS_PIT); {
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
             efc.run(TreasureFsm::respawn);
         }
     }
     
     efc.newState("idle_thrown", TREASURE_STATE_IDLE_THROWN); {
-        efc.newEvent(MOB_EV_LANDED); {
+        efc.newEvent(FSM_EV_LANDED); {
             efc.run(GenMobFsm::loseMomentum);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
@@ -126,7 +126,7 @@ void TreasureFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
-        efc.newEvent(MOB_EV_TIMER); {
+        efc.newEvent(FSM_EV_TIMER); {
             efc.run(GenMobFsm::handleDelivery);
         }
     }

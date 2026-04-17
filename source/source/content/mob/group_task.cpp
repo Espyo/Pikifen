@@ -120,17 +120,17 @@ void GroupTask::finishTask() {
     forIdx(p, game.states.gameplay->mobs.pikmin) {
         Pikmin* pikPtr = game.states.gameplay->mobs.pikmin[p];
         if(pikPtr->scriptVM.focusedMob == this) {
-            pikPtr->scriptVM.fsm.runEvent(MOB_EV_FINISHED_TASK);
-            pikPtr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            pikPtr->scriptVM.fsm.runEvent(FSM_EV_FINISHED_TASK);
+            pikPtr->scriptVM.fsm.runEvent(FSM_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
     
     if(game.states.gameplay->scriptVM.focusedMob == this) {
         game.states.gameplay->scriptVM.fsm.runEvent(
-            MOB_EV_FINISHED_TASK
+            FSM_EV_FINISHED_TASK
         );
         game.states.gameplay->scriptVM.fsm.runEvent(
-            MOB_EV_FOCUSED_MOB_UNAVAILABLE
+            FSM_EV_FOCUSED_MOB_UNAVAILABLE
         );
     }
 }

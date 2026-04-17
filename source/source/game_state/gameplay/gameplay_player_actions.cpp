@@ -289,7 +289,7 @@ bool GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
             !done &&
             player->leaderPtr->hasOpponentPikminLatched()
         ) {
-            player->leaderPtr->scriptVM.fsm.runEvent(MOB_EV_ITCH);
+            player->leaderPtr->scriptVM.fsm.runEvent(FSM_EV_ITCH);
             done = true;
         }
         
@@ -521,11 +521,11 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
     //it's received an input, which will trigger an event.
     if(player->leaderPtr) {
         player->leaderPtr->scriptVM.fsm.runEvent(
-            MOB_EV_INPUT_RECEIVED, (void*) &action
+            FSM_EV_INPUT_RECEIVED, (void*) &action
         );
     }
     game.states.gameplay->scriptVM.fsm.runEvent(
-        MOB_EV_INPUT_RECEIVED, (void*) &action
+        FSM_EV_INPUT_RECEIVED, (void*) &action
     );
     
     if(!msgBox && !onionMenu && !pauseMenu) {

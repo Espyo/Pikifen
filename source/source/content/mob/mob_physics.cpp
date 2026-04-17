@@ -643,7 +643,7 @@ void Mob::tickPhysics(float deltaT) {
     pushAmount = 0;
     
     if(touchedWall) {
-        scriptVM.fsm.runEvent(MOB_EV_TOUCHED_WALL);
+        scriptVM.fsm.runEvent(FSM_EV_TOUCHED_WALL);
     }
     
     if(type->walkable) {
@@ -772,7 +772,7 @@ void Mob::tickVerticalMovementPhysics(
             z = standingOnMob->z + standingOnMob->height;
             speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
-            scriptVM.fsm.runEvent(MOB_EV_LANDED);
+            scriptVM.fsm.runEvent(FSM_EV_LANDED);
             stopHeightEffect();
             highestMidairZ = FLT_MAX;
             
@@ -780,17 +780,17 @@ void Mob::tickVerticalMovementPhysics(
             z = groundSector->z;
             speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
-            scriptVM.fsm.runEvent(MOB_EV_LANDED);
+            scriptVM.fsm.runEvent(FSM_EV_LANDED);
             stopHeightEffect();
             highestMidairZ = FLT_MAX;
             
             if(groundSector->isBottomlessPit) {
-                scriptVM.fsm.runEvent(MOB_EV_BOTTOMLESS_PIT);
+                scriptVM.fsm.runEvent(FSM_EV_BOTTOMLESS_PIT);
             }
             
             if(groundSector->hazard) {
                 scriptVM.fsm.runEvent(
-                    MOB_EV_TOUCHED_HAZARD,
+                    FSM_EV_TOUCHED_HAZARD,
                     (void*) groundSector->hazard
                 );
                 newOnHazard = groundSector->hazard;
@@ -809,7 +809,7 @@ void Mob::tickVerticalMovementPhysics(
         if(leaderGround && holder.m->z <= leaderGround->z) {
             if(leaderGround->hazard) {
                 scriptVM.fsm.runEvent(
-                    MOB_EV_TOUCHED_HAZARD,
+                    FSM_EV_TOUCHED_HAZARD,
                     (void*) leaderGround->hazard
                 );
                 newOnHazard = leaderGround->hazard;
@@ -832,7 +832,7 @@ void Mob::tickVerticalMovementPhysics(
         z > groundSector->z
     ) {
         scriptVM.fsm.runEvent(
-            MOB_EV_TOUCHED_HAZARD,
+            FSM_EV_TOUCHED_HAZARD,
             (void*) groundSector->hazard
         );
         newOnHazard = groundSector->hazard;
@@ -841,7 +841,7 @@ void Mob::tickVerticalMovementPhysics(
     //Check if any hazards have been left.
     if(newOnHazard != onHazard && onHazard != nullptr) {
         scriptVM.fsm.runEvent(
-            MOB_EV_LEFT_HAZARD,
+            FSM_EV_LEFT_HAZARD,
             (void*) onHazard
         );
         
@@ -888,21 +888,21 @@ void Mob::tickWalkableRidingPhysics(float deltaT) {
     
     if(riderRemovedEvMob) {
         riderRemovedEvMob->scriptVM.fsm.runEvent(
-            MOB_EV_RIDER_REMOVED, (void*) this
+            FSM_EV_RIDER_REMOVED, (void*) this
         );
         if(type->weight != 0.0f) {
             riderRemovedEvMob->scriptVM.fsm.runEvent(
-                MOB_EV_WEIGHT_REMOVED, (void*) this
+                FSM_EV_WEIGHT_REMOVED, (void*) this
             );
         }
     }
     if(riderAddedEvMob) {
         riderAddedEvMob->scriptVM.fsm.runEvent(
-            MOB_EV_RIDER_ADDED, (void*) this
+            FSM_EV_RIDER_ADDED, (void*) this
         );
         if(type->weight != 0.0f) {
             riderAddedEvMob->scriptVM.fsm.runEvent(
-                MOB_EV_WEIGHT_ADDED, (void*) this
+                FSM_EV_WEIGHT_ADDED, (void*) this
             );
         }
     }

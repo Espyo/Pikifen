@@ -1639,7 +1639,7 @@ void GameplayState::loadGameContent() {
 void GameplayState::sendScriptMessage(
     Mob* sender, Mob* receiver, string& msg
 ) const {
-    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
+    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(FSM_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(&receiver->scriptVM, (void*) &msg, (void*) sender);
 }

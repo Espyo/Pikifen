@@ -1177,7 +1177,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     }
     
     if(ImGui::Combo("Team", &teamNr, teamNames, 15)) {
-        registerChange("object script vars change");
+        registerChange("script vars change");
         if(teamNr > 0) {
             //0 is reserved in this widget for "default".
             //Decrease it by one to get the real team index number.
@@ -1206,7 +1206,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     }
     
     if(ImGui::DragFloat("Health", &health, 0.25f, 0.0f, maxHealth)) {
-        registerChange("object script vars change");
+        registerChange("script vars change");
     }
     setTooltip(
         "Starting health for this specific object.\n"
@@ -1222,7 +1222,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
     //Max health property.
     if(ImGui::DragFloat("Max health", &maxHealth, 0.25f, 0.0f, FLT_MAX)) {
-        registerChange("object script vars change");
+        registerChange("script vars change");
     }
     setTooltip(
         "Maximum health for this specific object.\n"
@@ -1256,7 +1256,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
             string valueS = value;
             if(ImGui::InputText(pPtr->name.c_str(), &valueS)) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = valueS;
             }
             
@@ -1271,7 +1271,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
                     pPtr->minValue, pPtr->maxValue
                 )
             ) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = i2s(valueI);
             }
             
@@ -1286,7 +1286,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
                     pPtr->minValue, pPtr->maxValue
                 )
             ) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = f2s(valueF);
             }
             
@@ -1296,7 +1296,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
             bool valueB = s2b(value);
             if(ImGui::Checkbox(pPtr->name.c_str(), &valueB)) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = b2s(valueB);
             }
             
@@ -1306,7 +1306,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
             string valueS = value;
             if(ImGui::Combo(pPtr->name, &valueS, pPtr->valueList, 15)) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = valueS;
             }
             
@@ -1316,7 +1316,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
             int itemIdx = s2i(value);
             if(ImGui::Combo(pPtr->name, &itemIdx, pPtr->valueList, 15)) {
-                registerChange("object script vars change");
+                registerChange("script vars change");
                 value = i2s(itemIdx);
             }
             
@@ -1364,7 +1364,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     string mobVars = mPtr->vars;
     ImGui::Spacer();
     if(monoInputText("Full list", &mobVars)) {
-        registerChange("object script vars change");
+        registerChange("script vars change");
         mPtr->vars = mobVars;
     }
     setTooltip(
@@ -4212,7 +4212,7 @@ void AreaEditor::processGuiPanelMob() {
         "", WIDGET_EXPLANATION_SLIDER
     );
     
-    //Object script vars node.
+    //Script vars node.
     ImGui::Spacer();
     if(saveableTreeNode("mobs", "Script vars")) {
     

@@ -33,13 +33,13 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::startIdling);
         }
-        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::startDelivery);
         }
-        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
-        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
         }
     }
@@ -48,13 +48,13 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::startGenerating);
         }
-        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::startDelivery);
         }
-        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
-        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
             efc.run(OnionFsm::checkStopGenerating);
         }
     }
@@ -63,16 +63,16 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::stopGenerating);
         }
-        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::startDelivery);
         }
-        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
-        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
         }
     }

@@ -711,7 +711,7 @@ void Leader::dismissLogic() {
     //Dismiss leaders now.
     forIdx(m, group->members) {
         if(group->members[m]->type->category->id == MOB_CATEGORY_LEADERS) {
-            group->members[m]->scriptVM.fsm.runEvent(MOB_EV_DISMISSED, nullptr);
+            group->members[m]->scriptVM.fsm.runEvent(FSM_EV_DISMISSED, nullptr);
             group->members[m]->leaveGroup();
             m--;
         }
@@ -992,7 +992,7 @@ bool Leader::orderPikminToOnion(
     forIdx(p, candidates) {
     
         Pikmin* pikPtr = candidates[p].second;
-        FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(MOB_EV_GO_TO_ONION);
+        FsmEventDef* ev = pikPtr->scriptVM.fsm.getEvent(FSM_EV_GO_TO_ONION);
         if(!ev) continue;
         
         ev->run(&pikPtr->scriptVM, (void*) nPtr);
@@ -1027,7 +1027,7 @@ void Leader::queueThrow() {
  */
 void Leader::signalSwarmEnd() const {
     forIdx(m, group->members) {
-        group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_ENDED);
+        group->members[m]->scriptVM.fsm.runEvent(FSM_EV_SWARM_ENDED);
     }
 }
 
@@ -1037,7 +1037,7 @@ void Leader::signalSwarmEnd() const {
  */
 void Leader::signalSwarmStart() const {
     forIdx(m, group->members) {
-        group->members[m]->scriptVM.fsm.runEvent(MOB_EV_SWARM_STARTED);
+        group->members[m]->scriptVM.fsm.runEvent(FSM_EV_SWARM_STARTED);
     }
 }
 
@@ -1094,7 +1094,7 @@ void Leader::specificDismiss(
         //Remove it from the group and order it to go to that spot.
         members[m]->leaveGroup();
         members[m]->scriptVM.fsm.runEvent(
-            MOB_EV_DISMISSED, (void*) &destination
+            FSM_EV_DISMISSED, (void*) &destination
         );
         
     }
@@ -1200,9 +1200,9 @@ void Leader::swapHeldPikmin(Mob* newPik) {
     }
     
     FsmEventDef* oldPikEv =
-        oldPik->scriptVM.fsm.getEvent(MOB_EV_RELEASED);
+        oldPik->scriptVM.fsm.getEvent(FSM_EV_RELEASED);
     FsmEventDef* newPikEv =
-        newPik->scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+        newPik->scriptVM.fsm.getEvent(FSM_EV_GRABBED_BY_FRIEND);
     
     group->sort(newPik->subgroupTypePtr);
     
@@ -1366,7 +1366,7 @@ void Leader::updateThrowVariables() {
  * @param player The player responsible.
  * @param forward If true, switch to the next one. If false, to the previous.
  * @param forceSuccess If true, switch to this leader even if they can't
- * currently handle the leader switch script event.
+ * currently handle the leader switch script FSM event.
  * @param keepIdx If true, swap to a leader that has the same index in the
  * list of available leaders as the current one does.
  * Usually this is used because the current leader is no longer available.
@@ -1486,7 +1486,7 @@ bool grabClosestGroupMember(Player* player) {
     //Check if the leader can grab, and the group member can be grabbed.
     FsmEventDef* grabbedEv =
         player->closestGroupMember[BUBBLE_RELATION_CURRENT]->
-        scriptVM.fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+        scriptVM.fsm.getEvent(FSM_EV_GRABBED_BY_FRIEND);
     FsmEventDef* grabberEv =
         player->leaderPtr->scriptVM.fsm.getEvent(LEADER_EV_HOLDING);
     if(!grabberEv || !grabbedEv) {

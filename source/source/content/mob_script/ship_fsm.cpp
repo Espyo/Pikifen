@@ -33,10 +33,10 @@ void ShipFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ShipFsm::setAnim);
         }
-        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(ShipFsm::startDelivery);
         }
-        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(ShipFsm::receiveMob);
         }
     }

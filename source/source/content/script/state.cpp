@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Script event classes and related functions.
+ * FSM state classes and related functions.
  */
 
 
@@ -25,7 +25,7 @@
 FsmStateDef::FsmStateDef(const string& name) :
     name(name) {
     
-    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+    for(size_t e = 0; e < N_FSM_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -38,11 +38,11 @@ FsmStateDef::FsmStateDef(const string& name) :
  * @param evs Its events.
  */
 FsmStateDef::FsmStateDef(
-    const string& name, FsmEventDef* evs[N_SCRIPT_EVENTS]
+    const string& name, FsmEventDef* evs[N_FSM_EVENTS]
 ) :
     name(name) {
     
-    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+    for(size_t e = 0; e < N_FSM_EVENTS; e++) {
         events[e] = evs[e];
     }
 }
@@ -58,7 +58,7 @@ FsmStateDef::FsmStateDef(const string& name, size_t id) :
     name(name),
     id(id) {
     
-    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+    for(size_t e = 0; e < N_FSM_EVENTS; e++) {
         events[e] = nullptr;
     }
 }
@@ -156,7 +156,7 @@ bool FsmStateDef::loadFromDataNode(
     
     //Let the mob type do extra processing, if necessary.
     if(scriptDef->mobType) {
-        scriptDef->mobType->handleLoadedScriptState(this);
+        scriptDef->mobType->handleLoadedFsmState(this);
     }
     
     return success;
@@ -198,7 +198,7 @@ void FsmStateDef::mergeEvents(
  * @brief Unloads the state definition and its contents from memory.
  */
 void FsmStateDef::unload() {
-    for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+    for(size_t e = 0; e < N_FSM_EVENTS; e++) {
         FsmEventDef* ePtr = events[e];
         if(!ePtr) continue;
         ePtr->unload();

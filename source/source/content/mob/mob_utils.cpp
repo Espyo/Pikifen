@@ -1425,13 +1425,13 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
         
         if(game.states.gameplay->scriptVM.focusedMob == mPtr) {
             game.states.gameplay->scriptVM.fsm.runEvent(
-                MOB_EV_FOCUSED_MOB_UNAVAILABLE
+                FSM_EV_FOCUSED_MOB_UNAVAILABLE
             );
             game.states.gameplay->scriptVM.fsm.runEvent(
-                MOB_EV_FOCUS_OFF_REACH
+                FSM_EV_FOCUS_OFF_REACH
             );
             game.states.gameplay->scriptVM.fsm.runEvent(
-                MOB_EV_FOCUS_DIED
+                FSM_EV_FOCUS_DIED
             );
             game.states.gameplay->scriptVM.focusedMob = nullptr;
         }
@@ -1439,9 +1439,9 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
         forIdx(m, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->scriptVM.focusedMob == mPtr) {
-                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
-                m2Ptr->scriptVM.fsm.runEvent(MOB_EV_FOCUS_DIED);
+                m2Ptr->scriptVM.fsm.runEvent(FSM_EV_FOCUSED_MOB_UNAVAILABLE);
+                m2Ptr->scriptVM.fsm.runEvent(FSM_EV_FOCUS_OFF_REACH);
+                m2Ptr->scriptVM.fsm.runEvent(FSM_EV_FOCUS_DIED);
                 m2Ptr->scriptVM.focusedMob = nullptr;
             }
             if(m2Ptr->parent && m2Ptr->parent->m == mPtr) {

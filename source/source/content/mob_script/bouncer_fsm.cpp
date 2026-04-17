@@ -33,7 +33,7 @@ void BouncerFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BouncerFsm::setIdlingAnimation);
         }
-        efc.newEvent(MOB_EV_RIDER_ADDED); {
+        efc.newEvent(FSM_EV_RIDER_ADDED); {
             efc.run(BouncerFsm::handleMob);
         }
     }
@@ -41,10 +41,10 @@ void BouncerFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(BouncerFsm::setBouncingAnimation);
         }
-        efc.newEvent(MOB_EV_RIDER_ADDED); {
+        efc.newEvent(FSM_EV_RIDER_ADDED); {
             efc.run(BouncerFsm::handleMob);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
     }
@@ -101,7 +101,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to be bounced.
-        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
     } else if(
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
@@ -109,7 +109,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
     
         //Leader is about to be bounced.
-        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
         
     } else if(
         hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
@@ -121,7 +121,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
     
         //Pikmin carrying light load is about to be bounced.
-        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_BOUNCER);
     }
     
     if(!ev) return;

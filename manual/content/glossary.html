@@ -40,8 +40,8 @@
     </dl>
     <dl id="action">
       <dt>Action</dt>
-      <dd>Something that an object can do in its <a href="#script">script</a>. This includes walking to a certain point, losing <a href="#health">health</a>, changing its <a href="#animation">animation</a>, etc.</dd>
-      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+      <dd>Something that a <a href="#script">script</a> can do. This includes making its object walk to a certain point, focus on a different object, change state, etc.</dd>
+      <dd>Further reading: <a href="script.html">Script</a>.</dd>
       <dd>See also: <a href="#player-action">Player action</a>.</dd>
     </dl>
     <dl id="active">
@@ -191,8 +191,8 @@
     </dl>
     <dl id="event">
       <dt>Event</dt>
-      <dd>When something happens to an object, like when it gets hurt, or it reaches its destination, an event is thrown. In the <a href="#script">script</a>, you can specify what <a href="#action">actions</a> to perform whenever a certain event is triggered. Different <a href="#state">states</a> can have different event handling.</dd>
-      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+      <dd>When something happens in a <a href="#script">script</a>, like when its object gets hurt or reaches its destination, an event is thrown. You can specify what <a href="#action">actions</a> to perform whenever a certain event is triggered. Different <a href="#state">states</a> can have different event handling.</dd>
+      <dd>Further reading: <a href="script.html">Script</a>.</dd>
     </dl>
     <dl id="exploration">
       <dt>Exploration</dt>
@@ -225,7 +225,12 @@
     <dl id="frame-signal">
       <dt>Frame signal</dt>
       <dd>When something needs to happen during a specific <a href="#frame">frame</a> of <a href="#animation">animation</a>, a frame signal <a href="#event">event</a> can be thrown, and handled in the <a href="#script">script</a>.</dd>
-      <dd>Further reading: <a href="animation.html">Making animations</a>, <a href="mob_type.html">Object script</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>, <a href="mob_type.html">Script</a>.</dd>
+    </dl>
+    <dl id="fsm">
+      <dt>FSM, Finite-state machine</dt>
+      <dd><a href="#script">Scripts</a> are usually controlled by a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite-state machine</a>. This means they are always in one given <a href="#state">state</a>, which control what <a href="#action">actions</a> are run during given <a href="#event">events</a>, and can also jump between states.</dd>
+      <dd>Further reading: <a href="mob_type.html">Script</a>.</dd>
     </dl>
     
     <h2 id="G">G</h2>
@@ -383,10 +388,6 @@
       <dt>Object</dt>
       <dd>Any individual Pikmin, leader, obstacle, enemy, ship, etc. is an object. Each object is of an <a href="#object-type">object type</a>, and multiple objects of the same type can exist in the same area at once.</dd>
     </dl>
-    <dl id="object-action">
-      <dt>Object action</dt>
-      <dd>See <a href="#action">Action</a>.</dd>
-    </dl>
     <dl id="object-category">
       <dt>Object category</dt>
       <dd>A category contains a list of <a href="#object-type">object types</a>. Examples include Pikmin, leaders, treasures, and so on. Types in the same category look and behave similarly. For instance, all <a href="#object">objects</a> of a Pikmin type need to show the Pikmin itself and its <a href="#top">top</a>, they all need to follow leaders who whistle them, etc.</dd>
@@ -483,8 +484,8 @@
     </dl>
     <dl id="script">
       <dt>Script</dt>
-      <dd>An <a href="#object">object</a>'s script controls what the object should do when certain scenarios occur. Every object is in a <a href="#state">state</a> at any given time, and depending on the <a href="#event">events</a> it receives while in a specific state, it can do a different set of <a href="#action">actions</a>.</dd>
-      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+      <dd>A script controls what the <a href="#object">object</a> or area should do when certain scenarios occur. Every script is in a <a href="#state">state</a> at any given time, and depending on the <a href="#event">events</a> it receives while in a specific state, it can do a different set of <a href="#action">actions</a>.</dd>
+      <dd>Further reading: <a href="script.html">Script</a>.</dd>
     </dl>
     <dl id="sector">
       <dt>Sector</dt>
@@ -533,8 +534,8 @@
     </dl>
     <dl id="state">
       <dt>State</dt>
-      <dd>Every <a href="#object">object</a> with a <a href="#script">script</a> is in a specific state at any given time. When an <a href="#event">event</a> is received, the state the object is on will influence the response. For instance, when a Pikmin is near a Red Bulborb, if the Bulborb is in the "sleeping" state, it should wake up, but if it is in the "chasing" state, it should lunge in for a bite.</dd>
-      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+      <dd>Every <a href="#script">script</a>'s <a href="#fsm">FSM</a> is in a specific state at any given time. When an <a href="#event">event</a> is received, the state the script is on will influence the response. For instance, when a Pikmin is near a Red Bulborb, if the Bulborb is in the "sleeping" state, it should wake up, but if it is in the "chasing" state, it should lunge in for a bite.</dd>
+      <dd>Further reading: <a href="script.html">Script</a>.</dd>
     </dl>
     <dl id="stairs">
       <dt>Stairs</dt>

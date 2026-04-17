@@ -55,7 +55,7 @@ buildEnumNames(statusAffectsFlagINames, STATUS_AFFECTS_FLAG)({
 });
 
 
-//What mob script state the status effect changes to.
+//What mob FSM state the status effect changes to.
 enum STATUS_STATE_CHANGE {
 
     //None.
@@ -186,7 +186,7 @@ public:
     //How the affected mob's state changes, if it does at all.
     STATUS_STATE_CHANGE stateChangeType = STATUS_STATE_CHANGE_NONE;
     
-    //Name of the mob state to change to, if any.
+    //Name of the FSM state to change to, if any.
     string stateChangeName;
     
     //Name of the mob animation to change to, if any.

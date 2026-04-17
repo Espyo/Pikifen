@@ -30,7 +30,7 @@ void DecorationFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DecorationFsm::becomeIdle);
         }
-        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+        efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
             efc.run(DecorationFsm::checkBump);
         }
     }
@@ -38,7 +38,7 @@ void DecorationFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DecorationFsm::beBumped);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
     }

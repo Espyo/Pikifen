@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the script state classes and related functions.
+ * Header for the FSM state classes and related functions.
  */
 
 
@@ -39,13 +39,13 @@ public:
     size_t id = INVALID;
     
     //List of events to handle in this state.
-    FsmEventDef* events[N_SCRIPT_EVENTS];
+    FsmEventDef* events[N_FSM_EVENTS];
     
     
     //--- Public function declarations ---
     
     explicit FsmStateDef(const string& name);
-    FsmStateDef(const string& name, FsmEventDef* evs[N_SCRIPT_EVENTS]);
+    FsmStateDef(const string& name, FsmEventDef* evs[N_FSM_EVENTS]);
     FsmStateDef(const string& name, size_t id);
     void createAndAddConvenientEvents();
     void mergeEvents(

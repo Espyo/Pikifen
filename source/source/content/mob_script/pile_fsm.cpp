@@ -39,7 +39,7 @@ void PileFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(PileFsm::becomeIdle);
         }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
             efc.run(PileFsm::beAttacked);
         }
     }

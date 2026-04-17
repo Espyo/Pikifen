@@ -35,14 +35,14 @@ void BridgeFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_READY); {
             efc.run(BridgeFsm::setup);
         }
-        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
             efc.run(GenMobFsm::beAttacked);
             efc.run(BridgeFsm::checkHealth);
         }
-        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(BridgeFsm::checkHealth);
         }
-        efc.newEvent(MOB_EV_ZERO_HEALTH); {
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(BridgeFsm::checkHealth);
             efc.run(BridgeFsm::open);
             efc.changeState("destroyed");

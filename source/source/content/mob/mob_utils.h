@@ -602,10 +602,10 @@ struct Parent {
     //Should the child relay status effects to the parent?
     bool relayStatuses = false;
     
-    //Should the child handle script events?
+    //Should the child handle FSM events?
     bool handleEvents = false;
     
-    //Should the child relay script events to the parent?
+    //Should the child relay FSM events to the parent?
     bool relayEvents = false;
     
     //Animation used for the limb connecting child and parent.

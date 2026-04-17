@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Script event classes and related functions.
+ * FSM event classes and related functions.
  */
 
 

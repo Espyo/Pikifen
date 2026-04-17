@@ -30,10 +30,10 @@ void ConverterFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::becomeIdle);
         }
-        efc.newEvent(MOB_EV_THROWN_PIKMIN_LANDED); {
+        efc.newEvent(FSM_EV_THROWN_PIKMIN_LANDED); {
             efc.run(ConverterFsm::handlePikmin);
         }
-        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+        efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
             efc.run(ConverterFsm::handleObjectTouch);
         }
     }
@@ -42,14 +42,14 @@ void ConverterFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::bumped);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(ConverterFsm::finishBeingBumped);
             efc.changeState("closing");
         }
     }
     
     efc.newState("closing", CONVERTER_STATE_CLOSING); {
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(ConverterFsm::openOrSpit);
         }
     }
@@ -58,7 +58,7 @@ void ConverterFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::spit);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(ConverterFsm::openOrDie);
         }
     }
@@ -67,7 +67,7 @@ void ConverterFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::open);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
     }
@@ -76,7 +76,7 @@ void ConverterFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(ConverterFsm::startDying);
         }
-        efc.newEvent(MOB_EV_ANIMATION_END); {
+        efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(ConverterFsm::finishDying);
         }
     }

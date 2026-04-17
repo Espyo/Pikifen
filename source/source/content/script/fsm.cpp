@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Script event classes and related functions.
+ * Finite-state machine classes and related functions.
  */
 
 
@@ -136,7 +136,7 @@ bool FsmDef::compileStates(DataNode* fileNode) {
     forIdx(s, states) {
         FsmStateDef* state = states[s];
         
-        for(size_t e = 0; e < N_SCRIPT_EVENTS; e++) {
+        for(size_t e = 0; e < N_FSM_EVENTS; e++) {
             FsmEventDef* ev = state->events[e];
             if(!ev) continue;
             
@@ -340,7 +340,7 @@ void FsmInst::init() {
         
     if(!firstStateSuccess) {
         //If something went wrong, give it some dummy state.
-        curState = game.dummyScriptState;
+        curState = game.dummyFsmState;
     };
 }
 

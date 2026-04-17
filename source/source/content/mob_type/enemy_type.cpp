@@ -47,13 +47,13 @@ void EnemyType::createAndAddCarryingStates() {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryStopMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("carriable_moving");
         }
@@ -63,33 +63,33 @@ void EnemyType::createAndAddCarryingStates() {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.changeState("carriable_waiting");
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
+        efc.newEvent(FSM_EV_REACHED_DESTINATION); {
             efc.run(GenMobFsm::carryReachDestination);
         }
-        efc.newEvent(MOB_EV_PATH_BLOCKED); {
+        efc.newEvent(FSM_EV_PATH_BLOCKED); {
             efc.changeState("carriable_stuck");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryGetPath);
             efc.run(GenMobFsm::carryBeginMove);
         }
-        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
+        efc.newEvent(FSM_EV_CARRY_DELIVERED); {
             efc.changeState("being_delivered");
         }
-        efc.newEvent(MOB_EV_TOUCHED_BOUNCER); {
+        efc.newEvent(FSM_EV_TOUCHED_BOUNCER); {
             efc.changeState("carriable_thrown");
         }
     }
@@ -98,22 +98,22 @@ void EnemyType::createAndAddCarryingStates() {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::carryBecomeStuck);
         }
-        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+        efc.newEvent(FSM_EV_CARRIER_ADDED); {
             efc.run(GenMobFsm::handleCarrierAdded);
         }
-        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+        efc.newEvent(FSM_EV_CARRIER_REMOVED); {
             efc.run(GenMobFsm::handleCarrierRemoved);
         }
-        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_BEGIN_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("carriable_moving");
         }
-        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+        efc.newEvent(FSM_EV_CARRY_STOP_MOVE); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.changeState("carriable_waiting");
         }
-        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+        efc.newEvent(FSM_EV_PATHS_CHANGED); {
             efc.run(GenMobFsm::carryStopBeingStuck);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("carriable_moving");
@@ -121,7 +121,7 @@ void EnemyType::createAndAddCarryingStates() {
     }
     
     efc.newState("carriable_thrown", ENEMY_EXTRA_STATE_CARRIABLE_THROWN); {
-        efc.newEvent(MOB_EV_LANDED); {
+        efc.newEvent(FSM_EV_LANDED); {
             efc.run(GenMobFsm::loseMomentum);
             efc.run(GenMobFsm::carryGetPath);
             efc.changeState("carriable_moving");
@@ -132,7 +132,7 @@ void EnemyType::createAndAddCarryingStates() {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(GenMobFsm::startBeingDelivered);
         }
-        efc.newEvent(MOB_EV_TIMER); {
+        efc.newEvent(FSM_EV_TIMER); {
             efc.run(GenMobFsm::handleDelivery);
         }
     }

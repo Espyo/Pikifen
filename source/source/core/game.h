@@ -133,8 +133,8 @@ public:
     //Allegro display that represents the program window.
     ALLEGRO_DISPLAY* display = nullptr;
     
-    //A dummy script state for FSMs with no state to use.
-    FsmStateDef* dummyScriptState = nullptr;
+    //A dummy FSM state for FSMs with no state to use.
+    FsmStateDef* dummyFsmState = nullptr;
     
     //Error manager.
     ErrorManager errors;

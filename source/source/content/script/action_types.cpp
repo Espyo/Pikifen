@@ -754,7 +754,7 @@ void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
     
     if(data.scriptVM->mob->type->category->id == MOB_CATEGORY_PIKMIN) {
         data.scriptVM->fsm.runEvent(
-            MOB_EV_WHISTLED, (void*) target, (void*) silent
+            FSM_EV_WHISTLED, (void*) target, (void*) silent
         );
     } else {
         target->addToGroup(data.scriptVM->mob);
@@ -812,7 +812,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
     }
     
     //Go! Though if something went wrong, make it follow a path to nowhere,
-    //so it can emit the MOB_EV_REACHED_DESTINATION event, and hopefully
+    //so it can emit the FSM_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
     PathFollowSettings settings;
     settings.targetPoint = finalStop ? finalStop->pos : data.scriptVM->mob->pos;
@@ -925,7 +925,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getChomped(ScriptActionInstRunData& data) {
-    if(data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_EAT) {
+    if(data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_EAT) {
         ((Mob*) (data.customData1))->chomp(
             data.scriptVM->mob,
             (Hitbox*) (data.customData2)
@@ -981,19 +981,19 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
     switch (t) {
     case SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
         if(
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.actionDef->parentEvent == MOB_EV_DAMAGE
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_A_N ||
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_A ||
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_N ||
+            data.actionDef->parentEvent == FSM_EV_DAMAGE
         ) {
             *var =
                 (
                     (HitboxInteraction*)(data.customData1)
                 )->h1->bodyPartName;
         } else if(
-            data.actionDef->parentEvent == MOB_EV_TOUCHED_OBJECT ||
-            data.actionDef->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
-            data.actionDef->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
+            data.actionDef->parentEvent == FSM_EV_TOUCHED_OBJECT ||
+            data.actionDef->parentEvent == FSM_EV_TOUCHED_OPPONENT ||
+            data.actionDef->parentEvent == FSM_EV_THROWN_PIKMIN_LANDED
         ) {
             if(data.scriptVM->mob) {
                 *var =
@@ -1005,22 +1005,22 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
-        if(data.actionDef->parentEvent == MOB_EV_FRAME_SIGNAL) {
+        if(data.actionDef->parentEvent == FSM_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*)(data.customData1)));
         }
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD: {
         if(
-            data.actionDef->parentEvent == MOB_EV_TOUCHED_HAZARD ||
-            data.actionDef->parentEvent == MOB_EV_LEFT_HAZARD
+            data.actionDef->parentEvent == FSM_EV_TOUCHED_HAZARD ||
+            data.actionDef->parentEvent == FSM_EV_LEFT_HAZARD
         ) {
             *var = ((Hazard*)data.customData1)->manifest->internalName;
         }
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_NAME: {
-        if(data.actionDef->parentEvent == MOB_EV_INPUT_RECEIVED) {
+        if(data.actionDef->parentEvent == FSM_EV_INPUT_RECEIVED) {
             PLAYER_ACTION_TYPE playerActionTypeId =
                 (PLAYER_ACTION_TYPE)
                 ((Inpution::Action*) (data.customData1))->actionTypeId;
@@ -1032,32 +1032,32 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
-        if(data.actionDef->parentEvent == MOB_EV_INPUT_RECEIVED) {
+        if(data.actionDef->parentEvent == FSM_EV_INPUT_RECEIVED) {
             *var = f2s(((Inpution::Action*) (data.customData1))->value);
         }
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
-        if(data.actionDef->parentEvent == MOB_EV_RECEIVE_MESSAGE) {
+        if(data.actionDef->parentEvent == FSM_EV_RECEIVE_MESSAGE) {
             *var = *((string*)(data.customData1));
         }
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART: {
         if(
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.actionDef->parentEvent == MOB_EV_DAMAGE
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_A_N ||
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_A ||
+            data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_N ||
+            data.actionDef->parentEvent == FSM_EV_DAMAGE
         ) {
             *var =
                 (
                     (HitboxInteraction*)(data.customData1)
                 )->h2->bodyPartName;
         } else if(
-            data.actionDef->parentEvent == MOB_EV_TOUCHED_OBJECT ||
-            data.actionDef->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
-            data.actionDef->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
+            data.actionDef->parentEvent == FSM_EV_TOUCHED_OBJECT ||
+            data.actionDef->parentEvent == FSM_EV_TOUCHED_OPPONENT ||
+            data.actionDef->parentEvent == FSM_EV_THROWN_PIKMIN_LANDED
         ) {
             if(data.customData1 && data.scriptVM->mob) {
                 *var =
@@ -1472,7 +1472,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
 void ScriptActionRunners::orderRelease(ScriptActionInstRunData& data) {
     Mob* holder = data.scriptVM->mob->holder.m;
     if(holder) {
-        holder->scriptVM.fsm.runEvent(MOB_EV_RELEASE_ORDER, nullptr, nullptr);
+        holder->scriptVM.fsm.runEvent(FSM_EV_RELEASE_ORDER, nullptr, nullptr);
     }
 }
 
@@ -2415,30 +2415,30 @@ Mob* getTargetMob(
  */
 Mob* getTriggerMob(ScriptActionInstRunData& data) {
     if(
-        data.actionDef->parentEvent == MOB_EV_OBJECT_IN_REACH ||
-        data.actionDef->parentEvent == MOB_EV_OPPONENT_IN_REACH ||
-        data.actionDef->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED ||
-        data.actionDef->parentEvent == MOB_EV_TOUCHED_OBJECT ||
-        data.actionDef->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
-        data.actionDef->parentEvent == MOB_EV_HELD ||
-        data.actionDef->parentEvent == MOB_EV_RELEASED ||
-        data.actionDef->parentEvent == MOB_EV_SWALLOWED ||
-        data.actionDef->parentEvent == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-        data.actionDef->parentEvent == MOB_EV_FINISHED_RECEIVING_DELIVERY ||
-        data.actionDef->parentEvent == MOB_EV_ACTIVE_LEADER_CHANGED
+        data.actionDef->parentEvent == FSM_EV_OBJECT_IN_REACH ||
+        data.actionDef->parentEvent == FSM_EV_OPPONENT_IN_REACH ||
+        data.actionDef->parentEvent == FSM_EV_THROWN_PIKMIN_LANDED ||
+        data.actionDef->parentEvent == FSM_EV_TOUCHED_OBJECT ||
+        data.actionDef->parentEvent == FSM_EV_TOUCHED_OPPONENT ||
+        data.actionDef->parentEvent == FSM_EV_HELD ||
+        data.actionDef->parentEvent == FSM_EV_RELEASED ||
+        data.actionDef->parentEvent == FSM_EV_SWALLOWED ||
+        data.actionDef->parentEvent == FSM_EV_STARTED_RECEIVING_DELIVERY ||
+        data.actionDef->parentEvent == FSM_EV_FINISHED_RECEIVING_DELIVERY ||
+        data.actionDef->parentEvent == FSM_EV_ACTIVE_LEADER_CHANGED
     ) {
         return (Mob*)(data.customData1);
         
     } else if(
-        data.actionDef->parentEvent == MOB_EV_RECEIVE_MESSAGE
+        data.actionDef->parentEvent == FSM_EV_RECEIVE_MESSAGE
     ) {
         return(Mob*)(data.customData2);
         
     } else if(
-        data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
-        data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
-        data.actionDef->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
-        data.actionDef->parentEvent == MOB_EV_DAMAGE
+        data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_A_N ||
+        data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_A ||
+        data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_N ||
+        data.actionDef->parentEvent == FSM_EV_DAMAGE
     ) {
         return ((HitboxInteraction*)(data.customData1))->mob2;
         

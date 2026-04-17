@@ -30,7 +30,7 @@ void TrackFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(TrackFsm::spawn);
         }
-        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+        efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
             efc.run(TrackFsm::onTouched);
         }
     }
@@ -73,7 +73,7 @@ void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to ride it.
-        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_TRACK);
         
     } else if(
         hasFlag(traPtr->traType->riders, TRACK_RIDER_FLAG_LEADERS) &&
@@ -81,7 +81,7 @@ void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
     
         //Leader is about to ride it.
-        ev = toucher->scriptVM.fsm.getEvent(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->scriptVM.fsm.getEvent(FSM_EV_TOUCHED_TRACK);
         
     }
     

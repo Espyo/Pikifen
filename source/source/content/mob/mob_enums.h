@@ -371,13 +371,15 @@ buildEnumNames(mobTargetFlagINames, MOB_TARGET_FLAG)({
 });
 
 
-//Flags for how a loaded script event's actions should work.
+//Flags for how a loaded FSM event's actions should work.
 enum EVENT_LOAD_FLAG {
+
     //Run scripted actions after hardcoded actions.
     EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER = 1 << 0,
     
     //Run global actions after state specific actions.
     EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER = 1 << 1,
+    
 };
 
 

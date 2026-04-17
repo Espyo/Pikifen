@@ -110,7 +110,7 @@ void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(scriptVM->mob->pathInfo->result < 0) {
-            scriptVM->fsm.runEvent(MOB_EV_PATH_BLOCKED);
+            scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
         return;
     }
 }
@@ -192,7 +192,7 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     if(scriptVM->mob->pathInfo->result < 0) {
         scriptVM->mob->pathInfo->blockReason = PATH_BLOCK_REASON_NO_PATH;
-            scriptVM->fsm.runEvent(MOB_EV_PATH_BLOCKED);
+            scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
     }
 }
 
@@ -224,7 +224,7 @@ void GenMobFsm::carryReachDestination(
     scriptVM->mob->deliveryInfo->finalPoint =
         scriptVM->mob->carryInfo->intendedPoint;
     
-        scriptVM->fsm.runEvent(MOB_EV_CARRY_DELIVERED);
+        scriptVM->fsm.runEvent(FSM_EV_CARRY_DELIVERED);
 }
 
 
@@ -373,7 +373,7 @@ void GenMobFsm::handleCarrierAdded(
     if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-            scriptVM->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
+            scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -415,7 +415,7 @@ void GenMobFsm::handleCarrierRemoved(
         if(couldMove) {
             //If the mob can no longer move, send a move stop event,
             //so the mob, well, stops.
-                scriptVM->fsm.runEvent(MOB_EV_CARRY_STOP_MOVE);
+                scriptVM->fsm.runEvent(FSM_EV_CARRY_STOP_MOVE);
         }
         return;
     }
@@ -463,7 +463,7 @@ void GenMobFsm::handleCarrierRemoved(
     if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-            scriptVM->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
+            scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -478,7 +478,7 @@ void GenMobFsm::handleCarrierRemoved(
 void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
     if(scriptVM->focusedMob) {
         scriptVM->focusedMob->scriptVM.fsm.runEvent(
-            MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) scriptVM->mob
+            FSM_EV_FINISHED_RECEIVING_DELIVERY, (void*) scriptVM->mob
         );
     }
     
@@ -516,7 +516,7 @@ void GenMobFsm::startBeingDelivered(
     forIdx(p, scriptVM->mob->carryInfo->spotInfo) {
         Mob* pikPtr = scriptVM->mob->carryInfo->spotInfo[p].pikPtr;
         if(pikPtr) {
-            pikPtr->scriptVM.fsm.runEvent(MOB_EV_FINISHED_TASK);
+            pikPtr->scriptVM.fsm.runEvent(FSM_EV_FINISHED_TASK);
         }
     }
     
@@ -533,7 +533,7 @@ void GenMobFsm::startBeingDelivered(
     scriptVM->mob->becomeUncarriable();
     
     scriptVM->focusedMob->scriptVM.fsm.runEvent(
-        MOB_EV_STARTED_RECEIVING_DELIVERY, scriptVM->mob
+        FSM_EV_STARTED_RECEIVING_DELIVERY, scriptVM->mob
     );
     
     switch(scriptVM->mob->deliveryInfo->animType) {
