@@ -279,7 +279,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_H)) {
         if(state == EDITOR_STATE_LAYOUT && subState == EDITOR_SUB_STATE_NONE) {
-            if(selectedSectors.empty()) {
+            if(!sectorSelection.hasAny()) {
                 setStatus(
                     "To set a sector's height, you must first select a sector!",
                     true
@@ -287,8 +287,9 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
             } else {
                 subState = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
                 quickHeightSetStartPos = game.mouseCursor.winPos;
-                for(const auto& s : selectedSectors) {
-                    quickHeightSetStartHeights[s] = s->z;
+                for(size_t sIdx : sectorSelection.getItemIdxs()) {
+                    Sector* sPtr = game.curArea->sectors[sIdx];
+                    quickHeightSetStartHeights[sPtr] = sPtr->z;
                 }
                 setStatus(
                     "Move the cursor up or down to change the sector's height."
@@ -401,6 +402,8 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
         return;
     }
     
+    bool skipNormalClick = false;
+    
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(subState == EDITOR_SUB_STATE_NONE) {
@@ -415,9 +418,10 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                         splitEdge(
                             clickedEdge, game.editorsView.mouseCursorWorldPos
                         );
-                    clearSelection();
-                    selectedVertexes.insert(newVertex);
-                    updateVertexSelection();
+                    vertexSelection.setSingle(
+                        game.curArea->findVertexIdx(newVertex)
+                    );
+                    skipNormalClick = true;
                 }
             }
         }
@@ -430,10 +434,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                 getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
             if(!clickedMob) {
                 addNewMobUnderCursor();
-                //Quit now, otherwise the code after this will simulate a
-                //regular click, and if the mob is on the grid and the cursor
-                //isn't, this will deselect the mob.
-                return;
+                skipNormalClick = true;
             }
         }
         break;
@@ -450,11 +451,15 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                     );
                 if(clickedELink) {
                     registerChange("path link split");
-                    splitPathLink(
-                        clickedELink->link1, clickedELink->link2,
-                        snapPoint(game.editorsView.mouseCursorWorldPos)
+                    PathStop* newStop =
+                        splitPathLink(
+                            clickedELink->link1, clickedELink->link2,
+                            snapPoint(game.editorsView.mouseCursorWorldPos)
+                        );
+                    pathLinkSelection.setSingle(
+                        game.curArea->findPathStopIdx(newStop)
                     );
-                    clearSelection();
+                    skipNormalClick = true;
                 }
             }
         }
@@ -465,6 +470,13 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
         break;
         
     }
+    }
+    
+    if(skipNormalClick) {
+        //Quit now, otherwise the code after this will simulate a
+        //regular click, and if we created and selected a thing on the grid,
+        //but the cursor is not on the grid, this will deselect the thing.
+        return;
     }
     
     handleLmbDown(ev);
@@ -606,7 +618,7 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
 
         moving = true;
         octeeDragStart = game.editorsView.mouseCursorWorldPos;
-        Sector* sPtr = *selectedSectors.begin();
+        Sector* sPtr = game.curArea->sectors[sectorSelection.getFirstItemIdx()];
         octeeOrigAngle = sPtr->textureInfo.tf.rot;
         octeeOrigOffset = sPtr->textureInfo.tf.trans;
         octeeOrigScale = sPtr->textureInfo.tf.scale;
@@ -615,77 +627,15 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_SUB_STATE_NONE: {
 
-        bool twHandled = false;
-        if(
-            game.options.areaEd.selTrans &&
-            selectedVertexes.size() >= 2
-        ) {
-            twHandled =
-                curTransformationWidget.handleMouseDown(
-                    game.editorsView.mouseCursorWorldPos,
-                    &selectionCenter,
-                    &selectionSize,
-                    &selectionAngle,
-                    1.0f / game.editorsView.cam.zoom
-                );
-        }
+        handleSelectionAndTransformationLmbDown(
+            layoutSelCtrl, curTransformationWidget
+        );
         
-        if(!twHandled) {
+        vertexSelection.setHomogenized(false);
+        edgeSelection.setHomogenized(false);
+        sectorSelection.setHomogenized(false);
+        setSelectionStatusText();
         
-            //Start a new layout selection or select something.
-            bool startNewSelection = true;
-            
-            Vertex* clickedVertex = nullptr;
-            Edge* clickedEdge = nullptr;
-            Sector* clickedSector = nullptr;
-            getHoveredLayoutElement(
-                &clickedVertex, &clickedEdge, &clickedSector
-            );
-            
-            if(!isShiftPressed) {
-                if(clickedVertex || clickedEdge || clickedSector) {
-                    startNewSelection = false;
-                }
-                
-            }
-            
-            if(startNewSelection) {
-                if(!isCtrlPressed) clearSelection();
-                selecting = true;
-                selectionStart = game.editorsView.mouseCursorWorldPos;
-                selectionEnd = game.editorsView.mouseCursorWorldPos;
-                
-            } else {
-            
-                if(clickedVertex) {
-                    if(!isInContainer(selectedVertexes, clickedVertex)) {
-                        if(!isCtrlPressed) {
-                            clearSelection();
-                        }
-                        selectVertex(clickedVertex);
-                    }
-                } else if(clickedEdge) {
-                    if(!isInContainer(selectedEdges, clickedEdge)) {
-                        if(!isCtrlPressed) {
-                            clearSelection();
-                        }
-                        selectEdge(clickedEdge);
-                    }
-                } else {
-                    if(!isInContainer(selectedSectors, clickedSector)) {
-                        if(!isCtrlPressed) {
-                            clearSelection();
-                        }
-                        selectSector(clickedSector);
-                    }
-                }
-                
-            }
-            
-            selectionHomogenized = false;
-            setSelectionStatusText();
-            
-        }
         break;
         
     }
@@ -1232,74 +1182,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
     
-            //Selection box around the layout.
-            if(!isCtrlPressed) clearSelection();
-            
-            forIdx(v, game.curArea->vertexes) {
-                Vertex* vPtr = game.curArea->vertexes[v];
-                
-                if(
-                    vPtr->x >= selectionTL.x &&
-                    vPtr->x <= selectionBR.x &&
-                    vPtr->y >= selectionTL.y &&
-                    vPtr->y <= selectionBR.y
-                ) {
-                    selectedVertexes.insert(vPtr);
-                }
-            }
-            updateVertexSelection();
-            
-            if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-                forIdx(e, game.curArea->edges) {
-                    Edge* ePtr = game.curArea->edges[e];
-                    
-                    if(
-                        ePtr->vertexes[0]->x >= selectionTL.x &&
-                        ePtr->vertexes[0]->x <= selectionBR.x &&
-                        ePtr->vertexes[0]->y >= selectionTL.y &&
-                        ePtr->vertexes[0]->y <= selectionBR.y &&
-                        ePtr->vertexes[1]->x >= selectionTL.x &&
-                        ePtr->vertexes[1]->x <= selectionBR.x &&
-                        ePtr->vertexes[1]->y >= selectionTL.y &&
-                        ePtr->vertexes[1]->y <= selectionBR.y
-                    ) {
-                        selectedEdges.insert(ePtr);
-                    }
-                }
-            }
-            
-            if(selectionFilter == SELECTION_FILTER_SECTORS) {
-                forIdx(s, game.curArea->sectors) {
-                    Sector* sPtr = game.curArea->sectors[s];
-                    bool validSector = true;
-                    
-                    forIdx(e, sPtr->edges) {
-                        Edge* ePtr = sPtr->edges[e];
-                        
-                        if(
-                            ePtr->vertexes[0]->x < selectionTL.x ||
-                            ePtr->vertexes[0]->x > selectionBR.x ||
-                            ePtr->vertexes[0]->y < selectionTL.y ||
-                            ePtr->vertexes[0]->y > selectionBR.y ||
-                            ePtr->vertexes[1]->x < selectionTL.x ||
-                            ePtr->vertexes[1]->x > selectionBR.x ||
-                            ePtr->vertexes[1]->y < selectionTL.y ||
-                            ePtr->vertexes[1]->y > selectionBR.y
-                        ) {
-                            validSector = false;
-                            break;
-                        }
-                    }
-                    
-                    if(validSector) {
-                        selectedSectors.insert(sPtr);
-                    }
-                }
-            }
-            
-            selectionHomogenized = false;
-            setSelectionStatusText();
-            
             break;
             
         } case EDITOR_STATE_MOBS: {
@@ -1318,88 +1200,12 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
     
-            bool twHandled = false;
             if(
-                game.options.areaEd.selTrans &&
-                selectedVertexes.size() >= 2
-            ) {
-                Bitmask8 flags = 0;
-                if(isAltPressed) {
-                    enableFlag(
-                        flags, TransformationWidget::TW_FLAG_LOCK_CENTER
-                    );
-                }
-                twHandled =
-                    curTransformationWidget.handleMouseMove(
-                        snapPoint(game.editorsView.mouseCursorWorldPos, true),
-                        &selectionCenter,
-                        &selectionSize,
-                        &selectionAngle,
-                        1.0f / game.editorsView.cam.zoom, flags,
-                        AREA_EDITOR::SELECTION_TW_PADDING * 2.0f
-                    );
-                if(twHandled) {
-                    if(!moving) {
-                        startVertexMove();
-                    }
-                    
-                    ALLEGRO_TRANSFORM t;
-                    al_identity_transform(&t);
-                    al_scale_transform(
-                        &t,
-                        selectionSize.x / selectionOrigSize.x,
-                        selectionSize.y / selectionOrigSize.y
-                    );
-                    al_translate_transform(
-                        &t,
-                        selectionCenter.x - selectionOrigCenter.x,
-                        selectionCenter.y - selectionOrigCenter.y
-                    );
-                    al_rotate_transform(
-                        &t,
-                        selectionAngle - selectionOrigAngle
-                    );
-                    
-                    for(Vertex* v : selectedVertexes) {
-                        Point p = preMoveVertexCoords[v];
-                        p -= selectionOrigCenter;
-                        al_transform_coordinates(&t, &p.x, &p.y);
-                        p += selectionOrigCenter;
-                        v->x = p.x;
-                        v->y = p.y;
-                    }
-                }
-            }
-            
-            if(
-                !twHandled &&
-                !selectedVertexes.empty() &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move vertexes.
-                if(!moving) {
-                    startVertexMove();
-                }
-                
-                Point mouseOffset =
-                    game.editorsView.mouseCursorWorldPos - moveMouseStartPos;
-                Point closestVertexNewP =
-                    snapPoint(
-                        moveStartPos + mouseOffset, true
-                    );
-                Point offset =
-                    closestVertexNewP - moveStartPos;
-                for(Vertex* v : selectedVertexes) {
-                    Point orig = preMoveVertexCoords[v];
-                    v->x = orig.x + offset.x;
-                    v->y = orig.y + offset.y;
-                }
-                
-            } else if(
                 subState == EDITOR_SUB_STATE_OCTEE && moving
             ) {
                 //Move sector texture transformation property.
-                Sector* sPtr = *selectedSectors.begin();
+                Sector* sPtr =
+                    game.curArea->sectors[sectorSelection.getFirstItemIdx()];
                 
                 switch(octeeMode) {
                 case OCTEE_MODE_OFFSET: {
@@ -1434,6 +1240,19 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 };
                 
                 homogenizeSelectedSectors();
+                
+            } else {
+                handleSelectionAndTransformationLmbDrag(
+                    layoutSelCtrl, curTransformationWidget,
+                    snapPoint(game.editorsView.mouseCursorWorldPos),
+                [this] {
+                    startVertexMove();
+                    registerChange("vertex movement");
+                }
+                );
+                
+                setSelectionStatusText();
+                
             }
             
             break;
@@ -1554,6 +1373,9 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     
     curTransformationWidget.handleMouseUp();
     handleSelectionAndTransformationLmbUp(
+        layoutSelCtrl, curTransformationWidget
+    );
+    handleSelectionAndTransformationLmbUp(
         mobsSelCtrl, curTransformationWidget
     );
     handleSelectionAndTransformationLmbUp(
@@ -1663,8 +1485,9 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     if(subState == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
         float offset = getQuickHeightSetOffset();
         registerChange("quick sector height set");
-        for(auto& s : selectedSectors) {
-            s->z = quickHeightSetStartHeights[s] + offset;
+        for(size_t sIdx : sectorSelection.getItemIdxs()) {
+            Sector* sPtr = game.curArea->sectors[sIdx];
+            sPtr->z = quickHeightSetStartHeights[sPtr] + offset;
         }
         updateAllEdgeOffsetCaches();
     }

@@ -706,9 +706,6 @@ private:
     //Area data before vertex movement.
     Area* preMoveAreaData = nullptr;
     
-    //Position of the selected vertexes before movement.
-    map<Vertex*, Point> preMoveVertexCoords;
-    
     //Is preview mode on?
     bool previewMode = false;
     
@@ -776,11 +773,14 @@ private:
     //Info about the current sector split operation.
     SectorSplit sectorSplitInfo;
     
-    //Currently selected edges.
-    set<Edge*> selectedEdges;
+    //Selection manager for the vertexes.
+    SelectionManager vertexSelection;
     
-    //Currently selected sectors.
-    set<Sector*> selectedSectors;
+    //Selection manager for the edges.
+    SelectionManager edgeSelection;
+    
+    //Selection manager for the sector.
+    SelectionManager sectorSelection;
     
     //Selection manager for the mob generators.
     SelectionManager mobSelection;
@@ -800,6 +800,9 @@ private:
     //Selection manager for the reminders.
     SelectionManager reminderSelection;
     
+    //Selection controller for the layout state.
+    SelectionController layoutSelCtrl;
+    
     //Selection controller for the mobs state.
     SelectionController mobsSelCtrl;
     
@@ -814,9 +817,6 @@ private:
     
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
-    
-    //Currently selected vertexes.
-    set<Vertex*> selectedVertexes;
     
     //Is the user currently performing a rectangle box?
     bool selecting = false;
@@ -967,12 +967,12 @@ private:
     Sector* addNewSectorForLayoutDrawing(const Sector* copyFrom);
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);
-    bool deleteEdges(const set<Edge*>& which);
-    void deleteMobs();
-    void deletePathLinks();
-    void deletePathStops();
-    void deleteRegions();
-    void deleteTreeShadows();
+    bool deleteSelectedEdges();
+    void deleteSelectedMobs();
+    void deleteSelectedPathLinks();
+    void deleteSelectedPathStops();
+    void deleteSelectedRegions();
+    void deleteSelectedTreeShadows();
     void doSectorSplit();
     void emitTriangulationErrorStatusBarMessage(
         const TRIANGULATION_ERROR error
@@ -1020,7 +1020,7 @@ private:
         const set<Sector*>& sectors, unordered_set<Sector*>& list
     ) const;
     void getAffectedSectors(
-        const set<Vertex*>& vertexes, unordered_set<Sector*>& list
+        const set<size_t>& vertexIdxs, unordered_set<Sector*>& list
     ) const;
     void getHoveredLayoutElement(
         Vertex** clickedVertex, Edge** clickedEdge, Sector** clickedSector
@@ -1094,10 +1094,7 @@ private:
     bool saveArea(bool toBackup);
     void saveBackup();
     void saveReference();
-    void selectEdge(Edge* ePtr);
     void selectPathStopsWithLabel(const string& label);
-    void selectSector(Sector* sPtr);
-    void selectVertex(Vertex* vPtr);
     void setNewCircleSectorPoints();
     void setSelectionStatusText();
     void setStateFromUndoOrRedoHistory(Area* state);
@@ -1131,7 +1128,6 @@ private:
     void updateSectorTexture(Sector* sPtr, const string& internalName);
     void updateTextureSuggestions(const string& n);
     void updateUndoHistory();
-    void updateVertexSelection();
     void drawArrow(
         const Point& start, const Point& end,
         float startOffset, float endOffset,

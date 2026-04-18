@@ -250,17 +250,9 @@ void AreaEditor::drawCanvas() {
     
     drawVertexes(style);
     
-    //Selection transformation widget.
-    if(
-        game.options.areaEd.selTrans &&
-        selectedVertexes.size() >= 2 &&
-        (!moving || curTransformationWidget.isMovingHandle())
-    ) {
-        curTransformationWidget.draw(
-            &selectionCenter,
-            &selectionSize,
-            &selectionAngle,
-            1.0f / game.editorsView.cam.zoom
+    if(state == EDITOR_STATE_LAYOUT) {
+        drawSelectionAndTransformationThings(
+            layoutSelCtrl, curTransformationWidget
         );
     }
     
@@ -448,15 +440,16 @@ void AreaEditor::drawCanvas() {
             &game.editorsView.windowToWorldTransform, &nrCoords.x, &nrCoords.y
         );
         float offset = getQuickHeightSetOffset();
+        Sector* singleSector = nullptr;
+        if(sectorSelection.hasOne()) {
+            singleSector =
+                game.curArea->sectors[sectorSelection.getSingleItemIdx()];
+        }
         drawDebugText(
             TEXT_COLOR, nrCoords,
             "Height " +
             string(offset < 0 ? "" : "+") + i2s(offset) + "" +
-            (
-                selectedSectors.size() == 1 ?
-                " (" + f2s((*selectedSectors.begin())->z) + ")" :
-                ""
-            )
+            (singleSector ? " (" + f2s(singleSector->z) + ")" : "")
         );
     }
     
@@ -1040,7 +1033,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             sameZ = true;
         }
         
-        if(isInContainer(selectedEdges, ePtr)) {
+        if(edgeSelection.contains(e)) {
             selected = true;
         }
         
@@ -1074,14 +1067,14 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             Point otherPoint;
             if(
                 ePtr->vertexes[0] == moveClosestVertex &&
-                !isInContainer(selectedVertexes, ePtr->vertexes[1])
+                !vertexSelection.contains(ePtr->vertexIdxs[1])
             ) {
                 otherPoint.x = ePtr->vertexes[1]->x;
                 otherPoint.y = ePtr->vertexes[1]->y;
                 drawDist = true;
             } else if(
                 ePtr->vertexes[1] == moveClosestVertex &&
-                !isInContainer(selectedVertexes, ePtr->vertexes[0])
+                !vertexSelection.contains(ePtr->vertexIdxs[0])
             ) {
                 otherPoint.x = ePtr->vertexes[0]->x;
                 otherPoint.y = ePtr->vertexes[0]->y;
@@ -1093,8 +1086,9 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             }
         }
         
-        if(debugTriangulation && !selectedSectors.empty()) {
-            Sector* sPtr = *selectedSectors.begin();
+        if(debugTriangulation && sectorSelection.hasAny()) {
+            Sector* sPtr =
+                game.curArea->sectors[sectorSelection.getFirstItemIdx()];
             forIdx(t, sPtr->triangles) {
                 Triangle* tPtr = &sPtr->triangles[t];
                 al_draw_triangle(
@@ -1834,7 +1828,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
         }
         
         //Selection effect.
-        bool selected = isInContainer(selectedSectors, sPtr);
+        bool selected = sectorSelection.contains(s);
         bool valid = true;
         bool highlighted =
             sPtr == highlightedSector &&
@@ -1975,7 +1969,7 @@ void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
         size_t nVertexes = game.curArea->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {
             Vertex* vPtr = game.curArea->vertexes[v];
-            bool selected = isInContainer(selectedVertexes, vPtr);
+            bool selected = vertexSelection.contains(v);
             bool valid = vPtr != problemVertexPtr;
             bool highlighted =
                 highlightedVertex == vPtr &&

@@ -316,6 +316,12 @@ protected:
         //Callback for when the selection changed.
         std::function<void()> onSelectionChanged = nullptr;
         
+        //Callback for checking if an item is under the cursor, if it should
+        //be different from the default checks.
+        //The first argument is the item index.
+        //The second argument is the cursor position.
+        std::function<bool(size_t, const Point&)> onCheckUnderCursor = nullptr;
+        
         //Whether items are rectangular in shape or circular.
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;

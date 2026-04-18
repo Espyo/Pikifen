@@ -5799,20 +5799,24 @@ vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
         if(!getItemIsEligible(i)) continue;
         
         bool isInside;
-        Point iCenter, iSize;
-        float iAngle;
-        getItemInfo(i, &iCenter, &iSize, &iAngle);
-        
-        if(itemsAreRectangular) {
-            if(itemsCanRotate) {
-                getClosestPointInRotatedRectangle(
-                    cursorPos, iCenter, iSize, iAngle, &isInside
-                );
-            } else {
-                isInside = isPointInRectangle(cursorPos, iCenter, iSize);
-            }
+        if(onCheckUnderCursor) {
+            isInside = onCheckUnderCursor(i, cursorPos);
         } else {
-            isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
+            Point iCenter, iSize;
+            float iAngle;
+            getItemInfo(i, &iCenter, &iSize, &iAngle);
+            
+            if(itemsAreRectangular) {
+                if(itemsCanRotate) {
+                    getClosestPointInRotatedRectangle(
+                        cursorPos, iCenter, iSize, iAngle, &isInside
+                    );
+                } else {
+                    isInside = isPointInRectangle(cursorPos, iCenter, iSize);
+                }
+            } else {
+                isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
+            }
         }
         
         if(isInside) {

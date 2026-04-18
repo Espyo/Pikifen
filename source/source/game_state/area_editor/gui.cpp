@@ -1728,7 +1728,7 @@ void AreaEditor::processGuiPanelDetails() {
  * @brief Processes the Dear ImGui edge control panel for this frame.
  */
 void AreaEditor::processGuiPanelEdge() {
-    Edge* ePtr = *selectedEdges.begin();
+    Edge* ePtr = game.curArea->edges[edgeSelection.getFirstItemIdx()];
     
     //Wall shadow node.
     if(saveableTreeNode("layout", "Wall shadow")) {
@@ -1870,7 +1870,7 @@ void AreaEditor::processGuiPanelEdge() {
         ImGui::TreePop();
     }
     
-    if(enableEdgeSectorPatching && selectedEdges.size() == 1) {
+    if(enableEdgeSectorPatching && edgeSelection.hasOne()) {
     
         //Sector patching node.
         ImGui::Spacer();
@@ -2737,7 +2737,7 @@ void AreaEditor::processGuiPanelLayout() {
         );
         
         //Delete edges button.
-        if(!selectedEdges.empty()) {
+        if(edgeSelection.hasAny()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -2796,9 +2796,9 @@ void AreaEditor::processGuiPanelLayout() {
         
         //Clear selection button.
         if(
-            !selectedSectors.empty() ||
-            !selectedEdges.empty() ||
-            !selectedVertexes.empty()
+            sectorSelection.hasAny() ||
+            edgeSelection.hasAny() ||
+            vertexSelection.hasAny()
         ) {
             ImGui::SameLine();
             if(
@@ -2824,17 +2824,19 @@ void AreaEditor::processGuiPanelLayout() {
             
                 if(layoutMode == LAYOUT_MODE_EDGES) {
                     //If the user homogenized the edges, then
-                    //selectionHomogenized is true. But the sectors aren't
-                    //homogenized, so reset the variable back to false.
-                    selectionHomogenized = false;
+                    //the homogenization state is true. But the sectors aren't
+                    //homogenized, so reset the state back to false.
+                    sectorSelection.setHomogenized(false);
                 }
                 
                 layoutMode = LAYOUT_MODE_SECTORS;
                 
-                if(selectedSectors.size() == 1 || selectionHomogenized) {
+                if(
+                    sectorSelection.hasOne() || sectorSelection.isHomogenized()
+                ) {
                     processGuiPanelSector();
                     
-                } else if(selectedSectors.empty()) {
+                } else if(!sectorSelection.hasAny()) {
                 
                     //"No sector selected" text.
                     ImGui::TextDisabled("(No sector selected)");
@@ -2864,10 +2866,10 @@ void AreaEditor::processGuiPanelLayout() {
             
                 layoutMode = LAYOUT_MODE_EDGES;
                 
-                if(selectedEdges.size() == 1 || selectionHomogenized) {
+                if(edgeSelection.hasOne() || edgeSelection.isHomogenized()) {
                     processGuiPanelEdge();
                     
-                } else if(selectedEdges.empty()) {
+                } else if(!edgeSelection.hasAny()) {
                 
                     //"No edge selected" text.
                     ImGui::TextDisabled("(No edge selected)");
@@ -5435,7 +5437,7 @@ void AreaEditor::processGuiPanelReview() {
  * @brief Processes the Dear ImGui sector control panel for this frame.
  */
 void AreaEditor::processGuiPanelSector() {
-    Sector* sPtr = *selectedSectors.begin();
+    Sector* sPtr = game.curArea->sectors[sectorSelection.getFirstItemIdx()];
     
     //Sector behavior node.
     if(saveableTreeNode("layout", "Behavior")) {

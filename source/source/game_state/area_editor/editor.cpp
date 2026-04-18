@@ -205,6 +205,128 @@ AreaEditor::AreaEditor() :
     registerCmd(&AreaEditor::zoomOutCmd, "zoom_out");
     
     //Setup the selection managers.
+    vertexSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
+        *outCenter = v2p(game.curArea->vertexes[idx]);
+        *outSize = Point(16.0f / game.editorsView.cam.zoom);
+        *outAngle = 0.0f;
+    };
+    vertexSelection.onSetInfo =
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
+        game.curArea->vertexes[idx]->x = newCenter.x;
+        game.curArea->vertexes[idx]->y = newCenter.y;
+    };
+    vertexSelection.onGetTotal =
+    [this] () {
+        return game.curArea->vertexes.size();
+    };
+    vertexSelection.onIsEligible =
+    [this] (size_t idx) {
+        return state == EDITOR_STATE_LAYOUT;
+    };
+    vertexSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return game.curArea->vertexes[idx] == highlightedVertex;
+    };
+    vertexSelection.itemsAreRectangular = true;
+    vertexSelection.itemsCanResize = false;
+    vertexSelection.itemsCanRotate = false;
+    
+    edgeSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
+        Edge* ePtr = game.curArea->edges[idx];
+        Point v1 = v2p(ePtr->vertexes[0]);
+        Point v2 = v2p(ePtr->vertexes[1]);
+        *outCenter = (v1 + v2) / 2.0f;
+        *outSize =
+            Point(
+                Distance(v1, v2).toFloat(),
+                16.0f / game.editorsView.cam.zoom
+            );
+        *outAngle = getAngle(v1, v2);
+    };
+    edgeSelection.onSetInfo =
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
+    };
+    edgeSelection.onGetTotal =
+    [this] () {
+        return game.curArea->edges.size();
+    };
+    edgeSelection.onIsEligible =
+    [this] (size_t idx) {
+        return
+            state == EDITOR_STATE_LAYOUT &&
+            (
+                selectionFilter == SELECTION_FILTER_EDGES ||
+                selectionFilter == SELECTION_FILTER_SECTORS
+            );
+    };
+    edgeSelection.onSelectionChanged =
+    [this] () {
+        const set<size_t>& list = edgeSelection.getItemIdxs();
+        for(size_t eIdx : list) {
+            vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
+            vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
+        }
+    };
+    edgeSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return game.curArea->edges[idx] == highlightedEdge;
+    };
+    edgeSelection.itemsAreRectangular = true;
+    edgeSelection.itemsCanResize = false;
+    edgeSelection.itemsCanRotate = true;
+    edgeSelection.disableChanges = true;
+    
+    sectorSelection.onGetInfo =
+    [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
+        Sector* sPtr = game.curArea->sectors[idx];
+        cornersToCenterAndSize(
+            sPtr->bbox[0], sPtr->bbox[1], outCenter, outSize
+        );
+        *outAngle = 0.0f;
+    };
+    sectorSelection.onSetInfo =
+        [this] (
+            size_t idx, const Point & newCenter,
+            const Point & newSize, float newAngle
+    ) {
+    };
+    sectorSelection.onGetTotal =
+    [this] () {
+        return game.curArea->sectors.size();
+    };
+    sectorSelection.onIsEligible =
+    [this] (size_t idx) {
+        return
+            state == EDITOR_STATE_LAYOUT &&
+            selectionFilter == SELECTION_FILTER_SECTORS;
+    };
+    sectorSelection.onSelectionChanged =
+    [this] () {
+        const set<size_t>& list = sectorSelection.getItemIdxs();
+        for(size_t sIdx : list) {
+            Sector* sPtr = game.curArea->sectors[sIdx];
+            forIdx(e, sPtr->edges) {
+                edgeSelection.add(game.curArea->findEdgeIdx(sPtr->edges[e]));
+            }
+        }
+    };
+    sectorSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return game.curArea->sectors[idx] == highlightedSector;
+    };
+    sectorSelection.itemsAreRectangular = true;
+    sectorSelection.itemsCanResize = false;
+    sectorSelection.itemsCanRotate = false;
+    sectorSelection.disableChanges = true;
+    
     mobSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = game.curArea->mobGenerators[idx]->pos;
@@ -297,6 +419,20 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_PATHS;
     };
+    pathLinkSelection.onSelectionChanged =
+    [this] () {
+        const set<size_t>& list = pathLinkSelection.getItemIdxs();
+        for(size_t lIdx : list) {
+            pathStopSelection.add(
+                game.curArea->findPathStopIdx(
+                    game.curArea->editorPathLinks[lIdx].link1->startPtr
+                )
+            );
+            pathStopSelection.add(
+                game.curArea->editorPathLinks[lIdx].link1->endIdx
+            );
+        }
+    };
     pathLinkSelection.itemsAreRectangular = true;
     pathLinkSelection.itemsCanResize = false;
     pathLinkSelection.itemsCanRotate = true;
@@ -376,6 +512,16 @@ AreaEditor::AreaEditor() :
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.itemsCanResize = false;
     reminderSelection.itemsCanRotate = false;
+    
+    layoutSelCtrl.managers.push_back(&vertexSelection);
+    layoutSelCtrl.managers.push_back(&edgeSelection);
+    layoutSelCtrl.managers.push_back(&sectorSelection);
+    layoutSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p, true); };
+    layoutSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
+    layoutSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    layoutSelCtrl.overlapsCycle = false;
+    layoutSelCtrl.clickingSelectedUnselectsOthers = true;
     
     mobsSelCtrl.managers.push_back(&mobSelection);
     mobsSelCtrl.onSnapPoint =
@@ -601,9 +747,12 @@ void AreaEditor::cancelLayoutDrawing() {
  * @brief Cancels the vertex moving operation.
  */
 void AreaEditor::cancelLayoutMoving() {
-    for(auto const& v : selectedVertexes) {
-        v->x = preMoveVertexCoords[v].x;
-        v->y = preMoveVertexCoords[v].y;
+    const set<size_t>& selectedVertexes = vertexSelection.getItemIdxs();
+    for(size_t vIdx : selectedVertexes) {
+        Vertex* vPtr = game.curArea->vertexes[vIdx];
+        Vertex* oldVPtr = preMoveAreaData->vertexes[vIdx];
+        vPtr->x = oldVPtr->x;
+        vPtr->y = oldVPtr->y;
     }
     clearLayoutMoving();
 }
@@ -620,19 +769,30 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
     
+    vertexSelection.disable();
+    edgeSelection.disable();
+    sectorSelection.disable();
     mobSelection.disable();
     pathStopSelection.disable();
     pathLinkSelection.disable();
     shadowSelection.disable();
     regionSelection.disable();
     reminderSelection.disable();
+    
+    layoutSelCtrl.disable();
     mobsSelCtrl.disable();
     pathsSelCtrl.disable();
     detailsSelCtrl.disable();
     reviewSelCtrl.disable();
     
     switch(newState) {
-    case EDITOR_STATE_MOBS: {
+    case EDITOR_STATE_LAYOUT: {
+        vertexSelection.enable();
+        edgeSelection.enable();
+        sectorSelection.enable();
+        layoutSelCtrl.enable();
+        break;
+    } case EDITOR_STATE_MOBS: {
         mobSelection.enable();
         mobsSelCtrl.enable();
         break;
@@ -772,7 +932,6 @@ void AreaEditor::clearLayoutMoving() {
         forgetPreparedState(preMoveAreaData);
         preMoveAreaData = nullptr;
     }
-    preMoveVertexCoords.clear();
     clearSelection();
     moving = false;
 }
@@ -803,15 +962,16 @@ void AreaEditor::clearSelection() {
         subState = EDITOR_SUB_STATE_NONE;
     }
     
-    selectedVertexes.clear();
-    selectedEdges.clear();
-    selectedSectors.clear();
+    vertexSelection.clear();
+    edgeSelection.clear();
+    sectorSelection.clear();
     mobSelection.clear();
     pathStopSelection.clear();
     pathLinkSelection.clear();
     shadowSelection.clear();
     regionSelection.clear();
     reminderSelection.clear();
+    
     selectionHomogenized = false;
     setSelectionStatusText();
 }
@@ -877,7 +1037,7 @@ void AreaEditor::copyPropertiesCmd(float inputValue) {
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
-        if(!selectedSectors.empty()) {
+        if(sectorSelection.hasAny()) {
             copySectorProperties();
         } else {
             copyEdgeProperties();
@@ -1161,18 +1321,19 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
         return;
     }
     
-    if(selectedEdges.empty()) {
+    if(!edgeSelection.hasAny()) {
         setStatus("You have to select edges to delete!", true);
         return;
     }
     
     //Prepare everything.
     registerChange("edge deletion");
+    size_t singleDeletionIdx = edgeSelection.getSingleItemIdx();
     size_t nBefore = game.curArea->edges.size();
-    size_t nSelected = selectedEdges.size();
+    size_t nSelected = edgeSelection.getCount();
     
     //Delete!
-    bool success = deleteEdges(selectedEdges);
+    bool success = deleteSelectedEdges();
     
     //Cleanup.
     clearSelection();
@@ -1180,12 +1341,10 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
     
     //Report.
     if(success) {
+        size_t nDeletions = nBefore - game.curArea->edges.size();
         setStatus(
             "Deleted " +
-            amountStr(
-                (int) (nBefore - game.curArea->edges.size()),
-                "edge"
-            ) +
+            getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "edge") +
             " (" + i2s(nSelected) + " were selected)."
         );
     }
@@ -1216,7 +1375,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     size_t nDeletions = mobSelection.getCount();
     
     //Delete!
-    deleteMobs();
+    deleteSelectedMobs();
     
     //Cleanup.
     clearSelection();
@@ -1256,8 +1415,8 @@ void AreaEditor::deletePathCmd(float inputValue) {
     size_t nLinkDeletions = pathLinkSelection.getCount();
     
     //Delete!
-    deletePathLinks();
-    deletePathStops();
+    deleteSelectedPathLinks();
+    deleteSelectedPathStops();
     
     //Cleanup.
     clearSelection();
@@ -1314,7 +1473,7 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
     size_t nDeletions = regionSelection.getCount();
     
     //Delete!
-    deleteRegions();
+    deleteSelectedRegions();
     
     //Cleanup.
     clearSelection();
@@ -1386,7 +1545,7 @@ void AreaEditor::deleteTreeShadowCmd(float inputValue) {
     size_t nDeletions = shadowSelection.getCount();
     
     //Delete!
-    deleteTreeShadows();
+    deleteSelectedTreeShadows();
     
     //Cleanup.
     clearSelection();
@@ -1590,10 +1749,8 @@ void AreaEditor::doSectorSplit() {
     //such that one of the post-split sectors is a triangle, chances are you
     //had that complex shape, and you wanted to make a new triangle from it,
     //not that you had a "triangle" and wanted to make a complex shape.
-    clearSelection();
-    
     if(!sectorSplitInfo.workingSector) {
-        selectSector(newSector);
+        sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
     } else {
         float workingSectorArea =
             (
@@ -1608,9 +1765,11 @@ void AreaEditor::doSectorSplit() {
             (newSector->bbox[1].y - newSector->bbox[0].y);
             
         if(workingSectorArea < newSectorArea) {
-            selectSector(sectorSplitInfo.workingSector);
+            sectorSelection.setSingle(
+                game.curArea->findSectorIdx(sectorSplitInfo.workingSector)
+            );
         } else {
-            selectSector(newSector);
+            sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
         }
     }
     
@@ -1741,14 +1900,16 @@ void AreaEditor::finishCircleSector() {
  */
 void AreaEditor::finishLayoutMoving() {
     unordered_set<Sector*> affectedSectors;
+    const set<size_t>& selectedVertexes = vertexSelection.getItemIdxs();
     getAffectedSectors(selectedVertexes, affectedSectors);
     map<Vertex*, Vertex*> merges;
     map<Vertex*, Edge*> edgesToSplit;
     unordered_set<Sector*> mergeAffectedSectors;
     
     //Find merge vertexes and edges to split, if any.
-    for(auto& v : selectedVertexes) {
-        Point p = v2p(v);
+    for(size_t vIdx : selectedVertexes) {
+        Vertex* vPtr = game.curArea->vertexes[vIdx];
+        Point p = v2p(vPtr);
         
         vector<std::pair<Distance, Vertex*> > mergeVertexes =
             getMergeVertexes(
@@ -1759,8 +1920,8 @@ void AreaEditor::finishLayoutMoving() {
         for(size_t mv = 0; mv < mergeVertexes.size(); ) {
             Vertex* mvPtr = mergeVertexes[mv].second;
             if(
-                mvPtr == v ||
-                isInContainer(selectedVertexes, mvPtr)
+                mvPtr == vPtr ||
+                vertexSelection.contains(game.curArea->findVertexIdx(mvPtr))
             ) {
                 mergeVertexes.erase(mergeVertexes.begin() + mv);
             } else {
@@ -1783,7 +1944,7 @@ void AreaEditor::finishLayoutMoving() {
         }
         
         if(mergeV) {
-            merges[v] = mergeV;
+            merges[vPtr] = mergeV;
             
         } else {
             Edge* ePtr = nullptr;
@@ -1794,20 +1955,20 @@ void AreaEditor::finishLayoutMoving() {
                 ePtr = getEdgeUnderPoint(p, ePtr);
                 if(ePtr) {
                     ePtrV1Selected =
-                        isInContainer(selectedVertexes, ePtr->vertexes[0]);
+                        vertexSelection.contains(ePtr->vertexIdxs[0]);
                     ePtrV2Selected =
-                        isInContainer(selectedVertexes, ePtr->vertexes[1]);
+                        vertexSelection.contains(ePtr->vertexIdxs[1]);
                 }
             } while(
                 ePtr != nullptr &&
                 (
-                    v->hasEdge(ePtr) ||
+                    vPtr->hasEdge(ePtr) ||
                     ePtrV1Selected || ePtrV2Selected
                 )
             );
             
             if(ePtr) {
-                edgesToSplit[v] = ePtr;
+                edgesToSplit[vPtr] = ePtr;
             }
         }
     }
@@ -1817,7 +1978,7 @@ void AreaEditor::finishLayoutMoving() {
         Edge* ePtr = game.curArea->edges[e];
         bool bothSelected = true;
         for(size_t v = 0; v < 2; v++) {
-            if(!isInContainer(selectedVertexes, ePtr->vertexes[v])) {
+            if(!vertexSelection.contains(ePtr->vertexIdxs[v])) {
                 bothSelected = false;
                 break;
             }
@@ -1833,7 +1994,7 @@ void AreaEditor::finishLayoutMoving() {
         Vertex* vPtr = game.curArea->vertexes[v];
         Point p = v2p(vPtr);
         
-        if(isInContainer(selectedVertexes, vPtr)) {
+        if(vertexSelection.contains(v)) {
             continue;
         }
         bool isMergeTarget = false;
@@ -1903,8 +2064,6 @@ void AreaEditor::finishLayoutMoving() {
     //If we ended up with any intersection still, abort!
     if(!intersections.empty()) {
         cancelLayoutMoving();
-        forgetPreparedState(preMoveAreaData);
-        preMoveAreaData = nullptr;
         setStatus("That move would cause edges to intersect!", true);
         return;
     }
@@ -1921,8 +2080,6 @@ void AreaEditor::finishLayoutMoving() {
             for(auto const& m2 : merges) {
                 if(m2.second == crushedVertex) {
                     cancelLayoutMoving();
-                    forgetPreparedState(preMoveAreaData);
-                    preMoveAreaData = nullptr;
                     setStatus(
                         "That move would crush an edge that's in the middle!",
                         true
@@ -2070,8 +2227,7 @@ void AreaEditor::finishNewSectorDrawing() {
     updateAffectedSectors(affectedSectors);
     
     //Select the new sector, making it ready for editing.
-    clearSelection();
-    selectSector(newSector);
+    sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
     
     clearLayoutDrawing();
     subState = EDITOR_SUB_STATE_NONE;
@@ -2283,8 +2439,13 @@ void AreaEditor::goToProblem() {
         );
         
         changeState(EDITOR_STATE_LAYOUT);
-        selectEdge(problemEdgeIntersection.e1);
-        selectEdge(problemEdgeIntersection.e2);
+        edgeSelection.clear();
+        edgeSelection.add(
+            game.curArea->findEdgeIdx(problemEdgeIntersection.e1)
+        );
+        edgeSelection.add(
+            game.curArea->findEdgeIdx(problemEdgeIntersection.e2)
+        );
         centerCamera(minCoords, maxCoords);
         
         break;
@@ -2299,7 +2460,7 @@ void AreaEditor::goToProblem() {
         
         changeState(EDITOR_STATE_LAYOUT);
         Sector* sPtr = game.curArea->problems.nonSimples.begin()->first;
-        selectSector(sPtr);
+        sectorSelection.setSingle(game.curArea->findSectorIdx(sPtr));
         centerCamera(sPtr->bbox[0], sPtr->bbox[1]);
         
         break;
@@ -2320,7 +2481,7 @@ void AreaEditor::goToProblem() {
         );
         
         changeState(EDITOR_STATE_LAYOUT);
-        selectEdge(ePtr);
+        edgeSelection.setSingle(game.curArea->findEdgeIdx(ePtr));
         centerCamera(minCoords, maxCoords);
         
         break;
@@ -2334,7 +2495,9 @@ void AreaEditor::goToProblem() {
         }
         
         changeState(EDITOR_STATE_LAYOUT);
-        selectVertex(problemVertexPtr);
+        vertexSelection.setSingle(
+            game.curArea->findVertexIdx(problemVertexPtr)
+        );
         centerCamera(
             Point(
                 problemVertexPtr->x - 64,
@@ -2357,7 +2520,9 @@ void AreaEditor::goToProblem() {
         }
         
         changeState(EDITOR_STATE_LAYOUT);
-        selectSector(problemSectorPtr);
+        sectorSelection.setSingle(
+            game.curArea->findSectorIdx(problemSectorPtr)
+        );
         centerCamera(problemSectorPtr->bbox[0], problemSectorPtr->bbox[1]);
         
         break;
@@ -2831,7 +2996,7 @@ void AreaEditor::pastePropertiesCmd(float inputValue) {
     if(subState != EDITOR_SUB_STATE_NONE) return;
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
-        if(!selectedSectors.empty()) {
+        if(sectorSelection.hasAny()) {
             pasteSectorProperties();
         } else {
             pasteEdgeProperties();
@@ -2907,8 +3072,8 @@ void AreaEditor::pickTexture(
     void* info, bool isNew
 ) {
     Sector* sPtr = nullptr;
-    if(selectedSectors.size() == 1 || selectionHomogenized) {
-        sPtr = *selectedSectors.begin();
+    if(sectorSelection.hasOne() || sectorSelection.isHomogenized()) {
+        sPtr = game.curArea->sectors[sectorSelection.getFirstItemIdx()];
     }
     if(!sPtr) return;
     
@@ -3198,7 +3363,7 @@ bool AreaEditor::saveArea(bool toBackup) {
     //First, some cleanup.
     bool deletedSectors;
     game.curArea->cleanup(&deletedSectors);
-    if(deletedSectors && !selectedSectors.empty()) {
+    if(deletedSectors && sectorSelection.hasAny()) {
         clearSelection();
     }
     
@@ -3341,18 +3506,9 @@ void AreaEditor::selectAllCmd(float inputValue) {
     
     if(subState == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
         if(state == EDITOR_STATE_LAYOUT) {
-            selectedEdges.insert(
-                game.curArea->edges.begin(),
-                game.curArea->edges.end()
-            );
-            selectedSectors.insert(
-                game.curArea->sectors.begin(),
-                game.curArea->sectors.end()
-            );
-            selectedVertexes.insert(
-                game.curArea->vertexes.begin(),
-                game.curArea->vertexes.end()
-            );
+            vertexSelection.addAll(game.curArea->vertexes.size());
+            edgeSelection.addAll(game.curArea->vertexes.size());
+            sectorSelection.addAll(game.curArea->sectors.size());
             
         } else if(state == EDITOR_STATE_MOBS) {
             mobSelection.addAll(game.curArea->mobGenerators.size());
@@ -3360,13 +3516,13 @@ void AreaEditor::selectAllCmd(float inputValue) {
         } else if(state == EDITOR_STATE_PATHS) {
             pathStopSelection.addAll(game.curArea->pathStops.size());
             pathLinkSelection.addAll(game.curArea->editorPathLinks.size());
+            
         } else if(state == EDITOR_STATE_DETAILS) {
             shadowSelection.addAll(game.curArea->treeShadows.size());
             regionSelection.addAll(game.curArea->regions.size());
             
         }
         
-        updateVertexSelection();
         setSelectionStatusText();
         
     } else if(
@@ -3382,21 +3538,6 @@ void AreaEditor::selectAllCmd(float inputValue) {
             ].mobIdxs.push_back(m);
         }
     }
-}
-
-
-/**
- * @brief Selects an edge and its vertexes.
- *
- * @param e Edge to select.
- */
-void AreaEditor::selectEdge(Edge* e) {
-    if(selectionFilter == SELECTION_FILTER_VERTEXES) return;
-    selectedEdges.insert(e);
-    for(size_t v = 0; v < 2; v++) {
-        selectVertex(e->vertexes[v]);
-    }
-    setSelectionStatusText();
 }
 
 
@@ -3452,33 +3593,6 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
         }
     }
     setSelectionStatusText();
-}
-
-
-/**
- * @brief Selects a sector and its edges and vertexes.
- *
- * @param s Sector to select.
- */
-void AreaEditor::selectSector(Sector* s) {
-    if(selectionFilter != SELECTION_FILTER_SECTORS) return;
-    selectedSectors.insert(s);
-    forIdx(e, s->edges) {
-        selectEdge(s->edges[e]);
-    }
-    setSelectionStatusText();
-}
-
-
-/**
- * @brief Selects a vertex.
- *
- * @param v Vertex to select.
- */
-void AreaEditor::selectVertex(Vertex* v) {
-    selectedVertexes.insert(v);
-    setSelectionStatusText();
-    updateVertexSelection();
 }
 
 
@@ -3560,19 +3674,19 @@ void AreaEditor::setSelectionStatusText() {
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
-        if(!selectedVertexes.empty()) {
+        if(vertexSelection.hasAny()) {
             setStatus(
                 "Selected " +
                 amountStr(
-                    (int) selectedSectors.size(), "sector"
+                    (int) sectorSelection.getCount(), "sector"
                 ) +
                 ", " +
                 amountStr(
-                    (int) selectedEdges.size(), "edge"
+                    (int) edgeSelection.getCount(), "edge"
                 ) +
                 ", " +
                 amountStr(
-                    (int) selectedVertexes.size(), "vertex", "vertexes"
+                    (int) vertexSelection.getCount(), "vertex", "vertexes"
                 ) +
                 "."
             );
@@ -3784,23 +3898,9 @@ void AreaEditor::snapModeCmd(float inputValue) {
  * @brief Procedure to start moving the selected vertexes.
  */
 void AreaEditor::startVertexMove() {
+    if(moving) return;
+    
     preMoveAreaData = prepareState();
-    
-    moveClosestVertex = nullptr;
-    Distance moveClosestVertexDist;
-    for(auto const& v : selectedVertexes) {
-        Point p = v2p(v);
-        preMoveVertexCoords[v] = p;
-        
-        Distance d(game.editorsView.mouseCursorWorldPos, p);
-        if(!moveClosestVertex || d < moveClosestVertexDist) {
-            moveClosestVertex = v;
-            moveClosestVertexDist = d;
-            moveStartPos = p;
-        }
-    }
-    
-    moveMouseStartPos = game.editorsView.mouseCursorWorldPos;
     moving = true;
 }
 
@@ -4190,30 +4290,6 @@ void AreaEditor::updateUndoHistory() {
     while(undoHistory.size() > game.options.areaEd.undoLimit) {
         undoHistory.pop_back();
     };
-}
-
-
-/**
- * @brief Updates the selection transformation widget's information, since
- * a new vertex was just selected.
- */
-void AreaEditor::updateVertexSelection() {
-    Point selTL(FLT_MAX, FLT_MAX);
-    Point selBR(-FLT_MAX, -FLT_MAX);
-    for(Vertex* v : selectedVertexes) {
-        updateMinMaxCoords(selTL, selBR, v2p(v));
-    }
-    selTL.x -= AREA_EDITOR::SELECTION_TW_PADDING;
-    selTL.y -= AREA_EDITOR::SELECTION_TW_PADDING;
-    selBR.x += AREA_EDITOR::SELECTION_TW_PADDING;
-    selBR.y += AREA_EDITOR::SELECTION_TW_PADDING;
-    cornersToCenterAndSize(
-        selTL, selBR, &selectionCenter, &selectionSize
-    );
-    selectionAngle = 0.0f;
-    selectionOrigCenter = selectionCenter;
-    selectionOrigSize = selectionSize;
-    selectionOrigAngle = selectionAngle;
 }
 
 

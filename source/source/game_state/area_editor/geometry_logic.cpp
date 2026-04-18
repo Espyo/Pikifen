@@ -328,7 +328,7 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
  * so they can be then pasted onto another edge.
  */
 void AreaEditor::copyEdgeProperties() {
-    if(selectedEdges.empty()) {
+    if(!edgeSelection.hasAny()) {
         setStatus(
             "To copy an edge's properties, you must first select an edge "
             "to copy from!",
@@ -337,7 +337,7 @@ void AreaEditor::copyEdgeProperties() {
         return;
     }
     
-    if(selectedEdges.size() > 1) {
+    if(edgeSelection.getCount() > 1) {
         setStatus(
             "To copy an edge's properties, you can only select 1 edge!",
             true
@@ -345,13 +345,13 @@ void AreaEditor::copyEdgeProperties() {
         return;
     }
     
-    Edge* sourceEdge = *selectedEdges.begin();
+    Edge* sourceEdge =
+        game.curArea->edges[edgeSelection.getSingleItemIdx()];
     if(!copyBufferEdge) {
         copyBufferEdge = new Edge();
     }
     sourceEdge->clone(copyBufferEdge);
     setStatus("Successfully copied the edge's properties.");
-    return;
 }
 
 
@@ -384,7 +384,6 @@ void AreaEditor::copyMobProperties() {
     }
     sourceMob->clone(copyBufferMob);
     setStatus("Successfully copied the object's properties.");
-    return;
 }
 
 
@@ -414,13 +413,11 @@ void AreaEditor::copyPathLinkProperties() {
     
     EditorPathLink* sourceELink =
         &game.curArea->editorPathLinks[pathLinkSelection.getFirstItemIdx()];
-        
     if(!copyBufferPathLink) {
         copyBufferPathLink = new PathLink(nullptr, nullptr, INVALID);
     }
     sourceELink->link1->clone(copyBufferPathLink);
     setStatus("Successfully copied the path link's properties.");
-    return;
 }
 
 
@@ -430,7 +427,7 @@ void AreaEditor::copyPathLinkProperties() {
  *
  */
 void AreaEditor::copySectorProperties() {
-    if(selectedSectors.empty()) {
+    if(!sectorSelection.hasAny()) {
         setStatus(
             "To copy a sector's properties, you must first select a sector "
             "to copy from!",
@@ -439,7 +436,7 @@ void AreaEditor::copySectorProperties() {
         return;
     }
     
-    if(selectedSectors.size() > 1) {
+    if(sectorSelection.getCount() > 1) {
         setStatus(
             "To copy a sector's properties, you can only select 1 sector!",
             true
@@ -447,14 +444,14 @@ void AreaEditor::copySectorProperties() {
         return;
     }
     
-    Sector* sourceSector = *selectedSectors.begin();
+    Sector* sourceSector =
+        game.curArea->sectors[sectorSelection.getFirstItemIdx()];
     if(!copyBufferSector) {
         copyBufferSector = new Sector();
     }
     sourceSector->clone(copyBufferSector);
     copyBufferSector->textureInfo = sourceSector->textureInfo;
     setStatus("Successfully copied the sector's properties.");
-    return;
 }
 
 
@@ -491,56 +488,58 @@ void AreaEditor::deleteEdge(Edge* ePtr) {
 
 
 /**
- * @brief Removes and deletes the specified edges. The sectors on each side
+ * @brief Removes and deletes the selected edges. The sectors on each side
  * of the edge are merged, so the smallest sector will be deleted. In addition,
  * this operation will remove and delete any sectors that would
  * end up incomplete.
  *
- * @param which Edges to delete.
  * @return Whether all edges were deleted successfully.
  */
-bool AreaEditor::deleteEdges(const set<Edge*>& which) {
-    bool ret = true;
+bool AreaEditor::deleteSelectedEdges() {
+    bool success = true;
     
-    for(Edge* ePtr : which) {
+    const set<size_t>& selectedEdges = edgeSelection.getItemIdxs();
+    
+    for(size_t eIdx : selectedEdges) {
+        Edge* ePtr = game.curArea->edges[eIdx];
+        
         if(!ePtr->vertexes[0]) {
             //Huh, looks like one of the edge deletion procedures already
             //wiped this edge out. Skip it.
             continue;
         }
-        if(!mergeSectors(ePtr->sectors[0], ePtr->sectors[1])) {
-            ret = false;
-        }
+        
+        success &= mergeSectors(ePtr->sectors[0], ePtr->sectors[1]);
     }
     
-    return ret;
+    return success;
 }
 
 
 /**
  * @brief Removes and deletes the selected mobs.
  */
-void AreaEditor::deleteMobs() {
+void AreaEditor::deleteSelectedMobs() {
     const set<size_t>& selectedMobs = mobSelection.getItemIdxs();
     
-    for(auto const& mobIdx : selectedMobs) {
+    for(size_t mIdx : selectedMobs) {
         //Update links.
         forIdx(m2, game.curArea->mobGenerators) {
             MobGen* m2Ptr = game.curArea->mobGenerators[m2];
             forIdx(l, m2Ptr->links) {
-                if(m2Ptr->linkIdxs[l] == mobIdx) {
+                if(m2Ptr->linkIdxs[l] == mIdx) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
                     m2Ptr->linkIdxs.erase(m2Ptr->linkIdxs.begin() + l);
                 } else {
-                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mobIdx, false);
+                    adjustMisalignedIndex(m2Ptr->linkIdxs[l], mIdx, false);
                 }
             }
             
             if(m2Ptr->storedInside != INVALID) {
-                if(m2Ptr->storedInside == mobIdx) {
+                if(m2Ptr->storedInside == mIdx) {
                     m2Ptr->storedInside = INVALID;
                 } else {
-                    adjustMisalignedIndex(m2Ptr->storedInside, mobIdx, false);
+                    adjustMisalignedIndex(m2Ptr->storedInside, mIdx, false);
                 }
             }
         }
@@ -549,17 +548,17 @@ void AreaEditor::deleteMobs() {
         forIdx(c, game.curArea->mission.mobGroups) {
             MissionMobGroup* cPtr = &game.curArea->mission.mobGroups[c];
             for(size_t m = 0; m < cPtr->mobIdxs.size();) {
-                if(cPtr->mobIdxs[m] == mobIdx) {
+                if(cPtr->mobIdxs[m] == mIdx) {
                     cPtr->mobIdxs.erase(cPtr->mobIdxs.begin() + m);
                 } else {
-                    adjustMisalignedIndex(cPtr->mobIdxs[m], mobIdx, false);
+                    adjustMisalignedIndex(cPtr->mobIdxs[m], mIdx, false);
                     m++;
                 }
             }
         }
         
         //Delete it.
-        delete game.curArea->mobGenerators[mobIdx];
+        delete game.curArea->mobGenerators[mIdx];
     }
     
     //Finally, erase them from the vector.
@@ -568,15 +567,13 @@ void AreaEditor::deleteMobs() {
 
 
 /**
- * @brief Removes and deletes the specified path links.
- *
- * @param which Path links to delete.
+ * @brief Removes and deletes the selected path links.
  */
-void AreaEditor::deletePathLinks() {
+void AreaEditor::deleteSelectedPathLinks() {
     const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
     
-    for(auto const& linkIdx : selectedLinks) {
-        EditorPathLink* elPtr = &game.curArea->editorPathLinks[linkIdx];
+    for(size_t lIdx : selectedLinks) {
+        EditorPathLink* elPtr = &game.curArea->editorPathLinks[lIdx];
         //Delete it from the start path stop.
         elPtr->link1->startPtr->deleteLink(elPtr->link1);
         
@@ -590,22 +587,20 @@ void AreaEditor::deletePathLinks() {
 
 
 /**
- * @brief Removes and deletes the specified path stops.
- *
- * @param which Path stops to delete.
+ * @brief Removes and deletes the selected path stops.
  */
-void AreaEditor::deletePathStops() {
+void AreaEditor::deleteSelectedPathStops() {
     const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
     
-    for(auto const& stopIdx : selectedStops) {
+    for(auto const& sIdx : selectedStops) {
         //Check all links that end at this stop.
         forIdx(s2, game.curArea->pathStops) {
             PathStop* s2Ptr = game.curArea->pathStops[s2];
-            s2Ptr->deleteLink(game.curArea->pathStops[stopIdx]);
+            s2Ptr->deleteLink(game.curArea->pathStops[sIdx]);
         }
         
         //Delete it.
-        delete game.curArea->pathStops[stopIdx];
+        delete game.curArea->pathStops[sIdx];
     }
     
     //Finally, erase them from the vector.
@@ -614,12 +609,12 @@ void AreaEditor::deletePathStops() {
 
 
 /**
- * @brief Deletes the currently-selected regions.
+ * @brief Removes and deletes the selected regions.
  */
-void AreaEditor::deleteRegions() {
+void AreaEditor::deleteSelectedRegions() {
     const set<size_t>& selectedRegions = regionSelection.getItemIdxs();
     
-    for(auto const& regIdx : selectedRegions) {
+    for(size_t rIdx : selectedRegions) {
         //Update end conditions.
         forIdx(e, game.curArea->mission.endConds) {
             MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
@@ -629,12 +624,12 @@ void AreaEditor::deleteRegions() {
             }
             if(ePtr->idxParam == 0) continue;
             adjustMisalignedIndex(
-                ePtr->idxParam, regIdx, false
+                ePtr->idxParam, rIdx, false
             );
         }
         
         //Delete it.
-        delete game.curArea->regions[regIdx];
+        delete game.curArea->regions[rIdx];
     }
     
     //Finally, erase them from the vector.
@@ -643,14 +638,14 @@ void AreaEditor::deleteRegions() {
 
 
 /**
- * @brief Deletes the currently-selected tree shadows.
+ * @brief Removes and deletes the selected tree shadows.
  */
-void AreaEditor::deleteTreeShadows() {
+void AreaEditor::deleteSelectedTreeShadows() {
     const set<size_t>& selectedShadows = shadowSelection.getItemIdxs();
     
-    for(auto const& regIdx : selectedShadows) {
+    for(size_t sIdx : selectedShadows) {
         //Delete it.
-        delete game.curArea->treeShadows[regIdx];
+        delete game.curArea->treeShadows[sIdx];
     }
     
     //Finally, erase them from the vector.
@@ -1734,16 +1729,17 @@ void AreaEditor::getAffectedSectors(
  * @brief Adds to the list all sectors affected by the specified vertexes.
  * The list can include the nullptr sector.
  *
- * @param vertexes Vertexes that are affecting sectors.
+ * @param vertexIdxs Indexes of the vertexes that are affecting sectors.
  * @param list The list of affected sectors to fill out.
  */
 void AreaEditor::getAffectedSectors(
-    const set<Vertex*>& vertexes, unordered_set<Sector*>& list
+    const set<size_t>& vertexIdxs, unordered_set<Sector*>& list
 ) const {
-    for(auto& v : vertexes) {
-        forIdx(e, v->edges) {
-            list.insert(v->edges[e]->sectors[0]);
-            list.insert(v->edges[e]->sectors[1]);
+    for(size_t vIdx : vertexIdxs) {
+        Vertex* vPtr = game.curArea->vertexes[vIdx];
+        forIdx(e, vPtr->edges) {
+            list.insert(vPtr->edges[e]->sectors[0]);
+            list.insert(vPtr->edges[e]->sectors[1]);
         }
     }
 }
@@ -2215,12 +2211,14 @@ Vertex* AreaEditor::getVertexUnderPoint(const Point& p) const {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedEdges() {
-    if(selectedEdges.size() < 2) return;
+    if(edgeSelection.getCount() < 2) return;
     
-    Edge* base = *selectedEdges.begin();
-    for(auto e = selectedEdges.begin(); e != selectedEdges.end(); ++e) {
-        if(e == selectedEdges.begin()) continue;
-        base->clone(*e);
+    const set<size_t>& selectedEdges = edgeSelection.getItemIdxs();
+    Edge* base = game.curArea->edges[*selectedEdges.begin()];
+    for(size_t eIdx : selectedEdges) {
+        Edge* ePtr = game.curArea->edges[eIdx];
+        if(ePtr == base) continue;
+        base->clone(ePtr);
     }
 }
 
@@ -2283,13 +2281,15 @@ void AreaEditor::homogenizeSelectedPathStops() {
  * based on the one at the head of the selection.
  */
 void AreaEditor::homogenizeSelectedSectors() {
-    if(selectedSectors.size() < 2) return;
+    if(sectorSelection.getCount() < 2) return;
     
-    Sector* base = *selectedSectors.begin();
-    for(auto s = selectedSectors.begin(); s != selectedSectors.end(); ++s) {
-        if(s == selectedSectors.begin()) continue;
-        base->clone(*s);
-        updateSectorTexture(*s, base->textureInfo.bmpName);
+    const set<size_t>& selectedSectors = sectorSelection.getItemIdxs();
+    Sector* base = game.curArea->sectors[*selectedSectors.begin()];
+    for(size_t sIdx : selectedSectors) {
+        Sector* sPtr = game.curArea->sectors[sIdx];
+        if(sPtr == base) continue;
+        base->clone(sPtr);
+        updateSectorTexture(sPtr, base->textureInfo.bmpName);
     }
 }
 
@@ -2511,7 +2511,7 @@ void AreaEditor::pasteEdgeProperties() {
         return;
     }
     
-    if(selectedEdges.empty()) {
+    if(!edgeSelection.hasAny()) {
         setStatus(
             "To paste edge properties, you must first select which edge "
             "to paste to!",
@@ -2522,8 +2522,8 @@ void AreaEditor::pasteEdgeProperties() {
     
     registerChange("edge property paste");
     
-    for(Edge* e : selectedEdges) {
-        copyBufferEdge->clone(e);
+    for(size_t eIdx : edgeSelection.getItemIdxs()) {
+        copyBufferEdge->clone(game.curArea->edges[eIdx]);
     }
     
     updateAllEdgeOffsetCaches();
@@ -2557,8 +2557,8 @@ void AreaEditor::pasteMobProperties() {
     
     registerChange("object property paste");
     
-    for(size_t mobIdx : mobSelection.getItemIdxs()) {
-        copyBufferMob->clone(game.curArea->mobGenerators[mobIdx], false);
+    for(size_t mIdx : mobSelection.getItemIdxs()) {
+        copyBufferMob->clone(game.curArea->mobGenerators[mIdx], false);
     }
     
     setStatus("Successfully pasted object properties.");
@@ -2591,8 +2591,8 @@ void AreaEditor::pastePathLinkProperties() {
     
     registerChange("path link property paste");
     
-    for(size_t linkIdx : pathLinkSelection.getItemIdxs()) {
-        EditorPathLink* lPtr = &game.curArea->editorPathLinks[linkIdx];
+    for(size_t lIdx : pathLinkSelection.getItemIdxs()) {
+        EditorPathLink* lPtr = &game.curArea->editorPathLinks[lIdx];
         copyBufferPathLink->clone(lPtr->link1);
         if(lPtr->link2) copyBufferPathLink->clone(lPtr->link2);
     }
@@ -2615,7 +2615,7 @@ void AreaEditor::pasteSectorProperties() {
         return;
     }
     
-    if(selectedSectors.empty()) {
+    if(!sectorSelection.hasAny()) {
         setStatus(
             "To paste sector properties, you must first select which sector "
             "to paste to!",
@@ -2626,9 +2626,10 @@ void AreaEditor::pasteSectorProperties() {
     
     registerChange("sector property paste");
     
-    for(Sector* s : selectedSectors) {
-        copyBufferSector->clone(s);
-        updateSectorTexture(s, copyBufferSector->textureInfo.bmpName);
+    for(size_t sIdx : sectorSelection.getItemIdxs()) {
+        Sector* sPtr = game.curArea->sectors[sIdx];
+        copyBufferSector->clone(sPtr);
+        updateSectorTexture(sPtr, copyBufferSector->textureInfo.bmpName);
     }
     
     updateAllEdgeOffsetCaches();
@@ -2651,7 +2652,7 @@ void AreaEditor::pasteSectorTexture() {
         return;
     }
     
-    if(selectedSectors.empty()) {
+    if(!sectorSelection.hasAny()) {
         setStatus(
             "To paste a sector texture, you must first select which sector "
             "to paste to!",
@@ -2662,8 +2663,9 @@ void AreaEditor::pasteSectorTexture() {
     
     registerChange("sector texture paste");
     
-    for(Sector* s : selectedSectors) {
-        updateSectorTexture(s, copyBufferSector->textureInfo.bmpName);
+    for(size_t sIdx : sectorSelection.getItemIdxs()) {
+        Sector* sPtr = game.curArea->sectors[sIdx];
+        updateSectorTexture(sPtr, copyBufferSector->textureInfo.bmpName);
     }
     
     setStatus("Successfully pasted sector texture.");
@@ -2802,9 +2804,10 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
         
         vector<Vertex*> vertexesToCheck = game.curArea->vertexes;
         if(ignoreSelected) {
-            for(const Vertex* v : selectedVertexes) {
+            const set<size_t>& selectedVertexes = vertexSelection.getItemIdxs();
+            for(size_t vIdx : selectedVertexes) {
                 forIdx(v2, vertexesToCheck) {
-                    if(vertexesToCheck[v2] == v) {
+                    if(vertexesToCheck[v2] == game.curArea->vertexes[vIdx]) {
                         vertexesToCheck.erase(vertexesToCheck.begin() + v2);
                         break;
                     }
@@ -2858,8 +2861,10 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
                 //neighboring edges, because as we move an edge,
                 //the neighboring edges stretch along with it.
                 bool skip = false;
-                for(Vertex* v : selectedVertexes) {
-                    if(v->hasEdge(ePtr)) {
+                const set<size_t>& selectedVertexes =
+                    vertexSelection.getItemIdxs();
+                for(size_t vIdx : selectedVertexes) {
+                    if(game.curArea->vertexes[vIdx]->hasEdge(ePtr)) {
                         skip = true;
                         break;
                     }

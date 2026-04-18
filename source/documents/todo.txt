@@ -1,24 +1,26 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    if a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
-    https://github.com/Espyo/Pikifen/pull/91
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Add it to the layout area editor state
         Select some vertexes, drag center with Shift, with Shift still held zoom out, keep dragging = they start growing
+            Transformation widget needs a padding setting that only interferes where the handles and outline are, and not the calculations -- remove the path link and vertex camera zoom logic for figuring out their dimensions
+        Figure out what to do with game.options.areaEd.selTrans
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob, path stop, path link
+            Should they be 0-indexed or 1-indexed? What about the debug number displays?
         Some selected things become solid yellow, others an oscillating yellow, others no yellow
         Bring back the double-click+drag feature when creating a new mob, path stop, etc.
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Ice vent is hitting frozen Pikmin multiple times and eventually killing them
-        Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
-    Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
+    Vulnerability things
+        Ice vent is hitting frozen Pikmin multiple times and eventually killing them
+            Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
+        Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
+        https://github.com/Espyo/Pikifen/pull/91
     Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
     Move <direction> player actions have auto-repeat on for some reason
     You can open the radar and start Go Here! during interludes
@@ -37,11 +39,13 @@ Next tasks (roughly sorted most important first)
     Freezecake
     Swarming jingle
     Other mission tweaks
+        If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
         What upgrades are on
     Global script and script variables, which apply to the whole area
+        get_area_info -> get_misc_info
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
         A way for objects to send messages to the area
@@ -387,8 +391,7 @@ Next tasks (roughly sorted most important first)
             A cutscene queue, in case multiple ones need to start at once
             Scripting for them
                 Among other things, a way to move the camera, both with teleport, and smoothly
-                Maybe it should use the exact same logic as regular mob scripting. Obviously mob actions won't work, but changing states, ticking events, and performing actions onto mobs works
-                    Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
+                Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Area changes
             Areas should be able to specify whether they have a "types out on the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
             Objects should be able to specify what days they do and don't appear in
@@ -571,7 +574,6 @@ Misc things (so I don't forget)
             The ability for a mob to spawn another mob at a random angle
             A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
         hold_focused_mob should be able to specify the hold rotation method
-        Some way to read a different mob's "focus mob memory"?
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Add region trigger mobs, that output power based on how many mobs are inside the given region
@@ -588,11 +590,13 @@ Misc things (so I don't forget)
             String splitting, joining, getting the size of, etc.
         Add some infinite loop protection logic
             I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
-        A way to obtain the frame's deltaT
         Mobs could reference other mobs via their ID numbers (Mob::id)
+            They could also focus on each other with this ID, stored in variables; this would deprecate the "focus mob memory" feature
+            get_misc_info player_1_leader_id
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
         New actions
+            Get the name of the focused mob's current state, animation
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
             Setting the camera position and zoom
