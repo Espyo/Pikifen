@@ -171,7 +171,6 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 cancelLayoutMoving();
             } else if(subState == EDITOR_SUB_STATE_NONE) {
                 clearSelection();
-                selecting = false;
             }
             
         } else if(state == EDITOR_STATE_MOBS) {
@@ -188,7 +187,6 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 changeState(EDITOR_STATE_GAMEPLAY);
             } else if(subState == EDITOR_SUB_STATE_NONE) {
                 clearSelection();
-                selecting = false;
             }
             
         } else if(state == EDITOR_STATE_PATHS) {
@@ -197,7 +195,6 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 setStatus();
             } else if(subState == EDITOR_SUB_STATE_NONE) {
                 clearSelection();
-                selecting = false;
             }
             
         } else if(state == EDITOR_STATE_DETAILS) {
@@ -249,7 +246,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         if(
             state == EDITOR_STATE_LAYOUT &&
             subState == EDITOR_SUB_STATE_NONE &&
-            !moving && !selecting
+            isSelectionIdle()
         ) {
             circleSectorCmd(1.0f);
         }
@@ -259,14 +256,14 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(
-            !moving && !selecting &&
+            isSelectionIdle() &&
             game.options.areaEd.advancedMode
         ) {
             changeState(EDITOR_STATE_DETAILS);
         }
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_D, true)) {
-        if(state == EDITOR_STATE_MOBS && !moving && !selecting) {
+        if(state == EDITOR_STATE_MOBS && isSelectionIdle()) {
             duplicateMobsCmd(1.0f);
         }
         
@@ -299,7 +296,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L)) {
         if(
-            !moving && !selecting &&
+            isSelectionIdle() &&
             game.options.areaEd.advancedMode
         ) {
             changeState(EDITOR_STATE_LAYOUT);
@@ -338,7 +335,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_O)) {
         if(
-            !moving && !selecting &&
+            isSelectionIdle() &&
             game.options.areaEd.advancedMode
         ) {
             changeState(EDITOR_STATE_MOBS);
@@ -346,7 +343,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_P)) {
         if(
-            !moving && !selecting &&
+            isSelectionIdle() &&
             game.options.areaEd.advancedMode
         ) {
             changeState(EDITOR_STATE_PATHS);
@@ -1172,184 +1169,160 @@ void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
-    if(selecting) {
-    
-        Point selectionTL = selectionStart;
-        Point selectionBR = selectionStart;
-        updateMinMaxCoords(selectionTL, selectionBR, selectionEnd);
-        selectionEnd = game.editorsView.mouseCursorWorldPos;
-        
-        switch(state) {
-        case EDITOR_STATE_LAYOUT: {
-    
-            break;
-            
-        } case EDITOR_STATE_MOBS: {
-    
-            break;
-            
-        } case EDITOR_STATE_PATHS: {
-    
-            break;
-            
-        }
-        }
-        
-    } else {
-    
-        switch(state) {
-        case EDITOR_STATE_LAYOUT: {
-    
-            if(
-                subState == EDITOR_SUB_STATE_OCTEE && moving
-            ) {
-                //Move sector texture transformation property.
-                Sector* sPtr =
-                    game.curArea->sectors[sectorSelection.getFirstItemIdx()];
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+
+        if(
+            subState == EDITOR_SUB_STATE_OCTEE && moving
+        ) {
+            //Move sector texture transformation property.
+            Sector* sPtr =
+                game.curArea->sectors[sectorSelection.getFirstItemIdx()];
                 
-                switch(octeeMode) {
-                case OCTEE_MODE_OFFSET: {
-                    registerChange("sector texture offset change");
-                    Point diff =
-                        game.editorsView.mouseCursorWorldPos - octeeDragStart;
-                    diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
-                    diff = diff / sPtr->textureInfo.tf.scale;
-                    sPtr->textureInfo.tf.trans = octeeOrigOffset + diff;
-                    break;
-                } case OCTEE_MODE_SCALE: {
-                    registerChange("sector texture scale change");
-                    Point diff =
-                        game.editorsView.mouseCursorWorldPos - octeeDragStart;
-                    diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
-                    Point dragStartRot =
-                        rotatePoint(
-                            octeeDragStart, -sPtr->textureInfo.tf.rot
-                        );
-                    diff = diff / dragStartRot * octeeOrigScale;
-                    sPtr->textureInfo.tf.scale = octeeOrigScale + diff;
-                    break;
-                } case OCTEE_MODE_ANGLE: {
-                    registerChange("sector texture angle change");
-                    float dragStartA = getAngle(octeeDragStart);
-                    float cursorA =
-                        getAngle(game.editorsView.mouseCursorWorldPos);
-                    sPtr->textureInfo.tf.rot =
-                        octeeOrigAngle + (cursorA - dragStartA);
-                    break;
-                }
-                };
-                
-                homogenizeSelectedSectors();
-                
-            } else {
-                handleSelectionAndTransformationLmbDrag(
-                    layoutSelCtrl, curTransformationWidget,
-                    snapPoint(game.editorsView.mouseCursorWorldPos),
-                [this] {
-                    startVertexMove();
-                    registerChange("vertex movement");
-                }
-                );
-                
-                setSelectionStatusText();
-                
+            switch(octeeMode) {
+            case OCTEE_MODE_OFFSET: {
+                registerChange("sector texture offset change");
+                Point diff =
+                    game.editorsView.mouseCursorWorldPos - octeeDragStart;
+                diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
+                diff = diff / sPtr->textureInfo.tf.scale;
+                sPtr->textureInfo.tf.trans = octeeOrigOffset + diff;
+                break;
+            } case OCTEE_MODE_SCALE: {
+                registerChange("sector texture scale change");
+                Point diff =
+                    game.editorsView.mouseCursorWorldPos - octeeDragStart;
+                diff = rotatePoint(diff, -sPtr->textureInfo.tf.rot);
+                Point dragStartRot =
+                    rotatePoint(
+                        octeeDragStart, -sPtr->textureInfo.tf.rot
+                    );
+                diff = diff / dragStartRot * octeeOrigScale;
+                sPtr->textureInfo.tf.scale = octeeOrigScale + diff;
+                break;
+            } case OCTEE_MODE_ANGLE: {
+                registerChange("sector texture angle change");
+                float dragStartA = getAngle(octeeDragStart);
+                float cursorA =
+                    getAngle(game.editorsView.mouseCursorWorldPos);
+                sPtr->textureInfo.tf.rot =
+                    octeeOrigAngle + (cursorA - dragStartA);
+                break;
             }
+            };
             
-            break;
+            homogenizeSelectedSectors();
             
-        } case EDITOR_STATE_MOBS: {
-    
+        } else {
             handleSelectionAndTransformationLmbDrag(
-                mobsSelCtrl, curTransformationWidget,
+                layoutSelCtrl, curTransformationWidget,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
-                [this] { registerChange("object movement"); }
+            [this] {
+                startVertexMove();
+                registerChange("vertex movement");
+            }
             );
             
             setSelectionStatusText();
             
-            break;
-            
-        } case EDITOR_STATE_PATHS: {
-    
-            if(
-                movingPathPreviewCheckpoint != -1 &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Move path preview checkpoints.
-                pathPreviewCheckpoints[movingPathPreviewCheckpoint] =
-                    snapPoint(game.editorsView.mouseCursorWorldPos);
-                pathPreviewTimer.start(false);
-            } else {
-            
-                handleSelectionAndTransformationLmbDrag(
-                    pathsSelCtrl, curTransformationWidget,
-                    snapPoint(game.editorsView.mouseCursorWorldPos),
-                    [this] { registerChange("path stop movement"); }
-                );
-                
-                const set<size_t>& selectedPathStops =
-                    pathStopSelection.getItemIdxs();
-                for(size_t s : selectedPathStops) {
-                    game.curArea->pathStops[s]->calculateDistsPlusNeighbors();
-                }
-                
-                pathPreviewTimer.start(false);
-                
-                setSelectionStatusText();
-                
-            }
-            
-            break;
-            
-        } case EDITOR_STATE_DETAILS: {
-    
-            handleSelectionAndTransformationLmbDrag(
-                detailsSelCtrl, curTransformationWidget,
-                snapPoint(game.editorsView.mouseCursorWorldPos),
-                [this] { registerChange("tree shadow movement"); }
-            );
-            
-            break;
-            
-        } case EDITOR_STATE_TOOLS: {
-    
-            //Move reference handle.
-            Bitmask8 flags = 0;
-            if(referenceKeepAspectRatio) {
-                enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
-            }
-            if(isAltPressed) {
-                enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
-            }
-            curTransformationWidget.handleMouseMove(
-                snapPoint(game.editorsView.mouseCursorWorldPos),
-                &referenceCenter,
-                &referenceSize,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom, flags, 5.0f
-            );
-            
-            break;
-            
-        } case EDITOR_STATE_REVIEW: {
-    
-            //Move cross-section points.
-            if(movingCrossSectionPoint != -1) {
-                crossSectionCheckpoints[movingCrossSectionPoint] =
-                    snapPoint(game.editorsView.mouseCursorWorldPos);
-            }
-            
-            handleSelectionAndTransformationLmbDrag(
-                reviewSelCtrl, curTransformationWidget,
-                game.editorsView.mouseCursorWorldPos,
-            [this] () { changesMgr.markAsChanged(); }
-            );
-            
-            break;
-            
-        }
         }
         
+        break;
+        
+    } case EDITOR_STATE_MOBS: {
+
+        handleSelectionAndTransformationLmbDrag(
+            mobsSelCtrl, curTransformationWidget,
+            snapPoint(game.editorsView.mouseCursorWorldPos),
+            [this] { registerChange("object movement"); }
+        );
+        
+        setSelectionStatusText();
+        
+        break;
+        
+    } case EDITOR_STATE_PATHS: {
+
+        if(
+            movingPathPreviewCheckpoint != -1 &&
+            subState == EDITOR_SUB_STATE_NONE
+        ) {
+            //Move path preview checkpoints.
+            pathPreviewCheckpoints[movingPathPreviewCheckpoint] =
+                snapPoint(game.editorsView.mouseCursorWorldPos);
+            pathPreviewTimer.start(false);
+        } else {
+        
+            handleSelectionAndTransformationLmbDrag(
+                pathsSelCtrl, curTransformationWidget,
+                snapPoint(game.editorsView.mouseCursorWorldPos),
+            [this] {
+                startPathStopMove();
+                registerChange("path stop movement");
+            }
+            );
+            
+            const set<size_t>& selectedPathStops =
+                pathStopSelection.getItemIdxs();
+            for(size_t s : selectedPathStops) {
+                game.curArea->pathStops[s]->calculateDistsPlusNeighbors();
+            }
+            
+            pathPreviewTimer.start(false);
+            
+            setSelectionStatusText();
+            
+        }
+        
+        break;
+        
+    } case EDITOR_STATE_DETAILS: {
+
+        handleSelectionAndTransformationLmbDrag(
+            detailsSelCtrl, curTransformationWidget,
+            snapPoint(game.editorsView.mouseCursorWorldPos),
+            [this] { registerChange("tree shadow movement"); }
+        );
+        
+        break;
+        
+    } case EDITOR_STATE_TOOLS: {
+
+        //Move reference handle.
+        Bitmask8 flags = 0;
+        if(referenceKeepAspectRatio) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_KEEP_RATIO);
+        }
+        if(isAltPressed) {
+            enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+        }
+        curTransformationWidget.handleMouseMove(
+            snapPoint(game.editorsView.mouseCursorWorldPos),
+            &referenceCenter,
+            &referenceSize,
+            nullptr,
+            1.0f / game.editorsView.cam.zoom, flags, 5.0f
+        );
+        
+        break;
+        
+    } case EDITOR_STATE_REVIEW: {
+
+        //Move cross-section points.
+        if(movingCrossSectionPoint != -1) {
+            crossSectionCheckpoints[movingCrossSectionPoint] =
+                snapPoint(game.editorsView.mouseCursorWorldPos);
+        }
+        
+        handleSelectionAndTransformationLmbDrag(
+            reviewSelCtrl, curTransformationWidget,
+            game.editorsView.mouseCursorWorldPos,
+        [this] () { changesMgr.markAsChanged(); }
+        );
+        
+        break;
+        
+    }
     }
 }
 
@@ -1360,8 +1333,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
-    selecting = false;
-    
     if(moving) {
         if(
             state == EDITOR_STATE_LAYOUT && subState != EDITOR_SUB_STATE_OCTEE

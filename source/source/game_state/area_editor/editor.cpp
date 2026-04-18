@@ -348,6 +348,10 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_MOBS;
     };
+    mobSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return game.curArea->mobGenerators[idx] == highlightedMob;
+    };
     mobSelection.itemsAreRectangular = false;
     mobSelection.itemsCanResize = false;
     mobSelection.itemsCanRotate = false;
@@ -373,6 +377,10 @@ AreaEditor::AreaEditor() :
     pathStopSelection.onIsEligible =
     [this] (size_t idx) {
         return state == EDITOR_STATE_PATHS;
+    };
+    pathStopSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return game.curArea->pathStops[idx] == highlightedPathStop;
     };
     pathStopSelection.itemsAreRectangular = false;
     pathStopSelection.itemsCanResize = false;
@@ -432,6 +440,10 @@ AreaEditor::AreaEditor() :
                 game.curArea->editorPathLinks[lIdx].link1->endIdx
             );
         }
+    };
+    pathLinkSelection.onCheckUnderCursor =
+    [this] (size_t idx, const Point & cursorPos) {
+        return &game.curArea->editorPathLinks[idx] == highlightedEditorPathLink;
     };
     pathLinkSelection.itemsAreRectangular = true;
     pathLinkSelection.itemsCanResize = false;
@@ -567,7 +579,7 @@ AreaEditor::AreaEditor() :
 void AreaEditor::addNewMobCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -620,7 +632,7 @@ void AreaEditor::addNewMobUnderCursor() {
 void AreaEditor::addNewPathCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -643,7 +655,7 @@ void AreaEditor::addNewPathCmd(float inputValue) {
 void AreaEditor::addNewRegionCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -667,7 +679,7 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
 void AreaEditor::addNewReminderCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -688,7 +700,7 @@ void AreaEditor::addNewReminderCmd(float inputValue) {
 void AreaEditor::addNewTreeShadowCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -825,7 +837,7 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
 void AreaEditor::circleSectorCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -972,7 +984,6 @@ void AreaEditor::clearSelection() {
     regionSelection.clear();
     reminderSelection.clear();
     
-    selectionHomogenized = false;
     setSelectionStatusText();
 }
 
@@ -1317,7 +1328,7 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     //Check if the user can delete.
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -1360,7 +1371,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     //Check if the user can delete.
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -1398,7 +1409,7 @@ void AreaEditor::deletePathCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     //Check if the user can delete.
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -1458,7 +1469,7 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     //Check if the user can delete.
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -1495,7 +1506,8 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
 void AreaEditor::deleteReminderCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    //Check if the user can delete.
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -1530,7 +1542,7 @@ void AreaEditor::deleteTreeShadowCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     //Check if the user can delete.
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -2674,6 +2686,23 @@ void AreaEditor::handleLineError() {
 
 
 /**
+ * @brief Returns whether everything selection-related is idle, or if we're
+ * in the middle of some selection-related operation.
+ *
+ * @return Whether we're idle.
+ */
+bool AreaEditor::isSelectionIdle() const {
+    if(moving) return false;
+    if(!layoutSelCtrl.isIdle()) return false;
+    if(!mobsSelCtrl.isIdle()) return false;
+    if(!pathsSelCtrl.isIdle()) return false;
+    if(!detailsSelCtrl.isIdle()) return false;
+    if(!reviewSelCtrl.isIdle()) return false;
+    return true;
+}
+
+
+/**
  * @brief Code to run for the layout drawing command.
  *
  * @param inputValue Value of the player input for the command.
@@ -2681,7 +2710,7 @@ void AreaEditor::handleLineError() {
 void AreaEditor::layoutDrawingCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -2742,7 +2771,6 @@ void AreaEditor::load() {
     lastMobCustomCatName.clear();
     lastMobType = nullptr;
     selectionEffect = 0.0;
-    selectionHomogenized = false;
     showClosestStop = false;
     showPathPreview = false;
     previewMode = false;
@@ -2884,7 +2912,7 @@ void AreaEditor::loadBackup() {
 void AreaEditor::loadCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(moving || selecting) {
+    if(!isSelectionIdle()) {
         return;
     }
     
@@ -3198,7 +3226,7 @@ void AreaEditor::redoCmd(float inputValue) {
     
     if(
         subState != EDITOR_SUB_STATE_NONE ||
-        moving || selecting || curTransformationWidget.isMovingHandle()
+        !isSelectionIdle() || curTransformationWidget.isMovingHandle()
     ) {
         setStatus("Can't redo in the middle of an operation!", true);
         return;
@@ -3504,7 +3532,7 @@ void AreaEditor::saveReference() {
 void AreaEditor::selectAllCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(subState == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+    if(subState == EDITOR_SUB_STATE_NONE && isSelectionIdle()) {
         if(state == EDITOR_STATE_LAYOUT) {
             vertexSelection.addAll(game.curArea->vertexes.size());
             edgeSelection.addAll(game.curArea->vertexes.size());
@@ -3895,12 +3923,53 @@ void AreaEditor::snapModeCmd(float inputValue) {
 
 
 /**
+ * @brief Procedure to start moving the selected path stops.
+ */
+void AreaEditor::startPathStopMove() {
+    if(moving) return;
+    
+    preMovePivotStop = nullptr;
+    Distance closestDist;
+    
+    const set<size_t>& selectedStops = pathStopSelection.getItemIdxs();
+    for(size_t idx : selectedStops) {
+        Distance d(
+            game.editorsView.mouseCursorWorldPos,
+            game.curArea->pathStops[idx]->pos
+        );
+        if(!preMovePivotStop || d < closestDist) {
+            preMovePivotStop = game.curArea->pathStops[idx];
+            closestDist = d;
+        }
+    }
+    
+    moving = true;
+}
+
+
+/**
  * @brief Procedure to start moving the selected vertexes.
  */
 void AreaEditor::startVertexMove() {
     if(moving) return;
     
     preMoveAreaData = prepareState();
+    
+    preMovePivotVertex = nullptr;
+    Distance closestDist;
+    
+    const set<size_t>& selectedVertexes = vertexSelection.getItemIdxs();
+    for(size_t idx : selectedVertexes) {
+        Distance d(
+            game.editorsView.mouseCursorWorldPos,
+            v2p(game.curArea->vertexes[idx])
+        );
+        if(!preMovePivotVertex || d < closestDist) {
+            preMovePivotVertex = game.curArea->vertexes[idx];
+            closestDist = d;
+        }
+    }
+    
     moving = true;
 }
 
@@ -4040,7 +4109,7 @@ void AreaEditor::undoCmd(float inputValue) {
     
     if(
         subState != EDITOR_SUB_STATE_NONE ||
-        moving || selecting || curTransformationWidget.isMovingHandle()
+        !isSelectionIdle() || curTransformationWidget.isMovingHandle()
     ) {
         setStatus("Can't undo in the middle of an operation!", true);
         return;

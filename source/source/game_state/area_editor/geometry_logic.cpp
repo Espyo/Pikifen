@@ -2781,9 +2781,6 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
                 snapPointToAxis(
                     finalPoint, curTransformationWidget.getOldCenter()
                 );
-        } else if(moving) {
-            finalPoint =
-                snapPointToAxis(finalPoint, moveStartPos);
         }
     }
     

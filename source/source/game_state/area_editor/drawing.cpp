@@ -472,19 +472,6 @@ void AreaEditor::drawCanvas() {
         }
     }
     
-    //Selection box.
-    if(selecting) {
-        al_draw_rectangle(
-            selectionStart.x,
-            selectionStart.y,
-            selectionEnd.x,
-            selectionEnd.y,
-            AREA_EDITOR::SELECTION_COLOR,
-            2.0 / game.editorsView.cam.zoom
-            
-        );
-    }
-    
     //New thing marker.
     if(
         subState == EDITOR_SUB_STATE_DRAWING ||
@@ -1066,14 +1053,14 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             bool drawDist = false;
             Point otherPoint;
             if(
-                ePtr->vertexes[0] == moveClosestVertex &&
+                ePtr->vertexes[0] == preMovePivotVertex &&
                 !vertexSelection.contains(ePtr->vertexIdxs[1])
             ) {
                 otherPoint.x = ePtr->vertexes[1]->x;
                 otherPoint.y = ePtr->vertexes[1]->y;
                 drawDist = true;
             } else if(
-                ePtr->vertexes[1] == moveClosestVertex &&
+                ePtr->vertexes[1] == preMovePivotVertex &&
                 !vertexSelection.contains(ePtr->vertexIdxs[0])
             ) {
                 otherPoint.x = ePtr->vertexes[0]->x;
@@ -1082,7 +1069,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             }
             
             if(drawDist) {
-                drawLineDist(v2p(moveClosestVertex), otherPoint);
+                drawLineDist(v2p(preMovePivotVertex), otherPoint);
             }
         }
         
@@ -1509,24 +1496,18 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             ) {
                 bool drawDist = false;
                 Point otherPoint;
-                if(
-                    s1Ptr == moveClosestStop &&
-                    pathStopSelection.contains(s2Idx)
-                ) {
+                if(s1Ptr == preMovePivotStop) {
                     otherPoint.x = s2Ptr->pos.x;
                     otherPoint.y = s2Ptr->pos.y;
                     drawDist = true;
-                } else if(
-                    s2Ptr == moveClosestStop &&
-                    pathStopSelection.contains(s1Idx)
-                ) {
+                } else if(s2Ptr == preMovePivotStop) {
                     otherPoint.x = s1Ptr->pos.x;
                     otherPoint.y = s1Ptr->pos.y;
                     drawDist = true;
                 }
                 
                 if(drawDist) {
-                    drawLineDist(moveClosestStop->pos, otherPoint);
+                    drawLineDist(preMovePivotStop->pos, otherPoint);
                 }
             }
             

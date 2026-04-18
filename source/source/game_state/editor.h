@@ -510,6 +510,7 @@ protected:
         
         bool enable();
         bool disable();
+        bool isIdle() const;
         
         
     private:
@@ -543,7 +544,7 @@ protected:
         bool enabled = false;
         
         //Cursor position when the current operation started.
-        Point opStartCursorPos;
+        Point preOpCursorPos;
         
         //Center of the entire selection before the latest operation began.
         //Cache for performance.

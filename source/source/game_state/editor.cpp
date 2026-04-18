@@ -4969,6 +4969,11 @@ bool Editor::SelectionController::disable() {
 }
 
 
+bool Editor::SelectionController::isIdle() const {
+    return state == STATE_IDLING;
+}
+
+
 /**
  * @brief Draws things related to the selection.
  *
@@ -4982,12 +4987,12 @@ void Editor::SelectionController::draw(
     if(state == STATE_RUBBER_BAND) {
         //Setup.
         Point rBTL(
-            std::min(opStartCursorPos.x, cursorPos.x),
-            std::min(opStartCursorPos.y, cursorPos.y)
+            std::min(preOpCursorPos.x, cursorPos.x),
+            std::min(preOpCursorPos.y, cursorPos.y)
         );
         Point rBBR(
-            std::max(opStartCursorPos.x, cursorPos.x),
-            std::max(opStartCursorPos.y, cursorPos.y)
+            std::max(preOpCursorPos.x, cursorPos.x),
+            std::max(preOpCursorPos.y, cursorPos.y)
         );
         
         //Interior.
@@ -5323,7 +5328,7 @@ bool Editor::SelectionController::startRubberBand(const Point& cursorPos) {
     if(!enabled) return false;
     bool wasIdle = state == STATE_IDLING;
     state = STATE_RUBBER_BAND;
-    opStartCursorPos = cursorPos;
+    preOpCursorPos = cursorPos;
     return wasIdle;
 }
 
@@ -5338,7 +5343,7 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
     if(!enabled) return false;
     bool wasIdle = state == STATE_IDLING;
     state = STATE_DRAG_MOVING;
-    opStartCursorPos = cursorPos;
+    preOpCursorPos = cursorPos;
     
     bool gotClosest = false;
     Distance closestDist;
@@ -5435,7 +5440,7 @@ bool Editor::SelectionController::updateDragMove(const Point& cursorPos) {
     if(!enabled) return false;
     if(state != STATE_DRAG_MOVING) return false;
     
-    Point mouseOffset = cursorPos - opStartCursorPos;
+    Point mouseOffset = cursorPos - preOpCursorPos;
     Point newPivotPos = preOpPivotItemPos + mouseOffset;
     if(onSnapPoint) newPivotPos = onSnapPoint(newPivotPos);
     Point totalMoveOffset = newPivotPos - preOpPivotItemPos;
@@ -5466,13 +5471,13 @@ bool Editor::SelectionController::updateRubberBand(
     
     Point rubberBandTL =
         Point(
-            std::min(opStartCursorPos.x, cursorPos.x),
-            std::min(opStartCursorPos.y, cursorPos.y)
+            std::min(preOpCursorPos.x, cursorPos.x),
+            std::min(preOpCursorPos.y, cursorPos.y)
         );
     Point rubberBandBR =
         Point(
-            std::max(opStartCursorPos.x, cursorPos.x),
-            std::max(opStartCursorPos.y, cursorPos.y)
+            std::max(preOpCursorPos.x, cursorPos.x),
+            std::max(preOpCursorPos.y, cursorPos.y)
         );
         
     forIdx(m, managers) {

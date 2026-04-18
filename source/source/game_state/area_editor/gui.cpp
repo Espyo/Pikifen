@@ -2853,7 +2853,7 @@ void AreaEditor::processGuiPanelLayout() {
                     //Homogenize sectors button.
                     if(ImGui::Button("Edit all together")) {
                         registerChange("sector combining");
-                        selectionHomogenized = true;
+                        sectorSelection.setHomogenized(true);
                         homogenizeSelectedSectors();
                     }
                 }
@@ -2886,7 +2886,7 @@ void AreaEditor::processGuiPanelLayout() {
                     //Homogenize edges button.
                     if(ImGui::Button("Edit all together")) {
                         registerChange("edge combining");
-                        selectionHomogenized = true;
+                        edgeSelection.setHomogenized(true);
                         homogenizeSelectedEdges();
                     }
                 }

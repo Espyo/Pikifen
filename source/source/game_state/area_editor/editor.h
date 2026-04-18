@@ -131,6 +131,7 @@ public:
     void drawCanvas();
     string getOpenedContentPath() const;
     
+    
 private:
 
     /**
@@ -609,22 +610,7 @@ private:
     //Picker info for the picker in the "load" dialog.
     Picker loadDialogPicker;
     
-    //Closest mob to the mouse when moving.
-    MobGen* moveClosestMob = nullptr;
-    
-    //Closest path stop to the mouse when moving.
-    PathStop* moveClosestStop = nullptr;
-    
-    //Closest vertex to the mouse when moving.
-    Vertex* moveClosestVertex = nullptr;
-    
-    //The moved thing was here when the move started (world coords).
-    Point moveStartPos;
-    
-    //The mouse cursor was here when the move started (world coords).
-    Point moveMouseStartPos;
-    
-    //Currently moving the selected vertexes, objects, etc.?
+    //Currently moving the selected vertexes, path stops, etc.?
     bool moving = false;
     
     //Path preview checkpoint that is currently being moved, or -1 for none.
@@ -705,6 +691,12 @@ private:
     
     //Area data before vertex movement.
     Area* preMoveAreaData = nullptr;
+    
+    //Closest vertex to the mouse before a move started.
+    Vertex* preMovePivotVertex = nullptr;
+    
+    //Closest path stop to the mouse before a move started.
+    PathStop* preMovePivotStop = nullptr;
     
     //Is preview mode on?
     bool previewMode = false;
@@ -818,41 +810,11 @@ private:
     //Keep the aspect ratio of the currently selected shadow?
     bool selectedShadowKeepAspectRatio = false;
     
-    //Is the user currently performing a rectangle box?
-    bool selecting = false;
-    
-    //Angle of the selection.
-    float selectionAngle = 0.0f;
-    
-    //Center of the selection.
-    Point selectionCenter;
-    
     //The selection's alpha depends on this value.
     float selectionEffect = 0.0f;
     
-    //Point where the selection is currently at.
-    Point selectionEnd;
-    
     //Current layout mode selection filter.
     SELECTION_FILTER selectionFilter = SELECTION_FILTER_SECTORS;
-    
-    //Has the user agreed to homogenize the selection?
-    bool selectionHomogenized = false;
-    
-    //Angle of the selection, before it got transformed.
-    float selectionOrigAngle = 0.0f;
-    
-    //Center of the selection, before it got transformed.
-    Point selectionOrigCenter;
-    
-    //Size of the selection, before it got transformed.
-    Point selectionOrigSize;
-    
-    //Size of the selection, padding included.
-    Point selectionSize;
-    
-    //Point where the selection started.
-    Point selectionStart;
     
     //Show blocking vs. non-blocking sectors?
     bool showBlockingSectors = false;
@@ -1065,6 +1027,7 @@ private:
     void homogenizeSelectedPathLinks();
     void homogenizeSelectedPathStops();
     void homogenizeSelectedSectors();
+    bool isSelectionIdle() const;
     void loadAreaFolder(
         const string& requestedAreaPath,
         bool fromBackup, bool shouldUpdateHistory
@@ -1107,6 +1070,7 @@ private:
         PathLink* l1, PathLink* l2,
         const Point& where
     );
+    void startPathStopMove();
     void startVertexMove();
     void traverseSectorForSplit(
         const Sector* sPtr, Vertex* begin, const Vertex* checkpoint,
