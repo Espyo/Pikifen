@@ -110,7 +110,7 @@ AnimationEditor::AnimationEditor() :
     registerCmd(&AnimationEditor::zoomInCmd, "zoom_in");
     registerCmd(&AnimationEditor::zoomOutCmd, "zoom_out");
     
-    //Setup the selection manager.
+    //Setup the selection manager and controller.
     hitboxSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         if(!sideView) {

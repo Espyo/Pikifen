@@ -64,7 +64,7 @@ GuiEditor::GuiEditor() :
     registerCmd(&GuiEditor::zoomInCmd, "zoom_in");
     registerCmd(&GuiEditor::zoomOutCmd, "zoom_out");
     
-    //Setup the selection manager.
+    //Setup the selection manager and controller.
     itemSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = allItems[idx]->center;

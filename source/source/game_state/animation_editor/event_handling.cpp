@@ -307,7 +307,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 &curSprite->tf.trans,
                 &curSpriteSize,
                 &curSprite->tf.rot,
-                1.0f / game.editorsView.cam.zoom, flags, -FLT_MAX
+                1.0f / game.editorsView.cam.zoom, flags, 0.0f, -FLT_MAX
             )
         ) {
             curSprite->tf.scale = curSpriteSize / curSprite->bmpSize;
@@ -344,7 +344,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     &curSprite->topPose.size,
                     &curSprite->topPose.angle,
                     1.0f / game.editorsView.cam.zoom, flags,
-                    ANIM_EDITOR::TOP_MIN_SIZE
+                    0.0f, ANIM_EDITOR::TOP_MIN_SIZE
                 )
             ) {
                 changesMgr.markAsChanged();

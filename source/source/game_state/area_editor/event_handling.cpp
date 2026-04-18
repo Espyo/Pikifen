@@ -1301,7 +1301,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             &referenceCenter,
             &referenceSize,
             nullptr,
-            1.0f / game.editorsView.cam.zoom, flags, 5.0f
+            1.0f / game.editorsView.cam.zoom, flags, 0.0f, 5.0f
         );
         
         break;

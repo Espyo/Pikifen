@@ -2,9 +2,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Select some vertexes, drag center with Shift, with Shift still held zoom out, keep dragging = they start growing
-            Transformation widget needs a padding setting that only interferes where the handles and outline are, and not the calculations -- remove the path link and vertex camera zoom logic for figuring out their dimensions
-                AREA_EDITOR::SELECTION_TW_PADDING exists, but does nothing
         Figure out what to do with game.options.areaEd.selTrans
         Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
@@ -14,6 +11,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Should they be 0-indexed or 1-indexed? What about the debug number displays?
         Some selected things become solid yellow, others an oscillating yellow, others no yellow
             Get rid of AREA_EDITOR::SELECTION_COLOR and AREA_EDITOR::SELECTION_EFFECT_SPEED
+        The ability to rotate the selection
         Bring back the hold Ctrl to drag a single item axis locked feature
         Bring back the double-click+drag feature when creating a new mob, path stop, etc.
         Test everything

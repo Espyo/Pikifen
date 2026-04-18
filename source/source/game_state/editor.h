@@ -333,6 +333,9 @@ protected:
         //Whether the items can rotate.
         bool itemsCanRotate = false;
         
+        //Padding around each item.
+        float itemPadding = 0.0f;
+        
         //Whether to disable the editing the item's translation data.
         bool disableChanges = false;
         
@@ -504,8 +507,12 @@ protected:
             Point* outCentersOnlySize = nullptr
         ) const;
         bool getSelectedItemAngle(float* outAngle, bool* outCanChange) const;
-        size_t getSelectionTotalCount(bool* outCanChange = nullptr) const;
-        bool isTransformationWidgetAvailable(bool* outCanChange) const;
+        size_t getSelectionTotalCount(
+            bool* outCanChange = nullptr, float* outPadding = nullptr
+        ) const;
+        bool isTransformationWidgetAvailable(
+            bool* outCanChange, float* outPadding
+        ) const;
         bool isOpRuleRespected(OP_RULE rule) const;
         
         bool handleMouseUp();
@@ -612,16 +619,19 @@ protected:
         
         void draw(
             const Point* const center, const Point* const size,
-            const float* const angle, float zoom = 1.0f, Bitmask8 flags = 0
+            const float* const angle, float zoom = 1.0f, Bitmask8 flags = 0,
+            float padding = 0.0f
         ) const;
         bool handleMouseDown(
             const Point& mouseCoords, const Point* const center,
             const Point* const size, const float* const angle,
-            float zoom = 1.0f, Bitmask8 flags = 0
+            float zoom = 1.0f, Bitmask8 flags = 0, float padding = 0.0f
         );
         bool handleMouseMove(
             const Point& mouseCoords, Point* center, Point* size, float* angle,
-            float zoom = 1.0f, Bitmask8 flags = 0, float minSize = -FLT_MAX
+            float zoom = 1.0f, Bitmask8 flags = 0,
+            float padding = 0.0f, float minSize = -FLT_MAX,
+            const std::function<Point(const Point&)> snapFunc = nullptr
         );
         bool handleMouseUp();
         bool isMovingCenterHandle();
@@ -645,15 +655,16 @@ protected:
         //Old angle, before the user started dragging handles.
         float oldAngle = 0.0f;
         
-        //Before rotation began, the mouse made this angle with the center.
-        float oldMouseAngle = 0.0f;
+        //Before a transformation began, the mouse cursor was in this position.
+        Point oldMouseCoords;
         
         
         //--- Private function declarations ---
         
         void getLocations(
             const Point* const center, const Point* const size,
-            const float* const angle, Point* points, float* radius,
+            const float* const angle, float padding,
+            Point* outHandles, float* outRadius,
             ALLEGRO_TRANSFORM* outTransform
         ) const;
         

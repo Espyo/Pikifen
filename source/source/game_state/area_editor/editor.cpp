@@ -208,7 +208,7 @@ AreaEditor::AreaEditor() :
     vertexSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         *outCenter = v2p(game.curArea->vertexes[idx]);
-        *outSize = Point(16.0f / game.editorsView.cam.zoom);
+        *outSize = Point();
         *outAngle = 0.0f;
     };
     vertexSelection.onSetInfo =
@@ -234,6 +234,7 @@ AreaEditor::AreaEditor() :
     vertexSelection.itemsAreRectangular = true;
     vertexSelection.itemsCanResize = false;
     vertexSelection.itemsCanRotate = false;
+    vertexSelection.itemPadding = AREA_EDITOR::SELECTION_TW_PADDING;
     
     edgeSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
@@ -242,10 +243,7 @@ AreaEditor::AreaEditor() :
         Point v2 = v2p(ePtr->vertexes[1]);
         *outCenter = (v1 + v2) / 2.0f;
         *outSize =
-            Point(
-                Distance(v1, v2).toFloat(),
-                16.0f / game.editorsView.cam.zoom
-            );
+            Point(Distance(v1, v2).toFloat(), 0.0f);
         *outAngle = getAngle(v1, v2);
     };
     edgeSelection.onSetInfo =
@@ -287,6 +285,7 @@ AreaEditor::AreaEditor() :
     sectorSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         Sector* sPtr = game.curArea->sectors[idx];
+        sPtr->calculateBoundingBox();
         cornersToCenterAndSize(
             sPtr->bbox[0], sPtr->bbox[1], outCenter, outSize
         );
@@ -409,9 +408,7 @@ AreaEditor::AreaEditor() :
         p2 = p2 + offset;
         *outCenter = (p1 + p2) / 2.0f;
         *outSize =
-            Point(
-                Distance(p1, p2).toFloat(), 16.0f / game.editorsView.cam.zoom
-            );
+            Point(Distance(p1, p2).toFloat(), 0.0f);
     };
     pathLinkSelection.onSetInfo =
         [this] (
@@ -525,6 +522,7 @@ AreaEditor::AreaEditor() :
     reminderSelection.itemsCanResize = false;
     reminderSelection.itemsCanRotate = false;
     
+    //Setup the selection controllers.
     layoutSelCtrl.managers.push_back(&vertexSelection);
     layoutSelCtrl.managers.push_back(&edgeSelection);
     layoutSelCtrl.managers.push_back(&sectorSelection);

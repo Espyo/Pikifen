@@ -396,7 +396,8 @@ void Editor::drawSelectionAndTransformationThings(
 ) {
     //Transformation widget, if possible.
     bool canChange;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
+    float twPadding;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
         bool canChangeAngle;
@@ -411,11 +412,11 @@ void Editor::drawSelectionAndTransformationThings(
         if(!canChangeAngle || !canChange) {
             enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
         }
-        if(selectionSize.x != 0.0f) {
+        if(selectionSize.x != 0.0f || selectionSize.y != 0.0f) {
             traWid.draw(
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags
+                1.0f / game.editorsView.cam.zoom, flags, twPadding
             );
         }
     }
@@ -1041,7 +1042,8 @@ void Editor::handleSelectionAndTransformationLmbDown(
 ) {
     bool twHandled = false;
     bool canChange;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
+    float twPadding;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
         bool canChangeAngle;
@@ -1061,7 +1063,7 @@ void Editor::handleSelectionAndTransformationLmbDown(
                 game.editorsView.mouseCursorWorldPos,
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags
+                1.0f / game.editorsView.cam.zoom, flags, twPadding
             );
     }
     
@@ -1108,7 +1110,8 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     
     //Transformation widget.
     bool canChange;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange)) {
+    float twPadding;
+    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
         Point selectionCenter, selectionSize;
         float selectionAngle;
         bool canChangeAngle;
@@ -1131,7 +1134,8 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
                 mouseCursor,
                 &selectionCenter, &selectionSize,
                 useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags, 0.10f
+                1.0f / game.editorsView.cam.zoom, flags, twPadding, 0.10f,
+                selCtrl.onSnapPoint
             );
         if(twHandled) {
             if(onPreTransform) onPreTransform();
@@ -5157,8 +5161,9 @@ bool Editor::SelectionController::getTotalBBox(
     forIdx(m, managers) {
         Point mCenter, mSize;
         Point mCOCenter, mCOSize;
-        managers[m]->getBBox(&mCenter, &mSize, &mCOCenter, &mCOSize);
-        if(mSize.x == 0.0f) continue;
+        bool hasItems =
+            managers[m]->getBBox(&mCenter, &mSize, &mCOCenter, &mCOSize);
+        if(!hasItems) continue;
         
         if(!hasFirst) {
             totalCenter = mCenter;
@@ -5224,21 +5229,27 @@ bool Editor::SelectionController::getSelectedItemAngle(
  *
  * @param outCanChange Whether the selected items can have their properties
  * changed is returned here.
+ * @param outPadding The padding to use is returned here.
  * @return The total.
  */
 size_t Editor::SelectionController::getSelectionTotalCount(
-    bool* outCanChange
+    bool* outCanChange, float* outPadding
 ) const {
     bool canChange = false;
+    float padding = 0.0f;
     size_t total = 0;
     
     forIdx(m, managers) {
         size_t count = managers[m]->getCount();
         total += count;
-        if(count > 0) canChange |= (!managers[m]->disableChanges);
+        if(count > 0) {
+            canChange |= (!managers[m]->disableChanges);
+            padding = std::max(padding, managers[m]->itemPadding);
+        }
     }
     
     if(outCanChange) *outCanChange = canChange;
+    if(outPadding) *outPadding = padding;
     return total;
 }
 
@@ -5299,14 +5310,16 @@ bool Editor::SelectionController::isOpRuleRespected(OP_RULE rule) const {
  *
  * @param outCanChange Whether the selected items can have their properties
  * changed is returned here.
+ * @param outPadding The padding to use is returned here.
  * @return Whether it is available.
  */
 bool Editor::SelectionController::isTransformationWidgetAvailable(
-    bool* outCanChange
+    bool* outCanChange, float* outPadding
 ) const {
     *outCanChange = false;
+    *outPadding = 0.0f;
     if(!isOpRuleRespected(twTransformRule)) return false;
-    size_t selected = getSelectionTotalCount(outCanChange);
+    size_t selected = getSelectionTotalCount(outCanChange, outPadding);
     return selected > 0;
 }
 
@@ -6069,11 +6082,13 @@ bool Editor::SelectionManager::startOperation() {
  * @param size Width and height. If nullptr, no scale handles will be drawn.
  * @param angle Angle. If nullptr, the rotation handle will not be drawn.
  * @param zoom Zoom the widget's components by this much.
+ * @param padding Padding, if any. Used to help the outline and handles
+ * not be on top of important things.
  * @param flags Flags to use.
  */
 void Editor::TransformationWidget::draw(
     const Point* const center, const Point* const size,
-    const float* const angle, float zoom, Bitmask8 flags
+    const float* const angle, float zoom, Bitmask8 flags, float padding
 ) const {
     const ALLEGRO_COLOR ROT_HANDLE_COLOR = al_map_rgb(64, 64, 192);
     const ALLEGRO_COLOR NORMAL_HANDLE_COLOR = al_map_rgb(96, 96, 224);
@@ -6082,7 +6097,7 @@ void Editor::TransformationWidget::draw(
     
     Point handles[9];
     float radius;
-    getLocations(center, size, angle, handles, &radius, nullptr);
+    getLocations(center, size, angle, padding, handles, &radius, nullptr);
     
     //Draw the rotation handle.
     if(angle && radius >= 0.0f && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
@@ -6134,22 +6149,24 @@ void Editor::TransformationWidget::draw(
  * @param center Center point.
  * @param size Width and height. If nullptr, the default size is used.
  * @param angle Angle. If nullptr, zero is used.
- * @param handles Return the location of all nine translation and scale
+ * @param padding Padding, if any. Used to help the outline and handles
+ * not be on top of important things.
+ * @param outHandles Return the location of all nine translation and scale
  * handles here.
- * @param radius Return the angle handle's radius here.
+ * @param outRadius Return the angle handle's radius here.
  * @param outTransform If not nullptr, the transformation used is
  * returned here.
  * The transformation will only rotate and translate, not scale.
  */
 void Editor::TransformationWidget::getLocations(
     const Point* const center, const Point* const size,
-    const float* const angle, Point* handles, float* radius,
+    const float* const angle,  float padding,
+    Point* outHandles, float* outRadius,
     ALLEGRO_TRANSFORM* outTransform
 ) const {
     Point sizeToUse(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
     if(size) sizeToUse = *size;
-    if(sizeToUse.x <= 4.0f) sizeToUse.x = 4.0f;
-    if(sizeToUse.y <= 4.0f) sizeToUse.y = 4.0f;
+    sizeToUse += padding;
     
     //First, the Allegro transformation.
     ALLEGRO_TRANSFORM transformToUse;
@@ -6160,27 +6177,27 @@ void Editor::TransformationWidget::getLocations(
     al_translate_transform(&transformToUse, center->x, center->y);
     
     //Get the coordinates of all translation and scale handles.
-    handles[0] = { -sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
-    handles[1] = { 0.0f,                  -sizeToUse.y / 2.0f };
-    handles[2] = { sizeToUse.x / 2.0f,  -sizeToUse.y / 2.0f };
-    handles[3] = { -sizeToUse.x / 2.0f, 0.0f                  };
-    handles[4] = { 0.0f,                  0.0f                  };
-    handles[5] = { sizeToUse.x / 2.0f,  0.0f                  };
-    handles[6] = { -sizeToUse.x / 2.0f, sizeToUse.y / 2.0f  };
-    handles[7] = { 0.0f,                  sizeToUse.y / 2.0f  };
-    handles[8] = { sizeToUse.x / 2.0f,  sizeToUse.y / 2.0f  };
+    outHandles[0] = { -sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
+    outHandles[1] = { 0.0f, -sizeToUse.y / 2.0f };
+    outHandles[2] = { sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
+    outHandles[3] = { -sizeToUse.x / 2.0f, 0.0f };
+    outHandles[4] = { 0.0f, 0.0f };
+    outHandles[5] = { sizeToUse.x / 2.0f, 0.0f };
+    outHandles[6] = { -sizeToUse.x / 2.0f, sizeToUse.y / 2.0f };
+    outHandles[7] = { 0.0f, sizeToUse.y / 2.0f };
+    outHandles[8] = { sizeToUse.x / 2.0f, sizeToUse.y / 2.0f };
     
     for(unsigned char h = 0; h < 9; h++) {
         al_transform_coordinates(
-            &transformToUse, &handles[h].x, &handles[h].y
+            &transformToUse, &outHandles[h].x, &outHandles[h].y
         );
     }
     
     float diameter = Distance(Point(), sizeToUse).toFloat();
     if(diameter == 0.0f) {
-        *radius = 0.0f;
+        *outRadius = 0.0f;
     } else {
-        *radius = diameter / 2.0f;
+        *outRadius = diameter / 2.0f;
     }
     
     if(outTransform) *outTransform = transformToUse;
@@ -6207,18 +6224,21 @@ Point Editor::TransformationWidget::getOldCenter() const {
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @param flags Flags to use.
+ * @param padding Padding, if any. Used to help the outline and handles
+ * not be on top of important things.
  * @return Whether the user clicked on a handle.
  */
 bool Editor::TransformationWidget::handleMouseDown(
     const Point& mouseCoords, const Point* const center,
     const Point* const size, const float* const angle, float zoom,
-    Bitmask8 flags
+    Bitmask8 flags, float padding
 ) {
     if(!center) return false;
     
+    signed char clickedHandle = -1;
     Point handles[9];
     float radius;
-    getLocations(center, size, angle, handles, &radius, nullptr);
+    getLocations(center, size, angle, padding, handles, &radius, nullptr);
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; h++) {
@@ -6235,13 +6255,7 @@ bool Editor::TransformationWidget::handleMouseDown(
             Distance(handles[h], mouseCoords) <=
             EDITOR::TW_HANDLE_RADIUS * zoom
         ) {
-            if(h == 4) {
-                oldCenter = *center;
-            } else {
-                oldSize = *size;
-            }
-            movingHandle = h;
-            return true;
+            clickedHandle = h;
         }
     }
     
@@ -6252,14 +6266,19 @@ bool Editor::TransformationWidget::handleMouseDown(
             d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
             d <= radius + EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom
         ) {
-            movingHandle = 9;
-            oldAngle = *angle;
-            oldMouseAngle = getAngle(*center, mouseCoords);
-            return true;
+            clickedHandle = 9;
         }
     }
     
-    return false;
+    if(clickedHandle != -1) {
+        movingHandle = clickedHandle;
+        oldCenter = center ? *center : Point();
+        oldSize = size ? *size : Point();
+        oldAngle = angle ? *angle : 0.0f;
+        oldMouseCoords = mouseCoords;
+    }
+    
+    return clickedHandle != -1;
 }
 
 
@@ -6273,13 +6292,17 @@ bool Editor::TransformationWidget::handleMouseDown(
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @param flags Flags to use.
+ * @param padding Padding, if any. Used to help the outline and handles
+ * not be on top of important things.
  * @param minSize Minimum possible size for the width or height.
  * Use -FLT_MAX for none.
+ * @param snapFunc Function to snap the mouse coordinates with, if any.
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
     const Point& mouseCoords, Point* center, Point* size, float* angle,
-    float zoom, Bitmask8 flags, float minSize
+    float zoom, Bitmask8 flags, float padding, float minSize,
+    const std::function<Point(const Point&)> snapFunc
 ) {
     if(!center) return false;
     
@@ -6287,17 +6310,49 @@ bool Editor::TransformationWidget::handleMouseMove(
         return false;
     }
     
+    Point oldHandles[9];
+    float oldRadius;
+    getLocations(
+        &oldCenter,
+        size ? &oldSize : nullptr,
+        angle ? &oldAngle : nullptr,
+        padding, oldHandles, &oldRadius, nullptr
+    );
+    
+    Point oldHandlesSansPadding[9];
+    float oldRadiusSansPadding;
+    getLocations(
+        &oldCenter,
+        size ? &oldSize : nullptr,
+        angle ? &oldAngle : nullptr,
+        0.0f, oldHandlesSansPadding, &oldRadiusSansPadding, nullptr
+    );
+    
+    ALLEGRO_TRANSFORM t;
+    Point handles[9];
+    float radius;
+    getLocations(center, size, angle, 0.0f, handles, &radius, &t);
+    
+    Point handleCenterClickOffset =
+        oldMouseCoords - oldHandles[movingHandle];
+    Point handlePaddingOffset =
+        oldHandles[movingHandle] - oldHandlesSansPadding[movingHandle];
+    Point calculatedMouseCoords =
+        mouseCoords - (handleCenterClickOffset + handlePaddingOffset);
+    if(snapFunc) calculatedMouseCoords = snapFunc(calculatedMouseCoords);
+    
     //Logic for moving the center handle.
     if(movingHandle == 4 && !hasFlag(flags, TW_FLAG_DISABLE_CENTER)) {
-        *center = mouseCoords;
+        *center = calculatedMouseCoords;
         return true;
     }
     
     //Logic for moving the rotation handle.
     if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
+        float oldMouseAngle = getAngle(*center, oldMouseCoords);
         *angle =
             oldAngle +
-            getAngle(*center, mouseCoords) - oldMouseAngle;
+            getAngle(*center, calculatedMouseCoords) - oldMouseAngle;
         return true;
     }
     
@@ -6306,13 +6361,9 @@ bool Editor::TransformationWidget::handleMouseMove(
         return false;
     }
     
-    ALLEGRO_TRANSFORM t;
-    Point handles[9];
-    float radius;
-    getLocations(center, size, angle, handles, &radius, &t);
     al_invert_transform(&t);
     
-    Point transformedMouse = mouseCoords;
+    Point transformedMouse = calculatedMouseCoords;
     Point transformedCenter = *center;
     Point newSize = oldSize;
     al_transform_coordinates(&t, &transformedMouse.x, &transformedMouse.y);
