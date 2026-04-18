@@ -4796,6 +4796,19 @@ bool Editor::SelectionList::remove(size_t idx) {
 
 
 /**
+ * @brief Sets the selection to be the specified items.
+ *
+ * @param idxs The items to select.
+ * @return Whether the selection size changed.
+ */
+bool Editor::SelectionList::setItemIdxs(const set<size_t>& idxs) {
+    size_t oldSize = list.size();
+    list = idxs;
+    return list.size() != oldSize;
+}
+
+
+/**
  * @brief Sets the selection to be a single item only.
  *
  * @param idx The item to select.
@@ -5481,9 +5494,7 @@ bool Editor::SelectionController::updateRubberBand(
         );
         
     forIdx(m, managers) {
-        if(!addToSelectionMod) {
-            managers[m]->clear();
-        }
+        set<size_t> newSelectedItems;
         
         size_t nrTotalItems = managers[m]->getNrTotalItems();
         for(size_t i = 0; i < nrTotalItems; i++) {
@@ -5510,8 +5521,19 @@ bool Editor::SelectionController::updateRubberBand(
                 iBR.x <= rubberBandBR.x &&
                 iBR.y <= rubberBandBR.y
             ) {
-                managers[m]->add(i);
+                newSelectedItems.insert(i);
             }
+        }
+        
+        if(addToSelectionMod) {
+            const set<size_t>& oldSelectedItems = managers[m]->getItemIdxs();
+            newSelectedItems.insert(
+                oldSelectedItems.begin(), oldSelectedItems.end()
+            );
+        }
+        
+        if(managers[m]->getItemIdxs() != newSelectedItems) {
+            managers[m]->setItemIdxs(newSelectedItems);
         }
     }
     
@@ -5967,6 +5989,20 @@ bool Editor::SelectionManager::remove(size_t idx) {
     bool changed = selectedItems.remove(idx);
     if(changed && onSelectionChanged) onSelectionChanged();
     return changed;
+}
+
+
+/**
+ * @brief Sets the selection to be the specified items.
+ *
+ * @param idxs The items to select.
+ * @return Whether the selection size changed.
+ */
+bool Editor::SelectionManager::setItemIdxs(const set<size_t>& idxs) {
+    if(!enabled) return false;
+    bool sizeChanged = selectedItems.setItemIdxs(idxs);
+    if(onSelectionChanged) onSelectionChanged();
+    return sizeChanged;
 }
 
 

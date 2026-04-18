@@ -257,6 +257,7 @@ protected:
         bool addAll(size_t totalAmount);
         bool remove(size_t idx);
         bool clear();
+        bool setItemIdxs(const set<size_t>& idxs);
         bool setSingle(size_t idx);
         
         bool contains(size_t idx) const;
@@ -342,6 +343,7 @@ protected:
         bool addAll(size_t totalAmount);
         bool remove(size_t idx);
         bool clear();
+        bool setItemIdxs(const set<size_t>& idxs);
         bool setSingle(size_t idx);
         
         bool contains(size_t idx) const;
