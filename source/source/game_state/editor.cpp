@@ -395,28 +395,22 @@ void Editor::drawSelectionAndTransformationThings(
     const TransformationWidget& traWid
 ) {
     //Transformation widget, if possible.
-    bool canChange;
+    Point selectionCenter, selectionSize;
+    float selectionAngle;
+    bool useSelectionAngle;
+    Bitmask8 twFlags;
     float twPadding;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
-        Point selectionCenter, selectionSize;
-        float selectionAngle;
-        bool canChangeAngle;
-        selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle =
-            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
-        Bitmask8 flags = 0;
-        if(!canChange) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
-        }
-        if(!canChangeAngle || !canChange) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
-        }
+    if(
+        getSelectionTransformationWidgetParams(
+            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+            &useSelectionAngle, &twFlags, &twPadding
+        )
+    ) {
         if(selectionSize.x != 0.0f || selectionSize.y != 0.0f) {
             traWid.draw(
                 &selectionCenter, &selectionSize,
-                useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags, twPadding
+                useSelectionAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom, twFlags, twPadding
             );
         }
     }
@@ -559,6 +553,61 @@ void Editor::getQuickPlayAreaList(
     };
     scanAreas(game.content.areas.list[AREA_TYPE_SIMPLE]);
     scanAreas(game.content.areas.list[AREA_TYPE_MISSION]);
+}
+
+
+/**
+ * @brief Returns whether the transformation widget is available, and if so,
+ * what parameters to send to it, depending on the selection controller.
+ *
+ * @param selCtrl The selection controller.
+ * @param outSelectionCenter The selection center is returned here.
+ * @param outSelectionSize The selection size is returned here.
+ * @param outSelectionAngle The selection angle is returned here.
+ * @param outUseAngle Whether to use the selection angle or to pass a
+ * nullptr is returned here.
+ * @param outFlags The flags are returned here.
+ * @param outPadding The padding is returned here.
+ * @return Whether the transformation widget is available.
+ */
+bool Editor::getSelectionTransformationWidgetParams(
+    const SelectionController& selCtrl,
+    Point* outSelectionCenter, Point* outSelectionSize,
+    float* outSelectionAngle, bool* outUseAngle,
+    Bitmask8* outFlags, float* outPadding
+) const {
+    bool canChange;
+    float padding;
+    if(!selCtrl.isTransformationWidgetAvailable(&canChange, &padding)) {
+        return false;
+    }
+    
+    Point selectionCenter, selectionSize;
+    float selectionAngle;
+    bool canChangeAngle;
+    selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+    bool useAngle =
+        selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
+    Bitmask8 flags = 0;
+    if(!canChange) {
+        enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
+        enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
+    }
+    if(!canChangeAngle || !canChange) {
+        enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
+    }
+    if(isAltPressed) {
+        enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
+    }
+    
+    *outSelectionCenter = selectionCenter;
+    *outSelectionSize = selectionSize;
+    *outSelectionAngle = selectionAngle;
+    *outUseAngle = useAngle;
+    *outFlags = flags;
+    *outPadding = padding;
+    
+    return true;
 }
 
 
@@ -1041,29 +1090,23 @@ void Editor::handleSelectionAndTransformationLmbDown(
     SelectionController& selCtrl, TransformationWidget& traWid
 ) {
     bool twHandled = false;
-    bool canChange;
+    Point selectionCenter, selectionSize;
+    float selectionAngle;
+    bool useSelectionAngle;
+    Bitmask8 twFlags;
     float twPadding;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
-        Point selectionCenter, selectionSize;
-        float selectionAngle;
-        bool canChangeAngle;
-        selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle =
-            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
-        Bitmask8 flags = 0;
-        if(!canChange) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
-        }
-        if(!canChangeAngle) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
-        }
+    if(
+        getSelectionTransformationWidgetParams(
+            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+            &useSelectionAngle, &twFlags, &twPadding
+        )
+    ) {
         twHandled =
             traWid.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
                 &selectionCenter, &selectionSize,
-                useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags, twPadding
+                useSelectionAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom, twFlags, twPadding
             );
     }
     
@@ -1109,32 +1152,23 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     }
     
     //Transformation widget.
-    bool canChange;
+    Point selectionCenter, selectionSize;
+    float selectionAngle;
+    bool useSelectionAngle;
+    Bitmask8 twFlags;
     float twPadding;
-    if(selCtrl.isTransformationWidgetAvailable(&canChange, &twPadding)) {
-        Point selectionCenter, selectionSize;
-        float selectionAngle;
-        bool canChangeAngle;
-        selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        bool useAngle =
-            selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
-        Bitmask8 flags = 0;
-        if(!canChange) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_SIZE);
-        }
-        if(!canChangeAngle) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_ANGLE);
-        }
-        if(isAltPressed) {
-            enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
-        }
+    if(
+        getSelectionTransformationWidgetParams(
+            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+            &useSelectionAngle, &twFlags, &twPadding
+        )
+    ) {
         bool twHandled =
             traWid.handleMouseMove(
                 mouseCursor,
                 &selectionCenter, &selectionSize,
-                useAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, flags, twPadding, 0.10f,
+                useSelectionAngle ? &selectionAngle : nullptr,
+                1.0f / game.editorsView.cam.zoom, twFlags, twPadding, 0.10f,
                 selCtrl.onSnapPoint
             );
         if(twHandled) {
@@ -4977,11 +5011,17 @@ bool Editor::SelectionController::chooseViaMouseDown(
 /**
  * @brief Disables the controller.
  *
+ * @param disableManagers Whether to also disable its managers.
  * @return Whether it was enabled.
  */
-bool Editor::SelectionController::disable() {
+bool Editor::SelectionController::disable(bool disableManagers) {
     bool wasEnabled = enabled;
     enabled = false;
+    if(disableManagers) {
+        forIdx(m, managers) {
+            managers[m]->disable();
+        }
+    }
     return wasEnabled;
 }
 
@@ -5130,11 +5170,17 @@ void Editor::SelectionController::draw(
 /**
  * @brief Enables the controller.
  *
+ * @param enableManagers Whether to also enable its managers.
  * @return Whether it was disabled.
  */
-bool Editor::SelectionController::enable() {
+bool Editor::SelectionController::enable(bool enableManagers) {
     bool wasDisabled = !enabled;
     enabled = true;
+    if(enableManagers) {
+        forIdx(m, managers) {
+            managers[m]->enable();
+        }
+    }
     return wasDisabled;
 }
 

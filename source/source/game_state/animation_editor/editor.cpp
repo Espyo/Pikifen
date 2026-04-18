@@ -233,12 +233,10 @@ void AnimationEditor::changeState(const EDITOR_STATE newState) {
     comparison = false;
     comparisonSprite = nullptr;
     
-    hitboxSelection.disable();
-    hitboxSelCtrl.disable();
+    hitboxSelCtrl.disable(true);
     
     if(newState == EDITOR_STATE_HITBOXES) {
-        hitboxSelection.enable();
-        hitboxSelCtrl.enable();
+        hitboxSelCtrl.enable(true);
         selectPreviousHitboxes();
     }
     state = newState;

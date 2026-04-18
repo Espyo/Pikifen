@@ -517,8 +517,8 @@ protected:
         
         bool handleMouseUp();
         
-        bool enable();
-        bool disable();
+        bool enable(bool enableManagers);
+        bool disable(bool disableManagers);
         bool isIdle() const;
         
         
@@ -1103,6 +1103,12 @@ protected:
         string selectedAreaPath,
         vector<string>* outAreaNames, vector<string>* outAreaPaths,
         int* outSelectedAreaIdx
+    ) const;
+    bool getSelectionTransformationWidgetParams(
+        const SelectionController& selCtrl,
+        Point* outSelectionCenter, Point* outSelectionSize,
+        float* outSelectionAngle, bool* outUseAngle,
+        Bitmask8* outFlags, float* outPadding
     ) const;
     bool guiFocusedText();
     bool keyCheck(

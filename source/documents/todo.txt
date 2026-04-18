@@ -3,7 +3,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
         Figure out what to do with game.options.areaEd.selTrans
-        Try to lump more code into the manager itself, to reduce copy-paste
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.

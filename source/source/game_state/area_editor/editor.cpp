@@ -529,26 +529,26 @@ AreaEditor::AreaEditor() :
     layoutSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p, true); };
     layoutSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
-    layoutSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    layoutSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     layoutSelCtrl.overlapsCycle = false;
-    layoutSelCtrl.clickingSelectedUnselectsOthers = true;
+    layoutSelCtrl.clickingSelectedUnselectsOthers = false;
     
     mobsSelCtrl.managers.push_back(&mobSelection);
     mobsSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     mobsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
-    mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     mobsSelCtrl.overlapsCycle = true;
-    mobsSelCtrl.clickingSelectedUnselectsOthers = true;
+    mobsSelCtrl.clickingSelectedUnselectsOthers = false;
     
     pathsSelCtrl.managers.push_back(&pathStopSelection);
     pathsSelCtrl.managers.push_back(&pathLinkSelection);
     pathsSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
     pathsSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
-    pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
+    pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     pathsSelCtrl.overlapsCycle = true;
-    pathsSelCtrl.clickingSelectedUnselectsOthers = true;
+    pathsSelCtrl.clickingSelectedUnselectsOthers = false;
     
     detailsSelCtrl.managers.push_back(&shadowSelection);
     detailsSelCtrl.managers.push_back(&regionSelection);
@@ -557,12 +557,12 @@ AreaEditor::AreaEditor() :
     detailsSelCtrl.twTransformRule = SelectionController::OP_RULE_ALWAYS;
     detailsSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     detailsSelCtrl.overlapsCycle = true;
-    detailsSelCtrl.clickingSelectedUnselectsOthers = true;
+    detailsSelCtrl.clickingSelectedUnselectsOthers = false;
     
     reviewSelCtrl.managers.push_back(&reminderSelection);
     reviewSelCtrl.onSnapPoint =
     [this] (const Point & p) { return snapPoint(p); };
-    reviewSelCtrl.twTransformRule = SelectionController::OP_RULE_NEVER;
+    reviewSelCtrl.twTransformRule = SelectionController::OP_RULE_MULTIPLE_ITEMS;
     reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     reviewSelCtrl.overlapsCycle = true;
     reviewSelCtrl.clickingSelectedUnselectsOthers = false;
@@ -779,46 +779,27 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
     
-    vertexSelection.disable();
-    edgeSelection.disable();
-    sectorSelection.disable();
-    mobSelection.disable();
-    pathStopSelection.disable();
-    pathLinkSelection.disable();
-    shadowSelection.disable();
-    regionSelection.disable();
-    reminderSelection.disable();
-    
-    layoutSelCtrl.disable();
-    mobsSelCtrl.disable();
-    pathsSelCtrl.disable();
-    detailsSelCtrl.disable();
-    reviewSelCtrl.disable();
+    layoutSelCtrl.disable(true);
+    mobsSelCtrl.disable(true);
+    pathsSelCtrl.disable(true);
+    detailsSelCtrl.disable(true);
+    reviewSelCtrl.disable(true);
     
     switch(newState) {
     case EDITOR_STATE_LAYOUT: {
-        vertexSelection.enable();
-        edgeSelection.enable();
-        sectorSelection.enable();
-        layoutSelCtrl.enable();
+        layoutSelCtrl.enable(true);
         break;
     } case EDITOR_STATE_MOBS: {
-        mobSelection.enable();
-        mobsSelCtrl.enable();
+        mobsSelCtrl.enable(true);
         break;
     } case EDITOR_STATE_PATHS: {
-        pathStopSelection.enable();
-        pathLinkSelection.enable();
-        pathsSelCtrl.enable();
+        pathsSelCtrl.enable(true);
         break;
     } case EDITOR_STATE_DETAILS: {
-        shadowSelection.enable();
-        regionSelection.enable();
-        detailsSelCtrl.enable();
+        detailsSelCtrl.enable(true);
         break;
     } case EDITOR_STATE_REVIEW: {
-        reminderSelection.enable();
-        reviewSelCtrl.enable();
+        reviewSelCtrl.enable(true);
         break;
     } default: {
         break;
