@@ -163,6 +163,8 @@ AnimationEditor::AnimationEditor() :
     hitboxSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
     hitboxSelCtrl.overlapsCycle = true;
     hitboxSelCtrl.clickingSelectedUnselectsOthers = true;
+    hitboxSelCtrl.onSnapPoint =
+    [this] (const Point & p) { return snapPoint(p); };
     
     selectionControllers.push_back(&hitboxSelCtrl);
 }
@@ -1791,6 +1793,46 @@ void AnimationEditor::setupForNewAnimDbPre() {
     //Since Dear ImGui still hasn't rendered the current frame, which could
     //have had those assets visible, if it tries now it'll crash. So skip.
     game.skipDearImGuiFrame = true;
+}
+
+
+/**
+ * @brief Snaps a point to the nearest available relevant space, based
+ * on what keys are pressed down.
+ *
+ * @param p Point to snap.
+ * @return The snapped point.
+ */
+Point AnimationEditor::snapPoint(const Point& p) {
+    const float GRID_INTERVAL = 0.5f;
+    
+    Point finalPoint = p;
+    
+    if(isCtrlPressed) {
+        if(curTransformationWidget.isMovingCenterHandle()) {
+            finalPoint =
+                snapPointToAxis(
+                    finalPoint, curTransformationWidget.getOldCenter()
+                );
+        } else if(getSelectionControllerThatIsDragMoving()) {
+            finalPoint =
+                snapPointToAxis(
+                    finalPoint,
+                    getSelectionControllerThatIsDragMoving()->
+                    getPreOpPivotItemPos()
+                );
+        }
+    }
+    
+    if(isShiftPressed) {
+        return finalPoint;
+    }
+    
+    return
+        Point(
+            round(finalPoint.x / GRID_INTERVAL) * GRID_INTERVAL,
+            round(finalPoint.y / GRID_INTERVAL) * GRID_INTERVAL
+        );
 }
 
 

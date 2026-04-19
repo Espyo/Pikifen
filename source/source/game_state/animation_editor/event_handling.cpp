@@ -320,7 +320,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             bool changesMade =
                 handleSelectionAndTransformationLmbDrag(
                     hitboxSelCtrl, curTransformationWidget, false,
-                    game.editorsView.mouseCursorWorldPos
+                    snapPoint(game.editorsView.mouseCursorWorldPos)
                 );
             if(changesMade) {
                 changesMgr.markAsChanged();

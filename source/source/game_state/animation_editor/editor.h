@@ -302,6 +302,7 @@ private:
     void setBestFrameSprite();
     void setDefaultTopValues(Sprite* curSprite);
     void setSelectionStatusText();
+    Point snapPoint(const Point& p);
     void spriteBmpFloodFill(
         ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );

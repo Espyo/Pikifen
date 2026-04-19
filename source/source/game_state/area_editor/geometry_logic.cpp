@@ -2755,8 +2755,8 @@ void AreaEditor::rotateMobGensToPoint(const Point& pos) {
 
 
 /**
- * @brief Snaps a point to the nearest available snapping space, based on the
- * current snap mode, Shift key state, and Ctrl key state.
+ * @brief Snaps a point to the nearest available relevant space, based
+ * on what keys are pressed down.
  *
  * @param p Point to snap.
  * @param ignoreSelected If true, ignore the selected vertexes or edges

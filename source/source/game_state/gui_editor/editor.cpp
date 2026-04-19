@@ -861,8 +861,8 @@ void GuiEditor::snapModeCmd(float inputValue) {
 
 
 /**
- * @brief Snaps a point to the nearest available grid spot,
- * or keeps the point as is if Shift is pressed.
+ * @brief Snaps a point to the nearest available relevant space, based
+ * on what keys are pressed down.
  *
  * @param p Point to snap.
  * @return The snapped point.
