@@ -16,11 +16,15 @@ script {
             else
                 set_var idling_can_teleport false
                 get_random_float temp 1.0 1.5
-                set_timer $temp
+                set_var teleport_timer $temp
             end_if
         }
-        on_timer {
-            set_var idling_can_teleport true
+        on_tick {
+            get_misc_info temp delta_t
+            calculate teleport_timer $teleport_timer - $temp
+            if $teleport_timer <= 0
+                set_var idling_can_teleport true
+            end_if
         }
         on_active_leader_changed {
             if $idling_can_teleport = true

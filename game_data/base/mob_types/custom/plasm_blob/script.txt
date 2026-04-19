@@ -5,21 +5,21 @@ init {
 	set_var value 500
 	set_var play_particles true
 	set_var time_alive 0
-	set_timer 0.1
 }
 
 global {
-	on_timer {
+	on_tick {
+		get_misc_info temp delta_t
 		if $misc_timer > -1
 			if $misc_timer > 0
-				calculate misc_timer $misc_timer - 0.1
+				calculate misc_timer $misc_timer - $temp
 			end_if
 			if $misc_timer <= 0
 				set_var misc_timer 0
 			end_if
 		end_if
-		calculate time_alive $time_alive + 0.1
-		set_timer 0.1
+		calculate time_alive $time_alive + $temp
+		set_timer $temp
 	}
 	on_receive_message {
 		get_event_info temp message
@@ -60,7 +60,7 @@ script {
 			stop
 			set_tangible true
 		}
-		on_timer {
+		on_tick {
 			if $misc_timer = 0
 				set_var misc_timer -1
 				set_tangible true
@@ -92,7 +92,7 @@ script {
 			set_var rising true
 			move_to_target focused_mob
 		}
-		on_timer {
+		on_tick {
 			if $misc_timer = 0
 				set_var misc_timer 0
 				if $rising = true

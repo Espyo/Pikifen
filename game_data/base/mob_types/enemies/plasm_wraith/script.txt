@@ -16,17 +16,17 @@ init {
 }
 
 global {
-	on_timer {
-		//We need to keep track of a bunch of timed events at once, so here's a workaround for multiple timers. We lose a bit of precision, but it shouldn't be noticeable.
-		//We'll use values at or below -1 to indicate that the timer is not running. It's much lower than 0 to avoid accidental disabling.
+	on_tick {
+		get_misc_info temp delta_t
+		//We'll use values at or below -1 to indicate that a timer is not running. It's much lower than 0 to avoid accidental disabling.
 		if $idle_timer > -1
 			if $idle_timer > 0
-				calculate idle_timer $idle_timer - 0.1
+				calculate idle_timer $idle_timer - $temp
 			end_if
 		end_if
 		if $absorb_timer > -1
 			if $absorb_timer > 0
-				calculate absorb_timer $absorb_timer - 0.1
+				calculate absorb_timer $absorb_timer - $temp
 			end_if
 		end_if
 
@@ -40,7 +40,7 @@ global {
 			calculate health_diff $health_diff - 500
 		end_if
 
-		set_timer 0.1
+		set_timer $temp
 	}
 	on_receive_message {
 		get_event_info temp message
@@ -56,7 +56,6 @@ script {
             stop
             set_animation idling
             get_random_float idle_timer 1.5 3.5
-            set_timer 0.1
         }
         on_opponent_in_reach {
             focus trigger
@@ -84,7 +83,6 @@ script {
             move_to_relative $x $y
             set_animation walking
             get_random_float idle_timer 1.5 2.5
-            set_timer 0.1
             set_near_reach search
         }
         on_opponent_in_reach {
@@ -134,7 +132,6 @@ script {
             move_to_target focused_mob
             set_near_reach attack
             set_far_reach chase
-			set_timer 0.1
         }
 		on_tick {
 			//Cannot begin idling from here.
@@ -172,7 +169,6 @@ script {
 			stop
             set_animation attacking
             start_chomping 4 arm_l arm_r
-			set_timer 0.1
         }
         on_animation_end {
 			stop_chomping
@@ -325,7 +321,7 @@ script {
 			end_if
 		}
 
-		on_timer {
+		on_tick {
 			if $spawning = true
 				//Spawn more dense blobs if the health has dropped by a large amount to prevent possible lag.
 				if $health_diff >= 100
