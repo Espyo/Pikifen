@@ -107,12 +107,6 @@ const float REFERENCE_MIN_SIZE = 5.0f;
 //Width and height of a reminder icon.
 const float REMINDER_SIZE = 32.0f;
 
-//Color of a selected element, or the selection box.
-const ALLEGRO_COLOR SELECTION_COLOR = al_map_rgb(255, 255, 0);
-
-//Speed at which the selection effect's "wheel" spins, in radians per second.
-const float SELECTION_EFFECT_SPEED = TAU * 2;
-
 //Padding for the transformation widget when manipulating the selection.
 const float SELECTION_TW_PADDING = 8.0f;
 
@@ -1574,8 +1568,6 @@ void AreaEditor::doLogic() {
     ) {
         backupTimer.tick(game.deltaT);
     }
-    
-    selectionEffect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.deltaT;
     
     Editor::doLogicPost();
 }

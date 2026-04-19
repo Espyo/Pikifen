@@ -122,12 +122,6 @@ void AreaEditor::drawCanvas() {
         .edgeAlpha = 0.25f,
         .mobAlpha = 0.15f
     };
-    float selectionMinAlpha = 0.25f;
-    float selectionMaxAlpha = 0.75f;
-    
-    if(game.options.editors.useCustomStyle) {
-        style.highlightColor = game.options.editors.highlightColor;
-    }
     
     if(
         game.options.areaEd.viewMode == VIEW_MODE_HEIGHTMAP &&
@@ -181,16 +175,6 @@ void AreaEditor::drawCanvas() {
                 quickPreviewTimer.timeLeft,
                 quickPreviewTimer.duration / 2.0f
             );
-        selectionMinAlpha =
-            interpolateNumber(
-                t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                selectionMinAlpha, 0.0f
-            );
-        selectionMaxAlpha =
-            interpolateNumber(
-                t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                selectionMaxAlpha, 0.0f
-            );
         style.textureAlpha =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
@@ -218,11 +202,6 @@ void AreaEditor::drawCanvas() {
             );
     }
     
-    style.selectionAlpha =
-        selectionMinAlpha +
-        (sin(selectionEffect) + 1) *
-        (selectionMaxAlpha - selectionMinAlpha) / 2.0;
-        
     //Draw!
     drawSectors(style);
     
@@ -965,30 +944,31 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR DEBUG_SECTOR_B_COLOR = al_map_rgb(128, 224, 160);
     const ALLEGRO_COLOR DEBUG_EDGE_IDX_COLOR = al_map_rgb(255, 192, 192);
     
+    bool canSelectEdges =
+        (
+            selectionFilter == SELECTION_FILTER_SECTORS ||
+            selectionFilter == SELECTION_FILTER_EDGES
+        ) && state == EDITOR_STATE_LAYOUT;
+        
     size_t nEdges = game.curArea->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
+        //Setup.
         Edge* ePtr = game.curArea->edges[e];
         
         if(!ePtr->isValid()) continue;
         
-        bool oneSided = true;
-        bool sameZ = false;
-        bool valid = true;
-        bool selected = false;
-        bool highlighted =
-            ePtr == highlightedEdge &&
-            (
-                selectionFilter == SELECTION_FILTER_SECTORS ||
-                selectionFilter == SELECTION_FILTER_EDGES
-            ) &&
-            state == EDITOR_STATE_LAYOUT;
-            
+        bool isOneSided = !ePtr->sectors[0] || !ePtr->sectors[1];
+        bool isSameZ = false;
+        bool isValid = true;
+        bool isSelected = edgeSelection.contains(e);
+        bool isHighlighted = canSelectEdges && (ePtr == highlightedEdge);
+        
         if(problemSectorPtr) {
             if(
                 ePtr->sectors[0] == problemSectorPtr ||
                 ePtr->sectors[1] == problemSectorPtr
             ) {
-                valid = false;
+                isValid = false;
             }
             
         }
@@ -996,55 +976,56 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             problemEdgeIntersection.e1 == ePtr ||
             problemEdgeIntersection.e2 == ePtr
         ) {
-            valid = false;
+            isValid = false;
         }
         
         if(isInContainer(game.curArea->problems.loneEdges, ePtr)) {
-            valid = false;
+            isValid = false;
         }
         
         if(
             isInMap(game.curArea->problems.nonSimples, ePtr->sectors[0]) ||
             isInMap(game.curArea->problems.nonSimples, ePtr->sectors[1])
         ) {
-            valid = false;
+            isValid = false;
         }
         
-        if(ePtr->sectors[0] && ePtr->sectors[1]) oneSided = false;
-        
         if(
-            !oneSided &&
+            !isOneSided &&
             ePtr->sectors[0]->z == ePtr->sectors[1]->z &&
             ePtr->sectors[0]->type == ePtr->sectors[1]->type
         ) {
-            sameZ = true;
+            isSameZ = true;
         }
         
-        if(edgeSelection.contains(e)) {
-            selected = true;
+        //Pick the color.
+        ALLEGRO_COLOR color;
+        if(!isValid) {
+            color = VALID_EDGE_COLOR;
+        } else if(isOneSided) {
+            color = ONE_SIDED_EDGE_COLOR;
+        } else if(isSameZ) {
+            color = SAME_Z_EDGE_COLOR;
+        } else {
+            color = NORMAL_EDGE_COLOR;
+        }
+        if(isSelected) {
+            color = getSelectionEffectReplacementColor(color);
+        } else if(isHighlighted) {
+            color = getHighlightEffectReplacementColor(color);
         }
         
+        //Draw it.
         al_draw_line(
             ePtr->vertexes[0]->x,
             ePtr->vertexes[0]->y,
             ePtr->vertexes[1]->x,
             ePtr->vertexes[1]->y,
-            (
-                selected ?
-                multAlpha(AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha) :
-                !valid ?
-                multAlpha(VALID_EDGE_COLOR, style.edgeAlpha) :
-                highlighted ?
-                multAlpha(style.highlightColor, style.edgeAlpha) :
-                oneSided ?
-                multAlpha(ONE_SIDED_EDGE_COLOR, style.edgeAlpha) :
-                sameZ ?
-                multAlpha(SAME_Z_EDGE_COLOR, style.edgeAlpha) :
-                multAlpha(NORMAL_EDGE_COLOR, style.edgeAlpha)
-            ),
-            (selected ? 3.0 : 2.0) / game.editorsView.cam.zoom
+            multAlpha(color, style.edgeAlpha),
+            (isSelected ? 3.0 : 2.0) / game.editorsView.cam.zoom
         );
         
+        //Draw the edge lengths.
         if(
             state == EDITOR_STATE_LAYOUT &&
             moving &&
@@ -1073,6 +1054,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             }
         }
         
+        //Draw the debug triangulation.
         if(debugTriangulation && sectorSelection.hasAny()) {
             Sector* sPtr =
                 game.curArea->sectors[sectorSelection.getFirstItemIdx()];
@@ -1091,6 +1073,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             }
         }
         
+        //Draw the debug sector indexes.
         if(debugSectorIdxs) {
             Point middle(
                 (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
@@ -1136,6 +1119,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
             drawDebugText(DEBUG_SECTOR_B_COLOR, pos2, text2);
         }
         
+        //Draw the debug edge index.
         if(debugEdgeIdxs) {
             Point middle(
                 (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
@@ -1184,7 +1168,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR STORE_COLOR = al_map_rgb(224, 200, 200);
     const ALLEGRO_COLOR DEF_TYPE_COLOR = al_map_rgb(255, 0, 0);
     const ALLEGRO_COLOR ANGLE_ARROW_COLOR = COLOR_BLACK;
-    const ALLEGRO_COLOR TERRITORY_COLOR = al_map_rgb(240, 240, 192);
+    const ALLEGRO_COLOR TERRITORY_RADIUS_COLOR = al_map_rgb(240, 240, 192);
     const ALLEGRO_COLOR TERRAIN_RADIUS_COLOR = al_map_rgb(240, 192, 192);
     
     //Links and stores.
@@ -1236,23 +1220,38 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     
     //The generators themselves.
     forIdx(m, game.curArea->mobGenerators) {
+        //Setup.
         MobGen* mPtr = game.curArea->mobGenerators[m];
-        
         float radius = getMobGenRadius(mPtr);
-        ALLEGRO_COLOR color = DEF_TYPE_COLOR;
-        if(mPtr->type && mPtr != problemMobPtr) {
-            color =
-                changeAlpha(
-                    mPtr->type->category->editorColor, style.mobAlpha * 255
-                );
-        }
-        
-        if(mPtr->type && mPtr->type->rectangularDim.x != 0) {
-            drawRotatedRectangle(
-                mPtr->pos, mPtr->type->rectangularDim,
-                mPtr->angle, color, 1.0f / game.editorsView.cam.zoom
+        bool isSelected = mobSelection.contains(m);
+        bool isInMobGroup =
+            subState == EDITOR_SUB_STATE_MISSION_MOBS &&
+            isInContainer(
+                game.curArea->mission.mobGroups[curMobGroupIdx].mobIdxs, m
             );
+        bool isHighlighted =
+            highlightedMob == mPtr && state == EDITOR_STATE_MOBS;
+            
+        //Pick the color.
+        ALLEGRO_COLOR simpleColor = DEF_TYPE_COLOR;
+        if(mPtr->type && mPtr != problemMobPtr) {
+            simpleColor = mPtr->type->category->editorColor;
         }
+        ALLEGRO_COLOR color = simpleColor;
+        if(isSelected || isInMobGroup) {
+            color = getSelectionEffectReplacementColor(color);
+        } else if(isHighlighted) {
+            color = getHighlightEffectReplacementColor(color);
+        }
+        ALLEGRO_COLOR arrowColor = ANGLE_ARROW_COLOR;
+        ALLEGRO_COLOR territoryColor = TERRITORY_RADIUS_COLOR;
+        ALLEGRO_COLOR terrainColor = TERRAIN_RADIUS_COLOR;
+        
+        simpleColor = multAlpha(simpleColor, style.mobAlpha);
+        color = multAlpha(color, style.mobAlpha);
+        arrowColor = multAlpha(arrowColor, style.mobAlpha);
+        territoryColor = multAlpha(territoryColor, style.mobAlpha);
+        terrainColor = multAlpha(terrainColor, style.mobAlpha);
         
         //Draw children of this mob.
         if(mPtr->type) {
@@ -1276,16 +1275,26 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                     float cRot = mPtr->angle + spawnInfo->angle;
                     drawRotatedRectangle(
                         cPos, cType->rectangularDim,
-                        cRot, color, 1.0f / game.editorsView.cam.zoom
+                        cRot, simpleColor,
+                        1.0f / game.editorsView.cam.zoom
                     );
                 } else {
                     al_draw_circle(
                         cPos.x, cPos.y, cType->radius,
-                        color, 1.0f / game.editorsView.cam.zoom
+                        simpleColor, 1.0f / game.editorsView.cam.zoom
                     );
                 }
                 
             }
+        }
+        
+        //Draw the mob.
+        if(mPtr->type && mPtr->type->rectangularDim.x != 0) {
+            drawRotatedRectangle(
+                mPtr->pos, mPtr->type->rectangularDim,
+                mPtr->angle, color,
+                1.0f / game.editorsView.cam.zoom
+            );
         }
         
         al_draw_filled_circle(
@@ -1300,70 +1309,42 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         al_draw_line(
             mPtr->pos.x - lrw * 0.8, mPtr->pos.y - lrh * 0.8,
             mPtr->pos.x + lrw * 0.8, mPtr->pos.y + lrh * 0.8,
-            multAlpha(ANGLE_ARROW_COLOR, style.mobAlpha), lt
+            arrowColor, lt
         );
         
         float tx1 = mPtr->pos.x + lrw;
         float ty1 = mPtr->pos.y + lrh;
-        float tx2 =
-            tx1 + cos(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
-        float ty2 =
-            ty1 + sin(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
-        float tx3 =
-            tx1 + cos(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
-        float ty3 =
-            ty1 + sin(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
-            
+        float tx2 = tx1 + cos(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
+        float ty2 = ty1 + sin(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
+        float tx3 = tx1 + cos(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
+        float ty3 = ty1 + sin(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
+        
         al_draw_filled_triangle(
-            tx1, ty1,
-            tx2, ty2,
-            tx3, ty3,
-            multAlpha(ANGLE_ARROW_COLOR, style.mobAlpha)
+            tx1, ty1, tx2, ty2, tx3, ty3, arrowColor
         );
         
-        bool isSelected = mobSelection.contains(m);
-        bool isInMobGroup =
-            subState == EDITOR_SUB_STATE_MISSION_MOBS &&
-            isInContainer(
-                game.curArea->mission.mobGroups[curMobGroupIdx].mobIdxs, m
-            );
-        bool isHighlighted =
-            highlightedMob == mPtr &&
-            state == EDITOR_STATE_MOBS;
-            
-        if(isSelected || isInMobGroup) {
-            al_draw_filled_circle(
-                mPtr->pos.x, mPtr->pos.y, radius,
-                multAlpha(AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha)
-            );
-            
+        //Draw territory and such.
+        if(isSelected) {
             if(
                 game.options.areaEd.showTerritory &&
                 mPtr->type &&
-                mPtr->type->territoryRadius > 0 &&
-                isSelected
+                mPtr->type->territoryRadius > 0.0f
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->territoryRadius,
-                    TERRITORY_COLOR, 1.0f / game.editorsView.cam.zoom
+                    territoryColor, 1.0f / game.editorsView.cam.zoom
                 );
             }
             if(
                 game.options.areaEd.showTerritory &&
                 mPtr->type &&
-                mPtr->type->terrainRadius > 0 &&
-                isSelected
+                mPtr->type->terrainRadius > 0.0f
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->terrainRadius,
-                    TERRAIN_RADIUS_COLOR, 1.0f / game.editorsView.cam.zoom
+                    terrainColor, 1.0f / game.editorsView.cam.zoom
                 );
             }
-        } else if(isHighlighted) {
-            al_draw_filled_circle(
-                mPtr->pos.x, mPtr->pos.y, radius,
-                multAlpha(style.highlightColor, 0.25f)
-            );
         }
         
     }
@@ -1386,7 +1367,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR NORMAL_STOP_COLOR = al_map_rgb(88, 177, 177);
     const ALLEGRO_COLOR DEBUG_STOP_COLOR = al_map_rgb(80, 192, 192);
     const ALLEGRO_COLOR NORMAL_LINK_COLOR = al_map_rgba(34, 136, 187, 224);
-    const ALLEGRO_COLOR LEDGE_LINK_COLOR = al_map_rgba(180, 180, 64, 224);
+    const ALLEGRO_COLOR LEDGE_LINK_COLOR = al_map_rgba(180, 96, 32, 224);
     const ALLEGRO_COLOR DEBUG_LINK_COLOR = al_map_rgb(96, 104, 224);
     const ALLEGRO_COLOR CLOSEST_LINE_COLOR = al_map_rgb(192, 128, 32);
     const ALLEGRO_COLOR PREVIEW_OK_COLOR = al_map_rgb(255, 187, 136);
@@ -1397,8 +1378,12 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
         forIdx(s, game.curArea->pathStops) {
+            //Setup.
             PathStop* sPtr = game.curArea->pathStops[s];
-            bool highlighted = highlightedPathStop == sPtr;
+            bool isHighlighted = highlightedPathStop == sPtr;
+            bool isSelected = pathStopSelection.contains(s);
+            
+            //Pick the color.
             ALLEGRO_COLOR color;
             if(hasFlag(sPtr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
                 color = SCRIPT_STOP_COLOR;
@@ -1409,26 +1394,20 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             } else {
                 color = NORMAL_STOP_COLOR;
             }
+            if(isSelected) {
+                color = getSelectionEffectReplacementColor(color);
+            } else if(isHighlighted) {
+                color = getHighlightEffectReplacementColor(color);
+            }
+            
+            //Draw the stop.
             al_draw_filled_circle(
                 sPtr->pos.x, sPtr->pos.y,
                 sPtr->radius,
                 color
             );
             
-            if(pathStopSelection.contains(s)) {
-                al_draw_filled_circle(
-                    sPtr->pos.x, sPtr->pos.y, sPtr->radius,
-                    multAlpha(
-                        AREA_EDITOR::SELECTION_COLOR, style.selectionAlpha
-                    )
-                );
-            } else if(highlighted) {
-                al_draw_filled_circle(
-                    sPtr->pos.x, sPtr->pos.y, sPtr->radius,
-                    multAlpha(style.highlightColor, 0.50f)
-                );
-            }
-            
+            //Draw the debug path stop index.
             if(debugPathIdxs) {
                 drawDebugText(
                     DEBUG_STOP_COLOR, sPtr->pos, i2s(s)
@@ -1438,48 +1417,47 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
         
         //Links.
         forIdx(l, game.curArea->editorPathLinks) {
+            //Setup.
             EditorPathLink* elPtr = &game.curArea->editorPathLinks[l];
             PathStop* s1Ptr = elPtr->link1->startPtr;
             PathStop* s2Ptr = elPtr->link1->endPtr;
             size_t s1Idx =
                 game.curArea->findPathStopIdx(elPtr->link1->startPtr);
             size_t s2Idx = elPtr->link1->endIdx;
-            bool oneWay = elPtr->link2 == nullptr;
-            bool selected =
-                pathLinkSelection.contains(
-                    game.curArea->findEditorPathLinkIdx(elPtr)
-                );
-            bool highlighted = highlightedEditorPathLink == elPtr;
-            ALLEGRO_COLOR color = COLOR_WHITE;
-            if(selected) {
-                color =
-                    multAlpha(
-                        AREA_EDITOR::SELECTION_COLOR,
-                        style.selectionAlpha
-                    );
-            } else if(highlighted) {
-                color = changeAlpha(style.highlightColor, 255);
-            } else {
-                switch(elPtr->link1->type) {
-                case PATH_LINK_TYPE_NORMAL: {
-                    color = NORMAL_LINK_COLOR;
-                    break;
-                } case PATH_LINK_TYPE_LEDGE: {
-                    color = LEDGE_LINK_COLOR;
-                    break;
-                }
-                }
-                if(!oneWay) {
-                    color = changeColorLighting(color, 0.33f);
-                }
-            }
-            
             float angle =
                 getAngle(s1Ptr->pos, s2Ptr->pos);
             Point offset1 =
                 angleToCoordinates(angle, s1Ptr->radius);
             Point offset2 =
                 angleToCoordinates(angle, s2Ptr->radius);
+            bool isOneWay = elPtr->link2 == nullptr;
+            bool isSelected =
+                pathLinkSelection.contains(
+                    game.curArea->findEditorPathLinkIdx(elPtr)
+                );
+            bool isHighlighted = highlightedEditorPathLink == elPtr;
+            
+            //Pick the color.
+            ALLEGRO_COLOR color;
+            switch(elPtr->link1->type) {
+            case PATH_LINK_TYPE_NORMAL: {
+                color = NORMAL_LINK_COLOR;
+                break;
+            } case PATH_LINK_TYPE_LEDGE: {
+                color = LEDGE_LINK_COLOR;
+                break;
+            }
+            }
+            if(!isOneWay) {
+                color = changeColorLighting(color, 0.33f);
+            }
+            if(isSelected) {
+                color = getSelectionEffectReplacementColor(color);
+            } else if(isHighlighted) {
+                color = getHighlightEffectReplacementColor(color);
+            }
+            
+            //Draw the link.
             al_draw_line(
                 s1Ptr->pos.x + offset1.x,
                 s1Ptr->pos.y + offset1.y,
@@ -1489,6 +1467,28 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 AREA_EDITOR::PATH_LINK_THICKNESS / game.editorsView.cam.zoom
             );
             
+            //Draw a triangle down the middle for one-ways.
+            if(isOneWay) {
+                float midX =
+                    (s1Ptr->pos.x + s2Ptr->pos.x) / 2.0f;
+                float midY =
+                    (s1Ptr->pos.y + s2Ptr->pos.y) / 2.0f;
+                const float delta =
+                    (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
+                    game.editorsView.cam.zoom;
+                    
+                al_draw_filled_triangle(
+                    midX + cos(angle) * delta,
+                    midY + sin(angle) * delta,
+                    midX + cos(angle + TAU / 4) * delta,
+                    midY + sin(angle + TAU / 4) * delta,
+                    midX + cos(angle - TAU / 4) * delta,
+                    midY + sin(angle - TAU / 4) * delta,
+                    color
+                );
+            }
+            
+            //Draw the link length.
             if(
                 state == EDITOR_STATE_PATHS &&
                 moving &&
@@ -1511,7 +1511,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 }
             }
             
-            if(debugPathIdxs && (oneWay || s1Idx < s2Idx)) {
+            //Draw the debug link index.
+            if(debugPathIdxs && (isOneWay || s1Idx < s2Idx)) {
                 Point middle = (s1Ptr->pos + s2Ptr->pos) / 2.0f;
                 drawDebugText(
                     DEBUG_LINK_COLOR,
@@ -1520,27 +1521,6 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                         middle.y + sin(angle + TAU / 4) * 4
                     ),
                     f2s(s1Ptr->links[l]->distance)
-                );
-            }
-            
-            if(oneWay) {
-                //Draw a triangle down the middle.
-                float midX =
-                    (s1Ptr->pos.x + s2Ptr->pos.x) / 2.0f;
-                float midY =
-                    (s1Ptr->pos.y + s2Ptr->pos.y) / 2.0f;
-                const float delta =
-                    (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
-                    game.editorsView.cam.zoom;
-                    
-                al_draw_filled_triangle(
-                    midX + cos(angle) * delta,
-                    midY + sin(angle) * delta,
-                    midX + cos(angle + TAU / 4) * delta,
-                    midY + sin(angle + TAU / 4) * delta,
-                    midX + cos(angle - TAU / 4) * delta,
-                    midY + sin(angle - TAU / 4) * delta,
-                    color
                 );
             }
         }
@@ -1691,17 +1671,23 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
-    const ALLEGRO_COLOR REMINDER_BG_COLOR = al_map_rgb(128, 128, 64);
+    const ALLEGRO_COLOR REMINDER_BG_COLOR = al_map_rgb(224, 180, 64);
     
     if(state == EDITOR_STATE_REVIEW) {
         forIdx(r, game.curArea->reminders) {
+            //Setup.
             AreaMakerReminder* rPtr = &game.curArea->reminders[r];
+            bool isSelected = reminderSelection.contains(r);
             
+            //Pick the color.
+            ALLEGRO_COLOR color = REMINDER_BG_COLOR;
+            if(isSelected) {
+                color = getSelectionEffectReplacementColor(color);
+            }
+            
+            //Draw the reminder.
             drawFilledRoundedRectangle(
-                rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f,
-                reminderSelection.contains(r) ?
-                AREA_EDITOR::SELECTION_COLOR :
-                REMINDER_BG_COLOR
+                rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f, color
             );
             drawText(
                 "!", game.sysContent.fntAreaName, rPtr->pos,
@@ -1808,66 +1794,63 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             
         }
         
-        //Selection effect.
-        bool selected = sectorSelection.contains(s);
-        bool valid = true;
-        bool highlighted =
+        //Selection effect setup.
+        bool isSelected = sectorSelection.contains(s);
+        bool isValid = true;
+        bool isHighlighted =
             sPtr == highlightedSector &&
             selectionFilter == SELECTION_FILTER_SECTORS &&
             state == EDITOR_STATE_LAYOUT;
             
         if(isInMap(game.curArea->problems.nonSimples, sPtr)) {
-            valid = false;
+            isValid = false;
         }
         if(sPtr == problemSectorPtr) {
-            valid = false;
+            isValid = false;
         }
         
-        if(
-            selected || !valid || viewHeightmap ||
-            viewBrightness || showBlockingSectors || highlighted
-        ) {
+        //Pick the color.
+        ALLEGRO_COLOR color;
+        if(!isValid) {
+            color = INVALID_COLOR;
+        } else if(showBlockingSectors) {
+            color =
+                sPtr->type == SECTOR_TYPE_BLOCKING ?
+                AREA_EDITOR::BLOCKING_SECTOR_COLOR :
+                AREA_EDITOR::NON_BLOCKING_COLOR;
+        } else if(viewBrightness) {
+            color =
+                tintColor(
+                    BRIGHTNESS_MAP_COLOR, mapGray(sPtr->brightness)
+                );
+        } else if(viewHeightmap) {
+            float h =
+                interpolateNumber(
+                    sPtr->z,
+                    style.lowestSectorZ, style.highestSectorZ,
+                    0, 1.0f
+                );
+            color =
+                tintColor(HEIGHT_MAP_COLOR, mapGray(h * 255));
+        } else if(isSelected) {
+            color = getSelectionEffectOverlayColor();
+        } else if(isHighlighted) {
+            color = getHighlightEffectOverlayColor();
+        } else {
+            color = COLOR_EMPTY;
+        }
+        
+        //Draw the colored overlay.
+        if(color.a > 0.0f) {
             forIdx(t, sPtr->triangles) {
-            
                 ALLEGRO_VERTEX av[3];
                 for(size_t v = 0; v < 3; v++) {
-                    if(!valid) {
-                        av[v].color = INVALID_COLOR;
-                    } else if(showBlockingSectors) {
-                        av[v].color =
-                            sPtr->type == SECTOR_TYPE_BLOCKING ?
-                            AREA_EDITOR::BLOCKING_SECTOR_COLOR :
-                            AREA_EDITOR::NON_BLOCKING_COLOR;
-                    } else if(viewBrightness) {
-                        av[v].color =
-                            tintColor(
-                                BRIGHTNESS_MAP_COLOR, mapGray(sPtr->brightness)
-                            );
-                    } else if(viewHeightmap) {
-                        float h =
-                            interpolateNumber(
-                                sPtr->z,
-                                style.lowestSectorZ, style.highestSectorZ,
-                                0, 1.0f
-                            );
-                        av[v].color =
-                            tintColor(HEIGHT_MAP_COLOR, mapGray(h * 255));
-                    } else {
-                        av[v].color =
-                            multAlpha(
-                                AREA_EDITOR::SELECTION_COLOR,
-                                style.selectionAlpha / 2.0f
-                            );
-                        if(highlighted && !selected) {
-                            av[v].color =
-                                multAlpha(style.highlightColor, 0.06f);
-                        }
-                    }
                     av[v].u = 0;
                     av[v].v = 0;
                     av[v].x = sPtr->triangles[t].points[v]->x;
                     av[v].y = sPtr->triangles[t].points[v]->y;
                     av[v].z = 0;
+                    av[v].color = color;
                 }
                 
                 al_draw_prim(
@@ -1949,30 +1932,38 @@ void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_LAYOUT) {
         size_t nVertexes = game.curArea->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {
+            //Setup.
             Vertex* vPtr = game.curArea->vertexes[v];
-            bool selected = vertexSelection.contains(v);
-            bool valid = vPtr != problemVertexPtr;
-            bool highlighted =
+            bool isSelected = vertexSelection.contains(v);
+            bool isValid = vPtr != problemVertexPtr;
+            bool isHighlighted =
                 highlightedVertex == vPtr &&
                 (
                     selectionFilter == SELECTION_FILTER_SECTORS ||
                     selectionFilter == SELECTION_FILTER_EDGES ||
                     selectionFilter == SELECTION_FILTER_VERTEXES
                 );
+                
+            //Pick the color.
+            ALLEGRO_COLOR color;
+            if(!isValid) {
+                color = INVALID_COLOR;
+            } else {
+                color = NORMAL_COLOR;
+            }
+            if(isSelected) {
+                color = getSelectionEffectReplacementColor(color);
+            } else if(isHighlighted) {
+                color = getHighlightEffectReplacementColor(color);
+            }
+            color = multAlpha(color, style.edgeAlpha);
+            
+            //Draw the vertex.
             drawFilledDiamond(
-                v2p(vPtr), 3.0 / game.editorsView.cam.zoom,
-                selected ?
-                multAlpha(
-                    AREA_EDITOR::SELECTION_COLOR,
-                    style.selectionAlpha
-                ) :
-                !valid ?
-                INVALID_COLOR :
-                highlighted ?
-                multAlpha(style.highlightColor, style.edgeAlpha) :
-                multAlpha(NORMAL_COLOR, style.edgeAlpha)
+                v2p(vPtr), 3.0 / game.editorsView.cam.zoom, color
             );
             
+            //Draw the debug vertex index.
             if(debugVertexIdxs) {
                 drawDebugText(DEBUG_COLOR, v2p(vPtr), i2s(v));
             }

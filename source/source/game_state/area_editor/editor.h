@@ -51,8 +51,6 @@ extern const float POINT_LETTER_TEXT_SCALE;
 extern const float REFERENCE_MIN_SIZE;
 extern const float REMINDER_SIZE;
 extern const float QUICK_PREVIEW_DURATION;
-extern const ALLEGRO_COLOR SELECTION_COLOR;
-extern const float SELECTION_EFFECT_SPEED;
 extern const float SELECTION_TW_PADDING;
 extern const float UNDO_SAVE_LOCK_DURATION;
 extern const float VERTEX_MERGE_RADIUS;

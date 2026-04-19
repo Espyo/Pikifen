@@ -8,8 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob, path stop, path link
             Should they be 0-indexed or 1-indexed? What about the debug number displays?
-        Some selected things become solid yellow, others an oscillating yellow, others no yellow
-            Get rid of AREA_EDITOR::SELECTION_COLOR and AREA_EDITOR::SELECTION_EFFECT_SPEED
         The ability to rotate the selection
         Bring back the hold Ctrl to drag a single item axis locked feature
         Bring back the double-click+drag feature when creating a new mob, path stop, etc.
@@ -601,6 +599,7 @@ Misc things (so I don't forget)
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
         New actions
             Get the name of the focused mob's current state, animation
+            Get a list of all linked mobs
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
             Setting the camera position and zoom

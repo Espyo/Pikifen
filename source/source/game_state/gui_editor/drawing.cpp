@@ -37,7 +37,7 @@ void GuiEditor::drawCanvas() {
     const ALLEGRO_COLOR HC_ITEM_COLOR = al_map_rgb(224, 160, 160);
     const ALLEGRO_COLOR CUSTOM_ITEM_COLOR = al_map_rgb(160, 224, 160);
     const ALLEGRO_COLOR ITEM_NAME_COLOR = al_map_rgb(40, 40, 96);
-
+    
     Point canvasTL = game.editorsView.getTopLeft();
     
     al_set_clipping_rectangle(
@@ -80,7 +80,9 @@ void GuiEditor::drawCanvas() {
     
     //Sort them by layer.
     vector<pair<GuiItemDef*, unsigned char> > drawingSortedItems;
+    map<GuiItemDef*, size_t> itemIdxMap;
     forIdx(i, allItems) {
+        itemIdxMap[allItems[i]] = i;
         bool isCustom = i >= hardcodedItems.size();
         unsigned char drawingLayer;
         if(isCustom) {
@@ -102,19 +104,32 @@ void GuiEditor::drawCanvas() {
     );
     
     forIdx(i, drawingSortedItems) {
-        size_t itemIdx = drawingSortedItems[i].second;
+        //Setup.
+        size_t itemIdx = itemIdxMap[drawingSortedItems[i].first];
         GuiItemDef* item = drawingSortedItems[i].first;
         if(item->size.x == 0.0f) continue;
         bool isCustom =
             drawingSortedItems[i].second != GUI::DRAWING_LAYER_NORMAL;
-        ALLEGRO_COLOR color =
-            isCustom ? CUSTOM_ITEM_COLOR : HC_ITEM_COLOR;
-            
+        bool isSelected = itemSelection.contains(itemIdx);
+        
+        //Pick the color.
+        ALLEGRO_COLOR color;
+        if(isCustom) {
+            color = CUSTOM_ITEM_COLOR;
+        } else {
+            color = HC_ITEM_COLOR;
+        }
+        if(isSelected) {
+            color = getSelectionEffectReplacementColor(color);
+        }
+        
+        //Draw the item's background.
         drawFilledRoundedRectangle(
             item->center, item->size,
             8.0f / game.editorsView.cam.zoom, changeAlpha(color, 64)
         );
         
+        //Draw the item's text.
         float clipX = item->center.x - item->size.x / 2.0f;
         float clipY = item->center.y - item->size.y / 2.0f;
         al_transform_coordinates(
@@ -141,14 +156,13 @@ void GuiEditor::drawCanvas() {
             origClipX, origClipY, origClipW, origClipH
         );
         
-        if(!itemSelection.contains(itemIdx)) {
-            drawRoundedRectangle(
-                item->center,
-                item->size,
-                8.0f / game.editorsView.cam.zoom,
-                color, 2.0f / game.editorsView.cam.zoom
-            );
-        }
+        //Draw the item's outline.
+        drawRoundedRectangle(
+            item->center,
+            item->size,
+            8.0f / game.editorsView.cam.zoom,
+            color, 2.0f / game.editorsView.cam.zoom
+        );
     }
     
     drawSelectionAndTransformationThings(

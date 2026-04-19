@@ -43,6 +43,8 @@ extern const float OP_ERROR_FLASH_DURATION;
 extern const float PICKER_IMG_BUTTON_MIN_SIZE;
 extern const float PICKER_IMG_BUTTON_SIZE;
 extern const float RUBBER_BAND_TEXTURE_TIME_MULT;
+extern const ALLEGRO_COLOR SELECTION_EFFECT_BASE_COLOR;
+extern const float SELECTION_EFFECT_TIME_MULT;
 extern const ALLEGRO_COLOR SILHOUETTE_COLOR;
 extern const float STATUS_BAR_HEIGHT;
 extern const float TW_DEF_SIZE;
@@ -868,14 +870,8 @@ protected:
     //Style of the different things to draw in the canvas.
     struct CanvasStyle {
     
-        //Alpha for the selection effects [0 - 1].
-        float selectionAlpha = 0.75f;
-        
         //Grid alpha [0 - 1].
         float gridAlpha = 1.0f;
-        
-        //Highlights color.
-        ALLEGRO_COLOR highlightColor = COLOR_WHITE;
         
     };
     
@@ -1103,6 +1099,14 @@ protected:
         string selectedAreaPath,
         vector<string>* outAreaNames, vector<string>* outAreaPaths,
         int* outSelectedAreaIdx
+    ) const;
+    ALLEGRO_COLOR getHighlightEffectOverlayColor() const;
+    ALLEGRO_COLOR getHighlightEffectReplacementColor(
+        const ALLEGRO_COLOR& normalColor
+    ) const;
+    ALLEGRO_COLOR getSelectionEffectOverlayColor() const;
+    ALLEGRO_COLOR getSelectionEffectReplacementColor(
+        const ALLEGRO_COLOR& normalColor
     ) const;
     bool getSelectionTransformationWidgetParams(
         const SelectionController& selCtrl,

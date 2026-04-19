@@ -205,8 +205,6 @@ void AnimationEditor::drawCanvas() {
         }
         
         if(drawHitboxes) {
-            float hitboxOutlineAlpha =
-                0.25f + 0.75f * ((sin(selEffectAlpha) / 2.0f) + 0.5f);
             size_t nHitboxes = s->hitboxes.size();
             
             for(int h = (int) nHitboxes - 1; h >= 0; --h) {
@@ -215,6 +213,10 @@ void AnimationEditor::drawCanvas() {
                 //collisions. Making higher priority hitboxes appear above
                 //lower ones makes it all more intuitive and cohesive.
                 Hitbox* hPtr = &s->hitboxes[h];
+                bool isSelected =
+                    hitboxSelection.contains(h) &&
+                    state == EDITOR_STATE_HITBOXES;
+                    
                 ALLEGRO_COLOR hitboxColor, hitboxOutlineColor;
                 float hitboxOutlineThickness = 2.0f / game.editorsView.cam.zoom;
                 
@@ -233,15 +235,11 @@ void AnimationEditor::drawCanvas() {
                     break;
                 }
                 }
-                
-                if(
-                    hitboxSelection.contains(h) &&
-                    state == EDITOR_STATE_HITBOXES
-                ) {
+                if(isSelected) {
+                    hitboxOutlineColor =
+                        getSelectionEffectReplacementColor(hitboxOutlineColor);
                     hitboxOutlineThickness =
                         3.0f / game.editorsView.cam.zoom;
-                    hitboxOutlineColor =
-                        changeAlpha(hitboxColor, hitboxOutlineAlpha * 255);
                 }
                 
                 if(sideView && state == EDITOR_STATE_HITBOXES) {

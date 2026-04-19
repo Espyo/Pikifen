@@ -81,6 +81,12 @@ const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 //Multiply time by this much for the rubber band texture animation.
 const float RUBBER_BAND_TEXTURE_TIME_MULT = 10.0f;
 
+//Base color for the effect of selection-related things.
+const ALLEGRO_COLOR SELECTION_EFFECT_BASE_COLOR = al_map_rgb(255, 255, 0);
+
+//Time multiplier for the selection effect's alpha change.
+const float SELECTION_EFFECT_TIME_MULT = 8.0f;
+
 //Color to use for silhouette icons.
 const ALLEGRO_COLOR SILHOUETTE_COLOR = al_map_rgba(240, 240, 240, 160);
 
@@ -553,6 +559,91 @@ void Editor::getQuickPlayAreaList(
     };
     scanAreas(game.content.areas.list[AREA_TYPE_SIMPLE]);
     scanAreas(game.content.areas.list[AREA_TYPE_MISSION]);
+}
+
+
+/**
+ * @brief Returns the color that should be used to overlay on top of
+ * something that is currently highlighted.
+ *
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getHighlightEffectOverlayColor() const {
+    const ALLEGRO_COLOR highlightEffectBaseColor =
+        game.options.editors.useCustomStyle ?
+        game.options.editors.highlightColor :
+        COLOR_WHITE;
+        
+    return changeAlpha(highlightEffectBaseColor, 0.10f * 255);
+}
+
+
+/**
+ * @brief Returns the color that should be used to color something
+ * that is currently highlighted.
+ *
+ * @param normalColor Normal, non-highlighted color of the item.
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getHighlightEffectReplacementColor(
+    const ALLEGRO_COLOR& normalColor
+) const {
+    const ALLEGRO_COLOR highlightEffectBaseColor =
+        game.options.editors.useCustomStyle ?
+        game.options.editors.highlightColor :
+        COLOR_WHITE;
+        
+    return
+        interpolateColor(
+            0.30f, 0.0f, 1.0f,
+            normalColor,
+            changeAlpha(highlightEffectBaseColor, normalColor.a * 255)
+        );
+}
+
+
+/**
+ * @brief Returns the color that should be used to overlay on top of
+ * something that is currently selected.
+ *
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getSelectionEffectOverlayColor() const {
+    float selectionEffectIntensity =
+        (sin(game.timePassed * EDITOR::SELECTION_EFFECT_TIME_MULT) + 1.0f) /
+        2.0f;
+        
+    return
+        interpolateColor(
+            selectionEffectIntensity * 0.60f, 0.0f, 1.0f,
+            changeAlpha(EDITOR::SELECTION_EFFECT_BASE_COLOR, 0),
+            EDITOR::SELECTION_EFFECT_BASE_COLOR
+        );
+}
+
+
+/**
+ * @brief Returns the color that should be used to color something
+ * that is currently selected.
+ *
+ * @param normalColor Normal, non-selected color of the item.
+ * @return The color.
+ */
+ALLEGRO_COLOR Editor::getSelectionEffectReplacementColor(
+    const ALLEGRO_COLOR& normalColor
+) const {
+    float selectionEffectIntensity =
+        (sin(game.timePassed * EDITOR::SELECTION_EFFECT_TIME_MULT) + 1.0f) /
+        2.0f;
+        
+    return
+        interpolateColor(
+            selectionEffectIntensity, 0.0f, 1.0f,
+            normalColor,
+            changeAlpha(
+                EDITOR::SELECTION_EFFECT_BASE_COLOR, normalColor.a * 255
+            )
+        );
 }
 
 
@@ -5055,7 +5146,7 @@ void Editor::SelectionController::draw(
         //Interior.
         al_draw_filled_rectangle(
             rBTL.x, rBTL.y, rBBR.x, rBBR.y,
-            multAlpha(AREA_EDITOR::SELECTION_COLOR, 0.20f)
+            multAlpha(EDITOR::SELECTION_EFFECT_BASE_COLOR, 0.20f)
         );
         
         //Marching ants outline.
@@ -5073,7 +5164,7 @@ void Editor::SelectionController::draw(
             
         for(size_t v = 0; v < 4; v++) {
             av[v].z = 0;
-            av[v].color = AREA_EDITOR::SELECTION_COLOR;
+            av[v].color = EDITOR::SELECTION_EFFECT_BASE_COLOR;
         }
         
         enum DIR {
