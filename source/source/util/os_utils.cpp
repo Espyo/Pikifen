@@ -18,8 +18,9 @@
 
 #ifdef _WIN32
 #include <filesystem>
-#include <shellapi.h> //For ShellExecuteA().
+//Windows.h must be included before shellapi.h for compilation on Windows
 #include <windows.h>
+#include <shellapi.h> //For ShellExecuteA().
 #endif
 
 #include "os_utils.h"
