@@ -207,8 +207,8 @@ public:
     //How long it's been alive for.
     float timeAlive = 0.0f;
     
-    //Incremental ID. Used for misc. things.
-    size_t id = 0;
+    //Numeric ID. 0 cannot be assigned.
+    size_t id = 1;
     
     //-General state-
     

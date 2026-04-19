@@ -1306,8 +1306,8 @@ void Editor::handleSelectionAndTransformationLmbUp(
  * @brief Returns a string describing either an individual item's index,
  * or the total amount of multiple items. Useful for things like the status bar.
  *
- * @param singleIdx Index of the single item, 0-indexed.
- * INVALID if there are 0 or multiple items.
+ * @param singleIdx Index of the single item, 0-indexed. This gets represented
+ * in the string as 1-indexed. INVALID if there are 0 or multiple items.
  * @param amount Amount of items.
  * @param singularTerm Term that designates the items, in singular.
  * @param pluralTerm If the term in plural is different from the term in

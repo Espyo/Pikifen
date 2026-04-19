@@ -1135,7 +1135,7 @@ void GameplayState::doMenuLogic() {
     if(game.makerTools.infoLock) {
         string nameStr =
             resizeString(
-                "#" + i2s(game.makerTools.infoLock->id) + " " +
+                "ID " + i2s(game.makerTools.infoLock->id) + ", " +
                 game.makerTools.infoLock->type->name,
                 26
             );
@@ -1375,7 +1375,7 @@ void GameplayState::doMenuLogic() {
         }
         if(mouseSector) {
             mouseSectorStr +=
-                "  #" + sectorIdxStr + "\n"
+                "  index " + sectorIdxStr + "\n"
                 "  Z: " + sectorZStr + " | Light: " + sectorLightStr + "\n"
                 "  Hazard: " + sectorHazardStr + "\n"
                 "  Texture: " + sectorTexStr;
@@ -1384,13 +1384,13 @@ void GameplayState::doMenuLogic() {
         }
         string mouseEdgeStr;
         if(closestEdgeIdx != INVALID) {
-            mouseEdgeStr += "#" + i2s(closestEdgeIdx);
+            mouseEdgeStr += "index " + i2s(closestEdgeIdx);
         } else {
             mouseEdgeStr += "None";
         }
         string mouseVertexStr;
         if(closestVertexIdx != INVALID) {
-            mouseVertexStr += "#" + i2s(closestVertexIdx);
+            mouseVertexStr += "index " + i2s(closestVertexIdx);
         } else {
             mouseVertexStr += "None";
         }

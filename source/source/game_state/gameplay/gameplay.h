@@ -300,8 +300,8 @@ public:
     //Information about the message box currently active, if any.
     GameplayMessageBox* msgBox = nullptr;
     
-    //ID of the next mob to be created.
-    size_t nextMobId = 0;
+    //Numeric ID of the next mob to be created. 0 cannot be assigned.
+    size_t nextMobId = 1;
     
     //Manager of all particles.
     ParticleManager particles;

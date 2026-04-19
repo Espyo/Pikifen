@@ -793,7 +793,7 @@ void GuiEditor::setSelectionStatusText() {
         if(itemSelection.hasAny()) {
             setStatus(
                 "Selected " +
-                amountStr(itemSelection.getCount(), "item") + "."
+                amountStr((int) itemSelection.getCount(), "item") + "."
             );
         }
         break;

@@ -1264,7 +1264,7 @@ void GameplayState::load() {
     }
     
     //Generate mobs.
-    nextMobId = 0;
+    nextMobId = 1;
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object generation");
     }

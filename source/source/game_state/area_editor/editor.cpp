@@ -3718,10 +3718,7 @@ void AreaEditor::setSelectionStatusText() {
         if(mobSelection.hasAny()) {
             setStatus(
                 "Selected " +
-                getAmountOrIdxDescription(
-                    mobSelection.getSingleItemIdx(),
-                    mobSelection.getCount(), "object"
-                ) + "."
+                amountStr((int) mobSelection.getCount(), "object") + "."
             );
         }
         break;
