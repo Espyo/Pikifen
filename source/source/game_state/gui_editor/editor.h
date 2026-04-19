@@ -158,6 +158,7 @@ private:
         const ImDrawList* parentList, const ImDrawCmd* cmd
     );
     string getFileTooltip(const string& path) const;
+    SelectionController* getSelectionControllerThatIsDragMoving();
     void gridIntervalDecreaseCmd(float inputValue);
     void gridIntervalIncreaseCmd(float inputValue);
     void deleteGuiDefCmd(float inputValue);

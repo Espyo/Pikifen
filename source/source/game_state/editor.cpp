@@ -5289,6 +5289,17 @@ bool Editor::SelectionController::enable(bool enableManagers) {
 
 
 /**
+ * @brief Returns the position the pivot item (i.e. the one closest to
+ * the mouse cursor) had before the current operation started.
+ *
+ * @return The position.
+ */
+Point Editor::SelectionController::getPreOpPivotItemPos() const {
+    return preOpPivotItemPos;
+}
+
+
+/**
  * @brief Returns the total bounding box of every manager's selected items.
  *
  * @param outCenter The center is returned here.

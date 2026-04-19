@@ -351,6 +351,21 @@ string GuiEditor::getOpenedContentPath() const {
 
 
 /**
+ * @brief Returns which of the selection controllers is currently in a
+ * drag move operation, or nullptr if none are.
+ *
+ * @return The controller.
+ */
+Editor::SelectionController*
+GuiEditor::getSelectionControllerThatIsDragMoving() {
+    if(itemSelCtrl.isDragMoving()) {
+        return &itemSelCtrl;
+    }
+    return nullptr;
+}
+
+
+/**
  * @brief Code to run for the grid interval decrease command.
  *
  * @param inputValue Value of the player input for the command.
@@ -859,6 +874,13 @@ Point GuiEditor::snapPoint(const Point& p) {
             finalPoint =
                 snapPointToAxis(
                     finalPoint, curTransformationWidget.getOldCenter()
+                );
+        } else if(getSelectionControllerThatIsDragMoving()) {
+            finalPoint =
+                snapPointToAxis(
+                    finalPoint,
+                    getSelectionControllerThatIsDragMoving()->
+                    getPreOpPivotItemPos()
                 );
         }
     }

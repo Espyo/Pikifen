@@ -2781,6 +2781,13 @@ Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
                 snapPointToAxis(
                     finalPoint, curTransformationWidget.getOldCenter()
                 );
+        } else if(getSelectionControllerThatIsDragMoving()) {
+            finalPoint =
+                snapPointToAxis(
+                    finalPoint,
+                    getSelectionControllerThatIsDragMoving()->
+                    getPreOpPivotItemPos()
+                );
         }
     }
     

@@ -2414,6 +2414,33 @@ AreaEditor::SECTOR_SPLIT_RESULT AreaEditor::getSectorSplitEvaluation() {
 
 
 /**
+ * @brief Returns which of the selection controllers is currently in a
+ * drag move operation, or nullptr if none are.
+ *
+ * @return The controller.
+ */
+Editor::SelectionController*
+AreaEditor::getSelectionControllerThatIsDragMoving() {
+    if(layoutSelCtrl.isDragMoving()) {
+        return &layoutSelCtrl;
+    }
+    if(mobsSelCtrl.isDragMoving()) {
+        return &mobsSelCtrl;
+    }
+    if(pathsSelCtrl.isDragMoving()) {
+        return &pathsSelCtrl;
+    }
+    if(detailsSelCtrl.isDragMoving()) {
+        return &detailsSelCtrl;
+    }
+    if(reviewSelCtrl.isDragMoving()) {
+        return &reviewSelCtrl;
+    }
+    return nullptr;
+}
+
+
+/**
  * @brief Focuses the camera on the problem found, if any.
  */
 void AreaEditor::goToProblem() {

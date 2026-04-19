@@ -1018,6 +1018,7 @@ private:
     SECTOR_SPLIT_RESULT getSectorSplitEvaluation();
     Sector* getSectorUnderPoint(const Point& p) const;
     Vertex* getVertexUnderPoint(const Point& p) const;
+    SelectionController* getSelectionControllerThatIsDragMoving();
     void goToProblem();
     void handleLineError();
     void homogenizeSelectedEdges();

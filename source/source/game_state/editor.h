@@ -512,6 +512,7 @@ protected:
         size_t getSelectionTotalCount(
             bool* outCanChange = nullptr, float* outPadding = nullptr
         ) const;
+        Point getPreOpPivotItemPos() const;
         bool isTransformationWidgetAvailable(
             bool* outCanChange, float* outPadding
         ) const;
