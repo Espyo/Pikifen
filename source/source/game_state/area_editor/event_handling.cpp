@@ -554,7 +554,6 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
         
         shadowSelection.setHomogenized(false);
         regionSelection.setHomogenized(false);
-        setSelectionStatusText();
         
         break;
         
@@ -632,7 +631,6 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
         vertexSelection.setHomogenized(false);
         edgeSelection.setHomogenized(false);
         sectorSelection.setHomogenized(false);
-        setSelectionStatusText();
         
         break;
         
@@ -969,7 +967,6 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         );
         
         mobSelection.setHomogenized(false);
-        setSelectionStatusText();
         
         break;
         
@@ -1100,8 +1097,6 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
             !game.options.areaEd.selTrans
         );
         
-        setSelectionStatusText();
-        
         break;
         
     }
@@ -1143,7 +1138,6 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
             !game.options.areaEd.selTrans
         );
         
-        setSelectionStatusText();
     }
 }
 
@@ -1228,8 +1222,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             }
             );
             
-            setSelectionStatusText();
-            
         }
         
         break;
@@ -1242,8 +1234,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] { registerChange("object movement"); }
         );
-        
-        setSelectionStatusText();
         
         break;
         
@@ -1276,8 +1266,6 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             }
             
             pathPreviewTimer.start(false);
-            
-            setSelectionStatusText();
             
         }
         

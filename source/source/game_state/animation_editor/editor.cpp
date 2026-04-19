@@ -151,6 +151,10 @@ AnimationEditor::AnimationEditor() :
         if(!curSprite) return (size_t) 0;
         return curSprite->hitboxes.size();
     };
+    hitboxSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     hitboxSelection.itemsCanResize = true;
     hitboxSelection.itemsCanRotate = false;
     
@@ -232,6 +236,10 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
 void AnimationEditor::changeState(const EDITOR_STATE newState) {
     comparison = false;
     comparisonSprite = nullptr;
+    setStatus();
+    stopSounds();
+    
+    state = newState;
     
     hitboxSelCtrl.disable(true);
     
@@ -239,9 +247,6 @@ void AnimationEditor::changeState(const EDITOR_STATE newState) {
         hitboxSelCtrl.enable(true);
         selectPreviousHitboxes();
     }
-    state = newState;
-    setStatus();
-    stopSounds();
 }
 
 
@@ -411,8 +416,6 @@ void AnimationEditor::doLogic() {
             animPlaying = false;
         }
     }
-    
-    selEffectAlpha += TAU * 1.5 * game.deltaT;
     
     if(comparisonBlink) {
         comparisonBlinkTimer.tick(game.deltaT);
@@ -1669,6 +1672,30 @@ void AnimationEditor::setDefaultTopValues(Sprite* curSprite) {
         curSprite->topPose.size = Point(5.5f, 10.0f);
     } else if(loadedMobType->category->id == MOB_CATEGORY_LEADERS) {
         curSprite->topPose.size = Point(10.0f, 10.0f);
+    }
+}
+
+
+/**
+ * @brief Sets the status text based on how many things are selected.
+ */
+void AnimationEditor::setSelectionStatusText() {
+    setStatus();
+    
+    switch(state) {
+    case EDITOR_STATE_HITBOXES: {
+        if(hitboxSelection.hasAny()) {
+            setStatus(
+                "Selected " +
+                getAmountOrIdxDescription(
+                    hitboxSelection.getSingleItemIdx(),
+                    hitboxSelection.getCount(), "hitbox", "hitboxes"
+                ) + "."
+            );
+        }
+        break;
+        
+    }
     }
 }
 

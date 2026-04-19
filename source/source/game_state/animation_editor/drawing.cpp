@@ -116,7 +116,6 @@ void AnimationEditor::drawCanvas() {
     
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         const ALLEGRO_COLOR UNSELECTED_COLOR = al_map_rgba(0, 0, 0, 128);
-        const ALLEGRO_COLOR SELECTION_COLOR = al_map_rgb(224, 192, 0);
         gridAlpha = 0.0f;
         drawMobRadius = false;
         drawLeaderSilhouette = false;
@@ -137,6 +136,7 @@ void AnimationEditor::drawCanvas() {
                 &game.editorsView.windowToWorldTransform, &sceneBR.x, &sceneBR.y
             );
             
+            //Draw the darkening effect.
             for(unsigned char x = 0; x < 3; x++) {
                 Point recTL, recBR;
                 switch(x) {
@@ -182,16 +182,15 @@ void AnimationEditor::drawCanvas() {
                 }
             }
             
+            //Draw the separation outline.
             if(s->bmpSize.x > 0 && s->bmpSize.y > 0) {
-            
-                float outlineAlpha =
-                    (sin(selEffectAlpha) / 2.0f) + 0.5f;
+                ALLEGRO_COLOR color = getSelectionEffectOverlayColor();
                 al_draw_rectangle(
-                    bmpX + s->bmpPos.x + 0.5,
-                    bmpY + s->bmpPos.y + 0.5,
-                    bmpX + s->bmpPos.x + s->bmpSize.x - 0.5,
-                    bmpY + s->bmpPos.y + s->bmpSize.y - 0.5,
-                    multAlpha(SELECTION_COLOR, outlineAlpha), 1.0
+                    bmpX + s->bmpPos.x + 0.5f,
+                    bmpY + s->bmpPos.y + 0.5f,
+                    bmpX + s->bmpPos.x + s->bmpSize.x - 0.5f,
+                    bmpY + s->bmpPos.y + s->bmpSize.y - 0.5f,
+                    color, 1.0f
                 );
             }
         }

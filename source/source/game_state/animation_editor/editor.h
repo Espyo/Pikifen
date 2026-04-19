@@ -138,9 +138,6 @@ private:
     //Selection controller for the hitboxes.
     SelectionController hitboxSelCtrl;
     
-    //The selection effect alpha is calculated using the sine of this value.
-    float selEffectAlpha = 0.0f;
-    
     //Current maturity to display on the Pikmin's top.
     unsigned char curMaturity = 0;
     
@@ -304,6 +301,7 @@ private:
     void setAllSpriteScales(float scale);
     void setBestFrameSprite();
     void setDefaultTopValues(Sprite* curSprite);
+    void setSelectionStatusText();
     void spriteBmpFloodFill(
         ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );

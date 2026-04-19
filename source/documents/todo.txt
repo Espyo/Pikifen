@@ -2,8 +2,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Status bar and nav boxes should say how many are selected
-            Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
         The area editor should show the index of the selected sector, edge, vertex, mob, path stop, path link
             Should they be 0-indexed or 1-indexed? What about the debug number displays?

@@ -90,6 +90,10 @@ GuiEditor::GuiEditor() :
         if(!isCustom && state != EDITOR_STATE_HARDCODED) return false;
         return true;
     };
+    itemSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     itemSelection.itemsAreRectangular = true;
     itemSelection.itemsCanResize = true;
     itemSelection.itemsCanRotate = false;
@@ -774,6 +778,28 @@ void GuiEditor::setToDefaults(GuiItemDef* item) {
     item->center.y = 50.0f;
     item->size.x = 10.0f;
     item->size.y = 10.0f;
+}
+
+
+/**
+ * @brief Sets the status text based on how many things are selected.
+ */
+void GuiEditor::setSelectionStatusText() {
+    setStatus();
+    
+    switch(state) {
+    case EDITOR_STATE_CUSTOM:
+    case EDITOR_STATE_HARDCODED: {
+        if(itemSelection.hasAny()) {
+            setStatus(
+                "Selected " +
+                amountStr(itemSelection.getCount(), "item") + "."
+            );
+        }
+        break;
+        
+    }
+    }
 }
 
 

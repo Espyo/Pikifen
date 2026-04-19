@@ -221,6 +221,10 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_LAYOUT;
     };
+    vertexSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     vertexSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
         return game.curArea->vertexes[idx] == highlightedVertex;
@@ -266,6 +270,7 @@ AreaEditor::AreaEditor() :
             vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
             vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
         }
+        setSelectionStatusText();
     };
     edgeSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -310,6 +315,7 @@ AreaEditor::AreaEditor() :
                 edgeSelection.add(game.curArea->findEdgeIdx(sPtr->edges[e]));
             }
         }
+        setSelectionStatusText();
     };
     sectorSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -341,6 +347,10 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx) {
         return state == EDITOR_STATE_MOBS;
     };
+    mobSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     mobSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
         return game.curArea->mobGenerators[idx] == highlightedMob;
@@ -370,6 +380,10 @@ AreaEditor::AreaEditor() :
     pathStopSelection.onIsEligible =
     [this] (size_t idx) {
         return state == EDITOR_STATE_PATHS;
+    };
+    pathStopSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
     };
     pathStopSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -431,6 +445,7 @@ AreaEditor::AreaEditor() :
                 game.curArea->editorPathLinks[lIdx].link1->endIdx
             );
         }
+        setSelectionStatusText();
     };
     pathLinkSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -460,6 +475,10 @@ AreaEditor::AreaEditor() :
     [this] () {
         return game.curArea->treeShadows.size();
     };
+    shadowSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     shadowSelection.onIsEligible =
     [this] (size_t idx) {
         return state == EDITOR_STATE_DETAILS;
@@ -487,6 +506,10 @@ AreaEditor::AreaEditor() :
     [this] () {
         return game.curArea->regions.size();
     };
+    regionSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
+    };
     regionSelection.onIsEligible =
     [this] (size_t idx) {
         return state == EDITOR_STATE_DETAILS;
@@ -511,6 +534,10 @@ AreaEditor::AreaEditor() :
     reminderSelection.onGetTotal =
     [] () {
         return game.curArea->reminders.size();
+    };
+    reminderSelection.onSelectionChanged =
+    [this] () {
+        setSelectionStatusText();
     };
     reminderSelection.itemsAreRectangular = true;
     reminderSelection.itemsCanResize = false;
@@ -956,8 +983,6 @@ void AreaEditor::clearSelection() {
     shadowSelection.clear();
     regionSelection.clear();
     reminderSelection.clear();
-    
-    setSelectionStatusText();
 }
 
 
@@ -3522,8 +3547,6 @@ void AreaEditor::selectAllCmd(float inputValue) {
             
         }
         
-        setSelectionStatusText();
-        
     } else if(
         subState == EDITOR_SUB_STATE_MISSION_MOBS
     ) {
@@ -3591,7 +3614,6 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
             pathStopSelection.add(s);
         }
     }
-    setSelectionStatusText();
 }
 
 
@@ -3731,6 +3753,18 @@ void AreaEditor::setSelectionStatusText() {
                 getAmountOrIdxDescription(
                     regionSelection.getSingleItemIdx(),
                     regionSelection.getCount(), "region"
+                ) + "."
+            );
+        }
+        break;
+        
+    } case EDITOR_STATE_REVIEW: {
+        if(reminderSelection.hasAny()) {
+            setStatus(
+                "Selected " +
+                getAmountOrIdxDescription(
+                    reminderSelection.getSingleItemIdx(),
+                    reminderSelection.getCount(), "reminder"
                 ) + "."
             );
         }
