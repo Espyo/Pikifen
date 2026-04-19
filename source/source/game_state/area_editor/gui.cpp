@@ -672,7 +672,7 @@ void AreaEditor::processGuiDialogOptions() {
             "Selection transformation", &game.options.areaEd.selTrans
         );
         setTooltip(
-            "If true, when you select two or more vertexes, some handles\n"
+            "If true, when you select two or more things, some handles\n"
             "will appear, allowing you to scale or rotate them together.\n"
             "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
         );

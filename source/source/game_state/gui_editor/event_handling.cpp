@@ -124,7 +124,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     size_t prevSelectedItemIdx = itemSelection.getSingleItemIdx();
     
     handleSelectionAndTransformationLmbDown(
-        itemSelCtrl, curTransformationWidget
+        itemSelCtrl, curTransformationWidget, false
     );
     
     size_t newSelectedItemIdx = itemSelection.getSingleItemIdx();
@@ -145,7 +145,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     bool changesMade =
         handleSelectionAndTransformationLmbDrag(
-            itemSelCtrl, curTransformationWidget,
+            itemSelCtrl, curTransformationWidget, false,
             snapPoint(game.editorsView.mouseCursorWorldPos)
         );
     if(changesMade) {
@@ -161,7 +161,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
  */
 void GuiEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     handleSelectionAndTransformationLmbUp(
-        itemSelCtrl, curTransformationWidget
+        itemSelCtrl, curTransformationWidget, false
     );
 }
 

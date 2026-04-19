@@ -549,7 +549,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NONE: {
 
         handleSelectionAndTransformationLmbDown(
-            detailsSelCtrl, curTransformationWidget
+            detailsSelCtrl, curTransformationWidget, false
         );
         
         shadowSelection.setHomogenized(false);
@@ -625,7 +625,8 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NONE: {
 
         handleSelectionAndTransformationLmbDown(
-            layoutSelCtrl, curTransformationWidget
+            layoutSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans
         );
         
         vertexSelection.setHomogenized(false);
@@ -963,7 +964,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     } case EDITOR_SUB_STATE_NONE: {
 
         handleSelectionAndTransformationLmbDown(
-            mobsSelCtrl, curTransformationWidget
+            mobsSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans
         );
         
         mobSelection.setHomogenized(false);
@@ -1094,7 +1096,8 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
         }
         
         handleSelectionAndTransformationLmbDown(
-            pathsSelCtrl, curTransformationWidget
+            pathsSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans
         );
         
         setSelectionStatusText();
@@ -1136,7 +1139,8 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     if(!crossSectionHandled) {
     
         handleSelectionAndTransformationLmbDown(
-            reviewSelCtrl, curTransformationWidget
+            reviewSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans
         );
         
         setSelectionStatusText();
@@ -1216,6 +1220,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         } else {
             handleSelectionAndTransformationLmbDrag(
                 layoutSelCtrl, curTransformationWidget,
+                !game.options.areaEd.selTrans,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] {
                 startVertexMove();
@@ -1233,6 +1238,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
 
         handleSelectionAndTransformationLmbDrag(
             mobsSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans,
             snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] { registerChange("object movement"); }
         );
@@ -1255,6 +1261,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         
             handleSelectionAndTransformationLmbDrag(
                 pathsSelCtrl, curTransformationWidget,
+                !game.options.areaEd.selTrans,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] {
                 startPathStopMove();
@@ -1279,7 +1286,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_DETAILS: {
 
         handleSelectionAndTransformationLmbDrag(
-            detailsSelCtrl, curTransformationWidget,
+            detailsSelCtrl, curTransformationWidget, false,
             snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] { registerChange("tree shadow movement"); }
         );
@@ -1316,6 +1323,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         
         handleSelectionAndTransformationLmbDrag(
             reviewSelCtrl, curTransformationWidget,
+            !game.options.areaEd.selTrans,
             game.editorsView.mouseCursorWorldPos,
         [this] () { changesMgr.markAsChanged(); }
         );
@@ -1344,19 +1352,23 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     
     curTransformationWidget.handleMouseUp();
     handleSelectionAndTransformationLmbUp(
-        layoutSelCtrl, curTransformationWidget
+        layoutSelCtrl, curTransformationWidget,
+        !game.options.areaEd.selTrans
     );
     handleSelectionAndTransformationLmbUp(
-        mobsSelCtrl, curTransformationWidget
+        mobsSelCtrl, curTransformationWidget,
+        !game.options.areaEd.selTrans
     );
     handleSelectionAndTransformationLmbUp(
-        pathsSelCtrl, curTransformationWidget
+        pathsSelCtrl, curTransformationWidget,
+        !game.options.areaEd.selTrans
     );
     handleSelectionAndTransformationLmbUp(
-        detailsSelCtrl, curTransformationWidget
+        detailsSelCtrl, curTransformationWidget, false
     );
     handleSelectionAndTransformationLmbUp(
-        reviewSelCtrl, curTransformationWidget
+        reviewSelCtrl, curTransformationWidget,
+        !game.options.areaEd.selTrans
     );
     
     movingPathPreviewCheckpoint = -1;

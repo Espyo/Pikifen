@@ -257,7 +257,7 @@ void AnimationEditor::drawCanvas() {
         }
         
         drawSelectionAndTransformationThings(
-            hitboxSelCtrl, curTransformationWidget
+            hitboxSelCtrl, curTransformationWidget, false
         );
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {

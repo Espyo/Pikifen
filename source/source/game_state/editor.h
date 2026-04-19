@@ -1092,7 +1092,7 @@ protected:
     void drawOpErrorCursor();
     void drawSelectionAndTransformationThings(
         const SelectionController& selCtrl,
-        const TransformationWidget& traWid
+        const TransformationWidget& traWid, bool skipTraWid
     );
     Point getLastWidgetPost();
     void getQuickPlayAreaList(
@@ -1312,14 +1312,17 @@ protected:
     virtual void handleRmbDrag(const ALLEGRO_EVENT& ev);
     virtual void handleRmbUp(const ALLEGRO_EVENT& ev);
     void handleSelectionAndTransformationLmbDown(
-        SelectionController& selCtrl, TransformationWidget& traWid
+        SelectionController& selCtrl, TransformationWidget& traWid,
+        bool skipTraWid
     );
     bool handleSelectionAndTransformationLmbDrag(
         SelectionController& selCtrl, TransformationWidget& traWid,
-        const Point& mouseCursor, std::function<void()> onPreTransform = nullptr
+        bool skipTraWid, const Point& mouseCursor,
+        const std::function<void()>& onPreTransform = nullptr
     );
     void handleSelectionAndTransformationLmbUp(
-        SelectionController& selCtrl, TransformationWidget& traWid
+        SelectionController& selCtrl, TransformationWidget& traWid,
+        bool skipTraWid
     );
     string getAmountOrIdxDescription(
         size_t singleIdx, size_t amount,

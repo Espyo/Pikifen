@@ -2,7 +2,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Figure out what to do with game.options.areaEd.selTrans
         Status bar and nav boxes should say how many are selected
             Maybe a selection change callback would be useful for this?
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
@@ -52,6 +51,7 @@ Next tasks (roughly sorted most important first)
         A way for the area script to focus on some mobs
         A way for objects to send messages to the area
         A button in the area editor that creates/opens the script file externally?
+        Add some script to DEV Lab
     
     --- 2.0.0 ---
     Floors-over-floors; mostly for bridges

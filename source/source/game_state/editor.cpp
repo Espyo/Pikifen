@@ -395,29 +395,32 @@ void Editor::drawOpErrorCursor() {
  *
  * @param selCtrl The selection controller.
  * @param traWid The transformation widget.
+ * @param skipTraWid Whether to skip the transformation widget's logic.
  */
 void Editor::drawSelectionAndTransformationThings(
     const SelectionController& selCtrl,
-    const TransformationWidget& traWid
+    const TransformationWidget& traWid, bool skipTraWid
 ) {
-    //Transformation widget, if possible.
-    Point selectionCenter, selectionSize;
-    float selectionAngle;
-    bool useSelectionAngle;
-    Bitmask8 twFlags;
-    float twPadding;
-    if(
-        getSelectionTransformationWidgetParams(
-            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
-            &useSelectionAngle, &twFlags, &twPadding
-        )
-    ) {
-        if(selectionSize.x != 0.0f || selectionSize.y != 0.0f) {
-            traWid.draw(
-                &selectionCenter, &selectionSize,
-                useSelectionAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, twFlags, twPadding
-            );
+    if(!skipTraWid) {
+        //Transformation widget, if possible.
+        Point selectionCenter, selectionSize;
+        float selectionAngle;
+        bool useSelectionAngle;
+        Bitmask8 twFlags;
+        float twPadding;
+        if(
+            getSelectionTransformationWidgetParams(
+                selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+                &useSelectionAngle, &twFlags, &twPadding
+            )
+        ) {
+            if(selectionSize.x != 0.0f || selectionSize.y != 0.0f) {
+                traWid.draw(
+                    &selectionCenter, &selectionSize,
+                    useSelectionAngle ? &selectionAngle : nullptr,
+                    1.0f / game.editorsView.cam.zoom, twFlags, twPadding
+                );
+            }
         }
     }
     
@@ -1176,29 +1179,33 @@ void Editor::handleRmbUp(const ALLEGRO_EVENT& ev) {}
  *
  * @param selCtrl The selection controller.
  * @param traWid The transformation widget.
+ * @param skipTraWid Whether to skip the transformation widget's logic.
  */
 void Editor::handleSelectionAndTransformationLmbDown(
-    SelectionController& selCtrl, TransformationWidget& traWid
+    SelectionController& selCtrl, TransformationWidget& traWid, bool skipTraWid
 ) {
     bool twHandled = false;
-    Point selectionCenter, selectionSize;
-    float selectionAngle;
-    bool useSelectionAngle;
-    Bitmask8 twFlags;
-    float twPadding;
-    if(
-        getSelectionTransformationWidgetParams(
-            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
-            &useSelectionAngle, &twFlags, &twPadding
-        )
-    ) {
-        twHandled =
-            traWid.handleMouseDown(
-                game.editorsView.mouseCursorWorldPos,
-                &selectionCenter, &selectionSize,
-                useSelectionAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, twFlags, twPadding
-            );
+    
+    if(!skipTraWid) {
+        Point selectionCenter, selectionSize;
+        float selectionAngle;
+        bool useSelectionAngle;
+        Bitmask8 twFlags;
+        float twPadding;
+        if(
+            getSelectionTransformationWidgetParams(
+                selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+                &useSelectionAngle, &twFlags, &twPadding
+            )
+        ) {
+            twHandled =
+                traWid.handleMouseDown(
+                    game.editorsView.mouseCursorWorldPos,
+                    &selectionCenter, &selectionSize,
+                    useSelectionAngle ? &selectionAngle : nullptr,
+                    1.0f / game.editorsView.cam.zoom, twFlags, twPadding
+                );
+        }
     }
     
     if(twHandled) {
@@ -1218,13 +1225,15 @@ void Editor::handleSelectionAndTransformationLmbDown(
  *
  * @param selCtrl The selection controller.
  * @param traWid The transformation widget.
+ * @param skipTraWid Whether to skip the transformation widget's logic.
  * @param mouseCursor Mouse cursor coordinates to use.
  * @param onPreTransform Code to run before any transformation is made, if any.
  * @return Whether any important data changed.
  */
 bool Editor::handleSelectionAndTransformationLmbDrag(
     SelectionController& selCtrl, TransformationWidget& traWid,
-    const Point& mouseCursor, std::function<void()> onPreTransform
+    bool skipTraWid, const Point& mouseCursor,
+    const std::function<void()>& onPreTransform
 ) {
     //Rubber band.
     if(selCtrl.isCreatingRubberBand()) {
@@ -1243,31 +1252,33 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     }
     
     //Transformation widget.
-    Point selectionCenter, selectionSize;
-    float selectionAngle;
-    bool useSelectionAngle;
-    Bitmask8 twFlags;
-    float twPadding;
-    if(
-        getSelectionTransformationWidgetParams(
-            selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
-            &useSelectionAngle, &twFlags, &twPadding
-        )
-    ) {
-        bool twHandled =
-            traWid.handleMouseMove(
-                mouseCursor,
-                &selectionCenter, &selectionSize,
-                useSelectionAngle ? &selectionAngle : nullptr,
-                1.0f / game.editorsView.cam.zoom, twFlags, twPadding, 0.10f,
-                selCtrl.onSnapPoint
-            );
-        if(twHandled) {
-            if(onPreTransform) onPreTransform();
-            selCtrl.applyTransformation(
-                selectionCenter, selectionSize, selectionAngle
-            );
-            return true;
+    if(!skipTraWid) {
+        Point selectionCenter, selectionSize;
+        float selectionAngle;
+        bool useSelectionAngle;
+        Bitmask8 twFlags;
+        float twPadding;
+        if(
+            getSelectionTransformationWidgetParams(
+                selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
+                &useSelectionAngle, &twFlags, &twPadding
+            )
+        ) {
+            bool twHandled =
+                traWid.handleMouseMove(
+                    mouseCursor,
+                    &selectionCenter, &selectionSize,
+                    useSelectionAngle ? &selectionAngle : nullptr,
+                    1.0f / game.editorsView.cam.zoom, twFlags, twPadding, 0.10f,
+                    selCtrl.onSnapPoint
+                );
+            if(twHandled) {
+                if(onPreTransform) onPreTransform();
+                selCtrl.applyTransformation(
+                    selectionCenter, selectionSize, selectionAngle
+                );
+                return true;
+            }
         }
     }
     
@@ -1281,12 +1292,13 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
  *
  * @param selCtrl The selection controller.
  * @param traWid The transformation widget.
+ * @param skipTraWid Whether to skip the transformation widget's logic.
  */
 void Editor::handleSelectionAndTransformationLmbUp(
-    SelectionController& selCtrl, TransformationWidget& traWid
+    SelectionController& selCtrl, TransformationWidget& traWid, bool skipTraWid
 ) {
     selCtrl.handleMouseUp();
-    traWid.handleMouseUp();
+    if(!skipTraWid) traWid.handleMouseUp();
 }
 
 

@@ -185,7 +185,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_HITBOXES: {
         if(curSprite) {
             handleSelectionAndTransformationLmbDown(
-                hitboxSelCtrl, curTransformationWidget
+                hitboxSelCtrl, curTransformationWidget, false
             );
             prevHitboxSelection = hitboxSelection.getItemIdxs();
         }
@@ -319,7 +319,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         if(curSprite) {
             bool changesMade =
                 handleSelectionAndTransformationLmbDrag(
-                    hitboxSelCtrl, curTransformationWidget,
+                    hitboxSelCtrl, curTransformationWidget, false,
                     game.editorsView.mouseCursorWorldPos
                 );
             if(changesMade) {
@@ -395,7 +395,7 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     } case EDITOR_STATE_HITBOXES: {
         if(curSprite) {
             handleSelectionAndTransformationLmbUp(
-                hitboxSelCtrl, curTransformationWidget
+                hitboxSelCtrl, curTransformationWidget, false
             );
         }
         break;
