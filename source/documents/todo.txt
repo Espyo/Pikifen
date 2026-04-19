@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
         The ability to rotate the selection
         Bring back the hold Ctrl to drag a single item axis locked feature
-        Bring back the double-click+drag feature when creating a new mob, path stop, etc.
         Test everything
             Area editor selection filter
             OCTEE

@@ -923,7 +923,7 @@ private:
     void copySectorProperties();
     void createArea(const string& requestedAreaPath);
     void createDrawingVertexes();
-    void addNewMobUnderCursor();
+    MobGen* addNewMobUnderCursor();
     Sector* addNewSectorForLayoutDrawing(const Sector* copyFrom);
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);

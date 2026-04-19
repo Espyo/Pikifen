@@ -620,8 +620,10 @@ void AreaEditor::addNewMobCmd(float inputValue) {
 
 /**
  * @brief Creates a new mob where the mouse cursor is and adds it to the area.
+ *
+ * @return The new mob.
  */
-void AreaEditor::addNewMobUnderCursor() {
+MobGen* AreaEditor::addNewMobUnderCursor() {
     registerChange("object creation");
     subState = EDITOR_SUB_STATE_NONE;
     Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
@@ -633,13 +635,13 @@ void AreaEditor::addNewMobUnderCursor() {
             game.config.pikmin.order[0];
     }
     
-    game.curArea->mobGenerators.push_back(
-        new MobGen(hotspot, lastMobType)
-    );
+    MobGen* newMob = new MobGen(hotspot, lastMobType);
+    game.curArea->mobGenerators.push_back(newMob);
     
     mobSelection.setSingle(game.curArea->mobGenerators.size() - 1);
     
     setStatus("Created object.");
+    return newMob;
 }
 
 

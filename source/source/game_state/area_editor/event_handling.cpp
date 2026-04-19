@@ -399,7 +399,8 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
         return;
     }
     
-    bool skipNormalClick = false;
+    bool doFakeClick = false;
+    Point fakeClickWorldPos;
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
@@ -415,10 +416,13 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                         splitEdge(
                             clickedEdge, game.editorsView.mouseCursorWorldPos
                         );
+                    clearSelection();
                     vertexSelection.setSingle(
                         game.curArea->findVertexIdx(newVertex)
                     );
-                    skipNormalClick = true;
+                    highlightedVertex = newVertex;
+                    doFakeClick = true;
+                    fakeClickWorldPos = v2p(newVertex);
                 }
             }
         }
@@ -430,8 +434,10 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
             MobGen* clickedMob =
                 getMobUnderPoint(game.editorsView.mouseCursorWorldPos);
             if(!clickedMob) {
-                addNewMobUnderCursor();
-                skipNormalClick = true;
+                MobGen* newMob = addNewMobUnderCursor();
+                highlightedMob = newMob;
+                doFakeClick = true;
+                fakeClickWorldPos = newMob->pos;
             }
         }
         break;
@@ -456,7 +462,9 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                     pathLinkSelection.setSingle(
                         game.curArea->findPathStopIdx(newStop)
                     );
-                    skipNormalClick = true;
+                    highlightedPathStop = newStop;
+                    doFakeClick = true;
+                    fakeClickWorldPos = newStop->pos;
                 }
             }
         }
@@ -469,13 +477,22 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
     }
     }
     
-    if(skipNormalClick) {
-        //Quit now, otherwise the code after this will simulate a
-        //regular click, and if we created and selected a thing on the grid,
-        //but the cursor is not on the grid, this will deselect the thing.
+    if(doFakeClick) {
+        //Fake a single click in the given coordinates. This allows
+        //creating a new thing and then immediately start dragging it.
+        ALLEGRO_EVENT fakeClickEv = ev;
+        al_transform_coordinates(
+            &game.editorsView.worldToWindowTransform,
+            &fakeClickWorldPos.x, &fakeClickWorldPos.y
+        );
+        fakeClickEv.mouse.x = fakeClickWorldPos.x;
+        fakeClickEv.mouse.y = fakeClickWorldPos.y;
+        handleLmbDown(fakeClickEv);
         return;
     }
     
+    //Nothing got processed above, so just treat this double click as a
+    //normal single click.
     handleLmbDown(ev);
 }
 
