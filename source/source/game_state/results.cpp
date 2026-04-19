@@ -15,6 +15,7 @@
 #include "../core/misc_functions.h"
 #include "../util/allegro_utils.h"
 #include "../util/general_utils.h"
+#include "../util/os_utils.h"
 #include "../util/string_utils.h"
 
 

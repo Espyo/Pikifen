@@ -469,7 +469,7 @@ struct Shaker {
     
     
     //--- Public function declarations ---
-
+    
     Shaker(std::function<float(float, float)> getRandomFloat);
     void shake(float strength);
     void getOffsets(
@@ -534,7 +534,11 @@ struct Timer {
 bool adjustMisalignedIndex(
     size_t& idxToAlign, size_t changedItemIdx, bool addition
 );
-string getCurrentTime(bool fileNameFriendly);
+string incrementNameTillUnique(
+    const string& baseName,
+    const std::function<bool(const string&)> onCheckNameUnique,
+    const string& strBetween = "", size_t firstSuffixNr = 2
+);
 string sanitizeFileName(const string& s);
 string standardizePath(const string& path);
 string vectorTailToString(const vector<string>& v, size_t pos);

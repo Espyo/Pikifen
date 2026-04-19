@@ -11,6 +11,7 @@
 
 #include "maker_tools.h"
 
+#include "../util/os_utils.h"
 #include "game.h"
 #include "misc_functions.h"
 

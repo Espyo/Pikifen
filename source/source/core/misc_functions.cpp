@@ -1210,28 +1210,21 @@ void saveOptions() {
  * In other words, dumps a screenshot.
  */
 void saveScreenshot() {
-    string baseFileName = "screenshot_" + getCurrentTime(true);
+    string initialFileBaseName = "screenshot_" + getCurrentTime(true);
+    string fileExt = ".png";
     
     //Check if a file with this name already exists.
     vector<string> files =
         folderToVector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);
-    size_t variantNr = 1;
-    string finalFileName = baseFileName;
-    bool validName = false;
-    
-    do {
-    
-        if(!isInContainer(files, finalFileName + ".png")) {
-            //File name not found.
-            //Go ahead and create a screenshot with this name.
-            validName = true;
-        } else {
-            variantNr++;
-            finalFileName = baseFileName + " " + i2s(variantNr);
-        }
+    string finalFileBaseName =
+        incrementNameTillUnique(
+            initialFileBaseName,
+    [&files, &fileExt] (const string& n) {
+        return !isInContainer(files, n + fileExt);
+    },
+    "_"
+        );
         
-    } while(!validName);
-    
     //Before saving, let's set every pixel's alpha to 255.
     //This is because alpha operations on the backbuffer behave weirdly.
     //On some machines, when saving to a bitmap, it will use those weird
@@ -1259,7 +1252,8 @@ void saveScreenshot() {
     
     al_save_bitmap(
         (
-            FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + finalFileName + ".png"
+            FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" +
+            finalFileBaseName + fileExt
         ).c_str(),
         screenshot
     );

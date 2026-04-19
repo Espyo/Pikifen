@@ -347,7 +347,7 @@ vector<string> split(
             //including the delimiter itself, and search again.
             text.erase(text.begin(), text.begin() + pos + delSize);
         }
-    } while (pos != string::npos);
+    } while(pos != string::npos);
     
     //Text after the final delimiter.
     //(If there is one. If not, it's just the whole string.)

@@ -20,6 +20,7 @@
 #include "../util/allegro_utils.h"
 #include "../util/container_utils.h"
 #include "../util/general_utils.h"
+#include "../util/os_utils.h"
 #include "../util/string_utils.h"
 #include "const.h"
 #include "drawing.h"

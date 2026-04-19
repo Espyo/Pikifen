@@ -379,6 +379,50 @@ Point fromString<Point>(const string& s) {
 }
 
 
+/**
+ * @brief Given a base name, checks to see if that name is unique.
+ * If not, it tries adding a numeric suffix to the name and checking that.
+ * If not, this repeats with the numeric suffix increasing by one each time.
+ * As soon as any checked name is unique, the function returns that name.
+ *
+ * @param baseName The base name. It will be returned if it's unique from
+ * the get-go.
+ * @param onCheckNameUnique Callback to check if the tentative name is unique.
+ * The first parameter is the tentative name, and it returns true if it is
+ * unique.
+ * @param strBetween String to place between the base name and the numeric
+ * suffix. This will only be placed if the base name isn't unique from the
+ * get-go, and can be an empty string so it's just the name and the
+ * numeric suffix immediately after.
+ * @param firstSuffixNr Number to start the numeric suffixes at.
+ * @return The first unique name found.
+ */
+string incrementNameTillUnique(
+    const string& baseName,
+    const std::function<bool(const string&)> onCheckNameUnique,
+    const string& strBetween, size_t firstSuffixNr
+) {
+    //First, check the base name with no suffix.
+    if(onCheckNameUnique(baseName)) {
+        return baseName;
+    }
+    
+    //Now add a numeric suffix, and keep trying until the current number works.
+    size_t tentativeSuffix = firstSuffixNr;
+    string tentativeName;
+    
+    do {
+        tentativeName = baseName + strBetween + i2s(tentativeSuffix);
+        if(onCheckNameUnique(tentativeName)) {
+            break;
+        }
+        tentativeSuffix++;
+    } while(true);
+    
+    return tentativeName;
+}
+
+
 
 /**
  * @brief Sanitizes a file name (or part of it), such that it doesn't use any
